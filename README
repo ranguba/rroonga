@@ -1,0 +1,35 @@
+# -*- rd -*-
+
+= README
+
+== Name
+
+Ruby/groonga
+
+== Description
+
+Ruby bindings for groonga.
+
+http://groonga.org/
+
+== Dependencies
+
+  * Ruby >= 1.8
+  * groonga >= 0.0.2
+
+== Install
+
+  % sudo gem install groonga
+
+== Documents
+
+  * ...
+
+== Mailing list
+
+Use groonga's ML.
+
+
+== Thanks
+
+  * ...

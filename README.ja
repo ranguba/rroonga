@@ -1,0 +1,36 @@
+# -*- rd -*-
+
+= はじめに
+
+== 名前
+
+Ruby/groonga
+
+== 説明
+
+groongaのRubyバインディングです。
+
+http://groonga.org/
+
+== 依存ソフトウェア
+
+  * Ruby >= 1.8
+  * groonga >= 0.0.2
+
+== インストール
+
+  % sudo gem install groonga
+
+== ドキュメント
+
+  * ...
+
+== メーリングリスト
+
+質問、要望、バグ報告などはgroongaのMLにお願いします。
+
+http://lists.sourceforge.jp/mailman/listinfo/groonga-dev
+
+== 感謝
+
+  * ...
