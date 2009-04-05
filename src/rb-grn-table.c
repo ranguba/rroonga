@@ -102,11 +102,7 @@ rb_grn_table_s_create (VALUE argc, VALUE *argv, VALUE klass)
     if (RVAL2CBOOL(rb_key_with_sis))
 	flags |= GRN_OBJ_KEY_WITH_SIS;
 
-    if (NIL_P(rb_key_type)) {
-	key_type = NULL;
-    } else {
-	key_type = RVAL2GRNOBJECT(rb_key_type);
-    }
+    key_type = RVAL2GRNOBJECT(rb_key_type);
 
     if (NIL_P(rb_value_size)) {
 	value_size = 256;

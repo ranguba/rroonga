@@ -21,10 +21,17 @@
 
 #define SELF(object) (RVAL2GRNOBJECT(object))
 
+typedef struct _RbGrnObject RbGrnObject;
+struct _RbGrnObject
+{
+    grn_ctx *context;
+    grn_obj *object;
+};
+
 VALUE rb_cGrnObject;
 
-RbGrnObject *
-rb_grn_object_from_ruby_object (VALUE object)
+static RbGrnObject *
+rb_grn_object_wrapper_from_ruby_object (VALUE object)
 {
     RbGrnObject *grn_object;
 
@@ -37,6 +44,15 @@ rb_grn_object_from_ruby_object (VALUE object)
 	rb_raise(rb_eGrnError, "groonga object is NULL");
 
     return grn_object;
+}
+
+grn_obj *
+rb_grn_object_from_ruby_object (VALUE object)
+{
+    if (NIL_P(object))
+        return NULL;
+
+    return rb_grn_object_wrapper_from_ruby_object(object)->object;
 }
 
 static void
@@ -71,7 +87,7 @@ rb_grn_object_close (VALUE self)
 {
     RbGrnObject *grn_object;
 
-    grn_object = rb_grn_object_from_ruby_object(self);
+    grn_object = rb_grn_object_wrapper_from_ruby_object(self);
     if (grn_object->context && grn_object->object) {
         GRN_OBJ_FIN(grn_object->context, grn_object->object);
         grn_object->context = NULL;
@@ -85,7 +101,7 @@ rb_grn_object_closed_p (VALUE self)
 {
     RbGrnObject *grn_object;
 
-    grn_object = rb_grn_object_from_ruby_object(self);
+    grn_object = rb_grn_object_wrapper_from_ruby_object(self);
     if (grn_object->context && grn_object->object)
         return Qfalse;
     else

@@ -61,13 +61,6 @@ RB_GROONGA_BEGIN_DECLS
 RB_GROONGA_VAR VALUE rb_eGrnError;
 RB_GROONGA_VAR VALUE rb_cGrnObject;
 
-typedef struct _RbGrnObject RbGrnObject;
-struct _RbGrnObject
-{
-    grn_ctx *context;
-    grn_obj *object;
-};
-
 void           rb_grn_init_utils                    (VALUE mGroonga);
 void           rb_grn_init_exception                (VALUE mGroonga);
 void           rb_grn_init_encoding                 (VALUE mGroonga);
@@ -103,7 +96,7 @@ VALUE          rb_grn_object_close                  (VALUE object);
 #define RVAL2GRNCONTEXT(object)       (rb_grn_context_from_ruby_object(object))
 #define GRNCONTEXT2RVAL(context)      (rb_grn_context_to_ruby_object(context))
 
-#define RVAL2GRNOBJECT(rb_object)     (rb_grn_object_from_ruby_object(rb_object)->object)
+#define RVAL2GRNOBJECT(rb_object)     (rb_grn_object_from_ruby_object(rb_object))
 #define GRNOBJECT2RVAL(klass, context, object) \
                                       (rb_grn_object_to_ruby_object(klass, context, object))
 
@@ -116,7 +109,7 @@ VALUE          rb_grn_encoding_to_ruby_object       (grn_encoding encoding);
 grn_ctx       *rb_grn_context_from_ruby_object      (VALUE object);
 VALUE          rb_grn_context_to_ruby_object        (grn_ctx *context);
 
-RbGrnObject   *rb_grn_object_from_ruby_object       (VALUE object);
+grn_obj       *rb_grn_object_from_ruby_object       (VALUE object);
 VALUE          rb_grn_object_to_ruby_object         (VALUE klass,
 						     grn_ctx *context,
 						     grn_obj *db);
