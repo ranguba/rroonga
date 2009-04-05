@@ -31,4 +31,22 @@ class TypeTest < Test::Unit::TestCase
     type = Groonga::Type.new("user-id", :type => :integer)
     assert_equal("user-id", type.name)
   end
+
+  def test_builtins
+    assert_equal_type("<int>", Groonga::Type::INT)
+    assert_equal_type("<uint>", Groonga::Type::UINT)
+    assert_equal_type("<int64>", Groonga::Type::INT64)
+    assert_equal_type("<float>", Groonga::Type::FLOAT)
+    assert_equal_type("<time>", Groonga::Type::TIME)
+    assert_equal_type("<shorttext>", Groonga::Type::SHORT_TEXT)
+    assert_equal_type("<text>", Groonga::Type::TEXT)
+    assert_equal_type("<longtext>", Groonga::Type::LONG_TEXT)
+  end
+
+  private
+  def assert_equal_type(expected_name, id)
+    type = Groonga::Context.default[id]
+    assert_equal(expected_name,
+                 type ? type.name : type)
+  end
 end

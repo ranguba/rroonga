@@ -97,4 +97,18 @@ rb_grn_init_type (VALUE mGrn)
     rb_cGrnType = rb_define_class_under(mGrn, "Type", rb_cGrnObject);
 
     rb_define_method(rb_cGrnType, "initialize", rb_grn_type_initialize, -1);
+
+    rb_define_const(rb_cGrnType, "INT", INT2NUM(GRN_DB_INT));
+    rb_define_const(rb_cGrnType, "UINT", INT2NUM(GRN_DB_UINT));
+    rb_define_const(rb_cGrnType, "INT64", INT2NUM(GRN_DB_INT64));
+    rb_define_const(rb_cGrnType, "FLOAT", INT2NUM(GRN_DB_FLOAT));
+    rb_define_const(rb_cGrnType, "TIME", INT2NUM(GRN_DB_TIME));
+    rb_define_const(rb_cGrnType, "SHORT_TEXT", INT2NUM(GRN_DB_SHORTTEXT));
+    rb_define_const(rb_cGrnType, "TEXT", INT2NUM(GRN_DB_TEXT));
+    rb_define_const(rb_cGrnType, "LONG_TEXT", INT2NUM(GRN_DB_LONGTEXT));
+    rb_define_const(rb_cGrnType, "DELIMIT", INT2NUM(GRN_DB_DELIMIT));
+    rb_define_const(rb_cGrnType, "UNIGRAM", INT2NUM(GRN_DB_UNIGRAM));
+    rb_define_const(rb_cGrnType, "BIGRAM", INT2NUM(GRN_DB_BIGRAM));
+    rb_define_const(rb_cGrnType, "TRIGRAM", INT2NUM(GRN_DB_TRIGRAM));
+    rb_define_const(rb_cGrnType, "MECAB", INT2NUM(GRN_DB_MECAB));
 }

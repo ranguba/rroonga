@@ -153,14 +153,12 @@ static VALUE
 rb_grn_object_get_id (VALUE self)
 {
     RbGrnObject *grn_object;
-    unsigned id;
 
     grn_object = rb_grn_object_wrapper_from_ruby_object(self);
     if (grn_object->object)
-        id = grn_object->object->header.domain;
+        return UINT2NUM(grn_object->object->header.domain);
     else
-        id = 0;
-    return UINT2NUM(id);
+        return Qnil;
 }
 
 static VALUE
