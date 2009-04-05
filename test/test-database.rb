@@ -17,6 +17,11 @@ class DatabaseTest < Test::Unit::TestCase
     assert_equal(database, Groonga::Context.default.database)
   end
 
+  def test_temporary
+    Groonga::Database.create
+    assert_equal([], @tmp_dir.children)
+  end
+
   def test_open
     db_path = @tmp_dir + "db"
     database = Groonga::Database.create(:path => db_path.to_s)
