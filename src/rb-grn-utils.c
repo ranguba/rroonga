@@ -19,24 +19,16 @@
 
 #include "rb-groonga-private.h"
 
-static void
-finish_groonga (void)
+const char *
+rb_grn_inspect (VALUE object)
 {
-    grn_fin();
+    VALUE inspected;
+
+    inspected = rb_funcall(object, rb_intern("inspect"), 0);
+    return RSTRING_PTR(inspected);
 }
 
 void
-Init_groonga(void)
+rb_grn_init_utils (VALUE mGroonga)
 {
-    VALUE mGroonga;
-
-    mGroonga = rb_define_module("Groonga");
-
-    rb_grn_init_utils(mGroonga);
-    rb_grn_init_exception(mGroonga);
-    rb_grn_init_encoding(mGroonga);
-    rb_grn_init_context(mGroonga);
-
-    rb_grn_check_rc(grn_init());
-    atexit(finish_groonga);
 }

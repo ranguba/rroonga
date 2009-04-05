@@ -24,8 +24,65 @@
 
 #include <groonga.h>
 
-void rb_grn_init_exception (VALUE mGroonga);
+#if defined(__cplusplus)
+#  define RB_GROONGA_BEGIN_DECLS extern "C" {
+#  define RB_GROONGA_END_DECLS }
+#else
+#  define RB_GROONGA_BEGIN_DECLS
+#  define RB_GROONGA_END_DECLS
+#endif
 
-void rb_grn_check_rc (grn_rc rc);
+RB_GROONGA_BEGIN_DECLS
+
+#if defined(RUBY_GROONGA_PLATFORM_WIN32) && !defined(RB_GROONGA_PLATFORM_WIN32)
+#  define RB_GROONGA_PLATFORM_WIN32 RUBY_GROONGA_PLATFORM_WIN32
+#endif
+
+#if defined(RUBY_GROONGA_STATIC_COMPILATION) && !defined(RB_GROONGA_STATIC_COMPILATION)
+#  define RB_GROONGA_STATIC_COMPILATION RUBY_GROONGA_STATIC_COMPILATION
+#endif
+
+#if defined(RB_GROONGA_PLATFORM_WIN32) && !defined(RB_GROONGA_STATIC_COMPILATION)
+#  ifdef RB_GROONGA_COMPILATION
+#    define RB_GROONGA_VAR __declspec(dllexport)
+#  else
+#    define RB_GROONGA_VAR extern __declspec(dllimport)
+#  endif
+#else
+#  define RB_GROONGA_VAR extern
+#endif
+
+RB_GROONGA_VAR VALUE rb_eGrnError;
+
+void        rb_grn_init_utils                              (VALUE mGroonga);
+void        rb_grn_init_exception                          (VALUE mGroonga);
+void        rb_grn_init_encoding                           (VALUE mGroonga);
+void        rb_grn_init_context                            (VALUE mGroonga);
+
+VALUE       rb_grn_rc_to_exception                         (grn_rc rc);
+const char *rb_grn_rc_to_message                           (grn_rc rc);
+void        rb_grn_check_rc                                (grn_rc rc);
+
+void        rb_grn_context_check                           (grn_ctx *context);
+
+const char *rb_grn_inspect                                 (VALUE object);
+
+#define RB_GRN_INTERN(string)         (ID2SYM(rb_intern(string)))
+
+#define RVAL2GRNCONTEXT(object)       (rb_grn_context_from_ruby_object(object))
+#define GRNCONTEXT2RVAL(context)      (rb_grn_context_to_ruby_object(context))
+
+#define RVAL2GRNENCODING(object)      (rb_grn_encoding_from_ruby_object(object))
+#define GRNENCODING2RVAL(encoding)    (rb_grn_encoding_to_ruby_object(encoding))
+
+grn_ctx              *rb_grn_context_from_ruby_object      (VALUE object);
+VALUE                 rb_grn_context_to_ruby_object        (grn_ctx *context);
+
+grn_encoding          rb_grn_encoding_from_ruby_object     (VALUE object);
+VALUE                 rb_grn_encoding_to_ruby_object       (grn_encoding encoding);
+
+
+
+RB_GROONGA_END_DECLS
 
 #endif

@@ -45,7 +45,7 @@ class ExceptionTest < Test::Unit::TestCase
     assert_const_defined(Groonga, :FunctionNotImplemented)
     assert_const_defined(Groonga, :DirectoryNotEmpty)
     assert_const_defined(Groonga, :IllegalByteSequence)
-    assert_const_defined(Groonga, :SocketNotInitialised)
+    assert_const_defined(Groonga, :SocketNotInitialized)
     assert_const_defined(Groonga, :OperationWouldBlock)
     assert_const_defined(Groonga, :AddressIsNotAvailable)
     assert_const_defined(Groonga, :NetworkIsDown)
