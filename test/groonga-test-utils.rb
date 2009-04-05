@@ -6,8 +6,8 @@ require 'groonga'
 module GroongaTestUtils
   class << self
     def included(base)
-      base.setup :setup_tmp_directory
-      base.teardown :teardown_tmp_directory
+      base.setup :setup_tmp_directory, :before => :prepend
+      base.teardown :teardown_tmp_directory, :after => :append
     end
   end
 
