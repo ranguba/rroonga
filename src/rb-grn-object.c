@@ -61,6 +61,33 @@ rb_grn_object_free (void *object)
     xfree(object);
 }
 
+static VALUE
+guess_object_class (grn_obj *object)
+{
+    VALUE klass = Qnil;
+
+    switch (object->header.type) {
+      case GRN_DB:
+	klass = rb_cGrnDatabase;
+	break;
+      case GRN_TABLE_HASH_KEY:
+      case GRN_TABLE_PAT_KEY:
+      case GRN_TABLE_NO_KEY:
+	klass = rb_cGrnTable;
+	break;
+      case GRN_TYPE:
+	klass = rb_cGrnType;
+	break;
+      default:
+	rb_raise(rb_eTypeError,
+		 "unsupported groonga object type: %d",
+		 object->header.type);
+	break;
+    }
+
+    return klass;
+}
+
 VALUE
 rb_grn_object_to_ruby_object (VALUE klass, grn_ctx *context, grn_obj *object)
 {
@@ -72,6 +99,9 @@ rb_grn_object_to_ruby_object (VALUE klass, grn_ctx *context, grn_obj *object)
     grn_object = ALLOC(RbGrnObject);
     grn_object->context = context;
     grn_object->object = object;
+
+    if (NIL_P(klass))
+        klass = guess_object_class(object);
 
     return Data_Wrap_Struct(klass, NULL, rb_grn_object_free, grn_object);
 }
@@ -134,6 +164,28 @@ rb_grn_object_get_id (VALUE self)
 }
 
 static VALUE
+rb_grn_object_get_name (VALUE self)
+{
+    RbGrnObject *grn_object;
+    VALUE rb_name;
+    int name_size;
+
+    grn_object = rb_grn_object_wrapper_from_ruby_object(self);
+    if (!grn_object->object)
+	return Qnil;
+
+    name_size = grn_obj_name(grn_object->context, grn_object->object, NULL, 0);
+    if (name_size == 0)
+	return Qnil;
+
+    rb_name = rb_str_buf_new(name_size);
+    RSTRING_LEN(rb_name) = name_size;
+    grn_obj_name(grn_object->context, grn_object->object,
+		 RSTRING_PTR(rb_name), name_size);
+    return rb_name;
+}
+
+static VALUE
 rb_grn_object_eql_p (VALUE self, VALUE other)
 {
     RbGrnObject *self_grn_object, *other_grn_object;
@@ -169,6 +221,7 @@ rb_grn_init_object (VALUE mGrn)
     rb_define_alloc_func(rb_cGrnObject, rb_grn_object_alloc);
 
     rb_define_method(rb_cGrnObject, "id", rb_grn_object_get_id, 0);
+    rb_define_method(rb_cGrnObject, "name", rb_grn_object_get_name, 0);
 
     rb_define_method(rb_cGrnObject, "eql?", rb_grn_object_eql_p, 1);
     rb_define_method(rb_cGrnObject, "hash", rb_grn_object_hash, 0);

@@ -21,12 +21,12 @@
 
 #define SELF(object) (RVAL2GRNDB(object))
 
-static VALUE cGrnDatabase;
+VALUE rb_cGrnDatabase;
 
 grn_obj *
 rb_grn_database_from_ruby_object (VALUE object)
 {
-    if (!RVAL2CBOOL(rb_obj_is_kind_of(object, cGrnDatabase))) {
+    if (!RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cGrnDatabase))) {
 	rb_raise(rb_eTypeError, "not a groonga database");
     }
 
@@ -36,7 +36,7 @@ rb_grn_database_from_ruby_object (VALUE object)
 VALUE
 rb_grn_database_to_ruby_object (grn_ctx *context, grn_obj *database)
 {
-    return GRNOBJECT2RVAL(cGrnDatabase, context, database);
+    return GRNOBJECT2RVAL(rb_cGrnDatabase, context, database);
 }
 
 static VALUE
@@ -117,12 +117,13 @@ rb_grn_database_s_open (VALUE argc, VALUE *argv, VALUE klass)
 void
 rb_grn_init_database (VALUE mGrn)
 {
-    cGrnDatabase = rb_define_class_under(mGrn, "Database", rb_cGrnObject);
+    rb_cGrnDatabase = rb_define_class_under(mGrn, "Database", rb_cGrnObject);
 
-    rb_define_singleton_method(cGrnDatabase, "create",
+    rb_define_singleton_method(rb_cGrnDatabase, "create",
 			       rb_grn_database_s_create, -1);
-    rb_define_singleton_method(cGrnDatabase, "open",
+    rb_define_singleton_method(rb_cGrnDatabase, "open",
 			       rb_grn_database_s_open, -1);
 
-    rb_define_method(cGrnDatabase, "initialize", rb_grn_database_initialize, -1);
+    rb_define_method(rb_cGrnDatabase, "initialize",
+		     rb_grn_database_initialize, -1);
 }

@@ -34,7 +34,8 @@ class DatabaseTest < Test::Unit::TestCase
   end
 
   def test_temporary
-    Groonga::Database.create
+    database = Groonga::Database.create
+    assert_nil(database.name)
     assert_equal([], @tmp_dir.children)
   end
 
@@ -48,6 +49,7 @@ class DatabaseTest < Test::Unit::TestCase
       assert_not_predicate(database, :closed?)
       called = true
     end
+    assert_true(called)
     assert_predicate(database, :closed?)
   end
 

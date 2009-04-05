@@ -69,6 +69,16 @@ rb_grn_scan_options (VALUE options, ...)
              rb_grn_inspect(available_keys));
 }
 
+rb_grn_boolean
+rb_grn_equal_option (VALUE option, const char *key)
+{
+    if (RVAL2CBOOL(rb_funcall(option, rb_intern("=="), 1, RB_GRN_INTERN(key))))
+	return RB_GRN_TRUE;
+    if (RVAL2CBOOL(rb_funcall(option, rb_intern("=="), 1, rb_str_new2(key))))
+	return RB_GRN_TRUE;
+    return RB_GRN_FALSE;
+}
+
 void
 rb_grn_init_utils (VALUE mGrn)
 {

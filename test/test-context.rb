@@ -64,4 +64,10 @@ class ContextTest < Test::Unit::TestCase
     context = Groonga::Context.new(:encoding => :utf8)
     assert_equal(Groonga::Encoding::UTF8, context.encoding)
   end
+
+  def test_array_reference
+    Groonga::Database.create
+    context = Groonga::Context.default
+    assert_equal("<int>", context["<int>"].name)
+  end
 end

@@ -58,8 +58,15 @@ RB_GRN_BEGIN_DECLS
 #  define RB_GRN_VAR extern
 #endif
 
+typedef int rb_grn_boolean;
+#define RB_GRN_FALSE (0)
+#define RB_GRN_TRUE (!RB_GRN_FALSE)
+
 RB_GRN_VAR VALUE rb_eGrnError;
 RB_GRN_VAR VALUE rb_cGrnObject;
+RB_GRN_VAR VALUE rb_cGrnDatabase;
+RB_GRN_VAR VALUE rb_cGrnTable;
+RB_GRN_VAR VALUE rb_cGrnType;
 
 void           rb_grn_init_utils                    (VALUE mGrn);
 void           rb_grn_init_exception                (VALUE mGrn);
@@ -68,6 +75,7 @@ void           rb_grn_init_context                  (VALUE mGrn);
 void           rb_grn_init_object                   (VALUE mGrn);
 void           rb_grn_init_database                 (VALUE mGrn);
 void           rb_grn_init_table                    (VALUE mGrn);
+void           rb_grn_init_type                     (VALUE mGrn);
 
 VALUE          rb_grn_rc_to_exception               (grn_rc rc);
 const char    *rb_grn_rc_to_message                 (grn_rc rc);
@@ -80,6 +88,8 @@ void           rb_grn_context_check                 (grn_ctx *context);
 const char    *rb_grn_inspect                       (VALUE object);
 void           rb_grn_scan_options                  (VALUE options, ...)
                                                      RB_GRN_GNUC_NULL_TERMINATED;
+rb_grn_boolean rb_grn_equal_option                  (VALUE option,
+						     const char *key);
 
 VALUE          rb_grn_object_alloc                  (VALUE klass);
 void           rb_grn_object_initialize             (VALUE self,

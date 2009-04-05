@@ -23,12 +23,12 @@
 
 #define SELF(object) (RVAL2GRNTABLE(object))
 
-static VALUE cGrnTable;
+VALUE rb_cGrnTable;
 
 grn_obj *
 rb_grn_table_from_ruby_object (VALUE object)
 {
-    if (!RVAL2CBOOL(rb_obj_is_kind_of(object, cGrnTable))) {
+    if (!RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cGrnTable))) {
 	rb_raise(rb_eTypeError, "not a groonga table");
     }
 
@@ -38,7 +38,7 @@ rb_grn_table_from_ruby_object (VALUE object)
 VALUE
 rb_grn_table_to_ruby_object (grn_ctx *context, grn_obj *table)
 {
-    return GRNOBJECT2RVAL(cGrnTable, context, table);
+    return GRNOBJECT2RVAL(rb_cGrnTable, context, table);
 }
 
 static VALUE
@@ -48,7 +48,7 @@ rb_grn_table_s_create (VALUE argc, VALUE *argv, VALUE klass)
     grn_obj *key_type, *table;
     const char *name = NULL, *path = NULL;
     unsigned name_size = 0, value_size;
-    int flags = 0;
+    grn_obj_flags flags = 0;
     grn_encoding encoding;
     VALUE rb_table;
     VALUE options, rb_context, rb_name, rb_path, rb_persistent;
@@ -86,11 +86,9 @@ rb_grn_table_s_create (VALUE argc, VALUE *argv, VALUE klass)
 	flags |= GRN_OBJ_PERSISTENT;
 
     if (NIL_P(rb_key_type)) {
-    } else if (RVAL2CBOOL(rb_funcall(rb_key_store, rb_intern("=="),
-				     1, RB_GRN_INTERN("pat")))) {
+    } else if (rb_grn_equal_option(rb_key_store, "pat")) {
 	flags |= GRN_OBJ_TABLE_PAT_KEY;
-    } else if (RVAL2CBOOL(rb_funcall(rb_key_store, rb_intern("=="),
-				     1, RB_GRN_INTERN("hash")))) {
+    } else if (rb_grn_equal_option(rb_key_store, "hash")) {
 	flags |= GRN_OBJ_TABLE_HASH_KEY;
     } else {
 	rb_raise(rb_eArgError, ":key_store should be one of [:pat, :hash]: %s",
@@ -130,14 +128,12 @@ rb_grn_table_initialize (VALUE argc, VALUE *argv, VALUE self)
 {
     grn_ctx *context;
     grn_obj *table;
-    const char *path;
-    char *name = NULL;
+    char *name = NULL, *path = NULL;
     unsigned name_size = 0;
     VALUE rb_path, options, rb_context, rb_name;
 
-    rb_scan_args(argc, argv, "11", &rb_path, &options);
+    rb_scan_args(argc, argv, "01", &options);
 
-    path = StringValueCStr(rb_path);
     rb_grn_scan_options(options,
 			"context", &rb_context,
 			"name", &rb_name,
@@ -145,10 +141,14 @@ rb_grn_table_initialize (VALUE argc, VALUE *argv, VALUE self)
 			NULL);
 
     context = rb_grn_context_ensure(rb_context);
+
     if (!NIL_P(rb_name)) {
 	name = StringValuePtr(rb_name);
 	name_size = RSTRING_LEN(rb_name);
     }
+
+    if (!NIL_P(rb_path))
+	path = StringValueCStr(rb_path);
 
     table = grn_table_open(context, name, name_size, path);
     rb_grn_object_initialize(self, context, table);
@@ -173,12 +173,12 @@ rb_grn_table_s_open (VALUE argc, VALUE *argv, VALUE klass)
 void
 rb_grn_init_table (VALUE mGrn)
 {
-    cGrnTable = rb_define_class_under(mGrn, "Table", rb_cGrnObject);
+    rb_cGrnTable = rb_define_class_under(mGrn, "Table", rb_cGrnObject);
 
-    rb_define_singleton_method(cGrnTable, "create",
+    rb_define_singleton_method(rb_cGrnTable, "create",
 			       rb_grn_table_s_create, -1);
-    rb_define_singleton_method(cGrnTable, "open",
+    rb_define_singleton_method(rb_cGrnTable, "open",
 			       rb_grn_table_s_open, -1);
 
-    rb_define_method(cGrnTable, "initialize", rb_grn_table_initialize, -1);
+    rb_define_method(rb_cGrnTable, "initialize", rb_grn_table_initialize, -1);
 }

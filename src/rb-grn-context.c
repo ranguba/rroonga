@@ -179,6 +179,32 @@ rb_grn_context_get_database (VALUE self)
     return GRNDB2RVAL(context, grn_ctx_db(context));
 }
 
+static VALUE
+rb_grn_context_array_reference (VALUE self, VALUE name_or_id)
+{
+    grn_ctx *context;
+    grn_obj *object;
+
+    context = SELF(self);
+    if (RVAL2CBOOL(rb_obj_is_kind_of(name_or_id, rb_cString))) {
+	const char *name;
+	unsigned name_size;
+
+	name = StringValuePtr(name_or_id);
+	name_size = RSTRING_LEN(name_or_id);
+	object = grn_ctx_lookup(context, name, name_size);
+    } else if (RVAL2CBOOL(rb_obj_is_kind_of(name_or_id, rb_cInteger))) {
+	unsigned id;
+	id = NUM2UINT(name_or_id);
+	object = grn_ctx_get(context, id);
+    } else {
+	rb_raise(rb_eArgError, "should be string or unsigned integer: %s",
+		 rb_grn_inspect(name_or_id));
+    }
+
+    return GRNOBJECT2RVAL(Qnil, context, object);
+}
+
 void
 rb_grn_init_context (VALUE mGrn)
 {
@@ -204,4 +230,6 @@ rb_grn_init_context (VALUE mGrn)
     rb_define_method(cGrnContext, "encoding", rb_grn_context_get_encoding, 0);
 
     rb_define_method(cGrnContext, "database", rb_grn_context_get_database, 0);
+
+    rb_define_method(cGrnContext, "[]", rb_grn_context_array_reference, 1);
 }
