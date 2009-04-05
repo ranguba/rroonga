@@ -34,6 +34,12 @@
 
 RB_GROONGA_BEGIN_DECLS
 
+#if __GNUC__ >= 4
+#  define RB_GROONGA_GNUC_NULL_TERMINATED __attribute__((__sentinel__))
+#else
+#  define RB_GROONGA_GNUC_NULL_TERMINATED
+#endif
+
 #if defined(RUBY_GROONGA_PLATFORM_WIN32) && !defined(RB_GROONGA_PLATFORM_WIN32)
 #  define RB_GROONGA_PLATFORM_WIN32 RUBY_GROONGA_PLATFORM_WIN32
 #endif
@@ -54,18 +60,20 @@ RB_GROONGA_BEGIN_DECLS
 
 RB_GROONGA_VAR VALUE rb_eGrnError;
 
-void        rb_grn_init_utils                              (VALUE mGroonga);
-void        rb_grn_init_exception                          (VALUE mGroonga);
-void        rb_grn_init_encoding                           (VALUE mGroonga);
-void        rb_grn_init_context                            (VALUE mGroonga);
+void           rb_grn_init_utils                    (VALUE mGroonga);
+void           rb_grn_init_exception                (VALUE mGroonga);
+void           rb_grn_init_encoding                 (VALUE mGroonga);
+void           rb_grn_init_context                  (VALUE mGroonga);
 
-VALUE       rb_grn_rc_to_exception                         (grn_rc rc);
-const char *rb_grn_rc_to_message                           (grn_rc rc);
-void        rb_grn_check_rc                                (grn_rc rc);
+VALUE          rb_grn_rc_to_exception               (grn_rc rc);
+const char    *rb_grn_rc_to_message                 (grn_rc rc);
+void           rb_grn_check_rc                      (grn_rc rc);
 
-void        rb_grn_context_check                           (grn_ctx *context);
+void           rb_grn_context_check                 (grn_ctx *context);
 
-const char *rb_grn_inspect                                 (VALUE object);
+const char    *rb_grn_inspect                       (VALUE object);
+void           rb_grn_scan_options                  (VALUE options, ...)
+                                                     RB_GROONGA_GNUC_NULL_TERMINATED;
 
 #define RB_GRN_INTERN(string)         (ID2SYM(rb_intern(string)))
 
@@ -78,11 +86,11 @@ const char *rb_grn_inspect                                 (VALUE object);
 #define RVAL2GRNENCODING(object)      (rb_grn_encoding_from_ruby_object(object))
 #define GRNENCODING2RVAL(encoding)    (rb_grn_encoding_to_ruby_object(encoding))
 
-grn_ctx              *rb_grn_context_from_ruby_object      (VALUE object);
-VALUE                 rb_grn_context_to_ruby_object        (grn_ctx *context);
+grn_ctx       *rb_grn_context_from_ruby_object      (VALUE object);
+VALUE          rb_grn_context_to_ruby_object        (grn_ctx *context);
 
-grn_encoding          rb_grn_encoding_from_ruby_object     (VALUE object);
-VALUE                 rb_grn_encoding_to_ruby_object       (grn_encoding encoding);
+grn_encoding   rb_grn_encoding_from_ruby_object     (VALUE object);
+VALUE          rb_grn_encoding_to_ruby_object       (grn_encoding encoding);
 
 
 

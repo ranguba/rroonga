@@ -19,6 +19,8 @@
 
 #include "rb-groonga-private.h"
 
+#include <stdarg.h>
+
 const char *
 rb_grn_inspect (VALUE object)
 {
@@ -26,6 +28,44 @@ rb_grn_inspect (VALUE object)
 
     inspected = rb_funcall(object, rb_intern("inspect"), 0);
     return RSTRING_PTR(inspected);
+}
+
+void
+rb_grn_scan_options (VALUE options, ...)
+{
+    VALUE available_keys;
+    const char *key;
+    VALUE *value;
+    va_list args;
+
+    if (NIL_P(options))
+        options = rb_hash_new();
+    else
+        options = rb_funcall(options, rb_intern("dup"), 0);
+
+
+    available_keys = rb_ary_new();
+    va_start(args, options);
+    key = va_arg(args, const char *);
+    while (key) {
+        VALUE rb_key;
+        value = va_arg(args, VALUE *);
+
+        rb_key = RB_GRN_INTERN(key);
+        rb_ary_push(available_keys, rb_key);
+        *value = rb_hash_delete(options, rb_key);
+
+        key = va_arg(args, const char *);
+    }
+    va_end(args);
+
+    if (RVAL2CBOOL(rb_funcall(options, rb_intern("empty?"), 0)))
+        return;
+
+    rb_raise(rb_eArgError,
+             "unexpected key(s) exist: %s: available keys: %s",
+             rb_grn_inspect(rb_funcall(options, rb_intern("keys"), 0)),
+             rb_grn_inspect(available_keys));
 }
 
 void

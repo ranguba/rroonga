@@ -108,6 +108,7 @@ rb_grn_context_initialize (VALUE argc, VALUE *argv, VALUE self)
     grn_encoding encoding = GRN_ENC_DEFAULT;
     grn_rc rc;
     VALUE options, default_options;
+    VALUE use_ql, batch_mode, rb_encoding;
 
     rb_scan_args(argc, argv, "01", &options);
     default_options = rb_grn_context_s_get_default_options(rb_obj_class(self));
@@ -118,12 +119,17 @@ rb_grn_context_initialize (VALUE argc, VALUE *argv, VALUE self)
 	options = rb_hash_new();
     options = rb_funcall(default_options, rb_intern("merge"), 1, options);
 
-    if (RVAL2CBOOL(rb_hash_aref(options, RB_GRN_INTERN("use_ql"))))
+    rb_grn_scan_options(options,
+			"use_ql", &use_ql,
+			"batch_mode", &batch_mode,
+			"encoding", &rb_encoding,
+			NULL);
+
+    if (RVAL2CBOOL(use_ql))
 	flags |= GRN_CTX_USE_QL;
-    if (RVAL2CBOOL(rb_hash_aref(options, RB_GRN_INTERN("batch_mode"))))
+    if (RVAL2CBOOL(batch_mode))
 	flags |= GRN_CTX_BATCH_MODE;
-    encoding =
-	RVAL2GRNENCODING(rb_hash_aref(options, RB_GRN_INTERN("encoding")));
+    encoding = RVAL2GRNENCODING(rb_encoding);
 
     context = ALLOC(grn_ctx);
     DATA_PTR(self) = context;
