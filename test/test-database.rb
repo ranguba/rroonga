@@ -17,7 +17,7 @@ class DatabaseTest < Test::Unit::TestCase
     assert_equal(database, Groonga::Context.default.database)
   end
 
-  def test_temporary
+  def test_anonymous
     Groonga::Database.create
     assert_equal([], @tmp_dir.children)
   end
