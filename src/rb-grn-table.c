@@ -19,6 +19,8 @@
 
 #include "rb-grn.h"
 
+#define DEFAULT_VALUE_SIZE 512
+
 #define SELF(object) (RVAL2GRNTABLE(object))
 
 static VALUE cGrnTable;
@@ -104,7 +106,7 @@ rb_grn_table_s_create (VALUE argc, VALUE *argv, VALUE klass)
     key_type = RVAL2GRNOBJECT(rb_key_type);
 
     if (NIL_P(rb_value_size)) {
-	value_size = 256;
+	value_size = DEFAULT_VALUE_SIZE;
     } else {
 	value_size = NUM2UINT(rb_value_size);
     }

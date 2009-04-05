@@ -27,7 +27,8 @@ class DatabaseTest < Test::Unit::TestCase
     database = Groonga::Database.create(:path => db_path.to_s)
 
     called = false
-    Groonga::Database.open(db_path.to_s) do |database|
+    Groonga::Database.open(db_path.to_s) do |_database|
+      database = _database
       assert_not_predicate(database, :closed?)
       called = true
     end
