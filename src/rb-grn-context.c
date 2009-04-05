@@ -68,24 +68,62 @@ rb_grn_context_check (grn_ctx *context)
 }
 
 static VALUE
+rb_grn_context_s_get_default (VALUE self)
+{
+    VALUE context;
+
+    context = rb_cv_get(self, "@@default");
+    if (NIL_P(context)) {
+	context = rb_funcall(cGrnContext, rb_intern("new"), 0);
+	rb_cv_set(self, "@@default", context);
+    }
+    return context;
+}
+
+static VALUE
+rb_grn_context_s_set_default (VALUE self, VALUE context)
+{
+    rb_cv_set(self, "@@default", context);
+    return Qnil;
+}
+
+static VALUE
+rb_grn_context_s_get_default_options (VALUE self)
+{
+    return rb_cv_get(self, "@@default_options");
+}
+
+static VALUE
+rb_grn_context_s_set_default_options (VALUE self, VALUE options)
+{
+    rb_cv_set(self, "@@default_options", options);
+    return Qnil;
+}
+
+static VALUE
 rb_grn_context_initialize (VALUE argc, VALUE *argv, VALUE self)
 {
     grn_ctx *context;
     int flags = 0;
     grn_encoding encoding = GRN_ENC_DEFAULT;
     grn_rc rc;
-    VALUE options;
+    VALUE options, default_options;
 
     rb_scan_args(argc, argv, "01", &options);
-    if (NIL_P(options))
-        options = rb_hash_new();
+    default_options = rb_grn_context_s_get_default_options(rb_obj_class(self));
+    if (NIL_P(default_options))
+	default_options = rb_hash_new();
 
-    if (RVAL2CBOOL(rb_hash_aref(options, ID2SYM(rb_intern("use_ql")))))
+    if (NIL_P(options))
+	options = rb_hash_new();
+    options = rb_funcall(default_options, rb_intern("merge"), 1, options);
+
+    if (RVAL2CBOOL(rb_hash_aref(options, RB_GRN_INTERN("use_ql"))))
 	flags |= GRN_CTX_USE_QL;
-    if (RVAL2CBOOL(rb_hash_aref(options, ID2SYM(rb_intern("batch_mode")))))
+    if (RVAL2CBOOL(rb_hash_aref(options, RB_GRN_INTERN("batch_mode"))))
 	flags |= GRN_CTX_BATCH_MODE;
     encoding =
-	RVAL2GRNENCODING(rb_hash_aref(options, ID2SYM(rb_intern("encoding"))));
+	RVAL2GRNENCODING(rb_hash_aref(options, RB_GRN_INTERN("encoding")));
 
     context = ALLOC(grn_ctx);
     DATA_PTR(self) = context;
@@ -117,6 +155,18 @@ rb_grn_init_context (VALUE mGroonga)
 {
     cGrnContext = rb_define_class_under(mGroonga, "Context", rb_cObject);
     rb_define_alloc_func(cGrnContext, rb_grn_context_alloc);
+
+    rb_cv_set(cGrnContext, "@@default", Qnil);
+    rb_cv_set(cGrnContext, "@@default_options", Qnil);
+
+    rb_define_singleton_method(cGrnContext, "default",
+			       rb_grn_context_s_get_default, 0);
+    rb_define_singleton_method(cGrnContext, "default=",
+			       rb_grn_context_s_set_default, 1);
+    rb_define_singleton_method(cGrnContext, "default_options",
+			       rb_grn_context_s_get_default_options, 0);
+    rb_define_singleton_method(cGrnContext, "default_options=",
+			       rb_grn_context_s_set_default_options, 1);
 
     rb_define_method(cGrnContext, "initialize", rb_grn_context_initialize, -1);
     rb_define_method(cGrnContext, "use_ql?", rb_grn_context_use_ql_p, 0);
