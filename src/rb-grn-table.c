@@ -17,7 +17,7 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-#include "rb-groonga-private.h"
+#include "rb-grn.h"
 
 #define SELF(object) (RVAL2GRNTABLE(object))
 
@@ -43,13 +43,12 @@ static VALUE
 rb_grn_table_s_create (VALUE argc, VALUE *argv, VALUE klass)
 {
     grn_ctx *context;
-    grn_obj *key_type;
-    RbGrnObject *object;
+    grn_obj *key_type, *table;
     const char *name = NULL, *path = NULL;
     unsigned name_size = 0, value_size;
     int flags = 0;
     grn_encoding encoding;
-    VALUE table;
+    VALUE rb_table;
     VALUE options, rb_context, rb_name, rb_path, rb_persistent;
     VALUE rb_key_store, rb_key_normalize, rb_key_with_sis, rb_key_type;
     VALUE rb_value_size, rb_encoding;
@@ -112,26 +111,23 @@ rb_grn_table_s_create (VALUE argc, VALUE *argv, VALUE klass)
 
     encoding = RVAL2GRNENCODING(rb_encoding);
 
-    table = rb_grn_object_alloc(klass);
-    object = ALLOC(RbGrnObject);
-    DATA_PTR(table) = object;
-    object->context = context;
-    object->object = grn_table_create(context, name, name_size, path,
-				      flags, key_type, value_size,
-				      encoding);
+    table = grn_table_create(context, name, name_size, path,
+			     flags, key_type, value_size,
+			     encoding);
+    rb_table = GRNOBJECT2RVAL(klass, context, table);
     rb_grn_context_check(context);
 
     if (rb_block_given_p())
-        return rb_ensure(rb_yield, table, rb_grn_object_close, table);
+        return rb_ensure(rb_yield, rb_table, rb_grn_object_close, rb_table);
     else
-        return table;
+        return rb_table;
 }
 
 static VALUE
 rb_grn_table_initialize (VALUE argc, VALUE *argv, VALUE self)
 {
     grn_ctx *context;
-    RbGrnObject *object;
+    grn_obj *table;
     const char *path;
     char *name = NULL;
     unsigned name_size = 0;
@@ -152,10 +148,8 @@ rb_grn_table_initialize (VALUE argc, VALUE *argv, VALUE self)
 	name_size = RSTRING_LEN(rb_name);
     }
 
-    object = ALLOC(RbGrnObject);
-    DATA_PTR(self) = object;
-    object->context = context;
-    object->object = grn_table_open(context, name, name_size, path);
+    table = grn_table_open(context, name, name_size, path);
+    rb_grn_object_initialize(self, context, table);
     rb_grn_context_check(context);
 
     return Qnil;
@@ -175,9 +169,9 @@ rb_grn_table_s_open (VALUE argc, VALUE *argv, VALUE klass)
 }
 
 void
-rb_grn_init_table (VALUE mGroonga)
+rb_grn_init_table (VALUE mGrn)
 {
-    cGrnTable = rb_define_class_under(mGroonga, "Table", rb_cGrnObject);
+    cGrnTable = rb_define_class_under(mGrn, "Table", rb_cGrnObject);
 
     rb_define_singleton_method(cGrnTable, "create",
 			       rb_grn_table_s_create, -1);

@@ -17,7 +17,7 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-#include "rb-groonga-private.h"
+#include "rb-grn.h"
 
 #define SELF(object) (RVAL2GRNCONTEXT(object))
 
@@ -180,9 +180,9 @@ rb_grn_context_get_database (VALUE self)
 }
 
 void
-rb_grn_init_context (VALUE mGroonga)
+rb_grn_init_context (VALUE mGrn)
 {
-    cGrnContext = rb_define_class_under(mGroonga, "Context", rb_cObject);
+    cGrnContext = rb_define_class_under(mGrn, "Context", rb_cObject);
     rb_define_alloc_func(cGrnContext, rb_grn_context_alloc);
 
     rb_cv_set(cGrnContext, "@@default", Qnil);

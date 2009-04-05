@@ -17,7 +17,7 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-#include "rb-groonga-private.h"
+#include "rb-grn.h"
 
 static void
 finish_groonga (void)
@@ -28,17 +28,17 @@ finish_groonga (void)
 void
 Init_groonga(void)
 {
-    VALUE mGroonga;
+    VALUE mGrn;
 
-    mGroonga = rb_define_module("Groonga");
+    mGrn = rb_define_module("Groonga");
 
-    rb_grn_init_utils(mGroonga);
-    rb_grn_init_exception(mGroonga);
-    rb_grn_init_encoding(mGroonga);
-    rb_grn_init_context(mGroonga);
-    rb_grn_init_object(mGroonga);
-    rb_grn_init_database(mGroonga);
-    rb_grn_init_table(mGroonga);
+    rb_grn_init_utils(mGrn);
+    rb_grn_init_exception(mGrn);
+    rb_grn_init_encoding(mGrn);
+    rb_grn_init_context(mGrn);
+    rb_grn_init_object(mGrn);
+    rb_grn_init_database(mGrn);
+    rb_grn_init_table(mGrn);
 
     rb_grn_check_rc(grn_init());
     atexit(finish_groonga);

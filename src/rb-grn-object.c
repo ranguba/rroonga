@@ -17,7 +17,7 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-#include "rb-groonga-private.h"
+#include "rb-grn.h"
 
 #define SELF(object) (RVAL2GRNOBJECT(object))
 
@@ -82,6 +82,17 @@ rb_grn_object_alloc (VALUE klass)
     return Data_Wrap_Struct(klass, NULL, rb_grn_object_free, NULL);
 }
 
+void
+rb_grn_object_initialize (VALUE self, grn_ctx *context, grn_obj *object)
+{
+    RbGrnObject *grn_object;
+
+    grn_object = ALLOC(RbGrnObject);
+    DATA_PTR(self) = grn_object;
+    grn_object->context = context;
+    grn_object->object = object;
+}
+
 VALUE
 rb_grn_object_close (VALUE self)
 {
@@ -111,12 +122,22 @@ rb_grn_object_closed_p (VALUE self)
 static VALUE
 rb_grn_object_get_id (VALUE self)
 {
-    return UINT2NUM(SELF(self)->header.domain);
+    RbGrnObject *grn_object;
+    unsigned id;
+
+    grn_object = rb_grn_object_wrapper_from_ruby_object(self);
+    if (grn_object->object)
+        id = grn_object->object->header.domain;
+    else
+        id = 0;
+    return UINT2NUM(id);
 }
 
 static VALUE
 rb_grn_object_eql_p (VALUE self, VALUE other)
 {
+    RbGrnObject *self_grn_object, *other_grn_object;
+
     if (self == other)
         return Qtrue;
 
@@ -124,8 +145,15 @@ rb_grn_object_eql_p (VALUE self, VALUE other)
                                rb_obj_class(other))))
         return Qfalse;
 
-    return CBOOL2RVAL(SELF(self)->header.domain ==
-                      SELF(other)->header.domain);
+    self_grn_object = rb_grn_object_wrapper_from_ruby_object(self);
+    other_grn_object = rb_grn_object_wrapper_from_ruby_object(other);
+
+    if (self_grn_object->object == other_grn_object->object)
+        return Qtrue;
+    if (!self_grn_object->object || !other_grn_object->object)
+        return Qfalse;
+    return CBOOL2RVAL(self_grn_object->object->header.domain ==
+                      other_grn_object->object->header.domain);
 }
 
 static VALUE
@@ -135,9 +163,9 @@ rb_grn_object_hash (VALUE self)
 }
 
 void
-rb_grn_init_object (VALUE mGroonga)
+rb_grn_init_object (VALUE mGrn)
 {
-    rb_cGrnObject = rb_define_class_under(mGroonga, "Object", rb_cObject);
+    rb_cGrnObject = rb_define_class_under(mGrn, "Object", rb_cObject);
     rb_define_alloc_func(rb_cGrnObject, rb_grn_object_alloc);
 
     rb_define_method(rb_cGrnObject, "id", rb_grn_object_get_id, 0);

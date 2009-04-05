@@ -17,7 +17,7 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-#include "rb-groonga-private.h"
+#include "rb-grn.h"
 
 #include <stdarg.h>
 
@@ -70,6 +70,6 @@ rb_grn_scan_options (VALUE options, ...)
 }
 
 void
-rb_grn_init_utils (VALUE mGroonga)
+rb_grn_init_utils (VALUE mGrn)
 {
 }

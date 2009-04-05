@@ -17,7 +17,7 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-#include "rb-groonga-private.h"
+#include "rb-grn.h"
 
 static VALUE mGrnEncoding;
 static VALUE RB_GRN_ENCODING_DEFAULT;
@@ -91,9 +91,9 @@ rb_grn_encoding_to_ruby_object (grn_encoding encoding)
 }
 
 void
-rb_grn_init_encoding (VALUE mGroonga)
+rb_grn_init_encoding (VALUE mGrn)
 {
-    mGrnEncoding = rb_define_module_under(mGroonga, "Encoding");
+    mGrnEncoding = rb_define_module_under(mGrn, "Encoding");
 
 #define DEFINE_ENCODING(name, value)                                    \
     RB_GRN_ENCODING_ ## name = RB_GRN_INTERN(value);                    \

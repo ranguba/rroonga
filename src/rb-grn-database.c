@@ -17,7 +17,7 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-#include "rb-groonga-private.h"
+#include "rb-grn.h"
 
 #define SELF(object) (RVAL2GRNDB(object))
 
@@ -43,10 +43,10 @@ static VALUE
 rb_grn_database_s_create (VALUE argc, VALUE *argv, VALUE klass)
 {
     grn_ctx *context;
+    grn_obj *database;
     grn_db_create_optarg create_args;
-    RbGrnObject *object;
     const char *path = NULL;
-    VALUE database;
+    VALUE rb_database;
     VALUE rb_path, options, rb_context, encoding, builtin_type_names;
 
     rb_scan_args(argc, argv, "01", &options);
@@ -66,24 +66,22 @@ rb_grn_database_s_create (VALUE argc, VALUE *argv, VALUE klass)
     create_args.builtin_type_names = NULL;
     create_args.n_builtin_type_names = 0;
 
-    database = rb_grn_object_alloc(klass);
-    object = ALLOC(RbGrnObject);
-    DATA_PTR(database) = object;
-    object->context = context;
-    object->object = grn_db_create(context, path, &create_args);
+    database = grn_db_create(context, path, &create_args);
+    rb_database = GRNOBJECT2RVAL(klass, context, database);
     rb_grn_context_check(context);
 
     if (rb_block_given_p())
-        return rb_ensure(rb_yield, database, rb_grn_object_close, database);
+        return rb_ensure(rb_yield, rb_database,
+			 rb_grn_object_close, rb_database);
     else
-        return database;
+        return rb_database;
 }
 
 static VALUE
 rb_grn_database_initialize (VALUE argc, VALUE *argv, VALUE self)
 {
     grn_ctx *context;
-    RbGrnObject *object;
+    grn_obj *database;
     const char *path;
     VALUE rb_path, options, rb_context;
 
@@ -96,10 +94,8 @@ rb_grn_database_initialize (VALUE argc, VALUE *argv, VALUE self)
 
     context = rb_grn_context_ensure(rb_context);
 
-    object = ALLOC(RbGrnObject);
-    DATA_PTR(self) = object;
-    object->context = context;
-    object->object = grn_db_open(context, path);
+    database = grn_db_open(context, path);
+    rb_grn_object_initialize(self, context, database);
     rb_grn_context_check(context);
 
     return Qnil;
@@ -119,9 +115,9 @@ rb_grn_database_s_open (VALUE argc, VALUE *argv, VALUE klass)
 }
 
 void
-rb_grn_init_database (VALUE mGroonga)
+rb_grn_init_database (VALUE mGrn)
 {
-    cGrnDatabase = rb_define_class_under(mGroonga, "Database", rb_cGrnObject);
+    cGrnDatabase = rb_define_class_under(mGrn, "Database", rb_cGrnObject);
 
     rb_define_singleton_method(cGrnDatabase, "create",
 			       rb_grn_database_s_create, -1);

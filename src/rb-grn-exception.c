@@ -17,7 +17,7 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-#include "rb-groonga-private.h"
+#include "rb-grn.h"
 
 VALUE rb_eGrnError;
 
@@ -503,132 +503,132 @@ rb_grn_check_rc (grn_rc rc)
 }
 
 void
-rb_grn_init_exception (VALUE mGroonga)
+rb_grn_init_exception (VALUE mGrn)
 {
     rb_eGrnError =
-        rb_define_class_under(mGroonga, "Error", rb_eStandardError);
+        rb_define_class_under(mGrn, "Error", rb_eStandardError);
     eGrnEndOfData =
-        rb_define_class_under(mGroonga, "EndOfData", rb_eGrnError);
+        rb_define_class_under(mGrn, "EndOfData", rb_eGrnError);
     eGrnUnknownError =
-        rb_define_class_under(mGroonga, "UnknownError", rb_eGrnError);
+        rb_define_class_under(mGrn, "UnknownError", rb_eGrnError);
     eGrnOperationNotPermitted =
-        rb_define_class_under(mGroonga, "OperationNotPermitted", rb_eGrnError);
+        rb_define_class_under(mGrn, "OperationNotPermitted", rb_eGrnError);
     eGrnNoSuchFileOrDirectory =
-        rb_define_class_under(mGroonga, "NoSuchFileOrDirectory", rb_eGrnError);
+        rb_define_class_under(mGrn, "NoSuchFileOrDirectory", rb_eGrnError);
     eGrnNoSuchProcess =
-        rb_define_class_under(mGroonga, "NoSuchProcess", rb_eGrnError);
+        rb_define_class_under(mGrn, "NoSuchProcess", rb_eGrnError);
     eGrnInterruptedFunctionCall =
-        rb_define_class_under(mGroonga, "InterruptedFunctionCall", rb_eGrnError);
+        rb_define_class_under(mGrn, "InterruptedFunctionCall", rb_eGrnError);
     eGrnInputOutputError =
-        rb_define_class_under(mGroonga, "InputOutputError", rb_eGrnError);
+        rb_define_class_under(mGrn, "InputOutputError", rb_eGrnError);
     eGrnNoSuchDeviceOrAddress =
-        rb_define_class_under(mGroonga, "NoSuchDeviceOrAddress", rb_eGrnError);
+        rb_define_class_under(mGrn, "NoSuchDeviceOrAddress", rb_eGrnError);
     eGrnArgListTooLong =
-        rb_define_class_under(mGroonga, "ArgListTooLong", rb_eGrnError);
+        rb_define_class_under(mGrn, "ArgListTooLong", rb_eGrnError);
     eGrnExecFormatError =
-        rb_define_class_under(mGroonga, "ExecFormatError", rb_eGrnError);
+        rb_define_class_under(mGrn, "ExecFormatError", rb_eGrnError);
     eGrnBadFileDescriptor =
-        rb_define_class_under(mGroonga, "BadFileDescriptor", rb_eGrnError);
+        rb_define_class_under(mGrn, "BadFileDescriptor", rb_eGrnError);
     eGrnNoChildProcesses =
-        rb_define_class_under(mGroonga, "NoChildProcesses", rb_eGrnError);
+        rb_define_class_under(mGrn, "NoChildProcesses", rb_eGrnError);
     eGrnResourceTemporarilyUnavailable =
-        rb_define_class_under(mGroonga, "ResourceTemporarilyUnavailable", rb_eGrnError);
+        rb_define_class_under(mGrn, "ResourceTemporarilyUnavailable", rb_eGrnError);
     eGrnNotEnoughSpace =
-        rb_define_class_under(mGroonga, "NotEnoughSpace", rb_eGrnError);
+        rb_define_class_under(mGrn, "NotEnoughSpace", rb_eGrnError);
     eGrnPermissionDenied =
-        rb_define_class_under(mGroonga, "PermissionDenied", rb_eGrnError);
+        rb_define_class_under(mGrn, "PermissionDenied", rb_eGrnError);
     eGrnBadAddress =
-        rb_define_class_under(mGroonga, "BadAddress", rb_eGrnError);
+        rb_define_class_under(mGrn, "BadAddress", rb_eGrnError);
     eGrnResourceBusy =
-        rb_define_class_under(mGroonga, "ResourceBusy", rb_eGrnError);
+        rb_define_class_under(mGrn, "ResourceBusy", rb_eGrnError);
     eGrnFileExists =
-        rb_define_class_under(mGroonga, "FileExists", rb_eGrnError);
+        rb_define_class_under(mGrn, "FileExists", rb_eGrnError);
     eGrnImproperLink =
-        rb_define_class_under(mGroonga, "ImproperLink", rb_eGrnError);
+        rb_define_class_under(mGrn, "ImproperLink", rb_eGrnError);
     eGrnNoSuchDevice =
-        rb_define_class_under(mGroonga, "NoSuchDevice", rb_eGrnError);
+        rb_define_class_under(mGrn, "NoSuchDevice", rb_eGrnError);
     eGrnNotADirectory =
-        rb_define_class_under(mGroonga, "NotADirectory", rb_eGrnError);
+        rb_define_class_under(mGrn, "NotADirectory", rb_eGrnError);
     eGrnIsADirectory =
-        rb_define_class_under(mGroonga, "IsADirectory", rb_eGrnError);
+        rb_define_class_under(mGrn, "IsADirectory", rb_eGrnError);
     eGrnInvalidArgument =
-        rb_define_class_under(mGroonga, "InvalidArgument", rb_eGrnError);
+        rb_define_class_under(mGrn, "InvalidArgument", rb_eGrnError);
     eGrnTooManyOpenFilesInSystem =
-        rb_define_class_under(mGroonga, "TooManyOpenFilesInSystem", rb_eGrnError);
+        rb_define_class_under(mGrn, "TooManyOpenFilesInSystem", rb_eGrnError);
     eGrnTooManyOpenFiles =
-        rb_define_class_under(mGroonga, "TooManyOpenFiles", rb_eGrnError);
+        rb_define_class_under(mGrn, "TooManyOpenFiles", rb_eGrnError);
     eGrnInappropriateIOControlOperation =
-        rb_define_class_under(mGroonga, "InappropriateIOControlOperation", rb_eGrnError);
+        rb_define_class_under(mGrn, "InappropriateIOControlOperation", rb_eGrnError);
     eGrnFileTooLarge =
-        rb_define_class_under(mGroonga, "FileTooLarge", rb_eGrnError);
+        rb_define_class_under(mGrn, "FileTooLarge", rb_eGrnError);
     eGrnNoSpaceLeftOnDevice =
-        rb_define_class_under(mGroonga, "NoSpaceLeftOnDevice", rb_eGrnError);
+        rb_define_class_under(mGrn, "NoSpaceLeftOnDevice", rb_eGrnError);
     eGrnInvalidSeek =
-        rb_define_class_under(mGroonga, "InvalidSeek", rb_eGrnError);
+        rb_define_class_under(mGrn, "InvalidSeek", rb_eGrnError);
     eGrnReadOnlyFileSystem =
-        rb_define_class_under(mGroonga, "ReadOnlyFileSystem", rb_eGrnError);
+        rb_define_class_under(mGrn, "ReadOnlyFileSystem", rb_eGrnError);
     eGrnTooManyLinks =
-        rb_define_class_under(mGroonga, "TooManyLinks", rb_eGrnError);
+        rb_define_class_under(mGrn, "TooManyLinks", rb_eGrnError);
     eGrnBrokenPipe =
-        rb_define_class_under(mGroonga, "BrokenPipe", rb_eGrnError);
+        rb_define_class_under(mGrn, "BrokenPipe", rb_eGrnError);
     eGrnDomainError =
-        rb_define_class_under(mGroonga, "DomainError", rb_eGrnError);
+        rb_define_class_under(mGrn, "DomainError", rb_eGrnError);
     eGrnResultTooLarge =
-        rb_define_class_under(mGroonga, "ResultTooLarge", rb_eGrnError);
+        rb_define_class_under(mGrn, "ResultTooLarge", rb_eGrnError);
     eGrnResourceDeadlockAvoided =
-        rb_define_class_under(mGroonga, "ResourceDeadlockAvoided", rb_eGrnError);
+        rb_define_class_under(mGrn, "ResourceDeadlockAvoided", rb_eGrnError);
     eGrnNoMemoryAvailable =
-        rb_define_class_under(mGroonga, "NoMemoryAvailable", rb_eGrnError);
+        rb_define_class_under(mGrn, "NoMemoryAvailable", rb_eGrnError);
     eGrnFilenameTooLong =
-        rb_define_class_under(mGroonga, "FilenameTooLong", rb_eGrnError);
+        rb_define_class_under(mGrn, "FilenameTooLong", rb_eGrnError);
     eGrnNoLocksAvailable =
-        rb_define_class_under(mGroonga, "NoLocksAvailable", rb_eGrnError);
+        rb_define_class_under(mGrn, "NoLocksAvailable", rb_eGrnError);
     eGrnFunctionNotImplemented =
-        rb_define_class_under(mGroonga, "FunctionNotImplemented", rb_eGrnError);
+        rb_define_class_under(mGrn, "FunctionNotImplemented", rb_eGrnError);
     eGrnDirectoryNotEmpty =
-        rb_define_class_under(mGroonga, "DirectoryNotEmpty", rb_eGrnError);
+        rb_define_class_under(mGrn, "DirectoryNotEmpty", rb_eGrnError);
     eGrnIllegalByteSequence =
-        rb_define_class_under(mGroonga, "IllegalByteSequence", rb_eGrnError);
+        rb_define_class_under(mGrn, "IllegalByteSequence", rb_eGrnError);
     eGrnSocketNotInitialized =
-        rb_define_class_under(mGroonga, "SocketNotInitialized", rb_eGrnError);
+        rb_define_class_under(mGrn, "SocketNotInitialized", rb_eGrnError);
     eGrnOperationWouldBlock =
-        rb_define_class_under(mGroonga, "OperationWouldBlock", rb_eGrnError);
+        rb_define_class_under(mGrn, "OperationWouldBlock", rb_eGrnError);
     eGrnAddressIsNotAvailable =
-        rb_define_class_under(mGroonga, "AddressIsNotAvailable", rb_eGrnError);
+        rb_define_class_under(mGrn, "AddressIsNotAvailable", rb_eGrnError);
     eGrnNetworkIsDown =
-        rb_define_class_under(mGroonga, "NetworkIsDown", rb_eGrnError);
+        rb_define_class_under(mGrn, "NetworkIsDown", rb_eGrnError);
     eGrnNoBuffer =
-        rb_define_class_under(mGroonga, "NoBuffer", rb_eGrnError);
+        rb_define_class_under(mGrn, "NoBuffer", rb_eGrnError);
     eGrnSocketIsAlreadyConnected =
-        rb_define_class_under(mGroonga, "SocketIsAlreadyConnected", rb_eGrnError);
+        rb_define_class_under(mGrn, "SocketIsAlreadyConnected", rb_eGrnError);
     eGrnSocketIsNotConnected =
-        rb_define_class_under(mGroonga, "SocketIsNotConnected", rb_eGrnError);
+        rb_define_class_under(mGrn, "SocketIsNotConnected", rb_eGrnError);
     eGrnSocketIsAlreadyShutdowned =
-        rb_define_class_under(mGroonga, "SocketIsAlreadyShutdowned", rb_eGrnError);
+        rb_define_class_under(mGrn, "SocketIsAlreadyShutdowned", rb_eGrnError);
     eGrnOperationTimeout =
-        rb_define_class_under(mGroonga, "OperationTimeout", rb_eGrnError);
+        rb_define_class_under(mGrn, "OperationTimeout", rb_eGrnError);
     eGrnConnectionRefused =
-        rb_define_class_under(mGroonga, "ConnectionRefused", rb_eGrnError);
+        rb_define_class_under(mGrn, "ConnectionRefused", rb_eGrnError);
     eGrnRangeError =
-        rb_define_class_under(mGroonga, "RangeError", rb_eGrnError);
+        rb_define_class_under(mGrn, "RangeError", rb_eGrnError);
     eGrnTokenizerError =
-        rb_define_class_under(mGroonga, "TokenizerError", rb_eGrnError);
+        rb_define_class_under(mGrn, "TokenizerError", rb_eGrnError);
     eGrnFileCorrupt =
-        rb_define_class_under(mGroonga, "FileCorrupt", rb_eGrnError);
+        rb_define_class_under(mGrn, "FileCorrupt", rb_eGrnError);
     eGrnInvalidFormat =
-        rb_define_class_under(mGroonga, "InvalidFormat", rb_eGrnError);
+        rb_define_class_under(mGrn, "InvalidFormat", rb_eGrnError);
     eGrnObjectCorrupt =
-        rb_define_class_under(mGroonga, "ObjectCorrupt", rb_eGrnError);
+        rb_define_class_under(mGrn, "ObjectCorrupt", rb_eGrnError);
     eGrnTooManySymbolicLinks =
-        rb_define_class_under(mGroonga, "TooManySymbolicLinks", rb_eGrnError);
+        rb_define_class_under(mGrn, "TooManySymbolicLinks", rb_eGrnError);
     eGrnNotSocket =
-        rb_define_class_under(mGroonga, "NotSocket", rb_eGrnError);
+        rb_define_class_under(mGrn, "NotSocket", rb_eGrnError);
     eGrnOperationNotSupported =
-        rb_define_class_under(mGroonga, "OperationNotSupported", rb_eGrnError);
+        rb_define_class_under(mGrn, "OperationNotSupported", rb_eGrnError);
     eGrnAddressIsInUse =
-        rb_define_class_under(mGroonga, "AddressIsInUse", rb_eGrnError);
+        rb_define_class_under(mGrn, "AddressIsInUse", rb_eGrnError);
     eGrnZLibError =
-        rb_define_class_under(mGroonga, "ZLibError", rb_eGrnError);
+        rb_define_class_under(mGrn, "ZLibError", rb_eGrnError);
     eGrnLZOError =
-        rb_define_class_under(mGroonga, "LZOError", rb_eGrnError);
+        rb_define_class_under(mGrn, "LZOError", rb_eGrnError);
 }
