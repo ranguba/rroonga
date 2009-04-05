@@ -19,7 +19,7 @@
 
 #include "rb-groonga-private.h"
 
-#define SELF(context) (Data_Get_S)
+#define SELF(object) (RVAL2GRNCONTEXT(object))
 
 static VALUE cGrnContext;
 
@@ -28,7 +28,7 @@ rb_grn_context_from_ruby_object (VALUE object)
 {
     grn_ctx *context;
 
-    if (RTEST(rb_obj_is_kind_of(object, cGrnContext))) {
+    if (!RVAL2CBOOL(rb_obj_is_kind_of(object, cGrnContext))) {
 	rb_raise(rb_eTypeError, "not a groonga context");
     }
 
@@ -80,9 +80,9 @@ rb_grn_context_initialize (VALUE argc, VALUE *argv, VALUE self)
     if (NIL_P(options))
         options = rb_hash_new();
 
-    if (RTEST(rb_hash_aref(options, ID2SYM(rb_intern("use_ql")))))
+    if (RVAL2CBOOL(rb_hash_aref(options, ID2SYM(rb_intern("use_ql")))))
 	flags |= GRN_CTX_USE_QL;
-    if (RTEST(rb_hash_aref(options, ID2SYM(rb_intern("batch_mode")))))
+    if (RVAL2CBOOL(rb_hash_aref(options, ID2SYM(rb_intern("batch_mode")))))
 	flags |= GRN_CTX_BATCH_MODE;
     encoding =
 	RVAL2GRNENCODING(rb_hash_aref(options, ID2SYM(rb_intern("encoding"))));
@@ -94,11 +94,32 @@ rb_grn_context_initialize (VALUE argc, VALUE *argv, VALUE self)
     return Qnil;
 }
 
+static VALUE
+rb_grn_context_use_ql_p (VALUE self)
+{
+    return CBOOL2RVAL(SELF(self)->flags & GRN_CTX_USE_QL);
+}
+
+static VALUE
+rb_grn_context_batch_mode_p (VALUE self)
+{
+    return CBOOL2RVAL(SELF(self)->flags & GRN_CTX_BATCH_MODE);
+}
+
+static VALUE
+rb_grn_context_get_encoding (VALUE self)
+{
+    return GRNENCODING2RVAL(SELF(self)->encoding);
+}
+
 void
 rb_grn_init_context (VALUE mGroonga)
 {
     cGrnContext = rb_define_class_under(mGroonga, "Context", rb_cObject);
     rb_define_alloc_func(cGrnContext, rb_grn_context_alloc);
 
-    rb_define_method (cGrnContext, "initialize", rb_grn_context_initialize, -1);
+    rb_define_method(cGrnContext, "initialize", rb_grn_context_initialize, -1);
+    rb_define_method(cGrnContext, "use_ql?", rb_grn_context_use_ql_p, 0);
+    rb_define_method(cGrnContext, "batch_mode?", rb_grn_context_batch_mode_p, 0);
+    rb_define_method(cGrnContext, "encoding", rb_grn_context_get_encoding, 0);
 }

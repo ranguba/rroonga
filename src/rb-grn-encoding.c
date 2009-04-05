@@ -55,6 +55,41 @@ rb_grn_encoding_from_ruby_object (VALUE object)
     return GRN_ENC_DEFAULT;
 }
 
+VALUE
+rb_grn_encoding_to_ruby_object (grn_encoding encoding)
+{
+    VALUE rb_encoding;
+
+    switch (encoding) {
+      case GRN_ENC_DEFAULT:
+	rb_encoding = RB_GRN_ENCODING_DEFAULT;
+        break;
+      case GRN_ENC_NONE:
+	rb_encoding = RB_GRN_ENCODING_NONE;
+        break;
+      case GRN_ENC_EUC_JP:
+	rb_encoding = RB_GRN_ENCODING_EUC_JP;
+        break;
+      case GRN_ENC_UTF8:
+	rb_encoding = RB_GRN_ENCODING_UTF8;
+        break;
+      case GRN_ENC_SJIS:
+	rb_encoding = RB_GRN_ENCODING_SJIS;
+        break;
+      case GRN_ENC_LATIN1:
+	rb_encoding = RB_GRN_ENCODING_LATIN1;
+        break;
+      case GRN_ENC_KOI8R:
+	rb_encoding = RB_GRN_ENCODING_KOI8R;
+        break;
+      default:
+	rb_raise(rb_eArgError, "unknown encoding: %d", encoding);
+	break;
+    }
+
+    return rb_encoding;
+}
+
 void
 rb_grn_init_encoding (VALUE mGroonga)
 {

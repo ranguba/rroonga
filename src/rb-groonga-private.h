@@ -69,6 +69,9 @@ const char *rb_grn_inspect                                 (VALUE object);
 
 #define RB_GRN_INTERN(string)         (ID2SYM(rb_intern(string)))
 
+#define RVAL2CBOOL(object)            (RTEST(object))
+#define CBOOL2RVAL(boolean)           ((boolean) ? Qtrue : Qfalse)
+
 #define RVAL2GRNCONTEXT(object)       (rb_grn_context_from_ruby_object(object))
 #define GRNCONTEXT2RVAL(context)      (rb_grn_context_to_ruby_object(context))
 
