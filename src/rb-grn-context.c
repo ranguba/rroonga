@@ -42,7 +42,7 @@ static void
 rb_grn_context_free (void *context)
 {
     grn_ctx_fin(context);
-    free(context);
+    xfree(context);
 }
 
 static VALUE
@@ -67,6 +67,14 @@ rb_grn_context_check (grn_ctx *context)
 	     context->errfile, context->errline, context->errfunc);
 }
 
+grn_ctx *
+rb_grn_context_ensure (VALUE context)
+{
+    if (NIL_P(context))
+	context = rb_grn_context_get_default();
+    return SELF(context);
+}
+
 static VALUE
 rb_grn_context_s_get_default (VALUE self)
 {
@@ -78,6 +86,12 @@ rb_grn_context_s_get_default (VALUE self)
 	rb_cv_set(self, "@@default", context);
     }
     return context;
+}
+
+VALUE
+rb_grn_context_get_default (void)
+{
+    return rb_grn_context_s_get_default(cGrnContext);
 }
 
 static VALUE
@@ -156,6 +170,15 @@ rb_grn_context_get_encoding (VALUE self)
     return GRNENCODING2RVAL(SELF(self)->encoding);
 }
 
+static VALUE
+rb_grn_context_get_database (VALUE self)
+{
+    grn_ctx *context;
+
+    context = SELF(self);
+    return GRNDB2RVAL(context, grn_ctx_db(context));
+}
+
 void
 rb_grn_init_context (VALUE mGroonga)
 {
@@ -175,7 +198,10 @@ rb_grn_init_context (VALUE mGroonga)
 			       rb_grn_context_s_set_default_options, 1);
 
     rb_define_method(cGrnContext, "initialize", rb_grn_context_initialize, -1);
+
     rb_define_method(cGrnContext, "use_ql?", rb_grn_context_use_ql_p, 0);
     rb_define_method(cGrnContext, "batch_mode?", rb_grn_context_batch_mode_p, 0);
     rb_define_method(cGrnContext, "encoding", rb_grn_context_get_encoding, 0);
+
+    rb_define_method(cGrnContext, "database", rb_grn_context_get_database, 0);
 }

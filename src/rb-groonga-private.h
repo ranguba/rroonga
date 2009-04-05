@@ -64,11 +64,14 @@ void           rb_grn_init_utils                    (VALUE mGroonga);
 void           rb_grn_init_exception                (VALUE mGroonga);
 void           rb_grn_init_encoding                 (VALUE mGroonga);
 void           rb_grn_init_context                  (VALUE mGroonga);
+void           rb_grn_init_database                 (VALUE mGroonga);
 
 VALUE          rb_grn_rc_to_exception               (grn_rc rc);
 const char    *rb_grn_rc_to_message                 (grn_rc rc);
 void           rb_grn_check_rc                      (grn_rc rc);
 
+grn_ctx       *rb_grn_context_ensure                (VALUE context);
+VALUE          rb_grn_context_get_default           (void);
 void           rb_grn_context_check                 (grn_ctx *context);
 
 const char    *rb_grn_inspect                       (VALUE object);
@@ -80,18 +83,24 @@ void           rb_grn_scan_options                  (VALUE options, ...)
 #define RVAL2CBOOL(object)            (RTEST(object))
 #define CBOOL2RVAL(boolean)           ((boolean) ? Qtrue : Qfalse)
 
-#define RVAL2GRNCONTEXT(object)       (rb_grn_context_from_ruby_object(object))
-#define GRNCONTEXT2RVAL(context)      (rb_grn_context_to_ruby_object(context))
-
 #define RVAL2GRNENCODING(object)      (rb_grn_encoding_from_ruby_object(object))
 #define GRNENCODING2RVAL(encoding)    (rb_grn_encoding_to_ruby_object(encoding))
 
-grn_ctx       *rb_grn_context_from_ruby_object      (VALUE object);
-VALUE          rb_grn_context_to_ruby_object        (grn_ctx *context);
+#define RVAL2GRNCONTEXT(object)       (rb_grn_context_from_ruby_object(object))
+#define GRNCONTEXT2RVAL(context)      (rb_grn_context_to_ruby_object(context))
+
+#define RVAL2GRNDB(object)            (rb_grn_database_from_ruby_object(object))
+#define GRNDB2RVAL(context, db)       (rb_grn_database_to_ruby_object(context, db))
 
 grn_encoding   rb_grn_encoding_from_ruby_object     (VALUE object);
 VALUE          rb_grn_encoding_to_ruby_object       (grn_encoding encoding);
 
+grn_ctx       *rb_grn_context_from_ruby_object      (VALUE object);
+VALUE          rb_grn_context_to_ruby_object        (grn_ctx *context);
+
+grn_obj       *rb_grn_database_from_ruby_object     (VALUE object);
+VALUE          rb_grn_database_to_ruby_object       (grn_ctx *context,
+						     grn_obj *db);
 
 
 RB_GROONGA_END_DECLS

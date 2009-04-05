@@ -36,6 +36,7 @@ Init_groonga(void)
     rb_grn_init_exception(mGroonga);
     rb_grn_init_encoding(mGroonga);
     rb_grn_init_context(mGroonga);
+    rb_grn_init_database(mGroonga);
 
     rb_grn_check_rc(grn_init());
     atexit(finish_groonga);
