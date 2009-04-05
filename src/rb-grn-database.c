@@ -30,8 +30,8 @@ struct _RbGrnObject
     grn_obj *object;
 };
 
-grn_obj *
-rb_grn_database_from_ruby_object (VALUE object)
+static RbGrnObject *
+rb_grn_object_from_ruby_object (VALUE object)
 {
     RbGrnObject *grn_object;
 
@@ -42,7 +42,15 @@ rb_grn_database_from_ruby_object (VALUE object)
     Data_Get_Struct(object, RbGrnObject, grn_object);
     if (!grn_object)
 	rb_raise(rb_eGrnError, "groonga database is NULL");
-    return grn_object->object;
+
+    return grn_object;
+}
+
+
+grn_obj *
+rb_grn_database_from_ruby_object (VALUE object)
+{
+    return rb_grn_object_from_ruby_object(object)->object;
 }
 
 static void
@@ -74,38 +82,69 @@ rb_grn_database_alloc (VALUE klass)
 }
 
 static VALUE
+rb_grn_database_close (VALUE self)
+{
+    RbGrnObject *grn_object;
+
+    grn_object = rb_grn_object_from_ruby_object(self);
+    if (grn_object->context && grn_object->object) {
+        GRN_OBJ_FIN(grn_object->context, grn_object->object);
+        grn_object->context = NULL;
+        grn_object->object = NULL;
+    }
+    return Qnil;
+}
+
+static VALUE
+rb_grn_database_closed_p (VALUE self)
+{
+    RbGrnObject *grn_object;
+
+    grn_object = rb_grn_object_from_ruby_object(self);
+    if (grn_object->context && grn_object->object)
+        return Qfalse;
+    else
+        return Qtrue;
+}
+
+static VALUE
 rb_grn_database_s_create (VALUE argc, VALUE *argv, VALUE klass)
 {
     grn_ctx *context;
     grn_db_create_optarg create_args;
     RbGrnObject *object;
-    const char *path;
-    VALUE self;
+    const char *path = NULL;
+    VALUE database;
     VALUE rb_path, options, rb_context, encoding, builtin_type_names;
 
-    rb_scan_args(argc, argv, "11", &rb_path, &options);
+    rb_scan_args(argc, argv, "01", &options);
 
-    path = StringValuePtr(rb_path);
     rb_grn_scan_options(options,
+                        "path", &rb_path,
 			"context", &rb_context,
                         "encoding", &encoding,
                         "builtin_type_names", &builtin_type_names,
 			NULL);
 
+    if (!NIL_P(rb_path))
+        path = StringValuePtr(rb_path);
     context = rb_grn_context_ensure(rb_context);
 
     create_args.encoding = RVAL2GRNENCODING(encoding);
     create_args.builtin_type_names = NULL;
     create_args.n_builtin_type_names = 0;
 
-    self = rb_grn_database_alloc(klass);
+    database = rb_grn_database_alloc(klass);
     object = ALLOC(RbGrnObject);
-    DATA_PTR(self) = object;
+    DATA_PTR(database) = object;
     object->context = context;
     object->object = grn_db_create(context, path, &create_args);
     rb_grn_context_check(context);
 
-    return self;
+    if (rb_block_given_p())
+        return rb_ensure(rb_yield, database, rb_grn_database_close, database);
+    else
+        return database;
 }
 
 static VALUE
@@ -132,6 +171,19 @@ rb_grn_database_initialize (VALUE argc, VALUE *argv, VALUE self)
     rb_grn_context_check(context);
 
     return Qnil;
+}
+
+static VALUE
+rb_grn_database_s_open (VALUE argc, VALUE *argv, VALUE klass)
+{
+    VALUE database;
+
+    database = rb_grn_database_alloc(klass);
+    rb_grn_database_initialize(argc, argv, database);
+    if (rb_block_given_p())
+        return rb_ensure(rb_yield, database, rb_grn_database_close, database);
+    else
+        return database;
 }
 
 static VALUE
@@ -168,6 +220,8 @@ rb_grn_init_database (VALUE mGroonga)
 
     rb_define_singleton_method(cGrnDatabase, "create",
 			       rb_grn_database_s_create, -1);
+    rb_define_singleton_method(cGrnDatabase, "open",
+			       rb_grn_database_s_open, -1);
 
     rb_define_method(cGrnDatabase, "initialize", rb_grn_database_initialize, -1);
 
@@ -176,4 +230,7 @@ rb_grn_init_database (VALUE mGroonga)
     rb_define_method(cGrnDatabase, "eql?", rb_grn_database_eql_p, 1);
     rb_define_method(cGrnDatabase, "hash", rb_grn_database_hash, 0);
     rb_define_alias(cGrnDatabase, "==", "eql?");
+
+    rb_define_method(cGrnDatabase, "close", rb_grn_database_close, 0);
+    rb_define_method(cGrnDatabase, "closed?", rb_grn_database_closed_p, 0);
 }

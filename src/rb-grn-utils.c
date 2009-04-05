@@ -43,6 +43,7 @@ rb_grn_scan_options (VALUE options, ...)
     else
         options = rb_funcall(options, rb_intern("dup"), 0);
 
+    Check_Type(options, T_HASH);
 
     available_keys = rb_ary_new();
     va_start(args, options);
@@ -53,7 +54,7 @@ rb_grn_scan_options (VALUE options, ...)
 
         rb_key = RB_GRN_INTERN(key);
         rb_ary_push(available_keys, rb_key);
-        *value = rb_hash_delete(options, rb_key);
+        *value = rb_funcall(options, rb_intern("delete"), 1, rb_key);
 
         key = va_arg(args, const char *);
     }

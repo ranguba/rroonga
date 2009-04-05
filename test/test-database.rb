@@ -10,9 +10,33 @@ class DatabaseTest < Test::Unit::TestCase
 
     db_path = @tmp_dir + "db"
     assert_not_predicate(db_path, :exist?)
-    database = Groonga::Database.create(db_path.to_s)
+    database = Groonga::Database.create(:path => db_path.to_s)
     assert_predicate(db_path, :exist?)
+    assert_not_predicate(database, :closed?)
 
     assert_equal(database, Groonga::Context.default.database)
+  end
+
+  def test_open
+    db_path = @tmp_dir + "db"
+    database = Groonga::Database.create(:path => db_path.to_s)
+
+    called = false
+    Groonga::Database.open(db_path.to_s) do |database|
+      assert_not_predicate(database, :closed?)
+      called = true
+    end
+    assert_predicate(database, :closed?)
+  end
+
+  def test_new
+    db_path = @tmp_dir + "db"
+    assert_raise(Groonga::NoMemoryAvailable) do
+      Groonga::Database.new(db_path.to_s)
+    end
+
+    database = Groonga::Database.create(:path => db_path.to_s)
+
+    assert_not_predicate(Groonga::Database.new(db_path.to_s), :closed?)
   end
 end
