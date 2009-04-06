@@ -13,6 +13,17 @@ groongaのRubyバインディングです。
   * Ruby/groonga: http://groonga.rubyforge.org/
   * groonga: http://groonga.org/
 
+== 作者
+
+Kouhei Sutou <kou@clear-code.com>
+
+== ライセンス
+
+LGPL 2.1です。詳しくはlicense/LGPLを見てください。
+
+pkg-config.rbはrcairoに付属しているもので、これはRubyライセ
+ンスです。詳しくはlicense/RUBYとlicense/GPLを見てください。
+
 == 依存ソフトウェア
 
   * Ruby >= 1.8

@@ -13,6 +13,18 @@ Ruby bindings for groonga.
   * Ruby/groonga: http://groonga.rubyforge.org/
   * groonga: http://groonga.org/
 
+== Author
+
+Kouhei Sutou <kou@clear-code.com>
+
+== License
+
+LGPL 2.1. See license/LGPL for details.
+
+pkg-config.rb is a library that is bundled with rcairo. It's
+distributed under Ruby license. See license/RUBY and
+license/GPL for details.
+
 == Dependencies
 
   * Ruby >= 1.8
