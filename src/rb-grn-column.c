@@ -19,30 +19,28 @@
 
 #include "rb-grn.h"
 
-static void
-finish_groonga (void)
+#define SELF(object) (RVAL2GRNCOLUMN(object))
+
+VALUE rb_cGrnColumn;
+
+grn_obj *
+rb_grn_column_from_ruby_object (VALUE object)
 {
-    grn_fin();
+    if (!RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cGrnColumn))) {
+	rb_raise(rb_eTypeError, "not a groonga column");
+    }
+
+    return RVAL2GRNOBJECT(object, NULL);
+}
+
+VALUE
+rb_grn_column_to_ruby_object (grn_ctx *context, grn_obj *column)
+{
+    return GRNOBJECT2RVAL(rb_cGrnColumn, context, column);
 }
 
 void
-Init_groonga(void)
+rb_grn_init_column (VALUE mGrn)
 {
-    VALUE mGrn;
-
-    mGrn = rb_define_module("Groonga");
-
-    rb_grn_init_utils(mGrn);
-    rb_grn_init_exception(mGrn);
-    rb_grn_init_encoding(mGrn);
-    rb_grn_init_context(mGrn);
-    rb_grn_init_object(mGrn);
-    rb_grn_init_database(mGrn);
-    rb_grn_init_table(mGrn);
-    rb_grn_init_type(mGrn);
-    rb_grn_init_procedure(mGrn);
-    rb_grn_init_column(mGrn);
-
-    rb_grn_check_rc(grn_init());
-    atexit(finish_groonga);
+    rb_cGrnColumn = rb_define_class_under(mGrn, "Column", rb_cGrnObject);
 }

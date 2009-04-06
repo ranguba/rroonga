@@ -105,4 +105,25 @@ class TableTest < Test::Unit::TestCase
     Groonga::Table.create(:path => table_path.to_s)
     assert_not_predicate(Groonga::Table.new(:path => table_path.to_s), :closed?)
   end
+
+  def test_define_column
+    table_path = @tables_dir + "table"
+    table = Groonga::Table.create(:name => "bookmarks",
+                                  :path => table_path.to_s)
+    column = table.define_column("name", "<text>",
+                                 :type => "index",
+                                 :compress => "zlib",
+                                 :with_section => true,
+                                 :with_weight => true,
+                                 :with_position => true)
+    assert_equal("bookmarks.name", column.name)
+    assert_equal(column, table.column("name"))
+  end
+
+  def test_column
+    table_path = @tables_dir + "table"
+    table = Groonga::Table.create(:name => "bookmarks",
+                                  :path => table_path.to_s)
+    assert_nil(table.column("nonexistent"))
+  end
 end

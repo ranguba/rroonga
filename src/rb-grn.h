@@ -68,6 +68,7 @@ RB_GRN_VAR VALUE rb_cGrnDatabase;
 RB_GRN_VAR VALUE rb_cGrnTable;
 RB_GRN_VAR VALUE rb_cGrnType;
 RB_GRN_VAR VALUE rb_cGrnProcedure;
+RB_GRN_VAR VALUE rb_cGrnColumn;
 
 void           rb_grn_init_utils                    (VALUE mGrn);
 void           rb_grn_init_exception                (VALUE mGrn);
@@ -78,6 +79,7 @@ void           rb_grn_init_database                 (VALUE mGrn);
 void           rb_grn_init_table                    (VALUE mGrn);
 void           rb_grn_init_type                     (VALUE mGrn);
 void           rb_grn_init_procedure                (VALUE mGrn);
+void           rb_grn_init_column                   (VALUE mGrn);
 
 VALUE          rb_grn_rc_to_exception               (grn_rc rc);
 const char    *rb_grn_rc_to_message                 (grn_rc rc);
@@ -94,6 +96,8 @@ rb_grn_boolean rb_grn_equal_option                  (VALUE option,
 						     const char *key);
 
 VALUE          rb_grn_object_alloc                  (VALUE klass);
+grn_ctx       *rb_grn_object_ensure_context         (VALUE object,
+						     VALUE rb_context);
 void           rb_grn_object_initialize             (VALUE self,
 						     grn_ctx *context,
 						     grn_obj *object);
@@ -109,12 +113,20 @@ VALUE          rb_grn_object_close                  (VALUE object);
 #define RVAL2GRNCONTEXT(object)       (rb_grn_context_from_ruby_object(object))
 #define GRNCONTEXT2RVAL(context)      (rb_grn_context_to_ruby_object(context))
 
-#define RVAL2GRNOBJECT(rb_object)     (rb_grn_object_from_ruby_object(rb_object))
+#define RVAL2GRNOBJECT(rb_object, context)\
+                                      (rb_grn_object_from_ruby_object(rb_object, context))
 #define GRNOBJECT2RVAL(klass, context, object) \
                                       (rb_grn_object_to_ruby_object(klass, context, object))
 
 #define RVAL2GRNDB(object)            (rb_grn_database_from_ruby_object(object))
 #define GRNDB2RVAL(context, db)       (rb_grn_database_to_ruby_object(context, db))
+
+#define RVAL2GRNTABLE(object)         (rb_grn_table_from_ruby_object(object))
+#define GRNTABLE2RVAL(context, table) (rb_grn_table_to_ruby_object(context, table))
+
+#define RVAL2GRNCOLUMN(object)        (rb_grn_column_from_ruby_object(object))
+#define GRNCOLUMN2RVAL(context, column) \
+                                      (rb_grn_column_to_ruby_object(context, column))
 
 grn_encoding   rb_grn_encoding_from_ruby_object     (VALUE object);
 VALUE          rb_grn_encoding_to_ruby_object       (grn_encoding encoding);
@@ -122,7 +134,8 @@ VALUE          rb_grn_encoding_to_ruby_object       (grn_encoding encoding);
 grn_ctx       *rb_grn_context_from_ruby_object      (VALUE object);
 VALUE          rb_grn_context_to_ruby_object        (grn_ctx *context);
 
-grn_obj       *rb_grn_object_from_ruby_object       (VALUE object);
+grn_obj       *rb_grn_object_from_ruby_object       (VALUE object,
+						     grn_ctx *context);
 VALUE          rb_grn_object_to_ruby_object         (VALUE klass,
 						     grn_ctx *context,
 						     grn_obj *db);
@@ -130,6 +143,14 @@ VALUE          rb_grn_object_to_ruby_object         (VALUE klass,
 grn_obj       *rb_grn_database_from_ruby_object     (VALUE object);
 VALUE          rb_grn_database_to_ruby_object       (grn_ctx *context,
 						     grn_obj *db);
+
+grn_obj       *rb_grn_table_from_ruby_object        (VALUE object);
+VALUE          rb_grn_table_to_ruby_object          (grn_ctx *context,
+						     grn_obj *table);
+
+grn_obj       *rb_grn_column_from_ruby_object       (VALUE object);
+VALUE          rb_grn_column_to_ruby_object         (grn_ctx *context,
+						     grn_obj *column);
 
 
 RB_GRN_END_DECLS

@@ -19,7 +19,7 @@
 
 #include "rb-grn.h"
 
-#define SELF(object) (RVAL2GRNOBJECT(object))
+#define SELF(object) (rb_grn_object_wrapper_from_ruby_object(object))
 
 typedef struct _RbGrnObject RbGrnObject;
 struct _RbGrnObject
@@ -47,10 +47,31 @@ rb_grn_object_wrapper_from_ruby_object (VALUE object)
 }
 
 grn_obj *
-rb_grn_object_from_ruby_object (VALUE object)
+rb_grn_object_from_ruby_object (VALUE object, grn_ctx *context)
 {
     if (NIL_P(object))
         return NULL;
+
+    if (context) {
+	grn_obj *grn_object;
+	if (RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cString))) {
+	    grn_object = grn_ctx_lookup(context,
+					StringValuePtr(object),
+					RSTRING_LEN(object));
+	    if (!grn_object)
+		rb_raise(rb_eArgError,
+			 "unregistered groonga object: name: <%s>",
+			 rb_grn_inspect(object));
+	    return grn_object;
+	} else if (RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cInteger))) {
+	    grn_object = grn_ctx_get(context, NUM2UINT(object));
+	    if (!grn_object)
+		rb_raise(rb_eArgError,
+			 "unregistered groonga object: ID: <%s>",
+			 rb_grn_inspect(object));
+	    return grn_object;
+	}
+    }
 
     return rb_grn_object_wrapper_from_ruby_object(object)->object;
 }
@@ -115,6 +136,20 @@ rb_grn_object_alloc (VALUE klass)
     return Data_Wrap_Struct(klass, NULL, rb_grn_object_free, NULL);
 }
 
+grn_ctx *
+rb_grn_object_ensure_context (VALUE object, VALUE rb_context)
+{
+    if (NIL_P(rb_context)) {
+	RbGrnObject *grn_object;
+
+	grn_object = SELF(object);
+	if (grn_object && grn_object->context)
+	    return grn_object->context;
+    }
+
+    return rb_grn_context_ensure(rb_context);
+}
+
 void
 rb_grn_object_initialize (VALUE self, grn_ctx *context, grn_obj *object)
 {
@@ -131,7 +166,7 @@ rb_grn_object_close (VALUE self)
 {
     RbGrnObject *grn_object;
 
-    grn_object = rb_grn_object_wrapper_from_ruby_object(self);
+    grn_object = SELF(self);
     if (grn_object->context && grn_object->object) {
         GRN_OBJ_FIN(grn_object->context, grn_object->object);
         grn_object->context = NULL;
@@ -145,7 +180,7 @@ rb_grn_object_closed_p (VALUE self)
 {
     RbGrnObject *grn_object;
 
-    grn_object = rb_grn_object_wrapper_from_ruby_object(self);
+    grn_object = SELF(self);
     if (grn_object->context && grn_object->object)
         return Qfalse;
     else
@@ -157,7 +192,7 @@ rb_grn_object_get_id (VALUE self)
 {
     RbGrnObject *grn_object;
 
-    grn_object = rb_grn_object_wrapper_from_ruby_object(self);
+    grn_object = SELF(self);
     if (grn_object->object)
         return UINT2NUM(grn_object->object->header.domain);
     else
@@ -171,7 +206,7 @@ rb_grn_object_get_name (VALUE self)
     VALUE rb_name;
     int name_size;
 
-    grn_object = rb_grn_object_wrapper_from_ruby_object(self);
+    grn_object = SELF(self);
     if (!grn_object->object)
 	return Qnil;
 
@@ -198,8 +233,8 @@ rb_grn_object_eql_p (VALUE self, VALUE other)
                                rb_obj_class(other))))
         return Qfalse;
 
-    self_grn_object = rb_grn_object_wrapper_from_ruby_object(self);
-    other_grn_object = rb_grn_object_wrapper_from_ruby_object(other);
+    self_grn_object = SELF(self);
+    other_grn_object = SELF(other);
 
     if (self_grn_object->object == other_grn_object->object)
         return Qtrue;
