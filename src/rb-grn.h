@@ -100,8 +100,6 @@ void           rb_grn_object_initialize             (VALUE self,
 VALUE          rb_grn_object_close                  (VALUE object);
 
 
-#define RB_GRN_INTERN(string)         (ID2SYM(rb_intern(string)))
-
 #define RVAL2CBOOL(object)            (RTEST(object))
 #define CBOOL2RVAL(boolean)           ((boolean) ? Qtrue : Qfalse)
 

@@ -21,6 +21,8 @@
 
 #include <stdarg.h>
 
+#define RB_GRN_INTERN(string)         (ID2SYM(rb_intern(string)))
+
 const char *
 rb_grn_inspect (VALUE object)
 {
@@ -72,10 +74,16 @@ rb_grn_scan_options (VALUE options, ...)
 rb_grn_boolean
 rb_grn_equal_option (VALUE option, const char *key)
 {
-    if (RVAL2CBOOL(rb_funcall(option, rb_intern("=="), 1, RB_GRN_INTERN(key))))
+    VALUE key_string, key_symbol;
+
+    key_string = rb_str_new2(key);
+    if (RVAL2CBOOL(rb_funcall(option, rb_intern("=="), 1, key_string)))
 	return RB_GRN_TRUE;
-    if (RVAL2CBOOL(rb_funcall(option, rb_intern("=="), 1, rb_str_new2(key))))
+
+    key_symbol = rb_str_intern(key_string);
+    if (RVAL2CBOOL(rb_funcall(option, rb_intern("=="), 1, key_symbol)))
 	return RB_GRN_TRUE;
+
     return RB_GRN_FALSE;
 }
 
