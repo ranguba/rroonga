@@ -146,7 +146,7 @@ class TableTest < Test::Unit::TestCase
                               :path => description_column_path.to_s)
 
     books = Groonga::Hash.create(:name => "books",
-                                  :path => (@tables_dir + "books").to_s)
+                                 :path => (@tables_dir + "books").to_s)
     books_description = books.add_column("description",
                                          "<longtext>",
                                          description_column_path.to_s)
@@ -156,10 +156,45 @@ class TableTest < Test::Unit::TestCase
     assert_equal(bookmarks_description, bookmarks.column("description"))
   end
 
-  def test_column
-    table_path = @tables_dir + "table"
+  def test_column_nonexistent
+    table_path = @tables_dir + "bookmarks"
     table = Groonga::Hash.create(:name => "bookmarks",
-                                  :path => table_path.to_s)
+                                 :path => table_path.to_s)
     assert_nil(table.column("nonexistent"))
+  end
+
+  def test_set_value
+    table_path = @tables_dir + "bookmarks"
+    bookmarks = Groonga::Hash.create(:name => "bookmarks",
+                                     :path => table_path.to_s)
+    comment_column_path = @columns_dir + "comment"
+    bookmarks_comment =
+      bookmarks.define_column("comment", "<shorttext>",
+                              :type => "scalar",
+                              :path => comment_column_path.to_s)
+    id = bookmarks.add("groonga")
+    url = "http://groonga.org/"
+    bookmarks[id] = url
+    bookmarks_comment[id] = "fulltext search engine"
+
+    assert_equal([url, "fulltext search engine"],
+                 [bookmarks[id][0, url.length], bookmarks_comment[id]])
+  end
+
+
+  def test_add_by_id
+    users_path = @tables_dir + "users"
+    users = Groonga::Hash.create(:name => "users",
+                                 :path => users_path.to_s)
+    bookmarks_path = @tables_dir + "bookmarks"
+    bookmarks = Groonga::Hash.create(:name => "bookmarks",
+                                     :key_type => users,
+                                     :path => users_path.to_s)
+    morita_id = users.add("morita")
+    bookmark_id = bookmarks.add(morita_id)
+    url = "http://groonga.org/"
+    bookmarks[bookmark_id] = url
+
+    assert_equal(url, bookmarks[bookmark_id][0, url.length])
   end
 end

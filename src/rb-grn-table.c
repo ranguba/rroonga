@@ -49,7 +49,7 @@ rb_grn_table_s_create (VALUE argc, VALUE *argv, VALUE klass,
 		       grn_obj_flags key_store)
 {
     grn_ctx *context;
-    grn_obj *key_type, *table;
+    grn_obj *key_type = NULL, *table;
     const char *name = NULL, *path = NULL;
     unsigned name_size = 0, value_size;
     grn_obj_flags flags = key_store;
@@ -94,7 +94,11 @@ rb_grn_table_s_create (VALUE argc, VALUE *argv, VALUE klass,
     if (RVAL2CBOOL(rb_key_with_sis))
 	flags |= GRN_OBJ_KEY_WITH_SIS;
 
-    key_type = RVAL2GRNOBJECT(rb_key_type, context);
+    if (NIL_P(rb_key_type)) {
+	flags |= GRN_OBJ_KEY_VAR_SIZE;
+    } else {
+	key_type = RVAL2GRNOBJECT(rb_key_type, context);
+    }
 
     if (NIL_P(rb_value_size)) {
 	value_size = DEFAULT_VALUE_SIZE;
@@ -354,6 +358,42 @@ rb_grn_table_get_column (VALUE self, VALUE rb_name)
     return GRNCOLUMN2RVAL(context, column);
 }
 
+static VALUE
+rb_grn_hash_add (VALUE self, VALUE rb_key)
+{
+    grn_ctx *context;
+    grn_id id;
+    void *key;
+    grn_id id_key = 0;
+    char *string_key = NULL;
+    unsigned key_size = 0;
+    grn_search_flags flags;
+
+    if (RVAL2CBOOL(rb_obj_is_kind_of(rb_key, rb_cInteger))) {
+	id_key = NUM2UINT(rb_key);
+	key = &id_key;
+	key_size = sizeof(grn_id);
+    } else if (RVAL2CBOOL(rb_obj_is_kind_of(rb_key, rb_cString))) {
+	string_key = StringValuePtr(rb_key);
+	key = string_key;
+	key_size = RSTRING_LEN(rb_key);
+    } else {
+	rb_raise(rb_eArgError, "key should be integer or string: %s",
+		 rb_grn_inspect(rb_key));
+    }
+
+    context = rb_grn_object_ensure_context(self, Qnil);
+
+    flags = GRN_SEARCH_EXACT | GRN_TABLE_ADD;
+    id = grn_table_lookup(context, SELF(self), key, key_size, &flags);
+    rb_grn_context_check(context);
+
+    if (GRN_ID_NIL == id)
+	return Qnil;
+    else
+	return UINT2NUM(id);
+}
+
 void
 rb_grn_init_table (VALUE mGrn)
 {
@@ -381,4 +421,6 @@ rb_grn_init_table (VALUE mGrn)
 		     rb_grn_table_add_column, 3);
     rb_define_method(rb_cGrnTable, "column",
 		     rb_grn_table_get_column, 1);
+
+    rb_define_method(rb_cGrnHash, "add", rb_grn_hash_add, 1);
 }

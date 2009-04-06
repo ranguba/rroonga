@@ -254,6 +254,63 @@ rb_grn_object_hash (VALUE self)
     return rb_funcall(rb_grn_object_get_id(self), rb_intern("hash"), 0);
 }
 
+static VALUE
+rb_grn_object_array_reference (VALUE self, VALUE rb_id)
+{
+    RbGrnObject *grn_object;
+    grn_id id;
+    grn_obj *value;
+    VALUE rb_value = Qnil;
+
+    grn_object = SELF(self);
+    if (!grn_object->object)
+	return Qnil;
+
+    id = NUM2UINT(rb_id);
+    value = grn_obj_get_value(grn_object->context, grn_object->object, id, NULL);
+    if (!value) {
+	rb_grn_context_check(grn_object->context);
+	return Qnil;
+    }
+
+    if (!GRN_BULK_EMPTYP(value)) {
+	rb_value = rb_str_new(GRN_BULK_HEAD(value), GRN_BULK_VSIZE(value));
+	grn_obj_close(grn_object->context, value);
+    }
+    rb_grn_context_check(grn_object->context);
+
+    return rb_value;
+}
+
+static VALUE
+rb_grn_object_array_set (VALUE self, VALUE rb_id, VALUE rb_value)
+{
+    RbGrnObject *grn_object;
+    grn_id id;
+    grn_obj *value;
+    grn_rc rc;
+
+    grn_object = SELF(self);
+    if (!grn_object->object)
+	return Qnil;
+
+    id = NUM2UINT(rb_id);
+    value = grn_obj_open(grn_object->context, GRN_BULK, 0, 0);
+    rb_grn_context_check(grn_object->context);
+    rc = grn_bulk_write(grn_object->context, value,
+			StringValuePtr(rb_value), RSTRING_LEN(rb_value));
+    if (rc != GRN_SUCCESS) {
+	grn_obj_close(grn_object->context, value);
+	rb_grn_check_rc(rc);
+    }
+    rc = grn_obj_set_value(grn_object->context, grn_object->object, id,
+			   value, GRN_OBJ_SET);
+    grn_obj_close(grn_object->context, value);
+    rb_grn_check_rc(rc);
+
+    return Qnil;
+}
+
 void
 rb_grn_init_object (VALUE mGrn)
 {
@@ -269,4 +326,7 @@ rb_grn_init_object (VALUE mGrn)
 
     rb_define_method(rb_cGrnObject, "close", rb_grn_object_close, 0);
     rb_define_method(rb_cGrnObject, "closed?", rb_grn_object_closed_p, 0);
+
+    rb_define_method(rb_cGrnObject, "[]", rb_grn_object_array_reference, 1);
+    rb_define_method(rb_cGrnObject, "[]=", rb_grn_object_array_set, 2);
 }
