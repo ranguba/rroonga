@@ -10,7 +10,8 @@ Ruby/groonga
 
 groongaのRubyバインディングです。
 
-http://groonga.org/
+  * Ruby/groonga: http://groonga.rubyforge.org/
+  * groonga: http://groonga.org/
 
 == 依存ソフトウェア
 
