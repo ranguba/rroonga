@@ -33,21 +33,21 @@ class TableTest < Test::Unit::TestCase
   def test_create
     table_path = @tables_dir + "table"
     assert_not_predicate(table_path, :exist?)
-    table = Groonga::Table.create(:name => "bookmarks",
-                                  :path => table_path.to_s)
+    table = Groonga::PatriciaTrie.create(:name => "bookmarks",
+                                         :path => table_path.to_s)
     assert_equal("bookmarks", table.name)
     assert_predicate(table_path, :exist?)
   end
 
   def test_temporary
-    table = Groonga::Table.create
+    table = Groonga::PatriciaTrie.create
     assert_nil(table.name)
     assert_equal([], @tables_dir.children)
   end
 
   def test_open
     table_path = @tables_dir + "table"
-    table = Groonga::Table.create(:name => "bookmarks",
+    table = Groonga::Hash.create(:name => "bookmarks",
                                   :path => table_path.to_s)
     assert_equal("bookmarks", table.name)
     table.close
@@ -65,8 +65,8 @@ class TableTest < Test::Unit::TestCase
 
   def test_open_by_path
     table_path = @tables_dir + "table"
-    table = Groonga::Table.create(:name => "bookmarks",
-                                  :path => table_path.to_s)
+    table = Groonga::PatriciaTrie.create(:name => "bookmarks",
+                                         :path => table_path.to_s)
     assert_equal("bookmarks", table.name)
     table.close
 
@@ -83,8 +83,8 @@ class TableTest < Test::Unit::TestCase
 
   def test_open_override_name
     table_path = @tables_dir + "table"
-    table = Groonga::Table.create(:name => "bookmarks",
-                                  :path => table_path.to_s)
+    table = Groonga::PatriciaTrie.create(:name => "bookmarks",
+                                         :path => table_path.to_s)
     assert_equal("bookmarks", table.name)
     table.close
 
@@ -99,20 +99,32 @@ class TableTest < Test::Unit::TestCase
     assert_predicate(table, :closed?)
   end
 
+  def test_open_wrong_table
+    table_path = @tables_dir + "table"
+    Groonga::Hash.create(:name => "bookmarks",
+                         :path => table_path.to_s) do
+    end
+
+    assert_raise(TypeError) do
+      Groonga::PatriciaTrie.open(:name => "bookmarks",
+                                 :path => table_path.to_s)
+    end
+  end
+
   def test_new
     table_path = @tables_dir + "table"
     assert_raise(Groonga::NoSuchFileOrDirectory) do
-      Groonga::Table.new(:path => table_path.to_s)
+      Groonga::Hash.new(:path => table_path.to_s)
     end
 
-    Groonga::Table.create(:path => table_path.to_s)
-    assert_not_predicate(Groonga::Table.new(:path => table_path.to_s), :closed?)
+    Groonga::Hash.create(:path => table_path.to_s)
+    assert_not_predicate(Groonga::Hash.new(:path => table_path.to_s), :closed?)
   end
 
   def test_define_column
     table_path = @tables_dir + "table"
-    table = Groonga::Table.create(:name => "bookmarks",
-                                  :path => table_path.to_s)
+    table = Groonga::Hash.create(:name => "bookmarks",
+                                 :path => table_path.to_s)
     column = table.define_column("name", "<text>",
                                  :type => "index",
                                  :compress => "zlib",
@@ -124,8 +136,8 @@ class TableTest < Test::Unit::TestCase
   end
 
   def test_add_column
-    bookmarks = Groonga::Table.create(:name => "bookmarks",
-                                      :path => (@tables_dir + "bookmarks").to_s)
+    bookmarks = Groonga::Hash.create(:name => "bookmarks",
+                                     :path => (@tables_dir + "bookmarks").to_s)
 
     description_column_path = @columns_dir + "description"
     bookmarks_description =
@@ -133,7 +145,7 @@ class TableTest < Test::Unit::TestCase
                               :type => "index",
                               :path => description_column_path.to_s)
 
-    books = Groonga::Table.create(:name => "books",
+    books = Groonga::Hash.create(:name => "books",
                                   :path => (@tables_dir + "books").to_s)
     books_description = books.add_column("description",
                                          "<longtext>",
@@ -146,7 +158,7 @@ class TableTest < Test::Unit::TestCase
 
   def test_column
     table_path = @tables_dir + "table"
-    table = Groonga::Table.create(:name => "bookmarks",
+    table = Groonga::Hash.create(:name => "bookmarks",
                                   :path => table_path.to_s)
     assert_nil(table.column("nonexistent"))
   end

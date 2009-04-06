@@ -24,6 +24,9 @@
 #define SELF(object) (RVAL2GRNTABLE(object))
 
 VALUE rb_cGrnTable;
+VALUE rb_cGrnHash;
+VALUE rb_cGrnPatriciaTrie;
+VALUE rb_cGrnArray;
 
 grn_obj *
 rb_grn_table_from_ruby_object (VALUE object)
@@ -42,17 +45,18 @@ rb_grn_table_to_ruby_object (grn_ctx *context, grn_obj *table)
 }
 
 static VALUE
-rb_grn_table_s_create (VALUE argc, VALUE *argv, VALUE klass)
+rb_grn_table_s_create (VALUE argc, VALUE *argv, VALUE klass,
+		       grn_obj_flags key_store)
 {
     grn_ctx *context;
     grn_obj *key_type, *table;
     const char *name = NULL, *path = NULL;
     unsigned name_size = 0, value_size;
-    grn_obj_flags flags = 0;
+    grn_obj_flags flags = key_store;
     grn_encoding encoding;
     VALUE rb_table;
     VALUE options, rb_context, rb_name, rb_path, rb_persistent;
-    VALUE rb_key_store, rb_key_normalize, rb_key_with_sis, rb_key_type;
+    VALUE rb_key_normalize, rb_key_with_sis, rb_key_type;
     VALUE rb_value_size, rb_encoding;
 
     rb_scan_args(argc, argv, "01", &options);
@@ -62,7 +66,6 @@ rb_grn_table_s_create (VALUE argc, VALUE *argv, VALUE klass)
 			"name", &rb_name,
                         "path", &rb_path,
 			"persistent", &rb_persistent,
-			"key_store", &rb_key_store,
 			"key_normalize", &rb_key_normalize,
 			"key_with_sis", &rb_key_with_sis,
 			"key_type", &rb_key_type,
@@ -84,16 +87,6 @@ rb_grn_table_s_create (VALUE argc, VALUE *argv, VALUE klass)
 
     if (RVAL2CBOOL(rb_persistent))
 	flags |= GRN_OBJ_PERSISTENT;
-
-    if (NIL_P(rb_key_type)) {
-    } else if (rb_grn_equal_option(rb_key_store, "pat")) {
-	flags |= GRN_OBJ_TABLE_PAT_KEY;
-    } else if (rb_grn_equal_option(rb_key_store, "hash")) {
-	flags |= GRN_OBJ_TABLE_HASH_KEY;
-    } else {
-	rb_raise(rb_eArgError, ":key_store should be one of [:pat, :hash]: %s",
-		 rb_grn_inspect(rb_key_store));
-    }
 
     if (RVAL2CBOOL(rb_key_normalize))
 	flags |= GRN_OBJ_KEY_NORMALIZE;
@@ -124,9 +117,26 @@ rb_grn_table_s_create (VALUE argc, VALUE *argv, VALUE klass)
 }
 
 static VALUE
-rb_grn_table_initialize (VALUE argc, VALUE *argv, VALUE self)
+rb_grn_hash_s_create (VALUE argc, VALUE *argv, VALUE self)
 {
-    grn_ctx *context;
+    return rb_grn_table_s_create(argc, argv, self, GRN_TABLE_HASH_KEY);
+}
+
+static VALUE
+rb_grn_patricia_trie_s_create (VALUE argc, VALUE *argv, VALUE self)
+{
+    return rb_grn_table_s_create(argc, argv, self, GRN_TABLE_PAT_KEY);
+}
+
+static VALUE
+rb_grn_array_s_create (VALUE argc, VALUE *argv, VALUE self)
+{
+    return rb_grn_table_s_create(argc, argv, self, GRN_TABLE_NO_KEY);
+}
+
+static grn_obj *
+rb_grn_table_open (VALUE argc, VALUE *argv, grn_ctx **context)
+{
     grn_obj *table;
     char *name = NULL, *path = NULL;
     unsigned name_size = 0;
@@ -140,7 +150,7 @@ rb_grn_table_initialize (VALUE argc, VALUE *argv, VALUE self)
 			"path", &rb_path,
 			NULL);
 
-    context = rb_grn_context_ensure(rb_context);
+    *context = rb_grn_context_ensure(rb_context);
 
     if (!NIL_P(rb_name)) {
 	name = StringValuePtr(rb_name);
@@ -150,7 +160,17 @@ rb_grn_table_initialize (VALUE argc, VALUE *argv, VALUE self)
     if (!NIL_P(rb_path))
 	path = StringValueCStr(rb_path);
 
-    table = grn_table_open(context, name, name_size, path);
+    table = grn_table_open(*context, name, name_size, path);
+    return table;
+}
+
+static VALUE
+rb_grn_table_initialize (VALUE argc, VALUE *argv, VALUE self)
+{
+    grn_ctx *context = NULL;
+    grn_obj *table;
+
+    table = rb_grn_table_open(argc, argv, &context);
     rb_grn_object_initialize(self, context, table);
     rb_grn_context_check(context);
 
@@ -160,14 +180,27 @@ rb_grn_table_initialize (VALUE argc, VALUE *argv, VALUE self)
 static VALUE
 rb_grn_table_s_open (VALUE argc, VALUE *argv, VALUE klass)
 {
-    VALUE table;
+    grn_ctx *context = NULL;
+    grn_obj *table;
+    VALUE rb_table, rb_class;
 
-    table = rb_grn_object_alloc(klass);
-    rb_grn_table_initialize(argc, argv, table);
+    table = rb_grn_table_open(argc, argv, &context);
+    rb_grn_context_check(context);
+    if (klass != rb_cGrnTable) {
+	rb_class = GRNOBJECT2RCLASS(table);
+	if (klass != rb_class)
+	    rb_raise(rb_eTypeError,
+		     "unexpected existing table type: %s: expected %s",
+		     rb_grn_inspect(rb_class),
+		     rb_grn_inspect(klass));
+    }
+
+    rb_table = rb_grn_object_alloc(klass);
+    rb_grn_table_initialize(argc, argv, rb_table);
     if (rb_block_given_p())
-        return rb_ensure(rb_yield, table, rb_grn_object_close, table);
+        return rb_ensure(rb_yield, rb_table, rb_grn_object_close, rb_table);
     else
-        return table;
+        return rb_table;
 }
 
 static VALUE
@@ -325,11 +358,20 @@ void
 rb_grn_init_table (VALUE mGrn)
 {
     rb_cGrnTable = rb_define_class_under(mGrn, "Table", rb_cGrnObject);
+    rb_cGrnHash = rb_define_class_under(mGrn, "Hash", rb_cGrnTable);
+    rb_cGrnPatriciaTrie =
+	rb_define_class_under(mGrn, "PatriciaTrie", rb_cGrnTable);
+    rb_cGrnArray = rb_define_class_under(mGrn, "Array", rb_cGrnTable);
 
-    rb_define_singleton_method(rb_cGrnTable, "create",
-			       rb_grn_table_s_create, -1);
     rb_define_singleton_method(rb_cGrnTable, "open",
 			       rb_grn_table_s_open, -1);
+
+    rb_define_singleton_method(rb_cGrnHash, "create",
+			       rb_grn_hash_s_create, -1);
+    rb_define_singleton_method(rb_cGrnPatriciaTrie, "create",
+			       rb_grn_patricia_trie_s_create, -1);
+    rb_define_singleton_method(rb_cGrnArray, "create",
+			       rb_grn_array_s_create, -1);
 
     rb_define_method(rb_cGrnTable, "initialize", rb_grn_table_initialize, -1);
 

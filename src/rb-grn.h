@@ -66,6 +66,9 @@ RB_GRN_VAR VALUE rb_eGrnError;
 RB_GRN_VAR VALUE rb_cGrnObject;
 RB_GRN_VAR VALUE rb_cGrnDatabase;
 RB_GRN_VAR VALUE rb_cGrnTable;
+RB_GRN_VAR VALUE rb_cGrnHash;
+RB_GRN_VAR VALUE rb_cGrnPatriciaTrie;
+RB_GRN_VAR VALUE rb_cGrnArray;
 RB_GRN_VAR VALUE rb_cGrnType;
 RB_GRN_VAR VALUE rb_cGrnProcedure;
 RB_GRN_VAR VALUE rb_cGrnColumn;
@@ -120,6 +123,8 @@ VALUE          rb_grn_object_close                  (VALUE object);
 #define GRNOBJECT2RVAL(klass, context, object) \
                                       (rb_grn_object_to_ruby_object(klass, context, object))
 
+#define GRNOBJECT2RCLASS(object)      (rb_grn_object_to_ruby_class(object))
+
 #define RVAL2GRNDB(object)            (rb_grn_database_from_ruby_object(object))
 #define GRNDB2RVAL(context, db)       (rb_grn_database_to_ruby_object(context, db))
 
@@ -140,7 +145,9 @@ grn_obj       *rb_grn_object_from_ruby_object       (VALUE object,
 						     grn_ctx *context);
 VALUE          rb_grn_object_to_ruby_object         (VALUE klass,
 						     grn_ctx *context,
-						     grn_obj *db);
+						     grn_obj *object);
+
+VALUE          rb_grn_object_to_ruby_class          (grn_obj *object);
 
 grn_obj       *rb_grn_database_from_ruby_object     (VALUE object);
 VALUE          rb_grn_database_to_ruby_object       (grn_ctx *context,

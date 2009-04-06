@@ -82,8 +82,8 @@ rb_grn_object_free (void *object)
     xfree(object);
 }
 
-static VALUE
-guess_object_class (grn_obj *object)
+VALUE
+rb_grn_object_to_ruby_class (grn_obj *object)
 {
     VALUE klass = Qnil;
 
@@ -92,9 +92,13 @@ guess_object_class (grn_obj *object)
 	klass = rb_cGrnDatabase;
 	break;
       case GRN_TABLE_HASH_KEY:
+	klass = rb_cGrnHash;
+	break;
       case GRN_TABLE_PAT_KEY:
+	klass = rb_cGrnPatriciaTrie;
+	break;
       case GRN_TABLE_NO_KEY:
-	klass = rb_cGrnTable;
+	klass = rb_cGrnArray;
 	break;
       case GRN_TYPE:
 	klass = rb_cGrnType;
@@ -125,7 +129,7 @@ rb_grn_object_to_ruby_object (VALUE klass, grn_ctx *context, grn_obj *object)
     grn_object->object = object;
 
     if (NIL_P(klass))
-        klass = guess_object_class(object);
+        klass = GRNOBJECT2RCLASS(object);
 
     return Data_Wrap_Struct(klass, NULL, rb_grn_object_free, grn_object);
 }
