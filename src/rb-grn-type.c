@@ -45,7 +45,7 @@ rb_grn_type_initialize (VALUE argc, VALUE *argv, VALUE self)
     grn_ctx *context;
     grn_obj *type;
     const char *name = NULL;
-    unsigned name_size, size;
+    unsigned name_size, size = sizeof(grn_id);
     grn_obj_flags flags = 0;
     VALUE rb_name, options, rb_context, rb_key_type, rb_size;
 
@@ -81,7 +81,7 @@ rb_grn_type_initialize (VALUE argc, VALUE *argv, VALUE self)
             rb_raise(rb_eArgError, "size is missing: %s",
                      rb_grn_inspect(options));
     } else {
-        rb_size = NUM2UINT(rb_size);
+        size = NUM2UINT(rb_size);
     }
 
     type = grn_type_create(context, name, name_size, flags, size);
@@ -106,9 +106,4 @@ rb_grn_init_type (VALUE mGrn)
     rb_define_const(rb_cGrnType, "SHORT_TEXT", INT2NUM(GRN_DB_SHORTTEXT));
     rb_define_const(rb_cGrnType, "TEXT", INT2NUM(GRN_DB_TEXT));
     rb_define_const(rb_cGrnType, "LONG_TEXT", INT2NUM(GRN_DB_LONGTEXT));
-    rb_define_const(rb_cGrnType, "DELIMIT", INT2NUM(GRN_DB_DELIMIT));
-    rb_define_const(rb_cGrnType, "UNIGRAM", INT2NUM(GRN_DB_UNIGRAM));
-    rb_define_const(rb_cGrnType, "BIGRAM", INT2NUM(GRN_DB_BIGRAM));
-    rb_define_const(rb_cGrnType, "TRIGRAM", INT2NUM(GRN_DB_TRIGRAM));
-    rb_define_const(rb_cGrnType, "MECAB", INT2NUM(GRN_DB_MECAB));
 }

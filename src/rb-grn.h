@@ -67,6 +67,7 @@ RB_GRN_VAR VALUE rb_cGrnObject;
 RB_GRN_VAR VALUE rb_cGrnDatabase;
 RB_GRN_VAR VALUE rb_cGrnTable;
 RB_GRN_VAR VALUE rb_cGrnType;
+RB_GRN_VAR VALUE rb_cGrnProcedure;
 
 void           rb_grn_init_utils                    (VALUE mGrn);
 void           rb_grn_init_exception                (VALUE mGrn);
@@ -76,6 +77,7 @@ void           rb_grn_init_object                   (VALUE mGrn);
 void           rb_grn_init_database                 (VALUE mGrn);
 void           rb_grn_init_table                    (VALUE mGrn);
 void           rb_grn_init_type                     (VALUE mGrn);
+void           rb_grn_init_procedure                (VALUE mGrn);
 
 VALUE          rb_grn_rc_to_exception               (grn_rc rc);
 const char    *rb_grn_rc_to_message                 (grn_rc rc);

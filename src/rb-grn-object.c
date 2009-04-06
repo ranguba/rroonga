@@ -78,6 +78,9 @@ guess_object_class (grn_obj *object)
       case GRN_TYPE:
 	klass = rb_cGrnType;
 	break;
+      case GRN_PROC:
+	klass = rb_cGrnProcedure;
+	break;
       default:
 	rb_raise(rb_eTypeError,
 		 "unsupported groonga object type: %d",
