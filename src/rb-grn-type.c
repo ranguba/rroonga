@@ -30,7 +30,7 @@ rb_grn_type_from_ruby_object (VALUE object)
 	rb_raise(rb_eTypeError, "not a groonga type");
     }
 
-    return RVAL2GRNOBJECT(object);
+    return RVAL2GRNOBJECT(object, NULL);
 }
 
 VALUE

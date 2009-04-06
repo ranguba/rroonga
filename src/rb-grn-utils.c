@@ -21,8 +21,6 @@
 
 #include <stdarg.h>
 
-#define RB_GRN_INTERN(string)         (ID2SYM(rb_intern(string)))
-
 const char *
 rb_grn_inspect (VALUE object)
 {

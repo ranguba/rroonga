@@ -25,6 +25,9 @@ class TableTest < Test::Unit::TestCase
 
     @tables_dir = @tmp_dir + "tables"
     FileUtils.mkdir_p(@tables_dir.to_s)
+
+    @columns_dir = @tmp_dir + "columns"
+    FileUtils.mkdir_p(@columns_dir.to_s)
   end
 
   def test_create
@@ -118,6 +121,27 @@ class TableTest < Test::Unit::TestCase
                                  :with_position => true)
     assert_equal("bookmarks.name", column.name)
     assert_equal(column, table.column("name"))
+  end
+
+  def test_add_column
+    bookmarks = Groonga::Table.create(:name => "bookmarks",
+                                      :path => (@tables_dir + "bookmarks").to_s)
+
+    description_column_path = @columns_dir + "description"
+    bookmarks_description =
+      bookmarks.define_column("description", "<text>",
+                              :type => "index",
+                              :path => description_column_path.to_s)
+
+    books = Groonga::Table.create(:name => "books",
+                                  :path => (@tables_dir + "books").to_s)
+    books_description = books.add_column("description",
+                                         "<longtext>",
+                                         description_column_path.to_s)
+    assert_equal("books.description", books_description.name)
+    assert_equal(books_description, books.column("description"))
+
+    assert_equal(bookmarks_description, bookmarks.column("description"))
   end
 
   def test_column

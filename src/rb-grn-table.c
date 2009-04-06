@@ -180,7 +180,7 @@ rb_grn_table_define_column (VALUE argc, VALUE *argv, VALUE self)
     grn_obj_flags flags = 0;
     rb_grn_boolean use_default_type = RB_GRN_FALSE;
     VALUE rb_name, rb_value_type;
-    VALUE options, rb_context, rb_path, rb_persistent, rb_type;
+    VALUE options, rb_path, rb_persistent, rb_type;
     VALUE rb_compress, rb_with_section, rb_with_weight, rb_with_position;
 
     rb_scan_args(argc, argv, "21", &rb_name, &rb_value_type, &options);
@@ -189,7 +189,6 @@ rb_grn_table_define_column (VALUE argc, VALUE *argv, VALUE self)
     name_size = RSTRING_LEN(rb_name);
 
     rb_grn_scan_options(options,
-			"context", &rb_context,
 			"path", &rb_path,
 			"persistent", &rb_persistent,
 			"type", &rb_type,
@@ -199,7 +198,7 @@ rb_grn_table_define_column (VALUE argc, VALUE *argv, VALUE self)
 			"with_position", &rb_with_position,
 			NULL);
 
-    context = rb_grn_object_ensure_context(self, rb_context);
+    context = rb_grn_object_ensure_context(self, Qnil);
 
     value_type = RVAL2GRNOBJECT(rb_value_type, context);
 
@@ -279,6 +278,31 @@ rb_grn_table_define_column (VALUE argc, VALUE *argv, VALUE self)
 }
 
 static VALUE
+rb_grn_table_add_column (VALUE self, VALUE rb_name, VALUE rb_value_type,
+			 VALUE rb_path)
+{
+    grn_ctx *context;
+    grn_obj *value_type, *column;
+    char *name = NULL, *path = NULL;
+    unsigned name_size = 0;
+
+    name = StringValuePtr(rb_name);
+    name_size = RSTRING_LEN(rb_name);
+
+    context = rb_grn_object_ensure_context(self, Qnil);
+
+    value_type = RVAL2GRNOBJECT(rb_value_type, context);
+
+    path = StringValueCStr(rb_path);
+
+    column = grn_column_open(context, SELF(self), name, name_size,
+			     path, value_type);
+    rb_grn_context_check(context);
+
+    return GRNCOLUMN2RVAL(context, column);
+}
+
+static VALUE
 rb_grn_table_get_column (VALUE self, VALUE rb_name)
 {
     grn_ctx *context;
@@ -311,6 +335,8 @@ rb_grn_init_table (VALUE mGrn)
 
     rb_define_method(rb_cGrnTable, "define_column",
 		     rb_grn_table_define_column, -1);
+    rb_define_method(rb_cGrnTable, "add_column",
+		     rb_grn_table_add_column, 3);
     rb_define_method(rb_cGrnTable, "column",
 		     rb_grn_table_get_column, 1);
 }

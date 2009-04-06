@@ -30,7 +30,7 @@ rb_grn_procedure_from_ruby_object (VALUE object)
 	rb_raise(rb_eTypeError, "not a groonga procedure");
     }
 
-    return RVAL2GRNOBJECT(object);
+    return RVAL2GRNOBJECT(object, NULL);
 }
 
 VALUE
