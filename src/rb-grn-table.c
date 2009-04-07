@@ -446,6 +446,23 @@ rb_grn_hash_add (VALUE self, VALUE rb_key)
 	return UINT2NUM(id);
 }
 
+static VALUE
+rb_grn_array_add (VALUE self)
+{
+    grn_ctx *context;
+    grn_id id;
+
+    context = rb_grn_object_ensure_context(self, Qnil);
+
+    id = grn_table_add(context, SELF(self));
+    rb_grn_context_check(context);
+
+    if (GRN_ID_NIL == id)
+	return Qnil;
+    else
+	return UINT2NUM(id);
+}
+
 void
 rb_grn_init_table (VALUE mGrn)
 {
@@ -477,4 +494,5 @@ rb_grn_init_table (VALUE mGrn)
 		     rb_grn_table_get_columns, -1);
 
     rb_define_method(rb_cGrnHash, "add", rb_grn_hash_add, 1);
+    rb_define_method(rb_cGrnArray, "add", rb_grn_array_add, 0);
 }

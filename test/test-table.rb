@@ -182,6 +182,18 @@ class TableTest < Test::Unit::TestCase
                  [bookmarks[id][0, url.length], bookmarks_comment[id]])
   end
 
+  def test_add_without_name
+    users_path = @tables_dir + "users"
+    users = Groonga::Array.create(:name => "users",
+                                  :path => users_path.to_s)
+    name_column_path = @columns_dir + "name"
+    users_name = users.define_column("name", "<shorttext>",
+                                     :path => name_column_path.to_s)
+    morita_id = users.add
+    users_name[morita_id] = "morita"
+    assert_equal("morita", users_name[morita_id])
+  end
+
   def test_add_by_id
     users_path = @tables_dir + "users"
     users = Groonga::Hash.create(:name => "users",
