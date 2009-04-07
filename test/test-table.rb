@@ -19,6 +19,7 @@ class TableTest < Test::Unit::TestCase
 
   def setup
     Groonga::Context.default = nil
+    @context = Groonga::Context.default
 
     @db_path = @tmp_dir + "db"
     @database = Groonga::Database.create(:path => @db_path.to_s)
@@ -181,7 +182,6 @@ class TableTest < Test::Unit::TestCase
                  [bookmarks[id][0, url.length], bookmarks_comment[id]])
   end
 
-
   def test_add_by_id
     users_path = @tables_dir + "users"
     users = Groonga::Hash.create(:name => "users",
@@ -189,12 +189,23 @@ class TableTest < Test::Unit::TestCase
     bookmarks_path = @tables_dir + "bookmarks"
     bookmarks = Groonga::Hash.create(:name => "bookmarks",
                                      :key_type => users,
-                                     :path => users_path.to_s)
+                                     :path => bookmarks_path.to_s)
     morita_id = users.add("morita")
     bookmark_id = bookmarks.add(morita_id)
     url = "http://groonga.org/"
     bookmarks[bookmark_id] = url
 
     assert_equal(url, bookmarks[bookmark_id][0, url.length])
+  end
+
+  def test_columns
+    bookmarks_path = @tables_dir + "bookmarks"
+    bookmarks = Groonga::Array.create(:name => "bookmarks",
+                                      :path => bookmarks_path.to_s)
+
+    uri_column = bookmarks.define_column("uri", "<shorttext>")
+    comment_column = bookmarks.define_column("comment", "<text>")
+    assert_equal([uri_column.name, comment_column.name].sort,
+                 bookmarks.columns.collect {|id| @context[id].name}.sort)
   end
 end

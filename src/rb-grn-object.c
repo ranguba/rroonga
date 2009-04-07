@@ -106,6 +106,15 @@ rb_grn_object_to_ruby_class (grn_obj *object)
       case GRN_PROC:
 	klass = rb_cGrnProcedure;
 	break;
+      case GRN_COLUMN_FIX_SIZE:
+	klass = rb_cGrnFixSizeColumn;
+	break;
+      case GRN_COLUMN_VAR_SIZE:
+	klass = rb_cGrnVarSizeColumn;
+	break;
+      case GRN_COLUMN_INDEX:
+	klass = rb_cGrnIndexColumn;
+	break;
       default:
 	rb_raise(rb_eTypeError,
 		 "unsupported groonga object type: %d",

@@ -40,7 +40,7 @@ rb_grn_database_to_ruby_object (grn_ctx *context, grn_obj *database)
 }
 
 static VALUE
-rb_grn_database_s_create (VALUE argc, VALUE *argv, VALUE klass)
+rb_grn_database_s_create (int argc, VALUE *argv, VALUE klass)
 {
     grn_ctx *context;
     grn_obj *database;
@@ -78,7 +78,7 @@ rb_grn_database_s_create (VALUE argc, VALUE *argv, VALUE klass)
 }
 
 static VALUE
-rb_grn_database_initialize (VALUE argc, VALUE *argv, VALUE self)
+rb_grn_database_initialize (int argc, VALUE *argv, VALUE self)
 {
     grn_ctx *context;
     grn_obj *database;
@@ -102,7 +102,7 @@ rb_grn_database_initialize (VALUE argc, VALUE *argv, VALUE self)
 }
 
 static VALUE
-rb_grn_database_s_open (VALUE argc, VALUE *argv, VALUE klass)
+rb_grn_database_s_open (int argc, VALUE *argv, VALUE klass)
 {
     VALUE database;
 

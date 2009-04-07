@@ -22,6 +22,9 @@
 #define SELF(object) (RVAL2GRNCOLUMN(object))
 
 VALUE rb_cGrnColumn;
+VALUE rb_cGrnFixSizeColumn;
+VALUE rb_cGrnVarSizeColumn;
+VALUE rb_cGrnIndexColumn;
 
 grn_obj *
 rb_grn_column_from_ruby_object (VALUE object)
@@ -43,4 +46,10 @@ void
 rb_grn_init_column (VALUE mGrn)
 {
     rb_cGrnColumn = rb_define_class_under(mGrn, "Column", rb_cGrnObject);
+    rb_cGrnFixSizeColumn =
+	rb_define_class_under(mGrn, "FixSizeColumn", rb_cGrnColumn);
+    rb_cGrnVarSizeColumn =
+	rb_define_class_under(mGrn, "VarSizeColumn", rb_cGrnColumn);
+    rb_cGrnIndexColumn =
+	rb_define_class_under(mGrn, "IndexColumn", rb_cGrnColumn);
 }

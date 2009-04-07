@@ -72,6 +72,9 @@ RB_GRN_VAR VALUE rb_cGrnArray;
 RB_GRN_VAR VALUE rb_cGrnType;
 RB_GRN_VAR VALUE rb_cGrnProcedure;
 RB_GRN_VAR VALUE rb_cGrnColumn;
+RB_GRN_VAR VALUE rb_cGrnFixSizeColumn;
+RB_GRN_VAR VALUE rb_cGrnVarSizeColumn;
+RB_GRN_VAR VALUE rb_cGrnIndexColumn;
 
 void           rb_grn_init_utils                    (VALUE mGrn);
 void           rb_grn_init_exception                (VALUE mGrn);

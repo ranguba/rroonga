@@ -45,7 +45,7 @@ rb_grn_table_to_ruby_object (grn_ctx *context, grn_obj *table)
 }
 
 static VALUE
-rb_grn_table_s_create (VALUE argc, VALUE *argv, VALUE klass,
+rb_grn_table_s_create (int argc, VALUE *argv, VALUE klass,
 		       grn_obj_flags key_store)
 {
     grn_ctx *context;
@@ -121,25 +121,25 @@ rb_grn_table_s_create (VALUE argc, VALUE *argv, VALUE klass,
 }
 
 static VALUE
-rb_grn_hash_s_create (VALUE argc, VALUE *argv, VALUE self)
+rb_grn_hash_s_create (int argc, VALUE *argv, VALUE self)
 {
     return rb_grn_table_s_create(argc, argv, self, GRN_TABLE_HASH_KEY);
 }
 
 static VALUE
-rb_grn_patricia_trie_s_create (VALUE argc, VALUE *argv, VALUE self)
+rb_grn_patricia_trie_s_create (int argc, VALUE *argv, VALUE self)
 {
     return rb_grn_table_s_create(argc, argv, self, GRN_TABLE_PAT_KEY);
 }
 
 static VALUE
-rb_grn_array_s_create (VALUE argc, VALUE *argv, VALUE self)
+rb_grn_array_s_create (int argc, VALUE *argv, VALUE self)
 {
     return rb_grn_table_s_create(argc, argv, self, GRN_TABLE_NO_KEY);
 }
 
 static grn_obj *
-rb_grn_table_open (VALUE argc, VALUE *argv, grn_ctx **context)
+rb_grn_table_open (int argc, VALUE *argv, grn_ctx **context)
 {
     grn_obj *table;
     char *name = NULL, *path = NULL;
@@ -169,7 +169,7 @@ rb_grn_table_open (VALUE argc, VALUE *argv, grn_ctx **context)
 }
 
 static VALUE
-rb_grn_table_initialize (VALUE argc, VALUE *argv, VALUE self)
+rb_grn_table_initialize (int argc, VALUE *argv, VALUE self)
 {
     grn_ctx *context = NULL;
     grn_obj *table;
@@ -182,7 +182,7 @@ rb_grn_table_initialize (VALUE argc, VALUE *argv, VALUE self)
 }
 
 static VALUE
-rb_grn_table_s_open (VALUE argc, VALUE *argv, VALUE klass)
+rb_grn_table_s_open (int argc, VALUE *argv, VALUE klass)
 {
     grn_ctx *context = NULL;
     grn_obj *table;
@@ -208,7 +208,7 @@ rb_grn_table_s_open (VALUE argc, VALUE *argv, VALUE klass)
 }
 
 static VALUE
-rb_grn_table_define_column (VALUE argc, VALUE *argv, VALUE self)
+rb_grn_table_define_column (int argc, VALUE *argv, VALUE self)
 {
     grn_ctx *context;
     grn_obj *value_type, *column;
@@ -359,6 +359,55 @@ rb_grn_table_get_column (VALUE self, VALUE rb_name)
 }
 
 static VALUE
+rb_grn_table_get_columns (int argc, VALUE *argv, VALUE self)
+{
+    grn_ctx *context;
+    grn_obj *columns;
+    grn_rc rc;
+    int n;
+    grn_table_cursor *cursor;
+    VALUE rb_name, rb_columns;
+    char *name = NULL;
+    unsigned name_size = 0;
+
+    rb_scan_args(argc, argv, "01", &rb_name);
+
+    if (!NIL_P(rb_name)) {
+	name = StringValuePtr(rb_name);
+	name_size = RSTRING_LEN(rb_name);
+    }
+
+    context = rb_grn_object_ensure_context(self, Qnil);
+
+    columns = grn_table_create(context, NULL, 0, NULL, GRN_TABLE_HASH_KEY,
+			       NULL, 0, GRN_ENC_DEFAULT);
+    n = grn_table_columns(context, SELF(self), name, name_size, columns);
+    rb_grn_context_check(context);
+
+    rb_columns = rb_ary_new2(n);
+    if (n == 0)
+	return rb_columns;
+
+    cursor = grn_table_cursor_open(context, columns, NULL, 0, NULL, 0,
+				   GRN_CURSOR_ASCENDING);
+    rb_grn_context_check(context);
+    while (grn_table_cursor_next(context, cursor) != GRN_ID_NIL) {
+	void *key;
+	grn_id *column_id;
+	grn_table_cursor_get_key(context, cursor, &key);
+	column_id = key;
+	rb_ary_push(rb_columns, UINT2NUM(*column_id));
+    }
+    rc = grn_table_cursor_close(context, cursor);
+    if (rc != GRN_SUCCESS) {
+	rb_grn_context_check(context);
+	rb_grn_check_rc(rc);
+    }
+
+    return rb_columns;
+}
+
+static VALUE
 rb_grn_hash_add (VALUE self, VALUE rb_key)
 {
     grn_ctx *context;
@@ -421,6 +470,8 @@ rb_grn_init_table (VALUE mGrn)
 		     rb_grn_table_add_column, 3);
     rb_define_method(rb_cGrnTable, "column",
 		     rb_grn_table_get_column, 1);
+    rb_define_method(rb_cGrnTable, "columns",
+		     rb_grn_table_get_columns, -1);
 
     rb_define_method(rb_cGrnHash, "add", rb_grn_hash_add, 1);
 }

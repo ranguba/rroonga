@@ -40,7 +40,7 @@ rb_grn_type_to_ruby_object (grn_ctx *context, grn_obj *type)
 }
 
 static VALUE
-rb_grn_type_initialize (VALUE argc, VALUE *argv, VALUE self)
+rb_grn_type_initialize (int argc, VALUE *argv, VALUE self)
 {
     grn_ctx *context;
     grn_obj *type;

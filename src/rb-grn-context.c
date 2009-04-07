@@ -115,7 +115,7 @@ rb_grn_context_s_set_default_options (VALUE self, VALUE options)
 }
 
 static VALUE
-rb_grn_context_initialize (VALUE argc, VALUE *argv, VALUE self)
+rb_grn_context_initialize (int argc, VALUE *argv, VALUE self)
 {
     grn_ctx *context;
     int flags = 0;
