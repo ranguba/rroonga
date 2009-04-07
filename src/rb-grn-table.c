@@ -394,9 +394,12 @@ rb_grn_table_get_columns (int argc, VALUE *argv, VALUE self)
     while (grn_table_cursor_next(context, cursor) != GRN_ID_NIL) {
 	void *key;
 	grn_id *column_id;
+	grn_obj *column;
+
 	grn_table_cursor_get_key(context, cursor, &key);
 	column_id = key;
-	rb_ary_push(rb_columns, UINT2NUM(*column_id));
+	column = grn_ctx_get(context, *column_id);
+	rb_ary_push(rb_columns, GRNOBJECT2RVAL(Qnil, context, column));
     }
     rc = grn_table_cursor_close(context, cursor);
     if (rc != GRN_SUCCESS) {

@@ -206,6 +206,6 @@ class TableTest < Test::Unit::TestCase
     uri_column = bookmarks.define_column("uri", "<shorttext>")
     comment_column = bookmarks.define_column("comment", "<text>")
     assert_equal([uri_column.name, comment_column.name].sort,
-                 bookmarks.columns.collect {|id| @context[id].name}.sort)
+                 bookmarks.columns.collect {|column| column.name}.sort)
   end
 end
