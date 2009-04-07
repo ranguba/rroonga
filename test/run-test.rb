@@ -36,7 +36,6 @@ $LOAD_PATH.unshift(test_unit_dir)
 
 require 'test/unit'
 
-$LOAD_PATH.unshift(base_dir)
 $LOAD_PATH.unshift(src_dir)
 $LOAD_PATH.unshift(lib_dir)
 
