@@ -201,7 +201,7 @@ rb_grn_object_closed_p (VALUE self)
 }
 
 static VALUE
-rb_grn_object_get_id (VALUE self)
+rb_grn_object_get_domain (VALUE self)
 {
     RbGrnObject *grn_object;
 
@@ -235,7 +235,7 @@ rb_grn_object_get_name (VALUE self)
 }
 
 static VALUE
-rb_grn_object_eql_p (VALUE self, VALUE other)
+rb_grn_object_equal (VALUE self, VALUE other)
 {
     RbGrnObject *self_grn_object, *other_grn_object;
 
@@ -249,18 +249,7 @@ rb_grn_object_eql_p (VALUE self, VALUE other)
     self_grn_object = SELF(self);
     other_grn_object = SELF(other);
 
-    if (self_grn_object->object == other_grn_object->object)
-        return Qtrue;
-    if (!self_grn_object->object || !other_grn_object->object)
-        return Qfalse;
-    return CBOOL2RVAL(self_grn_object->object->header.domain ==
-                      other_grn_object->object->header.domain);
-}
-
-static VALUE
-rb_grn_object_hash (VALUE self)
-{
-    return rb_funcall(rb_grn_object_get_id(self), rb_intern("hash"), 0);
+    return self_grn_object->object == other_grn_object->object;
 }
 
 static VALUE
@@ -326,12 +315,10 @@ rb_grn_init_object (VALUE mGrn)
     rb_cGrnObject = rb_define_class_under(mGrn, "Object", rb_cObject);
     rb_define_alloc_func(rb_cGrnObject, rb_grn_object_alloc);
 
-    rb_define_method(rb_cGrnObject, "id", rb_grn_object_get_id, 0);
+    rb_define_method(rb_cGrnObject, "domain", rb_grn_object_get_domain, 0);
     rb_define_method(rb_cGrnObject, "name", rb_grn_object_get_name, 0);
 
-    rb_define_method(rb_cGrnObject, "eql?", rb_grn_object_eql_p, 1);
-    rb_define_method(rb_cGrnObject, "hash", rb_grn_object_hash, 0);
-    rb_define_alias(rb_cGrnObject, "==", "eql?");
+    rb_define_method(rb_cGrnObject, "==", rb_grn_object_equal, 1);
 
     rb_define_method(rb_cGrnObject, "close", rb_grn_object_close, 0);
     rb_define_method(rb_cGrnObject, "closed?", rb_grn_object_closed_p, 0);
