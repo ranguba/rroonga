@@ -20,6 +20,8 @@
 
 #define SELF(object) (rb_rb_grn_object_from_ruby_object(object))
 
+VALUE rb_cGrnObject;
+
 typedef struct _RbGrnObject RbGrnObject;
 struct _RbGrnObject
 {
@@ -383,7 +385,7 @@ rb_grn_object_search (int argc, VALUE *argv, VALUE self)
 	result = RVAL2GRNOBJECT(rb_result, context);
     }
 
-    operator = RVAL2GRNSELECTOPRATOR(rb_operator);
+    operator = RVAL2GRNSELECTOPERATOR(rb_operator);
 
     search_options.flags = 0;
     if (!NIL_P(rb_exact)) {
