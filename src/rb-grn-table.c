@@ -409,12 +409,11 @@ rb_grn_table_get_columns (int argc, VALUE *argv, VALUE self)
     return rb_columns;
 }
 
-static VALUE
-rb_grn_table_open_cursor (int argc, VALUE *argv, VALUE self)
+static grn_table_cursor *
+rb_grn_table_open_grn_cursor (int argc, VALUE *argv, VALUE self,
+			      grn_ctx **context)
 {
-    grn_ctx *context;
     grn_table_cursor *cursor;
-    VALUE rb_cursor;
     void *min_key = NULL, *max_key = NULL;
     unsigned min_key_size = 0, max_key_size = 0;
     int flags = 0;
@@ -430,7 +429,7 @@ rb_grn_table_open_cursor (int argc, VALUE *argv, VALUE self)
 			"less_than", &rb_less_than,
 			NULL);
 
-    context = rb_grn_object_ensure_context(self, Qnil);
+    *context = rb_grn_object_ensure_context(self, Qnil);
 
     if (!NIL_P(rb_min)) {
 	min_key = StringValuePtr(rb_min);
@@ -460,12 +459,23 @@ rb_grn_table_open_cursor (int argc, VALUE *argv, VALUE self)
     if (RVAL2CBOOL(rb_less_than))
 	flags |= GRN_CURSOR_LT;
 
-    cursor = grn_table_cursor_open(context, SELF(self),
+    cursor = grn_table_cursor_open(*context, SELF(self),
 				   min_key, min_key_size,
 				   max_key, max_key_size,
 				   flags);
-    rb_grn_context_check(context);
+    rb_grn_context_check(*context);
 
+    return cursor;
+}
+
+static VALUE
+rb_grn_table_open_cursor (int argc, VALUE *argv, VALUE self)
+{
+    grn_ctx *context;
+    grn_table_cursor *cursor;
+    VALUE rb_cursor;
+
+    cursor = rb_grn_table_open_grn_cursor(argc, argv, self, &context);
     rb_cursor = GRNTABLECURSOR2RVAL(Qnil, context, cursor);
     rb_iv_set(rb_cursor, "@table", self);
     if (rb_block_given_p())
@@ -473,6 +483,24 @@ rb_grn_table_open_cursor (int argc, VALUE *argv, VALUE self)
 			 rb_grn_table_cursor_close, rb_cursor);
     else
 	return rb_cursor;
+}
+
+static VALUE
+rb_grn_table_get_records (int argc, VALUE *argv, VALUE self)
+{
+    grn_ctx *context;
+    grn_table_cursor *cursor;
+    grn_id record_id;
+    VALUE records;
+
+    cursor = rb_grn_table_open_grn_cursor(argc, argv, self, &context);
+    records = rb_ary_new();
+    while ((record_id = grn_table_cursor_next(context, cursor))) {
+	rb_ary_push(records, rb_grn_record_new(self, record_id));
+    }
+    grn_table_cursor_close(context, cursor);
+
+    return records;
 }
 
 static VALUE
@@ -559,6 +587,7 @@ rb_grn_init_table (VALUE mGrn)
 		     rb_grn_table_get_columns, -1);
 
     rb_define_method(rb_cGrnTable, "open_cursor", rb_grn_table_open_cursor, -1);
+    rb_define_method(rb_cGrnTable, "records", rb_grn_table_get_records, -1);
 
     rb_define_method(rb_cGrnHash, "add", rb_grn_table_add_with_key, 1);
     rb_define_method(rb_cGrnPatriciaTrie, "add", rb_grn_table_add_with_key, 1);
