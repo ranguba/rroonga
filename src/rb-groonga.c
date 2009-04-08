@@ -38,6 +38,7 @@ Init_groonga(void)
     rb_grn_init_object(mGrn);
     rb_grn_init_database(mGrn);
     rb_grn_init_table(mGrn);
+    rb_grn_init_table_cursor(mGrn);
     rb_grn_init_type(mGrn);
     rb_grn_init_procedure(mGrn);
     rb_grn_init_column(mGrn);

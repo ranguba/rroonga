@@ -410,7 +410,72 @@ rb_grn_table_get_columns (int argc, VALUE *argv, VALUE self)
 }
 
 static VALUE
-rb_grn_hash_add (VALUE self, VALUE rb_key)
+rb_grn_table_open_cursor (int argc, VALUE *argv, VALUE self)
+{
+    grn_ctx *context;
+    grn_table_cursor *cursor;
+    VALUE rb_cursor;
+    void *min_key = NULL, *max_key = NULL;
+    unsigned min_key_size = 0, max_key_size = 0;
+    int flags = 0;
+    VALUE options, rb_min, rb_max, rb_order, rb_greater_than, rb_less_than;
+
+    rb_scan_args(argc, argv, "01", &options);
+
+    rb_grn_scan_options(options,
+			"min", &rb_min,
+                        "max", &rb_max,
+			"order", &rb_order,
+			"greater_than", &rb_greater_than,
+			"less_than", &rb_less_than,
+			NULL);
+
+    context = rb_grn_object_ensure_context(self, Qnil);
+
+    if (!NIL_P(rb_min)) {
+	min_key = StringValuePtr(rb_min);
+	min_key_size = RSTRING_LEN(rb_min);
+    }
+    if (!NIL_P(rb_max)) {
+	max_key = StringValuePtr(rb_max);
+	max_key_size = RSTRING_LEN(rb_max);
+    }
+
+    if (NIL_P(rb_order)) {
+    } else if (rb_grn_equal_option(rb_order, "asc") ||
+	       rb_grn_equal_option(rb_order, "ascending")) {
+	flags |= GRN_CURSOR_ASCENDING;
+    } else if (rb_grn_equal_option(rb_order, "desc") ||
+	       rb_grn_equal_option(rb_order, "descending")) {
+	flags |= GRN_CURSOR_DESCENDING;
+    } else {
+	rb_raise(rb_eArgError,
+		 "order should be one of "
+		 "[:asc, :ascending, :desc, :descending]: %s",
+		 rb_grn_inspect(rb_order));
+    }
+
+    if (RVAL2CBOOL(rb_greater_than))
+	flags |= GRN_CURSOR_GT;
+    if (RVAL2CBOOL(rb_less_than))
+	flags |= GRN_CURSOR_LT;
+
+    cursor = grn_table_cursor_open(context, SELF(self),
+				   min_key, min_key_size,
+				   max_key, max_key_size,
+				   flags);
+    rb_grn_context_check(context);
+
+    rb_cursor = GRNTABLECURSOR2RVAL(Qnil, context, cursor);
+    if (rb_block_given_p())
+	return rb_ensure(rb_yield, rb_cursor,
+			 rb_grn_table_cursor_close, rb_cursor);
+    else
+	return rb_cursor;
+}
+
+static VALUE
+rb_grn_table_add_with_key (VALUE self, VALUE rb_key)
 {
     grn_ctx *context;
     grn_id id;
@@ -492,6 +557,9 @@ rb_grn_init_table (VALUE mGrn)
     rb_define_method(rb_cGrnTable, "columns",
 		     rb_grn_table_get_columns, -1);
 
-    rb_define_method(rb_cGrnHash, "add", rb_grn_hash_add, 1);
+    rb_define_method(rb_cGrnTable, "open_cursor", rb_grn_table_open_cursor, -1);
+
+    rb_define_method(rb_cGrnHash, "add", rb_grn_table_add_with_key, 1);
+    rb_define_method(rb_cGrnPatriciaTrie, "add", rb_grn_table_add_with_key, 1);
     rb_define_method(rb_cGrnArray, "add", rb_grn_array_add, 0);
 }
