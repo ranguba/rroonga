@@ -60,6 +60,10 @@ module GroongaTestUtils
     @database = Groonga::Database.create(:path => @database_path.to_s)
   end
 
+  def teardown_sandbox
+    teardown_tmp_directory
+  end
+
   def teardown_tmp_directory
     FileUtils.rm_rf(@tmp_dir.to_s)
   end

@@ -120,7 +120,7 @@ VALUE          rb_grn_object_close                  (VALUE object);
 VALUE          rb_grn_table_cursor_close            (VALUE object);
 
 VALUE          rb_grn_record_new                    (VALUE table,
-						     VALUE id);
+						     grn_id id);
 
 
 #define RB_GRN_INTERN(string)         (ID2SYM(rb_intern(string)))

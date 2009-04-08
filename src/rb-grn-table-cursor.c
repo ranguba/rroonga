@@ -232,8 +232,7 @@ rb_grn_table_cursor_next (VALUE self)
         record_id = grn_table_cursor_next(rb_grn_table_cursor->context,
                                           rb_grn_table_cursor->cursor);
         if (record_id != GRN_ID_NIL)
-            rb_record = rb_grn_record_new(rb_iv_get(self, "@table"),
-                                          UINT2NUM(record_id));
+            rb_record = rb_grn_record_new(rb_iv_get(self, "@table"), record_id);
     }
 
     return rb_record;
@@ -256,8 +255,7 @@ rb_grn_table_cursor_each (VALUE self)
     context = rb_grn_table_cursor->context;
     cursor = rb_grn_table_cursor->cursor;
     while ((record_id = grn_table_cursor_next(context, cursor))) {
-        rb_yield(rb_grn_record_new(rb_iv_get(self, "@table"),
-                                   UINT2NUM(record_id)));
+        rb_yield(rb_grn_record_new(rb_iv_get(self, "@table"), record_id));
     }
 
     return Qnil;

@@ -508,7 +508,7 @@ rb_grn_table_add_with_key (VALUE self, VALUE rb_key)
     if (GRN_ID_NIL == id)
 	return Qnil;
     else
-	return UINT2NUM(id);
+	return rb_grn_record_new(self, id);
 }
 
 static VALUE
@@ -525,7 +525,7 @@ rb_grn_array_add (VALUE self)
     if (GRN_ID_NIL == id)
 	return Qnil;
     else
-	return UINT2NUM(id);
+	return rb_grn_record_new(self, id);
 }
 
 void

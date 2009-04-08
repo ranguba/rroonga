@@ -21,9 +21,9 @@
 VALUE rb_cGrnRecord;
 
 VALUE
-rb_grn_record_new (VALUE table, VALUE id)
+rb_grn_record_new (VALUE table, grn_id id)
 {
-    return rb_funcall(rb_cGrnRecord, rb_intern("new"), 2, table, id);
+    return rb_funcall(rb_cGrnRecord, rb_intern("new"), 2, table, UINT2NUM(id));
 }
 
 void

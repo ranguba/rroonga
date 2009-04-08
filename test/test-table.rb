@@ -160,13 +160,14 @@ class TableTest < Test::Unit::TestCase
       bookmarks.define_column("comment", "<shorttext>",
                               :type => "scalar",
                               :path => comment_column_path.to_s)
-    id = bookmarks.add("groonga")
+    groonga = bookmarks.add("groonga")
     url = "http://groonga.org/"
-    bookmarks[id] = url
-    bookmarks_comment[id] = "fulltext search engine"
+    bookmarks[groonga.id] = url
+    bookmarks_comment[groonga.id] = "fulltext search engine"
 
     assert_equal([url, "fulltext search engine"],
-                 [bookmarks[id][0, url.length], bookmarks_comment[id]])
+                 [bookmarks[groonga.id][0, url.length],
+                  bookmarks_comment[groonga.id]])
   end
 
   def test_add_without_name
@@ -176,9 +177,9 @@ class TableTest < Test::Unit::TestCase
     name_column_path = @columns_dir + "name"
     users_name = users.define_column("name", "<shorttext>",
                                      :path => name_column_path.to_s)
-    morita_id = users.add
-    users_name[morita_id] = "morita"
-    assert_equal("morita", users_name[morita_id])
+    morita = users.add
+    users_name[morita.id] = "morita"
+    assert_equal("morita", users_name[morita.id])
   end
 
   def test_add_by_id
@@ -189,12 +190,12 @@ class TableTest < Test::Unit::TestCase
     bookmarks = Groonga::Hash.create(:name => "bookmarks",
                                      :key_type => users,
                                      :path => bookmarks_path.to_s)
-    morita_id = users.add("morita")
-    bookmark_id = bookmarks.add(morita_id)
+    morita = users.add("morita")
+    groonga = bookmarks.add(morita.id)
     url = "http://groonga.org/"
-    bookmarks[bookmark_id] = url
+    bookmarks[groonga.id] = url
 
-    assert_equal(url, bookmarks[bookmark_id][0, url.length])
+    assert_equal(url, bookmarks[groonga.id][0, url.length])
   end
 
   def test_columns

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-#
 # Copyright (C) 2009  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
@@ -15,33 +13,23 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-module Groonga
-  class Record
-    attr_reader :table, :id
-    def initialize(table, id)
-      @table = table
-      @id = id
-    end
+class RecordTest < Test::Unit::TestCase
+  include GroongaTestUtils
 
-    def ==(other)
-      self.class == other.class and
-        [table, id] == [other.table, other.id]
-    end
+  def setup
+    setup_database
 
-    def [](column_name)
-      column = @table.column(column_name)
-      if column.nil?
-        raise Groonga::Error, "nonexistent column: <#{column_name.inspect}>"
-      end
-      column[@id]
-    end
+    @bookmarks_path = @tables_dir + "table"
+    @bookmarks = Groonga::PatriciaTrie.create(:name => "bookmarks",
+                                              :path => @bookmarks_path.to_s)
+    @uri_column_path = @columns_dir + "columns"
+    @bookmark_uri = @bookmarks.define_column("uri", "<shorttext>",
+                                             :path => @uri_column_path.to_s)
+  end
 
-    def []=(column_name, value)
-      column = @table.column(column_name)
-      if column.nil?
-        raise Groonga::Error, "nonexistent column: <#{column_name.inspect}>"
-      end
-      column[@id] = value
-    end
+  def test_column_accessor
+    groonga = @bookmarks.add("groonga")
+    groonga["uri"] = "http://groonga.org/"
+    assert_equal("http://groonga.org/", groonga["uri"])
   end
 end

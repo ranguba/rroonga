@@ -22,9 +22,9 @@ class TableCursorTest < Test::Unit::TestCase
     @bookmarks_path = @tables_dir + "table"
     @bookmarks = Groonga::PatriciaTrie.create(:name => "bookmarks",
                                               :path => @bookmarks_path.to_s)
-    @groonga_bookmark_id = @bookmarks.add("groonga")
-    @cutter_bookmark_id = @bookmarks.add("Cutter")
-    @ruby_bookmark_id = @bookmarks.add("Ruby")
+    @groonga_bookmark = @bookmarks.add("groonga")
+    @cutter_bookmark = @bookmarks.add("Cutter")
+    @ruby_bookmark = @bookmarks.add("Ruby")
   end
 
   def test_open
@@ -43,14 +43,9 @@ class TableCursorTest < Test::Unit::TestCase
     @bookmarks.open_cursor(:order => :ascending) do |cursor|
       record_and_key_list = cursor.collect {|record| [record, cursor.key]}
     end
-    assert_equal([[record(@cutter_bookmark_id), "Cutter"],
-                  [record(@ruby_bookmark_id), "Ruby"],
-                  [record(@groonga_bookmark_id), "groonga"]],
+    assert_equal([[@cutter_bookmark, "Cutter"],
+                  [@ruby_bookmark, "Ruby"],
+                  [@groonga_bookmark, "groonga"]],
                  record_and_key_list)
-  end
-
-  private
-  def record(id)
-    Groonga::Record.new(@bookmarks, id)
   end
 end
