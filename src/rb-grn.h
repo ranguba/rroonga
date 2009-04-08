@@ -152,8 +152,8 @@ VALUE          rb_grn_record_new                    (VALUE table,
 #define GRNTABLECURSOR2RCLASS(object) (rb_grn_table_cursor_to_ruby_class(object))
 
 #define RVAL2GRNCOLUMN(object)        (rb_grn_column_from_ruby_object(object))
-#define GRNCOLUMN2RVAL(context, column) \
-                                      (rb_grn_column_to_ruby_object(context, column))
+#define GRNCOLUMN2RVAL(klass, context, column) \
+                                      (rb_grn_column_to_ruby_object(klass, context, column))
 
 grn_encoding   rb_grn_encoding_from_ruby_object     (VALUE object);
 VALUE          rb_grn_encoding_to_ruby_object       (grn_encoding encoding);
@@ -184,7 +184,8 @@ VALUE          rb_grn_table_cursor_to_ruby_object   (VALUE klass,
 VALUE          rb_grn_table_cursor_to_ruby_class    (grn_table_cursor *cursor);
 
 grn_obj       *rb_grn_column_from_ruby_object       (VALUE object);
-VALUE          rb_grn_column_to_ruby_object         (grn_ctx *context,
+VALUE          rb_grn_column_to_ruby_object         (VALUE klass,
+						     grn_ctx *context,
 						     grn_obj *column);
 
 

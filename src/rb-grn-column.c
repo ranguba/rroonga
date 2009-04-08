@@ -36,9 +36,60 @@ rb_grn_column_from_ruby_object (VALUE object)
 }
 
 VALUE
-rb_grn_column_to_ruby_object (grn_ctx *context, grn_obj *column)
+rb_grn_column_to_ruby_object (VALUE klass, grn_ctx *context, grn_obj *column)
 {
-    return GRNOBJECT2RVAL(rb_cGrnColumn, context, column);
+    return GRNOBJECT2RVAL(klass, context, column);
+}
+
+static VALUE
+rb_grn_index_column_array_set (VALUE self, VALUE rb_id, VALUE rb_value)
+{
+    grn_ctx *context;
+    grn_rc rc;
+    grn_id id;
+    unsigned int section;
+    grn_obj *old_value, *new_value;
+    VALUE rb_section, rb_old_value, rb_new_value;
+
+    context = rb_grn_object_ensure_context(self, Qnil);
+
+    id = NUM2UINT(rb_id);
+
+    if (!RVAL2CBOOL(rb_obj_is_kind_of(rb_value, rb_cHash))) {
+	VALUE hash_value;
+	hash_value = rb_hash_new();
+	rb_hash_aset(hash_value, RB_GRN_INTERN("value"), rb_value);
+	rb_value = hash_value;
+    }
+
+    rb_grn_scan_options(rb_value,
+			"section", &rb_section,
+			"old_value", &rb_old_value,
+			"value", &rb_new_value,
+			NULL);
+
+    if (NIL_P(rb_section))
+	section = 0;
+    else
+	section = NUM2UINT(rb_section);
+
+    old_value = grn_obj_open(context, GRN_BULK, 0, 0);
+    if (!NIL_P(rb_old_value))
+	grn_bulk_write(context, old_value,
+		       StringValuePtr(rb_old_value), RSTRING_LEN(rb_old_value));
+    new_value = grn_obj_open(context, GRN_BULK, 0, 0);
+    if (!NIL_P(rb_new_value))
+	grn_bulk_write(context, new_value,
+		       StringValuePtr(rb_new_value), RSTRING_LEN(rb_new_value));
+
+    rc = grn_column_index_update(context, SELF(self),
+				 id, section, old_value, new_value);
+    grn_obj_close(context, old_value);
+    grn_obj_close(context, new_value);
+
+    rb_grn_check_rc(rc);
+
+    return Qnil;
 }
 
 void
@@ -51,4 +102,7 @@ rb_grn_init_column (VALUE mGrn)
 	rb_define_class_under(mGrn, "VarSizeColumn", rb_cGrnColumn);
     rb_cGrnIndexColumn =
 	rb_define_class_under(mGrn, "IndexColumn", rb_cGrnColumn);
+
+    rb_define_method(rb_cGrnIndexColumn, "[]=",
+		     rb_grn_index_column_array_set, 2);
 }

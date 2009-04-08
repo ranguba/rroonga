@@ -27,10 +27,19 @@ class RecordTest < Test::Unit::TestCase
     @bookmarks_uri = @bookmarks.define_column("uri", "<shorttext>",
                                               :path => @uri_column_path.to_s)
 
-    @comment_column_path = @columns_dir + "commment"
+    @comment_column_path = @columns_dir + "comment"
     @bookmarks_comment =
       @bookmarks.define_column("comment", "<text>",
                                :path => @comment_column_path.to_s)
+
+    @content_column_path = @columns_dir + "content"
+    @bookmarks_content =
+      @bookmarks.define_column("content", "<longtext>",
+                               :type => "index",
+                               :with_section => true,
+                               :with_weight => true,
+                               :with_position => true,
+                               :path => @content_column_path.to_s)
   end
 
   def test_column_accessor
@@ -46,7 +55,7 @@ class RecordTest < Test::Unit::TestCase
   def test_have_column?
     groonga = @bookmarks.add("groonga")
     assert_true(groonga.have_column?(:uri))
-    assert_false(groonga.have_column?(:content))
+    assert_false(groonga.have_column?(:nonexistent))
   end
 
   def test_get_nonexistent_column
@@ -59,5 +68,11 @@ class RecordTest < Test::Unit::TestCase
     assert_raise(Groonga::Error) do
       groonga["nonexistent"] = "value"
     end
+  end
+
+  def test_update_index_column
+    groonga = @bookmarks.add("groonga")
+    groonga["content"] = "<html>...</html>"
+    # groonga.search
   end
 end

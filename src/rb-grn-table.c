@@ -310,7 +310,7 @@ rb_grn_table_define_column (int argc, VALUE *argv, VALUE self)
 			       path, flags, value_type);
     rb_grn_context_check(context);
 
-    return GRNCOLUMN2RVAL(context, column);
+    return GRNCOLUMN2RVAL(Qnil, context, column);
 }
 
 static VALUE
@@ -335,7 +335,7 @@ rb_grn_table_add_column (VALUE self, VALUE rb_name, VALUE rb_value_type,
 			     path, value_type);
     rb_grn_context_check(context);
 
-    return GRNCOLUMN2RVAL(context, column);
+    return GRNCOLUMN2RVAL(Qnil, context, column);
 }
 
 static VALUE
@@ -354,7 +354,7 @@ rb_grn_table_get_column (VALUE self, VALUE rb_name)
     column = grn_table_column(context, SELF(self), name, name_size);
     rb_grn_context_check(context);
 
-    return GRNCOLUMN2RVAL(context, column);
+    return GRNCOLUMN2RVAL(Qnil, context, column);
 }
 
 static VALUE
