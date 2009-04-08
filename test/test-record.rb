@@ -22,14 +22,24 @@ class RecordTest < Test::Unit::TestCase
     @bookmarks_path = @tables_dir + "table"
     @bookmarks = Groonga::PatriciaTrie.create(:name => "bookmarks",
                                               :path => @bookmarks_path.to_s)
-    @uri_column_path = @columns_dir + "columns"
-    @bookmark_uri = @bookmarks.define_column("uri", "<shorttext>",
-                                             :path => @uri_column_path.to_s)
+
+    @uri_column_path = @columns_dir + "uri"
+    @bookmarks_uri = @bookmarks.define_column("uri", "<shorttext>",
+                                              :path => @uri_column_path.to_s)
+
+    @comment_column_path = @columns_dir + "commment"
+    @bookmarks_comment =
+      @bookmarks.define_column("comment", "<text>",
+                               :path => @comment_column_path.to_s)
   end
 
   def test_column_accessor
     groonga = @bookmarks.add("groonga")
+
     groonga["uri"] = "http://groonga.org/"
     assert_equal("http://groonga.org/", groonga["uri"])
+
+    groonga["comment"] = "fulltext search engine"
+    assert_equal("fulltext search engine", groonga["comment"])
   end
 end
