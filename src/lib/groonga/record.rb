@@ -30,9 +30,7 @@ module Groonga
 
     def [](column_name)
       column = @table.column(column_name.to_s)
-      if column.nil?
-        raise Groonga::Error, "nonexistent column: <#{column_name.inspect}>"
-      end
+      return nil if column.nil?
       column[@id]
     end
 

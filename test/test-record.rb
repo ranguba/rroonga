@@ -48,4 +48,16 @@ class RecordTest < Test::Unit::TestCase
     assert_true(groonga.have_column?(:uri))
     assert_false(groonga.have_column?(:content))
   end
+
+  def test_get_nonexistent_column
+    groonga = @bookmarks.add("groonga")
+    assert_nil(groonga["nonexistent"])
+  end
+
+  def test_set_nonexistent_column
+    groonga = @bookmarks.add("groonga")
+    assert_raise(Groonga::Error) do
+      groonga["nonexistent"] = "value"
+    end
+  end
 end
