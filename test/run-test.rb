@@ -35,6 +35,8 @@ $LOAD_PATH.unshift(test_unit_dir)
 
 require 'test/unit'
 
+ARGV.unshift("--priority-mode")
+
 $LOAD_PATH.unshift(src_dir)
 $LOAD_PATH.unshift(lib_dir)
 

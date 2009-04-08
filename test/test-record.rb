@@ -42,4 +42,10 @@ class RecordTest < Test::Unit::TestCase
     groonga["comment"] = "fulltext search engine"
     assert_equal("fulltext search engine", groonga["comment"])
   end
+
+  def test_have_column?
+    groonga = @bookmarks.add("groonga")
+    assert_true(groonga.have_column?(:uri))
+    assert_false(groonga.have_column?(:content))
+  end
 end
