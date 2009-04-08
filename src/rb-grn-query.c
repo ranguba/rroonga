@@ -82,6 +82,37 @@ rb_grn_query_alloc (VALUE klass)
     return Data_Wrap_Struct(klass, NULL, rb_rb_grn_query_free, NULL);
 }
 
+grn_sel_operator
+rb_grn_select_operator_from_ruby_object (VALUE rb_operator)
+{
+    grn_sel_operator operator = GRN_SEL_OR;
+
+    if (NIL_P(rb_operator) ||
+        rb_grn_equal_option(rb_operator, "or") ||
+        rb_grn_equal_option(rb_operator, "||")) {
+        operator = GRN_SEL_OR;
+    } else if (rb_grn_equal_option(rb_operator, "and") ||
+               rb_grn_equal_option(rb_operator, "+") ||
+               rb_grn_equal_option(rb_operator, "&&")) {
+        operator = GRN_SEL_AND;
+    } else if (rb_grn_equal_option(rb_operator, "but") ||
+               rb_grn_equal_option(rb_operator, "not") ||
+               rb_grn_equal_option(rb_operator, "-")) {
+        operator = GRN_SEL_BUT;
+    } else if (rb_grn_equal_option(rb_operator, "adjust") ||
+               rb_grn_equal_option(rb_operator, ">")) {
+        operator = GRN_SEL_ADJUST;
+    } else {
+        rb_raise(rb_eArgError,
+                 "operator should be one of "
+                 "[:or, :||, :and, :+, :&&, :but, :not, :-, :adjust, :>]"
+                 ": <%s>",
+                 rb_grn_inspect(rb_operator));
+    }
+
+    return operator;
+}
+
 static VALUE
 rb_grn_query_initialize (int argc, VALUE *argv, VALUE self)
 {
@@ -90,8 +121,8 @@ rb_grn_query_initialize (int argc, VALUE *argv, VALUE self)
     grn_query *query;
     char *query_string;
     unsigned int query_string_length;
-    grn_sel_operator default_operator = GRN_SEL_OR;
-    int max_expressions = 32;
+    grn_sel_operator default_operator;
+    int max_expressions = RB_GRN_QUERY_DEFAULT_MAX_EXPRESSIONS;
     grn_encoding encoding;
     VALUE rb_query_string, options, rb_context, rb_default_operator;
     VALUE rb_max_expressions, rb_encoding;
@@ -110,28 +141,7 @@ rb_grn_query_initialize (int argc, VALUE *argv, VALUE self)
 
     context = rb_grn_context_ensure(rb_context);
 
-    if (NIL_P(rb_default_operator) ||
-        rb_grn_equal_option(rb_default_operator, "or") ||
-        rb_grn_equal_option(rb_default_operator, "||")) {
-        default_operator = GRN_SEL_OR;
-    } else if (rb_grn_equal_option(rb_default_operator, "and") ||
-               rb_grn_equal_option(rb_default_operator, "+") ||
-               rb_grn_equal_option(rb_default_operator, "&&")) {
-        default_operator = GRN_SEL_AND;
-    } else if (rb_grn_equal_option(rb_default_operator, "but") ||
-               rb_grn_equal_option(rb_default_operator, "not") ||
-               rb_grn_equal_option(rb_default_operator, "-")) {
-        default_operator = GRN_SEL_BUT;
-    } else if (rb_grn_equal_option(rb_default_operator, "adjust") ||
-               rb_grn_equal_option(rb_default_operator, ">")) {
-        default_operator = GRN_SEL_ADJUST;
-    } else {
-        rb_raise(rb_eArgError,
-                 "default operator should be one of "
-                 "[:or, :||, :and, :+, :&&, :but, :not, :-, :adjust, :>]"
-                 ": <%s>",
-                 rb_grn_inspect(rb_default_operator));
-    }
+    default_operator = RVAL2GRNSELECTOPERATOR(rb_default_operator);
 
     if (!NIL_P(rb_max_expressions))
         max_expressions = NUM2INT(rb_max_expressions);

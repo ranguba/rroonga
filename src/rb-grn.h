@@ -61,7 +61,7 @@ typedef int rb_grn_boolean;
 #define RB_GRN_FALSE (0)
 #define RB_GRN_TRUE (!RB_GRN_FALSE)
 
-VALUE rb_cGrnObject;
+#define RB_GRN_QUERY_DEFAULT_MAX_EXPRESSIONS 32
 
 RB_GRN_VAR VALUE rb_eGrnError;
 RB_GRN_VAR VALUE rb_cGrnObject;
@@ -81,6 +81,7 @@ RB_GRN_VAR VALUE rb_cGrnFixSizeColumn;
 RB_GRN_VAR VALUE rb_cGrnVarSizeColumn;
 RB_GRN_VAR VALUE rb_cGrnIndexColumn;
 RB_GRN_VAR VALUE rb_cGrnRecord;
+RB_GRN_VAR VALUE rb_cGrnQuery;
 
 void           rb_grn_init_utils                    (VALUE mGrn);
 void           rb_grn_init_exception                (VALUE mGrn);
@@ -156,6 +157,11 @@ VALUE          rb_grn_record_new                    (VALUE table,
 #define GRNCOLUMN2RVAL(klass, context, column) \
                                       (rb_grn_column_to_ruby_object(klass, context, column))
 
+#define RVAL2GRNQUERY(object)         (rb_grn_query_from_ruby_object(object))
+#define GRNQUERY2RVAL(context, column)(rb_grn_query_to_ruby_object(context, column))
+
+#define RVAL2GRNSELECTOPERATOR(object)(rb_grn_select_operator_from_ruby_object(object))
+
 grn_encoding   rb_grn_encoding_from_ruby_object     (VALUE object);
 VALUE          rb_grn_encoding_to_ruby_object       (grn_encoding encoding);
 
@@ -188,6 +194,14 @@ grn_obj       *rb_grn_column_from_ruby_object       (VALUE object);
 VALUE          rb_grn_column_to_ruby_object         (VALUE klass,
 						     grn_ctx *context,
 						     grn_obj *column);
+
+grn_query     *rb_grn_query_from_ruby_object        (VALUE object);
+VALUE          rb_grn_query_to_ruby_object          (grn_ctx *context,
+						     grn_query *query);
+
+grn_sel_operator
+               rb_grn_select_operator_from_ruby_object
+                                                    (VALUE object);
 
 
 RB_GRN_END_DECLS

@@ -308,6 +308,177 @@ rb_grn_object_array_set (VALUE self, VALUE rb_id, VALUE rb_value)
     return Qnil;
 }
 
+static VALUE
+rb_grn_object_search (int argc, VALUE *argv, VALUE self)
+{
+    RbGrnObject *rb_grn_object;
+    grn_ctx *context;
+    grn_query *query;
+    grn_obj *result;
+    grn_sel_operator operator;
+    grn_search_optarg search_options;
+    rb_grn_boolean search_options_is_set = RB_GRN_FALSE;
+    rb_grn_boolean query_is_created = RB_GRN_FALSE;
+    grn_rc rc;
+    VALUE rb_query, options, rb_result, rb_operator;
+    VALUE rb_exact, rb_left_common_prefix, rb_suffix, rb_prefix, rb_partial;
+    VALUE rb_near, rb_near2, rb_similar, rb_term_extract;
+    VALUE rb_similarity_threshold, rb_max_interval, rb_weight_vector;
+    VALUE rb_procedure, rb_max_size;
+
+    rb_grn_object = SELF(self);
+    if (!rb_grn_object->object)
+	return Qnil;
+
+    context = rb_grn_object->context;
+
+    rb_scan_args(argc, argv, "11", &rb_query, &options);
+
+    /* FIXME: Groonga::Query is only required by
+     * Groonga::IndexColumn. Others are required grn_bulk.
+     */
+    if (CBOOL2RVAL(rb_obj_is_kind_of(rb_query, rb_cGrnQuery))) {
+	query = RVAL2GRNQUERY(rb_query);
+    } else if (CBOOL2RVAL(rb_obj_is_kind_of(rb_query, rb_cString))) {
+	query_is_created = RB_GRN_TRUE;
+	query = grn_query_open(context,
+			       StringValuePtr(rb_query),
+			       RSTRING_LEN(rb_query),
+			       GRN_SEL_OR,
+			       RB_GRN_QUERY_DEFAULT_MAX_EXPRESSIONS,
+			       GRN_ENC_DEFAULT);
+	rb_grn_context_check(context);
+    } else {
+	rb_raise(rb_eArgError,
+		 "query should be Groonga::Query or query string: <%s>",
+		 rb_grn_inspect(rb_query));
+    }
+
+    rb_grn_scan_options(options,
+			"result", &rb_result,
+			"operator", &rb_operator,
+			"exact", &rb_exact,
+			"left_common_prefix", &rb_left_common_prefix,
+			"suffix", &rb_suffix,
+			"prefix", &rb_prefix,
+			"partial", &rb_partial,
+			"near", &rb_near,
+			"near2", &rb_near2,
+			"similar", &rb_similar,
+			"term_exact", &rb_term_extract,
+			"similarity_threshold", &rb_similarity_threshold,
+			"max_interval", &rb_max_interval,
+			"weight_vector", &rb_weight_vector,
+			"procedure", &rb_procedure,
+			"max_size", &rb_max_size,
+			NULL);
+
+    if (NIL_P(rb_result)) {
+	result = grn_table_create(context, NULL, 0, NULL,
+				  GRN_OBJ_TABLE_HASH_KEY | GRN_OBJ_WITH_SUBREC,
+				  NULL /* FIXME: column range type */,
+				  0, GRN_ENC_NONE);
+	rb_grn_context_check(context);
+    } else {
+	result = RVAL2GRNOBJECT(rb_result, context);
+    }
+
+    operator = RVAL2GRNSELECTOPRATOR(rb_operator);
+
+    search_options.flags = 0;
+    if (!NIL_P(rb_exact)) {
+	search_options_is_set = RB_GRN_TRUE;
+	if (RVAL2CBOOL(rb_exact))
+	    search_options.flags |= GRN_SEARCH_EXACT;
+    }
+    if (!NIL_P(rb_left_common_prefix)) {
+	search_options_is_set = RB_GRN_TRUE;
+	if (RVAL2CBOOL(rb_left_common_prefix))
+	    search_options.flags |= GRN_SEARCH_LCP;
+    }
+    if (!NIL_P(rb_suffix)) {
+	search_options_is_set = RB_GRN_TRUE;
+	if (RVAL2CBOOL(rb_suffix))
+	    search_options.flags |= GRN_SEARCH_SUFFIX;
+    }
+    if (!NIL_P(rb_prefix)) {
+	search_options_is_set = RB_GRN_TRUE;
+	if (RVAL2CBOOL(rb_prefix))
+	    search_options.flags |= GRN_SEARCH_PREFIX;
+    }
+    if (!NIL_P(rb_partial)) {
+	search_options_is_set = RB_GRN_TRUE;
+	if (RVAL2CBOOL(rb_partial))
+	    search_options.flags |= GRN_SEARCH_PARTIAL;
+    }
+    if (!NIL_P(rb_near)) {
+	search_options_is_set = RB_GRN_TRUE;
+	if (RVAL2CBOOL(rb_near))
+	    search_options.flags |= GRN_SEARCH_NEAR;
+    }
+    if (!NIL_P(rb_near2)) {
+	search_options_is_set = RB_GRN_TRUE;
+	if (RVAL2CBOOL(rb_near2))
+	    search_options.flags |= GRN_SEARCH_NEAR2;
+    }
+    if (!NIL_P(rb_similar)) {
+	search_options_is_set = RB_GRN_TRUE;
+	if (RVAL2CBOOL(rb_similar))
+	    search_options.flags |= GRN_SEARCH_SIMILAR;
+    }
+    if (!NIL_P(rb_term_extract)) {
+	search_options_is_set = RB_GRN_TRUE;
+	if (RVAL2CBOOL(rb_term_extract))
+	    search_options.flags |= GRN_SEARCH_TERM_EXTRACT;
+    }
+
+    search_options.similarity_threshold = 30; /* FIXME */
+    if (!NIL_P(rb_similarity_threshold)) {
+	search_options_is_set = RB_GRN_TRUE;
+	search_options.similarity_threshold = NUM2INT(rb_similarity_threshold);
+    }
+
+    search_options.max_interval = 5; /* FIXME */
+    if (!NIL_P(rb_max_interval)) {
+	search_options_is_set = RB_GRN_TRUE;
+	search_options.max_interval = NUM2INT(rb_max_interval);
+    }
+
+    search_options.weight_vector = NULL; /* FIXME */
+    if (!NIL_P(rb_weight_vector)) {
+	search_options_is_set = RB_GRN_TRUE;
+	/* FIXME */
+	/* search_options.weight_vector = RVAL2INTVECTOR(rb_weight_vector); */
+    }
+
+    search_options.proc = NULL;
+    if (!NIL_P(rb_procedure)) {
+	search_options_is_set = RB_GRN_TRUE;
+	search_options.proc = RVAL2GRNOBJECT(rb_procedure, context);
+    }
+
+    search_options.max_size = 100; /* FIXME */
+    if (!NIL_P(rb_max_size)) {
+	search_options_is_set = RB_GRN_TRUE;
+	search_options.max_size = INT2NUM(rb_max_size);
+    }
+
+    rc = grn_obj_search(context,
+			rb_grn_object->object,
+			(grn_obj *)query,
+			result,
+			operator,
+			search_options_is_set ? &search_options : NULL);
+    if (query_is_created)
+	grn_query_close(context, query);
+    rb_grn_check_rc(rc);
+
+    if (NIL_P(rb_result))
+	return GRNOBJECT2RVAL(Qnil, context, result);
+    else
+	return rb_result;
+}
+
 void
 rb_grn_init_object (VALUE mGrn)
 {
@@ -324,4 +495,6 @@ rb_grn_init_object (VALUE mGrn)
 
     rb_define_method(rb_cGrnObject, "[]", rb_grn_object_array_reference, 1);
     rb_define_method(rb_cGrnObject, "[]=", rb_grn_object_array_set, 2);
+
+    rb_define_method(rb_cGrnObject, "search", rb_grn_object_search, -1);
 }

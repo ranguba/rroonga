@@ -29,21 +29,28 @@ module Groonga
     end
 
     def [](column_name)
-      column = @table.column(column_name.to_s)
-      return nil if column.nil?
-      column[@id]
+      (column(column_name) || {})[@id]
     end
 
     def []=(column_name, value)
-      column = @table.column(column_name.to_s)
-      if column.nil?
-        raise Groonga::Error, "nonexistent column: <#{column_name.inspect}>"
-      end
-      column[@id] = value
+      column(column_name, true)[@id] = value
     end
 
     def have_column?(name)
-      not @table.column(name.to_s).nil?
+      not column(name).nil?
+    end
+
+    def search(name, query, options={})
+      column(name, true).search(query, options)
+    end
+
+    private
+    def column(name, required=false)
+      _column = @table.column(name.to_s)
+      if _column.nil? and required
+        raise Groonga::Error, "nonexistent column: <#{name.inspect}>"
+      end
+      _column
     end
   end
 end
