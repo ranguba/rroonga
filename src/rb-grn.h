@@ -94,6 +94,7 @@ void           rb_grn_init_type                     (VALUE mGrn);
 void           rb_grn_init_procedure                (VALUE mGrn);
 void           rb_grn_init_column                   (VALUE mGrn);
 void           rb_grn_init_record                   (VALUE mGrn);
+void           rb_grn_init_query                    (VALUE mGrn);
 
 VALUE          rb_grn_rc_to_exception               (grn_rc rc);
 const char    *rb_grn_rc_to_message                 (grn_rc rc);

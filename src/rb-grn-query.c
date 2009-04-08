@@ -1,0 +1,194 @@
+/* -*- c-file-style: "ruby" -*- */
+/*
+  Copyright (C) 2009  Kouhei Sutou <kou@clear-code.com>
+
+  This library is free software; you can redistribute it and/or
+  modify it under the terms of the GNU Lesser General Public
+  License version 2.1 as published by the Free Software Foundation.
+
+  This library is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+  Lesser General Public License for more details.
+
+  You should have received a copy of the GNU Lesser General Public
+  License along with this library; if not, write to the Free Software
+  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+*/
+
+#include "rb-grn.h"
+
+#define SELF(object) (rb_rb_grn_query_from_ruby_object(object))
+
+typedef struct _RbGrnQuery RbGrnQuery;
+struct _RbGrnQuery
+{
+    grn_ctx *context;
+    grn_query *query;
+};
+
+VALUE rb_cGrnQuery;
+
+static RbGrnQuery *
+rb_rb_grn_query_from_ruby_object (VALUE object)
+{
+    RbGrnQuery *rb_grn_query;
+
+    if (!RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cGrnQuery))) {
+	rb_raise(rb_eTypeError, "not a groonga table cursor");
+    }
+
+    Data_Get_Struct(object, RbGrnQuery, rb_grn_query);
+    if (!rb_grn_query)
+	rb_raise(rb_eGrnError, "groonga query is NULL");
+
+    return rb_grn_query;
+}
+
+grn_query *
+rb_grn_query_from_ruby_object (VALUE object)
+{
+    if (NIL_P(object))
+        return NULL;
+
+    return SELF(object)->query;
+}
+
+static void
+rb_rb_grn_query_free (void *object)
+{
+    xfree(object);
+}
+
+VALUE
+rb_grn_query_to_ruby_object (grn_ctx *context, grn_query *query)
+{
+    RbGrnQuery *rb_grn_query;
+
+    if (!query)
+        return Qnil;
+
+    rb_grn_query = ALLOC(RbGrnQuery);
+    rb_grn_query->context = context;
+    rb_grn_query->query = query;
+
+    return Data_Wrap_Struct(rb_cGrnQuery, NULL,
+                            rb_rb_grn_query_free, rb_grn_query);
+}
+
+static VALUE
+rb_grn_query_alloc (VALUE klass)
+{
+    return Data_Wrap_Struct(klass, NULL, rb_rb_grn_query_free, NULL);
+}
+
+static VALUE
+rb_grn_query_initialize (int argc, VALUE *argv, VALUE self)
+{
+    RbGrnQuery *rb_grn_query;
+    grn_ctx *context = NULL;
+    grn_query *query;
+    char *query_string;
+    unsigned int query_string_length;
+    grn_sel_operator default_operator = GRN_SEL_OR;
+    int max_expressions = 32;
+    grn_encoding encoding;
+    VALUE rb_query_string, options, rb_context, rb_default_operator;
+    VALUE rb_max_expressions, rb_encoding;
+
+    rb_scan_args(argc, argv, "11", &rb_query_string, &options);
+
+    query_string = StringValuePtr(rb_query_string);
+    query_string_length = RSTRING_LEN(rb_query_string);
+
+    rb_grn_scan_options(options,
+                        "context", &rb_context,
+                        "default_operator", &rb_default_operator,
+                        "max_expressions", &rb_max_expressions,
+                        "encoding", &rb_encoding,
+                        NULL);
+
+    context = rb_grn_context_ensure(rb_context);
+
+    if (NIL_P(rb_default_operator) ||
+        rb_grn_equal_option(rb_default_operator, "or") ||
+        rb_grn_equal_option(rb_default_operator, "||")) {
+        default_operator = GRN_SEL_OR;
+    } else if (rb_grn_equal_option(rb_default_operator, "and") ||
+               rb_grn_equal_option(rb_default_operator, "+") ||
+               rb_grn_equal_option(rb_default_operator, "&&")) {
+        default_operator = GRN_SEL_AND;
+    } else if (rb_grn_equal_option(rb_default_operator, "but") ||
+               rb_grn_equal_option(rb_default_operator, "not") ||
+               rb_grn_equal_option(rb_default_operator, "-")) {
+        default_operator = GRN_SEL_BUT;
+    } else if (rb_grn_equal_option(rb_default_operator, "adjust") ||
+               rb_grn_equal_option(rb_default_operator, ">")) {
+        default_operator = GRN_SEL_ADJUST;
+    } else {
+        rb_raise(rb_eArgError,
+                 "default operator should be one of "
+                 "[:or, :||, :and, :+, :&&, :but, :not, :-, :adjust, :>]"
+                 ": <%s>",
+                 rb_grn_inspect(rb_default_operator));
+    }
+
+    if (!NIL_P(rb_max_expressions))
+        max_expressions = NUM2INT(rb_max_expressions);
+
+    encoding = RVAL2GRNENCODING(rb_encoding);
+
+    query = grn_query_open(context, query_string, query_string_length,
+                           default_operator, max_expressions, encoding);
+    rb_grn_context_check(context);
+
+    rb_grn_query = ALLOC(RbGrnQuery);
+    DATA_PTR(self) = rb_grn_query;
+    rb_grn_query->context = context;
+    rb_grn_query->query = query;
+
+    return Qnil;
+}
+
+static VALUE
+rb_grn_query_close (VALUE self)
+{
+    RbGrnQuery *rb_grn_query;
+
+    rb_grn_query = SELF(self);
+    if (rb_grn_query->context && rb_grn_query->query) {
+        grn_rc rc;
+
+        rc = grn_query_close(rb_grn_query->context, rb_grn_query->query);
+        rb_grn_query->context = NULL;
+        rb_grn_query->query = NULL;
+        rb_grn_check_rc(rc);
+    }
+    return Qnil;
+}
+
+static VALUE
+rb_grn_query_closed_p (VALUE self)
+{
+    RbGrnQuery *rb_grn_query;
+
+    rb_grn_query = SELF(self);
+    if (rb_grn_query->context && rb_grn_query->query)
+        return Qfalse;
+    else
+        return Qtrue;
+}
+
+void
+rb_grn_init_query (VALUE mGrn)
+{
+    rb_cGrnQuery = rb_define_class_under(mGrn, "Query", rb_cObject);
+    rb_define_alloc_func(rb_cGrnQuery, rb_grn_query_alloc);
+
+    rb_define_method(rb_cGrnQuery, "initialize",
+                     rb_grn_query_initialize, -1);
+    rb_define_method(rb_cGrnQuery, "close",
+                     rb_grn_query_close, 0);
+    rb_define_method(rb_cGrnQuery, "closed?",
+                     rb_grn_query_closed_p, 0);
+}
