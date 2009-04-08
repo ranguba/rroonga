@@ -16,16 +16,6 @@
 class TypeTest < Test::Unit::TestCase
   include GroongaTestUtils
 
-  def setup
-    Groonga::Context.default = nil
-
-    @db_path = @tmp_dir + "db"
-    @database = Groonga::Database.create(:path => @db_path.to_s)
-
-    @tables_dir = @tmp_dir + "tables"
-    FileUtils.mkdir_p(@tables_dir.to_s)
-  end
-
   def test_new
     type = Groonga::Type.new("user-id", :type => :integer)
     assert_equal("user-id", type.name)

@@ -16,12 +16,7 @@
 class TypeTest < Test::Unit::TestCase
   include GroongaTestUtils
 
-  def setup
-    Groonga::Context.default = nil
-
-    @db_path = @tmp_dir + "db"
-    @database = Groonga::Database.create(:path => @db_path.to_s)
-  end
+  setup :setup_database
 
   def test_builtins
     assert_equal_procedure("<token:delimit>", Groonga::Procedure::DELIMIT)

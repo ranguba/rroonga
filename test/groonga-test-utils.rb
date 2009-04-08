@@ -21,15 +21,43 @@ require 'groonga'
 module GroongaTestUtils
   class << self
     def included(base)
-      base.setup :setup_tmp_directory, :before => :prepend
-      base.teardown :teardown_tmp_directory, :after => :append
+      base.setup :setup_sandbox, :before => :prepend
+      base.teardown :teardown_sandbox, :after => :append
     end
+  end
+
+  def setup_sandbox
+    setup_tmp_directory
+    setup_tables_directory
+    setup_columns_directory
+
+    setup_context
   end
 
   def setup_tmp_directory
     @tmp_dir = Pathname(File.dirname(__FILE__)) + "tmp"
     FileUtils.rm_rf(@tmp_dir.to_s)
     FileUtils.mkdir_p(@tmp_dir.to_s)
+  end
+
+  def setup_tables_directory
+    @tables_dir = @tmp_dir + "tables"
+    FileUtils.mkdir_p(@tables_dir.to_s)
+  end
+
+  def setup_columns_directory
+    @columns_dir = @tmp_dir + "columns"
+    FileUtils.mkdir_p(@columns_dir.to_s)
+  end
+
+  def setup_context
+    Groonga::Context.default = nil
+    Groonga::Context.default_options = nil
+  end
+
+  def setup_database
+    @database_path = @tmp_dir + "database"
+    @database = Groonga::Database.create(:path => @database_path.to_s)
   end
 
   def teardown_tmp_directory

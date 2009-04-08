@@ -17,14 +17,7 @@ class TableCursorTest < Test::Unit::TestCase
   include GroongaTestUtils
 
   def setup
-    Groonga::Context.default = nil
-    @context = Groonga::Context.default
-
-    @db_path = @tmp_dir + "db"
-    @database = Groonga::Database.create(:path => @db_path.to_s)
-
-    @tables_dir = @tmp_dir + "tables"
-    FileUtils.mkdir_p(@tables_dir.to_s)
+    setup_database
 
     @bookmarks_path = @tables_dir + "table"
     @bookmarks = Groonga::PatriciaTrie.create(:name => "bookmarks",

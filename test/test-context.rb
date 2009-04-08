@@ -16,11 +16,6 @@
 class ContextTest < Test::Unit::TestCase
   include GroongaTestUtils
 
-  def setup
-    Groonga::Context.default = nil
-    Groonga::Context.default_options = nil
-  end
-
   def test_default
     context = Groonga::Context.default
     assert_not_predicate(context, :use_ql?)

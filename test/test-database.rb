@@ -16,10 +16,6 @@
 class DatabaseTest < Test::Unit::TestCase
   include GroongaTestUtils
 
-  def setup
-    Groonga::Context.default = nil
-  end
-
   def test_create
     assert_nil(Groonga::Context.default.database)
 
@@ -33,9 +29,10 @@ class DatabaseTest < Test::Unit::TestCase
   end
 
   def test_temporary
+    before_files = @tmp_dir.children
     database = Groonga::Database.create
     assert_nil(database.name)
-    assert_equal([], @tmp_dir.children)
+    assert_equal(before_files, @tmp_dir.children)
   end
 
   def test_open
