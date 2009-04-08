@@ -222,7 +222,7 @@ rb_grn_table_cursor_delete (VALUE self)
 static VALUE
 rb_grn_table_cursor_next (VALUE self)
 {
-    VALUE rb_record_id = Qnil;
+    VALUE rb_record = Qnil;
     RbGrnTableCursor *rb_grn_table_cursor;
 
     rb_grn_table_cursor = SELF(self);
@@ -232,10 +232,11 @@ rb_grn_table_cursor_next (VALUE self)
         record_id = grn_table_cursor_next(rb_grn_table_cursor->context,
                                           rb_grn_table_cursor->cursor);
         if (record_id != GRN_ID_NIL)
-            rb_record_id = UINT2NUM(record_id);
+            rb_record = rb_grn_record_new(rb_iv_get(self, "@table"),
+                                          UINT2NUM(record_id));
     }
 
-    return rb_record_id;
+    return rb_record;
 }
 
 static VALUE
@@ -255,7 +256,8 @@ rb_grn_table_cursor_each (VALUE self)
     context = rb_grn_table_cursor->context;
     cursor = rb_grn_table_cursor->cursor;
     while ((record_id = grn_table_cursor_next(context, cursor))) {
-        rb_yield(UINT2NUM(record_id));
+        rb_yield(rb_grn_record_new(rb_iv_get(self, "@table"),
+                                   UINT2NUM(record_id)));
     }
 
     return Qnil;

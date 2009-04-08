@@ -46,13 +46,18 @@ class TableCursorTest < Test::Unit::TestCase
   end
 
   def test_open_ascendent
-    id_and_key_list = []
+    record_and_key_list = []
     @bookmarks.open_cursor(:order => :ascending) do |cursor|
-      id_and_key_list = cursor.collect {|id| [id, cursor.key]}
+      record_and_key_list = cursor.collect {|record| [record, cursor.key]}
     end
-    assert_equal([[@cutter_bookmark_id, "Cutter"],
-                  [@ruby_bookmark_id, "Ruby"],
-                  [@groonga_bookmark_id, "groonga"]],
-                 id_and_key_list)
+    assert_equal([[record(@cutter_bookmark_id), "Cutter"],
+                  [record(@ruby_bookmark_id), "Ruby"],
+                  [record(@groonga_bookmark_id), "groonga"]],
+                 record_and_key_list)
+  end
+
+  private
+  def record(id)
+    Groonga::Record.new(@bookmarks, id)
   end
 end

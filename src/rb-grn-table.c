@@ -467,6 +467,7 @@ rb_grn_table_open_cursor (int argc, VALUE *argv, VALUE self)
     rb_grn_context_check(context);
 
     rb_cursor = GRNTABLECURSOR2RVAL(Qnil, context, cursor);
+    rb_iv_set(rb_cursor, "@table", self);
     if (rb_block_given_p())
 	return rb_ensure(rb_yield, rb_cursor,
 			 rb_grn_table_cursor_close, rb_cursor);

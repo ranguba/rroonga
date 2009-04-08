@@ -18,32 +18,16 @@
 
 #include "rb-grn.h"
 
-static void
-finish_groonga (void)
+VALUE rb_cGrnRecord;
+
+VALUE
+rb_grn_record_new (VALUE table, VALUE id)
 {
-    grn_fin();
+    return rb_funcall(rb_cGrnRecord, rb_intern("new"), 2, table, id);
 }
 
 void
-Init_groonga(void)
+rb_grn_init_record (VALUE mGrn)
 {
-    VALUE mGrn;
-
-    mGrn = rb_define_module("Groonga");
-
-    rb_grn_init_utils(mGrn);
-    rb_grn_init_exception(mGrn);
-    rb_grn_init_encoding(mGrn);
-    rb_grn_init_context(mGrn);
-    rb_grn_init_object(mGrn);
-    rb_grn_init_database(mGrn);
-    rb_grn_init_table(mGrn);
-    rb_grn_init_table_cursor(mGrn);
-    rb_grn_init_type(mGrn);
-    rb_grn_init_procedure(mGrn);
-    rb_grn_init_column(mGrn);
-    rb_grn_init_record(mGrn);
-
-    rb_grn_check_rc(grn_init());
-    atexit(finish_groonga);
+    rb_cGrnRecord = rb_const_get(mGrn, rb_intern("Record"));
 }

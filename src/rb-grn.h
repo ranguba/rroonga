@@ -80,6 +80,7 @@ RB_GRN_VAR VALUE rb_cGrnColumn;
 RB_GRN_VAR VALUE rb_cGrnFixSizeColumn;
 RB_GRN_VAR VALUE rb_cGrnVarSizeColumn;
 RB_GRN_VAR VALUE rb_cGrnIndexColumn;
+RB_GRN_VAR VALUE rb_cGrnRecord;
 
 void           rb_grn_init_utils                    (VALUE mGrn);
 void           rb_grn_init_exception                (VALUE mGrn);
@@ -92,6 +93,7 @@ void           rb_grn_init_table_cursor             (VALUE mGrn);
 void           rb_grn_init_type                     (VALUE mGrn);
 void           rb_grn_init_procedure                (VALUE mGrn);
 void           rb_grn_init_column                   (VALUE mGrn);
+void           rb_grn_init_record                   (VALUE mGrn);
 
 VALUE          rb_grn_rc_to_exception               (grn_rc rc);
 const char    *rb_grn_rc_to_message                 (grn_rc rc);
@@ -116,6 +118,9 @@ void           rb_grn_object_initialize             (VALUE self,
 VALUE          rb_grn_object_close                  (VALUE object);
 
 VALUE          rb_grn_table_cursor_close            (VALUE object);
+
+VALUE          rb_grn_record_new                    (VALUE table,
+						     VALUE id);
 
 
 #define RB_GRN_INTERN(string)         (ID2SYM(rb_intern(string)))
