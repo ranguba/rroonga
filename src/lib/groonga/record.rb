@@ -44,6 +44,10 @@ module Groonga
       column(name, true).search(query, options)
     end
 
+    def key
+      @table.key(@id)
+    end
+
     private
     def column(name, required=false)
       _column = @table.column(name.to_s)

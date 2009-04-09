@@ -56,7 +56,7 @@ module GroongaTestUtils
   end
 
   def setup_logger
-    Groonga::Logger.register do |level, time, title, message, location|
+    Groonga::Logger.register(:level => :dump) do |level, time, title, message, location|
       p [level, time, title, message, location]
     end
   end

@@ -556,6 +556,28 @@ rb_grn_array_add (VALUE self)
 	return rb_grn_record_new(self, id);
 }
 
+static VALUE
+rb_grn_table_get_key (VALUE self, VALUE rb_id)
+{
+    grn_ctx *context;
+    grn_id id;
+    VALUE key;
+    int key_size = 0;
+
+    context = rb_grn_object_ensure_context(self, Qnil);
+
+    id = NUM2UINT(rb_id);
+    key_size = grn_table_get_key(context, SELF(self), id, NULL, 0);
+    if (key_size == 0)
+	return Qnil;
+
+    key = rb_str_buf_new(key_size);
+    RSTRING_LEN(key) = key_size;
+    grn_table_get_key(context, SELF(self), id, RSTRING_PTR(key), key_size);
+    return key;
+}
+
+
 void
 rb_grn_init_table (VALUE mGrn)
 {
@@ -592,4 +614,6 @@ rb_grn_init_table (VALUE mGrn)
     rb_define_method(rb_cGrnHash, "add", rb_grn_table_add_with_key, 1);
     rb_define_method(rb_cGrnPatriciaTrie, "add", rb_grn_table_add_with_key, 1);
     rb_define_method(rb_cGrnArray, "add", rb_grn_array_add, 0);
+
+    rb_define_method(rb_cGrnHash, "key", rb_grn_table_get_key, 1);
 }

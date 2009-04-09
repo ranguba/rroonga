@@ -69,7 +69,7 @@ rb_grn_index_column_array_set (VALUE self, VALUE rb_id, VALUE rb_value)
 			NULL);
 
     if (NIL_P(rb_section))
-	section = 0;
+	section = 1;
     else
 	section = NUM2UINT(rb_section);
 

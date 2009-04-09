@@ -74,6 +74,8 @@ class RecordTest < Test::Unit::TestCase
   def test_update_index_column
     groonga = @bookmarks.add("groonga")
     groonga["content"] = "<html><body>groonga</body></html>"
-    assert_equal([:XXX], groonga.search("content", "groonga").records)
+    records = groonga.search("content", "groonga").records
+    assert_equal([groonga.id],
+                 records.collect {|record| record.key.unpack("i")[0]})
   end
 end
