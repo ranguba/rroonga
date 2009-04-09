@@ -315,7 +315,7 @@ rb_grn_object_search (int argc, VALUE *argv, VALUE self)
 {
     RbGrnObject *rb_grn_object;
     grn_ctx *context;
-    grn_query *query;
+    grn_obj *query;
     grn_obj *result;
     grn_sel_operator operator;
     grn_search_optarg search_options;
@@ -336,20 +336,17 @@ rb_grn_object_search (int argc, VALUE *argv, VALUE self)
 
     rb_scan_args(argc, argv, "11", &rb_query, &options);
 
-    /* FIXME: Groonga::Query is only required by
-     * Groonga::IndexColumn. Others are required grn_bulk.
-     */
     if (CBOOL2RVAL(rb_obj_is_kind_of(rb_query, rb_cGrnQuery))) {
-	query = RVAL2GRNQUERY(rb_query);
+	grn_query *_query;
+	_query = RVAL2GRNQUERY(rb_query);
+	query = (grn_obj *)_query;
     } else if (CBOOL2RVAL(rb_obj_is_kind_of(rb_query, rb_cString))) {
 	query_is_created = RB_GRN_TRUE;
-	query = grn_query_open(context,
-			       StringValuePtr(rb_query),
-			       RSTRING_LEN(rb_query),
-			       GRN_SEL_OR,
-			       RB_GRN_QUERY_DEFAULT_MAX_EXPRESSIONS,
-			       GRN_ENC_DEFAULT);
+	query = grn_obj_open(context, GRN_BULK, 0, 0);
+	rc = grn_bulk_write(context, query,
+			    StringValuePtr(rb_query), RSTRING_LEN(rb_query));
 	rb_grn_context_check(context);
+	rb_grn_check_rc(rc);
     } else {
 	rb_raise(rb_eArgError,
 		 "query should be Groonga::Query or query string: <%s>",
@@ -467,12 +464,12 @@ rb_grn_object_search (int argc, VALUE *argv, VALUE self)
 
     rc = grn_obj_search(context,
 			rb_grn_object->object,
-			(grn_obj *)query,
+			query,
 			result,
 			operator,
 			search_options_is_set ? &search_options : NULL);
     if (query_is_created)
-	grn_query_close(context, query);
+	grn_obj_close(context, query);
     rb_grn_check_rc(rc);
 
     if (NIL_P(rb_result))
