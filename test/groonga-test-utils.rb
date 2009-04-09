@@ -55,6 +55,12 @@ module GroongaTestUtils
     Groonga::Context.default_options = nil
   end
 
+  def setup_logger
+    Groonga::Logger.register do |level, time, title, message, location|
+      p [level, time, title, message, location]
+    end
+  end
+
   def setup_database
     @database_path = @tmp_dir + "database"
     @database = Groonga::Database.create(:path => @database_path.to_s)

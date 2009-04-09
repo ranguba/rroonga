@@ -204,6 +204,23 @@ rb_grn_context_array_reference (VALUE self, VALUE name_or_id)
     return GRNOBJECT2RVAL(Qnil, context, object);
 }
 
+static VALUE
+rb_grn_context_set_logger (VALUE self, VALUE rb_logger)
+{
+    grn_ctx *context;
+    grn_logger_info *logger;
+    grn_rc rc;
+
+    context = SELF(self);
+    logger = RVAL2GRNLOGGER(rb_logger);
+
+    rc = grn_logger_info_set(context, logger);
+    rb_grn_check_rc(rc);
+    rb_iv_set(self, "@logger", rb_logger);
+
+    return Qnil;
+}
+
 void
 rb_grn_init_context (VALUE mGrn)
 {

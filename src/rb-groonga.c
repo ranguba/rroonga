@@ -44,6 +44,7 @@ Init_groonga(void)
     rb_grn_init_column(mGrn);
     rb_grn_init_record(mGrn);
     rb_grn_init_query(mGrn);
+    rb_grn_init_logger(mGrn);
 
     rb_grn_check_rc(grn_init());
     atexit(finish_groonga);

@@ -82,6 +82,7 @@ RB_GRN_VAR VALUE rb_cGrnVarSizeColumn;
 RB_GRN_VAR VALUE rb_cGrnIndexColumn;
 RB_GRN_VAR VALUE rb_cGrnRecord;
 RB_GRN_VAR VALUE rb_cGrnQuery;
+RB_GRN_VAR VALUE rb_cGrnLogger;
 
 void           rb_grn_init_utils                    (VALUE mGrn);
 void           rb_grn_init_exception                (VALUE mGrn);
@@ -96,6 +97,7 @@ void           rb_grn_init_procedure                (VALUE mGrn);
 void           rb_grn_init_column                   (VALUE mGrn);
 void           rb_grn_init_record                   (VALUE mGrn);
 void           rb_grn_init_query                    (VALUE mGrn);
+void           rb_grn_init_logger                   (VALUE mGrn);
 
 VALUE          rb_grn_rc_to_exception               (grn_rc rc);
 const char    *rb_grn_rc_to_message                 (grn_rc rc);
@@ -162,6 +164,8 @@ VALUE          rb_grn_record_new                    (VALUE table,
 
 #define RVAL2GRNSELECTOPERATOR(object)(rb_grn_select_operator_from_ruby_object(object))
 
+#define RVAL2GRNLOGGER(object)        (rb_grn_logger_from_ruby_object(object))
+
 grn_encoding   rb_grn_encoding_from_ruby_object     (VALUE object);
 VALUE          rb_grn_encoding_to_ruby_object       (grn_encoding encoding);
 
@@ -202,6 +206,9 @@ VALUE          rb_grn_query_to_ruby_object          (grn_ctx *context,
 grn_sel_operator
                rb_grn_select_operator_from_ruby_object
                                                     (VALUE object);
+
+grn_logger_info *
+               rb_grn_logger_from_ruby_object       (VALUE object);
 
 
 RB_GRN_END_DECLS
