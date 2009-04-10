@@ -33,13 +33,16 @@ class RecordTest < Test::Unit::TestCase
                                :path => @comment_column_path.to_s)
 
     @content_column_path = @columns_dir + "content"
-    @bookmarks_content =
-      @bookmarks.define_column("content", "<longtext>",
+    @bookmarks_content = @bookmarks.define_column("content", "<longtext>")
+
+    @content_index_column_path = @columns_dir + "content-index"
+    @bookmarks_content_index =
+      @bookmarks.define_column("content-index", "<text>",
                                :type => "index",
                                :with_section => true,
                                :with_weight => true,
                                :with_position => true,
-                               :path => @content_column_path.to_s)
+                               :path => @content_index_column_path.to_s)
   end
 
   def test_column_accessor
@@ -70,12 +73,24 @@ class RecordTest < Test::Unit::TestCase
     end
   end
 
-  priority :must
   def test_update_index_column
     groonga = @bookmarks.add("groonga")
-    groonga["content"] = "<html><body>groonga</body></html>"
-    records = groonga.search("content", "groonga").records
-    assert_equal([groonga.id],
-                 records.collect {|record| record.key.unpack("i")[0]})
+    groonga["content-index"] = "<html><body>groonga</body></html>"
+
+    ruby = @bookmarks.add("ruby")
+    ruby["content-index"] = "<html><body>ruby</body></html>"
+
+    assert_index_search([groonga.id],
+                        groonga.search("content-index", "groonga").records)
+
+    assert_index_search([ruby.id, groonga.id],
+                        groonga.search("content-index", "html").records)
+  end
+
+  def assert_index_search(expected_ids, records)
+    ids = records.collect do |record|
+      record.key.unpack("i")[0]
+    end
+    assert_equal(expected_ids, ids)
   end
 end
