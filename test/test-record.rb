@@ -19,9 +19,9 @@ class RecordTest < Test::Unit::TestCase
   def setup
     setup_database
 
-    @bookmarks_path = @tables_dir + "table"
-    @bookmarks = Groonga::PatriciaTrie.create(:name => "bookmarks",
-                                              :path => @bookmarks_path.to_s)
+    @bookmarks_path = @tables_dir + "bookmarks"
+    @bookmarks = Groonga::Array.create(:name => "bookmarks",
+                                       :path => @bookmarks_path.to_s)
 
     @uri_column_path = @columns_dir + "uri"
     @bookmarks_uri = @bookmarks.define_column("uri", "<shorttext>",
@@ -35,18 +35,22 @@ class RecordTest < Test::Unit::TestCase
     @content_column_path = @columns_dir + "content"
     @bookmarks_content = @bookmarks.define_column("content", "<longtext>")
 
+    @bookmarks_index_path = @tables_dir + "bookmarks-index"
+    @bookmarks_index =
+      Groonga::PatriciaTrie.create(:name => "bookmarks-index",
+                                   :path => @bookmarks_index_path.to_s)
     @content_index_column_path = @columns_dir + "content-index"
-    @bookmarks_content_index =
-      @bookmarks.define_column("content-index", "<text>",
-                               :type => "index",
-                               :with_section => true,
-                               :with_weight => true,
-                               :with_position => true,
-                               :path => @content_index_column_path.to_s)
+    @bookmarks_index_content =
+      @bookmarks_index.define_column("content", "<text>",
+                                     :type => "index",
+                                     :with_section => true,
+                                     :with_weight => true,
+                                     :with_position => true,
+                                     :path => @content_index_column_path.to_s)
   end
 
   def test_column_accessor
-    groonga = @bookmarks.add("groonga")
+    groonga = @bookmarks.add
 
     groonga["uri"] = "http://groonga.org/"
     assert_equal("http://groonga.org/", groonga["uri"])
@@ -56,35 +60,35 @@ class RecordTest < Test::Unit::TestCase
   end
 
   def test_have_column?
-    groonga = @bookmarks.add("groonga")
+    groonga = @bookmarks.add
     assert_true(groonga.have_column?(:uri))
     assert_false(groonga.have_column?(:nonexistent))
   end
 
   def test_get_nonexistent_column
-    groonga = @bookmarks.add("groonga")
+    groonga = @bookmarks.add
     assert_nil(groonga["nonexistent"])
   end
 
   def test_set_nonexistent_column
-    groonga = @bookmarks.add("groonga")
+    groonga = @bookmarks.add
     assert_raise(Groonga::Error) do
       groonga["nonexistent"] = "value"
     end
   end
 
   def test_update_index_column
-    groonga = @bookmarks.add("groonga")
-    groonga["content-index"] = "<html><body>groonga</body></html>"
+    groonga = @bookmarks_index.add("groonga")
+    groonga["content"] = "<html><body>groonga</body></html>"
 
-    ruby = @bookmarks.add("ruby")
-    ruby["content-index"] = "<html><body>ruby</body></html>"
+    ruby = @bookmarks_index.add("ruby")
+    ruby["content"] = "<html><body>ruby</body></html>"
 
     assert_index_search([groonga.id],
-                        groonga.search("content-index", "groonga").records)
+                        groonga.search("content", "groonga").records)
 
     assert_index_search([ruby.id, groonga.id],
-                        groonga.search("content-index", "html").records)
+                        groonga.search("content", "html").records)
   end
 
   def assert_index_search(expected_ids, records)
