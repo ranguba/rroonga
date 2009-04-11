@@ -100,7 +100,7 @@ class RecordTest < Test::Unit::TestCase
     groonga = @bookmarks.add
     index = @bookmarks_index.add("groonga")
     groonga["content-index-id"] = index.id
-    assert_equal([index.id].pack("l"), groonga["content-index-id"])
+    assert_equal(index.id, groonga["content-index-id"])
   end
 
   private

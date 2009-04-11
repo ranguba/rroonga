@@ -18,6 +18,13 @@
 
 #include "rb-grn.h"
 
+#include <stdint.h>
+
+typedef struct {
+  int32_t tv_sec;
+  int32_t tv_usec;
+} grn_timeval;
+
 #define SELF(object) (rb_rb_grn_object_from_ruby_object(object))
 
 VALUE rb_cGrnObject;
@@ -253,30 +260,118 @@ rb_grn_object_equal (VALUE self, VALUE other)
 }
 
 static VALUE
+rb_grn_object_bulk_to_ruby_object (grn_ctx *context, grn_obj *object,
+				   grn_obj *bulk)
+{
+    VALUE rb_value = Qnil;
+    grn_id range;
+    grn_obj *range_object;
+
+    range = grn_obj_get_range(context, object);
+    switch (range) {
+      case GRN_DB_VOID:
+	break;
+      case GRN_DB_INT:
+	if (GRN_BULK_VSIZE(bulk) == sizeof(int32_t)) {
+	    int32_t *int32_value = (int32_t *)GRN_BULK_HEAD(bulk);
+	    rb_value = INT2NUM(*int32_value);
+	}
+	break;
+      case GRN_DB_UINT:
+	if (GRN_BULK_VSIZE(bulk) == sizeof(uint32_t)) {
+	    uint32_t *uint32_value = (uint32_t *)GRN_BULK_HEAD(bulk);
+	    rb_value = UINT2NUM(*uint32_value);
+	} else if (GRN_BULK_VSIZE(bulk) == sizeof(uint64_t)) {
+	    uint64_t *uint64_value = (uint64_t *)GRN_BULK_HEAD(bulk);
+	    rb_value = ULL2NUM(*uint64_value);
+	}
+	break;
+      case GRN_DB_INT64:
+	if (GRN_BULK_VSIZE(bulk) == sizeof(int64_t)) {
+	    int64_t *int64_value = (int64_t *)GRN_BULK_HEAD(bulk);
+	    rb_value = LL2NUM(*int64_value);
+	}
+	break;
+      case GRN_DB_FLOAT:
+	if (GRN_BULK_VSIZE(bulk) == sizeof(double)) {
+	    double *double_value = (double *)GRN_BULK_HEAD(bulk);
+	    rb_value = rb_float_new(*double_value);
+	}
+	break;
+      case GRN_DB_TIME:
+	if (GRN_BULK_VSIZE(bulk) == sizeof(grn_timeval)) {
+	    grn_timeval *time_value = (grn_timeval *)GRN_BULK_HEAD(bulk);
+	    rb_value = rb_funcall(rb_cTime, rb_intern("at"), 2,
+				  INT2NUM(time_value->tv_sec),
+				  INT2NUM(time_value->tv_usec));
+	}
+      case GRN_DB_SHORTTEXT:
+      case GRN_DB_TEXT:
+      case GRN_DB_LONGTEXT:
+      case GRN_DB_DELIMIT:
+      case GRN_DB_UNIGRAM:
+      case GRN_DB_BIGRAM:
+      case GRN_DB_TRIGRAM:
+      case GRN_DB_MECAB:
+	break;
+      default:
+	range_object = grn_ctx_get(context, range);
+	if (range_object) {
+	    switch (range_object->header.type) {
+	      case GRN_TABLE_HASH_KEY:
+	      case GRN_TABLE_PAT_KEY:
+	      case GRN_TABLE_NO_KEY:
+		if (GRN_BULK_VSIZE(bulk) == sizeof(int32_t)) {
+		    int32_t *int32_value = (int32_t *)GRN_BULK_HEAD(bulk);
+		    rb_value = INT2NUM(*int32_value);
+		}
+		break;
+	      default:
+		break;
+	    }
+	}
+	break;
+    }
+
+    if (NIL_P(rb_value))
+	rb_value = rb_str_new(GRN_BULK_HEAD(bulk), GRN_BULK_VSIZE(bulk));
+
+    return rb_value;
+}
+
+static VALUE
 rb_grn_object_array_reference (VALUE self, VALUE rb_id)
 {
     RbGrnObject *rb_grn_object;
     grn_id id;
+    grn_ctx *context;
+    grn_obj *object;
     grn_obj *value;
     VALUE rb_value = Qnil;
 
     rb_grn_object = SELF(self);
-    if (!rb_grn_object->object)
+    context = rb_grn_object->context;
+    object = rb_grn_object->object;
+    if (!object)
 	return Qnil;
 
     id = NUM2UINT(rb_id);
-    value = grn_obj_get_value(rb_grn_object->context, rb_grn_object->object,
-			      id, NULL);
+    value = grn_obj_get_value(context, object, id, NULL);
     if (!value) {
-	rb_grn_context_check(rb_grn_object->context);
-	return Qnil;
+	rb_grn_context_check(context);
+	return RB_GRN_FALSE;
     }
 
-    if (!GRN_BULK_EMPTYP(value)) {
-	rb_value = rb_str_new(GRN_BULK_HEAD(value), GRN_BULK_VSIZE(value));
-	grn_obj_close(rb_grn_object->context, value);
+    if (GRN_BULK_EMPTYP(value)) {
+	grn_obj_close(context, value);
+	rb_grn_context_check(context);
+	return RB_GRN_FALSE;
     }
-    rb_grn_context_check(rb_grn_object->context);
+
+    rb_value = rb_grn_object_bulk_to_ruby_object(context, object, value);
+
+    grn_obj_close(context, value);
+    rb_grn_context_check(context);
 
     return rb_value;
 }
