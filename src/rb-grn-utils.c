@@ -84,6 +84,52 @@ rb_grn_equal_option (VALUE option, const char *key)
     return RB_GRN_FALSE;
 }
 
+grn_obj *
+rb_grn_bulk_from_ruby_object (grn_ctx *context, VALUE object)
+{
+    grn_obj *bulk;
+    grn_rc rc;
+    const char *string;
+    unsigned int size;
+    int32_t int32_value;
+    int64_t int64_value;
+    double double_value;
+
+    bulk = grn_obj_open(context, GRN_BULK, 0, 0);
+    rb_grn_context_check(context);
+
+    if (RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cString))) {
+	string = RSTRING_PTR(object);
+	size = RSTRING_LEN(object);
+    } else if (RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cFixnum))) {
+	int32_value = NUM2INT(object);
+	string = (const char*)&int32_value;
+	size = sizeof(int32_value);
+    } else if (RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cBignum))) {
+	int64_value = NUM2LL(object);
+	string = (const char*)&int64_value;
+	size = sizeof(int64_value);
+    } else if (RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cFloat))) {
+	double_value = NUM2DBL(object);
+	string = (const char*)&double_value;
+	size = sizeof(double_value);
+    } else {
+	grn_obj_close(context, bulk);
+	rb_raise(rb_eTypeError,
+		 "bulked object should be one of [String, Integer, Float]: %s",
+		 rb_grn_inspect(object));
+    }
+
+    rc = grn_bulk_write(context, bulk, string, size);
+    if (rc != GRN_SUCCESS) {
+	grn_obj_close(context, bulk);
+	rb_grn_context_check(context);
+	rb_grn_check_rc(rc);
+    }
+
+    return bulk;
+}
+
 void
 rb_grn_init_utils (VALUE mGrn)
 {

@@ -47,6 +47,11 @@ class RecordTest < Test::Unit::TestCase
                                      :with_weight => true,
                                      :with_position => true,
                                      :path => @content_index_column_path.to_s)
+
+    @content_index_id_column_path = @columns_dir + "content-index-id"
+    @bookmarks_content_index_id =
+      @bookmarks.define_column("content-index-id", @bookmarks_index,
+                               :path => @content_index_id_column_path.to_s)
   end
 
   def test_column_accessor
@@ -91,6 +96,14 @@ class RecordTest < Test::Unit::TestCase
                         groonga.search("content", "html").records)
   end
 
+  def test_set_object_id
+    groonga = @bookmarks.add
+    index = @bookmarks_index.add("groonga")
+    groonga["content-index-id"] = index.id
+    assert_equal([index.id].pack("l"), groonga["content-index-id"])
+  end
+
+  private
   def assert_index_search(expected_ids, records)
     ids = records.collect do |record|
       record.key.unpack("i")[0]

@@ -166,6 +166,8 @@ VALUE          rb_grn_record_new                    (VALUE table,
 
 #define RVAL2GRNLOGGER(object)        (rb_grn_logger_from_ruby_object(object))
 
+#define RVAL2GRNBULK(context, object) (rb_grn_bulk_from_ruby_object(context, object))
+
 grn_encoding   rb_grn_encoding_from_ruby_object     (VALUE object);
 VALUE          rb_grn_encoding_to_ruby_object       (grn_encoding encoding);
 
@@ -209,6 +211,9 @@ grn_sel_operator
 
 grn_logger_info *
                rb_grn_logger_from_ruby_object       (VALUE object);
+
+grn_obj       *rb_grn_bulk_from_ruby_object         (grn_ctx *context,
+						     VALUE object);
 
 
 RB_GRN_END_DECLS

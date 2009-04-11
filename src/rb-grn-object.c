@@ -294,14 +294,7 @@ rb_grn_object_array_set (VALUE self, VALUE rb_id, VALUE rb_value)
 	return Qnil;
 
     id = NUM2UINT(rb_id);
-    value = grn_obj_open(rb_grn_object->context, GRN_BULK, 0, 0);
-    rb_grn_context_check(rb_grn_object->context);
-    rc = grn_bulk_write(rb_grn_object->context, value,
-			StringValuePtr(rb_value), RSTRING_LEN(rb_value));
-    if (rc != GRN_SUCCESS) {
-	grn_obj_close(rb_grn_object->context, value);
-	rb_grn_check_rc(rc);
-    }
+    value = RVAL2GRNBULK(rb_grn_object->context, rb_value);
     rc = grn_obj_set_value(rb_grn_object->context, rb_grn_object->object, id,
 			   value, GRN_OBJ_SET);
     grn_obj_close(rb_grn_object->context, value);
