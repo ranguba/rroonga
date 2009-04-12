@@ -41,7 +41,7 @@ class RecordTest < Test::Unit::TestCase
                                    :path => @bookmarks_index_path.to_s)
     @content_index_column_path = @columns_dir + "content-index"
     @bookmarks_index_content =
-      @bookmarks_index.define_column("content", "<text>",
+      @bookmarks_index.define_column("content", "<longtext>",
                                      :type => "index",
                                      :with_section => true,
                                      :with_weight => true,
@@ -101,6 +101,15 @@ class RecordTest < Test::Unit::TestCase
     index = @bookmarks_index.add("groonga")
     groonga["content-index-id"] = index.id
     assert_equal(index.id, groonga["content-index-id"])
+  end
+
+  def test_range
+    assert_equal(Groonga::Type::SHORT_TEXT, @bookmarks_uri.range)
+    assert_equal(Groonga::Type::TEXT, @bookmarks_comment.range)
+    assert_equal(Groonga::Type::LONG_TEXT, @bookmarks_content.range)
+    assert_equal(Groonga::Type::LONG_TEXT, @bookmarks_index_content.range)
+    assert_equal(@bookmarks_index,
+                 Groonga::Context.default[@bookmarks_content_index_id.range])
   end
 
   private

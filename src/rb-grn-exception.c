@@ -369,7 +369,7 @@ rb_grn_rc_to_message (grn_rc rc)
         message = "too many open files";
         break;
       case GRN_INAPPROPRIATE_I_O_CONTROL_OPERATION:
-        message = "inappropriate i o control operation";
+        message = "inappropriate I/O control operation";
         break;
       case GRN_FILE_TOO_LARGE:
         message = "file too large";

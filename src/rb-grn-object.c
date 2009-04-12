@@ -242,6 +242,23 @@ rb_grn_object_get_name (VALUE self)
 }
 
 static VALUE
+rb_grn_object_get_range (VALUE self)
+{
+    RbGrnObject *rb_grn_object;
+    grn_id range;
+
+    rb_grn_object = SELF(self);
+    if (!rb_grn_object->object)
+	return Qnil;
+
+    range = grn_obj_get_range(rb_grn_object->context, rb_grn_object->object);
+    if (range == GRN_ID_NIL)
+	return Qnil;
+    else
+	return INT2NUM(range);
+}
+
+static VALUE
 rb_grn_object_equal (VALUE self, VALUE other)
 {
     RbGrnObject *self_rb_grn_object, *other_rb_grn_object;
@@ -574,6 +591,7 @@ rb_grn_init_object (VALUE mGrn)
 
     rb_define_method(rb_cGrnObject, "domain", rb_grn_object_get_domain, 0);
     rb_define_method(rb_cGrnObject, "name", rb_grn_object_get_name, 0);
+    rb_define_method(rb_cGrnObject, "range", rb_grn_object_get_range, 0);
 
     rb_define_method(rb_cGrnObject, "==", rb_grn_object_equal, 1);
 

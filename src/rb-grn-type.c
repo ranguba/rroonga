@@ -105,4 +105,9 @@ rb_grn_init_type (VALUE mGrn)
     rb_define_const(rb_cGrnType, "SHORT_TEXT", INT2NUM(GRN_DB_SHORTTEXT));
     rb_define_const(rb_cGrnType, "TEXT", INT2NUM(GRN_DB_TEXT));
     rb_define_const(rb_cGrnType, "LONG_TEXT", INT2NUM(GRN_DB_LONGTEXT));
+    rb_define_const(rb_cGrnType, "DELIMIT", INT2NUM(GRN_DB_DELIMIT));
+    rb_define_const(rb_cGrnType, "UNIGRAM", INT2NUM(GRN_DB_UNIGRAM));
+    rb_define_const(rb_cGrnType, "BIGRAM", INT2NUM(GRN_DB_BIGRAM));
+    rb_define_const(rb_cGrnType, "TRIGRAM", INT2NUM(GRN_DB_TRIGRAM));
+    rb_define_const(rb_cGrnType, "MECAB", INT2NUM(GRN_DB_MECAB));
 }
