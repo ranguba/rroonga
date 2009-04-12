@@ -103,6 +103,12 @@ class RecordTest < Test::Unit::TestCase
     assert_equal(index.id, groonga["content-index-id"])
   end
 
+  def test_set_nil
+    groonga = @bookmarks.add
+    groonga["content"] = nil
+    assert_nil(groonga["content"])
+  end
+
   def test_range
     assert_equal(Groonga::Type::SHORT_TEXT, @bookmarks_uri.range)
     assert_equal(Groonga::Type::TEXT, @bookmarks_comment.range)

@@ -376,13 +376,13 @@ rb_grn_object_array_reference (VALUE self, VALUE rb_id)
     value = grn_obj_get_value(context, object, id, NULL);
     if (!value) {
 	rb_grn_context_check(context);
-	return RB_GRN_FALSE;
+	return Qnil;
     }
 
     if (GRN_BULK_EMPTYP(value)) {
 	grn_obj_close(context, value);
 	rb_grn_context_check(context);
-	return RB_GRN_FALSE;
+	return Qnil;
     }
 
     rb_value = rb_grn_object_bulk_to_ruby_object(context, object, value);

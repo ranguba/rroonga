@@ -98,7 +98,10 @@ rb_grn_bulk_from_ruby_object (grn_ctx *context, VALUE object)
     bulk = grn_obj_open(context, GRN_BULK, 0, 0);
     rb_grn_context_check(context);
 
-    if (RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cString))) {
+    if (NIL_P(object)) {
+	string = NULL;
+	size = 0;
+    } else if (RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cString))) {
 	string = RSTRING_PTR(object);
 	size = RSTRING_LEN(object);
     } else if (RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cFixnum))) {
@@ -116,7 +119,8 @@ rb_grn_bulk_from_ruby_object (grn_ctx *context, VALUE object)
     } else {
 	grn_obj_close(context, bulk);
 	rb_raise(rb_eTypeError,
-		 "bulked object should be one of [String, Integer, Float]: %s",
+		 "bulked object should be one of "
+		 "[nil, String, Integer, Float]: %s",
 		 rb_grn_inspect(object));
     }
 
