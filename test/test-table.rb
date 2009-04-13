@@ -208,4 +208,18 @@ class TableTest < Test::Unit::TestCase
     assert_equal([uri_column.name, comment_column.name].sort,
                  bookmarks.columns.collect {|column| column.name}.sort)
   end
+
+  def test_size
+    bookmarks_path = @tables_dir + "bookmarks"
+    bookmarks = Groonga::Array.create(:name => "bookmarks",
+                                      :path => bookmarks_path.to_s)
+
+    assert_equal(0, bookmarks.size)
+
+    bookmarks.add
+    bookmarks.add
+    bookmarks.add
+
+    assert_equal(3, bookmarks.size)
+  end
 end

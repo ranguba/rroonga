@@ -48,6 +48,20 @@ module Groonga
       @table.key(@id)
     end
 
+    def columns
+      @table.columns
+    end
+
+    def attributes
+      attributes = {}
+      table_name = @table.name
+      columns.each do |column|
+        next if column.is_a?(Groonga::IndexColumn)
+        attributes[column.name[(table_name.size + 1)..-1]] = column[@id]
+      end
+      attributes
+    end
+
     private
     def column(name, required=false)
       _column = @table.column(name.to_s)

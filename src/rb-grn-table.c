@@ -504,6 +504,17 @@ rb_grn_table_get_records (int argc, VALUE *argv, VALUE self)
 }
 
 static VALUE
+rb_grn_table_get_size (VALUE self)
+{
+    grn_ctx *context;
+    unsigned int size;
+
+    context = rb_grn_object_ensure_context(self, Qnil);
+    size = grn_table_size(context, SELF(self));
+    return UINT2NUM(size);
+}
+
+static VALUE
 rb_grn_table_add_with_key (VALUE self, VALUE rb_key)
 {
     grn_ctx *context;
@@ -577,7 +588,6 @@ rb_grn_table_get_key (VALUE self, VALUE rb_id)
     return key;
 }
 
-
 void
 rb_grn_init_table (VALUE mGrn)
 {
@@ -610,6 +620,8 @@ rb_grn_init_table (VALUE mGrn)
 
     rb_define_method(rb_cGrnTable, "open_cursor", rb_grn_table_open_cursor, -1);
     rb_define_method(rb_cGrnTable, "records", rb_grn_table_get_records, -1);
+
+    rb_define_method(rb_cGrnTable, "size", rb_grn_table_get_size, 0);
 
     rb_define_method(rb_cGrnHash, "add", rb_grn_table_add_with_key, 1);
     rb_define_method(rb_cGrnPatriciaTrie, "add", rb_grn_table_add_with_key, 1);
