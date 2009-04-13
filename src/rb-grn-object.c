@@ -18,13 +18,6 @@
 
 #include "rb-grn.h"
 
-#include <stdint.h>
-
-typedef struct {
-  int32_t tv_sec;
-  int32_t tv_usec;
-} grn_timeval;
-
 #define SELF(object) (rb_rb_grn_object_from_ruby_object(object))
 
 VALUE rb_cGrnObject;

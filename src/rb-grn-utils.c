@@ -93,6 +93,7 @@ rb_grn_bulk_from_ruby_object (grn_ctx *context, VALUE object)
     unsigned int size;
     int32_t int32_value;
     int64_t int64_value;
+    grn_timeval time_value;
     double double_value;
 
     bulk = grn_obj_open(context, GRN_BULK, 0, 0);
@@ -116,11 +117,16 @@ rb_grn_bulk_from_ruby_object (grn_ctx *context, VALUE object)
 	double_value = NUM2DBL(object);
 	string = (const char*)&double_value;
 	size = sizeof(double_value);
+    } else if (RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cTime))) {
+	time_value.tv_sec = NUM2INT(rb_funcall(object, rb_intern("to_i"), 0));
+	time_value.tv_usec = NUM2INT(rb_funcall(object, rb_intern("usec"), 0));
+	string = (const char*)&time_value;
+	size = sizeof(time_value);
     } else {
 	grn_obj_close(context, bulk);
 	rb_raise(rb_eTypeError,
 		 "bulked object should be one of "
-		 "[nil, String, Integer, Float]: %s",
+		 "[nil, String, Integer, Float, Time]: %s",
 		 rb_grn_inspect(object));
     }
 

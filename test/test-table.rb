@@ -222,4 +222,16 @@ class TableTest < Test::Unit::TestCase
 
     assert_equal(3, bookmarks.size)
   end
+
+  def test_time_column
+    bookmarks_path = @tables_dir + "bookmarks"
+    bookmarks = Groonga::Array.create(:name => "bookmarks",
+                                      :path => bookmarks_path.to_s)
+    column = bookmarks.define_column("created_at", "<time>")
+
+    bookmark = bookmarks.add
+    now = Time.now
+    bookmark["created_at"] = now
+    assert_equal(now, bookmark["created_at"])
+  end
 end

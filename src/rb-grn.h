@@ -63,6 +63,14 @@ typedef int rb_grn_boolean;
 
 #define RB_GRN_QUERY_DEFAULT_MAX_EXPRESSIONS 32
 
+#include <stdint.h>
+
+typedef struct {
+  int32_t tv_sec;
+  int32_t tv_usec;
+} grn_timeval;
+
+
 RB_GRN_VAR VALUE rb_eGrnError;
 RB_GRN_VAR VALUE rb_cGrnObject;
 RB_GRN_VAR VALUE rb_cGrnDatabase;
