@@ -576,6 +576,24 @@ rb_grn_object_search (int argc, VALUE *argv, VALUE self)
 	return rb_result;
 }
 
+static VALUE
+rb_grn_object_remove (VALUE self)
+{
+    RbGrnObject *rb_grn_object;
+    grn_ctx *context;
+    grn_rc rc;
+
+    rb_grn_object = SELF(self);
+    if (!rb_grn_object->object)
+	return Qnil;
+
+    context = rb_grn_object->context;
+    rc = grn_obj_remove(context, rb_grn_object->object);
+    rb_grn_check_rc(rc);
+
+    return Qnil;
+}
+
 void
 rb_grn_init_object (VALUE mGrn)
 {
@@ -595,4 +613,6 @@ rb_grn_init_object (VALUE mGrn)
     rb_define_method(rb_cGrnObject, "[]=", rb_grn_object_array_set, 2);
 
     rb_define_method(rb_cGrnObject, "search", rb_grn_object_search, -1);
+
+    rb_define_method(rb_cGrnObject, "remove", rb_grn_object_remove, 0);
 }

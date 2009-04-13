@@ -248,4 +248,13 @@ class TableTest < Test::Unit::TestCase
     bookmarks.delete(bookmark2.id)
     assert_equal(2, bookmarks.size)
   end
+
+  def test_remove
+    bookmarks_path = @tables_dir + "bookmarks"
+    bookmarks = Groonga::Array.create(:name => "bookmarks",
+                                      :path => bookmarks_path.to_s)
+    assert_predicate(bookmarks_path, :exist?)
+    bookmarks.remove
+    assert_not_predicate(bookmarks_path, :exist?)
+  end
 end
