@@ -62,6 +62,10 @@ module Groonga
       attributes
     end
 
+    def delete
+      @table.delete(@id)
+    end
+
     private
     def column(name, required=false)
       _column = @table.column(name.to_s)

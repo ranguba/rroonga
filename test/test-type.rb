@@ -16,6 +16,8 @@
 class TypeTest < Test::Unit::TestCase
   include GroongaTestUtils
 
+  setup :setup_database
+
   def test_new
     type = Groonga::Type.new("user-id", :type => :integer)
     assert_equal("user-id", type.name)
@@ -30,11 +32,6 @@ class TypeTest < Test::Unit::TestCase
     assert_equal_type("<shorttext>", Groonga::Type::SHORT_TEXT)
     assert_equal_type("<text>", Groonga::Type::TEXT)
     assert_equal_type("<longtext>", Groonga::Type::LONG_TEXT)
-    assert_equal_type("<delimit>", Groonga::Type::DELIMIT)
-    assert_equal_type("<unigram>", Groonga::Type::UNIGRAM)
-    assert_equal_type("<bigram>", Groonga::Type::BIGRAM)
-    assert_equal_type("<trigram>", Groonga::Type::TRIGRAM)
-    assert_equal_type("<mecab>", Groonga::Type::MECAB)
   end
 
   private

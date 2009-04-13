@@ -15,6 +15,8 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+$VERBOSE = true
+
 base_dir = File.expand_path(File.join(File.dirname(__FILE__), ".."))
 test_unit_dir = File.join(base_dir, "test-unit", "lib")
 src_dir = File.join(base_dir, "src")

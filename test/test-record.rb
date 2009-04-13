@@ -118,6 +118,16 @@ class RecordTest < Test::Unit::TestCase
                  Groonga::Context.default[@bookmarks_content_index_id.range])
   end
 
+  def test_delete
+    bookmark1 = @bookmarks.add
+    bookmark2 = @bookmarks.add
+    bookmark3 = @bookmarks.add
+
+    assert_equal(3, @bookmarks.size)
+    bookmark2.delete
+    assert_equal(2, @bookmarks.size)
+  end
+
   private
   def assert_index_search(expected_ids, records)
     ids = records.collect do |record|

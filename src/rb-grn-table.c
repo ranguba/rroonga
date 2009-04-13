@@ -588,6 +588,49 @@ rb_grn_table_get_key (VALUE self, VALUE rb_id)
     return key;
 }
 
+static VALUE
+rb_grn_table_delete_by_key (VALUE self, VALUE rb_key)
+{
+    grn_ctx *context;
+    const char *key;
+    int key_size = 0;
+    grn_rc rc;
+
+    context = rb_grn_object_ensure_context(self, Qnil);
+
+    key = StringValuePtr(rb_key);
+    key_size = RSTRING_LEN(rb_key);
+    rc = grn_table_delete(context, SELF(self), key, key_size);
+    rb_grn_check_rc(rc);
+
+    return Qnil;
+}
+
+static VALUE
+rb_grn_table_delete_by_id (VALUE self, VALUE rb_id)
+{
+    grn_ctx *context;
+    grn_id id;
+    grn_rc rc;
+
+    context = rb_grn_object_ensure_context(self, Qnil);
+
+    id = NUM2UINT(rb_id);
+    rc = grn_table_delete_by_id(context, SELF(self), id);
+    rb_grn_check_rc(rc);
+
+    return Qnil;
+}
+
+static VALUE
+rb_grn_table_delete (VALUE self, VALUE rb_id_or_key)
+{
+    if (RVAL2CBOOL(rb_obj_is_kind_of(rb_id_or_key, rb_cFixnum)))
+	return rb_grn_table_delete_by_id(self, rb_id_or_key);
+    else
+	return rb_grn_table_delete_by_key(self, rb_id_or_key);
+}
+
 void
 rb_grn_init_table (VALUE mGrn)
 {
@@ -628,4 +671,8 @@ rb_grn_init_table (VALUE mGrn)
     rb_define_method(rb_cGrnArray, "add", rb_grn_array_add, 0);
 
     rb_define_method(rb_cGrnHash, "key", rb_grn_table_get_key, 1);
+
+    rb_define_method(rb_cGrnHash, "delete", rb_grn_table_delete, 1);
+    rb_define_method(rb_cGrnPatriciaTrie, "delete", rb_grn_table_delete, 1);
+    rb_define_method(rb_cGrnArray, "delete", rb_grn_table_delete_by_id, 1);
 }

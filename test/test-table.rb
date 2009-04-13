@@ -234,4 +234,18 @@ class TableTest < Test::Unit::TestCase
     bookmark["created_at"] = now
     assert_equal(now, bookmark["created_at"])
   end
+
+  def test_delete
+    bookmarks_path = @tables_dir + "bookmarks"
+    bookmarks = Groonga::Array.create(:name => "bookmarks",
+                                      :path => bookmarks_path.to_s)
+
+    bookmark1 = bookmarks.add
+    bookmark2 = bookmarks.add
+    bookmark3 = bookmarks.add
+
+    assert_equal(3, bookmarks.size)
+    bookmarks.delete(bookmark2.id)
+    assert_equal(2, bookmarks.size)
+  end
 end
