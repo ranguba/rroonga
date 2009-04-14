@@ -19,7 +19,7 @@
 #include "rb-grn.h"
 
 static void
-finish_groonga (void)
+finish_groonga (VALUE data)
 {
     grn_fin();
 }
@@ -47,5 +47,5 @@ Init_groonga(void)
     rb_grn_init_logger(mGrn);
 
     rb_grn_check_rc(grn_init());
-    atexit(finish_groonga);
+    rb_set_end_proc(finish_groonga, Qnil);
 }
