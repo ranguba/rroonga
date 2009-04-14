@@ -349,7 +349,7 @@ rb_grn_object_bulk_to_ruby_object (grn_ctx *context, grn_obj *object,
     return rb_value;
 }
 
-static VALUE
+VALUE
 rb_grn_object_array_reference (VALUE self, VALUE rb_id)
 {
     RbGrnObject *rb_grn_object;

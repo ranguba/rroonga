@@ -26,7 +26,7 @@ rb_grn_inspect (VALUE object)
     VALUE inspected;
 
     inspected = rb_funcall(object, rb_intern("inspect"), 0);
-    return RSTRING_PTR(inspected);
+    return StringValueCStr(inspected);
 }
 
 void

@@ -127,6 +127,8 @@ grn_ctx       *rb_grn_object_ensure_context         (VALUE object,
 void           rb_grn_object_initialize             (VALUE self,
 						     grn_ctx *context,
 						     grn_obj *object);
+VALUE          rb_grn_object_array_reference        (VALUE object,
+						     VALUE rb_id);
 VALUE          rb_grn_object_close                  (VALUE object);
 
 VALUE          rb_grn_table_cursor_close            (VALUE object);
