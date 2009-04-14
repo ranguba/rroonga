@@ -266,4 +266,13 @@ class TableTest < Test::Unit::TestCase
     bookmark = bookmarks.add("http://google.com/")
     assert_equal(bookmark, bookmarks["http://google.com/"])
   end
+
+  def test_tokenizer
+    table = Groonga::Hash.create
+    assert_equal(Groonga::Context.default["<token:bigram>"],
+                 table.default_tokenizer)
+    table.default_tokenizer = "<token:mecab>"
+    assert_equal(Groonga::Context.default["<token:mecab>"],
+                 table.default_tokenizer)
+  end
 end

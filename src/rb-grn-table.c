@@ -663,6 +663,43 @@ rb_grn_table_array_reference (VALUE self, VALUE rb_id_or_key)
 	return rb_grn_table_array_reference_by_key(self, rb_id_or_key);
 }
 
+/* FIXME */
+grn_rc grn_table_get_info(grn_ctx *ctx, grn_obj *table, grn_obj_flags *flags,
+                          grn_encoding *encoding, grn_obj **tokenizer);
+
+static VALUE
+rb_grn_table_get_default_tokenizer (VALUE self)
+{
+    grn_ctx *context;
+    grn_obj *tokenizer;
+    grn_rc rc;
+
+    context = rb_grn_object_ensure_context(self, Qnil);
+    rc = grn_table_get_info(context, SELF(self),
+			    NULL, NULL, &tokenizer);
+    rb_grn_context_check(context);
+    rb_grn_check_rc(rc);
+
+    return GRNOBJECT2RVAL(Qnil, context, tokenizer);
+}
+
+static VALUE
+rb_grn_table_set_default_tokenizer (VALUE self, VALUE rb_tokenizer)
+{
+    grn_ctx *context;
+    grn_obj *tokenizer;
+    grn_rc rc;
+
+    context = rb_grn_object_ensure_context(self, Qnil);
+    tokenizer = RVAL2GRNOBJECT(rb_tokenizer, context);
+    rc = grn_obj_set_info(context, SELF(self),
+			  GRN_INFO_DEFAULT_TOKENIZER, tokenizer);
+    rb_grn_context_check(context);
+    rb_grn_check_rc(rc);
+
+    return Qnil;
+}
+
 void
 rb_grn_init_table (VALUE mGrn)
 {
@@ -710,4 +747,14 @@ rb_grn_init_table (VALUE mGrn)
 
     rb_define_method(rb_cGrnHash, "[]", rb_grn_table_array_reference, 1);
     rb_define_method(rb_cGrnPatriciaTrie, "[]", rb_grn_table_array_reference, 1);
+
+    rb_define_method(rb_cGrnHash, "default_tokenizer",
+		     rb_grn_table_get_default_tokenizer, 0);
+    rb_define_method(rb_cGrnPatriciaTrie, "default_tokenizer",
+		     rb_grn_table_get_default_tokenizer, 0);
+
+    rb_define_method(rb_cGrnHash, "default_tokenizer=",
+		     rb_grn_table_set_default_tokenizer, 1);
+    rb_define_method(rb_cGrnPatriciaTrie, "default_tokenizer=",
+		     rb_grn_table_set_default_tokenizer, 1);
 }
