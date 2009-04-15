@@ -288,4 +288,17 @@ class TableTest < Test::Unit::TestCase
     assert_equal("#<Groonga::Hash name: (anonymous), path: (temporary)>",
                  anonymous_table.inspect)
   end
+
+  def test_inspect_named
+    path = @tables_dir + "named.groonga"
+    named_table = Groonga::Hash.create(:name => "name", :path => path.to_s)
+    assert_equal("#<Groonga::Hash name: <name>, path: <#{path}>>",
+                 named_table.inspect)
+  end
+
+  def test_inspect_named_temporary
+    named_table = Groonga::Hash.create(:name => "name")
+    assert_equal("#<Groonga::Hash name: <name>, path: (temporary)>",
+                 named_table.inspect)
+  end
 end

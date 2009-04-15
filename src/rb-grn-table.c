@@ -226,8 +226,14 @@ rb_grn_table_inspect (VALUE self)
     if (name_size == 0) {
 	rb_str_cat2(inspected, "(anonymous)");
     } else {
-	rb_str_set_len(inspected, RSTRING_LEN(inspected) + name_size);
-	grn_obj_name(context, table, RSTRING_PTR(inspected), name_size);
+	VALUE name;
+
+	name = rb_str_buf_new(name_size);
+	grn_obj_name(context, table, RSTRING_PTR(name), name_size);
+	rb_str_set_len(name, name_size);
+	rb_str_cat2(inspected, "<");
+	rb_str_concat(inspected, name);
+	rb_str_cat2(inspected, ">");
     }
     rb_str_cat2(inspected, ", ");
 
