@@ -38,9 +38,12 @@ rb_grn_context_from_ruby_object (VALUE object)
 }
 
 static void
-rb_grn_context_free (void *context)
+rb_grn_context_free (void *pointer)
 {
-    grn_ctx_fin(context);
+    grn_ctx *context = pointer;
+
+    if (context->stat != GRN_CTX_FIN)
+	grn_ctx_fin(context);
     xfree(context);
 }
 
