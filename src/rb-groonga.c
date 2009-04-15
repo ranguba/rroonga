@@ -25,14 +25,12 @@ finish_groonga (VALUE data)
 {
     grn_ctx *context;
 
-    context = &grn_gctx;
+    context = grn_gctx.next;
     while (RB_GRN_TRUE) {
 	grn_ctx *next_context = context->next;
 
-	if (context->next == &grn_gctx)
-	    break;
 	grn_ctx_fin(context);
-	if (context == next_context)
+	if (next_context == &grn_gctx)
 	    break;
 	context = next_context;
     }
