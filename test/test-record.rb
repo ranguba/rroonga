@@ -130,9 +130,9 @@ class RecordTest < Test::Unit::TestCase
 
   def test_value
     bookmark = @bookmarks.add
-    assert_equal("", bookmark.value.delete("\0"))
-    bookmark.value = "http://groonga.org/"
-    assert_equal("http://groonga.org/", bookmark.value.delete("\0"))
+    assert_equal("", bookmark.value.split(/\0/, 2)[0])
+    bookmark.value = "http://groonga.org/\0"
+    assert_equal("http://groonga.org/", bookmark.value.split(/\0/, 2)[0])
   end
 
   private
