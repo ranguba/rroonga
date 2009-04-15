@@ -207,6 +207,46 @@ rb_grn_table_s_open (int argc, VALUE *argv, VALUE klass)
 }
 
 static VALUE
+rb_grn_table_inspect (VALUE self)
+{
+    grn_ctx *context;
+    grn_obj *table;
+    VALUE inspected;
+    int name_size;
+    const char *path;
+
+    context = rb_grn_object_ensure_context(self, Qnil);
+    table = SELF(self);
+
+    inspected = rb_str_new2("#<");
+    rb_str_concat(inspected, rb_inspect(rb_obj_class(self)));
+    rb_str_cat2(inspected, " name: ");
+
+    name_size = grn_obj_name(context, table, NULL, 0);
+    if (name_size == 0) {
+	rb_str_cat2(inspected, "(anonymous)");
+    } else {
+	rb_str_set_len(inspected, RSTRING_LEN(inspected) + name_size);
+	grn_obj_name(context, table, RSTRING_PTR(inspected), name_size);
+    }
+    rb_str_cat2(inspected, ", ");
+
+    rb_str_cat2(inspected, "path: ");
+    path = grn_obj_path(context, table);
+    if (path) {
+	rb_str_cat2(inspected, "<");
+	rb_str_cat2(inspected, path);
+	rb_str_cat2(inspected, ">");
+    } else {
+	rb_str_cat2(inspected, "(temporary)");
+    }
+
+    rb_str_cat2(inspected, ">");
+
+    return inspected;
+}
+
+static VALUE
 rb_grn_table_define_column (int argc, VALUE *argv, VALUE self)
 {
     grn_ctx *context;
@@ -720,6 +760,8 @@ rb_grn_init_table (VALUE mGrn)
 			       rb_grn_array_s_create, -1);
 
     rb_define_method(rb_cGrnTable, "initialize", rb_grn_table_initialize, -1);
+
+    rb_define_method(rb_cGrnTable, "inspect", rb_grn_table_inspect, 0);
 
     rb_define_method(rb_cGrnTable, "define_column",
 		     rb_grn_table_define_column, -1);

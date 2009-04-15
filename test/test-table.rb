@@ -275,4 +275,17 @@ class TableTest < Test::Unit::TestCase
     assert_equal(Groonga::Context.default["<token:mecab>"],
                  table.default_tokenizer)
   end
+
+  def test_inspect_anonymous
+    path = @tables_dir + "anoymous.groonga"
+    anonymous_table = Groonga::Hash.create(:path => path.to_s)
+    assert_equal("#<Groonga::Hash name: (anonymous), path: <#{path}>>",
+                 anonymous_table.inspect)
+  end
+
+  def test_inspect_anonymous_temporary
+    anonymous_table = Groonga::Hash.create
+    assert_equal("#<Groonga::Hash name: (anonymous), path: (temporary)>",
+                 anonymous_table.inspect)
+  end
 end
