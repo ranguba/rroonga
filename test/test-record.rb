@@ -128,6 +128,13 @@ class RecordTest < Test::Unit::TestCase
     assert_equal(2, @bookmarks.size)
   end
 
+  def test_value
+    bookmark = @bookmarks.add
+    assert_equal("", bookmark.value.delete("\0"))
+    bookmark.value = "http://groonga.org/"
+    assert_equal("http://groonga.org/", bookmark.value.delete("\0"))
+  end
+
   private
   def assert_index_search(expected_ids, records)
     ids = records.collect do |record|

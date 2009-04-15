@@ -48,6 +48,14 @@ module Groonga
       @table.key(@id)
     end
 
+    def value
+      @table[@id]
+    end
+
+    def value=(value)
+      @table[@id] = value
+    end
+
     def columns
       @table.columns
     end
