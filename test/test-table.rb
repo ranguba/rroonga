@@ -279,26 +279,36 @@ class TableTest < Test::Unit::TestCase
   def test_inspect_anonymous
     path = @tables_dir + "anoymous.groonga"
     anonymous_table = Groonga::Hash.create(:path => path.to_s)
-    assert_equal("#<Groonga::Hash name: (anonymous), path: <#{path}>>",
+    assert_equal("#<Groonga::Hash name: (anonymous), path: <#{path}>, size: 0>",
                  anonymous_table.inspect)
   end
 
   def test_inspect_anonymous_temporary
     anonymous_table = Groonga::Hash.create
-    assert_equal("#<Groonga::Hash name: (anonymous), path: (temporary)>",
+    assert_equal("#<Groonga::Hash name: (anonymous), path: (temporary), size: 0>",
                  anonymous_table.inspect)
   end
 
   def test_inspect_named
     path = @tables_dir + "named.groonga"
     named_table = Groonga::Hash.create(:name => "name", :path => path.to_s)
-    assert_equal("#<Groonga::Hash name: <name>, path: <#{path}>>",
+    assert_equal("#<Groonga::Hash name: <name>, path: <#{path}>, size: 0>",
                  named_table.inspect)
   end
 
   def test_inspect_named_temporary
     named_table = Groonga::Hash.create(:name => "name")
-    assert_equal("#<Groonga::Hash name: <name>, path: (temporary)>",
+    assert_equal("#<Groonga::Hash name: <name>, path: (temporary), size: 0>",
                  named_table.inspect)
+  end
+
+  def test_inspect_size
+    path = @tables_dir + "named.groonga"
+    contain_table = Groonga::Array.create(:name => "name", :path => path.to_s)
+    3.times do
+      contain_table.add
+    end
+    assert_equal("#<Groonga::Array name: <name>, path: <#{path}>, size: 3>",
+                 contain_table.inspect)
   end
 end

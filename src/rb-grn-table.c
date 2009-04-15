@@ -246,6 +246,14 @@ rb_grn_table_inspect (VALUE self)
     } else {
 	rb_str_cat2(inspected, "(temporary)");
     }
+    rb_str_cat2(inspected, ", ");
+
+    rb_str_cat2(inspected, "size: ");
+    {
+	char buf[21]; /* ceil(log10(2 ** 64)) + 1('\0') == 21 */
+	snprintf(buf, sizeof(buf), "%u", grn_table_size(context, table));
+	rb_str_cat2(inspected, buf);
+    }
 
     rb_str_cat2(inspected, ">");
 
