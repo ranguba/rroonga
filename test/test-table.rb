@@ -311,4 +311,11 @@ class TableTest < Test::Unit::TestCase
     assert_equal("#<Groonga::Array name: <name>, path: <#{path}>, size: 3>",
                  contain_table.inspect)
   end
+
+  def test_temporary_add
+    table = Groonga::Hash.create(:key_type => "<shorttext>")
+    assert_equal(0, table.size)
+    table.add("key")
+    assert_equal(1, table.size)
+  end
 end
