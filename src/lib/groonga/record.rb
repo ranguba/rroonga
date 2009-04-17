@@ -36,6 +36,10 @@ module Groonga
       column(column_name, true)[@id] = value
     end
 
+    def append(column_name, value)
+      column(column_name, true).append(@id, value)
+    end
+
     def have_column?(name)
       not column(name).nil?
     end

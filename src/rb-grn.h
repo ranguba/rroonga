@@ -88,6 +88,7 @@ RB_GRN_VAR VALUE rb_cGrnColumn;
 RB_GRN_VAR VALUE rb_cGrnFixSizeColumn;
 RB_GRN_VAR VALUE rb_cGrnVarSizeColumn;
 RB_GRN_VAR VALUE rb_cGrnIndexColumn;
+RB_GRN_VAR VALUE rb_cGrnAccessor;
 RB_GRN_VAR VALUE rb_cGrnRecord;
 RB_GRN_VAR VALUE rb_cGrnQuery;
 RB_GRN_VAR VALUE rb_cGrnLogger;
@@ -103,6 +104,7 @@ void           rb_grn_init_table_cursor             (VALUE mGrn);
 void           rb_grn_init_type                     (VALUE mGrn);
 void           rb_grn_init_procedure                (VALUE mGrn);
 void           rb_grn_init_column                   (VALUE mGrn);
+void           rb_grn_init_accessor                 (VALUE mGrn);
 void           rb_grn_init_record                   (VALUE mGrn);
 void           rb_grn_init_query                    (VALUE mGrn);
 void           rb_grn_init_logger                   (VALUE mGrn);
@@ -113,6 +115,7 @@ void           rb_grn_check_rc                      (grn_rc rc);
 
 grn_ctx       *rb_grn_context_ensure                (VALUE context);
 VALUE          rb_grn_context_get_default           (void);
+VALUE          rb_grn_context_to_exception          (grn_ctx *context);
 void           rb_grn_context_check                 (grn_ctx *context);
 
 const char    *rb_grn_inspect                       (VALUE object);

@@ -53,20 +53,48 @@ rb_grn_context_alloc (VALUE klass)
     return Data_Wrap_Struct(klass, NULL, rb_grn_context_free, NULL);
 }
 
+VALUE
+rb_grn_context_to_exception (grn_ctx *context)
+{
+    VALUE exception, exception_class;
+    const char *message;
+    grn_obj bulk;
+
+    if (context->rc == GRN_SUCCESS)
+	return Qnil;
+
+    exception_class = rb_grn_rc_to_exception(context->rc);
+    message = rb_grn_rc_to_message(context->rc);
+
+    grn_bulk_init(context, &bulk, 0);
+    GRN_BULK_PUTS(context, &bulk, message);
+    GRN_BULK_PUTS(context, &bulk, ": ");
+    GRN_BULK_PUTS(context, &bulk, context->errbuf);
+    GRN_BULK_PUTS(context, &bulk, "\n");
+    GRN_BULK_PUTS(context, &bulk, context->errfile);
+    GRN_BULK_PUTS(context, &bulk, ":");
+    grn_bulk_itoa(context, &bulk, context->errline);
+    GRN_BULK_PUTS(context, &bulk, ": ");
+    GRN_BULK_PUTS(context, &bulk, context->errfunc);
+    GRN_BULK_PUTS(context, &bulk, "()");
+    exception = rb_funcall(exception_class, rb_intern("new"), 1,
+			   rb_str_new(GRN_BULK_HEAD(&bulk),
+				      GRN_BULK_VSIZE(&bulk)));
+    grn_obj_close(context, &bulk);
+
+    return exception;
+}
+
 void
 rb_grn_context_check (grn_ctx *context)
 {
     VALUE exception;
-    const char *message;
 
-    if (context->rc == GRN_SUCCESS)
+    exception = rb_grn_context_to_exception(context);
+    if (NIL_P(exception))
 	return;
 
-    exception = rb_grn_rc_to_exception(context->rc);
-    message = rb_grn_rc_to_message(context->rc);
-    rb_raise(exception, "%s: %s\n%s:%d: %s()",
-	     message, context->errbuf,
-	     context->errfile, context->errline, context->errfunc);
+    rb_exc_raise(exception);
 }
 
 grn_ctx *

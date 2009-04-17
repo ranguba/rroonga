@@ -102,6 +102,9 @@ rb_grn_object_to_ruby_class (grn_obj *object)
       case GRN_TYPE:
 	klass = rb_cGrnType;
 	break;
+      case GRN_ACCESSOR:
+	klass = rb_cGrnAccessor;
+	break;
       case GRN_PROC:
 	klass = rb_cGrnProcedure;
 	break;
@@ -203,12 +206,17 @@ static VALUE
 rb_grn_object_get_domain (VALUE self)
 {
     RbGrnObject *rb_grn_object;
+    grn_id domain;
 
     rb_grn_object = SELF(self);
-    if (rb_grn_object->object)
-        return UINT2NUM(rb_grn_object->object->header.domain);
+    if (!rb_grn_object->object)
+	return Qnil;
+
+    domain = rb_grn_object->object->header.domain;
+    if (domain == GRN_ID_NIL)
+	return Qnil;
     else
-        return Qnil;
+        return UINT2NUM(domain);
 }
 
 static VALUE
@@ -352,6 +360,7 @@ rb_grn_object_bulk_to_ruby_object (grn_ctx *context, grn_obj *object,
 VALUE
 rb_grn_object_array_reference (VALUE self, VALUE rb_id)
 {
+    VALUE exception;
     RbGrnObject *rb_grn_object;
     grn_id id;
     grn_ctx *context;
@@ -373,23 +382,28 @@ rb_grn_object_array_reference (VALUE self, VALUE rb_id)
     }
 
     if (GRN_BULK_EMPTYP(value)) {
+	exception = rb_grn_context_to_exception(context);
 	grn_obj_close(context, value);
-	rb_grn_context_check(context);
+	if (!NIL_P(exception))
+	    rb_exc_raise(exception);
 	return Qnil;
     }
 
     rb_value = rb_grn_object_bulk_to_ruby_object(context, object, value);
 
+    exception = rb_grn_context_to_exception(context);
     grn_obj_close(context, value);
-    rb_grn_context_check(context);
+    if (!NIL_P(exception))
+	rb_exc_raise(exception);
 
     return rb_value;
 }
 
 static VALUE
-rb_grn_object_array_set (VALUE self, VALUE rb_id, VALUE rb_value)
+rb_grn_object_set (VALUE self, VALUE rb_id, VALUE rb_value, int flags)
 {
     RbGrnObject *rb_grn_object;
+    grn_ctx *context;
     grn_id id;
     grn_obj *value;
     grn_rc rc;
@@ -398,14 +412,28 @@ rb_grn_object_array_set (VALUE self, VALUE rb_id, VALUE rb_value)
     if (!rb_grn_object->object)
 	return Qnil;
 
+    context = rb_grn_object->context;
     id = NUM2UINT(rb_id);
-    value = RVAL2GRNBULK(rb_grn_object->context, rb_value);
-    rc = grn_obj_set_value(rb_grn_object->context, rb_grn_object->object, id,
-			   value, GRN_OBJ_SET);
-    grn_obj_close(rb_grn_object->context, value);
+    value = RVAL2GRNBULK(context, rb_value);
+    rc = grn_obj_set_value(context, rb_grn_object->object, id,
+			   value, flags);
+    grn_obj_close(context, value);
+    rb_grn_context_check(context);
     rb_grn_check_rc(rc);
 
     return Qnil;
+}
+
+static VALUE
+rb_grn_object_array_set (VALUE self, VALUE rb_id, VALUE rb_value)
+{
+    return rb_grn_object_set(self, rb_id, rb_value, GRN_OBJ_SET);
+}
+
+static VALUE
+rb_grn_object_append_value (VALUE self, VALUE rb_id, VALUE rb_value)
+{
+    return rb_grn_object_set(self, rb_id, rb_value, GRN_OBJ_APPEND);
 }
 
 static VALUE
@@ -413,6 +441,7 @@ rb_grn_object_search (int argc, VALUE *argv, VALUE self)
 {
     RbGrnObject *rb_grn_object;
     grn_ctx *context;
+    grn_obj *object;
     grn_obj *query;
     grn_obj *result;
     grn_sel_operator operator;
@@ -431,6 +460,7 @@ rb_grn_object_search (int argc, VALUE *argv, VALUE self)
 	return Qnil;
 
     context = rb_grn_object->context;
+    object = rb_grn_object->object;
 
     rb_scan_args(argc, argv, "11", &rb_query, &options);
 
@@ -473,7 +503,7 @@ rb_grn_object_search (int argc, VALUE *argv, VALUE self)
     if (NIL_P(rb_result)) {
 	result = grn_table_create(context, NULL, 0, NULL,
 				  GRN_OBJ_TABLE_HASH_KEY | GRN_OBJ_WITH_SUBREC,
-				  NULL /* FIXME: column range type */,
+				  grn_ctx_get(context, object->header.domain),
 				  0, GRN_ENC_NONE);
 	rb_grn_context_check(context);
     } else {
@@ -561,7 +591,7 @@ rb_grn_object_search (int argc, VALUE *argv, VALUE self)
     }
 
     rc = grn_obj_search(context,
-			rb_grn_object->object,
+			object,
 			query,
 			result,
 			operator,
@@ -600,6 +630,8 @@ rb_grn_init_object (VALUE mGrn)
     rb_cGrnObject = rb_define_class_under(mGrn, "Object", rb_cObject);
     rb_define_alloc_func(rb_cGrnObject, rb_grn_object_alloc);
 
+    rb_cGrnAccessor = rb_define_class_under(mGrn, "Accessor", rb_cGrnObject);
+
     rb_define_method(rb_cGrnObject, "domain", rb_grn_object_get_domain, 0);
     rb_define_method(rb_cGrnObject, "name", rb_grn_object_get_name, 0);
     rb_define_method(rb_cGrnObject, "range", rb_grn_object_get_range, 0);
@@ -611,6 +643,7 @@ rb_grn_init_object (VALUE mGrn)
 
     rb_define_method(rb_cGrnObject, "[]", rb_grn_object_array_reference, 1);
     rb_define_method(rb_cGrnObject, "[]=", rb_grn_object_array_set, 2);
+    rb_define_method(rb_cGrnObject, "append", rb_grn_object_append_value, 2);
 
     rb_define_method(rb_cGrnObject, "search", rb_grn_object_search, -1);
 

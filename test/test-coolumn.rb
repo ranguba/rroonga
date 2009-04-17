@@ -13,7 +13,7 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-class RecordTest < Test::Unit::TestCase
+class ColumnTest < Test::Unit::TestCase
   include GroongaTestUtils
 
   def setup
@@ -32,11 +32,6 @@ class RecordTest < Test::Unit::TestCase
     @users_name_column_path = @columns_dir + "name"
     @users_name_column =
       @users.define_column("name", "<shorttext>",
-                           :path => @users_name_column_path.to_s)
-
-    @users_addresses_column_path = @columns_dir + "addresses"
-    @users_addresses_column =
-      @users.define_column("addresses", "<shorttext>",
                            :path => @users_name_column_path.to_s,
                            :type => "vector")
   end
@@ -83,70 +78,40 @@ class RecordTest < Test::Unit::TestCase
                                      :path => @uri_index_column_path.to_s)
   end
 
-  def test_column_accessor
+  def test_update_index_column
     groonga = @bookmarks.add
+    groonga["content"] = "<html><body>groonga</body></html>"
 
-    groonga["uri"] = "http://groonga.org/"
-    assert_equal("http://groonga.org/", groonga["uri"])
+    ruby = @bookmarks.add
+    ruby["content"] = "<html><body>ruby</body></html>"
 
-    groonga["comment"] = "fulltext search engine"
-    assert_equal("fulltext search engine", groonga["comment"])
+    @bookmarks_index_content[groonga.id] = "<html><body>groonga</body></html>"
+    @bookmarks_index_content[ruby.id] = "<html><body>ruby</body></html>"
+
+    assert_index_search([groonga.id],
+                        @bookmarks_index_content.search("groonga").records)
+
+    assert_index_search([ruby.id, groonga.id],
+                        @bookmarks_index_content.search("html").records)
   end
 
-  def test_have_column?
-    groonga = @bookmarks.add
-    assert_true(groonga.have_column?(:uri))
-    assert_false(groonga.have_column?(:nonexistent))
+  def test_range
+    assert_equal(Groonga::Type::SHORT_TEXT, @bookmarks_uri.range)
+    assert_equal(Groonga::Type::TEXT, @bookmarks_comment.range)
+    assert_equal(Groonga::Type::LONG_TEXT, @bookmarks_content.range)
+    assert_equal(@users, context[@bookmarks_user_id.range])
+    assert_equal(@bookmarks, context[@bookmarks_index_content.range])
+    assert_equal(@bookmarks, context[@bookmarks_uri_index.range])
   end
 
-  def test_get_nonexistent_column
-    groonga = @bookmarks.add
-    assert_nil(groonga["nonexistent"])
-  end
-
-  def test_set_nonexistent_column
-    groonga = @bookmarks.add
-    assert_raise(Groonga::Error) do
-      groonga["nonexistent"] = "value"
-    end
-  end
-
-  def test_set_object_id
-    groonga = @bookmarks.add
-    daijiro = @users.add
-    daijiro["name"] = "daijiro"
-    groonga["user_id"] = daijiro.id
-    assert_equal(daijiro.id, groonga["user_id"])
-  end
-
-  def test_set_nil
-    groonga = @bookmarks.add
-    groonga["content"] = nil
-    assert_nil(groonga["content"])
-  end
-
-  def test_delete
-    bookmark1 = @bookmarks.add
-    bookmark2 = @bookmarks.add
-    bookmark3 = @bookmarks.add
-
-    assert_equal(3, @bookmarks.size)
-    bookmark2.delete
-    assert_equal(2, @bookmarks.size)
-  end
-
-  def test_value
+  def test_accessor
     bookmark = @bookmarks.add
-    assert_equal("", bookmark.value.split(/\0/, 2)[0])
-    bookmark.value = "http://groonga.org/\0"
-    assert_equal("http://groonga.org/", bookmark.value.split(/\0/, 2)[0])
-  end
-
-  def test_append
-    daijiro = @users.add
-    daijiro.append("addresses", "dai@example.com")
-    daijiro.append("addresses", "jiro@example.com")
-    assert_equal(["FIXME"], daijiro["addresses"])
+    bookmark["uri"] = "http://groonga.org/"
+    @bookmarks_uri_index[bookmark.id] = "http://groonga.org/"
+    result = @bookmarks_uri_index.search("http://groonga.org/")
+    accessor = result.column(".<index:uri>.uri")
+    assert_equal(["http://groonga.org/"],
+                 result.records.collect {|record| accessor[record.id]})
   end
 
   private

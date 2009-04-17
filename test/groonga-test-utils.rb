@@ -55,6 +55,10 @@ module GroongaTestUtils
     Groonga::Context.default_options = nil
   end
 
+  def context
+    Groonga::Context.default
+  end
+
   def setup_logger
     Groonga::Logger.register(:level => :dump) do |level, time, title, message, location|
       p [level, time, title, message, location]
