@@ -140,6 +140,34 @@ rb_grn_bulk_from_ruby_object (grn_ctx *context, VALUE object)
     return bulk;
 }
 
+/* FIXME: maybe not work */
+VALUE
+rb_grn_vector_to_ruby_object (grn_ctx *context, grn_obj *vector)
+{
+    VALUE array;
+    unsigned int i, n;
+
+    if (!vector)
+	return Qnil;
+
+    n = grn_vector_size(context, vector);
+    array = rb_ary_new2(n);
+    for (i = 0; i < n; i++) {
+	const char *value;
+	unsigned int weight, length;
+	grn_id domain;
+
+	length = grn_vector_get_element(context, vector, i,
+					&value, &weight, &domain);
+	rb_ary_push(array,
+		    rb_ary_new3(2,
+				rb_str_new(value, length), /* FIXME */
+				UINT2NUM(weight)));
+    }
+
+    return array;
+}
+
 void
 rb_grn_init_utils (VALUE mGrn)
 {

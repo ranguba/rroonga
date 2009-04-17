@@ -277,16 +277,13 @@ rb_grn_object_equal (VALUE self, VALUE other)
     return self_rb_grn_object->object == other_rb_grn_object->object;
 }
 
-static VALUE
-rb_grn_object_bulk_to_ruby_object (grn_ctx *context, grn_obj *object,
-				   grn_obj *bulk)
+VALUE
+rb_grn_bulk_to_ruby_object (grn_ctx *context, grn_obj *bulk)
 {
     VALUE rb_value = Qnil;
-    grn_id range;
-    grn_obj *range_object;
+    grn_obj *range;
 
-    range = grn_obj_get_range(context, object);
-    switch (range) {
+    switch (bulk->header.domain) {
       case GRN_DB_VOID:
 	break;
       case GRN_DB_INT:
@@ -333,9 +330,9 @@ rb_grn_object_bulk_to_ruby_object (grn_ctx *context, grn_obj *object,
       case GRN_DB_MECAB:
 	break;
       default:
-	range_object = grn_ctx_get(context, range);
-	if (range_object) {
-	    switch (range_object->header.type) {
+	range = grn_ctx_get(context, bulk->header.domain);
+	if (range) {
+	    switch (range->header.type) {
 	      case GRN_TABLE_HASH_KEY:
 	      case GRN_TABLE_PAT_KEY:
 	      case GRN_TABLE_NO_KEY:
@@ -362,10 +359,12 @@ rb_grn_object_array_reference (VALUE self, VALUE rb_id)
 {
     VALUE exception;
     RbGrnObject *rb_grn_object;
-    grn_id id;
+    grn_id id, range_id;
     grn_ctx *context;
     grn_obj *object;
-    grn_obj *value;
+    grn_obj *range;
+    unsigned char range_type;
+    grn_obj *value = NULL;
     VALUE rb_value = Qnil;
 
     rb_grn_object = SELF(self);
@@ -375,21 +374,67 @@ rb_grn_object_array_reference (VALUE self, VALUE rb_id)
 	return Qnil;
 
     id = NUM2UINT(rb_id);
-    value = grn_obj_get_value(context, object, id, NULL);
+    range_id = grn_obj_get_range(context, object);
+    range = grn_ctx_get(context, range_id);
+    range_type = range ? range->header.type : GRN_VOID;
+    switch (object->header.type) {
+      case GRN_TABLE_HASH_KEY:
+      case GRN_TABLE_PAT_KEY:
+      case GRN_TABLE_NO_KEY:
+      case GRN_TYPE:
+      case GRN_ACCESSOR: /* FIXME */
+	value = grn_obj_open(context, GRN_BULK, 0, range_id);
+	break;
+      case GRN_COLUMN_VAR_SIZE:
+      case GRN_COLUMN_FIX_SIZE:
+	switch (object->header.flags & GRN_OBJ_COLUMN_TYPE_MASK) {
+	  case GRN_OBJ_COLUMN_VECTOR:
+	    value = grn_obj_open(context, GRN_VECTOR, 0, range_id);
+	    if (!value)
+		rb_grn_context_check(context);
+	    break;
+	  case GRN_OBJ_COLUMN_INDEX:
+	  case GRN_OBJ_COLUMN_SCALAR:
+	    value = grn_obj_open(context, GRN_BULK, 0, range_id);
+	    if (!value)
+		rb_grn_context_check(context);
+	    break;
+	  default:
+	    rb_raise(rb_eGrnError, "unsupported column type: %u: %s",
+		     range_type, rb_grn_inspect(self));
+	    break;
+	}
+	break;
+      default:
+	rb_raise(rb_eGrnError, "unsupported type: %s", rb_grn_inspect(self));
+	break;
+    }
+
+    value = grn_obj_get_value(context, object, id, value);
     if (!value) {
 	rb_grn_context_check(context);
 	return Qnil;
     }
 
-    if (GRN_BULK_EMPTYP(value)) {
-	exception = rb_grn_context_to_exception(context);
-	grn_obj_close(context, value);
-	if (!NIL_P(exception))
-	    rb_exc_raise(exception);
-	return Qnil;
+    switch (value->header.type) {
+      case GRN_BULK:
+	if (GRN_BULK_EMPTYP(value)) {
+	    exception = rb_grn_context_to_exception(context);
+	    grn_obj_close(context, value);
+	    if (!NIL_P(exception))
+		rb_exc_raise(exception);
+	    return Qnil;
+	}
+	rb_value = GRNBULK2RVAL(context, value);
+	break;
+      case GRN_VECTOR:
+	rb_value = GRNVECTOR2RVAL(context, value);
+	break;
+      default:
+	rb_raise(rb_eGrnError,
+		 "unsupported value type: 0x%0x", value->header.type);
+	break;
     }
-
-    rb_value = rb_grn_object_bulk_to_ruby_object(context, object, value);
 
     exception = rb_grn_context_to_exception(context);
     grn_obj_close(context, value);

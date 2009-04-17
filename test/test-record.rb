@@ -19,9 +19,21 @@ class RecordTest < Test::Unit::TestCase
   def setup
     setup_database
 
+    setup_addresses_table
     setup_users_table
     setup_bookmarks_table
     setup_indexes
+  end
+
+  def setup_addresses_table
+    @addresses_path = @tables_dir + "addresses"
+    @addresses = Groonga::Array.create(:name => "addresses",
+                                       :path => @addresses_path.to_s)
+
+    @addresses_mail_column_path = @columns_dir + "mail"
+    @addresses_mail_column =
+      @addresses.define_column("mail", "<shorttext>",
+                               :path => @addresses_mail_column_path.to_s)
   end
 
   def setup_users_table
@@ -36,8 +48,8 @@ class RecordTest < Test::Unit::TestCase
 
     @users_addresses_column_path = @columns_dir + "addresses"
     @users_addresses_column =
-      @users.define_column("addresses", "<shorttext>",
-                           :path => @users_name_column_path.to_s,
+      @users.define_column("addresses", @addresses,
+                           :path => @users_addresses_column_path.to_s,
                            :type => "vector")
   end
 
@@ -143,9 +155,15 @@ class RecordTest < Test::Unit::TestCase
   end
 
   def test_append
+    dai = @addresses.add
+    dai["mail"] = "dai@example.com"
+
+    jiro = @addresses.add
+    jiro["mail"] = "jiro@example.com"
+
     daijiro = @users.add
-    daijiro.append("addresses", "dai@example.com")
-    daijiro.append("addresses", "jiro@example.com")
+    daijiro.append("addresses", dai.id)
+    daijiro.append("addresses", jiro.id)
     assert_equal(["FIXME"], daijiro["addresses"])
   end
 
