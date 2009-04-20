@@ -118,7 +118,9 @@ class ColumnTest < Test::Unit::TestCase
     assert_equal("#<Groonga::VarSizeColumn " +
                  "id: <#{@users_name_column.id}>, " +
                  "name: <users.name>, " +
-                 "path: <#{@users_name_column_path}>>",
+                 "path: <#{@users_name_column_path}>, " +
+                 "domain: <#{@users.inspect}>" +
+                 ">",
                  @users_name_column.inspect)
   end
 

@@ -135,6 +135,12 @@ void           rb_grn_object_initialize             (VALUE self,
 VALUE          rb_grn_object_array_reference        (VALUE object,
 						     VALUE rb_id);
 VALUE          rb_grn_object_close                  (VALUE object);
+VALUE          rb_grn_object_inspect_object         (VALUE inspected,
+						     grn_ctx *context,
+						     grn_obj *object);
+VALUE          rb_grn_object_inspect_object_content (VALUE inspected,
+						     grn_ctx *context,
+						     grn_obj *object);
 VALUE          rb_grn_object_inspect_header         (VALUE object,
 						     VALUE inspected);
 VALUE          rb_grn_object_inspect_content        (VALUE object,

@@ -203,6 +203,17 @@ rb_grn_object_closed_p (VALUE self)
 }
 
 VALUE
+rb_grn_object_inspect_object (VALUE inspected, grn_ctx *context, grn_obj *object)
+{
+    VALUE rb_object;
+
+    rb_object = GRNOBJECT2RVAL(Qnil, context, object);
+    rb_str_concat(inspected, rb_inspect(rb_object));
+
+    return inspected;
+}
+
+VALUE
 rb_grn_object_inspect_header (VALUE self, VALUE inspected)
 {
     rb_str_cat2(inspected, "#<");
@@ -212,20 +223,12 @@ rb_grn_object_inspect_header (VALUE self, VALUE inspected)
     return inspected;
 }
 
-VALUE
-rb_grn_object_inspect_content (VALUE self, VALUE inspected)
+static VALUE
+rb_grn_object_inspect_content_id (VALUE inspected,
+				  grn_ctx *context, grn_obj *object)
 {
-    RbGrnObject *rb_grn_object;
-    grn_ctx *context;
-    grn_obj *object;
     grn_id id;
     VALUE rb_id;
-    int name_size;
-    const char *path;
-
-    rb_grn_object = SELF(self);
-    context = rb_grn_object->context;
-    object = rb_grn_object->object;
 
     rb_str_cat2(inspected, "id: <");
     id = grn_obj_id(context, object);
@@ -234,7 +237,16 @@ rb_grn_object_inspect_content (VALUE self, VALUE inspected)
     else
 	rb_id = UINT2NUM(id);
     rb_str_concat(inspected, rb_obj_as_string(rb_id));
-    rb_str_cat2(inspected, ">, ");
+    rb_str_cat2(inspected, ">");
+
+    return inspected;
+}
+
+static VALUE
+rb_grn_object_inspect_content_name (VALUE inspected,
+				    grn_ctx *context, grn_obj *object)
+{
+    int name_size;
 
     rb_str_cat2(inspected, "name: ");
     name_size = grn_obj_name(context, object, NULL, 0);
@@ -250,7 +262,15 @@ rb_grn_object_inspect_content (VALUE self, VALUE inspected)
 	rb_str_concat(inspected, name);
 	rb_str_cat2(inspected, ">");
     }
-    rb_str_cat2(inspected, ", ");
+
+    return inspected;
+}
+
+static VALUE
+rb_grn_object_inspect_content_path (VALUE inspected,
+				    grn_ctx *context, grn_obj *object)
+{
+    const char *path;
 
     rb_str_cat2(inspected, "path: ");
     path = grn_obj_path(context, object);
@@ -261,6 +281,66 @@ rb_grn_object_inspect_content (VALUE self, VALUE inspected)
     } else {
 	rb_str_cat2(inspected, "(temporary)");
     }
+
+    return inspected;
+}
+
+static VALUE
+rb_grn_object_inspect_content_domain (VALUE inspected,
+				      grn_ctx *context, grn_obj *object)
+{
+    grn_id domain;
+
+    rb_str_cat2(inspected, "domain: ");
+    domain = object->header.domain;
+    rb_str_cat2(inspected, "<");
+    if (domain == GRN_ID_NIL) {
+	rb_str_cat2(inspected, "nil");
+    } else {
+	grn_obj *domain_object;
+
+	domain_object = grn_ctx_get(context, domain);
+	if (domain_object) {
+	    rb_grn_object_inspect_object(inspected, context, domain_object);
+	} else {
+	    rb_str_concat(inspected, rb_obj_as_string(UINT2NUM(domain)));
+	}
+    }
+    rb_str_cat2(inspected, ">");
+
+    return inspected;
+}
+
+VALUE
+rb_grn_object_inspect_object_content (VALUE inspected,
+				      grn_ctx *context, grn_obj *object)
+{
+    rb_grn_object_inspect_content_id(inspected, context, object);
+    rb_str_cat2(inspected, ", ");
+    rb_grn_object_inspect_content_name(inspected, context, object);
+    rb_str_cat2(inspected, ", ");
+    rb_grn_object_inspect_content_path(inspected, context, object);
+    rb_str_cat2(inspected, ", ");
+    rb_grn_object_inspect_content_domain(inspected, context, object);
+
+    return inspected;
+}
+
+VALUE
+rb_grn_object_inspect_content (VALUE self, VALUE inspected)
+{
+    RbGrnObject *rb_grn_object;
+    grn_ctx *context;
+    grn_obj *object;
+
+    rb_grn_object = SELF(self);
+    context = rb_grn_object->context;
+    object = rb_grn_object->object;
+
+    if (!object)
+	return inspected;
+
+    rb_grn_object_inspect_object_content(inspected, context, object);
 
     return inspected;
 }
