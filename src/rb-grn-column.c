@@ -87,7 +87,7 @@ rb_grn_index_column_array_set (VALUE self, VALUE rb_id, VALUE rb_value)
     grn_obj_close(context, old_value);
     grn_obj_close(context, new_value);
 
-    rb_grn_check_rc(rc);
+    rb_grn_rc_check(rc, self);
 
     return Qnil;
 }

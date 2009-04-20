@@ -97,7 +97,7 @@ rb_grn_bulk_from_ruby_object (grn_ctx *context, VALUE object)
     double double_value;
 
     bulk = grn_obj_open(context, GRN_BULK, 0, 0);
-    rb_grn_context_check(context);
+    rb_grn_context_check(context, object);
 
     if (NIL_P(object)) {
 	string = NULL;
@@ -133,8 +133,8 @@ rb_grn_bulk_from_ruby_object (grn_ctx *context, VALUE object)
     rc = grn_bulk_write(context, bulk, string, size);
     if (rc != GRN_SUCCESS) {
 	grn_obj_close(context, bulk);
-	rb_grn_context_check(context);
-	rb_grn_check_rc(rc);
+	rb_grn_context_check(context, object);
+	rb_grn_rc_check(rc, object);
     }
 
     return bulk;

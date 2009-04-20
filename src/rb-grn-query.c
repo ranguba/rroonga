@@ -150,7 +150,7 @@ rb_grn_query_initialize (int argc, VALUE *argv, VALUE self)
 
     query = grn_query_open(context, query_string, query_string_length,
                            default_operator, max_expressions, encoding);
-    rb_grn_context_check(context);
+    rb_grn_context_check(context, rb_ary_new4(argc, argv));
 
     rb_grn_query = ALLOC(RbGrnQuery);
     DATA_PTR(self) = rb_grn_query;
@@ -172,7 +172,7 @@ rb_grn_query_close (VALUE self)
         rc = grn_query_close(rb_grn_query->context, rb_grn_query->query);
         rb_grn_query->context = NULL;
         rb_grn_query->query = NULL;
-        rb_grn_check_rc(rc);
+        rb_grn_rc_check(rc, self);
     }
     return Qnil;
 }

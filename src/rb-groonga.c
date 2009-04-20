@@ -60,6 +60,6 @@ Init_groonga(void)
     rb_grn_init_query(mGrn);
     rb_grn_init_logger(mGrn);
 
-    rb_grn_check_rc(grn_init());
+    rb_grn_rc_check(grn_init(), Qnil);
     rb_set_end_proc(finish_groonga, Qnil);
 }

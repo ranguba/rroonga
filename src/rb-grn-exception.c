@@ -488,7 +488,7 @@ rb_grn_rc_to_message (grn_rc rc)
 }
 
 void
-rb_grn_check_rc (grn_rc rc)
+rb_grn_rc_check (grn_rc rc, VALUE related_object)
 {
     VALUE exception;
     const char *message;
@@ -498,7 +498,10 @@ rb_grn_check_rc (grn_rc rc)
 	return;
     message = rb_grn_rc_to_message(rc);
 
-    rb_raise(exception, "%s", message);
+    if (NIL_P(related_object))
+	rb_raise(exception, "%s", message);
+    else
+	rb_raise(exception, "%s: %s", rb_grn_inspect(related_object),  message);
 }
 
 void

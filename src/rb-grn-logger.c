@@ -199,7 +199,7 @@ rb_grn_logger_s_register (int argc, VALUE *argv, VALUE klass)
     logger = rb_funcall2(klass, rb_intern("new"), argc, argv);
     rb_grn_logger_set_handler(logger, rb_block_proc());
     rc = grn_logger_info_set(NULL, RVAL2GRNLOGGER(logger));
-    rb_grn_check_rc(rc);
+    rb_grn_rc_check(rc, logger);
     rb_cv_set(klass, "@@current_logger", logger);
 
     return Qnil;

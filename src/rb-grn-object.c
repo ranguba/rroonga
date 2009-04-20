@@ -391,13 +391,13 @@ rb_grn_object_array_reference (VALUE self, VALUE rb_id)
 	  case GRN_OBJ_COLUMN_VECTOR:
 	    value = grn_obj_open(context, GRN_VECTOR, 0, range_id);
 	    if (!value)
-		rb_grn_context_check(context);
+		rb_grn_context_check(context, self);
 	    break;
 	  case GRN_OBJ_COLUMN_INDEX:
 	  case GRN_OBJ_COLUMN_SCALAR:
 	    value = grn_obj_open(context, GRN_BULK, 0, range_id);
 	    if (!value)
-		rb_grn_context_check(context);
+		rb_grn_context_check(context, self);
 	    break;
 	  default:
 	    rb_raise(rb_eGrnError, "unsupported column type: %u: %s",
@@ -406,13 +406,14 @@ rb_grn_object_array_reference (VALUE self, VALUE rb_id)
 	}
 	break;
       default:
-	rb_raise(rb_eGrnError, "unsupported type: %s", rb_grn_inspect(self));
+	rb_raise(rb_eGrnError,
+		 "unsupported type: %s", rb_grn_inspect(self));
 	break;
     }
 
     value = grn_obj_get_value(context, object, id, value);
     if (!value) {
-	rb_grn_context_check(context);
+	rb_grn_context_check(context, self);
 	return Qnil;
     }
 
@@ -432,7 +433,8 @@ rb_grn_object_array_reference (VALUE self, VALUE rb_id)
 	break;
       default:
 	rb_raise(rb_eGrnError,
-		 "unsupported value type: 0x%0x", value->header.type);
+		 "unsupported value type: 0x%0x: %s",
+		 value->header.type, rb_grn_inspect(self));
 	break;
     }
 
@@ -463,8 +465,8 @@ rb_grn_object_set (VALUE self, VALUE rb_id, VALUE rb_value, int flags)
     rc = grn_obj_set_value(context, rb_grn_object->object, id,
 			   value, flags);
     grn_obj_close(context, value);
-    rb_grn_context_check(context);
-    rb_grn_check_rc(rc);
+    rb_grn_context_check(context, self);
+    rb_grn_rc_check(rc, self);
 
     return Qnil;
 }
@@ -518,8 +520,8 @@ rb_grn_object_search (int argc, VALUE *argv, VALUE self)
 	query = grn_obj_open(context, GRN_BULK, 0, 0);
 	rc = grn_bulk_write(context, query,
 			    StringValuePtr(rb_query), RSTRING_LEN(rb_query));
-	rb_grn_context_check(context);
-	rb_grn_check_rc(rc);
+	rb_grn_context_check(context, rb_query);
+	rb_grn_rc_check(rc, rb_query);
     } else {
 	rb_raise(rb_eArgError,
 		 "query should be Groonga::Query or query string: <%s>",
@@ -550,7 +552,7 @@ rb_grn_object_search (int argc, VALUE *argv, VALUE self)
 				  GRN_OBJ_TABLE_HASH_KEY | GRN_OBJ_WITH_SUBREC,
 				  grn_ctx_get(context, object->header.domain),
 				  0, GRN_ENC_NONE);
-	rb_grn_context_check(context);
+	rb_grn_context_check(context, self);
     } else {
 	result = RVAL2GRNOBJECT(rb_result, context);
     }
@@ -643,7 +645,7 @@ rb_grn_object_search (int argc, VALUE *argv, VALUE self)
 			search_options_is_set ? &search_options : NULL);
     if (query_is_created)
 	grn_obj_close(context, query);
-    rb_grn_check_rc(rc);
+    rb_grn_rc_check(rc, self);
 
     if (NIL_P(rb_result))
 	return GRNOBJECT2RVAL(Qnil, context, result);
@@ -664,7 +666,7 @@ rb_grn_object_remove (VALUE self)
 
     context = rb_grn_object->context;
     rc = grn_obj_remove(context, rb_grn_object->object);
-    rb_grn_check_rc(rc);
+    rb_grn_rc_check(rc, self);
 
     return Qnil;
 }

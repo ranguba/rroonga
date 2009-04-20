@@ -127,7 +127,7 @@ rb_grn_table_cursor_close (VALUE self)
                                     rb_grn_table_cursor->cursor);
         rb_grn_table_cursor->context = NULL;
         rb_grn_table_cursor->cursor = NULL;
-        rb_grn_check_rc(rc);
+        rb_grn_rc_check(rc, self);
     }
     return Qnil;
 }
@@ -196,7 +196,7 @@ rb_grn_table_cursor_set_value (VALUE self, VALUE value)
         rc = grn_table_cursor_set_value(rb_grn_table_cursor->context,
                                         rb_grn_table_cursor->cursor,
                                         StringValuePtr(value), GRN_OBJ_SET);
-        rb_grn_check_rc(rc);
+        rb_grn_rc_check(rc, self);
     }
 
     return Qnil;
@@ -213,7 +213,7 @@ rb_grn_table_cursor_delete (VALUE self)
 
         rc = grn_table_cursor_delete(rb_grn_table_cursor->context,
                                      rb_grn_table_cursor->cursor);
-        rb_grn_check_rc(rc);
+        rb_grn_rc_check(rc, self);
     }
 
     return Qnil;

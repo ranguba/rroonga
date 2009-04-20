@@ -111,7 +111,7 @@ rb_grn_table_s_create (int argc, VALUE *argv, VALUE klass,
 			     flags, key_type, value_size,
 			     encoding);
     rb_table = GRNOBJECT2RVAL(klass, context, table);
-    rb_grn_context_check(context);
+    rb_grn_context_check(context, rb_table);
 
     if (rb_block_given_p())
         return rb_ensure(rb_yield, rb_table, rb_grn_object_close, rb_table);
@@ -175,7 +175,7 @@ rb_grn_table_initialize (int argc, VALUE *argv, VALUE self)
 
     table = rb_grn_table_open(argc, argv, &context);
     rb_grn_object_initialize(self, context, table);
-    rb_grn_context_check(context);
+    rb_grn_context_check(context, self);
 
     return Qnil;
 }
@@ -188,7 +188,7 @@ rb_grn_table_s_open (int argc, VALUE *argv, VALUE klass)
     VALUE rb_table, rb_class;
 
     table = rb_grn_table_open(argc, argv, &context);
-    rb_grn_context_check(context);
+    rb_grn_context_check(context, rb_ary_new4(argc, argv));
     if (klass != rb_cGrnTable) {
 	rb_class = GRNOBJECT2RCLASS(table);
 	if (klass != rb_class)
@@ -362,7 +362,7 @@ rb_grn_table_define_column (int argc, VALUE *argv, VALUE self)
 
     column = grn_column_create(context, SELF(self), name, name_size,
 			       path, flags, value_type);
-    rb_grn_context_check(context);
+    rb_grn_context_check(context, self);
 
     return GRNCOLUMN2RVAL(Qnil, context, column);
 }
@@ -387,7 +387,7 @@ rb_grn_table_add_column (VALUE self, VALUE rb_name, VALUE rb_value_type,
 
     column = grn_column_open(context, SELF(self), name, name_size,
 			     path, value_type);
-    rb_grn_context_check(context);
+    rb_grn_context_check(context, self);
 
     return GRNCOLUMN2RVAL(Qnil, context, column);
 }
@@ -406,7 +406,7 @@ rb_grn_table_get_column (VALUE self, VALUE rb_name)
     context = rb_grn_object_ensure_context(self, Qnil);
 
     column = grn_table_column(context, SELF(self), name, name_size);
-    rb_grn_context_check(context);
+    rb_grn_context_check(context, self);
 
     return GRNCOLUMN2RVAL(Qnil, context, column);
 }
@@ -435,7 +435,7 @@ rb_grn_table_get_columns (int argc, VALUE *argv, VALUE self)
     columns = grn_table_create(context, NULL, 0, NULL, GRN_TABLE_HASH_KEY,
 			       NULL, 0, GRN_ENC_DEFAULT);
     n = grn_table_columns(context, SELF(self), name, name_size, columns);
-    rb_grn_context_check(context);
+    rb_grn_context_check(context, self);
 
     rb_columns = rb_ary_new2(n);
     if (n == 0)
@@ -443,7 +443,7 @@ rb_grn_table_get_columns (int argc, VALUE *argv, VALUE self)
 
     cursor = grn_table_cursor_open(context, columns, NULL, 0, NULL, 0,
 				   GRN_CURSOR_ASCENDING);
-    rb_grn_context_check(context);
+    rb_grn_context_check(context, self);
     while (grn_table_cursor_next(context, cursor) != GRN_ID_NIL) {
 	void *key;
 	grn_id *column_id;
@@ -456,8 +456,8 @@ rb_grn_table_get_columns (int argc, VALUE *argv, VALUE self)
     }
     rc = grn_table_cursor_close(context, cursor);
     if (rc != GRN_SUCCESS) {
-	rb_grn_context_check(context);
-	rb_grn_check_rc(rc);
+	rb_grn_context_check(context, self);
+	rb_grn_rc_check(rc, self);
     }
 
     return rb_columns;
@@ -517,7 +517,7 @@ rb_grn_table_open_grn_cursor (int argc, VALUE *argv, VALUE self,
 				   min_key, min_key_size,
 				   max_key, max_key_size,
 				   flags);
-    rb_grn_context_check(*context);
+    rb_grn_context_check(*context, self);
 
     return cursor;
 }
@@ -596,7 +596,7 @@ rb_grn_table_add_with_key (VALUE self, VALUE rb_key)
 
     flags = GRN_SEARCH_EXACT | GRN_TABLE_ADD;
     id = grn_table_lookup(context, SELF(self), key, key_size, &flags);
-    rb_grn_context_check(context);
+    rb_grn_context_check(context, self);
 
     if (GRN_ID_NIL == id)
 	return Qnil;
@@ -613,7 +613,7 @@ rb_grn_array_add (VALUE self)
     context = rb_grn_object_ensure_context(self, Qnil);
 
     id = grn_table_add(context, SELF(self));
-    rb_grn_context_check(context);
+    rb_grn_context_check(context, self);
 
     if (GRN_ID_NIL == id)
 	return Qnil;
@@ -655,7 +655,7 @@ rb_grn_table_delete_by_key (VALUE self, VALUE rb_key)
     key = StringValuePtr(rb_key);
     key_size = RSTRING_LEN(rb_key);
     rc = grn_table_delete(context, SELF(self), key, key_size);
-    rb_grn_check_rc(rc);
+    rb_grn_rc_check(rc, self);
 
     return Qnil;
 }
@@ -671,7 +671,7 @@ rb_grn_table_delete_by_id (VALUE self, VALUE rb_id)
 
     id = NUM2UINT(rb_id);
     rc = grn_table_delete_by_id(context, SELF(self), id);
-    rb_grn_check_rc(rc);
+    rb_grn_rc_check(rc, self);
 
     return Qnil;
 }
@@ -700,7 +700,7 @@ rb_grn_table_array_reference_by_key (VALUE self, VALUE rb_key)
     key_size = RSTRING_LEN(rb_key);
     flags = GRN_SEARCH_EXACT;
     id = grn_table_lookup(context, SELF(self), key, key_size, &flags);
-    rb_grn_context_check(context);
+    rb_grn_context_check(context, self);
 
     if (id == GRN_ID_NIL)
 	return Qnil;
@@ -731,8 +731,8 @@ rb_grn_table_get_default_tokenizer (VALUE self)
     context = rb_grn_object_ensure_context(self, Qnil);
     rc = grn_table_get_info(context, SELF(self),
 			    NULL, NULL, &tokenizer);
-    rb_grn_context_check(context);
-    rb_grn_check_rc(rc);
+    rb_grn_context_check(context, self);
+    rb_grn_rc_check(rc, self);
 
     return GRNOBJECT2RVAL(Qnil, context, tokenizer);
 }
@@ -748,8 +748,8 @@ rb_grn_table_set_default_tokenizer (VALUE self, VALUE rb_tokenizer)
     tokenizer = RVAL2GRNOBJECT(rb_tokenizer, context);
     rc = grn_obj_set_info(context, SELF(self),
 			  GRN_INFO_DEFAULT_TOKENIZER, tokenizer);
-    rb_grn_context_check(context);
-    rb_grn_check_rc(rc);
+    rb_grn_context_check(context, self);
+    rb_grn_rc_check(rc, self);
 
     return Qnil;
 }
