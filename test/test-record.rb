@@ -154,19 +154,6 @@ class RecordTest < Test::Unit::TestCase
     assert_equal("http://groonga.org/", bookmark.value.split(/\0/, 2)[0])
   end
 
-  def test_append
-    dai = @addresses.add
-    dai["mail"] = "dai@example.com"
-
-    jiro = @addresses.add
-    jiro["mail"] = "jiro@example.com"
-
-    daijiro = @users.add
-    daijiro.append("addresses", dai.id)
-    daijiro.append("addresses", jiro.id)
-    assert_equal(["FIXME"], daijiro["addresses"])
-  end
-
   private
   def assert_index_search(expected_ids, records)
     ids = records.collect do |record|

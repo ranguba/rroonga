@@ -107,20 +107,20 @@ rb_grn_bulk_from_ruby_object (grn_ctx *context, VALUE object)
 	size = RSTRING_LEN(object);
     } else if (RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cFixnum))) {
 	int32_value = NUM2INT(object);
-	string = (const char*)&int32_value;
+	string = (const char *)&int32_value;
 	size = sizeof(int32_value);
     } else if (RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cBignum))) {
 	int64_value = NUM2LL(object);
-	string = (const char*)&int64_value;
+	string = (const char *)&int64_value;
 	size = sizeof(int64_value);
     } else if (RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cFloat))) {
 	double_value = NUM2DBL(object);
-	string = (const char*)&double_value;
+	string = (const char *)&double_value;
 	size = sizeof(double_value);
     } else if (RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cTime))) {
 	time_value.tv_sec = NUM2INT(rb_funcall(object, rb_intern("to_i"), 0));
 	time_value.tv_usec = NUM2INT(rb_funcall(object, rb_intern("usec"), 0));
-	string = (const char*)&time_value;
+	string = (const char *)&time_value;
 	size = sizeof(time_value);
     } else {
 	grn_obj_close(context, bulk);
