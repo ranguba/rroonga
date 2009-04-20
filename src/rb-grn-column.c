@@ -87,6 +87,35 @@ rb_grn_index_column_array_set (VALUE self, VALUE rb_id, VALUE rb_value)
 }
 
 static VALUE
+rb_grn_index_column_get_sources (VALUE self)
+{
+    grn_ctx *context;
+    grn_obj *column;
+    grn_obj sources;
+    grn_id *source_ids;
+    VALUE rb_sources;
+    int i, n;
+
+    context = rb_grn_object_ensure_context(self, Qnil);
+    column = SELF(self);
+
+    grn_obj_get_info(context, column, GRN_INFO_SOURCE, &sources);
+    rb_grn_context_check(context, self);
+
+    n = GRN_BULK_VSIZE(&sources) / sizeof(grn_id);
+    source_ids = (grn_id *)GRN_BULK_HEAD(&sources);
+    rb_sources = rb_ary_new2(n);
+    for (i = 0; i < n; i++) {
+	grn_obj *source;
+	source = grn_ctx_get(context, *source_ids);
+	rb_ary_push(rb_sources, GRNOBJECT2RVAL(Qnil, context, source));
+	source_ids++;
+    }
+
+    return rb_sources;
+}
+
+static VALUE
 rb_grn_index_column_set_sources (VALUE self, VALUE rb_sources)
 {
     grn_ctx *context;
@@ -154,6 +183,8 @@ rb_grn_init_column (VALUE mGrn)
     rb_define_method(rb_cGrnIndexColumn, "[]=",
 		     rb_grn_index_column_array_set, 2);
 
+    rb_define_method(rb_cGrnIndexColumn, "sources",
+		     rb_grn_index_column_get_sources, 0);
     rb_define_method(rb_cGrnIndexColumn, "sources=",
 		     rb_grn_index_column_set_sources, 1);
     rb_define_method(rb_cGrnIndexColumn, "source=",

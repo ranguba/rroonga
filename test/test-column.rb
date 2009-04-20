@@ -89,6 +89,8 @@ class ColumnTest < Test::Unit::TestCase
 
     assert_content_search([groonga], "groonga")
     assert_content_search([ruby, groonga], "html")
+
+    assert_equal([@bookmarks_content], @bookmarks_index_content.sources)
   end
 
   def test_update_index_column
