@@ -96,12 +96,12 @@ class ColumnTest < Test::Unit::TestCase
   end
 
   def test_range
-    assert_equal(Groonga::Type::SHORT_TEXT, @bookmarks_uri.range)
-    assert_equal(Groonga::Type::TEXT, @bookmarks_comment.range)
-    assert_equal(Groonga::Type::LONG_TEXT, @bookmarks_content.range)
-    assert_equal(@users, context[@bookmarks_user_id.range])
-    assert_equal(@bookmarks, context[@bookmarks_index_content.range])
-    assert_equal(@bookmarks, context[@bookmarks_uri_index.range])
+    assert_equal(context[Groonga::Type::SHORT_TEXT], @bookmarks_uri.range)
+    assert_equal(context[Groonga::Type::TEXT], @bookmarks_comment.range)
+    assert_equal(context[Groonga::Type::LONG_TEXT], @bookmarks_content.range)
+    assert_equal(@users, @bookmarks_user_id.range)
+    assert_equal(@bookmarks, @bookmarks_index_content.range)
+    assert_equal(@bookmarks, @bookmarks_uri_index.range)
   end
 
   def test_accessor

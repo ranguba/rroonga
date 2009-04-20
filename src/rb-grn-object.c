@@ -416,14 +416,16 @@ rb_grn_object_get_domain (VALUE self)
 {
     RbGrnObject *rb_grn_object;
     grn_ctx *context;
+    grn_obj *object;
     grn_id domain;
 
     rb_grn_object = SELF(self);
-    if (!rb_grn_object->object)
+    object = rb_grn_object->object;
+    if (!object)
 	return Qnil;
 
     context = rb_grn_object->context;
-    domain = rb_grn_object->object->header.domain;
+    domain = object->header.domain;
     if (domain == GRN_ID_NIL) {
 	return Qnil;
     } else {
@@ -464,17 +466,28 @@ static VALUE
 rb_grn_object_get_range (VALUE self)
 {
     RbGrnObject *rb_grn_object;
+    grn_ctx *context;
+    grn_obj *object;
     grn_id range;
 
     rb_grn_object = SELF(self);
-    if (!rb_grn_object->object)
+    object = rb_grn_object->object;
+    if (!object)
 	return Qnil;
 
-    range = grn_obj_get_range(rb_grn_object->context, rb_grn_object->object);
-    if (range == GRN_ID_NIL)
+    context = rb_grn_object->context;
+    range = grn_obj_get_range(context, object);
+    if (range == GRN_ID_NIL) {
 	return Qnil;
-    else
-	return INT2NUM(range);
+    } else {
+	grn_obj *range_object;
+
+	range_object = grn_ctx_get(context, range);
+	if (range_object)
+	    return GRNOBJECT2RVAL(Qnil, context, range_object);
+	else
+	    return UINT2NUM(range);
+    }
 }
 
 static VALUE
