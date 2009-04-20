@@ -202,6 +202,79 @@ rb_grn_object_closed_p (VALUE self)
         return Qtrue;
 }
 
+VALUE
+rb_grn_object_inspect_header (VALUE self, VALUE inspected)
+{
+    rb_str_cat2(inspected, "#<");
+    rb_str_concat(inspected, rb_inspect(rb_obj_class(self)));
+
+    return inspected;
+}
+
+VALUE
+rb_grn_object_inspect_content (VALUE self, VALUE inspected)
+{
+    RbGrnObject *rb_grn_object;
+    grn_ctx *context;
+    grn_obj *object;
+    int name_size;
+    const char *path;
+
+    rb_grn_object = SELF(self);
+    context = rb_grn_object->context;
+    object = rb_grn_object->object;
+
+    rb_str_cat2(inspected, " name: ");
+
+    name_size = grn_obj_name(context, object, NULL, 0);
+    if (name_size == 0) {
+	rb_str_cat2(inspected, "(anonymous)");
+    } else {
+	VALUE name;
+
+	name = rb_str_buf_new(name_size);
+	grn_obj_name(context, object, RSTRING_PTR(name), name_size);
+	rb_str_set_len(name, name_size);
+	rb_str_cat2(inspected, "<");
+	rb_str_concat(inspected, name);
+	rb_str_cat2(inspected, ">");
+    }
+    rb_str_cat2(inspected, ", ");
+
+    rb_str_cat2(inspected, "path: ");
+    path = grn_obj_path(context, object);
+    if (path) {
+	rb_str_cat2(inspected, "<");
+	rb_str_cat2(inspected, path);
+	rb_str_cat2(inspected, ">");
+    } else {
+	rb_str_cat2(inspected, "(temporary)");
+    }
+
+    return inspected;
+}
+
+VALUE
+rb_grn_object_inspect_footer (VALUE self, VALUE inspected)
+{
+    rb_str_cat2(inspected, ">");
+
+    return inspected;
+}
+
+static VALUE
+rb_grn_object_inspect (VALUE self)
+{
+    VALUE inspected;
+
+    inspected = rb_str_new2("");
+    rb_grn_object_inspect_header(self, inspected);
+    rb_grn_object_inspect_content(self, inspected);
+    rb_grn_object_inspect_footer(self, inspected);
+
+    return inspected;
+}
+
 static VALUE
 rb_grn_object_get_domain (VALUE self)
 {
@@ -680,7 +753,7 @@ rb_grn_init_object (VALUE mGrn)
     rb_cGrnObject = rb_define_class_under(mGrn, "Object", rb_cObject);
     rb_define_alloc_func(rb_cGrnObject, rb_grn_object_alloc);
 
-    rb_cGrnAccessor = rb_define_class_under(mGrn, "Accessor", rb_cGrnObject);
+    rb_define_method(rb_cGrnObject, "inspect", rb_grn_object_inspect, 0);
 
     rb_define_method(rb_cGrnObject, "domain", rb_grn_object_get_domain, 0);
     rb_define_method(rb_cGrnObject, "name", rb_grn_object_get_name, 0);

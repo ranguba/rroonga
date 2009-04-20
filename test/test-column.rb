@@ -114,6 +114,12 @@ class ColumnTest < Test::Unit::TestCase
                  result.records.collect {|record| accessor[record.id]})
   end
 
+  def test_inspect
+    assert_equal("#<Groonga::VarSizeColumn name: <users.name>, " +
+                 "path: <#{@users_name_column_path}>>",
+                 @users_name_column.inspect)
+  end
+
   private
   def assert_index_search(expected_ids, records)
     ids = records.collect do |record|
