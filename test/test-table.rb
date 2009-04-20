@@ -369,4 +369,17 @@ class TableTest < Test::Unit::TestCase
     assert_equal(["daijiro"],
                  records.records.collect {|record| record[".user_id.name"]})
   end
+
+  def test_each
+    users = Groonga::Array.create(:name => "<users>")
+    user_name = users.define_column("name", "<shorttext>")
+
+    names = ["daijiro", "gunyarakun", "yu"]
+    names.each do |name|
+      user = users.add
+      user["name"] = name
+    end
+
+    assert_equal(names.sort, users.collect {|user| user["name"]}.sort)
+  end
 end

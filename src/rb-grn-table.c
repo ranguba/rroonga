@@ -550,6 +550,25 @@ rb_grn_table_get_size (VALUE self)
 }
 
 static VALUE
+rb_grn_table_each (VALUE self)
+{
+    grn_ctx *context;
+    grn_table_cursor *cursor;
+    grn_id id;
+
+    context = rb_grn_object_ensure_context(self, Qnil);
+    cursor = grn_table_cursor_open(context, SELF(self), NULL, 0, NULL, 0,
+				   GRN_CURSOR_DESCENDING);
+    rb_iv_set(self, "cursor", GRNTABLECURSOR2RVAL(Qnil, context, cursor));
+    while ((id = grn_table_cursor_next(context, cursor)) != GRN_ID_NIL) {
+	rb_yield(rb_grn_record_new(self, id));
+    }
+    grn_table_cursor_close(context, cursor);
+
+    return Qnil;
+}
+
+static VALUE
 rb_grn_table_add_with_key (VALUE self, VALUE rb_key)
 {
     grn_ctx *context;
@@ -744,6 +763,8 @@ rb_grn_init_table (VALUE mGrn)
 	rb_define_class_under(mGrn, "PatriciaTrie", rb_cGrnTable);
     rb_cGrnArray = rb_define_class_under(mGrn, "Array", rb_cGrnTable);
 
+    rb_include_module(rb_cGrnTable, rb_mEnumerable);
+
     rb_define_singleton_method(rb_cGrnTable, "open",
 			       rb_grn_table_s_open, -1);
 
@@ -771,6 +792,8 @@ rb_grn_init_table (VALUE mGrn)
     rb_define_method(rb_cGrnTable, "records", rb_grn_table_get_records, -1);
 
     rb_define_method(rb_cGrnTable, "size", rb_grn_table_get_size, 0);
+
+    rb_define_method(rb_cGrnTable, "each", rb_grn_table_each, 0);
 
     rb_define_method(rb_cGrnHash, "add", rb_grn_table_add_with_key, 1);
     rb_define_method(rb_cGrnPatriciaTrie, "add", rb_grn_table_add_with_key, 1);
