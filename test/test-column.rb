@@ -85,14 +85,11 @@ class ColumnTest < Test::Unit::TestCase
     ruby = @bookmarks.add
     ruby["content"] = "<html><body>ruby</body></html>"
 
-    @bookmarks_index_content[groonga.id] = "<html><body>groonga</body></html>"
-    @bookmarks_index_content[ruby.id] = "<html><body>ruby</body></html>"
+    @bookmarks_index_content[groonga.id] = groonga["content"]
+    @bookmarks_index_content[ruby.id] = ruby["content"]
 
-    assert_index_search([groonga.id],
-                        @bookmarks_index_content.search("groonga").records)
-
-    assert_index_search([ruby.id, groonga.id],
-                        @bookmarks_index_content.search("html").records)
+    assert_content_search([groonga], "groonga")
+    assert_content_search([ruby, groonga], "html")
   end
 
   def test_range
@@ -130,10 +127,14 @@ class ColumnTest < Test::Unit::TestCase
   end
 
   private
-  def assert_index_search(expected_ids, records)
-    ids = records.collect do |record|
-      record.key.unpack("i")[0]
+  def assert_content_search(expected_records, term)
+    records = @bookmarks_index_content.search(term).records
+    expected_contents = expected_records.collect do |record|
+      record["content"]
     end
-    assert_equal(expected_ids, ids)
+    actual_contents = records.collect do |record|
+      record[".<index:content>.content"]
+    end
+    assert_equal(expected_contents, actual_contents)
   end
 end
