@@ -73,14 +73,8 @@ rb_grn_index_column_array_set (VALUE self, VALUE rb_id, VALUE rb_value)
     else
 	section = NUM2UINT(rb_section);
 
-    old_value = grn_obj_open(context, GRN_BULK, 0, 0);
-    if (!NIL_P(rb_old_value))
-	grn_bulk_write(context, old_value,
-		       StringValuePtr(rb_old_value), RSTRING_LEN(rb_old_value));
-    new_value = grn_obj_open(context, GRN_BULK, 0, 0);
-    if (!NIL_P(rb_new_value))
-	grn_bulk_write(context, new_value,
-		       StringValuePtr(rb_new_value), RSTRING_LEN(rb_new_value));
+    old_value = RVAL2GRNBULK(context, rb_old_value);
+    new_value = RVAL2GRNBULK(context, rb_new_value);
 
     rc = grn_column_index_update(context, SELF(self),
 				 id, section, old_value, new_value);

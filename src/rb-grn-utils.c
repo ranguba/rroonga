@@ -95,6 +95,7 @@ rb_grn_bulk_from_ruby_object (grn_ctx *context, VALUE object)
     int64_t int64_value;
     grn_timeval time_value;
     double double_value;
+    grn_id id_value;
 
     bulk = grn_obj_open(context, GRN_BULK, 0, 0);
     rb_grn_context_check(context, object);
@@ -122,11 +123,22 @@ rb_grn_bulk_from_ruby_object (grn_ctx *context, VALUE object)
 	time_value.tv_usec = NUM2INT(rb_funcall(object, rb_intern("usec"), 0));
 	string = (const char *)&time_value;
 	size = sizeof(time_value);
+    } else if (RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cGrnObject))) {
+	grn_obj *grn_object;
+
+	grn_object = RVAL2GRNOBJECT(object, context);
+	id_value = grn_obj_id(context, grn_object);
+	string = (const char *)&id_value;
+	size = sizeof(id_value);
+    } else if (RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cGrnRecord))) {
+	id_value = NUM2UINT(rb_funcall(object, rb_intern("id"), 0));
+	string = (const char *)&id_value;
+	size = sizeof(id_value);
     } else {
 	grn_obj_close(context, bulk);
 	rb_raise(rb_eTypeError,
 		 "bulked object should be one of "
-		 "[nil, String, Integer, Float, Time]: %s",
+		 "[nil, String, Integer, Float, Time, Groonga::Object]: %s",
 		 rb_grn_inspect(object));
     }
 

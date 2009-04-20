@@ -749,17 +749,9 @@ rb_grn_object_search (int argc, VALUE *argv, VALUE self)
 	grn_query *_query;
 	_query = RVAL2GRNQUERY(rb_query);
 	query = (grn_obj *)_query;
-    } else if (CBOOL2RVAL(rb_obj_is_kind_of(rb_query, rb_cString))) {
-	query_is_created = RB_GRN_TRUE;
-	query = grn_obj_open(context, GRN_BULK, 0, 0);
-	rc = grn_bulk_write(context, query,
-			    StringValuePtr(rb_query), RSTRING_LEN(rb_query));
-	rb_grn_context_check(context, rb_query);
-	rb_grn_rc_check(rc, rb_query);
     } else {
-	rb_raise(rb_eArgError,
-		 "query should be Groonga::Query or query string: <%s>",
-		 rb_grn_inspect(rb_query));
+	query_is_created = RB_GRN_TRUE;
+	query = RVAL2GRNBULK(context, rb_query);
     }
 
     rb_grn_scan_options(options,
@@ -782,10 +774,20 @@ rb_grn_object_search (int argc, VALUE *argv, VALUE self)
 			NULL);
 
     if (NIL_P(rb_result)) {
+	grn_obj *domain = NULL;
+
+	switch (object->header.type) {
+	  case GRN_TABLE_PAT_KEY:
+	  case GRN_TABLE_HASH_KEY:
+	    domain = object;
+	    break;
+	  default:
+	    domain = grn_ctx_get(context, object->header.domain);
+	    break;
+	}
 	result = grn_table_create(context, NULL, 0, NULL,
 				  GRN_OBJ_TABLE_HASH_KEY | GRN_OBJ_WITH_SUBREC,
-				  grn_ctx_get(context, object->header.domain),
-				  0, GRN_ENC_NONE);
+				  domain, 0, GRN_ENC_NONE);
 	rb_grn_context_check(context, self);
     } else {
 	result = RVAL2GRNOBJECT(rb_result, context);
