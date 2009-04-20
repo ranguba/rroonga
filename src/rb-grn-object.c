@@ -415,17 +415,26 @@ static VALUE
 rb_grn_object_get_domain (VALUE self)
 {
     RbGrnObject *rb_grn_object;
+    grn_ctx *context;
     grn_id domain;
 
     rb_grn_object = SELF(self);
     if (!rb_grn_object->object)
 	return Qnil;
 
+    context = rb_grn_object->context;
     domain = rb_grn_object->object->header.domain;
-    if (domain == GRN_ID_NIL)
+    if (domain == GRN_ID_NIL) {
 	return Qnil;
-    else
-        return UINT2NUM(domain);
+    } else {
+	grn_obj *domain_object;
+
+	domain_object = grn_ctx_get(context, domain);
+	if (domain_object)
+	    return GRNOBJECT2RVAL(Qnil, context, domain_object);
+	else
+	    return UINT2NUM(domain);
+    }
 }
 
 static VALUE
