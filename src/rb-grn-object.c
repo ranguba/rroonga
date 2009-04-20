@@ -228,15 +228,13 @@ rb_grn_object_inspect_content_id (VALUE inspected,
 				  grn_ctx *context, grn_obj *object)
 {
     grn_id id;
-    VALUE rb_id;
 
     rb_str_cat2(inspected, "id: <");
     id = grn_obj_id(context, object);
     if (id == GRN_ID_NIL)
-	rb_id = Qnil;
+	rb_str_cat2(inspected, "nil");
     else
-	rb_id = UINT2NUM(id);
-    rb_str_concat(inspected, rb_obj_as_string(rb_id));
+	rb_str_concat(inspected, rb_obj_as_string(UINT2NUM(id)));
     rb_str_cat2(inspected, ">");
 
     return inspected;
@@ -651,7 +649,7 @@ rb_grn_object_array_reference (VALUE self, VALUE rb_id)
     switch (value->header.type) {
       case GRN_BULK:
 	if (GRN_BULK_EMPTYP(value)) {
-	    exception = rb_grn_context_to_exception(context);
+	    exception = rb_grn_context_to_exception(context, self);
 	    grn_obj_close(context, value);
 	    if (!NIL_P(exception))
 		rb_exc_raise(exception);
@@ -665,6 +663,9 @@ rb_grn_object_array_reference (VALUE self, VALUE rb_id)
       case GRN_UVECTOR:
 	rb_value = GRNUVECTOR2RVAL(context, value);
 	break;
+      case GRN_TYPE:
+	rb_value = GRNOBJECT2RVAL(Qnil, context, value);
+	break;
       default:
 	rb_raise(rb_eGrnError,
 		 "unsupported value type: 0x%0x: %s",
@@ -672,7 +673,7 @@ rb_grn_object_array_reference (VALUE self, VALUE rb_id)
 	break;
     }
 
-    exception = rb_grn_context_to_exception(context);
+    exception = rb_grn_context_to_exception(context, self);
     grn_obj_close(context, value);
     if (!NIL_P(exception))
 	rb_exc_raise(exception);
@@ -688,6 +689,7 @@ rb_grn_object_set (VALUE self, VALUE rb_id, VALUE rb_value, int flags)
     grn_id id;
     grn_obj *value;
     grn_rc rc;
+    VALUE exception;
 
     rb_grn_object = SELF(self);
     if (!rb_grn_object->object)
@@ -695,11 +697,18 @@ rb_grn_object_set (VALUE self, VALUE rb_id, VALUE rb_value, int flags)
 
     context = rb_grn_object->context;
     id = NUM2UINT(rb_id);
-    value = RVAL2GRNBULK(context, rb_value);
+    if (RVAL2CBOOL(rb_obj_is_kind_of(rb_value, rb_cArray))) {
+	value = RVAL2GRNUVECTOR(context, rb_value);
+	value->header.type = GRN_BULK;
+    } else {
+	value = RVAL2GRNBULK(context, rb_value);
+    }
     rc = grn_obj_set_value(context, rb_grn_object->object, id,
 			   value, flags);
+    exception = rb_grn_context_to_exception(context, self);
     grn_obj_close(context, value);
-    rb_grn_context_check(context, self);
+    if (!NIL_P(exception))
+	rb_exc_raise(exception);
     rb_grn_rc_check(rc, self);
 
     return Qnil;

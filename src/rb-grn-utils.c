@@ -134,6 +134,10 @@ rb_grn_bulk_from_ruby_object (grn_ctx *context, VALUE object)
 	id_value = NUM2UINT(rb_funcall(object, rb_intern("id"), 0));
 	string = (const char *)&id_value;
 	size = sizeof(id_value);
+    } else if (RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cGrnRecord))) {
+	id_value = NUM2UINT(rb_funcall(object, rb_intern("id"), 0));
+	string = (const char *)&id_value;
+	size = sizeof(id_value);
     } else {
 	grn_obj_close(context, bulk);
 	rb_raise(rb_eTypeError,
@@ -198,6 +202,33 @@ rb_grn_uvector_to_ruby_object (grn_ctx *context, grn_obj *uvector)
     }
 
     return array;
+}
+
+grn_obj *
+rb_grn_uvector_from_ruby_object (grn_ctx *context, VALUE object)
+{
+    VALUE *values;
+    grn_obj *uvector;
+    int i, n;
+
+    uvector = grn_obj_open(context, GRN_UVECTOR, 0, 0);
+    if (NIL_P(object))
+	return uvector;
+
+    n = RARRAY_LEN(object);
+    values = RARRAY_PTR(object);
+    for (i = 0; i < n; i++) {
+	VALUE value;
+	grn_id id;
+	void *grn_value;
+
+	value = values[i];
+	id = NUM2UINT(value);
+	grn_value = &id;
+	grn_bulk_write(context, uvector, grn_value, sizeof(id));
+    }
+
+    return uvector;
 }
 
 void

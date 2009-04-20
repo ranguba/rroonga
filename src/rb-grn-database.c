@@ -66,8 +66,9 @@ rb_grn_database_s_create (int argc, VALUE *argv, VALUE klass)
     create_args.n_builtin_type_names = 0;
 
     database = grn_db_create(context, path, &create_args);
+    rb_grn_context_check(context, rb_ary_new4(argc, argv));
     rb_database = GRNOBJECT2RVAL(klass, context, database);
-    rb_grn_context_check(context);
+    rb_grn_context_check(context, rb_ary_new4(argc, argv));
 
     if (rb_block_given_p())
         return rb_ensure(rb_yield, rb_database,
@@ -95,7 +96,7 @@ rb_grn_database_initialize (int argc, VALUE *argv, VALUE self)
 
     database = grn_db_open(context, path);
     rb_grn_object_initialize(self, context, database);
-    rb_grn_context_check(context);
+    rb_grn_context_check(context, self);
 
     return Qnil;
 }

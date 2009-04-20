@@ -116,7 +116,8 @@ void           rb_grn_rc_check                      (grn_rc rc,
 
 grn_ctx       *rb_grn_context_ensure                (VALUE context);
 VALUE          rb_grn_context_get_default           (void);
-VALUE          rb_grn_context_to_exception          (grn_ctx *context);
+VALUE          rb_grn_context_to_exception          (grn_ctx *context,
+						     VALUE related_object);
 void           rb_grn_context_check                 (grn_ctx *context,
 						     VALUE related_object);
 

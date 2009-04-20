@@ -54,7 +54,7 @@ rb_grn_context_alloc (VALUE klass)
 }
 
 VALUE
-rb_grn_context_to_exception (grn_ctx *context)
+rb_grn_context_to_exception (grn_ctx *context, VALUE related_object)
 {
     VALUE exception, exception_class;
     const char *message;
@@ -70,6 +70,10 @@ rb_grn_context_to_exception (grn_ctx *context)
     GRN_BULK_PUTS(context, &bulk, message);
     GRN_BULK_PUTS(context, &bulk, ": ");
     GRN_BULK_PUTS(context, &bulk, context->errbuf);
+    if (!NIL_P(related_object)) {
+	GRN_BULK_PUTS(context, &bulk, ": ");
+	GRN_BULK_PUTS(context, &bulk, rb_grn_inspect(related_object));
+    }
     GRN_BULK_PUTS(context, &bulk, "\n");
     GRN_BULK_PUTS(context, &bulk, context->errfile);
     GRN_BULK_PUTS(context, &bulk, ":");
@@ -86,11 +90,11 @@ rb_grn_context_to_exception (grn_ctx *context)
 }
 
 void
-rb_grn_context_check (grn_ctx *context)
+rb_grn_context_check (grn_ctx *context, VALUE related_object)
 {
     VALUE exception;
 
-    exception = rb_grn_context_to_exception(context);
+    exception = rb_grn_context_to_exception(context, related_object);
     if (NIL_P(exception))
 	return;
 
@@ -178,7 +182,7 @@ rb_grn_context_initialize (int argc, VALUE *argv, VALUE self)
     context = ALLOC(grn_ctx);
     DATA_PTR(self) = context;
     rc = grn_ctx_init(context, flags, encoding);
-    rb_grn_context_check(context);
+    rb_grn_context_check(context, self);
     return Qnil;
 }
 
