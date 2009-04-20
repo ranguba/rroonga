@@ -311,6 +311,32 @@ rb_grn_object_inspect_content_domain (VALUE inspected,
     return inspected;
 }
 
+static VALUE
+rb_grn_object_inspect_content_range (VALUE inspected,
+				     grn_ctx *context, grn_obj *object)
+{
+    grn_id range;
+
+    rb_str_cat2(inspected, "range: ");
+    range = grn_obj_get_range(context, object);
+    rb_str_cat2(inspected, "<");
+    if (range == GRN_ID_NIL) {
+	rb_str_cat2(inspected, "nil");
+    } else {
+	grn_obj *range_object;
+
+	range_object = grn_ctx_get(context, range);
+	if (range_object) {
+	    rb_grn_object_inspect_object(inspected, context, range_object);
+	} else {
+	    rb_str_concat(inspected, rb_obj_as_string(UINT2NUM(range)));
+	}
+    }
+    rb_str_cat2(inspected, ">");
+
+    return inspected;
+}
+
 VALUE
 rb_grn_object_inspect_object_content (VALUE inspected,
 				      grn_ctx *context, grn_obj *object)
@@ -322,6 +348,8 @@ rb_grn_object_inspect_object_content (VALUE inspected,
     rb_grn_object_inspect_content_path(inspected, context, object);
     rb_str_cat2(inspected, ", ");
     rb_grn_object_inspect_content_domain(inspected, context, object);
+    rb_str_cat2(inspected, ", ");
+    rb_grn_object_inspect_content_range(inspected, context, object);
 
     return inspected;
 }

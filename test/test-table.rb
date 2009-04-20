@@ -284,6 +284,7 @@ class TableTest < Test::Unit::TestCase
                  "name: (anonymous), " +
                  "path: <#{path}>, " +
                  "domain: <nil>, " +
+                 "range: <nil>, " +
                  "size: 0>",
                  anonymous_table.inspect)
   end
@@ -295,6 +296,7 @@ class TableTest < Test::Unit::TestCase
                  "name: (anonymous), " +
                  "path: (temporary), " +
                  "domain: <nil>, " +
+                 "range: <nil>, " +
                  "size: 0>",
                  anonymous_table.inspect)
   end
@@ -307,6 +309,7 @@ class TableTest < Test::Unit::TestCase
                  "name: <name>, " +
                  "path: <#{path}>, " +
                  "domain: <nil>, " +
+                 "range: <nil>, " +
                  "size: 0>",
                  named_table.inspect)
   end
@@ -318,6 +321,7 @@ class TableTest < Test::Unit::TestCase
                  "name: <name>, " +
                  "path: (temporary), " +
                  "domain: <nil>, " +
+                 "range: <nil>, " +
                  "size: 0>",
                  named_table.inspect)
   end
@@ -333,6 +337,7 @@ class TableTest < Test::Unit::TestCase
                  "name: <name>, " +
                  "path: <#{path}>, " +
                  "domain: <nil>, " +
+                 "range: <nil>, " +
                  "size: 3>",
                  contain_table.inspect)
   end

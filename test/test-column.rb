@@ -114,12 +114,14 @@ class ColumnTest < Test::Unit::TestCase
                  result.records.collect {|record| accessor[record.id]})
   end
 
+  priority :must
   def test_inspect
     assert_equal("#<Groonga::VarSizeColumn " +
                  "id: <#{@users_name_column.id}>, " +
                  "name: <users.name>, " +
                  "path: <#{@users_name_column_path}>, " +
-                 "domain: <#{@users.inspect}>" +
+                 "domain: <#{@users.inspect}>, " +
+                 "range: <#{context['<shorttext>'].inspect}>" +
                  ">",
                  @users_name_column.inspect)
   end
