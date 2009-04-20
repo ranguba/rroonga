@@ -168,6 +168,26 @@ rb_grn_vector_to_ruby_object (grn_ctx *context, grn_obj *vector)
     return array;
 }
 
+VALUE
+rb_grn_uvector_to_ruby_object (grn_ctx *context, grn_obj *uvector)
+{
+    VALUE array;
+    grn_id *current, *end;
+
+    if (!uvector)
+	return Qnil;
+
+    array = rb_ary_new();
+    current = (grn_id *)GRN_BULK_HEAD(uvector);
+    end = (grn_id *)GRN_BULK_CURR(uvector);
+    while (current < end) {
+	rb_ary_push(array, UINT2NUM(*current));
+	current++;
+    }
+
+    return array;
+}
+
 void
 rb_grn_init_utils (VALUE mGrn)
 {

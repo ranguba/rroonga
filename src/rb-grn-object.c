@@ -431,6 +431,9 @@ rb_grn_object_array_reference (VALUE self, VALUE rb_id)
       case GRN_VECTOR:
 	rb_value = GRNVECTOR2RVAL(context, value);
 	break;
+      case GRN_UVECTOR:
+	rb_value = GRNUVECTOR2RVAL(context, value);
+	break;
       default:
 	rb_raise(rb_eGrnError,
 		 "unsupported value type: 0x%0x: %s",

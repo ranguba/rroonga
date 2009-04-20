@@ -189,6 +189,11 @@ VALUE          rb_grn_record_new                    (VALUE table,
 #define GRNVECTOR2RVAL(context, vector) \
 	                              (rb_grn_vector_to_ruby_object(context, vector))
 
+#define RVAL2GRNUVECTOR(context, object) \
+	                              (rb_grn_uvector_from_ruby_object(context, object))
+#define GRNUVECTOR2RVAL(context, uvector) \
+	                              (rb_grn_uvector_to_ruby_object(context, uvector))
+
 grn_encoding   rb_grn_encoding_from_ruby_object     (VALUE object);
 VALUE          rb_grn_encoding_to_ruby_object       (grn_encoding encoding);
 
@@ -236,11 +241,15 @@ grn_logger_info *
 grn_obj       *rb_grn_bulk_from_ruby_object         (grn_ctx *context,
 						     VALUE object);
 VALUE          rb_grn_bulk_to_ruby_object           (grn_ctx *context,
-						     grn_obj *value);
+						     grn_obj *bulk);
 grn_obj       *rb_grn_vector_from_ruby_object       (grn_ctx *context,
 						     VALUE object);
 VALUE          rb_grn_vector_to_ruby_object         (grn_ctx *context,
-						     grn_obj *value);
+						     grn_obj *vector);
+grn_obj       *rb_grn_uvector_from_ruby_object      (grn_ctx *context,
+						     VALUE object);
+VALUE          rb_grn_uvector_to_ruby_object        (grn_ctx *context,
+						     grn_obj *uvector);
 
 
 RB_GRN_END_DECLS
