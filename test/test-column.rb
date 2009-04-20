@@ -78,6 +78,19 @@ class ColumnTest < Test::Unit::TestCase
                                      :path => @uri_index_column_path.to_s)
   end
 
+  def test_source_info
+    @bookmarks_index_content.sources = [@bookmarks_content]
+
+    groonga = @bookmarks.add
+    groonga["content"] = "<html><body>groonga</body></html>"
+
+    ruby = @bookmarks.add
+    ruby["content"] = "<html><body>ruby</body></html>"
+
+    assert_content_search([groonga], "groonga")
+    assert_content_search([ruby, groonga], "html")
+  end
+
   def test_update_index_column
     groonga = @bookmarks.add
     groonga["content"] = "<html><body>groonga</body></html>"

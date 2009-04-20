@@ -86,6 +86,60 @@ rb_grn_index_column_array_set (VALUE self, VALUE rb_id, VALUE rb_value)
     return Qnil;
 }
 
+static VALUE
+rb_grn_index_column_set_sources (VALUE self, VALUE rb_sources)
+{
+    grn_ctx *context;
+    grn_obj *column;
+    int i, n;
+    VALUE *rb_source_values;
+    grn_id *sources;
+    grn_rc rc;
+
+    context = rb_grn_object_ensure_context(self, Qnil);
+    column = SELF(self);
+
+    n = RARRAY_LEN(rb_sources);
+    rb_source_values = RARRAY_PTR(rb_sources);
+    sources = ALLOCA_N(grn_id, n);
+    for (i = 0; i < n; i++) {
+	VALUE rb_source_id;
+	grn_obj *source;
+	grn_id source_id;
+
+	rb_source_id = rb_source_values[i];
+	if (CBOOL2RVAL(rb_obj_is_kind_of(rb_source_id, rb_cInteger))) {
+	    source_id = NUM2UINT(rb_source_id);
+	} else {
+	    source = RVAL2GRNOBJECT(rb_source_id, context);
+	    rb_grn_context_check(context, rb_source_id);
+	    source_id = grn_obj_id(context, source);
+	}
+	sources[i] = source_id;
+    }
+
+    {
+	grn_obj source;
+	GRN_OBJ_INIT(&source, GRN_BULK, GRN_OBJ_DO_SHALLOW_COPY);
+	GRN_BULK_SET(context, &source, sources, n * sizeof(grn_id));
+	rc = grn_obj_set_info(context, column, GRN_INFO_SOURCE, &source);
+    }
+
+    rb_grn_context_check(context, self);
+    rb_grn_rc_check(rc, self);
+
+    return Qnil;
+}
+
+static VALUE
+rb_grn_index_column_set_source (VALUE self, VALUE rb_source)
+{
+    if (!RVAL2CBOOL(rb_obj_is_kind_of(rb_source, rb_cArray)))
+	rb_source = rb_ary_new3(1, rb_source);
+
+    return rb_grn_index_column_set_sources(self, rb_source);
+}
+
 void
 rb_grn_init_column (VALUE mGrn)
 {
@@ -99,4 +153,9 @@ rb_grn_init_column (VALUE mGrn)
 
     rb_define_method(rb_cGrnIndexColumn, "[]=",
 		     rb_grn_index_column_array_set, 2);
+
+    rb_define_method(rb_cGrnIndexColumn, "sources=",
+		     rb_grn_index_column_set_sources, 1);
+    rb_define_method(rb_cGrnIndexColumn, "source=",
+		     rb_grn_index_column_set_source, 1);
 }
