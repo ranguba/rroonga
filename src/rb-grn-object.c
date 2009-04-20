@@ -207,6 +207,7 @@ rb_grn_object_inspect_header (VALUE self, VALUE inspected)
 {
     rb_str_cat2(inspected, "#<");
     rb_str_concat(inspected, rb_inspect(rb_obj_class(self)));
+    rb_str_cat2(inspected, " ");
 
     return inspected;
 }
@@ -217,6 +218,8 @@ rb_grn_object_inspect_content (VALUE self, VALUE inspected)
     RbGrnObject *rb_grn_object;
     grn_ctx *context;
     grn_obj *object;
+    grn_id id;
+    VALUE rb_id;
     int name_size;
     const char *path;
 
@@ -224,8 +227,16 @@ rb_grn_object_inspect_content (VALUE self, VALUE inspected)
     context = rb_grn_object->context;
     object = rb_grn_object->object;
 
-    rb_str_cat2(inspected, " name: ");
+    rb_str_cat2(inspected, "id: <");
+    id = grn_obj_id(context, object);
+    if (id == GRN_ID_NIL)
+	rb_id = Qnil;
+    else
+	rb_id = UINT2NUM(id);
+    rb_str_concat(inspected, rb_obj_as_string(rb_id));
+    rb_str_cat2(inspected, ">, ");
 
+    rb_str_cat2(inspected, "name: ");
     name_size = grn_obj_name(context, object, NULL, 0);
     if (name_size == 0) {
 	rb_str_cat2(inspected, "(anonymous)");
@@ -273,6 +284,23 @@ rb_grn_object_inspect (VALUE self)
     rb_grn_object_inspect_footer(self, inspected);
 
     return inspected;
+}
+
+static VALUE
+rb_grn_object_get_id (VALUE self)
+{
+    RbGrnObject *rb_grn_object;
+    grn_id id;
+
+    rb_grn_object = SELF(self);
+    if (!rb_grn_object->object)
+	return Qnil;
+
+    id = grn_obj_id(rb_grn_object->context, rb_grn_object->object);
+    if (id == GRN_ID_NIL)
+	return Qnil;
+    else
+        return UINT2NUM(id);
 }
 
 static VALUE
@@ -755,6 +783,7 @@ rb_grn_init_object (VALUE mGrn)
 
     rb_define_method(rb_cGrnObject, "inspect", rb_grn_object_inspect, 0);
 
+    rb_define_method(rb_cGrnObject, "id", rb_grn_object_get_id, 0);
     rb_define_method(rb_cGrnObject, "domain", rb_grn_object_get_domain, 0);
     rb_define_method(rb_cGrnObject, "name", rb_grn_object_get_name, 0);
     rb_define_method(rb_cGrnObject, "range", rb_grn_object_get_range, 0);
