@@ -32,8 +32,7 @@ class ColumnTest < Test::Unit::TestCase
     @users_name_column_path = @columns_dir + "name"
     @users_name_column =
       @users.define_column("name", "<shorttext>",
-                           :path => @users_name_column_path.to_s,
-                           :type => "vector")
+                           :path => @users_name_column_path.to_s)
   end
 
   def setup_bookmarks_table
@@ -53,15 +52,16 @@ class ColumnTest < Test::Unit::TestCase
     @content_column_path = @columns_dir + "content"
     @bookmarks_content = @bookmarks.define_column("content", "<longtext>")
 
-    @user_id_column_path = @columns_dir + "user-id"
-    @bookmarks_user_id = @bookmarks.define_column("user_id", @users)
+    @user_column_path = @columns_dir + "user"
+    @bookmarks_user = @bookmarks.define_column("user", @users)
   end
 
   def setup_indexes
     @bookmarks_index_path = @tables_dir + "bookmarks-index"
     @bookmarks_index =
       Groonga::PatriciaTrie.create(:name => "bookmarks-index",
-                                   :path => @bookmarks_index_path.to_s)
+                                   :path => @bookmarks_index_path.to_s,
+                                   :key_type => "<shorttext>")
     @content_index_column_path = @columns_dir + "content-index"
     @bookmarks_index_content =
       @bookmarks_index.define_column("<index:content>", @bookmarks,
@@ -72,10 +72,22 @@ class ColumnTest < Test::Unit::TestCase
                                      :path => @content_index_column_path.to_s)
 
     @uri_index_column_path = @columns_dir + "uri-index"
-    @bookmarks_uri_index =
+    @bookmarks_index_uri =
       @bookmarks_index.define_column("<index:uri>", @bookmarks,
                                      :type => "index",
                                      :path => @uri_index_column_path.to_s)
+
+    @user_index_column_path = @columns_dir + "user-index"
+    @bookmarks_index_user =
+      @bookmarks_index.define_column("<index:user>", @bookmarks,
+                                     :type => "index",
+                                     :path => @user_index_column_path.to_s)
+
+    @user_vector_column_path = @columns_dir + "user-vector"
+    @bookmarks_user_vector =
+      @bookmarks.define_column("user-vector", @bookmarks_index,
+                               :type => "vector",
+                               :path => @user_vector_column_path.to_s)
   end
 
   def test_source_info
@@ -111,16 +123,16 @@ class ColumnTest < Test::Unit::TestCase
     assert_equal(context[Groonga::Type::SHORT_TEXT], @bookmarks_uri.range)
     assert_equal(context[Groonga::Type::TEXT], @bookmarks_comment.range)
     assert_equal(context[Groonga::Type::LONG_TEXT], @bookmarks_content.range)
-    assert_equal(@users, @bookmarks_user_id.range)
+    assert_equal(@users, @bookmarks_user.range)
     assert_equal(@bookmarks, @bookmarks_index_content.range)
-    assert_equal(@bookmarks, @bookmarks_uri_index.range)
+    assert_equal(@bookmarks, @bookmarks_index_uri.range)
   end
 
   def test_accessor
     bookmark = @bookmarks.add
     bookmark["uri"] = "http://groonga.org/"
-    @bookmarks_uri_index[bookmark.id] = "http://groonga.org/"
-    result = @bookmarks_uri_index.search("http://groonga.org/")
+    @bookmarks_index_uri[bookmark.id] = "http://groonga.org/"
+    result = @bookmarks_index_uri.search("http://groonga.org/")
     accessor = result.column(".<index:uri>.uri")
     assert_equal(["http://groonga.org/"],
                  result.records.collect {|record| accessor[record.id]})
