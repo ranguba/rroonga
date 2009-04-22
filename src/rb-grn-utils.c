@@ -184,6 +184,34 @@ rb_grn_vector_to_ruby_object (grn_ctx *context, grn_obj *vector)
     return array;
 }
 
+grn_obj *
+rb_grn_vector_from_ruby_object (grn_ctx *context, VALUE object)
+{
+    VALUE *values;
+    grn_obj *vector;
+    int i, n;
+
+    vector = grn_obj_open(context, GRN_VECTOR, 0, 0);
+    if (NIL_P(object))
+	return vector;
+
+    n = RARRAY_LEN(object);
+    values = RARRAY_PTR(object);
+    for (i = 0; i < n; i++) {
+	VALUE rb_value;
+	grn_id id;
+	void *grn_value;
+
+	rb_value = values[i];
+	id = NUM2UINT(rb_value);
+	grn_value = &id;
+	grn_vector_add_element(context, vector, grn_value, sizeof(id),
+			       0, GRN_ID_NIL);
+    }
+
+    return vector;
+}
+
 VALUE
 rb_grn_uvector_to_ruby_object (grn_ctx *context, grn_obj *uvector)
 {

@@ -698,8 +698,7 @@ rb_grn_object_set (VALUE self, VALUE rb_id, VALUE rb_value, int flags)
     context = rb_grn_object->context;
     id = NUM2UINT(rb_id);
     if (RVAL2CBOOL(rb_obj_is_kind_of(rb_value, rb_cArray))) {
-	value = RVAL2GRNUVECTOR(context, rb_value);
-	value->header.type = GRN_BULK;
+	value = RVAL2GRNVECTOR(context, rb_value);
     } else {
 	value = RVAL2GRNBULK(context, rb_value);
     }
@@ -774,7 +773,7 @@ rb_grn_object_search (int argc, VALUE *argv, VALUE self)
 			"near", &rb_near,
 			"near2", &rb_near2,
 			"similar", &rb_similar,
-			"term_exact", &rb_term_extract,
+			"term_extract", &rb_term_extract,
 			"similarity_threshold", &rb_similarity_threshold,
 			"max_interval", &rb_max_interval,
 			"weight_vector", &rb_weight_vector,

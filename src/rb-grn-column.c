@@ -42,6 +42,67 @@ rb_grn_column_to_ruby_object (VALUE klass, grn_ctx *context, grn_obj *column)
 }
 
 static VALUE
+rb_grn_fix_size_column_array_set (VALUE self, VALUE rb_id, VALUE rb_value)
+{
+    grn_ctx *context;
+    grn_obj *column;
+    grn_id range;
+    grn_obj *range_object = NULL;
+    grn_rc rc;
+    grn_id id;
+    grn_obj *value;
+
+    context = rb_grn_object_ensure_context(self, Qnil);
+    column = SELF(self);
+    id = NUM2UINT(rb_id);
+
+    range = grn_obj_get_range(context, column);
+    if (range != GRN_ID_NIL)
+	range_object = grn_ctx_get(context, range);
+
+    if (RVAL2CBOOL(rb_obj_is_kind_of(rb_value, rb_cGrnRecord))) {
+	VALUE rb_id, rb_table;
+	grn_obj *table;
+
+	if (!range_object)
+	    rb_raise(rb_eArgError,
+		     "%s isn't associated with any table: %s",
+		     rb_grn_inspect(self), rb_grn_inspect(rb_value));
+
+	rb_id = rb_funcall(rb_value, rb_intern("id"), 0);
+	rb_table = rb_funcall(rb_value, rb_intern("table"), 0);
+	table = RVAL2GRNTABLE(rb_table);
+	if (grn_obj_id(context, table) != range)
+	    rb_raise(rb_eArgError,
+		     "%s isn't associated with passed record's table: %s",
+		     rb_grn_inspect(self),
+		     rb_grn_inspect(rb_value));
+
+	value = RVAL2GRNUVECTOR(context, rb_ary_new3(1, rb_id));
+    } else if (range_object &&
+	       RVAL2CBOOL(rb_obj_is_kind_of(rb_value, rb_cInteger))) {
+	switch (range_object->header.type) {
+	  case GRN_TABLE_PAT_KEY:
+	  case GRN_TABLE_HASH_KEY:
+	  case GRN_TABLE_NO_KEY:
+	    value = RVAL2GRNUVECTOR(context, rb_ary_new3(1, rb_value));
+	    break;
+	  default:
+	    value = RVAL2GRNBULK(context, rb_value);
+	    break;
+	}
+    } else {
+	value = RVAL2GRNBULK(context, rb_value);
+    }
+
+    rc = grn_obj_set_value(context, column, id, value, GRN_OBJ_SET);
+    grn_obj_close(context, value);
+    rb_grn_rc_check(rc, self);
+
+    return Qnil;
+}
+
+static VALUE
 rb_grn_index_column_array_set (VALUE self, VALUE rb_id, VALUE rb_value)
 {
     grn_ctx *context;
@@ -180,6 +241,8 @@ rb_grn_init_column (VALUE mGrn)
     rb_cGrnIndexColumn =
 	rb_define_class_under(mGrn, "IndexColumn", rb_cGrnColumn);
 
+    rb_define_method(rb_cGrnFixSizeColumn, "[]=",
+		     rb_grn_fix_size_column_array_set, 2);
     rb_define_method(rb_cGrnIndexColumn, "[]=",
 		     rb_grn_index_column_array_set, 2);
 
