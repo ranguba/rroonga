@@ -44,6 +44,10 @@ module Groonga
       not column(name).nil?
     end
 
+    def reference_column?(name)
+      column(name, true).range.is_a?(Groonga::Table)
+    end
+
     def search(name, query, options={})
       column(name, true).search(query, options)
     end

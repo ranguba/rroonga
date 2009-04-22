@@ -155,6 +155,12 @@ class RecordTest < Test::Unit::TestCase
     assert_equal("http://groonga.org/", bookmark.value.split(/\0/, 2)[0])
   end
 
+  def test_reference_column?
+    bookmark = @bookmarks.add
+    assert_false(bookmark.reference_column?("uri"))
+    assert_true(bookmark.reference_column?("user"))
+  end
+
   private
   def assert_index_search(expected_ids, records)
     ids = records.collect do |record|
