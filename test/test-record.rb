@@ -70,8 +70,8 @@ class RecordTest < Test::Unit::TestCase
     @content_column_path = @columns_dir + "content"
     @bookmarks_content = @bookmarks.define_column("content", "<longtext>")
 
-    @user_id_column_path = @columns_dir + "user-id"
-    @bookmarks_user_id = @bookmarks.define_column("user_id", @users)
+    @user_column_path = @columns_dir + "user"
+    @bookmarks_user = @bookmarks.define_column("user", @users)
   end
 
   def setup_indexes
@@ -127,8 +127,9 @@ class RecordTest < Test::Unit::TestCase
     groonga = @bookmarks.add
     daijiro = @users.add
     daijiro["name"] = "daijiro"
-    groonga["user_id"] = daijiro.id
-    assert_equal(daijiro.id, groonga["user_id"])
+    assert_nil(groonga["user"])
+    groonga["user"] = daijiro.id
+    assert_equal(daijiro, groonga["user"])
   end
 
   def test_set_nil

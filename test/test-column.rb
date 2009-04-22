@@ -76,18 +76,6 @@ class ColumnTest < Test::Unit::TestCase
       @bookmarks_index.define_column("<index:uri>", @bookmarks,
                                      :type => "index",
                                      :path => @uri_index_column_path.to_s)
-
-    @user_index_column_path = @columns_dir + "user-index"
-    @bookmarks_index_user =
-      @bookmarks_index.define_column("<index:user>", @bookmarks,
-                                     :type => "index",
-                                     :path => @user_index_column_path.to_s)
-
-    @user_vector_column_path = @columns_dir + "user-vector"
-    @bookmarks_user_vector =
-      @bookmarks.define_column("user-vector", @bookmarks_index,
-                               :type => "vector",
-                               :path => @user_vector_column_path.to_s)
   end
 
   def test_source_info
@@ -136,6 +124,16 @@ class ColumnTest < Test::Unit::TestCase
     accessor = result.column(".<index:uri>.uri")
     assert_equal(["http://groonga.org/"],
                  result.records.collect {|record| accessor[record.id]})
+  end
+
+  def test_accessor_reference
+    bookmark = @bookmarks.add
+    assert_nil(@bookmarks_user[bookmark.id])
+
+    daijiro = @users.add
+    daijiro["name"] = "daijiro"
+    @bookmarks_user[bookmark.id] = daijiro
+    assert_equal(daijiro, @bookmarks_user[bookmark.id])
   end
 
   def test_inspect

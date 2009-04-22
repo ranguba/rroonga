@@ -84,6 +84,110 @@ rb_grn_equal_option (VALUE option, const char *key)
     return RB_GRN_FALSE;
 }
 
+static VALUE
+rb_grn_bulk_to_ruby_object_by_range_id (grn_ctx *context, grn_obj *bulk,
+					grn_obj *range, grn_id range_id,
+					VALUE rb_range,
+					VALUE related_object, VALUE *rb_value)
+{
+    rb_grn_boolean success = RB_GRN_TRUE;
+
+    switch (range_id) {
+      case GRN_DB_VOID:
+	*rb_value = rb_str_new(GRN_BULK_HEAD(bulk), GRN_BULK_VSIZE(bulk));
+	break;
+      case GRN_DB_INT:
+	*rb_value = INT2NUM(*((int *)GRN_BULK_HEAD(bulk)));
+	break;
+      case GRN_DB_UINT:
+	*rb_value = UINT2NUM(*((int *)GRN_BULK_HEAD(bulk)));
+	break;
+      case GRN_DB_INT64:
+	*rb_value = LL2NUM(*((long long *)GRN_BULK_HEAD(bulk)));
+	break;
+      case GRN_DB_FLOAT:
+	*rb_value = rb_float_new(*((double *)GRN_BULK_HEAD(bulk)));
+	break;
+      case GRN_DB_TIME:
+	{
+	    grn_timeval *time_value = (grn_timeval *)GRN_BULK_HEAD(bulk);
+	    *rb_value = rb_funcall(rb_cTime, rb_intern("at"), 2,
+				   INT2NUM(time_value->tv_sec),
+				   INT2NUM(time_value->tv_usec));
+	}
+	break;
+      case GRN_DB_SHORTTEXT:
+      case GRN_DB_TEXT:
+      case GRN_DB_LONGTEXT:
+	*rb_value = rb_str_new(GRN_BULK_HEAD(bulk), GRN_BULK_VSIZE(bulk));
+	break;
+      default:
+	success = RB_GRN_FALSE;
+	break;
+    }
+
+    return success;
+}
+
+static VALUE
+rb_grn_bulk_to_ruby_object_by_range_type (grn_ctx *context, grn_obj *bulk,
+					  grn_obj *range, grn_id range_id,
+					  VALUE rb_range,
+					  VALUE related_object, VALUE *rb_value)
+{
+    rb_grn_boolean success = RB_GRN_TRUE;
+
+    switch (range->header.type) {
+      case GRN_TABLE_HASH_KEY:
+      case GRN_TABLE_PAT_KEY:
+      case GRN_TABLE_NO_KEY:
+	{
+	    grn_id id;
+
+	    id = *((grn_id *)GRN_BULK_HEAD(bulk));
+	    if (id == GRN_ID_NIL)
+		*rb_value = Qnil;
+	    else
+		*rb_value = rb_grn_record_new(rb_range, id);
+	}
+	break;
+      default:
+	success = RB_GRN_FALSE;
+	break;
+    }
+
+    return success;
+}
+
+VALUE
+rb_grn_bulk_to_ruby_object (grn_ctx *context, grn_obj *bulk,
+			    VALUE related_object)
+{
+    grn_id range_id;
+    grn_obj *range;
+    VALUE rb_range;
+    VALUE rb_value = Qnil;
+
+    if (GRN_BULK_EMPTYP(bulk))
+	return Qnil;
+
+    range_id = bulk->header.domain;
+    range = grn_ctx_get(context, range_id);
+    rb_range = GRNOBJECT2RVAL(Qnil, context, range);
+
+    if (rb_grn_bulk_to_ruby_object_by_range_id(context, bulk,
+					       range, range_id, rb_range,
+					       related_object, &rb_value))
+	return rb_value;
+
+    if (rb_grn_bulk_to_ruby_object_by_range_type(context, bulk,
+						 range, range_id, rb_range,
+						 related_object, &rb_value))
+	return rb_value;
+
+    return rb_str_new(GRN_BULK_HEAD(bulk), GRN_BULK_VSIZE(bulk));
+}
+
 grn_obj *
 rb_grn_bulk_from_ruby_object (grn_ctx *context, VALUE object)
 {
@@ -257,6 +361,39 @@ rb_grn_uvector_from_ruby_object (grn_ctx *context, VALUE object)
     }
 
     return uvector;
+}
+
+VALUE
+rb_grn_value_to_ruby_object (grn_ctx *context,
+			     grn_obj *value,
+			     grn_obj *range,
+			     VALUE related_object)
+{
+    if (!value)
+	return Qnil;
+
+    switch (value->header.type) {
+      case GRN_VOID:
+	return Qnil;
+	break;
+      case GRN_BULK:
+	if (GRN_BULK_EMPTYP(value))
+	    return Qnil;
+	if (value->header.domain == GRN_ID_NIL && range)
+	    value->header.domain = grn_obj_id(context, range);
+	return GRNBULK2RVAL(context, value, related_object);
+	break;
+      default:
+	rb_raise(rb_eGrnError,
+		 "unsupported value type: 0x%0x: %s",
+		 value->header.type, rb_grn_inspect(related_object));
+	break;
+    }
+
+    if (!range)
+	return GRNOBJECT2RVAL(Qnil, context, value);
+
+    return Qnil;
 }
 
 void

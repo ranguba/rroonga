@@ -195,7 +195,8 @@ VALUE          rb_grn_record_new                    (VALUE table,
 #define RVAL2GRNLOGGER(object)        (rb_grn_logger_from_ruby_object(object))
 
 #define RVAL2GRNBULK(context, object) (rb_grn_bulk_from_ruby_object(context, object))
-#define GRNBULK2RVAL(context, bulk)   (rb_grn_bulk_to_ruby_object(context, bulk))
+#define GRNBULK2RVAL(context, bulk, related_object) \
+                                      (rb_grn_bulk_to_ruby_object(context, bulk, related_object))
 
 #define RVAL2GRNVECTOR(context, object) \
 	                              (rb_grn_vector_from_ruby_object(context, object))
@@ -206,6 +207,9 @@ VALUE          rb_grn_record_new                    (VALUE table,
 	                              (rb_grn_uvector_from_ruby_object(context, object))
 #define GRNUVECTOR2RVAL(context, uvector) \
 	                              (rb_grn_uvector_to_ruby_object(context, uvector))
+
+#define GRNVALUE2RVAL(context, value, range, related_object) \
+	                              (rb_grn_value_to_ruby_object(context, value, range, related_object))
 
 grn_encoding   rb_grn_encoding_from_ruby_object     (VALUE object);
 VALUE          rb_grn_encoding_to_ruby_object       (grn_encoding encoding);
@@ -254,7 +258,8 @@ grn_logger_info *
 grn_obj       *rb_grn_bulk_from_ruby_object         (grn_ctx *context,
 						     VALUE object);
 VALUE          rb_grn_bulk_to_ruby_object           (grn_ctx *context,
-						     grn_obj *bulk);
+						     grn_obj *bulk,
+						     VALUE related_object);
 grn_obj       *rb_grn_vector_from_ruby_object       (grn_ctx *context,
 						     VALUE object);
 VALUE          rb_grn_vector_to_ruby_object         (grn_ctx *context,
@@ -263,6 +268,11 @@ grn_obj       *rb_grn_uvector_from_ruby_object      (grn_ctx *context,
 						     VALUE object);
 VALUE          rb_grn_uvector_to_ruby_object        (grn_ctx *context,
 						     grn_obj *uvector);
+
+VALUE          rb_grn_value_to_ruby_object          (grn_ctx *context,
+						     grn_obj *value,
+						     grn_obj *range,
+						     VALUE related_object);
 
 
 RB_GRN_END_DECLS
