@@ -382,4 +382,16 @@ class TableTest < Test::Unit::TestCase
 
     assert_equal(names.sort, users.collect {|user| user["name"]}.sort)
   end
+
+  def test_truncate
+    users = Groonga::Array.create(:name => "<users>")
+    users.add
+    users.add
+    users.add
+    assert_equal(3, users.size)
+    assert_nothing_raised do
+      users.truncate
+    end
+    # assert_equal(0, users.size) # truncate isn't implemented in groonga.
+  end
 end

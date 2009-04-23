@@ -550,6 +550,19 @@ rb_grn_table_get_size (VALUE self)
 }
 
 static VALUE
+rb_grn_table_truncate (VALUE self)
+{
+    grn_ctx *context;
+    grn_rc rc;
+
+    context = rb_grn_object_ensure_context(self, Qnil);
+    rc = grn_table_truncate(context, SELF(self));
+    rb_grn_rc_check(rc, self);
+
+    return Qnil;
+}
+
+static VALUE
 rb_grn_table_each (VALUE self)
 {
     grn_ctx *context;
@@ -792,6 +805,7 @@ rb_grn_init_table (VALUE mGrn)
     rb_define_method(rb_cGrnTable, "records", rb_grn_table_get_records, -1);
 
     rb_define_method(rb_cGrnTable, "size", rb_grn_table_get_size, 0);
+    rb_define_method(rb_cGrnTable, "truncate", rb_grn_table_truncate, 0);
 
     rb_define_method(rb_cGrnTable, "each", rb_grn_table_each, 0);
 
