@@ -33,19 +33,23 @@ rb_grn_encoding_from_ruby_object (VALUE object)
     if (NIL_P(object))
         return GRN_ENC_DEFAULT;
 
-    if (rb_funcall(object, rb_intern("=="), 1, RB_GRN_ENCODING_DEFAULT)) {
+    if (rb_grn_equal_option(object, "default")) {
         return GRN_ENC_DEFAULT;
-    } else if (rb_funcall(object, rb_intern("=="), 1, RB_GRN_ENCODING_NONE)) {
+    } else if (rb_grn_equal_option(object, "none")) {
         return GRN_ENC_NONE;
-    } else if (rb_funcall(object, rb_intern("=="), 1, RB_GRN_ENCODING_EUC_JP)) {
+    } else if (rb_grn_equal_option(object, "euc_jp") ||
+	       rb_grn_equal_option(object, "euc-jp")) {
         return GRN_ENC_EUC_JP;
-    } else if (rb_funcall(object, rb_intern("=="), 1, RB_GRN_ENCODING_UTF8)) {
+    } else if (rb_grn_equal_option(object, "utf8") ||
+	       rb_grn_equal_option(object, "utf-8")) {
         return GRN_ENC_UTF8;
-    } else if (rb_funcall(object, rb_intern("=="), 1, RB_GRN_ENCODING_SJIS)) {
+    } else if (rb_grn_equal_option(object, "sjis") ||
+	       rb_grn_equal_option(object, "shift_jis") ||
+	       rb_grn_equal_option(object, "shift-jis")) {
         return GRN_ENC_SJIS;
-    } else if (rb_funcall(object, rb_intern("=="), 1, RB_GRN_ENCODING_LATIN1)) {
+    } else if (rb_grn_equal_option(object, "latin1")) {
         return GRN_ENC_LATIN1;
-    } else if (rb_funcall(object, rb_intern("=="), 1, RB_GRN_ENCODING_KOI8R)) {
+    } else if (rb_grn_equal_option(object, "koi8r")) {
         return GRN_ENC_KOI8R;
     } else {
         rb_raise(rb_eGrnError, "unknown encoding: %s", rb_grn_inspect(object));
