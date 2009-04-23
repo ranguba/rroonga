@@ -148,6 +148,13 @@ class RecordTest < Test::Unit::TestCase
     assert_equal(2, @bookmarks.size)
   end
 
+  def test_key
+    documents = Groonga::PatriciaTrie.create(:name => "<documents>",
+                                             :key_type => "<shorttext>")
+    reference = documents.add("reference")
+    assert_equal("reference", reference.key)
+  end
+
   def test_value
     bookmark = @bookmarks.add
     assert_equal("", bookmark.value.split(/\0/, 2)[0])

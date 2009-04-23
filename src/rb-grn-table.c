@@ -814,6 +814,7 @@ rb_grn_init_table (VALUE mGrn)
     rb_define_method(rb_cGrnArray, "add", rb_grn_array_add, 0);
 
     rb_define_method(rb_cGrnHash, "key", rb_grn_table_get_key, 1);
+    rb_define_method(rb_cGrnPatriciaTrie, "key", rb_grn_table_get_key, 1);
 
     rb_define_method(rb_cGrnHash, "delete", rb_grn_table_delete, 1);
     rb_define_method(rb_cGrnPatriciaTrie, "delete", rb_grn_table_delete, 1);
