@@ -34,6 +34,15 @@ class TypeTest < Test::Unit::TestCase
     assert_equal_type("<longtext>", Groonga::Type::LONG_TEXT)
   end
 
+  def test_inspect
+    assert_equal("#<Groonga::Type id: <8>, " +
+                 "name: <<longtext>>, " +
+                 "path: (temporary), " +
+                 "domain: <nil>, " +
+                 "range: <2147483648>>",
+                 context["<longtext>"].inspect)
+  end
+
   private
   def assert_equal_type(expected_name, id)
     type = Groonga::Context.default[id]

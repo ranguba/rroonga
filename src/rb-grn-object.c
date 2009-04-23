@@ -316,18 +316,25 @@ rb_grn_object_inspect_content_range (VALUE inspected,
     grn_id range;
 
     rb_str_cat2(inspected, "range: ");
+
     range = grn_obj_get_range(context, object);
     rb_str_cat2(inspected, "<");
-    if (range == GRN_ID_NIL) {
-	rb_str_cat2(inspected, "nil");
-    } else {
-	grn_obj *range_object;
-
-	range_object = grn_ctx_get(context, range);
-	if (range_object) {
-	    rb_grn_object_inspect_object(inspected, context, range_object);
+    switch (object->header.type) {
+      case GRN_TYPE:
+	rb_str_concat(inspected, rb_inspect(UINT2NUM(range)));
+	break;
+      default:
+	if (range == GRN_ID_NIL) {
+	    rb_str_cat2(inspected, "nil");
 	} else {
-	    rb_str_concat(inspected, rb_obj_as_string(UINT2NUM(range)));
+	    grn_obj *range_object;
+
+	    range_object = grn_ctx_get(context, range);
+	    if (range_object) {
+		rb_grn_object_inspect_object(inspected, context, range_object);
+	    } else {
+		rb_str_concat(inspected, rb_obj_as_string(UINT2NUM(range)));
+	    }
 	}
     }
     rb_str_cat2(inspected, ">");
