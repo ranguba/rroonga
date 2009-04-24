@@ -241,7 +241,6 @@ rb_grn_bulk_from_ruby_object (grn_ctx *context, VALUE object)
 	string = (const char *)&id_value;
 	size = sizeof(id_value);
     } else {
-	grn_obj_close(context, bulk);
 	rb_raise(rb_eTypeError,
 		 "bulked object should be one of "
 		 "[nil, String, Integer, Float, Time, Groonga::Object]: %s",
