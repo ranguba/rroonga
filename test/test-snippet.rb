@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+#
 # Copyright (C) 2009  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
@@ -16,7 +18,27 @@
 class SnippetTest < Test::Unit::TestCase
   include GroongaTestUtils
 
-  def test_new
-    snippet = Groonga::Snippet.new
+  def test_new_without_arguments
+    assert_nothing_raised do
+      Groonga::Snippet.new
+    end
+  end
+
+  def test_execute
+    snippet = Groonga::Snippet.new(:encoding => :utf8)
+    snippet.add_keyword("検索", :open_tag => "[[", :close_tag => "]]")
+    assert_equal(["groonga は組み込み型の全文[[検索]]エンジンライブラリです。DBMSやスクリプト",
+                  "組み込むことによって、その全文[[検索]]機能を強化することができます。ま"],
+                 snippet.execute(text))
+  end
+
+  private
+  def text
+    <<-EOT
+groonga は組み込み型の全文検索エンジンライブラリです。DBMSやスクリプト言語処理
+系等に組み込むことによって、その全文検索機能を強化することができます。また、リ
+レーショナルモデルに基づくデータストア機能を内包しており、groonga単体でも高速
+なデータストアサーバとして使用することができます。
+EOT
   end
 end

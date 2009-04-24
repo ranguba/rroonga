@@ -155,6 +155,7 @@ rb_grn_snippet_initialize (int argc, VALUE *argv, VALUE self)
                             default_open_tag, default_open_tag_length,
                             default_close_tag, default_close_tag_length,
                             mapping);
+    rb_grn_context_check(context, rb_ary_new4(argc, argv));
 
     rb_grn_snippet = ALLOC(RbGrnSnippet);
     DATA_PTR(self) = rb_grn_snippet;
@@ -162,6 +163,87 @@ rb_grn_snippet_initialize (int argc, VALUE *argv, VALUE self)
     rb_grn_snippet->snippet = snippet;
 
     return Qnil;
+}
+
+static VALUE
+rb_grn_snippet_add_keyword (int argc, VALUE *argv, VALUE self)
+{
+    RbGrnSnippet *rb_grn_snippet;
+    grn_rc rc;
+    VALUE rb_keyword, options;
+    VALUE rb_open_tag, rb_close_tag;
+    char *keyword, *open_tag = NULL, *close_tag = NULL;
+    unsigned int keyword_length, open_tag_length = 0, close_tag_length = 0;
+
+    rb_scan_args(argc, argv, "11", &rb_keyword, &options);
+
+    rb_grn_snippet = SELF(self);
+
+    keyword = StringValuePtr(rb_keyword);
+    keyword_length = RSTRING_LEN(rb_keyword);
+
+    rb_grn_scan_options(options,
+                        "open_tag", &rb_open_tag,
+                        "close_tag", &rb_close_tag,
+                        NULL);
+
+    if (!NIL_P(rb_open_tag)) {
+        open_tag = StringValuePtr(rb_open_tag);
+        open_tag_length = RSTRING_LEN(rb_open_tag);
+    }
+
+    if (!NIL_P(rb_close_tag)) {
+        close_tag = StringValuePtr(rb_close_tag);
+        close_tag_length = RSTRING_LEN(rb_close_tag);
+    }
+
+    rc = grn_snip_add_cond(rb_grn_snippet->context,
+                           rb_grn_snippet->snippet,
+                           keyword, keyword_length,
+                           open_tag, open_tag_length,
+                           close_tag, close_tag_length);
+    rb_grn_rc_check(rc, self);
+
+    return Qnil;
+}
+
+static VALUE
+rb_grn_snippet_execute (VALUE self, VALUE rb_string)
+{
+    RbGrnSnippet *rb_grn_snippet;
+    grn_rc rc;
+    grn_ctx *context;
+    grn_snip *snippet;
+    char *string;
+    unsigned int string_length;
+    unsigned int i, n_results, max_tagged_length;
+    VALUE rb_results;
+    char *result;
+
+    rb_grn_snippet = SELF(self);
+    context = rb_grn_snippet->context;
+    snippet = rb_grn_snippet->snippet;
+
+    string = StringValuePtr(rb_string);
+    string_length = RSTRING_LEN(rb_string);
+
+    rc = grn_snip_exec(context, snippet, string, string_length,
+                       &n_results, &max_tagged_length);
+    rb_grn_rc_check(rc, self);
+
+    rb_results = rb_ary_new2(n_results);
+    result = ALLOCA_N(char, max_tagged_length);
+    for (i = 0; i < n_results; i++) {
+        VALUE rb_result;
+        unsigned result_length;
+
+        rc = grn_snip_get_result(context, snippet, i, result, &result_length);
+        rb_grn_rc_check(rc, self);
+        rb_result = rb_str_new(result, result_length);
+        rb_ary_push(rb_results, rb_result);
+    }
+
+    return rb_results;
 }
 
 void
@@ -172,4 +254,8 @@ rb_grn_init_snippet (VALUE mGrn)
 
     rb_define_method(rb_cGrnSnippet, "initialize",
                      rb_grn_snippet_initialize, -1);
+    rb_define_method(rb_cGrnSnippet, "add_keyword",
+                     rb_grn_snippet_add_keyword, -1);
+    rb_define_method(rb_cGrnSnippet, "execute",
+                     rb_grn_snippet_execute, 1);
 }
