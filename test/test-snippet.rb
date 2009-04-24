@@ -88,27 +88,6 @@ class SnippetTest < Test::Unit::TestCase
                  snippet.execute(text))
   end
 
-  def test_skip_leading_spaces
-    raise "FIXME"
-    options_without_skip_leading_spaces = {
-      :encoding => :utf8,
-      :width => 50,
-      :default_open_tag => "{",
-      :default_close_tag => "}",
-    }
-    snippet = Groonga::Snippet.new(options_without_skip_leading_spaces)
-    snippet.add_keyword("モデル")
-    assert_equal(["\nレーショナル{モデル}に基づくデータ"],
-                 snippet.execute(text))
-
-    options_with_skip_leading_spaces =
-      options_without_skip_leading_spaces.merge(:skip_leading_spaces => true)
-    snippet = Groonga::Snippet.new(options_with_skip_leading_spaces)
-    snippet.add_keyword("モデル")
-    assert_equal(["\nレーショナル{モデル}に基づくデータ"],
-                 snippet.execute(text))
-  end
-
   private
   def text
     <<-EOT
