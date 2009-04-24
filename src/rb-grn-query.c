@@ -35,7 +35,7 @@ rb_rb_grn_query_from_ruby_object (VALUE object)
     RbGrnQuery *rb_grn_query;
 
     if (!RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cGrnQuery))) {
-	rb_raise(rb_eTypeError, "not a groonga table cursor");
+	rb_raise(rb_eTypeError, "not a groonga query");
     }
 
     Data_Get_Struct(object, RbGrnQuery, rb_grn_query);
