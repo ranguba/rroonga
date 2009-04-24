@@ -97,7 +97,7 @@ rb_grn_snippet_initialize (int argc, VALUE *argv, VALUE self)
     grn_ctx *context = NULL;
     grn_snip *snippet = NULL;
     VALUE options;
-    VALUE rb_context, rb_encoding, rb_normalize, rb_skip_reading_spaces;
+    VALUE rb_context, rb_encoding, rb_normalize, rb_skip_leading_spaces;
     VALUE rb_width, rb_max_results, rb_default_open_tag, rb_default_close_tag;
     VALUE rb_html_escape;
     grn_encoding encoding;
@@ -116,7 +116,7 @@ rb_grn_snippet_initialize (int argc, VALUE *argv, VALUE self)
                         "context", &rb_context,
                         "encoding", &rb_encoding,
                         "normalize", &rb_normalize,
-                        "skip_reading_spaces", &rb_skip_reading_spaces,
+                        "skip_leading_spaces", &rb_skip_leading_spaces,
                         "width", &rb_width,
                         "max_results", &rb_max_results,
                         "default_open_tag", &rb_default_open_tag,
@@ -129,7 +129,7 @@ rb_grn_snippet_initialize (int argc, VALUE *argv, VALUE self)
 
     if (RVAL2CBOOL(rb_normalize))
         flags |= GRN_SNIP_NORMALIZE;
-    if (RVAL2CBOOL(rb_skip_reading_spaces))
+    if (RVAL2CBOOL(rb_skip_leading_spaces))
         flags |= GRN_SNIP_SKIP_LEADING_SPACES;
 
     if (!NIL_P(rb_width))

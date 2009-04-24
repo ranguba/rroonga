@@ -32,6 +32,83 @@ class SnippetTest < Test::Unit::TestCase
                  snippet.execute(text))
   end
 
+  def test_invalid_encoding
+    snippet = Groonga::Snippet.new(:encoding => :shift_jis)
+    snippet.add_keyword("検索")
+    assert_equal([], snippet.execute(text))
+  end
+
+  def test_default_tag
+    snippet = Groonga::Snippet.new(:encoding => :utf8,
+                                   :default_open_tag => "<<",
+                                   :default_close_tag => ">>")
+    snippet.add_keyword("全文")
+    assert_equal(["groonga は組み込み型の<<全文>>検索エンジンライブラリです。DBMSやスクリプト",
+                  "等に組み込むことによって、その<<全文>>検索機能を強化することができます"],
+                 snippet.execute(text))
+  end
+
+  def test_width
+    snippet = Groonga::Snippet.new(:encoding => :utf8,
+                                   :width => 30,
+                                   :default_open_tag => "{",
+                                   :default_close_tag => "}")
+    snippet.add_keyword("データ")
+    assert_equal(["基づく{データ}ストア機",
+                  "高速\nな{データ}ストア"],
+                 snippet.execute(text))
+  end
+
+  def test_max_results
+    snippet = Groonga::Snippet.new(:encoding => :utf8,
+                                   :width => 30,
+                                   :max_results => 1,
+                                   :default_open_tag => "{",
+                                   :default_close_tag => "}")
+    snippet.add_keyword("データ")
+    assert_equal(["基づく{データ}ストア機"],
+                 snippet.execute(text))
+  end
+
+  def test_normalize
+    options_without_normalize = {
+      :encoding => :utf8,
+      :width => 30,
+      :default_open_tag => "{",
+      :default_close_tag => "}",
+    }
+    snippet = Groonga::Snippet.new(options_without_normalize)
+    snippet.add_keyword("処理系等")
+    assert_equal([], snippet.execute(text))
+
+    options_with_normalize = options_without_normalize.merge(:normalize => true)
+    snippet = Groonga::Snippet.new(options_with_normalize)
+    snippet.add_keyword("処理系等")
+    assert_equal(["ト言語{処理\n系等}に組"],
+                 snippet.execute(text))
+  end
+
+  def test_skip_leading_spaces
+    raise "FIXME"
+    options_without_skip_leading_spaces = {
+      :encoding => :utf8,
+      :width => 50,
+      :default_open_tag => "{",
+      :default_close_tag => "}",
+    }
+    snippet = Groonga::Snippet.new(options_without_skip_leading_spaces)
+    snippet.add_keyword("モデル")
+    assert_equal(["\nレーショナル{モデル}に基づくデータ"],
+                 snippet.execute(text))
+
+    options_with_skip_leading_spaces =
+      options_without_skip_leading_spaces.merge(:skip_leading_spaces => true)
+    snippet = Groonga::Snippet.new(options_with_skip_leading_spaces)
+    snippet.add_keyword("モデル")
+    assert_equal(["\nレーショナル{モデル}に基づくデータ"],
+                 snippet.execute(text))
+  end
+
   private
   def text
     <<-EOT
