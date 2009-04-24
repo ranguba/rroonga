@@ -92,6 +92,7 @@ RB_GRN_VAR VALUE rb_cGrnAccessor;
 RB_GRN_VAR VALUE rb_cGrnRecord;
 RB_GRN_VAR VALUE rb_cGrnQuery;
 RB_GRN_VAR VALUE rb_cGrnLogger;
+RB_GRN_VAR VALUE rb_cGrnSnippet;
 
 void           rb_grn_init_utils                    (VALUE mGrn);
 void           rb_grn_init_exception                (VALUE mGrn);
@@ -108,6 +109,7 @@ void           rb_grn_init_accessor                 (VALUE mGrn);
 void           rb_grn_init_record                   (VALUE mGrn);
 void           rb_grn_init_query                    (VALUE mGrn);
 void           rb_grn_init_logger                   (VALUE mGrn);
+void           rb_grn_init_snippet                  (VALUE mGrn);
 
 VALUE          rb_grn_rc_to_exception               (grn_rc rc);
 const char    *rb_grn_rc_to_message                 (grn_rc rc);
