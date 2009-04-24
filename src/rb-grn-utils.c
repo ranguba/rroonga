@@ -192,7 +192,6 @@ grn_obj *
 rb_grn_bulk_from_ruby_object (grn_ctx *context, VALUE object)
 {
     grn_obj *bulk;
-    grn_rc rc;
     const char *string;
     unsigned int size;
     int32_t int32_value;
@@ -200,9 +199,7 @@ rb_grn_bulk_from_ruby_object (grn_ctx *context, VALUE object)
     grn_timeval time_value;
     double double_value;
     grn_id id_value;
-
-    bulk = grn_obj_open(context, GRN_BULK, 0, 0);
-    rb_grn_context_check(context, object);
+    rb_grn_boolean shallow = RB_GRN_FALSE;
 
     if (NIL_P(object)) {
 	string = NULL;
@@ -210,6 +207,7 @@ rb_grn_bulk_from_ruby_object (grn_ctx *context, VALUE object)
     } else if (RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cString))) {
 	string = RSTRING_PTR(object);
 	size = RSTRING_LEN(object);
+	shallow = RB_GRN_TRUE;
     } else if (RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cFixnum))) {
 	int32_value = NUM2INT(object);
 	string = (const char *)&int32_value;
@@ -250,12 +248,12 @@ rb_grn_bulk_from_ruby_object (grn_ctx *context, VALUE object)
 		 rb_grn_inspect(object));
     }
 
-    rc = grn_bulk_write(context, bulk, string, size);
-    if (rc != GRN_SUCCESS) {
-	grn_obj_close(context, bulk);
-	rb_grn_context_check(context, object);
-	rb_grn_rc_check(rc, object);
-    }
+    if (shallow)
+	bulk = grn_obj_open(context, GRN_BULK, 0, GRN_OBJ_DO_SHALLOW_COPY);
+    else
+	bulk = grn_obj_open(context, GRN_BULK, 0, 0);
+    rb_grn_context_check(context, object);
+    GRN_BULK_SET(context, bulk, string, size);
 
     return bulk;
 }
