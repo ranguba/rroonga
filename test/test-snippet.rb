@@ -88,6 +88,27 @@ class SnippetTest < Test::Unit::TestCase
                  snippet.execute(text))
   end
 
+  def test_html_escape
+    text = "groonga は組み込み型の全文検索エンジン&データストアライブラリです。"
+    options_without_html_escape = {
+      :encoding => :utf8,
+      :width => 30,
+      :default_open_tag => "<",
+      :default_close_tag => ">",
+    }
+    snippet = Groonga::Snippet.new(options_without_html_escape)
+    snippet.add_keyword("エンジン")
+    assert_equal(["文検索<エンジン>&デー"],
+                 snippet.execute(text))
+
+    options_with_html_escape =
+      options_without_html_escape.merge(:html_escape => true)
+    snippet = Groonga::Snippet.new(options_with_html_escape)
+    snippet.add_keyword("エンジン")
+    assert_equal(["文検索<エンジン>&amp;デー"],
+                 snippet.execute(text))
+  end
+
   private
   def text
     <<-EOT
