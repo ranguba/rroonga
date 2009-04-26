@@ -154,6 +154,7 @@ class TableTest < Test::Unit::TestCase
   def test_set_value
     table_path = @tables_dir + "bookmarks"
     bookmarks = Groonga::Hash.create(:name => "bookmarks",
+                                     :value_size => 512,
                                      :path => table_path.to_s)
     comment_column_path = @columns_dir + "comment"
     bookmarks_comment =
@@ -162,12 +163,24 @@ class TableTest < Test::Unit::TestCase
                               :path => comment_column_path.to_s)
     groonga = bookmarks.add("groonga")
     url = "http://groonga.org/"
-    bookmarks[groonga.id] = url
+    groonga.value = url
     bookmarks_comment[groonga.id] = "fulltext search engine"
 
     assert_equal([url, "fulltext search engine"],
-                 [bookmarks[groonga.id][0, url.length],
+                 [groonga.value[0, url.length],
                   bookmarks_comment[groonga.id]])
+  end
+
+  def test_array_set
+    bookmarks = Groonga::Hash.create(:name => "bookmarks",
+                                     :value_size => 512)
+    url = "http://groonga.org/"
+    bookmarks["groonga"] = url
+
+    values = bookmarks.records.collect do |record|
+      record.value.split(/\0/, 2)[0]
+    end
+    assert_equal([url], values)
   end
 
   def test_add_without_name
@@ -189,13 +202,14 @@ class TableTest < Test::Unit::TestCase
     bookmarks_path = @tables_dir + "bookmarks"
     bookmarks = Groonga::Hash.create(:name => "bookmarks",
                                      :key_type => users,
+                                     :value_size => 512,
                                      :path => bookmarks_path.to_s)
     morita = users.add("morita")
     groonga = bookmarks.add(morita.id)
     url = "http://groonga.org/"
-    bookmarks[groonga.id] = url
+    groonga.value = url
 
-    assert_equal(url, bookmarks[groonga.id][0, url.length])
+    assert_equal(url, groonga.value[0, url.length])
   end
 
   def test_columns

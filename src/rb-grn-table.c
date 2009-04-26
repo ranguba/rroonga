@@ -18,9 +18,9 @@
 
 #include "rb-grn.h"
 
-#define DEFAULT_VALUE_SIZE 512
-
 #define SELF(object) (RVAL2GRNTABLE(object))
+#define RVAL2GRNKEY(object, context, domain, related_object) \
+    (rb_grn_key_from_ruby_object(object, context, domain, related_object))
 
 VALUE rb_cGrnTable;
 VALUE rb_cGrnHash;
@@ -54,7 +54,7 @@ rb_grn_table_s_create (int argc, VALUE *argv, VALUE klass,
     grn_ctx *context;
     grn_obj *key_type = NULL, *table;
     const char *name = NULL, *path = NULL;
-    unsigned name_size = 0, value_size;
+    unsigned name_size = 0, value_size = 0;
     grn_obj_flags flags = key_store;
     grn_encoding encoding;
     VALUE rb_table;
@@ -103,11 +103,8 @@ rb_grn_table_s_create (int argc, VALUE *argv, VALUE klass,
 	key_type = RVAL2GRNOBJECT(rb_key_type, context);
     }
 
-    if (NIL_P(rb_value_size)) {
-	value_size = DEFAULT_VALUE_SIZE;
-    } else {
+    if (!NIL_P(rb_value_size))
 	value_size = NUM2UINT(rb_value_size);
-    }
 
     encoding = RVAL2GRNENCODING(rb_encoding, context);
 
@@ -604,36 +601,77 @@ rb_grn_table_each (VALUE self)
     return Qnil;
 }
 
+static grn_obj *
+rb_grn_key_from_ruby_object (VALUE rb_key, grn_ctx *context, grn_id domain_id,
+			     VALUE related_object)
+{
+    grn_obj *key;
+    grn_obj *domain = NULL;
+    grn_id id;
+
+    if (domain_id != GRN_ID_NIL)
+	domain = grn_ctx_get(context, domain_id);
+
+    if (!domain)
+	return RVAL2GRNBULK(context, rb_key);
+
+    switch (domain->header.type) {
+      case GRN_TYPE:
+	return RVAL2GRNBULK_WITH_TYPE(context, rb_key, domain_id);
+	break;
+      case GRN_TABLE_HASH_KEY:
+      case GRN_TABLE_PAT_KEY:
+      case GRN_TABLE_NO_KEY:
+	id = RVAL2GRNID(rb_key, context, domain, related_object);
+	break;
+      default:
+	if (!RVAL2CBOOL(rb_obj_is_kind_of(rb_key, rb_cInteger)))
+	    rb_raise(rb_eGrnError,
+		     "should be unsigned integer: <%s>: <%s>",
+		     rb_grn_inspect(rb_key),
+		     rb_grn_inspect(related_object));
+
+	id = NUM2UINT(rb_key);
+	break;
+    }
+
+    key = grn_obj_open(context, GRN_BULK, 0, GRN_ID_NIL);
+    GRN_BULK_SET(context, key, &id, sizeof(id));
+    return key;
+}
+
+static grn_id
+rb_grn_table_add_with_key_raw (VALUE self, VALUE rb_key)
+{
+    VALUE exception;
+    grn_ctx *context;
+    grn_obj *table;
+    grn_id id;
+    grn_obj *key;
+    grn_search_flags flags;
+
+    context = rb_grn_object_ensure_context(self, Qnil);
+    table = SELF(self);
+
+    key = RVAL2GRNKEY(rb_key, context, table->header.domain, self);
+    flags = GRN_SEARCH_EXACT | GRN_TABLE_ADD;
+    id = grn_table_lookup(context, table,
+			  GRN_BULK_HEAD(key), GRN_BULK_VSIZE(key),
+			  &flags);
+    exception = rb_grn_context_to_exception(context, self);
+    grn_obj_close(context, key);
+    if (!NIL_P(exception))
+	rb_exc_raise(exception);
+
+    return id;
+}
+
 static VALUE
 rb_grn_table_add_with_key (VALUE self, VALUE rb_key)
 {
-    grn_ctx *context;
     grn_id id;
-    void *key;
-    grn_id id_key = 0;
-    char *string_key = NULL;
-    unsigned key_size = 0;
-    grn_search_flags flags;
 
-    if (RVAL2CBOOL(rb_obj_is_kind_of(rb_key, rb_cInteger))) {
-	id_key = NUM2UINT(rb_key);
-	key = &id_key;
-	key_size = sizeof(grn_id);
-    } else if (RVAL2CBOOL(rb_obj_is_kind_of(rb_key, rb_cString))) {
-	string_key = StringValuePtr(rb_key);
-	key = string_key;
-	key_size = RSTRING_LEN(rb_key);
-    } else {
-	rb_raise(rb_eArgError, "key should be integer or string: %s",
-		 rb_grn_inspect(rb_key));
-    }
-
-    context = rb_grn_object_ensure_context(self, Qnil);
-
-    flags = GRN_SEARCH_EXACT | GRN_TABLE_ADD;
-    id = grn_table_lookup(context, SELF(self), key, key_size, &flags);
-    rb_grn_context_check(context, self);
-
+    id = rb_grn_table_add_with_key_raw(self, rb_key);
     if (GRN_ID_NIL == id)
 	return Qnil;
     else
@@ -681,16 +719,22 @@ rb_grn_table_get_key (VALUE self, VALUE rb_id)
 static VALUE
 rb_grn_table_delete_by_key (VALUE self, VALUE rb_key)
 {
+    VALUE exception;
     grn_ctx *context;
-    const char *key;
-    int key_size = 0;
+    grn_obj *table;
+    grn_obj *key;
     grn_rc rc;
 
     context = rb_grn_object_ensure_context(self, Qnil);
+    table = SELF(self);
 
-    key = StringValuePtr(rb_key);
-    key_size = RSTRING_LEN(rb_key);
-    rc = grn_table_delete(context, SELF(self), key, key_size);
+    key = RVAL2GRNKEY(rb_key, context, table->header.domain, self);
+    rc = grn_table_delete(context, table,
+			  GRN_BULK_HEAD(key), GRN_BULK_VSIZE(key));
+    exception = rb_grn_context_to_exception(context, self);
+    grn_obj_close(context, key);
+    if (!NIL_P(exception))
+	rb_exc_raise(exception);
     rb_grn_rc_check(rc, self);
 
     return Qnil;
@@ -724,19 +768,25 @@ rb_grn_table_delete (VALUE self, VALUE rb_id_or_key)
 static VALUE
 rb_grn_table_array_reference_by_key (VALUE self, VALUE rb_key)
 {
+    VALUE exception;
     grn_ctx *context;
-    const char *key;
-    int key_size = 0;
+    grn_obj *table;
+    grn_obj *key;
     grn_id id;
     grn_search_flags flags = 0;
 
     context = rb_grn_object_ensure_context(self, Qnil);
+    table = SELF(self);
 
-    key = StringValuePtr(rb_key);
-    key_size = RSTRING_LEN(rb_key);
+    key = RVAL2GRNKEY(rb_key, context, table->header.domain, self);
     flags = GRN_SEARCH_EXACT;
-    id = grn_table_lookup(context, SELF(self), key, key_size, &flags);
-    rb_grn_context_check(context, self);
+    id = grn_table_lookup(context, table,
+			  GRN_BULK_HEAD(key), GRN_BULK_VSIZE(key),
+			  &flags);
+    exception = rb_grn_context_to_exception(context, self);
+    grn_obj_close(context, key);
+    if (!NIL_P(exception))
+	rb_exc_raise(exception);
 
     if (id == GRN_ID_NIL)
 	return Qnil;
@@ -751,6 +801,41 @@ rb_grn_table_array_reference (VALUE self, VALUE rb_id_or_key)
 	return rb_grn_object_array_reference(self, rb_id_or_key);
     else
 	return rb_grn_table_array_reference_by_key(self, rb_id_or_key);
+}
+
+static VALUE
+rb_grn_table_array_set (VALUE self, VALUE rb_key, VALUE rb_value)
+{
+    VALUE exception;
+    grn_ctx *context;
+    grn_obj *table;
+    grn_id id;
+    grn_obj *value;
+    grn_rc rc;
+
+    context = rb_grn_object_ensure_context(self, Qnil);
+    table = SELF(self);
+
+    if (NIL_P(rb_key))
+	rb_raise(rb_eArgError, "key should not be nil: <%s>",
+		 rb_grn_inspect(self));
+
+    id = rb_grn_table_add_with_key_raw(self, rb_key);
+    if (GRN_ID_NIL == id)
+	rb_raise(rb_eGrnError,
+		 "failed to add new record with key: <%s>: <%s>",
+		 rb_grn_inspect(rb_key),
+		 rb_grn_inspect(self));
+
+    value = RVAL2GRNBULK(context, rb_value);
+    rc = grn_obj_set_value(context, table, id, value, GRN_OBJ_SET);
+    exception = rb_grn_context_to_exception(context, self);
+    grn_obj_close(context, value);
+    if (!NIL_P(exception))
+	rb_exc_raise(exception);
+    rb_grn_rc_check(rc, self);
+
+    return rb_value;
 }
 
 static VALUE
@@ -854,8 +939,13 @@ rb_grn_init_table (VALUE mGrn)
     rb_define_method(rb_cGrnPatriciaTrie, "delete", rb_grn_table_delete, 1);
     rb_define_method(rb_cGrnArray, "delete", rb_grn_table_delete_by_id, 1);
 
+    rb_define_alias(rb_cGrnTable, "value", "[]");
+    rb_define_alias(rb_cGrnTable, "set_value", "[]=");
+
     rb_define_method(rb_cGrnHash, "[]", rb_grn_table_array_reference, 1);
     rb_define_method(rb_cGrnPatriciaTrie, "[]", rb_grn_table_array_reference, 1);
+    rb_define_method(rb_cGrnHash, "[]=", rb_grn_table_array_set, 2);
+    rb_define_method(rb_cGrnPatriciaTrie, "[]=", rb_grn_table_array_set, 2);
 
     rb_define_method(rb_cGrnHash, "encoding",
 		     rb_grn_table_get_encoding, 0);

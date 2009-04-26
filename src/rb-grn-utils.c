@@ -257,6 +257,85 @@ rb_grn_bulk_from_ruby_object (grn_ctx *context, VALUE object)
     return bulk;
 }
 
+grn_obj *
+rb_grn_bulk_from_ruby_object_with_type (grn_ctx *context, VALUE object,
+					grn_id type)
+{
+    grn_obj *bulk;
+    const char *string;
+    unsigned int size;
+    int32_t int32_value;
+    uint32_t uint32_value;
+    int64_t int64_value;
+    grn_timeval time_value;
+    double double_value;
+    grn_id range;
+    VALUE rb_type;
+    grn_obj_flags flags = 0;
+
+    switch (type) {
+      case GRN_DB_INT:
+	int32_value = NUM2INT(object);
+	string = (const char *)&int32_value;
+	size = sizeof(int32_value);
+	break;
+      case GRN_DB_UINT:
+	uint32_value = NUM2UINT(object);
+	string = (const char *)&uint32_value;
+	size = sizeof(uint32_value);
+	break;
+      case GRN_DB_INT64:
+	int64_value = NUM2LL(object);
+	string = (const char *)&int64_value;
+	size = sizeof(int64_value);
+	break;
+      case GRN_DB_FLOAT:
+	double_value = NUM2DBL(object);
+	string = (const char *)&double_value;
+	size = sizeof(double_value);
+	break;
+      case GRN_DB_TIME:
+	time_value.tv_sec = NUM2INT(rb_funcall(object, rb_intern("tv_sec"), 0));
+	time_value.tv_usec = NUM2INT(rb_funcall(object, rb_intern("tv_usec"), 0));
+	string = (const char *)&time_value;
+	size = sizeof(time_value);
+	break;
+      case GRN_DB_SHORTTEXT:
+      case GRN_DB_TEXT:
+      case GRN_DB_LONGTEXT:
+	string = StringValuePtr(object);
+	size = RSTRING_LEN(object);
+	range = grn_obj_get_range(context, grn_ctx_get(context, type));
+	if (size > range)
+	    rb_raise(rb_eArgError,
+		     "string is too large: expected: %u <= %u",
+		     size, range);
+	flags |= GRN_OBJ_DO_SHALLOW_COPY;
+	break;
+      case GRN_DB_VOID:
+      case GRN_DB_DELIMIT:
+      case GRN_DB_UNIGRAM:
+      case GRN_DB_BIGRAM:
+      case GRN_DB_TRIGRAM:
+      case GRN_DB_MECAB:
+	rb_type = GRNOBJECT2RVAL(Qnil, context, grn_ctx_get(context, type));
+	rb_raise(rb_eArgError,
+		 "unbulkable type: %s",
+		 rb_grn_inspect(rb_type));
+	break;
+      default:
+	return RVAL2GRNBULK(context, object);
+	break;
+    }
+
+    bulk = grn_obj_open(context, GRN_BULK, flags, GRN_ID_NIL);
+    rb_grn_context_check(context, object);
+    GRN_BULK_SET(context, bulk, string, size);
+
+    return bulk;
+}
+
+
 /* FIXME: maybe not work */
 VALUE
 rb_grn_vector_to_ruby_object (grn_ctx *context, grn_obj *vector)
@@ -391,6 +470,37 @@ rb_grn_value_to_ruby_object (grn_ctx *context,
 	return GRNOBJECT2RVAL(Qnil, context, value);
 
     return Qnil;
+}
+
+grn_id
+rb_grn_id_from_ruby_object (VALUE object, grn_ctx *context, grn_obj *table,
+			    VALUE related_object)
+{
+    VALUE rb_id;
+
+    if (NIL_P(object))
+	return Qnil;
+
+    if (RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cGrnRecord))) {
+	VALUE rb_table;
+	rb_table = rb_funcall(object, rb_intern("table"), 0);
+	if (table && RVAL2GRNOBJECT(rb_table, context) != table)
+	    rb_raise(rb_eGrnError,
+		     "wrong table: expected <%s>: actual <%s>",
+		     rb_grn_inspect(GRNOBJECT2RVAL(Qnil, context, table)),
+		     rb_grn_inspect(rb_table));
+	rb_id = rb_funcall(object, rb_intern("id"), 0);
+    } else {
+	rb_id = object;
+    }
+
+    if (!RVAL2CBOOL(rb_obj_is_kind_of(rb_id, rb_cInteger)))
+	rb_raise(rb_eGrnError,
+		 "should be unsigned integer or Groogna::Record: <%s>: <%s>",
+		 rb_grn_inspect(object),
+		 rb_grn_inspect(related_object));
+
+    return NUM2UINT(rb_id);
 }
 
 void

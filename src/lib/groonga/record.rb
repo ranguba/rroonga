@@ -57,11 +57,11 @@ module Groonga
     end
 
     def value
-      @table[@id]
+      @table.value(@id)
     end
 
     def value=(value)
-      @table[@id] = value
+      @table.set_value(@id, value)
     end
 
     def columns
