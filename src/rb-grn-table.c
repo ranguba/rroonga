@@ -597,6 +597,7 @@ rb_grn_table_each (VALUE self)
 	rb_yield(rb_grn_record_new(self, id));
     }
     grn_table_cursor_close(context, cursor);
+    rb_iv_set(self, "cursor", Qnil);
 
     return Qnil;
 }
