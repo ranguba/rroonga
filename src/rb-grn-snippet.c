@@ -148,7 +148,7 @@ rb_grn_snippet_initialize (int argc, VALUE *argv, VALUE self)
         default_close_tag_length = RSTRING_LEN(rb_default_close_tag);
     }
 
-    if (CBOOL2RVAL(rb_html_escape))
+    if (RVAL2CBOOL(rb_html_escape))
         mapping = (grn_snip_mapping *)-1;
 
     snippet = grn_snip_open(context, encoding, flags, width, max_results,

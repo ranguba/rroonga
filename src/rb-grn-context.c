@@ -187,6 +187,46 @@ rb_grn_context_initialize (int argc, VALUE *argv, VALUE self)
 }
 
 static VALUE
+rb_grn_context_inspect (VALUE self)
+{
+    VALUE inspected;
+    grn_ctx *context;
+    grn_obj *database;
+
+    context = SELF(self);
+
+    inspected = rb_str_new2("#<");
+    rb_str_concat(inspected, rb_inspect(rb_obj_class(self)));
+    rb_str_cat2(inspected, " ");
+
+    rb_str_cat2(inspected, "use_ql: <");
+    if (context->flags & GRN_CTX_USE_QL)
+	rb_str_cat2(inspected, "true");
+    else
+	rb_str_cat2(inspected, "false");
+    rb_str_cat2(inspected, ">, ");
+
+    rb_str_cat2(inspected, "batch_mode: <");
+    if (context->flags & GRN_CTX_BATCH_MODE)
+	rb_str_cat2(inspected, "true");
+    else
+	rb_str_cat2(inspected, "false");
+    rb_str_cat2(inspected, ">, ");
+
+    rb_str_cat2(inspected, "encoding: <");
+    rb_str_concat(inspected, rb_inspect(GRNENCODING2RVAL(context->encoding)));
+    rb_str_cat2(inspected, ">, ");
+
+    rb_str_cat2(inspected, "database: <");
+    database = grn_ctx_db(context);
+    rb_str_concat(inspected, rb_inspect(GRNDB2RVAL(context, database)));
+    rb_str_cat2(inspected, ">");
+
+    rb_str_cat2(inspected, ">");
+    return inspected;
+}
+
+static VALUE
 rb_grn_context_use_ql_p (VALUE self)
 {
     return CBOOL2RVAL(SELF(self)->flags & GRN_CTX_USE_QL);
@@ -258,6 +298,8 @@ rb_grn_init_context (VALUE mGrn)
 			       rb_grn_context_s_set_default_options, 1);
 
     rb_define_method(cGrnContext, "initialize", rb_grn_context_initialize, -1);
+
+    rb_define_method(cGrnContext, "inspect", rb_grn_context_inspect, 0);
 
     rb_define_method(cGrnContext, "use_ql?", rb_grn_context_use_ql_p, 0);
     rb_define_method(cGrnContext, "batch_mode?", rb_grn_context_batch_mode_p, 0);

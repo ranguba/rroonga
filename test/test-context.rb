@@ -59,6 +59,29 @@ class ContextTest < Test::Unit::TestCase
     assert_equal(Groonga::Encoding::UTF8, context.encoding)
   end
 
+  def test_inspect
+    context = Groonga::Context.new(:use_ql => true,
+                                   :batch_mode => true,
+                                   :encoding => Groonga::Encoding::UTF8)
+    assert_equal("#<Groonga::Context " +
+                 "use_ql: <true>, " +
+                 "batch_mode: <true>, " +
+                 "encoding: <:utf8>, " +
+                 "database: <nil>>",
+                 context.inspect)
+  end
+
+  def test_inspect_with_database
+    db = Groonga::Database.create
+    context = Groonga::Context.default
+    assert_equal("#<Groonga::Context " +
+                 "use_ql: <false>, " +
+                 "batch_mode: <false>, " +
+                 "encoding: <:default>, " +
+                 "database: <#{db.inspect}>>",
+                 context.inspect)
+  end
+
   def test_array_reference
     Groonga::Database.create
     context = Groonga::Context.default
