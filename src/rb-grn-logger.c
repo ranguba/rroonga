@@ -20,6 +20,7 @@
 
 #define RVAL2GRNWRAPPER(object)  (rb_grn_logger_info_wrapper_from_ruby_object(object))
 #define RVAL2GRNLOGLEVEL(object) (rb_grn_log_level_from_ruby_object(object))
+#define GRNLOGLEVEL2RVAL(level)  (rb_grn_log_level_to_ruby_object(level))
 
 VALUE cGrnLogger;
 
@@ -113,6 +114,50 @@ rb_grn_log_level_from_ruby_object (VALUE rb_level)
     return level;
 }
 
+static VALUE
+rb_grn_log_level_to_ruby_object (grn_log_level level)
+{
+    VALUE rb_level = Qnil;
+
+    switch (level) {
+      case GRN_LOG_NONE:
+	rb_level = RB_GRN_INTERN("none");
+	break;
+      case GRN_LOG_EMERG:
+	rb_level = RB_GRN_INTERN("emergency");
+	break;
+      case GRN_LOG_ALERT:
+	rb_level = RB_GRN_INTERN("alert");
+	break;
+      case GRN_LOG_CRIT:
+	rb_level = RB_GRN_INTERN("critical");
+	break;
+      case GRN_LOG_ERROR:
+	rb_level = RB_GRN_INTERN("error");
+	break;
+      case GRN_LOG_WARNING:
+	rb_level = RB_GRN_INTERN("warning");
+	break;
+      case GRN_LOG_NOTICE:
+	rb_level = RB_GRN_INTERN("notice");
+	break;
+      case GRN_LOG_INFO:
+	rb_level = RB_GRN_INTERN("info");
+	break;
+      case GRN_LOG_DEBUG:
+	rb_level = RB_GRN_INTERN("debug");
+	break;
+      case GRN_LOG_DUMP:
+	rb_level = RB_GRN_INTERN("dump");
+	break;
+      default:
+	rb_level = INT2NUM(level);
+	break;
+    }
+
+    return rb_level;
+}
+
 static void
 rb_grn_log (int level, const char *time, const char *title,
             const char *message, const char *location, void *func_arg)
@@ -120,7 +165,7 @@ rb_grn_log (int level, const char *time, const char *title,
     rb_grn_logger_info_wrapper *wrapper = func_arg;
 
     rb_funcall(wrapper->handler, rb_intern("call"), 5,
-               INT2NUM(level),
+               GRNLOGLEVEL2RVAL(level),
                rb_str_new2(time),
                rb_str_new2(title),
                rb_str_new2(message),
