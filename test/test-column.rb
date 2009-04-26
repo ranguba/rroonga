@@ -151,6 +151,10 @@ class ColumnTest < Test::Unit::TestCase
     assert_equal(@users, @users_name_column.domain)
   end
 
+  def test_table
+    assert_equal(@users, @users_name_column.table)
+  end
+
   private
   def assert_content_search(expected_records, term)
     records = @bookmarks_index_content.search(term).records
