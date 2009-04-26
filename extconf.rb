@@ -35,9 +35,10 @@ package_name = "groonga"
 module_name = "groonga"
 ext_dir_name = "src"
 src_dir = File.join(File.expand_path(File.dirname(__FILE__)), ext_dir_name)
-major, minor, micro = 0, 0, 2
+major, minor, micro = 0, 0, 3
 
 PKGConfig.have_package(package_name, major, minor, micro) or exit 1
+$defs << "-DGRN_VERSION=\\\"#{PKGConfig.modversion(package_name)}\\\""
 
 have_header("ruby/st.h") unless have_macro("HAVE_RUBY_ST_H", "ruby.h")
 have_func("rb_errinfo", "ruby.h")

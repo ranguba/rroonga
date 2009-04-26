@@ -44,6 +44,8 @@ Init_groonga (void)
 
     mGrn = rb_define_module("Groonga");
 
+    rb_define_const(mGrn, "VERSION", rb_str_new2(GRN_VERSION));
+
     rb_grn_init_utils(mGrn);
     rb_grn_init_exception(mGrn);
     rb_grn_init_encoding(mGrn);
