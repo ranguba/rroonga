@@ -27,6 +27,10 @@ VALUE rb_cGrnHash;
 VALUE rb_cGrnPatriciaTrie;
 VALUE rb_cGrnArray;
 
+/* FIXME */
+grn_rc grn_table_get_info(grn_ctx *ctx, grn_obj *table, grn_obj_flags *flags,
+                          grn_encoding *encoding, grn_obj **tokenizer);
+
 grn_obj *
 rb_grn_table_from_ruby_object (VALUE object)
 {
@@ -215,14 +219,30 @@ rb_grn_table_inspect_content (VALUE self, VALUE inspected)
     context = rb_grn_object_ensure_context(self, Qnil);
     table = SELF(self);
 
-    rb_str_cat2(inspected, ", ");
+    if (table->header.type != GRN_TABLE_NO_KEY) {
+	grn_rc rc;
+	grn_encoding encoding;
 
-    rb_str_cat2(inspected, "size: ");
+	rb_str_cat2(inspected, ", ");
+	rb_str_cat2(inspected, "encoding: <");
+	rc = grn_table_get_info(context, SELF(self), NULL, &encoding, NULL);
+
+	if (rc == GRN_SUCCESS)
+	    rb_str_concat(inspected, rb_inspect(GRNENCODING2RVAL(encoding)));
+	else
+	    rb_str_cat2(inspected, "invalid");
+
+	rb_str_cat2(inspected, ">");
+    }
+
+    rb_str_cat2(inspected, ", ");
+    rb_str_cat2(inspected, "size: <");
     {
 	char buf[21]; /* ceil(log10(2 ** 64)) + 1('\0') == 21 */
 	snprintf(buf, sizeof(buf), "%u", grn_table_size(context, table));
 	rb_str_cat2(inspected, buf);
     }
+    rb_str_cat2(inspected, ">");
 
     return inspected;
 }
@@ -729,10 +749,6 @@ rb_grn_table_array_reference (VALUE self, VALUE rb_id_or_key)
     else
 	return rb_grn_table_array_reference_by_key(self, rb_id_or_key);
 }
-
-/* FIXME */
-grn_rc grn_table_get_info(grn_ctx *ctx, grn_obj *table, grn_obj_flags *flags,
-                          grn_encoding *encoding, grn_obj **tokenizer);
 
 static VALUE
 rb_grn_table_get_default_tokenizer (VALUE self)
