@@ -28,10 +28,14 @@ static VALUE RB_GRN_ENCODING_LATIN1;
 static VALUE RB_GRN_ENCODING_KOI8R;
 
 grn_encoding
-rb_grn_encoding_from_ruby_object (VALUE object)
+rb_grn_encoding_from_ruby_object (VALUE object, grn_ctx *context)
 {
-    if (NIL_P(object))
-        return GRN_ENC_DEFAULT;
+    if (NIL_P(object)) {
+	if (context)
+	    return context->encoding;
+	else
+	    return GRN_ENC_DEFAULT;
+    }
 
     if (rb_grn_equal_option(object, "default")) {
         return GRN_ENC_DEFAULT;

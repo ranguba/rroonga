@@ -125,7 +125,7 @@ rb_grn_snippet_initialize (int argc, VALUE *argv, VALUE self)
                         NULL);
 
     context = rb_grn_context_ensure(rb_context);
-    encoding = RVAL2GRNENCODING(rb_encoding);
+    encoding = RVAL2GRNENCODING(rb_encoding, context);
 
     if (RVAL2CBOOL(rb_normalize))
         flags |= GRN_SNIP_NORMALIZE;

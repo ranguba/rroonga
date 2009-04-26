@@ -61,7 +61,7 @@ rb_grn_database_s_create (int argc, VALUE *argv, VALUE klass)
         path = StringValuePtr(rb_path);
     context = rb_grn_context_ensure(rb_context);
 
-    create_args.encoding = RVAL2GRNENCODING(encoding);
+    create_args.encoding = RVAL2GRNENCODING(encoding, context);
     create_args.builtin_type_names = NULL;
     create_args.n_builtin_type_names = 0;
 

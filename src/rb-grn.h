@@ -162,7 +162,8 @@ VALUE          rb_grn_record_new                    (VALUE table,
 #define RVAL2CBOOL(object)            (RTEST(object))
 #define CBOOL2RVAL(boolean)           ((boolean) ? Qtrue : Qfalse)
 
-#define RVAL2GRNENCODING(object)      (rb_grn_encoding_from_ruby_object(object))
+#define RVAL2GRNENCODING(object, context) \
+                                      (rb_grn_encoding_from_ruby_object(object, context))
 #define GRNENCODING2RVAL(encoding)    (rb_grn_encoding_to_ruby_object(encoding))
 
 #define RVAL2GRNCONTEXT(object)       (rb_grn_context_from_ruby_object(object))
@@ -213,7 +214,8 @@ VALUE          rb_grn_record_new                    (VALUE table,
 #define GRNVALUE2RVAL(context, value, range, related_object) \
 	                              (rb_grn_value_to_ruby_object(context, value, range, related_object))
 
-grn_encoding   rb_grn_encoding_from_ruby_object     (VALUE object);
+grn_encoding   rb_grn_encoding_from_ruby_object     (VALUE object,
+						     grn_ctx *context);
 VALUE          rb_grn_encoding_to_ruby_object       (grn_encoding encoding);
 
 grn_ctx       *rb_grn_context_from_ruby_object      (VALUE object);

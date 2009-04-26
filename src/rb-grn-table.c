@@ -109,7 +109,7 @@ rb_grn_table_s_create (int argc, VALUE *argv, VALUE klass,
 	value_size = NUM2UINT(rb_value_size);
     }
 
-    encoding = RVAL2GRNENCODING(rb_encoding);
+    encoding = RVAL2GRNENCODING(rb_encoding, context);
 
     table = grn_table_create(context, name, name_size, path,
 			     flags, key_type, value_size,
@@ -218,6 +218,9 @@ rb_grn_table_inspect_content (VALUE self, VALUE inspected)
 
     context = rb_grn_object_ensure_context(self, Qnil);
     table = SELF(self);
+
+    if (!table)
+	return inspected;
 
     if (table->header.type != GRN_TABLE_NO_KEY) {
 	grn_rc rc;
@@ -751,6 +754,21 @@ rb_grn_table_array_reference (VALUE self, VALUE rb_id_or_key)
 }
 
 static VALUE
+rb_grn_table_get_encoding (VALUE self)
+{
+    grn_ctx *context;
+    grn_encoding encoding;
+    grn_rc rc;
+
+    context = rb_grn_object_ensure_context(self, Qnil);
+    rc = grn_table_get_info(context, SELF(self), NULL, &encoding, NULL);
+    rb_grn_context_check(context, self);
+    rb_grn_rc_check(rc, self);
+
+    return GRNENCODING2RVAL(encoding);
+}
+
+static VALUE
 rb_grn_table_get_default_tokenizer (VALUE self)
 {
     grn_ctx *context;
@@ -838,6 +856,11 @@ rb_grn_init_table (VALUE mGrn)
 
     rb_define_method(rb_cGrnHash, "[]", rb_grn_table_array_reference, 1);
     rb_define_method(rb_cGrnPatriciaTrie, "[]", rb_grn_table_array_reference, 1);
+
+    rb_define_method(rb_cGrnHash, "encoding",
+		     rb_grn_table_get_encoding, 0);
+    rb_define_method(rb_cGrnPatriciaTrie, "encoding",
+		     rb_grn_table_get_encoding, 0);
 
     rb_define_method(rb_cGrnHash, "default_tokenizer",
 		     rb_grn_table_get_default_tokenizer, 0);

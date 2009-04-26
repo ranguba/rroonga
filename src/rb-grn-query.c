@@ -146,7 +146,7 @@ rb_grn_query_initialize (int argc, VALUE *argv, VALUE self)
     if (!NIL_P(rb_max_expressions))
         max_expressions = NUM2INT(rb_max_expressions);
 
-    encoding = RVAL2GRNENCODING(rb_encoding);
+    encoding = RVAL2GRNENCODING(rb_encoding, context);
 
     query = grn_query_open(context, query_string, query_string_length,
                            default_operator, max_expressions, encoding);

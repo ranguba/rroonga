@@ -177,7 +177,7 @@ rb_grn_context_initialize (int argc, VALUE *argv, VALUE self)
 	flags |= GRN_CTX_USE_QL;
     if (RVAL2CBOOL(batch_mode))
 	flags |= GRN_CTX_BATCH_MODE;
-    encoding = RVAL2GRNENCODING(rb_encoding);
+    encoding = RVAL2GRNENCODING(rb_encoding, NULL);
 
     context = ALLOC(grn_ctx);
     DATA_PTR(self) = context;
