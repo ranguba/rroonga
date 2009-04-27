@@ -22,6 +22,8 @@ require 'fileutils'
 require 'rubygems'
 require 'hoe'
 
+Hoe::SUPPORTED_TEST_FRAMEWORKS[:testunit2] = "test/run-test.rb"
+
 base_dir = File.join(File.dirname(__FILE__))
 truncate_base_dir = Proc.new do |x|
   x.gsub(/^#{Regexp.escape(base_dir + File::SEPARATOR)}/, '')
@@ -89,6 +91,7 @@ project = Hoe.new('groonga', version) do |project|
                    'groonga-dev@lists.sourceforge.jp']
   project.summary = 'Ruby bindings for groonga'
   project.url = 'http://groonga.rubyforge.org/'
+  project.testlib = :testunit2
   project.test_globs = []
   project.spec_extras = {
     :extensions => ['extconf.rb'],
