@@ -23,6 +23,8 @@ require 'rubygems'
 gem 'rdoc'
 require 'hoe'
 
+ENV["NODOT"] = "yes"
+
 Hoe::SUPPORTED_TEST_FRAMEWORKS[:testunit2] = "test/run-test.rb"
 
 base_dir = File.join(File.dirname(__FILE__))
