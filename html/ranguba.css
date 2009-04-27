@@ -46,9 +46,19 @@ div.header h1 span
   margin-bottom: 2px;
 }
 
+div.header h1 span.title
+{
+  padding-top: 20px;
+}
+
 div.header h1 span.title-separator
 {
   display: none;
+}
+
+div.header h1 span.title-project
+{
+  padding-bottom: 20px;
 }
 
 ul.menu
