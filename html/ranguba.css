@@ -51,40 +51,6 @@ div.header h1 span.title-separator
   display: none;
 }
 
-ul.other-languages
-{
-  position: absolute;
-  top: 0px;
-  right: 50px;
-  padding: 0px;
-  margin: 0px;
-}
-
-ul.other-languages li
-{
-  display: block;
-  float: left;
-  margin-left: 10px;
-}
-
-ul.other-languages li a
-{
-  display: block;
-  height: 11px;
-  width: 16px;
-  text-indent: -100000px;
-}
-
-ul.other-languages li#other-language-english
-{
-  background: url(us.png) no-repeat;
-}
-
-ul.other-languages li#other-language-japanese
-{
-  background: url(jp.png) no-repeat;
-}
-
 ul.menu
 {
   background: url(bar.png) repeat-x;
@@ -120,9 +86,9 @@ ul.menu li a:visited
   color: #ffb84f;
 }
 
-ul.menu li#menu-introduction
+ul.menu li#menu-reference
 {
-  background: url(introduction.png) no-repeat;
+  background: url(reference.png) no-repeat;
 }
 
 ul.menu li#menu-install
@@ -130,14 +96,9 @@ ul.menu li#menu-install
   background: url(install.png) no-repeat;
 }
 
-ul.menu li#menu-download
+ul.menu li#menu-developer
 {
-  background: url(download.png) no-repeat;
-}
-
-ul.menu li#menu-blog
-{
-  background: url(blog.png) no-repeat;
+  background: url(developer.png) no-repeat;
 }
 
 div.content
@@ -200,14 +161,7 @@ div.sponsors p
   margin: 0px;
 }
 
-div.sponsors p#sponsor-ipa
-{
-  margin-top: 15px;
-  margin-left: 50px;
-  margin-right: 220px;
-}
-
-div.sponsors p#sponsor-sf-net
+div.sponsors p#sponsor-rubyforge
 {
   position: absolute;
   top: 15px;
@@ -217,7 +171,7 @@ div.sponsors p#sponsor-sf-net
 div.sponsors p#sponsor-tango
 {
   position: absolute;
-  top: 5px;
+  top: 50px;
   right: 50px;
 }
 
