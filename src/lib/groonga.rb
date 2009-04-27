@@ -18,16 +18,31 @@
 require 'groonga/record'
 require 'groonga.so'
 
+##
+# Ruby/groonga用のネームスペース。Ruby/groongaのクラスやメソッ
+# ドなどはこのモジュール以下に定義される。
 module Groonga
   class << self
+    ##
+    # BUILD_VERSIONを"."で結合して<tt>"メジャーバージョン.マ
+    # イナーバージョン.マイクロバージョン"</tt>という形式の
+    # 文字列にしたもの。
     def build_version
       BUILD_VERSION.join(".")
     end
 
+    ##
+    # VERSIONを"."で結合して<tt>"メジャーバージョン.マイナー
+    # バージョン.マイクロバージョン"</tt>という形式の文字列に
+    # したもの。
     def version
       VERSION.join(".")
     end
 
+    ##
+    # BINDINGS_VERSIONを"."で結合して<tt>"メジャーバージョン.マ
+    # イナーバージョン.マイクロバージョン"</tt>という形式の文
+    # 字列にしたもの。
     def bindings_version
       BINDINGS_VERSION.join(".")
     end

@@ -100,19 +100,45 @@ rb_grn_encoding_to_ruby_object (grn_encoding encoding)
 void
 rb_grn_init_encoding (VALUE mGrn)
 {
+    /*
+     * Document-class: Groonga::Encoding
+     *
+     * groongaがサポートしてるエンコーディングが定義されてい
+     * るモジュールです。
+     */
     mGrnEncoding = rb_define_module_under(mGrn, "Encoding");
 
 #define DEFINE_ENCODING(name, value)                                    \
     RB_GRN_ENCODING_ ## name = RB_GRN_INTERN(value);                    \
     rb_define_const(mGrnEncoding, #name, RB_GRN_ENCODING_ ## name)
 
-    DEFINE_ENCODING(DEFAULT, "default");
-    DEFINE_ENCODING(NONE, "none");
-    DEFINE_ENCODING(EUC_JP, "euc_jp");
-    DEFINE_ENCODING(SJIS, "sjis");
-    DEFINE_ENCODING(UTF8, "utf8");
-    DEFINE_ENCODING(LATIN1, "latin1");
-    DEFINE_ENCODING(KOI8R, "koi8r");
+    RB_GRN_ENCODING_DEFAULT = RB_GRN_INTERN("default");
+    /* groongaをビルドしたときに指定したエンコーディング。 */
+    rb_define_const(mGrnEncoding, "DEFAULT", RB_GRN_ENCODING_DEFAULT);
+
+    RB_GRN_ENCODING_NONE = RB_GRN_INTERN("none");
+    /* 文字列をバイト列として扱うエンコーディング。 */
+    rb_define_const(mGrnEncoding, "NONE", RB_GRN_ENCODING_NONE);
+
+    RB_GRN_ENCODING_EUC_JP = RB_GRN_INTERN("euc_jp");
+    /* EUC-JP */
+    rb_define_const(mGrnEncoding, "EUC_JP", RB_GRN_ENCODING_EUC_JP);
+
+    RB_GRN_ENCODING_SJIS = RB_GRN_INTERN("sjis");
+    /* ShiftJIS */
+    rb_define_const(mGrnEncoding, "SJIS", RB_GRN_ENCODING_SJIS);
+
+    RB_GRN_ENCODING_UTF8 = RB_GRN_INTERN("utf8");
+    /* UTF-8 */
+    rb_define_const(mGrnEncoding, "UTF8", RB_GRN_ENCODING_UTF8);
+
+    RB_GRN_ENCODING_LATIN1 = RB_GRN_INTERN("latin1");
+    /* Latin-1。ISO-8859-1ではなくWindows-1252(CP1252)。 */
+    rb_define_const(mGrnEncoding, "LATIN1", RB_GRN_ENCODING_LATIN1);
+
+    RB_GRN_ENCODING_KOI8R = RB_GRN_INTERN("koi8r");
+    /* KOI8-R */
+    rb_define_const(mGrnEncoding, "KOI8R", RB_GRN_ENCODING_KOI8R);
 
 #undef DEFINE_ENCODING
 }

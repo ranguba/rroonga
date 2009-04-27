@@ -20,6 +20,7 @@ require 'English'
 require 'find'
 require 'fileutils'
 require 'rubygems'
+gem 'rdoc'
 require 'hoe'
 
 Hoe::SUPPORTED_TEST_FRAMEWORKS[:testunit2] = "test/run-test.rb"
@@ -95,7 +96,7 @@ project = Hoe.new('groonga', version) do |project|
   project.test_globs = []
   project.spec_extras = {
     :extensions => ['extconf.rb'],
-    :require_paths => ['src/lib', 'src'],
+    :require_paths => Dir.glob('src/*.c') + Dir.glob('src/lib/**/*.rb'),
     :has_rdoc => false,
   }
   news = File.join(base_dir, "NEWS")
@@ -118,6 +119,12 @@ if /mswin32/ =~ project.spec.platform.to_s
     groonga_files << f
   end
   project.spec.files += groonga_files
+end
+
+ObjectSpace.each_object(Rake::RDocTask) do |rdoc_task|
+  t_option_index = rdoc_task.options.index("-t")
+  rdoc_task.options[t_option_index, 2] = nil
+  rdoc_task.title = "Ruby/groonga - #{version}"
 end
 
 # fix Hoe's incorrect guess.

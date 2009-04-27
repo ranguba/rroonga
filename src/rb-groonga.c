@@ -50,9 +50,19 @@ Init_groonga (void)
 				   INT2NUM(GRN_MINOR_VERSION),
 				   INT2NUM(GRN_MICRO_VERSION));
     rb_obj_freeze(cGrnBuildVersion);
+    /*
+     * ビルドしたgroongaのバージョン。<tt>[メジャーバージョン,
+     * マイナーバージョン, マイクロバージョン]</tt>の配列。
+     */
     rb_define_const(mGrn, "BUILD_VERSION", cGrnBuildVersion);
 
     /* FIXME: API to get runtime groonga version doesn't exist */
+
+    /*
+     * 利用しているgroongaのバージョン（にしたい。現在は
+     * BUILD_VERSIONと同じ）。<tt>[メジャーバージョ
+     * ン, マイナーバージョン, マイクロバージョン]</tt>の配列。
+     */
     rb_define_const(mGrn, "VERSION", cGrnBuildVersion);
 
     cGrnBindingsVersion = rb_ary_new3(3,
@@ -60,6 +70,10 @@ Init_groonga (void)
 				      INT2NUM(RB_GRN_MINOR_VERSION),
 				      INT2NUM(RB_GRN_MICRO_VERSION));
     rb_obj_freeze(cGrnBindingsVersion);
+    /*
+     * Ruby/groongaのバージョン。<tt>[メジャーバージョン, マ
+     * イナーバージョン, マイクロバージョン]</tt>の配列。
+     */
     rb_define_const(mGrn, "BINDINGS_VERSION", cGrnBindingsVersion);
 
     rb_grn_init_utils(mGrn);
