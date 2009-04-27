@@ -195,10 +195,14 @@ dd
   margin-bottom: 0.5em;
 }
 
+pre
+{
+  overflow: auto;
+}
+
 pre.command
 {
   color: white;
   background-color: black;
-  padding: 5px;
-  padding-left: 10px;
+  padding: 5px 10px;
 }
