@@ -175,7 +175,7 @@ class TableTest < Test::Unit::TestCase
     bookmarks = Groonga::Hash.create(:name => "bookmarks",
                                      :value_size => 512)
     url = "http://groonga.org/"
-    bookmarks["groonga"] = url
+    bookmarks["groonga"] = "#{url}\0"
 
     values = bookmarks.records.collect do |record|
       record.value.split(/\0/, 2)[0]
