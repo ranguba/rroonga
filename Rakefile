@@ -98,7 +98,7 @@ project = Hoe.new('groonga', version) do |project|
   project.test_globs = []
   project.spec_extras = {
     :extensions => ['extconf.rb'],
-    :require_paths => Dir.glob('src/*.c') + Dir.glob('src/lib/**/*.rb'),
+    :require_paths => ["src/lib", "src"],
     :has_rdoc => false,
   }
   news = File.join(base_dir, "NEWS")
@@ -127,6 +127,9 @@ ObjectSpace.each_object(Rake::RDocTask) do |rdoc_task|
   t_option_index = rdoc_task.options.index("-t")
   rdoc_task.options[t_option_index, 2] = nil
   rdoc_task.title = "Ruby/groonga - #{version}"
+
+  rdoc_task.rdoc_files = ["src/rb-groonga.c"] + Dir.glob("src/rb-grn-*.c")
+  rdoc_task.rdoc_files += Dir.glob("src/lib/*.rb")
 end
 
 # fix Hoe's incorrect guess.
