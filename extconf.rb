@@ -103,9 +103,9 @@ end
 
 unless PKGConfig.have_package(package_name, major, minor, micro)
   install_groonga_locally(major, minor, micro)
+  PKGConfig.have_package(package_name, major, minor, micro) or exit 1
 end
 
-PKGConfig.have_package(package_name, major, minor, micro) or exit 1
 real_version = PKGConfig.modversion(package_name)
 real_major, real_minor, real_micro = real_version.split(/\./)
 $defs << "-DGRN_MAJOR_VERSION=#{real_major}"
