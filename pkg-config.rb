@@ -9,6 +9,19 @@ require 'English'
 require 'pathname'
 
 class PackageConfig
+  @@default_prepend_paths = []
+  @@default_append_paths = []
+
+  class << self
+    def prepend_default_path(path)
+      @@default_prepend_paths.unshift(path)
+    end
+
+    def append_default_path(path)
+      @@default_append_paths << path
+    end
+  end
+
   attr_accessor :msvc_syntax
   def initialize(name, path=nil, msvc_syntax=false)
     @name = name
@@ -71,8 +84,15 @@ class PackageConfig
   end
 
   private
+  def paths
+    paths = @@default_prepend_paths
+    paths += @path.split(separator)
+    paths += @@default_append_paths
+    paths
+  end
+
   def pc
-    @path.split(separator).each do |path|
+    paths.each do |path|
       pc_name = File.join(path, "#{@name}.pc")
       return pc_name if File.exist?(pc_name)
     end

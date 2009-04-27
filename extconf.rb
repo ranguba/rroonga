@@ -37,6 +37,74 @@ ext_dir_name = "src"
 src_dir = File.join(File.expand_path(File.dirname(__FILE__)), ext_dir_name)
 major, minor, micro = 0, 0, 3
 
+def install_groonga_locally(major, minor, micro)
+  require 'open-uri'
+  require 'shellwords'
+
+  tar_gz = "groonga-#{major}.#{minor}.#{micro}.tar.gz"
+  base_dir = File.join(File.dirname(__FILE__), "vendor")
+  install_dir = File.expand_path(File.join(base_dir, "local"))
+  FileUtils.mkdir_p(base_dir)
+
+  Dir.chdir(base_dir) do
+    url = "http://groonga.org/files/groonga/#{tar_gz}"
+    message("downloading %s...", url)
+    open(url, "rb") do |input|
+      File.open(tar_gz, "wb") do |output|
+        while (buffer = input.read(1024))
+          output.print(buffer)
+        end
+      end
+    end
+    message(" done\n")
+
+    message("extracting...")
+    if xsystem("tar xfz #{tar_gz}")
+      message(" done\n")
+    else
+      message(" failed\n")
+      exit 1
+    end
+
+    groonga_source_dir = "groonga-#{major}.#{minor}.#{micro}"
+    Dir.chdir(groonga_source_dir) do
+      message("configuring...")
+      if xsystem("./configure --prefix=#{Shellwords.escape(install_dir)}")
+        message(" done\n")
+      else
+        message(" failed\n")
+        exit 1
+      end
+
+      message("building (maybe long time)...")
+      if xsystem("make")
+        message(" done\n")
+      else
+        message(" failed\n")
+        exit 1
+      end
+
+      message("installing...")
+      if xsystem("make install")
+        message(" done\n")
+      else
+        message(" failed\n")
+        exit 1
+      end
+    end
+  end
+
+  pkg_config_dir = File.join(install_dir, "lib", "pkgconfig")
+  PackageConfig.prepend_default_path(pkg_config_dir)
+
+  lib_dir = File.join(install_dir, "lib")
+  $LDFLAGS += " -Wl,-rpath,#{Shellwords.escape(lib_dir)}"
+end
+
+unless PKGConfig.have_package(package_name, major, minor, micro)
+  install_groonga_locally(major, minor, micro)
+end
+
 PKGConfig.have_package(package_name, major, minor, micro) or exit 1
 real_version = PKGConfig.modversion(package_name)
 real_major, real_minor, real_micro = real_version.split(/\./)
