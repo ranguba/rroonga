@@ -101,7 +101,7 @@ void
 rb_grn_init_encoding (VALUE mGrn)
 {
     /*
-     * Document-class: Groonga::Encoding
+     * Document-module: Groonga::Encoding
      *
      * groongaがサポートしてるエンコーディングが定義されてい
      * るモジュールです。

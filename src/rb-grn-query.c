@@ -105,8 +105,7 @@ rb_grn_select_operator_from_ruby_object (VALUE rb_operator)
     } else {
         rb_raise(rb_eArgError,
                  "operator should be one of "
-                 "[:or, :||, :and, :+, :&&, :but, :not, :-, :adjust, :>]"
-                 ": <%s>",
+                 "[:or, :||, :and, :+, :&&, :but, :not, :-, :adjust, :>]: <%s>",
                  rb_grn_inspect(rb_operator));
     }
 

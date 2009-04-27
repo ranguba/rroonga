@@ -38,6 +38,11 @@ rb_grn_accessor_to_ruby_object (grn_ctx *context, grn_obj *table)
     return GRNOBJECT2RVAL(rb_cGrnAccessor, context, table);
 }
 
+/*
+ * Document-class: Groonga::Accessor < Groonga::Object
+ *
+ * アクセサ！
+ */
 void
 rb_grn_init_accessor (VALUE mGrn)
 {

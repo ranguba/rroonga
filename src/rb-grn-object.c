@@ -16,6 +16,14 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+/*
+ * Document-class: Groonga::Object
+ *
+ * Ruby/groongaが提供するクラスのベースとなるクラス。
+ * Groonga::ContextとGroonga::Logger以外はGroonga::Objectを継
+ * 承している。
+ */
+
 #include "rb-grn.h"
 
 #define SELF(object) (rb_rb_grn_object_from_ruby_object(object))
@@ -176,6 +184,15 @@ rb_grn_object_initialize (VALUE self, grn_ctx *context, grn_obj *object)
     rb_grn_object->object = object;
 }
 
+/*
+ * Document-method: close
+ *
+ * call-seq:
+ *   object.close
+ *
+ * _object_が使用しているリソースを開放する。これ以降_object_を
+ * 使うことはできない。
+ */
 VALUE
 rb_grn_object_close (VALUE self)
 {
@@ -190,6 +207,15 @@ rb_grn_object_close (VALUE self)
     return Qnil;
 }
 
+/*
+ * Document-method: closed?
+ *
+ * call-seq:
+ *   object.closed? -> true/false
+ *
+ * _object_が開放済みの場合は+true+を返し、そうでない場合は
+ * +false+を返す。
+ */
 static VALUE
 rb_grn_object_closed_p (VALUE self)
 {
@@ -386,6 +412,14 @@ rb_grn_object_inspect_footer (VALUE self, VALUE inspected)
     return inspected;
 }
 
+/*
+ * Document-method: inspect
+ *
+ * call-seq:
+ *   object.inspect -> 詳細情報
+ *
+ * _object_の詳細を示した文字列を返す。デバッグ用。
+ */
 static VALUE
 rb_grn_object_inspect (VALUE self)
 {
@@ -399,6 +433,15 @@ rb_grn_object_inspect (VALUE self)
     return inspected;
 }
 
+/*
+ * Document-method: id
+ *
+ * call-seq:
+ *   object.id -> ID/nil
+ *
+ * _object_のIDを返す。_object_が#closed?なときやIDがない場合
+ * は+nil+を返す。
+ */
 static VALUE
 rb_grn_object_get_id (VALUE self)
 {
@@ -416,6 +459,16 @@ rb_grn_object_get_id (VALUE self)
         return UINT2NUM(id);
 }
 
+/*
+ * Document-method: domain
+ *
+ * call-seq:
+ *   object.domain -> Groonga::Object/nil
+ *
+ * _object_の属しているGroonga::Objectを返す。例えば、
+ * Groonga::ColumnはGroonga::Tableを返す。属している
+ * Groonga::Objectがない場合は+nil+を返す。
+ */
 static VALUE
 rb_grn_object_get_domain (VALUE self)
 {
@@ -444,6 +497,14 @@ rb_grn_object_get_domain (VALUE self)
     }
 }
 
+/*
+ * Document-method: name
+ *
+ * call-seq:
+ *   object.name -> 名前/nil
+ *
+ * _object_の名前を返す。無名オブジェクトの場合は+nil+を返す。
+ */
 static VALUE
 rb_grn_object_get_name (VALUE self)
 {
@@ -467,6 +528,18 @@ rb_grn_object_get_name (VALUE self)
     return rb_name;
 }
 
+/*
+ * Document-method: range
+ *
+ * call-seq:
+ *   object.range -> Groonga::Object/nil
+ *
+ * _object_の値がとりうる範囲を示したGroonga::Objectを返す。
+ * 例えば、Groonga::Columnの場合は
+ * Groonga::Table#define_columnで指定されたGroonga::Typeや
+ * Groonga::Tableを返す。
+ * 範囲が指定されていないオブジェクトの場合は+nil+を返す。
+ */
 static VALUE
 rb_grn_object_get_range (VALUE self)
 {
@@ -495,6 +568,15 @@ rb_grn_object_get_range (VALUE self)
     }
 }
 
+/*
+ * Document-method: ==
+ *
+ * call-seq:
+ *   object == other -> true/false
+ *
+ * _object_と_other_が同じgroongaのオブジェクトなら+true+を返
+ * し、そうでなければ+false+を返す。
+ */
 static VALUE
 rb_grn_object_equal (VALUE self, VALUE other)
 {
@@ -513,6 +595,14 @@ rb_grn_object_equal (VALUE self, VALUE other)
     return self_rb_grn_object->object == other_rb_grn_object->object;
 }
 
+/*
+ * Document-method: []
+ *
+ * call-seq:
+ *   object[id] -> 値
+ *
+ * _object_の_id_に対応する値を返す。
+ */
 VALUE
 rb_grn_object_array_reference (VALUE self, VALUE rb_id)
 {
@@ -620,18 +710,65 @@ rb_grn_object_set (VALUE self, VALUE rb_id, VALUE rb_value, int flags)
     return Qnil;
 }
 
+/*
+ * Document-method: []=
+ *
+ * call-seq:
+ *   object[id] = value
+ *
+ * _object_の_id_に対応する値を設定する。既存の値は上書きさ
+ * れる。
+ */
 static VALUE
 rb_grn_object_array_set (VALUE self, VALUE rb_id, VALUE rb_value)
 {
     return rb_grn_object_set(self, rb_id, rb_value, GRN_OBJ_SET);
 }
 
+/*
+ * Document-method: append
+ *
+ * call-seq:
+ *   object.append(id, value)
+ *
+ * _object_の_id_に対応する値に_value_を追加する。
+ */
 static VALUE
 rb_grn_object_append_value (VALUE self, VALUE rb_id, VALUE rb_value)
 {
     return rb_grn_object_set(self, rb_id, rb_value, GRN_OBJ_APPEND);
 }
 
+/*
+ * Document-method: search
+ *
+ * call-seq:
+ *   object.search(query, options={}) -> Groonga::Table
+ *
+ * _object_から_query_に対応するオブジェクトを検索し、見つかっ
+ * たオブジェクトのIDがキーになっているGroonga::Tableを返す。
+ *
+ * 利用可能なオプションは以下の通り。
+ *
+ * _result_: 結果を格納するGroonga::Hash。指定しない場合は新
+ *           しくGroonga::Hashを生成し、それに結果を格納して
+ *           返す。
+ * _operator_: 以下のどれかの値を指定する。
+ *             +nil+, +"or"+, +"||"+, +"and"+, <tt>"+"</tt>,
+ *             +"&&"+, +"but"+, +"not"+, +"-"+, +"adjust"+, +">"+。
+ *             それぞれ以下のようになる。
+ * _exact_: +true+を指定すると完全一致で検索する
+ * _longest_common_prefix_: +true+を指定すると_query_と同じ
+ *                          接頭辞をもつエントリのうち、もっ
+ *                          とも長いエントリを検索する
+ * _suffix_: +true+を指定すると_query_が後方一致するエン
+ *           トリを検索する
+ * _prefix_: +true+を指定すると_query_が前方一致するレコード
+ *           を検索する
+ * _near_: +true+を指定すると_query_に指定した複数の語が近傍
+ *         に含まれるレコードを検索する
+ * ...: ...
+ */
 static VALUE
 rb_grn_object_search (int argc, VALUE *argv, VALUE self)
 {
@@ -646,7 +783,7 @@ rb_grn_object_search (int argc, VALUE *argv, VALUE self)
     rb_grn_boolean query_is_created = RB_GRN_FALSE;
     grn_rc rc;
     VALUE rb_query, options, rb_result, rb_operator;
-    VALUE rb_exact, rb_left_common_prefix, rb_suffix, rb_prefix, rb_partial;
+    VALUE rb_exact, rb_longest_common_prefix, rb_suffix, rb_prefix, rb_partial;
     VALUE rb_near, rb_near2, rb_similar, rb_term_extract;
     VALUE rb_similarity_threshold, rb_max_interval, rb_weight_vector;
     VALUE rb_procedure, rb_max_size;
@@ -673,7 +810,7 @@ rb_grn_object_search (int argc, VALUE *argv, VALUE self)
 			"result", &rb_result,
 			"operator", &rb_operator,
 			"exact", &rb_exact,
-			"left_common_prefix", &rb_left_common_prefix,
+			"longest_common_prefix", &rb_longest_common_prefix,
 			"suffix", &rb_suffix,
 			"prefix", &rb_prefix,
 			"partial", &rb_partial,
@@ -716,9 +853,9 @@ rb_grn_object_search (int argc, VALUE *argv, VALUE self)
 	if (RVAL2CBOOL(rb_exact))
 	    search_options.flags |= GRN_SEARCH_EXACT;
     }
-    if (!NIL_P(rb_left_common_prefix)) {
+    if (!NIL_P(rb_longest_common_prefix)) {
 	search_options_is_set = RB_GRN_TRUE;
-	if (RVAL2CBOOL(rb_left_common_prefix))
+	if (RVAL2CBOOL(rb_longest_common_prefix))
 	    search_options.flags |= GRN_SEARCH_LCP;
     }
     if (!NIL_P(rb_suffix)) {
