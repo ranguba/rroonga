@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja">
+  <head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="ranguba.css" type="text/css" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="icon" href="/favicon.png" />
+    <title>Rubyでgroonga使って全文検索 - ラングバ</title>
+  </head>
+  <body>
+    <div class="header">
+      <h1>
+        <a href="./">
+	  <span class="title">Rubyでgroonga使って全文検索</span>
+	  <span class="title-separator">-</span>
+	  <span class="title-project">ラングバ</span>
+        </a>
+      </h1>
+      <ul class="menu">
+	<li id="menu-reference"><a href="groonga/">リファレンスマニュアル</a></li>
+	<li id="menu-install"><a href="./#install-ruby-groonga">インストール</a></li>
+	<li id="menu-developer"><a href="developer.html">開発者向け情報</a></li>
+      </ul>
+    </div>
+
+    <div class="content">
+      <div class="main">
+	<h2>最新リリース</h2>
+	<p>
+	  2009-04-30にリリースされた0.0.1が最新です。
+        </p>
+
+	<h2 id="install-ruby-groonga">インストール</h2>
+	<p>
+	  RubyGemsでインストールできます。groongaがインストールされていない場合は自動でダウンロード・ビルドし利用します。
+        </p>
+        <pre class="command">% sudo gem install groonga</pre>
+
+	<h2 id="about-ruby-groonga">Ruby/groongaとは</h2>
+	<p>
+	  Ruby/groongaは<a href="http://groonga.org/">カラムストア機能も備える全文検索エンジンgroonga</a>をRubyから利用するための拡張ライブラリです。
+          高速・高機能なgroongaの機能をRubyらしい読み書きしやすい構文で利用できることが利点です。
+	</p>
+	<p>
+	  Ruby/groongaはgroongaのいわゆるDB-APIの層の機能をRubyレベルに提供します。DB-APIの層の上位であるQL-APIの層に相当する機能はActiveGroongaで提供します。
+	</p>
+
+	<h2 id="about-active-groonga">ActiveGroongaとは</h2>
+	<p>
+	  ActiveGroongaはRuby/groongaの機能を使ってより利用しやすい全文検索機能・データストア機能を提供するライブラリです。
+          ActiveRecordのようなAPIでgroongaで管理しているデータを通常のオブジェクトのように扱えます。
+	</p>
+	<p>
+	  ActiveGroongaはRuby on Railsに対応しています。データストアにRDBではなくgroongaを利用し、全文検索機能を強化したRailsアプリケーションを開発できます。
+          ActiveGroongaは以下のようにActiveRecordのような機能を持っているため、こまでのRailsアプリケーションの知識を利用することができます。
+          <ul>
+            <li>マイグレーション</li>
+            <li>フィクスチャ</li>
+            <li>バリデーション</li>
+            <li>リレーション</li>
+          </ul>
+	</p>
+
+	<h2 id="install-active-groonga">ActiveGroongaのインストール</h2>
+	<p>
+	  ActiveGroonagもRubyGemsでインストールできます。
+        </p>
+        <pre class="command">% sudo gem install activegroonga</pre>
+      </div>
+
+      <div class="sidebar">
+	<ul>
+	  <li><a href="http://rubyforge.org/projects/groonga/">プロジェクトページ</a></li>
+	  <li>
+	    <a href="http://lists.sourceforge.jp/mailman/listinfo/groonga-dev">メーリングリスト</a>
+            （groongaのメーリングリストにお願いします）
+	  </li>
+	</ul>
+      </div>
+    </div>
+
+    <div class="sponsors">
+      <p id="sponsor-tango">
+	<a href="http://tango.freedesktop.org/">
+          <img width="120" height="53" border="0" alt="Tango Desktop Projectのアイコンを利用しています。" src="tango-logo.png" />
+        </a>
+      </p>
+
+<!-- Piwik -->
+<!--
+<a href="http://piwik.org" title="Web analytics" onclick="window.open(this.href);return(false);">
+<script type="text/javascript">
+var pkBaseURL = (("https:" == document.location.protocol) ? "https://www.clear-code.com/piwik/" : "http://www.clear-code.com/piwik/");
+document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/javascript'%3E%3C/script%3E"));
+</script><script type="text/javascript">
+piwik_action_name = '';
+piwik_idsite = 2;
+piwik_url = pkBaseURL + "piwik.php";
+piwik_log(piwik_action_name, piwik_idsite, piwik_url);
+</script>
+<object><noscript><p>Web analytics <img src="http://www.clear-code.com/piwik/piwik.php?idsite=2" style="border:0" alt=""/></p></noscript></object></a>
+-->
+<!-- End Piwik Tag -->
+    </div>
+  </body>
+</html>

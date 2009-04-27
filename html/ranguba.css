@@ -1,0 +1,240 @@
+html,
+body
+{
+  margin: 0px;
+  padding: 0px;
+  color: black;
+  background-color: white;
+}
+
+a:link
+{
+  color: #f57900;
+}
+
+a:visited
+{
+  color: #ce5c00;
+}
+
+div.header
+{
+  position: relative;
+}
+
+div.header h1
+{
+  background: url(logo.png) no-repeat;
+  font-size: smaller;
+  margin-top: 20px;
+  margin-left: 50px;
+  height: 71px;
+}
+
+div.header h1 a,
+div.header h1 a:link,
+div.header h1 a:visited
+{
+  color: black;
+  text-decoration: none;
+}
+
+div.header h1 span
+{
+  display: block;
+  padding-left: 300px;
+  margin-bottom: 2px;
+}
+
+div.header h1 span.title-separator
+{
+  display: none;
+}
+
+ul.other-languages
+{
+  position: absolute;
+  top: 0px;
+  right: 50px;
+  padding: 0px;
+  margin: 0px;
+}
+
+ul.other-languages li
+{
+  display: block;
+  float: left;
+  margin-left: 10px;
+}
+
+ul.other-languages li a
+{
+  display: block;
+  height: 11px;
+  width: 16px;
+  text-indent: -100000px;
+}
+
+ul.other-languages li#other-language-english
+{
+  background: url(us.png) no-repeat;
+}
+
+ul.other-languages li#other-language-japanese
+{
+  background: url(jp.png) no-repeat;
+}
+
+ul.menu
+{
+  background: url(bar.png) repeat-x;
+  height: 38px;
+  padding-top: 12px;
+  padding-left: 50px;
+  margin-left: 0px;
+  margin-bottom: 0px;
+  padding-bottom: 0px;
+}
+
+ul.menu li
+{
+  display: inline;
+  margin-right: 10px;
+}
+
+ul.menu li a
+{
+  color: #fed08e;
+  text-decoration: none;
+  font-weight: bold;
+  padding-left: 20px;
+}
+
+ul.menu li a:hover
+{
+  text-decoration: underline;
+}
+
+ul.menu li a:visited
+{
+  color: #ffb84f;
+}
+
+ul.menu li#menu-introduction
+{
+  background: url(introduction.png) no-repeat;
+}
+
+ul.menu li#menu-install
+{
+  background: url(install.png) no-repeat;
+}
+
+ul.menu li#menu-download
+{
+  background: url(download.png) no-repeat;
+}
+
+ul.menu li#menu-blog
+{
+  background: url(blog.png) no-repeat;
+}
+
+div.content
+{
+  position: relative;
+  margin-left: 50px;
+  margin-right: 50px;
+}
+
+div.main
+{
+  margin-right: 170px;
+}
+
+div.main p
+{
+  line-height: 150%;
+}
+
+div.main h2,
+div.day h3
+{
+  margin-left: -45px;
+  text-indent: 45px;
+  height: 36px;
+  background: url(heading-mark.png) no-repeat ;
+}
+
+div.sidebar
+{
+  clear: both;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  width: 150px;
+  text-align: right;
+  background-color: white;
+}
+
+div.sidebar ul
+{
+  margin: 0px;
+  padding: 0px;
+}
+
+div.sidebar ul li
+{
+  list-style-type: none;
+  margin-bottom: 5px;
+}
+
+div.sponsors
+{
+  border-top: solid black 1px;
+  position: relative;
+}
+
+div.sponsors p
+{
+  margin: 0px;
+}
+
+div.sponsors p#sponsor-ipa
+{
+  margin-top: 15px;
+  margin-left: 50px;
+  margin-right: 220px;
+}
+
+div.sponsors p#sponsor-sf-net
+{
+  position: absolute;
+  top: 15px;
+  right: 50px;
+}
+
+div.sponsors p#sponsor-tango
+{
+  position: absolute;
+  top: 5px;
+  right: 50px;
+}
+
+dt
+{
+  margin-bottom: 0.25em;
+}
+
+dd
+{
+  margin-bottom: 0.5em;
+}
+
+pre.command
+{
+  color: white;
+  background-color: black;
+  padding: 5px;
+  padding-left: 10px;
+}
