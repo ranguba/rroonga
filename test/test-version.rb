@@ -14,7 +14,18 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 class VersionTest < Test::Unit::TestCase
+  def test_build_version
+    assert_match(/\A\d+\.\d+\.\d+\z/, Groonga.build_version)
+    assert_match(Groonga.build_version, Groonga::BUILD_VERSION.join("."))
+  end
+
   def test_version
-    assert_match(/\A\d+\.\d+\.\d+\z/, Groonga::VERSION)
+    assert_match(/\A\d+\.\d+\.\d+\z/, Groonga.version)
+    assert_match(Groonga.version, Groonga::VERSION.join("."))
+  end
+
+  def test_bindings_version
+    assert_match(/\A\d+\.\d+\.\d+\z/, Groonga.bindings_version)
+    assert_match(Groonga.bindings_version, Groonga::BINDINGS_VERSION.join("."))
   end
 end
