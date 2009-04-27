@@ -17,3 +17,19 @@
 
 require 'groonga/record'
 require 'groonga.so'
+
+module Groonga
+  class << self
+    def build_version
+      BUILD_VERSION.join(".")
+    end
+
+    def version
+      VERSION.join(".")
+    end
+
+    def bindings_version
+      BINDINGS_VERSION.join(".")
+    end
+  end
+end

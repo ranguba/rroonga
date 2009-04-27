@@ -41,10 +41,26 @@ void
 Init_groonga (void)
 {
     VALUE mGrn;
+    VALUE cGrnBuildVersion, cGrnBindingsVersion;
 
     mGrn = rb_define_module("Groonga");
 
-    rb_define_const(mGrn, "VERSION", rb_str_new2(GRN_VERSION));
+    cGrnBuildVersion = rb_ary_new3(3,
+				   INT2NUM(GRN_MAJOR_VERSION),
+				   INT2NUM(GRN_MINOR_VERSION),
+				   INT2NUM(GRN_MICRO_VERSION));
+    rb_obj_freeze(cGrnBuildVersion);
+    rb_define_const(mGrn, "BUILD_VERSION", cGrnBuildVersion);
+
+    /* FIXME: API to get runtime groonga version doesn't exist */
+    rb_define_const(mGrn, "VERSION", cGrnBuildVersion);
+
+    cGrnBindingsVersion = rb_ary_new3(3,
+				      INT2NUM(RB_GRN_MAJOR_VERSION),
+				      INT2NUM(RB_GRN_MINOR_VERSION),
+				      INT2NUM(RB_GRN_MICRO_VERSION));
+    rb_obj_freeze(cGrnBindingsVersion);
+    rb_define_const(mGrn, "BINDINGS_VERSION", cGrnBindingsVersion);
 
     rb_grn_init_utils(mGrn);
     rb_grn_init_exception(mGrn);

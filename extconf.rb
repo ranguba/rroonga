@@ -38,7 +38,11 @@ src_dir = File.join(File.expand_path(File.dirname(__FILE__)), ext_dir_name)
 major, minor, micro = 0, 0, 3
 
 PKGConfig.have_package(package_name, major, minor, micro) or exit 1
-$defs << "-DGRN_VERSION=\\\"#{PKGConfig.modversion(package_name)}\\\""
+real_version = PKGConfig.modversion(package_name)
+real_major, real_minor, real_micro = real_version.split(/\./)
+$defs << "-DGRN_MAJOR_VERSION=#{real_major}"
+$defs << "-DGRN_MINOR_VERSION=#{real_minor}"
+$defs << "-DGRN_MICRO_VERSION=#{real_micro}"
 
 have_header("ruby/st.h") unless have_macro("HAVE_RUBY_ST_H", "ruby.h")
 have_func("rb_errinfo", "ruby.h")
