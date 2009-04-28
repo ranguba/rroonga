@@ -31,7 +31,7 @@ VALUE rb_cGrnArray;
 
 /*
  * call-seq:
- *   Groonga::Array.create(options={})            -> Groonga::Array
+ *   Groonga::Array.create(options={})                -> Groonga::Array
  *   Groonga::Array.create(options={}) {|table| ... }
  *
  * キーのないテーブルを生成する。ブロックを指定すると、そのブ
@@ -134,9 +134,10 @@ rb_grn_array_s_create (int argc, VALUE *argv, VALUE klass)
 
 /*
  * call-seq:
- *  array.add -> Groonga::Record
+ *  array.add -> Groonga::Recordまたはnil
  *
- * 新しくレコードを生成します。
+ * レコード追加し、追加したレコードを返します。レコードの追
+ * 加に失敗した場合は+nil+を返します。
  */
 static VALUE
 rb_grn_array_add (VALUE self)
