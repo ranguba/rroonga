@@ -629,7 +629,7 @@ rb_grn_init_table (VALUE mGrn)
     rb_define_method(rb_cGrnTable, "delete", rb_grn_table_delete, 1);
 
     rb_grn_init_table_key_support(mGrn);
-    rb_grn_init_table_array(mGrn);
-    rb_grn_init_table_hash(mGrn);
-    rb_grn_init_table_patricia_trie(mGrn);
+    rb_grn_init_array(mGrn);
+    rb_grn_init_hash(mGrn);
+    rb_grn_init_patricia_trie(mGrn);
 }

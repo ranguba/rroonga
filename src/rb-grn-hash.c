@@ -20,21 +20,21 @@
 
 #define SELF(object) (RVAL2GRNTABLE(object))
 
-VALUE rb_cGrnPatriciaTrie;
+VALUE rb_cGrnHash;
 
 static VALUE
-rb_grn_patricia_trie_s_create (int argc, VALUE *argv, VALUE self)
+rb_grn_hash_s_create (int argc, VALUE *argv, VALUE self)
 {
-    return rb_grn_table_s_create(argc, argv, self, GRN_TABLE_PAT_KEY);
+    return rb_grn_table_s_create(argc, argv, self, GRN_TABLE_HASH_KEY);
 }
 
 void
-rb_grn_init_table_patricia_trie (VALUE mGrn)
+rb_grn_init_hash (VALUE mGrn)
 {
-    rb_cGrnPatriciaTrie =
-	rb_define_class_under(mGrn, "PatriciaTrie", rb_cGrnTable);
+    rb_cGrnHash = rb_define_class_under(mGrn, "Hash", rb_cGrnTable);
 
-    rb_include_module(rb_cGrnPatriciaTrie, rb_mGrnTableKeySupport);
-    rb_define_singleton_method(rb_cGrnPatriciaTrie, "create",
-			       rb_grn_patricia_trie_s_create, -1);
+    rb_include_module(rb_cGrnHash, rb_mGrnTableKeySupport);
+
+    rb_define_singleton_method(rb_cGrnHash, "create",
+			       rb_grn_hash_s_create, -1);
 }

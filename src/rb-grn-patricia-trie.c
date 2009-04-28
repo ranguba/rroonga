@@ -20,38 +20,21 @@
 
 #define SELF(object) (RVAL2GRNTABLE(object))
 
-VALUE rb_cGrnArray;
+VALUE rb_cGrnPatriciaTrie;
 
 static VALUE
-rb_grn_array_s_create (int argc, VALUE *argv, VALUE self)
+rb_grn_patricia_trie_s_create (int argc, VALUE *argv, VALUE self)
 {
-    return rb_grn_table_s_create(argc, argv, self, GRN_TABLE_NO_KEY);
-}
-
-static VALUE
-rb_grn_array_add (VALUE self)
-{
-    grn_ctx *context;
-    grn_id id;
-
-    context = rb_grn_object_ensure_context(self, Qnil);
-
-    id = grn_table_add(context, SELF(self));
-    rb_grn_context_check(context, self);
-
-    if (GRN_ID_NIL == id)
-	return Qnil;
-    else
-	return rb_grn_record_new(self, id);
+    return rb_grn_table_s_create(argc, argv, self, GRN_TABLE_PAT_KEY);
 }
 
 void
-rb_grn_init_table_array (VALUE mGrn)
+rb_grn_init_patricia_trie (VALUE mGrn)
 {
-    rb_cGrnArray = rb_define_class_under(mGrn, "Array", rb_cGrnTable);
+    rb_cGrnPatriciaTrie =
+	rb_define_class_under(mGrn, "PatriciaTrie", rb_cGrnTable);
 
-    rb_define_singleton_method(rb_cGrnArray, "create",
-			       rb_grn_array_s_create, -1);
-
-    rb_define_method(rb_cGrnArray, "add", rb_grn_array_add, 0);
+    rb_include_module(rb_cGrnPatriciaTrie, rb_mGrnTableKeySupport);
+    rb_define_singleton_method(rb_cGrnPatriciaTrie, "create",
+			       rb_grn_patricia_trie_s_create, -1);
 }
