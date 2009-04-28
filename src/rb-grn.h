@@ -84,6 +84,7 @@ RB_GRN_VAR VALUE rb_cGrnHash;
 RB_GRN_VAR VALUE rb_cGrnPatriciaTrie;
 RB_GRN_VAR VALUE rb_cGrnArray;
 RB_GRN_VAR VALUE rb_cGrnTableCursor;
+RB_GRN_VAR VALUE rb_mGrnTableCursorKeySupport;
 RB_GRN_VAR VALUE rb_cGrnHashCursor;
 RB_GRN_VAR VALUE rb_cGrnPatriciaTrieCursor;
 RB_GRN_VAR VALUE rb_cGrnArrayCursor;
@@ -111,6 +112,10 @@ void           rb_grn_init_array                    (VALUE mGrn);
 void           rb_grn_init_hash                     (VALUE mGrn);
 void           rb_grn_init_patricia_trie            (VALUE mGrn);
 void           rb_grn_init_table_cursor             (VALUE mGrn);
+void           rb_grn_init_table_cursor_key_support (VALUE mGrn);
+void           rb_grn_init_array_cursor             (VALUE mGrn);
+void           rb_grn_init_hash_cursor              (VALUE mGrn);
+void           rb_grn_init_patricia_trie_cursor     (VALUE mGrn);
 void           rb_grn_init_type                     (VALUE mGrn);
 void           rb_grn_init_procedure                (VALUE mGrn);
 void           rb_grn_init_column                   (VALUE mGrn);
@@ -164,6 +169,8 @@ VALUE          rb_grn_table_s_create                (int argc,
 						     VALUE *argv,
 						     VALUE klass,
 						     grn_obj_flags key_store);
+grn_ctx       *rb_grn_table_cursor_ensure_context   (VALUE cursor,
+						     VALUE rb_context);
 VALUE          rb_grn_table_cursor_close            (VALUE object);
 
 VALUE          rb_grn_record_new                    (VALUE table,
@@ -231,6 +238,9 @@ VALUE          rb_grn_record_new                    (VALUE table,
 
 #define RVAL2GRNID(object, context, table, related_object) \
                                       (rb_grn_id_from_ruby_object(object, context, table, related_object))
+
+#define GRNKEY2RVAL(context, key, key_size, table, related_object) \
+	                              (rb_grn_key_to_ruby_object(context, key, key_size, table, related_object))
 
 
 grn_encoding   rb_grn_encoding_from_ruby_object     (VALUE object,
@@ -306,6 +316,11 @@ grn_id         rb_grn_id_from_ruby_object           (VALUE object,
 						     grn_obj *table,
 						     VALUE related_object);
 
+VALUE          rb_grn_key_to_ruby_object            (grn_ctx *context,
+						     const void *key,
+						     int key_size,
+						     grn_obj *table,
+						     VALUE related_object);
 
 RB_GRN_END_DECLS
 

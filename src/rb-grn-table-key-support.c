@@ -110,20 +110,25 @@ rb_grn_table_key_support_get_key (VALUE self, VALUE rb_id)
 {
     grn_ctx *context;
     grn_id id;
-    VALUE key;
+    grn_obj *table, *key;
     int key_size = 0;
+    VALUE rb_key;
 
     context = rb_grn_object_ensure_context(self, Qnil);
+    table = SELF(self);
 
     id = NUM2UINT(rb_id);
-    key_size = grn_table_get_key(context, SELF(self), id, NULL, 0);
+    key_size = grn_table_get_key(context, table, id, NULL, 0);
     if (key_size == 0)
 	return Qnil;
 
-    key = rb_str_buf_new(key_size);
-    RSTRING_LEN(key) = key_size;
-    grn_table_get_key(context, SELF(self), id, RSTRING_PTR(key), key_size);
-    return key;
+    key = grn_obj_open(context, GRN_BULK, 0, GRN_ID_NIL);
+    grn_bulk_space(context, key, key_size);
+    grn_table_get_key(context, SELF(self), id, GRN_BULK_HEAD(key), key_size);
+    rb_key = GRNKEY2RVAL(context, GRN_BULK_HEAD(key), key_size, table, self);
+    grn_obj_close(context, key);
+
+    return rb_key;
 }
 
 static VALUE

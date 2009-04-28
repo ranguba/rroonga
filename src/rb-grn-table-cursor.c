@@ -28,9 +28,6 @@ struct _RbGrnTableCursor
 };
 
 VALUE rb_cGrnTableCursor;
-VALUE rb_cGrnHashCursor;
-VALUE rb_cGrnPatriciaTrieCursor;
-VALUE rb_cGrnArrayCursor;
 
 static RbGrnTableCursor *
 rb_rb_grn_table_cursor_from_ruby_object (VALUE object)
@@ -114,6 +111,20 @@ rb_grn_table_cursor_alloc (VALUE klass)
     return Data_Wrap_Struct(klass, NULL, rb_rb_grn_table_cursor_free, NULL);
 }
 
+grn_ctx *
+rb_grn_table_cursor_ensure_context (VALUE cursor, VALUE rb_context)
+{
+    if (NIL_P(rb_context)) {
+	RbGrnTableCursor *rb_grn_table_cursor;
+
+	rb_grn_table_cursor = SELF(cursor);
+	if (rb_grn_table_cursor && rb_grn_table_cursor->context)
+	    return rb_grn_table_cursor->context;
+    }
+
+    return rb_grn_context_ensure(rb_context);
+}
+
 VALUE
 rb_grn_table_cursor_close (VALUE self)
 {
@@ -142,26 +153,6 @@ rb_grn_table_cursor_closed_p (VALUE self)
         return Qfalse;
     else
         return Qtrue;
-}
-
-static VALUE
-rb_grn_table_cursor_get_key (VALUE self)
-{
-    VALUE rb_key = Qnil;
-    RbGrnTableCursor *rb_grn_table_cursor;
-
-    rb_grn_table_cursor = SELF(self);
-    if (rb_grn_table_cursor->context && rb_grn_table_cursor->cursor) {
-        int n;
-        void *key;
-
-        n = grn_table_cursor_get_key(rb_grn_table_cursor->context,
-                                     rb_grn_table_cursor->cursor,
-                                     &key);
-        rb_key = rb_str_new(key, n);
-    }
-
-    return rb_key;
 }
 
 static VALUE
@@ -269,20 +260,11 @@ rb_grn_init_table_cursor (VALUE mGrn)
 
     rb_include_module(rb_cGrnTableCursor, rb_mEnumerable);
 
-    rb_cGrnHashCursor =
-        rb_define_class_under(mGrn, "HashCursor", rb_cGrnTableCursor);
-    rb_cGrnPatriciaTrieCursor =
-        rb_define_class_under(mGrn, "PatriciaTrieCursor", rb_cGrnTableCursor);
-    rb_cGrnArrayCursor =
-        rb_define_class_under(mGrn, "ArrayCursor", rb_cGrnTableCursor);
-
     rb_define_method(rb_cGrnTableCursor, "close",
                      rb_grn_table_cursor_close, 0);
     rb_define_method(rb_cGrnTableCursor, "closed?",
                      rb_grn_table_cursor_closed_p, 0);
 
-    rb_define_method(rb_cGrnTableCursor, "key",
-                     rb_grn_table_cursor_get_key, 0);
     rb_define_method(rb_cGrnTableCursor, "value",
                      rb_grn_table_cursor_get_value, 0);
     rb_define_method(rb_cGrnTableCursor, "value=",
@@ -294,4 +276,9 @@ rb_grn_init_table_cursor (VALUE mGrn)
 
     rb_define_method(rb_cGrnTableCursor, "each",
                      rb_grn_table_cursor_each, 0);
+
+    rb_grn_init_table_cursor_key_support(mGrn);
+    rb_grn_init_array_cursor(mGrn);
+    rb_grn_init_hash_cursor(mGrn);
+    rb_grn_init_patricia_trie_cursor(mGrn);
 }

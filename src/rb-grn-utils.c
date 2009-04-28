@@ -503,6 +503,19 @@ rb_grn_id_from_ruby_object (VALUE object, grn_ctx *context, grn_obj *table,
     return NUM2UINT(rb_id);
 }
 
+VALUE
+rb_grn_key_to_ruby_object (grn_ctx *context, const void *key, int key_size,
+			   grn_obj *table, VALUE related_object)
+{
+    grn_obj bulk;
+
+    GRN_OBJ_INIT(&bulk, GRN_BULK, GRN_OBJ_DO_SHALLOW_COPY);
+    GRN_BULK_SET(context, &bulk, key, key_size);
+    bulk.header.domain = table->header.domain;
+
+    return GRNBULK2RVAL(context, &bulk, related_object);
+}
+
 void
 rb_grn_init_utils (VALUE mGrn)
 {
