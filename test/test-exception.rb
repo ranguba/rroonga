@@ -27,7 +27,7 @@ class ExceptionTest < Test::Unit::TestCase
     assert_const_defined(Groonga, :InterruptedFunctionCall)
     assert_const_defined(Groonga, :InputOutputError)
     assert_const_defined(Groonga, :NoSuchDeviceOrAddress)
-    assert_const_defined(Groonga, :ArgListTooLong)
+    assert_const_defined(Groonga, :ArgumentListTooLong)
     assert_const_defined(Groonga, :ExecFormatError)
     assert_const_defined(Groonga, :BadFileDescriptor)
     assert_const_defined(Groonga, :NoChildProcesses)
