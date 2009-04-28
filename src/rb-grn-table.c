@@ -19,13 +19,8 @@
 #include "rb-grn.h"
 
 #define SELF(object) (RVAL2GRNTABLE(object))
-#define RVAL2GRNKEY(object, context, domain, related_object) \
-    (rb_grn_key_from_ruby_object(object, context, domain, related_object))
 
 VALUE rb_cGrnTable;
-VALUE rb_cGrnHash;
-VALUE rb_cGrnPatriciaTrie;
-VALUE rb_cGrnArray;
 
 /* FIXME */
 grn_rc grn_table_get_info(grn_ctx *ctx, grn_obj *table, grn_obj_flags *flags,
@@ -47,7 +42,7 @@ rb_grn_table_to_ruby_object (grn_ctx *context, grn_obj *table)
     return GRNOBJECT2RVAL(rb_cGrnTable, context, table);
 }
 
-static VALUE
+VALUE
 rb_grn_table_s_create (int argc, VALUE *argv, VALUE klass,
 		       grn_obj_flags key_store)
 {
@@ -118,24 +113,6 @@ rb_grn_table_s_create (int argc, VALUE *argv, VALUE klass,
         return rb_ensure(rb_yield, rb_table, rb_grn_object_close, rb_table);
     else
         return rb_table;
-}
-
-static VALUE
-rb_grn_hash_s_create (int argc, VALUE *argv, VALUE self)
-{
-    return rb_grn_table_s_create(argc, argv, self, GRN_TABLE_HASH_KEY);
-}
-
-static VALUE
-rb_grn_patricia_trie_s_create (int argc, VALUE *argv, VALUE self)
-{
-    return rb_grn_table_s_create(argc, argv, self, GRN_TABLE_PAT_KEY);
-}
-
-static VALUE
-rb_grn_array_s_create (int argc, VALUE *argv, VALUE self)
-{
-    return rb_grn_table_s_create(argc, argv, self, GRN_TABLE_NO_KEY);
 }
 
 static grn_obj *
@@ -602,147 +579,8 @@ rb_grn_table_each (VALUE self)
     return Qnil;
 }
 
-static grn_obj *
-rb_grn_key_from_ruby_object (VALUE rb_key, grn_ctx *context, grn_id domain_id,
-			     VALUE related_object)
-{
-    grn_obj *key;
-    grn_obj *domain = NULL;
-    grn_id id;
-
-    if (domain_id != GRN_ID_NIL)
-	domain = grn_ctx_get(context, domain_id);
-
-    if (!domain)
-	return RVAL2GRNBULK(context, rb_key);
-
-    switch (domain->header.type) {
-      case GRN_TYPE:
-	return RVAL2GRNBULK_WITH_TYPE(context, rb_key, domain_id);
-	break;
-      case GRN_TABLE_HASH_KEY:
-      case GRN_TABLE_PAT_KEY:
-      case GRN_TABLE_NO_KEY:
-	id = RVAL2GRNID(rb_key, context, domain, related_object);
-	break;
-      default:
-	if (!RVAL2CBOOL(rb_obj_is_kind_of(rb_key, rb_cInteger)))
-	    rb_raise(rb_eGrnError,
-		     "should be unsigned integer: <%s>: <%s>",
-		     rb_grn_inspect(rb_key),
-		     rb_grn_inspect(related_object));
-
-	id = NUM2UINT(rb_key);
-	break;
-    }
-
-    key = grn_obj_open(context, GRN_BULK, 0, GRN_ID_NIL);
-    GRN_BULK_SET(context, key, &id, sizeof(id));
-    return key;
-}
-
-static grn_id
-rb_grn_table_add_with_key_raw (VALUE self, VALUE rb_key)
-{
-    VALUE exception;
-    grn_ctx *context;
-    grn_obj *table;
-    grn_id id;
-    grn_obj *key;
-    grn_search_flags flags;
-
-    context = rb_grn_object_ensure_context(self, Qnil);
-    table = SELF(self);
-
-    key = RVAL2GRNKEY(rb_key, context, table->header.domain, self);
-    flags = GRN_SEARCH_EXACT | GRN_TABLE_ADD;
-    id = grn_table_lookup(context, table,
-			  GRN_BULK_HEAD(key), GRN_BULK_VSIZE(key),
-			  &flags);
-    exception = rb_grn_context_to_exception(context, self);
-    grn_obj_close(context, key);
-    if (!NIL_P(exception))
-	rb_exc_raise(exception);
-
-    return id;
-}
-
 static VALUE
-rb_grn_table_add_with_key (VALUE self, VALUE rb_key)
-{
-    grn_id id;
-
-    id = rb_grn_table_add_with_key_raw(self, rb_key);
-    if (GRN_ID_NIL == id)
-	return Qnil;
-    else
-	return rb_grn_record_new(self, id);
-}
-
-static VALUE
-rb_grn_array_add (VALUE self)
-{
-    grn_ctx *context;
-    grn_id id;
-
-    context = rb_grn_object_ensure_context(self, Qnil);
-
-    id = grn_table_add(context, SELF(self));
-    rb_grn_context_check(context, self);
-
-    if (GRN_ID_NIL == id)
-	return Qnil;
-    else
-	return rb_grn_record_new(self, id);
-}
-
-static VALUE
-rb_grn_table_get_key (VALUE self, VALUE rb_id)
-{
-    grn_ctx *context;
-    grn_id id;
-    VALUE key;
-    int key_size = 0;
-
-    context = rb_grn_object_ensure_context(self, Qnil);
-
-    id = NUM2UINT(rb_id);
-    key_size = grn_table_get_key(context, SELF(self), id, NULL, 0);
-    if (key_size == 0)
-	return Qnil;
-
-    key = rb_str_buf_new(key_size);
-    RSTRING_LEN(key) = key_size;
-    grn_table_get_key(context, SELF(self), id, RSTRING_PTR(key), key_size);
-    return key;
-}
-
-static VALUE
-rb_grn_table_delete_by_key (VALUE self, VALUE rb_key)
-{
-    VALUE exception;
-    grn_ctx *context;
-    grn_obj *table;
-    grn_obj *key;
-    grn_rc rc;
-
-    context = rb_grn_object_ensure_context(self, Qnil);
-    table = SELF(self);
-
-    key = RVAL2GRNKEY(rb_key, context, table->header.domain, self);
-    rc = grn_table_delete(context, table,
-			  GRN_BULK_HEAD(key), GRN_BULK_VSIZE(key));
-    exception = rb_grn_context_to_exception(context, self);
-    grn_obj_close(context, key);
-    if (!NIL_P(exception))
-	rb_exc_raise(exception);
-    rb_grn_rc_check(rc, self);
-
-    return Qnil;
-}
-
-static VALUE
-rb_grn_table_delete_by_id (VALUE self, VALUE rb_id)
+rb_grn_table_delete (VALUE self, VALUE rb_id)
 {
     grn_ctx *context;
     grn_id id;
@@ -757,156 +595,15 @@ rb_grn_table_delete_by_id (VALUE self, VALUE rb_id)
     return Qnil;
 }
 
-static VALUE
-rb_grn_table_delete (VALUE self, VALUE rb_id_or_key)
-{
-    if (RVAL2CBOOL(rb_obj_is_kind_of(rb_id_or_key, rb_cFixnum)))
-	return rb_grn_table_delete_by_id(self, rb_id_or_key);
-    else
-	return rb_grn_table_delete_by_key(self, rb_id_or_key);
-}
-
-static VALUE
-rb_grn_table_array_reference_by_key (VALUE self, VALUE rb_key)
-{
-    VALUE exception;
-    grn_ctx *context;
-    grn_obj *table;
-    grn_obj *key;
-    grn_id id;
-    grn_search_flags flags = 0;
-
-    context = rb_grn_object_ensure_context(self, Qnil);
-    table = SELF(self);
-
-    key = RVAL2GRNKEY(rb_key, context, table->header.domain, self);
-    flags = GRN_SEARCH_EXACT;
-    id = grn_table_lookup(context, table,
-			  GRN_BULK_HEAD(key), GRN_BULK_VSIZE(key),
-			  &flags);
-    exception = rb_grn_context_to_exception(context, self);
-    grn_obj_close(context, key);
-    if (!NIL_P(exception))
-	rb_exc_raise(exception);
-
-    if (id == GRN_ID_NIL)
-	return Qnil;
-    else
-	return rb_grn_record_new(self, id);
-}
-
-static VALUE
-rb_grn_table_array_reference (VALUE self, VALUE rb_id_or_key)
-{
-    if (RVAL2CBOOL(rb_obj_is_kind_of(rb_id_or_key, rb_cFixnum)))
-	return rb_grn_object_array_reference(self, rb_id_or_key);
-    else
-	return rb_grn_table_array_reference_by_key(self, rb_id_or_key);
-}
-
-static VALUE
-rb_grn_table_array_set (VALUE self, VALUE rb_key, VALUE rb_value)
-{
-    VALUE exception;
-    grn_ctx *context;
-    grn_obj *table;
-    grn_id id;
-    grn_obj *value;
-    grn_rc rc;
-
-    context = rb_grn_object_ensure_context(self, Qnil);
-    table = SELF(self);
-
-    if (NIL_P(rb_key))
-	rb_raise(rb_eArgError, "key should not be nil: <%s>",
-		 rb_grn_inspect(self));
-
-    id = rb_grn_table_add_with_key_raw(self, rb_key);
-    if (GRN_ID_NIL == id)
-	rb_raise(rb_eGrnError,
-		 "failed to add new record with key: <%s>: <%s>",
-		 rb_grn_inspect(rb_key),
-		 rb_grn_inspect(self));
-
-    value = RVAL2GRNBULK(context, rb_value);
-    rc = grn_obj_set_value(context, table, id, value, GRN_OBJ_SET);
-    exception = rb_grn_context_to_exception(context, self);
-    grn_obj_close(context, value);
-    if (!NIL_P(exception))
-	rb_exc_raise(exception);
-    rb_grn_rc_check(rc, self);
-
-    return rb_value;
-}
-
-static VALUE
-rb_grn_table_get_encoding (VALUE self)
-{
-    grn_ctx *context;
-    grn_encoding encoding;
-    grn_rc rc;
-
-    context = rb_grn_object_ensure_context(self, Qnil);
-    rc = grn_table_get_info(context, SELF(self), NULL, &encoding, NULL);
-    rb_grn_context_check(context, self);
-    rb_grn_rc_check(rc, self);
-
-    return GRNENCODING2RVAL(encoding);
-}
-
-static VALUE
-rb_grn_table_get_default_tokenizer (VALUE self)
-{
-    grn_ctx *context;
-    grn_obj *tokenizer;
-    grn_rc rc;
-
-    context = rb_grn_object_ensure_context(self, Qnil);
-    rc = grn_table_get_info(context, SELF(self),
-			    NULL, NULL, &tokenizer);
-    rb_grn_context_check(context, self);
-    rb_grn_rc_check(rc, self);
-
-    return GRNOBJECT2RVAL(Qnil, context, tokenizer);
-}
-
-static VALUE
-rb_grn_table_set_default_tokenizer (VALUE self, VALUE rb_tokenizer)
-{
-    grn_ctx *context;
-    grn_obj *tokenizer;
-    grn_rc rc;
-
-    context = rb_grn_object_ensure_context(self, Qnil);
-    tokenizer = RVAL2GRNOBJECT(rb_tokenizer, context);
-    rc = grn_obj_set_info(context, SELF(self),
-			  GRN_INFO_DEFAULT_TOKENIZER, tokenizer);
-    rb_grn_context_check(context, self);
-    rb_grn_rc_check(rc, self);
-
-    return Qnil;
-}
-
 void
 rb_grn_init_table (VALUE mGrn)
 {
     rb_cGrnTable = rb_define_class_under(mGrn, "Table", rb_cGrnObject);
-    rb_cGrnHash = rb_define_class_under(mGrn, "Hash", rb_cGrnTable);
-    rb_cGrnPatriciaTrie =
-	rb_define_class_under(mGrn, "PatriciaTrie", rb_cGrnTable);
-    rb_cGrnArray = rb_define_class_under(mGrn, "Array", rb_cGrnTable);
 
     rb_include_module(rb_cGrnTable, rb_mEnumerable);
 
     rb_define_singleton_method(rb_cGrnTable, "open",
 			       rb_grn_table_s_open, -1);
-
-    rb_define_singleton_method(rb_cGrnHash, "create",
-			       rb_grn_hash_s_create, -1);
-    rb_define_singleton_method(rb_cGrnPatriciaTrie, "create",
-			       rb_grn_patricia_trie_s_create, -1);
-    rb_define_singleton_method(rb_cGrnArray, "create",
-			       rb_grn_array_s_create, -1);
 
     rb_define_method(rb_cGrnTable, "initialize", rb_grn_table_initialize, -1);
 
@@ -929,37 +626,10 @@ rb_grn_init_table (VALUE mGrn)
 
     rb_define_method(rb_cGrnTable, "each", rb_grn_table_each, 0);
 
-    rb_define_method(rb_cGrnHash, "add", rb_grn_table_add_with_key, 1);
-    rb_define_method(rb_cGrnPatriciaTrie, "add", rb_grn_table_add_with_key, 1);
-    rb_define_method(rb_cGrnArray, "add", rb_grn_array_add, 0);
+    rb_define_method(rb_cGrnTable, "delete", rb_grn_table_delete, 1);
 
-    rb_define_method(rb_cGrnHash, "key", rb_grn_table_get_key, 1);
-    rb_define_method(rb_cGrnPatriciaTrie, "key", rb_grn_table_get_key, 1);
-
-    rb_define_method(rb_cGrnHash, "delete", rb_grn_table_delete, 1);
-    rb_define_method(rb_cGrnPatriciaTrie, "delete", rb_grn_table_delete, 1);
-    rb_define_method(rb_cGrnArray, "delete", rb_grn_table_delete_by_id, 1);
-
-    rb_define_alias(rb_cGrnTable, "value", "[]");
-    rb_define_alias(rb_cGrnTable, "set_value", "[]=");
-
-    rb_define_method(rb_cGrnHash, "[]", rb_grn_table_array_reference, 1);
-    rb_define_method(rb_cGrnPatriciaTrie, "[]", rb_grn_table_array_reference, 1);
-    rb_define_method(rb_cGrnHash, "[]=", rb_grn_table_array_set, 2);
-    rb_define_method(rb_cGrnPatriciaTrie, "[]=", rb_grn_table_array_set, 2);
-
-    rb_define_method(rb_cGrnHash, "encoding",
-		     rb_grn_table_get_encoding, 0);
-    rb_define_method(rb_cGrnPatriciaTrie, "encoding",
-		     rb_grn_table_get_encoding, 0);
-
-    rb_define_method(rb_cGrnHash, "default_tokenizer",
-		     rb_grn_table_get_default_tokenizer, 0);
-    rb_define_method(rb_cGrnPatriciaTrie, "default_tokenizer",
-		     rb_grn_table_get_default_tokenizer, 0);
-
-    rb_define_method(rb_cGrnHash, "default_tokenizer=",
-		     rb_grn_table_set_default_tokenizer, 1);
-    rb_define_method(rb_cGrnPatriciaTrie, "default_tokenizer=",
-		     rb_grn_table_set_default_tokenizer, 1);
+    rb_grn_init_table_key_support(mGrn);
+    rb_grn_init_table_array(mGrn);
+    rb_grn_init_table_hash(mGrn);
+    rb_grn_init_table_patricia_trie(mGrn);
 }

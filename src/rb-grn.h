@@ -79,6 +79,7 @@ RB_GRN_VAR VALUE rb_eGrnError;
 RB_GRN_VAR VALUE rb_cGrnObject;
 RB_GRN_VAR VALUE rb_cGrnDatabase;
 RB_GRN_VAR VALUE rb_cGrnTable;
+RB_GRN_VAR VALUE rb_mGrnTableKeySupport;
 RB_GRN_VAR VALUE rb_cGrnHash;
 RB_GRN_VAR VALUE rb_cGrnPatriciaTrie;
 RB_GRN_VAR VALUE rb_cGrnArray;
@@ -105,6 +106,10 @@ void           rb_grn_init_context                  (VALUE mGrn);
 void           rb_grn_init_object                   (VALUE mGrn);
 void           rb_grn_init_database                 (VALUE mGrn);
 void           rb_grn_init_table                    (VALUE mGrn);
+void           rb_grn_init_table_key_support        (VALUE mGrn);
+void           rb_grn_init_table_array              (VALUE mGrn);
+void           rb_grn_init_table_hash               (VALUE mGrn);
+void           rb_grn_init_table_patricia_trie      (VALUE mGrn);
 void           rb_grn_init_table_cursor             (VALUE mGrn);
 void           rb_grn_init_type                     (VALUE mGrn);
 void           rb_grn_init_procedure                (VALUE mGrn);
@@ -155,6 +160,10 @@ VALUE          rb_grn_object_inspect_content        (VALUE object,
 VALUE          rb_grn_object_inspect_footer         (VALUE object,
 						     VALUE inspected);
 
+VALUE          rb_grn_table_s_create                (int argc,
+						     VALUE *argv,
+						     VALUE klass,
+						     grn_obj_flags key_store);
 VALUE          rb_grn_table_cursor_close            (VALUE object);
 
 VALUE          rb_grn_record_new                    (VALUE table,
