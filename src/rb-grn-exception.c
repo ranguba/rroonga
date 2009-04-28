@@ -28,7 +28,7 @@ static VALUE eGrnNoSuchProcess;
 static VALUE eGrnInterruptedFunctionCall;
 static VALUE eGrnInputOutputError;
 static VALUE eGrnNoSuchDeviceOrAddress;
-static VALUE eGrnArgListTooLong;
+static VALUE eGrnArgumentListTooLong;
 static VALUE eGrnExecFormatError;
 static VALUE eGrnBadFileDescriptor;
 static VALUE eGrnNoChildProcesses;
@@ -116,7 +116,7 @@ rb_grn_rc_to_exception (grn_rc rc)
         exception = eGrnNoSuchDeviceOrAddress;
         break;
       case GRN_ARG_LIST_TOO_LONG:
-        exception = eGrnArgListTooLong;
+        exception = eGrnArgumentListTooLong;
         break;
       case GRN_EXEC_FORMAT_ERROR:
         exception = eGrnExecFormatError;
@@ -318,7 +318,7 @@ rb_grn_rc_to_message (grn_rc rc)
         message = "no such device or address";
         break;
       case GRN_ARG_LIST_TOO_LONG:
-        message = "arg list too long";
+        message = "argument list too long";
         break;
       case GRN_EXEC_FORMAT_ERROR:
         message = "exec format error";
@@ -507,130 +507,508 @@ rb_grn_rc_check (grn_rc rc, VALUE related_object)
 void
 rb_grn_init_exception (VALUE mGrn)
 {
+    /*
+     * Document-class: Groonga::Error
+     *
+     * Ruby/groongaが発生する例外のスーパークラス。
+     */
     rb_eGrnError =
         rb_define_class_under(mGrn, "Error", rb_eStandardError);
+
+    /*
+     * Document-class: Groonga::EndOfData
+     *
+     * データの終端に達したときに発生する。
+     */
     eGrnEndOfData =
         rb_define_class_under(mGrn, "EndOfData", rb_eGrnError);
+
+    /*
+     * Document-class: Groonga::UnknownError
+     *
+     * 未知のエラーが発生したときに発生する。
+     */
     eGrnUnknownError =
         rb_define_class_under(mGrn, "UnknownError", rb_eGrnError);
+
+    /*
+     * Document-class: Groonga::OperationNotPermitted
+     *
+     * 操作が許可されていないときに発生する。
+     */
     eGrnOperationNotPermitted =
         rb_define_class_under(mGrn, "OperationNotPermitted", rb_eGrnError);
+
+    /*
+     * Document-class: Groonga::NoSuchFileOrDirectory
+     *
+     * ファイルまたはディレクトリがないときに発生する。
+     */
     eGrnNoSuchFileOrDirectory =
         rb_define_class_under(mGrn, "NoSuchFileOrDirectory", rb_eGrnError);
+
+    /*
+     * Document-class: Groonga::NoSuchProcess
+     *
+     * プロセスがないときに発生する。
+     */
     eGrnNoSuchProcess =
         rb_define_class_under(mGrn, "NoSuchProcess", rb_eGrnError);
+
+    /*
+     * Document-class: Groonga::InterruptedFunctionCall
+     *
+     * 関数の実行中に中断されたときに発生する。
+     */
     eGrnInterruptedFunctionCall =
         rb_define_class_under(mGrn, "InterruptedFunctionCall", rb_eGrnError);
+
+    /*
+     * Document-class: Groonga::InputOutputError
+     *
+     * 入出力エラーが起きたときに発生する。
+     */
     eGrnInputOutputError =
         rb_define_class_under(mGrn, "InputOutputError", rb_eGrnError);
+
+    /*
+     * Document-class: Groonga::NoSuchDeviceOrAddress
+     *
+     * デバイスまたはアドレスがないときに発生する。
+     */
     eGrnNoSuchDeviceOrAddress =
         rb_define_class_under(mGrn, "NoSuchDeviceOrAddress", rb_eGrnError);
-    eGrnArgListTooLong =
-        rb_define_class_under(mGrn, "ArgListTooLong", rb_eGrnError);
+
+    /*
+     * Document-class: Groonga::ArgumentListTooLong
+     *
+     * 引数の数が多すぎるときに発生する。
+     */
+    eGrnArgumentListTooLong =
+        rb_define_class_under(mGrn, "ArgumentListTooLong", rb_eGrnError);
+
+    /*
+     * Document-class: Groonga::ExecFormatError
+     *
+     * 実行ファイルのフォーマットに問題があるときに発生する。
+     */
     eGrnExecFormatError =
         rb_define_class_under(mGrn, "ExecFormatError", rb_eGrnError);
+
+    /*
+     * Document-class: Groonga::BadFileDescriptor
+     *
+     * ファイルディスクリプタに問題があるときに発生する。
+     */
     eGrnBadFileDescriptor =
         rb_define_class_under(mGrn, "BadFileDescriptor", rb_eGrnError);
+
+    /*
+     * Document-class: Groonga::NoChildProcesses
+     *
+     * 子プロセスがないときに発生する。
+     */
     eGrnNoChildProcesses =
         rb_define_class_under(mGrn, "NoChildProcesses", rb_eGrnError);
+
+    /*
+     * Document-class: Groonga::ResourceTemporarilyUnavailable
+     *
+     * 一時的にリソースを利用できないときに発生する。
+     */
     eGrnResourceTemporarilyUnavailable =
-        rb_define_class_under(mGrn, "ResourceTemporarilyUnavailable", rb_eGrnError);
+        rb_define_class_under(mGrn, "ResourceTemporarilyUnavailable",
+			      rb_eGrnError);
+
+    /*
+     * Document-class: Groonga::NotEnoughSpace
+     *
+     * 領域が足りないときに発生する。
+     */
     eGrnNotEnoughSpace =
         rb_define_class_under(mGrn, "NotEnoughSpace", rb_eGrnError);
+
+    /*
+     * Document-class: Groonga::PermissionDenied
+     *
+     * 許可がないときに発生する。
+     */
     eGrnPermissionDenied =
         rb_define_class_under(mGrn, "PermissionDenied", rb_eGrnError);
+
+    /*
+     * Document-class: Groonga::BadAddress
+     *
+     * アドレスに問題があるときに発生する。
+     */
     eGrnBadAddress =
         rb_define_class_under(mGrn, "BadAddress", rb_eGrnError);
+
+    /*
+     * Document-class: Groonga::ResourceBusy
+     *
+     * リソースが使用中のときに発生する。
+     */
     eGrnResourceBusy =
         rb_define_class_under(mGrn, "ResourceBusy", rb_eGrnError);
+
+    /*
+     * Document-class: Groonga::FileExists
+     *
+     * ファイルが存在しているときに発生する。
+     */
     eGrnFileExists =
         rb_define_class_under(mGrn, "FileExists", rb_eGrnError);
+
+    /*
+     * Document-class: Groonga::ImproperLink
+     *
+     * リンクに問題があるときに発生する。
+     */
     eGrnImproperLink =
         rb_define_class_under(mGrn, "ImproperLink", rb_eGrnError);
+
+    /*
+     * Document-class: Groonga::NoSuchDevice
+     *
+     * デバイスがないときに発生する。
+     */
     eGrnNoSuchDevice =
         rb_define_class_under(mGrn, "NoSuchDevice", rb_eGrnError);
+
+    /*
+     * Document-class: Groonga::NotADirectory
+     *
+     * ディレクトリではないときに発生する。
+     */
     eGrnNotADirectory =
         rb_define_class_under(mGrn, "NotADirectory", rb_eGrnError);
+
+    /*
+     * Document-class: Groonga::IsADirectory
+     *
+     * ディレクトリのときに発生する。
+     */
     eGrnIsADirectory =
         rb_define_class_under(mGrn, "IsADirectory", rb_eGrnError);
+
+    /*
+     * Document-class: Groonga::InvalidArgument
+     *
+     * 引数に問題があるときに発生する。
+     */
     eGrnInvalidArgument =
         rb_define_class_under(mGrn, "InvalidArgument", rb_eGrnError);
+
+    /*
+     * Document-class: Groonga::TooManyOpenFilesInSystem
+     *
+     * システム全体で開いているファイルが多すぎるときに発生する。
+     */
     eGrnTooManyOpenFilesInSystem =
         rb_define_class_under(mGrn, "TooManyOpenFilesInSystem", rb_eGrnError);
+
+    /*
+     * Document-class: Groonga::TooManyOpenFiles
+     *
+     * 開いているファイルが多すぎるときに発生する。
+     */
     eGrnTooManyOpenFiles =
         rb_define_class_under(mGrn, "TooManyOpenFiles", rb_eGrnError);
+
+    /*
+     * Document-class: Groonga::InappropriateIOControlOperation
+     *
+     * IO制御に問題があるときに発生する。
+     */
     eGrnInappropriateIOControlOperation =
         rb_define_class_under(mGrn, "InappropriateIOControlOperation", rb_eGrnError);
+
+    /*
+     * Document-class: Groonga::FileTooLarge
+     *
+     * ファイルが大きすぎるときに発生する。
+     */
     eGrnFileTooLarge =
         rb_define_class_under(mGrn, "FileTooLarge", rb_eGrnError);
+
+    /*
+     * Document-class: Groonga::NoSpaceLeftOnDevice
+     *
+     * デバイスに空いている領域がないときに発生する。
+     */
     eGrnNoSpaceLeftOnDevice =
         rb_define_class_under(mGrn, "NoSpaceLeftOnDevice", rb_eGrnError);
+
+    /*
+     * Document-class: Groonga::InvalidSeek
+     *
+     * seekに問題があるときに発生する。
+     */
     eGrnInvalidSeek =
         rb_define_class_under(mGrn, "InvalidSeek", rb_eGrnError);
+
+    /*
+     * Document-class: Groonga::ReadOnlyFileSystem
+     *
+     * ファイルシステムが読込専用のときに発生する。
+     */
     eGrnReadOnlyFileSystem =
         rb_define_class_under(mGrn, "ReadOnlyFileSystem", rb_eGrnError);
+
+    /*
+     * Document-class: Groonga::TooManyLinks
+     *
+     * リンクが多すぎるときに発生する。
+     */
     eGrnTooManyLinks =
         rb_define_class_under(mGrn, "TooManyLinks", rb_eGrnError);
+
+    /*
+     * Document-class: Groonga::BrokenPipe
+     *
+     * パイプが壊れているときに発生する。
+     */
     eGrnBrokenPipe =
         rb_define_class_under(mGrn, "BrokenPipe", rb_eGrnError);
+
+    /*
+     * Document-class: Groonga::DomainError
+     *
+     * 対象領域に問題があるときに発生する。
+     */
     eGrnDomainError =
         rb_define_class_under(mGrn, "DomainError", rb_eGrnError);
+
+    /*
+     * Document-class: Groonga::ResultTooLarge
+     *
+     * 結果が多すぎるときに発生する。
+     */
     eGrnResultTooLarge =
         rb_define_class_under(mGrn, "ResultTooLarge", rb_eGrnError);
+
+    /*
+     * Document-class: Groonga::ResourceDeadlockAvoided
+     *
+     * リソースのデッドロックを回避したときに発生する。
+     */
     eGrnResourceDeadlockAvoided =
         rb_define_class_under(mGrn, "ResourceDeadlockAvoided", rb_eGrnError);
+
+    /*
+     * Document-class: Groonga::NoMemoryAvailable
+     *
+     * メモリが足りないときに発生する。
+     */
     eGrnNoMemoryAvailable =
         rb_define_class_under(mGrn, "NoMemoryAvailable", rb_eGrnError);
+
+    /*
+     * Document-class: Groonga::FilenameTooLong
+     *
+     * ファイル名が長すぎるときに発生する。
+     */
     eGrnFilenameTooLong =
         rb_define_class_under(mGrn, "FilenameTooLong", rb_eGrnError);
+
+    /*
+     * Document-class: Groonga::NoLocksAvailable
+     *
+     * ロックがないときに発生する。
+     */
     eGrnNoLocksAvailable =
         rb_define_class_under(mGrn, "NoLocksAvailable", rb_eGrnError);
+
+    /*
+     * Document-class: Groonga::FunctionNotImplemented
+     *
+     * 関数を実装していないときに発生する。
+     */
     eGrnFunctionNotImplemented =
         rb_define_class_under(mGrn, "FunctionNotImplemented", rb_eGrnError);
+
+    /*
+     * Document-class: Groonga::DirectoryNotEmpty
+     *
+     * ディレクトリが空でないときに発生する。
+     */
     eGrnDirectoryNotEmpty =
         rb_define_class_under(mGrn, "DirectoryNotEmpty", rb_eGrnError);
+
+    /*
+     * Document-class: Groonga::IllegalByteSequence
+     *
+     * バイト列に問題があるときに発生する。
+     */
     eGrnIllegalByteSequence =
         rb_define_class_under(mGrn, "IllegalByteSequence", rb_eGrnError);
+
+    /*
+     * Document-class: Groonga::SocketNotInitialized
+     *
+     * ソケットが初期化されていないときに発生する。
+     */
     eGrnSocketNotInitialized =
         rb_define_class_under(mGrn, "SocketNotInitialized", rb_eGrnError);
+
+    /*
+     * Document-class: Groonga::OperationWouldBlock
+     *
+     * 操作がブロックする可能性があるときに発生する。
+     */
     eGrnOperationWouldBlock =
         rb_define_class_under(mGrn, "OperationWouldBlock", rb_eGrnError);
+
+    /*
+     * Document-class: Groonga::AddressIsNotAvailable
+     *
+     * アドレスを利用できないときに発生する。
+     */
     eGrnAddressIsNotAvailable =
         rb_define_class_under(mGrn, "AddressIsNotAvailable", rb_eGrnError);
+
+    /*
+     * Document-class: Groonga::NetworkIsDown
+     *
+     * ネットワークに問題があるときに発生する。
+     */
     eGrnNetworkIsDown =
         rb_define_class_under(mGrn, "NetworkIsDown", rb_eGrnError);
+
+    /*
+     * Document-class: Groonga::NoBuffer
+     *
+     * バッファがないときに発生する。
+     */
     eGrnNoBuffer =
         rb_define_class_under(mGrn, "NoBuffer", rb_eGrnError);
+
+    /*
+     * Document-class: Groonga::SocketIsAlreadyConnected
+     *
+     * ソケットが接続済みのときに発生する。
+     */
     eGrnSocketIsAlreadyConnected =
         rb_define_class_under(mGrn, "SocketIsAlreadyConnected", rb_eGrnError);
+
+    /*
+     * Document-class: Groonga::SocketIsNotConnected
+     *
+     * ソケットが接続されていないときに発生する。
+     */
     eGrnSocketIsNotConnected =
         rb_define_class_under(mGrn, "SocketIsNotConnected", rb_eGrnError);
+
+    /*
+     * Document-class: Groonga::SocketIsAlreadyShutdowned
+     *
+     * ソケットがすでに閉じられているときに発生する。
+     */
     eGrnSocketIsAlreadyShutdowned =
         rb_define_class_under(mGrn, "SocketIsAlreadyShutdowned", rb_eGrnError);
+
+    /*
+     * Document-class: Groonga::OperationTimeout
+     *
+     * 操作がタイムアウトしたときに発生する。
+     */
     eGrnOperationTimeout =
         rb_define_class_under(mGrn, "OperationTimeout", rb_eGrnError);
+
+    /*
+     * Document-class: Groonga::ConnectionRefused
+     *
+     * 接続を拒否されたときに発生する。
+     */
     eGrnConnectionRefused =
         rb_define_class_under(mGrn, "ConnectionRefused", rb_eGrnError);
+
+    /*
+     * Document-class: Groonga::RangeError
+     *
+     * 範囲外のときに発生する。
+     */
     eGrnRangeError =
         rb_define_class_under(mGrn, "RangeError", rb_eGrnError);
+
+    /*
+     * Document-class: Groonga::TokenizerError
+     *
+     * トークナイザーに問題があったときに発生する。
+     */
     eGrnTokenizerError =
         rb_define_class_under(mGrn, "TokenizerError", rb_eGrnError);
+
+    /*
+     * Document-class: Groonga::FileCorrupt
+     *
+     * ファイルに問題があったときに発生する。
+     */
     eGrnFileCorrupt =
         rb_define_class_under(mGrn, "FileCorrupt", rb_eGrnError);
+
+    /*
+     * Document-class: Groonga::InvalidFormat
+     *
+     * フォーマットに問題があったときに発生する。
+     */
     eGrnInvalidFormat =
         rb_define_class_under(mGrn, "InvalidFormat", rb_eGrnError);
+
+    /*
+     * Document-class: Groonga::ObjectCorrupt
+     *
+     * オブジェクトに問題があったときに発生する。
+     */
     eGrnObjectCorrupt =
         rb_define_class_under(mGrn, "ObjectCorrupt", rb_eGrnError);
+
+    /*
+     * Document-class: Groonga::TooManySymbolicLinks
+     *
+     * シンボリックリンクが多すぎるときに発生する。
+     */
     eGrnTooManySymbolicLinks =
         rb_define_class_under(mGrn, "TooManySymbolicLinks", rb_eGrnError);
+
+    /*
+     * Document-class: Groonga::NotSocket
+     *
+     * ソケットではないときに発生する。
+     */
     eGrnNotSocket =
         rb_define_class_under(mGrn, "NotSocket", rb_eGrnError);
+
+    /*
+     * Document-class: Groonga::OperationNotSupported
+     *
+     * 操作がサポートされていないときに発生する。
+     */
     eGrnOperationNotSupported =
         rb_define_class_under(mGrn, "OperationNotSupported", rb_eGrnError);
+
+    /*
+     * Document-class: Groonga::AddressIsInUse
+     *
+     * アドレスが使用中のときに発生する。
+     */
     eGrnAddressIsInUse =
         rb_define_class_under(mGrn, "AddressIsInUse", rb_eGrnError);
+
+    /*
+     * Document-class: Groonga::ZLibError
+     *
+     * ZLibに問題があるときに発生する。
+     */
     eGrnZLibError =
         rb_define_class_under(mGrn, "ZLibError", rb_eGrnError);
+
+    /*
+     * Document-class: Groonga::LZOError
+     *
+     * LZOに問題があるときに発生する。
+     */
     eGrnLZOError =
         rb_define_class_under(mGrn, "LZOError", rb_eGrnError);
 }
