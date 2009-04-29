@@ -18,6 +18,13 @@
 
 #include "rb-grn.h"
 
+/*
+ * Document-module: Groonga::Encoding
+ *
+ * groongaがサポートしてるエンコーディングが定義されてい
+ * るモジュールです。
+ */
+
 static VALUE mGrnEncoding;
 static VALUE RB_GRN_ENCODING_DEFAULT;
 static VALUE RB_GRN_ENCODING_NONE;
@@ -100,12 +107,6 @@ rb_grn_encoding_to_ruby_object (grn_encoding encoding)
 void
 rb_grn_init_encoding (VALUE mGrn)
 {
-    /*
-     * Document-module: Groonga::Encoding
-     *
-     * groongaがサポートしてるエンコーディングが定義されてい
-     * るモジュールです。
-     */
     mGrnEncoding = rb_define_module_under(mGrn, "Encoding");
 
 #define DEFINE_ENCODING(name, value)                                    \
