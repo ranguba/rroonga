@@ -17,7 +17,7 @@
 
 $VERBOSE = true
 
-$KCODE = "u"
+$KCODE = "u" if RUBY_VERSION < "1.9"
 
 base_dir = File.expand_path(File.join(File.dirname(__FILE__), ".."))
 test_unit_dir = File.join(base_dir, "test-unit", "lib")
