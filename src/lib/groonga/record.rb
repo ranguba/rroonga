@@ -56,6 +56,10 @@ module Groonga
       @table.key(@id)
     end
 
+    def score
+      self[".:score"]
+    end
+
     def value
       @table[@id]
     end

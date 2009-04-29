@@ -81,19 +81,22 @@ class RecordTest < Test::Unit::TestCase
       Groonga::PatriciaTrie.create(:name => "bookmarks-index",
                                    :path => @bookmarks_index_path.to_s)
     @content_index_column_path = @columns_dir + "content-index"
-    @bookmarks_index_content =
+    @bookmarks_content_index =
       @bookmarks_index.define_column("<index:content>", @bookmarks,
                                      :type => "index",
                                      :with_section => true,
                                      :with_weight => true,
                                      :with_position => true,
                                      :path => @content_index_column_path.to_s)
+    @bookmarks_content_index.source = @bookmarks_content
 
     @uri_index_column_path = @columns_dir + "uri-index"
     @bookmarks_uri_index =
       @bookmarks_index.define_column("<index:uri>", @bookmarks,
                                      :type => "index",
+                                     :with_position => true,
                                      :path => @uri_index_column_path.to_s)
+    @bookmarks_uri_index.source = @bookmarks_uri
   end
 
   def test_column_accessor
@@ -169,11 +172,17 @@ class RecordTest < Test::Unit::TestCase
     assert_true(bookmark.reference_column?("user"))
   end
 
-  private
-  def assert_index_search(expected_ids, records)
-    ids = records.collect do |record|
-      record.key.unpack("i")[0]
-    end
-    assert_equal(expected_ids, ids)
+  def test_score
+    groonga = @bookmarks.add
+    groonga["content"] = "full text search search search engine."
+
+    google = @bookmarks.add
+    google["content"] = "Web search engine."
+
+    results = @bookmarks_content_index.search("search")
+    assert_equal([[google.id, 1], [groonga.id, 3]],
+                 results.collect do |record|
+                   [record.id, record.score]
+                 end)
   end
 end
