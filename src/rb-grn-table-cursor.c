@@ -25,6 +25,7 @@ struct _RbGrnTableCursor
 {
     grn_ctx *context;
     grn_table_cursor *cursor;
+    rb_grn_boolean owner;
 };
 
 VALUE rb_cGrnTableCursor;
@@ -57,6 +58,12 @@ rb_grn_table_cursor_from_ruby_object (VALUE object)
 static void
 rb_rb_grn_table_cursor_free (void *object)
 {
+    RbGrnTableCursor *rb_grn_table_cursor = object;
+
+    if (rb_grn_table_cursor->context && rb_grn_table_cursor->cursor &&
+	rb_grn_table_cursor->owner)
+	grn_table_cursor_close(rb_grn_table_cursor->context,
+			       rb_grn_table_cursor->cursor);
     xfree(object);
 }
 
@@ -97,6 +104,7 @@ rb_grn_table_cursor_to_ruby_object (VALUE klass, grn_ctx *context,
     rb_grn_table_cursor = ALLOC(RbGrnTableCursor);
     rb_grn_table_cursor->context = context;
     rb_grn_table_cursor->cursor = cursor;
+    rb_grn_table_cursor->owner = RB_GRN_TRUE; /* FIXME */
 
     if (NIL_P(klass))
         klass = GRNTABLECURSOR2RCLASS(cursor);
@@ -132,12 +140,14 @@ rb_grn_table_cursor_close (VALUE self)
 
     rb_grn_table_cursor = SELF(self);
     if (rb_grn_table_cursor->context && rb_grn_table_cursor->cursor) {
-        grn_rc rc;
+        grn_rc rc = GRN_SUCCESS;
 
-        rc = grn_table_cursor_close(rb_grn_table_cursor->context,
-                                    rb_grn_table_cursor->cursor);
+	if (rb_grn_table_cursor->owner)
+	    rc = grn_table_cursor_close(rb_grn_table_cursor->context,
+					rb_grn_table_cursor->cursor);
         rb_grn_table_cursor->context = NULL;
         rb_grn_table_cursor->cursor = NULL;
+	rb_grn_table_cursor->owner = RB_GRN_FALSE;
         rb_grn_rc_check(rc, self);
     }
     return Qnil;
@@ -222,7 +232,7 @@ rb_grn_table_cursor_next (VALUE self)
 
         record_id = grn_table_cursor_next(rb_grn_table_cursor->context,
                                           rb_grn_table_cursor->cursor);
-        if (record_id != GRN_ID_NIL)
+        if (record_id != GRN_ID_NIL) /* FIXME: use grn_table_cursor_table */
             rb_record = rb_grn_record_new(rb_iv_get(self, "@table"), record_id);
     }
 

@@ -25,6 +25,7 @@ struct _RbGrnQuery
 {
     grn_ctx *context;
     grn_query *query;
+    rb_grn_boolean owner;
 };
 
 VALUE rb_cGrnQuery;
@@ -57,6 +58,11 @@ rb_grn_query_from_ruby_object (VALUE object)
 static void
 rb_rb_grn_query_free (void *object)
 {
+    RbGrnQuery *rb_grn_query = object;
+
+    if (rb_grn_query->context && rb_grn_query->query && rb_grn_query->owner)
+	/* grn_query_close(rb_grn_query->context, rb_grn_query->query) */;
+
     xfree(object);
 }
 
@@ -71,6 +77,7 @@ rb_grn_query_to_ruby_object (grn_ctx *context, grn_query *query)
     rb_grn_query = ALLOC(RbGrnQuery);
     rb_grn_query->context = context;
     rb_grn_query->query = query;
+    rb_grn_query->owner = RB_GRN_FALSE;
 
     return Data_Wrap_Struct(rb_cGrnQuery, NULL,
                             rb_rb_grn_query_free, rb_grn_query);
@@ -151,6 +158,7 @@ rb_grn_query_initialize (int argc, VALUE *argv, VALUE self)
     DATA_PTR(self) = rb_grn_query;
     rb_grn_query->context = context;
     rb_grn_query->query = query;
+    rb_grn_query->owner = RB_GRN_TRUE;
 
     return Qnil;
 }

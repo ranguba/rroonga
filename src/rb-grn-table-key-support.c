@@ -249,7 +249,7 @@ rb_grn_table_key_support_get_default_tokenizer (VALUE self)
     rb_grn_context_check(context, self);
     rb_grn_rc_check(rc, self);
 
-    return GRNOBJECT2RVAL(Qnil, context, tokenizer);
+    return GRNOBJECT2RVAL(Qnil, context, tokenizer, RB_GRN_FALSE);
 }
 
 static VALUE

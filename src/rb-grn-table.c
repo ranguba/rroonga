@@ -33,9 +33,10 @@ rb_grn_table_from_ruby_object (VALUE object, grn_ctx **context)
 }
 
 VALUE
-rb_grn_table_to_ruby_object (grn_ctx *context, grn_obj *table)
+rb_grn_table_to_ruby_object (grn_ctx *context, grn_obj *table,
+			     rb_grn_boolean owner)
 {
-    return GRNOBJECT2RVAL(rb_cGrnTable, context, table);
+    return GRNOBJECT2RVAL(rb_cGrnTable, context, table, owner);
 }
 
 VALUE
@@ -97,7 +98,7 @@ rb_grn_table_s_create (int argc, VALUE *argv, VALUE klass,
 
     table = grn_table_create(context, name, name_size, path,
 			     flags, key_type, value_size);
-    rb_table = GRNOBJECT2RVAL(klass, context, table);
+    rb_table = GRNOBJECT2RVAL(klass, context, table, RB_GRN_TRUE);
     rb_grn_context_check(context, rb_table);
 
     if (rb_block_given_p())
@@ -336,7 +337,7 @@ rb_grn_table_define_column (int argc, VALUE *argv, VALUE self)
 			       path, flags, value_type);
     rb_grn_context_check(context, self);
 
-    return GRNCOLUMN2RVAL(Qnil, context, column);
+    return GRNCOLUMN2RVAL(Qnil, context, column, RB_GRN_TRUE);
 }
 
 static VALUE
@@ -362,7 +363,7 @@ rb_grn_table_add_column (VALUE self, VALUE rb_name, VALUE rb_value_type,
 			     path, value_type);
     rb_grn_context_check(context, self);
 
-    return GRNCOLUMN2RVAL(Qnil, context, column);
+    return GRNCOLUMN2RVAL(Qnil, context, column, RB_GRN_TRUE);
 }
 
 static VALUE
@@ -373,6 +374,7 @@ rb_grn_table_get_column (VALUE self, VALUE rb_name)
     grn_obj *column;
     char *name = NULL;
     unsigned name_size = 0;
+    rb_grn_boolean owner;
 
     table = SELF(self, &context);
 
@@ -382,7 +384,8 @@ rb_grn_table_get_column (VALUE self, VALUE rb_name)
     column = grn_table_column(context, table, name, name_size);
     rb_grn_context_check(context, self);
 
-    return GRNCOLUMN2RVAL(Qnil, context, column);
+    owner = (column && column->header.type == GRN_ACCESSOR);
+    return GRNCOLUMN2RVAL(Qnil, context, column, owner);
 }
 
 static VALUE
@@ -423,11 +426,13 @@ rb_grn_table_get_columns (int argc, VALUE *argv, VALUE self)
 	void *key;
 	grn_id *column_id;
 	grn_obj *column;
+	VALUE rb_column;
 
 	grn_table_cursor_get_key(context, cursor, &key);
 	column_id = key;
 	column = grn_ctx_get(context, *column_id);
-	rb_ary_push(rb_columns, GRNOBJECT2RVAL(Qnil, context, column));
+	rb_column = GRNOBJECT2RVAL(Qnil, context, column, RB_GRN_FALSE);
+	rb_ary_push(rb_columns, rb_column);
     }
     rc = grn_table_cursor_close(context, cursor);
     if (rc != GRN_SUCCESS) {

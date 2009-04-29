@@ -33,9 +33,10 @@ rb_grn_accessor_from_ruby_object (VALUE object)
 }
 
 VALUE
-rb_grn_accessor_to_ruby_object (grn_ctx *context, grn_obj *table)
+rb_grn_accessor_to_ruby_object (grn_ctx *context, grn_obj *table,
+				rb_grn_boolean owner)
 {
-    return GRNOBJECT2RVAL(rb_cGrnAccessor, context, table);
+    return GRNOBJECT2RVAL(rb_cGrnAccessor, context, table, owner);
 }
 
 /*

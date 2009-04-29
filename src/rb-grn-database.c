@@ -33,9 +33,10 @@ rb_grn_database_from_ruby_object (VALUE object)
 }
 
 VALUE
-rb_grn_database_to_ruby_object (grn_ctx *context, grn_obj *database)
+rb_grn_database_to_ruby_object (grn_ctx *context, grn_obj *database,
+				rb_grn_boolean owner)
 {
-    return GRNOBJECT2RVAL(rb_cGrnDatabase, context, database);
+    return GRNOBJECT2RVAL(rb_cGrnDatabase, context, database, owner);
 }
 
 static VALUE
@@ -65,7 +66,7 @@ rb_grn_database_s_create (int argc, VALUE *argv, VALUE klass)
 
     database = grn_db_create(context, path, &create_args);
     rb_grn_context_check(context, rb_ary_new4(argc, argv));
-    rb_database = GRNOBJECT2RVAL(klass, context, database);
+    rb_database = GRNOBJECT2RVAL(klass, context, database, RB_GRN_FALSE);
     rb_grn_context_check(context, rb_ary_new4(argc, argv));
 
     if (rb_block_given_p())

@@ -122,7 +122,7 @@ rb_grn_array_s_create (int argc, VALUE *argv, VALUE klass)
 
     table = grn_table_create(context, name, name_size, path,
 			     flags, NULL, value_size);
-    rb_table = GRNOBJECT2RVAL(klass, context, table);
+    rb_table = GRNOBJECT2RVAL(klass, context, table, RB_GRN_TRUE);
     rb_grn_context_check(context, rb_table);
 
     if (rb_block_given_p())

@@ -173,7 +173,7 @@ rb_grn_bulk_to_ruby_object (grn_ctx *context, grn_obj *bulk,
 
     range_id = bulk->header.domain;
     range = grn_ctx_get(context, range_id);
-    rb_range = GRNOBJECT2RVAL(Qnil, context, range);
+    rb_range = GRNOBJECT2RVAL(Qnil, context, range, RB_GRN_FALSE);
 
     if (rb_grn_bulk_to_ruby_object_by_range_id(context, bulk,
 					       range, range_id, rb_range,
@@ -271,6 +271,7 @@ rb_grn_bulk_from_ruby_object_with_type (VALUE object, grn_ctx *context,
     grn_id range;
     VALUE rb_type;
     grn_obj_flags flags = 0;
+    grn_obj *type_object;
 
     switch (type) {
       case GRN_DB_INT:
@@ -317,7 +318,8 @@ rb_grn_bulk_from_ruby_object_with_type (VALUE object, grn_ctx *context,
       case GRN_DB_BIGRAM:
       case GRN_DB_TRIGRAM:
       case GRN_DB_MECAB:
-	rb_type = GRNOBJECT2RVAL(Qnil, context, grn_ctx_get(context, type));
+	type_object = grn_ctx_get(context, type);
+	rb_type = GRNOBJECT2RVAL(Qnil, context, type_object, RB_GRN_FALSE);
 	rb_raise(rb_eArgError,
 		 "unbulkable type: %s",
 		 rb_grn_inspect(rb_type));
@@ -477,7 +479,7 @@ rb_grn_value_to_ruby_object (grn_ctx *context,
     }
 
     if (!range)
-	return GRNOBJECT2RVAL(Qnil, context, value);
+	return GRNOBJECT2RVAL(Qnil, context, value, RB_GRN_FALSE);
 
     return Qnil;
 }
@@ -494,11 +496,16 @@ rb_grn_id_from_ruby_object (VALUE object, grn_ctx *context, grn_obj *table,
     if (RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cGrnRecord))) {
 	VALUE rb_table;
 	rb_table = rb_funcall(object, rb_intern("table"), 0);
-	if (table && RVAL2GRNOBJECT(rb_table, &context) != table)
+	if (table && RVAL2GRNOBJECT(rb_table, &context) != table) {
+	    VALUE rb_expected_table;
+
+	    rb_expected_table =
+		GRNOBJECT2RVAL(Qnil, context, table, RB_GRN_FALSE);
 	    rb_raise(rb_eGrnError,
 		     "wrong table: expected <%s>: actual <%s>",
-		     rb_grn_inspect(GRNOBJECT2RVAL(Qnil, context, table)),
+		     rb_grn_inspect(rb_expected_table),
 		     rb_grn_inspect(rb_table));
+	}
 	rb_id = rb_funcall(object, rb_intern("id"), 0);
     } else {
 	rb_id = object;

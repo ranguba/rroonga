@@ -35,6 +35,7 @@ struct _RbGrnObject
 {
     grn_ctx *context;
     grn_obj *object;
+    rb_grn_boolean owner;
 };
 
 grn_obj *
@@ -85,10 +86,12 @@ rb_rb_grn_object_free (void *object)
 {
     RbGrnObject *rb_grn_object = object;
 
-/*
-    if (rb_grn_object->context && rb_grn_object->object)
-	grn_obj_close(rb_grn_object->context, rb_grn_object->object);
-*/
+    if (rb_grn_object->context && rb_grn_object->object &&
+	rb_grn_object->owner) {
+	/* FIXME */
+	/* grn_obj_close(rb_grn_object->context, rb_grn_object->object); */
+    }
+
     xfree(rb_grn_object);
 }
 
@@ -139,7 +142,8 @@ rb_grn_object_to_ruby_class (grn_obj *object)
 }
 
 VALUE
-rb_grn_object_to_ruby_object (VALUE klass, grn_ctx *context, grn_obj *object)
+rb_grn_object_to_ruby_object (VALUE klass, grn_ctx *context, grn_obj *object,
+			      rb_grn_boolean owner)
 {
     RbGrnObject *rb_grn_object;
 
@@ -149,6 +153,7 @@ rb_grn_object_to_ruby_object (VALUE klass, grn_ctx *context, grn_obj *object)
     rb_grn_object = ALLOC(RbGrnObject);
     rb_grn_object->context = context;
     rb_grn_object->object = object;
+    rb_grn_object->owner = owner;
 
     if (NIL_P(klass))
         klass = GRNOBJECT2RCLASS(object);
@@ -171,6 +176,7 @@ rb_grn_object_initialize (VALUE self, grn_ctx *context, grn_obj *object)
     DATA_PTR(self) = rb_grn_object;
     rb_grn_object->context = context;
     rb_grn_object->object = object;
+    rb_grn_object->owner = RB_GRN_TRUE;
 }
 
 /*
@@ -189,9 +195,11 @@ rb_grn_object_close (VALUE self)
 
     rb_grn_object = SELF(self);
     if (rb_grn_object->context && rb_grn_object->object) {
-        GRN_OBJ_FIN(rb_grn_object->context, rb_grn_object->object);
+	if (rb_grn_object->owner)
+	    grn_obj_close(rb_grn_object->context, rb_grn_object->object);
         rb_grn_object->context = NULL;
         rb_grn_object->object = NULL;
+        rb_grn_object->owner = RB_GRN_FALSE;
     }
     return Qnil;
 }
@@ -222,7 +230,7 @@ rb_grn_object_inspect_object (VALUE inspected, grn_ctx *context, grn_obj *object
 {
     VALUE rb_object;
 
-    rb_object = GRNOBJECT2RVAL(Qnil, context, object);
+    rb_object = GRNOBJECT2RVAL(Qnil, context, object, RB_GRN_FALSE);
     rb_str_concat(inspected, rb_inspect(rb_object));
 
     return inspected;
@@ -481,7 +489,7 @@ rb_grn_object_get_domain (VALUE self)
 
 	domain_object = grn_ctx_get(context, domain);
 	if (domain_object)
-	    return GRNOBJECT2RVAL(Qnil, context, domain_object);
+	    return GRNOBJECT2RVAL(Qnil, context, domain_object, RB_GRN_FALSE);
 	else
 	    return UINT2NUM(domain);
     }
@@ -552,7 +560,7 @@ rb_grn_object_get_range (VALUE self)
 
 	range_object = grn_ctx_get(context, range);
 	if (range_object)
-	    return GRNOBJECT2RVAL(Qnil, context, range_object);
+	    return GRNOBJECT2RVAL(Qnil, context, range_object, RB_GRN_FALSE);
 	else
 	    return UINT2NUM(range);
     }
@@ -920,7 +928,7 @@ rb_grn_object_search (int argc, VALUE *argv, VALUE self)
     rb_grn_rc_check(rc, self);
 
     if (NIL_P(rb_result))
-	return GRNOBJECT2RVAL(Qnil, context, result);
+	return GRNOBJECT2RVAL(Qnil, context, result, RB_GRN_TRUE);
     else
 	return rb_result;
 }

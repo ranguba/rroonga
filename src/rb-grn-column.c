@@ -36,9 +36,10 @@ rb_grn_column_from_ruby_object (VALUE object, grn_ctx **context)
 }
 
 VALUE
-rb_grn_column_to_ruby_object (VALUE klass, grn_ctx *context, grn_obj *column)
+rb_grn_column_to_ruby_object (VALUE klass, grn_ctx *context, grn_obj *column,
+			      rb_grn_boolean owner)
 {
-    return GRNOBJECT2RVAL(klass, context, column);
+    return GRNOBJECT2RVAL(klass, context, column, owner);
 }
 
 static VALUE
@@ -158,7 +159,7 @@ rb_grn_column_get_table (VALUE self)
     table = grn_column_table(context, column);
     rb_grn_context_check(context, self);
 
-    return GRNOBJECT2RVAL(Qnil, context, table);
+    return GRNOBJECT2RVAL(Qnil, context, table, RB_GRN_FALSE);
 }
 
 static VALUE
@@ -181,8 +182,11 @@ rb_grn_index_column_get_sources (VALUE self)
     rb_sources = rb_ary_new2(n);
     for (i = 0; i < n; i++) {
 	grn_obj *source;
+	VALUE rb_source;
+
 	source = grn_ctx_get(context, *source_ids);
-	rb_ary_push(rb_sources, GRNOBJECT2RVAL(Qnil, context, source));
+	rb_source = GRNOBJECT2RVAL(Qnil, context, source, RB_GRN_FALSE);
+	rb_ary_push(rb_sources, rb_source);
 	source_ids++;
     }
 
