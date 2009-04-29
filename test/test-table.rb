@@ -423,4 +423,19 @@ class TableTest < Test::Unit::TestCase
     array = Groonga::Array.create
     assert_false(array.respond_to?(:encoding))
   end
+
+  def test_sort
+    bookmarks = Groonga::Array.create(:name => "<bookmarks>")
+    id_column = bookmarks.define_column("id", "<int>")
+    100.times do |i|
+      bookmark = bookmarks.add
+      bookmark["id"] = i + 100
+    end
+
+    results = bookmarks.sort(["id"], :limit => 20)
+    results = results.records(:order => :ascending).collect do |record|
+      id_column[record.value.unpack("i")[0]]
+    end
+    assert_equal((180..199).to_a.reverse, results)
+  end
 end

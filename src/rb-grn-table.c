@@ -602,6 +602,68 @@ rb_grn_table_delete (VALUE self, VALUE rb_id)
     return Qnil;
 }
 
+static VALUE
+rb_grn_table_sort (int argc, VALUE *argv, VALUE self)
+{
+    grn_ctx *context = NULL;
+    grn_obj *table;
+    grn_obj *result;
+    grn_table_sort_key *keys;
+    int n_records, limit = 0;
+    int i, n_keys;
+    VALUE rb_keys, options;
+    VALUE rb_limit;
+    VALUE *rb_sort_keys;
+
+    table = SELF(self, &context);
+
+    rb_scan_args(argc, argv, "11", &rb_keys, &options);
+    rb_grn_scan_options(options,
+			"limit", &rb_limit,
+			NULL);
+
+    n_keys = RARRAY_LEN(rb_keys);
+    rb_sort_keys = RARRAY_PTR(rb_keys);
+    keys = ALLOCA_N(grn_table_sort_key, n_keys);
+    for (i = 0; i < n_keys; i++) {
+	VALUE rb_sort_options, rb_key, rb_order;
+
+	if (RVAL2CBOOL(rb_obj_is_kind_of(rb_sort_keys[i], rb_cHash))) {
+	    rb_sort_options = rb_sort_keys[i];
+	} else {
+	    rb_sort_options = rb_hash_new();
+	    rb_hash_aset(rb_sort_options,
+			 RB_GRN_INTERN("key"),
+			 rb_sort_keys[i]);
+	}
+	rb_grn_scan_options(rb_sort_options,
+			    "key", &rb_key,
+			    "order", &rb_order,
+			    NULL);
+	if (RVAL2CBOOL(rb_obj_is_kind_of(rb_key, rb_cString)))
+	    rb_key = rb_grn_table_get_column(self, rb_key);
+	keys[i].key = RVAL2GRNOBJECT(rb_key, &context);
+	if (NIL_P(rb_order) ||
+	    rb_grn_equal_option(rb_order, "desc") ||
+	    rb_grn_equal_option(rb_order, "descending")) {
+	    keys[i].flags = GRN_TABLE_SORT_DESC;
+	} else {
+	    /* FIXME: validation */
+	    keys[i].flags = GRN_TABLE_SORT_ASC;
+	}
+    }
+
+    if (!NIL_P(rb_limit))
+	limit = NUM2INT(rb_limit);
+
+    result = grn_table_create(context, NULL, 0, NULL, GRN_TABLE_NO_KEY,
+			      table, sizeof(grn_id));
+    n_records = grn_table_sort(context, table, limit,
+			       result, keys, n_keys);
+
+    return GRNOBJECT2RVAL(Qnil, context, result, RB_GRN_TRUE);
+}
+
 void
 rb_grn_init_table (VALUE mGrn)
 {
@@ -634,6 +696,8 @@ rb_grn_init_table (VALUE mGrn)
     rb_define_method(rb_cGrnTable, "each", rb_grn_table_each, 0);
 
     rb_define_method(rb_cGrnTable, "delete", rb_grn_table_delete, 1);
+
+    rb_define_method(rb_cGrnTable, "sort", rb_grn_table_sort, -1);
 
     rb_grn_init_table_key_support(mGrn);
     rb_grn_init_array(mGrn);
