@@ -68,17 +68,13 @@ rb_grn_key_from_ruby_object (VALUE rb_key, grn_ctx *context, grn_id domain_id,
 }
 
 static grn_id
-rb_grn_table_key_support_add_raw (VALUE self, VALUE rb_key)
+rb_grn_table_key_support_add_raw (VALUE self, VALUE rb_key,
+				  grn_ctx *context, grn_obj *table)
 {
     VALUE exception;
-    grn_ctx *context;
-    grn_obj *table;
     grn_id id;
     grn_obj *key;
     grn_search_flags flags;
-
-    context = rb_grn_object_ensure_context(self, Qnil);
-    table = SELF(self);
 
     key = RVAL2GRNKEY(rb_key, context, table->header.domain, self);
     flags = GRN_SEARCH_EXACT | GRN_TABLE_ADD;
@@ -96,9 +92,14 @@ rb_grn_table_key_support_add_raw (VALUE self, VALUE rb_key)
 static VALUE
 rb_grn_table_key_support_add (VALUE self, VALUE rb_key)
 {
+    grn_ctx *context;
+    grn_obj *table;
     grn_id id;
 
-    id = rb_grn_table_key_support_add_raw(self, rb_key);
+    context = rb_grn_object_ensure_context(self, Qnil);
+    table = SELF(self);
+
+    id = rb_grn_table_key_support_add_raw(self, rb_key, context, table);
     if (GRN_ID_NIL == id)
 	return Qnil;
     else
@@ -230,7 +231,7 @@ rb_grn_table_key_support_array_set_by_key (VALUE self,
 	rb_raise(rb_eArgError, "key should not be nil: <%s>",
 		 rb_grn_inspect(self));
 
-    id = rb_grn_table_key_support_add_raw(self, rb_key);
+    id = rb_grn_table_key_support_add_raw(self, rb_key, context, table);
     if (GRN_ID_NIL == id)
 	rb_raise(rb_eGrnError,
 		 "failed to add new record with key: <%s>: <%s>",
