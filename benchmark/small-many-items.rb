@@ -51,7 +51,15 @@ def report(index=0)
     label.length
   end.max
 
-  label, block = @items[index] || @items[0]
+  label, block = @items[index]
+  if label.nil?
+    puts "unavailable report ID: #{index}"
+    puts "available IDs:"
+    @items.each_with_index do |(label, block), i|
+      puts "#{i}: #{label}"
+    end
+    exit 1
+  end
 
   if index.zero?
     puts(" " * (width - 1) + Benchmark::Tms::CAPTION.rstrip + "memory".rjust(14))
@@ -76,6 +84,10 @@ item("Hash") do
 end
 
 begin
+  base_dir = File.expand_path(File.join(File.dirname(__FILE__), ".."))
+  $LOAD_PATH.unshift(File.join(base_dir, "src"))
+  $LOAD_PATH.unshift(File.join(base_dir, "src", "lib"))
+
   require 'groonga'
   Groonga::Database.create
 
