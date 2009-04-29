@@ -75,10 +75,14 @@ def report(index=0)
   puts "#{label.ljust(width)} #{result.to_s.strip} #{formatted_size}MB"
 end
 
+values = []
+n.times do |i|
+  values << "%08d" % i
+end
+
 item("Hash") do
   hash = {}
-  n.times do |i|
-    value = "%08d" % i
+  values.each do |value|
     hash[value] = value
   end
 end
@@ -94,8 +98,7 @@ begin
   item("groonga: Hash: memory") do
     hash = Groonga::Hash.create(:key_type => "<shorttext>",
                                 :value_size => 8)
-    n.times do |i|
-      value = "%08d" % i
+    values.each do |value|
       hash[value] = value
     end
   end
@@ -103,8 +106,7 @@ begin
   item("groonga: Trie: memory") do
     hash = Groonga::PatriciaTrie.create(:key_type => "<shorttext>",
                                         :value_size => 8)
-    n.times do |i|
-      value = "%08d" % i
+    values.each do |value|
       hash[value] = value
     end
   end
@@ -114,8 +116,7 @@ begin
     hash = Groonga::Hash.create(:key_type => "<shorttext>",
                                 :value_size => 8,
                                 :path => hash_file.path)
-    n.times do |i|
-      value = "%08d" % i
+    values.each do |value|
       hash[value] = value
     end
   end
@@ -125,8 +126,7 @@ begin
     hash = Groonga::PatriciaTrie.create(:key_type => "<shorttext>",
                                         :value_size => 8,
                                         :path => trie_file.path)
-    n.times do |i|
-      value = "%08d" % i
+    values.each do |value|
       hash[value] = value
     end
   end
@@ -139,8 +139,7 @@ begin
   item("TC: Hash: memory") do
     db = TokyoCabinet::ADB::new
     db.open("*#bnum=#{n}#mode=wct#xmsiz=0")
-    n.times do |i|
-      value = "%08d" % i
+    values.each do |value|
       db.put(value, value)
     end
   end
@@ -148,8 +147,7 @@ begin
   item("TC: Tree: memory") do
     db = TokyoCabinet::ADB::new
     db.open("+#bnum=#{n}#mode=wct#xmsiz=0")
-    n.times do |i|
-      value = "%08d" % i
+    values.each do |value|
       db.put(value, value)
     end
   end
@@ -158,8 +156,7 @@ begin
   item("TC: Hash: file") do
     db = TokyoCabinet::ADB::new
     db.open("#{hash_file.path}#bnum=#{n}#mode=wct#xmsiz=0")
-    n.times do |i|
-      value = "%08d" % i
+    values.each do |value|
       db.put(value, value)
     end
   end
@@ -168,8 +165,7 @@ begin
   item("TC: Tree: file") do
     db = TokyoCabinet::ADB::new
     db.open("#{tree_file.path}#bnum=#{n}#mode=wct#xmsiz=0")
-    n.times do |i|
-      value = "%08d" % i
+    values.each do |value|
       db.put(value, value)
     end
   end
