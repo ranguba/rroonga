@@ -246,7 +246,8 @@ class TableTest < Test::Unit::TestCase
     bookmark = bookmarks.add
     now = Time.now
     bookmark["created_at"] = now
-    assert_equal(now, bookmark["created_at"])
+    assert_equal(now.to_a,
+                 bookmark["created_at"].to_a)
   end
 
   def test_delete
