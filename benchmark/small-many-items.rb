@@ -3,23 +3,23 @@
 # This benchmark is based on Tokyo Cabinet's benchmark at
 # http://alpha.mixi.co.jp/blog/?p=791
 #
-# On my environment at 2009/04/27:
+# On my environment at 2009/04/29:
 # % for x in {0..8}; do ruby benchmark/small-many-items.rb $x; done
 #                           user     system      total        real        memory
-# Hash                  4.750000   0.300000   5.050000 (  6.950539)    129.273MB
-# groonga: Hash: memory 4.980000   0.200000   5.180000 (  6.877130)     23.613MB
-# groonga: Trie: memory 5.660000   0.180000   5.840000 (  7.843830)     15.684MB
-# groonga: Hash: file   5.010000   0.300000   5.310000 (  7.292904)     23.617MB
-# groonga: Trie: file   5.570000   0.220000   5.790000 (  8.004818)     15.688MB
-# TC: Hash: memory      3.020000   0.210000   3.230000 (  4.087278)     53.461MB
-# TC: Tree: memory      2.820000   0.160000   2.980000 (  4.108988)     33.297MB
-# TC: Hash: file        3.860000   3.470000   7.330000 (  9.590320)      0.285MB
-# TC: Tree: file        3.540000   0.270000   3.810000 (  5.926145)      6.582MB
+# Hash                  1.070000   0.140000   1.210000 (  1.462675)     46.234MB
+# groonga: Hash: memory 1.380000   0.140000   1.520000 (  1.804040)     23.531MB
+# groonga: Trie: memory 1.780000   0.110000   1.890000 (  2.136395)     15.520MB
+# groonga: Hash: file   1.380000   0.180000   1.560000 (  1.879252)     23.535MB
+# groonga: Trie: file   1.650000   0.160000   1.810000 (  2.257756)     15.523MB
+# TC: Hash: memory      0.680000   0.170000   0.850000 (  1.038155)     38.246MB
+# TC: Tree: memory      0.640000   0.130000   0.770000 (  1.029011)     30.609MB
+# TC: Hash: file        1.150000   2.900000   4.050000 (  4.908274)      0.164MB
+# TC: Tree: file        0.970000   0.210000   1.180000 (  1.416418)      5.367MB
 #
-# Ruby: Debian GNU/Linux sid at 2009/04/27:
+# Ruby: Debian GNU/Linux sid at 2009/04/29:
 #       ruby 1.8.7 (2008-08-11 patchlevel 72) [x86_64-linux]
-# groonga: HEAD at 2009/04/27: f2104358b27b80ff9e3aeff7cea09723f59c07b4
-# Ruby/Groonga: trunk at 2009/04/27: r186
+# groonga: HEAD at 2009/04/29: c97c3cf78b8f0761ca48ef211caa155135f89487
+# Ruby/Groonga: trunk at 2009/04/29: r221
 # Tokyo Cabinet: 1.4.17
 # Tokyo Cabinet Ruby: 1.23
 
