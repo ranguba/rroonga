@@ -506,7 +506,7 @@ rb_grn_object_get_name (VALUE self)
 	return Qnil;
 
     rb_name = rb_str_buf_new(name_size);
-    RSTRING_LEN(rb_name) = name_size;
+    rb_str_set_len(rb_name, name_size);
     grn_obj_name(rb_grn_object->context, rb_grn_object->object,
 		 RSTRING_PTR(rb_name), name_size);
     return rb_name;
