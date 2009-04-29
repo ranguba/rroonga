@@ -603,7 +603,7 @@ rb_grn_object_array_reference (VALUE self, VALUE rb_id)
     grn_obj *object;
     grn_obj *range;
     unsigned char range_type;
-    grn_obj *value = NULL;
+    grn_obj value;
     VALUE rb_value = Qnil;
 
     rb_grn_object = SELF(self);
@@ -620,25 +620,24 @@ rb_grn_object_array_reference (VALUE self, VALUE rb_id)
       case GRN_TABLE_HASH_KEY:
       case GRN_TABLE_PAT_KEY:
       case GRN_TABLE_NO_KEY:
-	value = grn_obj_open(context, GRN_BULK, 0, GRN_DB_VOID);
+	GRN_OBJ_INIT(&value, GRN_BULK, 0);
 	break;
       case GRN_TYPE:
       case GRN_ACCESSOR: /* FIXME */
-	value = grn_obj_open(context, GRN_BULK, 0, range_id);
+	GRN_OBJ_INIT(&value, GRN_BULK, 0);
+	value.header.domain = range_id;
 	break;
       case GRN_COLUMN_VAR_SIZE:
       case GRN_COLUMN_FIX_SIZE:
 	switch (object->header.flags & GRN_OBJ_COLUMN_TYPE_MASK) {
 	  case GRN_OBJ_COLUMN_VECTOR:
-	    value = grn_obj_open(context, GRN_VECTOR, 0, range_id);
-	    if (!value)
-		rb_grn_context_check(context, self);
+	    GRN_OBJ_INIT(&value, GRN_VECTOR, 0);
+	    value.header.domain = range_id;
 	    break;
 	  case GRN_OBJ_COLUMN_INDEX:
 	  case GRN_OBJ_COLUMN_SCALAR:
-	    value = grn_obj_open(context, GRN_BULK, 0, range_id);
-	    if (!value)
-		rb_grn_context_check(context, self);
+	    GRN_OBJ_INIT(&value, GRN_BULK, 0);
+	    value.header.domain = range_id;
 	    break;
 	  default:
 	    rb_raise(rb_eGrnError, "unsupported column type: %u: %s",
@@ -652,16 +651,11 @@ rb_grn_object_array_reference (VALUE self, VALUE rb_id)
 	break;
     }
 
-    value = grn_obj_get_value(context, object, id, value);
-    if (!value) {
-	rb_grn_context_check(context, self);
-	return Qnil;
-    }
-
-    rb_value = GRNVALUE2RVAL(context, value, range, self);
-
+    grn_obj_get_value(context, object, id, &value);
     exception = rb_grn_context_to_exception(context, self);
-    grn_obj_close(context, value);
+    if (NIL_P(exception))
+	rb_value = GRNVALUE2RVAL(context, &value, range, self);
+    grn_obj_close(context, &value);
     if (!NIL_P(exception))
 	rb_exc_raise(exception);
 

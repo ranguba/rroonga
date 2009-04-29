@@ -69,7 +69,7 @@ rb_grn_table_key_support_get_key (VALUE self, VALUE rb_id)
 {
     grn_ctx *context = NULL;
     grn_id id;
-    grn_obj *table, *key;
+    grn_obj *table, key;
     int key_size = 0;
     VALUE rb_key;
 
@@ -80,11 +80,11 @@ rb_grn_table_key_support_get_key (VALUE self, VALUE rb_id)
     if (key_size == 0)
 	return Qnil;
 
-    key = grn_obj_open(context, GRN_BULK, 0, GRN_ID_NIL);
-    grn_bulk_space(context, key, key_size);
-    grn_table_get_key(context, table, id, GRN_BULK_HEAD(key), key_size);
-    rb_key = GRNKEY2RVAL(context, GRN_BULK_HEAD(key), key_size, table, self);
-    grn_obj_close(context, key);
+    GRN_OBJ_INIT(&key, GRN_BULK, 0);
+    grn_bulk_space(context, &key, key_size);
+    grn_table_get_key(context, table, id, GRN_BULK_HEAD(&key), key_size);
+    rb_key = GRNKEY2RVAL(context, GRN_BULK_HEAD(&key), key_size, table, self);
+    grn_obj_close(context, &key);
 
     return rb_key;
 }
