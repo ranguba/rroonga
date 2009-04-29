@@ -695,9 +695,9 @@ rb_grn_object_set (VALUE self, VALUE rb_id, VALUE rb_value, int flags)
     context = rb_grn_object->context;
     id = NUM2UINT(rb_id);
     if (RVAL2CBOOL(rb_obj_is_kind_of(rb_value, rb_cArray))) {
-	value = RVAL2GRNVECTOR(context, rb_value);
+	value = RVAL2GRNVECTOR(rb_value, context);
     } else {
-	value = RVAL2GRNBULK(context, rb_value);
+	value = RVAL2GRNBULK(rb_value, context);
     }
     rc = grn_obj_set_value(context, rb_grn_object->object, id,
 			   value, flags);
@@ -803,7 +803,7 @@ rb_grn_object_search (int argc, VALUE *argv, VALUE self)
 	query = (grn_obj *)_query;
     } else {
 	query_is_created = RB_GRN_TRUE;
-	query = RVAL2GRNBULK(context, rb_query);
+	query = RVAL2GRNBULK(rb_query, context);
     }
 
     rb_grn_scan_options(options,

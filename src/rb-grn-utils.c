@@ -329,7 +329,7 @@ rb_grn_bulk_from_ruby_object_with_type (VALUE object, grn_ctx *context,
 		 rb_grn_inspect(rb_type));
 	break;
       default:
-	return RVAL2GRNBULK(context, object);
+	return RVAL2GRNBULK(object, context);
 	break;
     }
 

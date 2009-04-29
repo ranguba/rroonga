@@ -78,21 +78,21 @@ rb_grn_fix_size_column_array_set (VALUE self, VALUE rb_id, VALUE rb_value)
 		     rb_grn_inspect(self),
 		     rb_grn_inspect(rb_value));
 
-	value = RVAL2GRNUVECTOR(context, rb_ary_new3(1, rb_id));
+	value = RVAL2GRNUVECTOR(rb_ary_new3(1, rb_id), context);
     } else if (range_object &&
 	       RVAL2CBOOL(rb_obj_is_kind_of(rb_value, rb_cInteger))) {
 	switch (range_object->header.type) {
 	  case GRN_TABLE_PAT_KEY:
 	  case GRN_TABLE_HASH_KEY:
 	  case GRN_TABLE_NO_KEY:
-	    value = RVAL2GRNUVECTOR(context, rb_ary_new3(1, rb_value));
+	    value = RVAL2GRNUVECTOR(rb_ary_new3(1, rb_value), context);
 	    break;
 	  default:
-	    value = RVAL2GRNBULK(context, rb_value);
+	    value = RVAL2GRNBULK(rb_value, context);
 	    break;
 	}
     } else {
-	value = RVAL2GRNBULK(context, rb_value);
+	value = RVAL2GRNBULK(rb_value, context);
     }
 
     rc = grn_obj_set_value(context, column, id, value, GRN_OBJ_SET);
@@ -134,8 +134,8 @@ rb_grn_index_column_array_set (VALUE self, VALUE rb_id, VALUE rb_value)
     else
 	section = NUM2UINT(rb_section);
 
-    old_value = RVAL2GRNBULK(context, rb_old_value);
-    new_value = RVAL2GRNBULK(context, rb_new_value);
+    old_value = RVAL2GRNBULK(rb_old_value, context);
+    new_value = RVAL2GRNBULK(rb_new_value, context);
 
     rc = grn_column_index_update(context, SELF(self),
 				 id, section, old_value, new_value);

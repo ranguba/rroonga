@@ -217,18 +217,18 @@ VALUE          rb_grn_record_new                    (VALUE table,
 
 #define RVAL2GRNLOGGER(object)        (rb_grn_logger_from_ruby_object(object))
 
-#define RVAL2GRNBULK(context, object) (rb_grn_bulk_from_ruby_object(object, context, NULL))
-#define RVAL2GRNBULK_WITH_TYPE(context, object, type) \
+#define RVAL2GRNBULK(object, context) (rb_grn_bulk_from_ruby_object(object, context, NULL))
+#define RVAL2GRNBULK_WITH_TYPE(object, context, type) \
     (rb_grn_bulk_from_ruby_object_with_type(object, context, NULL, type))
 #define GRNBULK2RVAL(context, bulk, related_object) \
     (rb_grn_bulk_to_ruby_object(context, bulk, related_object))
 
-#define RVAL2GRNVECTOR(context, object) \
+#define RVAL2GRNVECTOR(object, context) \
     (rb_grn_vector_from_ruby_object(object, context))
 #define GRNVECTOR2RVAL(context, vector) \
     (rb_grn_vector_to_ruby_object(context, vector))
 
-#define RVAL2GRNUVECTOR(context, object) \
+#define RVAL2GRNUVECTOR(object, context) \
     (rb_grn_uvector_from_ruby_object(object, context))
 #define GRNUVECTOR2RVAL(context, uvector) \
     (rb_grn_uvector_to_ruby_object(context, uvector))

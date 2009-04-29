@@ -197,7 +197,7 @@ rb_grn_table_key_support_array_set_by_key (VALUE self,
 		 rb_grn_inspect(rb_key),
 		 rb_grn_inspect(self));
 
-    value = RVAL2GRNBULK(context, rb_value);
+    value = RVAL2GRNBULK(rb_value, context);
     rc = grn_obj_set_value(context, table, id, value, GRN_OBJ_SET);
     exception = rb_grn_context_to_exception(context, self);
     grn_obj_close(context, value);
