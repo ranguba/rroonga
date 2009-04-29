@@ -217,19 +217,20 @@ VALUE          rb_grn_record_new                    (VALUE table,
 
 #define RVAL2GRNLOGGER(object)        (rb_grn_logger_from_ruby_object(object))
 
-#define RVAL2GRNBULK(object, context) (rb_grn_bulk_from_ruby_object(object, context, NULL))
-#define RVAL2GRNBULK_WITH_TYPE(object, context, type) \
-    (rb_grn_bulk_from_ruby_object_with_type(object, context, NULL, type))
+#define RVAL2GRNBULK(object, context, bulk) \
+    (rb_grn_bulk_from_ruby_object(object, context, bulk))
+#define RVAL2GRNBULK_WITH_TYPE(object, context, bulk, type) \
+    (rb_grn_bulk_from_ruby_object_with_type(object, context, bulk, type))
 #define GRNBULK2RVAL(context, bulk, related_object) \
     (rb_grn_bulk_to_ruby_object(context, bulk, related_object))
 
-#define RVAL2GRNVECTOR(object, context) \
-    (rb_grn_vector_from_ruby_object(object, context))
+#define RVAL2GRNVECTOR(object, context, vector)	\
+    (rb_grn_vector_from_ruby_object(object, context, vector))
 #define GRNVECTOR2RVAL(context, vector) \
     (rb_grn_vector_to_ruby_object(context, vector))
 
-#define RVAL2GRNUVECTOR(object, context) \
-    (rb_grn_uvector_from_ruby_object(object, context))
+#define RVAL2GRNUVECTOR(object, context, uvector) \
+    (rb_grn_uvector_from_ruby_object(object, context, uvector))
 #define GRNUVECTOR2RVAL(context, uvector) \
     (rb_grn_uvector_to_ruby_object(context, uvector))
 
@@ -302,11 +303,13 @@ VALUE          rb_grn_bulk_to_ruby_object           (grn_ctx *context,
 						     grn_obj *bulk,
 						     VALUE related_object);
 grn_obj       *rb_grn_vector_from_ruby_object       (VALUE object,
-						     grn_ctx *context);
+						     grn_ctx *context,
+						     grn_obj *vector);
 VALUE          rb_grn_vector_to_ruby_object         (grn_ctx *context,
 						     grn_obj *vector);
 grn_obj       *rb_grn_uvector_from_ruby_object      (VALUE object,
-						     grn_ctx *context);
+						     grn_ctx *context,
+						     grn_obj *uvector);
 VALUE          rb_grn_uvector_to_ruby_object        (grn_ctx *context,
 						     grn_obj *uvector);
 

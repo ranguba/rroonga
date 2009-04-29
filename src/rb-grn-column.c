@@ -50,7 +50,7 @@ rb_grn_fix_size_column_array_set (VALUE self, VALUE rb_id, VALUE rb_value)
     grn_obj *range_object = NULL;
     grn_rc rc;
     grn_id id;
-    grn_obj *value;
+    grn_obj value;
 
     context = rb_grn_object_ensure_context(self, Qnil);
     column = SELF(self);
@@ -78,25 +78,25 @@ rb_grn_fix_size_column_array_set (VALUE self, VALUE rb_id, VALUE rb_value)
 		     rb_grn_inspect(self),
 		     rb_grn_inspect(rb_value));
 
-	value = RVAL2GRNUVECTOR(rb_ary_new3(1, rb_id), context);
+	RVAL2GRNUVECTOR(rb_ary_new3(1, rb_id), context, &value);
     } else if (range_object &&
 	       RVAL2CBOOL(rb_obj_is_kind_of(rb_value, rb_cInteger))) {
 	switch (range_object->header.type) {
 	  case GRN_TABLE_PAT_KEY:
 	  case GRN_TABLE_HASH_KEY:
 	  case GRN_TABLE_NO_KEY:
-	    value = RVAL2GRNUVECTOR(rb_ary_new3(1, rb_value), context);
+	    RVAL2GRNUVECTOR(rb_ary_new3(1, rb_value), context, &value);
 	    break;
 	  default:
-	    value = RVAL2GRNBULK(rb_value, context);
+	    RVAL2GRNBULK(rb_value, context, &value);
 	    break;
 	}
     } else {
-	value = RVAL2GRNBULK(rb_value, context);
+	RVAL2GRNBULK(rb_value, context, &value);
     }
 
-    rc = grn_obj_set_value(context, column, id, value, GRN_OBJ_SET);
-    grn_obj_close(context, value);
+    rc = grn_obj_set_value(context, column, id, &value, GRN_OBJ_SET);
+    grn_obj_close(context, &value);
     rb_grn_rc_check(rc, self);
 
     return Qnil;
@@ -109,7 +109,7 @@ rb_grn_index_column_array_set (VALUE self, VALUE rb_id, VALUE rb_value)
     grn_rc rc;
     grn_id id;
     unsigned int section;
-    grn_obj *old_value, *new_value;
+    grn_obj old_value, new_value;
     VALUE rb_section, rb_old_value, rb_new_value;
 
     context = rb_grn_object_ensure_context(self, Qnil);
@@ -134,13 +134,13 @@ rb_grn_index_column_array_set (VALUE self, VALUE rb_id, VALUE rb_value)
     else
 	section = NUM2UINT(rb_section);
 
-    old_value = RVAL2GRNBULK(rb_old_value, context);
-    new_value = RVAL2GRNBULK(rb_new_value, context);
+    RVAL2GRNBULK(rb_old_value, context, &old_value);
+    RVAL2GRNBULK(rb_new_value, context, &new_value);
 
     rc = grn_column_index_update(context, SELF(self),
-				 id, section, old_value, new_value);
-    grn_obj_close(context, old_value);
-    grn_obj_close(context, new_value);
+				 id, section, &old_value, &new_value);
+    grn_obj_close(context, &old_value);
+    grn_obj_close(context, &new_value);
 
     rb_grn_rc_check(rc, self);
 

@@ -684,7 +684,7 @@ rb_grn_object_set (VALUE self, VALUE rb_id, VALUE rb_value, int flags)
     RbGrnObject *rb_grn_object;
     grn_ctx *context;
     grn_id id;
-    grn_obj *value;
+    grn_obj value;
     grn_rc rc;
     VALUE exception;
 
@@ -695,14 +695,14 @@ rb_grn_object_set (VALUE self, VALUE rb_id, VALUE rb_value, int flags)
     context = rb_grn_object->context;
     id = NUM2UINT(rb_id);
     if (RVAL2CBOOL(rb_obj_is_kind_of(rb_value, rb_cArray))) {
-	value = RVAL2GRNVECTOR(rb_value, context);
+	RVAL2GRNVECTOR(rb_value, context, &value);
     } else {
-	value = RVAL2GRNBULK(rb_value, context);
+	RVAL2GRNBULK(rb_value, context, &value);
     }
     rc = grn_obj_set_value(context, rb_grn_object->object, id,
-			   value, flags);
+			   &value, flags);
     exception = rb_grn_context_to_exception(context, self);
-    grn_obj_close(context, value);
+    grn_obj_close(context, &value);
     if (!NIL_P(exception))
 	rb_exc_raise(exception);
     rb_grn_rc_check(rc, self);
@@ -803,7 +803,7 @@ rb_grn_object_search (int argc, VALUE *argv, VALUE self)
 	query = (grn_obj *)_query;
     } else {
 	query_is_created = RB_GRN_TRUE;
-	query = RVAL2GRNBULK(rb_query, context);
+	query = RVAL2GRNBULK(rb_query, context, NULL);
     }
 
     rb_grn_scan_options(options,

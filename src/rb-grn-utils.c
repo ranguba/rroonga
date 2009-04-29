@@ -329,7 +329,7 @@ rb_grn_bulk_from_ruby_object_with_type (VALUE object, grn_ctx *context,
 		 rb_grn_inspect(rb_type));
 	break;
       default:
-	return RVAL2GRNBULK(object, context);
+	return RVAL2GRNBULK(object, context, bulk);
 	break;
     }
 
@@ -374,13 +374,16 @@ rb_grn_vector_to_ruby_object (grn_ctx *context, grn_obj *vector)
 }
 
 grn_obj *
-rb_grn_vector_from_ruby_object (VALUE object, grn_ctx *context)
+rb_grn_vector_from_ruby_object (VALUE object, grn_ctx *context, grn_obj *vector)
 {
     VALUE *values;
-    grn_obj *vector;
     int i, n;
 
-    vector = grn_obj_open(context, GRN_VECTOR, 0, 0);
+    if (vector)
+	GRN_OBJ_INIT(vector, GRN_VECTOR, 0);
+    else
+	vector = grn_obj_open(context, GRN_VECTOR, 0, 0);
+
     if (NIL_P(object))
 	return vector;
 
@@ -422,13 +425,17 @@ rb_grn_uvector_to_ruby_object (grn_ctx *context, grn_obj *uvector)
 }
 
 grn_obj *
-rb_grn_uvector_from_ruby_object (VALUE object, grn_ctx *context)
+rb_grn_uvector_from_ruby_object (VALUE object, grn_ctx *context,
+				 grn_obj *uvector)
 {
     VALUE *values;
-    grn_obj *uvector;
     int i, n;
 
-    uvector = grn_obj_open(context, GRN_UVECTOR, 0, 0);
+    if (uvector)
+	GRN_OBJ_INIT(uvector, GRN_UVECTOR, 0);
+    else
+	uvector = grn_obj_open(context, GRN_UVECTOR, 0, 0);
+
     if (NIL_P(object))
 	return uvector;
 
@@ -537,12 +544,11 @@ rb_grn_key_from_ruby_object (VALUE rb_key, grn_ctx *context,
 	domain = grn_ctx_get(context, domain_id);
 
     if (!domain)
-	return rb_grn_bulk_from_ruby_object(rb_key, context, key);
+	return RVAL2GRNBULK(rb_key, context, key);
 
     switch (domain->header.type) {
       case GRN_TYPE:
-	return rb_grn_bulk_from_ruby_object_with_type(rb_key, context,
-						      key, domain_id);
+	return RVAL2GRNBULK_WITH_TYPE(rb_key, context, key, domain_id);
 	break;
       case GRN_TABLE_HASH_KEY:
       case GRN_TABLE_PAT_KEY:
