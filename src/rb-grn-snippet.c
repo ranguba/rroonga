@@ -29,6 +29,7 @@ struct _RbGrnSnippet
 {
     grn_ctx *context;
     grn_snip *snippet;
+    rb_grn_boolean owner;
 };
 
 VALUE rb_cGrnSnippet;
@@ -63,11 +64,10 @@ rb_rb_grn_snippet_free (void *object)
 {
     RbGrnSnippet *rb_grn_snippet = object;
 
-    if (rb_grn_snippet->snippet) {
+    if (rb_grn_snippet->context && rb_grn_snippet->snippet &&
+	rb_grn_snippet->owner)
         grn_snip_close(rb_grn_snippet->context,
                        rb_grn_snippet->snippet);
-        rb_grn_snippet->snippet = NULL;
-    }
 
     xfree(object);
 }
@@ -83,6 +83,7 @@ rb_grn_snippet_to_ruby_object (grn_ctx *context, grn_snip *snippet)
     rb_grn_snippet = ALLOC(RbGrnSnippet);
     rb_grn_snippet->context = context;
     rb_grn_snippet->snippet = snippet;
+    rb_grn_snippet->owner = RB_GRN_FALSE;
 
     return Data_Wrap_Struct(rb_cGrnSnippet, NULL,
                             rb_rb_grn_snippet_free, rb_grn_snippet);
@@ -162,6 +163,7 @@ rb_grn_snippet_initialize (int argc, VALUE *argv, VALUE self)
     DATA_PTR(self) = rb_grn_snippet;
     rb_grn_snippet->context = context;
     rb_grn_snippet->snippet = snippet;
+    rb_grn_snippet->owner = RB_GRN_TRUE;
 
     return Qnil;
 }
