@@ -207,7 +207,7 @@ rb_grn_bulk_from_ruby_object (VALUE object, grn_ctx *context, grn_obj *bulk)
 	string = RSTRING_PTR(object);
 	size = RSTRING_LEN(object);
 	shallow = RB_GRN_TRUE;
-    } else if (RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cFixnum))) {
+    } else if (FIXNUM_P(object)) {
 	int32_value = NUM2INT(object);
 	string = (const char *)&int32_value;
 	size = sizeof(int32_value);

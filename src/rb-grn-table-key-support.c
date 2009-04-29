@@ -118,7 +118,7 @@ rb_grn_table_key_support_delete_by_key (VALUE self, VALUE rb_key)
 static VALUE
 rb_grn_table_key_support_delete (VALUE self, VALUE rb_id_or_key)
 {
-    if (RVAL2CBOOL(rb_obj_is_kind_of(rb_id_or_key, rb_cFixnum))) {
+    if (FIXNUM_P(rb_id_or_key)) {
 	int argc = 1;
 	VALUE argv[1];
 	argv[0] = rb_id_or_key;
@@ -160,7 +160,7 @@ rb_grn_table_key_support_array_reference_by_key (VALUE self, VALUE rb_key)
 static VALUE
 rb_grn_table_key_support_array_reference (VALUE self, VALUE rb_id_or_key)
 {
-    if (RVAL2CBOOL(rb_obj_is_kind_of(rb_id_or_key, rb_cFixnum))) {
+    if (FIXNUM_P(rb_id_or_key)) {
 	int argc = 1;
 	VALUE argv[1];
 	argv[0] = rb_id_or_key;
@@ -212,7 +212,7 @@ static VALUE
 rb_grn_table_key_support_array_set (VALUE self,
 				    VALUE rb_id_or_key, VALUE rb_value)
 {
-    if (RVAL2CBOOL(rb_obj_is_kind_of(rb_id_or_key, rb_cFixnum))) {
+    if (FIXNUM_P(rb_id_or_key)) {
 	int argc = 2;
 	VALUE argv[2];
 	argv[0] = rb_id_or_key;
