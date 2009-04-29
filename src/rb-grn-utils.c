@@ -189,9 +189,8 @@ rb_grn_bulk_to_ruby_object (grn_ctx *context, grn_obj *bulk,
 }
 
 grn_obj *
-rb_grn_bulk_from_ruby_object (grn_ctx *context, VALUE object)
+rb_grn_bulk_from_ruby_object (grn_ctx *context, VALUE object, grn_obj *bulk)
 {
-    grn_obj *bulk;
     const char *string;
     unsigned int size;
     int32_t int32_value;
@@ -247,11 +246,18 @@ rb_grn_bulk_from_ruby_object (grn_ctx *context, VALUE object)
 		 rb_grn_inspect(object));
     }
 
-    if (shallow)
-	bulk = grn_obj_open(context, GRN_BULK, 0, GRN_OBJ_DO_SHALLOW_COPY);
-    else
-	bulk = grn_obj_open(context, GRN_BULK, 0, 0);
-    rb_grn_context_check(context, object);
+    if (bulk) {
+	if (shallow)
+	    GRN_OBJ_INIT(bulk, GRN_BULK, GRN_OBJ_DO_SHALLOW_COPY);
+	else
+	    GRN_OBJ_INIT(bulk, GRN_BULK, 0);
+    } else {
+	if (shallow)
+	    bulk = grn_obj_open(context, GRN_BULK, 0, GRN_OBJ_DO_SHALLOW_COPY);
+	else
+	    bulk = grn_obj_open(context, GRN_BULK, 0, 0);
+	rb_grn_context_check(context, object);
+    }
     GRN_BULK_SET(context, bulk, string, size);
 
     return bulk;
@@ -259,9 +265,8 @@ rb_grn_bulk_from_ruby_object (grn_ctx *context, VALUE object)
 
 grn_obj *
 rb_grn_bulk_from_ruby_object_with_type (grn_ctx *context, VALUE object,
-					grn_id type)
+					grn_obj *bulk, grn_id type)
 {
-    grn_obj *bulk;
     const char *string;
     unsigned int size;
     int32_t int32_value;
@@ -328,7 +333,11 @@ rb_grn_bulk_from_ruby_object_with_type (grn_ctx *context, VALUE object,
 	break;
     }
 
-    bulk = grn_obj_open(context, GRN_BULK, flags, GRN_ID_NIL);
+    if (bulk) {
+	GRN_OBJ_INIT(bulk, GRN_BULK, flags);
+    } else {
+	bulk = grn_obj_open(context, GRN_BULK, flags, GRN_ID_NIL);
+    }
     rb_grn_context_check(context, object);
     GRN_BULK_SET(context, bulk, string, size);
 
@@ -514,6 +523,46 @@ rb_grn_key_to_ruby_object (grn_ctx *context, const void *key, int key_size,
     bulk.header.domain = table->header.domain;
 
     return GRNBULK2RVAL(context, &bulk, related_object);
+}
+
+grn_obj *
+rb_grn_key_from_ruby_object (VALUE rb_key, grn_ctx *context,
+			     grn_obj *key, grn_id domain_id,
+			     VALUE related_object)
+{
+    grn_obj *domain = NULL;
+    grn_id id;
+
+    if (domain_id != GRN_ID_NIL)
+	domain = grn_ctx_get(context, domain_id);
+
+    if (!domain)
+	return rb_grn_bulk_from_ruby_object(context, rb_key, key);
+
+    switch (domain->header.type) {
+      case GRN_TYPE:
+	return rb_grn_bulk_from_ruby_object_with_type(context, rb_key,
+						      key, domain_id);
+	break;
+      case GRN_TABLE_HASH_KEY:
+      case GRN_TABLE_PAT_KEY:
+      case GRN_TABLE_NO_KEY:
+	id = RVAL2GRNID(rb_key, context, domain, related_object);
+	break;
+      default:
+	if (!RVAL2CBOOL(rb_obj_is_kind_of(rb_key, rb_cInteger)))
+	    rb_raise(rb_eGrnError,
+		     "should be unsigned integer: <%s>: <%s>",
+		     rb_grn_inspect(rb_key),
+		     rb_grn_inspect(related_object));
+
+	id = NUM2UINT(rb_key);
+	break;
+    }
+
+    GRN_OBJ_INIT(key, GRN_BULK, 0);
+    GRN_BULK_SET(context, key, &id, sizeof(id));
+    return key;
 }
 
 void

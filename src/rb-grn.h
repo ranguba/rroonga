@@ -217,30 +217,32 @@ VALUE          rb_grn_record_new                    (VALUE table,
 
 #define RVAL2GRNLOGGER(object)        (rb_grn_logger_from_ruby_object(object))
 
-#define RVAL2GRNBULK(context, object) (rb_grn_bulk_from_ruby_object(context, object))
+#define RVAL2GRNBULK(context, object) (rb_grn_bulk_from_ruby_object(context, object, NULL))
 #define RVAL2GRNBULK_WITH_TYPE(context, object, type) \
-                                      (rb_grn_bulk_from_ruby_object_with_type(context, object, type))
+    (rb_grn_bulk_from_ruby_object_with_type(context, object, NULL, type))
 #define GRNBULK2RVAL(context, bulk, related_object) \
-                                      (rb_grn_bulk_to_ruby_object(context, bulk, related_object))
+    (rb_grn_bulk_to_ruby_object(context, bulk, related_object))
 
 #define RVAL2GRNVECTOR(context, object) \
-	                              (rb_grn_vector_from_ruby_object(context, object))
+    (rb_grn_vector_from_ruby_object(context, object))
 #define GRNVECTOR2RVAL(context, vector) \
-	                              (rb_grn_vector_to_ruby_object(context, vector))
+    (rb_grn_vector_to_ruby_object(context, vector))
 
 #define RVAL2GRNUVECTOR(context, object) \
-	                              (rb_grn_uvector_from_ruby_object(context, object))
+    (rb_grn_uvector_from_ruby_object(context, object))
 #define GRNUVECTOR2RVAL(context, uvector) \
-	                              (rb_grn_uvector_to_ruby_object(context, uvector))
+    (rb_grn_uvector_to_ruby_object(context, uvector))
 
 #define GRNVALUE2RVAL(context, value, range, related_object) \
-	                              (rb_grn_value_to_ruby_object(context, value, range, related_object))
+    (rb_grn_value_to_ruby_object(context, value, range, related_object))
 
 #define RVAL2GRNID(object, context, table, related_object) \
-                                      (rb_grn_id_from_ruby_object(object, context, table, related_object))
+    (rb_grn_id_from_ruby_object(object, context, table, related_object))
 
 #define GRNKEY2RVAL(context, key, key_size, table, related_object) \
-	                              (rb_grn_key_to_ruby_object(context, key, key_size, table, related_object))
+    (rb_grn_key_to_ruby_object(context, key, key_size, table, related_object))
+#define RVAL2GRNKEY(object, context, key, domain, related_object) \
+    (rb_grn_key_from_ruby_object(object, context, key, domain, related_object))
 
 
 grn_encoding   rb_grn_encoding_from_ruby_object     (VALUE object,
@@ -289,10 +291,12 @@ grn_logger_info *
                rb_grn_logger_from_ruby_object       (VALUE object);
 
 grn_obj       *rb_grn_bulk_from_ruby_object         (grn_ctx *context,
-						     VALUE object);
+						     VALUE object,
+						     grn_obj *bulk);
 grn_obj       *rb_grn_bulk_from_ruby_object_with_type
                                                     (grn_ctx *context,
 						     VALUE object,
+						     grn_obj *bulk,
 						     grn_id type);
 VALUE          rb_grn_bulk_to_ruby_object           (grn_ctx *context,
 						     grn_obj *bulk,
@@ -320,6 +324,11 @@ VALUE          rb_grn_key_to_ruby_object            (grn_ctx *context,
 						     const void *key,
 						     int key_size,
 						     grn_obj *table,
+						     VALUE related_object);
+grn_obj       *rb_grn_key_from_ruby_object          (VALUE rb_key,
+						     grn_ctx *context,
+						     grn_obj *key,
+						     grn_id domain_id,
 						     VALUE related_object);
 
 RB_GRN_END_DECLS
