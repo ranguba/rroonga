@@ -20,14 +20,14 @@ class ContextTest < Test::Unit::TestCase
     context = Groonga::Context.default
     assert_not_predicate(context, :use_ql?)
     assert_not_predicate(context, :batch_mode?)
-    assert_equal(Groonga::Encoding::DEFAULT, context.encoding)
+    assert_equal(Groonga::Encoding.default, context.encoding)
   end
 
   def test_default_options
     Groonga::Context.default_options = {
       :use_ql => true,
       :batch_mode => true,
-      :encoding => Groonga::Encoding::UTF8,
+      :encoding => :utf8,
     }
     context = Groonga::Context.default
     assert_predicate(context, :use_ql?)
@@ -53,7 +53,7 @@ class ContextTest < Test::Unit::TestCase
 
   def test_encoding
     context = Groonga::Context.new
-    assert_equal(Groonga::Encoding::DEFAULT, context.encoding)
+    assert_equal(Groonga::Encoding.default, context.encoding)
 
     context = Groonga::Context.new(:encoding => :utf8)
     assert_equal(Groonga::Encoding::UTF8, context.encoding)
@@ -77,7 +77,7 @@ class ContextTest < Test::Unit::TestCase
     assert_equal("#<Groonga::Context " +
                  "use_ql: <false>, " +
                  "batch_mode: <false>, " +
-                 "encoding: <:default>, " +
+                 "encoding: <#{Groonga::Encoding.default.inspect}>, " +
                  "database: <#{db.inspect}>>",
                  context.inspect)
   end

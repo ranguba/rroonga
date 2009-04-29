@@ -18,6 +18,10 @@
 class SnippetTest < Test::Unit::TestCase
   include GroongaTestUtils
 
+  def setup_encoding
+    Groonga::Encoding.default = :utf8
+  end
+
   def test_new_without_arguments
     assert_nothing_raised do
       Groonga::Snippet.new
@@ -25,7 +29,7 @@ class SnippetTest < Test::Unit::TestCase
   end
 
   def test_execute
-    snippet = Groonga::Snippet.new(:encoding => :utf8)
+    snippet = Groonga::Snippet.new
     snippet.add_keyword("検索", :open_tag => "[[", :close_tag => "]]")
     assert_equal(["groonga は組み込み型の全文[[検索]]エンジンライブラリです。DBMSやスクリプト",
                   "組み込むことによって、その全文[[検索]]機能を強化することができます。ま"],
@@ -33,14 +37,14 @@ class SnippetTest < Test::Unit::TestCase
   end
 
   def test_invalid_encoding
-    snippet = Groonga::Snippet.new(:encoding => :shift_jis)
+    Groonga::Context.default.encoding = :shift_jis
+    snippet = Groonga::Snippet.new
     snippet.add_keyword("検索")
     assert_equal([], snippet.execute(text))
   end
 
   def test_default_tag
-    snippet = Groonga::Snippet.new(:encoding => :utf8,
-                                   :default_open_tag => "<<",
+    snippet = Groonga::Snippet.new(:default_open_tag => "<<",
                                    :default_close_tag => ">>")
     snippet.add_keyword("全文")
     assert_equal(["groonga は組み込み型の<<全文>>検索エンジンライブラリです。DBMSやスクリプト",
@@ -49,8 +53,7 @@ class SnippetTest < Test::Unit::TestCase
   end
 
   def test_width
-    snippet = Groonga::Snippet.new(:encoding => :utf8,
-                                   :width => 30,
+    snippet = Groonga::Snippet.new(:width => 30,
                                    :default_open_tag => "{",
                                    :default_close_tag => "}")
     snippet.add_keyword("データ")
@@ -60,8 +63,7 @@ class SnippetTest < Test::Unit::TestCase
   end
 
   def test_max_results
-    snippet = Groonga::Snippet.new(:encoding => :utf8,
-                                   :width => 30,
+    snippet = Groonga::Snippet.new(:width => 30,
                                    :max_results => 1,
                                    :default_open_tag => "{",
                                    :default_close_tag => "}")
@@ -72,7 +74,6 @@ class SnippetTest < Test::Unit::TestCase
 
   def test_normalize
     options_without_normalize = {
-      :encoding => :utf8,
       :width => 30,
       :default_open_tag => "{",
       :default_close_tag => "}",
@@ -91,7 +92,6 @@ class SnippetTest < Test::Unit::TestCase
   def test_html_escape
     text = "groonga は組み込み型の全文検索エンジン&データストアライブラリです。"
     options_without_html_escape = {
-      :encoding => :utf8,
       :width => 30,
       :default_open_tag => "<",
       :default_close_tag => ">",

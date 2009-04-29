@@ -46,14 +46,13 @@ rb_grn_database_s_create (int argc, VALUE *argv, VALUE klass)
     grn_db_create_optarg create_args;
     const char *path = NULL;
     VALUE rb_database;
-    VALUE rb_path, options, rb_context, encoding, builtin_type_names;
+    VALUE rb_path, options, rb_context, builtin_type_names;
 
     rb_scan_args(argc, argv, "01", &options);
 
     rb_grn_scan_options(options,
                         "path", &rb_path,
 			"context", &rb_context,
-                        "encoding", &encoding,
                         "builtin_type_names", &builtin_type_names,
 			NULL);
 
@@ -61,7 +60,6 @@ rb_grn_database_s_create (int argc, VALUE *argv, VALUE klass)
         path = StringValuePtr(rb_path);
     context = rb_grn_context_ensure(rb_context);
 
-    create_args.encoding = RVAL2GRNENCODING(encoding, context);
     create_args.builtin_type_names = NULL;
     create_args.n_builtin_type_names = 0;
 

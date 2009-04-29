@@ -14,6 +14,8 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 class EncodingTest < Test::Unit::TestCase
+  include GroongaTestUtils
+
   def test_constants
     assert_equal(:default, Groonga::Encoding::DEFAULT)
     assert_equal(:none, Groonga::Encoding::NONE)
@@ -22,5 +24,10 @@ class EncodingTest < Test::Unit::TestCase
     assert_equal(:utf8, Groonga::Encoding::UTF8)
     assert_equal(:latin1, Groonga::Encoding::LATIN1)
     assert_equal(:koi8r, Groonga::Encoding::KOI8R)
+  end
+
+  def test_default
+    Groonga::Encoding.default = :utf8
+    assert_equal(:utf8, Groonga::Encoding.default)
   end
 end

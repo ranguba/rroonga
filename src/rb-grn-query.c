@@ -122,9 +122,8 @@ rb_grn_query_initialize (int argc, VALUE *argv, VALUE self)
     unsigned int query_string_length;
     grn_sel_operator default_operator;
     int max_expressions = RB_GRN_QUERY_DEFAULT_MAX_EXPRESSIONS;
-    grn_encoding encoding;
     VALUE rb_query_string, options, rb_context, rb_default_operator;
-    VALUE rb_max_expressions, rb_encoding;
+    VALUE rb_max_expressions;
 
     rb_scan_args(argc, argv, "11", &rb_query_string, &options);
 
@@ -135,7 +134,6 @@ rb_grn_query_initialize (int argc, VALUE *argv, VALUE self)
                         "context", &rb_context,
                         "default_operator", &rb_default_operator,
                         "max_expressions", &rb_max_expressions,
-                        "encoding", &rb_encoding,
                         NULL);
 
     context = rb_grn_context_ensure(rb_context);
@@ -145,10 +143,8 @@ rb_grn_query_initialize (int argc, VALUE *argv, VALUE self)
     if (!NIL_P(rb_max_expressions))
         max_expressions = NUM2INT(rb_max_expressions);
 
-    encoding = RVAL2GRNENCODING(rb_encoding, context);
-
     query = grn_query_open(context, query_string, query_string_length,
-                           default_operator, max_expressions, encoding);
+                           default_operator, max_expressions);
     rb_grn_context_check(context, rb_ary_new4(argc, argv));
 
     rb_grn_query = ALLOC(RbGrnQuery);

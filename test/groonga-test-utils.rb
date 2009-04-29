@@ -31,6 +31,7 @@ module GroongaTestUtils
     setup_tables_directory
     setup_columns_directory
 
+    setup_encoding
     setup_context
   end
 
@@ -50,6 +51,10 @@ module GroongaTestUtils
     FileUtils.mkdir_p(@columns_dir.to_s)
   end
 
+  def setup_encoding
+    Groonga::Encoding.default = nil
+  end
+
   def setup_context
     Groonga::Context.default = nil
     Groonga::Context.default_options = nil
@@ -57,6 +62,10 @@ module GroongaTestUtils
 
   def context
     Groonga::Context.default
+  end
+
+  def encoding
+    Groonga::Encoding.default
   end
 
   def setup_logger

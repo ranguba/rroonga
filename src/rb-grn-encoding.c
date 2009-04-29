@@ -104,10 +104,28 @@ rb_grn_encoding_to_ruby_object (grn_encoding encoding)
     return rb_encoding;
 }
 
+static VALUE
+rb_grn_encoding_s_get_default (VALUE self)
+{
+    return GRNENCODING2RVAL(grn_get_default_encoding());
+}
+
+static VALUE
+rb_grn_encoding_s_set_default (VALUE self, VALUE rb_encoding)
+{
+    grn_set_default_encoding(RVAL2GRNENCODING(rb_encoding, NULL));
+    return rb_encoding;
+}
+
 void
 rb_grn_init_encoding (VALUE mGrn)
 {
     mGrnEncoding = rb_define_module_under(mGrn, "Encoding");
+
+    rb_define_singleton_method(mGrnEncoding, "default",
+			       rb_grn_encoding_s_get_default, 0);
+    rb_define_singleton_method(mGrnEncoding, "default=",
+			       rb_grn_encoding_s_set_default, 1);
 
 #define DEFINE_ENCODING(name, value)                                    \
     RB_GRN_ENCODING_ ## name = RB_GRN_INTERN(value);                    \

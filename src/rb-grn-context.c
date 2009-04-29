@@ -153,7 +153,6 @@ rb_grn_context_initialize (int argc, VALUE *argv, VALUE self)
 {
     grn_ctx *context;
     int flags = 0;
-    grn_encoding encoding = GRN_ENC_DEFAULT;
     grn_rc rc;
     VALUE options, default_options;
     VALUE use_ql, batch_mode, rb_encoding;
@@ -177,12 +176,19 @@ rb_grn_context_initialize (int argc, VALUE *argv, VALUE self)
 	flags |= GRN_CTX_USE_QL;
     if (RVAL2CBOOL(batch_mode))
 	flags |= GRN_CTX_BATCH_MODE;
-    encoding = RVAL2GRNENCODING(rb_encoding, NULL);
 
     context = ALLOC(grn_ctx);
     DATA_PTR(self) = context;
-    rc = grn_ctx_init(context, flags, encoding);
+    rc = grn_ctx_init(context, flags);
     rb_grn_context_check(context, self);
+
+    if (!NIL_P(rb_encoding)) {
+	grn_encoding encoding;
+
+	encoding = RVAL2GRNENCODING(rb_encoding, NULL);
+	GRN_CTX_SET_ENCODING(context, encoding);
+    }
+
     return Qnil;
 }
 
@@ -241,7 +247,20 @@ rb_grn_context_batch_mode_p (VALUE self)
 static VALUE
 rb_grn_context_get_encoding (VALUE self)
 {
-    return GRNENCODING2RVAL(SELF(self)->encoding);
+    return GRNENCODING2RVAL(GRN_CTX_GET_ENCODING(SELF(self)));
+}
+
+static VALUE
+rb_grn_context_set_encoding (VALUE self, VALUE rb_encoding)
+{
+    grn_ctx *context;
+    grn_encoding encoding;
+
+    context = SELF(self);
+    encoding = RVAL2GRNENCODING(rb_encoding, NULL);
+    GRN_CTX_SET_ENCODING(context, encoding);
+
+    return rb_encoding;
 }
 
 static VALUE
@@ -304,6 +323,7 @@ rb_grn_init_context (VALUE mGrn)
     rb_define_method(cGrnContext, "use_ql?", rb_grn_context_use_ql_p, 0);
     rb_define_method(cGrnContext, "batch_mode?", rb_grn_context_batch_mode_p, 0);
     rb_define_method(cGrnContext, "encoding", rb_grn_context_get_encoding, 0);
+    rb_define_method(cGrnContext, "encoding=", rb_grn_context_set_encoding, 1);
 
     rb_define_method(cGrnContext, "database", rb_grn_context_get_database, 0);
 

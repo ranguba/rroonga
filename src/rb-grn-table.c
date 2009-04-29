@@ -22,10 +22,6 @@
 
 VALUE rb_cGrnTable;
 
-/* FIXME */
-grn_rc grn_table_get_info(grn_ctx *ctx, grn_obj *table, grn_obj_flags *flags,
-                          grn_encoding *encoding, grn_obj **tokenizer);
-
 grn_obj *
 rb_grn_table_from_ruby_object (VALUE object, grn_ctx **context)
 {
@@ -51,11 +47,10 @@ rb_grn_table_s_create (int argc, VALUE *argv, VALUE klass,
     const char *name = NULL, *path = NULL;
     unsigned name_size = 0, value_size = 0;
     grn_obj_flags flags = key_store;
-    grn_encoding encoding;
     VALUE rb_table;
     VALUE options, rb_context, rb_name, rb_path, rb_persistent;
     VALUE rb_key_normalize, rb_key_with_sis, rb_key_type;
-    VALUE rb_value_size, rb_encoding;
+    VALUE rb_value_size;
 
     rb_scan_args(argc, argv, "01", &options);
 
@@ -68,7 +63,6 @@ rb_grn_table_s_create (int argc, VALUE *argv, VALUE klass,
 			"key_with_sis", &rb_key_with_sis,
 			"key_type", &rb_key_type,
 			"value_size", &rb_value_size,
-                        "encoding", &rb_encoding,
 			NULL);
 
     context = rb_grn_context_ensure(rb_context);
@@ -101,11 +95,8 @@ rb_grn_table_s_create (int argc, VALUE *argv, VALUE klass,
     if (!NIL_P(rb_value_size))
 	value_size = NUM2UINT(rb_value_size);
 
-    encoding = RVAL2GRNENCODING(rb_encoding, context);
-
     table = grn_table_create(context, name, name_size, path,
-			     flags, key_type, value_size,
-			     encoding);
+			     flags, key_type, value_size);
     rb_table = GRNOBJECT2RVAL(klass, context, table);
     rb_grn_context_check(context, rb_table);
 
@@ -196,14 +187,17 @@ rb_grn_table_inspect_content (VALUE self, VALUE inspected)
 	return inspected;
 
     if (table->header.type != GRN_TABLE_NO_KEY) {
-	grn_rc rc;
+	grn_obj value;
 	grn_encoding encoding;
 
 	rb_str_cat2(inspected, ", ");
 	rb_str_cat2(inspected, "encoding: <");
-	rc = grn_table_get_info(context, table, NULL, &encoding, NULL);
+	GRN_OBJ_INIT(&value, GRN_BULK, 0);
+	grn_obj_get_info(context, table, GRN_INFO_ENCODING, &value);
+	encoding = *((grn_encoding *)GRN_BULK_HEAD(&value));
+	grn_obj_close(context, &value);
 
-	if (rc == GRN_SUCCESS)
+	if (context->rc == GRN_SUCCESS)
 	    rb_str_concat(inspected, rb_inspect(GRNENCODING2RVAL(encoding)));
 	else
 	    rb_str_cat2(inspected, "invalid");
@@ -414,7 +408,7 @@ rb_grn_table_get_columns (int argc, VALUE *argv, VALUE self)
     }
 
     columns = grn_table_create(context, NULL, 0, NULL, GRN_TABLE_HASH_KEY,
-			       NULL, 0, GRN_ENC_DEFAULT);
+			       NULL, 0);
     n = grn_table_columns(context, table, name, name_size, columns);
     rb_grn_context_check(context, self);
 

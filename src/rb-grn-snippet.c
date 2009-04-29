@@ -101,10 +101,9 @@ rb_grn_snippet_initialize (int argc, VALUE *argv, VALUE self)
     grn_ctx *context = NULL;
     grn_snip *snippet = NULL;
     VALUE options;
-    VALUE rb_context, rb_encoding, rb_normalize, rb_skip_leading_spaces;
+    VALUE rb_context, rb_normalize, rb_skip_leading_spaces;
     VALUE rb_width, rb_max_results, rb_default_open_tag, rb_default_close_tag;
     VALUE rb_html_escape;
-    grn_encoding encoding;
     int flags = GRN_SNIP_COPY_TAG;
     unsigned int width = 100;
     unsigned int max_results = 3;
@@ -118,7 +117,6 @@ rb_grn_snippet_initialize (int argc, VALUE *argv, VALUE self)
 
     rb_grn_scan_options(options,
                         "context", &rb_context,
-                        "encoding", &rb_encoding,
                         "normalize", &rb_normalize,
                         "skip_leading_spaces", &rb_skip_leading_spaces,
                         "width", &rb_width,
@@ -129,7 +127,6 @@ rb_grn_snippet_initialize (int argc, VALUE *argv, VALUE self)
                         NULL);
 
     context = rb_grn_context_ensure(rb_context);
-    encoding = RVAL2GRNENCODING(rb_encoding, context);
 
     if (RVAL2CBOOL(rb_normalize))
         flags |= GRN_SNIP_NORMALIZE;
@@ -155,7 +152,7 @@ rb_grn_snippet_initialize (int argc, VALUE *argv, VALUE self)
     if (RVAL2CBOOL(rb_html_escape))
         mapping = (grn_snip_mapping *)-1;
 
-    snippet = grn_snip_open(context, encoding, flags, width, max_results,
+    snippet = grn_snip_open(context, flags, width, max_results,
                             default_open_tag, default_open_tag_length,
                             default_close_tag, default_close_tag_length,
                             mapping);

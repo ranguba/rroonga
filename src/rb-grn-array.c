@@ -121,8 +121,7 @@ rb_grn_array_s_create (int argc, VALUE *argv, VALUE klass)
 	value_size = NUM2UINT(rb_value_size);
 
     table = grn_table_create(context, name, name_size, path,
-			     flags, NULL, value_size,
-			     GRN_ENC_NONE);
+			     flags, NULL, value_size);
     rb_table = GRNOBJECT2RVAL(klass, context, table);
     rb_grn_context_check(context, rb_table);
 

@@ -83,7 +83,13 @@ rb_grn_object_from_ruby_object (VALUE object, grn_ctx **context)
 static void
 rb_rb_grn_object_free (void *object)
 {
-    xfree(object);
+    RbGrnObject *rb_grn_object = object;
+
+/*
+    if (rb_grn_object->context && rb_grn_object->object)
+	grn_obj_close(rb_grn_object->context, rb_grn_object->object);
+*/
+    xfree(rb_grn_object);
 }
 
 VALUE
@@ -823,7 +829,7 @@ rb_grn_object_search (int argc, VALUE *argv, VALUE self)
 	}
 	result = grn_table_create(context, NULL, 0, NULL,
 				  GRN_OBJ_TABLE_HASH_KEY | GRN_OBJ_WITH_SUBREC,
-				  domain, 0, GRN_ENC_NONE);
+				  domain, 0);
 	rb_grn_context_check(context, self);
     } else {
 	result = RVAL2GRNOBJECT(rb_result, &context);

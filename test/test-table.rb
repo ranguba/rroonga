@@ -300,7 +300,7 @@ class TableTest < Test::Unit::TestCase
                  "path: <#{path}>, " +
                  "domain: <nil>, " +
                  "range: <nil>, " +
-                 "encoding: <:default>, " +
+                 "encoding: <#{encoding.inspect}>, " +
                  "size: <0>>",
                  anonymous_table.inspect)
   end
@@ -313,7 +313,7 @@ class TableTest < Test::Unit::TestCase
                  "path: (temporary), " +
                  "domain: <nil>, " +
                  "range: <nil>, " +
-                 "encoding: <:default>, " +
+                 "encoding: <#{encoding.inspect}>, " +
                  "size: <0>>",
                  anonymous_table.inspect)
   end
@@ -327,7 +327,7 @@ class TableTest < Test::Unit::TestCase
                  "path: <#{path}>, " +
                  "domain: <nil>, " +
                  "range: <nil>, " +
-                 "encoding: <:default>, " +
+                 "encoding: <#{encoding.inspect}>, " +
                  "size: <0>>",
                  named_table.inspect)
   end
@@ -340,7 +340,7 @@ class TableTest < Test::Unit::TestCase
                  "path: (temporary), " +
                  "domain: <nil>, " +
                  "range: <nil>, " +
-                 "encoding: <:default>, " +
+                 "encoding: <#{encoding.inspect}>, " +
                  "size: <0>>",
                  named_table.inspect)
   end
@@ -415,10 +415,10 @@ class TableTest < Test::Unit::TestCase
   end
 
   def test_encoding
-    assert_equal(:default, Groonga::Hash.create.encoding)
-    assert_equal(:utf8, Groonga::Hash.create(:encoding => :utf8).encoding)
-
-    assert_not_equal(:default, Groonga::PatriciaTrie.create.encoding)
+    assert_equal(Groonga::Encoding.default,
+                 Groonga::Hash.create.encoding)
+    assert_equal(Groonga::Encoding.default,
+                 Groonga::PatriciaTrie.create.encoding)
 
     array = Groonga::Array.create
     assert_false(array.respond_to?(:encoding))
