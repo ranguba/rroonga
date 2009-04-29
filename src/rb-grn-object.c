@@ -826,7 +826,7 @@ rb_grn_object_search (int argc, VALUE *argv, VALUE self)
 	    domain = object;
 	    break;
 	  default:
-	    domain = grn_ctx_get(context, object->header.domain);
+	    domain = grn_ctx_get(context, grn_obj_get_range(context, object));
 	    break;
 	}
 	result = grn_table_create(context, NULL, 0, NULL,

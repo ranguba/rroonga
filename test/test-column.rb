@@ -117,13 +117,34 @@ class ColumnTest < Test::Unit::TestCase
   end
 
   def test_accessor
-    bookmark = @bookmarks.add
-    bookmark["uri"] = "http://groonga.org/"
-    @bookmarks_index_uri[bookmark.id] = "http://groonga.org/"
-    result = @bookmarks_index_uri.search("http://groonga.org/")
-    accessor = result.column(".<index:uri>.uri")
-    assert_equal(["http://groonga.org/"],
-                 result.records.collect {|record| accessor[record.id]})
+    posts = Groonga::Hash.create(:name => "<posts>", :key_type => "<shorttext>")
+    posts.define_column("body", "<text>")
+    comments = Groonga::Hash.create(:name => "<comments>",
+                                    :key_type => "<shorttext>")
+    content = comments.define_column("content", "<shorttext>")
+    comments.define_column("post", posts)
+
+    index = Groonga::PatriciaTrie.create(:name => "<terms>",
+                                         :key_type => "<shorttext>")
+    content_index = index.define_column("content_index", comments,
+                                        :type => "index",
+                                        :with_position => true)
+    content_index.source = content
+
+    first_post = posts.add("Hello!")
+    first_post["body"] = "World"
+    hobby = posts.add("My Hobby")
+    hobby["body"] = "Drive and Eat"
+
+    friend = comments.add("Me too")
+    friend["content"] = "I'm also like drive"
+    friend["post"] = hobby
+
+    result = content_index.search("drive")
+    assert_equal([["I'm also like drive", "My Hobby"]],
+                 result.records.collect do |record|
+                   [record[".content"], record[".post.:key"]]
+                 end)
   end
 
   def test_accessor_reference
@@ -162,7 +183,7 @@ class ColumnTest < Test::Unit::TestCase
       record["content"]
     end
     actual_contents = records.collect do |record|
-      record[".<index:content>.content"]
+      record.key["content"]
     end
     assert_equal(expected_contents, actual_contents)
   end
