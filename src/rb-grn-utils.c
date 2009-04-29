@@ -189,7 +189,7 @@ rb_grn_bulk_to_ruby_object (grn_ctx *context, grn_obj *bulk,
 }
 
 grn_obj *
-rb_grn_bulk_from_ruby_object (grn_ctx *context, VALUE object, grn_obj *bulk)
+rb_grn_bulk_from_ruby_object (VALUE object, grn_ctx *context, grn_obj *bulk)
 {
     const char *string;
     unsigned int size;
@@ -264,7 +264,7 @@ rb_grn_bulk_from_ruby_object (grn_ctx *context, VALUE object, grn_obj *bulk)
 }
 
 grn_obj *
-rb_grn_bulk_from_ruby_object_with_type (grn_ctx *context, VALUE object,
+rb_grn_bulk_from_ruby_object_with_type (VALUE object, grn_ctx *context,
 					grn_obj *bulk, grn_id type)
 {
     const char *string;
@@ -374,7 +374,7 @@ rb_grn_vector_to_ruby_object (grn_ctx *context, grn_obj *vector)
 }
 
 grn_obj *
-rb_grn_vector_from_ruby_object (grn_ctx *context, VALUE object)
+rb_grn_vector_from_ruby_object (VALUE object, grn_ctx *context)
 {
     VALUE *values;
     grn_obj *vector;
@@ -422,7 +422,7 @@ rb_grn_uvector_to_ruby_object (grn_ctx *context, grn_obj *uvector)
 }
 
 grn_obj *
-rb_grn_uvector_from_ruby_object (grn_ctx *context, VALUE object)
+rb_grn_uvector_from_ruby_object (VALUE object, grn_ctx *context)
 {
     VALUE *values;
     grn_obj *uvector;
@@ -537,11 +537,11 @@ rb_grn_key_from_ruby_object (VALUE rb_key, grn_ctx *context,
 	domain = grn_ctx_get(context, domain_id);
 
     if (!domain)
-	return rb_grn_bulk_from_ruby_object(context, rb_key, key);
+	return rb_grn_bulk_from_ruby_object(rb_key, context, key);
 
     switch (domain->header.type) {
       case GRN_TYPE:
-	return rb_grn_bulk_from_ruby_object_with_type(context, rb_key,
+	return rb_grn_bulk_from_ruby_object_with_type(rb_key, context,
 						      key, domain_id);
 	break;
       case GRN_TABLE_HASH_KEY:
