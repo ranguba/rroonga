@@ -418,7 +418,7 @@ class TableTest < Test::Unit::TestCase
     assert_equal(:default, Groonga::Hash.create.encoding)
     assert_equal(:utf8, Groonga::Hash.create(:encoding => :utf8).encoding)
 
-    assert_equal(:default, Groonga::PatriciaTrie.create.encoding)
+    assert_not_equal(:default, Groonga::PatriciaTrie.create.encoding)
 
     array = Groonga::Array.create
     assert_false(array.respond_to?(:encoding))
