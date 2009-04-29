@@ -227,7 +227,7 @@ rb_grn_bulk_from_ruby_object (VALUE object, grn_ctx *context, grn_obj *bulk)
     } else if (RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cGrnObject))) {
 	grn_obj *grn_object;
 
-	grn_object = RVAL2GRNOBJECT(object, context);
+	grn_object = RVAL2GRNOBJECT(object, &context);
 	id_value = grn_obj_id(context, grn_object);
 	string = (const char *)&id_value;
 	size = sizeof(id_value);
@@ -500,7 +500,7 @@ rb_grn_id_from_ruby_object (VALUE object, grn_ctx *context, grn_obj *table,
     if (RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cGrnRecord))) {
 	VALUE rb_table;
 	rb_table = rb_funcall(object, rb_intern("table"), 0);
-	if (table && RVAL2GRNOBJECT(rb_table, context) != table)
+	if (table && RVAL2GRNOBJECT(rb_table, &context) != table)
 	    rb_raise(rb_eGrnError,
 		     "wrong table: expected <%s>: actual <%s>",
 		     rb_grn_inspect(GRNOBJECT2RVAL(Qnil, context, table)),

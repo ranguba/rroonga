@@ -18,7 +18,7 @@
 
 #include "rb-grn.h"
 
-#define SELF(object) (RVAL2GRNCOLUMN(object))
+#define SELF(object, context) (RVAL2GRNCOLUMN(object, context))
 
 VALUE rb_cGrnColumn;
 VALUE rb_cGrnFixSizeColumn;
@@ -26,13 +26,13 @@ VALUE rb_cGrnVarSizeColumn;
 VALUE rb_cGrnIndexColumn;
 
 grn_obj *
-rb_grn_column_from_ruby_object (VALUE object)
+rb_grn_column_from_ruby_object (VALUE object, grn_ctx **context)
 {
     if (!RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cGrnColumn))) {
 	rb_raise(rb_eTypeError, "not a groonga column");
     }
 
-    return RVAL2GRNOBJECT(object, NULL);
+    return RVAL2GRNOBJECT(object, context);
 }
 
 VALUE
@@ -44,7 +44,7 @@ rb_grn_column_to_ruby_object (VALUE klass, grn_ctx *context, grn_obj *column)
 static VALUE
 rb_grn_fix_size_column_array_set (VALUE self, VALUE rb_id, VALUE rb_value)
 {
-    grn_ctx *context;
+    grn_ctx *context = NULL;
     grn_obj *column;
     grn_id range;
     grn_obj *range_object = NULL;
@@ -52,8 +52,7 @@ rb_grn_fix_size_column_array_set (VALUE self, VALUE rb_id, VALUE rb_value)
     grn_id id;
     grn_obj value;
 
-    context = rb_grn_object_ensure_context(self, Qnil);
-    column = SELF(self);
+    column = SELF(self, &context);
     id = NUM2UINT(rb_id);
 
     range = grn_obj_get_range(context, column);
@@ -71,7 +70,7 @@ rb_grn_fix_size_column_array_set (VALUE self, VALUE rb_id, VALUE rb_value)
 
 	rb_id = rb_funcall(rb_value, rb_intern("id"), 0);
 	rb_table = rb_funcall(rb_value, rb_intern("table"), 0);
-	table = RVAL2GRNTABLE(rb_table);
+	table = RVAL2GRNTABLE(rb_table, &context);
 	if (grn_obj_id(context, table) != range)
 	    rb_raise(rb_eArgError,
 		     "%s isn't associated with passed record's table: %s",
@@ -105,14 +104,15 @@ rb_grn_fix_size_column_array_set (VALUE self, VALUE rb_id, VALUE rb_value)
 static VALUE
 rb_grn_index_column_array_set (VALUE self, VALUE rb_id, VALUE rb_value)
 {
-    grn_ctx *context;
+    grn_ctx *context = NULL;
+    grn_obj *column;
     grn_rc rc;
     grn_id id;
     unsigned int section;
     grn_obj old_value, new_value;
     VALUE rb_section, rb_old_value, rb_new_value;
 
-    context = rb_grn_object_ensure_context(self, Qnil);
+    column = SELF(self, &context);
 
     id = NUM2UINT(rb_id);
 
@@ -137,7 +137,7 @@ rb_grn_index_column_array_set (VALUE self, VALUE rb_id, VALUE rb_value)
     RVAL2GRNBULK(rb_old_value, context, &old_value);
     RVAL2GRNBULK(rb_new_value, context, &new_value);
 
-    rc = grn_column_index_update(context, SELF(self),
+    rc = grn_column_index_update(context, column,
 				 id, section, &old_value, &new_value);
     grn_obj_close(context, &old_value);
     grn_obj_close(context, &new_value);
@@ -150,11 +150,12 @@ rb_grn_index_column_array_set (VALUE self, VALUE rb_id, VALUE rb_value)
 static VALUE
 rb_grn_column_get_table (VALUE self)
 {
-    grn_ctx *context;
+    grn_ctx *context = NULL;
+    grn_obj *column;
     grn_obj *table;
 
-    context = rb_grn_object_ensure_context(self, Qnil);
-    table = grn_column_table(context, SELF(self));
+    column = SELF(self, &context);
+    table = grn_column_table(context, column);
     rb_grn_context_check(context, self);
 
     return GRNOBJECT2RVAL(Qnil, context, table);
@@ -163,15 +164,14 @@ rb_grn_column_get_table (VALUE self)
 static VALUE
 rb_grn_index_column_get_sources (VALUE self)
 {
-    grn_ctx *context;
+    grn_ctx *context = NULL;
     grn_obj *column;
     grn_obj sources;
     grn_id *source_ids;
     VALUE rb_sources;
     int i, n;
 
-    context = rb_grn_object_ensure_context(self, Qnil);
-    column = SELF(self);
+    column = SELF(self, &context);
 
     grn_obj_get_info(context, column, GRN_INFO_SOURCE, &sources);
     rb_grn_context_check(context, self);
@@ -192,15 +192,14 @@ rb_grn_index_column_get_sources (VALUE self)
 static VALUE
 rb_grn_index_column_set_sources (VALUE self, VALUE rb_sources)
 {
-    grn_ctx *context;
+    grn_ctx *context = NULL;
     grn_obj *column;
     int i, n;
     VALUE *rb_source_values;
     grn_id *sources;
     grn_rc rc;
 
-    context = rb_grn_object_ensure_context(self, Qnil);
-    column = SELF(self);
+    column = SELF(self, &context);
 
     n = RARRAY_LEN(rb_sources);
     rb_source_values = RARRAY_PTR(rb_sources);
@@ -214,7 +213,7 @@ rb_grn_index_column_set_sources (VALUE self, VALUE rb_sources)
 	if (CBOOL2RVAL(rb_obj_is_kind_of(rb_source_id, rb_cInteger))) {
 	    source_id = NUM2UINT(rb_source_id);
 	} else {
-	    source = RVAL2GRNOBJECT(rb_source_id, context);
+	    source = RVAL2GRNOBJECT(rb_source_id, &context);
 	    rb_grn_context_check(context, rb_source_id);
 	    source_id = grn_obj_id(context, source);
 	}

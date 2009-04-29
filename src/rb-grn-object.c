@@ -26,7 +26,7 @@
 
 #include "rb-grn.h"
 
-#define SELF(object) (rb_rb_grn_object_from_ruby_object(object))
+#define SELF(object) ((RbGrnObject *)DATA_PTR(object))
 
 VALUE rb_cGrnObject;
 
@@ -37,10 +37,34 @@ struct _RbGrnObject
     grn_obj *object;
 };
 
-static RbGrnObject *
-rb_rb_grn_object_from_ruby_object (VALUE object)
+grn_obj *
+rb_grn_object_from_ruby_object (VALUE object, grn_ctx **context)
 {
     RbGrnObject *rb_grn_object;
+
+    if (NIL_P(object))
+        return NULL;
+
+    if (context && *context) {
+	grn_obj *grn_object;
+	if (RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cString))) {
+	    grn_object = grn_ctx_lookup(*context,
+					StringValuePtr(object),
+					RSTRING_LEN(object));
+	    if (!grn_object)
+		rb_raise(rb_eArgError,
+			 "unregistered groonga object: name: <%s>",
+			 rb_grn_inspect(object));
+	    return grn_object;
+	} else if (RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cInteger))) {
+	    grn_object = grn_ctx_get(*context, NUM2UINT(object));
+	    if (!grn_object)
+		rb_raise(rb_eArgError,
+			 "unregistered groonga object: ID: <%s>",
+			 rb_grn_inspect(object));
+	    return grn_object;
+	}
+    }
 
     if (!RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cGrnObject))) {
 	rb_raise(rb_eTypeError, "not a groonga object");
@@ -50,37 +74,10 @@ rb_rb_grn_object_from_ruby_object (VALUE object)
     if (!rb_grn_object)
 	rb_raise(rb_eGrnError, "groonga object is NULL");
 
-    return rb_grn_object;
-}
+    if (context && !*context)
+	*context = rb_grn_object->context;
 
-grn_obj *
-rb_grn_object_from_ruby_object (VALUE object, grn_ctx *context)
-{
-    if (NIL_P(object))
-        return NULL;
-
-    if (context) {
-	grn_obj *grn_object;
-	if (RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cString))) {
-	    grn_object = grn_ctx_lookup(context,
-					StringValuePtr(object),
-					RSTRING_LEN(object));
-	    if (!grn_object)
-		rb_raise(rb_eArgError,
-			 "unregistered groonga object: name: <%s>",
-			 rb_grn_inspect(object));
-	    return grn_object;
-	} else if (RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cInteger))) {
-	    grn_object = grn_ctx_get(context, NUM2UINT(object));
-	    if (!grn_object)
-		rb_raise(rb_eArgError,
-			 "unregistered groonga object: ID: <%s>",
-			 rb_grn_inspect(object));
-	    return grn_object;
-	}
-    }
-
-    return rb_rb_grn_object_from_ruby_object(object)->object;
+    return rb_grn_object->object;
 }
 
 static void
@@ -157,20 +154,6 @@ VALUE
 rb_grn_object_alloc (VALUE klass)
 {
     return Data_Wrap_Struct(klass, NULL, rb_rb_grn_object_free, NULL);
-}
-
-grn_ctx *
-rb_grn_object_ensure_context (VALUE object, VALUE rb_context)
-{
-    if (NIL_P(rb_context)) {
-	RbGrnObject *rb_grn_object;
-
-	rb_grn_object = SELF(object);
-	if (rb_grn_object && rb_grn_object->context)
-	    return rb_grn_object->context;
-    }
-
-    return rb_grn_context_ensure(rb_context);
 }
 
 void
@@ -277,13 +260,14 @@ rb_grn_object_inspect_content_name (VALUE inspected,
     if (name_size == 0) {
 	rb_str_cat2(inspected, "(anonymous)");
     } else {
-	VALUE name;
+	grn_obj name;
 
-	name = rb_str_buf_new(name_size);
-	grn_obj_name(context, object, RSTRING_PTR(name), name_size);
-	rb_str_set_len(name, name_size);
+	GRN_OBJ_INIT(&name, GRN_BULK, 0);
+	grn_bulk_space(context, &name, name_size);
+	grn_obj_name(context, object, GRN_BULK_HEAD(&name), name_size);
+	GRN_BULK_PUTC(context, &name, '\0');
 	rb_str_cat2(inspected, "<");
-	rb_str_concat(inspected, name);
+	rb_str_cat2(inspected, GRN_BULK_HEAD(&name));
 	rb_str_cat2(inspected, ">");
     }
 
@@ -842,7 +826,7 @@ rb_grn_object_search (int argc, VALUE *argv, VALUE self)
 				  domain, 0, GRN_ENC_NONE);
 	rb_grn_context_check(context, self);
     } else {
-	result = RVAL2GRNOBJECT(rb_result, context);
+	result = RVAL2GRNOBJECT(rb_result, &context);
     }
 
     operator = RVAL2GRNSELECTOPERATOR(rb_operator);
@@ -916,7 +900,7 @@ rb_grn_object_search (int argc, VALUE *argv, VALUE self)
     search_options.proc = NULL;
     if (!NIL_P(rb_procedure)) {
 	search_options_is_set = RB_GRN_TRUE;
-	search_options.proc = RVAL2GRNOBJECT(rb_procedure, context);
+	search_options.proc = RVAL2GRNOBJECT(rb_procedure, &context);
     }
 
     search_options.max_size = 100; /* FIXME */

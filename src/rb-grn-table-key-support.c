@@ -18,7 +18,7 @@
 
 #include "rb-grn.h"
 
-#define SELF(object) (RVAL2GRNTABLE(object))
+#define SELF(object, context) (RVAL2GRNTABLE(object, context))
 
 VALUE rb_mGrnTableKeySupport;
 
@@ -51,12 +51,11 @@ rb_grn_table_key_support_add_raw (VALUE self, VALUE rb_key,
 static VALUE
 rb_grn_table_key_support_add (VALUE self, VALUE rb_key)
 {
-    grn_ctx *context;
+    grn_ctx *context = NULL;
     grn_obj *table;
     grn_id id;
 
-    context = rb_grn_object_ensure_context(self, Qnil);
-    table = SELF(self);
+    table = SELF(self, &context);
 
     id = rb_grn_table_key_support_add_raw(self, rb_key, context, table);
     if (GRN_ID_NIL == id)
@@ -68,14 +67,13 @@ rb_grn_table_key_support_add (VALUE self, VALUE rb_key)
 static VALUE
 rb_grn_table_key_support_get_key (VALUE self, VALUE rb_id)
 {
-    grn_ctx *context;
+    grn_ctx *context = NULL;
     grn_id id;
     grn_obj *table, *key;
     int key_size = 0;
     VALUE rb_key;
 
-    context = rb_grn_object_ensure_context(self, Qnil);
-    table = SELF(self);
+    table = SELF(self, &context);
 
     id = NUM2UINT(rb_id);
     key_size = grn_table_get_key(context, table, id, NULL, 0);
@@ -84,7 +82,7 @@ rb_grn_table_key_support_get_key (VALUE self, VALUE rb_id)
 
     key = grn_obj_open(context, GRN_BULK, 0, GRN_ID_NIL);
     grn_bulk_space(context, key, key_size);
-    grn_table_get_key(context, SELF(self), id, GRN_BULK_HEAD(key), key_size);
+    grn_table_get_key(context, table, id, GRN_BULK_HEAD(key), key_size);
     rb_key = GRNKEY2RVAL(context, GRN_BULK_HEAD(key), key_size, table, self);
     grn_obj_close(context, key);
 
@@ -95,13 +93,12 @@ static VALUE
 rb_grn_table_key_support_delete_by_key (VALUE self, VALUE rb_key)
 {
     VALUE exception;
-    grn_ctx *context;
+    grn_ctx *context = NULL;
     grn_obj *table;
     grn_obj key;
     grn_rc rc;
 
-    context = rb_grn_object_ensure_context(self, Qnil);
-    table = SELF(self);
+    table = SELF(self, &context);
 
     RVAL2GRNKEY(rb_key, context, &key, table->header.domain, self);
     rc = grn_table_delete(context, table,
@@ -132,14 +129,13 @@ static VALUE
 rb_grn_table_key_support_array_reference_by_key (VALUE self, VALUE rb_key)
 {
     VALUE exception;
-    grn_ctx *context;
+    grn_ctx *context = NULL;
     grn_obj *table;
     grn_obj key;
     grn_id id;
     grn_search_flags flags = 0;
 
-    context = rb_grn_object_ensure_context(self, Qnil);
-    table = SELF(self);
+    table = SELF(self, &context);
 
     RVAL2GRNKEY(rb_key, context, &key, table->header.domain, self);
     flags = GRN_SEARCH_EXACT;
@@ -177,14 +173,13 @@ rb_grn_table_key_support_array_set_by_key (VALUE self,
 					   VALUE rb_key, VALUE rb_value)
 {
     VALUE exception;
-    grn_ctx *context;
+    grn_ctx *context = NULL;
     grn_obj *table;
     grn_id id;
     grn_obj value;
     grn_rc rc;
 
-    context = rb_grn_object_ensure_context(self, Qnil);
-    table = SELF(self);
+    table = SELF(self, &context);
 
     if (NIL_P(rb_key))
 	rb_raise(rb_eArgError, "key should not be nil: <%s>",
@@ -228,12 +223,13 @@ rb_grn_table_key_support_array_set (VALUE self,
 static VALUE
 rb_grn_table_key_support_get_encoding (VALUE self)
 {
-    grn_ctx *context;
+    grn_ctx *context = NULL;
+    grn_obj *table;
     grn_encoding encoding;
     grn_rc rc;
 
-    context = rb_grn_object_ensure_context(self, Qnil);
-    rc = grn_table_get_info(context, SELF(self), NULL, &encoding, NULL);
+    table = SELF(self, &context);
+    rc = grn_table_get_info(context, table, NULL, &encoding, NULL);
     rb_grn_context_check(context, self);
     rb_grn_rc_check(rc, self);
 
@@ -243,13 +239,13 @@ rb_grn_table_key_support_get_encoding (VALUE self)
 static VALUE
 rb_grn_table_key_support_get_default_tokenizer (VALUE self)
 {
-    grn_ctx *context;
+    grn_ctx *context = NULL;
+    grn_obj *table;
     grn_obj *tokenizer;
     grn_rc rc;
 
-    context = rb_grn_object_ensure_context(self, Qnil);
-    rc = grn_table_get_info(context, SELF(self),
-			    NULL, NULL, &tokenizer);
+    table = SELF(self, &context);
+    rc = grn_table_get_info(context, table, NULL, NULL, &tokenizer);
     rb_grn_context_check(context, self);
     rb_grn_rc_check(rc, self);
 
@@ -259,13 +255,14 @@ rb_grn_table_key_support_get_default_tokenizer (VALUE self)
 static VALUE
 rb_grn_table_key_support_set_default_tokenizer (VALUE self, VALUE rb_tokenizer)
 {
-    grn_ctx *context;
+    grn_ctx *context = NULL;
+    grn_obj *table;
     grn_obj *tokenizer;
     grn_rc rc;
 
-    context = rb_grn_object_ensure_context(self, Qnil);
-    tokenizer = RVAL2GRNOBJECT(rb_tokenizer, context);
-    rc = grn_obj_set_info(context, SELF(self),
+    table = SELF(self, &context);
+    tokenizer = RVAL2GRNOBJECT(rb_tokenizer, &context);
+    rc = grn_obj_set_info(context, table,
 			  GRN_INFO_DEFAULT_TOKENIZER, tokenizer);
     rb_grn_context_check(context, self);
     rb_grn_rc_check(rc, self);

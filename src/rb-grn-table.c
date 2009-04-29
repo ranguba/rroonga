@@ -18,7 +18,7 @@
 
 #include "rb-grn.h"
 
-#define SELF(object) (RVAL2GRNTABLE(object))
+#define SELF(object, context) (RVAL2GRNTABLE(object, context))
 
 VALUE rb_cGrnTable;
 
@@ -27,13 +27,13 @@ grn_rc grn_table_get_info(grn_ctx *ctx, grn_obj *table, grn_obj_flags *flags,
                           grn_encoding *encoding, grn_obj **tokenizer);
 
 grn_obj *
-rb_grn_table_from_ruby_object (VALUE object)
+rb_grn_table_from_ruby_object (VALUE object, grn_ctx **context)
 {
     if (!RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cGrnTable))) {
 	rb_raise(rb_eTypeError, "not a groonga table");
     }
 
-    return RVAL2GRNOBJECT(object, NULL);
+    return RVAL2GRNOBJECT(object, context);
 }
 
 VALUE
@@ -95,7 +95,7 @@ rb_grn_table_s_create (int argc, VALUE *argv, VALUE klass,
     if (NIL_P(rb_key_type)) {
 	flags |= GRN_OBJ_KEY_VAR_SIZE;
     } else {
-	key_type = RVAL2GRNOBJECT(rb_key_type, context);
+	key_type = RVAL2GRNOBJECT(rb_key_type, &context);
     }
 
     if (!NIL_P(rb_value_size))
@@ -187,11 +187,10 @@ rb_grn_table_s_open (int argc, VALUE *argv, VALUE klass)
 static VALUE
 rb_grn_table_inspect_content (VALUE self, VALUE inspected)
 {
-    grn_ctx *context;
+    grn_ctx *context = NULL;
     grn_obj *table;
 
-    context = rb_grn_object_ensure_context(self, Qnil);
-    table = SELF(self);
+    table = SELF(self, &context);
 
     if (!table)
 	return inspected;
@@ -202,7 +201,7 @@ rb_grn_table_inspect_content (VALUE self, VALUE inspected)
 
 	rb_str_cat2(inspected, ", ");
 	rb_str_cat2(inspected, "encoding: <");
-	rc = grn_table_get_info(context, SELF(self), NULL, &encoding, NULL);
+	rc = grn_table_get_info(context, table, NULL, &encoding, NULL);
 
 	if (rc == GRN_SUCCESS)
 	    rb_str_concat(inspected, rb_inspect(GRNENCODING2RVAL(encoding)));
@@ -241,7 +240,8 @@ rb_grn_table_inspect (VALUE self)
 static VALUE
 rb_grn_table_define_column (int argc, VALUE *argv, VALUE self)
 {
-    grn_ctx *context;
+    grn_ctx *context = NULL;
+    grn_obj *table;
     grn_obj *value_type, *column;
     char *name = NULL, *path = NULL;
     unsigned name_size = 0;
@@ -250,6 +250,8 @@ rb_grn_table_define_column (int argc, VALUE *argv, VALUE self)
     VALUE rb_name, rb_value_type;
     VALUE options, rb_path, rb_persistent, rb_type;
     VALUE rb_compress, rb_with_section, rb_with_weight, rb_with_position;
+
+    table = SELF(self, &context);
 
     rb_scan_args(argc, argv, "21", &rb_name, &rb_value_type, &options);
 
@@ -266,9 +268,7 @@ rb_grn_table_define_column (int argc, VALUE *argv, VALUE self)
 			"with_position", &rb_with_position,
 			NULL);
 
-    context = rb_grn_object_ensure_context(self, Qnil);
-
-    value_type = RVAL2GRNOBJECT(rb_value_type, context);
+    value_type = RVAL2GRNOBJECT(rb_value_type, &context);
 
     if (!NIL_P(rb_path)) {
 	path = StringValueCStr(rb_path);
@@ -338,7 +338,7 @@ rb_grn_table_define_column (int argc, VALUE *argv, VALUE self)
 		     "{:type => :index} option.");
     }
 
-    column = grn_column_create(context, SELF(self), name, name_size,
+    column = grn_column_create(context, table, name, name_size,
 			       path, flags, value_type);
     rb_grn_context_check(context, self);
 
@@ -349,21 +349,22 @@ static VALUE
 rb_grn_table_add_column (VALUE self, VALUE rb_name, VALUE rb_value_type,
 			 VALUE rb_path)
 {
-    grn_ctx *context;
+    grn_ctx *context = NULL;
+    grn_obj *table;
     grn_obj *value_type, *column;
     char *name = NULL, *path = NULL;
     unsigned name_size = 0;
 
+    table = SELF(self, &context);
+
     name = StringValuePtr(rb_name);
     name_size = RSTRING_LEN(rb_name);
 
-    context = rb_grn_object_ensure_context(self, Qnil);
-
-    value_type = RVAL2GRNOBJECT(rb_value_type, context);
+    value_type = RVAL2GRNOBJECT(rb_value_type, &context);
 
     path = StringValueCStr(rb_path);
 
-    column = grn_column_open(context, SELF(self), name, name_size,
+    column = grn_column_open(context, table, name, name_size,
 			     path, value_type);
     rb_grn_context_check(context, self);
 
@@ -373,17 +374,18 @@ rb_grn_table_add_column (VALUE self, VALUE rb_name, VALUE rb_value_type,
 static VALUE
 rb_grn_table_get_column (VALUE self, VALUE rb_name)
 {
-    grn_ctx *context;
+    grn_ctx *context = NULL;
+    grn_obj *table;
     grn_obj *column;
     char *name = NULL;
     unsigned name_size = 0;
 
+    table = SELF(self, &context);
+
     name = StringValuePtr(rb_name);
     name_size = RSTRING_LEN(rb_name);
 
-    context = rb_grn_object_ensure_context(self, Qnil);
-
-    column = grn_table_column(context, SELF(self), name, name_size);
+    column = grn_table_column(context, table, name, name_size);
     rb_grn_context_check(context, self);
 
     return GRNCOLUMN2RVAL(Qnil, context, column);
@@ -392,7 +394,8 @@ rb_grn_table_get_column (VALUE self, VALUE rb_name)
 static VALUE
 rb_grn_table_get_columns (int argc, VALUE *argv, VALUE self)
 {
-    grn_ctx *context;
+    grn_ctx *context = NULL;
+    grn_obj *table;
     grn_obj *columns;
     grn_rc rc;
     int n;
@@ -401,6 +404,8 @@ rb_grn_table_get_columns (int argc, VALUE *argv, VALUE self)
     char *name = NULL;
     unsigned name_size = 0;
 
+    table = SELF(self, &context);
+
     rb_scan_args(argc, argv, "01", &rb_name);
 
     if (!NIL_P(rb_name)) {
@@ -408,11 +413,9 @@ rb_grn_table_get_columns (int argc, VALUE *argv, VALUE self)
 	name_size = RSTRING_LEN(rb_name);
     }
 
-    context = rb_grn_object_ensure_context(self, Qnil);
-
     columns = grn_table_create(context, NULL, 0, NULL, GRN_TABLE_HASH_KEY,
 			       NULL, 0, GRN_ENC_DEFAULT);
-    n = grn_table_columns(context, SELF(self), name, name_size, columns);
+    n = grn_table_columns(context, table, name, name_size, columns);
     rb_grn_context_check(context, self);
 
     rb_columns = rb_ary_new2(n);
@@ -445,11 +448,14 @@ static grn_table_cursor *
 rb_grn_table_open_grn_cursor (int argc, VALUE *argv, VALUE self,
 			      grn_ctx **context)
 {
+    grn_obj *table;
     grn_table_cursor *cursor;
     void *min_key = NULL, *max_key = NULL;
     unsigned min_key_size = 0, max_key_size = 0;
     int flags = 0;
     VALUE options, rb_min, rb_max, rb_order, rb_greater_than, rb_less_than;
+
+    table = SELF(self, context);
 
     rb_scan_args(argc, argv, "01", &options);
 
@@ -460,8 +466,6 @@ rb_grn_table_open_grn_cursor (int argc, VALUE *argv, VALUE self,
 			"greater_than", &rb_greater_than,
 			"less_than", &rb_less_than,
 			NULL);
-
-    *context = rb_grn_object_ensure_context(self, Qnil);
 
     if (!NIL_P(rb_min)) {
 	min_key = StringValuePtr(rb_min);
@@ -491,7 +495,7 @@ rb_grn_table_open_grn_cursor (int argc, VALUE *argv, VALUE self,
     if (RVAL2CBOOL(rb_less_than))
 	flags |= GRN_CURSOR_LT;
 
-    cursor = grn_table_cursor_open(*context, SELF(self),
+    cursor = grn_table_cursor_open(*context, table,
 				   min_key, min_key_size,
 				   max_key, max_key_size,
 				   flags);
@@ -503,13 +507,13 @@ rb_grn_table_open_grn_cursor (int argc, VALUE *argv, VALUE self,
 static VALUE
 rb_grn_table_open_cursor (int argc, VALUE *argv, VALUE self)
 {
-    grn_ctx *context;
+    grn_ctx *context = NULL;
     grn_table_cursor *cursor;
     VALUE rb_cursor;
 
     cursor = rb_grn_table_open_grn_cursor(argc, argv, self, &context);
     rb_cursor = GRNTABLECURSOR2RVAL(Qnil, context, cursor);
-    rb_iv_set(rb_cursor, "@table", self);
+    rb_iv_set(rb_cursor, "@table", self); /* FIXME: cursor should mark table */
     if (rb_block_given_p())
 	return rb_ensure(rb_yield, rb_cursor,
 			 rb_grn_table_cursor_close, rb_cursor);
@@ -520,7 +524,7 @@ rb_grn_table_open_cursor (int argc, VALUE *argv, VALUE self)
 static VALUE
 rb_grn_table_get_records (int argc, VALUE *argv, VALUE self)
 {
-    grn_ctx *context;
+    grn_ctx *context = NULL;
     grn_table_cursor *cursor;
     grn_id record_id;
     VALUE records;
@@ -538,22 +542,24 @@ rb_grn_table_get_records (int argc, VALUE *argv, VALUE self)
 static VALUE
 rb_grn_table_get_size (VALUE self)
 {
-    grn_ctx *context;
+    grn_ctx *context = NULL;
+    grn_obj *table;
     unsigned int size;
 
-    context = rb_grn_object_ensure_context(self, Qnil);
-    size = grn_table_size(context, SELF(self));
+    table = SELF(self, &context);
+    size = grn_table_size(context, table);
     return UINT2NUM(size);
 }
 
 static VALUE
 rb_grn_table_truncate (VALUE self)
 {
-    grn_ctx *context;
+    grn_ctx *context = NULL;
+    grn_obj *table;
     grn_rc rc;
 
-    context = rb_grn_object_ensure_context(self, Qnil);
-    rc = grn_table_truncate(context, SELF(self));
+    table = SELF(self, &context);
+    rc = grn_table_truncate(context, table);
     rb_grn_rc_check(rc, self);
 
     return Qnil;
@@ -562,12 +568,13 @@ rb_grn_table_truncate (VALUE self)
 static VALUE
 rb_grn_table_each (VALUE self)
 {
-    grn_ctx *context;
+    grn_ctx *context = NULL;
+    grn_obj *table;
     grn_table_cursor *cursor;
     grn_id id;
 
-    context = rb_grn_object_ensure_context(self, Qnil);
-    cursor = grn_table_cursor_open(context, SELF(self), NULL, 0, NULL, 0,
+    table = SELF(self, &context);
+    cursor = grn_table_cursor_open(context, table, NULL, 0, NULL, 0,
 				   GRN_CURSOR_DESCENDING);
     rb_iv_set(self, "cursor", GRNTABLECURSOR2RVAL(Qnil, context, cursor));
     while ((id = grn_table_cursor_next(context, cursor)) != GRN_ID_NIL) {
@@ -582,14 +589,15 @@ rb_grn_table_each (VALUE self)
 static VALUE
 rb_grn_table_delete (VALUE self, VALUE rb_id)
 {
-    grn_ctx *context;
+    grn_ctx *context = NULL;
+    grn_obj *table;
     grn_id id;
     grn_rc rc;
 
-    context = rb_grn_object_ensure_context(self, Qnil);
+    table = SELF(self, &context);
 
     id = NUM2UINT(rb_id);
-    rc = grn_table_delete_by_id(context, SELF(self), id);
+    rc = grn_table_delete_by_id(context, table, id);
     rb_grn_rc_check(rc, self);
 
     return Qnil;

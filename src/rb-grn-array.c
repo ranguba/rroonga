@@ -18,7 +18,7 @@
 
 #include "rb-grn.h"
 
-#define SELF(object) (RVAL2GRNTABLE(object))
+#define SELF(object, context) (RVAL2GRNTABLE(object, context))
 
 VALUE rb_cGrnArray;
 
@@ -83,7 +83,7 @@ VALUE rb_cGrnArray;
 static VALUE
 rb_grn_array_s_create (int argc, VALUE *argv, VALUE klass)
 {
-    grn_ctx *context;
+    grn_ctx *context = NULL;
     grn_obj *table;
     const char *name = NULL, *path = NULL;
     unsigned name_size = 0, value_size = 0;
@@ -142,12 +142,13 @@ rb_grn_array_s_create (int argc, VALUE *argv, VALUE klass)
 static VALUE
 rb_grn_array_add (VALUE self)
 {
-    grn_ctx *context;
+    grn_ctx *context = NULL;
+    grn_obj *table;
     grn_id id;
 
-    context = rb_grn_object_ensure_context(self, Qnil);
+    table = SELF(self, &context);
 
-    id = grn_table_add(context, SELF(self));
+    id = grn_table_add(context, table);
     rb_grn_context_check(context, self);
 
     if (GRN_ID_NIL == id)
