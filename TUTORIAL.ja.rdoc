@@ -1,0 +1,160 @@
+= チュートリアル
+
+このページでは簡単なアプリケーションの作成を通して
+Ruby/groongaの新しいSennaの操作方法を紹介します。
+
+== インストール
+
+Ruby/groongaはRubyGemsでインストールできます。
+
+  % sudo gem install groonga
+
+== データベースの作成
+
+簡単なブックマークアプリケーション用のデータベースを作ってみ
+ます。以下のようにgroongaライブラリを読み込んでirbを起動しま
+す。
+
+  % irb --simple-prompt -rubygems -rgroonga
+  >>
+
+まず、エンコーディングを設定します。ここではUTF-8を利用します。
+
+  >> $KCODE = "UTF-8"
+  => "UTF-8"
+  >> Groonga::Context.default_options = {:encoding => :utf8}
+  => {:encoding=>:utf8}
+
+それでは、ファイルを指定してデータベースを作成します。
+
+  >> Groonga::Database.create(:path => "/tmp/bookmark.db")
+  => #<Groonga::Database id: <nil>, name: (anonymous), path: </tmp/bookmark.db>, domain: <nil>, range: <nil>>
+
+ここで作成したデータベースは、これ以降、暗黙のうちに利用され
+ます。最初にデータベースを作成したら特に意識する必要はありま
+せん。
+
+== テーブルの定義
+
+groongaには以下の3種類のテーブルがあります。
+
+[Groonga::Hash]
+  ハッシュテーブル。主キーでレコードを管理します。キーと完全
+  一致するレコードを非常に高速に検索することができます。
+[Groonga::PatriciaTrie]
+  パトリシアトライ。ハッシュテーブルに比べて完全一致検索の速
+  度がやや遅いですが、前方一致検索・共通接頭辞探索などの検索
+  が行えます。またカーソルを用いてキーの昇降順にレコードを取
+  り出すことができます。
+[Groonga::Array]
+  配列。主キーの存在しないテーブルです。レコードはIDによって
+  識別します。
+
+ここではハッシュテーブルを利用して、+<items>+という名前のテー
+ブルを作成します。
+
+  >> items = Groonga::Hash.create(:name => "<items>", :persistent => true)
+  => #<Groonga::Hash id: <18>, name: <<items>>, path: </tmp/bookmark.db.0000012>, domain: <nil>, range: <nil>, encoding: <:utf8>, size: <0>>
+
+
+これで+<items>+という名前のテーブルが作成できました。
+
+テーブルはRubyのHashのように扱えます。
+
+例えば、以下のように+size+でテーブルに登録されているレコード
+の件数を取得できます。
+
+  >> items.size
+  0
+
+== レコードを追加する
+
+items>テーブルにレコードを追加します。
+
+  >> items.add("http://ja.wikipedia.org/wiki/Ruby")
+  => #<Groonga::Record:0x7f0ece6aeaf8 @table=#<Groonga::Hash id: <18>, name: <<items>>, path: </tmp/bookmark.db.0000012>, domain: <nil>, range: <nil>, encoding: <:utf8>, size: <1>>, @id=1>
+  >> items.add("http://www.ruby-lang.org/")
+  => #<Groonga::Record:0x7f0ece6a9fa8 @table=#<Groonga::Hash id: <18>, name: <<items>>, path: </tmp/bookmark.db.0000012>, domain: <nil>, range: <nil>, encoding: <:utf8>, size: <2>>, @id=2>
+
+件数を確認すると確かに2件増えています。
+
+  >> items.size
+  => 2
+
+主キーを指定してレコードを取り出す時には以下のようにします。
+
+  >> items["http://ja.wikipedia.org/wiki/Ruby"]
+  => #<Groonga::Record:0x7f0ece699ab8 @table=#<Groonga::Hash id: <18>, name: <<items>>, path: </tmp/bookmark.db.0000012>, domain: <nil>, range: <nil>, encoding: <:utf8>, size: <2>>, @id=1>
+
+== 全文検索を行う
+
+各itemのタイトル文字列を登録して、全文検索できるようにしてみ
+ましょう。
+
+まず+<items>+テーブルに+title+という名前のカラムを追加します。
+
+  >> title_colum = items.define_column("title", "<text>")
+  => #<Groonga::VarSizeColumn id: <19>, name: <<items>.title>, path: (temporary), domain: <#<Groonga::Hash id: <18>, name: <<items>>, path: </tmp/bookmark.db.0000012>, domain: <nil>, range: <nil>, encoding: <:utf8>, size: <2>>>, range: <#<Groonga::Type id: <7>, name: <<text>>, path: (temporary), domain: <nil>, range: <65536>>>>
+
+2番目の引数は、追加するカラムのデータ型を示しています。
++<int>+、+<text>+、+<longtext>+等の型が基本型として用意されて
+います。
+
+全文検索するためには、文字列を分解して得られる各単語を格納す
+るためのテーブルを別途しなければなりません。ここでは<terms>と
+いう名前でテーブルを定義します。
+
+  >> terms = Groonga::Hash.create(:name => "<terms>",
+                                  :key_type => "<shorttext>",
+                                  :persistent => true)
+  => #<Groonga::Hash id: <21>, name: <<terms>>, path: </tmp/bookmark.db.0000015>, domain: <#<Groonga::Type id: <6>, name: <<shorttext>>, path: (temporary), domain: <nil>, range: <4096>>>, range: <nil>, encoding: <:utf8>, size: <0>>
+
++<items>+テーブルの+title+カラムに対するインデックスを定義し
+ます。
+
+  >> title_index_column = terms.define_column("item_title", items,
+                                              :type => "index",
+                                              :with_position => true)
+  => #<Groonga::IndexColumn id: <22>, name: <<terms>.item_title>, path: (temporary), domain: <#<Groonga::Hash id: <21>, name: <<terms>>, path: </tmp/bookmark.db.0000015>, domain: <#<Groonga::Type id: <6>, name: <<shorttext>>, path: (temporary), domain: <nil>, range: <4096>>>, range: <nil>, encoding: <:utf8>, size: <0>>>, range: <#<Groonga::Hash id: <18>, name: <<items>>, path: </tmp/bookmark.db.0000012>, domain: <nil>, range: <nil>, encoding: <:utf8>, size: <2>>>>
+
+インデックス用カラムに、検索対象の+<items>+テーブルの+title+
+カラムを設定します。
+
+  >> title_index_column.source = title_column
+  => #<Groonga::VarSizeColumn id: <19>, name: <<items>.title>, path: (temporary), domain: <#<Groonga::Hash id: <18>, name: <<items>>, path: </tmp/bookmark.db.0000012>, domain: <nil>, range: <nil>, encoding: <:utf8>, size: <2>>>, range: <#<Groonga::Type id: <7>, name: <<text>>, path: (temporary), domain: <nil>, range: <65536>>>>
+
+少し違和感を感じるかも知れませんが、+<items>+テーブルのカラムに
+対するインデックスは、 +<terms>+テーブルのカラムとして定義しま
+す。
+
++<items>+にレコードが登録されると、その中に含まれる単語に該当
+するレコードが+<terms>+に自動的に追加されるようになります。
+
++<terms>+は、文書に含まれる語彙に相当する、やや特殊なテーブル
+だと言えます。しかし、他のテーブルと同様に語彙テーブルには自
+由にカラムを追加し、単語毎の様々な属性を管理することができま
+す。これはある種の検索処理を行う際には非常に便利に機能します。
+
+これでテーブルの定義は完了です。
+
+先ほど登録した各レコードの+title+カラムに値をセットします。
+
+  >> items["http://ja.wikipedia.org/wiki/Ruby"]["title"] = "Ruby"
+  => "Ruby"
+  >> items["http://www.ruby-lang.org/"]["title"] = "オブジェクトスクリプト言語Ruby"
+  "オブジェクトスクリプト言語Ruby"
+
+以下のようにして検索することができます。
+
+  >> title_index_column.saerch("Ruby").collect {|record| record.key.key}
+  ["http://ja.wikipedia.org/wiki/Ruby", "http://www.ruby-lang.org/"]
+
+検索結果はGroonga::Hashで返されます。ハッシュのキーに見つかっ
+た+<items>+のレコードが入っています。上の例ではrecord.keyで
++<items>+のレコードを取得して、さらにそのキーを指定して
+（record.key.key）で+<items>+のキーを返しています。
+
+
+== マルチユーザ向けのブックマークアプリケーション
+
+つづく。。。
