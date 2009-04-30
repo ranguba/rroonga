@@ -50,8 +50,7 @@ FileUtils.rm_rf(groonga_win32_dir)
 
 manifest = File.join(base_dir, "Manifest.txt")
 manifest_contents = []
-base_dir_included_components = %w(AUTHORS COPYING ChangeLog GPL
-                                  NEWS README Rakefile
+base_dir_included_components = %w(AUTHORS Rakefile
                                   extconf.rb pkg-config.rb)
 excluded_components = %w(.cvsignore .gdb_history CVS depend Makefile pkg
                          .svn .git vendor .test-result)
@@ -73,7 +72,7 @@ end
 
 # For Hoe's no user friendly default behavior. :<
 File.open("README.txt", "w") {|file| file << "= Dummy README\n== XXX\n"}
-FileUtils.cp("NEWS", "History.txt")
+FileUtils.cp("NEWS.rdoc", "History.txt")
 at_exit do
   FileUtils.rm_f("README.txt")
   FileUtils.rm_f("History.txt")
@@ -106,10 +105,10 @@ project = Hoe.new('groonga', version) do |project|
     :require_paths => ["src/lib", "src"],
   }
 
-  news_of_current_release = File.read("NEWS").split(/^==\s.*$/)[1]
+  news_of_current_release = File.read("NEWS.rdoc").split(/^==\s.*$/)[1]
   project.changes = cleanup_white_space(news_of_current_release)
 
-  entries = File.read("README").split(/^==\s(.*)$/)
+  entries = File.read("README.rdoc").split(/^==\s(.*)$/)
   description = cleanup_white_space(entries[entries.index("Description") + 1])
   project.summary, project.description, = description.split(/\n\n+/, 3)
 
@@ -139,6 +138,7 @@ ObjectSpace.each_object(Rake::RDocTask) do |rdoc_task|
 
   rdoc_task.rdoc_files = ["src/rb-groonga.c"] + Dir.glob("src/rb-grn-*.c")
   rdoc_task.rdoc_files += Dir.glob("src/lib/*.rb")
+  rdoc_task.rdoc_files += Dir.glob("*.rdoc")
 end
 
 task :publish_docs => [:prepare_docs_for_publishing]

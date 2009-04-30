@@ -1,5 +1,3 @@
-# -*- rd -*-
-
 = はじめに
 
 == 名前
@@ -18,7 +16,7 @@ groongaをRubyらしい書き方で利用できます。
 
 groongaに関する情報は以下を参照して下さい。
 
-  * groonga: http://groonga.org/
+* groonga: http://groonga.org/
 
 == 作者
 
@@ -33,8 +31,8 @@ pkg-config.rbはrcairoに付属しているもので、これはRubyライセ
 
 == 依存ソフトウェア
 
-  * Ruby >= 1.8
-  * groonga >= 0.0.2
+* Ruby >= 1.8 （1.9.1対応）
+* groonga >= 0.0.4
 
 == インストール
 
@@ -52,4 +50,4 @@ http://lists.sourceforge.jp/mailman/listinfo/groonga-dev
 
 == 感謝
 
-  * ...
+* ...
