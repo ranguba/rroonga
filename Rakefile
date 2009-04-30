@@ -54,7 +54,7 @@ base_dir_included_components = %w(AUTHORS COPYING ChangeLog GPL
                                   NEWS README Rakefile
                                   extconf.rb pkg-config.rb)
 excluded_components = %w(.cvsignore .gdb_history CVS depend Makefile pkg
-                         vendor .test-result)
+                         .svn .git vendor .test-result)
 excluded_suffixes = %w(.png .ps .pdf .o .so .a .txt .~)
 Find.find(base_dir) do |target|
   target = truncate_base_dir[target]
@@ -101,7 +101,6 @@ project = Hoe.new('groonga', version) do |project|
   project.spec_extras = {
     :extensions => ['extconf.rb'],
     :require_paths => ["src/lib", "src"],
-    :has_rdoc => false,
   }
   news = File.join(base_dir, "NEWS")
   project.changes = File.read(news).gsub(/\n+^Release(?m:.*)/, '')
@@ -193,9 +192,5 @@ end
 # fix Hoe's incorrect guess.
 project.spec.executables.clear
 project.lib_files = project.spec.files.grep(%r|^src/lib/|)
-
-# fix Hoe's install and uninstall task.
-task(:install).instance_variable_get("@actions").clear
-task(:uninstall).instance_variable_get("@actions").clear
 
 task(:release).prerequisites.reject! {|name| name == "clean"}
