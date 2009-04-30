@@ -115,6 +115,11 @@ ul.menu li#menu-reference
   background: url(reference.png) no-repeat;
 }
 
+ul.menu li#menu-tutorial
+{
+  background: url(tutorial.png) no-repeat;
+}
+
 ul.menu li#menu-install
 {
   background: url(install.png) no-repeat;
