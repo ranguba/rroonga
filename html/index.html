@@ -12,13 +12,13 @@
   </head>
   <body>
     <div class="header">
-      <h1>
+      <div class="title">
         <a href="./">
 	  <span class="title">Rubyでgroonga使って全文検索</span>
 	  <span class="title-separator">-</span>
 	  <span class="title-project">ラングバ</span>
         </a>
-      </h1>
+      </div>
       <ul class="menu">
 	<li id="menu-reference"><a href="groonga/">リファレンスマニュアル</a></li>
 	<li id="menu-install"><a href="./#install-ruby-groonga">インストール</a></li>
@@ -28,25 +28,27 @@
 
     <div class="content">
       <div class="main">
+	<h1>ラングバプロジェクト</h1>
+	<p>
+	  ラングバプロジェクトは<a href="http://groonga.org/">カラムストア機能も備える高速・高機能な全文検索エンジンgroonga</a>の機能をRubyから利用するためのライブラリを提供するプロジェクトです。
+	  高速・高機能なgroongaの機能をRubyらしい読み書きしやすい構文で利用できることが利点です。
+	</p>
+
 	<h2>最新リリース</h2>
 	<p>
 	  2009-04-30にリリースされた0.0.1が最新です。
         </p>
+
+	<h2 id="about-ruby-groonga">Ruby/groonga</h2>
+	<p>
+	  Ruby/groongaはgroongaのいわゆるDB-APIの層の機能をRubyレベルに提供します。DB-APIの層の上位であるQL-APIの層に相当する機能は<a href="#about-active-groonga">ActiveGroonga</a>で提供します。
+	</p>
 
 	<h2 id="install-ruby-groonga">インストール</h2>
 	<p>
 	  RubyGemsでインストールできます。groongaがインストールされていない場合は自動でダウンロード・ビルドし利用します。
         </p>
         <pre class="command">% sudo gem install groonga</pre>
-
-	<h2 id="about-ruby-groonga">Ruby/groongaとは</h2>
-	<p>
-	  Ruby/groongaは<a href="http://groonga.org/">カラムストア機能も備える全文検索エンジンgroonga</a>をRubyから利用するための拡張ライブラリです。
-          高速・高機能なgroongaの機能をRubyらしい読み書きしやすい構文で利用できることが利点です。
-	</p>
-	<p>
-	  Ruby/groongaはgroongaのいわゆるDB-APIの層の機能をRubyレベルに提供します。DB-APIの層の上位であるQL-APIの層に相当する機能はActiveGroongaで提供します。
-	</p>
 
 	<h2 id="about-active-groonga">ActiveGroongaとは</h2>
 	<p>

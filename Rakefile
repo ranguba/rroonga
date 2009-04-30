@@ -19,6 +19,8 @@ require 'English'
 
 require 'find'
 require 'fileutils'
+require 'pathname'
+require 'erb'
 require 'rubygems'
 gem 'rdoc'
 require 'hoe'
@@ -130,6 +132,53 @@ ObjectSpace.each_object(Rake::RDocTask) do |rdoc_task|
 
   rdoc_task.rdoc_files = ["src/rb-groonga.c"] + Dir.glob("src/rb-grn-*.c")
   rdoc_task.rdoc_files += Dir.glob("src/lib/*.rb")
+end
+
+task :publish_docs => [:prepare_docs_for_publishing]
+
+
+include ERB::Util
+
+def apply_template(file, head, header, footer)
+  content = File.read(file)
+  content = content.sub(/lang="en"/, 'lang="ja"')
+
+  title = nil
+  content = content.sub(/<title>(.+?)<\/title>/) do
+    title = $1
+    head.result(binding)
+  end
+
+  content = content.sub(/<body(?:.*?)>/) do |body_start|
+    "#{body_start}\n#{header.result(binding)}\n"
+  end
+
+  content = content.sub(/<\/body/) do |body_end|
+    "\n#{footer.result(binding)}\n#{body_end}"
+  end
+
+  File.open(file, "w") do |file|
+    file.print(content)
+  end
+end
+
+def erb_template(name)
+  file = File.join("html", "#{name}.html.erb")
+  template = File.read(file)
+  erb = ERB.new(template, nil, "-")
+  erb.filename = file
+  erb
+end
+
+task :prepare_docs_for_publishing do
+  head = erb_template("head")
+  header = erb_template("header")
+  footer = erb_template("footer")
+  Find.find("doc") do |file|
+    if /\.html\z/ =~ file and /_(?:c|rb)\.html\z/ !~ file
+      apply_template(file, head, header, footer)
+    end
+  end
 end
 
 # fix Hoe's incorrect guess.

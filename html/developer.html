@@ -12,13 +12,13 @@
   </head>
   <body>
     <div class="header">
-      <h1>
+      <div class="title">
         <a href="./">
 	  <span class="title">開発者向け情報</span>
 	  <span class="title-separator">-</span>
 	  <span class="title-project">ラングバ</span>
         </a>
-      </h1>
+      </div>
       <ul class="menu">
 	<li id="menu-reference"><a href="groonga/">リファレンスマニュアル</a></li>
 	<li id="menu-install"><a href="./#install-ruby-groonga">インストール</a></li>
@@ -28,6 +28,12 @@
 
     <div class="content">
       <div class="main">
+	<h1>開発者向け情報</h1>
+	<p>
+	  ラングバプロジェクトはRubyからもっと便利にgroongaを使えるようにするため、開発に参加してくれる人を募集しています。
+          ここでは、開発に必要となる情報を提供します。
+	</p>
+
 	<h2>リポジトリ</h2>
 	<p>
 	  Ruby/groongaとActiveGroongaのリポジトリはRubyForge上にあります。
@@ -61,6 +67,16 @@
 	  リポジトリにコミットがあるとそのコミットの差分が<a href="http://rubyforge.org/mailman/listinfo/groonga-commit">groonga-commitメーリングリスト</a>に流れます。
           開発に興味がある場合はgroonga-commitメーリングリストを購読してください。
 	</p>
+
+	<h2>ドキュメント</h2>
+	<p>
+	  ドキュメントはソースコード中にRDocで記述しています。
+          生成されたドキュメントはHTMLに変換され、<a href="groonga/">リファレンスマニュアル</a>で公開されます。
+	</p>
+	<p>
+          いつかは英語と日本語を用意できればよいとは思いますが、とりあえず、現在は日本語のみ用意しています。
+          日本語ドキュメントは直接ソースコード中に記述しています。RDocで多言語に対応したリファレンスマニュアルを作成する仕組みや、英語のドキュメント作成を手伝ってくれる人を募集しています。
+	</p>
       </div>
 
       <div class="sidebar">
@@ -87,7 +103,6 @@
       </p>
 
 <!-- Piwik -->
-<!--
 <a href="http://piwik.org" title="Web analytics" onclick="window.open(this.href);return(false);">
 <script type="text/javascript">
 var pkBaseURL = (("https:" == document.location.protocol) ? "https://www.clear-code.com/piwik/" : "http://www.clear-code.com/piwik/");
@@ -99,7 +114,6 @@ piwik_url = pkBaseURL + "piwik.php";
 piwik_log(piwik_action_name, piwik_idsite, piwik_url);
 </script>
 <object><noscript><p>Web analytics <img src="http://www.clear-code.com/piwik/piwik.php?idsite=2" style="border:0" alt=""/></p></noscript></object></a>
--->
 <!-- End Piwik Tag -->
     </div>
   </body>

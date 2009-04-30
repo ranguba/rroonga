@@ -3,8 +3,8 @@ body
 {
   margin: 0px;
   padding: 0px;
-  color: black;
-  background-color: white;
+  color: black !important;
+  background-color: white !important;
 }
 
 a:link
@@ -20,43 +20,48 @@ a:visited
 div.header
 {
   position: relative;
+  margin: 0px;
+  padding: 0px;
 }
 
-div.header h1
+div.header div.title
 {
   background: url(logo.png) no-repeat;
-  font-size: smaller;
+  font-family: sans-serif;
+  font-size: 12px;
+  font-weight: bold;
+  text-shadow: 0.1em 0.1em 0.1em rgb(200, 200, 200);
   margin-top: 20px;
   margin-left: 50px;
   height: 71px;
 }
 
-div.header h1 a,
-div.header h1 a:link,
-div.header h1 a:visited
+div.header div.title a,
+div.header div.title a:link,
+div.header div.title a:visited
 {
   color: black;
   text-decoration: none;
 }
 
-div.header h1 span
+div.header div.title span
 {
   display: block;
   padding-left: 300px;
   margin-bottom: 2px;
 }
 
-div.header h1 span.title
+div.header div.title span.title
 {
   padding-top: 20px;
 }
 
-div.header h1 span.title-separator
+div.header div.title span.title-separator
 {
   display: none;
 }
 
-div.header h1 span.title-project
+div.header div.title span.title-project
 {
   padding-bottom: 20px;
 }
@@ -65,24 +70,33 @@ ul.menu
 {
   background: url(bar.png) repeat-x;
   height: 38px;
+  padding: 0;
+  margin: 0;
   padding-top: 12px;
   padding-left: 50px;
+  padding-bottom: 0px;
+  margin-top: 16px;
   margin-left: 0px;
   margin-bottom: 0px;
-  padding-bottom: 0px;
+  font-family: sans;
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 100% !important;
 }
 
 ul.menu li
 {
   display: inline;
+  padding: 0;
+  margin: 0;
   margin-right: 10px;
+  padding-left: 0px;
 }
 
 ul.menu li a
 {
   color: #fed08e;
   text-decoration: none;
-  font-weight: bold;
   padding-left: 20px;
 }
 
@@ -205,4 +219,25 @@ pre.command
   color: white;
   background-color: black;
   padding: 5px 10px;
+}
+
+/* for RDoc */
+body.indexpage,
+body.class,
+body.module,
+body.file
+{
+  margin: 0 !important;
+}
+
+body.indexpage div.content
+{
+  margin: 1em 3em !important;
+}
+
+body.class div.content,
+body.module div.content,
+body.file div.content
+{
+  margin: 40px !important;
 }
