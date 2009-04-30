@@ -432,7 +432,13 @@ class TableTest < Test::Unit::TestCase
       bookmark["id"] = i + 100
     end
 
-    results = bookmarks.sort(["id"], :limit => 20)
+    results = bookmarks.sort([
+                              {
+                                :key => "id",
+                                :order => :descending,
+                              },
+                             ],
+                             :limit => 20)
     results = results.records(:order => :ascending).collect do |record|
       id_column[record.value.unpack("i")[0]]
     end

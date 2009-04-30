@@ -34,7 +34,7 @@ class TableCursorTest < Test::Unit::TestCase
         keys << cursor.key
       end
     end
-    assert_equal(["groonga", "Ruby", "Cutter"],
+    assert_equal(["Cutter", "Ruby", "groonga"],
                  keys)
   end
 

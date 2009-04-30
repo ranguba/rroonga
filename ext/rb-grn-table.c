@@ -573,8 +573,7 @@ rb_grn_table_each (VALUE self)
     grn_id id;
 
     table = SELF(self, &context);
-    cursor = grn_table_cursor_open(context, table, NULL, 0, NULL, 0,
-				   GRN_CURSOR_DESCENDING);
+    cursor = grn_table_cursor_open(context, table, NULL, 0, NULL, 0, 0);
     rb_iv_set(self, "cursor", GRNTABLECURSOR2RVAL(Qnil, context, cursor));
     while ((id = grn_table_cursor_next(context, cursor)) != GRN_ID_NIL) {
 	rb_yield(rb_grn_record_new(self, id));
@@ -643,9 +642,10 @@ rb_grn_table_sort (int argc, VALUE *argv, VALUE self)
 	if (RVAL2CBOOL(rb_obj_is_kind_of(rb_key, rb_cString)))
 	    rb_key = rb_grn_table_get_column(self, rb_key);
 	keys[i].key = RVAL2GRNOBJECT(rb_key, &context);
-	if (NIL_P(rb_order) ||
-	    rb_grn_equal_option(rb_order, "desc") ||
-	    rb_grn_equal_option(rb_order, "descending")) {
+	if (NIL_P(rb_order)) {
+	    keys[i].flags = 0;
+	} else if (rb_grn_equal_option(rb_order, "desc") ||
+		   rb_grn_equal_option(rb_order, "descending")) {
 	    keys[i].flags = GRN_TABLE_SORT_DESC;
 	} else {
 	    /* FIXME: validation */

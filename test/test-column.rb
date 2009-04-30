@@ -88,7 +88,7 @@ class ColumnTest < Test::Unit::TestCase
     ruby["content"] = "<html><body>ruby</body></html>"
 
     assert_content_search([groonga], "groonga")
-    assert_content_search([ruby, groonga], "html")
+    assert_content_search([groonga, ruby], "html")
 
     assert_equal([@bookmarks_content], @bookmarks_index_content.sources)
   end
@@ -104,7 +104,7 @@ class ColumnTest < Test::Unit::TestCase
     @bookmarks_index_content[ruby.id] = ruby["content"]
 
     assert_content_search([groonga], "groonga")
-    assert_content_search([ruby, groonga], "html")
+    assert_content_search([groonga, ruby], "html")
   end
 
   def test_range

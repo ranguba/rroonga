@@ -180,7 +180,7 @@ class RecordTest < Test::Unit::TestCase
     google["content"] = "Web search engine."
 
     results = @bookmarks_content_index.search("search")
-    assert_equal([[google.id, 1], [groonga.id, 3]],
+    assert_equal([[groonga.id, 3], [google.id, 1]],
                  results.collect do |record|
                    [record.id, record.score]
                  end)
