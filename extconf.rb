@@ -35,7 +35,7 @@ package_name = "groonga"
 module_name = "groonga"
 ext_dir_name = "src"
 src_dir = File.join(File.expand_path(File.dirname(__FILE__)), ext_dir_name)
-major, minor, micro = 0, 0, 3
+major, minor, micro = 0, 0, 4
 
 def install_groonga_locally(major, minor, micro)
   require 'open-uri'
