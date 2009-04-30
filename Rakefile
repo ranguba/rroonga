@@ -107,7 +107,7 @@ project = Hoe.new('groonga', version) do |project|
   project.changes = File.read(news).gsub(/\n+^Release(?m:.*)/, '')
   project.description = "Ruby bindings for groonga"
   project.need_tar = false
-  project.remote_rdoc_dir = "doc"
+  project.remote_rdoc_dir = "groonga"
 end
 
 project.spec.dependencies.delete_if {|dependency| dependency.name == "hoe"}
@@ -179,6 +179,15 @@ task :prepare_docs_for_publishing do
       apply_template(file, head, header, footer)
     end
   end
+end
+
+task :publish_html do
+  config = YAML.load(File.read(File.expand_path("~/.rubyforge/user-config.yml")))
+  host = "#{config["username"]}@rubyforge.org"
+
+  rsync_args = "-av --exclude '*.erb' --exclude '*.svg' --exclude .svn"
+  remote_dir = "/var/www/gforge-projects/#{project.rubyforge_name}/"
+  sh "rsync #{rsync_args} html/ #{host}:#{remote_dir}"
 end
 
 # fix Hoe's incorrect guess.
