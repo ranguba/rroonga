@@ -80,6 +80,10 @@ at_exit do
   FileUtils.rm_f(manifest)
 end
 
+def cleanup_white_space(entry)
+  entry.gsub(/(\A\n+|\n+\z)/, '') + "\n"
+end
+
 ENV["VERSION"] ||= guess_version
 version = ENV["VERSION"]
 project = Hoe.new('groonga', version) do |project|
@@ -94,7 +98,6 @@ project = Hoe.new('groonga', version) do |project|
   end.compact
   project.email = ['groonga-users-en@rubyforge.org',
                    'groonga-dev@lists.sourceforge.jp']
-  project.summary = 'Ruby bindings for groonga'
   project.url = 'http://groonga.rubyforge.org/'
   project.testlib = :testunit2
   project.test_globs = []
@@ -102,9 +105,14 @@ project = Hoe.new('groonga', version) do |project|
     :extensions => ['extconf.rb'],
     :require_paths => ["src/lib", "src"],
   }
-  news = File.join(base_dir, "NEWS")
-  project.changes = File.read(news).gsub(/\n+^Release(?m:.*)/, '')
-  project.description = "Ruby bindings for groonga"
+
+  news_of_current_release = File.read("NEWS").split(/^==\s.*$/)[1]
+  project.changes = cleanup_white_space(news_of_current_release)
+
+  entries = File.read("README").split(/^==\s(.*)$/)
+  description = cleanup_white_space(entries[entries.index("Description") + 1])
+  project.summary, project.description, = description.split(/\n\n+/, 3)
+
   project.need_tar = false
   project.remote_rdoc_dir = "groonga"
 end

@@ -8,9 +8,16 @@ Ruby/groonga
 
 == 説明
 
-groongaのRubyバインディングです。
+全文検索機能とカラムストア機能を提供するgroongaのRubyバイン
+ディングです。
 
-  * Ruby/groonga: http://groonga.rubyforge.org/
+groongaのいわゆるDB-API層をRubyから使うための拡張ライブラリで
+す。groongaのAPIをそのままRubyレベルに提供するのではなく、
+Rubyらしく読み書きしやすいAPIとして提供します。高速・高機能な
+groongaをRubyらしい書き方で利用できます。
+
+groongaに関する情報は以下を参照して下さい。
+
   * groonga: http://groonga.org/
 
 == 作者

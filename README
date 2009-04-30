@@ -8,9 +8,16 @@ Ruby/groonga
 
 == Description
 
-Ruby bindings for groonga.
+Ruby bindings for groonga that provides full text search and
+column store features.
 
-  * Ruby/groonga: http://groonga.rubyforge.org/
+Ruby/groonga is a extension library to use groonga's DB-API
+layer. Ruby/groonga provides Rubyish readable and writable
+API. You can use groonga's first and highly functional
+features from Ruby.
+
+See the following URL about groonga.
+
   * groonga: http://groonga.org/
 
 == Author
