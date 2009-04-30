@@ -34,8 +34,8 @@ truncate_base_dir = Proc.new do |x|
   x.gsub(/^#{Regexp.escape(base_dir + File::SEPARATOR)}/, '')
 end
 
-groonga_ext_dir = File.join(base_dir, 'src')
-groonga_lib_dir = File.join(groonga_ext_dir, 'lib')
+groonga_ext_dir = File.join(base_dir, 'ext')
+groonga_lib_dir = File.join(base_dir, 'lib')
 $LOAD_PATH.unshift(groonga_ext_dir)
 $LOAD_PATH.unshift(groonga_lib_dir)
 ENV["RUBYLIB"] = "#{groonga_lib_dir}:#{groonga_ext_dir}:#{ENV['RUBYLIB']}"
@@ -105,7 +105,7 @@ project = Hoe.new('groonga', version) do |project|
   project.test_globs = ["test/run-test.rb"]
   project.spec_extras = {
     :extensions => ['extconf.rb'],
-    :require_paths => ["src/lib", "src"],
+    :require_paths => ["lib", "ext"],
     :extra_rdoc_files => Dir.glob("*.rdoc"),
   }
   project.readme_file = "README.ja.rdoc"
@@ -125,7 +125,7 @@ project.spec.dependencies.delete_if {|dependency| dependency.name == "hoe"}
 
 if /mswin32/ =~ project.spec.platform.to_s
   project.spec.extensions = []
-  project.spec.files += ["src/groonga.so", "src/libruby-groonga.a"]
+  project.spec.files += ["ext/groonga.so", "ext/libruby-groonga.a"]
 
   FileUtils.cp_r(File.expand_path("~/.wine/drive_c/groonga-dev"),
                  groonga_win32_dir)
@@ -141,8 +141,8 @@ ObjectSpace.each_object(Rake::RDocTask) do |rdoc_task|
   rdoc_task.options[t_option_index, 2] = nil
   rdoc_task.title = "Ruby/groonga - #{version}"
 
-  rdoc_task.rdoc_files = ["src/rb-groonga.c"] + Dir.glob("src/rb-grn-*.c")
-  rdoc_task.rdoc_files += Dir.glob("src/lib/*.rb")
+  rdoc_task.rdoc_files = ["ext/rb-groonga.c"] + Dir.glob("ext/rb-grn-*.c")
+  rdoc_task.rdoc_files += Dir.glob("lib/*.rb")
   rdoc_task.rdoc_files += Dir.glob("*.rdoc")
 end
 
@@ -204,6 +204,6 @@ end
 
 # fix Hoe's incorrect guess.
 project.spec.executables.clear
-project.lib_files = project.spec.files.grep(%r|^src/lib/|)
+# project.lib_files = project.spec.files.grep(%r|^src/lib/|)
 
 task(:release).prerequisites.reject! {|name| name == "clean"}

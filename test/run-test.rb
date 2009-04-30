@@ -21,8 +21,8 @@ $KCODE = "u" if RUBY_VERSION < "1.9"
 
 base_dir = File.expand_path(File.join(File.dirname(__FILE__), ".."))
 test_unit_dir = File.join(base_dir, "test-unit", "lib")
-src_dir = File.join(base_dir, "src")
-lib_dir = File.join(src_dir, "lib")
+ext_dir = File.join(base_dir, "ext")
+lib_dir = File.join(base_dir, "lib")
 test_dir = File.join(base_dir, "test")
 
 make = nil
@@ -41,7 +41,7 @@ require 'test/unit'
 
 ARGV.unshift("--priority-mode")
 
-$LOAD_PATH.unshift(src_dir)
+$LOAD_PATH.unshift(ext_dir)
 $LOAD_PATH.unshift(lib_dir)
 
 $LOAD_PATH.unshift(test_dir)
