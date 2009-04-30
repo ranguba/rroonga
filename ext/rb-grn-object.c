@@ -742,24 +742,30 @@ rb_grn_object_append_value (VALUE self, VALUE rb_id, VALUE rb_value)
  *
  * 利用可能なオプションは以下の通り。
  *
- * _result_: 結果を格納するGroonga::Hash。指定しない場合は新
- *           しくGroonga::Hashを生成し、それに結果を格納して
- *           返す。
- * _operator_: 以下のどれかの値を指定する。
- *             +nil+, +"or"+, +"||"+, +"and"+, <tt>"+"</tt>,
- *             +"&&"+, +"but"+, +"not"+, +"-"+, +"adjust"+, +">"+。
- *             それぞれ以下のようになる。
- * _exact_: +true+を指定すると完全一致で検索する
- * _longest_common_prefix_: +true+を指定すると_query_と同じ
- *                          接頭辞をもつエントリのうち、もっ
- *                          とも長いエントリを検索する
- * _suffix_: +true+を指定すると_query_が後方一致するエン
- *           トリを検索する
- * _prefix_: +true+を指定すると_query_が前方一致するレコード
- *           を検索する
- * _near_: +true+を指定すると_query_に指定した複数の語が近傍
- *         に含まれるレコードを検索する
- * ...: ...
+ * [_:result_]
+ *   結果を格納するGroonga::Hash。指定しない場合は新しく
+ *   Groonga::Hashを生成し、それに結果を格納して返す。
+ * [_:operator_]
+ *   以下のどれかの値を指定する。+nil+, <tt>"or"</tt>, <tt>"||"</tt>,
+ *   <tt>"and"</tt>, <tt>"+"</tt>, <tt>"&&"</tt>, <tt>"but"</tt>,
+ *   <tt>"not"</tt>, <tt>"-"</tt>, <tt>"adjust"</tt>, <tt>">"</tt>。
+ *   それぞれ以下のようになる。（FIXME: 「以下」）
+ * [_:exact_]
+ *   +true+を指定すると完全一致で検索する
+ * [_:longest_common_prefix_]
+ *   +true+を指定すると_query_と同じ接頭辞をもつエントリのう
+ *   ち、もっとも長いエントリを検索する
+ * [_:suffix_]
+ *   +true+を指定すると_query_が後方一致するエントリを検索す
+ *   る
+ * [_:prefix_]
+ *   +true+を指定すると_query_が前方一致するレコードを検索す
+ *   る
+ * [_:near_]
+ *   +true+を指定すると_query_に指定した複数の語が近傍に含ま
+ *   れるレコードを検索する
+ * [...]
+ *   ...
  */
 static VALUE
 rb_grn_object_search (int argc, VALUE *argv, VALUE self)
