@@ -51,6 +51,9 @@ FileUtils.rm_rf(groonga_win32_dir)
 manifest = File.join(base_dir, "Manifest.txt")
 manifest_contents = []
 base_dir_included_components = %w(AUTHORS Rakefile
+                                  README.rdoc README.ja.rdoc
+                                  NEWS.rdoc NEWS.ja.rdoc
+                                  TUTORIAL.ja.rdoc
                                   extconf.rb pkg-config.rb)
 excluded_components = %w(.cvsignore .gdb_history CVS depend Makefile pkg
                          .svn .git doc vendor .test-result)
@@ -99,11 +102,13 @@ project = Hoe.new('groonga', version) do |project|
                    'groonga-dev@lists.sourceforge.jp']
   project.url = 'http://groonga.rubyforge.org/'
   project.testlib = :testunit2
-  project.test_globs = []
+  project.test_globs = ["test/run-test.rb"]
   project.spec_extras = {
     :extensions => ['extconf.rb'],
     :require_paths => ["src/lib", "src"],
+    :extra_rdoc_files => Dir.glob("*.rdoc"),
   }
+  project.readme_file = "README.ja.rdoc"
 
   news_of_current_release = File.read("NEWS.rdoc").split(/^==\s.*$/)[1]
   project.changes = cleanup_white_space(news_of_current_release)
