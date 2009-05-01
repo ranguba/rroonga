@@ -120,9 +120,9 @@ rb_grn_table_cursor_alloc (VALUE klass)
 }
 
 grn_ctx *
-rb_grn_table_cursor_ensure_context (VALUE cursor, VALUE rb_context)
+rb_grn_table_cursor_ensure_context (VALUE cursor, VALUE *rb_context)
 {
-    if (NIL_P(rb_context)) {
+    if (NIL_P(*rb_context)) {
 	RbGrnTableCursor *rb_grn_table_cursor;
 
 	rb_grn_table_cursor = SELF(cursor);

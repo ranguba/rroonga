@@ -85,11 +85,20 @@ static void
 rb_rb_grn_object_free (void *object)
 {
     RbGrnObject *rb_grn_object = object;
+    grn_ctx *context;
+    grn_obj *grn_object;
 
-    if (rb_grn_object->context && rb_grn_object->object &&
-	rb_grn_object->owner) {
-	/* FIXME */
-	/* grn_obj_close(rb_grn_object->context, rb_grn_object->object); */
+    context = rb_grn_object->context;
+    grn_object = rb_grn_object->object;
+
+    if (rb_grn_object->owner && context && grn_object &&
+	rb_grn_context_alive_p(context)) {
+	const char *path;
+
+	path = grn_obj_path(context, grn_object);
+	if (path == NULL || (path && grn_ctx_db(context))) {
+	    grn_obj_close(rb_grn_object->context, rb_grn_object->object);
+	}
     }
 
     xfree(rb_grn_object);
@@ -168,7 +177,8 @@ rb_grn_object_alloc (VALUE klass)
 }
 
 void
-rb_grn_object_initialize (VALUE self, grn_ctx *context, grn_obj *object)
+rb_grn_object_initialize (VALUE self, VALUE rb_context,
+			  grn_ctx *context, grn_obj *object)
 {
     RbGrnObject *rb_grn_object;
 
@@ -177,6 +187,8 @@ rb_grn_object_initialize (VALUE self, grn_ctx *context, grn_obj *object)
     rb_grn_object->context = context;
     rb_grn_object->object = object;
     rb_grn_object->owner = RB_GRN_TRUE;
+
+    rb_iv_set(self, "context", rb_context);
 }
 
 /*
@@ -954,6 +966,11 @@ rb_grn_object_remove (VALUE self)
     context = rb_grn_object->context;
     rc = grn_obj_remove(context, rb_grn_object->object);
     rb_grn_rc_check(rc, self);
+
+    rb_grn_object->context = NULL;
+    rb_grn_object->object = NULL;
+    rb_grn_object->owner = RB_GRN_FALSE;
+    rb_iv_set(self, "context", Qnil);
 
     return Qnil;
 }

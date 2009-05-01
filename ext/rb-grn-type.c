@@ -60,7 +60,7 @@ rb_grn_type_initialize (int argc, VALUE *argv, VALUE self)
     name = StringValuePtr(rb_name);
     name_size = RSTRING_LEN(rb_name);
 
-    context = rb_grn_context_ensure(rb_context);
+    context = rb_grn_context_ensure(&rb_context);
 
     if (NIL_P(rb_key_type)) {
         flags = GRN_OBJ_KEY_VAR_SIZE;
@@ -85,7 +85,7 @@ rb_grn_type_initialize (int argc, VALUE *argv, VALUE self)
     }
 
     type = grn_type_create(context, name, name_size, flags, size);
-    rb_grn_object_initialize(self, context, type);
+    rb_grn_object_initialize(self, rb_context, context, type);
     rb_grn_context_check(context, rb_ary_new4(argc, argv));
 
     return Qnil;

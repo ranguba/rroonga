@@ -130,7 +130,9 @@ const char    *rb_grn_rc_to_message                 (grn_rc rc);
 void           rb_grn_rc_check                      (grn_rc rc,
 						     VALUE related_object);
 
-grn_ctx       *rb_grn_context_ensure                (VALUE context);
+rb_grn_boolean rb_grn_context_alive_p               (grn_ctx *context);
+
+grn_ctx       *rb_grn_context_ensure                (VALUE *context);
 VALUE          rb_grn_context_get_default           (void);
 VALUE          rb_grn_context_to_exception          (grn_ctx *context,
 						     VALUE related_object);
@@ -145,6 +147,7 @@ rb_grn_boolean rb_grn_equal_option                  (VALUE option,
 
 VALUE          rb_grn_object_alloc                  (VALUE klass);
 void           rb_grn_object_initialize             (VALUE self,
+						     VALUE rb_context,
 						     grn_ctx *context,
 						     grn_obj *object);
 VALUE          rb_grn_object_array_reference        (VALUE object,
@@ -168,7 +171,7 @@ VALUE          rb_grn_table_s_create                (int argc,
 						     VALUE klass,
 						     grn_obj_flags key_store);
 grn_ctx       *rb_grn_table_cursor_ensure_context   (VALUE cursor,
-						     VALUE rb_context);
+						     VALUE *rb_context);
 VALUE          rb_grn_table_cursor_close            (VALUE object);
 
 VALUE          rb_grn_record_new                    (VALUE table,

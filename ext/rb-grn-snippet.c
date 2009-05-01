@@ -64,8 +64,8 @@ rb_rb_grn_snippet_free (void *object)
 {
     RbGrnSnippet *rb_grn_snippet = object;
 
-    if (rb_grn_snippet->context && rb_grn_snippet->snippet &&
-	rb_grn_snippet->owner)
+    if (rb_grn_snippet->owner &&
+	rb_grn_snippet->context && rb_grn_snippet->snippet)
         grn_snip_close(rb_grn_snippet->context,
                        rb_grn_snippet->snippet);
 
@@ -127,7 +127,7 @@ rb_grn_snippet_initialize (int argc, VALUE *argv, VALUE self)
                         "html_escape", &rb_html_escape,
                         NULL);
 
-    context = rb_grn_context_ensure(rb_context);
+    context = rb_grn_context_ensure(&rb_context);
 
     if (RVAL2CBOOL(rb_normalize))
         flags |= GRN_SNIP_NORMALIZE;
@@ -164,6 +164,8 @@ rb_grn_snippet_initialize (int argc, VALUE *argv, VALUE self)
     rb_grn_snippet->context = context;
     rb_grn_snippet->snippet = snippet;
     rb_grn_snippet->owner = RB_GRN_TRUE;
+
+    rb_iv_set(self, "context", rb_context);
 
     return Qnil;
 }

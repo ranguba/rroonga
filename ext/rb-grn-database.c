@@ -59,7 +59,7 @@ rb_grn_database_s_create (int argc, VALUE *argv, VALUE klass)
 
     if (!NIL_P(rb_path))
         path = StringValuePtr(rb_path);
-    context = rb_grn_context_ensure(rb_context);
+    context = rb_grn_context_ensure(&rb_context);
 
     create_args.builtin_type_names = NULL;
     create_args.n_builtin_type_names = 0;
@@ -67,6 +67,7 @@ rb_grn_database_s_create (int argc, VALUE *argv, VALUE klass)
     database = grn_db_create(context, path, &create_args);
     rb_grn_context_check(context, rb_ary_new4(argc, argv));
     rb_database = GRNOBJECT2RVAL(klass, context, database, RB_GRN_TRUE);
+    rb_iv_set(rb_database, "context", rb_context);
     rb_grn_context_check(context, rb_ary_new4(argc, argv));
 
     if (rb_block_given_p())
@@ -91,10 +92,10 @@ rb_grn_database_initialize (int argc, VALUE *argv, VALUE self)
 			"context", &rb_context,
 			NULL);
 
-    context = rb_grn_context_ensure(rb_context);
+    context = rb_grn_context_ensure(&rb_context);
 
     database = grn_db_open(context, path);
-    rb_grn_object_initialize(self, context, database);
+    rb_grn_object_initialize(self, rb_context, context, database);
     rb_grn_context_check(context, self);
 
     return Qnil;

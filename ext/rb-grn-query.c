@@ -143,7 +143,7 @@ rb_grn_query_initialize (int argc, VALUE *argv, VALUE self)
                         "max_expressions", &rb_max_expressions,
                         NULL);
 
-    context = rb_grn_context_ensure(rb_context);
+    context = rb_grn_context_ensure(&rb_context);
 
     default_operator = RVAL2GRNSELECTOPERATOR(rb_default_operator);
 
@@ -159,6 +159,8 @@ rb_grn_query_initialize (int argc, VALUE *argv, VALUE self)
     rb_grn_query->context = context;
     rb_grn_query->query = query;
     rb_grn_query->owner = RB_GRN_TRUE;
+
+    rb_iv_set(self, "context", rb_context);
 
     return Qnil;
 }

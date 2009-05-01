@@ -21,7 +21,7 @@
 extern grn_ctx grn_gctx;
 
 static void
-finish_groonga (VALUE data)
+finish_groonga (void)
 {
     grn_ctx *context;
 
@@ -76,8 +76,12 @@ Init_groonga (void)
      */
     rb_define_const(mGrn, "BINDINGS_VERSION", cGrnBindingsVersion);
 
-    rb_grn_init_utils(mGrn);
     rb_grn_init_exception(mGrn);
+
+    rb_grn_rc_check(grn_init(), Qnil);
+    atexit(finish_groonga);
+
+    rb_grn_init_utils(mGrn);
     rb_grn_init_encoding(mGrn);
     rb_grn_init_context(mGrn);
     rb_grn_init_object(mGrn);
@@ -92,7 +96,4 @@ Init_groonga (void)
     rb_grn_init_query(mGrn);
     rb_grn_init_logger(mGrn);
     rb_grn_init_snippet(mGrn);
-
-    rb_grn_rc_check(grn_init(), Qnil);
-    rb_set_end_proc(finish_groonga, Qnil);
 }

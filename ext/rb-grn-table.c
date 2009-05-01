@@ -66,7 +66,7 @@ rb_grn_table_s_create (int argc, VALUE *argv, VALUE klass,
 			"value_size", &rb_value_size,
 			NULL);
 
-    context = rb_grn_context_ensure(rb_context);
+    context = rb_grn_context_ensure(&rb_context);
 
     if (!NIL_P(rb_name)) {
         name = StringValuePtr(rb_name);
@@ -108,17 +108,17 @@ rb_grn_table_s_create (int argc, VALUE *argv, VALUE klass,
 }
 
 static grn_obj *
-rb_grn_table_open (int argc, VALUE *argv, grn_ctx **context)
+rb_grn_table_open (int argc, VALUE *argv, grn_ctx **context, VALUE *rb_context)
 {
     grn_obj *table;
     char *name = NULL, *path = NULL;
     unsigned name_size = 0;
-    VALUE rb_path, options, rb_context, rb_name;
+    VALUE rb_path, options, rb_name;
 
     rb_scan_args(argc, argv, "01", &options);
 
     rb_grn_scan_options(options,
-			"context", &rb_context,
+			"context", rb_context,
 			"name", &rb_name,
 			"path", &rb_path,
 			NULL);
@@ -142,9 +142,10 @@ rb_grn_table_initialize (int argc, VALUE *argv, VALUE self)
 {
     grn_ctx *context = NULL;
     grn_obj *table;
+    VALUE rb_context;
 
-    table = rb_grn_table_open(argc, argv, &context);
-    rb_grn_object_initialize(self, context, table);
+    table = rb_grn_table_open(argc, argv, &context, &rb_context);
+    rb_grn_object_initialize(self, rb_context, context, table);
     rb_grn_context_check(context, self);
 
     return Qnil;
@@ -153,23 +154,26 @@ rb_grn_table_initialize (int argc, VALUE *argv, VALUE self)
 static VALUE
 rb_grn_table_s_open (int argc, VALUE *argv, VALUE klass)
 {
-    grn_ctx *context = NULL;
-    grn_obj *table;
-    VALUE rb_table, rb_class;
+    VALUE rb_table;
 
-    table = rb_grn_table_open(argc, argv, &context);
-    rb_grn_context_check(context, rb_ary_new4(argc, argv));
+    rb_table = rb_grn_object_alloc(klass);
+    rb_grn_table_initialize(argc, argv, rb_table);
+
     if (klass != rb_cGrnTable) {
+	VALUE rb_class;
+	grn_obj *table;
+	grn_ctx *context = NULL;
+
+	table = SELF(rb_table, &context);
 	rb_class = GRNOBJECT2RCLASS(table);
-	if (klass != rb_class)
+	if (rb_class != klass) {
 	    rb_raise(rb_eTypeError,
 		     "unexpected existing table type: %s: expected %s",
 		     rb_grn_inspect(rb_class),
 		     rb_grn_inspect(klass));
+	}
     }
 
-    rb_table = rb_grn_object_alloc(klass);
-    rb_grn_table_initialize(argc, argv, rb_table);
     if (rb_block_given_p())
         return rb_ensure(rb_yield, rb_table, rb_grn_object_close, rb_table);
     else
@@ -349,6 +353,7 @@ rb_grn_table_add_column (VALUE self, VALUE rb_name, VALUE rb_value_type,
     grn_obj *value_type, *column;
     char *name = NULL, *path = NULL;
     unsigned name_size = 0;
+    VALUE rb_column;
 
     table = SELF(self, &context);
 
@@ -363,7 +368,9 @@ rb_grn_table_add_column (VALUE self, VALUE rb_name, VALUE rb_value_type,
 			     path, value_type);
     rb_grn_context_check(context, self);
 
-    return GRNCOLUMN2RVAL(Qnil, context, column, RB_GRN_TRUE);
+    rb_column = GRNCOLUMN2RVAL(Qnil, context, column, RB_GRN_TRUE);
+    rb_iv_set(rb_column, "table", self);
+    return rb_column;
 }
 
 static VALUE
@@ -375,6 +382,7 @@ rb_grn_table_get_column (VALUE self, VALUE rb_name)
     char *name = NULL;
     unsigned name_size = 0;
     rb_grn_boolean owner;
+    VALUE rb_column;
 
     table = SELF(self, &context);
 
@@ -385,7 +393,10 @@ rb_grn_table_get_column (VALUE self, VALUE rb_name)
     rb_grn_context_check(context, self);
 
     owner = (column && column->header.type == GRN_ACCESSOR);
-    return GRNCOLUMN2RVAL(Qnil, context, column, owner);
+    rb_column = GRNCOLUMN2RVAL(Qnil, context, column, owner);
+    if (owner)
+	rb_iv_set(rb_column, "table", self);
+    return rb_column;
 }
 
 static VALUE

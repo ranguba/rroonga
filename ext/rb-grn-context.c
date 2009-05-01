@@ -22,6 +22,33 @@
 
 static VALUE cGrnContext;
 
+static grn_ctx *management_context;
+static grn_hash *contexts;
+
+static void
+finish_groonga_context (void)
+{
+    grn_hash_close(management_context, contexts);
+
+    grn_ctx_fin(management_context);
+    xfree(management_context);
+
+    management_context = NULL;
+}
+
+rb_grn_boolean
+rb_grn_context_alive_p (grn_ctx *context)
+{
+    grn_search_flags flags = 0;
+
+    if (!management_context)
+	return RB_GRN_FALSE;
+
+    return grn_hash_lookup(management_context, contexts,
+			   &context, sizeof(grn_ctx *),
+			   NULL, &flags) != GRN_ID_NIL;
+}
+
 grn_ctx *
 rb_grn_context_from_ruby_object (VALUE object)
 {
@@ -42,8 +69,16 @@ rb_grn_context_free (void *pointer)
 {
     grn_ctx *context = pointer;
 
-    if (context->stat != GRN_CTX_FIN)
+    if (management_context)
+	grn_hash_delete(management_context, contexts,
+			&context, sizeof(grn_ctx *), NULL);
+    if (context->stat != GRN_CTX_FIN) {
+	grn_obj *database;
+	database = grn_ctx_db(context);
+	if (database)
+	    grn_obj_close(context, database);
 	grn_ctx_fin(context);
+    }
     xfree(context);
 }
 
@@ -102,11 +137,11 @@ rb_grn_context_check (grn_ctx *context, VALUE related_object)
 }
 
 grn_ctx *
-rb_grn_context_ensure (VALUE context)
+rb_grn_context_ensure (VALUE *context)
 {
-    if (NIL_P(context))
-	context = rb_grn_context_get_default();
-    return SELF(context);
+    if (NIL_P(*context))
+	*context = rb_grn_context_get_default();
+    return SELF(*context);
 }
 
 static VALUE
@@ -181,6 +216,14 @@ rb_grn_context_initialize (int argc, VALUE *argv, VALUE self)
     DATA_PTR(self) = context;
     rc = grn_ctx_init(context, flags);
     rb_grn_context_check(context, self);
+
+    {
+	grn_search_flags flags = GRN_TABLE_ADD;
+
+	grn_hash_lookup(management_context, contexts,
+			&context, sizeof(grn_ctx *),
+			NULL, &flags);
+    }
 
     if (!NIL_P(rb_encoding)) {
 	grn_encoding encoding;
@@ -303,6 +346,12 @@ rb_grn_context_array_reference (VALUE self, VALUE name_or_id)
 void
 rb_grn_init_context (VALUE mGrn)
 {
+    management_context = ALLOC(grn_ctx);
+    rb_grn_rc_check(grn_ctx_init(management_context, 0), Qnil);
+    contexts = grn_hash_create(management_context, NULL,
+			       sizeof(grn_ctx *), 0, 0);
+    atexit(finish_groonga_context);
+
     cGrnContext = rb_define_class_under(mGrn, "Context", rb_cObject);
     rb_define_alloc_func(cGrnContext, rb_grn_context_alloc);
 

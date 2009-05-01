@@ -26,10 +26,11 @@ static VALUE
 rb_grn_table_cursor_get_key (VALUE self)
 {
     VALUE rb_key = Qnil;
+    VALUE rb_context = Qnil;
     grn_ctx *context;
     grn_table_cursor *cursor;
 
-    context = rb_grn_table_cursor_ensure_context(self, Qnil);
+    context = rb_grn_table_cursor_ensure_context(self, &rb_context);
     cursor = SELF(self);
     if (context && cursor) {
         void *key;
