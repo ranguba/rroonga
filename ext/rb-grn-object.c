@@ -283,6 +283,7 @@ rb_grn_object_inspect_content_name (VALUE inspected,
 	rb_str_cat2(inspected, "<");
 	rb_str_cat2(inspected, GRN_BULK_HEAD(&name));
 	rb_str_cat2(inspected, ">");
+	grn_obj_close(context, &name);
     }
 
     return inspected;
