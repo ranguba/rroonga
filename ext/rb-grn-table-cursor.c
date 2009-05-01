@@ -59,11 +59,15 @@ static void
 rb_rb_grn_table_cursor_free (void *object)
 {
     RbGrnTableCursor *rb_grn_table_cursor = object;
+    grn_ctx *context;
+    grn_table_cursor *cursor;
 
-    if (rb_grn_table_cursor->context && rb_grn_table_cursor->cursor &&
-	rb_grn_table_cursor->owner)
-	grn_table_cursor_close(rb_grn_table_cursor->context,
-			       rb_grn_table_cursor->cursor);
+    context = rb_grn_table_cursor->context;
+    cursor = rb_grn_table_cursor->cursor;
+    if (rb_grn_table_cursor->owner && context && cursor &&
+	rb_grn_context_alive_p(context))
+	grn_table_cursor_close(context, cursor);
+
     xfree(object);
 }
 
