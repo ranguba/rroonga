@@ -60,8 +60,8 @@ rb_rb_grn_query_free (void *object)
 {
     RbGrnQuery *rb_grn_query = object;
 
-    if (rb_grn_query->context && rb_grn_query->query && rb_grn_query->owner)
-	/* grn_query_close(rb_grn_query->context, rb_grn_query->query) */;
+    if (rb_grn_query->owner && rb_grn_query->context && rb_grn_query->query)
+	grn_query_close(rb_grn_query->context, rb_grn_query->query);
 
     xfree(object);
 }
