@@ -101,7 +101,7 @@ rb_grn_context_to_exception (grn_ctx *context, VALUE related_object)
     exception_class = rb_grn_rc_to_exception(context->rc);
     message = rb_grn_rc_to_message(context->rc);
 
-    grn_bulk_init(context, &bulk, 0);
+    GRN_OBJ_INIT(&bulk, GRN_BULK, 0);
     GRN_BULK_PUTS(context, &bulk, message);
     GRN_BULK_PUTS(context, &bulk, ": ");
     GRN_BULK_PUTS(context, &bulk, context->errbuf);
