@@ -444,4 +444,24 @@ class TableTest < Test::Unit::TestCase
     end
     assert_equal((180..199).to_a.reverse, results)
   end
+
+  def test_sort_without_limit
+    bookmarks = Groonga::Array.create(:name => "<bookmarks>")
+    id_column = bookmarks.define_column("id", "<int>")
+    100.times do |i|
+      bookmark = bookmarks.add
+      bookmark["id"] = i + 100
+    end
+
+    results = bookmarks.sort([
+                              {
+                                :key => "id",
+                                :order => :descending,
+                              },
+                             ])
+    results = results.records(:order => :ascending).collect do |record|
+      id_column[record.value.unpack("i")[0]]
+    end
+    assert_equal((100..199).to_a.reverse, results)
+  end
 end
