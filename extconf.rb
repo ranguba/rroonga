@@ -116,6 +116,8 @@ have_header("ruby/st.h") unless have_macro("HAVE_RUBY_ST_H", "ruby.h")
 have_func("rb_errinfo", "ruby.h")
 have_type("enum ruby_value_type", "ruby.h")
 
+$INSTALLFILES << ["../lib/**/*.rb", "$(RUBYLIBDIR)", "../lib"]
+
 create_makefile(module_name, src_dir)
 
 makefile = File.read("Makefile")
