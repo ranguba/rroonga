@@ -28,6 +28,11 @@ finish_groonga (void)
     context = grn_gctx.next;
     while (RB_GRN_TRUE) {
 	grn_ctx *next_context = context->next;
+	grn_obj *database;
+
+	database = grn_ctx_db(context);
+	if (database)
+	    grn_obj_close(context, database);
 
 	grn_ctx_fin(context);
 	if (next_context == &grn_gctx)
