@@ -189,6 +189,7 @@ rb_grn_index_column_get_sources (VALUE self)
 	rb_ary_push(rb_sources, rb_source);
 	source_ids++;
     }
+    grn_obj_close(context, &sources);
 
     return rb_sources;
 }
@@ -229,6 +230,7 @@ rb_grn_index_column_set_sources (VALUE self, VALUE rb_sources)
 	GRN_OBJ_INIT(&source, GRN_BULK, GRN_OBJ_DO_SHALLOW_COPY);
 	GRN_BULK_SET(context, &source, sources, n * sizeof(grn_id));
 	rc = grn_obj_set_info(context, column, GRN_INFO_SOURCE, &source);
+	grn_obj_close(context, &source);
     }
 
     rb_grn_context_check(context, self);
