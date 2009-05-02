@@ -50,14 +50,14 @@ groongaには以下の3種類のテーブルがあります。
   配列。主キーの存在しないテーブルです。レコードはIDによって
   識別します。
 
-ここではハッシュテーブルを利用して、+&lt;items&gt;+という名前のテー
+ここではハッシュテーブルを利用して、<tt><items></tt>という名前のテー
 ブルを作成します。
 
   >> items = Groonga::Hash.create(:name => "<items>", :persistent => true)
   => #<Groonga::Hash id: <18>, name: <<items>>, path: </tmp/bookmark.db.0000012>, domain: <nil>, range: <nil>, encoding: <:utf8>, size: <0>>
 
 
-これで+&lt;items&gt;+という名前のテーブルが作成できました。
+これで<tt><items></tt>という名前のテーブルが作成できました。
 
 テーブルはRubyのHashのように扱えます。
 
@@ -91,17 +91,17 @@ items>テーブルにレコードを追加します。
 各itemのタイトル文字列を登録して、全文検索できるようにしてみ
 ましょう。
 
-まず+&lt;items&gt;+テーブルに+title+という名前のカラムを追加します。
+まず<tt><items></tt>テーブルに+title+という名前のカラムを追加します。
 
   >> title_colum = items.define_column("title", "<text>")
   => #<Groonga::VarSizeColumn id: <19>, name: <<items>.title>, path: (temporary), domain: <#<Groonga::Hash id: <18>, name: <<items>>, path: </tmp/bookmark.db.0000012>, domain: <nil>, range: <nil>, encoding: <:utf8>, size: <2>>>, range: <#<Groonga::Type id: <7>, name: <<text>>, path: (temporary), domain: <nil>, range: <65536>>>>
 
 2番目の引数は、追加するカラムのデータ型を示しています。
-+&lt;int&gt;+、+&lt;text&gt;+、+&lt;longtext&gt;+等の型が基本型として用意されて
+<tt><int></tt>、<tt><text></tt>、<tt><longtext></tt>等の型が基本型として用意されて
 います。
 
 全文検索するためには、文字列を分解して得られる各単語を格納す
-るためのテーブルを別途しなければなりません。ここでは&lt;terms>と
+るためのテーブルを別途しなければなりません。ここでは<terms>と
 いう名前でテーブルを定義します。
 
   >> terms = Groonga::Hash.create(:name => "<terms>",
@@ -109,7 +109,7 @@ items>テーブルにレコードを追加します。
                                   :persistent => true)
   => #<Groonga::Hash id: <21>, name: <<terms>>, path: </tmp/bookmark.db.0000015>, domain: <#<Groonga::Type id: <6>, name: <<shorttext>>, path: (temporary), domain: <nil>, range: <4096>>>, range: <nil>, encoding: <:utf8>, size: <0>>
 
-+&lt;items&gt;+テーブルの+title+カラムに対するインデックスを定義し
+<tt><items></tt>テーブルの+title+カラムに対するインデックスを定義し
 ます。
 
   >> title_index_column = terms.define_column("item_title", items,
@@ -117,20 +117,20 @@ items>テーブルにレコードを追加します。
                                               :with_position => true)
   => #<Groonga::IndexColumn id: <22>, name: <<terms>.item_title>, path: (temporary), domain: <#<Groonga::Hash id: <21>, name: <<terms>>, path: </tmp/bookmark.db.0000015>, domain: <#<Groonga::Type id: <6>, name: <<shorttext>>, path: (temporary), domain: <nil>, range: <4096>>>, range: <nil>, encoding: <:utf8>, size: <0>>>, range: <#<Groonga::Hash id: <18>, name: <<items>>, path: </tmp/bookmark.db.0000012>, domain: <nil>, range: <nil>, encoding: <:utf8>, size: <2>>>>
 
-インデックス用カラムに、検索対象の+&lt;items&gt;+テーブルの+title+
+インデックス用カラムに、検索対象の<tt><items></tt>テーブルの+title+
 カラムを設定します。
 
   >> title_index_column.source = title_column
   => #<Groonga::VarSizeColumn id: <19>, name: <<items>.title>, path: (temporary), domain: <#<Groonga::Hash id: <18>, name: <<items>>, path: </tmp/bookmark.db.0000012>, domain: <nil>, range: <nil>, encoding: <:utf8>, size: <2>>>, range: <#<Groonga::Type id: <7>, name: <<text>>, path: (temporary), domain: <nil>, range: <65536>>>>
 
-少し違和感を感じるかも知れませんが、+&lt;items&gt;+テーブルのカラムに
-対するインデックスは、 +&lt;terms&gt;+テーブルのカラムとして定義しま
+少し違和感を感じるかも知れませんが、<tt><items></tt>テーブルのカラムに
+対するインデックスは、 <tt><terms></tt>テーブルのカラムとして定義しま
 す。
 
-+&lt;items&gt;+にレコードが登録されると、その中に含まれる単語に該当
-するレコードが+&lt;terms&gt;+に自動的に追加されるようになります。
+<tt><items></tt>にレコードが登録されると、その中に含まれる単語に該当
+するレコードが<tt><terms></tt>に自動的に追加されるようになります。
 
-+&lt;terms&gt;+は、文書に含まれる語彙に相当する、やや特殊なテーブル
+<tt><terms></tt>は、文書に含まれる語彙に相当する、やや特殊なテーブル
 だと言えます。しかし、他のテーブルと同様に語彙テーブルには自
 由にカラムを追加し、単語毎の様々な属性を管理することができま
 す。これはある種の検索処理を行う際には非常に便利に機能します。
@@ -150,9 +150,10 @@ items>テーブルにレコードを追加します。
   ["http://ja.wikipedia.org/wiki/Ruby", "http://www.ruby-lang.org/"]
 
 検索結果はGroonga::Hashで返されます。ハッシュのキーに見つかっ
-た+&lt;items&gt;+のレコードが入っています。上の例ではrecord.keyで
-+&lt;items&gt;+のレコードを取得して、さらにそのキーを指定して
-（record.key.key）で+&lt;items&gt;+のキーを返しています。
+た<tt><items></tt>のレコードが入っています。上の例では
++record.key+で<tt><items></tt>のレコードを取得して、さらにそ
+のキーを指定して（+record.key.key+）で<tt><items></tt>のキー
+を返しています。
 
 
 == マルチユーザ向けのブックマークアプリケーション
