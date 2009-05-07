@@ -115,9 +115,9 @@ rb_grn_table_key_support_initialize (VALUE self, VALUE rb_context,
 static grn_id
 rb_grn_table_key_support_add_raw (VALUE self, VALUE rb_key)
 {
+    VALUE exception;
     grn_ctx *context;
     grn_obj *table;
-    VALUE exception;
     grn_id id;
     grn_obj *key;
     grn_search_flags flags;
@@ -262,9 +262,9 @@ static VALUE
 rb_grn_table_key_support_array_set_by_key (VALUE self,
 					   VALUE rb_key, VALUE rb_value)
 {
+    VALUE exception;
     grn_ctx *context;
     grn_obj *table;
-    VALUE exception;
     grn_id id;
     grn_obj *value;
     grn_rc rc;
@@ -310,23 +310,31 @@ rb_grn_table_key_support_array_set (VALUE self,
     }
 }
 
-#if 0
 static VALUE
 rb_grn_table_key_support_get_encoding (VALUE self)
 {
-    grn_ctx *context = NULL;
+    VALUE exception;
+    grn_ctx *context;
     grn_obj *table;
     grn_encoding encoding;
-    grn_rc rc;
+    grn_obj *value;
 
-    table = SELF(self, &context);
-    rc = grn_table_get_info(context, table, NULL, &encoding, NULL);
-    rb_grn_context_check(context, self);
-    rb_grn_rc_check(rc, self);
+    rb_grn_table_key_support_deconstruct(self, &table, &context, NULL, NULL);
+
+    value = grn_obj_get_info(context, table, GRN_INFO_ENCODING, NULL);
+    exception = rb_grn_context_to_exception(context, self);
+    if (value) {
+	memcpy(&encoding, GRN_BULK_HEAD(value), GRN_BULK_VSIZE(value));
+	grn_obj_close(context, value);
+    }
+
+    if (!NIL_P(exception))
+	rb_exc_raise(exception);
 
     return GRNENCODING2RVAL(encoding);
 }
 
+#if 0
 static VALUE
 rb_grn_table_key_support_get_default_tokenizer (VALUE self)
 {
@@ -388,10 +396,10 @@ rb_grn_init_table_key_support (VALUE mGrn)
     rb_define_method(rb_mGrnTableKeySupport, "[]=",
 		     rb_grn_table_key_support_array_set, 2);
 
-#if 0
     rb_define_method(rb_mGrnTableKeySupport, "encoding",
 		     rb_grn_table_key_support_get_encoding, 0);
 
+#if 0
     rb_define_method(rb_mGrnTableKeySupport, "default_tokenizer",
 		     rb_grn_table_key_support_get_default_tokenizer, 0);
 
