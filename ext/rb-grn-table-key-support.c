@@ -169,7 +169,7 @@ rb_grn_table_key_support_get_key (VALUE self, VALUE rb_id)
 	return Qnil;
 
     if (GRN_BULK_VSIZE(key) < key_size) {
-	grn_bulk_space(context, key, key_size);
+	grn_bulk_reserve(context, key, key_size);
 	grn_table_get_key(context, table, id, GRN_BULK_HEAD(key), key_size);
     }
 
@@ -305,35 +305,29 @@ rb_grn_table_key_support_get_encoding (VALUE self)
 {
     grn_ctx *context;
     grn_obj *table;
-    grn_encoding encoding;
+    grn_encoding encoding = GRN_ENC_NONE;
     grn_obj *value;
 
     rb_grn_table_key_support_deconstruct(self, &table, &context, NULL, &value);
 
     GRN_BULK_REWIND(value);
-    grn_bulk_space(context, value, sizeof(encoding));
+    grn_bulk_reserve(context, value, sizeof(grn_encoding));
     grn_obj_get_info(context, table, GRN_INFO_ENCODING, value);
     rb_grn_context_check(context, self);
-    memcpy(&encoding, GRN_BULK_HEAD(value), sizeof(encoding));
+    memcpy(&encoding, GRN_BULK_HEAD(value), sizeof(grn_encoding));
 
     return GRNENCODING2RVAL(encoding);
 }
 
-#if 0
 static VALUE
 rb_grn_table_key_support_get_default_tokenizer (VALUE self)
 {
-    RbGrnObject *rb_grn_object;
-    RbGrnTableKeySupport *rb_grn_table_key_support;
-    grn_ctx *context = NULL;
+    grn_ctx *context;
     grn_obj *table;
     grn_obj *tokenizer;
     grn_rc rc;
 
-    rb_grn_table_key_support = SELF(self);
-    rb_grn_object = RB_GRN_OBJECT(rb_grn_table_key_support);
-    table = rb_grn_object->object;
-    context = rb_grn_object->context;
+    rb_grn_table_key_support_deconstruct(self, &table, &context, NULL, NULL);
 
     rc = grn_table_get_info(context, table, NULL, NULL, &tokenizer);
     rb_grn_context_check(context, self);
@@ -345,12 +339,13 @@ rb_grn_table_key_support_get_default_tokenizer (VALUE self)
 static VALUE
 rb_grn_table_key_support_set_default_tokenizer (VALUE self, VALUE rb_tokenizer)
 {
-    grn_ctx *context = NULL;
+    grn_ctx *context;
     grn_obj *table;
     grn_obj *tokenizer;
     grn_rc rc;
 
-    table = SELF(self, &context);
+    rb_grn_table_key_support_deconstruct(self, &table, &context, NULL, NULL);
+
     tokenizer = RVAL2GRNOBJECT(rb_tokenizer, &context);
     rc = grn_obj_set_info(context, table,
 			  GRN_INFO_DEFAULT_TOKENIZER, tokenizer);
@@ -359,7 +354,6 @@ rb_grn_table_key_support_set_default_tokenizer (VALUE self, VALUE rb_tokenizer)
 
     return Qnil;
 }
-#endif
 
 void
 rb_grn_init_table_key_support (VALUE mGrn)
@@ -382,11 +376,9 @@ rb_grn_init_table_key_support (VALUE mGrn)
     rb_define_method(rb_mGrnTableKeySupport, "encoding",
 		     rb_grn_table_key_support_get_encoding, 0);
 
-#if 0
     rb_define_method(rb_mGrnTableKeySupport, "default_tokenizer",
 		     rb_grn_table_key_support_get_default_tokenizer, 0);
 
     rb_define_method(rb_mGrnTableKeySupport, "default_tokenizer=",
 		     rb_grn_table_key_support_set_default_tokenizer, 1);
-#endif
 }
