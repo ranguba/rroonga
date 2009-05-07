@@ -76,7 +76,7 @@ rb_grn_context_free (void *pointer)
 	grn_obj *database;
 	database = grn_ctx_db(context);
 	if (database)
-	    grn_obj_close(context, database);
+	    /* FIXME: grn_obj_close(context, database) */;
 	grn_ctx_fin(context);
     }
     xfree(context);
