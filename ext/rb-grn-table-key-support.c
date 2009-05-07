@@ -315,17 +315,13 @@ rb_grn_table_key_support_get_encoding (VALUE self)
     grn_encoding encoding;
     grn_obj *value;
 
-    rb_grn_table_key_support_deconstruct(self, &table, &context, NULL, NULL);
+    rb_grn_table_key_support_deconstruct(self, &table, &context, NULL, &value);
 
-    value = grn_obj_get_info(context, table, GRN_INFO_ENCODING, NULL);
-    exception = rb_grn_context_to_exception(context, self);
-    if (value) {
-	memcpy(&encoding, GRN_BULK_HEAD(value), GRN_BULK_VSIZE(value));
-	grn_obj_close(context, value);
-    }
-
-    if (!NIL_P(exception))
-	rb_exc_raise(exception);
+    GRN_BULK_REWIND(value);
+    grn_bulk_space(context, value, sizeof(encoding));
+    grn_obj_get_info(context, table, GRN_INFO_ENCODING, value);
+    rb_grn_context_check(context, self);
+    memcpy(&encoding, GRN_BULK_HEAD(value), sizeof(encoding));
 
     return GRNENCODING2RVAL(encoding);
 }
