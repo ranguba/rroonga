@@ -18,14 +18,73 @@
 
 #include "rb-grn.h"
 
-#define SELF(object) (RVAL2GRNTABLE(object))
-
 VALUE rb_cGrnPatriciaTrie;
 
 static VALUE
 rb_grn_patricia_trie_s_create (int argc, VALUE *argv, VALUE self)
 {
-    return rb_grn_table_s_create(argc, argv, self, GRN_TABLE_PAT_KEY);
+    grn_ctx *context;
+    grn_obj *key_type = NULL, *table;
+    const char *name = NULL, *path = NULL;
+    unsigned name_size = 0, value_size = 0;
+    grn_obj_flags flags = GRN_TABLE_PAT_KEY;
+    VALUE rb_table;
+    VALUE options, rb_context, rb_name, rb_path, rb_persistent;
+    VALUE rb_key_normalize, rb_key_with_sis, rb_key_type, rb_value_size;
+
+    rb_scan_args(argc, argv, "01", &options);
+
+    rb_grn_scan_options(options,
+			"context", &rb_context,
+			"name", &rb_name,
+                        "path", &rb_path,
+			"persistent", &rb_persistent,
+			"key_normalize", &rb_key_normalize,
+			"key_with_sis", &rb_key_with_sis,
+			"key_type", &rb_key_type,
+			"value_size", &rb_value_size,
+			NULL);
+
+    context = rb_grn_context_ensure(&rb_context);
+
+    if (!NIL_P(rb_name)) {
+        name = StringValuePtr(rb_name);
+	name_size = RSTRING_LEN(rb_name);
+    }
+
+    if (!NIL_P(rb_path)) {
+        path = StringValueCStr(rb_path);
+	flags |= GRN_OBJ_PERSISTENT;
+    }
+
+    if (RVAL2CBOOL(rb_persistent))
+	flags |= GRN_OBJ_PERSISTENT;
+
+    if (RVAL2CBOOL(rb_key_normalize))
+	flags |= GRN_OBJ_KEY_NORMALIZE;
+
+    if (RVAL2CBOOL(rb_key_with_sis))
+	flags |= GRN_OBJ_KEY_WITH_SIS;
+
+    if (NIL_P(rb_key_type)) {
+	flags |= GRN_OBJ_KEY_VAR_SIZE;
+    } else {
+	key_type = RVAL2GRNOBJECT(rb_key_type, &context);
+    }
+
+    if (!NIL_P(rb_value_size))
+	value_size = NUM2UINT(rb_value_size);
+
+    table = grn_table_create(context, name, name_size, path,
+			     flags, key_type, value_size);
+    rb_table = rb_grn_table_key_support_alloc(self);
+    rb_grn_table_key_support_initialize(rb_table, rb_context, context, table);
+    rb_grn_context_check(context, rb_table);
+
+    if (rb_block_given_p())
+        return rb_ensure(rb_yield, rb_table, rb_grn_object_close, rb_table);
+    else
+        return rb_table;
 }
 
 void
@@ -33,6 +92,7 @@ rb_grn_init_patricia_trie (VALUE mGrn)
 {
     rb_cGrnPatriciaTrie =
 	rb_define_class_under(mGrn, "PatriciaTrie", rb_cGrnTable);
+    rb_define_alloc_func(rb_cGrnHash, rb_grn_table_key_support_alloc);
 
     rb_include_module(rb_cGrnPatriciaTrie, rb_mGrnTableKeySupport);
     rb_define_singleton_method(rb_cGrnPatriciaTrie, "create",

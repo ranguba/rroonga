@@ -18,8 +18,6 @@
 
 #include "rb-grn.h"
 
-#define SELF(object) (RVAL2GRNTABLE(object))
-
 VALUE rb_cGrnHash;
 
 static VALUE
