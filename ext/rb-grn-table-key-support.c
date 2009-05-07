@@ -18,7 +18,7 @@
 
 #include "rb-grn.h"
 
-#define SELF(object, context) (RVAL2GRNTABLE(object, context))
+#define SELF(object) ((RbGrnTableKeySupport *)DATA_PTR(object))
 
 VALUE rb_mGrnTableKeySupport;
 
@@ -26,28 +26,118 @@ VALUE rb_mGrnTableKeySupport;
 grn_rc grn_table_get_info(grn_ctx *ctx, grn_obj *table, grn_obj_flags *flags,
                           grn_encoding *encoding, grn_obj **tokenizer);
 
-static grn_id
-rb_grn_table_key_support_add_raw (VALUE self, VALUE rb_key,
-				  grn_ctx *context, grn_obj *table)
+static void
+rb_grn_table_key_support_deconstruct (VALUE self,
+				      grn_obj **table,
+				      grn_ctx **context,
+				      grn_obj **key,
+				      grn_obj **value)
 {
+    RbGrnObject *rb_grn_object;
+    RbGrnTable *rb_grn_table;
+    RbGrnTableKeySupport *rb_grn_table_key_support;
+
+    rb_grn_table_key_support = SELF(self);
+    rb_grn_table = RB_GRN_TABLE(rb_grn_table_key_support);
+    rb_grn_object = RB_GRN_OBJECT(rb_grn_table_key_support);
+
+    if (table)
+	*table = rb_grn_object->object;
+    if (context)
+	*context = rb_grn_object->context;
+    if (key)
+	*key = rb_grn_table_key_support->key;
+    if (value)
+	*value = rb_grn_table->value;
+}
+
+static void
+rb_rb_grn_table_key_support_free (void *object)
+{
+    RbGrnObject *rb_grn_object = object;
+    RbGrnTable *rb_grn_table = object;
+    RbGrnTableKeySupport *rb_grn_table_key_support = object;
+    grn_ctx *context;
+    grn_obj *grn_object;
+
+    context = rb_grn_object->context;
+    grn_object = rb_grn_object->object;
+
+    if (rb_grn_object->owner && context && grn_object &&
+	rb_grn_context_alive_p(context)) {
+	const char *path;
+
+	path = grn_obj_path(context, grn_object);
+	if (path == NULL || (path && grn_ctx_db(context))) {
+	    grn_obj_close(rb_grn_object->context, rb_grn_object->object);
+	}
+    }
+
+    if (context && rb_grn_context_alive_p(context)) {
+	grn_obj_close(context, rb_grn_table->value);
+	grn_obj_close(context, rb_grn_table_key_support->key);
+    }
+    xfree(rb_grn_table_key_support);
+}
+
+VALUE
+rb_grn_table_key_support_alloc (VALUE klass)
+{
+    return Data_Wrap_Struct(klass, NULL, rb_rb_grn_table_key_support_free, NULL);
+}
+
+void
+rb_grn_table_key_support_initialize (VALUE self, VALUE rb_context,
+				     grn_ctx *context,
+				     grn_obj *table_key_support)
+{
+    RbGrnObject *rb_grn_object;
+    RbGrnTable *rb_grn_table;
+    RbGrnTableKeySupport *rb_grn_table_key_support;
+
+    rb_grn_table_key_support = ALLOC(RbGrnTableKeySupport);
+    DATA_PTR(self) = rb_grn_table_key_support;
+
+    rb_grn_object = RB_GRN_OBJECT(rb_grn_table_key_support);
+    rb_grn_object->context = context;
+    rb_grn_object->object = table_key_support;
+    rb_grn_object->owner = RB_GRN_TRUE;
+
+    rb_grn_table = RB_GRN_TABLE(rb_grn_table_key_support);
+    rb_grn_table->value = grn_obj_open(context, GRN_BULK, 0, GRN_ID_NIL);
+
+    rb_grn_table_key_support->key =
+	grn_obj_open(context, GRN_BULK, 0, GRN_ID_NIL);
+
+    rb_iv_set(self, "context", rb_context);
+}
+
+static grn_id
+rb_grn_table_key_support_add_raw (VALUE self, VALUE rb_key)
+{
+    grn_ctx *context;
+    grn_obj *table;
     VALUE exception;
     grn_id id;
-    grn_obj key;
+    grn_obj *key;
     grn_search_flags flags;
 
-    RVAL2GRNKEY(rb_key, context, &key, table->header.domain, self);
+    rb_grn_table_key_support_deconstruct(self, &table, &context, &key, NULL);
+
+    GRN_BULK_REWIND(key);
+    RVAL2GRNKEY(rb_key, context, key, table->header.domain, self);
     flags = GRN_SEARCH_EXACT | GRN_TABLE_ADD;
     id = grn_table_lookup(context, table,
-			  GRN_BULK_HEAD(&key), GRN_BULK_VSIZE(&key),
+			  GRN_BULK_HEAD(key), GRN_BULK_VSIZE(key),
 			  &flags);
     exception = rb_grn_context_to_exception(context, self);
-    grn_obj_close(context, &key);
     if (!NIL_P(exception))
 	rb_exc_raise(exception);
 
     return id;
 }
 
+#if 0
 static VALUE
 rb_grn_table_key_support_add (VALUE self, VALUE rb_key)
 {
@@ -166,36 +256,36 @@ rb_grn_table_key_support_array_reference (VALUE self, VALUE rb_id_or_key)
 							       rb_id_or_key);
     }
 }
-
+#endif
 
 static VALUE
 rb_grn_table_key_support_array_set_by_key (VALUE self,
 					   VALUE rb_key, VALUE rb_value)
 {
-    VALUE exception;
-    grn_ctx *context = NULL;
+    grn_ctx *context;
     grn_obj *table;
+    VALUE exception;
     grn_id id;
-    grn_obj value;
+    grn_obj *value;
     grn_rc rc;
-
-    table = SELF(self, &context);
 
     if (NIL_P(rb_key))
 	rb_raise(rb_eArgError, "key should not be nil: <%s>",
 		 rb_grn_inspect(self));
 
-    id = rb_grn_table_key_support_add_raw(self, rb_key, context, table);
+    rb_grn_table_key_support_deconstruct(self, &table, &context, NULL, &value);
+
+    id = rb_grn_table_key_support_add_raw(self, rb_key);
     if (GRN_ID_NIL == id)
 	rb_raise(rb_eGrnError,
 		 "failed to add new record with key: <%s>: <%s>",
 		 rb_grn_inspect(rb_key),
 		 rb_grn_inspect(self));
 
-    RVAL2GRNBULK(rb_value, context, &value);
-    rc = grn_obj_set_value(context, table, id, &value, GRN_OBJ_SET);
+    GRN_BULK_REWIND(value);
+    RVAL2GRNBULK(rb_value, context, value);
+    rc = grn_obj_set_value(context, table, id, value, GRN_OBJ_SET);
     exception = rb_grn_context_to_exception(context, self);
-    grn_obj_close(context, &value);
     if (!NIL_P(exception))
 	rb_exc_raise(exception);
     rb_grn_rc_check(rc, self);
@@ -220,6 +310,7 @@ rb_grn_table_key_support_array_set (VALUE self,
     }
 }
 
+#if 0
 static VALUE
 rb_grn_table_key_support_get_encoding (VALUE self)
 {
@@ -239,12 +330,18 @@ rb_grn_table_key_support_get_encoding (VALUE self)
 static VALUE
 rb_grn_table_key_support_get_default_tokenizer (VALUE self)
 {
+    RbGrnObject *rb_grn_object;
+    RbGrnTableKeySupport *rb_grn_table_key_support;
     grn_ctx *context = NULL;
     grn_obj *table;
     grn_obj *tokenizer;
     grn_rc rc;
 
-    table = SELF(self, &context);
+    rb_grn_table_key_support = SELF(self);
+    rb_grn_object = RB_GRN_OBJECT(rb_grn_table_key_support);
+    table = rb_grn_object->object;
+    context = rb_grn_object->context;
+
     rc = grn_table_get_info(context, table, NULL, NULL, &tokenizer);
     rb_grn_context_check(context, self);
     rb_grn_rc_check(rc, self);
@@ -269,12 +366,14 @@ rb_grn_table_key_support_set_default_tokenizer (VALUE self, VALUE rb_tokenizer)
 
     return Qnil;
 }
+#endif
 
 void
 rb_grn_init_table_key_support (VALUE mGrn)
 {
     rb_mGrnTableKeySupport = rb_define_module_under(rb_cGrnTable, "KeySupport");
 
+#if 0
     rb_define_method(rb_mGrnTableKeySupport, "add",
 		     rb_grn_table_key_support_add, 1);
     rb_define_method(rb_mGrnTableKeySupport, "key",
@@ -285,9 +384,11 @@ rb_grn_init_table_key_support (VALUE mGrn)
 
     rb_define_method(rb_mGrnTableKeySupport, "[]",
 		     rb_grn_table_key_support_array_reference, 1);
+#endif
     rb_define_method(rb_mGrnTableKeySupport, "[]=",
 		     rb_grn_table_key_support_array_set, 2);
 
+#if 0
     rb_define_method(rb_mGrnTableKeySupport, "encoding",
 		     rb_grn_table_key_support_get_encoding, 0);
 
@@ -296,4 +397,5 @@ rb_grn_init_table_key_support (VALUE mGrn)
 
     rb_define_method(rb_mGrnTableKeySupport, "default_tokenizer=",
 		     rb_grn_table_key_support_set_default_tokenizer, 1);
+#endif
 }

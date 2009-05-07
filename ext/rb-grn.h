@@ -200,6 +200,12 @@ grn_ctx       *rb_grn_table_cursor_ensure_context   (VALUE cursor,
 						     VALUE *rb_context);
 VALUE          rb_grn_table_cursor_close            (VALUE object);
 
+VALUE          rb_grn_table_key_support_alloc       (VALUE klass);
+void           rb_grn_table_key_support_initialize  (VALUE self,
+						     VALUE rb_context,
+						     grn_ctx *context,
+						     grn_obj *table_key_support);
+
 VALUE          rb_grn_record_new                    (VALUE table,
 						     grn_id id);
 
