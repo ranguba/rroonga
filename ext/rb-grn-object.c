@@ -30,14 +30,6 @@
 
 VALUE rb_cGrnObject;
 
-typedef struct _RbGrnObject RbGrnObject;
-struct _RbGrnObject
-{
-    grn_ctx *context;
-    grn_obj *object;
-    rb_grn_boolean owner;
-};
-
 grn_obj *
 rb_grn_object_from_ruby_object (VALUE object, grn_ctx **context)
 {

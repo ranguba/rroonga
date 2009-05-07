@@ -74,6 +74,32 @@ typedef struct {
   int32_t tv_usec;
 } grn_timeval;
 
+#define RB_GRN_OBJECT(object) ((RbGrnObject *)(object))
+#define RB_GRN_TABLE(object) ((RbGrnTable *)(object))
+
+typedef struct _RbGrnObject RbGrnObject;
+struct _RbGrnObject
+{
+    grn_ctx *context;
+    grn_obj *object;
+    grn_obj *domain;
+    grn_obj *range;
+    rb_grn_boolean owner;
+};
+
+typedef struct _RbGrnTable RbGrnTable;
+struct _RbGrnTable
+{
+    RbGrnObject parent;
+    grn_obj *value;
+};
+
+typedef struct _RbGrnTableKeySupport RbGrnTableKeySupport;
+struct _RbGrnTableKeySupport
+{
+    RbGrnTable parent;
+    grn_obj *key;
+};
 
 RB_GRN_VAR VALUE rb_eGrnError;
 RB_GRN_VAR VALUE rb_cGrnObject;
