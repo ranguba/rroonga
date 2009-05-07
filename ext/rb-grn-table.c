@@ -145,7 +145,7 @@ rb_grn_table_initialize (int argc, VALUE *argv, VALUE self)
     VALUE rb_context;
 
     table = rb_grn_table_open(argc, argv, &context, &rb_context);
-    rb_grn_object_initialize(self, rb_context, context, table);
+    rb_grn_object_initialize(self, rb_context, context, table, RB_GRN_TRUE);
     rb_grn_context_check(context, self);
 
     return Qnil;

@@ -70,7 +70,8 @@ rb_grn_hash_s_create (int argc, VALUE *argv, VALUE self)
     table = grn_table_create(context, name, name_size, path,
 			     flags, key_type, value_size);
     rb_table = rb_grn_table_key_support_alloc(self);
-    rb_grn_table_key_support_initialize(rb_table, rb_context, context, table);
+    rb_grn_table_key_support_initialize(rb_table, rb_context, context, table,
+					RB_GRN_TRUE);
     rb_grn_context_check(context, rb_table);
 
     if (rb_block_given_p())

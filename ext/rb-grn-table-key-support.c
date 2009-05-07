@@ -177,25 +177,21 @@ rb_grn_table_key_support_get_key (VALUE self, VALUE rb_id)
     return rb_key;
 }
 
-#if 0
 static VALUE
 rb_grn_table_key_support_delete_by_key (VALUE self, VALUE rb_key)
 {
-    VALUE exception;
-    grn_ctx *context = NULL;
+    grn_ctx *context;
     grn_obj *table;
-    grn_obj key;
+    grn_obj *key;
     grn_rc rc;
 
-    table = SELF(self, &context);
+    rb_grn_table_key_support_deconstruct(self, &table, &context, &key, NULL);
 
-    RVAL2GRNKEY(rb_key, context, &key, table->header.domain, self);
+    GRN_BULK_REWIND(key);
+    RVAL2GRNKEY(rb_key, context, key, table->header.domain, self);
     rc = grn_table_delete(context, table,
-			  GRN_BULK_HEAD(&key), GRN_BULK_VSIZE(&key));
-    exception = rb_grn_context_to_exception(context, self);
-    grn_obj_close(context, &key);
-    if (!NIL_P(exception))
-	rb_exc_raise(exception);
+			  GRN_BULK_HEAD(key), GRN_BULK_VSIZE(key));
+    rb_grn_context_check(context, self);
     rb_grn_rc_check(rc, self);
 
     return Qnil;
@@ -214,6 +210,7 @@ rb_grn_table_key_support_delete (VALUE self, VALUE rb_id_or_key)
     }
 }
 
+#if 0
 static VALUE
 rb_grn_table_key_support_array_reference_by_key (VALUE self, VALUE rb_key)
 {
@@ -385,10 +382,10 @@ rb_grn_init_table_key_support (VALUE mGrn)
     rb_define_method(rb_mGrnTableKeySupport, "key",
 		     rb_grn_table_key_support_get_key, 1);
 
-#if 0
     rb_define_method(rb_mGrnTableKeySupport, "delete",
 		     rb_grn_table_key_support_delete, 1);
 
+#if 0
     rb_define_method(rb_mGrnTableKeySupport, "[]",
 		     rb_grn_table_key_support_array_reference, 1);
 #endif

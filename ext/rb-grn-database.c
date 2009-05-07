@@ -95,7 +95,7 @@ rb_grn_database_initialize (int argc, VALUE *argv, VALUE self)
     context = rb_grn_context_ensure(&rb_context);
 
     database = grn_db_open(context, path);
-    rb_grn_object_initialize(self, rb_context, context, database);
+    rb_grn_object_initialize(self, rb_context, context, database, RB_GRN_TRUE);
     rb_grn_context_check(context, self);
 
     return Qnil;
