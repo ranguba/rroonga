@@ -175,7 +175,8 @@ VALUE          rb_grn_object_alloc                  (VALUE klass);
 void           rb_grn_object_initialize             (VALUE self,
 						     VALUE rb_context,
 						     grn_ctx *context,
-						     grn_obj *object);
+						     grn_obj *object,
+						     rb_grn_boolean owner);
 VALUE          rb_grn_object_array_reference        (VALUE object,
 						     VALUE rb_id);
 VALUE          rb_grn_object_close                  (VALUE object);
@@ -204,7 +205,8 @@ VALUE          rb_grn_table_key_support_alloc       (VALUE klass);
 void           rb_grn_table_key_support_initialize  (VALUE self,
 						     VALUE rb_context,
 						     grn_ctx *context,
-						     grn_obj *table_key_support);
+						     grn_obj *table_key_support,
+						     rb_grn_boolean owner);
 
 VALUE          rb_grn_record_new                    (VALUE table,
 						     grn_id id);

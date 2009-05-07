@@ -89,7 +89,8 @@ rb_grn_table_key_support_alloc (VALUE klass)
 void
 rb_grn_table_key_support_initialize (VALUE self, VALUE rb_context,
 				     grn_ctx *context,
-				     grn_obj *table_key_support)
+				     grn_obj *table_key_support,
+				     rb_grn_boolean owner)
 {
     RbGrnObject *rb_grn_object;
     RbGrnTable *rb_grn_table;
@@ -101,7 +102,7 @@ rb_grn_table_key_support_initialize (VALUE self, VALUE rb_context,
     rb_grn_object = RB_GRN_OBJECT(rb_grn_table_key_support);
     rb_grn_object->context = context;
     rb_grn_object->object = table_key_support;
-    rb_grn_object->owner = RB_GRN_TRUE;
+    rb_grn_object->owner = owner;
 
     rb_grn_table = RB_GRN_TABLE(rb_grn_table_key_support);
     rb_grn_table->value = grn_obj_open(context, GRN_BULK, 0, GRN_ID_NIL);
@@ -149,32 +150,34 @@ rb_grn_table_key_support_add (VALUE self, VALUE rb_key)
 	return rb_grn_record_new(self, id);
 }
 
-#if 0
 static VALUE
 rb_grn_table_key_support_get_key (VALUE self, VALUE rb_id)
 {
-    grn_ctx *context = NULL;
+    grn_ctx *context;
+    grn_obj *table, *key;
     grn_id id;
-    grn_obj *table, key;
-    int key_size = 0;
+    int key_size;
     VALUE rb_key;
 
-    table = SELF(self, &context);
+    rb_grn_table_key_support_deconstruct(self, &table, &context, &key, NULL);
 
     id = NUM2UINT(rb_id);
-    key_size = grn_table_get_key(context, table, id, NULL, 0);
+    GRN_BULK_REWIND(key);
+    key_size = grn_table_get_key(context, table, id,
+				 GRN_BULK_HEAD(key), GRN_BULK_VSIZE(key));
     if (key_size == 0)
 	return Qnil;
 
-    GRN_OBJ_INIT(&key, GRN_BULK, 0);
-    grn_bulk_space(context, &key, key_size);
-    grn_table_get_key(context, table, id, GRN_BULK_HEAD(&key), key_size);
-    rb_key = GRNKEY2RVAL(context, GRN_BULK_HEAD(&key), key_size, table, self);
-    grn_obj_close(context, &key);
+    if (GRN_BULK_VSIZE(key) < key_size) {
+	grn_bulk_space(context, key, key_size);
+	grn_table_get_key(context, table, id, GRN_BULK_HEAD(key), key_size);
+    }
 
+    rb_key = GRNKEY2RVAL(context, GRN_BULK_HEAD(key), key_size, table, self);
     return rb_key;
 }
 
+#if 0
 static VALUE
 rb_grn_table_key_support_delete_by_key (VALUE self, VALUE rb_key)
 {
@@ -379,10 +382,10 @@ rb_grn_init_table_key_support (VALUE mGrn)
 
     rb_define_method(rb_mGrnTableKeySupport, "add",
 		     rb_grn_table_key_support_add, 1);
-#if 0
     rb_define_method(rb_mGrnTableKeySupport, "key",
 		     rb_grn_table_key_support_get_key, 1);
 
+#if 0
     rb_define_method(rb_mGrnTableKeySupport, "delete",
 		     rb_grn_table_key_support_delete, 1);
 

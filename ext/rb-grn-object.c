@@ -146,20 +146,25 @@ VALUE
 rb_grn_object_to_ruby_object (VALUE klass, grn_ctx *context, grn_obj *object,
 			      rb_grn_boolean owner)
 {
-    RbGrnObject *rb_grn_object;
+    VALUE rb_object;
 
     if (!object)
         return Qnil;
 
-    rb_grn_object = ALLOC(RbGrnObject);
-    rb_grn_object->context = context;
-    rb_grn_object->object = object;
-    rb_grn_object->owner = owner;
-
     if (NIL_P(klass))
         klass = GRNOBJECT2RCLASS(object);
 
-    return Data_Wrap_Struct(klass, NULL, rb_rb_grn_object_free, rb_grn_object);
+    if (klass == rb_cGrnHash ||
+	klass == rb_cGrnPatriciaTrie) {
+	rb_object = rb_grn_table_key_support_alloc(klass);
+	rb_grn_table_key_support_initialize(rb_object, Qnil, context, object,
+					    owner);
+    } else {
+	rb_object = rb_grn_object_alloc(klass);
+	rb_grn_object_initialize(rb_object, Qnil, context, object, owner);
+    }
+
+    return rb_object;
 }
 
 VALUE
@@ -170,7 +175,8 @@ rb_grn_object_alloc (VALUE klass)
 
 void
 rb_grn_object_initialize (VALUE self, VALUE rb_context,
-			  grn_ctx *context, grn_obj *object)
+			  grn_ctx *context, grn_obj *object,
+			  rb_grn_boolean owner)
 {
     RbGrnObject *rb_grn_object;
 
@@ -178,7 +184,7 @@ rb_grn_object_initialize (VALUE self, VALUE rb_context,
     DATA_PTR(self) = rb_grn_object;
     rb_grn_object->context = context;
     rb_grn_object->object = object;
-    rb_grn_object->owner = RB_GRN_TRUE;
+    rb_grn_object->owner = owner;
 
     rb_iv_set(self, "context", rb_context);
 }
