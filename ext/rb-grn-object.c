@@ -157,11 +157,10 @@ rb_grn_object_to_ruby_object (VALUE klass, grn_ctx *context, grn_obj *object,
     if (klass == rb_cGrnHash ||
 	klass == rb_cGrnPatriciaTrie) {
 	rb_object = rb_grn_table_key_support_alloc(klass);
-	rb_grn_table_key_support_initialize(rb_object, Qnil, context, object,
-					    owner);
+	rb_grn_table_key_support_assign(rb_object, Qnil, context, object, owner);
     } else {
 	rb_object = rb_grn_object_alloc(klass);
-	rb_grn_object_initialize(rb_object, Qnil, context, object, owner);
+	rb_grn_object_assign(rb_object, Qnil, context, object, owner);
     }
 
     return rb_object;
@@ -174,9 +173,9 @@ rb_grn_object_alloc (VALUE klass)
 }
 
 void
-rb_grn_object_initialize (VALUE self, VALUE rb_context,
-			  grn_ctx *context, grn_obj *object,
-			  rb_grn_boolean owner)
+rb_grn_object_assign (VALUE self, VALUE rb_context,
+		      grn_ctx *context, grn_obj *object,
+		      rb_grn_boolean owner)
 {
     RbGrnObject *rb_grn_object;
     grn_id domain_id = GRN_ID_NIL;

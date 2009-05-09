@@ -172,7 +172,7 @@ rb_grn_boolean rb_grn_equal_option                  (VALUE option,
 						     const char *key);
 
 VALUE          rb_grn_object_alloc                  (VALUE klass);
-void           rb_grn_object_initialize             (VALUE self,
+void           rb_grn_object_assign                 (VALUE self,
 						     VALUE rb_context,
 						     grn_ctx *context,
 						     grn_obj *object,
@@ -193,6 +193,10 @@ VALUE          rb_grn_object_inspect_content        (VALUE object,
 VALUE          rb_grn_object_inspect_footer         (VALUE object,
 						     VALUE inspected);
 
+grn_obj       *rb_grn_table_open_raw                (int argc,
+						     VALUE *argv,
+						     grn_ctx **context,
+						     VALUE *rb_context);
 VALUE          rb_grn_table_s_create                (int argc,
 						     VALUE *argv,
 						     VALUE klass,
@@ -202,7 +206,7 @@ grn_ctx       *rb_grn_table_cursor_ensure_context   (VALUE cursor,
 VALUE          rb_grn_table_cursor_close            (VALUE object);
 
 VALUE          rb_grn_table_key_support_alloc       (VALUE klass);
-void           rb_grn_table_key_support_initialize  (VALUE self,
+void           rb_grn_table_key_support_assign      (VALUE self,
 						     VALUE rb_context,
 						     grn_ctx *context,
 						     grn_obj *table_key_support,

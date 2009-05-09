@@ -107,8 +107,9 @@ rb_grn_table_s_create (int argc, VALUE *argv, VALUE klass,
         return rb_table;
 }
 
-static grn_obj *
-rb_grn_table_open (int argc, VALUE *argv, grn_ctx **context, VALUE *rb_context)
+grn_obj *
+rb_grn_table_open_raw (int argc, VALUE *argv,
+		       grn_ctx **context, VALUE *rb_context)
 {
     grn_obj *table;
     char *name = NULL, *path = NULL;
@@ -144,8 +145,8 @@ rb_grn_table_initialize (int argc, VALUE *argv, VALUE self)
     grn_obj *table;
     VALUE rb_context;
 
-    table = rb_grn_table_open(argc, argv, &context, &rb_context);
-    rb_grn_object_initialize(self, rb_context, context, table, RB_GRN_TRUE);
+    table = rb_grn_table_open_raw(argc, argv, &context, &rb_context);
+    rb_grn_object_assign(self, rb_context, context, table, RB_GRN_TRUE);
     rb_grn_context_check(context, self);
 
     return Qnil;
