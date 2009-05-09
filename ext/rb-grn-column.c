@@ -174,6 +174,7 @@ rb_grn_index_column_get_sources (VALUE self)
 
     column = SELF(self, &context);
 
+    GRN_TEXT_INIT(&sources);
     grn_obj_get_info(context, column, GRN_INFO_SOURCE, &sources);
     rb_grn_context_check(context, self);
 
@@ -227,8 +228,8 @@ rb_grn_index_column_set_sources (VALUE self, VALUE rb_sources)
 
     {
 	grn_obj source;
-	GRN_OBJ_INIT(&source, GRN_BULK, GRN_OBJ_DO_SHALLOW_COPY);
-	GRN_BULK_SET(context, &source, sources, n * sizeof(grn_id));
+	GRN_OBJ_INIT(&source, GRN_BULK, GRN_OBJ_DO_SHALLOW_COPY, GRN_ID_NIL);
+	GRN_TEXT_SET(context, &source, sources, n * sizeof(grn_id));
 	rc = grn_obj_set_info(context, column, GRN_INFO_SOURCE, &source);
 	grn_obj_close(context, &source);
     }

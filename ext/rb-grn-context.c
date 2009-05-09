@@ -101,21 +101,21 @@ rb_grn_context_to_exception (grn_ctx *context, VALUE related_object)
     exception_class = rb_grn_rc_to_exception(context->rc);
     message = rb_grn_rc_to_message(context->rc);
 
-    GRN_OBJ_INIT(&bulk, GRN_BULK, 0);
-    GRN_BULK_PUTS(context, &bulk, message);
-    GRN_BULK_PUTS(context, &bulk, ": ");
-    GRN_BULK_PUTS(context, &bulk, context->errbuf);
+    GRN_OBJ_INIT(&bulk, GRN_BULK, 0, GRN_ID_NIL);
+    GRN_TEXT_PUTS(context, &bulk, message);
+    GRN_TEXT_PUTS(context, &bulk, ": ");
+    GRN_TEXT_PUTS(context, &bulk, context->errbuf);
     if (!NIL_P(related_object)) {
-	GRN_BULK_PUTS(context, &bulk, ": ");
-	GRN_BULK_PUTS(context, &bulk, rb_grn_inspect(related_object));
+	GRN_TEXT_PUTS(context, &bulk, ": ");
+	GRN_TEXT_PUTS(context, &bulk, rb_grn_inspect(related_object));
     }
-    GRN_BULK_PUTS(context, &bulk, "\n");
-    GRN_BULK_PUTS(context, &bulk, context->errfile);
-    GRN_BULK_PUTS(context, &bulk, ":");
-    grn_bulk_itoa(context, &bulk, context->errline);
-    GRN_BULK_PUTS(context, &bulk, ": ");
-    GRN_BULK_PUTS(context, &bulk, context->errfunc);
-    GRN_BULK_PUTS(context, &bulk, "()");
+    GRN_TEXT_PUTS(context, &bulk, "\n");
+    GRN_TEXT_PUTS(context, &bulk, context->errfile);
+    GRN_TEXT_PUTS(context, &bulk, ":");
+    grn_text_itoa(context, &bulk, context->errline);
+    GRN_TEXT_PUTS(context, &bulk, ": ");
+    GRN_TEXT_PUTS(context, &bulk, context->errfunc);
+    GRN_TEXT_PUTS(context, &bulk, "()");
     exception = rb_funcall(exception_class, rb_intern("new"), 1,
 			   rb_str_new(GRN_BULK_HEAD(&bulk),
 				      GRN_BULK_VSIZE(&bulk)));

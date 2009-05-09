@@ -197,7 +197,7 @@ rb_grn_table_inspect_content (VALUE self, VALUE inspected)
 
 	rb_str_cat2(inspected, ", ");
 	rb_str_cat2(inspected, "encoding: <");
-	GRN_OBJ_INIT(&value, GRN_BULK, 0);
+	GRN_OBJ_INIT(&value, GRN_BULK, 0, GRN_ID_NIL);
 	grn_obj_get_info(context, table, GRN_INFO_ENCODING, &value);
 	encoding = *((grn_encoding *)GRN_BULK_HEAD(&value));
 	grn_obj_close(context, &value);

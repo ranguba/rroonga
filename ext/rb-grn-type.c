@@ -98,8 +98,8 @@ rb_grn_init_type (VALUE mGrn)
 
     rb_define_method(rb_cGrnType, "initialize", rb_grn_type_initialize, -1);
 
-    rb_define_const(rb_cGrnType, "INT", INT2NUM(GRN_DB_INT));
-    rb_define_const(rb_cGrnType, "UINT", INT2NUM(GRN_DB_UINT));
+    rb_define_const(rb_cGrnType, "INT32", INT2NUM(GRN_DB_INT32));
+    rb_define_const(rb_cGrnType, "UINT32", INT2NUM(GRN_DB_UINT32));
     rb_define_const(rb_cGrnType, "INT64", INT2NUM(GRN_DB_INT64));
     rb_define_const(rb_cGrnType, "FLOAT", INT2NUM(GRN_DB_FLOAT));
     rb_define_const(rb_cGrnType, "TIME", INT2NUM(GRN_DB_TIME));

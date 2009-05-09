@@ -24,8 +24,8 @@ class TypeTest < Test::Unit::TestCase
   end
 
   def test_builtins
-    assert_equal_type("<int>", Groonga::Type::INT)
-    assert_equal_type("<uint>", Groonga::Type::UINT)
+    assert_equal_type("<int>", Groonga::Type::INT32)
+    assert_equal_type("<uint>", Groonga::Type::UINT32)
     assert_equal_type("<int64>", Groonga::Type::INT64)
     assert_equal_type("<float>", Groonga::Type::FLOAT)
     assert_equal_type("<time>", Groonga::Type::TIME)
@@ -35,7 +35,7 @@ class TypeTest < Test::Unit::TestCase
   end
 
   def test_inspect
-    assert_equal("#<Groonga::Type id: <8>, " +
+    assert_equal("#<Groonga::Type id: <9>, " +
                  "name: <<longtext>>, " +
                  "path: (temporary), " +
                  "domain: <nil>, " +

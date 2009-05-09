@@ -96,10 +96,10 @@ rb_grn_bulk_to_ruby_object_by_range_id (grn_ctx *context, grn_obj *bulk,
       case GRN_DB_VOID:
 	*rb_value = rb_str_new(GRN_BULK_HEAD(bulk), GRN_BULK_VSIZE(bulk));
 	break;
-      case GRN_DB_INT:
+      case GRN_DB_INT32:
 	*rb_value = INT2NUM(*((int *)GRN_BULK_HEAD(bulk)));
 	break;
-      case GRN_DB_UINT:
+      case GRN_DB_UINT32:
 	*rb_value = UINT2NUM(*((int *)GRN_BULK_HEAD(bulk)));
 	break;
       case GRN_DB_INT64:
@@ -247,12 +247,12 @@ rb_grn_bulk_from_ruby_object (VALUE object, grn_ctx *context, grn_obj *bulk)
     }
 
     if (bulk) {
-	GRN_OBJ_INIT(bulk, GRN_BULK, flags);
+	GRN_OBJ_INIT(bulk, GRN_BULK, flags, GRN_ID_NIL);
     } else {
 	bulk = grn_obj_open(context, GRN_BULK, 0, flags);
 	rb_grn_context_check(context, object);
     }
-    GRN_BULK_SET(context, bulk, string, size);
+    GRN_TEXT_SET(context, bulk, string, size);
 
     return bulk;
 }
@@ -274,12 +274,12 @@ rb_grn_bulk_from_ruby_object_with_type (VALUE object, grn_ctx *context,
     grn_obj *type_object;
 
     switch (type) {
-      case GRN_DB_INT:
+      case GRN_DB_INT32:
 	int32_value = NUM2INT(object);
 	string = (const char *)&int32_value;
 	size = sizeof(int32_value);
 	break;
-      case GRN_DB_UINT:
+      case GRN_DB_UINT32:
 	uint32_value = NUM2UINT(object);
 	string = (const char *)&uint32_value;
 	size = sizeof(uint32_value);
@@ -330,12 +330,12 @@ rb_grn_bulk_from_ruby_object_with_type (VALUE object, grn_ctx *context,
     }
 
     if (bulk) {
-	GRN_OBJ_INIT(bulk, GRN_BULK, flags);
+	GRN_OBJ_INIT(bulk, GRN_BULK, flags, GRN_ID_NIL);
     } else {
 	bulk = grn_obj_open(context, GRN_BULK, flags, GRN_ID_NIL);
 	rb_grn_context_check(context, object);
     }
-    GRN_BULK_SET(context, bulk, string, size);
+    GRN_TEXT_SET(context, bulk, string, size);
 
     return bulk;
 }
@@ -376,7 +376,7 @@ rb_grn_vector_from_ruby_object (VALUE object, grn_ctx *context, grn_obj *vector)
     int i, n;
 
     if (vector)
-	GRN_OBJ_INIT(vector, GRN_VECTOR, 0);
+	GRN_OBJ_INIT(vector, GRN_VECTOR, 0, GRN_ID_NIL);
     else
 	vector = grn_obj_open(context, GRN_VECTOR, 0, 0);
 
@@ -428,7 +428,7 @@ rb_grn_uvector_from_ruby_object (VALUE object, grn_ctx *context,
     int i, n;
 
     if (uvector)
-	GRN_OBJ_INIT(uvector, GRN_UVECTOR, 0);
+	GRN_OBJ_INIT(uvector, GRN_UVECTOR, 0, GRN_ID_NIL);
     else
 	uvector = grn_obj_open(context, GRN_UVECTOR, 0, 0);
 
@@ -526,8 +526,8 @@ rb_grn_key_to_ruby_object (grn_ctx *context, const void *key, int key_size,
 {
     grn_obj bulk;
 
-    GRN_OBJ_INIT(&bulk, GRN_BULK, GRN_OBJ_DO_SHALLOW_COPY);
-    GRN_BULK_SET(context, &bulk, key, key_size);
+    GRN_OBJ_INIT(&bulk, GRN_BULK, GRN_OBJ_DO_SHALLOW_COPY, GRN_ID_NIL);
+    GRN_TEXT_SET(context, &bulk, key, key_size);
     bulk.header.domain = table->header.domain;
 
     return GRNBULK2RVAL(context, &bulk, related_object);
@@ -567,8 +567,8 @@ rb_grn_key_from_ruby_object (VALUE rb_key, grn_ctx *context,
 	break;
     }
 
-    GRN_OBJ_INIT(key, GRN_BULK, 0);
-    GRN_BULK_SET(context, key, &id, sizeof(id));
+    GRN_OBJ_INIT(key, GRN_BULK, 0, GRN_ID_NIL);
+    GRN_TEXT_SET(context, key, &id, sizeof(id));
     return key;
 }
 

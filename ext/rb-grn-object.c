@@ -286,10 +286,10 @@ rb_grn_object_inspect_content_name (VALUE inspected,
     } else {
 	grn_obj name;
 
-	GRN_OBJ_INIT(&name, GRN_BULK, 0);
+	GRN_OBJ_INIT(&name, GRN_BULK, 0, GRN_ID_NIL);
 	grn_bulk_space(context, &name, name_size);
 	grn_obj_name(context, object, GRN_BULK_HEAD(&name), name_size);
-	GRN_BULK_PUTC(context, &name, '\0');
+	GRN_TEXT_PUTC(context, &name, '\0');
 	rb_str_cat2(inspected, "<");
 	rb_str_cat2(inspected, GRN_BULK_HEAD(&name));
 	rb_str_cat2(inspected, ">");
@@ -639,23 +639,23 @@ rb_grn_object_array_reference (VALUE self, VALUE rb_id)
       case GRN_TABLE_HASH_KEY:
       case GRN_TABLE_PAT_KEY:
       case GRN_TABLE_NO_KEY:
-	GRN_OBJ_INIT(&value, GRN_BULK, 0);
+	GRN_OBJ_INIT(&value, GRN_BULK, 0, GRN_ID_NIL);
 	break;
       case GRN_TYPE:
       case GRN_ACCESSOR: /* FIXME */
-	GRN_OBJ_INIT(&value, GRN_BULK, 0);
+	GRN_OBJ_INIT(&value, GRN_BULK, 0, GRN_ID_NIL);
 	value.header.domain = range_id;
 	break;
       case GRN_COLUMN_VAR_SIZE:
       case GRN_COLUMN_FIX_SIZE:
 	switch (object->header.flags & GRN_OBJ_COLUMN_TYPE_MASK) {
 	  case GRN_OBJ_COLUMN_VECTOR:
-	    GRN_OBJ_INIT(&value, GRN_VECTOR, 0);
+	    GRN_OBJ_INIT(&value, GRN_VECTOR, 0, GRN_ID_NIL);
 	    value.header.domain = range_id;
 	    break;
 	  case GRN_OBJ_COLUMN_INDEX:
 	  case GRN_OBJ_COLUMN_SCALAR:
-	    GRN_OBJ_INIT(&value, GRN_BULK, 0);
+	    GRN_OBJ_INIT(&value, GRN_BULK, 0, GRN_ID_NIL);
 	    value.header.domain = range_id;
 	    break;
 	  default:
