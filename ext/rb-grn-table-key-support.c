@@ -116,7 +116,6 @@ rb_grn_table_key_support_initialize (VALUE self, VALUE rb_context,
 static grn_id
 rb_grn_table_key_support_add_raw (VALUE self, VALUE rb_key)
 {
-    VALUE exception;
     grn_ctx *context;
     grn_obj *table;
     grn_id id;
@@ -131,9 +130,7 @@ rb_grn_table_key_support_add_raw (VALUE self, VALUE rb_key)
     id = grn_table_lookup(context, table,
 			  GRN_BULK_HEAD(key), GRN_BULK_VSIZE(key),
 			  &flags);
-    exception = rb_grn_context_to_exception(context, self);
-    if (!NIL_P(exception))
-	rb_exc_raise(exception);
+    rb_grn_context_check(context, self);
 
     return id;
 }
