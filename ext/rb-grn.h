@@ -375,7 +375,7 @@ VALUE          rb_grn_key_to_ruby_object            (grn_ctx *context,
 grn_obj       *rb_grn_key_from_ruby_object          (VALUE rb_key,
 						     grn_ctx *context,
 						     grn_obj *key,
-						     grn_id domain_id,
+						     grn_obj *domain,
 						     VALUE related_object);
 
 RB_GRN_END_DECLS

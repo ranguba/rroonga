@@ -31,7 +31,9 @@ rb_grn_table_key_support_deconstruct (VALUE self,
 				      grn_obj **table,
 				      grn_ctx **context,
 				      grn_obj **key,
-				      grn_obj **value)
+				      grn_obj **domain,
+				      grn_obj **value,
+				      grn_obj **range)
 {
     RbGrnObject *rb_grn_object;
     RbGrnTable *rb_grn_table;
@@ -45,6 +47,10 @@ rb_grn_table_key_support_deconstruct (VALUE self,
 	*table = rb_grn_object->object;
     if (context)
 	*context = rb_grn_object->context;
+    if (domain)
+	*domain = rb_grn_object->domain;
+    if (range)
+	*range = rb_grn_object->range;
     if (key)
 	*key = rb_grn_table_key_support->key;
     if (value)
@@ -69,7 +75,7 @@ rb_rb_grn_table_key_support_free (void *object)
 
 	path = grn_obj_path(context, grn_object);
 	if (path == NULL || (path && grn_ctx_db(context))) {
-	    grn_obj_close(rb_grn_object->context, rb_grn_object->object);
+	    grn_obj_close(rb_grn_object->context, grn_object);
 	}
     }
 
@@ -95,6 +101,8 @@ rb_grn_table_key_support_initialize (VALUE self, VALUE rb_context,
     RbGrnObject *rb_grn_object;
     RbGrnTable *rb_grn_table;
     RbGrnTableKeySupport *rb_grn_table_key_support;
+    grn_id domain_id = GRN_ID_NIL;
+    grn_id range_id = GRN_ID_NIL;
 
     rb_grn_table_key_support = ALLOC(RbGrnTableKeySupport);
     DATA_PTR(self) = rb_grn_table_key_support;
@@ -102,6 +110,21 @@ rb_grn_table_key_support_initialize (VALUE self, VALUE rb_context,
     rb_grn_object = RB_GRN_OBJECT(rb_grn_table_key_support);
     rb_grn_object->context = context;
     rb_grn_object->object = table_key_support;
+
+    if (table_key_support)
+	domain_id = table_key_support->header.domain;
+    if (domain_id == GRN_ID_NIL)
+	rb_grn_object->domain = NULL;
+    else
+	rb_grn_object->domain = grn_ctx_get(context, domain_id);
+
+    if (table_key_support)
+	range_id = grn_obj_get_range(context, table_key_support);
+    if (range_id == GRN_ID_NIL)
+	rb_grn_object->range = NULL;
+    else
+	rb_grn_object->range = grn_ctx_get(context, range_id);
+
     rb_grn_object->owner = owner;
 
     rb_grn_table = RB_GRN_TABLE(rb_grn_table_key_support);
@@ -119,13 +142,14 @@ rb_grn_table_key_support_add_raw (VALUE self, VALUE rb_key)
     grn_ctx *context;
     grn_obj *table;
     grn_id id;
-    grn_obj *key;
+    grn_obj *key, *domain;
     grn_search_flags flags;
 
-    rb_grn_table_key_support_deconstruct(self, &table, &context, &key, NULL);
+    rb_grn_table_key_support_deconstruct(self, &table, &context, &key, &domain,
+					 NULL, NULL);
 
     GRN_BULK_REWIND(key);
-    RVAL2GRNKEY(rb_key, context, key, table->header.domain, self);
+    RVAL2GRNKEY(rb_key, context, key, domain, self);
     flags = GRN_SEARCH_EXACT | GRN_TABLE_ADD;
     id = grn_table_lookup(context, table,
 			  GRN_BULK_HEAD(key), GRN_BULK_VSIZE(key),
@@ -156,7 +180,8 @@ rb_grn_table_key_support_get_key (VALUE self, VALUE rb_id)
     int key_size;
     VALUE rb_key;
 
-    rb_grn_table_key_support_deconstruct(self, &table, &context, &key, NULL);
+    rb_grn_table_key_support_deconstruct(self, &table, &context, &key, NULL,
+					 NULL, NULL);
 
     id = NUM2UINT(rb_id);
     GRN_BULK_REWIND(key);
@@ -179,13 +204,14 @@ rb_grn_table_key_support_delete_by_key (VALUE self, VALUE rb_key)
 {
     grn_ctx *context;
     grn_obj *table;
-    grn_obj *key;
+    grn_obj *key, *domain;
     grn_rc rc;
 
-    rb_grn_table_key_support_deconstruct(self, &table, &context, &key, NULL);
+    rb_grn_table_key_support_deconstruct(self, &table, &context, &key, &domain,
+					 NULL, NULL);
 
     GRN_BULK_REWIND(key);
-    RVAL2GRNKEY(rb_key, context, key, table->header.domain, self);
+    RVAL2GRNKEY(rb_key, context, key, domain, self);
     rc = grn_table_delete(context, table,
 			  GRN_BULK_HEAD(key), GRN_BULK_VSIZE(key));
     rb_grn_context_check(context, self);
@@ -211,14 +237,15 @@ static VALUE
 rb_grn_table_key_support_array_reference_by_key (VALUE self, VALUE rb_key)
 {
     grn_ctx *context;
-    grn_obj *table, *key;
+    grn_obj *table, *key, *domain;
     grn_id id;
     grn_search_flags flags = 0;
 
-    rb_grn_table_key_support_deconstruct(self, &table, &context, &key, NULL);
+    rb_grn_table_key_support_deconstruct(self, &table, &context, &key, &domain,
+					 NULL, NULL);
 
     GRN_BULK_REWIND(key);
-    RVAL2GRNKEY(rb_key, context, key, table->header.domain, self);
+    RVAL2GRNKEY(rb_key, context, key, domain, self);
     flags = GRN_SEARCH_EXACT;
     id = grn_table_lookup(context, table,
 			  GRN_BULK_HEAD(key), GRN_BULK_VSIZE(key),
@@ -260,7 +287,8 @@ rb_grn_table_key_support_array_set_by_key (VALUE self,
 	rb_raise(rb_eArgError, "key should not be nil: <%s>",
 		 rb_grn_inspect(self));
 
-    rb_grn_table_key_support_deconstruct(self, &table, &context, NULL, &value);
+    rb_grn_table_key_support_deconstruct(self, &table, &context, NULL, NULL,
+					 &value, NULL);
 
     id = rb_grn_table_key_support_add_raw(self, rb_key);
     if (GRN_ID_NIL == id)
@@ -305,7 +333,8 @@ rb_grn_table_key_support_get_encoding (VALUE self)
     grn_encoding encoding = GRN_ENC_NONE;
     grn_obj *value;
 
-    rb_grn_table_key_support_deconstruct(self, &table, &context, NULL, &value);
+    rb_grn_table_key_support_deconstruct(self, &table, &context, NULL, NULL,
+					 &value, NULL);
 
     GRN_BULK_REWIND(value);
     grn_bulk_reserve(context, value, sizeof(grn_encoding));
@@ -324,7 +353,8 @@ rb_grn_table_key_support_get_default_tokenizer (VALUE self)
     grn_obj *tokenizer;
     grn_rc rc;
 
-    rb_grn_table_key_support_deconstruct(self, &table, &context, NULL, NULL);
+    rb_grn_table_key_support_deconstruct(self, &table, &context, NULL, NULL,
+					 NULL, NULL);
 
     rc = grn_table_get_info(context, table, NULL, NULL, &tokenizer);
     rb_grn_context_check(context, self);
@@ -341,7 +371,8 @@ rb_grn_table_key_support_set_default_tokenizer (VALUE self, VALUE rb_tokenizer)
     grn_obj *tokenizer;
     grn_rc rc;
 
-    rb_grn_table_key_support_deconstruct(self, &table, &context, NULL, NULL);
+    rb_grn_table_key_support_deconstruct(self, &table, &context, NULL, NULL,
+					 NULL, NULL);
 
     tokenizer = RVAL2GRNOBJECT(rb_tokenizer, &context);
     rc = grn_obj_set_info(context, table,

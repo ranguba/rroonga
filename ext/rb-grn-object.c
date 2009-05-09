@@ -179,11 +179,28 @@ rb_grn_object_initialize (VALUE self, VALUE rb_context,
 			  rb_grn_boolean owner)
 {
     RbGrnObject *rb_grn_object;
+    grn_id domain_id = GRN_ID_NIL;
+    grn_id range_id = GRN_ID_NIL;
 
     rb_grn_object = ALLOC(RbGrnObject);
     DATA_PTR(self) = rb_grn_object;
     rb_grn_object->context = context;
     rb_grn_object->object = object;
+
+    if (object)
+	domain_id = object->header.domain;
+    if (domain_id == GRN_ID_NIL)
+	rb_grn_object->domain = NULL;
+    else
+	rb_grn_object->domain = grn_ctx_get(context, domain_id);
+
+    if (object && object->header.type != GRN_TYPE)
+	range_id = grn_obj_get_range(context, object);
+    if (range_id == GRN_ID_NIL)
+	rb_grn_object->range = NULL;
+    else
+	rb_grn_object->range = grn_ctx_get(context, range_id);
+
     rb_grn_object->owner = owner;
 
     rb_iv_set(self, "context", rb_context);
