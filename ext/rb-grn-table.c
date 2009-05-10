@@ -18,8 +18,7 @@
 
 #include "rb-grn.h"
 
-#define SELF(object, context) (RVAL2GRNTABLE(object, context))
-#define SELF_TO_BE_REPLACED(object) ((RbGrnTable *)DATA_PTR(object))
+#define SELF(object) ((RbGrnTable *)DATA_PTR(object))
 
 VALUE rb_cGrnTable;
 
@@ -245,7 +244,9 @@ rb_grn_table_s_open (int argc, VALUE *argv, VALUE klass)
 	grn_obj *table;
 	grn_ctx *context = NULL;
 
-	table = SELF(rb_table, &context);
+	rb_grn_table_deconstruct(SELF(rb_table), &table, &context,
+				 NULL, NULL,
+				 NULL, NULL, NULL);
 	rb_class = GRNOBJECT2RCLASS(table);
 	if (rb_class != klass) {
 	    rb_raise(rb_eTypeError,
@@ -267,7 +268,9 @@ rb_grn_table_inspect_content (VALUE self, VALUE inspected)
     grn_ctx *context = NULL;
     grn_obj *table;
 
-    table = SELF(self, &context);
+    rb_grn_table_deconstruct(SELF(self), &table, &context,
+			     NULL, NULL,
+			     NULL, NULL, NULL);
 
     if (!table)
 	return inspected;
@@ -331,7 +334,9 @@ rb_grn_table_define_column (int argc, VALUE *argv, VALUE self)
     VALUE options, rb_path, rb_persistent, rb_type;
     VALUE rb_compress, rb_with_section, rb_with_weight, rb_with_position;
 
-    table = SELF(self, &context);
+    rb_grn_table_deconstruct(SELF(self), &table, &context,
+			     NULL, NULL,
+			     NULL, NULL, NULL);
 
     rb_scan_args(argc, argv, "21", &rb_name, &rb_value_type, &options);
 
@@ -436,7 +441,9 @@ rb_grn_table_add_column (VALUE self, VALUE rb_name, VALUE rb_value_type,
     unsigned name_size = 0;
     VALUE rb_column;
 
-    table = SELF(self, &context);
+    rb_grn_table_deconstruct(SELF(self), &table, &context,
+			     NULL, NULL,
+			     NULL, NULL, NULL);
 
     name = StringValuePtr(rb_name);
     name_size = RSTRING_LEN(rb_name);
@@ -465,7 +472,9 @@ rb_grn_table_get_column (VALUE self, VALUE rb_name)
     rb_grn_boolean owner;
     VALUE rb_column;
 
-    table = SELF(self, &context);
+    rb_grn_table_deconstruct(SELF(self), &table, &context,
+			     NULL, NULL,
+			     NULL, NULL, NULL);
 
     name = StringValuePtr(rb_name);
     name_size = RSTRING_LEN(rb_name);
@@ -493,7 +502,9 @@ rb_grn_table_get_columns (int argc, VALUE *argv, VALUE self)
     char *name = NULL;
     unsigned name_size = 0;
 
-    table = SELF(self, &context);
+    rb_grn_table_deconstruct(SELF(self), &table, &context,
+			     NULL, NULL,
+			     NULL, NULL, NULL);
 
     rb_scan_args(argc, argv, "01", &rb_name);
 
@@ -546,7 +557,9 @@ rb_grn_table_open_grn_cursor (int argc, VALUE *argv, VALUE self,
     int flags = 0;
     VALUE options, rb_min, rb_max, rb_order, rb_greater_than, rb_less_than;
 
-    table = SELF(self, context);
+    rb_grn_table_deconstruct(SELF(self), &table, context,
+			     NULL, NULL,
+			     NULL, NULL, NULL);
 
     rb_scan_args(argc, argv, "01", &options);
 
@@ -637,7 +650,9 @@ rb_grn_table_get_size (VALUE self)
     grn_obj *table;
     unsigned int size;
 
-    table = SELF(self, &context);
+    rb_grn_table_deconstruct(SELF(self), &table, &context,
+			     NULL, NULL,
+			     NULL, NULL, NULL);
     size = grn_table_size(context, table);
     return UINT2NUM(size);
 }
@@ -649,7 +664,9 @@ rb_grn_table_truncate (VALUE self)
     grn_obj *table;
     grn_rc rc;
 
-    table = SELF(self, &context);
+    rb_grn_table_deconstruct(SELF(self), &table, &context,
+			     NULL, NULL,
+			     NULL, NULL, NULL);
     rc = grn_table_truncate(context, table);
     rb_grn_rc_check(rc, self);
 
@@ -664,7 +681,9 @@ rb_grn_table_each (VALUE self)
     grn_table_cursor *cursor;
     grn_id id;
 
-    table = SELF(self, &context);
+    rb_grn_table_deconstruct(SELF(self), &table, &context,
+			     NULL, NULL,
+			     NULL, NULL, NULL);
     cursor = grn_table_cursor_open(context, table, NULL, 0, NULL, 0, 0);
     rb_iv_set(self, "cursor", GRNTABLECURSOR2RVAL(Qnil, context, cursor));
     while ((id = grn_table_cursor_next(context, cursor)) != GRN_ID_NIL) {
@@ -684,7 +703,9 @@ rb_grn_table_delete (VALUE self, VALUE rb_id)
     grn_id id;
     grn_rc rc;
 
-    table = SELF(self, &context);
+    rb_grn_table_deconstruct(SELF(self), &table, &context,
+			     NULL, NULL,
+			     NULL, NULL, NULL);
 
     id = NUM2UINT(rb_id);
     rc = grn_table_delete_by_id(context, table, id);
@@ -706,7 +727,9 @@ rb_grn_table_sort (int argc, VALUE *argv, VALUE self)
     VALUE rb_limit;
     VALUE *rb_sort_keys;
 
-    table = SELF(self, &context);
+    rb_grn_table_deconstruct(SELF(self), &table, &context,
+			     NULL, NULL,
+			     NULL, NULL, NULL);
 
     rb_scan_args(argc, argv, "11", &rb_keys, &options);
     rb_grn_scan_options(options,
@@ -767,15 +790,14 @@ rb_grn_table_sort (int argc, VALUE *argv, VALUE self)
 VALUE
 rb_grn_table_array_reference (VALUE self, VALUE rb_id)
 {
-    RbGrnTable *rb_grn_table;
     grn_id id;
     grn_ctx *context;
     grn_obj *table;
     grn_obj *range;
     grn_obj *value;
 
-    rb_grn_table = SELF_TO_BE_REPLACED(self);
-    rb_grn_table_deconstruct(rb_grn_table, &table, &context, NULL, NULL,
+    rb_grn_table_deconstruct(SELF(self), &table, &context,
+			     NULL, NULL,
 			     &value, NULL, &range);
 
     id = NUM2UINT(rb_id);
@@ -798,7 +820,6 @@ rb_grn_table_array_reference (VALUE self, VALUE rb_id)
 static VALUE
 rb_grn_table_array_set (VALUE self, VALUE rb_id, VALUE rb_value)
 {
-    RbGrnTable *rb_grn_table;
     grn_id id;
     grn_ctx *context;
     grn_obj *table;
@@ -806,8 +827,8 @@ rb_grn_table_array_set (VALUE self, VALUE rb_id, VALUE rb_value)
     grn_obj *value;
     grn_rc rc;
 
-    rb_grn_table = SELF_TO_BE_REPLACED(self);
-    rb_grn_table_deconstruct(rb_grn_table, &table, &context, NULL, NULL,
+    rb_grn_table_deconstruct(SELF(self), &table, &context,
+			     NULL, NULL,
 			     &value, NULL, &range);
 
     id = NUM2UINT(rb_id);
