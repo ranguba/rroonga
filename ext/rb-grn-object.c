@@ -167,6 +167,11 @@ rb_grn_object_to_ruby_object (VALUE klass, grn_ctx *context, grn_obj *object,
     } else if (klass == rb_cGrnArray) {
 	rb_object = rb_grn_table_alloc(klass);
 	rb_grn_table_assign(rb_object, Qnil, context, object, owner);
+    } else if (klass == rb_cGrnFixSizeColumn ||
+	       klass == rb_cGrnVarSizeColumn ||
+	       klass == rb_cGrnIndexColumn) {
+	rb_object = rb_grn_column_alloc(klass);
+	rb_grn_column_assign(rb_object, Qnil, context, object, owner);
     } else {
 	rb_object = rb_grn_object_alloc(klass);
 	rb_grn_object_assign(rb_object, Qnil, context, object, owner);
@@ -239,7 +244,7 @@ rb_grn_object_deconstruct (RbGrnObject *rb_grn_object,
     if (domain)
 	*domain = rb_grn_object->domain;
     if (range_id)
-	*range = rb_grn_object->range_id;
+	*range_id = rb_grn_object->range_id;
     if (range)
 	*range = rb_grn_object->range;
 }

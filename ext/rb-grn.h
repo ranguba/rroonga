@@ -103,6 +103,13 @@ struct _RbGrnTableKeySupport
     grn_obj *key;
 };
 
+typedef struct _RbGrnColumn RbGrnColumn;
+struct _RbGrnColumn
+{
+    RbGrnObject parent;
+    grn_obj *value;
+};
+
 RB_GRN_VAR VALUE rb_eGrnError;
 RB_GRN_VAR VALUE rb_cGrnObject;
 RB_GRN_VAR VALUE rb_cGrnDatabase;
@@ -255,6 +262,26 @@ void           rb_grn_table_key_support_deconstruct (RbGrnTableKeySupport *rb_gr
 						     grn_obj **table_key_support,
 						     grn_ctx **context,
 						     grn_obj **key,
+						     grn_id *domain_id,
+						     grn_obj **domain,
+						     grn_obj **value,
+						     grn_id *range_id,
+						     grn_obj **range);
+
+VALUE          rb_grn_column_alloc                  (VALUE klass);
+void           rb_grn_column_bind                   (RbGrnColumn *rb_grn_column,
+						     grn_ctx *context,
+						     grn_obj *column_key_support,
+						     rb_grn_boolean owner);
+void           rb_grn_column_unbind                 (RbGrnColumn *rb_grn_column);
+void           rb_grn_column_assign                 (VALUE self,
+						     VALUE rb_context,
+						     grn_ctx *context,
+						     grn_obj *column,
+						     rb_grn_boolean owner);
+void           rb_grn_column_deconstruct            (RbGrnColumn *rb_grn_column,
+						     grn_obj **column,
+						     grn_ctx **context,
 						     grn_id *domain_id,
 						     grn_obj **domain,
 						     grn_obj **value,

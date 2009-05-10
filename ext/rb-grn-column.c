@@ -18,7 +18,7 @@
 
 #include "rb-grn.h"
 
-#define SELF(object, context) (RVAL2GRNCOLUMN(object, context))
+#define SELF(object) ((RbGrnColumn *)DATA_PTR(object))
 
 VALUE rb_cGrnColumn;
 VALUE rb_cGrnFixSizeColumn;
@@ -42,29 +42,106 @@ rb_grn_column_to_ruby_object (VALUE klass, grn_ctx *context, grn_obj *column,
     return GRNOBJECT2RVAL(klass, context, column, owner);
 }
 
+void
+rb_grn_column_unbind (RbGrnColumn *rb_grn_column)
+{
+    RbGrnObject *rb_grn_object;
+    grn_ctx *context;
+
+    rb_grn_object = RB_GRN_OBJECT(rb_grn_column);
+    context = rb_grn_object->context;
+
+    if (context && rb_grn_context_alive_p(context))
+	grn_obj_close(context, rb_grn_column->value);
+
+    rb_grn_object_unbind(rb_grn_object);
+}
+
+static void
+rb_grn_column_free (void *object)
+{
+    RbGrnColumn *rb_grn_column = object;
+
+    rb_grn_column_unbind(rb_grn_column);
+    xfree(rb_grn_column);
+}
+
+VALUE
+rb_grn_column_alloc (VALUE klass)
+{
+    return Data_Wrap_Struct(klass, NULL, rb_grn_column_free, NULL);
+}
+
+void
+rb_grn_column_bind (RbGrnColumn *rb_grn_column,
+		    grn_ctx *context, grn_obj *column, rb_grn_boolean owner)
+{
+    RbGrnObject *rb_grn_object;
+
+    rb_grn_object = RB_GRN_OBJECT(rb_grn_column);
+    rb_grn_object_bind(rb_grn_object, context, column, owner);
+
+    rb_grn_column->value = grn_obj_open(context, GRN_BULK, 0,
+					rb_grn_object->range_id);
+}
+
+void
+rb_grn_column_assign (VALUE self, VALUE rb_context,
+		      grn_ctx *context, grn_obj *column,
+		      rb_grn_boolean owner)
+{
+    RbGrnColumn *rb_grn_column;
+
+    rb_grn_column = ALLOC(RbGrnColumn);
+    DATA_PTR(self) = rb_grn_column;
+    rb_grn_column_bind(rb_grn_column, context, column, owner);
+
+    rb_iv_set(self, "context", rb_context);
+}
+
+void
+rb_grn_column_deconstruct (RbGrnColumn *rb_grn_column,
+			   grn_obj **column,
+			   grn_ctx **context,
+			   grn_id *domain_id,
+			   grn_obj **domain,
+			   grn_obj **value,
+			   grn_id *range_id,
+			   grn_obj **range)
+{
+    RbGrnObject *rb_grn_object;
+
+    rb_grn_object = RB_GRN_OBJECT(rb_grn_column);
+    rb_grn_object_deconstruct(rb_grn_object, column, context,
+			      domain_id, domain,
+			      range_id, range);
+
+    if (value)
+	*value = rb_grn_column->value;
+}
+
 static VALUE
 rb_grn_fix_size_column_array_set (VALUE self, VALUE rb_id, VALUE rb_value)
 {
     grn_ctx *context = NULL;
     grn_obj *column;
-    grn_id range;
-    grn_obj *range_object = NULL;
+    grn_id domain_id, range_id;
+    grn_obj *domain, *range;
+    grn_obj *value;
     grn_rc rc;
     grn_id id;
-    grn_obj value;
 
-    column = SELF(self, &context);
+    rb_grn_column_deconstruct(SELF(self), &column, &context,
+			      &domain_id, &domain,
+			      &value, &range_id, &range);
+
     id = NUM2UINT(rb_id);
-
-    range = grn_obj_get_range(context, column);
-    if (range != GRN_ID_NIL)
-	range_object = grn_ctx_get(context, range);
 
     if (RVAL2CBOOL(rb_obj_is_kind_of(rb_value, rb_cGrnRecord))) {
 	VALUE rb_id, rb_table;
 	grn_obj *table;
 
-	if (!range_object)
+	if (!range)
 	    rb_raise(rb_eArgError,
 		     "%s isn't associated with any table: %s",
 		     rb_grn_inspect(self), rb_grn_inspect(rb_value));
@@ -72,35 +149,19 @@ rb_grn_fix_size_column_array_set (VALUE self, VALUE rb_id, VALUE rb_value)
 	rb_id = rb_funcall(rb_value, rb_intern("id"), 0);
 	rb_table = rb_funcall(rb_value, rb_intern("table"), 0);
 	table = RVAL2GRNTABLE(rb_table, &context);
-	if (grn_obj_id(context, table) != range)
+	if (grn_obj_id(context, table) != range_id)
 	    rb_raise(rb_eArgError,
 		     "%s isn't associated with passed record's table: %s",
 		     rb_grn_inspect(self),
 		     rb_grn_inspect(rb_value));
 
-	GRN_OBJ_INIT(&value, GRN_UVECTOR, 0, GRN_ID_NIL);
-	RVAL2GRNUVECTOR(rb_ary_new3(1, rb_id), context, &value);
-    } else if (range_object &&
-	       RVAL2CBOOL(rb_obj_is_kind_of(rb_value, rb_cInteger))) {
-	switch (range_object->header.type) {
-	  case GRN_TABLE_PAT_KEY:
-	  case GRN_TABLE_HASH_KEY:
-	  case GRN_TABLE_NO_KEY:
-	    GRN_OBJ_INIT(&value, GRN_UVECTOR, 0, GRN_ID_NIL);
-	    RVAL2GRNUVECTOR(rb_ary_new3(1, rb_value), context, &value);
-	    break;
-	  default:
-	    GRN_OBJ_INIT(&value, GRN_BULK, 0, GRN_ID_NIL);
-	    RVAL2GRNBULK(rb_value, context, &value);
-	    break;
-	}
-    } else {
-	GRN_OBJ_INIT(&value, GRN_BULK, 0, GRN_ID_NIL);
-	RVAL2GRNBULK(rb_value, context, &value);
+	rb_value = rb_id;
     }
+    GRN_BULK_REWIND(value);
+    RVAL2GRNBULK(rb_value, context, value);
 
-    rc = grn_obj_set_value(context, column, id, &value, GRN_OBJ_SET);
-    grn_obj_close(context, &value);
+    rc = grn_obj_set_value(context, column, id, value, GRN_OBJ_SET);
+    rb_grn_context_check(context, self);
     rb_grn_rc_check(rc, self);
 
     return Qnil;
@@ -117,7 +178,9 @@ rb_grn_index_column_array_set (VALUE self, VALUE rb_id, VALUE rb_value)
     grn_obj old_value, new_value;
     VALUE rb_section, rb_old_value, rb_new_value;
 
-    column = SELF(self, &context);
+    rb_grn_column_deconstruct(SELF(self), &column, &context,
+			      NULL, NULL,
+			      NULL, NULL, NULL);
 
     id = NUM2UINT(rb_id);
 
@@ -161,7 +224,9 @@ rb_grn_column_get_table (VALUE self)
     grn_obj *column;
     grn_obj *table;
 
-    column = SELF(self, &context);
+    rb_grn_column_deconstruct(SELF(self), &column, &context,
+			      NULL, NULL,
+			      NULL, NULL, NULL);
     table = grn_column_table(context, column);
     rb_grn_context_check(context, self);
 
@@ -178,7 +243,9 @@ rb_grn_index_column_get_sources (VALUE self)
     VALUE rb_sources;
     int i, n;
 
-    column = SELF(self, &context);
+    rb_grn_column_deconstruct(SELF(self), &column, &context,
+			      NULL, NULL,
+			      NULL, NULL, NULL);
 
     GRN_TEXT_INIT(&sources);
     grn_obj_get_info(context, column, GRN_INFO_SOURCE, &sources);
@@ -211,7 +278,9 @@ rb_grn_index_column_set_sources (VALUE self, VALUE rb_sources)
     grn_id *sources;
     grn_rc rc;
 
-    column = SELF(self, &context);
+    rb_grn_column_deconstruct(SELF(self), &column, &context,
+			      NULL, NULL,
+			      NULL, NULL, NULL);
 
     n = RARRAY_LEN(rb_sources);
     rb_source_values = RARRAY_PTR(rb_sources);
@@ -259,6 +328,8 @@ void
 rb_grn_init_column (VALUE mGrn)
 {
     rb_cGrnColumn = rb_define_class_under(mGrn, "Column", rb_cGrnObject);
+    rb_define_alloc_func(rb_cGrnColumn, rb_grn_column_alloc);
+
     rb_cGrnFixSizeColumn =
 	rb_define_class_under(mGrn, "FixSizeColumn", rb_cGrnColumn);
     rb_cGrnVarSizeColumn =
