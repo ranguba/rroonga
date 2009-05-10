@@ -83,7 +83,9 @@ struct _RbGrnObject
     grn_ctx *context;
     grn_obj *object;
     grn_obj *domain;
+    grn_id domain_id;
     grn_obj *range;
+    grn_id range_id;
     rb_grn_boolean owner;
 };
 
@@ -172,6 +174,11 @@ rb_grn_boolean rb_grn_equal_option                  (VALUE option,
 						     const char *key);
 
 VALUE          rb_grn_object_alloc                  (VALUE klass);
+void           rb_grn_object_bind                   (RbGrnObject *rb_grn_object,
+						     grn_ctx *context,
+						     grn_obj *object,
+						     rb_grn_boolean owner);
+void           rb_grn_object_unbind                 (RbGrnObject *rb_grn_object);
 void           rb_grn_object_assign                 (VALUE self,
 						     VALUE rb_context,
 						     grn_ctx *context,
@@ -193,6 +200,18 @@ VALUE          rb_grn_object_inspect_content        (VALUE object,
 VALUE          rb_grn_object_inspect_footer         (VALUE object,
 						     VALUE inspected);
 
+VALUE          rb_grn_table_alloc                   (VALUE klass);
+void           rb_grn_table_bind                    (RbGrnTable *rb_grn_table,
+						     grn_ctx *context,
+						     grn_obj *table_key_support,
+						     rb_grn_boolean owner);
+void           rb_grn_table_unbind                  (RbGrnTable *rb_grn_table);
+void           rb_grn_table_assign                  (VALUE self,
+						     VALUE rb_context,
+						     grn_ctx *context,
+						     grn_obj *table,
+						     rb_grn_boolean owner);
+
 grn_obj       *rb_grn_table_open_raw                (int argc,
 						     VALUE *argv,
 						     grn_ctx **context,
@@ -206,6 +225,11 @@ grn_ctx       *rb_grn_table_cursor_ensure_context   (VALUE cursor,
 VALUE          rb_grn_table_cursor_close            (VALUE object);
 
 VALUE          rb_grn_table_key_support_alloc       (VALUE klass);
+void           rb_grn_table_key_support_bind        (RbGrnTableKeySupport *rb_grn_table_key_support,
+						     grn_ctx *context,
+						     grn_obj *table_key_support,
+						     rb_grn_boolean owner);
+void           rb_grn_table_key_support_unbind      (RbGrnTableKeySupport *rb_grn_table_key_support);
 void           rb_grn_table_key_support_assign      (VALUE self,
 						     VALUE rb_context,
 						     grn_ctx *context,

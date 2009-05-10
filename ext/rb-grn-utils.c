@@ -246,10 +246,8 @@ rb_grn_bulk_from_ruby_object (VALUE object, grn_ctx *context, grn_obj *bulk)
 		 rb_grn_inspect(object));
     }
 
-    if (bulk) {
-	GRN_OBJ_INIT(bulk, GRN_BULK, flags, GRN_ID_NIL);
-    } else {
-	bulk = grn_obj_open(context, GRN_BULK, 0, flags);
+    if (!bulk) {
+	bulk = grn_obj_open(context, GRN_BULK, flags, GRN_ID_NIL);
 	rb_grn_context_check(context, object);
     }
     GRN_TEXT_SET(context, bulk, string, size);

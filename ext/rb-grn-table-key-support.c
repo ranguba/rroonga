@@ -58,38 +58,44 @@ rb_grn_table_key_support_deconstruct (VALUE self,
 }
 
 static void
-rb_rb_grn_table_key_support_free (void *object)
+rb_grn_table_key_support_free (void *object)
 {
     RbGrnObject *rb_grn_object = object;
     RbGrnTable *rb_grn_table = object;
     RbGrnTableKeySupport *rb_grn_table_key_support = object;
     grn_ctx *context;
-    grn_obj *grn_object;
 
     context = rb_grn_object->context;
-    grn_object = rb_grn_object->object;
-
-    if (rb_grn_object->owner && context && grn_object &&
-	rb_grn_context_alive_p(context)) {
-	const char *path;
-
-	path = grn_obj_path(context, grn_object);
-	if (path == NULL || (path && grn_ctx_db(context))) {
-	    grn_obj_close(rb_grn_object->context, grn_object);
-	}
-    }
-
-    if (context && rb_grn_context_alive_p(context)) {
-	grn_obj_close(context, rb_grn_table->value);
+    if (context && rb_grn_context_alive_p(context))
 	grn_obj_close(context, rb_grn_table_key_support->key);
-    }
+
+    rb_grn_table_unbind(rb_grn_table);
+
     xfree(rb_grn_table_key_support);
 }
 
 VALUE
 rb_grn_table_key_support_alloc (VALUE klass)
 {
-    return Data_Wrap_Struct(klass, NULL, rb_rb_grn_table_key_support_free, NULL);
+    return Data_Wrap_Struct(klass, NULL, rb_grn_table_key_support_free, NULL);
+}
+
+void
+rb_grn_table_key_support_bind (RbGrnTableKeySupport *rb_grn_table_key_support,
+			       grn_ctx *context,
+			       grn_obj *table_key_support,
+			       rb_grn_boolean owner)
+{
+    RbGrnObject *rb_grn_object;
+    RbGrnTable *rb_grn_table;
+
+    rb_grn_object = RB_GRN_OBJECT(rb_grn_table_key_support);
+
+    rb_grn_table = RB_GRN_TABLE(rb_grn_table_key_support);
+    rb_grn_table_bind(rb_grn_table, context, table_key_support, owner);
+
+    rb_grn_table_key_support->key =
+	grn_obj_open(context, GRN_BULK, 0, rb_grn_object->domain_id);
 }
 
 void
@@ -98,40 +104,13 @@ rb_grn_table_key_support_assign (VALUE self, VALUE rb_context,
 				 grn_obj *table_key_support,
 				 rb_grn_boolean owner)
 {
-    RbGrnObject *rb_grn_object;
-    RbGrnTable *rb_grn_table;
     RbGrnTableKeySupport *rb_grn_table_key_support;
-    grn_id domain_id = GRN_ID_NIL;
-    grn_id range_id = GRN_ID_NIL;
 
     rb_grn_table_key_support = ALLOC(RbGrnTableKeySupport);
     DATA_PTR(self) = rb_grn_table_key_support;
 
-    rb_grn_object = RB_GRN_OBJECT(rb_grn_table_key_support);
-    rb_grn_object->context = context;
-    rb_grn_object->object = table_key_support;
-
-    if (table_key_support)
-	domain_id = table_key_support->header.domain;
-    if (domain_id == GRN_ID_NIL)
-	rb_grn_object->domain = NULL;
-    else
-	rb_grn_object->domain = grn_ctx_get(context, domain_id);
-
-    if (table_key_support)
-	range_id = grn_obj_get_range(context, table_key_support);
-    if (range_id == GRN_ID_NIL)
-	rb_grn_object->range = NULL;
-    else
-	rb_grn_object->range = grn_ctx_get(context, range_id);
-
-    rb_grn_object->owner = owner;
-
-    rb_grn_table = RB_GRN_TABLE(rb_grn_table_key_support);
-    rb_grn_table->value = grn_obj_open(context, GRN_BULK, 0, GRN_ID_NIL);
-
-    rb_grn_table_key_support->key =
-	grn_obj_open(context, GRN_BULK, 0, GRN_ID_NIL);
+    rb_grn_table_key_support_bind(rb_grn_table_key_support,
+				  context, table_key_support, owner);
 
     rb_iv_set(self, "context", rb_context);
 }
@@ -321,7 +300,6 @@ static VALUE
 rb_grn_table_key_support_array_set_by_key (VALUE self,
 					   VALUE rb_key, VALUE rb_value)
 {
-    VALUE exception;
     grn_ctx *context;
     grn_obj *table;
     grn_id id;
@@ -345,9 +323,7 @@ rb_grn_table_key_support_array_set_by_key (VALUE self,
     GRN_BULK_REWIND(value);
     RVAL2GRNBULK(rb_value, context, value);
     rc = grn_obj_set_value(context, table, id, value, GRN_OBJ_SET);
-    exception = rb_grn_context_to_exception(context, self);
-    if (!NIL_P(exception))
-	rb_exc_raise(exception);
+    rb_grn_context_check(context, self);
     rb_grn_rc_check(rc, self);
 
     return rb_value;

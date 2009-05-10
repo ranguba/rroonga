@@ -73,10 +73,9 @@ rb_grn_object_from_ruby_object (VALUE object, grn_ctx **context)
     return rb_grn_object->object;
 }
 
-static void
-rb_rb_grn_object_free (void *object)
+void
+rb_grn_object_unbind (RbGrnObject *rb_grn_object)
 {
-    RbGrnObject *rb_grn_object = object;
     grn_ctx *context;
     grn_obj *grn_object;
 
@@ -92,7 +91,14 @@ rb_rb_grn_object_free (void *object)
 	    grn_obj_close(rb_grn_object->context, rb_grn_object->object);
 	}
     }
+}
 
+static void
+rb_grn_object_free (void *object)
+{
+    RbGrnObject *rb_grn_object = object;
+
+    rb_grn_object_unbind(rb_grn_object);
     xfree(rb_grn_object);
 }
 
@@ -158,6 +164,9 @@ rb_grn_object_to_ruby_object (VALUE klass, grn_ctx *context, grn_obj *object,
 	klass == rb_cGrnPatriciaTrie) {
 	rb_object = rb_grn_table_key_support_alloc(klass);
 	rb_grn_table_key_support_assign(rb_object, Qnil, context, object, owner);
+    } else if (klass == rb_cGrnArray) {
+	rb_object = rb_grn_table_alloc(klass);
+	rb_grn_table_assign(rb_object, Qnil, context, object, owner);
     } else {
 	rb_object = rb_grn_object_alloc(klass);
 	rb_grn_object_assign(rb_object, Qnil, context, object, owner);
@@ -169,7 +178,33 @@ rb_grn_object_to_ruby_object (VALUE klass, grn_ctx *context, grn_obj *object,
 VALUE
 rb_grn_object_alloc (VALUE klass)
 {
-    return Data_Wrap_Struct(klass, NULL, rb_rb_grn_object_free, NULL);
+    return Data_Wrap_Struct(klass, NULL, rb_grn_object_free, NULL);
+}
+
+void
+rb_grn_object_bind (RbGrnObject *rb_grn_object,
+		    grn_ctx *context, grn_obj *object, rb_grn_boolean owner)
+{
+    rb_grn_object->context = context;
+    rb_grn_object->object = object;
+
+    rb_grn_object->domain_id = GRN_ID_NIL;
+    if (object)
+	rb_grn_object->domain_id = object->header.domain;
+    if (rb_grn_object->domain_id == GRN_ID_NIL)
+	rb_grn_object->domain = NULL;
+    else
+	rb_grn_object->domain = grn_ctx_get(context, rb_grn_object->domain_id);
+
+    rb_grn_object->range_id = GRN_ID_NIL;
+    if (object && object->header.type != GRN_TYPE)
+	rb_grn_object->range_id = grn_obj_get_range(context, object);
+    if (rb_grn_object->range_id == GRN_ID_NIL)
+	rb_grn_object->range = NULL;
+    else
+	rb_grn_object->range = grn_ctx_get(context, rb_grn_object->range_id);
+
+    rb_grn_object->owner = owner;
 }
 
 void
@@ -178,29 +213,10 @@ rb_grn_object_assign (VALUE self, VALUE rb_context,
 		      rb_grn_boolean owner)
 {
     RbGrnObject *rb_grn_object;
-    grn_id domain_id = GRN_ID_NIL;
-    grn_id range_id = GRN_ID_NIL;
 
     rb_grn_object = ALLOC(RbGrnObject);
     DATA_PTR(self) = rb_grn_object;
-    rb_grn_object->context = context;
-    rb_grn_object->object = object;
-
-    if (object)
-	domain_id = object->header.domain;
-    if (domain_id == GRN_ID_NIL)
-	rb_grn_object->domain = NULL;
-    else
-	rb_grn_object->domain = grn_ctx_get(context, domain_id);
-
-    if (object && object->header.type != GRN_TYPE)
-	range_id = grn_obj_get_range(context, object);
-    if (range_id == GRN_ID_NIL)
-	rb_grn_object->range = NULL;
-    else
-	rb_grn_object->range = grn_ctx_get(context, range_id);
-
-    rb_grn_object->owner = owner;
+    rb_grn_object_bind(rb_grn_object, context, object, owner);
 
     rb_iv_set(self, "context", rb_context);
 }
@@ -659,20 +675,17 @@ rb_grn_object_array_reference (VALUE self, VALUE rb_id)
 	break;
       case GRN_TYPE:
       case GRN_ACCESSOR: /* FIXME */
-	GRN_OBJ_INIT(&value, GRN_BULK, 0, GRN_ID_NIL);
-	value.header.domain = range_id;
+	GRN_OBJ_INIT(&value, GRN_BULK, 0, range_id);
 	break;
       case GRN_COLUMN_VAR_SIZE:
       case GRN_COLUMN_FIX_SIZE:
 	switch (object->header.flags & GRN_OBJ_COLUMN_TYPE_MASK) {
 	  case GRN_OBJ_COLUMN_VECTOR:
-	    GRN_OBJ_INIT(&value, GRN_VECTOR, 0, GRN_ID_NIL);
-	    value.header.domain = range_id;
+	    GRN_OBJ_INIT(&value, GRN_VECTOR, 0, range_id);
 	    break;
 	  case GRN_OBJ_COLUMN_INDEX:
 	  case GRN_OBJ_COLUMN_SCALAR:
-	    GRN_OBJ_INIT(&value, GRN_BULK, 0, GRN_ID_NIL);
-	    value.header.domain = range_id;
+	    GRN_OBJ_INIT(&value, GRN_BULK, 0, range_id);
 	    break;
 	  default:
 	    rb_raise(rb_eGrnError, "unsupported column type: %u: %s",
@@ -714,8 +727,10 @@ rb_grn_object_set (VALUE self, VALUE rb_id, VALUE rb_value, int flags)
     context = rb_grn_object->context;
     id = NUM2UINT(rb_id);
     if (RVAL2CBOOL(rb_obj_is_kind_of(rb_value, rb_cArray))) {
+	GRN_OBJ_INIT(&value, GRN_VECTOR, 0, GRN_ID_NIL);
 	RVAL2GRNVECTOR(rb_value, context, &value);
     } else {
+	GRN_OBJ_INIT(&value, GRN_BULK, 0, GRN_ID_NIL);
 	RVAL2GRNBULK(rb_value, context, &value);
     }
     rc = grn_obj_set_value(context, rb_grn_object->object, id,
@@ -828,7 +843,8 @@ rb_grn_object_search (int argc, VALUE *argv, VALUE self)
 	query = (grn_obj *)_query;
     } else {
 	query_is_created = RB_GRN_TRUE;
-	query = RVAL2GRNBULK(rb_query, context, NULL);
+	query = grn_obj_open(context, GRN_BULK, 0, GRN_ID_NIL);
+	RVAL2GRNBULK(rb_query, context, query);
     }
 
     rb_grn_scan_options(options,

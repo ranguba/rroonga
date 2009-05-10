@@ -39,6 +39,63 @@ rb_grn_table_to_ruby_object (grn_ctx *context, grn_obj *table,
     return GRNOBJECT2RVAL(rb_cGrnTable, context, table, owner);
 }
 
+void
+rb_grn_table_unbind (RbGrnTable *rb_grn_table)
+{
+    RbGrnObject *rb_grn_object;
+    grn_ctx *context;
+
+    rb_grn_object = RB_GRN_OBJECT(rb_grn_table);
+    context = rb_grn_object->context;
+
+    if (context && rb_grn_context_alive_p(context))
+	grn_obj_close(context, rb_grn_table->value);
+
+    rb_grn_object_unbind(rb_grn_object);
+}
+
+static void
+rb_grn_table_free (void *object)
+{
+    RbGrnTable *rb_grn_table = object;
+
+    rb_grn_table_unbind(rb_grn_table);
+    xfree(rb_grn_table);
+}
+
+VALUE
+rb_grn_table_alloc (VALUE klass)
+{
+    return Data_Wrap_Struct(klass, NULL, rb_grn_table_free, NULL);
+}
+
+void
+rb_grn_table_bind (RbGrnTable *rb_grn_table,
+		   grn_ctx *context, grn_obj *table, rb_grn_boolean owner)
+{
+    RbGrnObject *rb_grn_object;
+
+    rb_grn_object = RB_GRN_OBJECT(rb_grn_table);
+    rb_grn_object_bind(rb_grn_object, context, table, owner);
+
+    rb_grn_table->value = grn_obj_open(context, GRN_BULK, 0,
+				       rb_grn_object->range_id);
+}
+
+void
+rb_grn_table_assign (VALUE self, VALUE rb_context,
+		     grn_ctx *context, grn_obj *table,
+		     rb_grn_boolean owner)
+{
+    RbGrnTable *rb_grn_table;
+
+    rb_grn_table = ALLOC(RbGrnTable);
+    DATA_PTR(self) = rb_grn_table;
+    rb_grn_table_bind(rb_grn_table, context, table, owner);
+
+    rb_iv_set(self, "context", rb_context);
+}
+
 VALUE
 rb_grn_table_s_create (int argc, VALUE *argv, VALUE klass,
 		       grn_obj_flags key_store)
@@ -98,7 +155,8 @@ rb_grn_table_s_create (int argc, VALUE *argv, VALUE klass,
 
     table = grn_table_create(context, name, name_size, path,
 			     flags, key_type, value_size);
-    rb_table = GRNOBJECT2RVAL(klass, context, table, RB_GRN_TRUE);
+    rb_table = rb_grn_table_alloc(klass);
+    rb_grn_table_assign(rb_table, rb_context, context, table, RB_GRN_TRUE);
     rb_grn_context_check(context, rb_table);
 
     if (rb_block_given_p())
@@ -680,6 +738,7 @@ void
 rb_grn_init_table (VALUE mGrn)
 {
     rb_cGrnTable = rb_define_class_under(mGrn, "Table", rb_cGrnObject);
+    rb_define_alloc_func(rb_cGrnTable, rb_grn_table_alloc);
 
     rb_include_module(rb_cGrnTable, rb_mEnumerable);
 
