@@ -19,6 +19,7 @@
 #include "rb-grn.h"
 
 #define SELF(object, context) (RVAL2GRNTABLE(object, context))
+#define SELF_TO_BE_REPLACED(object) ((RbGrnTable *)DATA_PTR(object))
 
 VALUE rb_cGrnTable;
 
@@ -94,6 +95,27 @@ rb_grn_table_assign (VALUE self, VALUE rb_context,
     rb_grn_table_bind(rb_grn_table, context, table, owner);
 
     rb_iv_set(self, "context", rb_context);
+}
+
+void
+rb_grn_table_deconstruct (RbGrnTable *rb_grn_table,
+			  grn_obj **table,
+			  grn_ctx **context,
+			  grn_id *domain_id,
+			  grn_obj **domain,
+			  grn_obj **value,
+			  grn_id *range_id,
+			  grn_obj **range)
+{
+    RbGrnObject *rb_grn_object;
+
+    rb_grn_object = RB_GRN_OBJECT(rb_grn_table);
+    rb_grn_object_deconstruct(rb_grn_object, table, context,
+			      domain_id, domain,
+			      range_id, range);
+
+    if (value)
+	*value = rb_grn_table->value;
 }
 
 VALUE
@@ -734,6 +756,70 @@ rb_grn_table_sort (int argc, VALUE *argv, VALUE self)
     return GRNOBJECT2RVAL(Qnil, context, result, RB_GRN_TRUE);
 }
 
+/*
+ * Document-method: []
+ *
+ * call-seq:
+ *   table[id] -> 値
+ *
+ * _table_の_id_に対応する値を返す。
+ */
+VALUE
+rb_grn_table_array_reference (VALUE self, VALUE rb_id)
+{
+    RbGrnTable *rb_grn_table;
+    grn_id id;
+    grn_ctx *context;
+    grn_obj *table;
+    grn_obj *range;
+    grn_obj *value;
+
+    rb_grn_table = SELF_TO_BE_REPLACED(self);
+    rb_grn_table_deconstruct(rb_grn_table, &table, &context, NULL, NULL,
+			     &value, NULL, &range);
+
+    id = NUM2UINT(rb_id);
+    GRN_BULK_REWIND(value);
+    grn_obj_get_value(context, table, id, value);
+    rb_grn_context_check(context, self);
+
+    return GRNVALUE2RVAL(context, value, range, self);
+}
+
+/*
+ * Document-method: []=
+ *
+ * call-seq:
+ *   table[id] = value
+ *
+ * _table_の_id_に対応する値を設定する。既存の値は上書きさ
+ * れる。
+ */
+static VALUE
+rb_grn_table_array_set (VALUE self, VALUE rb_id, VALUE rb_value)
+{
+    RbGrnTable *rb_grn_table;
+    grn_id id;
+    grn_ctx *context;
+    grn_obj *table;
+    grn_obj *range;
+    grn_obj *value;
+    grn_rc rc;
+
+    rb_grn_table = SELF_TO_BE_REPLACED(self);
+    rb_grn_table_deconstruct(rb_grn_table, &table, &context, NULL, NULL,
+			     &value, NULL, &range);
+
+    id = NUM2UINT(rb_id);
+    GRN_BULK_REWIND(value);
+    RVAL2GRNBULK(rb_value, context, value);
+    rc = grn_obj_set_value(context, table, id, value, GRN_OBJ_SET);
+    rb_grn_context_check(context, self);
+    rb_grn_rc_check(rc, self);
+
+    return Qnil;
+}
+
 void
 rb_grn_init_table (VALUE mGrn)
 {
@@ -769,6 +855,9 @@ rb_grn_init_table (VALUE mGrn)
     rb_define_method(rb_cGrnTable, "delete", rb_grn_table_delete, 1);
 
     rb_define_method(rb_cGrnTable, "sort", rb_grn_table_sort, -1);
+
+    rb_define_method(rb_cGrnTable, "[]", rb_grn_table_array_reference, 1);
+    rb_define_method(rb_cGrnTable, "[]=", rb_grn_table_array_set, 2);
 
     rb_grn_init_table_key_support(mGrn);
     rb_grn_init_array(mGrn);

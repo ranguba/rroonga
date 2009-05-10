@@ -184,6 +184,14 @@ void           rb_grn_object_assign                 (VALUE self,
 						     grn_ctx *context,
 						     grn_obj *object,
 						     rb_grn_boolean owner);
+void           rb_grn_object_deconstruct            (RbGrnObject *rb_grn_object,
+						     grn_obj **object,
+						     grn_ctx **context,
+						     grn_id *domain_id,
+						     grn_obj **domain,
+						     grn_id *range_id,
+						     grn_obj **range);
+
 VALUE          rb_grn_object_array_reference        (VALUE object,
 						     VALUE rb_id);
 VALUE          rb_grn_object_close                  (VALUE object);
@@ -211,6 +219,14 @@ void           rb_grn_table_assign                  (VALUE self,
 						     grn_ctx *context,
 						     grn_obj *table,
 						     rb_grn_boolean owner);
+void           rb_grn_table_deconstruct             (RbGrnTable *rb_grn_table,
+						     grn_obj **table,
+						     grn_ctx **context,
+						     grn_id *domain_id,
+						     grn_obj **domain,
+						     grn_obj **value,
+						     grn_id *range_id,
+						     grn_obj **range);
 
 grn_obj       *rb_grn_table_open_raw                (int argc,
 						     VALUE *argv,
@@ -235,6 +251,15 @@ void           rb_grn_table_key_support_assign      (VALUE self,
 						     grn_ctx *context,
 						     grn_obj *table_key_support,
 						     rb_grn_boolean owner);
+void           rb_grn_table_key_support_deconstruct (RbGrnTableKeySupport *rb_grn_table_key_support,
+						     grn_obj **table_key_support,
+						     grn_ctx **context,
+						     grn_obj **key,
+						     grn_id *domain_id,
+						     grn_obj **domain,
+						     grn_obj **value,
+						     grn_id *range_id,
+						     grn_obj **range);
 
 VALUE          rb_grn_record_new                    (VALUE table,
 						     grn_id id);

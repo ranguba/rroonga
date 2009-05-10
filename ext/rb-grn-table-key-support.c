@@ -26,35 +26,27 @@ VALUE rb_mGrnTableKeySupport;
 grn_rc grn_table_get_info(grn_ctx *ctx, grn_obj *table, grn_obj_flags *flags,
                           grn_encoding *encoding, grn_obj **tokenizer);
 
-static void
-rb_grn_table_key_support_deconstruct (VALUE self,
-				      grn_obj **table,
+void
+rb_grn_table_key_support_deconstruct (RbGrnTableKeySupport *rb_grn_table_key_support,
+				      grn_obj **table_key_support,
 				      grn_ctx **context,
 				      grn_obj **key,
+				      grn_id *domain_id,
 				      grn_obj **domain,
 				      grn_obj **value,
+				      grn_id *range_id,
 				      grn_obj **range)
 {
-    RbGrnObject *rb_grn_object;
     RbGrnTable *rb_grn_table;
-    RbGrnTableKeySupport *rb_grn_table_key_support;
 
-    rb_grn_table_key_support = SELF(self);
     rb_grn_table = RB_GRN_TABLE(rb_grn_table_key_support);
-    rb_grn_object = RB_GRN_OBJECT(rb_grn_table_key_support);
 
-    if (table)
-	*table = rb_grn_object->object;
-    if (context)
-	*context = rb_grn_object->context;
-    if (domain)
-	*domain = rb_grn_object->domain;
-    if (range)
-	*range = rb_grn_object->range;
+    rb_grn_table_deconstruct(rb_grn_table, table_key_support, context,
+			     domain_id, domain,
+			     value, range_id, range);
+
     if (key)
 	*key = rb_grn_table_key_support->key;
-    if (value)
-	*value = rb_grn_table->value;
 }
 
 static void
@@ -139,8 +131,9 @@ rb_grn_table_key_support_add_raw (VALUE self, VALUE rb_key)
     grn_obj *key, *domain;
     grn_search_flags flags;
 
-    rb_grn_table_key_support_deconstruct(self, &table, &context, &key, &domain,
-					 NULL, NULL);
+    rb_grn_table_key_support_deconstruct(SELF(self), &table, &context,
+					 &key, NULL, &domain,
+					 NULL, NULL, NULL);
 
     GRN_BULK_REWIND(key);
     RVAL2GRNKEY(rb_key, context, key, domain, self);
@@ -174,8 +167,9 @@ rb_grn_table_key_support_get_key (VALUE self, VALUE rb_id)
     int key_size;
     VALUE rb_key;
 
-    rb_grn_table_key_support_deconstruct(self, &table, &context, &key, NULL,
-					 NULL, NULL);
+    rb_grn_table_key_support_deconstruct(SELF(self), &table, &context,
+					 &key, NULL, NULL,
+					 NULL, NULL, NULL);
 
     id = NUM2UINT(rb_id);
     GRN_BULK_REWIND(key);
@@ -201,8 +195,9 @@ rb_grn_table_key_support_delete_by_key (VALUE self, VALUE rb_key)
     grn_obj *key, *domain;
     grn_rc rc;
 
-    rb_grn_table_key_support_deconstruct(self, &table, &context, &key, &domain,
-					 NULL, NULL);
+    rb_grn_table_key_support_deconstruct(SELF(self), &table, &context,
+					 &key, NULL, &domain,
+					 NULL, NULL, NULL);
 
     GRN_BULK_REWIND(key);
     RVAL2GRNKEY(rb_key, context, key, domain, self);
@@ -235,8 +230,9 @@ rb_grn_table_key_support_lookup_raw (VALUE self, VALUE rb_key)
     grn_id id;
     grn_search_flags flags = 0;
 
-    rb_grn_table_key_support_deconstruct(self, &table, &context, &key, &domain,
-					 NULL, NULL);
+    rb_grn_table_key_support_deconstruct(SELF(self), &table, &context,
+					 &key, NULL, &domain,
+					 NULL, NULL, NULL);
 
     GRN_BULK_REWIND(key);
     RVAL2GRNKEY(rb_key, context, key, domain, self);
@@ -274,8 +270,9 @@ rb_grn_table_key_support_array_reference_by_key (VALUE self, VALUE rb_key)
     if (id == GRN_ID_NIL)
 	return Qnil;
 
-    rb_grn_table_key_support_deconstruct(self, &table, &context, NULL, NULL,
-					 &value, &range);
+    rb_grn_table_key_support_deconstruct(SELF(self), &table, &context,
+					 NULL, NULL, NULL,
+					 &value, NULL, &range);
     grn_obj_get_value(context, table, id, value);
     rb_grn_context_check(context, self);
 
@@ -310,8 +307,9 @@ rb_grn_table_key_support_array_set_by_key (VALUE self,
 	rb_raise(rb_eArgError, "key should not be nil: <%s>",
 		 rb_grn_inspect(self));
 
-    rb_grn_table_key_support_deconstruct(self, &table, &context, NULL, NULL,
-					 &value, NULL);
+    rb_grn_table_key_support_deconstruct(SELF(self), &table, &context,
+					 NULL, NULL, NULL,
+					 &value, NULL, NULL);
 
     id = rb_grn_table_key_support_add_raw(self, rb_key);
     if (GRN_ID_NIL == id)
@@ -354,8 +352,9 @@ rb_grn_table_key_support_get_encoding (VALUE self)
     grn_encoding encoding = GRN_ENC_NONE;
     grn_obj *value;
 
-    rb_grn_table_key_support_deconstruct(self, &table, &context, NULL, NULL,
-					 &value, NULL);
+    rb_grn_table_key_support_deconstruct(SELF(self), &table, &context,
+					 NULL, NULL, NULL,
+					 &value, NULL, NULL);
 
     GRN_BULK_REWIND(value);
     grn_bulk_reserve(context, value, sizeof(grn_encoding));
@@ -374,8 +373,9 @@ rb_grn_table_key_support_get_default_tokenizer (VALUE self)
     grn_obj *tokenizer;
     grn_rc rc;
 
-    rb_grn_table_key_support_deconstruct(self, &table, &context, NULL, NULL,
-					 NULL, NULL);
+    rb_grn_table_key_support_deconstruct(SELF(self), &table, &context,
+					 NULL, NULL, NULL,
+					 NULL, NULL, NULL);
 
     rc = grn_table_get_info(context, table, NULL, NULL, &tokenizer);
     rb_grn_context_check(context, self);
@@ -392,8 +392,9 @@ rb_grn_table_key_support_set_default_tokenizer (VALUE self, VALUE rb_tokenizer)
     grn_obj *tokenizer;
     grn_rc rc;
 
-    rb_grn_table_key_support_deconstruct(self, &table, &context, NULL, NULL,
-					 NULL, NULL);
+    rb_grn_table_key_support_deconstruct(SELF(self), &table, &context,
+					 NULL, NULL, NULL,
+					 NULL, NULL, NULL);
 
     tokenizer = RVAL2GRNOBJECT(rb_tokenizer, &context);
     rc = grn_obj_set_info(context, table,
