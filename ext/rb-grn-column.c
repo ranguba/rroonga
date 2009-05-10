@@ -121,53 +121,6 @@ rb_grn_column_deconstruct (RbGrnColumn *rb_grn_column,
 }
 
 static VALUE
-rb_grn_fix_size_column_array_set (VALUE self, VALUE rb_id, VALUE rb_value)
-{
-    grn_ctx *context = NULL;
-    grn_obj *column;
-    grn_id domain_id, range_id;
-    grn_obj *domain, *range;
-    grn_obj *value;
-    grn_rc rc;
-    grn_id id;
-
-    rb_grn_column_deconstruct(SELF(self), &column, &context,
-			      &domain_id, &domain,
-			      &value, &range_id, &range);
-
-    id = NUM2UINT(rb_id);
-
-    if (RVAL2CBOOL(rb_obj_is_kind_of(rb_value, rb_cGrnRecord))) {
-	VALUE rb_id, rb_table;
-	grn_obj *table;
-
-	if (!range)
-	    rb_raise(rb_eArgError,
-		     "%s isn't associated with any table: %s",
-		     rb_grn_inspect(self), rb_grn_inspect(rb_value));
-
-	rb_id = rb_funcall(rb_value, rb_intern("id"), 0);
-	rb_table = rb_funcall(rb_value, rb_intern("table"), 0);
-	table = RVAL2GRNTABLE(rb_table, &context);
-	if (grn_obj_id(context, table) != range_id)
-	    rb_raise(rb_eArgError,
-		     "%s isn't associated with passed record's table: %s",
-		     rb_grn_inspect(self),
-		     rb_grn_inspect(rb_value));
-
-	rb_value = rb_id;
-    }
-    GRN_BULK_REWIND(value);
-    RVAL2GRNBULK(rb_value, context, value);
-
-    rc = grn_obj_set_value(context, column, id, value, GRN_OBJ_SET);
-    rb_grn_context_check(context, self);
-    rb_grn_rc_check(rc, self);
-
-    return Qnil;
-}
-
-static VALUE
 rb_grn_index_column_array_set (VALUE self, VALUE rb_id, VALUE rb_value)
 {
     grn_ctx *context = NULL;
@@ -224,9 +177,9 @@ rb_grn_column_get_table (VALUE self)
     grn_obj *column;
     grn_obj *table;
 
-    rb_grn_column_deconstruct(SELF(self), &column, &context,
+    rb_grn_object_deconstruct((RbGrnObject *)(SELF(self)), &column, &context,
 			      NULL, NULL,
-			      NULL, NULL, NULL);
+			      NULL, NULL);
     table = grn_column_table(context, column);
     rb_grn_context_check(context, self);
 
@@ -330,15 +283,11 @@ rb_grn_init_column (VALUE mGrn)
     rb_cGrnColumn = rb_define_class_under(mGrn, "Column", rb_cGrnObject);
     rb_define_alloc_func(rb_cGrnColumn, rb_grn_column_alloc);
 
-    rb_cGrnFixSizeColumn =
-	rb_define_class_under(mGrn, "FixSizeColumn", rb_cGrnColumn);
     rb_cGrnVarSizeColumn =
 	rb_define_class_under(mGrn, "VarSizeColumn", rb_cGrnColumn);
     rb_cGrnIndexColumn =
 	rb_define_class_under(mGrn, "IndexColumn", rb_cGrnColumn);
 
-    rb_define_method(rb_cGrnFixSizeColumn, "[]=",
-		     rb_grn_fix_size_column_array_set, 2);
     rb_define_method(rb_cGrnIndexColumn, "[]=",
 		     rb_grn_index_column_array_set, 2);
 
@@ -350,4 +299,6 @@ rb_grn_init_column (VALUE mGrn)
 		     rb_grn_index_column_set_sources, 1);
     rb_define_method(rb_cGrnIndexColumn, "source=",
 		     rb_grn_index_column_set_source, 1);
+
+    rb_grn_init_fix_size_column(mGrn);
 }

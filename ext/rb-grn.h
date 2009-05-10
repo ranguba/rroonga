@@ -110,6 +110,13 @@ struct _RbGrnColumn
     grn_obj *value;
 };
 
+typedef struct _RbGrnFixSizeColumn RbGrnFixSizeColumn;
+struct _RbGrnFixSizeColumn
+{
+    RbGrnObject parent;
+    grn_obj *value;
+};
+
 RB_GRN_VAR VALUE rb_eGrnError;
 RB_GRN_VAR VALUE rb_cGrnObject;
 RB_GRN_VAR VALUE rb_cGrnDatabase;
@@ -154,6 +161,7 @@ void           rb_grn_init_patricia_trie_cursor     (VALUE mGrn);
 void           rb_grn_init_type                     (VALUE mGrn);
 void           rb_grn_init_procedure                (VALUE mGrn);
 void           rb_grn_init_column                   (VALUE mGrn);
+void           rb_grn_init_fix_size_column          (VALUE mGrn);
 void           rb_grn_init_accessor                 (VALUE mGrn);
 void           rb_grn_init_record                   (VALUE mGrn);
 void           rb_grn_init_query                    (VALUE mGrn);
@@ -280,6 +288,26 @@ void           rb_grn_column_assign                 (VALUE self,
 						     grn_obj *column,
 						     rb_grn_boolean owner);
 void           rb_grn_column_deconstruct            (RbGrnColumn *rb_grn_column,
+						     grn_obj **column,
+						     grn_ctx **context,
+						     grn_id *domain_id,
+						     grn_obj **domain,
+						     grn_obj **value,
+						     grn_id *range_id,
+						     grn_obj **range);
+
+VALUE          rb_grn_fix_size_column_alloc         (VALUE klass);
+void           rb_grn_fix_size_column_bind          (RbGrnFixSizeColumn *rb_grn_fix_size_column,
+						     grn_ctx *context,
+						     grn_obj *column_key_support,
+						     rb_grn_boolean owner);
+void           rb_grn_fix_size_column_unbind        (RbGrnFixSizeColumn *rb_grn_fix_size_column);
+void           rb_grn_fix_size_column_assign        (VALUE self,
+						     VALUE rb_context,
+						     grn_ctx *context,
+						     grn_obj *column,
+						     rb_grn_boolean owner);
+void           rb_grn_fix_size_column_deconstruct   (RbGrnFixSizeColumn *rb_grn_fix_size_column,
 						     grn_obj **column,
 						     grn_ctx **context,
 						     grn_id *domain_id,
