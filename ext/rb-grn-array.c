@@ -148,7 +148,7 @@ rb_grn_array_add (VALUE self)
 
     table = SELF(self, &context);
 
-    id = grn_table_add(context, table);
+    id = grn_table_add(context, table, NULL, 0, NULL);
     rb_grn_context_check(context, self);
 
     if (GRN_ID_NIL == id)

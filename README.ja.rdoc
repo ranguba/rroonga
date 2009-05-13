@@ -50,4 +50,4 @@ http://lists.sourceforge.jp/mailman/listinfo/groonga-dev
 
 == 感謝
 
-* ...
+* 森さん: 最新groonga対応パッチをくれました。

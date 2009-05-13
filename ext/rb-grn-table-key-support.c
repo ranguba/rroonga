@@ -129,7 +129,6 @@ rb_grn_table_key_support_add_raw (VALUE self, VALUE rb_key)
     grn_obj *table;
     grn_id id;
     grn_obj *key, *domain;
-    grn_search_flags flags;
 
     rb_grn_table_key_support_deconstruct(SELF(self), &table, &context,
 					 &key, NULL, &domain,
@@ -137,10 +136,8 @@ rb_grn_table_key_support_add_raw (VALUE self, VALUE rb_key)
 
     GRN_BULK_REWIND(key);
     RVAL2GRNKEY(rb_key, context, key, domain, self);
-    flags = GRN_SEARCH_EXACT | GRN_TABLE_ADD;
-    id = grn_table_lookup(context, table,
-			  GRN_BULK_HEAD(key), GRN_BULK_VSIZE(key),
-			  &flags);
+    id = grn_table_add(context, table,
+                       GRN_BULK_HEAD(key), GRN_BULK_VSIZE(key), NULL);
     rb_grn_context_check(context, self);
 
     return id;
@@ -228,7 +225,6 @@ rb_grn_table_key_support_lookup_raw (VALUE self, VALUE rb_key)
     grn_ctx *context;
     grn_obj *table, *key, *domain;
     grn_id id;
-    grn_search_flags flags = 0;
 
     rb_grn_table_key_support_deconstruct(SELF(self), &table, &context,
 					 &key, NULL, &domain,
@@ -236,10 +232,8 @@ rb_grn_table_key_support_lookup_raw (VALUE self, VALUE rb_key)
 
     GRN_BULK_REWIND(key);
     RVAL2GRNKEY(rb_key, context, key, domain, self);
-    flags = GRN_SEARCH_EXACT;
-    id = grn_table_lookup(context, table,
-			  GRN_BULK_HEAD(key), GRN_BULK_VSIZE(key),
-			  &flags);
+    id = grn_table_get(context, table,
+                       GRN_BULK_HEAD(key), GRN_BULK_VSIZE(key));
     rb_grn_context_check(context, self);
 
     return id;
