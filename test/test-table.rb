@@ -275,8 +275,7 @@ class TableTest < Test::Unit::TestCase
 
   def test_tokenizer
     table = Groonga::Hash.create
-    assert_equal(Groonga::Context.default["<token:bigram>"],
-                 table.default_tokenizer)
+    assert_nil(table.default_tokenizer)
     table.default_tokenizer = "<token:mecab>"
     assert_equal(Groonga::Context.default["<token:mecab>"],
                  table.default_tokenizer)
