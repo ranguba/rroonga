@@ -330,11 +330,11 @@ rb_grn_context_array_reference (VALUE self, VALUE name_or_id)
 
 	name = StringValuePtr(name_or_id);
 	name_size = RSTRING_LEN(name_or_id);
-	object = grn_ctx_lookup(context, name, name_size);
+	object = grn_ctx_get(context, name, name_size);
     } else if (RVAL2CBOOL(rb_obj_is_kind_of(name_or_id, rb_cInteger))) {
 	unsigned id;
 	id = NUM2UINT(name_or_id);
-	object = grn_ctx_get(context, id);
+	object = grn_ctx_at(context, id);
     } else {
 	rb_raise(rb_eArgError, "should be string or unsigned integer: %s",
 		 rb_grn_inspect(name_or_id));

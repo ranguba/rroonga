@@ -533,7 +533,7 @@ rb_grn_table_get_columns (int argc, VALUE *argv, VALUE self)
 
 	grn_table_cursor_get_key(context, cursor, &key);
 	column_id = key;
-	column = grn_ctx_get(context, *column_id);
+	column = grn_ctx_at(context, *column_id);
 	rb_column = GRNOBJECT2RVAL(Qnil, context, column, RB_GRN_FALSE);
 	rb_ary_push(rb_columns, rb_column);
     }

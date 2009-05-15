@@ -51,4 +51,4 @@ http://rubyforge.org/mailman/listinfo/groonga-users-en
 
 == Thanks
 
-* mori: sent a patch to support the latest groonga.
+* mori: sent patches to support the latest groonga.

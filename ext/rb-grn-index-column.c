@@ -193,7 +193,7 @@ rb_grn_index_column_get_sources (VALUE self)
 	grn_obj *source;
 	VALUE rb_source;
 
-	source = grn_ctx_get(context, *source_ids);
+	source = grn_ctx_at(context, *source_ids);
 	rb_source = GRNOBJECT2RVAL(Qnil, context, source, RB_GRN_FALSE);
 	rb_ary_push(rb_sources, rb_source);
 	source_ids++;

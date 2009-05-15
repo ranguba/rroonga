@@ -41,16 +41,16 @@ rb_grn_object_from_ruby_object (VALUE object, grn_ctx **context)
     if (context && *context) {
 	grn_obj *grn_object;
 	if (RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cString))) {
-	    grn_object = grn_ctx_lookup(*context,
-					StringValuePtr(object),
-					RSTRING_LEN(object));
+	    grn_object = grn_ctx_get(*context,
+                                     StringValuePtr(object),
+                                     RSTRING_LEN(object));
 	    if (!grn_object)
 		rb_raise(rb_eArgError,
 			 "unregistered groonga object: name: <%s>",
 			 rb_grn_inspect(object));
 	    return grn_object;
 	} else if (RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cInteger))) {
-	    grn_object = grn_ctx_get(*context, NUM2UINT(object));
+	    grn_object = grn_ctx_at(*context, NUM2UINT(object));
 	    if (!grn_object)
 		rb_raise(rb_eArgError,
 			 "unregistered groonga object: ID: <%s>",
@@ -200,7 +200,7 @@ rb_grn_object_bind (RbGrnObject *rb_grn_object,
     if (rb_grn_object->domain_id == GRN_ID_NIL)
 	rb_grn_object->domain = NULL;
     else
-	rb_grn_object->domain = grn_ctx_get(context, rb_grn_object->domain_id);
+	rb_grn_object->domain = grn_ctx_at(context, rb_grn_object->domain_id);
 
     rb_grn_object->range_id = GRN_ID_NIL;
     if (object && object->header.type != GRN_TYPE)
@@ -208,7 +208,7 @@ rb_grn_object_bind (RbGrnObject *rb_grn_object,
     if (rb_grn_object->range_id == GRN_ID_NIL)
 	rb_grn_object->range = NULL;
     else
-	rb_grn_object->range = grn_ctx_get(context, rb_grn_object->range_id);
+	rb_grn_object->range = grn_ctx_at(context, rb_grn_object->range_id);
 
     rb_grn_object->owner = owner;
 }
@@ -393,7 +393,7 @@ rb_grn_object_inspect_content_domain (VALUE inspected,
     } else {
 	grn_obj *domain_object;
 
-	domain_object = grn_ctx_get(context, domain);
+	domain_object = grn_ctx_at(context, domain);
 	if (domain_object) {
 	    rb_grn_object_inspect_object(inspected, context, domain_object);
 	} else {
@@ -425,7 +425,7 @@ rb_grn_object_inspect_content_range (VALUE inspected,
 	} else {
 	    grn_obj *range_object;
 
-	    range_object = grn_ctx_get(context, range);
+	    range_object = grn_ctx_at(context, range);
 	    if (range_object) {
 		rb_grn_object_inspect_object(inspected, context, range_object);
 	    } else {
@@ -559,7 +559,7 @@ rb_grn_object_get_domain (VALUE self)
     } else {
 	grn_obj *domain_object;
 
-	domain_object = grn_ctx_get(context, domain);
+	domain_object = grn_ctx_at(context, domain);
 	if (domain_object)
 	    return GRNOBJECT2RVAL(Qnil, context, domain_object, RB_GRN_FALSE);
 	else
@@ -630,7 +630,7 @@ rb_grn_object_get_range (VALUE self)
     } else {
 	grn_obj *range_object;
 
-	range_object = grn_ctx_get(context, range);
+	range_object = grn_ctx_at(context, range);
 	if (range_object)
 	    return GRNOBJECT2RVAL(Qnil, context, range_object, RB_GRN_FALSE);
 	else
@@ -694,7 +694,7 @@ rb_grn_object_array_reference (VALUE self, VALUE rb_id)
 
     id = NUM2UINT(rb_id);
     range_id = grn_obj_get_range(context, object);
-    range = grn_ctx_get(context, range_id);
+    range = grn_ctx_at(context, range_id);
     range_type = range ? range->header.type : GRN_VOID;
     switch (object->header.type) {
       case GRN_TABLE_HASH_KEY:
@@ -904,7 +904,7 @@ rb_grn_object_search (int argc, VALUE *argv, VALUE self)
 	    domain = object;
 	    break;
 	  default:
-	    domain = grn_ctx_get(context, grn_obj_get_range(context, object));
+	    domain = grn_ctx_at(context, grn_obj_get_range(context, object));
 	    break;
 	}
 	result = grn_table_create(context, NULL, 0, NULL,

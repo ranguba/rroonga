@@ -172,7 +172,7 @@ rb_grn_bulk_to_ruby_object (grn_ctx *context, grn_obj *bulk,
 	return Qnil;
 
     range_id = bulk->header.domain;
-    range = grn_ctx_get(context, range_id);
+    range = grn_ctx_at(context, range_id);
     rb_range = GRNOBJECT2RVAL(Qnil, context, range, RB_GRN_FALSE);
 
     if (rb_grn_bulk_to_ruby_object_by_range_id(context, bulk,
@@ -303,7 +303,7 @@ rb_grn_bulk_from_ruby_object_with_type (VALUE object, grn_ctx *context,
       case GRN_DB_LONGTEXT:
 	string = StringValuePtr(object);
 	size = RSTRING_LEN(object);
-	range = grn_obj_get_range(context, grn_ctx_get(context, type));
+	range = grn_obj_get_range(context, grn_ctx_at(context, type));
 	if (size > range)
 	    rb_raise(rb_eArgError,
 		     "string is too large: expected: %u <= %u",
@@ -316,7 +316,7 @@ rb_grn_bulk_from_ruby_object_with_type (VALUE object, grn_ctx *context,
       case GRN_DB_BIGRAM:
       case GRN_DB_TRIGRAM:
       case GRN_DB_MECAB:
-	type_object = grn_ctx_get(context, type);
+	type_object = grn_ctx_at(context, type);
 	rb_type = GRNOBJECT2RVAL(Qnil, context, type_object, RB_GRN_FALSE);
 	rb_raise(rb_eArgError,
 		 "unbulkable type: %s",
