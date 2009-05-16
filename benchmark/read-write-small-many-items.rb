@@ -147,8 +147,9 @@ begin
   require 'localmemcache'
 
   item("Localmemcache: file") do
-    LocalMemCache.drop(:namespace => "write-small-many-items", :force => true)
-    @db = LocalMemCache.new(:namespace => "write-small-many-items")
+    LocalMemCache.drop(:namespace => "read-write-small-many-items",
+                       :force => true)
+    @db = LocalMemCache.new(:namespace => "read-write-small-many-items")
     values.each do |value|
       @db[value] = value
       @db[value]
