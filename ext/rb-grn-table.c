@@ -805,7 +805,10 @@ rb_grn_table_array_reference (VALUE self, VALUE rb_id)
     grn_obj_get_value(context, table, id, value);
     rb_grn_context_check(context, self);
 
-    return GRNVALUE2RVAL(context, value, range, self);
+    if (GRN_BULK_EMPTYP(value))
+	return Qnil;
+    else
+	return rb_str_new(GRN_BULK_HEAD(value), GRN_BULK_VSIZE(value));
 }
 
 /*
