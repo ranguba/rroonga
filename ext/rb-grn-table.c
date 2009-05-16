@@ -479,7 +479,7 @@ rb_grn_table_get_column (VALUE self, VALUE rb_name)
     name = StringValuePtr(rb_name);
     name_size = RSTRING_LEN(rb_name);
 
-    column = grn_table_column(context, table, name, name_size);
+    column = grn_obj_column(context, table, name, name_size);
     rb_grn_context_check(context, self);
 
     owner = (column && column->header.type == GRN_ACCESSOR);
