@@ -127,15 +127,15 @@ rb_grn_table_key_support_add_raw (VALUE self, VALUE rb_key)
 {
     grn_ctx *context;
     grn_obj *table;
-    grn_id id;
+    grn_id id, domain_id;
     grn_obj *key, *domain;
 
     rb_grn_table_key_support_deconstruct(SELF(self), &table, &context,
-					 &key, NULL, &domain,
+					 &key, &domain_id, &domain,
 					 NULL, NULL, NULL);
 
     GRN_BULK_REWIND(key);
-    RVAL2GRNKEY(rb_key, context, key, domain, self);
+    RVAL2GRNKEY(rb_key, context, key, domain_id, domain, self);
     id = grn_table_add(context, table,
                        GRN_BULK_HEAD(key), GRN_BULK_VSIZE(key), NULL);
     rb_grn_context_check(context, self);
@@ -189,15 +189,16 @@ rb_grn_table_key_support_delete_by_key (VALUE self, VALUE rb_key)
 {
     grn_ctx *context;
     grn_obj *table;
+    grn_id domain_id;
     grn_obj *key, *domain;
     grn_rc rc;
 
     rb_grn_table_key_support_deconstruct(SELF(self), &table, &context,
-					 &key, NULL, &domain,
+					 &key, &domain_id, &domain,
 					 NULL, NULL, NULL);
 
     GRN_BULK_REWIND(key);
-    RVAL2GRNKEY(rb_key, context, key, domain, self);
+    RVAL2GRNKEY(rb_key, context, key, domain_id, domain, self);
     rc = grn_table_delete(context, table,
 			  GRN_BULK_HEAD(key), GRN_BULK_VSIZE(key));
     rb_grn_context_check(context, self);
@@ -224,14 +225,14 @@ rb_grn_table_key_support_lookup_raw (VALUE self, VALUE rb_key)
 {
     grn_ctx *context;
     grn_obj *table, *key, *domain;
-    grn_id id;
+    grn_id id, domain_id;
 
     rb_grn_table_key_support_deconstruct(SELF(self), &table, &context,
-					 &key, NULL, &domain,
+					 &key, &domain_id, &domain,
 					 NULL, NULL, NULL);
 
     GRN_BULK_REWIND(key);
-    RVAL2GRNKEY(rb_key, context, key, domain, self);
+    RVAL2GRNKEY(rb_key, context, key, domain_id, domain, self);
     id = grn_table_get(context, table,
                        GRN_BULK_HEAD(key), GRN_BULK_VSIZE(key));
     rb_grn_context_check(context, self);

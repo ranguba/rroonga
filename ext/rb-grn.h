@@ -375,8 +375,8 @@ VALUE          rb_grn_record_new                    (VALUE table,
 
 #define RVAL2GRNBULK(object, context, bulk) \
     (rb_grn_bulk_from_ruby_object(object, context, bulk))
-#define RVAL2GRNBULK_WITH_TYPE(object, context, bulk, type) \
-    (rb_grn_bulk_from_ruby_object_with_type(object, context, bulk, type))
+#define RVAL2GRNBULK_WITH_TYPE(object, context, bulk, type_id, type)	\
+    (rb_grn_bulk_from_ruby_object_with_type(object, context, bulk, type_id, type))
 #define GRNBULK2RVAL(context, bulk, related_object) \
     (rb_grn_bulk_to_ruby_object(context, bulk, related_object))
 
@@ -398,8 +398,9 @@ VALUE          rb_grn_record_new                    (VALUE table,
 
 #define GRNKEY2RVAL(context, key, key_size, table, related_object) \
     (rb_grn_key_to_ruby_object(context, key, key_size, table, related_object))
-#define RVAL2GRNKEY(object, context, key, domain, related_object) \
-    (rb_grn_key_from_ruby_object(object, context, key, domain, related_object))
+#define RVAL2GRNKEY(object, context, key, domain_id, domain, related_object) \
+    (rb_grn_key_from_ruby_object(object, context, key, domain_id,	\
+				 domain, related_object))
 
 
 grn_encoding   rb_grn_encoding_from_ruby_object     (VALUE object,
@@ -460,7 +461,8 @@ grn_obj       *rb_grn_bulk_from_ruby_object_with_type
                                                     (VALUE object,
 						     grn_ctx *context,
 						     grn_obj *bulk,
-						     grn_id type);
+						     grn_id type_id,
+						     grn_obj *type);
 VALUE          rb_grn_bulk_to_ruby_object           (grn_ctx *context,
 						     grn_obj *bulk,
 						     VALUE related_object);
@@ -493,6 +495,7 @@ VALUE          rb_grn_key_to_ruby_object            (grn_ctx *context,
 grn_obj       *rb_grn_key_from_ruby_object          (VALUE rb_key,
 						     grn_ctx *context,
 						     grn_obj *key,
+						     grn_id domain_id,
 						     grn_obj *domain,
 						     VALUE related_object);
 

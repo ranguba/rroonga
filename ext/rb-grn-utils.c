@@ -266,7 +266,8 @@ rb_grn_bulk_from_ruby_object (VALUE object, grn_ctx *context, grn_obj *bulk)
 
 grn_obj *
 rb_grn_bulk_from_ruby_object_with_type (VALUE object, grn_ctx *context,
-					grn_obj *bulk, grn_id type)
+					grn_obj *bulk,
+					grn_id type_id, grn_obj *type)
 {
     const char *string;
     unsigned int size;
@@ -278,9 +279,8 @@ rb_grn_bulk_from_ruby_object_with_type (VALUE object, grn_ctx *context,
     grn_id range;
     VALUE rb_type;
     grn_obj_flags flags = 0;
-    grn_obj *type_object;
 
-    switch (type) {
+    switch (type_id) {
       case GRN_DB_INT32:
 	int32_value = NUM2INT(object);
 	string = (const char *)&int32_value;
@@ -312,7 +312,7 @@ rb_grn_bulk_from_ruby_object_with_type (VALUE object, grn_ctx *context,
       case GRN_DB_LONGTEXT:
 	string = StringValuePtr(object);
 	size = RSTRING_LEN(object);
-	range = grn_obj_get_range(context, grn_ctx_at(context, type));
+	range = grn_obj_get_range(context, type);
 	if (size > range)
 	    rb_raise(rb_eArgError,
 		     "string is too large: expected: %u <= %u",
@@ -325,8 +325,7 @@ rb_grn_bulk_from_ruby_object_with_type (VALUE object, grn_ctx *context,
       case GRN_DB_BIGRAM:
       case GRN_DB_TRIGRAM:
       case GRN_DB_MECAB:
-	type_object = grn_ctx_at(context, type);
-	rb_type = GRNOBJECT2RVAL(Qnil, context, type_object, RB_GRN_FALSE);
+	rb_type = GRNOBJECT2RVAL(Qnil, context, type, RB_GRN_FALSE);
 	rb_raise(rb_eArgError,
 		 "unbulkable type: %s",
 		 rb_grn_inspect(rb_type));
@@ -540,7 +539,7 @@ rb_grn_key_to_ruby_object (grn_ctx *context, const void *key, int key_size,
 
 grn_obj *
 rb_grn_key_from_ruby_object (VALUE rb_key, grn_ctx *context,
-			     grn_obj *key, grn_obj *domain,
+			     grn_obj *key, grn_id domain_id, grn_obj *domain,
 			     VALUE related_object)
 {
     grn_id id;
@@ -550,8 +549,7 @@ rb_grn_key_from_ruby_object (VALUE rb_key, grn_ctx *context,
 
     switch (domain->header.type) {
       case GRN_TYPE:
-	return RVAL2GRNBULK_WITH_TYPE(rb_key, context, key,
-				      grn_obj_id(context, domain));
+	return RVAL2GRNBULK_WITH_TYPE(rb_key, context, key, domain_id, domain);
 	break;
       case GRN_TABLE_HASH_KEY:
       case GRN_TABLE_PAT_KEY:
