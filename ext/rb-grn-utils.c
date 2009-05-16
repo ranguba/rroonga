@@ -200,50 +200,59 @@ rb_grn_bulk_from_ruby_object (VALUE object, grn_ctx *context, grn_obj *bulk)
     grn_id id_value;
     grn_obj_flags flags = 0;
 
-    if (NIL_P(object)) {
+    switch (TYPE(object)) {
+      case T_NIL:
 	string = NULL;
 	size = 0;
-    } else if (RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cString))) {
+	break;
+      case T_STRING:
 	string = RSTRING_PTR(object);
 	size = RSTRING_LEN(object);
 	flags |= GRN_OBJ_DO_SHALLOW_COPY;
-    } else if (FIXNUM_P(object)) {
+	break;
+      case T_FIXNUM:
 	int32_value = NUM2INT(object);
 	string = (const char *)&int32_value;
 	size = sizeof(int32_value);
-    } else if (RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cBignum))) {
+	break;
+      case T_BIGNUM:
 	int64_value = NUM2LL(object);
 	string = (const char *)&int64_value;
 	size = sizeof(int64_value);
-    } else if (RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cFloat))) {
+	break;
+      case T_FLOAT:
 	double_value = NUM2DBL(object);
 	string = (const char *)&double_value;
 	size = sizeof(double_value);
-    } else if (RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cTime))) {
-	time_value.tv_sec = NUM2INT(rb_funcall(object, rb_intern("to_i"), 0));
-	time_value.tv_usec = NUM2INT(rb_funcall(object, rb_intern("usec"), 0));
-	string = (const char *)&time_value;
-	size = sizeof(time_value);
-    } else if (RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cGrnObject))) {
-	grn_obj *grn_object;
+	break;
+      default:
+	if (RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cTime))) {
+	    VALUE sec, usec;
 
-	grn_object = RVAL2GRNOBJECT(object, &context);
-	id_value = grn_obj_id(context, grn_object);
-	string = (const char *)&id_value;
-	size = sizeof(id_value);
-    } else if (RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cGrnRecord))) {
-	id_value = NUM2UINT(rb_funcall(object, rb_intern("id"), 0));
-	string = (const char *)&id_value;
-	size = sizeof(id_value);
-    } else if (RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cGrnRecord))) {
-	id_value = NUM2UINT(rb_funcall(object, rb_intern("id"), 0));
-	string = (const char *)&id_value;
-	size = sizeof(id_value);
-    } else {
-	rb_raise(rb_eTypeError,
-		 "bulked object should be one of "
-		 "[nil, String, Integer, Float, Time, Groonga::Object]: %s",
-		 rb_grn_inspect(object));
+	    sec = rb_funcall(object, rb_intern("to_i"), 0);
+	    usec = rb_funcall(object, rb_intern("usec"), 0);
+	    time_value.tv_sec = NUM2INT(sec);
+	    time_value.tv_usec = NUM2INT(usec);
+	    string = (const char *)&time_value;
+	    size = sizeof(time_value);
+	} else if (RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cGrnObject))) {
+	    grn_obj *grn_object;
+
+	    grn_object = RVAL2GRNOBJECT(object, &context);
+	    id_value = grn_obj_id(context, grn_object);
+	    string = (const char *)&id_value;
+	    size = sizeof(id_value);
+	} else if (RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cGrnRecord))) {
+	    id_value = NUM2UINT(rb_funcall(object, rb_intern("id"), 0));
+	    string = (const char *)&id_value;
+	    size = sizeof(id_value);
+	} else {
+	    rb_raise(rb_eTypeError,
+		     "bulked object should be one of "
+		     "[nil, String, Integer, Float, Time, Groonga::Object]: %s",
+		     rb_grn_inspect(object));
+	}
+	break;
     }
 
     if (!bulk) {
