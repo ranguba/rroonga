@@ -267,6 +267,7 @@ rb_grn_table_key_support_array_reference_by_key (VALUE self, VALUE rb_key)
     rb_grn_table_key_support_deconstruct(SELF(self), &table, &context,
 					 NULL, NULL, NULL,
 					 &value, NULL, &range);
+    GRN_BULK_REWIND(value);
     grn_obj_get_value(context, table, id, value);
     rb_grn_context_check(context, self);
 
