@@ -62,6 +62,8 @@ class ColumnTest < Test::Unit::TestCase
       Groonga::PatriciaTrie.create(:name => "bookmarks-index",
                                    :path => @bookmarks_index_path.to_s,
                                    :key_type => "<shorttext>")
+    @bookmarks_index.default_tokenizer = "<token:bigram>"
+
     @content_index_column_path = @columns_dir + "content-index"
     @bookmarks_index_content =
       @bookmarks_index.define_column("<index:content>", @bookmarks,
@@ -126,6 +128,7 @@ class ColumnTest < Test::Unit::TestCase
 
     index = Groonga::PatriciaTrie.create(:name => "<terms>",
                                          :key_type => "<shorttext>")
+    index.default_tokenizer = "<token:bigram>"
     content_index = index.define_column("content_index", comments,
                                         :type => "index",
                                         :with_position => true)

@@ -80,6 +80,8 @@ class RecordTest < Test::Unit::TestCase
     @bookmarks_index =
       Groonga::PatriciaTrie.create(:name => "bookmarks-index",
                                    :path => @bookmarks_index_path.to_s)
+    @bookmarks_index.default_tokenizer = "<token:bigram>"
+
     @content_index_column_path = @columns_dir + "content-index"
     @bookmarks_content_index =
       @bookmarks_index.define_column("<index:content>", @bookmarks,
