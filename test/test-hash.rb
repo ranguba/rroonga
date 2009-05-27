@@ -40,12 +40,14 @@ class HashTest < Test::Unit::TestCase
   end
 
   def test_array_reference
+    value = "groonga"
     bookmarks_path = @tables_dir + "bookmarks"
     bookmarks = Groonga::Hash.create(:name => "bookmarks",
                                      :path => bookmarks_path.to_s,
-                                     :key_type => "<shorttext>")
-    bookmarks["http://google.com/"] = "groonga"
-    assert_equal("groonga", bookmarks["http://google.com/"])
+                                     :key_type => "<shorttext>",
+                                     :value_size => value.size)
+    bookmarks["http://google.com/"] = value
+    assert_equal(value, bookmarks["http://google.com/"])
   end
 
   def test_lookup
