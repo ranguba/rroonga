@@ -36,9 +36,8 @@ class TableTest < Test::Unit::TestCase
   def test_open
     table_path = @tables_dir + "table"
     table = Groonga::Hash.create(:name => "bookmarks",
-                                  :path => table_path.to_s)
+                                 :path => table_path.to_s)
     assert_equal("bookmarks", table.name)
-    table.close
 
     called = false
     Groonga::Table.open(:name => "bookmarks") do |_table|

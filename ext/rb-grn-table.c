@@ -235,18 +235,24 @@ static VALUE
 rb_grn_table_s_open (int argc, VALUE *argv, VALUE klass)
 {
     VALUE rb_table;
+    grn_obj *table;
+    grn_ctx *context = NULL;
+    VALUE rb_context;
 
-    rb_table = rb_grn_object_alloc(klass);
-    rb_grn_table_initialize(argc, argv, rb_table);
+    table = rb_grn_table_open_raw(argc, argv, &context, &rb_context);
+    rb_grn_context_check(context, rb_ary_new4(argc, argv));
 
-    if (klass != rb_cGrnTable) {
+    if (!table)
+	rb_raise(rb_eGrnError,
+		 "unable to open table: %s: %s",
+		 rb_grn_inspect(klass),
+		 rb_grn_inspect(rb_ary_new4(argc, argv)));
+
+    if (klass == rb_cGrnTable) {
+	klass = GRNOBJECT2RCLASS(table);
+    } else {
 	VALUE rb_class;
-	grn_obj *table;
-	grn_ctx *context = NULL;
 
-	rb_grn_table_deconstruct(SELF(rb_table), &table, &context,
-				 NULL, NULL,
-				 NULL, NULL, NULL);
 	rb_class = GRNOBJECT2RCLASS(table);
 	if (rb_class != klass) {
 	    rb_raise(rb_eTypeError,
@@ -255,6 +261,9 @@ rb_grn_table_s_open (int argc, VALUE *argv, VALUE klass)
 		     rb_grn_inspect(klass));
 	}
     }
+
+    rb_table = rb_grn_object_alloc(klass);
+    rb_grn_object_assign(rb_table, rb_context, context, table, RB_GRN_TRUE);
 
     if (rb_block_given_p())
         return rb_ensure(rb_yield, rb_table, rb_grn_object_close, rb_table);
