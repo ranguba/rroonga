@@ -58,4 +58,59 @@ class HashTest < Test::Unit::TestCase
     bookmark = bookmarks.add("http://google.com/")
     assert_equal(bookmark, bookmarks.lookup("http://google.com/"))
   end
+
+
+  def test_inspect_anonymous
+    path = @tables_dir + "anoymous.groonga"
+    anonymous_table = Groonga::Hash.create(:path => path.to_s)
+    assert_equal("#<Groonga::Hash " +
+                 "id: <#{anonymous_table.id}>, " +
+                 "name: (anonymous), " +
+                 "path: <#{path}>, " +
+                 "domain: <nil>, " +
+                 "range: <nil>, " +
+                 "encoding: <#{encoding.inspect}>, " +
+                 "size: <0>>",
+                 anonymous_table.inspect)
+  end
+
+  def test_inspect_anonymous_temporary
+    anonymous_table = Groonga::Hash.create
+    assert_equal("#<Groonga::Hash " +
+                 "id: <#{anonymous_table.id}>, " +
+                 "name: (anonymous), " +
+                 "path: (temporary), " +
+                 "domain: <nil>, " +
+                 "range: <nil>, " +
+                 "encoding: <#{encoding.inspect}>, " +
+                 "size: <0>>",
+                 anonymous_table.inspect)
+  end
+
+  def test_inspect_named
+    path = @tables_dir + "named.groonga"
+    named_table = Groonga::Hash.create(:name => "name", :path => path.to_s)
+    assert_equal("#<Groonga::Hash " +
+                 "id: <#{named_table.id}>, " +
+                 "name: <name>, " +
+                 "path: <#{path}>, " +
+                 "domain: <nil>, " +
+                 "range: <nil>, " +
+                 "encoding: <#{encoding.inspect}>, " +
+                 "size: <0>>",
+                 named_table.inspect)
+  end
+
+  def test_inspect_named_temporary
+    named_table = Groonga::Hash.create(:name => "name")
+    assert_equal("#<Groonga::Hash " +
+                 "id: <#{named_table.id}>, " +
+                 "name: <name>, " +
+                 "path: (temporary), " +
+                 "domain: <nil>, " +
+                 "range: <nil>, " +
+                 "encoding: <#{encoding.inspect}>, " +
+                 "size: <0>>",
+                 named_table.inspect)
+  end
 end
