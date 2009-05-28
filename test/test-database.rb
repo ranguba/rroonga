@@ -83,4 +83,9 @@ class DatabaseTest < Test::Unit::TestCase
                   "<uint>"],
                  database.collect {|object| object.name}.sort)
   end
+
+  def test_encoding
+    assert_equal(Groonga::Encoding.default,
+                 Groonga::Database.create.encoding)
+  end
 end

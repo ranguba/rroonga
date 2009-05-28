@@ -13,29 +13,13 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-class ArrayTest < Test::Unit::TestCase
+class PatriciaTrieTest < Test::Unit::TestCase
   include GroongaTestUtils
 
   setup :setup_database
 
-  def test_inspect_size
-    path = @tables_dir + "named.groonga"
-    contain_table = Groonga::Array.create(:name => "name", :path => path.to_s)
-    3.times do
-      contain_table.add
-    end
-    assert_equal("#<Groonga::Array " +
-                 "id: <#{contain_table.id}>, " +
-                 "name: <name>, " +
-                 "path: <#{path}>, " +
-                 "domain: <nil>, " +
-                 "range: <nil>, " +
-                 "size: <3>>",
-                 contain_table.inspect)
-  end
-
   def test_encoding
-    array = Groonga::Array.create
-    assert_false(array.respond_to?(:encoding))
+    assert_equal(Groonga::Encoding.default,
+                 Groonga::PatriciaTrie.create.encoding)
   end
 end

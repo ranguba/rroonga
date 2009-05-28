@@ -146,6 +146,7 @@ rb_grn_init_database (VALUE mGrn)
 {
     rb_cGrnDatabase = rb_define_class_under(mGrn, "Database", rb_cGrnObject);
     rb_include_module(rb_cGrnDatabase, rb_mEnumerable);
+    rb_include_module(rb_cGrnDatabase, rb_mGrnEncodingSupport);
 
     rb_define_singleton_method(rb_cGrnDatabase, "create",
 			       rb_grn_database_s_create, -1);

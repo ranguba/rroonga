@@ -127,6 +127,7 @@ struct _RbGrnIndexColumn
 
 RB_GRN_VAR VALUE rb_eGrnError;
 RB_GRN_VAR VALUE rb_cGrnObject;
+RB_GRN_VAR VALUE rb_mGrnEncodingSupport;
 RB_GRN_VAR VALUE rb_cGrnDatabase;
 RB_GRN_VAR VALUE rb_cGrnTable;
 RB_GRN_VAR VALUE rb_mGrnTableKeySupport;
@@ -153,6 +154,7 @@ RB_GRN_VAR VALUE rb_cGrnSnippet;
 void           rb_grn_init_utils                    (VALUE mGrn);
 void           rb_grn_init_exception                (VALUE mGrn);
 void           rb_grn_init_encoding                 (VALUE mGrn);
+void           rb_grn_init_encoding_support         (VALUE mGrn);
 void           rb_grn_init_context                  (VALUE mGrn);
 void           rb_grn_init_object                   (VALUE mGrn);
 void           rb_grn_init_database                 (VALUE mGrn);

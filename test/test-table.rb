@@ -331,16 +331,6 @@ class TableTest < Test::Unit::TestCase
     # assert_equal(0, users.size) # truncate isn't implemented in groonga.
   end
 
-  def test_encoding
-    assert_equal(Groonga::Encoding.default,
-                 Groonga::Hash.create.encoding)
-    assert_equal(Groonga::Encoding.default,
-                 Groonga::PatriciaTrie.create.encoding)
-
-    array = Groonga::Array.create
-    assert_false(array.respond_to?(:encoding))
-  end
-
   def test_sort
     bookmarks = Groonga::Array.create(:name => "<bookmarks>")
     id_column = bookmarks.define_column("id", "<int>")

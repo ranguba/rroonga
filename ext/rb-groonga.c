@@ -88,6 +88,7 @@ Init_groonga (void)
 
     rb_grn_init_utils(mGrn);
     rb_grn_init_encoding(mGrn);
+    rb_grn_init_encoding_support(mGrn);
     rb_grn_init_context(mGrn);
     rb_grn_init_object(mGrn);
     rb_grn_init_database(mGrn);

@@ -113,4 +113,9 @@ class HashTest < Test::Unit::TestCase
                  "size: <0>>",
                  named_table.inspect)
   end
+
+  def test_encoding
+    assert_equal(Groonga::Encoding.default,
+                 Groonga::Hash.create.encoding)
+  end
 end

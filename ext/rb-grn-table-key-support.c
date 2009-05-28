@@ -408,6 +408,7 @@ void
 rb_grn_init_table_key_support (VALUE mGrn)
 {
     rb_mGrnTableKeySupport = rb_define_module_under(rb_cGrnTable, "KeySupport");
+    rb_include_module(rb_mGrnTableKeySupport, rb_mGrnEncodingSupport);
 
     rb_define_method(rb_mGrnTableKeySupport, "initialize",
 		     rb_grn_table_key_support_initialize, -1);
@@ -426,9 +427,6 @@ rb_grn_init_table_key_support (VALUE mGrn)
 		     rb_grn_table_key_support_array_reference, 1);
     rb_define_method(rb_mGrnTableKeySupport, "[]=",
 		     rb_grn_table_key_support_array_set, 2);
-
-    rb_define_method(rb_mGrnTableKeySupport, "encoding",
-		     rb_grn_table_key_support_get_encoding, 0);
 
     rb_define_method(rb_mGrnTableKeySupport, "default_tokenizer",
 		     rb_grn_table_key_support_get_default_tokenizer, 0);
