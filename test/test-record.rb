@@ -84,20 +84,18 @@ class RecordTest < Test::Unit::TestCase
 
     @content_index_column_path = @columns_dir + "content-index"
     @bookmarks_content_index =
-      @bookmarks_index.define_column("<index:content>", @bookmarks,
-                                     :type => "index",
-                                     :with_section => true,
-                                     :with_weight => true,
-                                     :with_position => true,
-                                     :path => @content_index_column_path.to_s)
+      @bookmarks_index.define_index_column("<index:content>", @bookmarks,
+                                           :with_section => true,
+                                           :with_weight => true,
+                                           :with_position => true,
+                                           :path => @content_index_column_path.to_s)
     @bookmarks_content_index.source = @bookmarks_content
 
     @uri_index_column_path = @columns_dir + "uri-index"
     @bookmarks_uri_index =
-      @bookmarks_index.define_column("<index:uri>", @bookmarks,
-                                     :type => "index",
-                                     :with_position => true,
-                                     :path => @uri_index_column_path.to_s)
+      @bookmarks_index.define_index_column("<index:uri>", @bookmarks,
+                                           :with_position => true,
+                                           :path => @uri_index_column_path.to_s)
     @bookmarks_uri_index.source = @bookmarks_uri
   end
 

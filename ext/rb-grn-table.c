@@ -338,10 +338,8 @@ rb_grn_table_define_column (int argc, VALUE *argv, VALUE self)
     char *name = NULL, *path = NULL;
     unsigned name_size = 0;
     grn_obj_flags flags = 0;
-    rb_grn_boolean use_default_type = RB_GRN_FALSE;
     VALUE rb_name, rb_value_type;
     VALUE options, rb_path, rb_persistent, rb_type;
-    VALUE rb_compress, rb_with_section, rb_with_weight, rb_with_position;
 
     rb_grn_table_deconstruct(SELF(self), &table, &context,
 			     NULL, NULL,
@@ -356,6 +354,62 @@ rb_grn_table_define_column (int argc, VALUE *argv, VALUE self)
 			"path", &rb_path,
 			"persistent", &rb_persistent,
 			"type", &rb_type,
+			NULL);
+
+    value_type = RVAL2GRNOBJECT(rb_value_type, &context);
+
+    if (!NIL_P(rb_path)) {
+	path = StringValueCStr(rb_path);
+	flags |= GRN_OBJ_PERSISTENT;
+    }
+
+    if (RVAL2CBOOL(rb_persistent))
+	flags |= GRN_OBJ_PERSISTENT;
+
+    if (NIL_P(rb_type) ||
+	(rb_grn_equal_option(rb_type, "scalar"))) {
+	flags |= GRN_OBJ_COLUMN_SCALAR;
+    } else if (rb_grn_equal_option(rb_type, "vector")) {
+	flags |= GRN_OBJ_COLUMN_VECTOR;
+    } else {
+	rb_raise(rb_eArgError,
+		 "invalid column type: %s: "
+		 "available types: [:scalar, :vector, nil]",
+		 rb_grn_inspect(rb_type));
+    }
+
+    column = grn_column_create(context, table, name, name_size,
+			       path, flags, value_type);
+    rb_grn_context_check(context, self);
+
+    return GRNCOLUMN2RVAL(Qnil, context, column, RB_GRN_TRUE);
+}
+
+static VALUE
+rb_grn_table_define_index_column (int argc, VALUE *argv, VALUE self)
+{
+    grn_ctx *context = NULL;
+    grn_obj *table;
+    grn_obj *value_type, *column;
+    char *name = NULL, *path = NULL;
+    unsigned name_size = 0;
+    grn_obj_flags flags = GRN_OBJ_COLUMN_INDEX;
+    VALUE rb_name, rb_value_type;
+    VALUE options, rb_path, rb_persistent;
+    VALUE rb_compress, rb_with_section, rb_with_weight, rb_with_position;
+
+    rb_grn_table_deconstruct(SELF(self), &table, &context,
+			     NULL, NULL,
+			     NULL, NULL, NULL);
+
+    rb_scan_args(argc, argv, "21", &rb_name, &rb_value_type, &options);
+
+    name = StringValuePtr(rb_name);
+    name_size = RSTRING_LEN(rb_name);
+
+    rb_grn_scan_options(options,
+			"path", &rb_path,
+			"persistent", &rb_persistent,
 			"compress", &rb_compress,
 			"with_section", &rb_with_section,
 			"with_weight", &rb_with_weight,
@@ -372,21 +426,6 @@ rb_grn_table_define_column (int argc, VALUE *argv, VALUE self)
     if (RVAL2CBOOL(rb_persistent))
 	flags |= GRN_OBJ_PERSISTENT;
 
-    if (NIL_P(rb_type)) {
-	use_default_type = RB_GRN_TRUE;
-    } else if (rb_grn_equal_option(rb_type, "index")) {
-	flags |= GRN_OBJ_COLUMN_INDEX;
-    } else if (rb_grn_equal_option(rb_type, "scalar")) {
-	flags |= GRN_OBJ_COLUMN_SCALAR;
-    } else if (rb_grn_equal_option(rb_type, "vector")) {
-	flags |= GRN_OBJ_COLUMN_VECTOR;
-    } else {
-	rb_raise(rb_eArgError,
-		 "invalid column type: %s: "
-		 "available types: [:index, :scalar, :vector, nil]",
-		 rb_grn_inspect(rb_type));
-    }
-
     if (NIL_P(rb_compress)) {
     } else if (rb_grn_equal_option(rb_compress, "zlib")) {
 	flags |= GRN_OBJ_COMPRESS_ZLIB;
@@ -399,38 +438,14 @@ rb_grn_table_define_column (int argc, VALUE *argv, VALUE self)
 		 rb_grn_inspect(rb_compress));
     }
 
-    if (RVAL2CBOOL(rb_with_section)) {
-	if (use_default_type)
-	    flags |= GRN_OBJ_COLUMN_INDEX;
-	if (flags & GRN_OBJ_COLUMN_INDEX)
-	    flags |= GRN_OBJ_WITH_SECTION;
-	else
-	    rb_raise(rb_eArgError,
-		     "{:with_section => true} requires "
-		     "{:type => :index} option.");
-    }
+    if (RVAL2CBOOL(rb_with_section))
+	flags |= GRN_OBJ_WITH_SECTION;
 
-    if (RVAL2CBOOL(rb_with_weight)) {
-	if (use_default_type)
-	    flags |= GRN_OBJ_COLUMN_INDEX;
-	if (flags & GRN_OBJ_COLUMN_INDEX)
-	    flags |= GRN_OBJ_WITH_WEIGHT;
-	else
-	    rb_raise(rb_eArgError,
-		     "{:with_weight => true} requires "
-		     "{:type => :index} option.");
-    }
+    if (RVAL2CBOOL(rb_with_weight))
+	flags |= GRN_OBJ_WITH_WEIGHT;
 
-    if (RVAL2CBOOL(rb_with_position)) {
-	if (use_default_type)
-	    flags |= GRN_OBJ_COLUMN_INDEX;
-	if (flags & GRN_OBJ_COLUMN_INDEX)
-	    flags |= GRN_OBJ_WITH_POSITION;
-	else
-	    rb_raise(rb_eArgError,
-		     "{:with_position => true} requires "
-		     "{:type => :index} option.");
-    }
+    if (RVAL2CBOOL(rb_with_position))
+	flags |= GRN_OBJ_WITH_POSITION;
 
     column = grn_column_create(context, table, name, name_size,
 			       path, flags, value_type);
@@ -870,6 +885,8 @@ rb_grn_init_table (VALUE mGrn)
 
     rb_define_method(rb_cGrnTable, "define_column",
 		     rb_grn_table_define_column, -1);
+    rb_define_method(rb_cGrnTable, "define_index_column",
+		     rb_grn_table_define_index_column, -1);
     rb_define_method(rb_cGrnTable, "add_column",
 		     rb_grn_table_add_column, 3);
     rb_define_method(rb_cGrnTable, "column",

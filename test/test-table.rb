@@ -112,12 +112,11 @@ class TableTest < Test::Unit::TestCase
     table_path = @tables_dir + "table"
     table = Groonga::Hash.create(:name => "bookmarks",
                                  :path => table_path.to_s)
-    column = table.define_column("name", "<text>",
-                                 :type => "index",
-                                 :compress => "zlib",
-                                 :with_section => true,
-                                 :with_weight => true,
-                                 :with_position => true)
+    column = table.define_index_column("name", "<text>",
+                                       :compress => "zlib",
+                                       :with_section => true,
+                                       :with_weight => true,
+                                       :with_position => true)
     assert_equal("bookmarks.name", column.name)
     assert_equal(column, table.column("name"))
   end
@@ -128,9 +127,8 @@ class TableTest < Test::Unit::TestCase
 
     description_column_path = @columns_dir + "description"
     bookmarks_description =
-      bookmarks.define_column("description", "<text>",
-                              :type => "index",
-                              :path => description_column_path.to_s)
+      bookmarks.define_index_column("description", "<text>",
+                                    :path => description_column_path.to_s)
 
     books = Groonga::Hash.create(:name => "books",
                                  :path => (@tables_dir + "books").to_s)
