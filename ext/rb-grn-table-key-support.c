@@ -344,27 +344,6 @@ rb_grn_table_key_support_array_set (VALUE self,
 }
 
 static VALUE
-rb_grn_table_key_support_get_encoding (VALUE self)
-{
-    grn_ctx *context;
-    grn_obj *table;
-    grn_encoding encoding = GRN_ENC_NONE;
-    grn_obj *value;
-
-    rb_grn_table_key_support_deconstruct(SELF(self), &table, &context,
-					 NULL, NULL, NULL,
-					 &value, NULL, NULL);
-
-    GRN_BULK_REWIND(value);
-    grn_bulk_reserve(context, value, sizeof(grn_encoding));
-    grn_obj_get_info(context, table, GRN_INFO_ENCODING, value);
-    rb_grn_context_check(context, self);
-    memcpy(&encoding, GRN_BULK_HEAD(value), sizeof(grn_encoding));
-
-    return GRNENCODING2RVAL(encoding);
-}
-
-static VALUE
 rb_grn_table_key_support_get_default_tokenizer (VALUE self)
 {
     grn_ctx *context;
