@@ -18,7 +18,7 @@
 
 #include "rb-grn.h"
 
-#define SELF(object) ((RbGrnObject *)DATA_PTR(object))
+#define SELF(object) (RB_GRN_OBJECT(DATA_PTR(object)))
 
 VALUE rb_mGrnEncodingSupport;
 
@@ -26,7 +26,7 @@ static VALUE
 rb_grn_encoding_support_get_encoding (VALUE self)
 {
     grn_ctx *context = NULL;
-    grn_obj *object;
+    grn_obj *object = NULL;
     grn_obj *encoding_value;
     grn_encoding encoding;
 

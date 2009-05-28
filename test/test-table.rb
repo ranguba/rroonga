@@ -270,14 +270,6 @@ class TableTest < Test::Unit::TestCase
     assert_not_predicate(bookmarks_path, :exist?)
   end
 
-  def test_tokenizer
-    table = Groonga::Hash.create
-    assert_nil(table.default_tokenizer)
-    table.default_tokenizer = "<token:mecab>"
-    assert_equal(Groonga::Context.default["<token:mecab>"],
-                 table.default_tokenizer)
-  end
-
   def test_temporary_add
     table = Groonga::Hash.create(:key_type => "<shorttext>")
     assert_equal(0, table.size)

@@ -118,4 +118,12 @@ class HashTest < Test::Unit::TestCase
     assert_equal(Groonga::Encoding.default,
                  Groonga::Hash.create.encoding)
   end
+
+  def test_tokenizer
+    hash = Groonga::Hash.create
+    assert_nil(hash.default_tokenizer)
+    hash.default_tokenizer = "<token:bigram>"
+    assert_equal(Groonga::Context.default["<token:bigram>"],
+                 hash.default_tokenizer)
+  end
 end

@@ -22,4 +22,12 @@ class PatriciaTrieTest < Test::Unit::TestCase
     assert_equal(Groonga::Encoding.default,
                  Groonga::PatriciaTrie.create.encoding)
   end
+
+  def test_tokenizer
+    trie = Groonga::PatriciaTrie.create
+    assert_nil(trie.default_tokenizer)
+    trie.default_tokenizer = "<token:trigram>"
+    assert_equal(Groonga::Context.default["<token:trigram>"],
+                 trie.default_tokenizer)
+  end
 end
