@@ -59,4 +59,28 @@ class DatabaseTest < Test::Unit::TestCase
 
     assert_not_predicate(Groonga::Database.new(db_path.to_s), :closed?)
   end
+
+  def test_each
+    db_path = @tmp_dir + "db"
+    database = Groonga::Database.create(:path => db_path.to_s)
+    assert_equal(["<float>",
+                  "<int64>",
+                  "<int>",
+                  "<longtext>",
+                  "<proc:disp>",
+                  "<proc:init>",
+                  "<proc:scan>",
+                  "<proc:search>",
+                  "<shorttext>",
+                  "<text>",
+                  "<time>",
+                  "<token:bigram>",
+                  "<token:delimit>",
+                  "<token:mecab>",
+                  "<token:trigram>",
+                  "<token:unigram>",
+                  "<uint64>",
+                  "<uint>"],
+                 database.collect {|object| object.name}.sort)
+  end
 end

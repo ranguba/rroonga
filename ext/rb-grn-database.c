@@ -18,7 +18,7 @@
 
 #include "rb-grn.h"
 
-#define SELF(object) (RVAL2GRNDB(object))
+#define SELF(object) ((RbGrnObject *)DATA_PTR(object))
 
 VALUE rb_cGrnDatabase;
 
@@ -66,7 +66,9 @@ rb_grn_database_s_create (int argc, VALUE *argv, VALUE klass)
 
     database = grn_db_create(context, path, &create_args);
     rb_grn_context_check(context, rb_ary_new4(argc, argv));
-    rb_database = GRNOBJECT2RVAL(klass, context, database, RB_GRN_TRUE);
+    rb_database = rb_grn_object_alloc(klass);
+    rb_grn_object_assign(rb_database, rb_context, context,
+			 database, RB_GRN_TRUE);
     rb_iv_set(rb_database, "context", rb_context);
     rb_grn_context_check(context, rb_ary_new4(argc, argv));
 
@@ -114,10 +116,36 @@ rb_grn_database_s_open (int argc, VALUE *argv, VALUE klass)
         return database;
 }
 
+static VALUE
+rb_grn_database_each (VALUE self)
+{
+    grn_ctx *context = NULL;
+    grn_obj *database;
+    grn_table_cursor *cursor;
+    grn_id id;
+
+    rb_grn_object_deconstruct((RbGrnObject *)SELF(self), &database, &context,
+			      NULL, NULL, NULL, NULL);
+    cursor = grn_table_cursor_open(context, database, NULL, 0, NULL, 0, 0);
+    rb_iv_set(self, "cursor", GRNTABLECURSOR2RVAL(Qnil, context, cursor));
+    while ((id = grn_table_cursor_next(context, cursor)) != GRN_ID_NIL) {
+	grn_obj *object;
+
+	object = grn_ctx_at(context, id);
+	if (object)
+	    rb_yield(GRNOBJECT2RVAL(Qnil, context, object, RB_GRN_FALSE));
+    }
+    grn_table_cursor_close(context, cursor);
+    rb_iv_set(self, "cursor", Qnil);
+
+    return Qnil;
+}
+
 void
 rb_grn_init_database (VALUE mGrn)
 {
     rb_cGrnDatabase = rb_define_class_under(mGrn, "Database", rb_cGrnObject);
+    rb_include_module(rb_cGrnDatabase, rb_mEnumerable);
 
     rb_define_singleton_method(rb_cGrnDatabase, "create",
 			       rb_grn_database_s_create, -1);
@@ -126,4 +154,7 @@ rb_grn_init_database (VALUE mGrn)
 
     rb_define_method(rb_cGrnDatabase, "initialize",
 		     rb_grn_database_initialize, -1);
+
+    rb_define_method(rb_cGrnDatabase, "each",
+		     rb_grn_database_each, 0);
 }
