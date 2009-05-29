@@ -85,10 +85,14 @@ rb_grn_object_unbind (RbGrnObject *rb_grn_object)
     if (rb_grn_object->owner && context && grn_object &&
 	rb_grn_context_alive_p(context)) {
 	const char *path;
+	grn_obj *db = NULL;
 
 	path = grn_obj_path(context, grn_object);
-	if (path == NULL || (path && grn_ctx_db(context))) {
-	    grn_obj_close(rb_grn_object->context, rb_grn_object->object);
+	db = grn_ctx_db(context);
+	if (path == NULL || (path && db)) {
+	    grn_obj_close(context, grn_object);
+	    if (grn_object == db)
+		/* FIXME: grn_ctx_use(context, NULL) */;
 	}
     }
 }
