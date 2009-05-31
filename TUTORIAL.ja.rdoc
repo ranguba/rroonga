@@ -174,7 +174,7 @@ N-gramを利用した全文検索では、分解したN文字とその出現位�
 まず、ユーザ情報とコメント情報を格納するテーブルを追加して、
 下図のようなテーブル構成にします。
 
-<img href="http://qwik.jp/senna/senna2.files/rect4605.png" />
+http://qwik.jp/senna/senna2.files/rect4605.png
 
 まず、<tt><users></tt>テーブルを追加します。
 
