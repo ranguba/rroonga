@@ -168,7 +168,24 @@ rb_grn_fix_size_column_array_set (VALUE self, VALUE rb_id, VALUE rb_value)
 		     rb_grn_inspect(rb_value));
 
 	rb_value = rb_id;
+    } else if (range) {
+	switch (range->header.type) {
+	  case GRN_TABLE_HASH_KEY:
+	  case GRN_TABLE_PAT_KEY:
+	    if (!RVAL2CBOOL(rb_obj_is_kind_of(rb_value, rb_cFixnum))) {
+		VALUE rb_range;
+		grn_id id;
+
+		rb_range = GRNOBJECT2RVAL(Qnil, context, range, RB_GRN_FALSE);
+		id = rb_grn_table_key_support_get(rb_range, rb_value);
+		rb_value = UINT2NUM(id);
+	    }
+	    break;
+	  default:
+	    break;
+	}
     }
+
     GRN_BULK_REWIND(value);
     RVAL2GRNBULK(rb_value, context, value);
 

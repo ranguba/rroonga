@@ -313,6 +313,8 @@ void           rb_grn_table_key_support_deconstruct (RbGrnTableKeySupport *rb_gr
 						     grn_obj **value,
 						     grn_id *range_id,
 						     grn_obj **range);
+grn_id         rb_grn_table_key_support_get         (VALUE self,
+						     VALUE rb_key);
 
 VALUE          rb_grn_fix_size_column_alloc         (VALUE klass);
 void           rb_grn_fix_size_column_bind          (RbGrnFixSizeColumn *rb_grn_fix_size_column,

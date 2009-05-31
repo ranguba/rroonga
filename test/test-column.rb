@@ -176,6 +176,16 @@ class ColumnTest < Test::Unit::TestCase
     assert_equal(@users, @users_name_column.table)
   end
 
+  def test_array_set_with_key_of_table
+    users = Groonga::Hash.create(:name => "<users>")
+    bookmarks = Groonga::Hash.create(:name => "<bookmarks>")
+    bookmarks.define_column("user", users)
+
+    users.add("morita")
+    groonga = bookmarks.add("http://groonga.org/", :user => "morita")
+    assert_equal("morita", groonga[:user].key)
+  end
+
   private
   def assert_content_search(expected_records, term)
     records = @bookmarks_index_content.search(term).records

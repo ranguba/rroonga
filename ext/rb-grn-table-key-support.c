@@ -215,7 +215,7 @@ rb_grn_table_key_support_delete (VALUE self, VALUE rb_id_or_key)
     }
 }
 
-static grn_id
+grn_id
 rb_grn_table_key_support_get (VALUE self, VALUE rb_key)
 {
     grn_ctx *context;
