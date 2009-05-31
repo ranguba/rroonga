@@ -45,4 +45,23 @@ class ArrayTest < Test::Unit::TestCase
     me = users.add(:name => "me")
     assert_equal("me", me[:name])
   end
+
+  def test_define_index_column
+    users = Groonga::Array.create(:name => "<users>")
+    users.define_column("name", "<text>")
+    bookmarks = Groonga::Array.create(:name => "<bookmarks>")
+    bookmarks.define_column("title", "<text>")
+    bookmarks.define_column("user", users)
+
+    index = users.define_index_column("bookmarks", bookmarks,
+                                      :source => "<bookmarks>.user")
+    morita = users.add(:name => "morita")
+    gunyara_kun = users.add(:name => "gunyara-kun")
+    groonga = bookmarks.add(:title => "groonga", :user => morita)
+    google = bookmarks.add(:title => "google", :user => morita)
+    python = bookmarks.add(:title => "Python", :user => gunyara_kun)
+
+    assert_equal(["groonga", "google"],
+                 index.search(morita.id).collect {|record| record.key["title"]})
+  end
 end
