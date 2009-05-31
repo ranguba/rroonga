@@ -32,6 +32,8 @@ rb_grn_index_column_unbind (RbGrnIndexColumn *rb_grn_index_column)
     context = rb_grn_object->context;
 
     if (context && rb_grn_context_alive_p(context)) {
+	grn_obj_close(context, rb_grn_index_column->id_query);
+	grn_obj_close(context, rb_grn_index_column->string_query);
 	grn_obj_close(context, rb_grn_index_column->value);
 	grn_obj_close(context, rb_grn_index_column->old_value);
     }
@@ -68,6 +70,12 @@ rb_grn_index_column_bind (RbGrnIndexColumn *rb_grn_index_column,
 					      rb_grn_object->range_id);
     rb_grn_index_column->old_value = grn_obj_open(context, GRN_BULK, 0,
 						  rb_grn_object->range_id);
+
+    rb_grn_index_column->id_query = grn_obj_open(context, GRN_BULK, 0,
+						 rb_grn_object->domain_id);
+    rb_grn_index_column->string_query = grn_obj_open(context, GRN_BULK,
+						     GRN_OBJ_DO_SHALLOW_COPY,
+						     GRN_ID_NIL);
 }
 
 void
@@ -93,7 +101,9 @@ rb_grn_index_column_deconstruct (RbGrnIndexColumn *rb_grn_index_column,
 				 grn_obj **value,
 				 grn_obj **old_value,
 				 grn_id *range_id,
-				 grn_obj **range)
+				 grn_obj **range,
+				 grn_obj **id_query,
+				 grn_obj **string_query)
 {
     RbGrnObject *rb_grn_object;
 
@@ -106,6 +116,10 @@ rb_grn_index_column_deconstruct (RbGrnIndexColumn *rb_grn_index_column,
 	*value = rb_grn_index_column->value;
     if (old_value)
 	*old_value = rb_grn_index_column->old_value;
+    if (id_query)
+	*id_query = rb_grn_index_column->id_query;
+    if (string_query)
+	*string_query = rb_grn_index_column->string_query;
 }
 
 static VALUE
@@ -124,6 +138,7 @@ rb_grn_index_column_array_set (VALUE self, VALUE rb_id, VALUE rb_value)
     rb_grn_index_column_deconstruct(SELF(self), &column, &context,
 				    NULL, NULL,
 				    &new_value, &old_value,
+				    NULL, NULL,
 				    NULL, NULL);
 
     id = NUM2UINT(rb_id);
@@ -180,7 +195,8 @@ rb_grn_index_column_get_sources (VALUE self)
 
     rb_grn_index_column_deconstruct(SELF(self), &column, &context,
 				    NULL, NULL,
-				    NULL, NULL, NULL, NULL);
+				    NULL, NULL, NULL, NULL,
+				    NULL, NULL);
 
     GRN_OBJ_INIT(&sources, GRN_BULK, 0, GRN_ID_NIL);
     grn_obj_get_info(context, column, GRN_INFO_SOURCE, &sources);
@@ -216,7 +232,8 @@ rb_grn_index_column_set_sources (VALUE self, VALUE rb_sources)
 
     rb_grn_index_column_deconstruct(SELF(self), &column, &context,
 				    NULL, NULL,
-				    NULL, NULL, NULL, NULL);
+				    NULL, NULL, NULL, NULL,
+				    NULL, NULL);
 
     n = RARRAY_LEN(rb_sources);
     rb_source_values = RARRAY_PTR(rb_sources);
@@ -262,6 +279,98 @@ rb_grn_index_column_set_source (VALUE self, VALUE rb_source)
     return rb_grn_index_column_set_sources(self, rb_source);
 }
 
+/*
+ * Document-method: search
+ *
+ * call-seq:
+ *   column.search(query, options={}) -> Groonga::Hash
+ *
+ * _object_から_query_に対応するオブジェクトを検索し、見つかっ
+ * たオブジェクトのIDがキーになっているGroonga::Hashを返す。
+ *
+ * 利用可能なオプションは以下の通り。
+ *
+ * [_:result_]
+ *   結果を格納するGroonga::Hash。指定しない場合は新しく
+ *   Groonga::Hashを生成し、それに結果を格納して返す。
+ * [_:operator_]
+ *   以下のどれかの値を指定する。+nil+, <tt>"or"</tt>, <tt>"||"</tt>,
+ *   <tt>"and"</tt>, <tt>"+"</tt>, <tt>"&&"</tt>, <tt>"but"</tt>,
+ *   <tt>"not"</tt>, <tt>"-"</tt>, <tt>"adjust"</tt>, <tt>">"</tt>。
+ *   それぞれ以下のようになる。（FIXME: 「以下」）
+ * [_:exact_]
+ *   +true+を指定すると完全一致で検索する
+ * [_:longest_common_prefix_]
+ *   +true+を指定すると_query_と同じ接頭辞をもつエントリのう
+ *   ち、もっとも長いエントリを検索する
+ * [_:suffix_]
+ *   +true+を指定すると_query_が後方一致するエントリを検索す
+ *   る
+ * [_:prefix_]
+ *   +true+を指定すると_query_が前方一致するレコードを検索す
+ *   る
+ * [_:near_]
+ *   +true+を指定すると_query_に指定した複数の語が近傍に含ま
+ *   れるレコードを検索する
+ * [...]
+ *   ...
+ */
+static VALUE
+rb_grn_index_column_search (int argc, VALUE *argv, VALUE self)
+{
+    grn_ctx *context;
+    grn_obj *column;
+    grn_obj *range;
+    grn_obj *query = NULL, *id_query = NULL, *string_query = NULL;
+    grn_obj *result;
+    grn_sel_operator operator;
+    grn_rc rc;
+    VALUE rb_query, options, rb_result, rb_operator;
+
+    rb_grn_index_column_deconstruct(SELF(self), &column, &context,
+				    NULL, NULL,
+				    NULL, NULL, NULL, &range,
+				    &id_query, &string_query);
+
+    rb_scan_args(argc, argv, "11", &rb_query, &options);
+
+    if (CBOOL2RVAL(rb_obj_is_kind_of(rb_query, rb_cGrnQuery))) {
+	grn_query *_query;
+	_query = RVAL2GRNQUERY(rb_query);
+	query = (grn_obj *)_query;
+    } else if (CBOOL2RVAL(rb_obj_is_kind_of(rb_query, rb_cInteger))) {
+	GRN_TEXT_SET(context, id_query, NUM2UINT(rb_query), sizeof(grn_id));
+	query = id_query;
+    } else {
+	const char *_query;
+	_query = StringValuePtr(rb_query);
+	GRN_TEXT_SET(context, string_query, _query, RSTRING_LEN(rb_query));
+	query = string_query;
+    }
+
+    rb_grn_scan_options(options,
+			"result", &rb_result,
+			"operator", &rb_operator,
+			NULL);
+
+    if (NIL_P(rb_result)) {
+	result = grn_table_create(context, NULL, 0, NULL,
+				  GRN_OBJ_TABLE_HASH_KEY | GRN_OBJ_WITH_SUBREC,
+				  range, 0);
+	rb_grn_context_check(context, self);
+	rb_result = GRNOBJECT2RVAL(Qnil, context, result, RB_GRN_TRUE);
+    } else {
+	result = RVAL2GRNOBJECT(rb_result, &context);
+    }
+
+    operator = RVAL2GRNSELECTOPERATOR(rb_operator);
+
+    rc = grn_obj_search(context, column, query, result, operator, NULL);
+    rb_grn_rc_check(rc, self);
+
+    return rb_result;
+}
+
 void
 rb_grn_init_index_column (VALUE mGrn)
 {
@@ -278,6 +387,9 @@ rb_grn_init_index_column (VALUE mGrn)
 		     rb_grn_index_column_set_sources, 1);
     rb_define_method(rb_cGrnIndexColumn, "source=",
 		     rb_grn_index_column_set_source, 1);
+
+    rb_define_method(rb_cGrnIndexColumn, "search",
+		     rb_grn_index_column_search, -1);
 
     rb_grn_init_fix_size_column(mGrn);
 }

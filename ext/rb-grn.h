@@ -123,6 +123,8 @@ struct _RbGrnIndexColumn
     RbGrnObject parent;
     grn_obj *value;
     grn_obj *old_value;
+    grn_obj *id_query;
+    grn_obj *string_query;
 };
 
 RB_GRN_VAR VALUE rb_eGrnError;
@@ -326,7 +328,9 @@ void           rb_grn_index_column_deconstruct      (RbGrnIndexColumn *rb_grn_in
 						     grn_obj **value,
 						     grn_obj **old_value,
 						     grn_id *range_id,
-						     grn_obj **range);
+						     grn_obj **range,
+						     grn_obj **id_query,
+						     grn_obj **string_query);
 
 VALUE          rb_grn_record_new                    (VALUE table,
 						     grn_id id);
