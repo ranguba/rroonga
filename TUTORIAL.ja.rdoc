@@ -83,7 +83,7 @@ items>テーブルにレコードを追加します。
 
 主キーを指定してレコードを取り出す時には以下のようにします。
 
-  >> items["http://ja.wikipedia.org/wiki/Ruby"]
+  >> items.find("http://ja.wikipedia.org/wiki/Ruby")
   => #<Groonga::Record:0x7f0ece699ab8 @table=#<Groonga::Hash id: <18>, name: <<items>>, path: </tmp/bookmark.db.0000012>, domain: <nil>, range: <nil>, encoding: <:utf8>, size: <2>>, @id=1>
 
 == 全文検索を行う
@@ -109,12 +109,28 @@ items>テーブルにレコードを追加します。
                                   :persistent => true)
   => #<Groonga::Hash id: <21>, name: <<terms>>, path: </tmp/bookmark.db.0000015>, domain: <#<Groonga::Type id: <6>, name: <<shorttext>>, path: (temporary), domain: <nil>, range: <4096>>>, range: <nil>, encoding: <:utf8>, size: <0>>
 
-<tt><items></tt>テーブルの+title+カラムに対するインデックスを定義し
-ます。
+文字列を単語に分解するオブジェクトのことを「トークナイザ」と
+呼びます。デフォルトではトークナイザは指定されていません。全
+文検索を利用するためにはトークナイザを指定する必要があるので、
+ここでは、N-gramを利用することにします。
 
-  >> title_index_column = terms.define_column("item_title", items,
-                                              :type => "index",
-                                              :with_position => true)
+N-gramのNは文字列を何文字毎に分解するかの文字数になります。
+N-gramを利用した全文検索では、分解したN文字とその出現位置を利
+用して全文検索を行います。groongaは1文字で分解するユニグラム、
+2文字のバイグラム、3文字のトリグラムをサポートしています。こ
+こでは、バイグラムを利用すことにします。
+
+  >> terms.default_tokenizer = "<token:bigram>"
+
+単語格納用テーブルの準備ができたので、<tt><items></tt>テーブ
+ルの+title+カラムに対するインデックスを定義します。今回のよう
+にN-gramを利用する場合は<tt>:with_position => true</tt>を指定
+することを忘れないでください。これを忘れるとN文字でしか検索で
+きなくなります。（例えば、バイグラムなら「にく」など2文字のの
+検索語しかヒットしなくなる）
+
+  >> title_index_column = terms.define_index_column("item_title", items,
+                                                    :with_position => true)
   => #<Groonga::IndexColumn id: <22>, name: <<terms>.item_title>, path: (temporary), domain: <#<Groonga::Hash id: <21>, name: <<terms>>, path: </tmp/bookmark.db.0000015>, domain: <#<Groonga::Type id: <6>, name: <<shorttext>>, path: (temporary), domain: <nil>, range: <4096>>>, range: <nil>, encoding: <:utf8>, size: <0>>>, range: <#<Groonga::Hash id: <18>, name: <<items>>, path: </tmp/bookmark.db.0000012>, domain: <nil>, range: <nil>, encoding: <:utf8>, size: <2>>>>
 
 インデックス用カラムに、検索対象の<tt><items></tt>テーブルの+title+
@@ -123,25 +139,27 @@ items>テーブルにレコードを追加します。
   >> title_index_column.source = title_column
   => #<Groonga::VarSizeColumn id: <19>, name: <<items>.title>, path: (temporary), domain: <#<Groonga::Hash id: <18>, name: <<items>>, path: </tmp/bookmark.db.0000012>, domain: <nil>, range: <nil>, encoding: <:utf8>, size: <2>>>, range: <#<Groonga::Type id: <7>, name: <<text>>, path: (temporary), domain: <nil>, range: <65536>>>>
 
-少し違和感を感じるかも知れませんが、<tt><items></tt>テーブルのカラムに
-対するインデックスは、 <tt><terms></tt>テーブルのカラムとして定義しま
-す。
+少し違和感を感じるかも知れませんが、<tt><items></tt>テーブル
+のカラムに対するインデックスは、<tt><terms></tt>テーブルのカ
+ラムとして定義します。
 
-<tt><items></tt>にレコードが登録されると、その中に含まれる単語に該当
-するレコードが<tt><terms></tt>に自動的に追加されるようになります。
+<tt><items></tt>にレコードが登録されると、その中に含まれる単
+語に該当するレコードが<tt><terms></tt>に自動的に追加されるよ
+うになります。
 
-<tt><terms></tt>は、文書に含まれる語彙に相当する、やや特殊なテーブル
-だと言えます。しかし、他のテーブルと同様に語彙テーブルには自
-由にカラムを追加し、単語毎の様々な属性を管理することができま
-す。これはある種の検索処理を行う際には非常に便利に機能します。
+<tt><terms></tt>は、文書に含まれる語彙に相当する、やや特殊な
+テーブルだと言えます。しかし、他のテーブルと同様に語彙テーブ
+ルには自由にカラムを追加し、単語毎の様々な属性を管理すること
+ができます。これはある種の検索処理を行う際には非常に便利に機
+能します。
 
 これでテーブルの定義は完了です。
 
 先ほど登録した各レコードの+title+カラムに値をセットします。
 
-  >> items["http://ja.wikipedia.org/wiki/Ruby"]["title"] = "Ruby"
+  >> items.find("http://ja.wikipedia.org/wiki/Ruby")["title"] = "Ruby"
   => "Ruby"
-  >> items["http://www.ruby-lang.org/"]["title"] = "オブジェクトスクリプト言語Ruby"
+  >> items.find("http://www.ruby-lang.org/")["title"] = "オブジェクトスクリプト言語Ruby"
   "オブジェクトスクリプト言語Ruby"
 
 以下のようにして検索することができます。
