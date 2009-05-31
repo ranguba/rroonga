@@ -72,9 +72,9 @@ groongaには以下の3種類のテーブルがあります。
 items>テーブルにレコードを追加します。
 
   >> items.add("http://ja.wikipedia.org/wiki/Ruby")
-  => #<Groonga::Record:0x7f0ece6aeaf8 @table=#<Groonga::Hash id: <18>, name: <<items>>, path: </tmp/bookmark.db.0000012>, domain: <nil>, range: <nil>, encoding: <:utf8>, size: <1>>, @id=1>
+  => #<Groonga::Record ...>
   >> items.add("http://www.ruby-lang.org/")
-  => #<Groonga::Record:0x7f0ece6a9fa8 @table=#<Groonga::Hash id: <18>, name: <<items>>, path: </tmp/bookmark.db.0000012>, domain: <nil>, range: <nil>, encoding: <:utf8>, size: <2>>, @id=2>
+  => #<Groonga::Record ...>
 
 件数を確認すると確かに2件増えています。
 
@@ -84,7 +84,7 @@ items>テーブルにレコードを追加します。
 主キーを指定してレコードを取り出す時には以下のようにします。
 
   >> items.find("http://ja.wikipedia.org/wiki/Ruby")
-  => #<Groonga::Record:0x7f0ece699ab8 @table=#<Groonga::Hash id: <18>, name: <<items>>, path: </tmp/bookmark.db.0000012>, domain: <nil>, range: <nil>, encoding: <:utf8>, size: <2>>, @id=1>
+  => #<Groonga::Record ...>
 
 == 全文検索を行う
 
@@ -93,8 +93,8 @@ items>テーブルにレコードを追加します。
 
 まず<tt><items></tt>テーブルに+title+という名前のカラムを追加します。
 
-  >> title_colum = items.define_column("title", "<text>")
-  => #<Groonga::VarSizeColumn id: <19>, name: <<items>.title>, path: (temporary), domain: <#<Groonga::Hash id: <18>, name: <<items>>, path: </tmp/bookmark.db.0000012>, domain: <nil>, range: <nil>, encoding: <:utf8>, size: <2>>>, range: <#<Groonga::Type id: <7>, name: <<text>>, path: (temporary), domain: <nil>, range: <65536>>>>
+  >> title_colum = items.define_column("title", "<text>", :persistent => true)
+  => #<Groonga::VarSizeColumn ...>
 
 2番目の引数は、追加するカラムのデータ型を示しています。
 <tt><int></tt>、<tt><text></tt>、<tt><longtext></tt>等の型が基本型として用意されて
@@ -106,38 +106,29 @@ items>テーブルにレコードを追加します。
 
   >> terms = Groonga::Hash.create(:name => "<terms>",
                                   :key_type => "<shorttext>",
-                                  :persistent => true)
-  => #<Groonga::Hash id: <21>, name: <<terms>>, path: </tmp/bookmark.db.0000015>, domain: <#<Groonga::Type id: <6>, name: <<shorttext>>, path: (temporary), domain: <nil>, range: <4096>>>, range: <nil>, encoding: <:utf8>, size: <0>>
+                                  :persistent => true,
+                                  :default_tokenizer => "<token:bigram>")
+  => #<Groonga::Hash ...>
 
-文字列を単語に分解するオブジェクトのことを「トークナイザ」と
-呼びます。デフォルトではトークナイザは指定されていません。全
-文検索を利用するためにはトークナイザを指定する必要があるので、
-ここでは、N-gramを利用することにします。
+ここでは、トークナイザとして<tt>:default_tokenzier =>
+"<token:bigram>"</tt> を指定しています。トークナイザとは文字
+列を単語に分解するオブジェクトのことです。デフォルトではトー
+クナイザは指定されていません。全文検索を利用するためにはトー
+クナイザを指定する必要があるので、ここではN-gramの一種である
+バイグラムを指定しています。
 
-N-gramのNは文字列を何文字毎に分解するかの文字数になります。
 N-gramを利用した全文検索では、分解したN文字とその出現位置を利
-用して全文検索を行います。groongaは1文字で分解するユニグラム、
-2文字のバイグラム、3文字のトリグラムをサポートしています。こ
-こでは、バイグラムを利用すことにします。
-
-  >> terms.default_tokenizer = "<token:bigram>"
+用して全文検索を行います。N-gramのNは文字列を何文字毎に分解す
+るかの文字数になります。groongaは1文字で分解するユニグラム、
+2文字のバイグラム、3文字のトリグラムをサポートしています。
 
 単語格納用テーブルの準備ができたので、<tt><items></tt>テーブ
-ルの+title+カラムに対するインデックスを定義します。今回のよう
-にN-gramを利用する場合は<tt>:with_position => true</tt>を指定
-することを忘れないでください。これを忘れるとN文字でしか検索で
-きなくなります。（例えば、バイグラムなら「にく」など2文字のの
-検索語しかヒットしなくなる）
+ルの+title+カラムに対するインデックスを定義します。
 
-  >> title_index_column = terms.define_index_column("item_title", items,
-                                                    :with_position => true)
-  => #<Groonga::IndexColumn id: <22>, name: <<terms>.item_title>, path: (temporary), domain: <#<Groonga::Hash id: <21>, name: <<terms>>, path: </tmp/bookmark.db.0000015>, domain: <#<Groonga::Type id: <6>, name: <<shorttext>>, path: (temporary), domain: <nil>, range: <4096>>>, range: <nil>, encoding: <:utf8>, size: <0>>>, range: <#<Groonga::Hash id: <18>, name: <<items>>, path: </tmp/bookmark.db.0000012>, domain: <nil>, range: <nil>, encoding: <:utf8>, size: <2>>>>
-
-インデックス用カラムに、検索対象の<tt><items></tt>テーブルの+title+
-カラムを設定します。
-
-  >> title_index_column.source = title_column
-  => #<Groonga::VarSizeColumn id: <19>, name: <<items>.title>, path: (temporary), domain: <#<Groonga::Hash id: <18>, name: <<items>>, path: </tmp/bookmark.db.0000012>, domain: <nil>, range: <nil>, encoding: <:utf8>, size: <2>>>, range: <#<Groonga::Type id: <7>, name: <<text>>, path: (temporary), domain: <nil>, range: <65536>>>>
+  >> terms.define_index_column("item_title", items,
+                               :persistent => true,
+                               :source => "<items>.title")
+  => #<Groonga::IndexColumn ...>
 
 少し違和感を感じるかも知れませんが、<tt><items></tt>テーブル
 のカラムに対するインデックスは、<tt><terms></tt>テーブルのカ
@@ -175,5 +166,119 @@ N-gramを利用した全文検索では、分解したN文字とその出現位�
 
 
 == マルチユーザ向けのブックマークアプリケーション
+
+ここまでで作った単機能のアプリケーションをもう少し拡張して、
+複数のユーザが、それぞれにコメントを記入できるブックマークア
+プリケーションにしてみましょう。
+
+まず、ユーザ情報とコメント情報を格納するテーブルを追加して、
+下図のようなテーブル構成にします。
+
+<img href="http://qwik.jp/senna/senna2.files/rect4605.png" />
+
+まず、<tt><users></tt>テーブルを追加します。
+
+  >> users = Groonga::Hash.create(:name => "<users>",
+                                  :key_type => "<shorttext>")
+  => #<Groonga::Hash ...>
+  >> users.define_column("name", "<text>")
+  => #<Groonga::VarSizeColumn ...>
+
+
+次に、<tt><comments></tt>テーブルを追加します。
+
+  >> comments = Groonga::Hash.create(:name => "<comments>",
+                                     :key_type => "<shorttext>")
+  => #<Groonga::Hash ...>
+  >> comments.define_column("item", items)
+  => #<Groonga::FixSizeColumn ..>
+  >> comments.define_column("author", users)
+  => #<Groonga::FixSizeColumn ..>
+  >> comments.define_column("content", "<text>")
+  => #<Groonga::VarSizeColumn ..>
+  >> comments.define_column("issued", "<time>")
+  => #<Groonga::FixSizeColumn ..>
+
+<tt><comments></tt>テーブルの+content+カラムを全文検索できる
+ようにインデックスを定義します。
+
+  >> terms.define_index_column("comment_content", comments,
+                               :source => "<comments>.content")
+  => #<Groonga::IndexColumn ...>
+
+これでテーブルが定義できました。
+
+続いてユーザを何人か追加します。
+
+  >> users.add("moritan", :name => "モリタン")
+  => #<Groonga::Record ...>
+  >> users.add("taporobo", :name => "タポロボ")
+  => #<Groonga::Record ...>
+
+次に、実際にユーザがブックマークを貼る時の処理を実行してみま
+しょう。
+
+ユーザ+moritan+が、はてなダイアリーのとあるページをブックマーク
+したと想定します。
+
+まず対象のページが<tt><items></tt>テーブルに登録済かどうか調
+べます。
+
+  >> items.find("http://d.hatena.ne.jp/brazil/20050829/1125321936")
+  => nil
+
+未登録なのでまず当該ページを<tt><items></tt>に登録します。
+
+  >> items.add("http://d.hatena.ne.jp/brazil/20050829/1125321936",
+               :title => "[翻訳]JavaScript: 世界で最も誤解されたプログラミング言語")
+  => #<Groonga::Record ...>
+
+次に、登録したitemを+item+カラムの値に指定して
+<tt><comments></tt>にレコードを登録します。
+
+  >> comments.add(:item => "http://d.hatena.ne.jp/brazil/20050829/1125321936",
+                  :author => "moritan",
+                  :content => "JavaScript LISP",
+                  :issued => 1187430026)
+  => #<Groonga::Record ...>
+
+== メソッド化
+
+上記の一連の手続きをメソッドにまとめてみます。
+
+  >> @items = items
+  >> @comments = comments
+  >> def add_bookmark(url, title, author, content, issued)
+  >>  item = @items.find(url) || @items.add(url, :title => title)
+  >>  @comments.add(:item => item,
+  >>                :author => author,
+  >>                :content => content,
+  >>                :issued => issued)
+  >> end
+
++itmes+と+comments+をインスタンス変数に代入しているのはメソッ
+ド内からでも見えるようにするためです。
+
++add_bookmark+は以下のような手順を実行しています。
+
+  * <tt><items></tt>テーブルに該当ページのレコードがあるかどうか調べる。
+  * レコードがなければ追加する。
+  * <tt><comments></tt>テーブルにレコードを登録する。
+
+作成したメソッドを呼び出していくつかブックマークを登録してみ
+ましょう。
+
+  >> add_bookmark("http://practical-scheme.net/docs/cont-j.html",
+                  "なんでも継続", "moritan", "継続 LISP Scheme", 1187568692)
+  => #<Groonga::Record ...>
+  >> add_bookmark("http://d.hatena.ne.jp/higepon/20070815/1187192864",
+                  "末尾再帰", "taporobo", "末尾再帰 Scheme LISP", 1187568793)
+  => #<Groonga::Record ...>
+  >> add_bookmark("http://practical-scheme.net/docs/cont-j.html",
+                  "なんでも継続", "taporobo", "トランポリン LISP continuation",
+                  1187568692)
+  => #<Groonga::Record ...>
+
+== 全文検索その2
 
 つづく。。。
