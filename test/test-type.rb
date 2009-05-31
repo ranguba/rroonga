@@ -27,6 +27,7 @@ class TypeTest < Test::Unit::TestCase
     assert_equal_type("<int>", Groonga::Type::INT32)
     assert_equal_type("<uint>", Groonga::Type::UINT32)
     assert_equal_type("<int64>", Groonga::Type::INT64)
+    assert_equal_type("<uint64>", Groonga::Type::UINT64)
     assert_equal_type("<float>", Groonga::Type::FLOAT)
     assert_equal_type("<time>", Groonga::Type::TIME)
     assert_equal_type("<shorttext>", Groonga::Type::SHORT_TEXT)
