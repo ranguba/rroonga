@@ -284,6 +284,8 @@ rb_grn_table_inspect_content (VALUE self, VALUE inspected)
 
     if (!table)
 	return inspected;
+    if (!context)
+	return inspected;
 
     if (table->header.type != GRN_TABLE_NO_KEY) {
 	grn_obj value;
