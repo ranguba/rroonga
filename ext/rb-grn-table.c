@@ -450,6 +450,22 @@ rb_grn_table_define_index_column (int argc, VALUE *argv, VALUE self)
     if (RVAL2CBOOL(rb_with_weight))
 	flags |= GRN_OBJ_WITH_WEIGHT;
 
+    if (NIL_P(rb_with_position) &&
+	(table->header.type == GRN_TABLE_HASH_KEY ||
+	 table->header.type == GRN_TABLE_PAT_KEY)) {
+	grn_id tokenizer_id;
+	grn_obj *tokenizer;
+
+	tokenizer = grn_obj_get_info(context, table,
+				     GRN_INFO_DEFAULT_TOKENIZER,
+				     NULL);
+	tokenizer_id = grn_obj_id(context, tokenizer);
+	if ((tokenizer_id == GRN_DB_UNIGRAM) ||
+	    (tokenizer_id == GRN_DB_BIGRAM) ||
+	    (tokenizer_id == GRN_DB_TRIGRAM)) {
+	    rb_with_position = Qtrue;
+	}
+    }
     if (RVAL2CBOOL(rb_with_position))
 	flags |= GRN_OBJ_WITH_POSITION;
 
