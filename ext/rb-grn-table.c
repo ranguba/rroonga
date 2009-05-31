@@ -724,7 +724,7 @@ rb_grn_table_each (VALUE self)
     return Qnil;
 }
 
-static VALUE
+VALUE
 rb_grn_table_delete (VALUE self, VALUE rb_id)
 {
     grn_ctx *context = NULL;
@@ -849,7 +849,7 @@ rb_grn_table_array_reference (VALUE self, VALUE rb_id)
  * _table_の_id_に対応する値を設定する。既存の値は上書きさ
  * れる。
  */
-static VALUE
+VALUE
 rb_grn_table_array_set (VALUE self, VALUE rb_id, VALUE rb_value)
 {
     grn_id id;

@@ -280,6 +280,15 @@ VALUE          rb_grn_table_s_create                (int argc,
 						     VALUE *argv,
 						     VALUE klass,
 						     grn_obj_flags key_store);
+
+VALUE          rb_grn_table_delete                  (VALUE self,
+						     VALUE rb_id);
+VALUE          rb_grn_table_array_reference         (VALUE self,
+						     VALUE rb_id);
+VALUE          rb_grn_table_array_set               (VALUE self,
+						     VALUE rb_id,
+						     VALUE rb_value);
+
 grn_ctx       *rb_grn_table_cursor_ensure_context   (VALUE cursor,
 						     VALUE *rb_context);
 VALUE          rb_grn_table_cursor_close            (VALUE object);

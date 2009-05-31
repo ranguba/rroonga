@@ -207,10 +207,7 @@ static VALUE
 rb_grn_table_key_support_delete (VALUE self, VALUE rb_id_or_key)
 {
     if (FIXNUM_P(rb_id_or_key)) {
-	int argc = 1;
-	VALUE argv[1];
-	argv[0] = rb_id_or_key;
-	return rb_call_super(argc, argv);
+	return rb_grn_table_delete(self, rb_id_or_key);
     } else {
 	return rb_grn_table_key_support_delete_by_key(self, rb_id_or_key);
     }
@@ -278,10 +275,7 @@ static VALUE
 rb_grn_table_key_support_array_reference (VALUE self, VALUE rb_id_or_key)
 {
     if (FIXNUM_P(rb_id_or_key)) {
-	int argc = 1;
-	VALUE argv[1];
-	argv[0] = rb_id_or_key;
-	return rb_call_super(argc, argv);
+	return rb_grn_table_array_reference(self, rb_id_or_key);
     } else {
 	return rb_grn_table_key_support_array_reference_by_key(self,
 							       rb_id_or_key);
@@ -327,11 +321,7 @@ rb_grn_table_key_support_array_set (VALUE self,
 				    VALUE rb_id_or_key, VALUE rb_value)
 {
     if (FIXNUM_P(rb_id_or_key)) {
-	int argc = 2;
-	VALUE argv[2];
-	argv[0] = rb_id_or_key;
-	argv[1] = rb_value;
-	return rb_call_super(argc, argv);
+	return rb_grn_table_array_set(self, rb_id_or_key, rb_value);
     } else {
 	return rb_grn_table_key_support_array_set_by_key(self,
 							 rb_id_or_key,
