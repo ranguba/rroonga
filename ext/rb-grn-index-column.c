@@ -393,6 +393,4 @@ rb_grn_init_index_column (VALUE mGrn)
 
     rb_define_method(rb_cGrnIndexColumn, "search",
 		     rb_grn_index_column_search, -1);
-
-    rb_grn_init_fix_size_column(mGrn);
 }
