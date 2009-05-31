@@ -167,7 +167,7 @@ rb_grn_init_patricia_trie (VALUE mGrn)
 {
     rb_cGrnPatriciaTrie =
 	rb_define_class_under(mGrn, "PatriciaTrie", rb_cGrnTable);
-    rb_define_alloc_func(rb_cGrnHash, rb_grn_table_key_support_alloc);
+    rb_define_alloc_func(rb_cGrnPatriciaTrie, rb_grn_table_key_support_alloc);
 
     rb_include_module(rb_cGrnPatriciaTrie, rb_mGrnTableKeySupport);
     rb_define_singleton_method(rb_cGrnPatriciaTrie, "create",
