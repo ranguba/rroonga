@@ -20,7 +20,7 @@ groongaに関する情報は以下を参照して下さい。
 
 == 作者
 
-Kouhei Sutou <kou@clear-code.com>
+Kouhei Sutou: <tt><kou@clear-code.com></tt>
 
 == ライセンス
 
@@ -32,7 +32,7 @@ pkg-config.rbはrcairoに付属しているもので、これはRubyライセ
 == 依存ソフトウェア
 
 * Ruby >= 1.8 （1.9.1対応）
-* groonga >= 0.0.4
+* groonga >= 0.0.8
 
 == インストール
 

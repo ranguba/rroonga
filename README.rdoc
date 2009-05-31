@@ -20,7 +20,7 @@ See the following URL about groonga.
 
 == Author
 
-Kouhei Sutou <kou@clear-code.com>
+Kouhei Sutou: <tt><kou@clear-code.com></tt>
 
 == License
 
@@ -33,7 +33,7 @@ license/GPL for details.
 == Dependencies
 
 * Ruby >= 1.8 (including 1.9.1)
-* groonga >= 0.0.4
+* groonga >= 0.0.8
 
 == Install
 
