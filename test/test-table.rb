@@ -277,27 +277,6 @@ class TableTest < Test::Unit::TestCase
     assert_equal(1, table.size)
   end
 
-  def test_search
-    users = Groonga::Array.create(:name => "<users>")
-    user_name = users.define_column("name", "<shorttext>")
-
-    bookmarks = Groonga::Hash.create(:name => "<bookmarks>",
-                                     :key_type => "<shorttext>")
-    bookmark_user_id = bookmarks.define_column("user_id", users)
-
-    daijiro = users.add
-    daijiro["name"] = "daijiro"
-    gunyarakun = users.add
-    gunyarakun["name"] = "gunyarakun"
-
-    groonga = bookmarks.add("http://groonga.org/")
-    groonga["user_id"] = daijiro
-
-    records = bookmarks.search("http://groonga.org/")
-    assert_equal(["daijiro"],
-                 records.records.collect {|record| record[".user_id.name"]})
-  end
-
   def test_each
     users = Groonga::Array.create(:name => "<users>")
     user_name = users.define_column("name", "<shorttext>")

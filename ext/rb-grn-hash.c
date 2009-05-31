@@ -18,6 +18,8 @@
 
 #include "rb-grn.h"
 
+#define SELF(object) ((RbGrnTableKeySupport *)DATA_PTR(object))
+
 VALUE rb_cGrnHash;
 
 static VALUE
@@ -80,6 +82,45 @@ rb_grn_hash_s_create (int argc, VALUE *argv, VALUE self)
         return rb_table;
 }
 
+static VALUE
+rb_grn_hash_search (int argc, VALUE *argv, VALUE self)
+{
+    grn_rc rc;
+    grn_ctx *context;
+    grn_obj *table;
+    grn_id domain_id;
+    grn_obj *key, *domain, *result;
+    VALUE rb_key, options, rb_result;
+
+    rb_grn_table_key_support_deconstruct(SELF(self), &table, &context,
+					 &key, &domain_id, &domain,
+					 NULL, NULL, NULL);
+
+    rb_scan_args(argc, argv, "11", &rb_key, &options);
+
+    RVAL2GRNKEY(rb_key, context, key, domain_id, domain, self);
+
+    rb_grn_scan_options(options,
+			"result", &rb_result,
+			NULL);
+
+    if (NIL_P(rb_result)) {
+	result = grn_table_create(context, NULL, 0, NULL,
+				  GRN_OBJ_TABLE_HASH_KEY | GRN_OBJ_WITH_SUBREC,
+				  table, 0);
+	rb_grn_context_check(context, self);
+	rb_result = GRNOBJECT2RVAL(Qnil, context, result, RB_GRN_TRUE);
+    } else {
+	result = RVAL2GRNOBJECT(rb_result, &context);
+    }
+
+    rc = grn_obj_search(context, table, key,
+			result, GRN_SEL_OR, NULL);
+    rb_grn_rc_check(rc, self);
+
+    return rb_result;
+}
+
 void
 rb_grn_init_hash (VALUE mGrn)
 {
@@ -90,4 +131,6 @@ rb_grn_init_hash (VALUE mGrn)
 
     rb_define_singleton_method(rb_cGrnHash, "create",
 			       rb_grn_hash_s_create, -1);
+
+    rb_define_method(rb_cGrnHash, "search", rb_grn_hash_search, -1);
 }
