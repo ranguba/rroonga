@@ -229,7 +229,8 @@ rb_grn_table_cursor_next (VALUE self)
 
         record_id = grn_table_cursor_next(context, cursor);
         if (record_id != GRN_ID_NIL) /* FIXME: use grn_table_cursor_table */
-            rb_record = rb_grn_record_new(rb_iv_get(self, "@table"), record_id);
+            rb_record = rb_grn_record_new(rb_iv_get(self, "@table"),
+					  record_id, Qnil);
     }
 
     return rb_record;
@@ -247,7 +248,8 @@ rb_grn_table_cursor_each (VALUE self)
 
     if (context && cursor) {
 	while ((record_id = grn_table_cursor_next(context, cursor))) {
-	    rb_yield(rb_grn_record_new(rb_iv_get(self, "@table"), record_id));
+	    rb_yield(rb_grn_record_new(rb_iv_get(self, "@table"),
+				       record_id, Qnil));
 	}
     }
 

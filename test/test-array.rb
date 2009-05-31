@@ -38,4 +38,11 @@ class ArrayTest < Test::Unit::TestCase
     array = Groonga::Array.create
     assert_false(array.respond_to?(:encoding))
   end
+
+  def test_add
+    users = Groonga::Array.create(:name => "<users>")
+    users.define_column("name", "<text>")
+    me = users.add(:name => "me")
+    assert_equal("me", me[:name])
+  end
 end

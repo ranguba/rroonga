@@ -51,4 +51,11 @@ class PatriciaTrieTest < Test::Unit::TestCase
     assert_equal(["daijiro"],
                  records.records.collect {|record| record[".user_id.name"]})
   end
+
+  def test_add
+    users = Groonga::PatriciaTrie.create(:name => "<users>")
+    users.define_column("address", "<text>")
+    me = users.add("me", :address => "me@example.com")
+    assert_equal("me@example.com", me[:address])
+  end
 end

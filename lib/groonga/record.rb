@@ -18,9 +18,14 @@
 module Groonga
   class Record
     attr_reader :table, :id
-    def initialize(table, id)
+    def initialize(table, id, values=nil)
       @table = table
       @id = id
+      if values
+        values.each do |name, value|
+          self[name] = value
+        end
+      end
     end
 
     def ==(other)

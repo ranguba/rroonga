@@ -147,4 +147,11 @@ class HashTest < Test::Unit::TestCase
     assert_equal(["daijiro"],
                  records.records.collect {|record| record[".user_id.name"]})
   end
+
+  def test_add
+    users = Groonga::Hash.create(:name => "<users>")
+    users.define_column("address", "<text>")
+    me = users.add("me", :address => "me@example.com")
+    assert_equal("me@example.com", me[:address])
+  end
 end

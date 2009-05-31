@@ -148,7 +148,7 @@ rb_grn_bulk_to_ruby_object_by_range_type (grn_ctx *context, grn_obj *bulk,
 	    if (id == GRN_ID_NIL)
 		*rb_value = Qnil;
 	    else
-		*rb_value = rb_grn_record_new(rb_range, id);
+		*rb_value = rb_grn_record_new(rb_range, id, Qnil);
 	}
 	break;
       default:

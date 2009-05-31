@@ -358,7 +358,8 @@ void           rb_grn_index_column_deconstruct      (RbGrnIndexColumn *rb_grn_in
 						     grn_obj **string_query);
 
 VALUE          rb_grn_record_new                    (VALUE table,
-						     grn_id id);
+						     grn_id id,
+						     VALUE values);
 
 
 #define RB_GRN_INTERN(string)         (ID2SYM(rb_intern(string)))

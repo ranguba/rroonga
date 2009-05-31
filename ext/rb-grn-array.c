@@ -140,11 +140,14 @@ rb_grn_array_s_create (int argc, VALUE *argv, VALUE klass)
  * 加に失敗した場合は+nil+を返します。
  */
 static VALUE
-rb_grn_array_add (VALUE self)
+rb_grn_array_add (int argc, VALUE *argv, VALUE self)
 {
     grn_ctx *context = NULL;
     grn_obj *table;
     grn_id id;
+    VALUE values;
+
+    rb_scan_args(argc, argv, "01", &values);
 
     table = SELF(self, &context);
 
@@ -154,7 +157,7 @@ rb_grn_array_add (VALUE self)
     if (GRN_ID_NIL == id)
 	return Qnil;
     else
-	return rb_grn_record_new(self, id);
+	return rb_grn_record_new(self, id, values);
 }
 
 void
@@ -165,5 +168,5 @@ rb_grn_init_array (VALUE mGrn)
     rb_define_singleton_method(rb_cGrnArray, "create",
 			       rb_grn_array_s_create, -1);
 
-    rb_define_method(rb_cGrnArray, "add", rb_grn_array_add, 0);
+    rb_define_method(rb_cGrnArray, "add", rb_grn_array_add, -1);
 }

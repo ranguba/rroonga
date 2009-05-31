@@ -140,15 +140,17 @@ rb_grn_table_key_support_add_raw (VALUE self, VALUE rb_key)
 }
 
 static VALUE
-rb_grn_table_key_support_add (VALUE self, VALUE rb_key)
+rb_grn_table_key_support_add (int argc, VALUE *argv, VALUE self)
 {
     grn_id id;
+    VALUE key, values;
 
-    id = rb_grn_table_key_support_add_raw(self, rb_key);
+    rb_scan_args(argc, argv, "11", &key, &values);
+    id = rb_grn_table_key_support_add_raw(self, key);
     if (GRN_ID_NIL == id)
 	return Qnil;
     else
-	return rb_grn_record_new(self, id);
+	return rb_grn_record_new(self, id, values);
 }
 
 static VALUE
@@ -243,7 +245,7 @@ rb_grn_table_key_support_find (VALUE self, VALUE rb_key)
     if (id == GRN_ID_NIL)
 	return Qnil;
     else
-	return rb_grn_record_new(self, id);
+	return rb_grn_record_new(self, id, Qnil);
 }
 
 static VALUE
@@ -378,7 +380,7 @@ rb_grn_init_table_key_support (VALUE mGrn)
 		     rb_grn_table_key_support_initialize, -1);
 
     rb_define_method(rb_mGrnTableKeySupport, "add",
-		     rb_grn_table_key_support_add, 1);
+		     rb_grn_table_key_support_add, -1);
     rb_define_method(rb_mGrnTableKeySupport, "key",
 		     rb_grn_table_key_support_get_key, 1);
 

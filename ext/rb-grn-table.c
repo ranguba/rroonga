@@ -663,7 +663,7 @@ rb_grn_table_get_records (int argc, VALUE *argv, VALUE self)
     cursor = rb_grn_table_open_grn_cursor(argc, argv, self, &context);
     records = rb_ary_new();
     while ((record_id = grn_table_cursor_next(context, cursor))) {
-	rb_ary_push(records, rb_grn_record_new(self, record_id));
+	rb_ary_push(records, rb_grn_record_new(self, record_id, Qnil));
     }
     grn_table_cursor_close(context, cursor);
 
@@ -716,7 +716,7 @@ rb_grn_table_each (VALUE self)
     rb_cursor = GRNTABLECURSOR2RVAL(Qnil, context, cursor);
     rb_iv_set(self, "cursor", rb_cursor);
     while ((id = grn_table_cursor_next(context, cursor)) != GRN_ID_NIL) {
-	rb_yield(rb_grn_record_new(self, id));
+	rb_yield(rb_grn_record_new(self, id, Qnil));
     }
     rb_grn_table_cursor_close(rb_cursor);
     rb_iv_set(self, "cursor", Qnil);
