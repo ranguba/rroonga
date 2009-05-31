@@ -112,13 +112,22 @@ class TableTest < Test::Unit::TestCase
     table_path = @tables_dir + "table"
     table = Groonga::Hash.create(:name => "bookmarks",
                                  :path => table_path.to_s)
-    column = table.define_index_column("name", "<text>",
-                                       :compress => "zlib",
-                                       :with_section => true,
-                                       :with_weight => true,
-                                       :with_position => true)
+    column = table.define_column("name", "<text>")
     assert_equal("bookmarks.name", column.name)
     assert_equal(column, table.column("name"))
+  end
+
+  def test_define_index_column
+    bookmarks = Groonga::Hash.create(:name => "<bookmarks>")
+    bookmarks.define_column("content", "<text>")
+    terms = Groonga::Hash.create(:name => "<terms>")
+    terms.default_tokenizer = "<token:bigram>"
+    index = terms.define_index_column("content-index", bookmarks,
+                                      :with_section => true,
+                                      :source => "<bookmarks>.content")
+    bookmarks.add("google", :content => "Search engine")
+    assert_equal(["google"],
+                 index.search("engine").collect {|record| record.key.key})
   end
 
   def test_add_column

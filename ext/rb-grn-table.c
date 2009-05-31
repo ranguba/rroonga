@@ -400,6 +400,7 @@ rb_grn_table_define_index_column (int argc, VALUE *argv, VALUE self)
     VALUE rb_name, rb_value_type;
     VALUE options, rb_path, rb_persistent;
     VALUE rb_compress, rb_with_section, rb_with_weight, rb_with_position;
+    VALUE rb_column, rb_source, rb_sources;
 
     rb_grn_table_deconstruct(SELF(self), &table, &context,
 			     NULL, NULL,
@@ -417,6 +418,8 @@ rb_grn_table_define_index_column (int argc, VALUE *argv, VALUE self)
 			"with_section", &rb_with_section,
 			"with_weight", &rb_with_weight,
 			"with_position", &rb_with_position,
+			"source", &rb_source,
+			"sources", &rb_sources,
 			NULL);
 
     value_type = RVAL2GRNOBJECT(rb_value_type, &context);
@@ -450,11 +453,20 @@ rb_grn_table_define_index_column (int argc, VALUE *argv, VALUE self)
     if (RVAL2CBOOL(rb_with_position))
 	flags |= GRN_OBJ_WITH_POSITION;
 
+    if (!NIL_P(rb_source) && !NIL_P(rb_sources))
+	rb_raise(rb_eArgError, "should not pass both of :source and :sources.");
+
     column = grn_column_create(context, table, name, name_size,
 			       path, flags, value_type);
     rb_grn_context_check(context, self);
 
-    return GRNCOLUMN2RVAL(Qnil, context, column, RB_GRN_TRUE);
+    rb_column = GRNCOLUMN2RVAL(Qnil, context, column, RB_GRN_TRUE);
+    if (!NIL_P(rb_source))
+	rb_funcall(rb_column, rb_intern("source="), 1, rb_source);
+    if (!NIL_P(rb_sources))
+	rb_funcall(rb_column, rb_intern("sources="), 1, rb_sources);
+
+    return rb_column;
 }
 
 static VALUE
