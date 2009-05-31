@@ -340,7 +340,9 @@ rb_grn_index_column_search (int argc, VALUE *argv, VALUE self)
 	_query = RVAL2GRNQUERY(rb_query);
 	query = (grn_obj *)_query;
     } else if (CBOOL2RVAL(rb_obj_is_kind_of(rb_query, rb_cInteger))) {
-	GRN_TEXT_SET(context, id_query, NUM2UINT(rb_query), sizeof(grn_id));
+	grn_id id;
+	id = NUM2UINT(rb_query);
+	GRN_TEXT_SET(context, id_query, &id, sizeof(grn_id));
 	query = id_query;
     } else {
 	const char *_query;
