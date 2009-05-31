@@ -58,4 +58,11 @@ class PatriciaTrieTest < Test::Unit::TestCase
     me = users.add("me", :address => "me@example.com")
     assert_equal("me@example.com", me[:address])
   end
+
+  def test_default_tokenizer_on_create
+    terms = Groonga::PatriciaTrie.create(:name => "<terms>",
+                                         :default_tokenizer => "<token:unigram>")
+    assert_equal(context[Groonga::Type::UNIGRAM],
+                 terms.default_tokenizer)
+  end
 end

@@ -154,4 +154,11 @@ class HashTest < Test::Unit::TestCase
     me = users.add("me", :address => "me@example.com")
     assert_equal("me@example.com", me[:address])
   end
+
+  def test_default_tokenizer_on_create
+    terms = Groonga::Hash.create(:name => "<terms>",
+                                 :default_tokenizer => "<token:trigram>")
+    assert_equal(context[Groonga::Type::TRIGRAM],
+                 terms.default_tokenizer)
+  end
 end

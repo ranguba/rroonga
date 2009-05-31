@@ -32,7 +32,7 @@ rb_grn_hash_s_create (int argc, VALUE *argv, VALUE self)
     grn_obj_flags flags = GRN_TABLE_HASH_KEY;
     VALUE rb_table;
     VALUE options, rb_context, rb_name, rb_path, rb_persistent;
-    VALUE rb_key_type, rb_value_size;
+    VALUE rb_key_type, rb_value_size, rb_default_tokenizer;
 
     rb_scan_args(argc, argv, "01", &options);
 
@@ -43,6 +43,7 @@ rb_grn_hash_s_create (int argc, VALUE *argv, VALUE self)
 			"persistent", &rb_persistent,
 			"key_type", &rb_key_type,
 			"value_size", &rb_value_size,
+			"default_tokenizer", &rb_default_tokenizer,
 			NULL);
 
     context = rb_grn_context_ensure(&rb_context);
@@ -75,6 +76,10 @@ rb_grn_hash_s_create (int argc, VALUE *argv, VALUE self)
     rb_grn_table_key_support_assign(rb_table, rb_context, context, table,
 				    RB_GRN_TRUE);
     rb_grn_context_check(context, rb_table);
+
+    if (!NIL_P(rb_default_tokenizer))
+	rb_funcall(rb_table, rb_intern("default_tokenizer="), 1,
+		   rb_default_tokenizer);
 
     if (rb_block_given_p())
         return rb_ensure(rb_yield, rb_table, rb_grn_object_close, rb_table);
