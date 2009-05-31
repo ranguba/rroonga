@@ -20,6 +20,8 @@
 
 #define SELF(object) (RVAL2GRNCONTEXT(object))
 
+#define OBJECTS_TABLE_NAME "<ranguba:objects>"
+
 static VALUE cGrnContext;
 
 grn_ctx *
@@ -40,25 +42,24 @@ rb_grn_context_from_ruby_object (VALUE object)
 void
 rb_grn_context_register (grn_ctx *context, RbGrnObject *object)
 {
-    grn_obj *registered_objects;
-    const char registered_objects_key[] = "<ranguba:objects>";
+    grn_obj *objects;
 
     if (!grn_ctx_db(context))
 	return;
 
-    registered_objects = grn_ctx_get(context,
-				     registered_objects_key,
-				     strlen(registered_objects_key));
-    if (!registered_objects)
-	registered_objects = grn_table_create(context,
-					      registered_objects_key,
-					      strlen(registered_objects_key),
-					      NULL,
-					      GRN_OBJ_TABLE_HASH_KEY,
-					      grn_ctx_at(context, GRN_DB_UINT64),
-					      0);
+    objects = grn_ctx_get(context,
+			  OBJECTS_TABLE_NAME,
+			  strlen(OBJECTS_TABLE_NAME));
+    if (!objects)
+	objects = grn_table_create(context,
+				   OBJECTS_TABLE_NAME,
+				   strlen(OBJECTS_TABLE_NAME),
+				   NULL,
+				   GRN_OBJ_TABLE_HASH_KEY,
+				   grn_ctx_at(context, GRN_DB_UINT64),
+				   0);
 
-    grn_table_add(context, registered_objects,
+    grn_table_add(context, objects,
 		  &object, sizeof(RbGrnObject *),
 		  NULL);
 }
@@ -66,51 +67,47 @@ rb_grn_context_register (grn_ctx *context, RbGrnObject *object)
 void
 rb_grn_context_unregister (grn_ctx *context, RbGrnObject *object)
 {
-    grn_obj *registered_objects;
-    const char registered_objects_key[] = "<ranguba:objects>";
+    grn_obj *objects;
 
     if (!grn_ctx_db(context))
 	return;
 
-    registered_objects = grn_ctx_get(context,
-				     registered_objects_key,
-				     strlen(registered_objects_key));
-    if (!registered_objects)
+    objects = grn_ctx_get(context,
+			  OBJECTS_TABLE_NAME,
+			  strlen(OBJECTS_TABLE_NAME));
+    if (!objects)
 	return;
 
-    grn_table_delete(context, registered_objects,
-		     &object, sizeof(RbGrnObject *));
+    grn_table_delete(context, objects, &object, sizeof(RbGrnObject *));
 }
 
 void
 rb_grn_context_unbind (grn_ctx *context)
 {
     grn_obj *database;
-    grn_obj *registered_objects;
-    const char registered_objects_key[] = "<ranguba:objects>";
+    grn_obj *objects;
 
     database = grn_ctx_db(context);
     if (!database)
 	return;
 
-    registered_objects = grn_ctx_get(context,
-				     registered_objects_key,
-				     strlen(registered_objects_key));
-    if (registered_objects) {
+    objects = grn_ctx_get(context,
+			  OBJECTS_TABLE_NAME,
+			  strlen(OBJECTS_TABLE_NAME));
+    if (objects) {
 	grn_table_cursor *cursor;
 
-	cursor = grn_table_cursor_open(context, registered_objects,
-				       NULL, 0, NULL, 0, 0);
+	cursor = grn_table_cursor_open(context, objects, NULL, 0, NULL, 0, 0);
 	while (grn_table_cursor_next(context, cursor) != GRN_ID_NIL) {
 	    void *value;
 	    RbGrnObject *object = NULL;
 	    grn_table_cursor_get_key(context, cursor, &value);
 	    memcpy(&object, value, sizeof(RbGrnObject *));
-	    if (object->object != database)
-		object->unbind(object);
+	    object->object = NULL;
+	    object->unbind(object);
 	}
 	grn_table_cursor_close(context, cursor);
-	grn_obj_close(context, registered_objects);
+	grn_obj_close(context, objects);
     }
 
     grn_obj_close(context, database);
