@@ -71,6 +71,7 @@ class DatabaseTest < Test::Unit::TestCase
                   "<proc:init>",
                   "<proc:scan>",
                   "<proc:search>",
+                  "<ranguba:objects>",
                   "<shorttext>",
                   "<text>",
                   "<time>",

@@ -82,19 +82,27 @@ rb_grn_object_unbind (RbGrnObject *rb_grn_object)
     context = rb_grn_object->context;
     grn_object = rb_grn_object->object;
 
-    if (rb_grn_object->owner && context && grn_object &&
-	rb_grn_context_alive_p(context)) {
+    if (context)
+	rb_grn_context_unregister(context, rb_grn_object);
+
+    if (rb_grn_object->owner && context && grn_object) {
 	const char *path;
 	grn_obj *db = NULL;
 
 	path = grn_obj_path(context, grn_object);
 	db = grn_ctx_db(context);
 	if (path == NULL || (path && db)) {
-	    grn_obj_close(context, grn_object);
-	    if (grn_object == db)
-		/* FIXME: grn_ctx_use(context, NULL) */;
+	    if (grn_object == db) {
+		rb_grn_context_unbind(context);
+	    } else {
+		grn_obj_close(context, grn_object);
+	    }
 	}
     }
+
+    rb_grn_object->context = NULL;
+    rb_grn_object->object = NULL;
+    rb_grn_object->owner = RB_GRN_FALSE;
 }
 
 static void
@@ -102,7 +110,7 @@ rb_grn_object_free (void *object)
 {
     RbGrnObject *rb_grn_object = object;
 
-    rb_grn_object_unbind(rb_grn_object);
+    rb_grn_object->unbind(rb_grn_object);
     xfree(rb_grn_object);
 }
 
@@ -215,6 +223,11 @@ rb_grn_object_bind (RbGrnObject *rb_grn_object,
 	rb_grn_object->range = grn_ctx_at(context, rb_grn_object->range_id);
 
     rb_grn_object->owner = owner;
+
+    rb_grn_object->unbind = RB_GRN_UNBIND_FUNCTION(rb_grn_object_unbind);
+
+    if (context)
+	rb_grn_context_register(context, rb_grn_object);
 }
 
 void
@@ -240,6 +253,9 @@ rb_grn_object_deconstruct (RbGrnObject *rb_grn_object,
 			   grn_id *range_id,
 			   grn_obj **range)
 {
+    if (!rb_grn_object)
+	return;
+
     if (object)
 	*object = rb_grn_object->object;
     if (context)
@@ -266,16 +282,7 @@ rb_grn_object_deconstruct (RbGrnObject *rb_grn_object,
 VALUE
 rb_grn_object_close (VALUE self)
 {
-    RbGrnObject *rb_grn_object;
-
-    rb_grn_object = SELF(self);
-    if (rb_grn_object->context && rb_grn_object->object) {
-	if (rb_grn_object->owner)
-	    grn_obj_close(rb_grn_object->context, rb_grn_object->object);
-        rb_grn_object->context = NULL;
-        rb_grn_object->object = NULL;
-        rb_grn_object->owner = RB_GRN_FALSE;
-    }
+    rb_grn_object_unbind(SELF(self));
     return Qnil;
 }
 
@@ -467,6 +474,9 @@ rb_grn_object_inspect_content (VALUE self, VALUE inspected)
     grn_obj *object;
 
     rb_grn_object = SELF(self);
+    if (!rb_grn_object)
+	return inspected;
+
     context = rb_grn_object->context;
     object = rb_grn_object->object;
 
@@ -821,9 +831,7 @@ rb_grn_object_remove (VALUE self)
     rc = grn_obj_remove(context, rb_grn_object->object);
     rb_grn_rc_check(rc, self);
 
-    rb_grn_object->context = NULL;
-    rb_grn_object->object = NULL;
-    rb_grn_object->owner = RB_GRN_FALSE;
+    rb_grn_object->unbind(rb_grn_object);
     rb_iv_set(self, "context", Qnil);
 
     return Qnil;

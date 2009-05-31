@@ -76,6 +76,11 @@ typedef struct {
 
 #define RB_GRN_OBJECT(object) ((RbGrnObject *)(object))
 #define RB_GRN_TABLE(object) ((RbGrnTable *)(object))
+#define RB_GRN_TABLE_CURSOR(object) ((RbGrnTableCursort *)(object))
+#define RB_GRN_INDEX_COLUMN(object) ((RbGrnIndexColumn *)(object))
+#define RB_GRN_UNBIND_FUNCTION(function) ((RbGrnUnbindFunction)(function))
+
+typedef void (*RbGrnUnbindFunction) (void *object);
 
 typedef struct _RbGrnObject RbGrnObject;
 struct _RbGrnObject
@@ -87,6 +92,7 @@ struct _RbGrnObject
     grn_obj *range;
     grn_id range_id;
     rb_grn_boolean owner;
+    RbGrnUnbindFunction unbind;
 };
 
 typedef struct _RbGrnTable RbGrnTable;
@@ -125,6 +131,12 @@ struct _RbGrnIndexColumn
     grn_obj *old_value;
     grn_obj *id_query;
     grn_obj *string_query;
+};
+
+typedef struct _RbGrnTableCursor RbGrnTableCursor;
+struct _RbGrnTableCursor
+{
+    RbGrnObject parent;
 };
 
 RB_GRN_VAR VALUE rb_eGrnError;
@@ -186,7 +198,11 @@ const char    *rb_grn_rc_to_message                 (grn_rc rc);
 void           rb_grn_rc_check                      (grn_rc rc,
 						     VALUE related_object);
 
-rb_grn_boolean rb_grn_context_alive_p               (grn_ctx *context);
+void           rb_grn_context_register              (grn_ctx *context,
+						     RbGrnObject *object);
+void           rb_grn_context_unregister            (grn_ctx *context,
+						     RbGrnObject *object);
+void           rb_grn_context_unbind                (grn_ctx *context);
 
 grn_ctx       *rb_grn_context_ensure                (VALUE *context);
 VALUE          rb_grn_context_get_default           (void);
@@ -364,7 +380,7 @@ VALUE          rb_grn_record_new                    (VALUE table,
 
 #define RVAL2GRNTABLECURSOR(object)   (rb_grn_table_cursor_from_ruby_object(object))
 #define GRNTABLECURSOR2RVAL(klass, context, cursor) \
-                                      (rb_grn_table_cursor_to_ruby_object(klass, context, cursor))
+    (rb_grn_table_cursor_to_ruby_object(klass, context, cursor, RB_GRN_TRUE))
 #define GRNTABLECURSOR2RCLASS(object) (rb_grn_table_cursor_to_ruby_class(object))
 
 #define RVAL2GRNCOLUMN(object, context) \
@@ -436,11 +452,20 @@ VALUE          rb_grn_table_to_ruby_object          (grn_ctx *context,
 						     rb_grn_boolean owner);
 
 grn_table_cursor *
-               rb_grn_table_cursor_from_ruby_object (VALUE object);
+               rb_grn_table_cursor_from_ruby_object (VALUE object,
+						     grn_ctx **context);
 VALUE          rb_grn_table_cursor_to_ruby_object   (VALUE klass,
 						     grn_ctx *context,
-						     grn_table_cursor *cursor);
+						     grn_table_cursor *cursor,
+						     rb_grn_boolean owner);
 VALUE          rb_grn_table_cursor_to_ruby_class    (grn_table_cursor *cursor);
+void           rb_grn_table_cursor_deconstruct      (RbGrnTableCursor *rb_grn_table_cursor,
+						     grn_table_cursor **cursor,
+						     grn_ctx **context,
+						     grn_id *domain_id,
+						     grn_obj **domain,
+						     grn_id *range_id,
+						     grn_obj **range);
 
 grn_obj       *rb_grn_column_from_ruby_object       (VALUE object,
 						     grn_ctx **context);

@@ -18,57 +18,18 @@
 
 #include "rb-grn.h"
 
-#define SELF(object) (rb_rb_grn_table_cursor_from_ruby_object(object))
-
-typedef struct _RbGrnTableCursor RbGrnTableCursor;
-struct _RbGrnTableCursor
-{
-    grn_ctx *context;
-    grn_table_cursor *cursor;
-    rb_grn_boolean owner;
-};
+#define SELF(object) ((RbGrnTableCursor *)DATA_PTR(object))
 
 VALUE rb_cGrnTableCursor;
 
-static RbGrnTableCursor *
-rb_rb_grn_table_cursor_from_ruby_object (VALUE object)
+grn_table_cursor *
+rb_grn_table_cursor_from_ruby_object (VALUE object, grn_ctx **context)
 {
-    RbGrnTableCursor *rb_grn_table_cursor;
-
     if (!RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cGrnTableCursor))) {
 	rb_raise(rb_eTypeError, "not a groonga table cursor");
     }
 
-    Data_Get_Struct(object, RbGrnTableCursor, rb_grn_table_cursor);
-    if (!rb_grn_table_cursor)
-	rb_raise(rb_eGrnError, "groonga table cursor is NULL");
-
-    return rb_grn_table_cursor;
-}
-
-grn_table_cursor *
-rb_grn_table_cursor_from_ruby_object (VALUE object)
-{
-    if (NIL_P(object))
-        return NULL;
-
-    return SELF(object)->cursor;
-}
-
-static void
-rb_rb_grn_table_cursor_free (void *object)
-{
-    RbGrnTableCursor *rb_grn_table_cursor = object;
-    grn_ctx *context;
-    grn_table_cursor *cursor;
-
-    context = rb_grn_table_cursor->context;
-    cursor = rb_grn_table_cursor->cursor;
-    if (rb_grn_table_cursor->owner && context && cursor &&
-	rb_grn_context_alive_p(context))
-	grn_table_cursor_close(context, cursor);
-
-    xfree(object);
+    return RVAL2GRNOBJECT(object, context);
 }
 
 VALUE
@@ -98,72 +59,98 @@ rb_grn_table_cursor_to_ruby_class (grn_obj *object)
 
 VALUE
 rb_grn_table_cursor_to_ruby_object (VALUE klass, grn_ctx *context,
-                                    grn_table_cursor *cursor)
+				    grn_table_cursor *cursor,
+				    rb_grn_boolean owner)
+{
+    if (NIL_P(klass))
+	klass = rb_grn_table_cursor_to_ruby_class(cursor);
+    return GRNOBJECT2RVAL(klass, context, cursor, owner);
+}
+
+void
+rb_grn_table_cursor_unbind (RbGrnTableCursor *rb_grn_table_cursor)
+{
+    RbGrnObject *rb_grn_object;
+
+    rb_grn_object = RB_GRN_OBJECT(rb_grn_table_cursor);
+    rb_grn_object_unbind(rb_grn_object);
+}
+
+static void
+rb_grn_table_cursor_free (void *object)
+{
+    RbGrnTableCursor *rb_grn_table_cursor = object;
+
+    rb_grn_table_cursor_unbind(rb_grn_table_cursor);
+    xfree(rb_grn_table_cursor);
+}
+
+VALUE
+rb_grn_table_cursor_alloc (VALUE klass)
+{
+    return Data_Wrap_Struct(klass, NULL, rb_grn_table_cursor_free, NULL);
+}
+
+void
+rb_grn_table_cursor_bind (RbGrnTableCursor *rb_grn_table_cursor,
+			  grn_ctx *context, grn_table_cursor *cursor,
+			  rb_grn_boolean owner)
+{
+    RbGrnObject *rb_grn_object;
+
+    rb_grn_object = RB_GRN_OBJECT(rb_grn_table_cursor);
+    rb_grn_object_bind(rb_grn_object, context, cursor, owner);
+    rb_grn_object->unbind = RB_GRN_UNBIND_FUNCTION(rb_grn_table_cursor_unbind);
+}
+
+void
+rb_grn_table_cursor_assign (VALUE self, VALUE rb_context,
+			    grn_ctx *context, grn_table_cursor *cursor,
+			    rb_grn_boolean owner)
 {
     RbGrnTableCursor *rb_grn_table_cursor;
 
-    if (!cursor)
-        return Qnil;
-
     rb_grn_table_cursor = ALLOC(RbGrnTableCursor);
-    rb_grn_table_cursor->context = context;
-    rb_grn_table_cursor->cursor = cursor;
-    rb_grn_table_cursor->owner = RB_GRN_TRUE; /* FIXME */
+    DATA_PTR(self) = rb_grn_table_cursor;
+    rb_grn_table_cursor_bind(rb_grn_table_cursor, context, cursor, owner);
 
-    if (NIL_P(klass))
-        klass = GRNTABLECURSOR2RCLASS(cursor);
-
-    return Data_Wrap_Struct(klass, NULL,
-                            rb_rb_grn_table_cursor_free, rb_grn_table_cursor);
+    rb_iv_set(self, "context", rb_context);
 }
 
-static VALUE
-rb_grn_table_cursor_alloc (VALUE klass)
+void
+rb_grn_table_cursor_deconstruct (RbGrnTableCursor *rb_grn_table_cursor,
+				 grn_table_cursor **cursor,
+				 grn_ctx **context,
+				 grn_id *domain_id,
+				 grn_obj **domain,
+				 grn_id *range_id,
+				 grn_obj **range)
 {
-    return Data_Wrap_Struct(klass, NULL, rb_rb_grn_table_cursor_free, NULL);
-}
+    RbGrnObject *rb_grn_object;
 
-grn_ctx *
-rb_grn_table_cursor_ensure_context (VALUE cursor, VALUE *rb_context)
-{
-    if (NIL_P(*rb_context)) {
-	RbGrnTableCursor *rb_grn_table_cursor;
-
-	rb_grn_table_cursor = SELF(cursor);
-	if (rb_grn_table_cursor && rb_grn_table_cursor->context)
-	    return rb_grn_table_cursor->context;
-    }
-
-    return rb_grn_context_ensure(rb_context);
+    rb_grn_object = RB_GRN_OBJECT(rb_grn_table_cursor);
+    rb_grn_object_deconstruct(rb_grn_object, cursor, context,
+			      domain_id, domain,
+			      range_id, range);
 }
 
 VALUE
 rb_grn_table_cursor_close (VALUE self)
 {
-    RbGrnTableCursor *rb_grn_table_cursor;
-
-    rb_grn_table_cursor = SELF(self);
-    if (rb_grn_table_cursor->context && rb_grn_table_cursor->cursor) {
-        grn_rc rc = GRN_SUCCESS;
-
-	if (rb_grn_table_cursor->owner)
-	    rc = grn_table_cursor_close(rb_grn_table_cursor->context,
-					rb_grn_table_cursor->cursor);
-        rb_grn_table_cursor->context = NULL;
-        rb_grn_table_cursor->cursor = NULL;
-	rb_grn_table_cursor->owner = RB_GRN_FALSE;
-        rb_grn_rc_check(rc, self);
-    }
+    rb_grn_table_cursor_unbind(SELF(self));
     return Qnil;
 }
 
 static VALUE
 rb_grn_table_cursor_closed_p (VALUE self)
 {
-    RbGrnTableCursor *rb_grn_table_cursor;
+    grn_table_cursor *cursor;
+    grn_ctx *context;
 
-    rb_grn_table_cursor = SELF(self);
-    if (rb_grn_table_cursor->context && rb_grn_table_cursor->cursor)
+    rb_grn_table_cursor_deconstruct(SELF(self), &cursor, &context,
+				    NULL, NULL, NULL, NULL);
+
+    if (context && cursor)
         return Qfalse;
     else
         return Qtrue;
@@ -172,17 +159,17 @@ rb_grn_table_cursor_closed_p (VALUE self)
 static VALUE
 rb_grn_table_cursor_get_value (VALUE self)
 {
+    grn_ctx *context;
+    grn_table_cursor *cursor;
     VALUE rb_value = Qnil;
-    RbGrnTableCursor *rb_grn_table_cursor;
 
-    rb_grn_table_cursor = SELF(self);
-    if (rb_grn_table_cursor->context && rb_grn_table_cursor->cursor) {
+    rb_grn_table_cursor_deconstruct(SELF(self), &cursor, &context,
+				    NULL, NULL, NULL, NULL);
+    if (context && cursor) {
         int n;
         void *value;
 
-        n = grn_table_cursor_get_value(rb_grn_table_cursor->context,
-                                       rb_grn_table_cursor->cursor,
-                                       &value);
+        n = grn_table_cursor_get_value(context, cursor, &value);
         rb_value = rb_str_new(value, n);
     }
 
@@ -192,15 +179,18 @@ rb_grn_table_cursor_get_value (VALUE self)
 static VALUE
 rb_grn_table_cursor_set_value (VALUE self, VALUE value)
 {
-    RbGrnTableCursor *rb_grn_table_cursor;
+    grn_ctx *context;
+    grn_table_cursor *cursor;
 
-    rb_grn_table_cursor = SELF(self);
-    if (rb_grn_table_cursor->context && rb_grn_table_cursor->cursor) {
+    rb_grn_table_cursor_deconstruct(SELF(self), &cursor, &context,
+				    NULL, NULL, NULL, NULL);
+    if (context && cursor) {
         grn_rc rc;
 
-        rc = grn_table_cursor_set_value(rb_grn_table_cursor->context,
-                                        rb_grn_table_cursor->cursor,
-                                        StringValuePtr(value), GRN_OBJ_SET);
+        rc = grn_table_cursor_set_value(context,
+                                        cursor,
+                                        StringValuePtr(value),
+					GRN_OBJ_SET);
         rb_grn_rc_check(rc, self);
     }
 
@@ -210,14 +200,15 @@ rb_grn_table_cursor_set_value (VALUE self, VALUE value)
 static VALUE
 rb_grn_table_cursor_delete (VALUE self)
 {
-    RbGrnTableCursor *rb_grn_table_cursor;
+    grn_ctx *context;
+    grn_table_cursor *cursor;
 
-    rb_grn_table_cursor = SELF(self);
-    if (rb_grn_table_cursor->context && rb_grn_table_cursor->cursor) {
+    rb_grn_table_cursor_deconstruct(SELF(self), &cursor, &context,
+				    NULL, NULL, NULL, NULL);
+    if (context && cursor) {
         grn_rc rc;
 
-        rc = grn_table_cursor_delete(rb_grn_table_cursor->context,
-                                     rb_grn_table_cursor->cursor);
+        rc = grn_table_cursor_delete(context, cursor);
         rb_grn_rc_check(rc, self);
     }
 
@@ -228,14 +219,15 @@ static VALUE
 rb_grn_table_cursor_next (VALUE self)
 {
     VALUE rb_record = Qnil;
-    RbGrnTableCursor *rb_grn_table_cursor;
+    grn_ctx *context;
+    grn_table_cursor *cursor;
 
-    rb_grn_table_cursor = SELF(self);
-    if (rb_grn_table_cursor->context && rb_grn_table_cursor->cursor) {
+    rb_grn_table_cursor_deconstruct(SELF(self), &cursor, &context,
+				    NULL, NULL, NULL, NULL);
+    if (context && cursor) {
         grn_id record_id;
 
-        record_id = grn_table_cursor_next(rb_grn_table_cursor->context,
-                                          rb_grn_table_cursor->cursor);
+        record_id = grn_table_cursor_next(context, cursor);
         if (record_id != GRN_ID_NIL) /* FIXME: use grn_table_cursor_table */
             rb_record = rb_grn_record_new(rb_iv_get(self, "@table"), record_id);
     }
@@ -247,20 +239,16 @@ static VALUE
 rb_grn_table_cursor_each (VALUE self)
 {
     grn_id record_id;
-    RbGrnTableCursor *rb_grn_table_cursor;
     grn_ctx *context;
     grn_table_cursor *cursor;
 
-    rb_grn_table_cursor = SELF(self);
-    if (!rb_grn_table_cursor->context)
-        return Qnil;
-    if (!rb_grn_table_cursor->cursor)
-        return Qnil;
+    rb_grn_table_cursor_deconstruct(SELF(self), &cursor, &context,
+				    NULL, NULL, NULL, NULL);
 
-    context = rb_grn_table_cursor->context;
-    cursor = rb_grn_table_cursor->cursor;
-    while ((record_id = grn_table_cursor_next(context, cursor))) {
-        rb_yield(rb_grn_record_new(rb_iv_get(self, "@table"), record_id));
+    if (context && cursor) {
+	while ((record_id = grn_table_cursor_next(context, cursor))) {
+	    rb_yield(rb_grn_record_new(rb_iv_get(self, "@table"), record_id));
+	}
     }
 
     return Qnil;

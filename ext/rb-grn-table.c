@@ -48,7 +48,7 @@ rb_grn_table_unbind (RbGrnTable *rb_grn_table)
     rb_grn_object = RB_GRN_OBJECT(rb_grn_table);
     context = rb_grn_object->context;
 
-    if (context && rb_grn_context_alive_p(context))
+    if (context)
 	grn_obj_close(context, rb_grn_table->value);
 
     rb_grn_object_unbind(rb_grn_object);
@@ -77,6 +77,7 @@ rb_grn_table_bind (RbGrnTable *rb_grn_table,
 
     rb_grn_object = RB_GRN_OBJECT(rb_grn_table);
     rb_grn_object_bind(rb_grn_object, context, table, owner);
+    rb_grn_object->unbind = RB_GRN_UNBIND_FUNCTION(rb_grn_table_unbind);
 
     rb_grn_table->value = grn_obj_open(context, GRN_BULK, 0,
 				       rb_grn_object->range_id);
@@ -703,17 +704,19 @@ rb_grn_table_each (VALUE self)
     grn_ctx *context = NULL;
     grn_obj *table;
     grn_table_cursor *cursor;
+    VALUE rb_cursor;
     grn_id id;
 
     rb_grn_table_deconstruct(SELF(self), &table, &context,
 			     NULL, NULL,
 			     NULL, NULL, NULL);
     cursor = grn_table_cursor_open(context, table, NULL, 0, NULL, 0, 0);
-    rb_iv_set(self, "cursor", GRNTABLECURSOR2RVAL(Qnil, context, cursor));
+    rb_cursor = GRNTABLECURSOR2RVAL(Qnil, context, cursor);
+    rb_iv_set(self, "cursor", rb_cursor);
     while ((id = grn_table_cursor_next(context, cursor)) != GRN_ID_NIL) {
 	rb_yield(rb_grn_record_new(self, id));
     }
-    grn_table_cursor_close(context, cursor);
+    rb_grn_table_cursor_close(rb_cursor);
     rb_iv_set(self, "cursor", Qnil);
 
     return Qnil;

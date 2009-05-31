@@ -122,12 +122,14 @@ rb_grn_database_each (VALUE self)
     grn_ctx *context = NULL;
     grn_obj *database;
     grn_table_cursor *cursor;
+    VALUE rb_cursor;
     grn_id id;
 
     rb_grn_object_deconstruct((RbGrnObject *)SELF(self), &database, &context,
 			      NULL, NULL, NULL, NULL);
     cursor = grn_table_cursor_open(context, database, NULL, 0, NULL, 0, 0);
-    rb_iv_set(self, "cursor", GRNTABLECURSOR2RVAL(Qnil, context, cursor));
+    rb_cursor = GRNTABLECURSOR2RVAL(Qnil, context, cursor);
+    rb_iv_set(self, "cursor", rb_cursor);
     while ((id = grn_table_cursor_next(context, cursor)) != GRN_ID_NIL) {
 	grn_obj *object;
 
@@ -135,7 +137,7 @@ rb_grn_database_each (VALUE self)
 	if (object)
 	    rb_yield(GRNOBJECT2RVAL(Qnil, context, object, RB_GRN_FALSE));
     }
-    grn_table_cursor_close(context, cursor);
+    rb_grn_table_cursor_close(rb_cursor);
     rb_iv_set(self, "cursor", Qnil);
 
     return Qnil;

@@ -23,22 +23,6 @@ extern grn_ctx grn_gctx;
 static void
 finish_groonga (void)
 {
-    grn_ctx *context;
-
-    context = grn_gctx.next;
-    while (RB_GRN_TRUE) {
-	grn_ctx *next_context = context->next;
-	grn_obj *database;
-
-	database = grn_ctx_db(context);
-	if (database)
-	    grn_obj_close(context, database);
-
-	grn_ctx_fin(context);
-	if (next_context == &grn_gctx)
-	    break;
-	context = next_context;
-    }
     grn_fin();
 }
 

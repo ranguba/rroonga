@@ -80,6 +80,7 @@ module GroongaTestUtils
   end
 
   def teardown_sandbox
+    @database = nil
     teardown_tmp_directory
     GC.start
   end

@@ -22,33 +22,6 @@
 
 static VALUE cGrnContext;
 
-static grn_ctx *management_context;
-static grn_hash *contexts;
-
-static void
-finish_groonga_context (void)
-{
-    grn_hash_close(management_context, contexts);
-
-    grn_ctx_fin(management_context);
-    xfree(management_context);
-
-    management_context = NULL;
-}
-
-rb_grn_boolean
-rb_grn_context_alive_p (grn_ctx *context)
-{
-    grn_search_flags flags = 0;
-
-    if (!management_context)
-	return RB_GRN_FALSE;
-
-    return grn_hash_lookup(management_context, contexts,
-			   &context, sizeof(grn_ctx *),
-			   NULL, &flags) != GRN_ID_NIL;
-}
-
 grn_ctx *
 rb_grn_context_from_ruby_object (VALUE object)
 {
@@ -64,19 +37,93 @@ rb_grn_context_from_ruby_object (VALUE object)
     return context;
 }
 
+void
+rb_grn_context_register (grn_ctx *context, RbGrnObject *object)
+{
+    grn_obj *registered_objects;
+    const char registered_objects_key[] = "<ranguba:objects>";
+
+    if (!grn_ctx_db(context))
+	return;
+
+    registered_objects = grn_ctx_get(context,
+				     registered_objects_key,
+				     strlen(registered_objects_key));
+    if (!registered_objects)
+	registered_objects = grn_table_create(context,
+					      registered_objects_key,
+					      strlen(registered_objects_key),
+					      NULL,
+					      GRN_OBJ_TABLE_HASH_KEY,
+					      grn_ctx_at(context, GRN_DB_UINT64),
+					      0);
+
+    grn_table_add(context, registered_objects,
+		  &object, sizeof(RbGrnObject *),
+		  NULL);
+}
+
+void
+rb_grn_context_unregister (grn_ctx *context, RbGrnObject *object)
+{
+    grn_obj *registered_objects;
+    const char registered_objects_key[] = "<ranguba:objects>";
+
+    if (!grn_ctx_db(context))
+	return;
+
+    registered_objects = grn_ctx_get(context,
+				     registered_objects_key,
+				     strlen(registered_objects_key));
+    if (!registered_objects)
+	return;
+
+    grn_table_delete(context, registered_objects,
+		     &object, sizeof(RbGrnObject *));
+}
+
+void
+rb_grn_context_unbind (grn_ctx *context)
+{
+    grn_obj *database;
+    grn_obj *registered_objects;
+    const char registered_objects_key[] = "<ranguba:objects>";
+
+    database = grn_ctx_db(context);
+    if (!database)
+	return;
+
+    registered_objects = grn_ctx_get(context,
+				     registered_objects_key,
+				     strlen(registered_objects_key));
+    if (registered_objects) {
+	grn_table_cursor *cursor;
+
+	cursor = grn_table_cursor_open(context, registered_objects,
+				       NULL, 0, NULL, 0, 0);
+	while (grn_table_cursor_next(context, cursor) != GRN_ID_NIL) {
+	    void *value;
+	    RbGrnObject *object = NULL;
+	    grn_table_cursor_get_key(context, cursor, &value);
+	    memcpy(&object, value, sizeof(RbGrnObject *));
+	    if (object->object != database)
+		object->unbind(object);
+	}
+	grn_table_cursor_close(context, cursor);
+	grn_obj_close(context, registered_objects);
+    }
+
+    grn_obj_close(context, database);
+    grn_ctx_use(context, NULL);
+}
+
 static void
 rb_grn_context_free (void *pointer)
 {
     grn_ctx *context = pointer;
 
-    if (management_context)
-	grn_hash_delete(management_context, contexts,
-			&context, sizeof(grn_ctx *), NULL);
     if (context->stat != GRN_CTX_FIN) {
-	grn_obj *database;
-	database = grn_ctx_db(context);
-	if (database)
-	    /* FIXME: grn_obj_close(context, database) */;
+	rb_grn_context_unbind (context);
 	grn_ctx_fin(context);
     }
     xfree(context);
@@ -217,14 +264,6 @@ rb_grn_context_initialize (int argc, VALUE *argv, VALUE self)
     rc = grn_ctx_init(context, flags);
     rb_grn_context_check(context, self);
 
-    {
-	grn_search_flags flags = GRN_TABLE_ADD;
-
-	grn_hash_lookup(management_context, contexts,
-			&context, sizeof(grn_ctx *),
-			NULL, &flags);
-    }
-
     if (!NIL_P(rb_encoding)) {
 	grn_encoding encoding;
 
@@ -346,12 +385,6 @@ rb_grn_context_array_reference (VALUE self, VALUE name_or_id)
 void
 rb_grn_init_context (VALUE mGrn)
 {
-    management_context = ALLOC(grn_ctx);
-    rb_grn_rc_check(grn_ctx_init(management_context, 0), Qnil);
-    contexts = grn_hash_create(management_context, NULL,
-			       sizeof(grn_ctx *), 0, 0);
-    atexit(finish_groonga_context);
-
     cGrnContext = rb_define_class_under(mGrn, "Context", rb_cObject);
     rb_define_alloc_func(cGrnContext, rb_grn_context_alloc);
 

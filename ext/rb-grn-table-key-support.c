@@ -54,7 +54,7 @@ rb_grn_table_key_support_free (void *object)
     grn_ctx *context;
 
     context = rb_grn_object->context;
-    if (context && rb_grn_context_alive_p(context))
+    if (context)
 	grn_obj_close(context, rb_grn_table_key_support->key);
 
     rb_grn_table_unbind(rb_grn_table);
@@ -111,9 +111,9 @@ rb_grn_table_key_support_initialize (int argc, VALUE *argv, VALUE self)
     VALUE rb_context;
 
     table = rb_grn_table_open_raw(argc, argv, &context, &rb_context);
+    rb_grn_context_check(context, self);
     rb_grn_table_key_support_assign(self, rb_context, context,
 				    table, RB_GRN_TRUE);
-    rb_grn_context_check(context, self);
 
     return Qnil;
 }

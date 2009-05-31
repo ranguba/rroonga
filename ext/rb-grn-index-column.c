@@ -31,7 +31,7 @@ rb_grn_index_column_unbind (RbGrnIndexColumn *rb_grn_index_column)
     rb_grn_object = RB_GRN_OBJECT(rb_grn_index_column);
     context = rb_grn_object->context;
 
-    if (context && rb_grn_context_alive_p(context)) {
+    if (context) {
 	grn_obj_close(context, rb_grn_index_column->id_query);
 	grn_obj_close(context, rb_grn_index_column->string_query);
 	grn_obj_close(context, rb_grn_index_column->value);
@@ -65,6 +65,7 @@ rb_grn_index_column_bind (RbGrnIndexColumn *rb_grn_index_column,
 
     rb_grn_object = RB_GRN_OBJECT(rb_grn_index_column);
     rb_grn_object_bind(rb_grn_object, context, column, owner);
+    rb_grn_object->unbind = RB_GRN_UNBIND_FUNCTION(rb_grn_index_column_unbind);
 
     rb_grn_index_column->value = grn_obj_open(context, GRN_BULK, 0,
 					      rb_grn_object->range_id);
