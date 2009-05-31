@@ -217,7 +217,7 @@ rb_grn_table_key_support_delete (VALUE self, VALUE rb_id_or_key)
 }
 
 static grn_id
-rb_grn_table_key_support_lookup_raw (VALUE self, VALUE rb_key)
+rb_grn_table_key_support_get (VALUE self, VALUE rb_key)
 {
     grn_ctx *context;
     grn_obj *table, *key, *domain;
@@ -237,11 +237,11 @@ rb_grn_table_key_support_lookup_raw (VALUE self, VALUE rb_key)
 }
 
 static VALUE
-rb_grn_table_key_support_lookup (VALUE self, VALUE rb_key)
+rb_grn_table_key_support_find (VALUE self, VALUE rb_key)
 {
     grn_id id;
 
-    id = rb_grn_table_key_support_lookup_raw(self, rb_key);
+    id = rb_grn_table_key_support_get(self, rb_key);
 
     if (id == GRN_ID_NIL)
 	return Qnil;
@@ -256,7 +256,7 @@ rb_grn_table_key_support_array_reference_by_key (VALUE self, VALUE rb_key)
     grn_obj *table, *value, *range;
     grn_id id;
 
-    id = rb_grn_table_key_support_lookup_raw(self, rb_key);
+    id = rb_grn_table_key_support_get(self, rb_key);
 
     if (id == GRN_ID_NIL)
 	return Qnil;
@@ -395,8 +395,8 @@ rb_grn_init_table_key_support (VALUE mGrn)
     rb_define_method(rb_mGrnTableKeySupport, "delete",
 		     rb_grn_table_key_support_delete, 1);
 
-    rb_define_method(rb_mGrnTableKeySupport, "lookup",
-		     rb_grn_table_key_support_lookup, 1);
+    rb_define_method(rb_mGrnTableKeySupport, "find",
+		     rb_grn_table_key_support_find, 1);
     rb_define_method(rb_mGrnTableKeySupport, "[]",
 		     rb_grn_table_key_support_array_reference, 1);
     rb_define_method(rb_mGrnTableKeySupport, "[]=",

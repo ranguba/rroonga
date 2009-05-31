@@ -50,13 +50,13 @@ class HashTest < Test::Unit::TestCase
     assert_equal(value, bookmarks["http://google.com/"])
   end
 
-  def test_lookup
+  def test_find
     bookmarks_path = @tables_dir + "bookmarks"
     bookmarks = Groonga::Hash.create(:name => "bookmarks",
                                      :path => bookmarks_path.to_s,
                                      :key_type => "<shorttext>")
     bookmark = bookmarks.add("http://google.com/")
-    assert_equal(bookmark, bookmarks.lookup("http://google.com/"))
+    assert_equal(bookmark, bookmarks.find("http://google.com/"))
   end
 
 
