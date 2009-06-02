@@ -65,6 +65,8 @@ VALUE rb_cGrnArray;
  * [+:value_size+]
  *   値の大きさを指定する。省略すると0になる。
  *
+ * 使用例:
+ *
  * 無名一時テーブルを生成する。
  *   Groonga::Array.create
  *
@@ -134,10 +136,31 @@ rb_grn_array_s_create (int argc, VALUE *argv, VALUE klass)
 
 /*
  * call-seq:
- *  array.add -> Groonga::Recordまたはnil
+ *   array.add(values=nil) -> Groonga::Recordまたはnil
  *
- * レコード追加し、追加したレコードを返します。レコードの追
- * 加に失敗した場合は+nil+を返します。
+ * レコード追加し、追加したレコードを返す。レコードの追加に失
+ * 敗した場合は+nil+を返す。
+ *
+ * _values_にはレコードのカラムに設定する値を指定する。省略
+ * した場合または+nil+を指定した場合はカラムは設定しない。カ
+ * ラムの値は<tt>{:カラム名1 => 値1, :カラム名2 => 値2,
+ * ...}</tt>と指定する。
+ *
+ * 使用例では、以下のようなユーザを格納するGroonga::Arrayが
+ * 定義されているものとする。
+ *   users = Groonga::Array.create(:name => "<users>")
+ *   users.define_column("name", "<shorttext>")
+ *   users.define_column("uri", "<shorttext>")
+ *
+ * ユーザを追加する。
+ *   user = users.add
+ *
+ * daijiroユーザを追加する。
+ *   daijiro = users.add(:name => "daijiro")
+ *
+ * gunyara-kunユーザを追加する。
+ *   gunyara_kun = users.add(:name => "gunyara-kun",
+ *                           :uri => "http://d.hatena.ne.jp/tasukuchan/")
  */
 static VALUE
 rb_grn_array_add (int argc, VALUE *argv, VALUE self)
