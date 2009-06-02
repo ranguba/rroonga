@@ -20,6 +20,13 @@
 
 VALUE rb_cGrnArrayCursor;
 
+/*
+ * Document-class: Groonga::ArrayCursor < Groonga::TableCursor
+ *
+ * Groonga::Arrayに登録されているレコードを順番に取り出すた
+ * めのオブジェクト。
+ */
+
 void
 rb_grn_init_array_cursor (VALUE mGrn)
 {
