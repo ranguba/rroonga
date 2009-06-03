@@ -27,7 +27,7 @@ require 'hoe'
 
 ENV["NODOT"] = "yes"
 
-Hoe::SUPPORTED_TEST_FRAMEWORKS[:testunit2] = "test/run-test.rb"
+Hoe::Test::SUPPORTED_TEST_FRAMEWORKS[:testunit2] = "test/run-test.rb"
 
 base_dir = File.join(File.dirname(__FILE__))
 truncate_base_dir = Proc.new do |x|
