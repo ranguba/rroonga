@@ -272,7 +272,7 @@ rb_grn_context_s_get_default_options (VALUE self)
  *
  * コンテキストを作成する時に利用するデフォルトのオプション
  * を設定する。利用可能なオプションは
- * Groonga::Context#initializeを参照。
+ * Groonga::Context.newを参照。
  */
 static VALUE
 rb_grn_context_s_set_default_options (VALUE self, VALUE options)
@@ -288,7 +288,7 @@ rb_grn_context_s_set_default_options (VALUE self, VALUE options)
  * コンテキストを作成する。_options_に指定可能な値は以下の通
  * り。
  *
- * [+:encoding]
+ * [+:encoding+]
  *   エンコーディングを指定する。エンコーディングの指定方法
  *   はGroonga::Encodingを参照。
  */
@@ -329,6 +329,12 @@ rb_grn_context_initialize (int argc, VALUE *argv, VALUE self)
     return Qnil;
 }
 
+/*
+ * call-seq:
+ *   context.inspect -> String
+ *
+ * コンテキストの中身を人に見やすい文字列で返す。
+ */
 static VALUE
 rb_grn_context_inspect (VALUE self)
 {
@@ -357,12 +363,25 @@ rb_grn_context_inspect (VALUE self)
     return inspected;
 }
 
+/*
+ * call-seq:
+ *   context.encoding -> Groonga::Encoding
+ *
+ * コンテキストが使うエンコーディングを返す。
+ */
 static VALUE
 rb_grn_context_get_encoding (VALUE self)
 {
     return GRNENCODING2RVAL(GRN_CTX_GET_ENCODING(SELF(self)));
 }
 
+/*
+ * call-seq:
+ *   context.encoding=(encoding)
+ *
+ * コンテキストが使うエンコーディングを設定する。エンコーディ
+ * ングの指定のしかたはGroonga::Encodingを参照。
+ */
 static VALUE
 rb_grn_context_set_encoding (VALUE self, VALUE rb_encoding)
 {
@@ -376,6 +395,12 @@ rb_grn_context_set_encoding (VALUE self, VALUE rb_encoding)
     return rb_encoding;
 }
 
+/*
+ * call-seq:
+ *   context.database -> Groonga::Database
+ *
+ * コンテキストが使うデータベースを返す。
+ */
 static VALUE
 rb_grn_context_get_database (VALUE self)
 {
@@ -385,6 +410,19 @@ rb_grn_context_get_database (VALUE self)
     return GRNDB2RVAL(context, grn_ctx_db(context), RB_GRN_FALSE);
 }
 
+/*
+ * call-seq:
+ *   context[name] -> Groonga::Object or nil
+ *   context[id]   -> Groonga::Object or nil
+ *
+ * コンテキスト管理下にあるオブジェクトを返す。
+ *
+ * _name_として文字列を指定した場合はオブジェクト名でオブジェ
+ * クトを検索する。
+ *
+ * _id_として数値を指定した場合はオブジェクトIDでオブジェク
+ * トを検索する。
+ */
 static VALUE
 rb_grn_context_array_reference (VALUE self, VALUE name_or_id)
 {
