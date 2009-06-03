@@ -22,6 +22,19 @@
 
 VALUE rb_mGrnEncodingSupport;
 
+/*
+ * Document-module: Groonga::EncodingSupport
+ *
+ * オブジェクトにエンコーディング関連の機能を提供するモジュー
+ * ル。
+ */
+
+/*
+ * call-seq:
+ *   object.encoding -> エンコーディング
+ *
+ * オブジェクトのエンコーディングを返す。
+ */
 static VALUE
 rb_grn_encoding_support_get_encoding (VALUE self)
 {
