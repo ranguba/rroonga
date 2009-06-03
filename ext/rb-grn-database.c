@@ -66,6 +66,14 @@ rb_grn_database_to_ruby_object (grn_ctx *context, grn_obj *database,
  * [+:context+]
  *   データベースを結びつけるコンテキスト。省略すると
  *   Groonga::Context.defaultを利用する。
+ *
+ * 使用例は以下の通り。
+ *
+ * 一時データベースを作成:
+ *   Groonga::Database.create
+ *
+ * 永続データベースを作成:
+ *   Groonga::Database.create(:path => "/tmp/db.groonga")
  */
 static VALUE
 rb_grn_database_s_create (int argc, VALUE *argv, VALUE klass)
@@ -181,6 +189,11 @@ rb_grn_database_s_open (int argc, VALUE *argv, VALUE klass)
  *   database.each {|object| ...}
  *
  * データベース内のオブジェクトを順番にブロックに渡す。
+ *
+ * すべてのオブジェクトの名前を表示する:
+ *   database.each do |object|
+ *     p object.name
+ *   end
  */
 static VALUE
 rb_grn_database_each (VALUE self)
