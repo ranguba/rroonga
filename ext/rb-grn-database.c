@@ -22,6 +22,17 @@
 
 VALUE rb_cGrnDatabase;
 
+/*
+ * Document-class: Groonga::Database
+ *
+ * テーブルの集合を管理するためのオブジェクト。
+ *
+ * コンテキストに結びつけて使用する。通常、アプリケーション
+ * 毎に1つのコンテキストを利用するので、データベースも1つだ
+ * け利用する。コンテキストと違い、データベースは暗黙のうち
+ * に作成されないので明示的に作成する必要がある。
+ */
+
 grn_obj *
 rb_grn_database_from_ruby_object (VALUE object)
 {
@@ -39,6 +50,23 @@ rb_grn_database_to_ruby_object (grn_ctx *context, grn_obj *database,
     return GRNOBJECT2RVAL(rb_cGrnDatabase, context, database, owner);
 }
 
+/*
+ * call-seq:
+ *   Groonga::Database.create(options=nil) -> Groonga::Database
+ *
+ * 新しくデータベースを作成する。
+ *
+ * _options_にはハッシュでオプションを指定する。指定できるオ
+ * プションは以下の通り。
+ *
+ * [+:path+]
+ *   データベースを保存するパス。省略すると一時データベース
+ *   となる。
+ *
+ * [+:context+]
+ *   データベースを結びつけるコンテキスト。省略すると
+ *   Groonga::Context.defaultを利用する。
+ */
 static VALUE
 rb_grn_database_s_create (int argc, VALUE *argv, VALUE klass)
 {
@@ -79,6 +107,22 @@ rb_grn_database_s_create (int argc, VALUE *argv, VALUE klass)
         return rb_database;
 }
 
+/*
+ * call-seq:
+ *   Groonga::Database.new(path, options=nil) -> Groonga::Database
+ *   Groonga::Database.new(path, options=nil) {|database| ...}
+ *
+ * 既存のデータベースを開く。ブロックを指定した場合はブロッ
+ * クに開いたデータベースを渡し、ブロックを抜けるときに閉じ
+ * る。
+ *
+ * _options_にはハッシュでオプションを指定する。指定できるオ
+ * プションは以下の通り。
+ *
+ * [+:context+]
+ *   データベースを結びつけるコンテキスト。省略すると
+ *   Groonga::Context.defaultを利用する。
+ */
 static VALUE
 rb_grn_database_initialize (int argc, VALUE *argv, VALUE self)
 {
@@ -103,6 +147,22 @@ rb_grn_database_initialize (int argc, VALUE *argv, VALUE self)
     return Qnil;
 }
 
+/*
+ * call-seq:
+ *   Groonga::Database.open(path, options=nil) -> Groonga::Database
+ *   Groonga::Database.open(path, options=nil) {|database| ...}
+ *
+ * 既存のデータベースを開く。ブロックを指定した場合はブロッ
+ * クに開いたデータベースを渡し、ブロックを抜けるときに閉じ
+ * る。
+ *
+ * _options_にはハッシュでオプションを指定する。指定できるオ
+ * プションは以下の通り。
+ *
+ * [+:context+]
+ *   データベースを結びつけるコンテキスト。省略すると
+ *   Groonga::Context.defaultを利用する。
+ */
 static VALUE
 rb_grn_database_s_open (int argc, VALUE *argv, VALUE klass)
 {
@@ -116,6 +176,12 @@ rb_grn_database_s_open (int argc, VALUE *argv, VALUE klass)
         return database;
 }
 
+/*
+ * call-seq:
+ *   database.each {|object| ...}
+ *
+ * データベース内のオブジェクトを順番にブロックに渡す。
+ */
 static VALUE
 rb_grn_database_each (VALUE self)
 {
