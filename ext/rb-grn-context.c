@@ -24,6 +24,25 @@
 
 static VALUE cGrnContext;
 
+/*
+ * Document-class: Groonga::Context
+ *
+ * groonga全体に渡る情報を管理するオブジェクト。通常のアプリ
+ * ケーションでは1つのコンテキストを作成し、それを利用する。
+ * 複数のコンテキストを利用する必要はない。
+ *
+ * デフォルトで使用されるコンテキストは
+ * Groonga::Context#defaultでアクセスできる。コンテキストを
+ * 指定できる箇所でコンテキストの指定を省略したり+nil+を指定
+ * した場合はGroonga::Context.defaultが利用される。
+ *
+ * また、デフォルトのコンテキストは必要になると暗黙のうちに
+ * 作成される。そのため、コンテキストを意識することは少ない。
+ *
+ * 暗黙のうちに作成されるコンテキストにオプションを指定する
+ * 場合はGroonga::Context.default_options=を使用する。
+ */
+
 grn_ctx *
 rb_grn_context_from_ruby_object (VALUE object)
 {
@@ -188,6 +207,17 @@ rb_grn_context_ensure (VALUE *context)
     return SELF(*context);
 }
 
+/*
+ * call-seq:
+ *   Groonga::Context.default -> Groonga::Context
+ *
+ * デフォルトのコンテキストを返す。デフォルトのコンテキスト
+ * が作成されていない場合は暗黙のうちに作成し、それを返す。
+ *
+ * 暗黙のうちにコンテキストを作成する場合は、
+ * Groonga::Context.default_optionsに設定されているオプショ
+ * ンを利用する。
+ */
 static VALUE
 rb_grn_context_s_get_default (VALUE self)
 {
@@ -207,6 +237,15 @@ rb_grn_context_get_default (void)
     return rb_grn_context_s_get_default(cGrnContext);
 }
 
+/*
+ * call-seq:
+ *   Groonga::Context.default=(context)
+ *
+ * デフォルトのコンテキストを設定する。+nil+を指定すると、デ
+ * フォルトのコンテキストをリセットする。リセットすると、次
+ * 回Groonga::Context.defaultを呼び出したときに新しくコンテ
+ * キストが作成される。
+ */
 static VALUE
 rb_grn_context_s_set_default (VALUE self, VALUE context)
 {
@@ -214,12 +253,27 @@ rb_grn_context_s_set_default (VALUE self, VALUE context)
     return Qnil;
 }
 
+/*
+ * call-seq:
+ *   Groonga::Context.default_options -> Hash or nil
+ *
+ * コンテキストを作成する時に利用するデフォルトのオプション
+ * を返す。
+ */
 static VALUE
 rb_grn_context_s_get_default_options (VALUE self)
 {
     return rb_cv_get(self, "@@default_options");
 }
 
+/*
+ * call-seq:
+ *   Groonga::Context.default_options=(options)
+ *
+ * コンテキストを作成する時に利用するデフォルトのオプション
+ * を設定する。利用可能なオプションは
+ * Groonga::Context#initializeを参照。
+ */
 static VALUE
 rb_grn_context_s_set_default_options (VALUE self, VALUE options)
 {
@@ -227,6 +281,17 @@ rb_grn_context_s_set_default_options (VALUE self, VALUE options)
     return Qnil;
 }
 
+/*
+ * call-seq:
+ *   Groonga::Context.new(options=nil)
+ *
+ * コンテキストを作成する。_options_に指定可能な値は以下の通
+ * り。
+ *
+ * [+:encoding]
+ *   エンコーディングを指定する。エンコーディングの指定方法
+ *   はGroonga::Encodingを参照。
+ */
 static VALUE
 rb_grn_context_initialize (int argc, VALUE *argv, VALUE self)
 {
@@ -234,7 +299,7 @@ rb_grn_context_initialize (int argc, VALUE *argv, VALUE self)
     int flags = 0;
     grn_rc rc;
     VALUE options, default_options;
-    VALUE use_ql, batch_mode, rb_encoding;
+    VALUE rb_encoding;
 
     rb_scan_args(argc, argv, "01", &options);
     default_options = rb_grn_context_s_get_default_options(rb_obj_class(self));
@@ -246,15 +311,8 @@ rb_grn_context_initialize (int argc, VALUE *argv, VALUE self)
     options = rb_funcall(default_options, rb_intern("merge"), 1, options);
 
     rb_grn_scan_options(options,
-			"use_ql", &use_ql,
-			"batch_mode", &batch_mode,
 			"encoding", &rb_encoding,
 			NULL);
-
-    if (RVAL2CBOOL(use_ql))
-	flags |= GRN_CTX_USE_QL;
-    if (RVAL2CBOOL(batch_mode))
-	flags |= GRN_CTX_BATCH_MODE;
 
     context = ALLOC(grn_ctx);
     DATA_PTR(self) = context;
@@ -284,20 +342,6 @@ rb_grn_context_inspect (VALUE self)
     inspected = rb_str_new2("#<");
     rb_str_concat(inspected, rb_inspect(rb_obj_class(self)));
     rb_str_cat2(inspected, " ");
-
-    rb_str_cat2(inspected, "use_ql: <");
-    if (context->flags & GRN_CTX_USE_QL)
-	rb_str_cat2(inspected, "true");
-    else
-	rb_str_cat2(inspected, "false");
-    rb_str_cat2(inspected, ">, ");
-
-    rb_str_cat2(inspected, "batch_mode: <");
-    if (context->flags & GRN_CTX_BATCH_MODE)
-	rb_str_cat2(inspected, "true");
-    else
-	rb_str_cat2(inspected, "false");
-    rb_str_cat2(inspected, ">, ");
 
     rb_str_cat2(inspected, "encoding: <");
     rb_str_concat(inspected, rb_inspect(GRNENCODING2RVAL(context->encoding)));
