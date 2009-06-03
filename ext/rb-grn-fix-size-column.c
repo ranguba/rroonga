@@ -22,6 +22,12 @@
 
 VALUE rb_cGrnFixSizeColumn;
 
+/*
+ * Document-class: Groonga::FixSizeColumn < Groonga::Column
+ *
+ * 固定長データ用のカラム。
+ */
+
 void
 rb_grn_fix_size_column_unbind (RbGrnFixSizeColumn *rb_grn_fix_size_column)
 {
@@ -104,8 +110,6 @@ rb_grn_fix_size_column_deconstruct (RbGrnFixSizeColumn *rb_grn_fix_size_column,
 }
 
 /*
- * Document-method: []
- *
  * call-seq:
  *   column[id] -> 値
  *
@@ -132,6 +136,12 @@ rb_grn_fix_size_column_array_reference (VALUE self, VALUE rb_id)
     return GRNVALUE2RVAL(context, value, range, self);
 }
 
+/*
+ * call-seq:
+ *   column[id] = value
+ *
+ * _column_の_id_に対応する値を設定する。
+ */
 static VALUE
 rb_grn_fix_size_column_array_set (VALUE self, VALUE rb_id, VALUE rb_value)
 {
