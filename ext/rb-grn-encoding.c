@@ -44,13 +44,13 @@
  * [+:euc_jp+]
  *   EUC-JPを使用。Groonga::Encoding::EUC_JP
  *
- * [+"euc-jp"+]
+ * [<tt>"euc-jp"</tt>]
  *   +:euc_jp+と同じ。
  *
  * [+:utf8+]
  *   UTF-8を使用。Groonga::Encoding::UTF8
  *
- * [+"utf-8"+]
+ * [<tt>"utf-8"</tt>]
  *   +:utf8+と同じ。
  *
  * [+:sjis+]
@@ -59,7 +59,7 @@
  * [+:shift_jis+]
  *   +:sjis+と同じ。
  *
- * [+"shift-jis"+]
+ * [<tt>"shift-jis"</tt>]
  *   +:sjis+と同じ。
  *
  * [+:latin1+]
@@ -148,12 +148,25 @@ rb_grn_encoding_to_ruby_object (grn_encoding encoding)
     return rb_encoding;
 }
 
+/*
+ * call-seq:
+ *   Groonga::Encoding.default -> エンコーディング
+ *
+ * デフォルトのエンコーディングを返す。
+ */
 static VALUE
 rb_grn_encoding_s_get_default (VALUE self)
 {
     return GRNENCODING2RVAL(grn_get_default_encoding());
 }
 
+/*
+ * call-seq:
+ *   Groonga::Encoding.default(encoding)
+ *
+ * デフォルトのエンコーディングを設定する。エンコーディング
+ * の指定方法はGroonga::Encodingを参照。
+ */
 static VALUE
 rb_grn_encoding_s_set_default (VALUE self, VALUE rb_encoding)
 {
