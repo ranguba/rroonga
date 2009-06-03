@@ -358,18 +358,6 @@ rb_grn_context_inspect (VALUE self)
 }
 
 static VALUE
-rb_grn_context_use_ql_p (VALUE self)
-{
-    return CBOOL2RVAL(SELF(self)->flags & GRN_CTX_USE_QL);
-}
-
-static VALUE
-rb_grn_context_batch_mode_p (VALUE self)
-{
-    return CBOOL2RVAL(SELF(self)->flags & GRN_CTX_BATCH_MODE);
-}
-
-static VALUE
 rb_grn_context_get_encoding (VALUE self)
 {
     return GRNENCODING2RVAL(GRN_CTX_GET_ENCODING(SELF(self)));
@@ -445,8 +433,6 @@ rb_grn_init_context (VALUE mGrn)
 
     rb_define_method(cGrnContext, "inspect", rb_grn_context_inspect, 0);
 
-    rb_define_method(cGrnContext, "use_ql?", rb_grn_context_use_ql_p, 0);
-    rb_define_method(cGrnContext, "batch_mode?", rb_grn_context_batch_mode_p, 0);
     rb_define_method(cGrnContext, "encoding", rb_grn_context_get_encoding, 0);
     rb_define_method(cGrnContext, "encoding=", rb_grn_context_set_encoding, 1);
 
