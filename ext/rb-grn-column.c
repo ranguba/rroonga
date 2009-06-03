@@ -65,6 +65,12 @@ rb_grn_column_to_ruby_object (VALUE klass, grn_ctx *context, grn_obj *column,
     return GRNOBJECT2RVAL(klass, context, column, owner);
 }
 
+/*
+ * call-seq:
+ *   column.table -> Groonga::Table
+ *
+ * カラムが所属するテーブルを返す。
+ */
 static VALUE
 rb_grn_column_get_table (VALUE self)
 {
