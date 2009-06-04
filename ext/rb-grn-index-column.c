@@ -196,7 +196,9 @@ rb_grn_index_column_deconstruct (RbGrnIndexColumn *rb_grn_index_column,
  *     content_index[groonga] = {:value => sentence, :section => i + 1}
  *   end
  *
- *   p content.search("エンジン").collect {|record| record.key["title"]} # -> ["groonga"]
+ *   content.search("エンジン").collect do |record|
+ *     p record.key["title"] # -> "groonga"
+ *   end
  */
 static VALUE
 rb_grn_index_column_array_set (VALUE self, VALUE rb_id, VALUE rb_value)
