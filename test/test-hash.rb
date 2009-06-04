@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Copyright (C) 2009  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
@@ -167,5 +168,20 @@ class HashTest < Test::Unit::TestCase
     assert_raise(Groonga::InvalidArgument) do
       Groonga::Hash.create(:name => "<users>")
     end
+  end
+
+  def test_define_index_column_implicit_with_position
+    bookmarks = Groonga::Hash.create(:name => "<bookmarks>")
+    bookmarks.define_column("comment", "<text>")
+    terms = Groonga::Hash.create(:name => "<terms>",
+                                 :default_tokenizer => "<token:bigram>")
+    index = terms.define_index_column("comment", bookmarks,
+                                      :source => "<bookmarks>.comment")
+    groonga = bookmarks.add("groonga", :comment => "search engine by Brazil")
+    google = bookmarks.add("google", :comment => "search engine by Google")
+    ruby = bookmarks.add("ruby", :comment => "programing language")
+
+    assert_equal(["groonga", "google"],
+                 index.search("engine").collect {|record| record.key.key})
   end
 end

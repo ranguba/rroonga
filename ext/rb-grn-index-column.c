@@ -202,7 +202,7 @@ static VALUE
 rb_grn_index_column_array_set (VALUE self, VALUE rb_id, VALUE rb_value)
 {
     grn_ctx *context = NULL;
-    grn_obj *column;
+    grn_obj *column, *range;
     grn_rc rc;
     grn_id id;
     unsigned int section;
@@ -214,10 +214,10 @@ rb_grn_index_column_array_set (VALUE self, VALUE rb_id, VALUE rb_value)
     rb_grn_index_column_deconstruct(SELF(self), &column, &context,
 				    NULL, NULL,
 				    &new_value, &old_value,
-				    NULL, NULL,
+				    NULL, &range,
 				    NULL, NULL);
 
-    id = NUM2UINT(rb_id);
+    id = RVAL2GRNID(rb_id, context, range, self);
 
     if (!RVAL2CBOOL(rb_obj_is_kind_of(rb_value, rb_cHash))) {
 	VALUE hash_value;
