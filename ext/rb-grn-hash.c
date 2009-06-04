@@ -183,6 +183,8 @@ rb_grn_hash_s_create (int argc, VALUE *argv, VALUE self)
 
     table = grn_table_create(context, name, name_size, path,
 			     flags, key_type, value_size);
+    if (!table)
+	rb_grn_context_check(context, rb_ary_new4(argc, argv));
     rb_table = rb_grn_table_key_support_alloc(self);
     rb_grn_table_key_support_assign(rb_table, rb_context, context, table,
 				    RB_GRN_TRUE);

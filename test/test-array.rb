@@ -64,4 +64,11 @@ class ArrayTest < Test::Unit::TestCase
     assert_equal(["groonga", "google"],
                  index.search(morita.id).collect {|record| record.key["title"]})
   end
+
+  def test_duplicated_name
+    Groonga::Array.create(:name => "<users>")
+    assert_raise(Groonga::InvalidArgument) do
+      Groonga::Array.create(:name => "<users>")
+    end
+  end
 end

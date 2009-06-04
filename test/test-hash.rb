@@ -162,18 +162,10 @@ class HashTest < Test::Unit::TestCase
                  terms.default_tokenizer)
   end
 
-  def test_define_index_column_implicit_with_position
-    bookmarks = Groonga::Hash.create(:name => "<bookmarks>")
-    bookmarks.define_column("comment", "<text>")
-    terms = Groonga::Hash.create(:name => "<terms>",
-                                 :default_tokenizer => "<token:bigram>")
-    index = terms.define_index_column("comment", bookmarks,
-                                      :source => "<bookmarks>.comment")
-    groonga = bookmarks.add("groonga", :comment => "search engine by Brazil")
-    google = bookmarks.add("google", :comment => "search engine by Google")
-    ruby = bookmarks.add("ruby", :comment => "programing language")
-
-    assert_equal(["groonga", "google"],
-                 index.search("engine").collect {|record| record.key.key})
+  def test_duplicated_name
+    Groonga::Hash.create(:name => "<users>")
+    assert_raise(Groonga::InvalidArgument) do
+      Groonga::Hash.create(:name => "<users>")
+    end
   end
 end

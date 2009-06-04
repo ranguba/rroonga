@@ -65,4 +65,11 @@ class PatriciaTrieTest < Test::Unit::TestCase
     assert_equal(context[Groonga::Type::UNIGRAM],
                  terms.default_tokenizer)
   end
+
+  def test_duplicated_name
+    Groonga::PatriciaTrie.create(:name => "<users>")
+    assert_raise(Groonga::InvalidArgument) do
+      Groonga::PatriciaTrie.create(:name => "<users>")
+    end
+  end
 end
