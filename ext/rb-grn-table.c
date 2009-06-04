@@ -226,7 +226,13 @@ rb_grn_table_initialize (int argc, VALUE *argv, VALUE self)
     VALUE rb_context;
 
     table = rb_grn_table_open_raw(argc, argv, &context, &rb_context);
-    rb_grn_object_assign(self, rb_context, context, table, RB_GRN_TRUE);
+    /* FIXME!!!! */
+    if (self == rb_cGrnArray) {
+	rb_grn_table_assign(self, rb_context, context, table, RB_GRN_TRUE);
+    } else {
+	rb_grn_table_key_support_assign(self, rb_context, context,
+					table, RB_GRN_TRUE);
+    }
     rb_grn_context_check(context, self);
 
     return Qnil;
@@ -263,8 +269,15 @@ rb_grn_table_s_open (int argc, VALUE *argv, VALUE klass)
 	}
     }
 
-    rb_table = rb_grn_object_alloc(klass);
-    rb_grn_object_assign(rb_table, rb_context, context, table, RB_GRN_TRUE);
+    /* FIXME!!!! */
+    if (klass == rb_cGrnArray) {
+	rb_table = rb_grn_table_alloc(klass);
+	rb_grn_table_assign(rb_table, rb_context, context, table, RB_GRN_TRUE);
+    } else {
+	rb_table = rb_grn_table_key_support_alloc(klass);
+	rb_grn_table_key_support_assign(rb_table, rb_context, context,
+					table, RB_GRN_TRUE);
+    }
 
     if (rb_block_given_p())
         return rb_ensure(rb_yield, rb_table, rb_grn_object_close, rb_table);

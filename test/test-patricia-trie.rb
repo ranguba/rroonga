@@ -72,4 +72,11 @@ class PatriciaTrieTest < Test::Unit::TestCase
       Groonga::PatriciaTrie.create(:name => "<users>")
     end
   end
+
+  def test_open_same_name
+    users_created = Groonga::PatriciaTrie.create(:name => "<users>")
+    users_opened = Groonga::PatriciaTrie.open(:name => "<users>")
+    users_opened.add("morita")
+    assert_equal(1, users_created.size)
+  end
 end

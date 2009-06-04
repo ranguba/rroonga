@@ -65,10 +65,17 @@ class ArrayTest < Test::Unit::TestCase
                  index.search(morita.id).collect {|record| record.key["title"]})
   end
 
-  def test_duplicated_name
+  def test_create_duplicated_name
     Groonga::Array.create(:name => "<users>")
     assert_raise(Groonga::InvalidArgument) do
       Groonga::Array.create(:name => "<users>")
     end
+  end
+
+  def test_open_same_name
+    users_created = Groonga::Array.create(:name => "<users>")
+    users_opened = Groonga::Array.open(:name => "<users>")
+    users_opened.add
+    assert_equal(1, users_created.size)
   end
 end
