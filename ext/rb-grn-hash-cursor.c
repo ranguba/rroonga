@@ -20,6 +20,14 @@
 
 VALUE rb_cGrnHashCursor;
 
+/*
+ * Document-class: Groonga::HashCursor < Groonga::TableCursor
+ *
+ * Groonga::Hashに登録されているレコードを順番に取り出すため
+ * のオブジェクト。利用できるメソッドはGroonga::TableCursor
+ * とGroonga::TableCursorKeySupportを参照。
+ */
+
 void
 rb_grn_init_hash_cursor (VALUE mGrn)
 {
