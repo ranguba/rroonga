@@ -1,5 +1,16 @@
 = NEWS
 
+== 0.0.2: 2009-06-04
+
+* Supported groonga 0.0.9 [mori]
+* Improved preformance: cache key, value, domain and range
+* Improved API
+* Added documents
+* Supported Ruby 1.9
+* Bug fixes:
+** Fixed install process [Tasuku SUENAGA]
+** Fixed memory leaks
+
 == 0.0.1: 2009-04-30
 
 * Initial release!
