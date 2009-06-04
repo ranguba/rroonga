@@ -153,8 +153,9 @@ rb_grn_index_column_deconstruct (RbGrnIndexColumn *rb_grn_index_column,
  *   段落番号を指定する。省略した場合は1を指定したとみなされ
  *   る。
  *
- *   Groonga::Table#define_index_column で<tt>{:with_section
- *   => true}</tt>を指定していなければいけない。
+ *   Groonga::Table#define_index_columnで
+ *   <tt>{:with_section => true}</tt>を指定していなければい
+ *   けない。
  *
  * [+:old_value+]
  *   以前の値を指定する。省略した場合は現在の値が用いられる。
