@@ -22,6 +22,16 @@
 
 VALUE rb_cGrnIndexColumn;
 
+/*
+ * Document-class: Groonga::IndexColumn < Groonga::Column
+ *
+ * 転置索引エントリを格納するカラム。このカラムを利用するこ
+ * とにより高速な全文検索を実現できる。
+ *
+ * テーブルにGroonga::IndexColumnを定義する方法は
+ * Groonga::Table#define_index_columnを参照。
+ */
+
 void
 rb_grn_index_column_unbind (RbGrnIndexColumn *rb_grn_index_column)
 {
@@ -123,6 +133,71 @@ rb_grn_index_column_deconstruct (RbGrnIndexColumn *rb_grn_index_column,
 	*string_query = rb_grn_index_column->string_query;
 }
 
+/*
+ * call-seq:
+ *   column[id] = value
+ *   column[id] = options
+ *
+ * IDが_id_であるレコードを高速に全文検索するため転置索引を作
+ * 成する。多くの場合、Groonga::Table#define_index_columnで
+ * +:source+オプションを指定することにより、自動的に全文検索
+ * 用の索引は更新されるので、明示的にこのメソッドを使うこと
+ * は少ない。
+ *
+ * _value_には文字列を指定する。
+ *
+ * _options_を指定することにより、より索引の作成を制御できる。
+ * _options_に指定可能な値は以下の通り。
+ *
+ * [+:section+]
+ *   段落番号を指定する。省略した場合は1を指定したとみなされ
+ *   る。
+ *
+ *   Groonga::Table#define_index_column で<tt>{:with_section
+ *   => true}</tt>を指定していなければいけない。
+ *
+ * [+:old_value+]
+ *   以前の値を指定する。省略した場合は現在の値が用いられる。
+ *   通常は指定する必要はない。
+ *
+ * [+:value+]
+ *   新しい値を指定する。_value_を指定した場合と_options_で
+ *   <tt>{:value => value}</tt>を指定した場合は同じ動作とな
+ *   る。
+ *
+ * 記事の段落毎に索引を作成する。
+ *   articles = Groonga::Array.create(:name => "<articles>")
+ *   articles.define_column("title", "<shottext>")
+ *   articles.define_column("content", "<text>")
+ *
+ *   terms = Groonga::Hash.create(:name => "<terms>",
+ *                                :with_section => true,
+ *                                :default_tokenizer => "<token:bigram>")
+ *   content_index = terms.define_index_column("content", articles)
+ *
+ *   content = <<-EOC
+ *   groonga は組み込み型の全文検索エンジンライブラリです。
+ *   DBMSやスクリプト言語処理系等に組み込むことによって、その
+ *   全文検索機能を強化することができます。また、リレーショナ
+ *   ルモデルに基づくデータストア機能を内包しており、groonga
+ *   単体でも高速なデータストアサーバとして使用することができ
+ *   ます。
+ *
+ *   ■全文検索方式
+ *   転置索引型の全文検索エンジンです。転置索引は圧縮されてファ
+ *   イルに格納され、検索時のディスク読み出し量を小さく、かつ
+ *   局所的に抑えるように設計されています。用途に応じて以下の
+ *   索引タイプを選択できます。
+ *   EOC
+ *
+ *   groonga = articles.add(:title => "groonga", :content => content)
+ *
+ *   content.split(/\n{2,}/).each_with_index do |sentence, i|
+ *     content_index[groonga] = {:value => sentence, :section => i + 1}
+ *   end
+ *
+ *   p content.search("エンジン").collect {|record| record.key["title"]} # -> ["groonga"]
+ */
 static VALUE
 rb_grn_index_column_array_set (VALUE self, VALUE rb_id, VALUE rb_value)
 {
