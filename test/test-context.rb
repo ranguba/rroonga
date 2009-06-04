@@ -18,8 +18,6 @@ class ContextTest < Test::Unit::TestCase
 
   def test_default
     context = Groonga::Context.default
-    assert_not_predicate(context, :use_ql?)
-    assert_not_predicate(context, :batch_mode?)
     assert_equal(Groonga::Encoding.default, context.encoding)
   end
 
