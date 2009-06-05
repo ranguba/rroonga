@@ -1,5 +1,9 @@
 = お知らせ
 
+== 0.0.3: 2009-XX-XX
+
+* [#26145] Groonga::TableKeySupport#has_key?の追加 [Tasuku SUENAGA]
+
 == 0.0.2: 2009-06-04
 
 * groonga 0.0.8対応 [mori]

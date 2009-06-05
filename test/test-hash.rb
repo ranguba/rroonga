@@ -191,4 +191,11 @@ class HashTest < Test::Unit::TestCase
     users_opened.add("morita")
     assert_equal(1, users_created.size)
   end
+
+  def test_has_key?
+    users = Groonga::Hash.create(:name => "<users>")
+    assert_false(users.has_key?("morita"))
+    users.add("morita")
+    assert_true(users.has_key?("morita"))
+  end
 end

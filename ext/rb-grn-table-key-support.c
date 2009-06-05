@@ -183,6 +183,24 @@ rb_grn_table_key_support_get_key (VALUE self, VALUE rb_id)
 }
 
 static VALUE
+rb_grn_table_key_support_has_key (VALUE self, VALUE rb_key)
+{
+    grn_ctx *context;
+    grn_obj *table, *key, *domain;
+    grn_id id, domain_id;
+
+    rb_grn_table_key_support_deconstruct(SELF(self), &table, &context,
+					 &key, &domain_id, &domain,
+					 NULL, NULL, NULL);
+
+    GRN_BULK_REWIND(key);
+    RVAL2GRNKEY(rb_key, context, key, domain_id, domain, self);
+    id = grn_table_get(context, table, GRN_BULK_HEAD(key), GRN_BULK_VSIZE(key));
+
+    return id == GRN_ID_NIL ? Qfalse : Qtrue;
+}
+
+static VALUE
 rb_grn_table_key_support_delete_by_key (VALUE self, VALUE rb_key)
 {
     grn_ctx *context;
@@ -383,6 +401,8 @@ rb_grn_init_table_key_support (VALUE mGrn)
 		     rb_grn_table_key_support_add, -1);
     rb_define_method(rb_mGrnTableKeySupport, "key",
 		     rb_grn_table_key_support_get_key, 1);
+    rb_define_method(rb_mGrnTableKeySupport, "has_key?",
+		     rb_grn_table_key_support_has_key, 1);
 
     rb_define_method(rb_mGrnTableKeySupport, "delete",
 		     rb_grn_table_key_support_delete, 1);
