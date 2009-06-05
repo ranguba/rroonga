@@ -2,7 +2,7 @@
 
 == 0.0.2: 2009-06-04
 
-* Supported groonga 0.0.9 [mori]
+* Supported groonga 0.0.8 [mori]
 * Improved preformance: cache key, value, domain and range
 * Improved API
 * Added documents
