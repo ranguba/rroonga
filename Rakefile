@@ -202,6 +202,11 @@ task :publish_html do
   sh "rsync #{rsync_args} html/ #{host}:#{remote_dir}"
 end
 
+task :tag do
+  repository = "svn+ssh://rubyforge.org/var/svn/groonga/groonga"
+  sh "svn cp #{repository}/trunk #{repository}/tags/#{version}"
+end
+
 # fix Hoe's incorrect guess.
 project.spec.executables.clear
 # project.lib_files = project.spec.files.grep(%r|^src/lib/|)
