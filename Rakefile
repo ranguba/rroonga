@@ -88,7 +88,7 @@ end
 
 ENV["VERSION"] ||= guess_version
 version = ENV["VERSION"]
-project = Hoe.new('groonga', version) do |project|
+project = Hoe.spec('groonga', version) do |project|
   project.rubyforge_name = 'groonga'
   authors = File.join(base_dir, "AUTHORS")
   project.author = File.readlines(authors).collect do |line|
