@@ -204,7 +204,8 @@ end
 
 task :tag do
   repository = "svn+ssh://rubyforge.org/var/svn/groonga/groonga"
-  sh "svn cp #{repository}/trunk #{repository}/tags/#{version}"
+  sh("svn cp -m 'release #{version}!!!' " +
+     "#{repository}/trunk #{repository}/tags/#{version}")
 end
 
 # fix Hoe's incorrect guess.
