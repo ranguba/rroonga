@@ -28,7 +28,7 @@ Ruby/groongaはRubyGemsでインストールできます。
 それでは、ファイルを指定してデータベースを作成します。
 
   >> Groonga::Database.create(:path => "/tmp/bookmark.db")
-  => #<Groonga::Database id: <nil>, name: (anonymous), path: </tmp/bookmark.db>, domain: <nil>, range: <nil>>
+  => #<Groonga::Database ...>
 
 ここで作成したデータベースは、これ以降、暗黙のうちに利用され
 ます。最初にデータベースを作成したら特に意識する必要はありま
@@ -54,7 +54,7 @@ groongaには以下の3種類のテーブルがあります。
 ブルを作成します。
 
   >> items = Groonga::Hash.create(:name => "<items>", :persistent => true)
-  => #<Groonga::Hash id: <18>, name: <<items>>, path: </tmp/bookmark.db.0000012>, domain: <nil>, range: <nil>, encoding: <:utf8>, size: <0>>
+  => #<Groonga::Hash ...>
 
 
 これで<tt><items></tt>という名前のテーブルが作成できました。
