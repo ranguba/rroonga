@@ -8,8 +8,8 @@
 * Added documents
 * Supported Ruby 1.9
 * Bug fixes:
-** Fixed install process [Tasuku SUENAGA]
-** Fixed memory leaks
+  * Fixed install process [Tasuku SUENAGA]
+  * Fixed memory leaks
 
 == 0.0.1: 2009-04-30
 
