@@ -34,7 +34,7 @@ module Groonga
     end
 
     def [](column_name)
-      (column(column_name) || {})[@id]
+      column(column_name, true)[@id]
     end
 
     def []=(column_name, value)
