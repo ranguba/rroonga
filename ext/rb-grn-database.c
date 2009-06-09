@@ -51,6 +51,27 @@ rb_grn_database_to_ruby_object (grn_ctx *context, grn_obj *database,
 }
 
 /*
+ * Document-method: close
+ *
+ * call-seq:
+ *   database.close
+ *
+ * _database_が使用しているリソースを開放する。これ以降_database_を
+ * 使うことはできない。
+ */
+static VALUE
+rb_grn_database_close (VALUE self)
+{
+    VALUE rb_context;
+
+    rb_context = rb_iv_get(self, "context");
+    if (!NIL_P(rb_context))
+	rb_iv_set(rb_context, "database", Qnil);
+
+    return rb_grn_object_close(self);
+}
+
+/*
  * call-seq:
  *   Groonga::Database.create(options=nil) -> Groonga::Database
  *
@@ -106,11 +127,13 @@ rb_grn_database_s_create (int argc, VALUE *argv, VALUE klass)
     rb_grn_object_assign(rb_database, rb_context, context,
 			 database, RB_GRN_TRUE);
     rb_iv_set(rb_database, "context", rb_context);
+    if (!NIL_P(rb_context))
+	rb_iv_set(rb_context, "database", rb_database);
     rb_grn_context_check(context, rb_ary_new4(argc, argv));
 
     if (rb_block_given_p())
         return rb_ensure(rb_yield, rb_database,
-			 rb_grn_object_close, rb_database);
+			 rb_grn_database_close, rb_database);
     else
         return rb_database;
 }
@@ -152,6 +175,10 @@ rb_grn_database_initialize (int argc, VALUE *argv, VALUE self)
     rb_grn_object_assign(self, rb_context, context, database, RB_GRN_TRUE);
     rb_grn_context_check(context, self);
 
+    rb_iv_set(self, "context", rb_context);
+    if (!NIL_P(rb_context))
+	rb_iv_set(rb_context, "database", self);
+
     return Qnil;
 }
 
@@ -179,7 +206,7 @@ rb_grn_database_s_open (int argc, VALUE *argv, VALUE klass)
     database = rb_grn_object_alloc(klass);
     rb_grn_database_initialize(argc, argv, database);
     if (rb_block_given_p())
-        return rb_ensure(rb_yield, database, rb_grn_object_close, database);
+        return rb_ensure(rb_yield, database, rb_grn_database_close, database);
     else
         return database;
 }
@@ -239,4 +266,7 @@ rb_grn_init_database (VALUE mGrn)
 
     rb_define_method(rb_cGrnDatabase, "each",
 		     rb_grn_database_each, 0);
+
+    rb_define_method(rb_cGrnDatabase, "close",
+		     rb_grn_database_close, 0);
 }
