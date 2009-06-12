@@ -93,7 +93,7 @@ items>テーブルにレコードを追加します。
 
 まず<tt><items></tt>テーブルに+title+という名前のカラムを追加します。
 
-  >> title_colum = items.define_column("title", "<text>", :persistent => true)
+  >> title_column = items.define_column("title", "<text>", :persistent => true)
   => #<Groonga::VarSizeColumn ...>
 
 2番目の引数は、追加するカラムのデータ型を示しています。
@@ -125,9 +125,9 @@ N-gramを利用した全文検索では、分解したN文字とその出現位�
 単語格納用テーブルの準備ができたので、<tt><items></tt>テーブ
 ルの+title+カラムに対するインデックスを定義します。
 
-  >> terms.define_index_column("item_title", items,
-                               :persistent => true,
-                               :source => "<items>.title")
+  >> title_index_column = terms.define_index_column("item_title", items,
+						    :persistent => true,
+						    :source => "<items>.title")
   => #<Groonga::IndexColumn ...>
 
 少し違和感を感じるかも知れませんが、<tt><items></tt>テーブル
@@ -155,7 +155,7 @@ N-gramを利用した全文検索では、分解したN文字とその出現位�
 
 以下のようにして検索することができます。
 
-  >> title_index_column.saerch("Ruby").collect {|record| record.key.key}
+  >> title_index_column.search("Ruby").collect {|record| record.key.key}
   ["http://ja.wikipedia.org/wiki/Ruby", "http://www.ruby-lang.org/"]
 
 検索結果はGroonga::Hashで返されます。ハッシュのキーに見つかっ
