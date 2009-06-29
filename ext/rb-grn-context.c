@@ -69,14 +69,21 @@ rb_grn_context_register (grn_ctx *context, RbGrnObject *object)
     objects = grn_ctx_get(context,
 			  OBJECTS_TABLE_NAME,
 			  strlen(OBJECTS_TABLE_NAME));
-    if (!objects)
+    if (!objects) {
+        grn_obj *key_type;
+
+        if (sizeof(RbGrnObject *) == 4)
+	    key_type = grn_ctx_at(context, GRN_DB_UINT32);
+        else
+	    key_type = grn_ctx_at(context, GRN_DB_UINT64);
 	objects = grn_table_create(context,
 				   OBJECTS_TABLE_NAME,
 				   strlen(OBJECTS_TABLE_NAME),
 				   NULL,
 				   GRN_OBJ_TABLE_HASH_KEY,
-				   grn_ctx_at(context, GRN_DB_UINT64),
+				   key_type,
 				   0);
+    }
 
     grn_table_add(context, objects,
 		  &object, sizeof(RbGrnObject *),

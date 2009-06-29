@@ -52,3 +52,5 @@ http://lists.sourceforge.jp/mailman/listinfo/groonga-dev
 
 * 森さん: 最新groonga対応パッチをくれました。
 * グニャラくん: バグレポートしてくれました。
+* にくさん: バグレポートしてくれました。
+
