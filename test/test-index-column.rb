@@ -54,4 +54,28 @@ class IndexColumnTest < Test::Unit::TestCase
     assert_equal([groonga],
                  content_index.search("エンジン").collect {|record| record.key})
   end
+
+  def test_shorter_query_than_ngram
+    articles = Groonga::Array.create(:name => "<articles>")
+    articles.define_column("content", "<text>")
+
+    terms = Groonga::PatriciaTrie.create(:name => "<terms>",
+                                         :default_tokenizer => "<token:bigram>")
+    content_index = terms.define_index_column("content", articles,
+                                              :source => "<articles>.content")
+    articles.add(:content => 'l')
+    articles.add(:content => 'll')
+    articles.add(:content => 'hello')
+
+    assert_search(["hello"], content_index, "he")
+    assert_search(["ll", "hello"], content_index, "ll")
+    assert_search(["l", "ll", "hello"], content_index, "l")
+  end
+
+  def assert_search(expected, content_index, keyword)
+    result = content_index.search(keyword).collect do |entry|
+      entry.key["content"]
+    end
+    assert_equal(expected, result)
+  end
 end

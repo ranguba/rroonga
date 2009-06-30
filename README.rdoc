@@ -54,3 +54,4 @@ http://rubyforge.org/mailman/listinfo/groonga-users-en
 * mori: sent patches to support the latest groonga.
 * Tasuku SUENAGA: sent bug reports.
 * niku: sent bug reports.
+* dara: wrote tests.
