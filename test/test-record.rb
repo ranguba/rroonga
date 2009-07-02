@@ -63,6 +63,10 @@ class RecordTest < Test::Unit::TestCase
     @bookmarks_uri = @bookmarks.define_column("uri", "<shorttext>",
                                               :path => @uri_column_path.to_s)
 
+    @rate_column_path = @columns_dir + "rate"
+    @bookmarks_rate = @bookmarks.define_column("rate", "<uint>",
+                                               :path => @rate_column_path.to_s)
+
     @comment_column_path = @columns_dir + "comment"
     @bookmarks_comment =
       @bookmarks.define_column("comment", "<text>",
@@ -186,5 +190,16 @@ class RecordTest < Test::Unit::TestCase
                  results.collect do |record|
                    [record.id, record.score]
                  end)
+  end
+
+  def test_increment!
+    groonga = @bookmarks.add
+    assert_equal(0, groonga["rate"])
+    groonga.increment!("rate")
+    assert_equal(1, groonga["rate"])
+    groonga.increment!("rate", 2)
+    assert_equal(3, groonga["rate"])
+    groonga.increment!("rate", -2)
+    assert_equal(1, groonga["rate"])
   end
 end

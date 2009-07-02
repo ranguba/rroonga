@@ -73,6 +73,10 @@ module Groonga
       @table[@id] = value
     end
 
+    def increment!(name, delta=nil)
+      column(name, true).increment!(@id, delta)
+    end
+
     def columns
       @table.columns
     end
