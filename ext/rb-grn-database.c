@@ -50,6 +50,20 @@ rb_grn_database_to_ruby_object (grn_ctx *context, grn_obj *database,
     return GRNOBJECT2RVAL(rb_cGrnDatabase, context, database, owner);
 }
 
+static void
+rb_grn_database_deconstruct (RbGrnObject *rb_grn_database,
+			     grn_obj **database,
+			     grn_ctx **context,
+			     grn_id *domain_id,
+			     grn_obj **domain,
+			     grn_id *range_id,
+			     grn_obj **range)
+{
+    rb_grn_object_deconstruct(rb_grn_database, database, context,
+			      domain_id, domain,
+			      range_id, range);
+}
+
 /*
  * Document-method: close
  *
@@ -231,8 +245,8 @@ rb_grn_database_each (VALUE self)
     VALUE rb_cursor;
     grn_id id;
 
-    rb_grn_object_deconstruct((RbGrnObject *)SELF(self), &database, &context,
-			      NULL, NULL, NULL, NULL);
+    rb_grn_database_deconstruct(SELF(self), &database, &context,
+				NULL, NULL, NULL, NULL);
     cursor = grn_table_cursor_open(context, database, NULL, 0, NULL, 0, 0);
     rb_cursor = GRNTABLECURSOR2RVAL(Qnil, context, cursor);
     rb_iv_set(self, "cursor", rb_cursor);
@@ -247,6 +261,124 @@ rb_grn_database_each (VALUE self)
     rb_iv_set(self, "cursor", Qnil);
 
     return Qnil;
+}
+
+/*
+ * Document-method: unlock
+ *
+ * call-seq:
+ *   database.unlock
+ *
+ * _database_のロックを解除する。
+ */
+static VALUE
+rb_grn_database_unlock (VALUE self)
+{
+    grn_ctx *context;
+    grn_obj *database;
+    grn_rc rc;
+
+    rb_grn_database_deconstruct(SELF(self), &database, &context,
+				NULL, NULL, NULL, NULL);
+
+    rc = grn_obj_unlock(context, database, GRN_ID_NIL);
+    rb_grn_context_check(context, self);
+    rb_grn_rc_check(rc, self);
+
+    return Qnil;
+}
+
+/*
+ * Document-method: lock
+ *
+ * call-seq:
+ *   database.lock(options={})
+ *   database.lock(options={}) {...}
+ *
+ * _database_をロックする。ロックに失敗した場合は
+ * Groonga::ResourceDeadlockAvoided例外が発生する。
+ *
+ * ブロックを指定した場合はブロックを抜けたときにunlockする。
+ *
+ * 利用可能なオプションは以下の通り。
+ *
+ * [_:timeout_]
+ *   ロックを獲得できなかった場合は_:timeout_秒間ロックの獲
+ *   得を試みる。_:timeout_秒以内にロックを獲得できなかった
+ *   場合は例外が発生する。
+ */
+static VALUE
+rb_grn_database_lock (int argc, VALUE *argv, VALUE self)
+{
+    grn_ctx *context;
+    grn_obj *database;
+    int timeout = 0;
+    grn_rc rc;
+    VALUE options, rb_timeout;
+
+    rb_scan_args(argc, argv, "01",  &options);
+
+    rb_grn_database_deconstruct(SELF(self), &database, &context,
+				NULL, NULL, NULL, NULL);
+
+    rb_grn_scan_options(options,
+			"timeout", &rb_timeout,
+			NULL);
+
+    if (!NIL_P(rb_timeout))
+	timeout = NUM2UINT(rb_timeout);
+
+    rc = grn_obj_lock(context, database, GRN_ID_NIL, timeout);
+    rb_grn_context_check(context, self);
+    rb_grn_rc_check(rc, self);
+
+    if (rb_block_given_p()) {
+	return rb_ensure(rb_yield, Qnil, rb_grn_database_unlock, self);
+    } else {
+	return Qnil;
+    }
+}
+
+/*
+ * Document-method: clear_lock
+ *
+ * call-seq:
+ *   database.clear_lock
+ *
+ * _database_のロックを強制的に解除する。
+ */
+static VALUE
+rb_grn_database_clear_lock (VALUE self)
+{
+    grn_ctx *context;
+    grn_obj *database;
+
+    rb_grn_database_deconstruct(SELF(self), &database, &context,
+				NULL, NULL, NULL, NULL);
+
+    grn_obj_clear_lock(context, database);
+
+    return Qnil;
+}
+
+/*
+ * Document-method: locked?
+ *
+ * call-seq:
+ *   database.locked?
+ *
+ * _database_がロックされていれば+true+を返す。
+ */
+static VALUE
+rb_grn_database_is_locked (VALUE self)
+{
+    grn_ctx *context;
+    grn_obj *database;
+
+    rb_grn_database_deconstruct(SELF(self), &database, &context,
+				NULL, NULL, NULL, NULL);
+
+    return CBOOL2RVAL(grn_obj_is_locked(context, database));
 }
 
 void
@@ -269,4 +401,10 @@ rb_grn_init_database (VALUE mGrn)
 
     rb_define_method(rb_cGrnDatabase, "close",
 		     rb_grn_database_close, 0);
+
+    rb_define_method(rb_cGrnDatabase, "lock", rb_grn_database_lock, -1);
+    rb_define_method(rb_cGrnDatabase, "unlock", rb_grn_database_unlock, 0);
+    rb_define_method(rb_cGrnDatabase, "clear_lock",
+		     rb_grn_database_clear_lock, 0);
+    rb_define_method(rb_cGrnDatabase, "locked?", rb_grn_database_is_locked, 0);
 }

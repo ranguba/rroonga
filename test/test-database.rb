@@ -85,4 +85,34 @@ class DatabaseTest < Test::Unit::TestCase
     assert_equal(Groonga::Encoding.default,
                  Groonga::Database.create.encoding)
   end
+
+  def test_lock
+    database = Groonga::Database.create
+
+    assert_not_predicate(database, :locked?)
+    database.lock
+    assert_predicate(database, :locked?)
+    database.unlock
+    assert_not_predicate(database, :locked?)
+  end
+
+  def test_lock_block
+    database = Groonga::Database.create
+
+    assert_not_predicate(database, :locked?)
+    database.lock do
+      assert_predicate(database, :locked?)
+    end
+    assert_not_predicate(database, :locked?)
+  end
+
+  def test_clear_lock
+    database = Groonga::Database.create
+
+    assert_not_predicate(database, :locked?)
+    database.lock
+    assert_predicate(database, :locked?)
+    database.clear_lock
+    assert_not_predicate(database, :locked?)
+  end
 end
