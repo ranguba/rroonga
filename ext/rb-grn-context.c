@@ -146,7 +146,7 @@ rb_grn_context_free (void *pointer)
     grn_ctx *context = pointer;
 
     if (context->stat != GRN_CTX_FIN) {
-	rb_grn_context_unbind (context);
+	rb_grn_context_unbind(context);
 	grn_ctx_fin(context);
     }
     xfree(context);
