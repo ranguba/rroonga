@@ -86,12 +86,46 @@ rb_grn_column_get_table (VALUE self)
     return GRNOBJECT2RVAL(Qnil, context, table, RB_GRN_FALSE);
 }
 
+/*
+ * call-seq:
+ *   column.local_name
+ *
+ * テーブル名を除いたカラム名を返す。
+ *
+ *   items = Groonga::Array.create(:name => "<items>")
+ *   title = items.define_column("title", "<shorttext>")
+ *   title.name # => "<items>.title"
+ *   title.local_name # => "title"
+ */
+static VALUE
+rb_grn_column_get_local_name (VALUE self)
+{
+    grn_ctx *context = NULL;
+    grn_obj *column;
+    int name_size;
+    VALUE rb_name;
+
+    rb_grn_object_deconstruct((RbGrnObject *)(SELF(self)), &column, &context,
+			      NULL, NULL,
+			      NULL, NULL);
+    name_size = grn_column_name(context, column, NULL, 0);
+    if (name_size == 0)
+	return Qnil;
+
+    rb_name = rb_str_buf_new(name_size);
+    rb_str_set_len(rb_name, name_size);
+    grn_column_name(context, column, RSTRING_PTR(rb_name), name_size);
+    return rb_name;
+}
+
 void
 rb_grn_init_column (VALUE mGrn)
 {
     rb_cGrnColumn = rb_define_class_under(mGrn, "Column", rb_cGrnObject);
 
     rb_define_method(rb_cGrnColumn, "table", rb_grn_column_get_table, 0);
+    rb_define_method(rb_cGrnColumn, "local_name",
+		     rb_grn_column_get_local_name, 0);
 
     rb_grn_init_fix_size_column(mGrn);
     rb_grn_init_variable_size_column(mGrn);

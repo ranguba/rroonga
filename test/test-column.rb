@@ -167,6 +167,13 @@ class ColumnTest < Test::Unit::TestCase
     assert_equal("morita", groonga[:user].key)
   end
 
+  def test_local_name
+    items = Groonga::Array.create(:name => "<items>")
+    title = items.define_column("title", "<shorttext>")
+    assert_equal("<items>.title", title.name)
+    assert_equal("title", title.local_name)
+  end
+
   private
   def assert_content_search(expected_records, term)
     records = @bookmarks_index_content.search(term).records
