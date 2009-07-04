@@ -1024,6 +1024,48 @@ rb_grn_table_lock (int argc, VALUE *argv, VALUE self)
 }
 
 /*
+ * Document-method: clear_lock
+ *
+ * call-seq:
+ *   table.clear_lock(options={})
+ *
+ * _table_のロックを強制的に解除する。
+ *
+ * 利用可能なオプションは以下の通り。
+ *
+ * [_:id_]
+ *   _:id_で指定したレコードのロックを強制的に解除する。
+ *   （注: groonga側が未実装のため、現在は無視される。実装さ
+ *   れるのではないかと思っているが、実装されないかもしれな
+ *   い。）
+ */
+static VALUE
+rb_grn_table_clear_lock (int argc, VALUE *argv, VALUE self)
+{
+    grn_id id = GRN_ID_NIL;
+    grn_ctx *context;
+    grn_obj *table;
+    VALUE options, rb_id;
+
+    rb_scan_args(argc, argv, "01",  &options);
+
+    rb_grn_table_deconstruct(SELF(self), &table, &context,
+			     NULL, NULL,
+			     NULL, NULL, NULL);
+
+    rb_grn_scan_options(options,
+			"id", &rb_id,
+			NULL);
+
+    if (!NIL_P(rb_id))
+	id = NUM2UINT(rb_id);
+
+    grn_obj_clear_lock(context, table);
+
+    return Qnil;
+}
+
+/*
  * Document-method: locked?
  *
  * call-seq:
@@ -1106,6 +1148,7 @@ rb_grn_init_table (VALUE mGrn)
 
     rb_define_method(rb_cGrnTable, "lock", rb_grn_table_lock, -1);
     rb_define_method(rb_cGrnTable, "unlock", rb_grn_table_unlock, -1);
+    rb_define_method(rb_cGrnTable, "clear_lock", rb_grn_table_clear_lock, -1);
     rb_define_method(rb_cGrnTable, "locked?", rb_grn_table_is_locked, -1);
 
     rb_grn_init_table_key_support(mGrn);
