@@ -915,13 +915,65 @@ rb_grn_table_array_set (VALUE self, VALUE rb_id, VALUE rb_value)
 }
 
 /*
+ * Document-method: unlock
+ *
+ * call-seq:
+ *   table.unlock(options={})
+ *
+ * _table_のロックを解除する。
+ *
+ * 利用可能なオプションは以下の通り。
+ *
+ * [_:id_]
+ *   _:id_で指定したレコードのロックを解除する。（注:
+ *   groonga側が未実装のため、現在は無視される）
+ */
+static VALUE
+rb_grn_table_unlock (int argc, VALUE *argv, VALUE self)
+{
+    grn_id id = GRN_ID_NIL;
+    grn_ctx *context;
+    grn_obj *table;
+    grn_rc rc;
+    VALUE options, rb_id;
+
+    rb_scan_args(argc, argv, "01",  &options);
+
+    rb_grn_table_deconstruct(SELF(self), &table, &context,
+			     NULL, NULL,
+			     NULL, NULL, NULL);
+
+    rb_grn_scan_options(options,
+			"id", &rb_id,
+			NULL);
+
+    if (!NIL_P(rb_id))
+	id = NUM2UINT(rb_id);
+
+    rc = grn_obj_unlock(context, table, id);
+    rb_grn_context_check(context, self);
+    rb_grn_rc_check(rc, self);
+
+    return Qnil;
+}
+
+static VALUE
+rb_grn_table_unlock_ensure (VALUE self)
+{
+    return rb_grn_table_unlock(0, NULL, self);
+}
+
+/*
  * Document-method: lock
  *
  * call-seq:
  *   table.lock(options={})
+ *   table.lock(options={}) {...}
  *
  * _table_をロックする。ロックに失敗した場合は
  * Groonga::ResourceDeadlockAvoided例外が発生する。
+ *
+ * ブロックを指定した場合はブロックを抜けたときにunlockする。
  *
  * 利用可能なオプションは以下の通り。
  *
@@ -964,50 +1016,11 @@ rb_grn_table_lock (int argc, VALUE *argv, VALUE self)
     rb_grn_context_check(context, self);
     rb_grn_rc_check(rc, self);
 
-    return Qnil;
-}
-
-/*
- * Document-method: unlock
- *
- * call-seq:
- *   table.unlock(options={})
- *
- * _table_のロックを解除する。
- *
- * 利用可能なオプションは以下の通り。
- *
- * [_:id_]
- *   _:id_で指定したレコードのロックを解除する。（注:
- *   groonga側が未実装のため、現在は無視される）
- */
-static VALUE
-rb_grn_table_unlock (int argc, VALUE *argv, VALUE self)
-{
-    grn_id id = GRN_ID_NIL;
-    grn_ctx *context;
-    grn_obj *table;
-    grn_rc rc;
-    VALUE options, rb_id;
-
-    rb_scan_args(argc, argv, "01",  &options);
-
-    rb_grn_table_deconstruct(SELF(self), &table, &context,
-			     NULL, NULL,
-			     NULL, NULL, NULL);
-
-    rb_grn_scan_options(options,
-			"id", &rb_id,
-			NULL);
-
-    if (!NIL_P(rb_id))
-	id = NUM2UINT(rb_id);
-
-    rc = grn_obj_unlock(context, table, id);
-    rb_grn_context_check(context, self);
-    rb_grn_rc_check(rc, self);
-
-    return Qnil;
+    if (rb_block_given_p()) {
+	return rb_ensure(rb_yield, Qnil, rb_grn_table_unlock_ensure, self);
+    } else {
+	return Qnil;
+    }
 }
 
 /*

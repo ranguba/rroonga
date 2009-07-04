@@ -362,4 +362,15 @@ class TableTest < Test::Unit::TestCase
     bookmarks.unlock
     assert_not_predicate(bookmarks, :locked?)
   end
+
+  def test_lock_block
+    bookmarks = Groonga::Array.create(:name => "<bookmarks>")
+    bookmark = bookmarks.add
+
+    assert_not_predicate(bookmarks, :locked?)
+    bookmarks.lock do
+      assert_predicate(bookmarks, :locked?)
+    end
+    assert_not_predicate(bookmarks, :locked?)
+  end
 end
