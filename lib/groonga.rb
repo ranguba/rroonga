@@ -48,3 +48,5 @@ module Groonga
     end
   end
 end
+
+require 'groonga/schema'
