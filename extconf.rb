@@ -21,6 +21,7 @@ require 'English'
 require 'mkmf'
 require 'pkg-config'
 require 'fileutils'
+require 'shellwords'
 
 checking_for(checking_message("GCC")) do
   if macro_defined?("__GNUC__", "")
@@ -37,16 +38,43 @@ ext_dir_name = "ext"
 src_dir = File.join(File.expand_path(File.dirname(__FILE__)), ext_dir_name)
 major, minor, micro = 0, 0, 8
 
+def local_groonga_base_dir
+  File.join(File.dirname(__FILE__), "vendor")
+end
+
+def local_groonga_install_dir
+  File.expand_path(File.join(local_groonga_base_dir, "local"))
+end
+
+def have_local_groonga?(package_name, major, minor, micro)
+  return false unless File.exist?(File.join(local_groonga_install_dir, "lib"))
+
+  prepend_pkg_config_path_for_local_groonga
+  PKGConfig.have_package(package_name, major, minor, micro)
+end
+
+def prepend_pkg_config_path_for_local_groonga
+  pkg_config_dir = File.join(local_groonga_install_dir, "lib", "pkgconfig")
+  PackageConfig.prepend_default_path(pkg_config_dir)
+
+  lib_dir = File.join(local_groonga_install_dir, "lib")
+  original_LDFLAGS = $LDFLAGS
+  checking_for(checking_message("-Wl,-rpath is available")) do
+    $LDFLAGS += " -Wl,-rpath,#{Shellwords.escape(lib_dir)}"
+    available = try_compile("int main() {return 0;}")
+    $LDFLAGS = original_LDFLAGS unless available
+    available
+  end
+end
+
 def install_groonga_locally(major, minor, micro)
   require 'open-uri'
   require 'shellwords'
 
   tar_gz = "groonga-#{major}.#{minor}.#{micro}.tar.gz"
-  base_dir = File.join(File.dirname(__FILE__), "vendor")
-  install_dir = File.expand_path(File.join(base_dir, "local"))
-  FileUtils.mkdir_p(base_dir)
+  FileUtils.mkdir_p(local_groonga_base_dir)
 
-  Dir.chdir(base_dir) do
+  Dir.chdir(local_groonga_base_dir) do
     url = "http://groonga.org/files/groonga/#{tar_gz}"
     message("downloading %s...", url)
     open(url, "rb") do |input|
@@ -69,7 +97,7 @@ def install_groonga_locally(major, minor, micro)
     groonga_source_dir = "groonga-#{major}.#{minor}.#{micro}"
     Dir.chdir(groonga_source_dir) do
       message("configuring...")
-      if xsystem("./configure --prefix=#{Shellwords.escape(install_dir)}")
+      if xsystem("./configure CFLAGS='-g -O0' --prefix=#{Shellwords.escape(install_dir)}")
         message(" done\n")
       else
         message(" failed\n")
@@ -94,16 +122,14 @@ def install_groonga_locally(major, minor, micro)
     end
   end
 
-  pkg_config_dir = File.join(install_dir, "lib", "pkgconfig")
-  PackageConfig.prepend_default_path(pkg_config_dir)
-
-  lib_dir = File.join(install_dir, "lib")
-  $LDFLAGS += " -Wl,-rpath,#{Shellwords.escape(lib_dir)}"
+  prepend_pkg_config_path_for_local_groonga
 end
 
 unless PKGConfig.have_package(package_name, major, minor, micro)
-  install_groonga_locally(major, minor, micro)
-  PKGConfig.have_package(package_name, major, minor, micro) or exit 1
+  unless have_local_groonga?(package_name, major, minor, micro)
+    install_groonga_locally(major, minor, micro)
+    PKGConfig.have_package(package_name, major, minor, micro) or exit 1
+  end
 end
 
 real_version = PKGConfig.modversion(package_name)

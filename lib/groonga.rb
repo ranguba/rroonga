@@ -15,6 +15,30 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+require 'pathname'
+
+base_dir = Pathname.new(__FILE__).dirname.dirname
+local_groonga_library_dir = base_dir + "vendor" + "local" + "lib"
+if local_groonga_library_dir.exist?
+  prepend_path = Proc.new do |environment_name, separator|
+    paths = (ENV[environment_name] || '').split(/#{separator}/)
+    unless paths.include?(local_groonga_library_dir.to_s)
+      paths = [local_groonga_library_dir] + paths
+      ENV[environment_name] = paths.join(separator)
+    end
+  end
+
+  case RUBY_PLATFORM
+  when /mingw|mswin/
+    prepend_path.call("PATH", ";")
+  when /darwin/
+    prepend_path.call("DYLD_LIBRARY_PATH", ":")
+  else
+    # This is not work. It's too late. :<
+    prepend_path.call("LD_LIBRARY_PATH", ":")
+  end
+end
+
 require 'groonga/record'
 require 'groonga.so'
 
