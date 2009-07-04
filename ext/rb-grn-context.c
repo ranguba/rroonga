@@ -71,16 +71,21 @@ rb_grn_context_register (grn_ctx *context, RbGrnObject *object)
 			  strlen(OBJECTS_TABLE_NAME));
     if (!objects) {
         grn_obj *key_type;
+	int flags = GRN_OBJ_TABLE_HASH_KEY;
+
+	if (grn_obj_path(context, grn_ctx_db(context)))
+	    flags |= GRN_OBJ_PERSISTENT;
 
         if (sizeof(RbGrnObject *) == 4)
 	    key_type = grn_ctx_at(context, GRN_DB_UINT32);
         else
 	    key_type = grn_ctx_at(context, GRN_DB_UINT64);
+
 	objects = grn_table_create(context,
 				   OBJECTS_TABLE_NAME,
 				   strlen(OBJECTS_TABLE_NAME),
 				   NULL,
-				   GRN_OBJ_TABLE_HASH_KEY,
+				   flags,
 				   key_type,
 				   0);
 	rb_grn_context_check(context, Qnil);
