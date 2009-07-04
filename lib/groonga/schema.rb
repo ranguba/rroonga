@@ -18,13 +18,34 @@
 module Groonga
   class Schema
     class << self
-      def create_table(name, options={})
-        options ||= {}
-
-        definition = TableDefinition.new(name, options.dup)
-        yield(definition)
-        definition.create
+      def define(options={})
+        schema = new(options)
+        yield(schema)
+        schema.define
       end
+
+      def create_table(name, options={}, &block)
+        define do |schema|
+          schema.create_table(name, options, &block)
+        end
+      end
+    end
+
+    def initialize(options={})
+      @options = (options || {}).dup
+      @definitions = []
+    end
+
+    def define
+      @definitions.each do |definition|
+        definition.define
+      end
+    end
+
+    def create_table(name, options={})
+      definition = TableDefinition.new(name, @options.merge(options || {}))
+      yield(definition)
+      @definitions << definition
     end
 
     class TableDefinition
@@ -36,10 +57,10 @@ module Groonga
         @table_type = table_type
       end
 
-      def create
+      def define
         table = @table_type.create(:name => @name, :path => @options[:path])
         @columns.each do |column|
-          column.create(table)
+          column.define(table)
         end
         table
       end
@@ -130,7 +151,7 @@ module Groonga
         @type = nil
       end
 
-      def create(table)
+      def define(table)
         table.define_column(@name,
                             normalize_type(@type),
                             @options)
