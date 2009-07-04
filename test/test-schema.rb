@@ -96,4 +96,17 @@ class SchemaTest < Test::Unit::TestCase
     end
     assert_equal(context["<longtext>"], context["<posts>.content"].range)
   end
+
+  def test_dump
+    Groonga::Schema.define do |schema|
+      schema.define_table("<posts>") do |table|
+        table.short_text :title
+      end
+    end
+    assert_equal(<<-EOS, Groonga::Schema::Dumper.dump)
+define_table("<posts>") do |table|
+  table.short_text("title")
+end
+EOS
+  end
 end

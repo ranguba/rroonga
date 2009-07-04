@@ -26,7 +26,7 @@ module Groonga
 
       def create_table(name, options={}, &block)
         define do |schema|
-          schema.create_table(name, options, &block)
+          schema.define_table(name, options, &block)
         end
       end
     end
@@ -42,7 +42,7 @@ module Groonga
       end
     end
 
-    def create_table(name, options={})
+    def define_table(name, options={})
       definition = TableDefinition.new(name, @options.merge(options || {}))
       yield(definition)
       @definitions << definition
@@ -178,6 +178,64 @@ module Groonga
           "<int>"
         else
           type
+        end
+      end
+    end
+
+    class Dumper
+      class << self
+        def dump(options={})
+          new(options).dump
+        end
+      end
+
+      def initialize(options={})
+        @options = (options || {}).dup
+      end
+
+      def dump
+        context = @options[:context] || Groonga::Context.default
+        database = context.database
+        return nil if database.nil?
+
+        schema = ""
+        database.each do |object|
+          next unless object.is_a?(Groonga::Table)
+          next if object.name == "<ranguba:objects>"
+          schema << "define_table(#{object.name.inspect}) do |table|\n"
+          object.columns.each do |column|
+            type = column_method(column)
+            name = column.local_name
+            schema << "  table.#{type}(#{name.inspect})\n"
+          end
+          schema << "end\n"
+        end
+        schema
+      end
+
+      private
+      def column_method(column)
+        case column.range.name
+        when "<int>"
+          "integer32"
+        when "<int64>"
+          "integer64"
+        when "<uint>"
+          "unsigned_integer32"
+        when "<uint64>"
+          "unsigned_integer64"
+        when "<float>"
+          "float"
+        when "<time>"
+          "time"
+        when "<shorttext>"
+          "short_text"
+        when "<text>"
+          "text"
+        when "<longtext>"
+          "long_text"
+        else
+          raise ArgumentError, "unsupported column: #{column.inspect}"
         end
       end
     end
