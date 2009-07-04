@@ -351,4 +351,15 @@ class TableTest < Test::Unit::TestCase
     end
     assert_equal((100..199).to_a.reverse, results)
   end
+
+  def test_lock
+    bookmarks = Groonga::Array.create(:name => "<bookmarks>")
+    bookmark = bookmarks.add
+
+    assert_not_predicate(bookmarks, :locked?)
+    bookmarks.lock
+    assert_predicate(bookmarks, :locked?)
+    bookmarks.unlock
+    assert_not_predicate(bookmarks, :locked?)
+  end
 end
