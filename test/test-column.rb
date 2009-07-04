@@ -157,25 +157,6 @@ class ColumnTest < Test::Unit::TestCase
     assert_equal(daijiro, @bookmarks_user[bookmark.id])
   end
 
-  def test_inspect
-    assert_equal("#<Groonga::VarSizeColumn " +
-                 "id: <#{@users_name_column.id}>, " +
-                 "name: <users.name>, " +
-                 "path: <#{@users_name_column_path}>, " +
-                 "domain: <#{@users.inspect}>, " +
-                 "range: <#{context['<shorttext>'].inspect}>" +
-                 ">",
-                 @users_name_column.inspect)
-  end
-
-  def test_domain
-    assert_equal(@users, @users_name_column.domain)
-  end
-
-  def test_table
-    assert_equal(@users, @users_name_column.table)
-  end
-
   def test_array_set_with_key_of_table
     users = Groonga::Hash.create(:name => "<users>")
     bookmarks = Groonga::Hash.create(:name => "<bookmarks>")

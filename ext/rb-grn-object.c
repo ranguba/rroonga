@@ -145,7 +145,7 @@ rb_grn_object_to_ruby_class (grn_obj *object)
 	klass = rb_cGrnFixSizeColumn;
 	break;
       case GRN_COLUMN_VAR_SIZE:
-	klass = rb_cGrnVarSizeColumn;
+	klass = rb_cGrnVariableSizeColumn;
 	break;
       case GRN_COLUMN_INDEX:
 	klass = rb_cGrnIndexColumn;

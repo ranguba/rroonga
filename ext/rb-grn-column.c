@@ -21,7 +21,6 @@
 #define SELF(object) ((RbGrnColumn *)DATA_PTR(object))
 
 VALUE rb_cGrnColumn;
-VALUE rb_cGrnVarSizeColumn;
 
 /*
  * Document-class: Groonga::Column < Groonga::Object
@@ -33,7 +32,7 @@ VALUE rb_cGrnVarSizeColumn;
  * カラムには大きく分けて3種類ある。
  * [Groonga::FixSizeColumn]
  *   固定長のデータを格納するカラム。
- * [Groonga::VarSizeColumn]
+ * [Groonga::VariableSizeColumn]
  *   可変長のデータを格納するカラム。
  * [Groonga::IndexColumn]
  *   転置インデックスを格納するカラム。全文検索や参照元レコー
@@ -92,11 +91,9 @@ rb_grn_init_column (VALUE mGrn)
 {
     rb_cGrnColumn = rb_define_class_under(mGrn, "Column", rb_cGrnObject);
 
-    rb_cGrnVarSizeColumn =
-	rb_define_class_under(mGrn, "VarSizeColumn", rb_cGrnColumn);
-
     rb_define_method(rb_cGrnColumn, "table", rb_grn_column_get_table, 0);
 
     rb_grn_init_fix_size_column(mGrn);
+    rb_grn_init_variable_size_column(mGrn);
     rb_grn_init_index_column(mGrn);
 }
