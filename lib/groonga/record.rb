@@ -99,6 +99,22 @@ module Groonga
       @table.delete(@id)
     end
 
+    def lock(options={}, &block)
+      @table.lock(options.merge(:id => @id), &block)
+    end
+
+    def unlock(options={})
+      @table.unlock(options.merge(:id => @id))
+    end
+
+    def clear_lock(options={})
+      @table.clear_lock(options.merge(:id => @id))
+    end
+
+    def locked?(options={})
+      @table.locked?(options.merge(:id => @id))
+    end
+
     private
     def column(name, required=false)
       _column = @table.column(name.to_s)

@@ -213,4 +213,43 @@ class RecordTest < Test::Unit::TestCase
     groonga.decrement!("rate", -2)
     assert_equal(-1, groonga["rate"])
   end
+
+  def test_lock
+    groonga = @bookmarks.add
+
+    assert_not_predicate(groonga, :locked?)
+    groonga.lock
+    assert_predicate(groonga, :locked?)
+    groonga.unlock
+    assert_not_predicate(groonga, :locked?)
+  end
+
+  def test_lock_failed
+    groonga = @bookmarks.add
+
+    groonga.lock
+    assert_raise(Groonga::ResourceDeadlockAvoided) do
+      groonga.lock
+    end
+  end
+
+  def test_lock_block
+    groonga = @bookmarks.add
+
+    assert_not_predicate(groonga, :locked?)
+    groonga.lock do
+      assert_predicate(groonga, :locked?)
+    end
+    assert_not_predicate(groonga, :locked?)
+  end
+
+  def test_clear_lock
+    groonga = @bookmarks.add
+
+    assert_not_predicate(groonga, :locked?)
+    groonga.lock
+    assert_predicate(groonga, :locked?)
+    groonga.clear_lock
+    assert_not_predicate(groonga, :locked?)
+  end
 end
