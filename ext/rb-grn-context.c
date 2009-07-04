@@ -83,6 +83,7 @@ rb_grn_context_register (grn_ctx *context, RbGrnObject *object)
 				   GRN_OBJ_TABLE_HASH_KEY,
 				   key_type,
 				   0);
+	rb_grn_context_check(context, Qnil);
     }
 
     grn_table_add(context, objects,
