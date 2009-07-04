@@ -206,15 +206,8 @@ rb_grn_fix_size_column_array_set (VALUE self, VALUE rb_id, VALUE rb_value)
     return Qnil;
 }
 
-/*
- * call-seq:
- *   column.increment!(id, delta=nil)
- *
- * _column_の_id_に対応する値を_delta_だけ増加する。_delta_
- * が+nil+の場合は1増加する。
- */
 static VALUE
-rb_grn_fix_size_column_increment (int argc, VALUE *argv, VALUE self)
+rb_grn_fix_size_column_integer_set (int argc, VALUE *argv, VALUE self, int flags)
 {
     grn_ctx *context = NULL;
     grn_obj *column;
@@ -236,11 +229,37 @@ rb_grn_fix_size_column_increment (int argc, VALUE *argv, VALUE self)
     GRN_BULK_REWIND(value);
     RVAL2GRNBULK(rb_delta, context, value);
 
-    rc = grn_obj_set_value(context, column, id, value, GRN_OBJ_INCR);
+    rc = grn_obj_set_value(context, column, id, value, flags);
     rb_grn_context_check(context, self);
     rb_grn_rc_check(rc, self);
 
     return Qnil;
+}
+
+/*
+ * call-seq:
+ *   column.increment!(id, delta=nil)
+ *
+ * _column_の_id_に対応する値を_delta_だけ増加する。_delta_
+ * が+nil+の場合は1増加する。
+ */
+static VALUE
+rb_grn_fix_size_column_increment (int argc, VALUE *argv, VALUE self)
+{
+    return rb_grn_fix_size_column_integer_set(argc, argv, self, GRN_OBJ_INCR);
+}
+
+/*
+ * call-seq:
+ *   column.decrement!(id, delta=nil)
+ *
+ * _column_の_id_に対応する値を_delta_だけ減少する。_delta_
+ * が+nil+の場合は1減少する。
+ */
+static VALUE
+rb_grn_fix_size_column_decrement (int argc, VALUE *argv, VALUE self)
+{
+    return rb_grn_fix_size_column_integer_set(argc, argv, self, GRN_OBJ_DECR);
 }
 
 void
@@ -257,4 +276,6 @@ rb_grn_init_fix_size_column (VALUE mGrn)
 
     rb_define_method(rb_cGrnFixSizeColumn, "increment!",
 		     rb_grn_fix_size_column_increment, -1);
+    rb_define_method(rb_cGrnFixSizeColumn, "decrement!",
+		     rb_grn_fix_size_column_decrement, -1);
 }

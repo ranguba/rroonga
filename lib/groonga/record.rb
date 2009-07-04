@@ -77,6 +77,10 @@ module Groonga
       column(name, true).increment!(@id, delta)
     end
 
+    def decrement!(name, delta=nil)
+      column(name, true).decrement!(@id, delta)
+    end
+
     def columns
       @table.columns
     end
