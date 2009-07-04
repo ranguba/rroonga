@@ -363,6 +363,16 @@ class TableTest < Test::Unit::TestCase
     assert_not_predicate(bookmarks, :locked?)
   end
 
+  def test_lock_failed
+    bookmarks = Groonga::Array.create(:name => "<bookmarks>")
+    bookmark = bookmarks.add
+
+    bookmarks.lock
+    assert_raise(Groonga::ResourceDeadlockAvoided) do
+      bookmarks.lock
+    end
+  end
+
   def test_lock_block
     bookmarks = Groonga::Array.create(:name => "<bookmarks>")
     bookmark = bookmarks.add

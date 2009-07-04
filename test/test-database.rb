@@ -96,6 +96,15 @@ class DatabaseTest < Test::Unit::TestCase
     assert_not_predicate(database, :locked?)
   end
 
+  def test_lock_failed
+    database = Groonga::Database.create
+
+    database.lock
+    assert_raise(Groonga::ResourceDeadlockAvoided) do
+      database.lock
+    end
+  end
+
   def test_lock_block
     database = Groonga::Database.create
 
