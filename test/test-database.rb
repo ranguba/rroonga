@@ -67,7 +67,6 @@ class DatabaseTest < Test::Unit::TestCase
                   "<int64>",
                   "<int>",
                   "<longtext>",
-                  "<ranguba:objects>",
                   "<shorttext>",
                   "<text>",
                   "<time>",

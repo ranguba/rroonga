@@ -102,11 +102,11 @@ class HashTest < Test::Unit::TestCase
                  named_table.inspect)
   end
 
-  def test_inspect_named_temporary
-    named_table = Groonga::Hash.create(:name => "name")
+  def test_inspect_temporary
+    named_table = Groonga::Hash.create
     assert_equal("#<Groonga::Hash " +
                  "id: <#{named_table.id}>, " +
-                 "name: <name>, " +
+                 "name: (anonymous), " +
                  "path: (temporary), " +
                  "domain: <nil>, " +
                  "range: <nil>, " +

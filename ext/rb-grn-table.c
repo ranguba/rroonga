@@ -150,6 +150,7 @@ rb_grn_table_s_create (int argc, VALUE *argv, VALUE klass,
     if (!NIL_P(rb_name)) {
         name = StringValuePtr(rb_name);
 	name_size = RSTRING_LEN(rb_name);
+	flags |= GRN_OBJ_PERSISTENT;
     }
 
     if (!NIL_P(rb_path)) {

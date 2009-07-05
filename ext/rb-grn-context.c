@@ -20,8 +20,6 @@
 
 #define SELF(object) (RVAL2GRNCONTEXT(object))
 
-#define OBJECTS_TABLE_NAME "<ranguba:objects>"
-
 static VALUE cGrnContext;
 
 /*
@@ -66,15 +64,9 @@ rb_grn_context_register (grn_ctx *context, RbGrnObject *object)
     if (!grn_ctx_db(context))
 	return;
 
-    objects = grn_ctx_get(context,
-			  OBJECTS_TABLE_NAME,
-			  strlen(OBJECTS_TABLE_NAME));
+    objects = GRN_CTX_USER_DATA(context);
     if (!objects) {
         grn_obj *key_type;
-	int flags = GRN_OBJ_TABLE_HASH_KEY;
-
-	if (grn_obj_path(context, grn_ctx_db(context)))
-	    flags |= GRN_OBJ_PERSISTENT;
 
         if (sizeof(RbGrnObject *) == 4)
 	    key_type = grn_ctx_at(context, GRN_DB_UINT32);
@@ -82,13 +74,14 @@ rb_grn_context_register (grn_ctx *context, RbGrnObject *object)
 	    key_type = grn_ctx_at(context, GRN_DB_UINT64);
 
 	objects = grn_table_create(context,
-				   OBJECTS_TABLE_NAME,
-				   strlen(OBJECTS_TABLE_NAME),
 				   NULL,
-				   flags,
+				   0,
+				   NULL,
+				   GRN_OBJ_TABLE_HASH_KEY,
 				   key_type,
 				   0);
 	rb_grn_context_check(context, Qnil);
+	GRN_CTX_USER_DATA(context) = objects;
     }
 
     grn_table_add(context, objects,
@@ -104,9 +97,7 @@ rb_grn_context_unregister (grn_ctx *context, RbGrnObject *object)
     if (!grn_ctx_db(context))
 	return;
 
-    objects = grn_ctx_get(context,
-			  OBJECTS_TABLE_NAME,
-			  strlen(OBJECTS_TABLE_NAME));
+    objects = GRN_CTX_USER_DATA(context);
     if (!objects)
 	return;
 
@@ -123,9 +114,7 @@ rb_grn_context_unbind (grn_ctx *context)
     if (!database)
 	return;
 
-    objects = grn_ctx_get(context,
-			  OBJECTS_TABLE_NAME,
-			  strlen(OBJECTS_TABLE_NAME));
+    objects = GRN_CTX_USER_DATA(context);
     if (objects) {
 	grn_table_cursor *cursor;
 

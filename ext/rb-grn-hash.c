@@ -162,6 +162,7 @@ rb_grn_hash_s_create (int argc, VALUE *argv, VALUE self)
     if (!NIL_P(rb_name)) {
         name = StringValuePtr(rb_name);
 	name_size = RSTRING_LEN(rb_name);
+	flags |= GRN_OBJ_PERSISTENT;
     }
 
     if (!NIL_P(rb_path)) {
