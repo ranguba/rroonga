@@ -428,6 +428,12 @@ VALUE          rb_grn_record_new                    (VALUE table,
     (rb_grn_object_to_ruby_object(klass, context, object, owner))
 #define GRNOBJECT2RCLASS(object)      (rb_grn_object_to_ruby_class(object))
 
+/* TODO: MORE BETTER NAME!!! PLEASE!!! */
+#define RVAL2GRNOBJ(rb_object, context, object)	\
+    (rb_grn_obj_from_ruby_object(rb_object, context, object))
+#define GRNOBJ2RVAL(klass, context, object, related_object)	\
+    (rb_grn_obj_to_ruby_object(klass, context, object, related_object))
+
 #define RVAL2GRNDB(object)            (rb_grn_database_from_ruby_object(object))
 #define GRNDB2RVAL(context, db, owner) \
     (rb_grn_database_to_ruby_object(context, db, owner))
@@ -597,6 +603,14 @@ VALUE          rb_grn_variable_to_ruby_object       (grn_ctx *context,
 						     grn_obj *variable);
 grn_obj       *rb_grn_variable_from_ruby_object     (VALUE rb_variable,
 						     grn_ctx **context);
+
+grn_obj       *rb_grn_obj_from_ruby_object          (VALUE rb_object,
+						     grn_ctx *context,
+						     grn_obj **obj);
+VALUE          rb_grn_obj_to_ruby_object            (VALUE klass,
+						     grn_ctx *context,
+						     grn_obj *obj,
+						     VALUE related_object);
 
 RB_GRN_END_DECLS
 

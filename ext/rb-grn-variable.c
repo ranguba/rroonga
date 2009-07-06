@@ -109,7 +109,7 @@ rb_grn_variable_get_value (VALUE self)
                                 NULL, NULL,
                                 NULL, NULL);
 
-    return GRNBULK2RVAL(context, variable, self);
+    return GRNOBJ2RVAL(Qnil, context, variable, self);
 }
 
 static VALUE
@@ -121,8 +121,7 @@ rb_grn_variable_set_value (VALUE self, VALUE value)
     rb_grn_variable_deconstruct(SELF(self), &variable, &context,
                                 NULL, NULL,
                                 NULL, NULL);
-
-    /* value = grn_expr_set_value(context, variable); */
+    RVAL2GRNOBJ(value, context, &variable);
     return Qnil;
 }
 

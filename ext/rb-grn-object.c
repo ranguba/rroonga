@@ -152,7 +152,7 @@ rb_grn_object_to_ruby_class (grn_obj *object)
 	break;
       default:
 	rb_raise(rb_eTypeError,
-		 "unsupported groonga object type: %d",
+		 "unsupported groonga object type: 0x%x",
 		 object->header.type);
 	break;
     }

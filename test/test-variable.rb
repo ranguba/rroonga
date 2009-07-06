@@ -22,5 +22,7 @@ class VariableTest < Test::Unit::TestCase
     expression = Groonga::Expression.new
     variable = expression.define_variable
     assert_nil(variable.value)
+    variable.value = "morita"
+    assert_equal("morita", variable.value)
   end
 end
