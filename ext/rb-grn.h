@@ -146,6 +146,12 @@ struct _RbGrnTableCursor
     RbGrnObject parent;
 };
 
+typedef struct _RbGrnVariable RbGrnVariable;
+struct _RbGrnVariable
+{
+    RbGrnObject parent;
+};
+
 typedef struct _RbGrnExpression RbGrnExpression;
 struct _RbGrnExpression
 {
@@ -178,6 +184,7 @@ RB_GRN_VAR VALUE rb_cGrnRecord;
 RB_GRN_VAR VALUE rb_cGrnQuery;
 RB_GRN_VAR VALUE rb_cGrnLogger;
 RB_GRN_VAR VALUE rb_cGrnSnippet;
+RB_GRN_VAR VALUE rb_cGrnVariable;
 RB_GRN_VAR VALUE rb_cGrnExpression;
 
 void           rb_grn_init_utils                    (VALUE mGrn);
@@ -206,6 +213,7 @@ void           rb_grn_init_index_column             (VALUE mGrn);
 void           rb_grn_init_accessor                 (VALUE mGrn);
 void           rb_grn_init_record                   (VALUE mGrn);
 void           rb_grn_init_query                    (VALUE mGrn);
+void           rb_grn_init_variable                 (VALUE mGrn);
 void           rb_grn_init_expression               (VALUE mGrn);
 void           rb_grn_init_logger                   (VALUE mGrn);
 void           rb_grn_init_snippet                  (VALUE mGrn);
@@ -588,7 +596,7 @@ grn_obj       *rb_grn_key_from_ruby_object          (VALUE rb_key,
 VALUE          rb_grn_variable_to_ruby_object       (grn_ctx *context,
 						     grn_obj *variable);
 grn_obj       *rb_grn_variable_from_ruby_object     (VALUE rb_variable,
-						     grn_ctx *context);
+						     grn_ctx **context);
 
 RB_GRN_END_DECLS
 

@@ -123,20 +123,24 @@ rb_grn_expression_initialize (int argc, VALUE *argv, VALUE self)
 }
 
 static VALUE
-rb_grn_expression_define_variable (VALUE self, VALUE rb_name, VALUE rb_type)
+rb_grn_expression_define_variable (int argc, VALUE *argv, VALUE self)
 {
     grn_ctx *context = NULL;
     grn_obj *expression, *variable;
     char *name = NULL;
     unsigned name_size = 0;
-    VALUE rb_variable;
+    VALUE rb_name, rb_variable;
+
+    rb_scan_args(argc, argv, "01", &rb_name);
 
     rb_grn_expression_deconstruct(SELF(self), &expression, &context,
                                   NULL, NULL,
                                   NULL, NULL, NULL);
 
-    name = StringValuePtr(rb_name);
-    name_size = RSTRING_LEN(rb_name);
+    if (!NIL_P(rb_name)) {
+	name = StringValuePtr(rb_name);
+	name_size = RSTRING_LEN(rb_name);
+    }
 
     variable = grn_expr_add_var(context, expression, name, name_size);
     rb_variable = GRNVARIABLE2RVAL(context, variable);
@@ -267,7 +271,7 @@ rb_grn_init_expression (VALUE mGrn)
                      rb_grn_expression_initialize, -1);
 
     rb_define_method(rb_cGrnExpression, "define_variable",
-                     rb_grn_expression_define_variable, 2);
+                     rb_grn_expression_define_variable, -1);
     rb_define_method(rb_cGrnExpression, "append_object",
                      rb_grn_expression_append_object, 1);
     rb_define_method(rb_cGrnExpression, "append_constant",
