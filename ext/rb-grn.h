@@ -146,6 +146,13 @@ struct _RbGrnTableCursor
     RbGrnObject parent;
 };
 
+typedef struct _RbGrnExpression RbGrnExpression;
+struct _RbGrnExpression
+{
+    RbGrnObject parent;
+    grn_obj *value;
+};
+
 RB_GRN_VAR VALUE rb_eGrnError;
 RB_GRN_VAR VALUE rb_cGrnObject;
 RB_GRN_VAR VALUE rb_mGrnEncodingSupport;
@@ -171,6 +178,7 @@ RB_GRN_VAR VALUE rb_cGrnRecord;
 RB_GRN_VAR VALUE rb_cGrnQuery;
 RB_GRN_VAR VALUE rb_cGrnLogger;
 RB_GRN_VAR VALUE rb_cGrnSnippet;
+RB_GRN_VAR VALUE rb_cGrnExpression;
 
 void           rb_grn_init_utils                    (VALUE mGrn);
 void           rb_grn_init_exception                (VALUE mGrn);
@@ -198,6 +206,7 @@ void           rb_grn_init_index_column             (VALUE mGrn);
 void           rb_grn_init_accessor                 (VALUE mGrn);
 void           rb_grn_init_record                   (VALUE mGrn);
 void           rb_grn_init_query                    (VALUE mGrn);
+void           rb_grn_init_expression               (VALUE mGrn);
 void           rb_grn_init_logger                   (VALUE mGrn);
 void           rb_grn_init_snippet                  (VALUE mGrn);
 
@@ -465,6 +474,11 @@ VALUE          rb_grn_record_new                    (VALUE table,
     (rb_grn_key_from_ruby_object(object, context, key, domain_id,	\
 				 domain, related_object))
 
+#define GRNVARIABLE2RVAL(context, variable) \
+    (rb_grn_variable_to_ruby_object(context, variable))
+#define RVAL2GRNVARIABLE(object, context) \
+    (rb_grn_variable_from_ruby_object(object, context))
+
 
 grn_encoding   rb_grn_encoding_from_ruby_object     (VALUE object,
 						     grn_ctx *context);
@@ -570,6 +584,11 @@ grn_obj       *rb_grn_key_from_ruby_object          (VALUE rb_key,
 						     grn_id domain_id,
 						     grn_obj *domain,
 						     VALUE related_object);
+
+VALUE          rb_grn_variable_to_ruby_object       (grn_ctx *context,
+						     grn_obj *variable);
+grn_obj       *rb_grn_variable_from_ruby_object     (VALUE rb_variable,
+						     grn_ctx *context);
 
 RB_GRN_END_DECLS
 
