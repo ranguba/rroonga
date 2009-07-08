@@ -323,7 +323,6 @@ rb_grn_object_inspect_header (VALUE self, VALUE inspected)
 {
     rb_str_cat2(inspected, "#<");
     rb_str_concat(inspected, rb_inspect(rb_obj_class(self)));
-    rb_str_cat2(inspected, " ");
 
     return inspected;
 }
@@ -480,10 +479,13 @@ rb_grn_object_inspect_content (VALUE self, VALUE inspected)
     context = rb_grn_object->context;
     object = rb_grn_object->object;
 
-    if (!object)
-	return inspected;
+    rb_str_cat2(inspected, " ");
+    if (object) {
+	rb_grn_object_inspect_object_content(inspected, context, object);
+    } else {
+	rb_str_cat2(inspected, "(closed)");
+    }
 
-    rb_grn_object_inspect_object_content(inspected, context, object);
 
     return inspected;
 }
