@@ -31,12 +31,6 @@ if local_groonga_library_dir.exist?
   case RUBY_PLATFORM
   when /mingw|mswin/
     prepend_path.call("PATH", ";")
-  when /darwin/
-    # This is not work. It's too late. :<
-    prepend_path.call("DYLD_LIBRARY_PATH", ":")
-  else
-    # This is not work. It's too late. :<
-    prepend_path.call("LD_LIBRARY_PATH", ":")
   end
 end
 
