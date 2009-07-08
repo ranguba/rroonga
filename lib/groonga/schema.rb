@@ -29,6 +29,10 @@ module Groonga
           schema.define_table(name, options, &block)
         end
       end
+
+      def dump(options={})
+        Dumper.new(options).dump
+      end
     end
 
     def initialize(options={})
@@ -183,12 +187,6 @@ module Groonga
     end
 
     class Dumper
-      class << self
-        def dump(options={})
-          new(options).dump
-        end
-      end
-
       def initialize(options={})
         @options = (options || {}).dup
       end

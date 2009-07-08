@@ -103,7 +103,7 @@ class SchemaTest < Test::Unit::TestCase
         table.short_text :title
       end
     end
-    assert_equal(<<-EOS, Groonga::Schema::Dumper.dump)
+    assert_equal(<<-EOS, Groonga::Schema.dump)
 define_table("<posts>") do |table|
   table.short_text("title")
 end
