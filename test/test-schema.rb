@@ -97,6 +97,18 @@ class SchemaTest < Test::Unit::TestCase
     assert_equal(context["<longtext>"], context["<posts>.content"].range)
   end
 
+  def test_index
+    assert_nil(context["<terms>.content"])
+    Groonga::Schema.create_table("<posts>") do |table|
+      table.long_text :content
+    end
+    Groonga::Schema.create_table("<terms>") do |table|
+      table.index :content, "<posts>.content"
+    end
+    assert_equal([context["<posts>.content"]],
+                 context["<terms>.content"].sources)
+  end
+
   def test_dump
     Groonga::Schema.define do |schema|
       schema.define_table("<posts>") do |table|

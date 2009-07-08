@@ -120,6 +120,14 @@ module Groonga
         column(name, "<longtext>", options)
       end
 
+      def index(name, target_column, options={})
+        column = self[name] || IndexColumnDefinition.new(name, options)
+        column.target = target_column
+        column.options.merge!(options)
+        @columns << column unless @columns.include?(column)
+        self
+      end
+
       def [](name)
         @columns.find {|column| column.name == name}
       end
@@ -183,6 +191,33 @@ module Groonga
         else
           type
         end
+      end
+    end
+
+    class IndexColumnDefinition
+      attr_accessor :name, :target
+      attr_reader :options
+
+      def initialize(name, options={})
+        @name = name
+        @name = @name.to_s if @name.is_a?(Symbol)
+        @options = (options || {}).dup
+        @target = nil
+      end
+
+      def define(table)
+        target = @target
+        target = context[target] unless target.is_a?(Groonga::Object)
+        index = table.define_index_column(@name,
+                                          target.table,
+                                          @options)
+        index.source = target
+        index
+      end
+
+      private
+      def context
+        @options[:context] || Groonga::Context.default
       end
     end
 

@@ -486,7 +486,6 @@ rb_grn_object_inspect_content (VALUE self, VALUE inspected)
 	rb_str_cat2(inspected, "(closed)");
     }
 
-
     return inspected;
 }
 
