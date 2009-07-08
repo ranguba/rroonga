@@ -23,7 +23,7 @@ if local_groonga_library_dir.exist?
   prepend_path = Proc.new do |environment_name, separator|
     paths = (ENV[environment_name] || '').split(/#{separator}/)
     unless paths.include?(local_groonga_library_dir.to_s)
-      paths = [local_groonga_library_dir] + paths
+      paths = [local_groonga_library_dir.to_s] + paths
       ENV[environment_name] = paths.join(separator)
     end
   end
