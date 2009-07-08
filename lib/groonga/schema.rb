@@ -24,7 +24,7 @@ module Groonga
         schema.define
       end
 
-      def create_table(name, options={}, &block)
+      def define_table(name, options={}, &block)
         define do |schema|
           schema.define_table(name, options, &block)
         end
