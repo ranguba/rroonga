@@ -30,6 +30,31 @@ module Groonga
         end
       end
 
+      def normalize_type(type)
+        return type if type.nil?
+        return type if type.is_a?(Groonga::Object)
+        case type.to_s
+        when "string"
+          "<shorttext>"
+        when "text"
+          "<text>"
+        when "int", "integer"
+          "<int>"
+        when "float"
+          "<float>"
+        when "decimal"
+          "<int64>"
+        when "datetime", "timestamp", "time", "date"
+          "<time>"
+        when "binary"
+          "<longtext>"
+        when "boolean"
+          "<int>"
+        else
+          type
+        end
+      end
+
       def dump(options={})
         Dumper.new(options).dump
       end
@@ -62,7 +87,7 @@ module Groonga
       end
 
       def define
-        table = @table_type.create(:name => @name, :path => @options[:path])
+        table = @table_type.create(create_options)
         @columns.each do |column|
           column.define(table)
         end
@@ -147,6 +172,34 @@ module Groonga
         end
       end
 
+      def create_options
+        common = {
+          :name => @name,
+          :path => @options[:path],
+          :persistent => @options[:persistent],
+          :value_size => @options[:value_size],
+          :context => context,
+        }
+        key_support_table_common = {
+          :key_type => Schema.normalize_type(@options[:key_type]),
+          :default_tokenizer => @options[:default_tokenizer],
+        }
+
+        if @table_type == Groonga::Array
+          common
+        elsif @table_type == Groonga::Hash
+          common.merge(key_support_table_common)
+        elsif @table_type == Groonga::PatriciaTrie
+          options = {
+            :key_normalize => @options[:key_normalize],
+            :key_with_sis => @options[:key_with_sis],
+          }
+          common.merge(key_support_table_common).merge(options)
+        else
+          raise ArgumentError, "unknown table type: #{@table_type.inspect}"
+        end
+      end
+
       def context
         @options[:context] || Groonga::Context.default
       end
@@ -165,32 +218,8 @@ module Groonga
 
       def define(table)
         table.define_column(@name,
-                            normalize_type(@type),
+                            Schema.normalize_type(@type),
                             @options)
-      end
-
-      def normalize_type(type)
-        return type if type.is_a?(Groonga::Object)
-        case type.to_s
-        when "string"
-          "<shorttext>"
-        when "text"
-          "<text>"
-        when "integer"
-          "<int>"
-        when "float"
-          "<float>"
-        when "decimal"
-          "<int64>"
-        when "datetime", "timestamp", "time", "date"
-          "<time>"
-        when "binary"
-          "<longtext>"
-        when "boolean"
-          "<int>"
-        else
-          type
-        end
       end
     end
 

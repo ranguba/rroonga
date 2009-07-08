@@ -31,16 +31,81 @@ class SchemaTest < Test::Unit::TestCase
     assert_kind_of(Groonga::Hash, context["<posts>"])
   end
 
+  def test_define_hash_with_full_option
+    path = @tmp_dir + "hash.groonga"
+    tokenizer = context["<token:trigram>"]
+    Groonga::Schema.define_table("<posts>",
+                                 :type => :hash,
+                                 :key_type => "integer",
+                                 :path => path.to_s,
+                                 :value_size => 29,
+                                 :default_tokenizer => tokenizer) do |table|
+    end
+    table = context["<posts>"]
+    assert_equal("#<Groonga::Hash " +
+                 "id: <#{table.id}>, " +
+                 "name: <<posts>>, " +
+                 "path: <#{path}>, " +
+                 "domain: <#{context['<int>'].inspect}>, " +
+                 "range: <nil>, " +
+                 "encoding: <:utf8>, " +
+                 "size: <0>>",
+                 table.inspect)
+    assert_equal(tokenizer, table.default_tokenizer)
+  end
+
   def test_define_patricia_trie
     Groonga::Schema.define_table("<posts>", :type => :patricia_trie) do |table|
     end
     assert_kind_of(Groonga::PatriciaTrie, context["<posts>"])
   end
 
+  def test_define_patricia_trie_with_full_option
+    path = @tmp_dir + "patricia-trie.groonga"
+    Groonga::Schema.define_table("<posts>",
+                                 :type => :patricia_trie,
+                                 :key_type => "integer",
+                                 :path => path.to_s,
+                                 :value_size => 29,
+                                 :default_tokenizer => "<token:bigram>",
+                                 :key_normalize => true,
+                                 :key_with_sis => true) do |table|
+    end
+    table = context["<posts>"]
+    assert_equal("#<Groonga::PatriciaTrie " +
+                 "id: <#{table.id}>, " +
+                 "name: <<posts>>, " +
+                 "path: <#{path}>, " +
+                 "domain: <#{context['<int>'].inspect}>, " +
+                 "range: <nil>, " +
+                 "encoding: <:utf8>, " +
+                 "size: <0>>",
+                 table.inspect)
+    assert_equal(context["<token:bigram>"], table.default_tokenizer)
+  end
+
   def test_define_array
     Groonga::Schema.define_table("<posts>", :type => :array) do |table|
     end
     assert_kind_of(Groonga::Array, context["<posts>"])
+  end
+
+  def test_define_array_with_full_option
+    path = @tmp_dir + "array.groonga"
+    Groonga::Schema.define_table("<posts>",
+                                 :type => :array,
+                                 :path => path.to_s,
+                                 :value_size => 29) do |table|
+    end
+    table = context["<posts>"]
+    assert_equal("#<Groonga::Array " +
+                 "id: <#{table.id}>, " +
+                 "name: <<posts>>, " +
+                 "path: <#{path}>, " +
+                 "domain: <nil>, " +
+                 "range: <nil>, " +
+                 "size: <0>>",
+                 table.inspect)
   end
 
   def test_integer32_column
