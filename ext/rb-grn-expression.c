@@ -185,7 +185,7 @@ rb_grn_expression_append_object (VALUE self, VALUE rb_object)
                                   NULL, NULL, NULL);
 
     object = RVAL2GRNOBJECT(rb_object, &context);
-    grn_expr_append_const(context, expression, object);
+    grn_expr_append_obj(context, expression, object);
     rb_grn_context_check(context, self);
     return self;
 }

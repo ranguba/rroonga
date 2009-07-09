@@ -27,8 +27,29 @@ class ExpressionTest < Test::Unit::TestCase
     expression = Groonga::Expression.new
     expression.append_constant(morita)
     expression.append_constant("name")
-    expression.append_operation(Groonga::Operation::GET_VALUE, 2)
+    expression.append_operation(Groonga::Operation::OBJECT_GET_VALUE, 2)
     expression.compile
     assert_equal("mori daijiro", expression.execute)
+  end
+
+  def test_get_value_with_variable
+    users = Groonga::Hash.create(:name => "<users>")
+    name = users.define_column("name", "<shorttext>")
+
+    morita = users.add("morita", :name => "mori daijiro")
+    gunyara_kun = users.add("gunyara-kun", :name => "Tasuku SUENAGA")
+
+    expression = Groonga::Expression.new
+    variable = expression.define_variable
+    variable.value = morita
+    expression.append_object(variable)
+    expression.append_constant("name")
+    expression.append_operation(Groonga::Operation::OBJECT_GET_VALUE, 2)
+    expression.compile
+
+    assert_equal("mori daijiro", expression.execute)
+
+    variable.value = gunyara_kun.id
+    assert_equal("Tasuku SUENAGA", expression.execute)
   end
 end
