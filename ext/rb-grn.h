@@ -187,6 +187,7 @@ RB_GRN_VAR VALUE rb_cGrnSnippet;
 RB_GRN_VAR VALUE rb_cGrnVariable;
 RB_GRN_VAR VALUE rb_cGrnOperation;
 RB_GRN_VAR VALUE rb_cGrnExpression;
+RB_GRN_VAR VALUE rb_cGrnExpressionBuilder;
 
 void           rb_grn_init_utils                    (VALUE mGrn);
 void           rb_grn_init_exception                (VALUE mGrn);
@@ -217,6 +218,7 @@ void           rb_grn_init_query                    (VALUE mGrn);
 void           rb_grn_init_variable                 (VALUE mGrn);
 void           rb_grn_init_operation                (VALUE mGrn);
 void           rb_grn_init_expression               (VALUE mGrn);
+void           rb_grn_init_expression_builder       (VALUE mGrn);
 void           rb_grn_init_logger                   (VALUE mGrn);
 void           rb_grn_init_snippet                  (VALUE mGrn);
 
@@ -426,6 +428,9 @@ void           rb_grn_expression_assign             (VALUE self,
 VALUE          rb_grn_record_new                    (VALUE table,
 						     grn_id id,
 						     VALUE values);
+
+VALUE          rb_grn_expression_builder_new        (VALUE table);
+VALUE          rb_grn_expression_builder_build      (VALUE self);
 
 
 #define RB_GRN_INTERN(string)         (ID2SYM(rb_intern(string)))

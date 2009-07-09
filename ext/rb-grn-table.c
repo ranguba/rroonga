@@ -36,7 +36,7 @@ VALUE
 rb_grn_table_to_ruby_object (grn_ctx *context, grn_obj *table,
 			     rb_grn_boolean owner)
 {
-    return GRNOBJECT2RVAL(rb_cGrnTable, context, table, owner);
+    return GRNOBJECT2RVAL(Qnil, context, table, owner);
 }
 
 void
@@ -1106,6 +1106,54 @@ rb_grn_table_is_locked (int argc, VALUE *argv, VALUE self)
     return CBOOL2RVAL(grn_obj_is_locked(context, table));
 }
 
+static VALUE
+rb_grn_table_scan (int argc, VALUE *argv, VALUE self)
+{
+    grn_ctx *context;
+    grn_obj *table, *result, *expression;
+    grn_sel_operator operator = GRN_SEL_OR;
+    grn_rc rc;
+    VALUE options, rb_operator, rb_result;
+    VALUE rb_expression, builder;
+
+    rb_scan_args(argc, argv, "01", &options);
+
+    rb_grn_table_deconstruct(SELF(self), &table, &context,
+			     NULL, NULL,
+			     NULL, NULL, NULL);
+
+    rb_grn_scan_options(options,
+			"operator", &rb_operator,
+			"result", &rb_result,
+			NULL);
+
+    if (!NIL_P(rb_operator))
+	operator = NUM2INT(rb_operator);
+
+    if (NIL_P(rb_result)) {
+	result = grn_table_create(context, NULL, 0, NULL,
+				  GRN_TABLE_HASH_KEY | GRN_OBJ_WITH_SUBREC,
+				  table,
+				  0);
+	rb_result = GRNTABLE2RVAL(context, result, RB_GRN_TRUE);
+    } else {
+	result = RVAL2GRNTABLE(rb_result, &context);
+    }
+
+    builder = rb_grn_expression_builder_new(self);
+    rb_expression = rb_grn_expression_builder_build(builder);
+
+    rb_grn_object_deconstruct(RB_GRN_OBJECT(DATA_PTR(rb_expression)),
+			      &expression, NULL,
+			      NULL, NULL, NULL, NULL);
+
+    rc = grn_table_select(context, table, expression, result, operator);
+    rb_grn_context_check(context, self);
+    rb_grn_rc_check(rc, self);
+
+    return rb_result;
+}
+
 void
 rb_grn_init_table (VALUE mGrn)
 {
@@ -1151,6 +1199,8 @@ rb_grn_init_table (VALUE mGrn)
     rb_define_method(rb_cGrnTable, "unlock", rb_grn_table_unlock, -1);
     rb_define_method(rb_cGrnTable, "clear_lock", rb_grn_table_clear_lock, -1);
     rb_define_method(rb_cGrnTable, "locked?", rb_grn_table_is_locked, -1);
+
+    rb_define_method(rb_cGrnTable, "scan", rb_grn_table_scan, -1);
 
     rb_grn_init_table_key_support(mGrn);
     rb_grn_init_array(mGrn);
