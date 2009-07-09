@@ -15,22 +15,70 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+
 module Groonga
+
+  # groongaのスキーマ（データ構造）を管理するクラス。
   class Schema
     class << self
+
+      # call-seq:
+      #   Groonga::Schema.define(options={}) {|schema| ...}
+      #
+      # スキーマを定義する。ブロックにはGroonga::Schemaオブ
+      # ジェクトがわたるので、そのオブジェクトを利用してスキー
+      # マを定義する。
+      #
+      # _options_に指定可能な値は以下の通り。
+      #
+      # [+:context+]
+      #   スキーマ定義時に使用するGroonga::Contextを指定する。
+      #   省略した場合はGroonga::Context.defaultを使用する。
       def define(options={})
         schema = new(options)
         yield(schema)
         schema.define
       end
 
+      # call-seq:
+      #   Groonga::Schema.create_table(name, options={}) {|table| ...}
+      #
+      # 名前が_name_のテーブルを作成する。以下の省略形。
+      #
+      #   Groonga::Schema.define do |schema|
+      #     schema.create_table(name, options) do |table|
+      #       ...
+      #     end
+      #   end
+      #
+      # ブロックにはGroonga::Schema::TableDefinitionオブジェ
+      # クトがわたるので、そのオブジェクトを利用してテーブル
+      # の詳細を定義する。
+      #
+      # _options_に指定可能な値は以下の通り。
+      #
+      # [+:context+]
+      #   スキーマ定義時に使用するGroonga::Contextを指定する。
+      #   省略した場合はGroonga::Context.defaultを使用する。
+      #
+      # [+:path+]
+      #   テーブルを保存するパスを指定する。パスを指定すると
+      #   永続テーブルになる。
+      #
+      # [+:persistent+]
+      #   テーブルを永続テーブルとする。+:path:+を省略した場
+      #   合はパス名は自動的に作成される。デフォルトでは永続
+      #   テーブルとなる。
+      #
+      # [+:value_size+]
+      #   値のサイズを指定する。デフォルトは0。
       def create_table(name, options={}, &block)
         define do |schema|
           schema.create_table(name, options, &block)
         end
       end
 
-      def normalize_type(type)
+      def normalize_type(type) # :nodoc:
         return type if type.nil?
         return type if type.is_a?(Groonga::Object)
         case type.to_s
@@ -176,7 +224,7 @@ module Groonga
         common = {
           :name => @name,
           :path => @options[:path],
-          :persistent => @options[:persistent],
+          :persistent => persistent?,
           :value_size => @options[:value_size],
           :context => context,
         }
@@ -198,6 +246,10 @@ module Groonga
         else
           raise ArgumentError, "unknown table type: #{@table_type.inspect}"
         end
+      end
+
+      def persistent?
+        @options[:persistent].nil? ? true : @options[:persistent]
       end
 
       def context
