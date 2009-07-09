@@ -41,9 +41,14 @@ rb_grn_object_from_ruby_object (VALUE object, grn_ctx **context)
     if (context && *context) {
 	grn_obj *grn_object;
 	if (RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cString))) {
-	    grn_object = grn_ctx_get(*context,
-                                     StringValuePtr(object),
-                                     RSTRING_LEN(object));
+	    const char *name;
+	    unsigned int name_size;
+
+	    name = StringValuePtr(object);
+	    name_size = RSTRING_LEN(object);
+	    grn_object = rb_grn_context_get_backward_compatibility(*context,
+								   name,
+								   name_size);
 	    if (!grn_object)
 		rb_raise(rb_eArgError,
 			 "unregistered groonga object: name: <%s>",

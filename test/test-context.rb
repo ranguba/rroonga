@@ -57,6 +57,6 @@ class ContextTest < Test::Unit::TestCase
   def test_array_reference
     Groonga::Database.create
     context = Groonga::Context.default
-    assert_equal("<int>", context["<int>"].name)
+    assert_equal("Int32", context["<int>"].name)
   end
 end

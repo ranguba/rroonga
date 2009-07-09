@@ -412,6 +412,69 @@ rb_grn_context_get_database (VALUE self)
     return GRNDB2RVAL(context, grn_ctx_db(context), RB_GRN_FALSE);
 }
 
+static const char *
+grn_type_name_old_to_new (const char *name, unsigned int name_size)
+{
+    unsigned int i;
+
+    for (i = 0; i < name_size; i++) {
+	if (name[i] == '\0')
+	    return NULL;
+    }
+
+    if (strcmp(name, "<int>") == 0) {
+	return "Int32";
+    } else if (strcmp(name, "<uint>") == 0) {
+	return "Uint32";
+    } else if (strcmp(name, "<int64>") == 0) {
+	return "Int64";
+    } else if (strcmp(name, "<uint64>") == 0) {
+	return "Uint64";
+    } else if (strcmp(name, "<float>") == 0) {
+	return "Float";
+    } else if (strcmp(name, "<time>") == 0) {
+	return "Time";
+    } else if (strcmp(name, "<shorttext>") == 0) {
+	return "Shorttext";
+    } else if (strcmp(name, "<text>") == 0) {
+	return "Text";
+    } else if (strcmp(name, "<longtext>") == 0) {
+	return "Longtext";
+    } else if (strcmp(name, "<token:delimit>") == 0) {
+	return "Token:delimit";
+    } else if (strcmp(name, "<token:unigram>") == 0) {
+	return "Token:unigram";
+    } else if (strcmp(name, "<token:bigram>") == 0) {
+	return "Token:bigram";
+    } else if (strcmp(name, "<token:trigram>") == 0) {
+	return "Token:trigram";
+    } else if (strcmp(name, "<token:mecab>") == 0) {
+	return "Token:mecab";
+    }
+
+    return NULL;
+}
+
+grn_obj *
+rb_grn_context_get_backward_compatibility (grn_ctx *context,
+					   const char *name,
+					   unsigned int name_size)
+{
+    grn_obj *object;
+
+    object = grn_ctx_get(context, name, name_size);
+    if (!object) {
+	const char *old_type_name;
+
+	old_type_name = grn_type_name_old_to_new(name, name_size);
+	if (old_type_name)
+	    object = grn_ctx_get(context, old_type_name, strlen(old_type_name));
+    }
+
+    return object;
+}
+
+
 /*
  * call-seq:
  *   context[name] -> Groonga::Object or nil
@@ -434,11 +497,12 @@ rb_grn_context_array_reference (VALUE self, VALUE name_or_id)
     context = SELF(self);
     if (RVAL2CBOOL(rb_obj_is_kind_of(name_or_id, rb_cString))) {
 	const char *name;
-	unsigned name_size;
+	unsigned int name_size;
 
 	name = StringValuePtr(name_or_id);
 	name_size = RSTRING_LEN(name_or_id);
-	object = grn_ctx_get(context, name, name_size);
+	object = rb_grn_context_get_backward_compatibility(context,
+							   name, name_size);
     } else if (RVAL2CBOOL(rb_obj_is_kind_of(name_or_id, rb_cInteger))) {
 	unsigned id;
 	id = NUM2UINT(name_or_id);

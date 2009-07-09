@@ -235,6 +235,10 @@ VALUE          rb_grn_context_to_exception          (grn_ctx *context,
 						     VALUE related_object);
 void           rb_grn_context_check                 (grn_ctx *context,
 						     VALUE related_object);
+grn_obj       *rb_grn_context_get_backward_compatibility
+                                                    (grn_ctx *context,
+						     const char *name,
+						     unsigned int name_size);
 
 const char    *rb_grn_inspect                       (VALUE object);
 void           rb_grn_scan_options                  (VALUE options, ...)
