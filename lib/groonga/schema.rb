@@ -103,6 +103,27 @@ module Groonga
         end
       end
 
+      # スキーマの内容を文字列で返す。返された値は
+      # Groonga::Schema#restoreすることによりスキーマ内に組
+      # み込むことができる。
+      #
+      #   dump.rb:
+      #     File.open("/tmp/groonga-schema.rb", "w") do |schema|
+      #       dumped_text = Groonga::Schema.dump
+      #     end
+      #
+      #   restore.rb:
+      #     dumped_text = Groonga::Schema.dump
+      #     Groonga::Database.create(:path => "/tmp/new-db.grn")
+      #     Groonga::Schema.define do |schema|
+      #       schema.restore(dumped_text)
+      #     end
+      #
+      # _options_に指定可能な値は以下の通り。
+      #
+      # [+:context+]
+      #   スキーマ定義時に使用するGroonga::Contextを指定する。
+      #   省略した場合はGroonga::Context.defaultを使用する。
       def dump(options={})
         Dumper.new(options).dump
       end
@@ -117,6 +138,10 @@ module Groonga
       @definitions.each do |definition|
         definition.define
       end
+    end
+
+    def restore(dumped_text)
+      instance_eval(dumped_text)
     end
 
     def create_table(name, options={})
