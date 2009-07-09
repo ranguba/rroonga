@@ -185,6 +185,7 @@ RB_GRN_VAR VALUE rb_cGrnQuery;
 RB_GRN_VAR VALUE rb_cGrnLogger;
 RB_GRN_VAR VALUE rb_cGrnSnippet;
 RB_GRN_VAR VALUE rb_cGrnVariable;
+RB_GRN_VAR VALUE rb_cGrnOperation;
 RB_GRN_VAR VALUE rb_cGrnExpression;
 
 void           rb_grn_init_utils                    (VALUE mGrn);
@@ -214,6 +215,7 @@ void           rb_grn_init_accessor                 (VALUE mGrn);
 void           rb_grn_init_record                   (VALUE mGrn);
 void           rb_grn_init_query                    (VALUE mGrn);
 void           rb_grn_init_variable                 (VALUE mGrn);
+void           rb_grn_init_operation                (VALUE mGrn);
 void           rb_grn_init_expression               (VALUE mGrn);
 void           rb_grn_init_logger                   (VALUE mGrn);
 void           rb_grn_init_snippet                  (VALUE mGrn);
@@ -409,6 +411,18 @@ void           rb_grn_index_column_deconstruct      (RbGrnIndexColumn *rb_grn_in
 						     grn_obj **id_query,
 						     grn_obj **string_query);
 
+VALUE          rb_grn_expression_alloc              (VALUE klass);
+void           rb_grn_expression_bind               (RbGrnExpression *rb_grn_expression,
+						     grn_ctx *context,
+						     grn_obj *expression,
+						     rb_grn_boolean owner);
+void           rb_grn_expression_unbind             (RbGrnExpression *rb_grn_expression);
+void           rb_grn_expression_assign             (VALUE self,
+						     VALUE rb_context,
+						     grn_ctx *context,
+						     grn_obj *expression,
+						     rb_grn_boolean owner);
+
 VALUE          rb_grn_record_new                    (VALUE table,
 						     grn_id id,
 						     VALUE values);
@@ -496,6 +510,9 @@ VALUE          rb_grn_record_new                    (VALUE table,
     (rb_grn_variable_to_ruby_object(context, variable))
 #define RVAL2GRNVARIABLE(object, context) \
     (rb_grn_variable_from_ruby_object(object, context))
+
+#define RVAL2GRNOPERATION(operation) (NUM2UINT(operation))
+#define GRNOPERATION2RVAL(operation) (UINT2NUM(operation))
 
 
 grn_encoding   rb_grn_encoding_from_ruby_object     (VALUE object,

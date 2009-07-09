@@ -624,11 +624,13 @@ rb_grn_obj_from_ruby_object (VALUE rb_object, grn_ctx *context, grn_obj **_obj)
 	} else if (RVAL2CBOOL(rb_obj_is_kind_of(rb_object, rb_cGrnRecord))) {
 	    grn_id id, table_id;
 	    VALUE rb_table;
-	    grn_obj *table;
+	    grn_obj *table = NULL;
 
 	    id = NUM2UINT(rb_funcall(rb_object, rb_intern("id"), 0));
 	    rb_table = rb_funcall(rb_object, rb_intern("table"), 0);
-	    table = RB_GRN_OBJECT(rb_table)->object; /* TODO: use deconstruct */
+	    rb_grn_table_deconstruct(RB_GRN_TABLE(DATA_PTR(rb_table)),
+				     &table, NULL,
+				     NULL, NULL, NULL, NULL, NULL);
 	    table_id = grn_obj_id(context, table);
 	    GRN_RECORD_INIT(obj, 0, table_id);
 	    GRN_RECORD_SET(context, obj, id);

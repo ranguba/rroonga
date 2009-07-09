@@ -190,6 +190,9 @@ rb_grn_object_to_ruby_object (VALUE klass, grn_ctx *context, grn_obj *object,
     } else if (klass == rb_cGrnIndexColumn) {
 	rb_object = rb_grn_index_column_alloc(klass);
 	rb_grn_index_column_assign(rb_object, Qnil, context, object, owner);
+    } else if (klass == rb_cGrnExpression) {
+	rb_object = rb_grn_expression_alloc(klass);
+	rb_grn_expression_assign(rb_object, Qnil, context, object, owner);
     } else {
 	rb_object = rb_grn_object_alloc(klass);
 	rb_grn_object_assign(rb_object, Qnil, context, object, owner);
@@ -246,7 +249,8 @@ rb_grn_object_assign (VALUE self, VALUE rb_context,
     DATA_PTR(self) = rb_grn_object;
     rb_grn_object_bind(rb_grn_object, context, object, owner);
 
-    rb_iv_set(self, "context", rb_context);
+    if (!NIL_P(rb_context))
+	rb_iv_set(self, "context", rb_context);
 }
 
 void
