@@ -35,6 +35,11 @@ module Groonga
       Record.new(self, @expression, @table, @variable)
     end
 
+    def &(other)
+      @expression.append_operation(Groonga::Operation::AND, 2)
+      self
+    end
+
     class Record
       def initialize(builder, expression, table, variable)
         @builder = builder

@@ -84,4 +84,12 @@ class ExpressionBuilderTest < Test::Unit::TestCase
     assert_equal(["gunyara-kun", "yu"],
                  result.collect {|record| record.key.key})
   end
+
+  def test_and
+    result = @users.scan do |builder|
+      (builder.record["hp"] > 100) & (builder.record["hp"] <= 200)
+    end
+    assert_equal(["gunyara-kun", "yu"],
+                 result.collect {|record| record.key.key})
+  end
 end
