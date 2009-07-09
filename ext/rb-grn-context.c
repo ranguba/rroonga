@@ -464,11 +464,19 @@ rb_grn_context_get_backward_compatibility (grn_ctx *context,
 
     object = grn_ctx_get(context, name, name_size);
     if (!object) {
-	const char *old_type_name;
+	const char *new_type_name;
 
-	old_type_name = grn_type_name_old_to_new(name, name_size);
-	if (old_type_name)
-	    object = grn_ctx_get(context, old_type_name, strlen(old_type_name));
+	new_type_name = grn_type_name_old_to_new(name, name_size);
+	if (new_type_name) {
+	    object = grn_ctx_get(context, new_type_name, strlen(new_type_name));
+#if 0
+	    if (object) {
+		rb_warn("deprecated old data type name <%s> is used. "
+			"Use new data type name <%s> instead.",
+			name, new_type_name);
+	    }
+#endif
+	}
     }
 
     return object;
