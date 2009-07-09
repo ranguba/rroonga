@@ -24,9 +24,9 @@ module Groonga
         schema.define
       end
 
-      def define_table(name, options={}, &block)
+      def create_table(name, options={}, &block)
         define do |schema|
-          schema.define_table(name, options, &block)
+          schema.create_table(name, options, &block)
         end
       end
 
@@ -71,7 +71,7 @@ module Groonga
       end
     end
 
-    def define_table(name, options={})
+    def create_table(name, options={})
       definition = TableDefinition.new(name, @options.merge(options || {}))
       yield(definition)
       @definitions << definition
@@ -264,7 +264,7 @@ module Groonga
         database.each do |object|
           next unless object.is_a?(Groonga::Table)
           next if object.name == "<ranguba:objects>"
-          schema << "define_table(#{object.name.inspect}) do |table|\n"
+          schema << "create_table(#{object.name.inspect}) do |table|\n"
           object.columns.each do |column|
             type = column_method(column)
             name = column.local_name
