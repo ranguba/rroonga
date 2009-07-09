@@ -145,7 +145,7 @@ ObjectSpace.each_object(Rake::RDocTask) do |rdoc_task|
   rdoc_task.title = "Ruby/groonga - #{version}"
 
   rdoc_task.rdoc_files = ["ext/rb-groonga.c"] + Dir.glob("ext/rb-grn-*.c")
-  rdoc_task.rdoc_files += Dir.glob("lib/*.rb")
+  rdoc_task.rdoc_files += Dir.glob("lib/**/*.rb")
   rdoc_task.rdoc_files += Dir.glob("*.rdoc")
 end
 
