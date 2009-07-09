@@ -78,31 +78,6 @@ module Groonga
         end
       end
 
-      def normalize_type(type) # :nodoc:
-        return type if type.nil?
-        return type if type.is_a?(Groonga::Object)
-        case type.to_s
-        when "string"
-          "Shorttext"
-        when "text"
-          "Text"
-        when "int", "integer"
-          "Int32"
-        when "float"
-          "Float"
-        when "decimal"
-          "Int64"
-        when "datetime", "timestamp", "time", "date"
-          "Time"
-        when "binary"
-          "Longtext"
-        when "boolean"
-          "Bool"
-        else
-          type
-        end
-      end
-
       # スキーマの内容を文字列で返す。返された値は
       # Groonga::Schema#restoreすることによりスキーマ内に組
       # み込むことができる。
@@ -127,23 +102,84 @@ module Groonga
       def dump(options={})
         Dumper.new(options).dump
       end
+
+      def normalize_type(type) # :nodoc:
+        return type if type.nil?
+        return type if type.is_a?(Groonga::Object)
+        case type.to_s
+        when "string"
+          "Shorttext"
+        when "text"
+          "Text"
+        when "int", "integer"
+          "Int32"
+        when "float"
+          "Float"
+        when "decimal"
+          "Int64"
+        when "datetime", "timestamp", "time", "date"
+          "Time"
+        when "binary"
+          "Longtext"
+        when "boolean"
+          "Bool"
+        else
+          type
+        end
+      end
     end
 
+    # スキーマ定義を開始する。
+    #
+    # _options_に指定可能な値は以下の通り。
+    #
+    # [+:context+]
+    #   スキーマ定義時に使用するGroonga::Contextを指定する。
+    #   省略した場合はGroonga::Context.defaultを使用する。
     def initialize(options={})
       @options = (options || {}).dup
       @definitions = []
     end
 
+    # 定義されたスキーマ定義を実際に実行する。
     def define
       @definitions.each do |definition|
         definition.define
       end
     end
 
+    # Groonga::Schema.dumpで返されたスキーマの内容を読み込む。
+    #
+    # 読み込まれた内容は#defineを呼び出すまでは実行されない
+    # ことに注意すること。
     def restore(dumped_text)
       instance_eval(dumped_text)
     end
 
+    # 名前が_name_のテーブルを作成する。
+    #
+    # 作成したテーブルは#defineを呼び出すまでは実行されない
+    # ことに注意すること。
+    #
+    # _options_に指定可能な値は以下の通り。
+    #
+    # [+:context+]
+    #   スキーマ定義時に使用するGroonga::Contextを指定する。
+    #   省略した場合はGroonga::Schema.newで指定した
+    #   Groonga::Contextを使用する。Groonga::Schema.newで指
+    #   定していない場合はGroonga::Context.defaultを使用する。
+    #
+    # [+:path+]
+    #   テーブルを保存するパスを指定する。パスを指定すると
+    #   永続テーブルになる。
+    #
+    # [+:persistent+]
+    #   テーブルを永続テーブルとする。+:path:+を省略した場
+    #   合はパス名は自動的に作成される。デフォルトでは永続
+    #   テーブルとなる。
+    #
+    # [+:value_size+]
+    #   値のサイズを指定する。デフォルトは0。
     def create_table(name, options={})
       definition = TableDefinition.new(name, @options.merge(options || {}))
       yield(definition)
