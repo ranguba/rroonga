@@ -26,29 +26,31 @@ module Groonga
       @variable = @expression.define_variable
       @variable.value = Groonga::Record.new(@table, 0)
       @expression.append_object(@variable)
-      expression = yield(self)
-      expression.compile
-      expression
+      yield(self)
+      @expression.compile
+      @expression
     end
 
     def record
-      Record.new(@expression, @table, @variable)
+      Record.new(self, @expression, @table, @variable)
     end
 
     class Record
-      def initialize(expression, table, variable)
+      def initialize(builder, expression, table, variable)
+        @builder = builder
         @expression = expression
         @table = table
         @variable = variable
       end
 
       def [](name)
-        Column.new(@expression, @table.column(name), @variable)
+        Column.new(@builder, @expression, @table.column(name), @variable)
       end
     end
 
     class Column
-      def initialize(expression, column, variable)
+      def initialize(builder, expression, column, variable)
+        @builder = builder
         @expression = expression
         @column = column
         @variable = variable
@@ -60,7 +62,43 @@ module Groonga
         @expression.append_operation(Groonga::Operation::OBJECT_GET_VALUE, 2)
         @expression.append_constant(other)
         @expression.append_operation(Groonga::Operation::EQUAL, 2)
-        @expression
+        @builder
+      end
+
+      def <(other)
+        @expression.append_object(@variable)
+        @expression.append_constant(@column.local_name)
+        @expression.append_operation(Groonga::Operation::OBJECT_GET_VALUE, 2)
+        @expression.append_constant(other)
+        @expression.append_operation(Groonga::Operation::LESS, 2)
+        @builder
+      end
+
+      def <=(other)
+        @expression.append_object(@variable)
+        @expression.append_constant(@column.local_name)
+        @expression.append_operation(Groonga::Operation::OBJECT_GET_VALUE, 2)
+        @expression.append_constant(other)
+        @expression.append_operation(Groonga::Operation::LESS_EQUAL, 2)
+        @builder
+      end
+
+      def >(other)
+        @expression.append_object(@variable)
+        @expression.append_constant(@column.local_name)
+        @expression.append_operation(Groonga::Operation::OBJECT_GET_VALUE, 2)
+        @expression.append_constant(other)
+        @expression.append_operation(Groonga::Operation::GREATER, 2)
+        @builder
+      end
+
+      def >=(other)
+        @expression.append_object(@variable)
+        @expression.append_constant(@column.local_name)
+        @expression.append_operation(Groonga::Operation::OBJECT_GET_VALUE, 2)
+        @expression.append_constant(other)
+        @expression.append_operation(Groonga::Operation::GREATER_EQUAL, 2)
+        @builder
       end
     end
   end

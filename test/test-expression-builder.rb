@@ -23,18 +23,65 @@ class ExpressionBuilderTest < Test::Unit::TestCase
   def setup_tables
     @users = Groonga::Hash.create(:name => "<users>")
     @name = @users.define_column("name", "<shorttext>")
+    @hp = @users.define_column("hp", "<uint>")
   end
 
   def setup_data
-    @morita = @users.add("morita", :name => "mori daijiro")
-    @gunyara_kun = @users.add("gunyara-kun", :name => "Tasuku SUENAGA")
+    @morita = @users.add("morita",
+                         :name => "mori daijiro",
+                         :hp => 100)
+    @gunyara_kun = @users.add("gunyara-kun",
+                              :name => "Tasuku SUENAGA",
+                              :hp => 150)
+    @yu = @users.add("yu",
+                     :name => "Yutaro Shimamura",
+                     :hp => 200)
   end
 
   def test_equal
     result = @users.scan do |builder|
       builder.record["name"] == "mori daijiro"
     end
-    assert_equal(["mori daijiro"],
-                 result.collect {|record| record.key["name"]})
+    assert_equal(["morita"],
+                 result.collect {|record| record.key.key})
+  end
+
+  def test_not_equal
+    omit("not supported yet!!!")
+    result = @users.scan do |builder|
+      builder.record["name"] != "mori daijiro"
+    end
+    assert_equal(["gunyara-kun", "yu"],
+                 result.collect {|record| record.key.key})
+  end
+
+  def test_less
+    result = @users.scan do |builder|
+      builder.record["hp"] < 150
+    end
+    assert_equal(["morita"], result.collect {|record| record.key.key})
+  end
+
+  def test_less_equal
+    result = @users.scan do |builder|
+      builder.record["hp"] <= 150
+    end
+    assert_equal(["morita", "gunyara-kun"],
+                 result.collect {|record| record.key.key})
+  end
+
+  def test_greater
+    result = @users.scan do |builder|
+      builder.record["hp"] > 150
+    end
+    assert_equal(["yu"], result.collect {|record| record.key.key})
+  end
+
+  def test_greater_equal
+    result = @users.scan do |builder|
+      builder.record["hp"] >= 150
+    end
+    assert_equal(["gunyara-kun", "yu"],
+                 result.collect {|record| record.key.key})
   end
 end
