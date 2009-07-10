@@ -85,7 +85,7 @@ rb_grn_type_initialize (int argc, VALUE *argv, VALUE self)
     }
 
     type = grn_type_create(context, name, name_size, flags, size);
-    rb_grn_object_assign(self, rb_context, context, type, RB_GRN_TRUE);
+    rb_grn_object_assign(self, rb_context, context, type);
     rb_grn_context_check(context, rb_ary_new4(argc, argv));
 
     return Qnil;

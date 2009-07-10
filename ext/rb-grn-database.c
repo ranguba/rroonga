@@ -138,8 +138,7 @@ rb_grn_database_s_create (int argc, VALUE *argv, VALUE klass)
     database = grn_db_create(context, path, &create_args);
     rb_grn_context_check(context, rb_ary_new4(argc, argv));
     rb_database = rb_grn_object_alloc(klass);
-    rb_grn_object_assign(rb_database, rb_context, context,
-			 database, RB_GRN_TRUE);
+    rb_grn_object_assign(rb_database, rb_context, context, database);
     rb_iv_set(rb_database, "context", rb_context);
     if (!NIL_P(rb_context))
 	rb_iv_set(rb_context, "database", rb_database);
@@ -186,7 +185,7 @@ rb_grn_database_initialize (int argc, VALUE *argv, VALUE self)
     context = rb_grn_context_ensure(&rb_context);
 
     database = grn_db_open(context, path);
-    rb_grn_object_assign(self, rb_context, context, database, RB_GRN_TRUE);
+    rb_grn_object_assign(self, rb_context, context, database);
     rb_grn_context_check(context, self);
 
     rb_iv_set(self, "context", rb_context);

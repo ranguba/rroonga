@@ -68,56 +68,6 @@ rb_grn_table_cursor_to_ruby_object (VALUE klass, grn_ctx *context,
 }
 
 void
-rb_grn_table_cursor_unbind (RbGrnTableCursor *rb_grn_table_cursor)
-{
-    RbGrnObject *rb_grn_object;
-
-    rb_grn_object = RB_GRN_OBJECT(rb_grn_table_cursor);
-    rb_grn_object_unbind(rb_grn_object);
-}
-
-static void
-rb_grn_table_cursor_free (void *object)
-{
-    RbGrnTableCursor *rb_grn_table_cursor = object;
-
-    rb_grn_table_cursor_unbind(rb_grn_table_cursor);
-    xfree(rb_grn_table_cursor);
-}
-
-VALUE
-rb_grn_table_cursor_alloc (VALUE klass)
-{
-    return Data_Wrap_Struct(klass, NULL, rb_grn_table_cursor_free, NULL);
-}
-
-void
-rb_grn_table_cursor_bind (RbGrnTableCursor *rb_grn_table_cursor,
-			  grn_ctx *context, grn_table_cursor *cursor,
-			  rb_grn_boolean owner)
-{
-    RbGrnObject *rb_grn_object;
-
-    rb_grn_object = RB_GRN_OBJECT(rb_grn_table_cursor);
-    rb_grn_object_bind(rb_grn_object, context, cursor, owner);
-    rb_grn_object->unbind = RB_GRN_UNBIND_FUNCTION(rb_grn_table_cursor_unbind);
-}
-
-void
-rb_grn_table_cursor_assign (VALUE self, VALUE rb_context,
-			    grn_ctx *context, grn_table_cursor *cursor,
-			    rb_grn_boolean owner)
-{
-    RbGrnTableCursor *rb_grn_table_cursor;
-
-    rb_grn_table_cursor = ALLOC(RbGrnTableCursor);
-    DATA_PTR(self) = rb_grn_table_cursor;
-    rb_grn_table_cursor_bind(rb_grn_table_cursor, context, cursor, owner);
-
-    rb_iv_set(self, "context", rb_context);
-}
-
-void
 rb_grn_table_cursor_deconstruct (RbGrnTableCursor *rb_grn_table_cursor,
 				 grn_table_cursor **cursor,
 				 grn_ctx **context,
@@ -137,7 +87,7 @@ rb_grn_table_cursor_deconstruct (RbGrnTableCursor *rb_grn_table_cursor,
 VALUE
 rb_grn_table_cursor_close (VALUE self)
 {
-    rb_grn_table_cursor_unbind(SELF(self));
+    /* rb_grn_table_cursor_unbind(SELF(self)); */ /* TODO: grn_obj_close() */
     return Qnil;
 }
 
@@ -260,7 +210,7 @@ void
 rb_grn_init_table_cursor (VALUE mGrn)
 {
     rb_cGrnTableCursor = rb_define_class_under(mGrn, "TableCursor", rb_cObject);
-    rb_define_alloc_func(rb_cGrnTableCursor, rb_grn_table_cursor_alloc);
+    rb_define_alloc_func(rb_cGrnTableCursor, rb_grn_object_alloc);
 
     rb_include_module(rb_cGrnTableCursor, rb_mEnumerable);
 

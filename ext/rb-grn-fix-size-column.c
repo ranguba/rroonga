@@ -18,7 +18,7 @@
 
 #include "rb-grn.h"
 
-#define SELF(object) ((RbGrnFixSizeColumn *)DATA_PTR(object))
+#define SELF(object) ((RbGrnColumn *)DATA_PTR(object))
 
 VALUE rb_cGrnFixSizeColumn;
 
@@ -27,87 +27,6 @@ VALUE rb_cGrnFixSizeColumn;
  *
  * 固定長データ用のカラム。
  */
-
-void
-rb_grn_fix_size_column_unbind (RbGrnFixSizeColumn *rb_grn_fix_size_column)
-{
-    RbGrnObject *rb_grn_object;
-    grn_ctx *context;
-
-    rb_grn_object = RB_GRN_OBJECT(rb_grn_fix_size_column);
-    context = rb_grn_object->context;
-
-    if (context)
-	grn_obj_close(context, rb_grn_fix_size_column->value);
-
-    rb_grn_object_unbind(rb_grn_object);
-}
-
-static void
-rb_grn_fix_size_column_free (void *object)
-{
-    RbGrnFixSizeColumn *rb_grn_fix_size_column = object;
-
-    rb_grn_fix_size_column_unbind(rb_grn_fix_size_column);
-    xfree(rb_grn_fix_size_column);
-}
-
-VALUE
-rb_grn_fix_size_column_alloc (VALUE klass)
-{
-    return Data_Wrap_Struct(klass, NULL, rb_grn_fix_size_column_free, NULL);
-}
-
-void
-rb_grn_fix_size_column_bind (RbGrnFixSizeColumn *rb_grn_fix_size_column,
-			     grn_ctx *context, grn_obj *column,
-			     rb_grn_boolean owner)
-{
-    RbGrnObject *rb_grn_object;
-
-    rb_grn_object = RB_GRN_OBJECT(rb_grn_fix_size_column);
-    rb_grn_object_bind(rb_grn_object, context, column, owner);
-    rb_grn_object->unbind =
-	RB_GRN_UNBIND_FUNCTION(rb_grn_fix_size_column_unbind);
-
-    rb_grn_fix_size_column->value = grn_obj_open(context, GRN_BULK, 0,
-						 rb_grn_object->range_id);
-}
-
-void
-rb_grn_fix_size_column_assign (VALUE self, VALUE rb_context,
-		      grn_ctx *context, grn_obj *column,
-		      rb_grn_boolean owner)
-{
-    RbGrnFixSizeColumn *rb_grn_fix_size_column;
-
-    rb_grn_fix_size_column = ALLOC(RbGrnFixSizeColumn);
-    DATA_PTR(self) = rb_grn_fix_size_column;
-    rb_grn_fix_size_column_bind(rb_grn_fix_size_column, context, column, owner);
-
-    rb_iv_set(self, "context", rb_context);
-}
-
-void
-rb_grn_fix_size_column_deconstruct (RbGrnFixSizeColumn *rb_grn_fix_size_column,
-				    grn_obj **column,
-				    grn_ctx **context,
-				    grn_id *domain_id,
-				    grn_obj **domain,
-				    grn_obj **value,
-				    grn_id *range_id,
-				    grn_obj **range)
-{
-    RbGrnObject *rb_grn_object;
-
-    rb_grn_object = RB_GRN_OBJECT(rb_grn_fix_size_column);
-    rb_grn_object_deconstruct(rb_grn_object, column, context,
-			      domain_id, domain,
-			      range_id, range);
-
-    if (value)
-	*value = rb_grn_fix_size_column->value;
-}
 
 /*
  * call-seq:
@@ -124,9 +43,9 @@ rb_grn_fix_size_column_array_reference (VALUE self, VALUE rb_id)
     grn_obj *range;
     grn_obj *value;
 
-    rb_grn_fix_size_column_deconstruct(SELF(self), &fix_size_column, &context,
-				       NULL, NULL,
-				       &value, NULL, &range);
+    rb_grn_column_deconstruct(SELF(self), &fix_size_column, &context,
+			      NULL, NULL,
+			      &value, NULL, &range);
 
     id = NUM2UINT(rb_id);
     GRN_BULK_REWIND(value);
@@ -153,9 +72,9 @@ rb_grn_fix_size_column_array_set (VALUE self, VALUE rb_id, VALUE rb_value)
     grn_rc rc;
     grn_id id;
 
-    rb_grn_fix_size_column_deconstruct(SELF(self), &column, &context,
-				       &domain_id, &domain,
-				       &value, &range_id, &range);
+    rb_grn_column_deconstruct(SELF(self), &column, &context,
+			      &domain_id, &domain,
+			      &value, &range_id, &range);
 
     id = NUM2UINT(rb_id);
 
@@ -218,9 +137,9 @@ rb_grn_fix_size_column_integer_set (int argc, VALUE *argv, VALUE self, int flags
 
     rb_scan_args(argc, argv, "11", &rb_id, &rb_delta);
 
-    rb_grn_fix_size_column_deconstruct(SELF(self), &column, &context,
-				       NULL, NULL,
-				       &value, NULL, NULL);
+    rb_grn_column_deconstruct(SELF(self), &column, &context,
+			      NULL, NULL,
+			      &value, NULL, NULL);
 
     id = NUM2UINT(rb_id);
     if (NIL_P(rb_delta))
@@ -267,7 +186,6 @@ rb_grn_init_fix_size_column (VALUE mGrn)
 {
     rb_cGrnFixSizeColumn =
 	rb_define_class_under(mGrn, "FixSizeColumn", rb_cGrnColumn);
-    rb_define_alloc_func(rb_cGrnFixSizeColumn, rb_grn_fix_size_column_alloc);
 
     rb_define_method(rb_cGrnFixSizeColumn, "[]",
 		     rb_grn_fix_size_column_array_reference, 1);

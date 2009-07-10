@@ -76,8 +76,11 @@ typedef struct {
 
 #define RB_GRN_OBJECT(object) ((RbGrnObject *)(object))
 #define RB_GRN_TABLE(object) ((RbGrnTable *)(object))
+#define RB_GRN_TABLE_KEY_SUPPORT(object) ((RbGrnTableKeySupport *)(object))
 #define RB_GRN_TABLE_CURSOR(object) ((RbGrnTableCursort *)(object))
+#define RB_GRN_COLUMN(object) ((RbGrnColumn *)(object))
 #define RB_GRN_INDEX_COLUMN(object) ((RbGrnIndexColumn *)(object))
+#define RB_GRN_EXPRESSION(object) ((RbGrnExpression *)(object))
 #define RB_GRN_UNBIND_FUNCTION(function) ((RbGrnUnbindFunction)(function))
 
 typedef void (*RbGrnUnbindFunction) (void *object);
@@ -85,14 +88,13 @@ typedef void (*RbGrnUnbindFunction) (void *object);
 typedef struct _RbGrnObject RbGrnObject;
 struct _RbGrnObject
 {
+    VALUE self;
     grn_ctx *context;
     grn_obj *object;
     grn_obj *domain;
     grn_id domain_id;
     grn_obj *range;
     grn_id range_id;
-    rb_grn_boolean owner;
-    RbGrnUnbindFunction unbind;
 };
 
 typedef struct _RbGrnTable RbGrnTable;
@@ -116,25 +118,10 @@ struct _RbGrnColumn
     grn_obj *value;
 };
 
-typedef struct _RbGrnFixSizeColumn RbGrnFixSizeColumn;
-struct _RbGrnFixSizeColumn
-{
-    RbGrnObject parent;
-    grn_obj *value;
-};
-
-typedef struct _RbGrnVariableSizeColumn RbGrnVariableSizeColumn;
-struct _RbGrnVariableSizeColumn
-{
-    RbGrnObject parent;
-    grn_obj *value;
-};
-
 typedef struct _RbGrnIndexColumn RbGrnIndexColumn;
 struct _RbGrnIndexColumn
 {
-    RbGrnObject parent;
-    grn_obj *value;
+    RbGrnColumn parent;
     grn_obj *old_value;
     grn_obj *id_query;
     grn_obj *string_query;
@@ -251,16 +238,16 @@ rb_grn_boolean rb_grn_equal_option                  (VALUE option,
 						     const char *key);
 
 VALUE          rb_grn_object_alloc                  (VALUE klass);
-void           rb_grn_object_bind                   (RbGrnObject *rb_grn_object,
+void           rb_grn_object_bind                   (VALUE self,
+						     VALUE rb_context,
+						     RbGrnObject *rb_grn_object,
 						     grn_ctx *context,
-						     grn_obj *object,
-						     rb_grn_boolean owner);
+						     grn_obj *object);
 void           rb_grn_object_unbind                 (RbGrnObject *rb_grn_object);
 void           rb_grn_object_assign                 (VALUE self,
 						     VALUE rb_context,
 						     grn_ctx *context,
-						     grn_obj *object,
-						     rb_grn_boolean owner);
+						     grn_obj *object);
 void           rb_grn_object_deconstruct            (RbGrnObject *rb_grn_object,
 						     grn_obj **object,
 						     grn_ctx **context,
@@ -285,12 +272,12 @@ VALUE          rb_grn_object_inspect_content        (VALUE object,
 VALUE          rb_grn_object_inspect_footer         (VALUE object,
 						     VALUE inspected);
 
-VALUE          rb_grn_table_alloc                   (VALUE klass);
 void           rb_grn_table_bind                    (RbGrnTable *rb_grn_table,
 						     grn_ctx *context,
-						     grn_obj *table_key_support,
-						     rb_grn_boolean owner);
-void           rb_grn_table_unbind                  (RbGrnTable *rb_grn_table);
+						     grn_obj *table_key_support);
+void           rb_grn_table_finalizer               (grn_ctx *context,
+						     grn_obj *grn_object,
+						     RbGrnTable *rb_grn_table);
 void           rb_grn_table_assign                  (VALUE self,
 						     VALUE rb_context,
 						     grn_ctx *context,
@@ -326,17 +313,12 @@ grn_ctx       *rb_grn_table_cursor_ensure_context   (VALUE cursor,
 						     VALUE *rb_context);
 VALUE          rb_grn_table_cursor_close            (VALUE object);
 
-VALUE          rb_grn_table_key_support_alloc       (VALUE klass);
 void           rb_grn_table_key_support_bind        (RbGrnTableKeySupport *rb_grn_table_key_support,
 						     grn_ctx *context,
-						     grn_obj *table_key_support,
-						     rb_grn_boolean owner);
-void           rb_grn_table_key_support_unbind      (RbGrnTableKeySupport *rb_grn_table_key_support);
-void           rb_grn_table_key_support_assign      (VALUE self,
-						     VALUE rb_context,
-						     grn_ctx *context,
-						     grn_obj *table_key_support,
-						     rb_grn_boolean owner);
+						     grn_obj *table_key_support);
+void           rb_grn_table_key_support_finalizer   (grn_ctx *context,
+						     grn_obj *grn_object,
+						     RbGrnTableKeySupport *rb_grn_table_key_support);
 void           rb_grn_table_key_support_deconstruct (RbGrnTableKeySupport *rb_grn_table_key_support,
 						     grn_obj **table_key_support,
 						     grn_ctx **context,
@@ -349,18 +331,13 @@ void           rb_grn_table_key_support_deconstruct (RbGrnTableKeySupport *rb_gr
 grn_id         rb_grn_table_key_support_get         (VALUE self,
 						     VALUE rb_key);
 
-VALUE          rb_grn_fix_size_column_alloc         (VALUE klass);
-void           rb_grn_fix_size_column_bind          (RbGrnFixSizeColumn *rb_grn_fix_size_column,
+void           rb_grn_column_bind                   (RbGrnColumn *rb_grn_column,
 						     grn_ctx *context,
-						     grn_obj *column_key_support,
-						     rb_grn_boolean owner);
-void           rb_grn_fix_size_column_unbind        (RbGrnFixSizeColumn *rb_grn_fix_size_column);
-void           rb_grn_fix_size_column_assign        (VALUE self,
-						     VALUE rb_context,
-						     grn_ctx *context,
+						     grn_obj *column);
+void           rb_grn_column_finalizer              (grn_ctx *context,
 						     grn_obj *column,
-						     rb_grn_boolean owner);
-void           rb_grn_fix_size_column_deconstruct   (RbGrnFixSizeColumn *rb_grn_fix_size_column,
+						     RbGrnColumn *rb_grn_column);
+void           rb_grn_column_deconstruct            (RbGrnColumn *rb_grn_column,
 						     grn_obj **column,
 						     grn_ctx **context,
 						     grn_id *domain_id,
@@ -369,38 +346,12 @@ void           rb_grn_fix_size_column_deconstruct   (RbGrnFixSizeColumn *rb_grn_
 						     grn_id *range_id,
 						     grn_obj **range);
 
-VALUE          rb_grn_variable_size_column_alloc    (VALUE klass);
-void           rb_grn_variable_size_column_bind     (RbGrnVariableSizeColumn *rb_column,
-						     grn_ctx *context,
-						     grn_obj *column_key_support,
-						     rb_grn_boolean owner);
-void           rb_grn_variable_size_column_unbind   (RbGrnVariableSizeColumn *rb_column);
-void           rb_grn_variable_size_column_assign   (VALUE self,
-						     VALUE rb_context,
-						     grn_ctx *context,
-						     grn_obj *column,
-						     rb_grn_boolean owner);
-void           rb_grn_variable_size_column_deconstruct
-                                                    (RbGrnVariableSizeColumn *rb_column,
-						     grn_obj **column,
-						     grn_ctx **context,
-						     grn_id *domain_id,
-						     grn_obj **domain,
-						     grn_obj **value,
-						     grn_id *range_id,
-						     grn_obj **range);
-
-VALUE          rb_grn_index_column_alloc            (VALUE klass);
 void           rb_grn_index_column_bind             (RbGrnIndexColumn *rb_grn_index_column,
 						     grn_ctx *context,
-						     grn_obj *column_key_support,
-						     rb_grn_boolean owner);
-void           rb_grn_index_column_unbind           (RbGrnIndexColumn *rb_grn_index_column);
-void           rb_grn_index_column_assign           (VALUE self,
-						     VALUE rb_context,
-						     grn_ctx *context,
-						     grn_obj *column,
-						     rb_grn_boolean owner);
+						     grn_obj *object);
+void           rb_grn_index_column_finalizer        (grn_ctx *context,
+						     grn_obj *grn_object,
+						     RbGrnIndexColumn *rb_grn_index_column);
 void           rb_grn_index_column_deconstruct      (RbGrnIndexColumn *rb_grn_index_column,
 						     grn_obj **column,
 						     grn_ctx **context,
@@ -413,17 +364,12 @@ void           rb_grn_index_column_deconstruct      (RbGrnIndexColumn *rb_grn_in
 						     grn_obj **id_query,
 						     grn_obj **string_query);
 
-VALUE          rb_grn_expression_alloc              (VALUE klass);
 void           rb_grn_expression_bind               (RbGrnExpression *rb_grn_expression,
 						     grn_ctx *context,
-						     grn_obj *expression,
-						     rb_grn_boolean owner);
-void           rb_grn_expression_unbind             (RbGrnExpression *rb_grn_expression);
-void           rb_grn_expression_assign             (VALUE self,
-						     VALUE rb_context,
-						     grn_ctx *context,
-						     grn_obj *expression,
-						     rb_grn_boolean owner);
+						     grn_obj *expression);
+void           rb_grn_expression_finalizer          (grn_ctx *context,
+						     grn_obj *grn_object,
+						     RbGrnExpression *rb_grn_expression);
 
 VALUE          rb_grn_record_new                    (VALUE table,
 						     grn_id id,

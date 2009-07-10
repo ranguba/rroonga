@@ -64,6 +64,49 @@ rb_grn_column_to_ruby_object (VALUE klass, grn_ctx *context, grn_obj *column,
     return GRNOBJECT2RVAL(klass, context, column, owner);
 }
 
+void
+rb_grn_column_bind (RbGrnColumn *rb_column,
+		    grn_ctx *context, grn_obj *column)
+{
+    RbGrnObject *rb_grn_object;
+
+    rb_grn_object = RB_GRN_OBJECT(rb_column);
+
+    rb_column->value = grn_obj_open(context, GRN_BULK, 0,
+                                    rb_grn_object->range_id);
+}
+
+void
+rb_grn_column_finalizer (grn_ctx *context, grn_obj *grn_object,
+			 RbGrnColumn *rb_column)
+{
+    if (context && rb_column->value)
+	grn_obj_close(context, rb_column->value);
+    rb_column->value = NULL;
+}
+
+void
+rb_grn_column_deconstruct (RbGrnColumn *rb_column,
+			   grn_obj **column,
+			   grn_ctx **context,
+			   grn_id *domain_id,
+			   grn_obj **domain,
+			   grn_obj **value,
+			   grn_id *range_id,
+			   grn_obj **range)
+{
+    RbGrnObject *rb_grn_object;
+
+    rb_grn_object = RB_GRN_OBJECT(rb_column);
+    rb_grn_object_deconstruct(rb_grn_object, column, context,
+			      domain_id, domain,
+			      range_id, range);
+
+    if (value)
+	*value = rb_column->value;
+}
+
+
 /*
  * call-seq:
  *   column.table -> Groonga::Table

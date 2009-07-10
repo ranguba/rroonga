@@ -56,94 +56,13 @@ rb_grn_context_from_ruby_object (VALUE object)
     return context;
 }
 
-void
-rb_grn_context_register (grn_ctx *context, RbGrnObject *object)
-{
-    grn_obj *objects;
-
-    if (!grn_ctx_db(context))
-	return;
-
-    objects = GRN_CTX_USER_DATA(context)->ptr;
-    if (!objects) {
-        grn_obj *key_type;
-
-        if (sizeof(RbGrnObject *) == 4)
-	    key_type = grn_ctx_at(context, GRN_DB_UINT32);
-        else
-	    key_type = grn_ctx_at(context, GRN_DB_UINT64);
-
-	objects = grn_table_create(context,
-				   NULL,
-				   0,
-				   NULL,
-				   GRN_OBJ_TABLE_HASH_KEY,
-				   key_type,
-				   0);
-	rb_grn_context_check(context, Qnil);
-	GRN_CTX_USER_DATA(context)->ptr = objects;
-    }
-
-    grn_table_add(context, objects,
-		  &object, sizeof(RbGrnObject *),
-		  NULL);
-}
-
-void
-rb_grn_context_unregister (grn_ctx *context, RbGrnObject *object)
-{
-    grn_obj *objects;
-
-    if (!grn_ctx_db(context))
-	return;
-
-    objects = GRN_CTX_USER_DATA(context)->ptr;
-    if (!objects)
-	return;
-
-    grn_table_delete(context, objects, &object, sizeof(RbGrnObject *));
-}
-
-void
-rb_grn_context_unbind (grn_ctx *context)
-{
-    grn_obj *database;
-    grn_obj *objects;
-
-    database = grn_ctx_db(context);
-    if (!database)
-	return;
-
-    objects = GRN_CTX_USER_DATA(context)->ptr;
-    if (objects) {
-	grn_table_cursor *cursor;
-
-	cursor = grn_table_cursor_open(context, objects, NULL, 0, NULL, 0, 0);
-	while (grn_table_cursor_next(context, cursor) != GRN_ID_NIL) {
-	    void *value;
-	    RbGrnObject *object = NULL;
-	    grn_table_cursor_get_key(context, cursor, &value);
-	    memcpy(&object, value, sizeof(RbGrnObject *));
-	    object->object = NULL;
-	    object->unbind(object);
-	}
-	grn_table_cursor_close(context, cursor);
-	grn_obj_close(context, objects);
-    }
-
-    grn_obj_close(context, database);
-    grn_ctx_use(context, NULL);
-}
-
 static void
 rb_grn_context_free (void *pointer)
 {
     grn_ctx *context = pointer;
 
-    if (context->stat != GRN_CTX_FIN) {
-	rb_grn_context_unbind(context);
+    if (context->stat != GRN_CTX_FIN)
 	grn_ctx_fin(context);
-    }
     xfree(context);
 }
 

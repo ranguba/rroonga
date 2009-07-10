@@ -33,52 +33,28 @@ VALUE rb_cGrnIndexColumn;
  */
 
 void
-rb_grn_index_column_unbind (RbGrnIndexColumn *rb_grn_index_column)
+rb_grn_index_column_finalizer (grn_ctx *context, grn_obj *object,
+			       RbGrnIndexColumn *rb_grn_index_column)
 {
-    RbGrnObject *rb_grn_object;
-    grn_ctx *context;
+    if (!context)
+	return;
 
-    rb_grn_object = RB_GRN_OBJECT(rb_grn_index_column);
-    context = rb_grn_object->context;
+    grn_obj_close(context, rb_grn_index_column->id_query);
+    grn_obj_close(context, rb_grn_index_column->string_query);
+    grn_obj_close(context, rb_grn_index_column->old_value);
 
-    if (context) {
-	grn_obj_close(context, rb_grn_index_column->id_query);
-	grn_obj_close(context, rb_grn_index_column->string_query);
-	grn_obj_close(context, rb_grn_index_column->value);
-	grn_obj_close(context, rb_grn_index_column->old_value);
-    }
-
-    rb_grn_object_unbind(rb_grn_object);
-}
-
-static void
-rb_grn_index_column_free (void *object)
-{
-    RbGrnIndexColumn *rb_grn_index_column = object;
-
-    rb_grn_index_column_unbind(rb_grn_index_column);
-    xfree(rb_grn_index_column);
-}
-
-VALUE
-rb_grn_index_column_alloc (VALUE klass)
-{
-    return Data_Wrap_Struct(klass, NULL, rb_grn_index_column_free, NULL);
+    rb_grn_column_finalizer(context, object, RB_GRN_COLUMN(rb_grn_index_column));
 }
 
 void
 rb_grn_index_column_bind (RbGrnIndexColumn *rb_grn_index_column,
-			  grn_ctx *context, grn_obj *column,
-			  rb_grn_boolean owner)
+			  grn_ctx *context, grn_obj *column)
 {
     RbGrnObject *rb_grn_object;
 
+    rb_grn_column_bind(RB_GRN_COLUMN(rb_grn_index_column), context, column);
     rb_grn_object = RB_GRN_OBJECT(rb_grn_index_column);
-    rb_grn_object_bind(rb_grn_object, context, column, owner);
-    rb_grn_object->unbind = RB_GRN_UNBIND_FUNCTION(rb_grn_index_column_unbind);
 
-    rb_grn_index_column->value = grn_obj_open(context, GRN_BULK, 0,
-					      rb_grn_object->range_id);
     rb_grn_index_column->old_value = grn_obj_open(context, GRN_BULK, 0,
 						  rb_grn_object->range_id);
 
@@ -87,20 +63,6 @@ rb_grn_index_column_bind (RbGrnIndexColumn *rb_grn_index_column,
     rb_grn_index_column->string_query = grn_obj_open(context, GRN_BULK,
 						     GRN_OBJ_DO_SHALLOW_COPY,
 						     GRN_ID_NIL);
-}
-
-void
-rb_grn_index_column_assign (VALUE self, VALUE rb_context,
-			    grn_ctx *context, grn_obj *column,
-			    rb_grn_boolean owner)
-{
-    RbGrnIndexColumn *rb_grn_index_column;
-
-    rb_grn_index_column = ALLOC(RbGrnIndexColumn);
-    DATA_PTR(self) = rb_grn_index_column;
-    rb_grn_index_column_bind(rb_grn_index_column, context, column, owner);
-
-    rb_iv_set(self, "context", rb_context);
 }
 
 void
@@ -119,12 +81,10 @@ rb_grn_index_column_deconstruct (RbGrnIndexColumn *rb_grn_index_column,
     RbGrnObject *rb_grn_object;
 
     rb_grn_object = RB_GRN_OBJECT(rb_grn_index_column);
-    rb_grn_object_deconstruct(rb_grn_object, column, context,
-			      domain_id, domain,
+    rb_grn_column_deconstruct(RB_GRN_COLUMN(rb_grn_object), column, context,
+			      domain_id, domain, value,
 			      range_id, range);
 
-    if (value)
-	*value = rb_grn_index_column->value;
     if (old_value)
 	*old_value = rb_grn_index_column->old_value;
     if (id_query)
@@ -457,7 +417,6 @@ rb_grn_init_index_column (VALUE mGrn)
 {
     rb_cGrnIndexColumn =
 	rb_define_class_under(mGrn, "IndexColumn", rb_cGrnColumn);
-    rb_define_alloc_func(rb_cGrnIndexColumn, rb_grn_index_column_alloc);
 
     rb_define_method(rb_cGrnIndexColumn, "[]=",
 		     rb_grn_index_column_array_set, 2);

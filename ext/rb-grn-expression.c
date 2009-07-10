@@ -38,48 +38,16 @@ rb_grn_expression_unbind (RbGrnExpression *rb_grn_expression)
     rb_grn_object_unbind(RB_GRN_OBJECT(rb_grn_expression));
 }
 
-static void
-rb_grn_expression_free (void *object)
-{
-    RbGrnExpression *rb_grn_expression = object;
-
-    RB_GRN_OBJECT(rb_grn_expression)->unbind(rb_grn_expression);
-    xfree(rb_grn_expression);
-}
-
-VALUE
-rb_grn_expression_alloc (VALUE klass)
-{
-    return Data_Wrap_Struct(klass, NULL, rb_grn_expression_free, NULL);
-}
-
 void
 rb_grn_expression_bind (RbGrnExpression *rb_grn_expression,
-                        grn_ctx *context, grn_obj *expression,
-                        rb_grn_boolean owner)
+                        grn_ctx *context, grn_obj *expression)
 {
     RbGrnObject *rb_grn_object;
 
     rb_grn_object = RB_GRN_OBJECT(rb_grn_expression);
-    rb_grn_object_bind(rb_grn_object, context, expression, owner);
-    rb_grn_object->unbind = RB_GRN_UNBIND_FUNCTION(rb_grn_expression_unbind);
 
     rb_grn_expression->value = grn_obj_open(context, GRN_BULK, 0,
                                             rb_grn_object->range_id);
-}
-
-void
-rb_grn_expression_assign (VALUE self, VALUE rb_context,
-                          grn_ctx *context, grn_obj *expression,
-                          rb_grn_boolean owner)
-{
-    RbGrnExpression *rb_grn_expression;
-
-    rb_grn_expression = ALLOC(RbGrnExpression);
-    DATA_PTR(self) = rb_grn_expression;
-    rb_grn_expression_bind(rb_grn_expression, context, expression, owner);
-
-    rb_iv_set(self, "context", rb_context);
 }
 
 void
@@ -126,7 +94,7 @@ rb_grn_expression_initialize (int argc, VALUE *argv, VALUE self)
     }
 
     expression = grn_expr_create(context, name, name_size);
-    rb_grn_expression_assign(self, rb_context, context, expression, RB_GRN_TRUE);
+    rb_grn_object_assign(self, rb_context, context, expression);
     rb_grn_context_check(context, self);
 
     return Qnil;
@@ -296,8 +264,6 @@ void
 rb_grn_init_expression (VALUE mGrn)
 {
     rb_cGrnExpression = rb_define_class_under(mGrn, "Expression", rb_cGrnObject);
-    rb_define_alloc_func(rb_cGrnExpression, rb_grn_expression_alloc);
-
     rb_define_method(rb_cGrnExpression, "initialize",
                      rb_grn_expression_initialize, -1);
 
