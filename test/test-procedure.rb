@@ -19,11 +19,11 @@ class ProcedureTest < Test::Unit::TestCase
   setup :setup_database
 
   def test_builtins
-    assert_equal_procedure("Token:delimit", Groonga::Procedure::DELIMIT)
-    assert_equal_procedure("Token:unigram", Groonga::Procedure::UNIGRAM)
-    assert_equal_procedure("Token:bigram", Groonga::Procedure::BIGRAM)
-    assert_equal_procedure("Token:trigram", Groonga::Procedure::TRIGRAM)
-    assert_equal_procedure("Token:mecab", Groonga::Procedure::MECAB)
+    assert_equal_procedure("TokenDelimit", Groonga::Procedure::DELIMIT)
+    assert_equal_procedure("TokenUnigram", Groonga::Procedure::UNIGRAM)
+    assert_equal_procedure("TokenBigram", Groonga::Procedure::BIGRAM)
+    assert_equal_procedure("TokenTrigram", Groonga::Procedure::TRIGRAM)
+    assert_equal_procedure("TokenMecab", Groonga::Procedure::MECAB)
   end
 
   private

@@ -64,7 +64,7 @@ rb_grn_context_register (grn_ctx *context, RbGrnObject *object)
     if (!grn_ctx_db(context))
 	return;
 
-    objects = GRN_CTX_USER_DATA(context);
+    objects = GRN_CTX_USER_DATA(context)->ptr;
     if (!objects) {
         grn_obj *key_type;
 
@@ -81,7 +81,7 @@ rb_grn_context_register (grn_ctx *context, RbGrnObject *object)
 				   key_type,
 				   0);
 	rb_grn_context_check(context, Qnil);
-	GRN_CTX_USER_DATA(context) = objects;
+	GRN_CTX_USER_DATA(context)->ptr = objects;
     }
 
     grn_table_add(context, objects,
@@ -97,7 +97,7 @@ rb_grn_context_unregister (grn_ctx *context, RbGrnObject *object)
     if (!grn_ctx_db(context))
 	return;
 
-    objects = GRN_CTX_USER_DATA(context);
+    objects = GRN_CTX_USER_DATA(context)->ptr;
     if (!objects)
 	return;
 
@@ -114,7 +114,7 @@ rb_grn_context_unbind (grn_ctx *context)
     if (!database)
 	return;
 
-    objects = GRN_CTX_USER_DATA(context);
+    objects = GRN_CTX_USER_DATA(context)->ptr;
     if (objects) {
 	grn_table_cursor *cursor;
 
@@ -425,31 +425,31 @@ grn_type_name_old_to_new (const char *name, unsigned int name_size)
     if (strcmp(name, "<int>") == 0) {
 	return "Int32";
     } else if (strcmp(name, "<uint>") == 0) {
-	return "Uint32";
+	return "UInt32";
     } else if (strcmp(name, "<int64>") == 0) {
 	return "Int64";
     } else if (strcmp(name, "<uint64>") == 0) {
-	return "Uint64";
+	return "UInt64";
     } else if (strcmp(name, "<float>") == 0) {
 	return "Float";
     } else if (strcmp(name, "<time>") == 0) {
 	return "Time";
     } else if (strcmp(name, "<shorttext>") == 0) {
-	return "Shorttext";
+	return "ShortText";
     } else if (strcmp(name, "<text>") == 0) {
 	return "Text";
     } else if (strcmp(name, "<longtext>") == 0) {
-	return "Longtext";
+	return "LongText";
     } else if (strcmp(name, "<token:delimit>") == 0) {
-	return "Token:delimit";
+	return "TokenDelimit";
     } else if (strcmp(name, "<token:unigram>") == 0) {
-	return "Token:unigram";
+	return "TokenUnigram";
     } else if (strcmp(name, "<token:bigram>") == 0) {
-	return "Token:bigram";
+	return "TokenBigram";
     } else if (strcmp(name, "<token:trigram>") == 0) {
-	return "Token:trigram";
+	return "TokenTrigram";
     } else if (strcmp(name, "<token:mecab>") == 0) {
-	return "Token:mecab";
+	return "TokenMecab";
     }
 
     return NULL;

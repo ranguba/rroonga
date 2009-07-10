@@ -25,19 +25,19 @@ class TypeTest < Test::Unit::TestCase
 
   def test_builtins
     assert_equal_type("Int32", Groonga::Type::INT32)
-    assert_equal_type("Uint32", Groonga::Type::UINT32)
+    assert_equal_type("UInt32", Groonga::Type::UINT32)
     assert_equal_type("Int64", Groonga::Type::INT64)
-    assert_equal_type("Uint64", Groonga::Type::UINT64)
+    assert_equal_type("UInt64", Groonga::Type::UINT64)
     assert_equal_type("Float", Groonga::Type::FLOAT)
     assert_equal_type("Time", Groonga::Type::TIME)
-    assert_equal_type("Shorttext", Groonga::Type::SHORT_TEXT)
+    assert_equal_type("ShortText", Groonga::Type::SHORT_TEXT)
     assert_equal_type("Text", Groonga::Type::TEXT)
-    assert_equal_type("Longtext", Groonga::Type::LONG_TEXT)
+    assert_equal_type("LongText", Groonga::Type::LONG_TEXT)
   end
 
   def test_inspect
     assert_equal("#<Groonga::Type id: <#{Groonga::Type::LONG_TEXT}>, " +
-                 "name: <Longtext>, " +
+                 "name: <LongText>, " +
                  "path: (temporary), " +
                  "domain: <nil>, " +
                  "range: <2147483648>>",
