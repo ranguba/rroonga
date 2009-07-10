@@ -98,6 +98,13 @@ rb_grn_init_type (VALUE mGrn)
 
     rb_define_method(rb_cGrnType, "initialize", rb_grn_type_initialize, -1);
 
+    rb_define_const(rb_cGrnType, "OBJECT", INT2NUM(GRN_DB_OBJECT));
+    rb_define_const(rb_cGrnType, "BOOLEAN", INT2NUM(GRN_DB_BOOL));
+    rb_define_const(rb_cGrnType, "BOOL", INT2NUM(GRN_DB_BOOL));
+    rb_define_const(rb_cGrnType, "INT8", INT2NUM(GRN_DB_INT8));
+    rb_define_const(rb_cGrnType, "UINT8", INT2NUM(GRN_DB_UINT8));
+    rb_define_const(rb_cGrnType, "INT16", INT2NUM(GRN_DB_INT16));
+    rb_define_const(rb_cGrnType, "UINT16", INT2NUM(GRN_DB_UINT16));
     rb_define_const(rb_cGrnType, "INT32", INT2NUM(GRN_DB_INT32));
     rb_define_const(rb_cGrnType, "UINT32", INT2NUM(GRN_DB_UINT32));
     rb_define_const(rb_cGrnType, "INT64", INT2NUM(GRN_DB_INT64));

@@ -24,6 +24,13 @@ class TypeTest < Test::Unit::TestCase
   end
 
   def test_builtins
+    assert_equal_type("Object", Groonga::Type::OBJECT) # FIXME!!!
+    assert_equal_type("Bool", Groonga::Type::BOOLEAN)
+    assert_equal_type("Bool", Groonga::Type::BOOL)
+    assert_equal_type("Int8", Groonga::Type::INT8)
+    assert_equal_type("UInt8", Groonga::Type::UINT8)
+    assert_equal_type("Int16", Groonga::Type::INT16)
+    assert_equal_type("UInt16", Groonga::Type::UINT16)
     assert_equal_type("Int32", Groonga::Type::INT32)
     assert_equal_type("UInt32", Groonga::Type::UINT32)
     assert_equal_type("Int64", Groonga::Type::INT64)
