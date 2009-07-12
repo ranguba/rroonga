@@ -33,37 +33,10 @@ rb_grn_table_cursor_from_ruby_object (VALUE object, grn_ctx **context)
 }
 
 VALUE
-rb_grn_table_cursor_to_ruby_class (grn_obj *object)
-{
-    VALUE klass = Qnil;
-
-    switch (object->header.type) {
-      case GRN_CURSOR_TABLE_HASH_KEY:
-	klass = rb_cGrnHashCursor;
-	break;
-      case GRN_CURSOR_TABLE_PAT_KEY:
-	klass = rb_cGrnPatriciaTrieCursor;
-	break;
-      case GRN_CURSOR_TABLE_NO_KEY:
-	klass = rb_cGrnArrayCursor;
-	break;
-      default:
-	rb_raise(rb_eTypeError,
-		 "unsupported groonga object type: %d",
-		 object->header.type);
-	break;
-    }
-
-    return klass;
-}
-
-VALUE
 rb_grn_table_cursor_to_ruby_object (VALUE klass, grn_ctx *context,
 				    grn_table_cursor *cursor,
 				    rb_grn_boolean owner)
 {
-    if (NIL_P(klass))
-	klass = rb_grn_table_cursor_to_ruby_class(cursor);
     return GRNOBJECT2RVAL(klass, context, cursor, owner);
 }
 

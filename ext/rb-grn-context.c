@@ -61,8 +61,14 @@ rb_grn_context_free (void *pointer)
 {
     grn_ctx *context = pointer;
 
-    if (context->stat != GRN_CTX_FIN)
+    if (context->stat != GRN_CTX_FIN) {
+	grn_obj *database;
+
+	database = grn_ctx_db(context);
+	if (database)
+	    grn_obj_close(context, database);
 	grn_ctx_fin(context);
+    }
     xfree(context);
 }
 

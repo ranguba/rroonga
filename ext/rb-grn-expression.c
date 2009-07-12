@@ -23,6 +23,16 @@
 VALUE rb_cGrnExpression;
 
 void
+rb_grn_expression_finalizer (grn_ctx *context, grn_obj *object,
+			     RbGrnExpression *rb_grn_expression)
+{
+    if (!context)
+	return;
+
+    grn_obj_close(context, rb_grn_expression->value);
+}
+
+void
 rb_grn_expression_unbind (RbGrnExpression *rb_grn_expression)
 {
     grn_ctx *context;

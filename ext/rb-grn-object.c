@@ -86,6 +86,13 @@ rb_grn_object_finalizer (grn_ctx *context, grn_obj *grn_object,
 
     rb_grn_object = user_data->ptr;
 
+    if (rb_grn_object->context != context ||
+	rb_grn_object->object != grn_object)
+	return GRN_SUCCESS;
+
+    rb_grn_object->context = NULL;
+    rb_grn_object->object = NULL;
+
     switch (grn_object->header.type) {
       case GRN_DB:
       case GRN_TYPE:
@@ -121,9 +128,6 @@ rb_grn_object_finalizer (grn_ctx *context, grn_obj *grn_object,
 	break;
     }
 
-    rb_grn_object->context = NULL;
-    rb_grn_object->object = NULL;
-
     return GRN_SUCCESS;
 }
 
@@ -136,8 +140,11 @@ rb_grn_object_free (void *object)
 
     context = rb_grn_object->context;
     grn_object = rb_grn_object->object;
-    if (context && grn_object)
+    if (context && grn_object) {
+	rb_grn_object->context = NULL;
+	rb_grn_object->object = NULL;
 	grn_obj_close(context, grn_object);
+    }
     xfree(rb_grn_object);
 }
 
@@ -179,6 +186,15 @@ rb_grn_object_to_ruby_class (grn_obj *object)
 	break;
       case GRN_EXPR:
 	klass = rb_cGrnExpression;
+	break;
+      case GRN_CURSOR_TABLE_HASH_KEY:
+	klass = rb_cGrnHashCursor;
+	break;
+      case GRN_CURSOR_TABLE_PAT_KEY:
+	klass = rb_cGrnPatriciaTrieCursor;
+	break;
+      case GRN_CURSOR_TABLE_NO_KEY:
+	klass = rb_cGrnArrayCursor;
 	break;
       default:
 	rb_raise(rb_eTypeError,
@@ -228,8 +244,17 @@ rb_grn_object_bind_common (VALUE self, VALUE rb_context,
     rb_iv_set(self, "context", rb_context);
 
     rb_grn_object->self = self;
-    grn_obj_user_data(context, object)->ptr = rb_grn_object;
-    grn_obj_set_finalizer(context, object, rb_grn_object_finalizer);
+    switch (object->header.type) {
+      case GRN_ACCESSOR:
+      case GRN_CURSOR_TABLE_HASH_KEY:
+      case GRN_CURSOR_TABLE_PAT_KEY:
+      case GRN_CURSOR_TABLE_NO_KEY:
+	break;
+      default:
+	grn_obj_user_data(context, object)->ptr = rb_grn_object;
+	grn_obj_set_finalizer(context, object, rb_grn_object_finalizer);
+	break;
+    }
 
     rb_grn_object->context = context;
     rb_grn_object->object = object;
@@ -262,6 +287,9 @@ rb_grn_object_bind (VALUE self, VALUE rb_context, RbGrnObject *rb_grn_object,
       case GRN_TYPE:
       case GRN_ACCESSOR:
       case GRN_PROC:
+      case GRN_CURSOR_TABLE_HASH_KEY:
+      case GRN_CURSOR_TABLE_PAT_KEY:
+      case GRN_CURSOR_TABLE_NO_KEY:
 	break;
       case GRN_TABLE_HASH_KEY:
       case GRN_TABLE_PAT_KEY:
@@ -305,6 +333,9 @@ rb_grn_object_assign (VALUE self, VALUE rb_context,
       case GRN_TYPE:
       case GRN_ACCESSOR:
       case GRN_PROC:
+      case GRN_CURSOR_TABLE_HASH_KEY:
+      case GRN_CURSOR_TABLE_PAT_KEY:
+      case GRN_CURSOR_TABLE_NO_KEY:
 	rb_grn_object = ALLOC(RbGrnObject);
 	break;
       case GRN_TABLE_HASH_KEY:
@@ -372,7 +403,13 @@ rb_grn_object_deconstruct (RbGrnObject *rb_grn_object,
 VALUE
 rb_grn_object_close (VALUE self)
 {
-    rb_grn_object_unbind(SELF(self));
+    grn_obj *object;
+    grn_ctx *context;
+
+    rb_grn_object_deconstruct(SELF(self), &object, &context,
+			      NULL, NULL, NULL, NULL);
+    if (object && context)
+	grn_obj_close(context, object);
     return Qnil;
 }
 
@@ -388,10 +425,12 @@ rb_grn_object_close (VALUE self)
 static VALUE
 rb_grn_object_closed_p (VALUE self)
 {
-    RbGrnObject *rb_grn_object;
+    grn_obj *object;
+    grn_ctx *context;
 
-    rb_grn_object = SELF(self);
-    if (rb_grn_object->context && rb_grn_object->object)
+    rb_grn_object_deconstruct(SELF(self), &object, &context,
+			      NULL, NULL, NULL, NULL);
+    if (context && object)
         return Qfalse;
     else
         return Qtrue;
