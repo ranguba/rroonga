@@ -366,6 +366,7 @@ void
 rb_grn_init_table_key_support (VALUE mGrn)
 {
     rb_mGrnTableKeySupport = rb_define_module_under(rb_cGrnTable, "KeySupport");
+    rb_include_module(rb_mGrnTableKeySupport, rb_mGrnEncodingSupport);
 
     rb_define_method(rb_mGrnTableKeySupport, "initialize",
 		     rb_grn_table_key_support_initialize, -1);
