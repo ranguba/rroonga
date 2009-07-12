@@ -116,9 +116,9 @@ rb_grn_bulk_to_ruby_object_by_range_id (grn_ctx *context, grn_obj *bulk,
 				   INT2NUM(time_value->tv_usec));
 	}
 	break;
-      case GRN_DB_SHORTTEXT:
+      case GRN_DB_SHORT_TEXT:
       case GRN_DB_TEXT:
-      case GRN_DB_LONGTEXT:
+      case GRN_DB_LONG_TEXT:
 	*rb_value = rb_str_new(GRN_BULK_HEAD(bulk), GRN_BULK_VSIZE(bulk));
 	break;
       default:
@@ -307,9 +307,9 @@ rb_grn_bulk_from_ruby_object_with_type (VALUE object, grn_ctx *context,
 	string = (const char *)&time_value;
 	size = sizeof(time_value);
 	break;
-      case GRN_DB_SHORTTEXT:
+      case GRN_DB_SHORT_TEXT:
       case GRN_DB_TEXT:
-      case GRN_DB_LONGTEXT:
+      case GRN_DB_LONG_TEXT:
 	string = StringValuePtr(object);
 	size = RSTRING_LEN(object);
 	range = grn_obj_get_range(context, type);

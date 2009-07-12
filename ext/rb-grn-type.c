@@ -111,9 +111,9 @@ rb_grn_init_type (VALUE mGrn)
     rb_define_const(rb_cGrnType, "UINT64", INT2NUM(GRN_DB_UINT64));
     rb_define_const(rb_cGrnType, "FLOAT", INT2NUM(GRN_DB_FLOAT));
     rb_define_const(rb_cGrnType, "TIME", INT2NUM(GRN_DB_TIME));
-    rb_define_const(rb_cGrnType, "SHORT_TEXT", INT2NUM(GRN_DB_SHORTTEXT));
+    rb_define_const(rb_cGrnType, "SHORT_TEXT", INT2NUM(GRN_DB_SHORT_TEXT));
     rb_define_const(rb_cGrnType, "TEXT", INT2NUM(GRN_DB_TEXT));
-    rb_define_const(rb_cGrnType, "LONG_TEXT", INT2NUM(GRN_DB_LONGTEXT));
+    rb_define_const(rb_cGrnType, "LONG_TEXT", INT2NUM(GRN_DB_LONG_TEXT));
     rb_define_const(rb_cGrnType, "DELIMIT", INT2NUM(GRN_DB_DELIMIT));
     rb_define_const(rb_cGrnType, "UNIGRAM", INT2NUM(GRN_DB_UNIGRAM));
     rb_define_const(rb_cGrnType, "BIGRAM", INT2NUM(GRN_DB_BIGRAM));

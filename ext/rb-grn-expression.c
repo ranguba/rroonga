@@ -264,6 +264,7 @@ void
 rb_grn_init_expression (VALUE mGrn)
 {
     rb_cGrnExpression = rb_define_class_under(mGrn, "Expression", rb_cGrnObject);
+
     rb_define_method(rb_cGrnExpression, "initialize",
                      rb_grn_expression_initialize, -1);
 
