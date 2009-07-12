@@ -297,6 +297,9 @@ rb_grn_object_assign (VALUE self, VALUE rb_context,
 {
     void *rb_grn_object;
 
+    if (!object)
+	return;
+
     switch (object->header.type) {
       case GRN_DB:
       case GRN_TYPE:
