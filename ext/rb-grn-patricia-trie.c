@@ -85,7 +85,7 @@ rb_grn_patricia_trie_s_create (int argc, VALUE *argv, VALUE self)
     if (!table)
 	rb_grn_context_check(context, rb_ary_new4(argc, argv));
     rb_table = rb_grn_object_alloc(self);
-    rb_grn_object_assign(rb_table, rb_context, context, table);
+    rb_grn_object_assign(Qnil, rb_table, rb_context, context, table);
     rb_grn_context_check(context, rb_table);
 
     if (!NIL_P(rb_default_tokenizer))

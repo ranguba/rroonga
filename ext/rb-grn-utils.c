@@ -578,7 +578,7 @@ rb_grn_obj_from_ruby_object (VALUE rb_object, grn_ctx *context, grn_obj **_obj)
 
     if (*_obj) {
 	obj = *_obj;
-	grn_obj_close(context, obj);
+	grn_obj_close(context, obj); /* FIXME: grn_obj_reinit() */
     } else {
 	*_obj = grn_obj_open(context, GRN_VOID, 0, GRN_ID_NIL);
 	obj = *_obj;

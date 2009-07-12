@@ -87,7 +87,7 @@ rb_grn_table_key_support_initialize (int argc, VALUE *argv, VALUE self)
 
     table = rb_grn_table_open_raw(argc, argv, &context, &rb_context);
     rb_grn_context_check(context, self);
-    rb_grn_object_assign(self, rb_context, context, table);
+    rb_grn_object_assign(Qnil, self, rb_context, context, table);
 
     return Qnil;
 }

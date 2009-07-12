@@ -83,18 +83,35 @@ rb_grn_object_finalizer (grn_ctx *context, grn_obj *grn_object,
 			 grn_user_data *user_data)
 {
     RbGrnObject *rb_grn_object;
+    rb_grn_boolean need_finalize = RB_GRN_TRUE;
 
     rb_grn_object = user_data->ptr;
 
+    grn_obj_user_data(context, grn_object)->ptr = NULL;
+    grn_obj_set_finalizer(context, grn_object, NULL);
+
+    debug("finalize %p:%p:%p:%p:%p %x\n",
+	   context, grn_object, rb_grn_object,
+	   rb_grn_object->context, rb_grn_object->object,
+	   grn_object->header.type);
+
     if (rb_grn_object->context != context ||
-	rb_grn_object->object != grn_object)
-	return GRN_SUCCESS;
+	rb_grn_object->object != grn_object) {
+	if (grn_object->header.type == GRN_DB)
+	    grn_ctx_use(context, NULL);
+	need_finalize = RB_GRN_FALSE;
+    }
 
     rb_grn_object->context = NULL;
     rb_grn_object->object = NULL;
 
+    if (!need_finalize)
+	return GRN_SUCCESS;
+
     switch (grn_object->header.type) {
       case GRN_DB:
+	grn_ctx_use(context, NULL);
+	break;
       case GRN_TYPE:
       case GRN_ACCESSOR:
       case GRN_PROC:
@@ -140,10 +157,13 @@ rb_grn_object_free (void *object)
 
     context = rb_grn_object->context;
     grn_object = rb_grn_object->object;
+    debug("rb-free: %p:%p:%p\n", context, grn_object, object);
     if (context && grn_object) {
 	rb_grn_object->context = NULL;
 	rb_grn_object->object = NULL;
-	grn_obj_close(context, grn_object);
+	debug("type: %x\n", grn_object->header.type);
+	if (rb_grn_object->need_close)
+	    grn_obj_close(context, grn_object);
     }
     xfree(rb_grn_object);
 }
@@ -224,7 +244,7 @@ rb_grn_object_to_ruby_object (VALUE klass, grn_ctx *context, grn_obj *object,
         klass = GRNOBJECT2RCLASS(object);
 
     rb_object = rb_grn_object_alloc(klass);
-    rb_grn_object_assign(rb_object, Qnil, context, object);
+    rb_grn_object_assign(klass, rb_object, Qnil, context, object);
 
     return rb_object;
 }
@@ -236,7 +256,7 @@ rb_grn_object_alloc (VALUE klass)
 }
 
 static void
-rb_grn_object_bind_common (VALUE self, VALUE rb_context,
+rb_grn_object_bind_common (VALUE klass, VALUE self, VALUE rb_context,
 			   RbGrnObject *rb_grn_object,
 			   grn_ctx *context, grn_obj *object)
 {
@@ -244,15 +264,26 @@ rb_grn_object_bind_common (VALUE self, VALUE rb_context,
     rb_iv_set(self, "context", rb_context);
 
     rb_grn_object->self = self;
+    rb_grn_object->need_close = RB_GRN_TRUE;
     switch (object->header.type) {
-      case GRN_ACCESSOR:
-      case GRN_CURSOR_TABLE_HASH_KEY:
-      case GRN_CURSOR_TABLE_PAT_KEY:
-      case GRN_CURSOR_TABLE_NO_KEY:
-	break;
-      default:
+      case GRN_DB:
+      case GRN_TABLE_HASH_KEY:
+      case GRN_TABLE_PAT_KEY:
+      case GRN_TABLE_NO_KEY:
+      case GRN_COLUMN_FIX_SIZE:
+      case GRN_COLUMN_VAR_SIZE:
+      case GRN_COLUMN_INDEX:
 	grn_obj_user_data(context, object)->ptr = rb_grn_object;
 	grn_obj_set_finalizer(context, object, rb_grn_object_finalizer);
+	break;
+      case GRN_PROC:
+      case GRN_EXPR:
+      case GRN_TYPE:
+	rb_grn_object->need_close = RB_GRN_FALSE;
+	break;
+      default:
+	if (klass == rb_cGrnVariable)
+	    rb_grn_object->need_close = RB_GRN_FALSE;
 	break;
     }
 
@@ -277,50 +308,7 @@ rb_grn_object_bind_common (VALUE self, VALUE rb_context,
 }
 
 void
-rb_grn_object_bind (VALUE self, VALUE rb_context, RbGrnObject *rb_grn_object,
-		    grn_ctx *context, grn_obj *object)
-{
-    rb_grn_object_bind_common(self, rb_context, rb_grn_object, context, object);
-
-    switch (object->header.type) {
-      case GRN_DB:
-      case GRN_TYPE:
-      case GRN_ACCESSOR:
-      case GRN_PROC:
-      case GRN_CURSOR_TABLE_HASH_KEY:
-      case GRN_CURSOR_TABLE_PAT_KEY:
-      case GRN_CURSOR_TABLE_NO_KEY:
-	break;
-      case GRN_TABLE_HASH_KEY:
-      case GRN_TABLE_PAT_KEY:
-	rb_grn_table_key_support_bind(RB_GRN_TABLE_KEY_SUPPORT(rb_grn_object),
-				      context, object);
-	break;
-      case GRN_TABLE_NO_KEY:
-	rb_grn_table_bind(RB_GRN_TABLE(rb_grn_object), context, object);
-	break;
-      case GRN_COLUMN_FIX_SIZE:
-      case GRN_COLUMN_VAR_SIZE:
-	rb_grn_column_bind(RB_GRN_COLUMN(rb_grn_object), context, object);
-	break;
-      case GRN_COLUMN_INDEX:
-	rb_grn_index_column_bind(RB_GRN_INDEX_COLUMN(rb_grn_object),
-				 context, object);
-	break;
-      case GRN_EXPR:
-	rb_grn_expression_bind(RB_GRN_EXPRESSION(rb_grn_object),
-			       context, object);
-	break;
-      default:
-	rb_raise(rb_eTypeError,
-		 "unsupported groonga object type: 0x%x",
-		 object->header.type);
-	break;
-    }
-}
-
-void
-rb_grn_object_assign (VALUE self, VALUE rb_context,
+rb_grn_object_assign (VALUE klass, VALUE self, VALUE rb_context,
 		      grn_ctx *context, grn_obj *object)
 {
     void *rb_grn_object;
@@ -328,41 +316,56 @@ rb_grn_object_assign (VALUE self, VALUE rb_context,
     if (!object)
 	return;
 
-    switch (object->header.type) {
-      case GRN_DB:
-      case GRN_TYPE:
-      case GRN_ACCESSOR:
-      case GRN_PROC:
-      case GRN_CURSOR_TABLE_HASH_KEY:
-      case GRN_CURSOR_TABLE_PAT_KEY:
-      case GRN_CURSOR_TABLE_NO_KEY:
+    if (NIL_P(klass))
+	klass = rb_obj_class(self);
+
+    if (klass == rb_cGrnDatabase ||
+	(RVAL2CBOOL(rb_obj_is_kind_of(self, rb_cGrnType))) ||
+	klass == rb_cGrnAccessor ||
+	klass == rb_cGrnHashCursor ||
+	klass == rb_cGrnPatriciaTrieCursor ||
+	klass == rb_cGrnArrayCursor ||
+	klass == rb_cGrnProcedure ||
+	klass == rb_cGrnVariable) {
 	rb_grn_object = ALLOC(RbGrnObject);
-	break;
-      case GRN_TABLE_HASH_KEY:
-      case GRN_TABLE_PAT_KEY:
+	rb_grn_object_bind_common(klass, self, rb_context, rb_grn_object,
+				  context, object);
+    } else if (RVAL2CBOOL(rb_obj_is_kind_of(self, rb_mGrnTableKeySupport))) {
 	rb_grn_object = ALLOC(RbGrnTableKeySupport);
-	break;
-      case GRN_TABLE_NO_KEY:
+	rb_grn_object_bind_common(klass, self, rb_context, rb_grn_object,
+				  context, object);
+	rb_grn_table_key_support_bind(RB_GRN_TABLE_KEY_SUPPORT(rb_grn_object),
+				      context, object);
+    } else if (RVAL2CBOOL(rb_obj_is_kind_of(self, rb_cGrnTable))) {
 	rb_grn_object = ALLOC(RbGrnTable);
-	break;
-      case GRN_COLUMN_FIX_SIZE:
-      case GRN_COLUMN_VAR_SIZE:
-	rb_grn_object = ALLOC(RbGrnColumn);
-	break;
-      case GRN_COLUMN_INDEX:
+	rb_grn_object_bind_common(klass, self, rb_context, rb_grn_object,
+				  context, object);
+	rb_grn_table_bind(RB_GRN_TABLE(rb_grn_object), context, object);
+    } else if (RVAL2CBOOL(rb_obj_is_kind_of(self, rb_cGrnIndexColumn))) {
 	rb_grn_object = ALLOC(RbGrnIndexColumn);
-	break;
-      case GRN_EXPR:
+	rb_grn_object_bind_common(klass, self, rb_context, rb_grn_object,
+				  context, object);
+	rb_grn_index_column_bind(RB_GRN_INDEX_COLUMN(rb_grn_object),
+				 context, object);
+    } else if (RVAL2CBOOL(rb_obj_is_kind_of(self, rb_cGrnColumn))) {
+	rb_grn_object = ALLOC(RbGrnColumn);
+	rb_grn_object_bind_common(klass, self, rb_context, rb_grn_object,
+				  context, object);
+	rb_grn_column_bind(RB_GRN_COLUMN(rb_grn_object), context, object);
+    } else if (klass == rb_cGrnExpression) {
 	rb_grn_object = ALLOC(RbGrnExpression);
-	break;
-      default:
+	rb_grn_object_bind_common(klass, self, rb_context, rb_grn_object,
+				  context, object);
+	rb_grn_expression_bind(RB_GRN_EXPRESSION(rb_grn_object),
+			       context, object);
+    } else {
 	rb_raise(rb_eTypeError,
 		 "unsupported groonga object type: 0x%x",
 		 object->header.type);
-	break;
     }
-    rb_grn_object_bind(self, rb_context, RB_GRN_OBJECT(rb_grn_object),
-		       context, object);
+
+    debug("assign: %p:%p:%p 0x%x\n", context, object, rb_grn_object,
+	   object->header.type);
 }
 
 void

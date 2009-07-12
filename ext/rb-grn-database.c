@@ -114,7 +114,7 @@ static VALUE
 rb_grn_database_s_create (int argc, VALUE *argv, VALUE klass)
 {
     grn_ctx *context;
-    grn_obj *database;
+    grn_obj *old_database, *database;
     grn_db_create_optarg create_args;
     const char *path = NULL;
     VALUE rb_database;
@@ -135,10 +135,13 @@ rb_grn_database_s_create (int argc, VALUE *argv, VALUE klass)
     create_args.builtin_type_names = NULL;
     create_args.n_builtin_type_names = 0;
 
+    old_database = grn_ctx_db(context);
+    if (old_database)
+	grn_obj_close(context, old_database);
     database = grn_db_create(context, path, &create_args);
     rb_grn_context_check(context, rb_ary_new4(argc, argv));
     rb_database = rb_grn_object_alloc(klass);
-    rb_grn_object_assign(rb_database, rb_context, context, database);
+    rb_grn_object_assign(Qnil, rb_database, rb_context, context, database);
     rb_iv_set(rb_database, "context", rb_context);
     if (!NIL_P(rb_context))
 	rb_iv_set(rb_context, "database", rb_database);
@@ -171,7 +174,7 @@ static VALUE
 rb_grn_database_initialize (int argc, VALUE *argv, VALUE self)
 {
     grn_ctx *context;
-    grn_obj *database;
+    grn_obj *old_database, *database;
     const char *path;
     VALUE rb_path, options, rb_context;
 
@@ -184,8 +187,11 @@ rb_grn_database_initialize (int argc, VALUE *argv, VALUE self)
 
     context = rb_grn_context_ensure(&rb_context);
 
+    old_database = grn_ctx_db(context);
+    if (old_database)
+	grn_obj_close(context, old_database);
     database = grn_db_open(context, path);
-    rb_grn_object_assign(self, rb_context, context, database);
+    rb_grn_object_assign(Qnil, self, rb_context, context, database);
     rb_grn_context_check(context, self);
 
     rb_iv_set(self, "context", rb_context);

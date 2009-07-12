@@ -57,6 +57,12 @@ RB_GRN_BEGIN_DECLS
 #  define RB_GRN_VAR extern
 #endif
 
+#ifdef RB_GRN_DEBUG
+#  define debug(...) printf(...)
+#else
+#  define debug(...)
+#endif
+
 #define RB_GRN_MAJOR_VERSION 0
 #define RB_GRN_MINOR_VERSION 0
 #define RB_GRN_MICRO_VERSION 3
@@ -95,6 +101,7 @@ struct _RbGrnObject
     grn_id domain_id;
     grn_obj *range;
     grn_id range_id;
+    rb_grn_boolean need_close;
 };
 
 typedef struct _RbGrnTable RbGrnTable;
@@ -244,7 +251,8 @@ void           rb_grn_object_bind                   (VALUE self,
 						     grn_ctx *context,
 						     grn_obj *object);
 void           rb_grn_object_unbind                 (RbGrnObject *rb_grn_object);
-void           rb_grn_object_assign                 (VALUE self,
+void           rb_grn_object_assign                 (VALUE klass,
+						     VALUE self,
 						     VALUE rb_context,
 						     grn_ctx *context,
 						     grn_obj *object);

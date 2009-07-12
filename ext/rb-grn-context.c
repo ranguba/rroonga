@@ -61,14 +61,18 @@ rb_grn_context_free (void *pointer)
 {
     grn_ctx *context = pointer;
 
+    debug("context-free: %p\n", context);
     if (context->stat != GRN_CTX_FIN) {
 	grn_obj *database;
 
 	database = grn_ctx_db(context);
-	if (database)
+	debug("context:database: %p:%p\n", context, database);
+	if (database && database->header.type == GRN_DB) {
 	    grn_obj_close(context, database);
+	}
 	grn_ctx_fin(context);
     }
+    debug("context-free: %p: done\n", context);
     xfree(context);
 }
 
@@ -252,6 +256,8 @@ rb_grn_context_initialize (int argc, VALUE *argv, VALUE self)
 	encoding = RVAL2GRNENCODING(rb_encoding, NULL);
 	GRN_CTX_SET_ENCODING(context, encoding);
     }
+
+    debug("context new: %p\n", context);
 
     return Qnil;
 }

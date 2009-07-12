@@ -189,7 +189,7 @@ rb_grn_table_initialize (int argc, VALUE *argv, VALUE self)
     VALUE rb_context;
 
     table = rb_grn_table_open_raw(argc, argv, &context, &rb_context);
-    rb_grn_object_assign(self, rb_context, context, table);
+    rb_grn_object_assign(Qnil, self, rb_context, context, table);
     rb_grn_context_check(context, self);
 
     return Qnil;
@@ -198,7 +198,8 @@ rb_grn_table_initialize (int argc, VALUE *argv, VALUE self)
 static VALUE
 rb_grn_table_s_open (int argc, VALUE *argv, VALUE klass)
 {
-    VALUE rb_table;
+    grn_user_data *user_data;
+    VALUE rb_table = Qnil;
     grn_obj *table;
     grn_ctx *context = NULL;
     VALUE rb_context;
@@ -212,22 +213,27 @@ rb_grn_table_s_open (int argc, VALUE *argv, VALUE klass)
 		 rb_grn_inspect(klass),
 		 rb_grn_inspect(rb_ary_new4(argc, argv)));
 
-    if (klass == rb_cGrnTable) {
-	klass = GRNOBJECT2RCLASS(table);
+    user_data = grn_obj_user_data(context, table);
+    if (user_data && user_data->ptr) {
+	rb_table = RB_GRN_OBJECT(user_data->ptr)->self;
     } else {
-	VALUE rb_class;
+	if (klass == rb_cGrnTable) {
+	    klass = GRNOBJECT2RCLASS(table);
+	} else {
+	    VALUE rb_class;
 
-	rb_class = GRNOBJECT2RCLASS(table);
-	if (rb_class != klass) {
-	    rb_raise(rb_eTypeError,
-		     "unexpected existing table type: %s: expected %s",
-		     rb_grn_inspect(rb_class),
-		     rb_grn_inspect(klass));
+	    rb_class = GRNOBJECT2RCLASS(table);
+	    if (rb_class != klass) {
+		rb_raise(rb_eTypeError,
+			 "unexpected existing table type: %s: expected %s",
+			 rb_grn_inspect(rb_class),
+			 rb_grn_inspect(klass));
+	    }
 	}
-    }
 
-    rb_table = rb_grn_object_alloc(klass);
-    rb_grn_object_assign(rb_table, rb_context, context, table);
+	rb_table = rb_grn_object_alloc(klass);
+	rb_grn_object_assign(klass, rb_table, rb_context, context, table);
+    }
 
     if (rb_block_given_p())
         return rb_ensure(rb_yield, rb_table, rb_grn_object_close, rb_table);
