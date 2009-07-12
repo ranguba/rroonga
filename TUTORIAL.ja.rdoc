@@ -249,11 +249,11 @@ http://qwik.jp/senna/senna2.files/rect4605.png
   >> @items = items
   >> @comments = comments
   >> def add_bookmark(url, title, author, content, issued)
-  >>  item = @items.find(url) || @items.add(url, :title => title)
-  >>  @comments.add(:item => item,
-  >>                :author => author,
-  >>                :content => content,
-  >>                :issued => issued)
+  >>   item = @items.find(url) || @items.add(url, :title => title)
+  >>   @comments.add(:item => item,
+  >>                 :author => author,
+  >>                 :content => content,
+  >>                 :issued => issued)
   >> end
 
 +itmes+と+comments+をインスタンス変数に代入しているのはメソッ
