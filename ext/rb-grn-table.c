@@ -1109,6 +1109,7 @@ rb_grn_init_table (VALUE mGrn)
     rb_cGrnTable = rb_define_class_under(mGrn, "Table", rb_cGrnObject);
 
     rb_include_module(rb_cGrnTable, rb_mEnumerable);
+    rb_include_module(rb_cGrnTable, rb_mGrnEncodingSupport);
 
     rb_define_singleton_method(rb_cGrnTable, "open",
 			       rb_grn_table_s_open, -1);
