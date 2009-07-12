@@ -48,7 +48,7 @@ class SchemaTest < Test::Unit::TestCase
                  "path: <#{path}>, " +
                  "domain: <#{context['<int>'].inspect}>, " +
                  "range: <nil>, " +
-                 "encoding: <:utf8>, " +
+                 "encoding: <#{Groonga::Encoding.default.inspect}>, " +
                  "size: <0>>",
                  table.inspect)
     assert_equal(tokenizer, table.default_tokenizer)
@@ -78,7 +78,7 @@ class SchemaTest < Test::Unit::TestCase
                  "path: <#{path}>, " +
                  "domain: <#{context['<int>'].inspect}>, " +
                  "range: <nil>, " +
-                 "encoding: <:utf8>, " +
+                 "encoding: <#{Groonga::Encoding.default.inspect}>, " +
                  "size: <0>>",
                  table.inspect)
     assert_equal(context["<token:bigram>"], table.default_tokenizer)
