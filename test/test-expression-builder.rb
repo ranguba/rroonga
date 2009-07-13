@@ -24,6 +24,10 @@ class ExpressionBuilderTest < Test::Unit::TestCase
     @users = Groonga::Hash.create(:name => "<users>")
     @name = @users.define_column("name", "<shorttext>")
     @hp = @users.define_column("hp", "<uint>")
+
+    @terms = Groonga::PatriciaTrie.create(:name => "<terms>",
+                                          :default_tokenizer => "TokenBigram")
+    @terms.define_index_column("user-name", @users, :source => @name)
   end
 
   def setup_data
@@ -39,8 +43,8 @@ class ExpressionBuilderTest < Test::Unit::TestCase
   end
 
   def test_equal
-    result = @users.scan do |builder|
-      builder.record["name"] == "mori daijiro"
+    result = @users.select do |expression|
+      expression.record["name"] == "mori daijiro"
     end
     assert_equal(["morita"],
                  result.collect {|record| record.key.key})
@@ -48,46 +52,46 @@ class ExpressionBuilderTest < Test::Unit::TestCase
 
   def test_not_equal
     omit("not supported yet!!!")
-    result = @users.scan do |builder|
-      builder.record["name"] != "mori daijiro"
+    result = @users.select do |expression|
+      expression.record["name"] != "mori daijiro"
     end
     assert_equal(["gunyara-kun", "yu"],
                  result.collect {|record| record.key.key})
   end
 
   def test_less
-    result = @users.scan do |builder|
-      builder.record["hp"] < 150
+    result = @users.select do |expression|
+      expression.record["hp"] < 150
     end
     assert_equal(["morita"], result.collect {|record| record.key.key})
   end
 
   def test_less_equal
-    result = @users.scan do |builder|
-      builder.record["hp"] <= 150
+    result = @users.select do |expression|
+      expression.record["hp"] <= 150
     end
     assert_equal(["morita", "gunyara-kun"],
                  result.collect {|record| record.key.key})
   end
 
   def test_greater
-    result = @users.scan do |builder|
-      builder.record["hp"] > 150
+    result = @users.select do |expression|
+      expression.record["hp"] > 150
     end
     assert_equal(["yu"], result.collect {|record| record.key.key})
   end
 
   def test_greater_equal
-    result = @users.scan do |builder|
-      builder.record["hp"] >= 150
+    result = @users.select do |expression|
+      expression.record["hp"] >= 150
     end
     assert_equal(["gunyara-kun", "yu"],
                  result.collect {|record| record.key.key})
   end
 
   def test_and
-    result = @users.scan do |builder|
-      (builder.record["hp"] > 100) & (builder.record["hp"] <= 200)
+    result = @users.select do |expression|
+      (expression.record["hp"] > 100) & (expression.record["hp"] <= 200)
     end
     assert_equal(["gunyara-kun", "yu"],
                  result.collect {|record| record.key.key})

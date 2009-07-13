@@ -1062,7 +1062,7 @@ rb_grn_table_is_locked (int argc, VALUE *argv, VALUE self)
 }
 
 static VALUE
-rb_grn_table_scan (int argc, VALUE *argv, VALUE self)
+rb_grn_table_select (int argc, VALUE *argv, VALUE self)
 {
     grn_ctx *context;
     grn_obj *table, *result, *expression;
@@ -1154,7 +1154,7 @@ rb_grn_init_table (VALUE mGrn)
     rb_define_method(rb_cGrnTable, "clear_lock", rb_grn_table_clear_lock, -1);
     rb_define_method(rb_cGrnTable, "locked?", rb_grn_table_is_locked, -1);
 
-    rb_define_method(rb_cGrnTable, "scan", rb_grn_table_scan, -1);
+    rb_define_method(rb_cGrnTable, "select", rb_grn_table_select, -1);
 
     rb_grn_init_table_key_support(mGrn);
     rb_grn_init_array(mGrn);
