@@ -1,5 +1,20 @@
 = NEWS
 
+== 0.0.3: 2009-07-18
+
+* [#26145] Added Groonga::TableKeySupport#has_key? [Tasuku SUENAGA]
+* [#26146] Groonga::Record#[] raises an exception for nonexistent
+  column name. [Tasuku SUENAGA]
+* Supported 32bit environment [niku]
+* Added a test for N-gram index search [dara]
+* Added APIs
+  * Groonga::Record#incemrent!
+  * Groonga::Record#decemrent!
+  * Groonga::Record#lock
+  * Groonga::Table#lock
+  * Groonga::Schema: A DSL for schema definition
+  * Groonga::Expression
+
 == 0.0.2: 2009-06-04
 
 * Supported groonga 0.0.8 [mori]

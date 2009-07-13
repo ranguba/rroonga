@@ -1,8 +1,19 @@
 = お知らせ
 
-== 0.0.3: 2009-XX-XX
+== 0.0.3: 2009-07-18
 
 * [#26145] Groonga::TableKeySupport#has_key?の追加 [Tasuku SUENAGA]
+* [#26146] カラム名が存在しない場合はGroonga::Record#[]が例外
+  をあげるように変更 [Tasuku SUENAGA]
+* 32ビット環境をサポート [niku]
+* N-gramインデックスサーチのテストを追加 [dara]
+* APIの追加
+  * Groonga::Record#incemrent!
+  * Groonga::Record#decemrent!
+  * Groonga::Record#lock
+  * Groonga::Table#lock
+  * Groonga::Schema: スキーマ定義用DSL
+  * Groonga::Expression
 
 == 0.0.2: 2009-06-04
 
