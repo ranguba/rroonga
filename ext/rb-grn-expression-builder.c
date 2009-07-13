@@ -21,10 +21,11 @@
 VALUE rb_cGrnRecordExpressionBuilder;
 
 VALUE
-rb_grn_record_expression_builder_new (VALUE table)
+rb_grn_record_expression_builder_new (VALUE table, VALUE query, VALUE name,
+				      VALUE default_column)
 {
     return rb_funcall(rb_cGrnRecordExpressionBuilder,
-		      rb_intern("new"), 1, table);
+		      rb_intern("new"), 4, table, query, name, default_column);
 }
 
 static VALUE

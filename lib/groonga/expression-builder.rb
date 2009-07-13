@@ -17,17 +17,25 @@
 
 module Groonga
   class RecordExpressionBuilder
-    def initialize(table)
+    def initialize(table, query, name, default_column)
       @table = table
+      @query = query
+      @name = name
+      @default_column = default_column
     end
 
     def build
-      @expression = Expression.new
-      @variable = @expression.define_variable
-      @variable.value = Groonga::Record.new(@table, 0)
-      @expression.append_object(@variable)
-      yield(self)
-      @expression.compile
+      @expression = Expression.new(:name => @name,
+                                   :query => @query,
+                                   :table => @table,
+                                   :default_column => @default_column)
+      if block_given?
+        @variable = @expression.define_variable
+        @variable.value = Groonga::Record.new(@table, 0)
+        @expression.append_object(@variable)
+        yield(self)
+        @expression.compile
+      end
       @expression
     end
 
@@ -46,6 +54,7 @@ module Groonga
       self
     end
 
+    private
     class ColumnExpressionBuilder
       def initialize(builder, expression, column, variable)
         @builder = builder

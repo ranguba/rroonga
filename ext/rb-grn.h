@@ -383,7 +383,10 @@ VALUE          rb_grn_record_new                    (VALUE table,
 						     grn_id id,
 						     VALUE values);
 
-VALUE          rb_grn_record_expression_builder_new (VALUE table);
+VALUE          rb_grn_record_expression_builder_new (VALUE table,
+						     VALUE query,
+						     VALUE name,
+						     VALUE default_column);
 VALUE          rb_grn_record_expression_builder_build
                                                     (VALUE self);
 

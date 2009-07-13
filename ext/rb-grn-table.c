@@ -1169,18 +1169,34 @@ rb_grn_table_select (int argc, VALUE *argv, VALUE self)
     grn_obj *table, *result, *expression;
     grn_sel_operator operator = GRN_SEL_OR;
     grn_rc rc;
-    VALUE options, rb_operator, rb_result;
+    VALUE query_or_options, options;
+    VALUE rb_query, rb_name, rb_operator, rb_result, rb_default_column;
     VALUE rb_expression, builder;
 
-    rb_scan_args(argc, argv, "01", &options);
+    rb_scan_args(argc, argv, "02", &query_or_options, &options);
 
     rb_grn_table_deconstruct(SELF(self), &table, &context,
 			     NULL, NULL,
 			     NULL, NULL, NULL);
 
+    if (NIL_P(query_or_options)) {
+	rb_query = Qnil;
+	options = Qnil;
+    } else if (RVAL2CBOOL(rb_obj_is_kind_of(query_or_options, rb_cHash))) {
+	rb_query = Qnil;
+	options = query_or_options;
+    } else {
+	rb_query = query_or_options;
+	if (!RVAL2CBOOL(rb_obj_is_kind_of(rb_query, rb_cString)))
+	    rb_raise(rb_eArgError, "query should be a String: <%s>",
+		     rb_grn_inspect(rb_query));
+    }
+
     rb_grn_scan_options(options,
 			"operator", &rb_operator,
 			"result", &rb_result,
+			"name", &rb_name,
+			"default_column", &rb_default_column,
 			NULL);
 
     if (!NIL_P(rb_operator))
@@ -1196,7 +1212,8 @@ rb_grn_table_select (int argc, VALUE *argv, VALUE self)
 	result = RVAL2GRNTABLE(rb_result, &context);
     }
 
-    builder = rb_grn_record_expression_builder_new(self);
+    builder = rb_grn_record_expression_builder_new(self, rb_query, rb_name,
+						   rb_default_column);
     rb_expression = rb_grn_record_expression_builder_build(builder);
 
     rb_grn_object_deconstruct(RB_GRN_OBJECT(DATA_PTR(rb_expression)),
