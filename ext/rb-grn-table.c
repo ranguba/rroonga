@@ -1110,7 +1110,7 @@ rb_grn_table_select (int argc, VALUE *argv, VALUE self)
 	result = RVAL2GRNTABLE(rb_result, &context);
     }
 
-    builder = rb_grn_expression_builder_new(self, rb_result);
+    builder = rb_grn_expression_builder_new(self);
     rb_expression = rb_grn_expression_builder_build(builder);
 
     rb_grn_object_deconstruct(RB_GRN_OBJECT(DATA_PTR(rb_expression)),
@@ -1121,7 +1121,7 @@ rb_grn_table_select (int argc, VALUE *argv, VALUE self)
     rb_grn_context_check(context, self);
     rb_grn_rc_check(rc, self);
 
-    return rb_grn_expression_builder_resolve(builder, rb_result);
+    return rb_result;
 }
 
 void
