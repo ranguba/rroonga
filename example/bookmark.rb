@@ -1,14 +1,32 @@
 #!/usr/bin/env ruby
 # -*- coding: utf-8 -*-
 
-require "rubygems"
-require "groonga"
+base_dir = File.join(File.dirname(__FILE__), "..")
+groonga_ext_dir = File.join(base_dir, 'ext')
+groonga_lib_dir = File.join(base_dir, 'lib')
+$LOAD_PATH.unshift(groonga_ext_dir)
+$LOAD_PATH.unshift(groonga_lib_dir)
+
+begin
+  require "groonga"
+rescue LoadError
+  require "rubygems"
+  require "groonga"
+end
 
 $KCODE = "UTF-8"
 Groonga::Context.default_options = {:encoding => :utf8}
 
 path = ARGV[0]
-persistent = !path.nil?
+if path.nil?
+  require 'tmpdir'
+  require 'fileutils'
+  temporary_directory = File.join(Dir.tmpdir, "ruby-groonga")
+  FileUtils.mkdir_p(temporary_directory)
+  at_exit {FileUtils.rm_rf(temporary_directory)}
+  path = File.join(temporary_directory, "db")
+end
+persistent = true
 
 p Groonga::Database.create(:path => path)
 
@@ -79,8 +97,34 @@ p add_bookmark("http://practical-scheme.net/docs/cont-j.html",
                "なんでも継続", "taporobo", "トランポリン LISP continuation",
                1187568692)
 
-terms.column("comment_content").search("LISP").each do |record|
+
+records = comments.select do |record|
+  record["content"] =~ "LISP"
+end
+
+records.each do |record|
   record = record.key
-  p [record[".issued"], record[".item.title"], record[".author.name"],
+  p [record.id,
+     record[".issued"],
+     record[".item.title"],
+     record[".author.name"],
      record[".content"]]
+end
+
+p records
+
+records.sort([{:key => ".issued", :order => "descending"}]).each do |record|
+  record = record.key
+  p [record.id,
+     record[".issued"],
+     record[".item.title"],
+     record[".author.name"],
+     record[".content"]]
+end
+
+records.group([".item"]).each do |record|
+  item = record.key
+  p [record[".:nsubrecs"],
+     item.key,
+     item[".title"]]
 end

@@ -281,4 +281,70 @@ http://qwik.jp/senna/senna2.files/rect4605.png
 
 == 全文検索その2
 
+登録したレコードに対して全文検索を実行してみます。
+
+  >> records = comments.select do |record|
+  >>   record["content"] =~ "LISP"
+  >> end
+  >> records.each do |record|
+  >>   record = record.key
+  >>   p [record.id,
+  >>      record[".issued"],
+  >>      record[".item.title"],
+  >>      record[".author.name"],
+  >>      record[".content"]]
+  >> end
+  [1, Sat Aug 18 18:40:26 +0900 2007, "[翻訳]JavaScript: 世界で最も誤解されたプログラミング言語", "モリタン", "JavaScript LISP"]
+  [2, Mon Aug 20 09:11:32 +0900 2007, "なんでも継続", "モリタン", "継続 LISP Scheme"]
+  [3, Mon Aug 20 09:13:13 +0900 2007, "末尾再帰", "タポロボ", "末尾再帰 Scheme LISP"]
+  [4, Mon Aug 20 09:11:32 +0900 2007, "なんでも継続", "タポロボ", "トランポリン LISP continuation"]
+
+カラムへのアクセスは、カラム名を+.+で繋いで複合データ型の要素
+を再帰的に辿ることができます。（同様の出力を普通のRDBで実現す
+るためには、<tt><items></tt>テーブル、<tt><comments></tt>テー
+ブル、<tt><users></tt>テーブルのJOIN操作が必要になります。）
+
+上の式の中で、肝心の検索処理は、第一引数の式を評価する時点で
+完了していて、レコードセットオブジェクトとしてメモリに蓄積さ
+れています。
+
+  >> records
+  #<Groonga::Hash ..., size: <4>>
+
+レコードセットは、出力する前に様々に加工することができます。
+
+以下は、日付で降順にソートしてから出力した例です。
+
+  >> records.sort([{:key => ".issued", :order => "descending"}]).each do |record|
+  >>   record = record.key
+  >>   p [record.id,
+  >>      record[".issued"],
+  >>      record[".item.title"],
+  >>      record[".author.name"],
+  >>      record[".content"]]
+  >> end
+  [3, Mon Aug 20 09:13:13 +0900 2007, "末尾再帰", "タポロボ", "末尾再帰 Scheme LISP"]
+  [2, Mon Aug 20 09:11:32 +0900 2007, "なんでも継続", "モリタン", "継続 LISP Scheme"]
+  [4, Mon Aug 20 09:11:32 +0900 2007, "なんでも継続", "タポロボ", "トランポリン LISP continuation"]
+  [1, Sat Aug 18 18:40:26 +0900 2007, "[翻訳]JavaScript: 世界で最も誤解されたプログラミング言語", "モリタン", "JavaScript LISP"]
+
+同じitemが何度も出てくると検索結果が見にくいので、item毎にグ
+ループ化してみます。
+
+  >> records.group([".item"]).each do |record|
+  >>   item = record.key
+  >>   p [record[".:nsubrecs"],
+  >>      item.key,
+  >>      item[".title"]]
+  >> end
+  [1, "http://d.hatena.ne.jp/brazil/20050829/1125321936", "[翻訳]JavaScript: 世界で最も誤解されたプログラミング言語"]
+  [2, "http://practical-scheme.net/docs/cont-j.html", "なんでも継続"]
+  [1, "http://d.hatena.ne.jp/higepon/20070815/1187192864", "末尾再帰"]
+
++.:nsubrecs+というのはグループ化した単位に含まれるレコードの
+件数を示します。SQLで言えば、GROUP BY句を含むクエリのcount 関
+数のような働きです。
+
+== 少し複雑な検索
+
 つづく。。。
