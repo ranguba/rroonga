@@ -33,7 +33,7 @@ rb_grn_patricia_trie_s_create (int argc, VALUE *argv, VALUE self)
     VALUE rb_table;
     VALUE options, rb_context, rb_name, rb_path, rb_persistent;
     VALUE rb_key_normalize, rb_key_with_sis, rb_key_type, rb_value_size;
-    VALUE rb_default_tokenizer;
+    VALUE rb_default_tokenizer, rb_sub_records;
 
     rb_scan_args(argc, argv, "01", &options);
 
@@ -47,6 +47,7 @@ rb_grn_patricia_trie_s_create (int argc, VALUE *argv, VALUE self)
 			"key_type", &rb_key_type,
 			"value_size", &rb_value_size,
 			"default_tokenizer", &rb_default_tokenizer,
+			"sub_records", &rb_sub_records,
 			NULL);
 
     context = rb_grn_context_ensure(&rb_context);
@@ -79,6 +80,9 @@ rb_grn_patricia_trie_s_create (int argc, VALUE *argv, VALUE self)
 
     if (!NIL_P(rb_value_size))
 	value_size = NUM2UINT(rb_value_size);
+
+    if (RVAL2CBOOL(rb_sub_records))
+	flags |= GRN_OBJ_WITH_SUBREC;
 
     table = grn_table_create(context, name, name_size, path,
 			     flags, key_type, value_size);

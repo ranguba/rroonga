@@ -65,6 +65,11 @@ VALUE rb_cGrnArray;
  * [+:value_size+]
  *   値の大きさを指定する。省略すると0になる。
  *
+ * [+:sub_records+]
+ *   +true+を指定すると#groupでグループ化したときに、
+ *   <tt>record[".:nsubrecs"]</tt>でグループに含まれるレコー
+ *   ドの件数を取得できる。
+ *
  * 使用例:
  *
  * 無名一時テーブルを生成する。
@@ -92,7 +97,7 @@ rb_grn_array_s_create (int argc, VALUE *argv, VALUE klass)
     grn_obj_flags flags = GRN_TABLE_NO_KEY;
     VALUE rb_table;
     VALUE options, rb_context, rb_name, rb_path, rb_persistent;
-    VALUE rb_value_size;
+    VALUE rb_value_size, rb_sub_records;
 
     rb_scan_args(argc, argv, "01", &options);
 
@@ -102,6 +107,7 @@ rb_grn_array_s_create (int argc, VALUE *argv, VALUE klass)
                         "path", &rb_path,
 			"persistent", &rb_persistent,
 			"value_size", &rb_value_size,
+			"sub_records", &rb_sub_records,
 			NULL);
 
     context = rb_grn_context_ensure(&rb_context);
@@ -122,6 +128,9 @@ rb_grn_array_s_create (int argc, VALUE *argv, VALUE klass)
 
     if (!NIL_P(rb_value_size))
 	value_size = NUM2UINT(rb_value_size);
+
+    if (RVAL2CBOOL(rb_sub_records))
+	flags |= GRN_OBJ_WITH_SUBREC;
 
     table = grn_table_create(context, name, name_size, path,
 			     flags, NULL, value_size);
