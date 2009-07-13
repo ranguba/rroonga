@@ -326,10 +326,8 @@ class TableTest < Test::Unit::TestCase
                               },
                              ],
                              :limit => 20)
-    results = results.records(:order => :ascending).collect do |record|
-      id_column[record.value.unpack("i")[0]]
-    end
-    assert_equal((180..199).to_a.reverse, results)
+    assert_equal((180..199).to_a.reverse,
+                 results.collect {|record| record["id"]})
   end
 
   def test_sort_without_limit
@@ -346,10 +344,8 @@ class TableTest < Test::Unit::TestCase
                                 :order => :descending,
                               },
                              ])
-    results = results.records(:order => :ascending).collect do |record|
-      id_column[record.value.unpack("i")[0]]
-    end
-    assert_equal((100..199).to_a.reverse, results)
+    assert_equal((100..199).to_a.reverse,
+                 results.collect {|record| record["id"]})
   end
 
   def test_lock

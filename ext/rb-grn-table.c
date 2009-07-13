@@ -752,6 +752,8 @@ rb_grn_table_sort (int argc, VALUE *argv, VALUE self)
     VALUE rb_keys, options;
     VALUE rb_limit;
     VALUE *rb_sort_keys;
+    grn_table_cursor *cursor;
+    VALUE rb_result;
 
     rb_grn_table_deconstruct(SELF(self), &table, &context,
 			     NULL, NULL,
@@ -799,10 +801,23 @@ rb_grn_table_sort (int argc, VALUE *argv, VALUE self)
 
     result = grn_table_create(context, NULL, 0, NULL, GRN_TABLE_NO_KEY,
 			      table, sizeof(grn_id));
-    n_records = grn_table_sort(context, table, limit,
-			       result, keys, n_keys);
+    n_records = grn_table_sort(context, table, limit, result, keys, n_keys);
 
-    return GRNOBJECT2RVAL(Qnil, context, result, RB_GRN_TRUE);
+    rb_result = rb_ary_new();
+    cursor = grn_table_cursor_open(context, result, NULL, 0, NULL, 0,
+				   GRN_CURSOR_ASCENDING);
+    while (grn_table_cursor_next(context, cursor) != GRN_ID_NIL) {
+	void *value;
+	grn_id *id;
+
+	grn_table_cursor_get_value(context, cursor, &value);
+	id = value;
+	rb_ary_push(rb_result, rb_grn_record_new(self, *id, Qnil));
+    }
+    grn_table_cursor_close(context, cursor);
+    grn_obj_close(context, result);
+
+    return rb_result;
 }
 
 /*
@@ -1095,7 +1110,7 @@ rb_grn_table_select (int argc, VALUE *argv, VALUE self)
 	result = RVAL2GRNTABLE(rb_result, &context);
     }
 
-    builder = rb_grn_expression_builder_new(self);
+    builder = rb_grn_expression_builder_new(self, rb_result);
     rb_expression = rb_grn_expression_builder_build(builder);
 
     rb_grn_object_deconstruct(RB_GRN_OBJECT(DATA_PTR(rb_expression)),
@@ -1106,7 +1121,7 @@ rb_grn_table_select (int argc, VALUE *argv, VALUE self)
     rb_grn_context_check(context, self);
     rb_grn_rc_check(rc, self);
 
-    return rb_result;
+    return rb_grn_expression_builder_resolve(builder, rb_result);
 }
 
 void
