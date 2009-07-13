@@ -747,8 +747,8 @@ rb_grn_table_sort (int argc, VALUE *argv, VALUE self)
     grn_obj *table;
     grn_obj *result;
     grn_table_sort_key *keys;
-    int n_records, limit = 0;
     int i, n_keys;
+    int n_records, limit = 0;
     VALUE rb_keys, options;
     VALUE rb_limit;
     VALUE *rb_sort_keys;
@@ -760,9 +760,10 @@ rb_grn_table_sort (int argc, VALUE *argv, VALUE self)
 			     NULL, NULL, NULL);
 
     rb_scan_args(argc, argv, "11", &rb_keys, &options);
-    rb_grn_scan_options(options,
-			"limit", &rb_limit,
-			NULL);
+
+    if (!RVAL2CBOOL(rb_obj_is_kind_of(rb_keys, rb_cArray)))
+	rb_raise(rb_eArgError, "keys should be an array of key: <%s>",
+		 rb_grn_inspect(rb_keys));
 
     n_keys = RARRAY_LEN(rb_keys);
     rb_sort_keys = RARRAY_PTR(rb_keys);
@@ -796,6 +797,10 @@ rb_grn_table_sort (int argc, VALUE *argv, VALUE self)
 	}
     }
 
+    rb_grn_scan_options(options,
+			"limit", &rb_limit,
+			NULL);
+
     if (!NIL_P(rb_limit))
 	limit = NUM2INT(rb_limit);
 
@@ -817,7 +822,88 @@ rb_grn_table_sort (int argc, VALUE *argv, VALUE self)
     grn_table_cursor_close(context, cursor);
     grn_obj_close(context, result);
 
+    rb_grn_context_check(context, self); /* FIXME: here is too late */
+
     return rb_result;
+}
+
+static VALUE
+rb_grn_table_group (int argc, VALUE *argv, VALUE self)
+{
+    grn_ctx *context = NULL;
+    grn_obj *table;
+    grn_table_sort_key *keys;
+    grn_table_group_result *results;
+    int i, n_keys, n_results;
+    grn_rc rc;
+    VALUE rb_keys;
+    VALUE *rb_sort_keys;
+    VALUE rb_results;
+
+    rb_grn_table_deconstruct(SELF(self), &table, &context,
+			     NULL, NULL,
+			     NULL, NULL, NULL);
+
+    rb_scan_args(argc, argv, "10", &rb_keys);
+
+    if (!RVAL2CBOOL(rb_obj_is_kind_of(rb_keys, rb_cArray)))
+	rb_raise(rb_eArgError, "keys should be an array of key: <%s>",
+		 rb_grn_inspect(rb_keys));
+
+    n_keys = RARRAY_LEN(rb_keys);
+    rb_sort_keys = RARRAY_PTR(rb_keys);
+    keys = ALLOCA_N(grn_table_sort_key, n_keys);
+    for (i = 0; i < n_keys; i++) {
+	VALUE rb_sort_options, rb_key;
+
+	if (RVAL2CBOOL(rb_obj_is_kind_of(rb_sort_keys[i], rb_cHash))) {
+	    rb_sort_options = rb_sort_keys[i];
+	} else {
+	    rb_sort_options = rb_hash_new();
+	    rb_hash_aset(rb_sort_options,
+			 RB_GRN_INTERN("key"),
+			 rb_sort_keys[i]);
+	}
+	rb_grn_scan_options(rb_sort_options,
+			    "key", &rb_key,
+			    NULL);
+	if (RVAL2CBOOL(rb_obj_is_kind_of(rb_key, rb_cString)))
+	    rb_key = rb_grn_table_get_column(self, rb_key);
+	keys[i].key = RVAL2GRNOBJECT(rb_key, &context);
+	keys[i].flags = 0;
+    }
+
+    n_results = n_keys;
+    results = ALLOCA_N(grn_table_group_result, n_results);
+    rb_results = rb_ary_new();
+    for (i = 0; i < n_results; i++) {
+	grn_obj *result;
+	grn_id range_id;
+	VALUE rb_result;
+
+	range_id = grn_obj_get_range(context, keys[i].key);
+	result = grn_table_create(context, NULL, 0, NULL,
+				  GRN_TABLE_HASH_KEY | GRN_OBJ_WITH_SUBREC,
+				  grn_ctx_at(context, range_id), 0);
+	results[i].table = result;
+	results[i].key_begin = 0;
+	results[i].key_end = 0;
+	results[i].limit = 0;
+	results[i].flags = 0;
+	results[i].op = GRN_SEL_OR;
+
+	rb_result = GRNOBJECT2RVAL(Qnil, context, result, RB_GRN_TRUE);
+	rb_ary_push(rb_results, rb_result);
+    }
+
+    rc = grn_table_group(context, table, keys, n_keys, results, n_results);
+    rb_grn_context_check(context, self);
+    rb_grn_rc_check(rc, self);
+
+    if (n_results == 1)
+	return rb_ary_pop(rb_results);
+    else
+	return rb_results;
 }
 
 /*
@@ -1160,6 +1246,7 @@ rb_grn_init_table (VALUE mGrn)
     rb_define_method(rb_cGrnTable, "delete", rb_grn_table_delete, 1);
 
     rb_define_method(rb_cGrnTable, "sort", rb_grn_table_sort, -1);
+    rb_define_method(rb_cGrnTable, "group", rb_grn_table_group, -1);
 
     rb_define_method(rb_cGrnTable, "[]", rb_grn_table_array_reference, 1);
     rb_define_method(rb_cGrnTable, "[]=", rb_grn_table_array_set, 2);

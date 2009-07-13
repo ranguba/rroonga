@@ -330,6 +330,19 @@ class TableTest < Test::Unit::TestCase
                  results.collect {|record| record["id"]})
   end
 
+  def test_sort_simple
+    bookmarks = Groonga::Array.create(:name => "<bookmarks>")
+    id_column = bookmarks.define_column("id", "<int>")
+    100.times do |i|
+      bookmark = bookmarks.add
+      bookmark["id"] = i + 100
+    end
+
+    results = bookmarks.sort(["id"], :limit => 20)
+    assert_equal((100..119).to_a,
+                 results.collect {|record| record["id"]})
+  end
+
   def test_sort_without_limit
     bookmarks = Groonga::Array.create(:name => "<bookmarks>")
     id_column = bookmarks.define_column("id", "<int>")
@@ -338,14 +351,44 @@ class TableTest < Test::Unit::TestCase
       bookmark["id"] = i + 100
     end
 
-    results = bookmarks.sort([
-                              {
-                                :key => "id",
-                                :order => :descending,
-                              },
-                             ])
+    results = bookmarks.sort([{:key => "id", :order => :descending}])
     assert_equal((100..199).to_a.reverse,
                  results.collect {|record| record["id"]})
+  end
+
+  def test_group
+    bookmarks = Groonga::Hash.create(:name => "<bookmarks>")
+    bookmarks.define_column("title", "<text>")
+    comments = Groonga::Array.create(:name => "<comments>")
+    comments.define_column("bookmark", bookmarks)
+    comments.define_column("content", "Text")
+    comments.define_column("issued", "Int32")
+
+    groonga = bookmarks.add("http://groonga.org/", :title => "groonga")
+    ruby = bookmarks.add("http://ruby-lang.org/", :title => "Ruby")
+
+    now = Time.now.to_i
+    comments.add(:bookmark => groonga,
+                 :content => "full-text search",
+                 :issued => now)
+    comments.add(:bookmark => groonga,
+                 :content => "column store",
+                 :issued => now)
+    comments.add(:bookmark => ruby,
+                 :content => "object oriented script language",
+                 :issued => now)
+
+    records = comments.select do |record|
+      record["issued"] > 0
+    end
+    assert_equal([[2, "groonga", "http://groonga.org/"],
+                  [1, "Ruby", "http://ruby-lang.org/"]],
+                 records.group([".bookmark"]).collect do |record|
+                   bookmark = record.key
+                   [record[".:nsubrecs"],
+                    bookmark["title"],
+                    bookmark.key]
+                 end)
   end
 
   def test_lock
