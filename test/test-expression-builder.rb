@@ -96,4 +96,12 @@ class ExpressionBuilderTest < Test::Unit::TestCase
     assert_equal(["gunyara-kun", "yu"],
                  result.collect {|record| record.key.key})
   end
+
+  def test_match
+    result = @users.select do |expression|
+      expression.record["name"] =~ "ro"
+    end
+    assert_equal(["morita", "yu"],
+                 result.collect {|record| record.key.key})
+  end
 end

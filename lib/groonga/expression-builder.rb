@@ -76,6 +76,15 @@ module Groonga
         @builder
       end
 
+      def =~(other)
+        @expression.append_object(@variable)
+        @expression.append_constant(@column.local_name)
+        @expression.append_operation(Groonga::Operation::OBJECT_GET_VALUE, 2)
+        @expression.append_constant(other)
+        @expression.append_operation(Groonga::Operation::MATCH, 2)
+        @builder
+      end
+
       def <(other)
         @expression.append_object(@variable)
         @expression.append_constant(@column.local_name)
