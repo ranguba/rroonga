@@ -136,13 +136,18 @@ rb_grn_expression_define_variable (int argc, VALUE *argv, VALUE self)
     grn_obj *expression, *variable;
     char *name = NULL;
     unsigned name_size = 0;
-    VALUE rb_name, rb_variable;
+    VALUE options, rb_name, rb_domain, rb_variable;
 
-    rb_scan_args(argc, argv, "01", &rb_name);
+    rb_scan_args(argc, argv, "01", &options);
 
     rb_grn_expression_deconstruct(SELF(self), &expression, &context,
                                   NULL, NULL,
                                   NULL, NULL, NULL);
+
+    rb_grn_scan_options(options,
+			"name", &rb_name,
+			"domain", &rb_domain,
+			NULL);
 
     if (!NIL_P(rb_name)) {
 	name = StringValuePtr(rb_name);
@@ -151,6 +156,12 @@ rb_grn_expression_define_variable (int argc, VALUE *argv, VALUE self)
 
     variable = grn_expr_add_var(context, expression, name, name_size);
     rb_variable = GRNVARIABLE2RVAL(context, variable);
+
+    if (RVAL2CBOOL(rb_obj_is_kind_of(rb_domain, rb_cGrnTable))) {
+	grn_id domain_id;
+	domain_id = NUM2UINT(rb_funcall(rb_domain, rb_intern("id"), 0));
+	GRN_RECORD_INIT(variable, 0, domain_id);
+    }
 
     return rb_variable;
 }

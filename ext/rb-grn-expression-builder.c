@@ -19,13 +19,20 @@
 #include "rb-grn.h"
 
 VALUE rb_cGrnRecordExpressionBuilder;
+VALUE rb_cGrnColumnExpressionBuilder;
 
 VALUE
-rb_grn_record_expression_builder_new (VALUE table, VALUE query, VALUE name,
-				      VALUE default_column)
+rb_grn_record_expression_builder_new (VALUE table, VALUE name)
 {
     return rb_funcall(rb_cGrnRecordExpressionBuilder,
-		      rb_intern("new"), 4, table, query, name, default_column);
+		      rb_intern("new"), 2, table, name);
+}
+
+VALUE
+rb_grn_column_expression_builder_new (VALUE column, VALUE name, VALUE query)
+{
+    return rb_funcall(rb_cGrnColumnExpressionBuilder,
+		      rb_intern("new"), 3, column, name, query);
 }
 
 static VALUE
@@ -46,9 +53,17 @@ rb_grn_record_expression_builder_build (VALUE self)
     return rb_iterate(build, self, build_block, self);
 }
 
+VALUE
+rb_grn_column_expression_builder_build (VALUE self)
+{
+    return rb_iterate(build, self, build_block, self);
+}
+
 void
 rb_grn_init_expression_builder (VALUE mGrn)
 {
     rb_cGrnRecordExpressionBuilder =
         rb_const_get(mGrn, rb_intern("RecordExpressionBuilder"));
+    rb_cGrnColumnExpressionBuilder =
+        rb_const_get(mGrn, rb_intern("ColumnExpressionBuilder"));
 }

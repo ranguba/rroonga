@@ -106,7 +106,7 @@ class ExpressionBuilderTest < Test::Unit::TestCase
   end
 
   def test_query_string
-    result = @users.select("ro", :default_column => "name")
+    result = @name.select("ro")
     assert_equal(["morita", "yu"],
                  result.collect {|record| record.key.key})
   end
