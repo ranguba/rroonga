@@ -49,7 +49,13 @@ module Groonga
       end
 
       def [](name)
-        Column.new(@builder, @expression, @table.column(name), @variable)
+        column = @table.column(name)
+        if column.nil?
+          message = "unknown column <#{name.inspect}> " +
+            "for table <#{@table.inspect}>"
+          raise ArgumentError, message
+        end
+        Column.new(@builder, @expression, column, @variable)
       end
     end
 
