@@ -1110,8 +1110,8 @@ rb_grn_table_select (int argc, VALUE *argv, VALUE self)
 	result = RVAL2GRNTABLE(rb_result, &context);
     }
 
-    builder = rb_grn_expression_builder_new(self);
-    rb_expression = rb_grn_expression_builder_build(builder);
+    builder = rb_grn_record_expression_builder_new(self);
+    rb_expression = rb_grn_record_expression_builder_build(builder);
 
     rb_grn_object_deconstruct(RB_GRN_OBJECT(DATA_PTR(rb_expression)),
 			      &expression, NULL,

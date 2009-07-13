@@ -16,7 +16,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 module Groonga
-  class ExpressionBuilder
+  class RecordExpressionBuilder
     def initialize(table)
       @table = table
     end
@@ -31,8 +31,14 @@ module Groonga
       @expression
     end
 
-    def record
-      Record.new(self, @expression, @table, @variable)
+    def [](name)
+      column = @table.column(name)
+      if column.nil?
+        message = "unknown column <#{name.inspect}> " +
+          "for table <#{@table.inspect}>"
+        raise ArgumentError, message
+      end
+      ColumnExpressionBuilder.new(self, @expression, column, @variable)
     end
 
     def &(other)
@@ -40,26 +46,7 @@ module Groonga
       self
     end
 
-    class Record
-      def initialize(builder, expression, table, variable)
-        @builder = builder
-        @expression = expression
-        @table = table
-        @variable = variable
-      end
-
-      def [](name)
-        column = @table.column(name)
-        if column.nil?
-          message = "unknown column <#{name.inspect}> " +
-            "for table <#{@table.inspect}>"
-          raise ArgumentError, message
-        end
-        Column.new(@builder, @expression, column, @variable)
-      end
-    end
-
-    class Column
+    class ColumnExpressionBuilder
       def initialize(builder, expression, column, variable)
         @builder = builder
         @expression = expression

@@ -43,8 +43,8 @@ class ExpressionBuilderTest < Test::Unit::TestCase
   end
 
   def test_equal
-    result = @users.select do |expression|
-      expression.record["name"] == "mori daijiro"
+    result = @users.select do |record|
+      record["name"] == "mori daijiro"
     end
     assert_equal(["morita"],
                  result.collect {|record| record.key.key})
@@ -52,54 +52,54 @@ class ExpressionBuilderTest < Test::Unit::TestCase
 
   def test_not_equal
     omit("not supported yet!!!")
-    result = @users.select do |expression|
-      expression.record["name"] != "mori daijiro"
+    result = @users.select do |record|
+      record["name"] != "mori daijiro"
     end
     assert_equal(["gunyara-kun", "yu"],
                  result.collect {|record| record.key.key})
   end
 
   def test_less
-    result = @users.select do |expression|
-      expression.record["hp"] < 150
+    result = @users.select do |record|
+      record["hp"] < 150
     end
     assert_equal(["morita"], result.collect {|record| record.key.key})
   end
 
   def test_less_equal
-    result = @users.select do |expression|
-      expression.record["hp"] <= 150
+    result = @users.select do |record|
+      record["hp"] <= 150
     end
     assert_equal(["morita", "gunyara-kun"],
                  result.collect {|record| record.key.key})
   end
 
   def test_greater
-    result = @users.select do |expression|
-      expression.record["hp"] > 150
+    result = @users.select do |record|
+      record["hp"] > 150
     end
     assert_equal(["yu"], result.collect {|record| record.key.key})
   end
 
   def test_greater_equal
-    result = @users.select do |expression|
-      expression.record["hp"] >= 150
+    result = @users.select do |record|
+      record["hp"] >= 150
     end
     assert_equal(["gunyara-kun", "yu"],
                  result.collect {|record| record.key.key})
   end
 
   def test_and
-    result = @users.select do |expression|
-      (expression.record["hp"] > 100) & (expression.record["hp"] <= 200)
+    result = @users.select do |record|
+      (record["hp"] > 100) & (record["hp"] <= 200)
     end
     assert_equal(["gunyara-kun", "yu"],
                  result.collect {|record| record.key.key})
   end
 
   def test_match
-    result = @users.select do |expression|
-      expression.record["name"] =~ "ro"
+    result = @users.select do |record|
+      record["name"] =~ "ro"
     end
     assert_equal(["morita", "yu"],
                  result.collect {|record| record.key.key})
