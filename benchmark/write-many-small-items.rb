@@ -3,30 +3,33 @@
 # This benchmark is based on Tokyo Cabinet's benchmark at
 # http://alpha.mixi.co.jp/blog/?p=791
 #
-# On my environment at 2009/05/16:
-# % for x in {0..9}; do ruby benchmark/write-small-many-items.rb $x; done
+# On my environment at 2009/07/14:
+# % for x in {0..9}; do ruby benchmark/write-many-small-items.rb $x; done
 #                           user     system      total        real        memory
-# Hash                  1.090000   0.180000   1.270000 (  1.565159)     47.090MB
-# groonga: Hash: memory 0.930000   0.140000   1.070000 (  1.364338)     23.473MB
-# groonga: Trie: memory 1.170000   0.120000   1.290000 (  1.601229)     15.480MB
-# groonga: Hash: file   0.980000   0.170000   1.150000 (  1.398126)     23.477MB
-# groonga: Trie: file   1.220000   0.130000   1.350000 (  1.744243)     15.484MB
-# Localmemcache: file   1.100000   0.210000   1.310000 (  1.734014)     39.301MB
-# TC: Hash: memory      0.710000   0.130000   0.840000 (  1.061472)     42.055MB
-# TC: Tree: memory      0.640000   0.150000   0.790000 (  1.040223)     30.566MB
-# TC: Hash: file        1.310000   2.370000   3.680000 (  5.028978)      2.133MB
-# TC: Tree: file        1.030000   0.200000   1.230000 (  1.666725)      6.086MB
+# Hash                  0.650000   0.130000   0.780000 (  0.799843)     46.957MB
+# groonga: Hash: memory 0.650000   0.130000   0.780000 (  0.781058)     23.477MB
+# groonga: Trie: memory 0.690000   0.180000   0.870000 (  0.862132)     15.516MB
+# groonga: Hash: file   0.660000   0.120000   0.780000 (  0.780952)     23.480MB
+# groonga: Trie: file   0.660000   0.190000   0.850000 (  0.867515)     15.520MB
+# Localmemcache: file   0.900000   0.150000   1.050000 (  1.052692)     39.312MB
+# TC: Hash: memory      0.480000   0.150000   0.630000 (  0.636297)     42.062MB
+# TC: Tree: memory      0.440000   0.150000   0.590000 (  0.593117)     30.570MB
+# TC: Hash: file        1.000000   1.820000   2.820000 (  2.989515)      2.160MB
+# TC: Tree: file        0.720000   0.130000   0.850000 (  0.877557)      6.102MB
 #
-# Ruby: Debian GNU/Linux sid at 2009/05/16:
-#       ruby 1.8.7 (2008-08-11 patchlevel 72) [x86_64-linux]
-# groonga: HEAD at 2009/05/16: ed49074fbc217b97c0b0b8d675f2417f9490c87e
-# Ruby/Groonga: trunk at 2009/05/16: r321
-# Localmemcache: HEAD at 2009/05/16: 6f8cfbd3a103c2be8d54834a65deb096d7cda34f
-# Tokyo Cabinet: 1.4.20
-# Tokyo Cabinet Ruby: 1.23
+# CPU: Intel(R) Core(TM)2 Duo 2.33GHz
+# Memory: 2GB
+# Ruby: Debian GNU/Linux sid at 2009/07/14:
+#       ruby 1.8.7 (2009-06-12 patchlevel 174) [x86_64-linux]
+# groonga: HEAD at 2009/07/14: fdaf58df5dd0195c10624eabee3e3f522f4af3f9
+# Ruby/Groonga: trunk at 2009/07/14: r479
+# Localmemcache: HEAD at 2009/07/14: 3121629016344dfd10f7533ca8ec68a0006cca21
+# Tokyo Cabinet: 1.4.29
+# Tokyo Cabinet Ruby: 1.27
 #
-# NOTE: All C source codes are built with "-g -O0"
-# option. They will be more faster with "-O2" option.
+# NOTE:
+# * groonga, Localmemcache and Tokyo Cabinet are built with "-O3" option.
+# * Ruby bindings of them are built with "-O2" option.
 
 require File.join(File.dirname(__FILE__), "common.rb")
 
@@ -94,8 +97,8 @@ begin
   require 'localmemcache'
 
   item("Localmemcache: file") do
-    LocalMemCache.drop(:namespace => "write-small-many-items", :force => true)
-    @db = LocalMemCache.new(:namespace => "write-small-many-items")
+    LocalMemCache.drop(:namespace => "write-many-small-items", :force => true)
+    @db = LocalMemCache.new(:namespace => "write-many-small-items")
     values.each do |value|
       @db[value] = value
     end
