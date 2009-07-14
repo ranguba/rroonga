@@ -27,8 +27,6 @@ require 'hoe'
 
 ENV["NODOT"] = "yes"
 
-Hoe::Test::SUPPORTED_TEST_FRAMEWORKS[:testunit2] = "test/run-test.rb"
-
 base_dir = File.join(File.dirname(__FILE__))
 truncate_base_dir = Proc.new do |x|
   x.gsub(/^#{Regexp.escape(base_dir + File::SEPARATOR)}/, '')
@@ -90,6 +88,7 @@ ENV["VERSION"] ||= guess_version
 version = ENV["VERSION"]
 project = nil
 Hoe.spec('groonga') do |_project|
+  Hoe::Test::SUPPORTED_TEST_FRAMEWORKS[:testunit2] = "test/run-test.rb"
   project = _project
   project.version = version
   project.rubyforge_name = 'groonga'
@@ -140,7 +139,8 @@ if /mswin32/ =~ project.spec.platform.to_s
 end
 
 ObjectSpace.each_object(Rake::RDocTask) do |rdoc_task|
-  t_option_index = rdoc_task.options.index("-t")
+  options = rdoc_task.options
+  t_option_index = options.index("--title") || options.index("-t")
   rdoc_task.options[t_option_index, 2] = nil
   rdoc_task.title = "Ruby/groonga - #{version}"
 
