@@ -4,7 +4,7 @@
 # http://alpha.mixi.co.jp/blog/?p=791
 #
 # On my environment at 2009/05/16:
-# % for x in {0..9}; do ruby benchmark/read-write-small-many-items.rb $x; done
+# % for x in {0..9}; do ruby benchmark/read-write-many-small-items.rb $x; done
 #                           user     system      total        real        memory
 # Hash                  1.440000   0.120000   1.560000 (  2.018838)     47.230MB
 # groonga: Hash: memory 1.780000   0.170000   1.950000 (  2.331934)     30.582MB
@@ -99,9 +99,9 @@ begin
   require 'localmemcache'
 
   item("Localmemcache: file") do
-    LocalMemCache.drop(:namespace => "read-write-small-many-items",
+    LocalMemCache.drop(:namespace => "read-write-many-small-items",
                        :force => true)
-    @db = LocalMemCache.new(:namespace => "read-write-small-many-items")
+    @db = LocalMemCache.new(:namespace => "read-write-many-small-items")
     values.each do |value|
       @db[value] = value
       @db[value]
