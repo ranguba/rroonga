@@ -251,7 +251,7 @@ void           rb_grn_object_bind                   (VALUE self,
 						     RbGrnObject *rb_grn_object,
 						     grn_ctx *context,
 						     grn_obj *object);
-void           rb_grn_object_unbind                 (RbGrnObject *rb_grn_object);
+void           rb_grn_object_free                   (RbGrnObject *rb_grn_object);
 void           rb_grn_object_assign                 (VALUE klass,
 						     VALUE self,
 						     VALUE rb_context,

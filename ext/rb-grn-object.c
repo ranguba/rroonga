@@ -148,16 +148,15 @@ rb_grn_object_finalizer (grn_ctx *context, grn_obj *grn_object,
     return GRN_SUCCESS;
 }
 
-static void
-rb_grn_object_free (void *object)
+void
+rb_grn_object_free (RbGrnObject *rb_grn_object)
 {
-    RbGrnObject *rb_grn_object = object;
     grn_ctx *context;
     grn_obj *grn_object;
 
     context = rb_grn_object->context;
     grn_object = rb_grn_object->object;
-    debug("rb-free: %p:%p:%p\n", context, grn_object, object);
+    debug("rb-free: %p:%p:%p\n", context, grn_object, rb_grn_object);
     if (context && grn_object) {
 	rb_grn_object->context = NULL;
 	rb_grn_object->object = NULL;
@@ -243,7 +242,7 @@ rb_grn_object_to_ruby_object (VALUE klass, grn_ctx *context, grn_obj *object,
     if (NIL_P(klass))
         klass = GRNOBJECT2RCLASS(object);
 
-    rb_object = rb_grn_object_alloc(klass);
+    rb_object = rb_obj_alloc(klass);
     rb_grn_object_assign(klass, rb_object, Qnil, context, object);
 
     return rb_object;
