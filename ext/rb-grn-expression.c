@@ -33,22 +33,6 @@ rb_grn_expression_finalizer (grn_ctx *context, grn_obj *object,
 }
 
 void
-rb_grn_expression_unbind (RbGrnExpression *rb_grn_expression)
-{
-    grn_ctx *context;
-    grn_obj *value;
-
-    context = RB_GRN_OBJECT(rb_grn_expression)->context;
-    value = rb_grn_expression->value;
-    if (context && value) {
-	grn_obj_close(context, value);
-	rb_grn_expression->value = NULL;
-    }
-
-    rb_grn_object_unbind(RB_GRN_OBJECT(rb_grn_expression));
-}
-
-void
 rb_grn_expression_bind (RbGrnExpression *rb_grn_expression,
                         grn_ctx *context, grn_obj *expression)
 {
