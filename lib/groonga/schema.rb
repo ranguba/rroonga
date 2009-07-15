@@ -108,7 +108,7 @@ module Groonga
         return type if type.is_a?(Groonga::Object)
         case type.to_s
         when "string"
-          "Shorttext"
+          "ShortText"
         when "text"
           "Text"
         when "int", "integer"
@@ -120,7 +120,7 @@ module Groonga
         when "datetime", "timestamp", "time", "date"
           "Time"
         when "binary"
-          "Longtext"
+          "LongText"
         when "boolean"
           "Bool"
         else
@@ -212,46 +212,46 @@ module Groonga
       end
 
       def integer32(name, options={})
-        column(name, "<int>", options)
+        column(name, "Int32", options)
       end
       alias_method :integer, :integer32
       alias_method :int32, :integer32
 
       def integer64(name, options={})
-        column(name, "<int64>", options)
+        column(name, "Int64", options)
       end
       alias_method :int64, :integer64
 
       def unsigned_integer32(name, options={})
-        column(name, "<uint>", options)
+        column(name, "UInt32", options)
       end
       alias_method :unsigned_integer, :unsigned_integer32
       alias_method :uint32, :unsigned_integer32
 
       def unsigned_integer64(name, options={})
-        column(name, "<uint64>", options)
+        column(name, "UInt64", options)
       end
       alias_method :uint64, :unsigned_integer64
 
       def float(name, options={})
-        column(name, "<float>", options)
+        column(name, "Float", options)
       end
 
       def time(name, options={})
-        column(name, "<time>", options)
+        column(name, "Time", options)
       end
 
       def short_text(name, options={})
-        column(name, "<shorttext>", options)
+        column(name, "ShortText", options)
       end
       alias_method :string, :short_text
 
       def text(name, options={})
-        column(name, "<text>", options)
+        column(name, "Text", options)
       end
 
       def long_text(name, options={})
-        column(name, "<longtext>", options)
+        column(name, "LongText", options)
       end
 
       def index(name, target_column, options={})
