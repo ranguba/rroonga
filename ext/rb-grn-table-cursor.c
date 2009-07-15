@@ -60,7 +60,23 @@ rb_grn_table_cursor_deconstruct (RbGrnTableCursor *rb_grn_table_cursor,
 VALUE
 rb_grn_table_cursor_close (VALUE self)
 {
-    /* rb_grn_table_cursor_unbind(SELF(self)); */ /* TODO: grn_obj_close() */
+    RbGrnTableCursor *rb_grn_table_cursor;
+    grn_table_cursor *cursor;
+    grn_ctx *context;
+
+    rb_grn_table_cursor = SELF(self);
+    rb_grn_table_cursor_deconstruct(rb_grn_table_cursor, &cursor, &context,
+				    NULL, NULL, NULL, NULL);
+
+    if (context && cursor) {
+	RbGrnObject *rb_grn_object;
+
+	rb_grn_object = RB_GRN_OBJECT(rb_grn_table_cursor);
+        grn_obj_close(context, cursor);
+	rb_grn_object->context = NULL;
+	rb_grn_object->object = NULL;
+    }
+
     return Qnil;
 }
 
