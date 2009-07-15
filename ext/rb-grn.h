@@ -440,7 +440,7 @@ VALUE          rb_grn_column_expression_builder_build
 #define RVAL2GRNQUERY(object)         (rb_grn_query_from_ruby_object(object))
 #define GRNQUERY2RVAL(context, column)(rb_grn_query_to_ruby_object(context, column))
 
-#define RVAL2GRNSELECTOPERATOR(object)(rb_grn_select_operator_from_ruby_object(object))
+#define RVAL2GRNOPERATOR(object)      (rb_grn_operator_from_ruby_object(object))
 
 #define RVAL2GRNLOGGER(object)        (rb_grn_logger_from_ruby_object(object))
 
@@ -477,9 +477,6 @@ VALUE          rb_grn_column_expression_builder_build
     (rb_grn_variable_to_ruby_object(context, variable))
 #define RVAL2GRNVARIABLE(object, context) \
     (rb_grn_variable_from_ruby_object(object, context))
-
-#define RVAL2GRNOPERATION(operation) (NUM2UINT(operation))
-#define GRNOPERATION2RVAL(operation) (UINT2NUM(operation))
 
 
 grn_encoding   rb_grn_encoding_from_ruby_object     (VALUE object,
@@ -535,9 +532,7 @@ grn_query     *rb_grn_query_from_ruby_object        (VALUE object);
 VALUE          rb_grn_query_to_ruby_object          (grn_ctx *context,
 						     grn_query *query);
 
-grn_sel_operator
-               rb_grn_select_operator_from_ruby_object
-                                                    (VALUE object);
+grn_operator   rb_grn_operator_from_ruby_object     (VALUE object);
 
 grn_logger_info *
                rb_grn_logger_from_ruby_object       (VALUE object);

@@ -271,7 +271,7 @@ rb_grn_hash_search (int argc, VALUE *argv, VALUE self)
     }
 
     rc = grn_obj_search(context, table, key,
-			result, GRN_SEL_OR, NULL);
+			result, GRN_OP_OR, NULL);
     rb_grn_rc_check(rc, self);
 
     return rb_result;

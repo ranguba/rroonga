@@ -362,7 +362,7 @@ rb_grn_index_column_search (int argc, VALUE *argv, VALUE self)
     grn_obj *range;
     grn_obj *query = NULL, *id_query = NULL, *string_query = NULL;
     grn_obj *result;
-    grn_sel_operator operator;
+    grn_operator operator;
     grn_rc rc;
     VALUE rb_query, options, rb_result, rb_operator;
 
@@ -404,7 +404,7 @@ rb_grn_index_column_search (int argc, VALUE *argv, VALUE self)
 	result = RVAL2GRNOBJECT(rb_result, &context);
     }
 
-    operator = RVAL2GRNSELECTOPERATOR(rb_operator);
+    operator = RVAL2GRNOPERATOR(rb_operator);
 
     rc = grn_obj_search(context, column, query, result, operator, NULL);
     rb_grn_rc_check(rc, self);

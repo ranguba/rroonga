@@ -110,7 +110,7 @@ rb_grn_patricia_trie_search (int argc, VALUE *argv, VALUE self)
     grn_obj *table;
     grn_id domain_id;
     grn_obj *key, *domain, *result;
-    grn_sel_operator operator;
+    grn_operator operator;
     grn_search_optarg search_options;
     rb_grn_boolean search_options_is_set = RB_GRN_TRUE;
     VALUE rb_key, options, rb_result, rb_operator, rb_type;
@@ -139,7 +139,7 @@ rb_grn_patricia_trie_search (int argc, VALUE *argv, VALUE self)
 	result = RVAL2GRNOBJECT(rb_result, &context);
     }
 
-    operator = RVAL2GRNSELECTOPERATOR(rb_operator);
+    operator = RVAL2GRNOPERATOR(rb_operator);
 
     search_options.flags = 0;
     if (NIL_P(rb_type)) {

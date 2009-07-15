@@ -221,7 +221,7 @@ rb_grn_expression_append_operation (VALUE self, VALUE rb_operation,
 {
     grn_ctx *context = NULL;
     grn_obj *expression;
-    grn_op operation;
+    grn_operator operation;
     int n_arguments = 0;
 
     rb_grn_expression_deconstruct(SELF(self), &expression, &context,

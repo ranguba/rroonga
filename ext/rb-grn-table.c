@@ -890,7 +890,7 @@ rb_grn_table_group (int argc, VALUE *argv, VALUE self)
 	results[i].key_end = 0;
 	results[i].limit = 0;
 	results[i].flags = 0;
-	results[i].op = GRN_SEL_OR;
+	results[i].op = GRN_OP_OR;
 
 	rb_result = GRNOBJECT2RVAL(Qnil, context, result, RB_GRN_TRUE);
 	rb_ary_push(rb_results, rb_result);
@@ -1167,7 +1167,7 @@ rb_grn_table_select (int argc, VALUE *argv, VALUE self)
 {
     grn_ctx *context;
     grn_obj *table, *result, *expression;
-    grn_sel_operator operator = GRN_SEL_OR;
+    grn_operator operator = GRN_OP_OR;
     grn_rc rc;
     VALUE options;
     VALUE rb_name, rb_operator, rb_result;

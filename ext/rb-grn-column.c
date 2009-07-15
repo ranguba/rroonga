@@ -166,7 +166,7 @@ rb_grn_column_select (int argc, VALUE *argv, VALUE self)
 {
     grn_ctx *context;
     grn_obj *table, *column, *result, *expression;
-    grn_sel_operator operator = GRN_SEL_OR;
+    grn_operator operator = GRN_OP_OR;
     grn_rc rc;
     VALUE options;
     VALUE rb_query, rb_name, rb_operator, rb_result;
