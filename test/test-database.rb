@@ -63,7 +63,8 @@ class DatabaseTest < Test::Unit::TestCase
   def test_each
     db_path = @tmp_dir + "db"
     database = Groonga::Database.create(:path => db_path.to_s)
-    assert_equal(["Bool",
+    assert_equal(["/q/define_selector",
+                  "Bool",
                   "Float",
                   "Int16",
                   "Int32",
