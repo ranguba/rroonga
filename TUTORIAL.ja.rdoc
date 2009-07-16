@@ -69,7 +69,7 @@ groongaには以下の3種類のテーブルがあります。
 
 == レコードを追加する
 
-items>テーブルにレコードを追加します。
+<tt><items></tt>テーブルにレコードを追加します。
 
   >> items.add("http://ja.wikipedia.org/wiki/Ruby")
   => #<Groonga::Record ...>
