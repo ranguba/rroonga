@@ -84,11 +84,11 @@ class RecordTest < Test::Unit::TestCase
     @bookmarks_index =
       Groonga::PatriciaTrie.create(:name => "bookmarks-index",
                                    :path => @bookmarks_index_path.to_s)
-    @bookmarks_index.default_tokenizer = "<token:bigram>"
+    @bookmarks_index.default_tokenizer = "TokenBigram"
 
     @content_index_column_path = @columns_dir + "content-index"
     @bookmarks_content_index =
-      @bookmarks_index.define_index_column("<index:content>", @bookmarks,
+      @bookmarks_index.define_index_column("content", @bookmarks,
                                            :with_section => true,
                                            :with_weight => true,
                                            :with_position => true,
@@ -97,7 +97,7 @@ class RecordTest < Test::Unit::TestCase
 
     @uri_index_column_path = @columns_dir + "uri-index"
     @bookmarks_uri_index =
-      @bookmarks_index.define_index_column("<index:uri>", @bookmarks,
+      @bookmarks_index.define_index_column("uri", @bookmarks,
                                            :with_position => true,
                                            :path => @uri_index_column_path.to_s)
     @bookmarks_uri_index.source = @bookmarks_uri
