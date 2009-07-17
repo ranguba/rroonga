@@ -661,7 +661,6 @@ rb_grn_obj_to_ruby_object (VALUE klass, grn_ctx *context,
       case GRN_VOID:
 	return Qnil;
 	break;
-      case GRN_ATOM: /* Is it OK? */
       case GRN_BULK:
 	return GRNBULK2RVAL(context, obj, related_object);
 	break;
