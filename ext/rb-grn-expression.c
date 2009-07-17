@@ -97,7 +97,7 @@ rb_grn_expression_initialize (int argc, VALUE *argv, VALUE self)
 
     if (query) {
 	grn_obj *table;
-	grn_obj *default_column;
+	grn_obj *default_column = NULL;
 
 	table = RVAL2GRNOBJECT(rb_table, &context);
 	default_column = RVAL2GRNBULK(rb_default_column, context, default_column);
