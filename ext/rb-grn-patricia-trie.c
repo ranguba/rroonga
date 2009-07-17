@@ -141,31 +141,6 @@ rb_grn_patricia_trie_search (int argc, VALUE *argv, VALUE self)
 
     operator = RVAL2GRNOPERATOR(rb_operator);
 
-    search_options.flags = 0;
-    if (NIL_P(rb_type)) {
-	search_options_is_set = RB_GRN_FALSE;
-    } else if (rb_grn_equal_option(rb_type, "exact")) {
-	search_options.flags |= GRN_SEARCH_EXACT;
-    } else if (rb_grn_equal_option(rb_type, "longest_common_prefix") ||
-	       rb_grn_equal_option(rb_type, "longest-common-prefix")) {
-	search_options.flags |= GRN_SEARCH_LCP;
-    } else if (rb_grn_equal_option(rb_type, "suffix")) {
-	search_options.flags |= GRN_SEARCH_SUFFIX;
-    } else if (rb_grn_equal_option(rb_type, "prefix")) {
-	search_options.flags |= GRN_SEARCH_PREFIX;
-    } else if (rb_grn_equal_option(rb_type, "term_extract") ||
-	       rb_grn_equal_option(rb_type, "term-extract")) {
-	search_options.flags |= GRN_SEARCH_TERM_EXTRACT;
-    } else if (rb_grn_equal_option(rb_type, "suffix")) {
-	search_options.flags |= GRN_SEARCH_SUFFIX;
-    } else {
-	rb_raise(rb_eArgError,
-		 "search type should be one of "
-		 "[nil, :exact, :longest_common_prefix, :suffix, "
-		 ":prefix, :term_extract]: %s",
-		 rb_grn_inspect(rb_type));
-    }
-
     rc = grn_obj_search(context, table, key,
 			result, operator,
 			search_options_is_set ? &search_options : NULL);
