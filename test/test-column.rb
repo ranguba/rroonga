@@ -61,12 +61,12 @@ class ColumnTest < Test::Unit::TestCase
     @bookmarks_index =
       Groonga::PatriciaTrie.create(:name => "bookmarks-index",
                                    :path => @bookmarks_index_path.to_s,
-                                   :key_type => "<shorttext>")
-    @bookmarks_index.default_tokenizer = "<token:bigram>"
+                                   :key_type => "ShortText")
+    @bookmarks_index.default_tokenizer = "TokenBigram"
 
     @content_index_column_path = @columns_dir + "content-index"
     @bookmarks_index_content =
-      @bookmarks_index.define_index_column("<index:content>", @bookmarks,
+      @bookmarks_index.define_index_column("content", @bookmarks,
                                            :with_section => true,
                                            :with_weight => true,
                                            :with_position => true,
@@ -74,7 +74,7 @@ class ColumnTest < Test::Unit::TestCase
 
     @uri_index_column_path = @columns_dir + "uri-index"
     @bookmarks_index_uri =
-      @bookmarks_index.define_index_column("<index:uri>", @bookmarks,
+      @bookmarks_index.define_index_column("uri", @bookmarks,
                                            :path => @uri_index_column_path.to_s)
   end
 
