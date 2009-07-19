@@ -74,6 +74,7 @@ def install_groonga_locally(major, minor, micro)
   tar_gz = "groonga-#{major}.#{minor}.#{micro}.tar.gz"
   FileUtils.mkdir_p(local_groonga_base_dir)
 
+  install_dir = local_groonga_install_dir
   Dir.chdir(local_groonga_base_dir) do
     url = "http://groonga.org/files/groonga/#{tar_gz}"
     message("downloading %s...", url)
@@ -97,7 +98,7 @@ def install_groonga_locally(major, minor, micro)
     groonga_source_dir = "groonga-#{major}.#{minor}.#{micro}"
     Dir.chdir(groonga_source_dir) do
       message("configuring...")
-      if xsystem("./configure CFLAGS='-g -O0' --prefix=#{Shellwords.escape(local_groonga_install_dir)}")
+      if xsystem("./configure CFLAGS='-g -O0' --prefix=#{Shellwords.escape(install_dir)}")
         message(" done\n")
       else
         message(" failed\n")
