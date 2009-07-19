@@ -54,3 +54,4 @@ http://lists.sourceforge.jp/mailman/listinfo/groonga-dev
 * グニャラくん: バグレポートしてくれました。
 * にくさん: バグレポートしてくれました。
 * daraさん: テストを書いてくれました。
+* id:mat_akiさん: チュートリアルのバグを教えてくれました。

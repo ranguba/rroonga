@@ -187,9 +187,9 @@ http://qwik.jp/senna/senna2.files/rect4605.png
 
 次に、<tt><comments></tt>テーブルを追加します。
 
-  >> comments = Groonga::Hash.create(:name => "<comments>",
-                                     :key_type => "<shorttext>")
-  => #<Groonga::Hash ...>
+  >> comments = Groonga::Array.create(:name => "<comments>",
+                                      :key_type => "<shorttext>")
+  => #<Groonga::Array ...>
   >> comments.define_column("item", items)
   => #<Groonga::FixSizeColumn ..>
   >> comments.define_column("author", users)

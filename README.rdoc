@@ -55,3 +55,4 @@ http://rubyforge.org/mailman/listinfo/groonga-users-en
 * Tasuku SUENAGA: sent bug reports.
 * niku: sent bug reports.
 * dara: wrote tests.
+* id:mat_aki: sent bug reports.
