@@ -45,15 +45,15 @@ rb_grn_type_initialize (int argc, VALUE *argv, VALUE self)
     grn_ctx *context;
     grn_obj *type;
     const char *name = NULL;
-    unsigned name_size, size = sizeof(grn_id);
+    unsigned name_size, size = 0;
     grn_obj_flags flags = 0;
-    VALUE rb_name, options, rb_context, rb_key_type, rb_size;
+    VALUE rb_name, options, rb_context, rb_option, rb_size;
 
     rb_scan_args(argc, argv, "11", &rb_name, &options);
 
     rb_grn_scan_options(options,
 			"context", &rb_context,
-			"type", &rb_key_type,
+			"option", &rb_option,
 			"size", &rb_size,
 			NULL);
 
@@ -62,22 +62,30 @@ rb_grn_type_initialize (int argc, VALUE *argv, VALUE self)
 
     context = rb_grn_context_ensure(&rb_context);
 
-    if (NIL_P(rb_key_type)) {
-        flags = GRN_OBJ_KEY_VAR_SIZE;
-    } else if (rb_grn_equal_option(rb_key_type, "integer") ||
-               rb_grn_equal_option(rb_key_type, "int")) {
+    if (NIL_P(rb_option)) {
+    } else if (rb_grn_equal_option(rb_option, "integer") ||
+               rb_grn_equal_option(rb_option, "int")) {
 	flags = GRN_OBJ_KEY_INT;
         size = sizeof(int);
-    } else if (rb_grn_equal_option(rb_key_type, "uint")) {
+    } else if (rb_grn_equal_option(rb_option, "unsigned_integer") ||
+	       rb_grn_equal_option(rb_option, "uint")) {
 	flags = GRN_OBJ_KEY_UINT;
         size = sizeof(unsigned int);
-    } else if (rb_grn_equal_option(rb_key_type, "float")) {
+    } else if (rb_grn_equal_option(rb_option, "float")) {
 	flags = GRN_OBJ_KEY_FLOAT;
         size = sizeof(double);
+    } else if (rb_grn_equal_option(rb_option, "variable")) {
+        flags = GRN_OBJ_KEY_VAR_SIZE;
+    } else {
+	rb_raise(rb_eArgError,
+		 ":option should be one of "
+		 "[:int, :integer, :uint, :unsigned_integer, "
+		 ":float, :variable]: %s",
+		 rb_grn_inspect(options));
     }
 
     if (NIL_P(rb_size)) {
-        if (flags == GRN_OBJ_KEY_VAR_SIZE)
+        if (size == 0)
             rb_raise(rb_eArgError, "size is missing: %s",
                      rb_grn_inspect(options));
     } else {

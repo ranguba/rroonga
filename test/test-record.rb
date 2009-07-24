@@ -55,8 +55,9 @@ class RecordTest < Test::Unit::TestCase
 
   def setup_bookmarks_table
     @bookmarks_path = @tables_dir + "bookmarks"
+    value_type = Groonga::Type.new("Text512", :size => 512)
     @bookmarks = Groonga::Array.create(:name => "bookmarks",
-                                       :value_size => 512,
+                                       :value_type => value_type,
                                        :path => @bookmarks_path.to_s)
 
     @uri_column_path = @columns_dir + "uri"

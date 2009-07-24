@@ -19,7 +19,7 @@ class TypeTest < Test::Unit::TestCase
   setup :setup_database
 
   def test_new
-    type = Groonga::Type.new("user-id", :type => :integer)
+    type = Groonga::Type.new("user-id", :option => :integer)
     assert_equal("user-id", type.name)
   end
 

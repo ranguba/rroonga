@@ -158,9 +158,10 @@ class TableTest < Test::Unit::TestCase
   end
 
   def test_set_value
+    value_type = Groonga::Type.new("Text512", :size => 512)
     table_path = @tables_dir + "bookmarks"
     bookmarks = Groonga::Hash.create(:name => "bookmarks",
-                                     :value_size => 512,
+                                     :value_type => value_type,
                                      :path => table_path.to_s)
     comment_column_path = @columns_dir + "comment"
     bookmarks_comment =
@@ -178,8 +179,9 @@ class TableTest < Test::Unit::TestCase
   end
 
   def test_array_set
+    value_type = Groonga::Type.new("Text512", :size => 512)
     bookmarks = Groonga::Hash.create(:name => "bookmarks",
-                                     :value_size => 512)
+                                     :value_type => value_type)
     url = "http://groonga.org/"
     bookmarks["groonga"] = "#{url}\0"
 
@@ -205,10 +207,12 @@ class TableTest < Test::Unit::TestCase
     users_path = @tables_dir + "users"
     users = Groonga::Hash.create(:name => "users",
                                  :path => users_path.to_s)
+
+    value_type = Groonga::Type.new("Text512", :size => 512)
     bookmarks_path = @tables_dir + "bookmarks"
     bookmarks = Groonga::Hash.create(:name => "bookmarks",
                                      :key_type => users,
-                                     :value_size => 512,
+                                     :value_type => value_type,
                                      :path => bookmarks_path.to_s)
     morita = users.add("morita")
     groonga = bookmarks.add(morita.id)

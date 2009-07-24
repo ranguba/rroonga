@@ -91,13 +91,13 @@ static VALUE
 rb_grn_array_s_create (int argc, VALUE *argv, VALUE klass)
 {
     grn_ctx *context = NULL;
-    grn_obj *table;
+    grn_obj *value_type = NULL, *table;
     const char *name = NULL, *path = NULL;
-    unsigned name_size = 0, value_size = 0;
+    unsigned name_size = 0;
     grn_obj_flags flags = GRN_TABLE_NO_KEY;
     VALUE rb_table;
     VALUE options, rb_context, rb_name, rb_path, rb_persistent;
-    VALUE rb_value_size, rb_sub_records;
+    VALUE rb_value_type, rb_sub_records;
 
     rb_scan_args(argc, argv, "01", &options);
 
@@ -106,7 +106,7 @@ rb_grn_array_s_create (int argc, VALUE *argv, VALUE klass)
 			"name", &rb_name,
                         "path", &rb_path,
 			"persistent", &rb_persistent,
-			"value_size", &rb_value_size,
+			"value_type", &rb_value_type,
 			"sub_records", &rb_sub_records,
 			NULL);
 
@@ -126,14 +126,14 @@ rb_grn_array_s_create (int argc, VALUE *argv, VALUE klass)
     if (RVAL2CBOOL(rb_persistent))
 	flags |= GRN_OBJ_PERSISTENT;
 
-    if (!NIL_P(rb_value_size))
-	value_size = NUM2UINT(rb_value_size);
+    if (!NIL_P(rb_value_type))
+	value_type = RVAL2GRNOBJECT(rb_value_type, &context);
 
     if (RVAL2CBOOL(rb_sub_records))
 	flags |= GRN_OBJ_WITH_SUBREC;
 
     table = grn_table_create(context, name, name_size, path,
-			     flags, NULL, value_size);
+			     flags, NULL, value_type);
     if (!table)
 	rb_grn_context_check(context, rb_ary_new4(argc, argv));
     rb_table = GRNOBJECT2RVAL(klass, context, table, RB_GRN_TRUE);

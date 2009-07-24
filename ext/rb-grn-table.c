@@ -136,14 +136,14 @@ rb_grn_table_s_create (int argc, VALUE *argv, VALUE klass,
 		       grn_obj_flags key_store)
 {
     grn_ctx *context;
-    grn_obj *key_type = NULL, *table;
+    grn_obj *key_type = NULL, *value_type = NULL, *table;
     const char *name = NULL, *path = NULL;
-    unsigned name_size = 0, value_size = 0;
+    unsigned name_size = 0;
     grn_obj_flags flags = key_store;
     VALUE rb_table;
     VALUE options, rb_context, rb_name, rb_path, rb_persistent;
     VALUE rb_key_normalize, rb_key_with_sis, rb_key_type;
-    VALUE rb_value_size;
+    VALUE rb_value_type;
 
     rb_scan_args(argc, argv, "01", &options);
 
@@ -155,7 +155,7 @@ rb_grn_table_s_create (int argc, VALUE *argv, VALUE klass,
 			"key_normalize", &rb_key_normalize,
 			"key_with_sis", &rb_key_with_sis,
 			"key_type", &rb_key_type,
-			"value_size", &rb_value_size,
+			"value_type", &rb_value_type,
 			NULL);
 
     context = rb_grn_context_ensure(&rb_context);
@@ -186,11 +186,11 @@ rb_grn_table_s_create (int argc, VALUE *argv, VALUE klass,
 	key_type = RVAL2GRNOBJECT(rb_key_type, &context);
     }
 
-    if (!NIL_P(rb_value_size))
-	value_size = NUM2UINT(rb_value_size);
+    if (!NIL_P(rb_value_type))
+	value_type = RVAL2GRNOBJECT(rb_value_type, &context);
 
     table = grn_table_create(context, name, name_size, path,
-			     flags, key_type, value_size);
+			     flags, key_type, value_type);
     rb_table = rb_grn_object_alloc(klass);
     rb_grn_table_assign(rb_table, rb_context, context, table, RB_GRN_TRUE);
     rb_grn_context_check(context, rb_table);
@@ -856,7 +856,7 @@ rb_grn_table_sort (int argc, VALUE *argv, VALUE self)
 	limit = NUM2INT(rb_limit);
 
     result = grn_table_create(context, NULL, 0, NULL, GRN_TABLE_NO_KEY,
-			      table, sizeof(grn_id));
+			      NULL, table);
     n_records = grn_table_sort(context, table, limit, result, keys, n_keys);
 
     rb_result = rb_ary_new();

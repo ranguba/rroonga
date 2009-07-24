@@ -55,10 +55,11 @@ begin
 
   require 'groonga'
   @database = Groonga::Database.create
+  value_type = Groonga::Type.new("Text8", :size => 8)
 
   item("groonga: Hash: memory") do
     @hash = Groonga::Hash.create(:key_type => "<shorttext>",
-                                 :value_size => 8)
+                                 :value_type => value_type)
     values.each do |value|
       @hash[value] = value
       @hash[value]
@@ -67,7 +68,7 @@ begin
 
   item("groonga: Trie: memory") do
     @hash = Groonga::PatriciaTrie.create(:key_type => "<shorttext>",
-                                         :value_size => 8)
+                                         :value_type => value_type)
     values.each do |value|
       @hash[value] = value
       @hash[value]
@@ -77,7 +78,7 @@ begin
   @hash_file = Tempfile.new("groonga-hash")
   item("groonga: Hash: file") do
     @hash = Groonga::Hash.create(:key_type => "<shorttext>",
-                                 :value_size => 8,
+                                 :value_type => value_type,
                                  :path => @hash_file.path)
     values.each do |value|
       @hash[value] = value
@@ -88,7 +89,7 @@ begin
   trie_file = Tempfile.new("groonga-trie")
   item("groonga: Trie: file") do
     @hash = Groonga::PatriciaTrie.create(:key_type => "<shorttext>",
-                                         :value_size => 8,
+                                         :value_type => value_type,
                                          :path => trie_file.path)
     values.each do |value|
       @hash[value] = value

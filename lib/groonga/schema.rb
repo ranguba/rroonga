@@ -70,8 +70,8 @@ module Groonga
       #   合はパス名は自動的に作成される。デフォルトでは永続
       #   テーブルとなる。
       #
-      # [+:value_size+]
-      #   値のサイズを指定する。デフォルトは0。
+      # [+:value_type+]
+      #   値のサイズを指定する。デフォルトは0。 # FIXME
       def create_table(name, options={}, &block)
         define do |schema|
           schema.create_table(name, options, &block)
@@ -286,7 +286,7 @@ module Groonga
           :name => @name,
           :path => @options[:path],
           :persistent => persistent?,
-          :value_size => @options[:value_size],
+          :value_type => @options[:value_type],
           :context => context,
         }
         key_support_table_common = {

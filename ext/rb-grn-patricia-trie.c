@@ -26,13 +26,14 @@ static VALUE
 rb_grn_patricia_trie_s_create (int argc, VALUE *argv, VALUE self)
 {
     grn_ctx *context;
-    grn_obj *key_type = NULL, *table;
+    grn_obj *key_type = NULL, *value_type = NULL, *table;
     const char *name = NULL, *path = NULL;
-    unsigned name_size = 0, value_size = 0;
+    unsigned name_size = 0;
     grn_obj_flags flags = GRN_TABLE_PAT_KEY;
     VALUE rb_table;
     VALUE options, rb_context, rb_name, rb_path, rb_persistent;
-    VALUE rb_key_normalize, rb_key_with_sis, rb_key_type, rb_value_size;
+    VALUE rb_key_normalize, rb_key_with_sis, rb_key_type;
+    VALUE rb_value_type;
     VALUE rb_default_tokenizer, rb_sub_records;
 
     rb_scan_args(argc, argv, "01", &options);
@@ -45,7 +46,7 @@ rb_grn_patricia_trie_s_create (int argc, VALUE *argv, VALUE self)
 			"key_normalize", &rb_key_normalize,
 			"key_with_sis", &rb_key_with_sis,
 			"key_type", &rb_key_type,
-			"value_size", &rb_value_size,
+			"value_type", &rb_value_type,
 			"default_tokenizer", &rb_default_tokenizer,
 			"sub_records", &rb_sub_records,
 			NULL);
@@ -78,14 +79,14 @@ rb_grn_patricia_trie_s_create (int argc, VALUE *argv, VALUE self)
 	key_type = RVAL2GRNOBJECT(rb_key_type, &context);
     }
 
-    if (!NIL_P(rb_value_size))
-	value_size = NUM2UINT(rb_value_size);
+    if (!NIL_P(rb_value_type))
+	value_type = RVAL2GRNOBJECT(rb_value_type, &context);
 
     if (RVAL2CBOOL(rb_sub_records))
 	flags |= GRN_OBJ_WITH_SUBREC;
 
     table = grn_table_create(context, name, name_size, path,
-			     flags, key_type, value_size);
+			     flags, key_type, value_type);
     if (!table)
 	rb_grn_context_check(context, rb_ary_new4(argc, argv));
     rb_table = rb_grn_object_alloc(self);
