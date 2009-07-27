@@ -1301,9 +1301,15 @@ rb_grn_table_union_bang (VALUE self, VALUE rb_other)
 }
 
 static VALUE
-rb_grn_table_intersect_bang (VALUE self, VALUE rb_other)
+rb_grn_table_intersection_bang (VALUE self, VALUE rb_other)
 {
     return rb_grn_table_set_operation_bang(self ,rb_other, GRN_OP_AND);
+}
+
+static VALUE
+rb_grn_table_difference_bang (VALUE self, VALUE rb_other)
+{
+    return rb_grn_table_set_operation_bang(self ,rb_other, GRN_OP_BUT);
 }
 
 void
@@ -1356,8 +1362,10 @@ rb_grn_init_table (VALUE mGrn)
     rb_define_method(rb_cGrnTable, "select", rb_grn_table_select, -1);
 
     rb_define_method(rb_cGrnTable, "union!", rb_grn_table_union_bang, 1);
-    rb_define_method(rb_cGrnTable, "intersect!",
-		     rb_grn_table_intersect_bang, 1);
+    rb_define_method(rb_cGrnTable, "intersection!",
+		     rb_grn_table_intersection_bang, 1);
+    rb_define_method(rb_cGrnTable, "difference!",
+		     rb_grn_table_difference_bang, 1);
 
     rb_grn_init_table_key_support(mGrn);
     rb_grn_init_array(mGrn);
