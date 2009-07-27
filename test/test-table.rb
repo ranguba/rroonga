@@ -233,6 +233,15 @@ class TableTest < Test::Unit::TestCase
                  bookmarks.columns.collect {|column| column.name}.sort)
   end
 
+  def test_column_by_symbol
+    bookmarks_path = @tables_dir + "bookmarks"
+    bookmarks = Groonga::Array.create(:name => "bookmarks",
+                                      :path => bookmarks_path.to_s)
+
+    uri_column = bookmarks.define_column("uri", "Text")
+    assert_equal(uri_column, bookmarks.column(:uri))
+  end
+
   def test_size
     bookmarks_path = @tables_dir + "bookmarks"
     bookmarks = Groonga::Array.create(:name => "bookmarks",

@@ -551,6 +551,18 @@ rb_grn_table_get_column (VALUE self, VALUE rb_name)
 			     NULL, NULL,
 			     NULL, NULL, NULL);
 
+    switch (TYPE(rb_name)) {
+      case T_SYMBOL:
+	rb_name = rb_str_new2(rb_id2name(SYM2ID(rb_name)));
+	break;
+      case T_STRING:
+	break;
+      default:
+	rb_raise(rb_eArgError,
+		 "column name should be String or Symbol: %s",
+		 rb_grn_inspect(rb_name));
+	break;
+    }
     name = StringValuePtr(rb_name);
     name_size = RSTRING_LEN(rb_name);
 
