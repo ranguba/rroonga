@@ -91,6 +91,12 @@ typedef struct {
 
 typedef void (*RbGrnUnbindFunction) (void *object);
 
+typedef struct _RbGrnContext RbGrnContext;
+struct _RbGrnContext
+{
+    grn_ctx context;
+};
+
 typedef struct _RbGrnObject RbGrnObject;
 struct _RbGrnObject
 {
@@ -222,12 +228,6 @@ const char    *rb_grn_rc_to_message                 (grn_rc rc);
 void           rb_grn_rc_check                      (grn_rc rc,
 						     VALUE related_object);
 
-void           rb_grn_context_register              (grn_ctx *context,
-						     RbGrnObject *object);
-void           rb_grn_context_unregister            (grn_ctx *context,
-						     RbGrnObject *object);
-void           rb_grn_context_unbind                (grn_ctx *context);
-
 grn_ctx       *rb_grn_context_ensure                (VALUE *context);
 VALUE          rb_grn_context_get_default           (void);
 VALUE          rb_grn_context_to_exception          (grn_ctx *context,
@@ -268,6 +268,7 @@ void           rb_grn_object_deconstruct            (RbGrnObject *rb_grn_object,
 VALUE          rb_grn_object_array_reference        (VALUE object,
 						     VALUE rb_id);
 VALUE          rb_grn_object_close                  (VALUE object);
+VALUE          rb_grn_object_closed_p               (VALUE object);
 VALUE          rb_grn_object_inspect_object         (VALUE inspected,
 						     grn_ctx *context,
 						     grn_obj *object);
@@ -320,7 +321,6 @@ VALUE          rb_grn_table_array_set               (VALUE self,
 
 grn_ctx       *rb_grn_table_cursor_ensure_context   (VALUE cursor,
 						     VALUE *rb_context);
-VALUE          rb_grn_table_cursor_close            (VALUE object);
 
 void           rb_grn_table_key_support_bind        (RbGrnTableKeySupport *rb_grn_table_key_support,
 						     grn_ctx *context,
