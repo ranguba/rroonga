@@ -194,13 +194,52 @@ class SchemaTest < Test::Unit::TestCase
 
   def test_dump
     Groonga::Schema.define do |schema|
-      schema.create_table("<posts>") do |table|
+      schema.create_table("posts") do |table|
         table.short_text :title
       end
     end
     assert_equal(<<-EOS, Groonga::Schema.dump)
-create_table("<posts>") do |table|
+create_table("posts") do |table|
   table.short_text("title")
+end
+EOS
+  end
+
+  def test_reference_dump
+    Groonga::Schema.define do |schema|
+      schema.create_table("items") do |table|
+        table.short_text("title")
+      end
+
+      schema.create_table("users") do |table|
+        table.short_text("name")
+      end
+
+      schema.create_table("comments") do |table|
+        table.reference("item", "items")
+        table.reference("author", "users")
+        table.text("content")
+        table.time("issued")
+      end
+    end
+
+    assert_equal(<<-EOS, Groonga::Schema.dump)
+create_table("comments") do |table|
+  table.text("content")
+  table.time("issued")
+end
+
+create_table("items") do |table|
+  table.short_text("title")
+end
+
+create_table("users") do |table|
+  table.short_text("name")
+end
+
+change_table("comments") do |table|
+  table.reference("author", "users")
+  table.reference("item", "items")
 end
 EOS
   end

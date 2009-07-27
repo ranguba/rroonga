@@ -19,6 +19,29 @@
 module Groonga
 
   # groongaのスキーマ（データ構造）を管理するクラス。
+  #
+  # Groonga::Schemaを使うことにより簡単にテーブルやカラムを
+  # 追加・削除することができる。
+  #
+  # http://qwik.jp/senna/senna2.files/rect4605.png
+  # のようなスキーマを定義する場合は以下のようになる。
+  #
+  #   Groonga::Schema.define do |schema|
+  #     schema.create_table("items") do |table|
+  #       table.short_text("title")
+  #     end
+  #
+  #     schema.create_table("users") do |table|
+  #       table.short_text("name")
+  #     end
+  #
+  #     schema.create_table("comments") do |table|
+  #       table.reference("item", "items")
+  #       table.reference("author", "users")
+  #       table.text("content")
+  #       table.time("issued")
+  #     end
+  #   end
   class Schema
     class << self
 
@@ -79,7 +102,7 @@ module Groonga
       end
 
       # スキーマの内容を文字列で返す。返された値は
-      # Groonga::Schema#restoreすることによりスキーマ内に組
+      # Groonga::Schema.restoreすることによりスキーマ内に組
       # み込むことができる。
       #
       #   dump.rb:
@@ -90,9 +113,7 @@ module Groonga
       #   restore.rb:
       #     dumped_text = Groonga::Schema.dump
       #     Groonga::Database.create(:path => "/tmp/new-db.grn")
-      #     Groonga::Schema.define do |schema|
-      #       schema.restore(dumped_text)
-      #     end
+      #     Groonga::Schema.restore(dumped_text)
       #
       # _options_に指定可能な値は以下の通り。
       #
@@ -101,6 +122,13 @@ module Groonga
       #   省略した場合はGroonga::Context.defaultを使用する。
       def dump(options={})
         Dumper.new(options).dump
+      end
+
+      # Groonga::Schema.dumpで文字列化したスキーマを組み込む。
+      def restore(dumped_text, options={})
+        define(options) do |schema|
+          schema.load(dumped_text)
+	end
       end
 
       def normalize_type(type) # :nodoc:
@@ -152,7 +180,7 @@ module Groonga
     #
     # 読み込まれた内容は#defineを呼び出すまでは実行されない
     # ことに注意すること。
-    def restore(dumped_text)
+    def load(dumped_text)
       instance_eval(dumped_text)
     end
 
@@ -186,6 +214,13 @@ module Groonga
       @definitions << definition
     end
 
+    def change_table(table_name, options={})
+      options = @options.merge(options || {}).merge(:change => true)
+      definition = TableDefinition.new(name, options)
+      yield(definition)
+      @definitions << definition
+    end
+
     class TableDefinition
       def initialize(name, options)
         @name = name
@@ -196,7 +231,11 @@ module Groonga
       end
 
       def define
-        table = @table_type.create(create_options)
+        if @options[:change]
+          table = context[@name]
+        else
+          table = @table_type.create(create_options)
+        end
         @columns.each do |column|
           column.define(table)
         end
@@ -252,6 +291,10 @@ module Groonga
 
       def long_text(name, options={})
         column(name, "LongText", options)
+      end
+
+      def reference(name, table, options={})
+        column(name, table, options)
       end
 
       def index(name, target_column, options={})
@@ -373,24 +416,49 @@ module Groonga
         database = context.database
         return nil if database.nil?
 
-        schema = ""
+        reference_columns = []
+        definitions = []
         database.each do |object|
           next unless object.is_a?(Groonga::Table)
-          next if object.name == "<ranguba:objects>"
-          schema << "create_table(#{object.name.inspect}) do |table|\n"
-          object.columns.each do |column|
-            type = column_method(column)
-            name = column.local_name
-            schema << "  table.#{type}(#{name.inspect})\n"
+          schema = "create_table(#{object.name.inspect}) do |table|\n"
+          object.columns.sort_by {|column| column.local_name}.each do |column|
+            if column.range.is_a?(Groonga::Table)
+              reference_columns << column
+            else
+              type = column_method(column)
+              name = column.local_name
+              schema << "  table.#{type}(#{name.inspect})\n"
+            end
           end
-          schema << "end\n"
+          schema << "end"
+          definitions << schema
         end
-        schema
+
+        reference_columns.group_by do |column|
+          column.table
+        end.each do |table, columns|
+          schema = "change_table(#{table.name.inspect}) do |table|\n"
+          columns.each do |column|
+            name = column.local_name
+            reference = column.range
+            schema << "  table.reference(#{name.inspect}, " +
+                                        "#{reference.name.inspect})\n"
+          end
+          schema << "end"
+          definitions << schema
+        end
+
+        if definitions.empty?
+          ""
+        else
+          definitions.join("\n\n") + "\n"
+        end
       end
 
       private
       def column_method(column)
-        case column.range.name
+        range = column.range
+        case range.name
         when "Int32"
           "integer32"
         when "Int64"
