@@ -1272,6 +1272,27 @@ rb_grn_table_select (int argc, VALUE *argv, VALUE self)
     return rb_result;
 }
 
+static VALUE
+rb_grn_table_union_bang (VALUE self, VALUE rb_other)
+{
+    grn_ctx *context;
+    grn_obj *table, *other;
+    grn_rc rc;
+
+    rb_grn_table_deconstruct(SELF(self), &table, &context,
+			     NULL, NULL,
+			     NULL, NULL, NULL);
+    rb_grn_table_deconstruct(SELF(rb_other), &other, NULL,
+			     NULL, NULL,
+			     NULL, NULL, NULL);
+
+    rc = grn_table_setoperation(context, table, other, table, GRN_OP_OR);
+    rb_grn_context_check(context, self);
+    rb_grn_rc_check(rc, self);
+
+    return self;
+}
+
 void
 rb_grn_init_table (VALUE mGrn)
 {
@@ -1320,6 +1341,8 @@ rb_grn_init_table (VALUE mGrn)
     rb_define_method(rb_cGrnTable, "locked?", rb_grn_table_is_locked, -1);
 
     rb_define_method(rb_cGrnTable, "select", rb_grn_table_select, -1);
+
+    rb_define_method(rb_cGrnTable, "union!", rb_grn_table_union_bang, 1);
 
     rb_grn_init_table_key_support(mGrn);
     rb_grn_init_array(mGrn);

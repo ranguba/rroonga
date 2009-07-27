@@ -413,6 +413,21 @@ class TableTest < Test::Unit::TestCase
                  end)
   end
 
+  def test_union!
+    bookmarks = Groonga::Hash.create(:name => "bookmarks")
+    bookmarks.define_column("title", "ShortText")
+
+    groonga = bookmarks.add("http://groonga.org/", :title => "groonga")
+    ruby = bookmarks.add("http://ruby-lang.org/", :title => "Ruby")
+
+    ruby_bookmarks = bookmarks.select {|record| record["title"] == "Ruby"}
+    groonga_bookmarks = bookmarks.select {|record| record["title"] == "groonga"}
+    assert_equal(["Ruby", "groonga"],
+                 ruby_bookmarks.union!(groonga_bookmarks).collect do |record|
+                   record[".title"]
+                 end)
+  end
+
   def test_lock
     bookmarks = Groonga::Array.create(:name => "<bookmarks>")
     bookmark = bookmarks.add
