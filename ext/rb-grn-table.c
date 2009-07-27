@@ -694,8 +694,7 @@ rb_grn_table_open_cursor (int argc, VALUE *argv, VALUE self)
     rb_cursor = GRNTABLECURSOR2RVAL(Qnil, context, cursor);
     rb_iv_set(rb_cursor, "@table", self); /* FIXME: cursor should mark table */
     if (rb_block_given_p())
-	return rb_ensure(rb_yield, rb_cursor,
-			 rb_grn_table_cursor_close, rb_cursor);
+	return rb_ensure(rb_yield, rb_cursor, rb_grn_object_close, rb_cursor);
     else
 	return rb_cursor;
 }
@@ -762,12 +761,10 @@ rb_grn_table_each (VALUE self)
 			     NULL, NULL, NULL);
     cursor = grn_table_cursor_open(context, table, NULL, 0, NULL, 0, 0);
     rb_cursor = GRNTABLECURSOR2RVAL(Qnil, context, cursor);
-    rb_iv_set(self, "cursor", rb_cursor);
     while ((id = grn_table_cursor_next(context, cursor)) != GRN_ID_NIL) {
 	rb_yield(rb_grn_record_new(self, id, Qnil));
     }
-    rb_grn_table_cursor_close(rb_cursor);
-    rb_iv_set(self, "cursor", Qnil);
+    rb_grn_object_close(rb_cursor);
 
     return Qnil;
 }

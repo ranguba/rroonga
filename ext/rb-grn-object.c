@@ -115,6 +115,9 @@ rb_grn_object_finalizer (grn_ctx *context, grn_obj *grn_object,
       case GRN_TYPE:
       case GRN_ACCESSOR:
       case GRN_PROC:
+      case GRN_CURSOR_TABLE_HASH_KEY:
+      case GRN_CURSOR_TABLE_PAT_KEY:
+      case GRN_CURSOR_TABLE_NO_KEY:
 	break;
       case GRN_TABLE_HASH_KEY:
       case GRN_TABLE_PAT_KEY:
@@ -140,7 +143,7 @@ rb_grn_object_finalizer (grn_ctx *context, grn_obj *grn_object,
 	break;
       default:
 	rb_raise(rb_eTypeError,
-		 "unsupported groonga object type: 0x%x",
+		 "unsupported groonga object type for finalizer: 0x%x",
 		 grn_object->header.type);
 	break;
     }
@@ -217,7 +220,7 @@ rb_grn_object_to_ruby_class (grn_obj *object)
 	break;
       default:
 	rb_raise(rb_eTypeError,
-		 "unsupported groonga object type: 0x%x",
+		 "unsupported groonga object type for class detection: 0x%x",
 		 object->header.type);
 	break;
     }
@@ -266,6 +269,9 @@ rb_grn_object_bind_common (VALUE klass, VALUE self, VALUE rb_context,
     rb_grn_object->need_close = RB_GRN_TRUE;
     switch (object->header.type) {
       case GRN_DB:
+      case GRN_CURSOR_TABLE_HASH_KEY:
+      case GRN_CURSOR_TABLE_PAT_KEY:
+      case GRN_CURSOR_TABLE_NO_KEY:
       case GRN_TABLE_HASH_KEY:
       case GRN_TABLE_PAT_KEY:
       case GRN_TABLE_NO_KEY:
@@ -320,10 +326,10 @@ rb_grn_object_assign (VALUE klass, VALUE self, VALUE rb_context,
 
     if (klass == rb_cGrnDatabase ||
 	(RVAL2CBOOL(rb_obj_is_kind_of(self, rb_cGrnType))) ||
-	klass == rb_cGrnAccessor ||
 	klass == rb_cGrnHashCursor ||
 	klass == rb_cGrnPatriciaTrieCursor ||
 	klass == rb_cGrnArrayCursor ||
+	klass == rb_cGrnAccessor ||
 	klass == rb_cGrnProcedure ||
 	klass == rb_cGrnVariable) {
 	rb_grn_object = ALLOC(RbGrnObject);
@@ -359,7 +365,7 @@ rb_grn_object_assign (VALUE klass, VALUE self, VALUE rb_context,
 			       context, object);
     } else {
 	rb_raise(rb_eTypeError,
-		 "unsupported groonga object type: 0x%x",
+		 "unsupported groonga object type for assignment: 0x%x",
 		 object->header.type);
     }
 
@@ -424,7 +430,7 @@ rb_grn_object_close (VALUE self)
  * _object_が開放済みの場合は+true+を返し、そうでない場合は
  * +false+を返す。
  */
-static VALUE
+VALUE
 rb_grn_object_closed_p (VALUE self)
 {
     grn_obj *object;

@@ -44,23 +44,25 @@ static VALUE cGrnContext;
 grn_ctx *
 rb_grn_context_from_ruby_object (VALUE object)
 {
-    grn_ctx *context;
+    RbGrnContext *rb_grn_context;
 
     if (!RVAL2CBOOL(rb_obj_is_kind_of(object, cGrnContext))) {
 	rb_raise(rb_eTypeError, "not a groonga context");
     }
 
-    Data_Get_Struct(object, grn_ctx, context);
-    if (!context)
+    Data_Get_Struct(object, RbGrnContext, rb_grn_context);
+    if (!rb_grn_context)
 	rb_raise(rb_eGrnError, "groonga context is NULL");
-    return context;
+    return &(rb_grn_context->context);
 }
 
 static void
 rb_grn_context_free (void *pointer)
 {
-    grn_ctx *context = pointer;
+    RbGrnContext *rb_grn_context = pointer;
+    grn_ctx *context;
 
+    context = &(rb_grn_context->context);
     debug("context-free: %p\n", context);
     if (context->stat != GRN_CTX_FIN) {
 	grn_obj *database;
@@ -73,7 +75,9 @@ rb_grn_context_free (void *pointer)
 	grn_ctx_fin(context);
     }
     debug("context-free: %p: done\n", context);
-    xfree(context);
+    xfree(rb_grn_context);
+
+    GRN_CTX_USER_DATA(context)->ptr = NULL;
 }
 
 static VALUE
@@ -226,6 +230,7 @@ rb_grn_context_s_set_default_options (VALUE self, VALUE options)
 static VALUE
 rb_grn_context_initialize (int argc, VALUE *argv, VALUE self)
 {
+    RbGrnContext *rb_grn_context;
     grn_ctx *context;
     int flags = 0;
     grn_rc rc;
@@ -245,10 +250,13 @@ rb_grn_context_initialize (int argc, VALUE *argv, VALUE self)
 			"encoding", &rb_encoding,
 			NULL);
 
-    context = ALLOC(grn_ctx);
-    DATA_PTR(self) = context;
+    rb_grn_context = ALLOC(RbGrnContext);
+    DATA_PTR(self) = rb_grn_context;
+    context = &(rb_grn_context->context);
     rc = grn_ctx_init(context, flags);
     rb_grn_context_check(context, self);
+
+    GRN_CTX_USER_DATA(context)->ptr = rb_grn_context;
 
     if (!NIL_P(rb_encoding)) {
 	grn_encoding encoding;

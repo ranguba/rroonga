@@ -262,7 +262,7 @@ rb_grn_database_each (VALUE self)
 	if (object)
 	    rb_yield(GRNOBJECT2RVAL(Qnil, context, object, RB_GRN_FALSE));
     }
-    rb_grn_table_cursor_close(rb_cursor);
+    rb_grn_object_close(rb_cursor);
     rb_iv_set(self, "cursor", Qnil);
 
     return Qnil;

@@ -57,44 +57,6 @@ rb_grn_table_cursor_deconstruct (RbGrnTableCursor *rb_grn_table_cursor,
 			      range_id, range);
 }
 
-VALUE
-rb_grn_table_cursor_close (VALUE self)
-{
-    RbGrnTableCursor *rb_grn_table_cursor;
-    grn_table_cursor *cursor;
-    grn_ctx *context;
-
-    rb_grn_table_cursor = SELF(self);
-    rb_grn_table_cursor_deconstruct(rb_grn_table_cursor, &cursor, &context,
-				    NULL, NULL, NULL, NULL);
-
-    if (context && cursor) {
-	RbGrnObject *rb_grn_object;
-
-	rb_grn_object = RB_GRN_OBJECT(rb_grn_table_cursor);
-        grn_obj_close(context, cursor);
-	rb_grn_object->context = NULL;
-	rb_grn_object->object = NULL;
-    }
-
-    return Qnil;
-}
-
-static VALUE
-rb_grn_table_cursor_closed_p (VALUE self)
-{
-    grn_table_cursor *cursor;
-    grn_ctx *context;
-
-    rb_grn_table_cursor_deconstruct(SELF(self), &cursor, &context,
-				    NULL, NULL, NULL, NULL);
-
-    if (context && cursor)
-        return Qfalse;
-    else
-        return Qtrue;
-}
-
 static VALUE
 rb_grn_table_cursor_get_value (VALUE self)
 {
@@ -204,9 +166,9 @@ rb_grn_init_table_cursor (VALUE mGrn)
     rb_include_module(rb_cGrnTableCursor, rb_mEnumerable);
 
     rb_define_method(rb_cGrnTableCursor, "close",
-                     rb_grn_table_cursor_close, 0);
+                     rb_grn_object_close, 0);
     rb_define_method(rb_cGrnTableCursor, "closed?",
-                     rb_grn_table_cursor_closed_p, 0);
+                     rb_grn_object_closed_p, 0);
 
     rb_define_method(rb_cGrnTableCursor, "value",
                      rb_grn_table_cursor_get_value, 0);
