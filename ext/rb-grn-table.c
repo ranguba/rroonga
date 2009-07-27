@@ -1312,6 +1312,12 @@ rb_grn_table_difference_bang (VALUE self, VALUE rb_other)
     return rb_grn_table_set_operation_bang(self ,rb_other, GRN_OP_BUT);
 }
 
+static VALUE
+rb_grn_table_merge_bang (VALUE self, VALUE rb_other)
+{
+    return rb_grn_table_set_operation_bang(self ,rb_other, GRN_OP_ADJUST);
+}
+
 void
 rb_grn_init_table (VALUE mGrn)
 {
@@ -1366,6 +1372,8 @@ rb_grn_init_table (VALUE mGrn)
 		     rb_grn_table_intersection_bang, 1);
     rb_define_method(rb_cGrnTable, "difference!",
 		     rb_grn_table_difference_bang, 1);
+    rb_define_method(rb_cGrnTable, "merge!",
+		     rb_grn_table_merge_bang, 1);
 
     rb_grn_init_table_key_support(mGrn);
     rb_grn_init_array(mGrn);
