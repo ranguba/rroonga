@@ -33,7 +33,7 @@ module Groonga
       expression.append_object(variable)
       if block_given?
         builder = yield(self)
-        builder.build(expression, variable)
+        builder.build(expression, variable) unless builder.nil?
       end
       expression.compile
       expression
