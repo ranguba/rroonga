@@ -362,7 +362,7 @@ rb_grn_table_define_column (int argc, VALUE *argv, VALUE self)
     unsigned name_size = 0;
     grn_obj_flags flags = 0;
     VALUE rb_name, rb_value_type;
-    VALUE options, rb_path, rb_persistent, rb_type;
+    VALUE options, rb_path, rb_persistent, rb_compress, rb_type;
 
     rb_grn_table_deconstruct(SELF(self), &table, &context,
 			     NULL, NULL,
@@ -377,6 +377,7 @@ rb_grn_table_define_column (int argc, VALUE *argv, VALUE self)
 			"path", &rb_path,
 			"persistent", &rb_persistent,
 			"type", &rb_type,
+			"compress", &rb_compress,
 			NULL);
 
     value_type = RVAL2GRNOBJECT(rb_value_type, &context);
@@ -401,6 +402,18 @@ rb_grn_table_define_column (int argc, VALUE *argv, VALUE self)
 		 rb_grn_inspect(rb_type));
     }
 
+    if (NIL_P(rb_compress)) {
+    } else if (rb_grn_equal_option(rb_compress, "zlib")) {
+	flags |= GRN_OBJ_COMPRESS_ZLIB;
+    } else if (rb_grn_equal_option(rb_compress, "lzo")) {
+	flags |= GRN_OBJ_COMPRESS_LZO;
+    } else {
+	rb_raise(rb_eArgError,
+		 "invalid compress type: %s: "
+		 "available types: [:zlib, :lzo, nil]",
+		 rb_grn_inspect(rb_compress));
+    }
+
     column = grn_column_create(context, table, name, name_size,
 			       path, flags, value_type);
     rb_grn_context_check(context, self);
@@ -419,7 +432,7 @@ rb_grn_table_define_index_column (int argc, VALUE *argv, VALUE self)
     grn_obj_flags flags = GRN_OBJ_COLUMN_INDEX;
     VALUE rb_name, rb_value_type;
     VALUE options, rb_path, rb_persistent;
-    VALUE rb_compress, rb_with_section, rb_with_weight, rb_with_position;
+    VALUE rb_with_section, rb_with_weight, rb_with_position;
     VALUE rb_column, rb_source, rb_sources;
 
     rb_grn_table_deconstruct(SELF(self), &table, &context,
@@ -434,7 +447,6 @@ rb_grn_table_define_index_column (int argc, VALUE *argv, VALUE self)
     rb_grn_scan_options(options,
 			"path", &rb_path,
 			"persistent", &rb_persistent,
-			"compress", &rb_compress,
 			"with_section", &rb_with_section,
 			"with_weight", &rb_with_weight,
 			"with_position", &rb_with_position,
@@ -451,18 +463,6 @@ rb_grn_table_define_index_column (int argc, VALUE *argv, VALUE self)
 
     if (RVAL2CBOOL(rb_persistent))
 	flags |= GRN_OBJ_PERSISTENT;
-
-    if (NIL_P(rb_compress)) {
-    } else if (rb_grn_equal_option(rb_compress, "zlib")) {
-	flags |= GRN_OBJ_COMPRESS_ZLIB;
-    } else if (rb_grn_equal_option(rb_compress, "lzo")) {
-	flags |= GRN_OBJ_COMPRESS_LZO;
-    } else {
-	rb_raise(rb_eArgError,
-		 "invalid compress type: %s: "
-		 "available types: [:zlib, :lzo, nil]",
-		 rb_grn_inspect(rb_compress));
-    }
 
     if (RVAL2CBOOL(rb_with_section))
 	flags |= GRN_OBJ_WITH_SECTION;
