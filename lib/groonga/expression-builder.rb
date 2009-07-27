@@ -145,6 +145,7 @@ module Groonga
     def initialize(column, name, query)
       super()
       @table = column.table
+      @range = column.range
       @column = column
       @default_column = column.local_name
       @name = name
@@ -152,27 +153,36 @@ module Groonga
     end
 
     def ==(other)
-      EqualExpressionBuilder.new(@column.local_name, other)
+      EqualExpressionBuilder.new(@column.local_name, normalize(other))
     end
 
     def =~(other)
-      MatchExpressionBuilder.new(@column.local_name, other)
+      MatchExpressionBuilder.new(@column.local_name, normalize(other))
     end
 
     def <(other)
-      LessExpressionBuilder.new(@column.local_name, other)
+      LessExpressionBuilder.new(@column.local_name, normalize(other))
     end
 
     def <=(other)
-      LessEqualExpressionBuilder.new(@column.local_name, other)
+      LessEqualExpressionBuilder.new(@column.local_name, normalize(other))
     end
 
     def >(other)
-      GreaterExpressionBuilder.new(@column.local_name, other)
+      GreaterExpressionBuilder.new(@column.local_name, normalize(other))
     end
 
     def >=(other)
-      GreaterEqualExpressionBuilder.new(@column.local_name, other)
+      GreaterEqualExpressionBuilder.new(@column.local_name, normalize(other))
+    end
+
+    private
+    def normalize(other)
+      if @range.is_a?(Groonga::Table) and other.is_a?(Integer)
+        Groonga::Record.new(@range, other)
+      else
+        other
+      end
     end
   end
 end

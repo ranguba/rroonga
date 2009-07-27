@@ -28,6 +28,10 @@ class ExpressionBuilderTest < Test::Unit::TestCase
     @terms = Groonga::PatriciaTrie.create(:name => "<terms>",
                                           :default_tokenizer => "TokenBigram")
     @terms.define_index_column("user-name", @users, :source => @name)
+
+    @bookmarks = Groonga::Array.create(:name => "bookmarks")
+    @bookmarks.define_column("user", @users)
+    @bookmarks.define_column("uri", "ShortText")
   end
 
   def setup_data
@@ -40,6 +44,11 @@ class ExpressionBuilderTest < Test::Unit::TestCase
     @yu = @users.add("yu",
                      :name => "Yutaro Shimamura",
                      :hp => 200)
+
+    @groonga = @bookmarks.add(:user => @morita, :uri => "http://groonga.org/")
+    @ruby = @bookmarks.add(:user => @morita, :uri => "http://ruby-lang.org/")
+    @nico_dict = @bookmarks.add(:user => @gunyara_kun,
+                                :uri => "http://dic.nicovideo.jp/")
   end
 
   def test_equal
@@ -110,5 +119,21 @@ class ExpressionBuilderTest < Test::Unit::TestCase
     result = @name.select("ro")
     assert_equal(["morita", "yu"],
                  result.collect {|record| record.key.key})
+  end
+
+  def test_record
+    result = @bookmarks.select do |record|
+      record["user"] == @morita
+    end
+    assert_equal(["http://groonga.org/", "http://ruby-lang.org/"],
+                 result.collect {|record| record.key["uri"]})
+  end
+
+  def test_record_id
+    result = @bookmarks.select do |record|
+      record["user"] == @morita.id
+    end
+    assert_equal(["http://groonga.org/", "http://ruby-lang.org/"],
+                 result.collect {|record| record.key["uri"]})
   end
 end
