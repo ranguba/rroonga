@@ -17,6 +17,7 @@
 
 module Groonga
   module ExpressionBuildable
+    attr_reader :table
     def initialize(*args)
       @table = nil
       @name = nil
