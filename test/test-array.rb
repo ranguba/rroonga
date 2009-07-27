@@ -30,6 +30,7 @@ class ArrayTest < Test::Unit::TestCase
                  "path: <#{path}>, " +
                  "domain: <nil>, " +
                  "range: <nil>, " +
+                 "flags: <>, " +
                  "size: <3>>",
                  contain_table.inspect)
   end

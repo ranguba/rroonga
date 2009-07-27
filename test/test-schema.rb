@@ -48,6 +48,7 @@ class SchemaTest < Test::Unit::TestCase
                  "path: <#{path}>, " +
                  "domain: <#{context['<int>'].inspect}>, " +
                  "range: <nil>, " +
+                 "flags: <>, " +
                  "encoding: <#{Groonga::Encoding.default.inspect}>, " +
                  "size: <0>>",
                  table.inspect)
@@ -78,6 +79,7 @@ class SchemaTest < Test::Unit::TestCase
                  "path: <#{path}>, " +
                  "domain: <#{context['<int>'].inspect}>, " +
                  "range: <nil>, " +
+                 "flags: <KEY_WITH_SIS|KEY_NORMALIZE|WITH_SECTION>, " +
                  "encoding: <#{Groonga::Encoding.default.inspect}>, " +
                  "size: <0>>",
                  table.inspect)
@@ -104,6 +106,7 @@ class SchemaTest < Test::Unit::TestCase
                  "path: <#{path}>, " +
                  "domain: <nil>, " +
                  "range: <nil>, " +
+                 "flags: <>, " +
                  "size: <0>>",
                  table.inspect)
   end

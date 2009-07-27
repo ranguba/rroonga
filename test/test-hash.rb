@@ -71,6 +71,7 @@ class HashTest < Test::Unit::TestCase
                  "path: <#{path}>, " +
                  "domain: <nil>, " +
                  "range: <nil>, " +
+                 "flags: <>, " +
                  "encoding: <#{encoding.inspect}>, " +
                  "size: <0>>",
                  anonymous_table.inspect)
@@ -84,6 +85,7 @@ class HashTest < Test::Unit::TestCase
                  "path: (temporary), " +
                  "domain: <nil>, " +
                  "range: <nil>, " +
+                 "flags: <>, " +
                  "encoding: <#{encoding.inspect}>, " +
                  "size: <0>>",
                  anonymous_table.inspect)
@@ -98,6 +100,7 @@ class HashTest < Test::Unit::TestCase
                  "path: <#{path}>, " +
                  "domain: <nil>, " +
                  "range: <nil>, " +
+                 "flags: <>, " +
                  "encoding: <#{encoding.inspect}>, " +
                  "size: <0>>",
                  named_table.inspect)
@@ -111,6 +114,7 @@ class HashTest < Test::Unit::TestCase
                  "path: (temporary), " +
                  "domain: <nil>, " +
                  "range: <nil>, " +
+                 "flags: <>, " +
                  "encoding: <#{encoding.inspect}>, " +
                  "size: <0>>",
                  named_table.inspect)

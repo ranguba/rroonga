@@ -585,6 +585,112 @@ rb_grn_object_inspect_content_range (VALUE inspected,
     return inspected;
 }
 
+static VALUE
+rb_grn_object_inspect_content_flags (VALUE inspected,
+				     grn_ctx *context, grn_obj *object)
+{
+    grn_obj_flags flags;
+    VALUE inspected_flags;
+
+    rb_str_cat2(inspected, "flags: ");
+
+    flags = object->header.flags;
+
+    inspected_flags = rb_ary_new();
+
+    if (0) {
+	if (flags & GRN_OBJ_TABLE_HASH_KEY)
+	    rb_ary_push(inspected_flags, rb_str_new2("TABLE_HASH_KEY"));
+	if (flags & GRN_OBJ_TABLE_PAT_KEY)
+	    rb_ary_push(inspected_flags, rb_str_new2("TABLE_PAT_KEY"));
+	if (flags & GRN_OBJ_TABLE_NO_KEY)
+	    rb_ary_push(inspected_flags, rb_str_new2("TABLE_NO_KEY"));
+	if (flags & GRN_OBJ_TABLE_ALIAS)
+	    rb_ary_push(inspected_flags, rb_str_new2("TABLE_ALIAS"));
+    }
+
+    switch (object->header.type) {
+      case GRN_COLUMN_FIX_SIZE:
+      case GRN_COLUMN_VAR_SIZE:
+      case GRN_TYPE:
+	if (flags & GRN_OBJ_KEY_UINT)
+	    rb_ary_push(inspected_flags, rb_str_new2("KEY_UINT"));
+	if (flags & GRN_OBJ_KEY_INT)
+	    rb_ary_push(inspected_flags, rb_str_new2("KEY_INT"));
+	if (flags & GRN_OBJ_KEY_FLOAT)
+	    rb_ary_push(inspected_flags, rb_str_new2("KEY_FLOAT"));
+	break;
+      default:
+	break;
+    }
+
+    switch (object->header.type) {
+      case GRN_TABLE_HASH_KEY:
+      case GRN_TABLE_PAT_KEY:
+	if (flags & GRN_OBJ_KEY_WITH_SIS)
+	    rb_ary_push(inspected_flags, rb_str_new2("KEY_WITH_SIS"));
+	if (flags & GRN_OBJ_KEY_NORMALIZE)
+	    rb_ary_push(inspected_flags, rb_str_new2("KEY_NORMALIZE"));
+	break;
+      default:
+	break;
+    }
+
+    if (0) {
+	if (flags & GRN_OBJ_COLUMN_SCALAR)
+	    rb_ary_push(inspected_flags, rb_str_new2("COLUMN_SCALAR"));
+	if (flags & GRN_OBJ_COLUMN_VECTOR)
+	    rb_ary_push(inspected_flags, rb_str_new2("COLUMN_VECTOR"));
+	if (flags & GRN_OBJ_COLUMN_INDEX)
+	    rb_ary_push(inspected_flags, rb_str_new2("COLUMN_INDEX"));
+    }
+
+    switch (object->header.type) {
+      case GRN_COLUMN_FIX_SIZE:
+      case GRN_COLUMN_VAR_SIZE:
+	if (flags & GRN_OBJ_COMPRESS_ZLIB)
+	    rb_ary_push(inspected_flags, rb_str_new2("COMPRESS_ZLIB"));
+	if (flags & GRN_OBJ_COMPRESS_LZO)
+	    rb_ary_push(inspected_flags, rb_str_new2("COMPRESS_LZO"));
+	break;
+      default:
+	break;
+    }
+
+    if (flags & GRN_OBJ_WITH_SECTION)
+	rb_ary_push(inspected_flags, rb_str_new2("WITH_SECTION"));
+    if (flags & GRN_OBJ_WITH_WEIGHT)
+	rb_ary_push(inspected_flags, rb_str_new2("WITH_WEIGHT"));
+    if (flags & GRN_OBJ_WITH_POSITION)
+	rb_ary_push(inspected_flags, rb_str_new2("WITH_POSITION"));
+    if (flags & GRN_OBJ_WITH_BUFFER)
+	rb_ary_push(inspected_flags, rb_str_new2("WITH_BUFFER"));
+
+    if (flags & GRN_OBJ_UNIT_DOCUMENT_SECTION)
+	rb_ary_push(inspected_flags, rb_str_new2("UNIT_DOCUMENT_SECTION"));
+    if (flags & GRN_OBJ_UNIT_DOCUMENT_POSITION)
+	rb_ary_push(inspected_flags, rb_str_new2("UNIT_DOCUMENT_POSITION"));
+
+    if (flags & GRN_OBJ_UNIT_SECTION_POSITION)
+	rb_ary_push(inspected_flags, rb_str_new2("UNIT_SECTION_POSITION"));
+
+    if (flags & GRN_OBJ_UNIT_USERDEF_DOCUMENT)
+	rb_ary_push(inspected_flags, rb_str_new2("UNIT_USERDEF_DOCUMENT"));
+    if (flags & GRN_OBJ_UNIT_USERDEF_SECTION)
+	rb_ary_push(inspected_flags, rb_str_new2("UNIT_USERDEF_SECTION"));
+    if (flags & GRN_OBJ_UNIT_USERDEF_POSITION)
+	rb_ary_push(inspected_flags, rb_str_new2("UNIT_USERDEF_POSITION"));
+
+    if (flags & GRN_OBJ_WITH_SUBREC)
+	rb_ary_push(inspected_flags, rb_str_new2("WITH_SUBREC"));
+
+    rb_str_cat2(inspected, "<");
+    rb_str_concat(inspected, rb_ary_join(inspected_flags, rb_str_new2("|")));
+    rb_str_cat2(inspected, ">");
+
+    return inspected;
+}
+
 VALUE
 rb_grn_object_inspect_object_content (VALUE inspected,
 				      grn_ctx *context, grn_obj *object)
@@ -598,6 +704,8 @@ rb_grn_object_inspect_object_content (VALUE inspected,
     rb_grn_object_inspect_content_domain(inspected, context, object);
     rb_str_cat2(inspected, ", ");
     rb_grn_object_inspect_content_range(inspected, context, object);
+    rb_str_cat2(inspected, ", ");
+    rb_grn_object_inspect_content_flags(inspected, context, object);
 
     return inspected;
 }
