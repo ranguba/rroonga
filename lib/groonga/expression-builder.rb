@@ -17,11 +17,7 @@
 
 module Groonga
   module ExpressionBuildable
-    attr_accessor :builder, :expression, :variable
     def initialize(*args)
-      @builder = self
-      @expression = nil
-      @variable = nil
       @table = nil
       @name = nil
       @query = nil
@@ -29,17 +25,97 @@ module Groonga
     end
 
     def build
-      @expression = Expression.new(:table => @table,
-                                   :name => @name,
-                                   :query => @query,
-                                   :default_column => @default_column)
+      expression = Expression.new(:table => @table,
+                                  :name => @name,
+                                  :query => @query,
+                                  :default_column => @default_column)
+      variable = expression.define_variable(:domain => @table)
+      expression.append_object(variable)
       if block_given?
-        @variable = @expression.define_variable(:domain => @table)
-        @expression.append_object(@variable)
-        yield(self)
-        @expression.compile
+        builder = yield(self)
+        builder.build(expression, variable)
       end
-      @expression
+      expression.compile
+      expression
+    end
+
+    class ExpressionBuilder
+      def initialize
+        super()
+      end
+
+      def &(other)
+        AndExpressionBuilder.new(self, other)
+      end
+    end
+
+    class AndExpressionBuilder < ExpressionBuilder
+      def initialize(*expression_builders)
+        super()
+        @expression_builders = expression_builders
+      end
+
+      def build(expression, variable)
+        return if @expression_builders.empty?
+        @expression_builders.each do |builder|
+          builder.build(expression, variable)
+        end
+        expression.append_operation(Groonga::Operation::AND,
+                                    @expression_builders.size)
+      end
+    end
+
+    class BinaryExpressionBuilder < ExpressionBuilder
+      def initialize(operation, column_name, value)
+        super()
+        @operation = operation
+        @column_name = column_name
+        @value = value
+      end
+
+      def build(expression, variable)
+        expression.append_object(variable)
+        expression.append_constant(@column_name)
+        expression.append_operation(Groonga::Operation::OBJECT_GET_VALUE, 2)
+        expression.append_constant(@value)
+        expression.append_operation(@operation, 2)
+      end
+    end
+
+    class EqualExpressionBuilder < BinaryExpressionBuilder
+      def initialize(column_name, value)
+        super(Groonga::Operation::EQUAL, column_name, value)
+      end
+    end
+
+    class MatchExpressionBuilder < BinaryExpressionBuilder
+      def initialize(column_name, value)
+        super(Groonga::Operation::MATCH, column_name, value)
+      end
+    end
+
+    class LessExpressionBuilder < BinaryExpressionBuilder
+      def initialize(column_name, value)
+        super(Groonga::Operation::LESS, column_name, value)
+      end
+    end
+
+    class LessEqualExpressionBuilder < BinaryExpressionBuilder
+      def initialize(column_name, value)
+        super(Groonga::Operation::LESS_EQUAL, column_name, value)
+      end
+    end
+
+    class GreaterExpressionBuilder < BinaryExpressionBuilder
+      def initialize(column_name, value)
+        super(Groonga::Operation::GREATER, column_name, value)
+      end
+    end
+
+    class GreaterEqualExpressionBuilder < BinaryExpressionBuilder
+      def initialize(column_name, value)
+        super(Groonga::Operation::GREATER_EQUAL, column_name, value)
+      end
     end
   end
 
@@ -47,7 +123,7 @@ module Groonga
     include ExpressionBuildable
 
     def initialize(table, name)
-      super
+      super()
       @table = table
       @name = name
     end
@@ -59,16 +135,7 @@ module Groonga
           "for table <#{@table.inspect}>"
         raise ArgumentError, message
       end
-      builder = ColumnExpressionBuilder.new(column, nil, nil)
-      builder.builder = @builder
-      builder.expression = @expression
-      builder.variable = @variable
-      builder
-    end
-
-    def &(other)
-      @expression.append_operation(Groonga::Operation::AND, 2)
-      @builder
+      ColumnExpressionBuilder.new(column, nil, nil)
     end
   end
 
@@ -76,7 +143,7 @@ module Groonga
     include ExpressionBuildable
 
     def initialize(column, name, query)
-      super
+      super()
       @table = column.table
       @column = column
       @default_column = column.local_name
@@ -85,57 +152,27 @@ module Groonga
     end
 
     def ==(other)
-      @expression.append_object(@variable)
-      @expression.append_constant(@column.local_name)
-      @expression.append_operation(Groonga::Operation::OBJECT_GET_VALUE, 2)
-      @expression.append_constant(other)
-      @expression.append_operation(Groonga::Operation::EQUAL, 2)
-      @builder
+      EqualExpressionBuilder.new(@column.local_name, other)
     end
 
     def =~(other)
-      @expression.append_object(@variable)
-      @expression.append_constant(@column.local_name)
-      @expression.append_operation(Groonga::Operation::OBJECT_GET_VALUE, 2)
-      @expression.append_constant(other)
-      @expression.append_operation(Groonga::Operation::MATCH, 2)
-      @builder
+      MatchExpressionBuilder.new(@column.local_name, other)
     end
 
     def <(other)
-      @expression.append_object(@variable)
-      @expression.append_constant(@column.local_name)
-      @expression.append_operation(Groonga::Operation::OBJECT_GET_VALUE, 2)
-      @expression.append_constant(other)
-      @expression.append_operation(Groonga::Operation::LESS, 2)
-      @builder
+      LessExpressionBuilder.new(@column.local_name, other)
     end
 
     def <=(other)
-      @expression.append_object(@variable)
-      @expression.append_constant(@column.local_name)
-      @expression.append_operation(Groonga::Operation::OBJECT_GET_VALUE, 2)
-      @expression.append_constant(other)
-      @expression.append_operation(Groonga::Operation::LESS_EQUAL, 2)
-      @builder
+      LessEqualExpressionBuilder.new(@column.local_name, other)
     end
 
     def >(other)
-      @expression.append_object(@variable)
-      @expression.append_constant(@column.local_name)
-      @expression.append_operation(Groonga::Operation::OBJECT_GET_VALUE, 2)
-      @expression.append_constant(other)
-      @expression.append_operation(Groonga::Operation::GREATER, 2)
-      @builder
+      GreaterExpressionBuilder.new(@column.local_name, other)
     end
 
     def >=(other)
-      @expression.append_object(@variable)
-      @expression.append_constant(@column.local_name)
-      @expression.append_operation(Groonga::Operation::OBJECT_GET_VALUE, 2)
-      @expression.append_constant(other)
-      @expression.append_operation(Groonga::Operation::GREATER_EQUAL, 2)
-      @builder
+      GreaterEqualExpressionBuilder.new(@column.local_name, other)
     end
   end
 end
