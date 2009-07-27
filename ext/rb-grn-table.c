@@ -1229,15 +1229,31 @@ rb_grn_table_select (int argc, VALUE *argv, VALUE self)
     grn_obj *table, *result, *expression;
     grn_operator operator = GRN_OP_OR;
     grn_rc rc;
-    VALUE options;
+    VALUE rb_query = Qnil, query_or_options, options;
     VALUE rb_name, rb_operator, rb_result;
     VALUE rb_expression, builder;
 
-    rb_scan_args(argc, argv, "01", &options);
+    rb_scan_args(argc, argv, "02", &query_or_options, &options);
 
     rb_grn_table_deconstruct(SELF(self), &table, &context,
 			     NULL, NULL,
 			     NULL, NULL, NULL);
+
+    if (RVAL2CBOOL(rb_obj_is_kind_of(query_or_options, rb_cString))) {
+	if (rb_block_given_p())
+	    rb_raise(rb_eArgError,
+		     "should not specify both of query string and "
+		     "expression block: %s",
+		     rb_grn_inspect(rb_ary_new4(argc, argv)));
+	rb_query = query_or_options;
+    } else {
+	if (!NIL_P(options))
+	    rb_raise(rb_eArgError,
+		     "should be [query_string, option_hash] "
+		     "or [option_hash]: %s",
+		     rb_grn_inspect(rb_ary_new4(argc, argv)));
+	options = query_or_options;
+    }
 
     rb_grn_scan_options(options,
 			"operator", &rb_operator,
@@ -1258,12 +1274,27 @@ rb_grn_table_select (int argc, VALUE *argv, VALUE self)
 	result = RVAL2GRNTABLE(rb_result, &context);
     }
 
-    builder = rb_grn_record_expression_builder_new(self, rb_name);
-    rb_expression = rb_grn_record_expression_builder_build(builder);
+    if (NIL_P(rb_query)) {
+	builder = rb_grn_record_expression_builder_new(self, rb_name);
+	rb_expression = rb_grn_record_expression_builder_build(builder);
+	rb_grn_object_deconstruct(RB_GRN_OBJECT(DATA_PTR(rb_expression)),
+				  &expression, NULL,
+				  NULL, NULL, NULL, NULL);
+    } else {
+	const char *name = NULL, *query;
+	unsigned name_size = 0, query_size;
 
-    rb_grn_object_deconstruct(RB_GRN_OBJECT(DATA_PTR(rb_expression)),
-			      &expression, NULL,
-			      NULL, NULL, NULL, NULL);
+	query = StringValueCStr(rb_query);
+	query_size = RSTRING_LEN(rb_query);
+	if (!NIL_P(rb_name)) {
+	    name = StringValueCStr(rb_name);
+	    name_size = RSTRING_LEN(rb_name);
+	}
+	expression = grn_expr_create_from_str(context, name, name_size,
+					      query, query_size,
+					      table, NULL);
+    }
+
 
     rc = grn_table_select(context, table, expression, result, operator);
     rb_grn_context_check(context, self);
