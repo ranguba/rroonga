@@ -14,6 +14,8 @@ rescue LoadError
   require "groonga"
 end
 
+require 'time'
+
 $KCODE = "UTF-8"
 Groonga::Context.default_options = {:encoding => :utf8}
 
@@ -43,10 +45,13 @@ p(terms = Groonga::Hash.create(:name => "<terms>",
                                :default_tokenizer => "<token:bigram>"))
 p terms.define_index_column("item_title", items,
                             :persistent => persistent,
+                            :with_weight => true,
+                            :with_section => true,
+                            :with_position => true,
                             :source => "<items>.title")
 
 p items.find("http://ja.wikipedia.org/wiki/Ruby")["title"] = "Ruby"
-p items.find("http://www.ruby-lang.org/")["title"] = "オブジェクトスクリプト言語Ruby"
+p items.find("http://www.ruby-lang.org/")["title"] = "オブジェクト指向スクリプト言語Ruby"
 
 p(users = Groonga::Hash.create(:name => "<users>",
                                :key_type => "<shorttext>",
@@ -63,6 +68,9 @@ p comments.define_column("issued", "<time>")
 
 p terms.define_index_column("comment_content", comments,
                             :persistent => persistent,
+                            :with_weight => true,
+                            :with_section => true,
+                            :with_position => true,
                             :source => "<comments>.content")
 
 p users.add("moritan", :name => "モリタン")
@@ -96,6 +104,15 @@ p add_bookmark("http://d.hatena.ne.jp/higepon/20070815/1187192864",
 p add_bookmark("http://practical-scheme.net/docs/cont-j.html",
                "なんでも継続", "taporobo", "トランポリン LISP continuation",
                1187568692)
+p add_bookmark("http://jp.rubyist.net/managinze",
+               "るびま", "moritan", "Ruby ドキュメント",
+               Time.now)
+p add_bookmark("http://jp.rubyist.net/managinze",
+               "るびま", "taporobo", "Ruby 雑誌",
+               Time.now)
+p add_bookmark("http://groonga.rubyforge.org/",
+               "ラングバ", "moritan", "Ruby groonga",
+               Time.parse("2009-07-19"))
 
 
 records = comments.select do |record|
@@ -127,4 +144,12 @@ records.group([".item"]).each do |record|
   p [record[".:nsubrecs"],
      item.key,
      item[".title"]]
+end
+
+p ruby_comments = @comments.select {|record| record["content"] =~ "Ruby"}
+p ruby_items = @items.select("*W1:50 title:%Ruby")
+
+p ruby_items = ruby_comments.group([".item"]).union!(ruby_items)
+ruby_items.sort([{:key => ".:score", :order => "descendant"}]).each do |record|
+  p [record[".:score"], record[".title"]]
 end

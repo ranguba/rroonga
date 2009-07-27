@@ -347,4 +347,47 @@ http://qwik.jp/senna/senna2.files/rect4605.png
 
 == 少し複雑な検索
 
-つづく。。。
+さらに実用的な検索について考えてみましょう。
+
+ブックマークが大量に蓄積されるに従って、より的確に適合度を算
+出する必要性に迫られます。
+
+今のところ検索対象として利用できるのは<tt><items>.title</tt>
+と<tt><comments>.content</tt>ですが、<tt><items>.title</tt>は
+元ページから得られるやや信頼できる情報なのに対して、
+<tt><comments>.content</tt>はブックマークユーザが任意に設定で
+きる情報で、やや信憑性に乏しいと言えます。しかし、再現率を確
+保するためにはユーザのコメントも是非対象に含めたいところです。
+
+そこで、以下のようなポリシーで検索を行うことにします。
+
+* <tt><items>.title</tt>か<tt><comments>.content</tt>のいずれ
+  かにマッチするitemを検索する。
+* ただし、<tt><items>.title</tt>にマッチしたレコードはスコア
+  を10倍重み付けする。
+* 同一のitemに対して、キーワードにマッチする<tt>comment</tt>
+  が複数存在した場合は、それぞれの<tt>comment</tt>のスコアの
+  和を、該当するitemのスコアとする。
+
+以下のようにして、commentとitemとそれぞれに対する検索結果を求
+めます。
+
+  >> ruby_comments = @comments.select {|record| record["content"] =~ "Ruby"}
+  #<Groonga::Hash ..., size: <2>>
+  >> ruby_items = @items.select("*W1:50 title:%Ruby")
+  #<Groonga::Hash ..., size: <2>>
+
+_ruby_comments_の結果をitem毎にグループ化し、_ruby_items_と
+unionして出力します。
+
+  >> ruby_items = ruby_comments.group([".item"]).union!(ruby_items)
+  #<Groonga::Hash ..., size: <4>>
+  >> ruby_items.sort([{:key => ".:score", :order => "descendant"}]).each do |record|
+  >>   p [record[".:score"], record[".title"]]
+  >> end
+  [1, "るびま"]
+  [1, "オブジェクトスクリプト言語Ruby"]
+  [1, "Ruby"]
+  [1, "ラングバ"]
+
+これで目的の結果が得られました。（FIXME: 得られていない！）
