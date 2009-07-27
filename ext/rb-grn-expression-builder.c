@@ -50,13 +50,19 @@ build_block (VALUE self)
 VALUE
 rb_grn_record_expression_builder_build (VALUE self)
 {
-    return rb_iterate(build, self, build_block, self);
+    if (rb_block_given_p())
+	return rb_iterate(build, self, build_block, self);
+    else
+	return build(self);
 }
 
 VALUE
 rb_grn_column_expression_builder_build (VALUE self)
 {
-    return rb_iterate(build, self, build_block, self);
+    if (rb_block_given_p())
+	return rb_iterate(build, self, build_block, self);
+    else
+	return build(self);
 }
 
 void

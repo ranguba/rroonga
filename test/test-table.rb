@@ -369,6 +369,15 @@ class TableTest < Test::Unit::TestCase
                  results.collect {|record| record["id"]})
   end
 
+  def test_select_without_block
+    comments = Groonga::Array.create(:name => "comments")
+    comment1 = comments.add
+    comment2 = comments.add
+    comment3 = comments.add
+    assert_equal([comment1, comment2, comment3],
+                 comments.select.collect {|record| record.key})
+  end
+
   def test_group
     bookmarks = Groonga::Hash.create(:name => "<bookmarks>")
     bookmarks.define_column("title", "<text>")
