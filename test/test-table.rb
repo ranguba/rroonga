@@ -428,6 +428,21 @@ class TableTest < Test::Unit::TestCase
                  end)
   end
 
+  def test_intersect!
+    bookmarks = Groonga::Hash.create(:name => "bookmarks")
+    bookmarks.define_column("title", "ShortText")
+
+    bookmarks.add("http://groonga.org/", :title => "groonga")
+    bookmarks.add("http://ruby-lang.org/", :title => "Ruby")
+
+    ruby_bookmarks = bookmarks.select {|record| record["title"] == "Ruby"}
+    all_bookmarks = bookmarks.select
+    assert_equal(["Ruby"],
+                 ruby_bookmarks.intersect!(all_bookmarks).collect do |record|
+                   record[".title"]
+                 end)
+  end
+
   def test_lock
     bookmarks = Groonga::Array.create(:name => "<bookmarks>")
     bookmark = bookmarks.add
