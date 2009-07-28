@@ -63,9 +63,7 @@ class DatabaseTest < Test::Unit::TestCase
   def test_each
     db_path = @tmp_dir + "db"
     database = Groonga::Database.create(:path => db_path.to_s)
-    assert_equal(["/q/define_selector",
-                  "/q/loader",
-                  "Bool",
+    assert_equal(["Bool",
                   "Float",
                   "Int16",
                   "Int32",
@@ -84,7 +82,15 @@ class DatabaseTest < Test::Unit::TestCase
                   "UInt16",
                   "UInt32",
                   "UInt64",
-                  "UInt8"],
+                  "UInt8",
+                  "column_create",
+                  "column_list",
+                  "define_selector",
+                  "load",
+                  "select",
+                  "status",
+                  "table_create",
+                  "table_list"],
                  database.collect {|object| object.name}.sort)
   end
 
