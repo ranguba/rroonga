@@ -101,6 +101,18 @@ module Groonga
         end
       end
 
+      # 名前が_name_のテーブルを削除する。
+      # _options_に指定可能な値は以下の通り。
+      #
+      # [+:context+]
+      #   スキーマ定義時に使用するGroonga::Contextを指定する。
+      #   省略した場合はGroonga::Context.defaultを使用する。
+      def remove_table(name, options={})
+        define do |schema|
+          schema.remove_table(name, options)
+        end
+      end
+
       # スキーマの内容を文字列で返す。返された値は
       # Groonga::Schema.restoreすることによりスキーマ内に組
       # み込むことができる。
@@ -211,6 +223,11 @@ module Groonga
     def create_table(name, options={})
       definition = TableDefinition.new(name, @options.merge(options || {}))
       yield(definition)
+      @definitions << definition
+    end
+
+    def remove_table(name, options={})
+      definition = TableRemoveDefinition.new(name, @options.merge(options || {}))
       @definitions << definition
     end
 
@@ -358,6 +375,18 @@ module Groonga
 
       def context
         @options[:context] || Groonga::Context.default
+      end
+    end
+
+    class TableRemoveDefinition
+      def initialize(name, options={})
+        @name = name
+        @options = options
+      end
+
+      def define
+        context = @options[:context] || Groonga::Context.default
+        context[@name].remove
       end
     end
 

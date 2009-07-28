@@ -25,6 +25,13 @@ class SchemaTest < Test::Unit::TestCase
     assert_not_nil(context["<posts>"])
   end
 
+  def test_remove_table
+    Groonga::Array.create(:name => "posts")
+    assert_not_nil(context["posts"])
+    Groonga::Schema.remove_table("posts")
+    assert_nil(context["posts"])
+  end
+
   def test_define_hash
     Groonga::Schema.create_table("<posts>", :type => :hash) do |table|
     end
