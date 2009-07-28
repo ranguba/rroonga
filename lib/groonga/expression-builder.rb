@@ -48,11 +48,16 @@ module Groonga
       def &(other)
         AndExpressionBuilder.new(self, other)
       end
+
+      def |(other)
+        OrExpressionBuilder.new(self, other)
+      end
     end
 
-    class AndExpressionBuilder < ExpressionBuilder
-      def initialize(*expression_builders)
+    class SetExpressionBuilder < ExpressionBuilder
+      def initialize(operation, *expression_builders)
         super()
+        @operation = operation
         @expression_builders = expression_builders
       end
 
@@ -61,8 +66,19 @@ module Groonga
         @expression_builders.each do |builder|
           builder.build(expression, variable)
         end
-        expression.append_operation(Groonga::Operation::AND,
-                                    @expression_builders.size)
+        expression.append_operation(@operation, @expression_builders.size)
+      end
+    end
+
+    class AndExpressionBuilder < SetExpressionBuilder
+      def initialize(*expression_builders)
+        super(Groonga::Operation::AND, *expression_builders)
+      end
+    end
+
+    class OrExpressionBuilder < SetExpressionBuilder
+      def initialize(*expression_builders)
+        super(Groonga::Operation::OR, *expression_builders)
       end
     end
 
