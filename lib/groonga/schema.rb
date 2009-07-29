@@ -114,6 +114,12 @@ module Groonga
         end
       end
 
+      def change_table(name, options={})
+        define do |schema|
+          schema.change_table(name, options)
+        end
+      end
+
       # スキーマの内容を文字列で返す。返された値は
       # Groonga::Schema.restoreすることによりスキーマ内に組
       # み込むことができる。
@@ -243,10 +249,12 @@ module Groonga
     end
 
     class TableDefinition
+      attr_reader :name
+
       def initialize(name, options)
         @name = name
         @name = @name.to_s if @name.is_a?(Symbol)
-        @columns = []
+        @definitions = []
         validate_options(options)
         @options = options
         @table_type = table_type
@@ -258,17 +266,34 @@ module Groonga
         else
           table = @table_type.create(create_options)
         end
-        @columns.each do |column|
-          column.define(table)
+        @definitions.each do |definition|
+          definition.define(table)
         end
         table
       end
 
       def column(name, type, options={})
-        column = self[name] || ColumnDefinition.new(name, options)
-        column.type = type
-        column.options.merge!(options)
-        @columns << column unless @columns.include?(column)
+        self[name, ColumnDefinition] ||= ColumnDefinition.new(name, options)
+        definition = self[name, ColumnDefinition]
+        definition.type = type
+        definition.options.merge!(options)
+        self
+      end
+
+      def remove_column(name, options={})
+        self[name, ColumnRemoveDefinition] ||=
+          ColumnRemoveDefinition.new(name, options)
+        definition = self[name, ColumnDefinition]
+        definition.options.merge!(options)
+        self
+      end
+
+      def index(name, target_column, options={})
+        self[name, IndexColumnDefinition] ||=
+          IndexColumnDefinition.new(name, options)
+        definition = self[name, IndexColumnDefinition]
+        definition.target = target_column
+        definition.options.merge!(options)
         self
       end
 
@@ -319,19 +344,28 @@ module Groonga
         column(name, table, options)
       end
 
-      def index(name, target_column, options={})
-        column = self[name] || IndexColumnDefinition.new(name, options)
-        column.target = target_column
-        column.options.merge!(options)
-        @columns << column unless @columns.include?(column)
-        self
+      def [](name, definition_class=nil)
+        @definitions.find do |definition|
+          definition.name.to_s == name.to_s and
+            (definition_class.nil? or definition.is_a?(definition_class))
+        end
       end
 
-      def [](name)
-        @columns.find {|column| column.name == name}
+      def context
+        @options[:context] || Groonga::Context.default
       end
 
       private
+      def []=(name, definition_class, definition)
+        old_definition = self[name, definition_class]
+        if old_definition
+          index = @definitions.index(old_definition)
+          @definitions[index] = definition
+        else
+          @definitions << definition
+        end
+      end
+
       AVAILABLE_OPTION_KEYS = [:context, :type, :path, :persistent,
                                :key_type, :value_type, :default_tokenizer,
                                :key_normalize, :key_with_sis]
@@ -389,10 +423,6 @@ module Groonga
 
       def persistent?
         @options[:persistent].nil? ? true : @options[:persistent]
-      end
-
-      def context
-        @options[:context] || Groonga::Context.default
       end
     end
 
