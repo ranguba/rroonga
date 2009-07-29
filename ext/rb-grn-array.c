@@ -62,8 +62,11 @@ VALUE rb_cGrnArray;
  *   Groonga::Contextに結びついているデータベースが一時デー
  *   タベースの場合は例外が発生する。
  *
- * [+:value_size+]
- *   値の大きさを指定する。省略すると0になる。
+ * [+:value_type+]
+ *   値の型を指定する。省略すると値のための領域を確保しない。
+ *   値を保存したい場合は必ず指定すること。
+ *
+ *   参考: Groonga::Type.new
  *
  * [+:sub_records+]
  *   +true+を指定すると#groupでグループ化したときに、

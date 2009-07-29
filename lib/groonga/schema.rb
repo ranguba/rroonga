@@ -94,7 +94,8 @@ module Groonga
       #   テーブルとなる。
       #
       # [+:value_type+]
-      #   値のサイズを指定する。デフォルトは0。 # FIXME
+      #   値の型を指定する。省略すると値のための領域を確保しない。
+      #   値を保存したい場合は必ず指定すること。
       def create_table(name, options={}, &block)
         define do |schema|
           schema.create_table(name, options, &block)
@@ -218,8 +219,11 @@ module Groonga
     #   合はパス名は自動的に作成される。デフォルトでは永続
     #   テーブルとなる。
     #
-    # [+:value_size+]
-    #   値のサイズを指定する。デフォルトは0。
+    # [+:value_type+]
+    #   値の型を指定する。省略すると値のための領域を確保しな
+    #   い。値を保存したい場合は必ず指定すること。
+    #
+    #   参考: Groonga::Type.new
     def create_table(name, options={})
       definition = TableDefinition.new(name, @options.merge(options || {}))
       yield(definition)
