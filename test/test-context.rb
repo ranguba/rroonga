@@ -54,9 +54,15 @@ class ContextTest < Test::Unit::TestCase
                  context.inspect)
   end
 
-  def test_array_reference
+  def test_array_reference_by_string
     Groonga::Database.create
     context = Groonga::Context.default
     assert_equal("Int32", context["<int>"].name)
+  end
+
+  def test_array_reference_by_symbol
+    Groonga::Database.create
+    context = Groonga::Context.default
+    assert_equal("Bool", context[:Bool].name)
   end
 end

@@ -440,23 +440,33 @@ rb_grn_context_array_reference (VALUE self, VALUE name_or_id)
 {
     grn_ctx *context;
     grn_obj *object;
+    const char *name;
+    unsigned int name_size;
+    grn_id id;
 
     context = SELF(self);
-    if (RVAL2CBOOL(rb_obj_is_kind_of(name_or_id, rb_cString))) {
-	const char *name;
-	unsigned int name_size;
-
+    switch (TYPE(name_or_id)) {
+      case T_SYMBOL:
+	name = rb_id2name(SYM2ID(name_or_id));
+	name_size = strlen(name);
+	object = rb_grn_context_get_backward_compatibility(context,
+							   name, name_size);
+	break;
+      case T_STRING:
 	name = StringValuePtr(name_or_id);
 	name_size = RSTRING_LEN(name_or_id);
 	object = rb_grn_context_get_backward_compatibility(context,
 							   name, name_size);
-    } else if (RVAL2CBOOL(rb_obj_is_kind_of(name_or_id, rb_cInteger))) {
-	unsigned id;
+	break;
+      case T_FIXNUM:
 	id = NUM2UINT(name_or_id);
 	object = grn_ctx_at(context, id);
-    } else {
-	rb_raise(rb_eArgError, "should be string or unsigned integer: %s",
+	break;
+      default:
+	rb_raise(rb_eArgError,
+		 "should be String, Symbol or unsigned integer: %s",
 		 rb_grn_inspect(name_or_id));
+	break;
     }
 
     return GRNOBJECT2RVAL(Qnil, context, object, RB_GRN_FALSE);
