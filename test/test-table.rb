@@ -356,6 +356,19 @@ class TableTest < Test::Unit::TestCase
                  results.collect {|record| record["id"]})
   end
 
+  def test_sort_by_array
+    bookmarks = Groonga::Array.create(:name => "<bookmarks>")
+    id_column = bookmarks.define_column("id", "<int>")
+    100.times do |i|
+      bookmark = bookmarks.add
+      bookmark["id"] = i + 100
+    end
+
+    results = bookmarks.sort([["id", "descending"]], :limit => 20)
+    assert_equal((180..199).to_a.reverse,
+                 results.collect {|record| record["id"]})
+  end
+
   def test_sort_without_limit
     bookmarks = Groonga::Array.create(:name => "<bookmarks>")
     id_column = bookmarks.define_column("id", "<int>")

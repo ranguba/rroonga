@@ -833,6 +833,14 @@ rb_grn_table_sort (int argc, VALUE *argv, VALUE self)
 
 	if (RVAL2CBOOL(rb_obj_is_kind_of(rb_sort_keys[i], rb_cHash))) {
 	    rb_sort_options = rb_sort_keys[i];
+	} else if (RVAL2CBOOL(rb_obj_is_kind_of(rb_sort_keys[i], rb_cArray))) {
+	    rb_sort_options = rb_hash_new();
+	    rb_hash_aset(rb_sort_options,
+			 RB_GRN_INTERN("key"),
+			 rb_ary_entry(rb_sort_keys[i], 0));
+	    rb_hash_aset(rb_sort_options,
+			 RB_GRN_INTERN("order"),
+			 rb_ary_entry(rb_sort_keys[i], 1));
 	} else {
 	    rb_sort_options = rb_hash_new();
 	    rb_hash_aset(rb_sort_options,
@@ -851,9 +859,14 @@ rb_grn_table_sort (int argc, VALUE *argv, VALUE self)
 	} else if (rb_grn_equal_option(rb_order, "desc") ||
 		   rb_grn_equal_option(rb_order, "descending")) {
 	    keys[i].flags = GRN_TABLE_SORT_DESC;
-	} else {
-	    /* FIXME: validation */
+	} else if (rb_grn_equal_option(rb_order, "asc") ||
+		   rb_grn_equal_option(rb_order, "ascending")) {
 	    keys[i].flags = GRN_TABLE_SORT_ASC;
+	} else {
+	    rb_raise(rb_eArgError,
+		     "order should be one of "
+		     "[nil, :desc, :descending, :asc, :ascending]: %s",
+		     rb_grn_inspect(rb_order));
 	}
     }
 
