@@ -81,8 +81,8 @@ module GroongaTestUtils
 
   def teardown_sandbox
     @database = nil
-    teardown_tmp_directory
     GC.start
+    teardown_tmp_directory
   end
 
   def teardown_tmp_directory
