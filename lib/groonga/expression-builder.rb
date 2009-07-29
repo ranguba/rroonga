@@ -31,10 +31,17 @@ module Groonga
                                   :query => @query,
                                   :default_column => @default_column)
       variable = expression.define_variable(:domain => @table)
-      if block_given?
-        builder = yield(self)
-        builder.build(expression, variable) unless builder.nil?
+
+      builder = nil
+      builder = yield(self) if block_given?
+      if builder.nil? or builder == self
+        expression.append_constant(1)
+        expression.append_constant(1)
+        expression.append_operation(Groonga::Operation::OR, 2)
+      else
+        builder.build(expression, variable)
       end
+
       expression.compile
       expression
     end
