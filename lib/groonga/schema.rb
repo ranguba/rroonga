@@ -247,6 +247,7 @@ module Groonga
         @name = name
         @name = @name.to_s if @name.is_a?(Symbol)
         @columns = []
+        validate_options(options)
         @options = options
         @table_type = table_type
       end
@@ -331,6 +332,19 @@ module Groonga
       end
 
       private
+      AVAILABLE_OPTION_KEYS = [:context, :type, :path, :persistent,
+                               :key_type, :value_type, :default_tokenizer,
+                               :key_normalize, :key_with_sis]
+      def validate_options(options)
+        return if options.nil?
+        unknown_keys = options.keys - AVAILABLE_OPTION_KEYS
+        unless unknown_keys.empty?
+          message = "unknown keys are specified: #{unknown_keys.inspect}"
+          message << ": available keys: #{AVAILABLE_OPTION_KEYS.inspect}"
+          raise ArgumentError, message
+        end
+      end
+
       def table_type
         type = @options[:type]
         case type
