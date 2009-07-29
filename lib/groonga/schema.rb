@@ -367,7 +367,8 @@ module Groonga
       end
 
       AVAILABLE_OPTION_KEYS = [:context, :change, :type, :path, :persistent,
-                               :key_type, :value_type, :default_tokenizer,
+                               :key_type, :value_type, :sub_records,
+                               :default_tokenizer,
                                :key_normalize, :key_with_sis]
       def validate_options(options)
         return if options.nil?
@@ -400,6 +401,7 @@ module Groonga
           :persistent => persistent?,
           :value_type => @options[:value_type],
           :context => context,
+          :sub_records => @options[:sub_records],
         }
         key_support_table_common = {
           :key_type => Schema.normalize_type(@options[:key_type]),
