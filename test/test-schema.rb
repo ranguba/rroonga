@@ -193,6 +193,18 @@ class SchemaTest < Test::Unit::TestCase
     assert_equal(context["<longtext>"], context["<posts>.content"].range)
   end
 
+  def test_remove_column
+    Groonga::Schema.create_table("posts") do |table|
+      table.long_text :content
+    end
+    assert_not_nil(context["posts.content"])
+
+    Groonga::Schema.change_table("posts") do |table|
+      table.remove_column("content")
+    end
+    assert_nil(context["posts.content"])
+  end
+
   def test_index
     assert_nil(context["<terms>.content"])
     Groonga::Schema.create_table("<posts>") do |table|

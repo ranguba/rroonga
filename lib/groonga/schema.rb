@@ -114,9 +114,9 @@ module Groonga
         end
       end
 
-      def change_table(name, options={})
+      def change_table(name, options={}, &block)
         define do |schema|
-          schema.change_table(name, options)
+          schema.change_table(name, options, &block)
         end
       end
 
@@ -241,7 +241,7 @@ module Groonga
       @definitions << definition
     end
 
-    def change_table(table_name, options={})
+    def change_table(name, options={})
       options = @options.merge(options || {}).merge(:change => true)
       definition = TableDefinition.new(name, options)
       yield(definition)
@@ -283,7 +283,7 @@ module Groonga
       def remove_column(name, options={})
         self[name, ColumnRemoveDefinition] ||=
           ColumnRemoveDefinition.new(name, options)
-        definition = self[name, ColumnDefinition]
+        definition = self[name, ColumnRemoveDefinition]
         definition.options.merge!(options)
         self
       end
@@ -366,7 +366,7 @@ module Groonga
         end
       end
 
-      AVAILABLE_OPTION_KEYS = [:context, :type, :path, :persistent,
+      AVAILABLE_OPTION_KEYS = [:context, :change, :type, :path, :persistent,
                                :key_type, :value_type, :default_tokenizer,
                                :key_normalize, :key_with_sis]
       def validate_options(options)
@@ -453,6 +453,21 @@ module Groonga
         table.define_column(@name,
                             Schema.normalize_type(@type),
                             @options)
+      end
+    end
+
+    class ColumnRemoveDefinition
+      attr_accessor :name
+      attr_reader :options
+
+      def initialize(name, options={})
+        @name = name
+        @name = @name.to_s if @name.is_a?(Symbol)
+        @options = (options || {}).dup
+      end
+
+      def define(table)
+        table.column(@name).remove
       end
     end
 
