@@ -98,6 +98,9 @@ rb_grn_table_mark (void *data)
     if (!grn_obj_path(context, table))
 	return;
 
+    if (grn_obj_name(context, table, NULL, 0) == 0)
+	return;
+
     column_ids = grn_table_create(context, NULL, 0, NULL,
 				  GRN_TABLE_HASH_KEY, NULL, 0);
     n = grn_table_columns(context, table, NULL, 0, column_ids);
