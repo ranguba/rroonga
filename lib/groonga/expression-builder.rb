@@ -31,7 +31,6 @@ module Groonga
                                   :query => @query,
                                   :default_column => @default_column)
       variable = expression.define_variable(:domain => @table)
-      expression.append_object(variable)
       if block_given?
         builder = yield(self)
         builder.build(expression, variable) unless builder.nil?
