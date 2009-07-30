@@ -542,7 +542,11 @@ rb_grn_object_inspect_content_domain (VALUE inspected,
 
 	domain_object = grn_ctx_at(context, domain);
 	if (domain_object) {
-	    rb_grn_object_inspect_object(inspected, context, domain_object);
+	    if (domain_object == object) {
+		rb_str_cat2(inspected, "self");
+	    } else {
+		rb_grn_object_inspect_object(inspected, context, domain_object);
+	    }
 	} else {
 	    rb_str_concat(inspected, rb_obj_as_string(UINT2NUM(domain)));
 	}
