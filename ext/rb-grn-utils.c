@@ -586,23 +586,23 @@ rb_grn_obj_from_ruby_object (VALUE rb_object, grn_ctx *context, grn_obj **_obj)
 
     switch (TYPE(rb_object)) {
       case T_NIL:
-	GRN_VOID_INIT(obj);
+	grn_obj_reinit(context, obj, GRN_DB_VOID, 0);
 	break;
       case T_STRING:
-	GRN_TEXT_INIT(obj, 0);
+	grn_obj_reinit(context, obj, GRN_DB_TEXT, 0);
 	GRN_TEXT_SET(context, obj,
 		     RSTRING_PTR(rb_object), RSTRING_LEN(rb_object));
 	break;
       case T_FIXNUM:
-	GRN_INT32_INIT(obj, 0);
+	grn_obj_reinit(context, obj, GRN_DB_INT32, 0);
 	GRN_INT32_SET(context, obj, NUM2INT(rb_object));
 	break;
       case T_BIGNUM:
-	GRN_INT64_INIT(obj, 0);
+	grn_obj_reinit(context, obj, GRN_DB_INT64, 0);
 	GRN_INT64_SET(context, obj, NUM2LL(rb_object));
 	break;
       case T_FLOAT:
-	GRN_FLOAT_INIT(obj, 0);
+	grn_obj_reinit(context, obj, GRN_DB_FLOAT, 0);
 	GRN_FLOAT_SET(context, obj, NUM2DBL(rb_object));
 	break;
       default:
@@ -615,7 +615,7 @@ rb_grn_obj_from_ruby_object (VALUE rb_object, grn_ctx *context, grn_obj **_obj)
 	    time_value = NUM2INT(sec);
 	    time_value <<= 32;
 	    time_value += NUM2INT(usec);
-	    GRN_TIME_INIT(obj, 0);
+	    grn_obj_reinit(context, obj, GRN_DB_TIME, 0);
 	    GRN_TIME_SET(context, obj, time_value);
 	} else if (RVAL2CBOOL(rb_obj_is_kind_of(rb_object, rb_cGrnObject))) {
 	    grn_obj_close(context, obj); /* TODO: reduce memory allocation */
@@ -632,7 +632,7 @@ rb_grn_obj_from_ruby_object (VALUE rb_object, grn_ctx *context, grn_obj **_obj)
 				     &table, NULL,
 				     NULL, NULL, NULL, NULL, NULL);
 	    table_id = grn_obj_id(context, table);
-	    GRN_RECORD_INIT(obj, 0, table_id);
+	    grn_obj_reinit(context, obj, table_id, 0);
 	    GRN_RECORD_SET(context, obj, id);
 	} else {
 	    rb_raise(rb_eTypeError,
