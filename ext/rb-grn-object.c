@@ -273,11 +273,11 @@ rb_grn_object_bind_common (VALUE klass, VALUE self, VALUE rb_context,
       case GRN_COLUMN_FIX_SIZE:
       case GRN_COLUMN_VAR_SIZE:
       case GRN_COLUMN_INDEX:
+      case GRN_EXPR:
 	grn_obj_user_data(context, object)->ptr = rb_grn_object;
 	grn_obj_set_finalizer(context, object, rb_grn_object_finalizer);
 	break;
       case GRN_PROC:
-      case GRN_EXPR:
       case GRN_TYPE:
 	rb_grn_object->need_close = RB_GRN_FALSE;
 	break;

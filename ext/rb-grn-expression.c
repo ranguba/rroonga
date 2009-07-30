@@ -26,10 +26,10 @@ void
 rb_grn_expression_finalizer (grn_ctx *context, grn_obj *object,
 			     RbGrnExpression *rb_grn_expression)
 {
-    if (!context)
-	return;
+    if (context && rb_grn_expression->value)
+	grn_obj_close(context, rb_grn_expression->value);
 
-    grn_obj_close(context, rb_grn_expression->value);
+    rb_grn_expression->value = NULL;
 }
 
 void
