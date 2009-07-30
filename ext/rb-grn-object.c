@@ -83,7 +83,6 @@ rb_grn_object_finalizer (grn_ctx *context, grn_obj *grn_object,
 			 grn_user_data *user_data)
 {
     RbGrnObject *rb_grn_object;
-    rb_grn_boolean need_finalize = RB_GRN_TRUE;
 
     rb_grn_object = user_data->ptr;
 
@@ -95,18 +94,14 @@ rb_grn_object_finalizer (grn_ctx *context, grn_obj *grn_object,
 	   rb_grn_object->context, rb_grn_object->object,
 	   grn_object->header.type);
 
-    if (rb_grn_object->context != context ||
-	rb_grn_object->object != grn_object) {
-	if (grn_object->header.type == GRN_DB)
-	    grn_ctx_use(context, NULL);
-	need_finalize = RB_GRN_FALSE;
+    if ((rb_grn_object->context != context ||
+	 rb_grn_object->object != grn_object) &&
+	grn_object->header.type == GRN_DB) {
+	grn_ctx_use(context, NULL);
     }
 
     rb_grn_object->context = NULL;
     rb_grn_object->object = NULL;
-
-    if (!need_finalize)
-	return GRN_SUCCESS;
 
     switch (grn_object->header.type) {
       case GRN_DB:
