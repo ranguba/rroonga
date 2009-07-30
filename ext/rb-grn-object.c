@@ -154,12 +154,7 @@ rb_grn_object_free (RbGrnObject *rb_grn_object)
 	rb_grn_object->object = NULL;
 	debug("type: %x\n", grn_object->header.type);
 	if (rb_grn_object->need_close) {
-	    grn_user_data *user_data;
-
-	    user_data = grn_obj_user_data(context, grn_object);
-	    if (user_data)
-		rb_grn_object_finalizer(context, grn_object, user_data);
-	    grn_obj_unlink(context, grn_object);
+	    grn_obj_close(context, grn_object);
 	}
     }
     xfree(rb_grn_object);
