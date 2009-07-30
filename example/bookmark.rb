@@ -16,6 +16,10 @@ end
 
 require 'time'
 
+# Groonga::Logger.register(:level => :debug) do |level, time, title, message, location|
+#   p [level, time, title, message, location]
+# end
+
 $KCODE = "UTF-8"
 Groonga::Context.default_options = {:encoding => :utf8}
 
@@ -150,6 +154,6 @@ p ruby_comments = @comments.select {|record| record["content"] =~ "Ruby"}
 p ruby_items = @items.select("*W1:50 title:%Ruby")
 
 p ruby_items = ruby_comments.group([".item"]).union!(ruby_items)
-ruby_items.sort([{:key => ".:score", :order => "descendant"}]).each do |record|
+ruby_items.sort([{:key => ".:score", :order => "descending"}]).each do |record|
   p [record[".:score"], record[".title"]]
 end
