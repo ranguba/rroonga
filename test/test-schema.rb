@@ -211,10 +211,10 @@ class SchemaTest < Test::Unit::TestCase
       table.long_text :content
     end
     Groonga::Schema.create_table("<terms>") do |table|
-      table.index :posts_content, "<posts>.content"
+      table.index "<posts>.content"
     end
     assert_equal([context["<posts>.content"]],
-                 context["<terms>.posts_content"].sources)
+                 context["<terms>.<posts>_content"].sources)
   end
 
   def test_dump

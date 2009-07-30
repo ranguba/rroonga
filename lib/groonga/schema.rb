@@ -276,7 +276,7 @@ module Groonga
         self[name, ColumnDefinition] ||= ColumnDefinition.new(name, options)
         definition = self[name, ColumnDefinition]
         definition.type = type
-        definition.options.merge!(options)
+        definition.options.merge!(column_options.merge(options))
         self
       end
 
@@ -288,12 +288,23 @@ module Groonga
         self
       end
 
-      def index(name, target_column, options={})
+      def index(target_column, options={})
+        name = options.delete(:name)
+        if name.nil?
+          target_column_name = nil
+          if target_column.is_a?(Groonga::Column)
+            target_column_name = target_column.name
+          else
+            target_column_name = target_column
+          end
+          name = target_column_name.gsub(/\./, "_")
+        end
+
         self[name, IndexColumnDefinition] ||=
           IndexColumnDefinition.new(name, options)
         definition = self[name, IndexColumnDefinition]
         definition.target = target_column
-        definition.options.merge!(options)
+        definition.options.merge!(column_options.merge(options))
         self
       end
 
@@ -423,6 +434,10 @@ module Groonga
         end
       end
 
+      def column_options
+        {:persistent => persistent?}
+      end
+
       def persistent?
         @options[:persistent].nil? ? true : @options[:persistent]
       end
@@ -487,6 +502,9 @@ module Groonga
       def define(table)
         target = @target
         target = context[target] unless target.is_a?(Groonga::Object)
+        if target.nil?
+          raise ArgumentError, "Unknown index target: #{@target.inspect}"
+        end
         index = table.define_index_column(@name,
                                           target.table,
                                           @options)
