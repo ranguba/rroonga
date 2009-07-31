@@ -264,9 +264,9 @@ module Groonga
         if @options[:change]
           table = context[@name]
         else
-          if @options[:force]
-            table = context[@name]
-            table.remove if table
+          table = context[@name]
+          if table and @options[:force]
+            table.remove
           end
           table = @table_type.create(create_options)
         end

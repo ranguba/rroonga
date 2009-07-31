@@ -25,6 +25,17 @@ class SchemaTest < Test::Unit::TestCase
     assert_not_nil(context["<posts>"])
   end
 
+  def test_create_table_force
+    Groonga::Schema.create_table("posts") do |table|
+    end
+    assert_raise(Groonga::InvalidArgument) do
+      Groonga::Schema.create_table("posts") do |table|
+      end
+    end
+    Groonga::Schema.create_table("posts", :force => true) do |table|
+    end
+  end
+
   def test_remove_table
     Groonga::Array.create(:name => "posts")
     assert_not_nil(context["posts"])
