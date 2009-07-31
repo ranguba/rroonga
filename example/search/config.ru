@@ -93,7 +93,7 @@ EOF
       records = []
       response.write(<<-EOS)
   <div class='search-summary'>
-    <p>groonga</p>
+    <p>Rubyでgroonga使って全文検索</p>
   </div>
 EOS
     else
