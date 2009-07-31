@@ -89,13 +89,17 @@ EOF
 
   def render_search_result(request, response)
     _words = words(request)
-    offset = 0
-    before = Time.now
     if _words.empty?
       records = []
-      total_records = 0
+      response.write(<<-EOS)
+  <div class='search-summary'>
+    <p>groonga</p>
+  </div>
+EOS
     else
+      offset = 0
       options = {}
+      before = Time.now
       records = @documents.select do |record|
         expression = nil
         _words.each do |word|
@@ -112,10 +116,9 @@ EOF
       records = records.sort([[".:score", "descending"],
                               [".last-modified", "descending"]],
                              :limit => 20)
-    end
-    elapsed = Time.now - before
+      elapsed = Time.now - before
 
-    response.write(<<-EOS)
+      response.write(<<-EOS)
   <div class='search-summary'>
     <p>
       <span class="keyword">#{escape_html(query(request))}</span>の検索結果:
@@ -129,6 +132,7 @@ EOF
     </p>
   </div>
 EOS
+    end
 
     response.write("  <div class='records'>\n")
     records.each do |record|
