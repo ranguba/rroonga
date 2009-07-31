@@ -31,6 +31,7 @@ class Searcher
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
 <head>
   <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+  <meta name="robot" content="noindex,nofollow" />
   <title>groongaで全文検索</title>
   <link rel="stylesheet" href="css/groonga.css" type="text/css" media="all" />
 </head>
