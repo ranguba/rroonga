@@ -309,9 +309,11 @@ module Groonga
           name = target_column_name.gsub(/\./, "_")
         end
 
-        self[name, IndexColumnDefinition] ||=
-          IndexColumnDefinition.new(name, options)
         definition = self[name, IndexColumnDefinition]
+        if definition.nil?
+          definition = IndexColumnDefinition.new(name, options)
+          update_definition(name, IndexColumnDefinition, definition)
+        end
         definition.target = target_column
         definition.options.merge!(column_options.merge(options))
         self
