@@ -51,15 +51,27 @@ targets.each do |target|
     if path.file? and path.extname == ".html"
       path.open do |html|
         values = {:path => path.relative_path_from(target).to_s}
-        document = Nokogiri::HTML(html)
-        document.css("title").each do |title|
+        _documents = documents.select do |record|
+          record["path"] == values[:path]
+        end
+        if _documents.size.zero?
+          document = documents.add
+        else
+          document = _documents.to_a[0].key
+        end
+
+        html_document = Nokogiri::HTML(html)
+        html_document.css("title").each do |title|
           values[:title] = title.text
         end
-        document.css("body").each do |body|
+        html_document.css("body").each do |body|
           values[:content] = body.text
         end
         values["last-modified"] = path.mtime
-        documents.add(values)
+
+        values.each do |key, value|
+          document[key] = value
+        end
       end
     end
   end
