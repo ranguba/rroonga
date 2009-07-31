@@ -35,6 +35,7 @@ else
 
     schema.create_table("terms",
                         :type => :patricia_trie,
+                        :normalize_key = true,
                         :default_tokenizer => "TokenBigram") do |table|
       table.index("documents.title")
       table.index("documents.content")
