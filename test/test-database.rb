@@ -86,6 +86,7 @@ class DatabaseTest < Test::Unit::TestCase
                   "column_create",
                   "column_list",
                   "define_selector",
+                  "expr_missing",
                   "load",
                   "select",
                   "status",
