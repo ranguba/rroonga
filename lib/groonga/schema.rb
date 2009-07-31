@@ -277,17 +277,22 @@ module Groonga
       end
 
       def column(name, type, options={})
-        self[name, ColumnDefinition] ||= ColumnDefinition.new(name, options)
         definition = self[name, ColumnDefinition]
+        if definition.nil?
+          definition = ColumnDefinition.new(name, options)
+          update_definition(name, ColumnDefinition, definition)
+        end
         definition.type = type
         definition.options.merge!(column_options.merge(options))
         self
       end
 
       def remove_column(name, options={})
-        self[name, ColumnRemoveDefinition] ||=
-          ColumnRemoveDefinition.new(name, options)
         definition = self[name, ColumnRemoveDefinition]
+        if definition.nil?
+          definition = ColumnRemoveDefinition.new(name, options)
+          update_definition(name, ColumnRemoveDefinition, definition)
+        end
         definition.options.merge!(options)
         self
       end
@@ -371,7 +376,7 @@ module Groonga
       end
 
       private
-      def []=(name, definition_class, definition)
+      def update_definition(name, definition_class, definition)
         old_definition = self[name, definition_class]
         if old_definition
           index = @definitions.index(old_definition)
