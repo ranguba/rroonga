@@ -1,0 +1,64 @@
+#!/usr/bin/env ruby
+
+if ARGV.size < 2 or ARGV.find {|option| option == "-h" or option == "--help"}
+  puts "Usage: #{$0} DATABASE_FILE [FILE_OR_DIRECTORY ...]"
+  exit
+end
+
+require 'pathname'
+
+base_directory = Pathname(__FILE__).dirname + ".."
+$LOAD_PATH.unshift((base_directory + "ext").to_s)
+$LOAD_PATH.unshift((base_directory + "lib").to_s)
+
+require 'rubygems'
+require 'groonga'
+require 'nokogiri'
+
+database_file, *targets = ARGV
+
+database_file = Pathname(database_file)
+database_directory = database_file.dirname
+database_directory.mkpath unless database_directory.exist?
+
+if database_file.exist?
+  Groonga::Database.open(database_file.to_s)
+else
+  Groonga::Database.create(:path => database_file.to_s)
+  Groonga::Schema.define do |schema|
+    schema.create_table("documents") do |table|
+      table.string("title")
+      table.text("content")
+      table.string("path")
+    end
+
+    schema.create_table("terms",
+                        :type => :patricia_trie,
+                        :default_tokenizer => "TokenBigram") do |table|
+      table.index("documents.title")
+      table.index("documents.content")
+    end
+  end
+end
+
+documents = Groonga::Context.default["documents"]
+
+targets.each do |target|
+  target = Pathname(target)
+  target.find do |path|
+    throw :prune if path.basename.to_s == ".svn"
+    if path.file? and path.extname == ".html"
+      path.open do |html|
+        values = {:path => path.relative_path_from(target).to_s}
+        document = Nokogiri::HTML(html)
+        document.css("title").each do |title|
+          values[:title] = title.text
+        end
+        document.css("body").each do |body|
+          values[:content] = body.text
+        end
+        documents.add(values)
+      end
+    end
+  end
+end
