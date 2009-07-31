@@ -1,5 +1,18 @@
 = NEWS
 
+== 0.0.6: 2009-07-31
+
+* Supported groonga 0.1.1.
+* Fixed documents [id:mat_aki]
+* Supported groonga expression for searching.
+* Added API
+  * Groonga::Table#union!
+  * Groonga::Table#intersect!
+  * Groonga::Table#differene!
+  * Groonga::Table#merge!
+* Provided tar.gz [id:m_seki]
+* Fixed memory leaks
+
 == 0.0.3: 2009-07-18
 
 * [#26145] Added Groonga::TableKeySupport#has_key? [Tasuku SUENAGA]
