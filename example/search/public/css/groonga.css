@@ -1,0 +1,122 @@
+body
+{
+  background-color: #fff;
+  color: #000;
+}
+
+div.header
+{
+  display: none;
+}
+
+div.search-box
+{
+  width: 100%;
+  text-align: center;
+}
+
+div.re-search
+{
+}
+
+div.search-summary
+{
+  font-size: small;
+  border-top: 1px solid #fc3;
+  background-color: #ffd;
+}
+
+div.search-summary p
+{
+  padding: 3px;
+  margin: 0;
+}
+
+div.records
+{
+  font-size: smaller;
+  padding-top: 10px;
+  padding-left: 30px;
+  margin-right: 20%;
+  margin-bottom: 30px;
+}
+
+div.records h2
+{
+  padding: 0;
+  margin-bottom: 5px;
+}
+
+div.records p
+{
+}
+
+p.snippet
+{
+  padding: 0;
+  margin: 0;
+}
+
+p.snippet span.separator
+{
+  font-weight: bold;
+}
+
+span.keyword,
+span.total-entries,
+span.display-range
+{
+  font-weight: bold;
+}
+
+div.pagination
+{
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+p.metadata
+{
+  padding: 0;
+  margin: 0;
+  margin-top: 5px;
+}
+
+span.url
+{
+  color: green;
+}
+
+pre
+{
+  overflow: auto;
+  margin: 20px 30px;
+  padding: 10px;
+  border-top: 1px solid #fc3;
+  background-color: #ffd;
+}
+
+a img
+{
+  border-style: none;
+}
+
+ul.sources li
+{
+  display: inline;
+}
+
+div.footer
+{
+  border-top: 1px solid #fc3;
+  background-color: #ffd;
+  margin-top: 5px;
+  text-align: right;
+}
+
+div.footer p
+{
+  font-size: small;
+  padding: 0;
+  margin: 0;
+}
