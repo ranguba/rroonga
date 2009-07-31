@@ -160,7 +160,8 @@ EOM
     snippet = Groonga::Snippet.new(:width => 100,
                                    :default_open_tag => open_tag,
                                    :default_close_tag => close_tag,
-                                   :html_escape => true)
+                                   :html_escape => true,
+                                   :normalize => true)
     words(request).each do |word|
       snippet.add_keyword(word)
     end
