@@ -110,7 +110,7 @@ rb_grn_table_mark (void *data)
     }
 
     cursor = grn_table_cursor_open(context, column_ids, NULL, 0, NULL, 0,
-				   GRN_CURSOR_ASCENDING);
+				   0, 0, GRN_CURSOR_ASCENDING);
     while (grn_table_cursor_next(context, cursor) != GRN_ID_NIL) {
 	void *key;
 	grn_id *column_id;
@@ -613,7 +613,7 @@ rb_grn_table_get_columns (int argc, VALUE *argv, VALUE self)
 	return rb_columns;
 
     cursor = grn_table_cursor_open(context, columns, NULL, 0, NULL, 0,
-				   GRN_CURSOR_ASCENDING);
+				   0, 0, GRN_CURSOR_ASCENDING);
     rb_grn_context_check(context, self);
     while (grn_table_cursor_next(context, cursor) != GRN_ID_NIL) {
 	void *key;
@@ -689,10 +689,11 @@ rb_grn_table_open_grn_cursor (int argc, VALUE *argv, VALUE self,
     if (RVAL2CBOOL(rb_less_than))
 	flags |= GRN_CURSOR_LT;
 
+    /* FIXME: should support offset and limit */
     cursor = grn_table_cursor_open(*context, table,
 				   min_key, min_key_size,
 				   max_key, max_key_size,
-				   flags);
+				   0, 0, flags);
     rb_grn_context_check(*context, self);
 
     return cursor;
@@ -774,7 +775,8 @@ rb_grn_table_each (VALUE self)
     rb_grn_table_deconstruct(SELF(self), &table, &context,
 			     NULL, NULL,
 			     NULL, NULL, NULL);
-    cursor = grn_table_cursor_open(context, table, NULL, 0, NULL, 0, 0);
+    cursor = grn_table_cursor_open(context, table, NULL, 0, NULL, 0,
+				   0, 0, GRN_CURSOR_ASCENDING);
     rb_cursor = GRNTABLECURSOR2RVAL(Qnil, context, cursor);
     while ((id = grn_table_cursor_next(context, cursor)) != GRN_ID_NIL) {
 	rb_yield(rb_grn_record_new(self, id, Qnil));
@@ -886,7 +888,7 @@ rb_grn_table_sort (int argc, VALUE *argv, VALUE self)
 
     rb_result = rb_ary_new();
     cursor = grn_table_cursor_open(context, result, NULL, 0, NULL, 0,
-				   GRN_CURSOR_ASCENDING);
+				   0, 0, GRN_CURSOR_ASCENDING);
     while (grn_table_cursor_next(context, cursor) != GRN_ID_NIL) {
 	void *value;
 	grn_id *id;
