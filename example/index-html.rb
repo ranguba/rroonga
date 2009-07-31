@@ -30,6 +30,7 @@ else
       table.string("title")
       table.text("content")
       table.string("path")
+      table.time("last-modified")
     end
 
     schema.create_table("terms",
@@ -57,6 +58,7 @@ targets.each do |target|
         document.css("body").each do |body|
           values[:content] = body.text
         end
+        values["last-modified"] = path.mtime
         documents.add(values)
       end
     end
