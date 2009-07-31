@@ -76,7 +76,7 @@ EOF
 
   def render_search_box(request, response)
     response.write(<<-EOF)
-<form method="get" action="/search">
+<form method="get" action="./">
   <p>
     <a href="."><img src="images/mini-groonga.png" alt="groonga" /></a>
     <input name="query" type="text" value="#{escape_html(query(request))}" />
