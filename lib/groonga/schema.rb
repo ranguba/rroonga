@@ -264,6 +264,10 @@ module Groonga
         if @options[:change]
           table = context[@name]
         else
+          if @options[:force]
+            table = context[@name]
+            table.remove if table
+          end
           table = @table_type.create(create_options)
         end
         @definitions.each do |definition|
@@ -377,7 +381,8 @@ module Groonga
         end
       end
 
-      AVAILABLE_OPTION_KEYS = [:context, :change, :type, :path, :persistent,
+      AVAILABLE_OPTION_KEYS = [:context, :change, :force,
+                               :type, :path, :persistent,
                                :key_type, :value_type, :sub_records,
                                :default_tokenizer,
                                :key_normalize, :key_with_sis]
