@@ -75,10 +75,7 @@ typedef int rb_grn_boolean;
 
 #include <stdint.h>
 
-typedef struct {
-  int32_t tv_sec;
-  int32_t tv_usec;
-} grn_timeval;
+#define RB_GRN_USEC_PER_SEC 1000000
 
 #define RB_GRN_OBJECT(object) ((RbGrnObject *)(object))
 #define RB_GRN_TABLE(object) ((RbGrnTable *)(object))
