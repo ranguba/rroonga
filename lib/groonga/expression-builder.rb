@@ -140,6 +140,21 @@ module Groonga
         super(Groonga::Operation::GREATER_EQUAL, column_name, value)
       end
     end
+
+    class SubExpressionBuilder < ExpressionBuilder
+      def initialize(table, column_name, query)
+        super()
+        @table = table
+        @column_name = column_name
+        @query = query
+      end
+
+      def build(expression, variable)
+        expression.parse(@query,
+                         :table => @table,
+                         :default_column => @column_name)
+      end
+    end
   end
 
   class RecordExpressionBuilder
@@ -159,6 +174,10 @@ module Groonga
         raise ArgumentError, message
       end
       ColumnExpressionBuilder.new(column, nil, nil)
+    end
+
+    def match(query, column_name=nil)
+      SubExpressionBuilder.new(@table, column_name, query)
     end
   end
 

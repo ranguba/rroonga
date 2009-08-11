@@ -34,27 +34,29 @@ module Groonga
     end
 
     def [](column_name)
-      column(column_name, true)[@id]
+      column(column_name)[@id]
     end
 
     def []=(column_name, value)
-      column(column_name, true)[@id] = value
+      column(column_name)[@id] = value
     end
 
     def append(column_name, value)
-      column(column_name, true).append(@id, value)
+      column(column_name).append(@id, value)
     end
 
     def have_column?(name)
-      not column(name).nil?
+      column(name).is_a?(Groonga::Column)
+    rescue Groonga::InvalidArgument
+      false
     end
 
     def reference_column?(name)
-      column(name, true).range.is_a?(Groonga::Table)
+      column(name).range.is_a?(Groonga::Table)
     end
 
     def search(name, query, options={})
-      column(name, true).search(query, options)
+      column(name).search(query, options)
     end
 
     def key
@@ -74,11 +76,11 @@ module Groonga
     end
 
     def increment!(name, delta=nil)
-      column(name, true).increment!(@id, delta)
+      column(name).increment!(@id, delta)
     end
 
     def decrement!(name, delta=nil)
-      column(name, true).decrement!(@id, delta)
+      column(name).decrement!(@id, delta)
     end
 
     def columns
@@ -116,12 +118,8 @@ module Groonga
     end
 
     private
-    def column(name, required=false)
-      _column = @table.column(name.to_s)
-      if _column.nil? and required
-        raise Groonga::Error, "nonexistent column: <#{name.inspect}>"
-      end
-      _column
+    def column(name)
+      @table.column(name.to_s)
     end
   end
 end

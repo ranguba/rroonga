@@ -122,14 +122,14 @@ class RecordTest < Test::Unit::TestCase
 
   def test_get_nonexistent_column
     groonga = @bookmarks.add
-    assert_raise(Groonga::Error) do
+    assert_raise(Groonga::InvalidArgument) do
       groonga["nonexistent"]
     end
   end
 
   def test_set_nonexistent_column
     groonga = @bookmarks.add
-    assert_raise(Groonga::Error) do
+    assert_raise(Groonga::InvalidArgument) do
       groonga["nonexistent"] = "value"
     end
   end

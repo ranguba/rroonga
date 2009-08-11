@@ -220,6 +220,40 @@ rb_grn_expression_append_operation (VALUE self, VALUE rb_operation,
 }
 
 static VALUE
+rb_grn_expression_parse (int argc, VALUE *argv, VALUE self)
+{
+    grn_ctx *context = NULL;
+    grn_obj *expression, *table, *default_column = NULL;
+    grn_rc rc;
+    char *query = NULL;
+    unsigned query_size = 0;
+    VALUE options, rb_query, rb_table, rb_default_column;
+
+    rb_scan_args(argc, argv, "11", &rb_query, &options);
+    rb_grn_scan_options(options,
+                        "table", &rb_table,
+                        "default_column", &rb_default_column,
+                        NULL);
+
+    query = StringValuePtr(rb_query);
+    query_size = RSTRING_LEN(rb_query);
+
+    rb_grn_expression_deconstruct(SELF(self), &expression, &context,
+                                  NULL, NULL,
+                                  NULL, NULL, NULL);
+
+    table = RVAL2GRNOBJECT(rb_table, &context);
+    default_column = RVAL2GRNBULK(rb_default_column, context, default_column);
+    rc = grn_expr_parse(context, expression, query, query_size,
+			table, default_column);
+    if (rc != GRN_SUCCESS)
+	rb_grn_context_check(context,
+			     rb_ary_new3(2, self, rb_ary_new4(argc, argv)));
+
+    return Qnil;
+}
+
+static VALUE
 rb_grn_expression_execute (VALUE self)
 {
     grn_ctx *context = NULL;
@@ -300,6 +334,9 @@ rb_grn_init_expression (VALUE mGrn)
                      rb_grn_expression_append_constant, 1);
     rb_define_method(rb_cGrnExpression, "append_operation",
                      rb_grn_expression_append_operation, 2);
+
+    rb_define_method(rb_cGrnExpression, "parse",
+                     rb_grn_expression_parse, -1);
 
     rb_define_method(rb_cGrnExpression, "execute",
                      rb_grn_expression_execute, 0);

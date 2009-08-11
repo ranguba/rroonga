@@ -15,6 +15,7 @@
 
 require 'fileutils'
 require 'pathname'
+require 'time'
 
 require 'groonga'
 
