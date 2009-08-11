@@ -150,6 +150,65 @@ rb_grn_patricia_trie_search (int argc, VALUE *argv, VALUE self)
     return rb_result;
 }
 
+static VALUE
+rb_grn_patricia_trie_scan (VALUE self, VALUE rb_string)
+{
+    grn_ctx *context;
+    grn_obj *table;
+    VALUE rb_result = Qnil;
+    grn_pat_scan_hit hits[1024];
+    const char *string;
+    long string_length;
+    rb_grn_boolean block_given;
+
+    string = StringValuePtr(rb_string);
+    string_length = RSTRING_LEN(rb_string);
+
+    rb_grn_table_key_support_deconstruct(SELF(self), &table, &context,
+					 NULL, NULL, NULL,
+					 NULL, NULL, NULL);
+
+    block_given = rb_block_given_p();
+    if (!block_given)
+	rb_result = rb_ary_new();
+
+    while (string_length > 0) {
+	const char *rest;
+	int i, n_hits;
+	long previous_offset = 0;
+
+	n_hits = grn_pat_scan(context, (grn_pat *)table,
+			      string, string_length,
+			      hits, sizeof(hits) / sizeof(*hits),
+			      &rest);
+	for (i = 0; i < n_hits; i++) {
+	    VALUE record, term, matched_info;
+
+	    if (hits[i].offset < previous_offset)
+		continue;
+
+	    record = rb_grn_record_new(self, hits[i].id, Qnil);
+	    term = rb_str_new(string + hits[i].offset,
+			      hits[i].length);
+	    matched_info = rb_ary_new3(4,
+				       term,
+				       record,
+				       UINT2NUM(hits[i].offset),
+				       UINT2NUM(hits[i].length));
+	    if (block_given) {
+		rb_yield(matched_info);
+	    } else {
+		rb_ary_push(rb_result, matched_info);
+	    }
+	    previous_offset = hits[i].offset;
+	}
+	string_length -= rest - string;
+	string = rest;
+    }
+
+    return rb_result;
+}
+
 void
 rb_grn_init_patricia_trie (VALUE mGrn)
 {
@@ -162,4 +221,6 @@ rb_grn_init_patricia_trie (VALUE mGrn)
 
     rb_define_method(rb_cGrnPatriciaTrie, "search",
 		     rb_grn_patricia_trie_search, -1);
+    rb_define_method(rb_cGrnPatriciaTrie, "scan",
+		     rb_grn_patricia_trie_scan, 1);
 }

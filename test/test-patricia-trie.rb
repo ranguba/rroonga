@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Copyright (C) 2009  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
@@ -87,5 +88,20 @@ class PatriciaTrieTest < Test::Unit::TestCase
     assert_false(users.has_key?("morita"))
     users.add("morita")
     assert_true(users.has_key?("morita"))
+  end
+
+  def test_scan
+    Groonga::Context.default_options = {:encoding => "utf-8"}
+    words = Groonga::PatriciaTrie.create(:key_type => "ShortText",
+                                         :key_normalize => true)
+    words.add("リンク")
+    adventure_of_link = words.add('リンクの冒険')
+    words.add('冒険')
+    gaxtu = words.add('ｶﾞｯ')
+    muteki = words.add('ＭＵＴＥＫＩ')
+    assert_equal([["muTEki", muteki, 0, 6],
+                  ["リンクの冒険", adventure_of_link, 7, 18],
+                  ["ガッ", gaxtu, 42, 6]],
+                 words.scan('muTEki リンクの冒険 ミリバール ガッ'))
   end
 end
