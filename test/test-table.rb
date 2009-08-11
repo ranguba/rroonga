@@ -154,7 +154,9 @@ class TableTest < Test::Unit::TestCase
     table_path = @tables_dir + "bookmarks"
     table = Groonga::Hash.create(:name => "bookmarks",
                                  :path => table_path.to_s)
-    assert_nil(table.column("nonexistent"))
+    assert_raise(Groonga::InvalidArgument) do
+      table.column("nonexistent")
+    end
   end
 
   def test_set_value
