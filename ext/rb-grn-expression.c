@@ -223,16 +223,22 @@ static VALUE
 rb_grn_expression_parse (int argc, VALUE *argv, VALUE self)
 {
     grn_ctx *context = NULL;
-    grn_obj *expression, *table, *default_column = NULL;
+    grn_obj *expression, *default_column = NULL;
+    grn_operator default_operator = GRN_OP_AND;
+    grn_operator default_mode = GRN_OP_MATCH;
     grn_rc rc;
     char *query = NULL;
     unsigned query_size = 0;
-    VALUE options, rb_query, rb_table, rb_default_column;
+    int parse_level = 0;
+    VALUE options, rb_query, rb_default_column, rb_default_operator;
+    VALUE rb_default_mode, rb_use_pragma;
 
     rb_scan_args(argc, argv, "11", &rb_query, &options);
     rb_grn_scan_options(options,
-                        "table", &rb_table,
                         "default_column", &rb_default_column,
+                        "default_operator", &rb_default_operator,
+                        "default_mode", &rb_default_mode,
+			"use_pragma", &rb_use_pragma,
                         NULL);
 
     query = StringValuePtr(rb_query);
@@ -242,10 +248,16 @@ rb_grn_expression_parse (int argc, VALUE *argv, VALUE self)
                                   NULL, NULL,
                                   NULL, NULL, NULL);
 
-    table = RVAL2GRNOBJECT(rb_table, &context);
     default_column = RVAL2GRNBULK(rb_default_column, context, default_column);
+    if (!NIL_P(rb_default_mode))
+	default_mode = RVAL2GRNOPERATOR(rb_default_mode);
+    if (!NIL_P(rb_default_operator))
+	default_operator = RVAL2GRNOPERATOR(rb_default_operator);
+    if (RVAL2CBOOL(rb_use_pragma))
+	parse_level = 2;
     rc = grn_expr_parse(context, expression, query, query_size,
-			table, default_column);
+			default_column, default_mode, default_operator,
+			parse_level);
     if (rc != GRN_SUCCESS)
 	rb_grn_context_check(context,
 			     rb_ary_new3(2, self, rb_ary_new4(argc, argv)));

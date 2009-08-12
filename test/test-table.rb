@@ -399,7 +399,7 @@ class TableTest < Test::Unit::TestCase
     comment3 = comments.add(:content => "test",
                             :created_at => Time.parse("2009-06-09"))
     result = comments.select do |record|
-      (record.match("Hello", "content")) &
+      record.match("Hello", "content") &
         (record["created_at"] < Time.parse("2009-08-01"))
     end
     assert_equal([comment2],

@@ -813,9 +813,9 @@ rb_grn_table_sort (int argc, VALUE *argv, VALUE self)
     grn_obj *result;
     grn_table_sort_key *keys;
     int i, n_keys;
-    int n_records, limit = 0;
+    int n_records, offset = 0, limit = -1;
     VALUE rb_keys, options;
-    VALUE rb_limit;
+    VALUE rb_offset, rb_limit;
     VALUE *rb_sort_keys;
     grn_table_cursor *cursor;
     VALUE rb_result;
@@ -876,15 +876,19 @@ rb_grn_table_sort (int argc, VALUE *argv, VALUE self)
     }
 
     rb_grn_scan_options(options,
+			"offset", &rb_offset,
 			"limit", &rb_limit,
 			NULL);
 
+    if (!NIL_P(rb_offset))
+	offset = NUM2INT(rb_offset);
     if (!NIL_P(rb_limit))
 	limit = NUM2INT(rb_limit);
 
     result = grn_table_create(context, NULL, 0, NULL, GRN_TABLE_NO_KEY,
 			      NULL, table);
-    n_records = grn_table_sort(context, table, limit, result, keys, n_keys);
+    n_records = grn_table_sort(context, table, offset, limit,
+			       result, keys, n_keys);
 
     rb_result = rb_ary_new();
     cursor = grn_table_cursor_open(context, result, NULL, 0, NULL, 0,

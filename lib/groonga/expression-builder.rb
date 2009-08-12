@@ -142,17 +142,14 @@ module Groonga
     end
 
     class SubExpressionBuilder < ExpressionBuilder
-      def initialize(table, column_name, query)
+      def initialize(query, options)
         super()
-        @table = table
-        @column_name = column_name
         @query = query
+        @options = options
       end
 
       def build(expression, variable)
-        expression.parse(@query,
-                         :table => @table,
-                         :default_column => @column_name)
+        expression.parse(@query, @options)
       end
     end
   end
@@ -176,8 +173,13 @@ module Groonga
       ColumnExpressionBuilder.new(column, nil, nil)
     end
 
-    def match(query, column_name=nil)
-      SubExpressionBuilder.new(@table, column_name, query)
+    def match(query, options_or_default_column={})
+      if options_or_default_column.is_a?(String)
+        options = {:default_column => options_or_default_column}
+      else
+        options = options_or_default_column
+      end
+      SubExpressionBuilder.new(query, options)
     end
   end
 
