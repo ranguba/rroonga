@@ -330,6 +330,33 @@ rb_grn_expression_array_reference (VALUE self, VALUE rb_name_or_offset)
     return Qnil;
 }
 
+/* REMOVE ME */
+grn_rc grn_expr_inspect(grn_ctx *ctx, grn_obj *buf, grn_obj *expr);
+
+static VALUE
+rb_grn_expression_inspect (VALUE self)
+{
+    grn_rc rc;
+    grn_ctx *context = NULL;
+    grn_obj inspected;
+    grn_obj *expression;
+    VALUE rb_inspected;
+
+    rb_grn_expression_deconstruct(SELF(self), &expression, &context,
+                                  NULL, NULL,
+                                  NULL, NULL, NULL);
+
+    GRN_TEXT_INIT(&inspected, 0);
+    GRN_TEXT_PUTS(context, &inspected, "#<Groonga::Expression ");
+    rc = grn_expr_inspect(context, &inspected, expression);
+    GRN_TEXT_PUTS(context, &inspected, ">");
+    rb_inspected = rb_str_new(GRN_TEXT_VALUE(&inspected),
+			      GRN_TEXT_LEN(&inspected));
+    GRN_OBJ_FIN(context, &inspected);
+
+    return rb_inspected;
+}
+
 void
 rb_grn_init_expression (VALUE mGrn)
 {
@@ -360,4 +387,7 @@ rb_grn_init_expression (VALUE mGrn)
 
     rb_define_method(rb_cGrnExpression, "[]",
                      rb_grn_expression_array_reference, 1);
+
+    rb_define_method(rb_cGrnExpression, "inspect",
+                     rb_grn_expression_inspect, 0);
 }
