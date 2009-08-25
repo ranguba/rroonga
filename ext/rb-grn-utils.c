@@ -217,8 +217,14 @@ rb_grn_bulk_from_ruby_object (VALUE object, grn_ctx *context, grn_obj *bulk)
 	break;
       case T_BIGNUM:
 	int64_value = NUM2LL(object);
-	string = (const char *)&int64_value;
-	size = sizeof(int64_value);
+        if (int64_value <= INT32_MAX) {
+            int32_value = int64_value;
+            string = (const char *)&int32_value;
+            size = sizeof(int32_value);
+        } else {
+            string = (const char *)&int64_value;
+            size = sizeof(int64_value);
+        }
 	break;
       case T_FLOAT:
 	double_value = NUM2DBL(object);
