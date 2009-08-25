@@ -88,6 +88,8 @@ class DatabaseTest < Test::Unit::TestCase
                   "define_selector",
                   "expr_missing",
                   "load",
+                  "now",
+                  "rand",
                   "select",
                   "status",
                   "table_create",

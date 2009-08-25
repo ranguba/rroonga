@@ -375,9 +375,9 @@ rb_grn_init_expression (VALUE mGrn)
     rb_define_method(rb_cGrnExpression, "define_variable",
                      rb_grn_expression_define_variable, -1);
     rb_define_method(rb_cGrnExpression, "append_object",
-                     rb_grn_expression_append_object, 1);
+                     rb_grn_expression_append_object, -1);
     rb_define_method(rb_cGrnExpression, "append_constant",
-                     rb_grn_expression_append_constant, 1);
+                     rb_grn_expression_append_constant, -1);
     rb_define_method(rb_cGrnExpression, "append_operation",
                      rb_grn_expression_append_operation, 2);
 

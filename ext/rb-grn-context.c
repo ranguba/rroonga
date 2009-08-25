@@ -472,6 +472,14 @@ rb_grn_context_array_reference (VALUE self, VALUE name_or_id)
     return GRNOBJECT2RVAL(Qnil, context, object, RB_GRN_FALSE);
 }
 
+static VALUE
+rb_grn_context_pop (VALUE self)
+{
+    grn_ctx *context;
+    context = SELF(self);
+    return GRNOBJ2RVAL(Qnil, context, grn_ctx_pop(context), self);
+}
+
 void
 rb_grn_init_context (VALUE mGrn)
 {
@@ -500,4 +508,6 @@ rb_grn_init_context (VALUE mGrn)
     rb_define_method(cGrnContext, "database", rb_grn_context_get_database, 0);
 
     rb_define_method(cGrnContext, "[]", rb_grn_context_array_reference, 1);
+    
+    rb_define_method(cGrnContext, "pop", rb_grn_context_pop, 0);
 }

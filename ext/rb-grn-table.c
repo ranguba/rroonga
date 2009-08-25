@@ -1250,7 +1250,6 @@ rb_grn_table_select (int argc, VALUE *argv, VALUE self)
     grn_ctx *context;
     grn_obj *table, *result, *expression;
     grn_operator operator = GRN_OP_OR;
-    grn_rc rc;
     VALUE rb_query = Qnil, query_or_options, options;
     VALUE rb_name, rb_operator, rb_result;
     VALUE rb_expression, builder;
@@ -1318,9 +1317,8 @@ rb_grn_table_select (int argc, VALUE *argv, VALUE self)
     }
 
 
-    rc = grn_table_select(context, table, expression, result, operator);
+    grn_table_select(context, table, expression, result, operator);
     rb_grn_context_check(context, self);
-    rb_grn_rc_check(rc, self);
 
     return rb_result;
 }

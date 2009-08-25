@@ -99,7 +99,7 @@ module Groonga
       def build(expression, variable)
         expression.append_object(variable)
         expression.append_constant(@column_name)
-        expression.append_operation(Groonga::Operation::OBJECT_GET_VALUE, 2)
+        expression.append_operation(Groonga::Operation::GET_VALUE, 2)
         expression.append_constant(@value)
         expression.append_operation(@operation, 2)
       end

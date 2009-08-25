@@ -27,9 +27,10 @@ class ExpressionTest < Test::Unit::TestCase
     expression = Groonga::Expression.new
     expression.append_constant(morita)
     expression.append_constant("name")
-    expression.append_operation(Groonga::Operation::OBJECT_GET_VALUE, 2)
+    expression.append_operation(Groonga::Operation::GET_VALUE, 2)
     expression.compile
-    assert_equal("mori daijiro", expression.execute)
+    expression.execute
+    assert_equal("mori daijiro", context.pop)
   end
 
   def test_get_value_with_variable
@@ -44,12 +45,13 @@ class ExpressionTest < Test::Unit::TestCase
     variable.value = morita
     expression.append_object(variable)
     expression.append_constant("name")
-    expression.append_operation(Groonga::Operation::OBJECT_GET_VALUE, 2)
+    expression.append_operation(Groonga::Operation::GET_VALUE, 2)
     expression.compile
-
-    assert_equal("mori daijiro", expression.execute)
+    expression.execute
+    assert_equal("mori daijiro", context.pop)
 
     variable.value = gunyara_kun.id
-    assert_equal("Tasuku SUENAGA", expression.execute)
+    expression.execute
+    assert_equal("Tasuku SUENAGA", context.pop)
   end
 end

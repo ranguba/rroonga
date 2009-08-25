@@ -78,11 +78,12 @@ rb_grn_object_from_ruby_object (VALUE object, grn_ctx **context)
     return rb_grn_object->object;
 }
 
-grn_rc
-rb_grn_object_finalizer (grn_ctx *context, grn_obj *grn_object,
+static grn_obj *
+rb_grn_object_finalizer (grn_ctx *context, int n_args, grn_obj **grn_objects,
 			 grn_user_data *user_data)
 {
     RbGrnObject *rb_grn_object;
+    grn_obj *grn_object = *grn_objects;
 
     rb_grn_object = user_data->ptr;
 
@@ -137,7 +138,7 @@ rb_grn_object_finalizer (grn_ctx *context, grn_obj *grn_object,
 	break;
     }
 
-    return GRN_SUCCESS;
+    return NULL;
 }
 
 void

@@ -119,7 +119,9 @@ module Groonga
 
     private
     def column(name)
-      @table.column(name.to_s)
+      _column = @table.column(name.to_s)
+      raise InvalidArgument, "column(#{name.inspect}) is nil" if _column.nil?
+      _column
     end
   end
 end
