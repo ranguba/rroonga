@@ -151,49 +151,52 @@ rb_grn_expression_define_variable (int argc, VALUE *argv, VALUE self)
 }
 
 static VALUE
-rb_grn_expression_get_value (VALUE self, VALUE rb_offset)
+rb_grn_expression_append_object (int argc, VALUE *argv, VALUE self)
 {
-    grn_ctx *context = NULL;
-    grn_obj *value, *expression;
-    int offset;
-
-    rb_grn_expression_deconstruct(SELF(self), &expression, &context,
-                                  NULL, NULL,
-                                  NULL, NULL, NULL);
-
-    offset = NUM2INT(rb_offset);
-    value = grn_expr_get_value(context, expression, offset);
-    return GRNBULK2RVAL(context, value, self);
-}
-
-static VALUE
-rb_grn_expression_append_object (VALUE self, VALUE rb_object)
-{
+    VALUE rb_object, rb_operation, rb_n_arguments;
     grn_ctx *context = NULL;
     grn_obj *expression, *object;
+    grn_operator operation = GRN_OP_PUSH;
+    int n_arguments = 1;
+
+    rb_scan_args(argc, argv, "12", &rb_object, &rb_operation, &rb_n_arguments);
+    if (!NIL_P(rb_operation))
+        operation = NUM2INT(rb_operation);
+    if (!NIL_P(rb_n_arguments))
+        n_arguments = NUM2INT(rb_n_arguments);
 
     rb_grn_expression_deconstruct(SELF(self), &expression, &context,
                                   NULL, NULL,
                                   NULL, NULL, NULL);
 
     object = RVAL2GRNOBJECT(rb_object, &context);
-    grn_expr_append_obj(context, expression, object);
+    grn_expr_append_obj(context, expression, object,
+                        operation, n_arguments);
     rb_grn_context_check(context, self);
     return self;
 }
 
 static VALUE
-rb_grn_expression_append_constant (VALUE self, VALUE rb_constant)
+rb_grn_expression_append_constant (int argc, VALUE *argv, VALUE self)
 {
+    VALUE rb_constant, rb_operator, rb_n_arguments;
     grn_ctx *context = NULL;
     grn_obj *expression, *constant = NULL;
+    grn_operator operator = GRN_OP_PUSH;
+    int n_arguments = 1;
+
+    rb_scan_args(argc, argv, "12", &rb_constant, &rb_operator, &rb_n_arguments);
+    if (!NIL_P(rb_operator))
+        operator = NUM2INT(rb_operator);
+    if (!NIL_P(rb_n_arguments))
+        n_arguments = NUM2INT(rb_n_arguments);
 
     rb_grn_expression_deconstruct(SELF(self), &expression, &context,
                                   NULL, NULL, NULL,
 				  NULL, NULL);
 
     RVAL2GRNOBJ(rb_constant, context, &constant);
-    grn_expr_append_const(context, expression, constant);
+    grn_expr_append_const(context, expression, constant, operator, n_arguments);
     grn_obj_close(context, constant);
     rb_grn_context_check(context, self);
     return self;
@@ -269,14 +272,18 @@ static VALUE
 rb_grn_expression_execute (VALUE self)
 {
     grn_ctx *context = NULL;
-    grn_obj *expression, *result;
+    grn_obj *expression;
+    grn_rc rc;
 
     rb_grn_expression_deconstruct(SELF(self), &expression, &context,
                                   NULL, NULL,
                                   NULL, NULL, NULL);
 
-    result = grn_expr_exec(context, expression);
-    return GRNOBJ2RVAL(Qnil, context, result, self);
+    rc = grn_expr_exec(context, expression, 0);
+    rb_grn_context_check(context, self);
+    rb_grn_rc_check(rc, self);
+    
+    return Qnil;
 }
 
 static VALUE
@@ -381,9 +388,6 @@ rb_grn_init_expression (VALUE mGrn)
                      rb_grn_expression_execute, 0);
     rb_define_method(rb_cGrnExpression, "compile",
                      rb_grn_expression_compile, 0);
-
-    rb_define_method(rb_cGrnExpression, "value",
-                     rb_grn_expression_get_value, 1);
 
     rb_define_method(rb_cGrnExpression, "[]",
                      rb_grn_expression_array_reference, 1);
