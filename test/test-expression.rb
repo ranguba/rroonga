@@ -54,4 +54,14 @@ class ExpressionTest < Test::Unit::TestCase
     expression.execute
     assert_equal("Tasuku SUENAGA", context.pop)
   end
+
+  def test_inspect
+    expression = Groonga::Expression.new
+    expression.append_constant(1)
+    expression.append_constant(1)
+    expression.append_operation(Groonga::Operation::PLUS, 2)
+    expression.compile
+
+    assert_equal("#<Groonga::Expression noname(){1 1}>", expression.inspect)
+  end
 end
