@@ -200,6 +200,11 @@ rb_grn_bulk_from_ruby_object (VALUE object, grn_ctx *context, grn_obj *bulk)
     grn_id id_value;
     grn_obj_flags flags = 0;
 
+    if (bulk && bulk->header.domain == GRN_DB_TIME)
+        return rb_grn_bulk_from_ruby_object_with_type(
+            object, context, bulk, bulk->header.domain,
+            grn_ctx_at(context, bulk->header.domain));
+    
     switch (TYPE(object)) {
       case T_NIL:
 	string = NULL;
@@ -282,7 +287,7 @@ rb_grn_bulk_from_ruby_object_with_type (VALUE object, grn_ctx *context,
     int64_t time_value;
     double double_value;
     grn_id range;
-    VALUE rb_type;
+    VALUE rb_type_object;
     grn_obj_flags flags = 0;
 
     switch (type_id) {
@@ -308,11 +313,30 @@ rb_grn_bulk_from_ruby_object_with_type (VALUE object, grn_ctx *context,
 	break;
       case GRN_DB_TIME:
 	{
-	    VALUE sec, usec;
+	    VALUE rb_sec, rb_usec;
+            int64_t sec;
+            int32_t usec;
 
-	    sec = rb_funcall(object, rb_intern("to_i"), 0);
-	    usec = rb_funcall(object, rb_intern("usec"), 0);
-	    time_value = NUM2LL(sec) * RB_GRN_USEC_PER_SEC + NUM2LL(usec);
+            switch (TYPE(object)) {
+            case T_FIXNUM:
+            case T_BIGNUM:
+                sec = NUM2LL(object);
+                usec = 0;
+                break;
+            case T_FLOAT:
+                rb_sec = rb_funcall(object, rb_intern("to_i"), 0);
+                rb_usec = rb_funcall(object, rb_intern("remainder"), 1, INT2NUM(1));
+
+                sec = NUM2LL(rb_sec);
+                usec = (int32_t)(NUM2DBL(rb_usec) * 1000000);
+                break;
+            default:
+                sec = NUM2LL(rb_funcall(object, rb_intern("to_i"), 0));
+                usec = NUM2INT(rb_funcall(object, rb_intern("usec"), 0));
+                break;
+            }
+	    
+	    time_value = sec * RB_GRN_USEC_PER_SEC + usec;
 	}
 	string = (const char *)&time_value;
 	size = sizeof(time_value);
@@ -335,10 +359,10 @@ rb_grn_bulk_from_ruby_object_with_type (VALUE object, grn_ctx *context,
       case GRN_DB_BIGRAM:
       case GRN_DB_TRIGRAM:
       case GRN_DB_MECAB:
-	rb_type = GRNOBJECT2RVAL(Qnil, context, type, RB_GRN_FALSE);
+	rb_type_object = GRNOBJECT2RVAL(Qnil, context, type, RB_GRN_FALSE);
 	rb_raise(rb_eArgError,
 		 "unbulkable type: %s",
-		 rb_grn_inspect(rb_type));
+		 rb_grn_inspect(rb_type_object));
 	break;
       default:
 	return RVAL2GRNBULK(object, context, bulk);

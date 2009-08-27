@@ -107,7 +107,7 @@ p add_bookmark("http://d.hatena.ne.jp/higepon/20070815/1187192864",
                "末尾再帰", "taporobo", "末尾再帰 Scheme LISP", 1187568793)
 p add_bookmark("http://practical-scheme.net/docs/cont-j.html",
                "なんでも継続", "taporobo", "トランポリン LISP continuation",
-               1187568692)
+               1187568692.98765)
 p add_bookmark("http://jp.rubyist.net/managinze",
                "るびま", "moritan", "Ruby ドキュメント",
                Time.now)
