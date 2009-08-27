@@ -18,6 +18,8 @@
 module Groonga
   module ExpressionBuildable
     attr_reader :table
+    attr_accessor :query
+
     def initialize(*args)
       @table = nil
       @name = nil
@@ -28,12 +30,18 @@ module Groonga
     def build
       expression = Expression.new(:table => @table,
                                   :name => @name,
-                                  :query => @query,
                                   :default_column => @default_column)
       variable = expression.define_variable(:domain => @table)
 
       builder = nil
-      builder = yield(self) if block_given?
+      builder = self.match(@query) if @query
+      if block_given?
+        if builder
+          builder &= yield(self)
+        else
+          builder = yield(self)
+        end
+      end
       if builder.nil? or builder == self
         expression.append_constant(1)
         expression.append_constant(1)

@@ -1261,11 +1261,6 @@ rb_grn_table_select (int argc, VALUE *argv, VALUE self)
 			     NULL, NULL, NULL);
 
     if (RVAL2CBOOL(rb_obj_is_kind_of(query_or_options, rb_cString))) {
-	if (rb_block_given_p())
-	    rb_raise(rb_eArgError,
-		     "should not specify both of query string and "
-		     "expression block: %s",
-		     rb_grn_inspect(rb_ary_new4(argc, argv)));
 	rb_query = query_or_options;
     } else {
 	if (!NIL_P(options))
@@ -1295,27 +1290,14 @@ rb_grn_table_select (int argc, VALUE *argv, VALUE self)
 	result = RVAL2GRNTABLE(rb_result, &context);
     }
 
-    if (NIL_P(rb_query)) {
-	builder = rb_grn_record_expression_builder_new(self, rb_name);
-	rb_expression = rb_grn_record_expression_builder_build(builder);
-	rb_grn_object_deconstruct(RB_GRN_OBJECT(DATA_PTR(rb_expression)),
-				  &expression, NULL,
-				  NULL, NULL, NULL, NULL);
-    } else {
-	const char *name = NULL, *query;
-	unsigned name_size = 0, query_size;
-
-	query = StringValueCStr(rb_query);
-	query_size = RSTRING_LEN(rb_query);
-	if (!NIL_P(rb_name)) {
-	    name = StringValueCStr(rb_name);
-	    name_size = RSTRING_LEN(rb_name);
-	}
-	expression = grn_expr_create_from_str(context, name, name_size,
-					      query, query_size,
-					      table, NULL);
+    builder = rb_grn_record_expression_builder_new(self, rb_name);
+    if (!NIL_P(rb_query)) {
+        rb_funcall(builder, rb_intern("query="), 1, rb_query);
     }
-
+    rb_expression = rb_grn_record_expression_builder_build(builder);
+    rb_grn_object_deconstruct(RB_GRN_OBJECT(DATA_PTR(rb_expression)),
+                              &expression, NULL,
+				  NULL, NULL, NULL, NULL);
 
     grn_table_select(context, table, expression, result, operator);
     rb_grn_context_check(context, self);

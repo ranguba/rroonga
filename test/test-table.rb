@@ -382,37 +382,6 @@ class TableTest < Test::Unit::TestCase
                  results.collect {|record| record["id"]})
   end
 
-  def test_select_sub_expression
-    comments = Groonga::Array.create(:name => "comments")
-    comments.define_column("content", "Text")
-    comments.define_column("created_at", "Time")
-    terms = Groonga::PatriciaTrie.create(:name => "terms")
-    terms.define_index_column("comment_content", comments,
-                              :with_section => true,
-                              :source => "comments.content")
-    comment1 = comments.add(:content => "Hello Good-bye!",
-                            :created_at => Time.parse("2009-08-09"))
-    comment2 = comments.add(:content => "Hello World",
-                            :created_at => Time.parse("2009-07-09"))
-    comment3 = comments.add(:content => "test",
-                            :created_at => Time.parse("2009-06-09"))
-    result = comments.select do |record|
-      record.match("Hello", "content") &
-        (record["created_at"] < Time.parse("2009-08-01"))
-    end
-    assert_equal([comment2],
-                 result.collect {|record| record.key})
-  end
-
-  def test_select_without_block
-    comments = Groonga::Array.create(:name => "comments")
-    comment1 = comments.add
-    comment2 = comments.add
-    comment3 = comments.add
-    assert_equal([comment1, comment2, comment3],
-                 comments.select.collect {|record| record.key})
-  end
-
   def test_group
     bookmarks = Groonga::Hash.create(:name => "<bookmarks>")
     bookmarks.define_column("title", "<text>")
