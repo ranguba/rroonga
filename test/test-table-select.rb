@@ -57,6 +57,13 @@ class TableTestSelect < Test::Unit::TestCase
     assert_equal([@comment2], result.collect {|record| record.key})
   end
 
+  def test_select_query_with_block_match
+    result = @comments.select("content:%Hello") do |record|
+      record.match("World", "content")
+    end
+    assert_equal([@comment2], result.collect {|record| record.key})
+  end
+
   def test_select_without_block
     assert_equal([@comment1, @comment2, @comment3],
                  @comments.select.collect {|record| record.key})
