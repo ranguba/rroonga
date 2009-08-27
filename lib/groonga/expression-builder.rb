@@ -28,9 +28,7 @@ module Groonga
     end
 
     def build
-      expression = Expression.new(:table => @table,
-                                  :name => @name,
-                                  :default_column => @default_column)
+      expression = Expression.new(:name => @name)
       variable = expression.define_variable(:domain => @table)
 
       builder = nil
