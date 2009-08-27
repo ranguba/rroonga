@@ -196,6 +196,30 @@ class ColumnTest < Test::Unit::TestCase
                  end)
   end
 
+  def test_select_with_block
+    posts = Groonga::Hash.create(:name => "<posts>", :key_type => "<shorttext>")
+    body = posts.define_column("body", "<text>")
+
+    index = Groonga::PatriciaTrie.create(:name => "<terms>",
+                                         :key_type => "<shorttext>",
+                                         :key_normalize => true)
+    index.default_tokenizer = "<token:bigram>"
+    body_index = index.define_index_column("body_index", posts,
+                                           :with_position => true,
+                                           :source => body)
+
+    first_post = posts.add("Hello!", :body => "World")
+    hobby = posts.add("My Hobby", :body => "Drive and Eat")
+    
+    result = body.select do |column|
+      column =~ "drive"
+    end
+    assert_equal(["Drive and Eat"],
+                 result.records.collect do |record|
+                   record["body"]
+                 end)
+  end
+
   private
   def assert_content_search(expected_records, term)
     records = @bookmarks_index_content.search(term).records

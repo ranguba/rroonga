@@ -168,32 +168,35 @@ rb_grn_column_select (int argc, VALUE *argv, VALUE self)
     grn_obj *table, *column, *result, *expression;
     grn_operator operator = GRN_OP_OR;
     VALUE options;
-    VALUE rb_query, rb_name, rb_operator, rb_result;
-    char *name = NULL, *query;
-    unsigned name_size = 0, query_size;
+    VALUE rb_query, rb_query_or_options, rb_name, rb_operator, rb_result;
     VALUE builder;
     VALUE rb_expression;
+    
+    rb_query = Qnil;
 
-    rb_scan_args(argc, argv, "11", &rb_query, &options);
-
-    query = StringValueCStr(rb_query);
-    query_size = RSTRING_LEN(rb_query);
+    rb_scan_args(argc, argv, "02", &rb_query_or_options, &options);
 
     rb_grn_column_deconstruct(SELF(self), &column, &context,
 			      NULL, NULL,
 			      NULL, NULL, NULL);
     table = grn_column_table(context, column);
 
+    if (RVAL2CBOOL(rb_obj_is_kind_of(rb_query_or_options, rb_cString))) {
+        rb_query = rb_query_or_options;
+    } else {
+        if (!NIL_P(options))
+            rb_raise(rb_eArgError,
+		     "should be [query_string, option_hash] "
+		     "or [option_hash]: %s",
+		     rb_grn_inspect(rb_ary_new4(argc, argv)));
+        options = rb_query_or_options;
+    }
+    
     rb_grn_scan_options(options,
 			"operator", &rb_operator,
 			"result", &rb_result,
 			"name", &rb_name,
 			NULL);
-
-    if (!NIL_P(rb_name)) {
-	name = StringValueCStr(rb_name);
-	name_size = RSTRING_LEN(rb_name);
-    }
 
     if (!NIL_P(rb_operator))
 	operator = NUM2INT(rb_operator);
