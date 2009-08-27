@@ -70,17 +70,14 @@ rb_grn_expression_initialize (int argc, VALUE *argv, VALUE self)
 {
     grn_ctx *context = NULL;
     grn_obj *expression;
-    VALUE options, rb_context, rb_name, rb_query, rb_table, rb_default_column;
-    char *name = NULL, *query = NULL;
-    unsigned name_size = 0, query_size = 0;
+    VALUE options, rb_context, rb_name;
+    char *name = NULL;
+    unsigned name_size = 0;
 
     rb_scan_args(argc, argv, "01", &options);
     rb_grn_scan_options(options,
                         "context", &rb_context,
                         "name", &rb_name,
-                        "query", &rb_query,
-                        "table", &rb_table,
-                        "default_column", &rb_default_column,
                         NULL);
 
     context = rb_grn_context_ensure(&rb_context);
@@ -90,23 +87,7 @@ rb_grn_expression_initialize (int argc, VALUE *argv, VALUE self)
 	name_size = RSTRING_LEN(rb_name);
     }
 
-    if (!NIL_P(rb_query)) {
-	query = StringValuePtr(rb_query);
-	query_size = RSTRING_LEN(rb_query);
-    }
-
-    if (query) {
-	grn_obj *table;
-	grn_obj *default_column = NULL;
-
-	table = RVAL2GRNOBJECT(rb_table, &context);
-	default_column = RVAL2GRNBULK(rb_default_column, context, default_column);
-	expression = grn_expr_create_from_str(context, name, name_size,
-					      query, query_size,
-					      table, default_column);
-    } else {
-	expression = grn_expr_create(context, name, name_size);
-    }
+    expression = grn_expr_create(context, name, name_size);
     rb_grn_object_assign(Qnil, self, rb_context, context, expression);
     rb_grn_context_check(context, self);
 
