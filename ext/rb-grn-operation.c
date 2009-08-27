@@ -69,16 +69,18 @@ rb_grn_init_operation (VALUE mGrn)
                     UINT2NUM(GRN_OP_XOR_ASSIGN));
     rb_define_const(rb_mGrnOperation, "OR_ASSIGN",
                     UINT2NUM(GRN_OP_OR_ASSIGN));
-    rb_define_const(rb_mGrnOperation, "QUESTION",
-                    UINT2NUM(GRN_OP_QUESTION));
-    rb_define_const(rb_mGrnOperation, "COLON",
-                    UINT2NUM(GRN_OP_COLON));
+    rb_define_const(rb_mGrnOperation, "TERNARY",
+                    UINT2NUM(GRN_OP_TERNARY));
+    rb_define_const(rb_mGrnOperation, "COMMA",
+                    UINT2NUM(GRN_OP_COMMA));
     rb_define_const(rb_mGrnOperation, "BITWISE_OR",
                     UINT2NUM(GRN_OP_BITWISE_OR));
     rb_define_const(rb_mGrnOperation, "BITWISE_XOR",
                     UINT2NUM(GRN_OP_BITWISE_XOR));
     rb_define_const(rb_mGrnOperation, "BITWISE_AND",
                     UINT2NUM(GRN_OP_BITWISE_AND));
+    rb_define_const(rb_mGrnOperation, "BITWISE_NOT",
+                    UINT2NUM(GRN_OP_BITWISE_NOT));
     rb_define_const(rb_mGrnOperation, "EQUAL",
                     UINT2NUM(GRN_OP_EQUAL));
     rb_define_const(rb_mGrnOperation, "NOT_EQUAL",
@@ -125,6 +127,10 @@ rb_grn_init_operation (VALUE mGrn)
                     UINT2NUM(GRN_OP_INCR));
     rb_define_const(rb_mGrnOperation, "DECREMENT",
                     UINT2NUM(GRN_OP_DECR));
+    rb_define_const(rb_mGrnOperation, "INCREMENT_POST",
+                    UINT2NUM(GRN_OP_INCR_POST));
+    rb_define_const(rb_mGrnOperation, "DECREMENT_POST",
+                    UINT2NUM(GRN_OP_DECR_POST));
     rb_define_const(rb_mGrnOperation, "NOT",
                     UINT2NUM(GRN_OP_NOT));
     rb_define_const(rb_mGrnOperation, "ADJUST",
@@ -169,6 +175,7 @@ rb_grn_init_operation (VALUE mGrn)
                     UINT2NUM(GRN_OP_TABLE_GROUP));
     rb_define_const(rb_mGrnOperation, "JSON_PUT",
                     UINT2NUM(GRN_OP_JSON_PUT));
+
 
 /*
     rb_define_const(rb_mGrnOperation, "GEO_DISTANCE1",
