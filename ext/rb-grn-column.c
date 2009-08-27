@@ -171,6 +171,8 @@ rb_grn_column_select (int argc, VALUE *argv, VALUE self)
     VALUE rb_query, rb_name, rb_operator, rb_result;
     char *name = NULL, *query;
     unsigned name_size = 0, query_size;
+    VALUE builder;
+    VALUE rb_expression;
 
     rb_scan_args(argc, argv, "11", &rb_query, &options);
 
@@ -206,9 +208,12 @@ rb_grn_column_select (int argc, VALUE *argv, VALUE self)
 	result = RVAL2GRNTABLE(rb_result, &context);
     }
 
-    expression = grn_expr_create_from_str(context, name, name_size,
-					  query, query_size,
-					  table, column);
+    builder = rb_grn_column_expression_builder_new(self, rb_name, rb_query);
+    rb_expression = rb_grn_column_expression_builder_build(builder);
+    rb_grn_object_deconstruct(RB_GRN_OBJECT(DATA_PTR(rb_expression)),
+                              &expression, NULL,
+                              NULL, NULL, NULL, NULL);
+
     grn_table_select(context, table, expression, result, operator);
     rb_grn_context_check(context, self);
 

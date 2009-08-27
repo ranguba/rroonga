@@ -32,7 +32,7 @@ module Groonga
       variable = expression.define_variable(:domain => @table)
 
       builder = nil
-      builder = self.match(@query) if @query
+      builder = match(@query) if @query
       if block_given?
         if builder
           builder &= yield(self)
@@ -203,27 +203,31 @@ module Groonga
     end
 
     def ==(other)
-      EqualExpressionBuilder.new(@column.local_name, normalize(other))
+      EqualExpressionBuilder.new(@default_column, normalize(other))
     end
 
     def =~(other)
-      MatchExpressionBuilder.new(@column.local_name, normalize(other))
+      MatchExpressionBuilder.new(@default_column, normalize(other))
     end
 
     def <(other)
-      LessExpressionBuilder.new(@column.local_name, normalize(other))
+      LessExpressionBuilder.new(@default_column, normalize(other))
     end
 
     def <=(other)
-      LessEqualExpressionBuilder.new(@column.local_name, normalize(other))
+      LessEqualExpressionBuilder.new(@default_column, normalize(other))
     end
 
     def >(other)
-      GreaterExpressionBuilder.new(@column.local_name, normalize(other))
+      GreaterExpressionBuilder.new(@default_column, normalize(other))
     end
 
     def >=(other)
-      GreaterEqualExpressionBuilder.new(@column.local_name, normalize(other))
+      GreaterEqualExpressionBuilder.new(@default_column, normalize(other))
+    end
+
+    def match(query)
+      SubExpressionBuilder.new(query, :default_column => @default_column)
     end
 
     private
