@@ -53,7 +53,7 @@ groongaには以下の3種類のテーブルがあります。
 ここではハッシュテーブルを利用して、<tt><items></tt>という名前のテー
 ブルを作成します。
 
-  >> items = Groonga::Hash.create(:name => "<items>", :persistent => true)
+  >> items = Groonga::Hash.create(:name => "<items>")
   => #<Groonga::Hash ...>
 
 
@@ -93,7 +93,7 @@ groongaには以下の3種類のテーブルがあります。
 
 まず<tt><items></tt>テーブルに+title+という名前のカラムを追加します。
 
-  >> title_column = items.define_column("title", "<text>", :persistent => true)
+  >> title_column = items.define_column("title", "<text>")
   => #<Groonga::VarSizeColumn ...>
 
 2番目の引数は、追加するカラムのデータ型を示しています。
@@ -106,7 +106,6 @@ groongaには以下の3種類のテーブルがあります。
 
   >> terms = Groonga::Hash.create(:name => "<terms>",
                                   :key_type => "<shorttext>",
-                                  :persistent => true,
                                   :default_tokenizer => "<token:bigram>")
   => #<Groonga::Hash ...>
 
@@ -126,7 +125,6 @@ N-gramを利用した全文検索では、分解したN文字とその出現位�
 ルの+title+カラムに対するインデックスを定義します。
 
   >> title_index_column = terms.define_index_column("item_title", items,
-						    :persistent => true,
 						    :source => "<items>.title")
   => #<Groonga::IndexColumn ...>
 
@@ -187,8 +185,7 @@ http://qwik.jp/senna/senna2.files/rect4605.png
 
 次に、<tt><comments></tt>テーブルを追加します。
 
-  >> comments = Groonga::Array.create(:name => "<comments>",
-                                      :key_type => "<shorttext>")
+  >> comments = Groonga::Array.create(:name => "<comments>")
   => #<Groonga::Array ...>
   >> comments.define_column("item", items)
   => #<Groonga::FixSizeColumn ..>
