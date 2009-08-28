@@ -600,8 +600,8 @@ rb_grn_object_inspect_content_flags (VALUE inspected,
 	    rb_ary_push(inspected_flags, rb_str_new2("TABLE_PAT_KEY"));
 	if (flags & GRN_OBJ_TABLE_NO_KEY)
 	    rb_ary_push(inspected_flags, rb_str_new2("TABLE_NO_KEY"));
-	if (flags & GRN_OBJ_TABLE_ALIAS)
-	    rb_ary_push(inspected_flags, rb_str_new2("TABLE_ALIAS"));
+	if (flags & GRN_OBJ_TABLE_VIEW)
+	    rb_ary_push(inspected_flags, rb_str_new2("TABLE_VIEW"));
     }
 
     switch (object->header.type) {
