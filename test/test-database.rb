@@ -79,10 +79,12 @@ class DatabaseTest < Test::Unit::TestCase
                   "TokenMecab",
                   "TokenTrigram",
                   "TokenUnigram",
+                  "TokyoGeoPoint",
                   "UInt16",
                   "UInt32",
                   "UInt64",
                   "UInt8",
+                  "WGS84GeoPoint",
                   "column_create",
                   "column_list",
                   "define_selector",
@@ -93,7 +95,8 @@ class DatabaseTest < Test::Unit::TestCase
                   "select",
                   "status",
                   "table_create",
-                  "table_list"],
+                  "table_list",
+                  "view_add"],
                  database.collect {|object| object.name}.sort)
   end
 
