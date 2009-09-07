@@ -203,4 +203,11 @@ class HashTest < Test::Unit::TestCase
     users.add("morita")
     assert_true(users.has_key?("morita"))
   end
+
+  def test_big_key
+    hash = Groonga::Hash.create(:key_type => "UInt64")
+    assert_nothing_raised do
+      hash.add(1 << 63)
+    end
+  end
 end

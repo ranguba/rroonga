@@ -105,6 +105,9 @@ rb_grn_bulk_to_ruby_object_by_range_id (grn_ctx *context, grn_obj *bulk,
       case GRN_DB_INT64:
 	*rb_value = LL2NUM(*((long long *)GRN_BULK_HEAD(bulk)));
 	break;
+      case GRN_DB_UINT64:
+	*rb_value = ULL2NUM(GRN_UINT64_VALUE(bulk));
+	break;
       case GRN_DB_FLOAT:
 	*rb_value = rb_float_new(*((double *)GRN_BULK_HEAD(bulk)));
 	break;
@@ -204,7 +207,7 @@ rb_grn_bulk_from_ruby_object (VALUE object, grn_ctx *context, grn_obj *bulk)
         return rb_grn_bulk_from_ruby_object_with_type(
             object, context, bulk, bulk->header.domain,
             grn_ctx_at(context, bulk->header.domain));
-    
+
     switch (TYPE(object)) {
       case T_NIL:
 	string = NULL;
@@ -284,6 +287,7 @@ rb_grn_bulk_from_ruby_object_with_type (VALUE object, grn_ctx *context,
     int32_t int32_value;
     uint32_t uint32_value;
     int64_t int64_value;
+    uint64_t uint64_value;
     int64_t time_value;
     double double_value;
     grn_id range;
@@ -305,6 +309,11 @@ rb_grn_bulk_from_ruby_object_with_type (VALUE object, grn_ctx *context,
 	int64_value = NUM2LL(object);
 	string = (const char *)&int64_value;
 	size = sizeof(int64_value);
+	break;
+      case GRN_DB_UINT64:
+	uint64_value = NUM2ULL(object);
+	string = (const char *)&uint64_value;
+	size = sizeof(uint64_value);
 	break;
       case GRN_DB_FLOAT:
 	double_value = NUM2DBL(object);

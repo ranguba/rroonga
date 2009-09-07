@@ -53,5 +53,7 @@ http://lists.sourceforge.jp/mailman/listinfo/groonga-dev
 * 森さん: 最新groonga対応パッチをくれました。
 * グニャラくん: バグレポートしてくれました。
 * にくさん: バグレポートしてくれました。
-* daraさん: テストを書いてくれました。
+* daraさん:
+  * テストを書いてくれました。
+  * バグを直してくれました。
 * id:mat_akiさん: チュートリアルのバグを教えてくれました。
