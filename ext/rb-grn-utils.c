@@ -94,35 +94,37 @@ rb_grn_bulk_to_ruby_object_by_range_id (grn_ctx *context, grn_obj *bulk,
 
     switch (range_id) {
       case GRN_DB_VOID:
-	*rb_value = rb_str_new(GRN_BULK_HEAD(bulk), GRN_BULK_VSIZE(bulk));
+	*rb_value = rb_str_new(GRN_TEXT_VALUE(bulk), GRN_TEXT_LEN(bulk));
 	break;
       case GRN_DB_INT32:
-	*rb_value = INT2NUM(*((int *)GRN_BULK_HEAD(bulk)));
+	*rb_value = INT2NUM(GRN_INT32_VALUE(bulk));
 	break;
       case GRN_DB_UINT32:
-	*rb_value = UINT2NUM(*((int *)GRN_BULK_HEAD(bulk)));
+	*rb_value = UINT2NUM(GRN_UINT32_VALUE(bulk));
 	break;
       case GRN_DB_INT64:
-	*rb_value = LL2NUM(*((long long *)GRN_BULK_HEAD(bulk)));
+	*rb_value = LL2NUM(GRN_INT64_VALUE(bulk));
 	break;
       case GRN_DB_UINT64:
 	*rb_value = ULL2NUM(GRN_UINT64_VALUE(bulk));
 	break;
       case GRN_DB_FLOAT:
-	*rb_value = rb_float_new(*((double *)GRN_BULK_HEAD(bulk)));
+	*rb_value = rb_float_new(GRN_FLOAT_VALUE(bulk));
 	break;
       case GRN_DB_TIME:
 	{
-	    int64_t time_value = GRN_TIME_VALUE(bulk);
+	    int64_t time_value, sec, usec;
+
+	    time_value = GRN_TIME_VALUE(bulk);
+	    GRN_TIME_UNPACK(time_value, sec, usec);
 	    *rb_value = rb_funcall(rb_cTime, rb_intern("at"), 2,
-				   LL2NUM(time_value / RB_GRN_USEC_PER_SEC),
-				   LL2NUM(time_value % RB_GRN_USEC_PER_SEC));
+				   LL2NUM(sec), LL2NUM(usec));
 	}
 	break;
       case GRN_DB_SHORT_TEXT:
       case GRN_DB_TEXT:
       case GRN_DB_LONG_TEXT:
-	*rb_value = rb_str_new(GRN_BULK_HEAD(bulk), GRN_BULK_VSIZE(bulk));
+	*rb_value = rb_str_new(GRN_TEXT_VALUE(bulk), GRN_TEXT_LEN(bulk));
 	break;
       default:
 	success = RB_GRN_FALSE;
@@ -245,7 +247,7 @@ rb_grn_bulk_from_ruby_object (VALUE object, grn_ctx *context, grn_obj *bulk)
 
 	    sec = rb_funcall(object, rb_intern("to_i"), 0);
 	    usec = rb_funcall(object, rb_intern("usec"), 0);
-	    time_value = NUM2LL(sec) * RB_GRN_USEC_PER_SEC + NUM2LL(usec);
+	    time_value = GRN_TIME_PACK(NUM2LL(sec), NUM2LL(usec));
 	    string = (const char *)&time_value;
 	    size = sizeof(time_value);
 	} else if (RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cGrnObject))) {
@@ -334,7 +336,8 @@ rb_grn_bulk_from_ruby_object_with_type (VALUE object, grn_ctx *context,
                 break;
             case T_FLOAT:
                 rb_sec = rb_funcall(object, rb_intern("to_i"), 0);
-                rb_usec = rb_funcall(object, rb_intern("remainder"), 1, INT2NUM(1));
+                rb_usec = rb_funcall(object, rb_intern("remainder"), 1,
+				     INT2NUM(1));
 
                 sec = NUM2LL(rb_sec);
                 usec = (int32_t)(NUM2DBL(rb_usec) * 1000000);
@@ -344,8 +347,8 @@ rb_grn_bulk_from_ruby_object_with_type (VALUE object, grn_ctx *context,
                 usec = NUM2INT(rb_funcall(object, rb_intern("usec"), 0));
                 break;
             }
-	    
-	    time_value = sec * RB_GRN_USEC_PER_SEC + usec;
+
+	    time_value = GRN_TIME_PACK(sec, usec);
 	}
 	string = (const char *)&time_value;
 	size = sizeof(time_value);
@@ -655,7 +658,7 @@ rb_grn_obj_from_ruby_object (VALUE rb_object, grn_ctx *context, grn_obj **_obj)
 
 	    sec = rb_funcall(rb_object, rb_intern("to_i"), 0);
 	    usec = rb_funcall(rb_object, rb_intern("usec"), 0);
-	    time_value = NUM2LL(sec) * RB_GRN_USEC_PER_SEC + NUM2LL(usec);
+	    time_value = GRN_TIME_PACK(NUM2LL(sec), NUM2LL(usec));
 	    grn_obj_reinit(context, obj, GRN_DB_TIME, 0);
 	    GRN_TIME_SET(context, obj, time_value);
 	} else if (RVAL2CBOOL(rb_obj_is_kind_of(rb_object, rb_cGrnObject))) {

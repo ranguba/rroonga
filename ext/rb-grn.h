@@ -75,8 +75,6 @@ typedef int rb_grn_boolean;
 
 #include <stdint.h>
 
-#define RB_GRN_USEC_PER_SEC 1000000
-
 #define RB_GRN_OBJECT(object) ((RbGrnObject *)(object))
 #define RB_GRN_TABLE(object) ((RbGrnTable *)(object))
 #define RB_GRN_TABLE_KEY_SUPPORT(object) ((RbGrnTableKeySupport *)(object))
