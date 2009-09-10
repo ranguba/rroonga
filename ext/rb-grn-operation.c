@@ -69,8 +69,10 @@ rb_grn_init_operation (VALUE mGrn)
                     UINT2NUM(GRN_OP_XOR_ASSIGN));
     rb_define_const(rb_mGrnOperation, "OR_ASSIGN",
                     UINT2NUM(GRN_OP_OR_ASSIGN));
-    rb_define_const(rb_mGrnOperation, "TERNARY",
-                    UINT2NUM(GRN_OP_TERNARY));
+    rb_define_const(rb_mGrnOperation, "JUMP",
+                    UINT2NUM(GRN_OP_JUMP));
+    rb_define_const(rb_mGrnOperation, "CJUMP",
+                    UINT2NUM(GRN_OP_CJUMP));
     rb_define_const(rb_mGrnOperation, "COMMA",
                     UINT2NUM(GRN_OP_COMMA));
     rb_define_const(rb_mGrnOperation, "BITWISE_OR",
