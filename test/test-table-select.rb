@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Copyright (C) 2009  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
@@ -34,6 +35,9 @@ class TableTestSelect < Test::Unit::TestCase
                               :created_at => Time.parse("2009-07-09"))
     @comment3 = @comments.add(:content => "test",
                               :created_at => Time.parse("2009-06-09"))
+    @japanese_comment =
+      @comments.add(:content => "うちのボロTVはまだ現役です",
+                    :created_at => Time.parse("2009-06-09"))
   end
 
   def test_select_sub_expression
@@ -49,8 +53,7 @@ class TableTestSelect < Test::Unit::TestCase
     result = @comments.select("content:%Hello")
     assert_equal([@comment1, @comment2], result.collect {|record| record.key})
   end
-  
-  priority :must
+
   def test_select_query_with_block
     result = @comments.select("content:%Hello") do |record|
       record["created_at"] < Time.parse("2009-08-01")
@@ -66,7 +69,12 @@ class TableTestSelect < Test::Unit::TestCase
   end
 
   def test_select_without_block
-    assert_equal([@comment1, @comment2, @comment3],
+    assert_equal([@comment1, @comment2, @comment3, @japanese_comment],
                  @comments.select.collect {|record| record.key})
+  end
+
+  def test_select_query_japanese
+    result = @comments.select("content:%ボロTV")
+    assert_equal([@japanese_comment], result.collect {|record| record.key})
   end
 end
