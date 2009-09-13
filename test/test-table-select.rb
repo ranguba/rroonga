@@ -23,7 +23,8 @@ class TableTestSelect < Test::Unit::TestCase
     @comments = Groonga::Array.create(:name => "comments")
     @comments.define_column("content", "Text")
     @comments.define_column("created_at", "Time")
-    terms = Groonga::PatriciaTrie.create(:name => "terms")
+    terms = Groonga::PatriciaTrie.create(:name => "terms",
+                                         :default_tokenizer => "TokenBigram")
     terms.define_index_column("comment_content", @comments,
                               :with_section => true,
                               :source => "comments.content")
