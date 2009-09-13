@@ -125,7 +125,7 @@ class SchemaTest < Test::Unit::TestCase
                  "id: <#{table.id}>, " +
                  "name: <<posts>>, " +
                  "path: <#{path}>, " +
-                 "domain: <nil>, " +
+                 "domain: <#{type.inspect}>, " +
                  "range: <#{type.inspect}>, " +
                  "flags: <>, " +
                  "size: <0>>",
