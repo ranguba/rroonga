@@ -23,7 +23,7 @@
 VALUE rb_cGrnVariableSizeColumn;
 
 /*
- * Document-class: Groonga::FixSizeColumn < Groonga::Column
+ * Document-class: Groonga::VariableSizeColumn < Groonga::Column
  *
  * 可変長データ用のカラム。
  */
