@@ -238,7 +238,7 @@ rb_grn_expression_parse (int argc, VALUE *argv, VALUE self)
     if (!NIL_P(rb_default_operator))
 	default_operator = RVAL2GRNOPERATOR(rb_default_operator);
     if (RVAL2CBOOL(rb_use_pragma))
-	parse_level = 2;
+	parse_level = 4;
     rc = grn_expr_parse(context, expression, query, query_size,
 			default_column, default_mode, default_operator,
 			parse_level);
