@@ -47,7 +47,7 @@ $LOAD_PATH.unshift(lib_dir)
 $LOAD_PATH.unshift(test_dir)
 require 'groonga-test-utils'
 
-Dir.glob("test/**/test{_,-}*.rb") do |file|
+Dir.glob("#{base_dir}/test/**/test{_,-}*.rb") do |file|
   require file.sub(/\.rb$/, '')
 end
 
