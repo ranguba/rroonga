@@ -77,4 +77,11 @@ class TableTestSelect < Test::Unit::TestCase
     result = @comments.select("content:%ボロTV")
     assert_equal([@japanese_comment], result.collect {|record| record.key})
   end
+
+  def test_select_not_query
+    result = @comments.select do |record|
+      record["content"].match "Hello -World"
+    end
+    assert_equal([@comment1], result.collect {|record| record.key})
+  end
 end
