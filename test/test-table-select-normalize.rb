@@ -40,4 +40,9 @@ class TableTestSelectNormalize < Test::Unit::TestCase
     result = @comments.select("content:%ボロTV")
     assert_equal([@japanese_comment], result.collect {|record| record.key})
   end
+
+  def test_select_query_only_in_japanese
+    result = @comments.select("content:%うちの")
+    assert_equal([@japanese_comment], result.collect {|record| record.key})
+  end
 end
