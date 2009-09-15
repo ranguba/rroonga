@@ -245,6 +245,7 @@ rb_grn_expression_parse (int argc, VALUE *argv, VALUE self)
     if (rc != GRN_SUCCESS)
 	rb_grn_context_check(context,
 			     rb_ary_new3(2, self, rb_ary_new4(argc, argv)));
+    grn_obj_close(context, default_column);
 
     return Qnil;
 }
