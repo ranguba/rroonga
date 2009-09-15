@@ -53,7 +53,7 @@ rb_grn_context_from_ruby_object (VALUE object)
     Data_Get_Struct(object, RbGrnContext, rb_grn_context);
     if (!rb_grn_context)
 	rb_raise(rb_eGrnError, "groonga context is NULL");
-    return &(rb_grn_context->context);
+    return rb_grn_context->context;
 }
 
 static void
@@ -62,7 +62,7 @@ rb_grn_context_free (void *pointer)
     RbGrnContext *rb_grn_context = pointer;
     grn_ctx *context;
 
-    context = &(rb_grn_context->context);
+    context = rb_grn_context->context;
     debug("context-free: %p\n", context);
     if (context->stat != GRN_CTX_FIN) {
 	grn_obj *database;
@@ -76,8 +76,6 @@ rb_grn_context_free (void *pointer)
     }
     debug("context-free: %p: done\n", context);
     xfree(rb_grn_context);
-
-    GRN_CTX_USER_DATA(context)->ptr = NULL;
 }
 
 static VALUE
@@ -233,7 +231,6 @@ rb_grn_context_initialize (int argc, VALUE *argv, VALUE self)
     RbGrnContext *rb_grn_context;
     grn_ctx *context;
     int flags = 0;
-    grn_rc rc;
     VALUE options, default_options;
     VALUE rb_encoding;
 
@@ -252,8 +249,7 @@ rb_grn_context_initialize (int argc, VALUE *argv, VALUE self)
 
     rb_grn_context = ALLOC(RbGrnContext);
     DATA_PTR(self) = rb_grn_context;
-    context = &(rb_grn_context->context);
-    rc = grn_ctx_init(context, flags);
+    context = rb_grn_context->context = grn_ctx_open(flags);
     rb_grn_context_check(context, self);
 
     GRN_CTX_USER_DATA(context)->ptr = rb_grn_context;

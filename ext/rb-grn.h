@@ -89,7 +89,7 @@ typedef void (*RbGrnUnbindFunction) (void *object);
 typedef struct _RbGrnContext RbGrnContext;
 struct _RbGrnContext
 {
-    grn_ctx context;
+    grn_ctx *context;
 };
 
 typedef struct _RbGrnObject RbGrnObject;
