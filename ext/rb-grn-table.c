@@ -1297,10 +1297,15 @@ rb_grn_table_select (int argc, VALUE *argv, VALUE self)
     rb_expression = rb_grn_record_expression_builder_build(builder);
     rb_grn_object_deconstruct(RB_GRN_OBJECT(DATA_PTR(rb_expression)),
                               &expression, NULL,
-				  NULL, NULL, NULL, NULL);
+			      NULL, NULL, NULL, NULL);
 
     grn_table_select(context, table, expression, result, operator);
     rb_grn_context_check(context, self);
+
+    rb_attr(rb_singleton_class(rb_result),
+	    rb_intern("expression"),
+	    RB_GRN_TRUE, RB_GRN_FALSE, RB_GRN_FALSE);
+    rb_iv_set(rb_result, "@expression", rb_expression);
 
     return rb_result;
 }
