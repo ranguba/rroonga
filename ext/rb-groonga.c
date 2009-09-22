@@ -18,12 +18,22 @@
 
 #include "rb-grn.h"
 
+rb_grn_boolean rb_grn_exited = RB_GRN_FALSE;
 extern grn_ctx grn_gctx;
 
 static void
-finish_groonga (void)
+finish_groonga (VALUE data)
 {
+    grn_ctx *context = grn_gctx.next;
+
+    debug("finish\n");
+    while (context && context != &grn_gctx) {
+	rb_grn_context_fin(context);
+	context = context->next;
+    }
     grn_fin();
+    debug("finish: done\n");
+    rb_grn_exited = RB_GRN_TRUE;
 }
 
 void
@@ -68,7 +78,7 @@ Init_groonga (void)
     rb_grn_init_exception(mGrn);
 
     rb_grn_rc_check(grn_init(), Qnil);
-    atexit(finish_groonga);
+    rb_set_end_proc(finish_groonga, Qnil);
 
     rb_grn_init_utils(mGrn);
     rb_grn_init_encoding(mGrn);

@@ -56,6 +56,22 @@ rb_grn_context_from_ruby_object (VALUE object)
     return rb_grn_context->context;
 }
 
+void
+rb_grn_context_fin (grn_ctx *context)
+{
+    grn_obj *database;
+
+    if (context->stat == GRN_CTX_FIN)
+	return;
+
+    database = grn_ctx_db(context);
+    debug("context:database: %p:%p\n", context, database);
+    if (database && database->header.type == GRN_DB) {
+	grn_obj_close(context, database);
+    }
+    grn_ctx_fin(context);
+}
+
 static void
 rb_grn_context_free (void *pointer)
 {
@@ -64,16 +80,8 @@ rb_grn_context_free (void *pointer)
 
     context = rb_grn_context->context;
     debug("context-free: %p\n", context);
-    if (context->stat != GRN_CTX_FIN) {
-	grn_obj *database;
-
-	database = grn_ctx_db(context);
-	debug("context:database: %p:%p\n", context, database);
-	if (database && database->header.type == GRN_DB) {
-	    grn_obj_close(context, database);
-	}
-	grn_ctx_fin(context);
-    }
+    if (!rb_grn_exited)
+	rb_grn_context_fin(context);
     debug("context-free: %p: done\n", context);
     xfree(rb_grn_context);
 }
