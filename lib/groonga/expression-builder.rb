@@ -185,7 +185,8 @@ module Groonga
       else
         options = options_or_default_column
       end
-      SubExpressionBuilder.new(query, options)
+      default_options = {:parser => :table}
+      SubExpressionBuilder.new(query, default_options.merge(options))
     end
   end
 
@@ -226,8 +227,11 @@ module Groonga
       GreaterEqualExpressionBuilder.new(@default_column, normalize(other))
     end
 
-    def match(query)
-      SubExpressionBuilder.new(query, :default_column => @default_column)
+    def match(query, options={})
+      default_options = {:parser => :table}
+      ensure_options = {:default_column => @default_column}
+      options = default_options.merge(options).merge(ensure_options)
+      SubExpressionBuilder.new(query, options)
     end
 
     private

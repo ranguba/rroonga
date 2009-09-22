@@ -215,14 +215,14 @@ rb_grn_expression_parse (int argc, VALUE *argv, VALUE self)
     unsigned query_size = 0;
     int parse_level = 0;
     VALUE options, rb_query, rb_default_column, rb_default_operator;
-    VALUE rb_default_mode, rb_use_pragma;
+    VALUE rb_default_mode, rb_parser;
 
     rb_scan_args(argc, argv, "11", &rb_query, &options);
     rb_grn_scan_options(options,
                         "default_column", &rb_default_column,
                         "default_operator", &rb_default_operator,
                         "default_mode", &rb_default_mode,
-			"use_pragma", &rb_use_pragma,
+			"parser", &rb_parser,
                         NULL);
 
     query = StringValuePtr(rb_query);
@@ -237,8 +237,26 @@ rb_grn_expression_parse (int argc, VALUE *argv, VALUE self)
 	default_mode = RVAL2GRNOPERATOR(rb_default_mode);
     if (!NIL_P(rb_default_operator))
 	default_operator = RVAL2GRNOPERATOR(rb_default_operator);
-    if (RVAL2CBOOL(rb_use_pragma))
+    if (NIL_P(rb_parser) ||
+	rb_grn_equal_option(rb_parser, "column") ||
+	rb_grn_equal_option(rb_parser, "column-query") ||
+	rb_grn_equal_option(rb_parser, "column_query")) {
+	parse_level = 0;
+    } else if (rb_grn_equal_option(rb_parser, "table") ||
+	       rb_grn_equal_option(rb_parser, "table-query") ||
+	       rb_grn_equal_option(rb_parser, "table_query")) {
+	parse_level = 2;
+    } else if (rb_grn_equal_option(rb_parser, "expression") ||
+	       rb_grn_equal_option(rb_parser, "language")) {
 	parse_level = 4;
+    } else {
+	rb_raise(rb_eArgError,
+		 "parser should be one of "
+		 "[nil, :column, :column_query, :table, :table_query, "
+		 ":expression, :language]: %s",
+		 rb_grn_inspect(rb_parser));
+    }
+
     rc = grn_expr_parse(context, expression, query, query_size,
 			default_column, default_mode, default_operator,
 			parse_level);
@@ -264,7 +282,7 @@ rb_grn_expression_execute (VALUE self)
     rc = grn_expr_exec(context, expression, 0);
     rb_grn_context_check(context, self);
     rb_grn_rc_check(rc, self);
-    
+
     return Qnil;
 }
 
