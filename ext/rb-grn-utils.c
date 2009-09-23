@@ -521,6 +521,25 @@ rb_grn_value_to_ruby_object (grn_ctx *context,
 	    value->header.domain = grn_obj_id(context, range);
 	return GRNBULK2RVAL(context, value, related_object);
 	break;
+      case GRN_UVECTOR:
+	{
+	    VALUE rb_value, rb_range = Qnil;
+	    grn_id *uvector, *uvector_end;
+
+	    rb_value = rb_ary_new();
+	    if (range)
+		rb_range = GRNTABLE2RVAL(context, range, RB_GRN_FALSE);
+	    uvector = (grn_id *)GRN_BULK_HEAD(value);
+	    uvector_end = (grn_id *)GRN_BULK_CURR(value);
+	    for (; uvector < uvector_end; uvector++) {
+		VALUE record = Qnil;
+		if (*uvector != GRN_ID_NIL)
+		    record = rb_grn_record_new(rb_range, *uvector, Qnil);
+		rb_ary_push(rb_value, record);
+	    }
+	    return rb_value;
+	}
+	break;
       default:
 	rb_raise(rb_eGrnError,
 		 "unsupported value type: 0x%0x: %s",

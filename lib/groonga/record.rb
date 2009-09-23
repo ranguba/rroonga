@@ -45,6 +45,10 @@ module Groonga
       column(column_name).append(@id, value)
     end
 
+    def prepend(column_name, value)
+      column(column_name).prepend(@id, value)
+    end
+
     def have_column?(name)
       column(name).is_a?(Groonga::Column)
     rescue Groonga::InvalidArgument
@@ -92,7 +96,7 @@ module Groonga
       table_name = @table.name
       columns.each do |column|
         next if column.is_a?(Groonga::IndexColumn)
-        attributes[column.name[(table_name.size + 1)..-1]] = column[@id]
+        attributes[column.local_name] = column[@id]
       end
       attributes
     end

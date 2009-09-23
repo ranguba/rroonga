@@ -20,6 +20,7 @@ class VariableSizeColumnTest < Test::Unit::TestCase
     setup_database
 
     setup_users_table
+    setup_users
   end
 
   def setup_users_table
@@ -30,6 +31,17 @@ class VariableSizeColumnTest < Test::Unit::TestCase
     @users_name_column_path = @columns_dir + "name"
     @name = @users.define_column("name", "<shorttext>",
                                  :path => @users_name_column_path.to_s)
+
+    @users_friends_column_path = @columns_dir + "friends"
+    @friends = @users.define_column("friends", @users,
+                                    :type => :vector,
+                                    :path => @users_friends_column_path.to_s)
+  end
+
+  def setup_users
+    @morita = @users.add(:name => "mori daijiro")
+    @gunyara_kun = @users.add(:name => "Tasuku SUENAGA")
+    @yu = @users.add(:name => "Yutaro Shimamura")
   end
 
   def test_inspect
@@ -50,5 +62,21 @@ class VariableSizeColumnTest < Test::Unit::TestCase
 
   def test_table
     assert_equal(@users, @name.table)
+  end
+
+  def test_vector_append
+    assert_equal([], @morita["friends"])
+    @morita.append("friends", @yu)
+    assert_equal([@yu], @morita["friends"])
+    @morita.append("friends", @gunyara_kun)
+    assert_equal([@yu, @gunyara_kun], @morita["friends"])
+  end
+
+  def test_vector_prepend
+    assert_equal([], @morita["friends"])
+    @morita.prepend("friends", @yu)
+    assert_equal([@yu], @morita["friends"])
+    @morita.prepend("friends", @gunyara_kun)
+    assert_equal([@gunyara_kun, @yu], @morita["friends"])
   end
 end

@@ -1052,12 +1052,26 @@ rb_grn_object_array_set (VALUE self, VALUE rb_id, VALUE rb_value)
  * call-seq:
  *   object.append(id, value)
  *
- * _object_の_id_に対応する値に_value_を追加する。
+ * _object_の_id_に対応する値の最後に_value_を追加する。
  */
 static VALUE
 rb_grn_object_append_value (VALUE self, VALUE rb_id, VALUE rb_value)
 {
     return rb_grn_object_set(self, rb_id, rb_value, GRN_OBJ_APPEND);
+}
+
+/*
+ * Document-method: prepend
+ *
+ * call-seq:
+ *   object.prepend(id, value)
+ *
+ * _object_の_id_に対応する値の最初に_value_を追加する。
+ */
+static VALUE
+rb_grn_object_prepend_value (VALUE self, VALUE rb_id, VALUE rb_value)
+{
+    return rb_grn_object_set(self, rb_id, rb_value, GRN_OBJ_PREPEND);
 }
 
 static VALUE
@@ -1101,6 +1115,7 @@ rb_grn_init_object (VALUE mGrn)
     rb_define_method(rb_cGrnObject, "[]", rb_grn_object_array_reference, 1);
     rb_define_method(rb_cGrnObject, "[]=", rb_grn_object_array_set, 2);
     rb_define_method(rb_cGrnObject, "append", rb_grn_object_append_value, 2);
+    rb_define_method(rb_cGrnObject, "prepend", rb_grn_object_prepend_value, 2);
 
     rb_define_method(rb_cGrnObject, "remove", rb_grn_object_remove, 0);
 }
