@@ -84,4 +84,11 @@ class TableTestSelect < Test::Unit::TestCase
     end
     assert_equal([@comment1], result.collect {|record| record.key})
   end
+
+  def test_select_query_with_dot
+    result = @comments.select do |record|
+      record["content"].match "Hello World a.b"
+    end
+    assert_equal([], result.collect {|record| record.key})
+  end
 end
