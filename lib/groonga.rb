@@ -69,4 +69,5 @@ module Groonga
   end
 end
 
+require 'groonga/patricia-trie'
 require 'groonga/schema'

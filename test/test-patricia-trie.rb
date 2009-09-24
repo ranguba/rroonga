@@ -99,9 +99,30 @@ class PatriciaTrieTest < Test::Unit::TestCase
     words.add('冒険')
     gaxtu = words.add('ｶﾞｯ')
     muteki = words.add('ＭＵＴＥＫＩ')
-    assert_equal([["muTEki", muteki, 0, 6],
-                  ["リンクの冒険", adventure_of_link, 7, 18],
-                  ["ガッ", gaxtu, 42, 6]],
+    assert_equal([[muteki, "muTEki", 0, 6],
+                  [adventure_of_link, "リンクの冒険", 7, 18],
+                  [gaxtu, "ガッ", 42, 6]],
                  words.scan('muTEki リンクの冒険 ミリバール ガッ'))
+  end
+
+  def test_tag_keys
+    Groonga::Context.default_options = {:encoding => "utf-8"}
+    words = Groonga::PatriciaTrie.create(:key_type => "ShortText",
+                                         :key_normalize => true)
+    words.add("リンク")
+    words.add('リンクの冒険')
+    words.add('冒険')
+    words.add('ｶﾞｯ')
+    words.add('ＭＵＴＥＫＩ')
+
+    text = 'muTEki リンクの冒険 ミリバール ガッ'
+    actual = words.tag_keys(text) do |record, word|
+      "<#{word}(#{record.key})>"
+    end
+    assert_equal("<muTEki[muTEki](ＭＵＴＥＫＩ)> " +
+                 "<リンクの冒険[リンクの冒険](リンクの冒険)> " +
+                 "ミリバール " +
+                 "<ガッ[ガッ](ガッ)>",
+                 actual)
   end
 end

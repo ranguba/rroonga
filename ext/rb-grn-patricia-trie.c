@@ -191,8 +191,8 @@ rb_grn_patricia_trie_scan (VALUE self, VALUE rb_string)
 	    term = rb_str_new(string + hits[i].offset,
 			      hits[i].length);
 	    matched_info = rb_ary_new3(4,
-				       term,
 				       record,
+				       term,
 				       UINT2NUM(hits[i].offset),
 				       UINT2NUM(hits[i].length));
 	    if (block_given) {
