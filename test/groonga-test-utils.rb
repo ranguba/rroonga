@@ -89,4 +89,11 @@ module GroongaTestUtils
   def teardown_tmp_directory
     FileUtils.rm_rf(@tmp_dir.to_s)
   end
+
+  private
+  def assert_equal_select_result(expected, actual)
+    assert_equal(expected,
+                 actual.collect {|record| record.key},
+                 actual.expression.inspect)
+  end
 end

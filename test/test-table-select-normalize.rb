@@ -38,11 +38,11 @@ class TableTestSelectNormalize < Test::Unit::TestCase
 
   def test_select_query_with_japanese
     result = @comments.select("content:%ボロTV")
-    assert_equal([@japanese_comment], result.collect {|record| record.key})
+    assert_equal_select_result([@japanese_comment], result)
   end
 
   def test_select_query_only_in_japanese
     result = @comments.select("content:%うちの")
-    assert_equal([@japanese_comment], result.collect {|record| record.key})
+    assert_equal_select_result([@japanese_comment], result)
   end
 end

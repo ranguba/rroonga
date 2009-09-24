@@ -45,50 +45,50 @@ class TableTestSelect < Test::Unit::TestCase
       record.match("Hello", "content") &
         (record["created_at"] < Time.parse("2009-08-01"))
     end
-    assert_equal([@comment2],
-                 result.collect {|record| record.key})
+    assert_equal_select_result([@comment2], result)
   end
 
   def test_select_query
     result = @comments.select("content:%Hello")
-    assert_equal([@comment1, @comment2], result.collect {|record| record.key})
+    assert_equal_select_result([@comment1, @comment2], result)
   end
 
   def test_select_query_with_block
     result = @comments.select("content:%Hello") do |record|
       record["created_at"] < Time.parse("2009-08-01")
     end
-    assert_equal([@comment2], result.collect {|record| record.key})
+    assert_equal_select_result([@comment2], result)
   end
 
   def test_select_query_with_block_match
     result = @comments.select("content:%Hello") do |record|
       record.match("World", "content")
     end
-    assert_equal([@comment2], result.collect {|record| record.key})
+    assert_equal_select_result([@comment2], result)
   end
 
   def test_select_without_block
-    assert_equal([@comment1, @comment2, @comment3, @japanese_comment],
-                 @comments.select.collect {|record| record.key})
+    assert_equal_select_result([@comment1, @comment2,
+                                @comment3, @japanese_comment],
+                               @comments.select)
   end
 
   def test_select_query_japanese
     result = @comments.select("content:%ボロTV")
-    assert_equal([@japanese_comment], result.collect {|record| record.key})
+    assert_equal_select_result([@japanese_comment], result)
   end
 
   def test_select_but_query
     result = @comments.select do |record|
       record["content"].match "Hello -World"
     end
-    assert_equal([@comment1], result.collect {|record| record.key})
+    assert_equal_select_result([@comment1], result)
   end
 
   def test_select_query_with_three_terms
     result = @comments.select do |record|
       record["content"].match "Say Hello World"
     end
-    assert_equal([], result.collect {|record| record.key})
+    assert_equal_select_result([], result)
   end
 end
