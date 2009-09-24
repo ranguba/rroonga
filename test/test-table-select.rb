@@ -91,4 +91,11 @@ class TableTestSelect < Test::Unit::TestCase
     end
     assert_equal_select_result([], result)
   end
+
+  def test_select_query_with_brackets
+    result = @comments.select do |record|
+      record["content"].match "Say (Hello World)"
+    end
+    assert_equal_select_result([], result)
+  end
 end
