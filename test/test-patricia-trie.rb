@@ -112,6 +112,7 @@ class PatriciaTrieTest < Test::Unit::TestCase
     words.add("リンク")
     words.add('リンクの冒険')
     words.add('冒険')
+    words.add('㍊')
     words.add('ｶﾞｯ')
     words.add('ＭＵＴＥＫＩ')
 
@@ -119,10 +120,10 @@ class PatriciaTrieTest < Test::Unit::TestCase
     actual = words.tag_keys(text) do |record, word|
       "<#{word}(#{record.key})>"
     end
-    assert_equal("<muTEki[muTEki](ＭＵＴＥＫＩ)> " +
-                 "<リンクの冒険[リンクの冒険](リンクの冒険)> " +
-                 "ミリバール " +
-                 "<ガッ[ガッ](ガッ)>",
+    assert_equal("<muTEki(muteki)> " +
+                 "<リンクの冒険(リンクの冒険)> " +
+                 "<ミリバール(ミリバール)> " +
+                 "<ガッ(ガッ)>",
                  actual)
   end
 end
