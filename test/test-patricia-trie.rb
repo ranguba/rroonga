@@ -116,12 +116,13 @@ class PatriciaTrieTest < Test::Unit::TestCase
     words.add('ｶﾞｯ')
     words.add('ＭＵＴＥＫＩ')
 
-    text = 'muTEki リンクの冒険 ミリバール ガッ'
+    text = 'muTEki リンクの冒険 マッチしない ミリバール ガッ'
     actual = words.tag_keys(text) do |record, word|
       "<#{word}(#{record.key})>"
     end
     assert_equal("<muTEki(muteki)> " +
                  "<リンクの冒険(リンクの冒険)> " +
+                 "マッチしない " +
                  "<ミリバール(ミリバール)> " +
                  "<ガッ(ガッ)>",
                  actual)
