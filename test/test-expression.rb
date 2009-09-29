@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Copyright (C) 2009  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
@@ -63,5 +64,34 @@ class ExpressionTest < Test::Unit::TestCase
     expression.compile
 
     assert_equal("#<Groonga::Expression noname(){1 1}>", expression.inspect)
+  end
+
+  def test_snippet
+    users = Groonga::Array.create(:name => "users")
+    name = users.define_column("name", "ShortText")
+    terms = Groonga::Hash.create(:name => "terms",
+                                 :key_type => "ShortText",
+                                 :default_tokenizer => "TokenBigram")
+    users.define_index_column("user_name", users,
+                              :source => "users.name",
+                              :with_position => true)
+
+    expression = Groonga::Expression.new
+    variable = expression.define_variable(:domain => users)
+    expression.append_object(variable)
+    expression.parse("ラングバ OR Ruby OR groonga", :default_column => name)
+    expression.compile
+
+    snippet = expression.snippet([["[[", "]]"], ["<", ">"]],
+                                 :width => 30)
+    assert_equal(["[[ラングバ]]プロジェクト",
+                  "ン[[groonga]]の機能を<Ruby>か",
+                  "。[[groonga]]の機能を<Ruby>ら"],
+                 snippet.execute("ラングバプロジェクトはカラムストア機能も" +
+                                 "備える高速・高機能な全文検索エンジンgroonga" +
+                                 "の機能をRubyから利用するためのライブラリを" +
+                                 "提供するプロジェクトです。groongaの機能を" +
+                                 "Rubyらしい読み書きしやすい構文で利用できる" +
+                                 "ことが利点です。"))
   end
 end

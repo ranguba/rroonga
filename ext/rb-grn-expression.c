@@ -216,6 +216,7 @@ rb_grn_expression_parse (int argc, VALUE *argv, VALUE self)
     int parse_level = 0;
     VALUE options, rb_query, rb_default_column, rb_default_operator;
     VALUE rb_default_mode, rb_parser;
+    VALUE exception = Qnil;
 
     rb_scan_args(argc, argv, "11", &rb_query, &options);
     rb_grn_scan_options(options,
@@ -260,10 +261,16 @@ rb_grn_expression_parse (int argc, VALUE *argv, VALUE self)
     rc = grn_expr_parse(context, expression, query, query_size,
 			default_column, default_mode, default_operator,
 			parse_level);
-    if (rc != GRN_SUCCESS)
-	rb_grn_context_check(context,
-			     rb_ary_new3(2, self, rb_ary_new4(argc, argv)));
+    if (rc != GRN_SUCCESS) {
+	VALUE related_object;
+
+	related_object = rb_ary_new3(2, self, rb_ary_new4(argc, argv));
+	exception = rb_grn_context_to_exception(context, related_object);
+    }
     grn_obj_close(context, default_column);
+
+    if (!NIL_P(exception))
+	rb_exc_raise(exception);
 
     return Qnil;
 }
@@ -364,6 +371,104 @@ rb_grn_expression_inspect (VALUE self)
     return rb_inspected;
 }
 
+static VALUE
+rb_grn_expression_snippet (int argc, VALUE *argv, VALUE self)
+{
+    grn_ctx *context = NULL;
+    grn_obj *expression;
+    grn_snip *snippet;
+    VALUE options;
+    VALUE rb_context, rb_normalize, rb_skip_leading_spaces;
+    VALUE rb_width, rb_max_results, rb_tags;
+    VALUE rb_html_escape;
+    VALUE *rb_tag_values;
+    unsigned int i;
+    int flags = GRN_SNIP_COPY_TAG;
+    unsigned int width = 100;
+    unsigned int max_results = 3;
+    unsigned int n_tags = 0;
+    char **open_tags = NULL;
+    unsigned int *open_tag_lengths = NULL;
+    char **close_tags = NULL;
+    unsigned int *close_tag_lengths = NULL;
+    grn_snip_mapping *mapping = NULL;
+
+    rb_grn_expression_deconstruct(SELF(self), &expression, &context,
+                                  NULL, NULL,
+                                  NULL, NULL, NULL);
+
+    rb_scan_args(argc, argv, "11", &rb_tags, &options);
+
+    rb_grn_scan_options(options,
+                        "context", &rb_context,
+                        "normalize", &rb_normalize,
+                        "skip_leading_spaces", &rb_skip_leading_spaces,
+                        "width", &rb_width,
+                        "max_results", &rb_max_results,
+                        "html_escape", &rb_html_escape,
+                        NULL);
+
+    if (TYPE(rb_tags) != T_ARRAY) {
+	rb_raise(rb_eArgError,
+		 "tags should be "
+		 "[\"open_tag\", \"close_tag\"] or",
+		 "[[\"open_tag1\", \"close_tag1\"], ...]: %s",
+		 rb_grn_inspect(rb_tags));
+    }
+
+    if (TYPE(RARRAY_PTR(rb_tags)[0]) == T_STRING) {
+	rb_tags = rb_ary_new3(1, rb_tags);
+    }
+
+    rb_tag_values = RARRAY_PTR(rb_tags);
+    n_tags = RARRAY_LEN(rb_tags);
+    open_tags = ALLOCA_N(char *, n_tags);
+    open_tag_lengths = ALLOCA_N(unsigned int, n_tags);
+    close_tags = ALLOCA_N(char *, n_tags);
+    close_tag_lengths = ALLOCA_N(unsigned int, n_tags);
+    for (i = 0; i < n_tags; i++) {
+	VALUE *tag_pair;
+
+	if (TYPE(rb_tag_values[i]) != T_ARRAY ||
+	    RARRAY_LEN(rb_tag_values[i]) != 2) {
+	    rb_raise(rb_eArgError,
+		     "tags should be "
+		     "[\"open_tag\", \"close_tag\"] or",
+		     "[[\"open_tag1\", \"close_tag1\"], ...]: %s",
+		     rb_grn_inspect(rb_tags));
+	}
+	tag_pair = RARRAY_PTR(rb_tag_values[i]);
+	open_tags[i] = StringValuePtr(tag_pair[0]);
+	open_tag_lengths[i] = RSTRING_LEN(tag_pair[0]);
+	close_tags[i] = StringValuePtr(tag_pair[1]);
+	close_tag_lengths[i] = RSTRING_LEN(tag_pair[1]);
+    }
+
+    if (RVAL2CBOOL(rb_normalize))
+        flags |= GRN_SNIP_NORMALIZE;
+    if (RVAL2CBOOL(rb_skip_leading_spaces))
+        flags |= GRN_SNIP_SKIP_LEADING_SPACES;
+
+    if (!NIL_P(rb_width))
+        width = NUM2UINT(rb_width);
+
+    if (!NIL_P(rb_max_results))
+        max_results = NUM2UINT(rb_max_results);
+
+    if (RVAL2CBOOL(rb_html_escape))
+        mapping = (grn_snip_mapping *)-1;
+
+    snippet = grn_expr_snip(context, expression, flags, width, max_results,
+			    n_tags,
+                            (const char **)open_tags, open_tag_lengths,
+                            (const char **)close_tags, close_tag_lengths,
+                            mapping);
+    rb_grn_context_check(context,
+			 rb_ary_new3(2, self, rb_ary_new4(argc, argv)));
+
+    return GRNSNIPPET2RVAL(context, snippet, RB_GRN_TRUE);
+}
+
 void
 rb_grn_init_expression (VALUE mGrn)
 {
@@ -391,6 +496,9 @@ rb_grn_init_expression (VALUE mGrn)
 
     rb_define_method(rb_cGrnExpression, "[]",
                      rb_grn_expression_array_reference, 1);
+
+    rb_define_method(rb_cGrnExpression, "snippet",
+                     rb_grn_expression_snippet, -1);
 
     rb_define_method(rb_cGrnExpression, "inspect",
                      rb_grn_expression_inspect, 0);
