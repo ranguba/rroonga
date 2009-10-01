@@ -355,6 +355,77 @@ rb_grn_context_get_database (VALUE self)
     return GRNDB2RVAL(context, grn_ctx_db(context), RB_GRN_FALSE);
 }
 
+/*
+ * call-seq:
+ *   context.connect(host, port)
+ *
+ * groongaサーバに接続する。
+ */
+static VALUE
+rb_grn_context_connect (VALUE self, VALUE rb_host, VALUE rb_port)
+{
+    grn_ctx *context;
+    char *host;
+    int port;
+    int flags = 0;
+    grn_rc rc;
+
+    context = SELF(self);
+    host = StringValueCStr(rb_host);
+    port = NUM2INT(rb_port);
+    rc = grn_ctx_connect(context, host, port, flags);
+    rb_grn_context_check(context, self);
+    rb_grn_rc_check(rc, self);
+
+    return Qnil;
+}
+
+/*
+ * call-seq:
+ *   context.send(str) -> ID
+ *
+ * groongaサーバにクエリ文字列を送信する。
+ */
+static VALUE
+rb_grn_context_send (VALUE self, VALUE rb_str)
+{
+    grn_ctx *context;
+    char *str;
+    unsigned str_size;
+    int flags = 0;
+    unsigned qid;
+
+    context = SELF(self);
+    str = StringValuePtr(rb_str);
+    str_size = RSTRING_LEN(rb_str);
+    qid = grn_ctx_send(context, str, str_size, flags);
+    rb_grn_context_check(context, self);
+
+    return UINT2NUM(qid);
+}
+
+/*
+ * call-seq:
+ *   context.recv -> [ID, String]
+ *
+ * groongaサーバからクエリ実行結果文字列を受信する。
+ */
+static VALUE
+rb_grn_context_recv (VALUE self)
+{
+    grn_ctx *context;
+    char *str;
+    unsigned str_size;
+    int flags = 0;
+    unsigned qid;
+
+    context = SELF(self);
+    qid = grn_ctx_recv(context, &str, &str_size, &flags);
+    rb_grn_context_check(context, self);
+
+    return rb_ary_new3(2, UINT2NUM(qid), rb_str_new(str, str_size));
+}
+
 static const char *
 grn_type_name_old_to_new (const char *name, unsigned int name_size)
 {
@@ -514,4 +585,8 @@ rb_grn_init_context (VALUE mGrn)
     rb_define_method(cGrnContext, "[]", rb_grn_context_array_reference, 1);
     
     rb_define_method(cGrnContext, "pop", rb_grn_context_pop, 0);
+
+    rb_define_method(cGrnContext, "connect", rb_grn_context_connect, 2);
+    rb_define_method(cGrnContext, "send", rb_grn_context_send, 1);
+    rb_define_method(cGrnContext, "recv", rb_grn_context_recv, 0);
 }
