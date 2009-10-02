@@ -43,9 +43,13 @@ ARGV.unshift("--priority-mode")
 
 $LOAD_PATH.unshift(ext_dir)
 $LOAD_PATH.unshift(lib_dir)
+$LOAD_PATH.unshift(base_dir)
 
 $LOAD_PATH.unshift(test_dir)
 require 'groonga-test-utils'
+
+pkg_config = File.join(base_dir, "vendor", "local", "lib", "pkgconfig")
+PackageConfig.prepend_default_path(pkg_config)
 
 Dir.glob("#{base_dir}/test/**/test{_,-}*.rb") do |file|
   require file.sub(/\.rb$/, '')

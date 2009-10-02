@@ -16,6 +16,8 @@
 require 'fileutils'
 require 'pathname'
 require 'time'
+require 'json'
+require 'pkg-config'
 
 require 'groonga'
 
