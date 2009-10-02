@@ -423,7 +423,7 @@ rb_grn_expression_snippet (int argc, VALUE *argv, VALUE self)
     grn_obj *expression;
     grn_snip *snippet;
     VALUE options;
-    VALUE rb_context, rb_normalize, rb_skip_leading_spaces;
+    VALUE rb_normalize, rb_skip_leading_spaces;
     VALUE rb_width, rb_max_results, rb_tags;
     VALUE rb_html_escape;
     VALUE *rb_tag_values;
