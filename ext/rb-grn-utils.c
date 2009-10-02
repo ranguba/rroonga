@@ -124,7 +124,9 @@ rb_grn_bulk_to_ruby_object_by_range_id (grn_ctx *context, grn_obj *bulk,
       case GRN_DB_SHORT_TEXT:
       case GRN_DB_TEXT:
       case GRN_DB_LONG_TEXT:
-	*rb_value = rb_str_new(GRN_TEXT_VALUE(bulk), GRN_TEXT_LEN(bulk));
+	*rb_value = rb_grn_context_rb_string_new(context,
+						 GRN_TEXT_VALUE(bulk),
+						 GRN_TEXT_LEN(bulk));
 	break;
       default:
 	success = RB_GRN_FALSE;
@@ -190,7 +192,9 @@ rb_grn_bulk_to_ruby_object (grn_ctx *context, grn_obj *bulk,
 						 related_object, &rb_value))
 	return rb_value;
 
-    return rb_str_new(GRN_BULK_HEAD(bulk), GRN_BULK_VSIZE(bulk));
+    return rb_grn_context_rb_string_new(context,
+					GRN_BULK_HEAD(bulk),
+					GRN_BULK_VSIZE(bulk));
 }
 
 grn_obj *

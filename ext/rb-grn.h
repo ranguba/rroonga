@@ -405,8 +405,6 @@ VALUE          rb_grn_column_expression_builder_build
 #define RVAL2GRNENCODING(object, context) \
                                       (rb_grn_encoding_from_ruby_object(object, context))
 #define GRNENCODING2RVAL(encoding)    (rb_grn_encoding_to_ruby_object(encoding))
-#define GRNENCODING2RBENCODING(encoding) \
-                                      (rb_grn_encoding_to_ruby_encoding(encoding))
 
 #define RVAL2GRNCONTEXT(object)       (rb_grn_context_from_ruby_object(object))
 #define GRNCONTEXT2RVAL(context)      (rb_grn_context_to_ruby_object(context))
@@ -497,6 +495,11 @@ rb_encoding   *rb_grn_encoding_to_ruby_encoding     (grn_encoding encoding);
 
 grn_ctx       *rb_grn_context_from_ruby_object      (VALUE object);
 VALUE          rb_grn_context_to_ruby_object        (grn_ctx *context);
+VALUE          rb_grn_context_rb_string_new         (grn_ctx *context,
+						     const char *string,
+						     long length);
+VALUE          rb_grn_context_rb_string_encode      (grn_ctx *context,
+						     VALUE rb_string);
 
 grn_obj       *rb_grn_object_from_ruby_object       (VALUE object,
 						     grn_ctx **context);

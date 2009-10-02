@@ -221,19 +221,16 @@ rb_grn_snippet_execute (VALUE self, VALUE rb_string)
     unsigned int i, n_results, max_tagged_length;
     VALUE rb_results;
     char *result;
-#ifdef HAVE_RUBY_ENCODING_H
-    rb_encoding *encoding;
-#endif
 
     rb_grn_snippet = SELF(self);
     context = rb_grn_snippet->context;
     snippet = rb_grn_snippet->snippet;
 
+#ifdef HAVE_RUBY_ENCODING_H
+    rb_string = rb_grn_context_rb_string_encode(context, rb_string);
+#endif
     string = StringValuePtr(rb_string);
     string_length = RSTRING_LEN(rb_string);
-#ifdef HAVE_RUBY_ENCODING_H
-    encoding = rb_enc_get(rb_string);
-#endif
 
     rc = grn_snip_exec(context, snippet, string, string_length,
                        &n_results, &max_tagged_length);
@@ -247,11 +244,7 @@ rb_grn_snippet_execute (VALUE self, VALUE rb_string)
 
         rc = grn_snip_get_result(context, snippet, i, result, &result_length);
         rb_grn_rc_check(rc, self);
-#ifdef HAVE_RUBY_ENCODING_H
-        rb_result = rb_enc_str_new(result, result_length, encoding);
-#else
-        rb_result = rb_str_new(result, result_length);
-#endif
+        rb_result = rb_grn_context_rb_string_new(context, result, result_length);
         rb_ary_push(rb_results, rb_result);
     }
 

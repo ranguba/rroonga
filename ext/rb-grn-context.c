@@ -148,6 +148,34 @@ rb_grn_context_ensure (VALUE *context)
     return SELF(*context);
 }
 
+VALUE
+rb_grn_context_rb_string_new (grn_ctx *context, const char *string, long length)
+{
+    if (length < 0)
+	length = strlen(string);
+#ifdef HAVE_RUBY_ENCODING_H
+    return rb_enc_str_new(string, length,
+			  rb_grn_encoding_to_ruby_encoding(context->encoding));
+#else
+    return rb_str_new(string, length);
+#endif
+}
+
+VALUE
+rb_grn_context_rb_string_encode (grn_ctx *context, VALUE rb_string)
+{
+#ifdef HAVE_RUBY_ENCODING_H
+    rb_encoding *encoding, *to_encode;
+
+    encoding = rb_enc_get(rb_string);
+    to_encode = rb_grn_encoding_to_ruby_encoding(context->encoding);
+    if (rb_enc_to_index(encoding) != rb_enc_to_index(to_encode))
+	rb_string = rb_str_encode(rb_string, rb_enc_from_encoding(to_encode),
+				  0, Qnil);
+#endif
+    return rb_string;
+}
+
 /*
  * call-seq:
  *   Groonga::Context.default -> Groonga::Context

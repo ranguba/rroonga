@@ -20,8 +20,17 @@ module Groonga
     def tag_keys(text)
       position = 0
       result = ''
+      if text.respond_to?(:encoding)
+        encoding = text.encoding
+        bytes = text.dup.force_encoding("ascii-8bit")
+      else
+        encoding = nil
+        bytes = text
+      end
       scan(text) do |record, word, start, length|
-        result << text[position...start]
+        previous_text = bytes[position...start]
+        previous_text.force_encoding(encoding) if encoding
+        result << previous_text
         result << yield(record, word)
         position = start + length
       end
