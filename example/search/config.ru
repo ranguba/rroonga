@@ -71,8 +71,8 @@ EOF
     request['query'] || ''
   end
 
-  def words(request)
-    query(request).split
+  def page(request)
+    (request['page'] || 0).to_i
   end
 
   def render_search_box(request, response)
@@ -88,8 +88,10 @@ EOF
   end
 
   def render_search_result(request, response)
-    _words = words(request)
-    if _words.empty?
+    _query = query(request)
+    _page = page(request)
+    limit = 20
+    if _query.empty?
       records = []
       response.write(<<-EOS)
   <div class='search-summary'>
@@ -97,25 +99,16 @@ EOF
   </div>
 EOS
     else
-      offset = 0
       options = {}
       before = Time.now
       records = @documents.select do |record|
-        expression = nil
-        _words.each do |word|
-          sub_expression = record["content"] =~ word
-          if expression.nil?
-            expression = sub_expression
-          else
-            expression &= sub_expression
-          end
-        end
-        expression
+        record["content"].match(_query)
       end
       total_records = records.size
       records = records.sort([[".:score", "descending"],
                               [".last-modified", "descending"]],
-                             :limit => 20)
+                             :offset => _page * limit,
+                             :limit => limit)
       elapsed = Time.now - before
 
       response.write(<<-EOS)
@@ -124,9 +117,9 @@ EOS
       <span class="keyword">#{escape_html(query(request))}</span>の検索結果:
       <span class="total-entries">#{total_records}</span>件中
       <span class="display-range">
-        #{total_records.zero? ? 0 : offset + 1}
+        #{total_records.zero? ? 0 : _page + 1}
         -
-        #{offset + records.size}
+        #{_page + records.size}
       </span>
       件（#{elapsed}秒）
     </p>
@@ -139,6 +132,8 @@ EOS
       render_record(request, response, record)
     end
     response.write("  </div>\n")
+
+    # render_pagination(request, response, _page, limit)
   end
 
   def render_record(request, response, record)
@@ -160,22 +155,51 @@ EOM
   end
 
   def render_snippet(request, response, record)
-    open_tag = "<span class=\"keyword\">"
-    close_tag = "</span>"
-    snippet = Groonga::Snippet.new(:width => 100,
-                                   :default_open_tag => open_tag,
-                                   :default_close_tag => close_tag,
-                                   :html_escape => true,
-                                   :normalize => true)
-    words(request).each do |word|
-      snippet.add_keyword(word)
-    end
+    expression = record.table.expression
+    snippet = expression.snippet([["<span class=\"keyword\">", "</span>"]],
+                                 :width => 100,
+                                 :html_escape => true,
+                                 :normalize => true)
     separator = "\n<span class='separator'>...</span>\n"
     response.write(<<-EOS)
       <p class="snippet">
         #{snippet.execute(record[".content"]).join(separator)}
       </p>
 EOS
+  end
+
+  def render_pagination(request, response, page, limit)
+    _query = query(request)
+    return if _query.empty?
+
+    total_records = @documents.size
+    return if total_records < limit
+
+    last_page = total_records / limit
+    response.write("<div class='pagination'>\n")
+    if page > 0
+      render_pagination_link(request, response, _query, page - 1, "<<")
+    end
+    last_page.times do |i|
+      if i == page
+        response.write(pagination_span(escape_html(i)))
+      else
+        render_pagination_link(request, response, _query, i, i)
+      end
+    end
+    if page < last_page
+      render_pagination_link(request, response, _query, page + 1, ">>")
+    end
+    response.write("</div>\n")
+  end
+
+  def render_pagination_link(request, response, query, page, label)
+    href = "./?query=#{escape_html(query)};page=#{escape_html(page)}"
+    response.write(pagination_span("<a href='#{href}'>#{label}</a>"))
+  end
+
+  def pagination_span(content)
+    "<span class='pagination-link'>#{content}</span>\n"
   end
 end
 
