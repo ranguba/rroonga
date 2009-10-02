@@ -357,22 +357,49 @@ rb_grn_context_get_database (VALUE self)
 
 /*
  * call-seq:
- *   context.connect(host, port)
+ *   context.connect(options=nil)
  *
- * groongaサーバに接続する。
+ * groongaサーバに接続する。_options_に指定可能な値は以下の通
+ * り。
+ *
+ * [+:host+]
+ *   groongaサーバのホスト名。またはIPアドレス。省略すると
+ *   "localhost"に接続する。
+ *
+ * [+:port+]
+ *   groongaサーバのポート番号。省略すると10041番ポートに接
+ *   続する。
  */
 static VALUE
-rb_grn_context_connect (VALUE self, VALUE rb_host, VALUE rb_port)
+rb_grn_context_connect (int argc, VALUE *argv, VALUE self)
 {
     grn_ctx *context;
     char *host;
     int port;
     int flags = 0;
     grn_rc rc;
+    VALUE options, rb_host, rb_port;
+
+    rb_scan_args(argc, argv, "01", &options);
+    rb_grn_scan_options(options,
+			"host", &rb_host,
+			"port", &rb_port,
+			NULL);
 
     context = SELF(self);
-    host = StringValueCStr(rb_host);
-    port = NUM2INT(rb_port);
+
+    if (NIL_P(rb_host)) {
+	host = "localhost";
+    } else {
+	host = StringValueCStr(rb_host);
+    }
+
+    if (NIL_P(rb_port)) {
+	port = 10041;
+    } else {
+	port = NUM2INT(rb_port);
+    }
+
     rc = grn_ctx_connect(context, host, port, flags);
     rb_grn_context_check(context, self);
     rb_grn_rc_check(rc, self);
@@ -590,7 +617,7 @@ rb_grn_init_context (VALUE mGrn)
 
     rb_define_method(cGrnContext, "pop", rb_grn_context_pop, 0);
 
-    rb_define_method(cGrnContext, "connect", rb_grn_context_connect, 2);
+    rb_define_method(cGrnContext, "connect", rb_grn_context_connect, -1);
     rb_define_method(cGrnContext, "send", rb_grn_context_send, 1);
     rb_define_method(cGrnContext, "receive", rb_grn_context_receive, 0);
 }
