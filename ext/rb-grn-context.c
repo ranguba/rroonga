@@ -382,48 +382,52 @@ rb_grn_context_connect (VALUE self, VALUE rb_host, VALUE rb_port)
 
 /*
  * call-seq:
- *   context.send(str) -> ID
+ *   context.send(string) -> ID
  *
  * groongaサーバにクエリ文字列を送信する。
+ *
+ * 実験的: APIが変わる可能性があります。
  */
 static VALUE
-rb_grn_context_send (VALUE self, VALUE rb_str)
+rb_grn_context_send (VALUE self, VALUE rb_string)
 {
     grn_ctx *context;
-    char *str;
-    unsigned str_size;
+    char *string;
+    unsigned int string_size;
     int flags = 0;
-    unsigned qid;
+    unsigned int query_id;
 
     context = SELF(self);
-    str = StringValuePtr(rb_str);
-    str_size = RSTRING_LEN(rb_str);
-    qid = grn_ctx_send(context, str, str_size, flags);
+    string = StringValuePtr(rb_string);
+    string_size = RSTRING_LEN(rb_string);
+    query_id = grn_ctx_send(context, string, string_size, flags);
     rb_grn_context_check(context, self);
 
-    return UINT2NUM(qid);
+    return UINT2NUM(query_id);
 }
 
 /*
  * call-seq:
- *   context.recv -> [ID, String]
+ *   context.receive -> [ID, String]
  *
  * groongaサーバからクエリ実行結果文字列を受信する。
+ *
+ * 実験的: APIが変わる可能性があります。
  */
 static VALUE
-rb_grn_context_recv (VALUE self)
+rb_grn_context_receive (VALUE self)
 {
     grn_ctx *context;
-    char *str;
-    unsigned str_size;
+    char *string;
+    unsigned string_size;
     int flags = 0;
-    unsigned qid;
+    unsigned int query_id;
 
     context = SELF(self);
-    qid = grn_ctx_recv(context, &str, &str_size, &flags);
+    query_id = grn_ctx_recv(context, &string, &string_size, &flags);
     rb_grn_context_check(context, self);
 
-    return rb_ary_new3(2, UINT2NUM(qid), rb_str_new(str, str_size));
+    return rb_ary_new3(2, UINT2NUM(query_id), rb_str_new(string, string_size));
 }
 
 static const char *
@@ -583,10 +587,10 @@ rb_grn_init_context (VALUE mGrn)
     rb_define_method(cGrnContext, "database", rb_grn_context_get_database, 0);
 
     rb_define_method(cGrnContext, "[]", rb_grn_context_array_reference, 1);
-    
+
     rb_define_method(cGrnContext, "pop", rb_grn_context_pop, 0);
 
     rb_define_method(cGrnContext, "connect", rb_grn_context_connect, 2);
     rb_define_method(cGrnContext, "send", rb_grn_context_send, 1);
-    rb_define_method(cGrnContext, "recv", rb_grn_context_recv, 0);
+    rb_define_method(cGrnContext, "receive", rb_grn_context_receive, 0);
 }
