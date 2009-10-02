@@ -1,5 +1,15 @@
 = お知らせ
 
+== 0.0.7: 2009-10-02
+
+* groonga 0.1.4対応
+* APIの追加
+  * Groonga::PatriciaTrie#scan
+  * Groonga::PatriciaTrie#tag_keys
+  * Groonga::Expression#snippet
+  * Groonga::Object#append
+  * Groonga::Object#prepend
+
 == 0.0.6: 2009-07-31
 
 * groonga 0.1.1対応
