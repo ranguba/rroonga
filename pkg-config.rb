@@ -146,7 +146,7 @@ class PackageConfig
     [path_flags, other_flags]
   end
 
-  IDENTIFIER_RE = /[\w\d_.]+/
+  IDENTIFIER_RE = /[\w.]+/
   def parse_pc
     raise ".pc for #{@name} doesn't exist." unless exist?
     @variables = {}
