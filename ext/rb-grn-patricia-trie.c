@@ -188,8 +188,14 @@ rb_grn_patricia_trie_scan (VALUE self, VALUE rb_string)
 		continue;
 
 	    record = rb_grn_record_new(self, hits[i].id, Qnil);
+#ifdef HAVE_RUBY_ENCODING_H
+	    term = rb_enc_str_new(string + hits[i].offset,
+				  hits[i].length,
+				  GRNENCODING2RBENCODING(context->encoding));
+#else
 	    term = rb_str_new(string + hits[i].offset,
 			      hits[i].length);
+#endif
 	    matched_info = rb_ary_new3(4,
 				       record,
 				       term,

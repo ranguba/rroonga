@@ -148,6 +148,43 @@ rb_grn_encoding_to_ruby_object (grn_encoding encoding)
     return rb_encoding;
 }
 
+#ifdef HAVE_RUBY_ENCODING_H
+rb_encoding *
+rb_grn_encoding_to_ruby_encoding (grn_encoding encoding)
+{
+    rb_encoding *rb_encoding;
+
+    if (encoding == GRN_ENC_DEFAULT)
+	encoding = grn_get_default_encoding();
+
+    switch (encoding) {
+      case GRN_ENC_NONE:
+	rb_encoding = rb_ascii8bit_encoding();
+        break;
+      case GRN_ENC_EUC_JP:
+	rb_encoding = rb_enc_find("euc-jp");
+        break;
+      case GRN_ENC_UTF8:
+	rb_encoding = rb_utf8_encoding();
+        break;
+      case GRN_ENC_SJIS:
+	rb_encoding = rb_enc_find("CP932");
+        break;
+      case GRN_ENC_LATIN1:
+	rb_encoding = rb_enc_find("ISO-8859-1");
+        break;
+      case GRN_ENC_KOI8R:
+	rb_encoding = rb_enc_find("KOI8-R");
+        break;
+      default:
+	rb_raise(rb_eArgError, "unknown encoding: %d", encoding);
+	break;
+    }
+
+    return rb_encoding;
+}
+#endif
+
 /*
  * call-seq:
  *   Groonga::Encoding.default -> エンコーディング

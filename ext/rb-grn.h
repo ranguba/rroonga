@@ -21,6 +21,10 @@
 
 #include <ruby.h>
 
+#ifdef HAVE_RUBY_ENCODING_H
+#  include <ruby/encoding.h>
+#endif
+
 #include <groonga.h>
 
 #if defined(__cplusplus)
@@ -401,6 +405,8 @@ VALUE          rb_grn_column_expression_builder_build
 #define RVAL2GRNENCODING(object, context) \
                                       (rb_grn_encoding_from_ruby_object(object, context))
 #define GRNENCODING2RVAL(encoding)    (rb_grn_encoding_to_ruby_object(encoding))
+#define GRNENCODING2RBENCODING(encoding) \
+                                      (rb_grn_encoding_to_ruby_encoding(encoding))
 
 #define RVAL2GRNCONTEXT(object)       (rb_grn_context_from_ruby_object(object))
 #define GRNCONTEXT2RVAL(context)      (rb_grn_context_to_ruby_object(context))
@@ -485,6 +491,9 @@ VALUE          rb_grn_column_expression_builder_build
 grn_encoding   rb_grn_encoding_from_ruby_object     (VALUE object,
 						     grn_ctx *context);
 VALUE          rb_grn_encoding_to_ruby_object       (grn_encoding encoding);
+#ifdef HAVE_RUBY_ENCODING_H
+rb_encoding   *rb_grn_encoding_to_ruby_encoding     (grn_encoding encoding);
+#endif
 
 grn_ctx       *rb_grn_context_from_ruby_object      (VALUE object);
 VALUE          rb_grn_context_to_ruby_object        (grn_ctx *context);

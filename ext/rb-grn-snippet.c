@@ -18,10 +18,6 @@
 
 #include "rb-grn.h"
 
-#ifdef HAVE_RUBY_ENCODING_H
-#  include <ruby/encoding.h>
-#endif
-
 #define SELF(object) (rb_rb_grn_snippet_from_ruby_object(object))
 
 typedef struct _RbGrnSnippet RbGrnSnippet;
