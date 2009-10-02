@@ -279,4 +279,24 @@ change_table("comments") do |table|
 end
 EOS
   end
+
+  priority :never # the following test case will not pass at this time
+  def test_explicit_context_create_table
+    context = Groonga::Context.default
+    Groonga::Context.default = nil
+
+    Groonga::Schema.define(:context => context) do |schema|
+      schema.create_table('items', :type => :hash) do |table|
+        table.text("text")
+      end
+      assert_nothing_raised do
+        schema.create_table("terms_text",
+                            :type => :patricia_trie,
+                            :key_normalize => true,
+                            :default_tokenizer => "TokenBigram") do |table|
+          table.index('items.text')
+        end
+      end
+    end
+  end
 end
