@@ -20,7 +20,11 @@ groongaに関する情報は以下を参照して下さい。
 
 == 作者
 
-Kouhei Sutou: <tt><kou@clear-code.com></tt>
+Kouhei Sutou:: <tt><kou@clear-code.com></tt>
+Tasuku SUENAGA:: <tt><a@razil.jp></tt>
+daijiro:: <tt><morita@razil.jp></tt>
+Yuto HAYAMIZU:: <tt><y.hayamizu@gmail.com></tt>
+SHIDARA Yoji:: <tt><dara@shidara.net></tt>
 
 == ライセンス
 
