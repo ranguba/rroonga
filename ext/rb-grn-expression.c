@@ -455,7 +455,7 @@ rb_grn_expression_snippet (int argc, VALUE *argv, VALUE self)
     if (TYPE(rb_tags) != T_ARRAY) {
 	rb_raise(rb_eArgError,
 		 "tags should be "
-		 "[\"open_tag\", \"close_tag\"] or",
+		 "[\"open_tag\", \"close_tag\"] or"
 		 "[[\"open_tag1\", \"close_tag1\"], ...]: %s",
 		 rb_grn_inspect(rb_tags));
     }
@@ -477,7 +477,7 @@ rb_grn_expression_snippet (int argc, VALUE *argv, VALUE self)
 	    RARRAY_LEN(rb_tag_values[i]) != 2) {
 	    rb_raise(rb_eArgError,
 		     "tags should be "
-		     "[\"open_tag\", \"close_tag\"] or",
+		     "[\"open_tag\", \"close_tag\"] or"
 		     "[[\"open_tag1\", \"close_tag1\"], ...]: %s",
 		     rb_grn_inspect(rb_tags));
 	}
