@@ -36,7 +36,7 @@ package_name = "groonga"
 module_name = "groonga"
 ext_dir_name = "ext"
 src_dir = File.join(File.expand_path(File.dirname(__FILE__)), ext_dir_name)
-major, minor, micro = 0, 1, 3
+major, minor, micro = 0, 1, 4
 
 def local_groonga_base_dir
   File.join(File.dirname(__FILE__), "vendor")
