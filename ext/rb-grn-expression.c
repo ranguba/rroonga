@@ -371,6 +371,51 @@ rb_grn_expression_inspect (VALUE self)
     return rb_inspected;
 }
 
+/*
+ * call-seq:
+ *   expression.snippet(tags, options) -> Groonga::Snippet
+ *
+ * _expression_からGroonga::Snippetを生成する。_tags_にはキー
+ * ワードの前後に挿入するタグの配列を以下のような形式で指定
+ * する。
+ *
+ *   [
+ *    ["キーワード前に挿入する文字列1", "キーワード後に挿入する文字列1"],
+ *    ["キーワード前に挿入する文字列2", "キーワード後に挿入する文字列2"],
+ *    ...,
+ *   ]
+ *
+ * もし、1つのスニペットの中に_tags_で指定したタグより多くの
+ * キーワードが含まれている場合は、以下のように、また、先頭
+ * のタグから順番に使われる。
+ *
+ *   expression.parse("Ruby groonga 検索")
+ *   tags = [["<tag1>", "</tag1>"], ["<tag2>", "</tag2>"]]
+ *   snippet = expression.snippet(tags)
+ *   p snippet.execute("Rubyでgroonga使って全文検索、高速検索。")
+ *     # => ["<tag1>Ruby</tag1>で<tag2>groonga</tag2>"
+ *     #     "使って全文<tag1>検索</tag1>、高速<tag2>検索</tag2>。"]
+ *
+ * _options_に指定可能な値は以下の通り。
+ *
+ * [+:normalize+]
+ *   キーワード文字列・スニペット元の文字列を正規化するかど
+ *   うか。省略した場合は+false+で正規化しない。
+ *
+ * [+:skip_leading_spaces+]
+ *   先頭の空白を無視するかどうか。省略した場合は+false+で無
+ *   視しない。
+ *
+ * [+:width+]
+ *   スニペット文字列の長さ。省略した場合は100文字。
+ *
+ * [+:max_results+]
+ *   生成するスニペットの最大数。省略した場合は3。
+ *
+ * [+:html_escape+]
+ *   スニペット内の+<+, +>+, +&+, +"+をHTMLエスケープするか
+ *   どうか。省略した場合は+false+で、HTMLエスケープしない。
+ */
 static VALUE
 rb_grn_expression_snippet (int argc, VALUE *argv, VALUE self)
 {
@@ -400,7 +445,6 @@ rb_grn_expression_snippet (int argc, VALUE *argv, VALUE self)
     rb_scan_args(argc, argv, "11", &rb_tags, &options);
 
     rb_grn_scan_options(options,
-                        "context", &rb_context,
                         "normalize", &rb_normalize,
                         "skip_leading_spaces", &rb_skip_leading_spaces,
                         "width", &rb_width,
