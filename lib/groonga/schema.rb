@@ -513,7 +513,7 @@ module Groonga
 
       def define(table)
         target = @target
-        target = context[target] unless target.is_a?(Groonga::Object)
+        target = table.context[target] unless target.is_a?(Groonga::Object)
         if target.nil?
           raise ArgumentError, "Unknown index target: #{@target.inspect}"
         end
@@ -522,11 +522,6 @@ module Groonga
                                           @options)
         index.source = target
         index
-      end
-
-      private
-      def context
-        @options[:context] || Groonga::Context.default
       end
     end
 
