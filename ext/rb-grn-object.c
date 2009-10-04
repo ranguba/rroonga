@@ -257,7 +257,7 @@ rb_grn_object_bind_common (VALUE klass, VALUE self, VALUE rb_context,
 			   grn_ctx *context, grn_obj *object)
 {
     DATA_PTR(self) = rb_grn_object;
-    rb_iv_set(self, "context", rb_context);
+    rb_iv_set(self, "@context", rb_context);
 
     rb_grn_object->self = self;
     rb_grn_object->need_close = RB_GRN_TRUE;
@@ -1089,7 +1089,7 @@ rb_grn_object_remove (VALUE self)
     rc = grn_obj_remove(context, rb_grn_object->object);
     rb_grn_rc_check(rc, self);
 
-    rb_iv_set(self, "context", Qnil);
+    rb_iv_set(self, "@context", Qnil);
 
     return Qnil;
 }
@@ -1099,6 +1099,8 @@ rb_grn_init_object (VALUE mGrn)
 {
     rb_cGrnObject = rb_define_class_under(mGrn, "Object", rb_cObject);
     rb_define_alloc_func(rb_cGrnObject, rb_grn_object_alloc);
+
+    rb_define_attr(rb_cGrnObject, "context", RB_GRN_TRUE, RB_GRN_FALSE);
 
     rb_define_method(rb_cGrnObject, "inspect", rb_grn_object_inspect, 0);
 

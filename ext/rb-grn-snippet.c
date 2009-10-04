@@ -162,7 +162,7 @@ rb_grn_snippet_initialize (int argc, VALUE *argv, VALUE self)
     rb_grn_snippet->snippet = snippet;
     rb_grn_snippet->owner = RB_GRN_TRUE;
 
-    rb_iv_set(self, "context", rb_context);
+    rb_iv_set(self, "@context", rb_context);
 
     return Qnil;
 }

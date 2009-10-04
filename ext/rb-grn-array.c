@@ -141,7 +141,7 @@ rb_grn_array_s_create (int argc, VALUE *argv, VALUE klass)
 	rb_grn_context_check(context, rb_ary_new4(argc, argv));
     rb_table = GRNOBJECT2RVAL(klass, context, table, RB_GRN_TRUE);
     rb_grn_context_check(context, rb_table);
-    rb_iv_set(rb_table, "context", rb_context);
+    rb_iv_set(rb_table, "@context", rb_context);
 
     if (rb_block_given_p())
         return rb_ensure(rb_yield, rb_table, rb_grn_object_close, rb_table);

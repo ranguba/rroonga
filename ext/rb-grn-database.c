@@ -78,7 +78,7 @@ rb_grn_database_close (VALUE self)
 {
     VALUE rb_context;
 
-    rb_context = rb_iv_get(self, "context");
+    rb_context = rb_iv_get(self, "@context");
     if (!NIL_P(rb_context))
 	rb_iv_set(rb_context, "database", Qnil);
 
@@ -142,7 +142,7 @@ rb_grn_database_s_create (int argc, VALUE *argv, VALUE klass)
     rb_grn_context_check(context, rb_ary_new4(argc, argv));
     rb_database = rb_grn_object_alloc(klass);
     rb_grn_object_assign(Qnil, rb_database, rb_context, context, database);
-    rb_iv_set(rb_database, "context", rb_context);
+    rb_iv_set(rb_database, "@context", rb_context);
     if (!NIL_P(rb_context))
 	rb_iv_set(rb_context, "database", rb_database);
     rb_grn_context_check(context, rb_ary_new4(argc, argv));
@@ -194,7 +194,7 @@ rb_grn_database_initialize (int argc, VALUE *argv, VALUE self)
     rb_grn_object_assign(Qnil, self, rb_context, context, database);
     rb_grn_context_check(context, self);
 
-    rb_iv_set(self, "context", rb_context);
+    rb_iv_set(self, "@context", rb_context);
     if (!NIL_P(rb_context))
 	rb_iv_set(rb_context, "database", self);
 
