@@ -94,4 +94,25 @@ class ExpressionTest < Test::Unit::TestCase
                                  "Rubyらしい読み書きしやすい構文で利用できる" +
                                  "ことが利点です。"))
   end
+
+  def test_snippet_without_tags
+    users = Groonga::Array.create(:name => "users")
+    name = users.define_column("name", "ShortText")
+    terms = Groonga::Hash.create(:name => "terms",
+                                 :key_type => "ShortText",
+                                 :default_tokenizer => "TokenBigram")
+    users.define_index_column("user_name", users,
+                              :source => "users.name",
+                              :with_position => true)
+
+    expression = Groonga::Expression.new
+    variable = expression.define_variable(:domain => users)
+    expression.append_object(variable)
+    expression.parse("ラングバ", :default_column => name)
+    expression.compile
+
+    snippet = expression.snippet([], :width => 30)
+    assert_equal(["ラングバプロジェクト"],
+                 snippet.execute("ラングバプロジェクトはカラムストア機能も"))
+  end
 end
