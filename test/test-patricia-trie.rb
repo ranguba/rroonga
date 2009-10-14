@@ -154,7 +154,7 @@ class PatriciaTrieTest < Test::Unit::TestCase
     words.add('無敵')
     words.add('ＢＯＵＫＥＮ')
 
-    text = 'muTEki リンクの冒険 マッチしない ミリバール ガッ おわり'
+    text = 'muTEki リンクの冒険'
     actual = words.tag_keys(text) do |record, word|
       "<#{word}(#{record.key})>"
     end
