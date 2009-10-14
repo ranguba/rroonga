@@ -34,6 +34,7 @@ module Groonga
         result << yield(record, word)
         position = start + length
       end
+      result << bytes[position..-1]
       result
     end
   end

@@ -116,7 +116,7 @@ class PatriciaTrieTest < Test::Unit::TestCase
     words.add('ｶﾞｯ')
     words.add('ＭＵＴＥＫＩ')
 
-    text = 'muTEki リンクの冒険 マッチしない ミリバール ガッ'
+    text = 'muTEki リンクの冒険 マッチしない ミリバール ガッ おわり'
     actual = words.tag_keys(text) do |record, word|
       "<#{word}(#{record.key})>"
     end
@@ -124,7 +124,23 @@ class PatriciaTrieTest < Test::Unit::TestCase
                  "<リンクの冒険(リンクの冒険)> " +
                  "マッチしない " +
                  "<ミリバール(ミリバール)> " +
-                 "<ガッ(ガッ)>",
+                 "<ガッ(ガッ)> " +
+                 "おわり",
                  actual)
+  end
+
+  def test_tag_keys_with_no_match
+    Groonga::Context.default_options = {:encoding => "utf-8"}
+    words = Groonga::PatriciaTrie.create(:key_type => "ShortText",
+                                         :key_normalize => true)
+
+    words.add('無敵')
+    words.add('ＢＯＵＫＥＮ')
+
+    text = 'muTEki リンクの冒険 マッチしない ミリバール ガッ おわり'
+    actual = words.tag_keys(text) do |record, word|
+      "<#{word}(#{record.key})>"
+    end
+    assert_equal(text, actual)
   end
 end
