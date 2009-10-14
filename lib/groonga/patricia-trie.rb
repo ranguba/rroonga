@@ -34,7 +34,11 @@ module Groonga
         result << yield(record, word)
         position = start + length
       end
-      result << bytes[position..-1]
+      last_text = bytes[position..-1]
+      unless last_text.empty?
+        last_text.force_encoding(encoding) if encoding
+        result << last_text
+      end
       result
     end
   end
