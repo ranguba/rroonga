@@ -62,7 +62,7 @@ RB_GRN_BEGIN_DECLS
 #endif
 
 #ifdef RB_GRN_DEBUG
-#  define debug(...) printf(__VA_ARGS__)
+#  define debug(...) fprintf(stderr, __VA_ARGS__)
 #else
 #  define debug(...)
 #endif
