@@ -21,8 +21,8 @@
 rb_grn_boolean rb_grn_exited = RB_GRN_FALSE;
 extern grn_ctx grn_gctx;
 
-static void
-finish_groonga (VALUE data)
+static VALUE
+finish_groonga (VALUE self, VALUE object_id)
 {
     grn_ctx *context = grn_gctx.next;
 
@@ -34,6 +34,8 @@ finish_groonga (VALUE data)
     grn_fin();
     debug("finish: done\n");
     rb_grn_exited = RB_GRN_TRUE;
+
+    return Qnil;
 }
 
 void
@@ -41,8 +43,17 @@ Init_groonga (void)
 {
     VALUE mGrn;
     VALUE cGrnBuildVersion, cGrnBindingsVersion;
+    VALUE groonga_finalizer, groonga_finalizer_keeper;
 
     mGrn = rb_define_module("Groonga");
+
+    groonga_finalizer = rb_funcall(rb_cObject, rb_intern("new"), 0);
+    rb_define_singleton_method(groonga_finalizer, "call", finish_groonga, 1);
+    groonga_finalizer_keeper = rb_funcall(rb_cObject, rb_intern("new"), 0);
+    rb_funcall(rb_const_get(rb_cObject, rb_intern("ObjectSpace")),
+	       rb_intern("define_finalizer"),
+	       2, groonga_finalizer_keeper, groonga_finalizer);
+    rb_iv_set(mGrn, "finalizer", groonga_finalizer_keeper);
 
     cGrnBuildVersion = rb_ary_new3(3,
 				   INT2NUM(GRN_MAJOR_VERSION),
@@ -78,7 +89,6 @@ Init_groonga (void)
     rb_grn_init_exception(mGrn);
 
     rb_grn_rc_check(grn_init(), Qnil);
-    rb_set_end_proc(finish_groonga, Qnil);
 
     rb_grn_init_utils(mGrn);
     rb_grn_init_encoding(mGrn);
