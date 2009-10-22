@@ -60,7 +60,7 @@ rb_grn_init_operation (VALUE mGrn)
     rb_define_const(rb_mGrnOperation, "SHIFTL_ASSIGN",
                     UINT2NUM(GRN_OP_SHIFTL_ASSIGN));
     rb_define_const(rb_mGrnOperation, "SHIRTR_ASSIGN",
-                    UINT2NUM(GRN_OP_SHIRTR_ASSIGN));
+                    UINT2NUM(GRN_OP_SHIFTR_ASSIGN));
     rb_define_const(rb_mGrnOperation, "SHIFTRR_ASSIGN",
                     UINT2NUM(GRN_OP_SHIFTRR_ASSIGN));
     rb_define_const(rb_mGrnOperation, "AND_ASSIGN",
