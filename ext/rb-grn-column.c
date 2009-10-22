@@ -220,6 +220,11 @@ rb_grn_column_select (int argc, VALUE *argv, VALUE self)
     grn_table_select(context, table, expression, result, operator);
     rb_grn_context_check(context, self);
 
+    rb_attr(rb_singleton_class(rb_result),
+	    rb_intern("expression"),
+	    RB_GRN_TRUE, RB_GRN_FALSE, RB_GRN_FALSE);
+    rb_iv_set(rb_result, "@expression", rb_expression);
+
     return rb_result;
 }
 
