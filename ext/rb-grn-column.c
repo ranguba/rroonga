@@ -168,28 +168,32 @@ rb_grn_column_select (int argc, VALUE *argv, VALUE self)
     grn_obj *table, *column, *result, *expression;
     grn_operator operator = GRN_OP_OR;
     VALUE options;
-    VALUE rb_query, rb_query_or_options, rb_name, rb_operator, rb_result;
+    VALUE rb_query, condition_or_options, rb_name, rb_operator, rb_result;
     VALUE builder;
-    VALUE rb_expression;
+    VALUE rb_expression = Qnil;
     
     rb_query = Qnil;
 
-    rb_scan_args(argc, argv, "02", &rb_query_or_options, &options);
+    rb_scan_args(argc, argv, "02", &condition_or_options, &options);
 
     rb_grn_column_deconstruct(SELF(self), &column, &context,
 			      NULL, NULL,
 			      NULL, NULL, NULL);
     table = grn_column_table(context, column);
 
-    if (RVAL2CBOOL(rb_obj_is_kind_of(rb_query_or_options, rb_cString))) {
-        rb_query = rb_query_or_options;
+    if (RVAL2CBOOL(rb_obj_is_kind_of(condition_or_options, rb_cString))) {
+        rb_query = condition_or_options;
+    } else if (RVAL2CBOOL(rb_obj_is_kind_of(condition_or_options,
+                                            rb_cGrnExpression))) {
+        rb_expression = condition_or_options;
     } else {
         if (!NIL_P(options))
             rb_raise(rb_eArgError,
-		     "should be [query_string, option_hash] "
+		     "should be [query_string, option_hash], "
+		     "[expression, opion_hash] "
 		     "or [option_hash]: %s",
 		     rb_grn_inspect(rb_ary_new4(argc, argv)));
-        options = rb_query_or_options;
+        options = condition_or_options;
     }
     
     rb_grn_scan_options(options,
@@ -211,8 +215,10 @@ rb_grn_column_select (int argc, VALUE *argv, VALUE self)
 	result = RVAL2GRNTABLE(rb_result, &context);
     }
 
-    builder = rb_grn_column_expression_builder_new(self, rb_name, rb_query);
-    rb_expression = rb_grn_column_expression_builder_build(builder);
+    if (NIL_P(rb_expression)) {
+      builder = rb_grn_column_expression_builder_new(self, rb_name, rb_query);
+      rb_expression = rb_grn_column_expression_builder_build(builder);
+    }
     rb_grn_object_deconstruct(RB_GRN_OBJECT(DATA_PTR(rb_expression)),
                               &expression, NULL,
                               NULL, NULL, NULL, NULL);

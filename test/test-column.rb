@@ -175,21 +175,9 @@ class ColumnTest < Test::Unit::TestCase
   end
 
   def test_select
-    posts = Groonga::Hash.create(:name => "<posts>", :key_type => "<shorttext>")
-    body = posts.define_column("body", "<text>")
-
-    index = Groonga::PatriciaTrie.create(:name => "<terms>",
-                                         :key_type => "<shorttext>",
-                                         :key_normalize => true)
-    index.default_tokenizer = "<token:bigram>"
-    body_index = index.define_index_column("body_index", posts,
-                                           :with_position => true,
-                                           :source => body)
-
-    first_post = posts.add("Hello!", :body => "World")
-    hobby = posts.add("My Hobby", :body => "Drive and Eat")
+    populate_table_for_select
     
-    result = body.select("drive")
+    result = @body.select("drive")
     assert_equal(["Drive and Eat"],
                  result.records.collect do |record|
                    record["body"]
@@ -198,22 +186,27 @@ class ColumnTest < Test::Unit::TestCase
                  "{body GET_VALUE \"drive\" MATCH}>", result.expression.inspect)
   end
 
+  def test_select_expression
+    populate_table_for_select
+
+    expression = Groonga::Expression.new
+    variable = expression.define_variable(:domain => @posts)
+    expression.append_object(variable)
+    expression.parse("body:%drive", :parser => :table)
+    expression.compile
+    result = @body.select(expression)
+    assert_equal(["Drive and Eat"],
+                 result.records.collect do |record|
+                   record["body"]
+                 end)
+    assert_equal("#<Groonga::Expression noname(?0:\"\")" +
+                 "{?0 body GET_VALUE \"drive\" MATCH}>", result.expression.inspect)
+  end
+
   def test_select_with_block
-    posts = Groonga::Hash.create(:name => "<posts>", :key_type => "<shorttext>")
-    body = posts.define_column("body", "<text>")
+    populate_table_for_select
 
-    index = Groonga::PatriciaTrie.create(:name => "<terms>",
-                                         :key_type => "<shorttext>",
-                                         :key_normalize => true)
-    index.default_tokenizer = "<token:bigram>"
-    body_index = index.define_index_column("body_index", posts,
-                                           :with_position => true,
-                                           :source => body)
-
-    first_post = posts.add("Hello!", :body => "World")
-    hobby = posts.add("My Hobby", :body => "Drive and Eat")
-    
-    result = body.select do |column|
+    result = @body.select do |column|
       column =~ "drive"
     end
     assert_equal(["Drive and Eat"],
@@ -246,5 +239,21 @@ class ColumnTest < Test::Unit::TestCase
       record.key["content"]
     end
     assert_equal(expected_contents, actual_contents)
+  end
+
+  def populate_table_for_select
+    @posts = Groonga::Hash.create(:name => "<posts>", :key_type => "<shorttext>")
+    @body = @posts.define_column("body", "<text>")
+
+    index = Groonga::PatriciaTrie.create(:name => "<terms>",
+                                         :key_type => "<shorttext>",
+                                         :key_normalize => true)
+    index.default_tokenizer = "<token:bigram>"
+    body_index = index.define_index_column("body_index", @posts,
+                                           :with_position => true,
+                                           :source => @body)
+
+    first_post = @posts.add("Hello!", :body => "World")
+    hobby = @posts.add("My Hobby", :body => "Drive and Eat")
   end
 end

@@ -1248,6 +1248,7 @@ rb_grn_table_is_locked (int argc, VALUE *argv, VALUE self)
  * call-seq:
  *   table.select(options) {|record| ...} -> Groonga::Hash
  *   table.select(query, options) -> Groonga::Hash
+ *   table.select(expression, options) -> Groonga::Hash
  *
  * _table_からブロックまたは文字列で指定した条件にマッチする
  * レコードを返す。返されたテーブルには+expression+という特
@@ -1298,6 +1299,8 @@ rb_grn_table_is_locked (int argc, VALUE *argv, VALUE self)
  *   "description:@groonga" # "description"カラムに
  *                          # "groonga"を含んでいるレコードにマッチ
  *
+ * _expression_には既に作成済みのGroonga::Expressionを渡す
+ *
  * ブロックで条件を指定する場合はGroonga::ExpressionBuilder
  * を参照。
  *
@@ -1331,25 +1334,29 @@ rb_grn_table_select (int argc, VALUE *argv, VALUE self)
     grn_ctx *context;
     grn_obj *table, *result, *expression;
     grn_operator operator = GRN_OP_OR;
-    VALUE rb_query = Qnil, query_or_options, options;
+    VALUE rb_query = Qnil, condition_or_options, options;
     VALUE rb_name, rb_operator, rb_result;
-    VALUE rb_expression, builder;
+    VALUE rb_expression = Qnil, builder;
 
-    rb_scan_args(argc, argv, "02", &query_or_options, &options);
+    rb_scan_args(argc, argv, "02", &condition_or_options, &options);
 
     rb_grn_table_deconstruct(SELF(self), &table, &context,
 			     NULL, NULL,
 			     NULL, NULL, NULL);
 
-    if (RVAL2CBOOL(rb_obj_is_kind_of(query_or_options, rb_cString))) {
-	rb_query = query_or_options;
+    if (RVAL2CBOOL(rb_obj_is_kind_of(condition_or_options, rb_cString))) {
+	rb_query = condition_or_options;
+    } else if (RVAL2CBOOL(rb_obj_is_kind_of(condition_or_options,
+					    rb_cGrnExpression))) {
+	rb_expression = condition_or_options;
     } else {
 	if (!NIL_P(options))
 	    rb_raise(rb_eArgError,
-		     "should be [query_string, option_hash] "
+		     "should be [query_string, option_hash], "
+		     "[expression, opion_hash] "
 		     "or [option_hash]: %s",
 		     rb_grn_inspect(rb_ary_new4(argc, argv)));
-	options = query_or_options;
+	options = condition_or_options;
     }
 
     rb_grn_scan_options(options,
@@ -1371,11 +1378,13 @@ rb_grn_table_select (int argc, VALUE *argv, VALUE self)
 	result = RVAL2GRNTABLE(rb_result, &context);
     }
 
-    builder = rb_grn_record_expression_builder_new(self, rb_name);
-    if (!NIL_P(rb_query)) {
-        rb_funcall(builder, rb_intern("query="), 1, rb_query);
+    if (NIL_P(rb_expression)) {
+      builder = rb_grn_record_expression_builder_new(self, rb_name);
+      if (!NIL_P(rb_query)) {
+          rb_funcall(builder, rb_intern("query="), 1, rb_query);
+      }
+      rb_expression = rb_grn_record_expression_builder_build(builder);
     }
-    rb_expression = rb_grn_record_expression_builder_build(builder);
     rb_grn_object_deconstruct(RB_GRN_OBJECT(DATA_PTR(rb_expression)),
                               &expression, NULL,
 			      NULL, NULL, NULL, NULL);

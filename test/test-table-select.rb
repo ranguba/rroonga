@@ -53,6 +53,17 @@ class TableTestSelect < Test::Unit::TestCase
     assert_equal_select_result([@comment1, @comment2], result)
   end
 
+  def test_select_expression
+    expression = Groonga::Expression.new
+    variable = expression.define_variable(:domain => @comments)
+    expression.append_object(variable)
+    expression.parse("content:%Hello", :parser => :table)
+    expression.compile
+    result = @comments.select(expression)
+    assert_equal(expression, result.expression)
+    assert_equal_select_result([@comment1, @comment2], result)
+  end
+
   def test_select_query_with_block
     result = @comments.select("content:%Hello") do |record|
       record["created_at"] < Time.parse("2009-08-01")
