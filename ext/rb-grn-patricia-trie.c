@@ -113,7 +113,7 @@ rb_grn_patricia_trie_search (int argc, VALUE *argv, VALUE self)
     grn_obj *key, *domain, *result;
     grn_operator operator;
     grn_search_optarg search_options;
-    rb_grn_boolean search_options_is_set = RB_GRN_TRUE;
+    rb_grn_boolean search_options_is_set = RB_GRN_FALSE;
     VALUE rb_key, options, rb_result, rb_operator, rb_type;
 
     rb_grn_table_key_support_deconstruct(SELF(self), &table, &context,

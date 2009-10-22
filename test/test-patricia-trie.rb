@@ -33,8 +33,6 @@ class PatriciaTrieTest < Test::Unit::TestCase
   end
 
   def test_search
-    omit("creating entry is broken.")
-
     users = Groonga::Array.create(:name => "<users>")
     user_name = users.define_column("name", "<shorttext>")
 
