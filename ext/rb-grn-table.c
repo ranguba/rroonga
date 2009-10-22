@@ -1327,6 +1327,10 @@ rb_grn_table_is_locked (int argc, VALUE *argv, VALUE self)
  *
  * [+:name+]
  *   条件の名前。省略した場合は名前を付けない。
+ *
+ * [+:parser+]
+ *   _query_をパースする時に使用するパーサー。省略した場合は
+ *   _:table_
  */
 static VALUE
 rb_grn_table_select (int argc, VALUE *argv, VALUE self)
@@ -1335,7 +1339,7 @@ rb_grn_table_select (int argc, VALUE *argv, VALUE self)
     grn_obj *table, *result, *expression;
     grn_operator operator = GRN_OP_OR;
     VALUE rb_query = Qnil, condition_or_options, options;
-    VALUE rb_name, rb_operator, rb_result;
+    VALUE rb_name, rb_operator, rb_result, rb_parser = Qnil;
     VALUE rb_expression = Qnil, builder;
 
     rb_scan_args(argc, argv, "02", &condition_or_options, &options);
@@ -1363,6 +1367,7 @@ rb_grn_table_select (int argc, VALUE *argv, VALUE self)
 			"operator", &rb_operator,
 			"result", &rb_result,
 			"name", &rb_name,
+			"parser", &rb_parser,
 			NULL);
 
     if (!NIL_P(rb_operator))
@@ -1380,9 +1385,8 @@ rb_grn_table_select (int argc, VALUE *argv, VALUE self)
 
     if (NIL_P(rb_expression)) {
       builder = rb_grn_record_expression_builder_new(self, rb_name);
-      if (!NIL_P(rb_query)) {
-          rb_funcall(builder, rb_intern("query="), 1, rb_query);
-      }
+      rb_funcall(builder, rb_intern("query="), 1, rb_query);
+      rb_funcall(builder, rb_intern("parser="), 1, rb_parser);
       rb_expression = rb_grn_record_expression_builder_build(builder);
     }
     rb_grn_object_deconstruct(RB_GRN_OBJECT(DATA_PTR(rb_expression)),

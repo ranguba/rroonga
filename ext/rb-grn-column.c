@@ -168,7 +168,8 @@ rb_grn_column_select (int argc, VALUE *argv, VALUE self)
     grn_obj *table, *column, *result, *expression;
     grn_operator operator = GRN_OP_OR;
     VALUE options;
-    VALUE rb_query, condition_or_options, rb_name, rb_operator, rb_result;
+    VALUE rb_query, condition_or_options;
+    VALUE rb_name, rb_operator, rb_result, rb_parser = Qnil;
     VALUE builder;
     VALUE rb_expression = Qnil;
     
@@ -200,6 +201,7 @@ rb_grn_column_select (int argc, VALUE *argv, VALUE self)
 			"operator", &rb_operator,
 			"result", &rb_result,
 			"name", &rb_name,
+			"parser", &rb_parser,
 			NULL);
 
     if (!NIL_P(rb_operator))
@@ -217,6 +219,7 @@ rb_grn_column_select (int argc, VALUE *argv, VALUE self)
 
     if (NIL_P(rb_expression)) {
       builder = rb_grn_column_expression_builder_new(self, rb_name, rb_query);
+      rb_funcall(builder, rb_intern("parser="), 1, rb_parser);
       rb_expression = rb_grn_column_expression_builder_build(builder);
     }
     rb_grn_object_deconstruct(RB_GRN_OBJECT(DATA_PTR(rb_expression)),

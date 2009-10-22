@@ -174,10 +174,22 @@ class ColumnTest < Test::Unit::TestCase
     assert_equal("title", title.local_name)
   end
 
-  def test_select
+  def test_select_query
     populate_table_for_select
     
     result = @body.select("drive")
+    assert_equal(["Drive and Eat"],
+                 result.records.collect do |record|
+                   record["body"]
+                 end)
+    assert_equal("#<Groonga::Expression noname(?0:\"\")" +
+                 "{body GET_VALUE \"drive\" MATCH}>", result.expression.inspect)
+  end
+
+  def test_select_query_with_parser
+    populate_table_for_select
+
+    result = @body.select("body @ \"drive\"", :parser => :expression)
     assert_equal(["Drive and Eat"],
                  result.records.collect do |record|
                    record["body"]
