@@ -54,7 +54,7 @@ class TableCursorTest < Test::Unit::TestCase
     add_ids(bookmarks)
     results = []
     bookmarks.open_cursor do |cursor|
-      while record = cursor.next
+      cursor.each do |record|
         results << record["id"]
       end
     end
@@ -67,7 +67,7 @@ class TableCursorTest < Test::Unit::TestCase
     add_ids(bookmarks)
     results = []
     bookmarks.open_cursor(:limit => 20) do |cursor|
-      while record = cursor.next
+      cursor.each do |record|
         results << record["id"]
       end
     end
@@ -80,7 +80,7 @@ class TableCursorTest < Test::Unit::TestCase
     add_ids(bookmarks)
     results = []
     bookmarks.open_cursor(:offset => 20) do |cursor|
-      while record = cursor.next
+      cursor.each do |record|
         results << record["id"]
       end
     end
@@ -93,7 +93,7 @@ class TableCursorTest < Test::Unit::TestCase
     add_ids(bookmarks)
     results = []
     bookmarks.open_cursor(:limit => 20, :offset => 20) do |cursor|
-      while record = cursor.next
+      cursor.each do |record|
         results << record["id"]
       end
     end
