@@ -48,4 +48,71 @@ class TableCursorTest < Test::Unit::TestCase
                   [@groonga_bookmark, "groonga"]],
                  record_and_key_list)
   end
+
+  def test_without_limit_and_offset
+    bookmarks = create_bookmarks
+    add_ids(bookmarks)
+    results = []
+    bookmarks.open_cursor do |cursor|
+      while record = cursor.next
+        results << record["id"]
+      end
+    end
+
+    assert_equal((100..199).to_a, results)
+  end
+
+  def test_with_limit
+    bookmarks = create_bookmarks
+    add_ids(bookmarks)
+    results = []
+    bookmarks.open_cursor(:limit => 20) do |cursor|
+      while record = cursor.next
+        results << record["id"]
+      end
+    end
+
+    assert_equal((100...120).to_a, results)
+  end
+
+  def test_with_offset
+    bookmarks = create_bookmarks
+    add_ids(bookmarks)
+    results = []
+    bookmarks.open_cursor(:offset => 20) do |cursor|
+      while record = cursor.next
+        results << record["id"]
+      end
+    end
+
+    assert_equal((120...200).to_a, results)
+  end
+
+  def test_with_limit_and_offset
+    bookmarks = create_bookmarks
+    add_ids(bookmarks)
+    results = []
+    bookmarks.open_cursor(:limit => 20, :offset => 20) do |cursor|
+      while record = cursor.next
+        results << record["id"]
+      end
+    end
+
+    assert_equal((120...140).to_a, results)
+  end
+
+  private
+  def create_bookmarks
+    bookmarks = Groonga::Array.create(:name => "<bookmarks>")
+    bookmarks.define_column("id", "<int>")
+    bookmarks
+  end
+
+  def add_ids(bookmarks)
+    (0...100).to_a.each do |i|
+      bookmark = bookmarks.add
+      bookmark["id"] = i + 100
+    end
+    bookmarks
+  end
 end

@@ -644,8 +644,10 @@ rb_grn_table_open_grn_cursor (int argc, VALUE *argv, VALUE self,
     grn_table_cursor *cursor;
     void *min_key = NULL, *max_key = NULL;
     unsigned min_key_size = 0, max_key_size = 0;
+    unsigned offset = 0, limit = 0;
     int flags = 0;
     VALUE options, rb_min, rb_max, rb_order, rb_greater_than, rb_less_than;
+    VALUE rb_offset, rb_limit;
 
     rb_grn_table_deconstruct(SELF(self), &table, context,
 			     NULL, NULL,
@@ -656,6 +658,8 @@ rb_grn_table_open_grn_cursor (int argc, VALUE *argv, VALUE self,
     rb_grn_scan_options(options,
 			"min", &rb_min,
                         "max", &rb_max,
+                        "offset", &rb_offset,
+                        "limit", &rb_limit,
 			"order", &rb_order,
 			"greater_than", &rb_greater_than,
 			"less_than", &rb_less_than,
@@ -669,6 +673,10 @@ rb_grn_table_open_grn_cursor (int argc, VALUE *argv, VALUE self,
 	max_key = StringValuePtr(rb_max);
 	max_key_size = RSTRING_LEN(rb_max);
     }
+    if (!NIL_P(rb_offset))
+	offset = NUM2INT(rb_offset);
+    if (!NIL_P(rb_limit))
+	limit = NUM2INT(rb_limit);
 
     if (NIL_P(rb_order)) {
     } else if (rb_grn_equal_option(rb_order, "asc") ||
@@ -689,11 +697,10 @@ rb_grn_table_open_grn_cursor (int argc, VALUE *argv, VALUE self,
     if (RVAL2CBOOL(rb_less_than))
 	flags |= GRN_CURSOR_LT;
 
-    /* FIXME: should support offset and limit */
     cursor = grn_table_cursor_open(*context, table,
 				   min_key, min_key_size,
 				   max_key, max_key_size,
-				   0, 0, flags);
+				   offset, limit, flags);
     rb_grn_context_check(*context, self);
 
     return cursor;
