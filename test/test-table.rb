@@ -325,12 +325,8 @@ class TableTest < Test::Unit::TestCase
   end
 
   def test_sort
-    bookmarks = Groonga::Array.create(:name => "<bookmarks>")
-    id_column = bookmarks.define_column("id", "<int>")
-    100.times do |i|
-      bookmark = bookmarks.add
-      bookmark["id"] = i + 100
-    end
+    bookmarks = create_bookmarks
+    add_shuffled_ids(bookmarks)
 
     results = bookmarks.sort([
                               {
@@ -344,12 +340,8 @@ class TableTest < Test::Unit::TestCase
   end
 
   def test_sort_simple
-    bookmarks = Groonga::Array.create(:name => "<bookmarks>")
-    id_column = bookmarks.define_column("id", "<int>")
-    100.times do |i|
-      bookmark = bookmarks.add
-      bookmark["id"] = i + 100
-    end
+    bookmarks = create_bookmarks
+    add_shuffled_ids(bookmarks)
 
     results = bookmarks.sort(["id"], :limit => 20)
     assert_equal((100..119).to_a,
@@ -357,28 +349,50 @@ class TableTest < Test::Unit::TestCase
   end
 
   def test_sort_by_array
-    bookmarks = Groonga::Array.create(:name => "<bookmarks>")
-    id_column = bookmarks.define_column("id", "<int>")
-    100.times do |i|
-      bookmark = bookmarks.add
-      bookmark["id"] = i + 100
-    end
+    bookmarks = create_bookmarks
+    add_shuffled_ids(bookmarks)
 
     results = bookmarks.sort([["id", "descending"]], :limit => 20)
     assert_equal((180..199).to_a.reverse,
                  results.collect {|record| record["id"]})
   end
 
-  def test_sort_without_limit
-    bookmarks = Groonga::Array.create(:name => "<bookmarks>")
-    id_column = bookmarks.define_column("id", "<int>")
-    100.times do |i|
-      bookmark = bookmarks.add
-      bookmark["id"] = i + 100
-    end
+  def test_sort_without_limit_and_offset
+    bookmarks = create_bookmarks
+    add_shuffled_ids(bookmarks)
 
     results = bookmarks.sort([{:key => "id", :order => :descending}])
     assert_equal((100..199).to_a.reverse,
+                 results.collect {|record| record["id"]})
+  end
+
+  def test_sort_with_limit
+    bookmarks = create_bookmarks
+    add_shuffled_ids(bookmarks)
+
+    results = bookmarks.sort([{:key => "id", :order => :descending}],
+                             :limit => 20)
+    assert_equal((180..199).to_a.reverse,
+                 results.collect {|record| record["id"]})
+  end
+
+  def test_sort_with_offset
+    bookmarks = create_bookmarks
+    add_shuffled_ids(bookmarks)
+
+    results = bookmarks.sort([{:key => "id", :order => :descending}],
+                             :offset => 20)
+    assert_equal((100..179).to_a.reverse,
+                 results.collect {|record| record["id"]})
+  end
+
+  def test_sort_with_limit_and_offset
+    bookmarks = create_bookmarks
+    add_shuffled_ids(bookmarks)
+
+    results = bookmarks.sort([{:key => "id", :order => :descending}],
+                             :limit => 20, :offset => 20)
+    assert_equal((160..179).to_a.reverse,
                  results.collect {|record| record["id"]})
   end
 
@@ -519,5 +533,21 @@ class TableTest < Test::Unit::TestCase
     assert_predicate(bookmarks, :locked?)
     bookmarks.clear_lock
     assert_not_predicate(bookmarks, :locked?)
+  end
+
+  private
+  def create_bookmarks
+    bookmarks = Groonga::Array.create(:name => "<bookmarks>")
+    bookmarks.define_column("id", "<int>")
+    bookmarks
+  end
+
+  def add_shuffled_ids(bookmarks)
+    srand(Time.now.to_i)
+    (0...100).to_a.shuffle.each do |i|
+      bookmark = bookmarks.add
+      bookmark["id"] = i + 100
+    end
+    bookmarks
   end
 end
