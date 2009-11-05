@@ -773,19 +773,24 @@ rb_grn_table_truncate (VALUE self)
 static VALUE
 rb_grn_table_each (VALUE self)
 {
+    RbGrnTable *rb_table;
+    RbGrnObject *rb_grn_object;
     grn_ctx *context = NULL;
     grn_obj *table;
     grn_table_cursor *cursor;
     VALUE rb_cursor;
     grn_id id;
 
-    rb_grn_table_deconstruct(SELF(self), &table, &context,
+    rb_table = SELF(self);
+    rb_grn_table_deconstruct(rb_table, &table, &context,
 			     NULL, NULL,
 			     NULL, NULL, NULL);
     cursor = grn_table_cursor_open(context, table, NULL, 0, NULL, 0,
 				   0, -1, GRN_CURSOR_ASCENDING);
     rb_cursor = GRNTABLECURSOR2RVAL(Qnil, context, cursor);
-    while ((id = grn_table_cursor_next(context, cursor)) != GRN_ID_NIL) {
+    rb_grn_object = RB_GRN_OBJECT(rb_table);
+    while (rb_grn_object->object &&
+	   (id = grn_table_cursor_next(context, cursor)) != GRN_ID_NIL) {
 	rb_yield(rb_grn_record_new(self, id, Qnil));
     }
     rb_grn_object_close(rb_cursor);
