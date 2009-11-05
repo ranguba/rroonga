@@ -253,7 +253,7 @@ rb_grn_database_each (VALUE self)
     rb_grn_database_deconstruct(SELF(self), &database, &context,
 				NULL, NULL, NULL, NULL);
     cursor = grn_table_cursor_open(context, database, NULL, 0, NULL, 0,
-				   0, 0, GRN_CURSOR_ASCENDING);
+				   0, -1, GRN_CURSOR_ASCENDING);
     rb_cursor = GRNTABLECURSOR2RVAL(Qnil, context, cursor);
     rb_iv_set(self, "cursor", rb_cursor);
     while ((id = grn_table_cursor_next(context, cursor)) != GRN_ID_NIL) {
