@@ -174,7 +174,7 @@ EOS
 
     return if total_records < limit
 
-    last_page = total_records / limit
+    last_page = (total_records / limit.to_f).ceil
     response.write("<div class='pagination'>\n")
     if page > 0
       render_pagination_link(request, response, _query, page - 1, "<<")
