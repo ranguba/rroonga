@@ -250,7 +250,8 @@ rb_grn_column_get_local_name (VALUE self)
  *
  * [+:parser+]
  *   _query_をパースする時に使用するパーサー。省略した場合は
- *   +:table+。
+ *   +:query+。（FIXME: デフォルトを+:column_query+にして、
+ *   +:default_mode+も指定できるようにする？）
  */
 static VALUE
 rb_grn_column_select (int argc, VALUE *argv, VALUE self)

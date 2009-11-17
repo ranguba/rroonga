@@ -188,7 +188,7 @@ module Groonga
         options = options_or_default_column
       end
       options = options.dup
-      options[:parser] ||= :table
+      options[:parser] ||= :query
       SubExpressionBuilder.new(query, options)
     end
   end
@@ -232,7 +232,7 @@ module Groonga
 
     def match(query, options={})
       options = options.dup
-      options[:parser] ||= :table
+      options[:parser] ||= :query
       options[:default_column] = @default_column
       SubExpressionBuilder.new(query, options)
     end

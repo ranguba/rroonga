@@ -1350,7 +1350,7 @@ rb_grn_table_is_locked (int argc, VALUE *argv, VALUE self)
  *
  * [+:parser+]
  *   _query_をパースする時に使用するパーサー。省略した場合は
- *   +:table+。
+ *   +:query+。
  */
 static VALUE
 rb_grn_table_select (int argc, VALUE *argv, VALUE self)

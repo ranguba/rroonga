@@ -189,7 +189,7 @@ class ColumnTest < Test::Unit::TestCase
   def test_select_query_with_parser
     populate_table_for_select
 
-    result = @body.select("body @ \"drive\"", :parser => :expression)
+    result = @body.select("body @ \"drive\"", :parser => :script)
     assert_equal(["Drive and Eat"],
                  result.records.collect do |record|
                    record["body"]
@@ -204,7 +204,7 @@ class ColumnTest < Test::Unit::TestCase
     expression = Groonga::Expression.new
     variable = expression.define_variable(:domain => @posts)
     expression.append_object(variable)
-    expression.parse("body:%drive", :parser => :table)
+    expression.parse("body:%drive", :parser => :script)
     expression.compile
     result = @body.select(expression)
     assert_equal(["Drive and Eat"],

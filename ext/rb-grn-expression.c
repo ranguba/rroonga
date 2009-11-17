@@ -226,6 +226,7 @@ rb_grn_expression_append_operation (VALUE self, VALUE rb_operation,
  *   "+"や"OR"で繋がれず、ただ列挙された複数の条件があった時、
  *   _expression_全体として各レコードをヒットとみなすかの論理
  *   条件を指定する。省略した場合はGroonga::Operation::OR。
+ *   （FIXME: デフォルトANDにする？）
  *
  *   [Groonga::Operation::OR]
  *     レコードはいずれかの条件にマッチすればいい。
@@ -237,14 +238,30 @@ rb_grn_expression_append_operation (VALUE self, VALUE rb_operation,
  *
  * [+:default_mode+]
  *   検索時のモードを指定する。省略した場合は
- *   Groonga::Operation::Match
+ *   Groonga::Operation::MATCH。（FIXME: モードによってどう
+ *   いう動作になるかを書く。）
  *
  * [+:parser+]
- *   _query_をパースする際に用いるパーサーを指定する。省略し
- *   た場合は:column。
- *   指定可能な値は、nil, :column, :column_query, :table,
- *   :table_query, :expression, :languageのいずれか。
+ *   _query_の構文を解析するパーサーを指定する。指定可
+ *   能な値は以下の通り。省略した場合は+:query+。
  *
+ *   [+nil+]
+ *     +:query+と同様。
+ *   [+:query+]
+ *     「文字列1 OR 文字列2」で「"文字列1"あるいは"文字列2"
+ *     にマッチという検索エンジンで利用できるような構文を使
+ *     う。
+ *
+ *     参考: grn式のquery形式（FIXME: URLを入れる）
+ *   [+:column_query+]
+ *     +:query+から別カラムを参照する「[カラム名]:[演算
+ *     子][値]」という構文を使えなくしたもの。
+ *     +:default_mode+で指定したモードでしか演算できない。
+ *   [+:script+]
+ *     「[カラム名] == [値]」というようにECMAScript風の構文
+ *     を使う。
+ *
+ *     参考: grn式のscript形式（FIXME: URLを入れる）
  */
 static VALUE
 rb_grn_expression_parse (int argc, VALUE *argv, VALUE self)
@@ -282,22 +299,17 @@ rb_grn_expression_parse (int argc, VALUE *argv, VALUE self)
     if (!NIL_P(rb_default_operator))
 	default_operator = RVAL2GRNOPERATOR(rb_default_operator);
     if (NIL_P(rb_parser) ||
-	rb_grn_equal_option(rb_parser, "column") ||
-	rb_grn_equal_option(rb_parser, "column-query") ||
-	rb_grn_equal_option(rb_parser, "column_query")) {
-	parse_level = 0;
-    } else if (rb_grn_equal_option(rb_parser, "table") ||
-	       rb_grn_equal_option(rb_parser, "table-query") ||
-	       rb_grn_equal_option(rb_parser, "table_query")) {
+	rb_grn_equal_option(rb_parser, "query")) {
 	parse_level = 2;
-    } else if (rb_grn_equal_option(rb_parser, "expression") ||
-	       rb_grn_equal_option(rb_parser, "language")) {
+    } else if (rb_grn_equal_option(rb_parser, "column-query") ||
+	       rb_grn_equal_option(rb_parser, "column_query")) {
+	parse_level = 0;
+    } else if (rb_grn_equal_option(rb_parser, "script")) {
 	parse_level = 4;
     } else {
 	rb_raise(rb_eArgError,
 		 "parser should be one of "
-		 "[nil, :column, :column_query, :table, :table_query, "
-		 ":expression, :language]: %s",
+		 "[nil, :query, :column_query, :script]: %s",
 		 rb_grn_inspect(rb_parser));
     }
 

@@ -54,7 +54,7 @@ class TableTestSelect < Test::Unit::TestCase
   end
 
   def test_select_query_with_parser
-    result = @comments.select("content @ \"Hello\"", :parser => :expression)
+    result = @comments.select("content @ \"Hello\"", :parser => :script)
     assert_equal_select_result([@comment1, @comment2], result)
   end
 
@@ -62,7 +62,7 @@ class TableTestSelect < Test::Unit::TestCase
     expression = Groonga::Expression.new
     variable = expression.define_variable(:domain => @comments)
     expression.append_object(variable)
-    expression.parse("content:%Hello", :parser => :table)
+    expression.parse("content:%Hello", :parser => :query)
     expression.compile
     result = @comments.select(expression)
     assert_equal(expression, result.expression)
