@@ -425,7 +425,7 @@ class TableTest < Test::Unit::TestCase
                   [1, "Ruby", "http://ruby-lang.org/"]],
                  records.group([".bookmark"]).collect do |record|
                    bookmark = record.key
-                   [record[".:nsubrecs"],
+                   [record.n_sub_records,
                     bookmark["title"],
                     bookmark.key]
                  end)

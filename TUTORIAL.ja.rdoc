@@ -330,7 +330,7 @@ http://qwik.jp/senna/senna2.files/rect4605.png
 
   >> records.group([".item"]).each do |record|
   >>   item = record.key
-  >>   p [record[".:nsubrecs"],
+  >>   p [record.n_sub_records,
   >>      item.key,
   >>      item[".title"]]
   >> end
@@ -338,9 +338,9 @@ http://qwik.jp/senna/senna2.files/rect4605.png
   [2, "http://practical-scheme.net/docs/cont-j.html", "なんでも継続"]
   [1, "http://d.hatena.ne.jp/higepon/20070815/1187192864", "末尾再帰"]
 
-+.:nsubrecs+というのはグループ化した単位に含まれるレコードの
-件数を示します。SQLで言えば、GROUP BY句を含むクエリのcount 関
-数のような働きです。
++n_sub_records+というのはグループ化した単位に含まれるレコード
+の件数を示します。SQLで言えば、GROUP BY句を含むクエリのcount
+関数のような働きです。
 
 == 少し複雑な検索
 

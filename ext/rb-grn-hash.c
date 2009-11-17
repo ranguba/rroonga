@@ -95,7 +95,7 @@ VALUE rb_cGrnHash;
  *
  * [+:sub_records+]
  *   +true+を指定すると#groupでグループ化したときに、
- *   <tt>record[".:nsubrecs"]</tt>でグループに含まれるレコー
+ *   Groonga::Record#n_sub_recordsでグループに含まれるレコー
  *   ドの件数を取得できる。
  *
  * 使用例:

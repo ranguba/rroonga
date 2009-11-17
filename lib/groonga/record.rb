@@ -71,6 +71,10 @@ module Groonga
       self[".:score"]
     end
 
+    def n_sub_records
+      self[".:nsubrecs"]
+    end
+
     def value
       @table[@id]
     end
