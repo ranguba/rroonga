@@ -174,8 +174,8 @@ rb_grn_column_get_local_name (VALUE self)
  * Groonga::Expression#snippetを使うことにより、指定した条件
  * 用のスニペットを簡単に生成できる。
  *
- *   results = column.select do |record|
- *     record["description"] =~ "groonga"
+ *   results = description_column.select do |column|
+ *     column =~ "groonga"
  *   end
  *   snippet = results.expression.snippet([["<em>", "</em>"]])
  *   results.each do |record|
@@ -213,14 +213,16 @@ rb_grn_column_get_local_name (VALUE self)
  *
  * 例:
  *   "groonga" # _column_カラムの値が"groonga"のレコードにマッチ
- *   "name:daijiro" # "name"カラムの値が"daijiro"のレコードにマッチ
- *   "description:@groonga" # "description"カラムに
+ *   "name:daijiro" # _column_カラムが属しているテーブルの
+ *                  # "name"カラムの値が"daijiro"のレコードにマッチ
+ *   "description:@groonga" # _column_カラムが属しているテーブルの
+ *                          # "description"カラムが
  *                          # "groonga"を含んでいるレコードにマッチ
  *
  * _expression_には既に作成済みのGroonga::Expressionを渡す
  *
- * ブロックで条件を指定する場合はGroonga::ExpressionBuilder
- * を参照。
+ * ブロックで条件を指定する場合は
+ * Groonga::ColumnExpressionBuilderを参照。
  *
  * _options_に指定可能な値は以下の通り。
  *
@@ -250,7 +252,6 @@ rb_grn_column_get_local_name (VALUE self)
  *   _query_をパースする時に使用するパーサー。省略した場合は
  *   +:table+。
  */
-
 static VALUE
 rb_grn_column_select (int argc, VALUE *argv, VALUE self)
 {
