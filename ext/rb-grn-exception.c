@@ -82,6 +82,10 @@ static VALUE eGrnOperationNotSupported;
 static VALUE eGrnAddressIsInUse;
 static VALUE eGrnZLibError;
 static VALUE eGrnLZOError;
+static VALUE eGrnStackOverFlow;
+static VALUE eGrnSyntaxError;
+static VALUE eGrnRetryMax;
+static VALUE eGrnIncompatibleFileFormat;
 
 VALUE
 rb_grn_rc_to_exception (grn_rc rc)
@@ -90,6 +94,7 @@ rb_grn_rc_to_exception (grn_rc rc)
 
     switch (rc) {
       case GRN_SUCCESS:
+	return Qnil;
         break;
       case GRN_END_OF_DATA:
         exception = eGrnEndOfData;
@@ -277,10 +282,22 @@ rb_grn_rc_to_exception (grn_rc rc)
       case GRN_LZO_ERROR:
         exception = eGrnLZOError;
         break;
-      default:
-        rb_raise(rb_eGrnError, "invalid return code: %d", rc);
+      case GRN_STACK_OVER_FLOW:
+        exception = eGrnStackOverFlow;
+        break;
+      case GRN_SYNTAX_ERROR:
+        exception = eGrnSyntaxError;
+        break;
+      case GRN_RETRY_MAX:
+        exception = eGrnRetryMax;
+        break;
+      case GRN_INCOMPATIBLE_FILE_FORMAT:
+        exception = eGrnIncompatibleFileFormat;
         break;
     }
+
+    if (NIL_P(exception))
+        rb_raise(rb_eGrnError, "invalid return code: %d", rc);
 
     return exception;
 }
@@ -292,6 +309,7 @@ rb_grn_rc_to_message (grn_rc rc)
 
     switch (rc) {
       case GRN_SUCCESS:
+	return NULL;
 	break;
       case GRN_END_OF_DATA:
         message = "end of data";
@@ -479,10 +497,22 @@ rb_grn_rc_to_message (grn_rc rc)
       case GRN_LZO_ERROR:
         message = "LZO error";
         break;
-      default:
-        rb_raise(rb_eGrnError, "invalid return code: %d", rc);
+      case GRN_STACK_OVER_FLOW:
+        message = "stack over flow";
+        break;
+      case GRN_SYNTAX_ERROR:
+        message = "syntax error";
+        break;
+      case GRN_RETRY_MAX:
+        message = "retry max";
+        break;
+      case GRN_INCOMPATIBLE_FILE_FORMAT:
+        message = "incompatible file format";
         break;
     }
+
+    if (!message)
+        rb_raise(rb_eGrnError, "invalid return code: %d", rc);
 
     return message;
 }
@@ -1011,4 +1041,36 @@ rb_grn_init_exception (VALUE mGrn)
      */
     eGrnLZOError =
         rb_define_class_under(mGrn, "LZOError", rb_eGrnError);
+
+    /*
+     * Document-class: Groonga::StackOverFlow
+     *
+     * スタックオーバーフロー時に発生する。
+     */
+    eGrnStackOverFlow =
+        rb_define_class_under(mGrn, "StackOverFlow", rb_eGrnError);
+
+    /*
+     * Document-class: Groonga::SyntaxError
+     *
+     * 構文に問題があるときに発生する。
+     */
+    eGrnSyntaxError =
+        rb_define_class_under(mGrn, "SyntaxError", rb_eGrnError);
+
+    /*
+     * Document-class: Groonga::RetryMax
+     *
+     * 再試行回数が最大数に達したときに発生する。
+     */
+    eGrnRetryMax =
+        rb_define_class_under(mGrn, "RertryError", rb_eGrnError);
+
+    /*
+     * Document-class: Groonga::IncompatibleFileFormat
+     *
+     * 互換性のないファイルフォーマットを読み込んだときに発生する。
+     */
+    eGrnIncompatibleFileFormat =
+        rb_define_class_under(mGrn, "IncompatibleFileFormat", rb_eGrnError);
 }
