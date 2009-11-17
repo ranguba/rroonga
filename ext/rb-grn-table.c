@@ -730,6 +730,13 @@ rb_grn_table_open_cursor (int argc, VALUE *argv, VALUE self)
 	return rb_cursor;
 }
 
+/*
+ * call-seq:
+ *   table.get_records -> Groonga::Recordの配列
+ *
+ * テーブルに登録されている全てのレコードが入っている配列を
+ * 返す。
+ */
 static VALUE
 rb_grn_table_get_records (int argc, VALUE *argv, VALUE self)
 {
@@ -748,6 +755,12 @@ rb_grn_table_get_records (int argc, VALUE *argv, VALUE self)
     return records;
 }
 
+/*
+ * call-seq:
+ *   table.size -> レコード数
+ *
+ * テーブルに登録されているレコード数を返す。
+ */
 static VALUE
 rb_grn_table_get_size (VALUE self)
 {
