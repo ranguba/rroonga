@@ -261,8 +261,7 @@ rb_grn_expression_append_operation (VALUE self, VALUE rb_operation,
  * [+:default_operator+]
  *   "+"や"OR"で繋がれず、ただ列挙された複数の条件があった時、
  *   _expression_全体として各レコードをヒットとみなすかの論理
- *   条件を指定する。省略した場合はGroonga::Operation::OR。
- *   （FIXME: デフォルトANDにする？）
+ *   条件を指定する。省略した場合はGroonga::Operation::AND。
  *
  *   [Groonga::Operation::OR]
  *     レコードはいずれかの条件にマッチすればいい。
