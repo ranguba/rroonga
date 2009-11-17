@@ -22,6 +22,13 @@
 
 VALUE rb_cGrnTableCursor;
 
+/*
+ * Document-class: Groonga::TableCursor < Groonga::Object
+ *
+ * テーブルに登録されているレコードを順番に取り出すための
+ * オブジェクト。
+ */
+
 grn_table_cursor *
 rb_grn_table_cursor_from_ruby_object (VALUE object, grn_ctx **context)
 {
@@ -98,6 +105,12 @@ rb_grn_table_cursor_set_value (VALUE self, VALUE value)
     return Qnil;
 }
 
+/*
+ * call-seq:
+ *   table_cursor.delete
+ *
+ * カレントレコードを削除する。
+ */
 static VALUE
 rb_grn_table_cursor_delete (VALUE self)
 {
@@ -116,6 +129,12 @@ rb_grn_table_cursor_delete (VALUE self)
     return Qnil;
 }
 
+/*
+ * call-seq:
+ *   table_cursor.next -> Groonga::Record
+ *
+ * カレントレコードを一件進めてそのレコードを返す。
+ */
 static VALUE
 rb_grn_table_cursor_next (VALUE self)
 {

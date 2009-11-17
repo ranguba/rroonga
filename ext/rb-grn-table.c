@@ -714,6 +714,41 @@ rb_grn_table_open_grn_cursor (int argc, VALUE *argv, VALUE self,
     return cursor;
 }
 
+/*
+ * call-seq:
+ *   table.open_cursor(options={}) -> Groonga::TableCursor
+ *
+ * テーブル用のカーソルを生成して返す。
+ *
+ * _options_に指定可能な値は以下の通り。
+ *
+ * [+:min+]
+ *  キーの下限
+ *
+ * [+:max+]
+ *  キーの上限
+ *
+ * [+:offset+]
+ *   該当する範囲のレコードのうち、(0ベースで)_:offset_番目
+ *   からレコードを取り出す。
+ *
+ * [+:limit+]
+ *   該当する範囲のレコードのうち、_:limit_件のみを取り出す。
+ *
+ * [+:order+]
+ *   +:asc+または+:ascending+を指定すると昇順にレコードを取
+ *   り出す。
+ *   +:desc+または+:ascending+を指定すると降順にレコードを取
+ *   り出す。
+ *
+ * [+:greater_than+]
+ *   +true+を指定すると+:min+で指定した値に一致した[+key+]を
+ *   範囲に含まない。
+ *
+ * [+:less_than+]
+ *   +true+を指定すると+:max+で指定した値に一致した[+key+]を
+ *   範囲に含まない。
+ */
 static VALUE
 rb_grn_table_open_cursor (int argc, VALUE *argv, VALUE self)
 {
