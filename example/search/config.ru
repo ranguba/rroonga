@@ -186,7 +186,7 @@ EOS
         render_pagination_link(request, response, _query, i, i)
       end
     end
-    if page < last_page
+    if page < (last_page - 1)
       render_pagination_link(request, response, _query, page + 1, ">>")
     end
     response.write("</div>\n")
