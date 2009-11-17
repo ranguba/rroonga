@@ -17,6 +17,14 @@
 
 module Groonga
   class PatriciaTrie
+    # call-seq:
+    #   patricia_trie.tag_keys(text) {|record, word| ...} -> String
+    #
+    # _text_を走査し、レコードのキーとマッチする部分文字列ごとに
+    # そのレコードが_record_として、その部分文字列が_word_として、
+    # ブロックが呼び出される。ブロックから返された文字列が元の部
+    # 分文字列と置換される。全てのヒットに対してのその置換処理が
+    # 行われた文字列が返される。
     def tag_keys(text)
       position = 0
       result = ''

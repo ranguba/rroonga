@@ -22,6 +22,127 @@
 
 VALUE rb_cGrnPatriciaTrie;
 
+/*
+ * Document-class: Groonga::PatriciaTrie < Groonga::Table
+ *
+ * 各レコードをパトリシアトライで管理するテーブル。ハッシュ
+ * テーブルに比べて完全一致検索の速度がやや遅いが、前方一致
+ * 検索・共通接頭辞探索などの検索ができる。またカーソルを用
+ * いてキーの昇降順にレコードを取り出すことができる。
+ */
+
+/*
+ * call-seq:
+ *   Groonga::PatriciaTrie.create(options={}) -> Groonga::PatriciaTrie
+ *   Groonga::PatriciaTrie.create(options={}) {|table| ... }
+ *
+ * 各レコードをパトリシアトライで管理するテーブルを生成する。
+ * ブロックを指定すると、そのブロックに生成したテーブルが渡さ
+ * れ、ブロックを抜けると自動的にテーブルが破棄される。
+ *
+ * _options_に指定可能な値は以下の通り。
+ *
+ * [+:context+]
+ *   テーブルが利用するGroonga::Context。省略すると
+ *   Groonga::Context.defaultを用いる。
+ *
+ * [+:name+]
+ *   テーブルの名前。名前をつけると、Groonga::Context#[]に名
+ *   前を指定してテーブルを取得することができる。省略すると
+ *   無名テーブルになり、テーブルIDでのみ取得できる。
+ *
+ * [+:path+]
+ *   テーブルを保存するパス。パスを指定すると永続テーブルとな
+ *   り、プロセス終了後もレコードは保持される。次回起動時に
+ *   Groonga::PatriciaTrie.openで保存されたレコードを利用する
+ *   ことができる。省略すると一時テーブルになり、プロセスが終
+ *   了するとレコードは破棄される。
+ *
+ * [+:persistent+]
+ *   +true+を指定すると永続テーブルとなる。+path+を省略した
+ *   場合は自動的にパスが付加される。+:context+で指定した
+ *   Groonga::Contextに結びついているデータベースが一時デー
+ *   タベースの場合は例外が発生する。
+ *
+ * [+:key_type+]
+ *   キーの種類を示すオブジェクトを指定する。キーの種類には
+ *   Groonga::Typeまたはテーブル（Groonga::Array、
+ *   Groonga::Hash、Groonga::PatriciaTrieのどれか）を指定する。
+ *
+ *   Groonga::Typeを指定した場合は、その型が示す範囲の値をキー
+ *   として使用する。ただし、キーの最大サイズは4096バイトで
+ *   あるため、Groonga::Type::TEXTやGroonga::Type::LONG_TEXT
+ *   は使用できない。
+ *
+ *   テーブルを指定した場合はレコードIDをキーとして使用する。
+ *   指定したテーブルのGroonga::Recordをキーとして使用するこ
+ *   ともでき、その場合は自動的にGroonga::Recordからレコード
+ *   IDを取得する。
+ *
+ *   省略した場合は文字列をキーとして使用する。この場合、
+ *   4096バイトまで使用可能である。
+ *
+ * [+:value_type+]
+ *   値の型を指定する。省略すると値のための領域を確保しない。
+ *   値を保存したい場合は必ず指定すること。
+ *
+ *   参考: Groonga::Type.new
+ *
+ * [+:default_tokenizer+]
+ *   Groonga::IndexColumnで使用するトークナイザを指定する。
+ *   デフォルトでは何も設定されていないので、テーブルに
+ *   Groonga::IndexColumnを定義する場合は
+ *   <tt>"<token:bigram>"</tt>などを指定する必要がある。
+ *
+ * [+:sub_records+]
+ *   +true+を指定すると#groupでグループ化したときに、
+ *   <tt>record[".:nsubrecs"]</tt>でグループに含まれるレコー
+ *   ドの件数を取得できる。
+ *
+ * 使用例:
+ *
+ * 無名一時テーブルを生成する。
+ *   Groonga::PatriciaTrie.create
+ *
+ * 無名永続テーブルを生成する。
+ *   Groonga::PatriciaTrie.create(:path => "/tmp/hash.grn")
+ *
+ * 名前付き永続テーブルを生成する。ただし、ファイル名は気に
+ * しない。
+ *   Groonga::PatriciaTrie.create(:name => "<bookmarks>",
+ *                                :persistent => true)
+ *
+ * それぞれのレコードに512バイトの値を格納できる無名一時テー
+ * ブルを生成する。
+ *   Groonga::PatriciaTrie.create(:value => 512)
+ *
+ * キーとして文字列を使用する無名一時テーブルを生成する。
+ *   Groonga::PatriciaTrie.create(:key_type => Groonga::Type::TEXT)
+ *
+ * キーとして文字列を使用する無名一時テーブルを生成する。
+ * （キーの種類を表すオブジェクトは文字列で指定。）
+ *   Groonga::PatriciaTrie.create(:key_type => "<shorttext>")
+ *
+ * キーとして<tt><bookmarks></tt>テーブルのレコードを使用す
+ * る無名一時テーブルを生成する。
+ *   bookmarks = Groonga::PatriciaTrie.create(:name => "<bookmarks>")
+ *   Groonga::PatriciaTrie.create(:key_type => bookmarks)
+ *
+ * キーとして<tt><bookmarks></tt>テーブルのレコードを使用す
+ * る無名一時テーブルを生成する。
+ * （テーブルは文字列で指定。）
+ *   Groonga::PatriciaTrie.create(:name => "<bookmarks>")
+ *   Groonga::PatriciaTrie.create(:key_type => "<bookmarks>")
+ *
+ * 全文検索用のトークンをバイグラムで切り出す無名一時テーブ
+ * ルを生成する。
+ *   bookmarks = Groonga::PatriciaTrie.create(:name => "<bookmarks>")
+ *   bookmarks.define_column("comment", "<text>")
+ *   terms = Groonga::PatriciaTrie.create(:name => "<terms>",
+ *                                        :default_tokenizer => "<token:bigram>")
+ *   terms.define_index_column("content", bookmarks,
+ *                             :source => "<bookmarks>.comment")
+ */
 static VALUE
 rb_grn_patricia_trie_s_create (int argc, VALUE *argv, VALUE self)
 {
@@ -103,6 +224,52 @@ rb_grn_patricia_trie_s_create (int argc, VALUE *argv, VALUE self)
         return rb_table;
 }
 
+/*
+ * call-seq:
+ *   patricia_trie.search(key, options=nil) -> Groonga::Hash
+ *
+ * _key_にマッチするレコードのIDがキーに入っている
+ * Groonga::Hashを返す。マッチするレコードがない場合は空の
+ * Groonga::Hashが返る。
+ *
+ * _options_で+:result+を指定することにより、そのテーブルにマッ
+ * チしたレコードIDがキーのレコードを追加することができる。
+ * +:result+にテーブルを指定した場合は、そのテーブルが返る。
+ *
+ * _options_に指定可能な値は以下の通り。
+ *
+ * [+:result+]
+ *   結果を格納するテーブル。
+ *
+ * [+:operator+]
+ *   マッチしたレコードをどのように扱うか。指定可能な値は以
+ *   下の通り。省略した場合はGroonga::Operation::OR。
+ *
+ *   [Groonga::Operation::OR]
+ *     マッチしたレコードを追加。すでにレコードが追加され
+ *     ている場合は何もしない。
+ *   [Groonga::Operation::AND]
+ *     マッチしたレコードのスコアを増加。マッチしなかった
+ *     レコードを削除。
+ *   [Groonga::Operation::BUT]
+ *     マッチしたレコードを削除。
+ *   [Groonga::Operation::ADJUST]
+ *     マッチしたレコードのスコアを増加。
+ *
+ * [+:type+]
+ *   ?????
+ *
+ * 複数のキーで検索し、結果を1つのテーブルに集める。
+ *   result = nil
+ *   keys = ["morita", "gunyara-kun", "yu"]
+ *   keys.each do |key|
+ *     result = users.search(key, :result => result)
+ *   end
+ *   result.each do |record|
+ *     user = record.key
+ *     p user.key # -> "morita"または"gunyara-kun"または"yu"
+ *   end
+ */
 static VALUE
 rb_grn_patricia_trie_search (int argc, VALUE *argv, VALUE self)
 {
@@ -150,6 +317,20 @@ rb_grn_patricia_trie_search (int argc, VALUE *argv, VALUE self)
     return rb_result;
 }
 
+/*
+ * call-seq:
+ *   patricia_trie.scan(string) -> Array
+ *   patricia_trie.scan(string) {|matched_info| ... }
+ *
+ * _string_を走査し、レコードのキーとマッチする部分文字
+ * 列ごとに、そのレコード、その部分文字列、_string_内で
+ * のその部分文字列のオフセット、その部分文字列のバイト
+ * 単位での長さ、以上4つを含んでいるArrayの_matched_info_
+ * が作成される。ブロックが指定された場合は、_matched_info_
+ * がブロックに渡され、ブロックを指定しなかった場合は、
+ * 全てのヒットの_matched_info_がまとめられたArrayが返さ
+ * れる。
+ */
 static VALUE
 rb_grn_patricia_trie_scan (VALUE self, VALUE rb_string)
 {
