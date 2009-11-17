@@ -117,9 +117,9 @@ EOS
       <span class="keyword">#{escape_html(query(request))}</span>の検索結果:
       <span class="total-entries">#{total_records}</span>件中
       <span class="display-range">
-        #{total_records.zero? ? 0 : _page + 1}
+        #{total_records.zero? ? 0 : (_page * limit) + 1}
         -
-        #{_page + records.size}
+        #{(_page * limit) + records.size}
       </span>
       件（#{elapsed}秒）
     </p>
@@ -133,7 +133,7 @@ EOS
     end
     response.write("  </div>\n")
 
-    # render_pagination(request, response, _page, limit)
+    render_pagination(request, response, _page, limit, total_records)
   end
 
   def render_record(request, response, record)
@@ -168,11 +168,10 @@ EOM
 EOS
   end
 
-  def render_pagination(request, response, page, limit)
+  def render_pagination(request, response, page, limit, total_records)
     _query = query(request)
     return if _query.empty?
 
-    total_records = @documents.size
     return if total_records < limit
 
     last_page = total_records / limit
