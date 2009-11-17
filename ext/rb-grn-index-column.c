@@ -133,7 +133,7 @@ rb_grn_index_column_deconstruct (RbGrnIndexColumn *rb_grn_index_column,
  *
  *   terms = Groonga::Hash.create(:name => "<terms>",
  *                                :with_section => true,
- *                                :default_tokenizer => "<token:bigram>")
+ *                                :default_tokenizer => "TokenBigram")
  *   content_index = terms.define_index_column("content", articles)
  *
  *   content = <<-EOC

@@ -93,7 +93,7 @@ VALUE rb_cGrnPatriciaTrie;
  *   Groonga::IndexColumnで使用するトークナイザを指定する。
  *   デフォルトでは何も設定されていないので、テーブルに
  *   Groonga::IndexColumnを定義する場合は
- *   <tt>"<token:bigram>"</tt>などを指定する必要がある。
+ *   <tt>"TokenBigram"</tt>などを指定する必要がある。
  *
  * [+:sub_records+]
  *   +true+を指定すると#groupでグループ化したときに、
@@ -140,7 +140,7 @@ VALUE rb_cGrnPatriciaTrie;
  *   bookmarks = Groonga::PatriciaTrie.create(:name => "<bookmarks>")
  *   bookmarks.define_column("comment", "<text>")
  *   terms = Groonga::PatriciaTrie.create(:name => "<terms>",
- *                                        :default_tokenizer => "<token:bigram>")
+ *                                        :default_tokenizer => "TokenBigram")
  *   terms.define_index_column("content", bookmarks,
  *                             :source => "<bookmarks>.comment")
  */

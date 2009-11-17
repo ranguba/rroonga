@@ -106,11 +106,11 @@ groongaには以下の3種類のテーブルがあります。
 
   >> terms = Groonga::Hash.create(:name => "<terms>",
                                   :key_type => "<shorttext>",
-                                  :default_tokenizer => "<token:bigram>")
+                                  :default_tokenizer => "TokenBigram")
   => #<Groonga::Hash ...>
 
 ここでは、トークナイザとして<tt>:default_tokenzier =>
-"<token:bigram>"</tt> を指定しています。トークナイザとは文字
+"TokenBigram"</tt> を指定しています。トークナイザとは文字
 列を単語に分解するオブジェクトのことです。デフォルトではトー
 クナイザは指定されていません。全文検索を利用するためにはトー
 クナイザを指定する必要があるので、ここではN-gramの一種である

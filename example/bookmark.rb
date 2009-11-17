@@ -46,7 +46,7 @@ p items.define_column("title", "<text>", :persistent => persistent)
 p(terms = Groonga::Hash.create(:name => "<terms>",
                                :key_type => "<shorttext>",
                                :persistent => persistent,
-                               :default_tokenizer => "<token:bigram>"))
+                               :default_tokenizer => "TokenBigram"))
 p terms.define_index_column("item_title", items,
                             :persistent => persistent,
                             :with_weight => true,
