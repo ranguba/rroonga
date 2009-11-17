@@ -115,7 +115,7 @@ VALUE rb_cGrnHash;
  *   Groonga::Hash.create(:value => 512)
  *
  * キーとして文字列を使用する無名一時テーブルを生成する。
- *   Groonga::Hash.create(:key_type => Groonga::Type::TEXT)
+ *   Groonga::Hash.create(:key_type => Groonga::Type::SHORT_TEXT)
  *
  * キーとして文字列を使用する無名一時テーブルを生成する。
  * （キーの種類を表すオブジェクトは文字列で指定。）
