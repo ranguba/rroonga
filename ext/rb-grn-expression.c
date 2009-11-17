@@ -22,6 +22,13 @@
 
 VALUE rb_cGrnExpression;
 
+/*
+ * Document-class: Groonga::Expression < Groonga::Object
+ *
+ * 検索条件やデータベースへの操作を表現するオブジェクト。
+ *
+ */
+
 void
 rb_grn_expression_finalizer (grn_ctx *context, grn_obj *object,
 			     RbGrnExpression *rb_grn_expression)
@@ -203,6 +210,42 @@ rb_grn_expression_append_operation (VALUE self, VALUE rb_operation,
     return Qnil;
 }
 
+/*
+ * call-seq:
+ *   expression.parse(query, options={})
+ *
+ * 文字列_query_をパースする。
+ *
+ * _options_に指定可能な値は以下の通り。
+ *
+ * [+:default_column+]
+ *   "column_name:hoge"ではなく"hoge"のようにcolumn_nameが指
+ *   定されない条件の検索対象となるカラムを指定する。
+ *
+ * [+:default_operator+]
+ *   "+"や"OR"で繋がれず、ただ列挙された複数の条件があった時、
+ *   _expression_全体として各レコードをヒットとみなすかの論理
+ *   条件を指定する。省略した場合はGroonga::Operation::OR。
+ *
+ *   [Groonga::Operation::OR]
+ *     レコードはいずれかの条件にマッチすればいい。
+ *   [Groonga::Operation::AND]
+ *     レコードは全ての条件にマッチしなければならない。
+ *   [Groonga::Operation::BUT]
+ *     最初の条件にレコードはマッチし、残りの条件にレコードは
+ *     マッチしてはならない。
+ *
+ * [+:default_mode+]
+ *   検索時のモードを指定する。省略した場合は
+ *   Groonga::Operation::Match
+ *
+ * [+:parser+]
+ *   _query_をパースする際に用いるパーサーを指定する。省略し
+ *   た場合は:column。
+ *   指定可能な値は、nil, :column, :column_query, :table,
+ *   :table_query, :expression, :languageのいずれか。
+ *
+ */
 static VALUE
 rb_grn_expression_parse (int argc, VALUE *argv, VALUE self)
 {
