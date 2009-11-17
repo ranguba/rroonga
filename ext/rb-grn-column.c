@@ -248,7 +248,7 @@ rb_grn_column_get_local_name (VALUE self)
  *
  * [+:parser+]
  *   _query_をパースする時に使用するパーサー。省略した場合は
- *   _:table_
+ *   +:table+。
  */
 
 static VALUE
