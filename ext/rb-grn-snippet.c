@@ -30,6 +30,12 @@ struct _RbGrnSnippet
 
 VALUE rb_cGrnSnippet;
 
+/*
+ * Document-class: Groonga::Snippet < Groonga::Object
+ *
+ * スニペット（検索語周辺のテキスト）を生成するためのオブジェクト。
+ */
+
 static RbGrnSnippet *
 rb_rb_grn_snippet_from_ruby_object (VALUE object)
 {
@@ -92,6 +98,41 @@ rb_grn_snippet_alloc (VALUE klass)
     return Data_Wrap_Struct(klass, NULL, rb_rb_grn_snippet_free, NULL);
 }
 
+/*
+ * call-seq:
+ *   Groonga::Snippet.new(options={})
+ *
+ * スニペットを作成する。_options_に指定可能な値は以下の通
+ * り。
+ *
+ * [+:context+]
+ *   スキーマ作成時に使用するGroonga::Contextを指定する。
+ *   省略した場合はGroonga::Context.defaultを使用する。
+ *
+ * [+:normalize+]
+ *   キーワード文字列・スニペット元の文字列を正規化するかど
+ *   うか。省略した場合は+false+で正規化しない。
+ *
+ * [+:skip_leading_spaces+]
+ *   先頭の空白を無視するかどうか。省略した場合は+false+で無
+ *   視しない。
+ *
+ * [+:width+]
+ *   スニペット文字列の長さ。省略した場合は100文字。
+ *
+ * [+:max_results+]
+ *   生成するスニペットの最大数。省略した場合は3。
+ *
+ * [+:html_escape+]
+ *   スニペット内の+<+, +>+, +&+, +"+をHTMLエスケープするか
+ *   どうか。省略した場合は+false+で、HTMLエスケープしない。
+ *
+ * [+:default_open_tag+]
+ *   デフォルトの開始タグ。省略した場合は""(空文字列)
+ *
+ * [+:default_close_tag+]
+ *   デフォルトの終了タグ。省略した場合は""(空文字列)
+ */
 static VALUE
 rb_grn_snippet_initialize (int argc, VALUE *argv, VALUE self)
 {
@@ -167,6 +208,21 @@ rb_grn_snippet_initialize (int argc, VALUE *argv, VALUE self)
     return Qnil;
 }
 
+/*
+ * call-seq:
+ *   snippet.add_keyword(keyword, options={})
+ *
+ * _keyword_を追加する。_options_に指定可能な値は以下の通
+ * り。
+ *
+ * [+:open_tag+]
+ *   開始タグ。省略した場合はGroonga::Snippet.newで指定し
+ *   た_:default_open_tag_。
+ *
+ * [+:close_tag+]
+ *   終了タグ。省略した場合はGroonga::Snippet.newで指定し
+ *   た_:default_close_tag_。
+ */
 static VALUE
 rb_grn_snippet_add_keyword (int argc, VALUE *argv, VALUE self)
 {
@@ -209,6 +265,12 @@ rb_grn_snippet_add_keyword (int argc, VALUE *argv, VALUE self)
     return Qnil;
 }
 
+/*
+ * call-seq:
+ *   snippet.execute(string) -> スニペットの配列
+ *
+ * _string_を走査し、スニペットを作成する。
+ */
 static VALUE
 rb_grn_snippet_execute (VALUE self, VALUE rb_string)
 {
