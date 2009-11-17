@@ -1308,13 +1308,13 @@ rb_grn_table_is_locked (int argc, VALUE *argv, VALUE self)
  *
  * 例:
  *   "name:daijiro" # "name"カラムの値が"daijiro"のレコードにマッチ
- *   "description:@groonga" # "description"カラムに
+ *   "description:@groonga" # "description"カラムが
  *                          # "groonga"を含んでいるレコードにマッチ
  *
  * _expression_には既に作成済みのGroonga::Expressionを渡す
  *
- * ブロックで条件を指定する場合はGroonga::ExpressionBuilder
- * を参照。
+ * ブロックで条件を指定する場合は
+ * Groonga::RecordExpressionBuilderを参照。
  *
  * _options_に指定可能な値は以下の通り。
  *
