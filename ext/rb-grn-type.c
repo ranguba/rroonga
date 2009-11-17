@@ -22,6 +22,15 @@
 
 VALUE rb_cGrnType;
 
+/*
+ * Document-class: Groonga::Type
+ *
+ * groongaのテーブルの主キーや、カラムの値の型のためのオブジェ
+ * クト。型として使用可能なものはgroongaで予め定義済みの型、ユ
+ * ーザが定義する型、またはユーザが定義したテーブル。
+ */
+
+
 grn_obj *
 rb_grn_type_from_ruby_object (VALUE object)
 {
@@ -39,6 +48,25 @@ rb_grn_type_to_ruby_object (grn_ctx *context, grn_obj *type,
     return GRNOBJECT2RVAL(rb_cGrnType, context, type, owner);
 }
 
+/*
+ * call-seq:
+ *   Groonga::Type.new(name, options={})
+ *
+ * 名前が_name_の型を作成する。_options_に指定可能な値は以下の通
+ * り。
+ *
+ * [+:context+]
+ *   型の作成時に利用するGroonga::Contextを指定する。省略すると
+ *   Groonga::Context.defaultを用いる。
+ *
+ * [+:option+]
+ *   指定する場合には:int, :integer, :uint, :unsigned_integer,
+ *   :float, :variableのいずれかを指定する。
+ *
+ * [+:size+]
+ *   +:option+が:variableの場合は最大長、それ以外の場合は長さを
+ *   指定する(単位:byte)。
+ */
 static VALUE
 rb_grn_type_initialize (int argc, VALUE *argv, VALUE self)
 {
