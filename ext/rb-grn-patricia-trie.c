@@ -321,16 +321,47 @@ rb_grn_patricia_trie_search (int argc, VALUE *argv, VALUE self)
 /*
  * call-seq:
  *   patricia_trie.scan(string) -> Array
- *   patricia_trie.scan(string) {|matched_info| ... }
+ *   patricia_trie.scan(string) {|record, word, start, length| ... }
  *
- * _string_を走査し、レコードのキーとマッチする部分文字
- * 列ごとに、そのレコード、その部分文字列、_string_内で
- * のその部分文字列のオフセット、その部分文字列のバイト
- * 単位での長さ、以上4つを含んでいるArrayの_matched_info_
- * が作成される。ブロックが指定された場合は、_matched_info_
- * がブロックに渡され、ブロックを指定しなかった場合は、
- * 全てのヒットの_matched_info_がまとめられたArrayが返さ
- * れる。
+ * _string_を走査し、_patricia_trie_内に格納されているキーに
+ * マッチした部分文字列の情報をブロックに渡す。複数のキーが
+ * マッチする場合は最長一致するキーを優先する。
+ *
+ * [_record_]
+ *   マッチしたキーのGroonga::Record。
+ *
+ * [_word_]
+ *   マッチした部分文字列。
+ *
+ * [_start_]
+ *   _string_内での_word_の出現位置。（バイト単位）
+ *
+ * [_length_]
+ *   _word_の長さ。（バイト探知）
+ *
+ * ブロックを指定しない場合は、マッチした部分文字列の情報を
+ * まとめて配列として返す。
+ *
+ *   words = Groonga::PatriciaTrie.create(:key_type => "ShortText",
+ *                                        :key_normalize => true)
+ *   words.add("リンク")
+ *   adventure_of_link = words.add('リンクの冒険')
+ *   words.add('冒険')
+ *   gaxtu = words.add('ｶﾞｯ')
+ *   muteki = words.add('ＭＵＴＥＫＩ')
+ *
+ *   text = 'muTEki リンクの冒険 ミリバール ガッ'
+ *   words.scan(text).each do |record, word, start, length|
+ *     p [record.key, word, start, length]
+ *       # -> ["ＭＵＴＥＫＩ", "muTEki", 0, 6]
+ *       # -> ["リンクの冒険", "リンクの冒険", 7, 18]
+ *       # -> ["ｶﾞｯ", "ガッ", 42, 6]
+ *   end
+ *
+ *   words.scan(text)
+ *     # -> [[muteki, "muTEki", 0, 6],
+ *     #     [adventure_of_link, "リンクの冒険", 7, 18],
+ *     #     [gaxtu, "ガッ", 42, 6]]
  */
 static VALUE
 rb_grn_patricia_trie_scan (VALUE self, VALUE rb_string)
