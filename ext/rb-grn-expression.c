@@ -101,6 +101,20 @@ rb_grn_expression_initialize (int argc, VALUE *argv, VALUE self)
     return Qnil;
 }
 
+/*
+ * call-seq:
+ *   expression.define_variable(options={}) -> Groonga::Variable
+ *
+ * _expression_で使用可能な変数を作成する。
+ *
+ * _options_に指定可能な値は以下の通り。
+ *
+ * [+:name+]
+ *   変数の名前を指定する。
+ *
+ * [+:domain+]
+ *   テーブルを指定すると、そのテーブル用のレコードとして初期化する。
+ */
 static VALUE
 rb_grn_expression_define_variable (int argc, VALUE *argv, VALUE self)
 {
@@ -138,6 +152,14 @@ rb_grn_expression_define_variable (int argc, VALUE *argv, VALUE self)
     return rb_variable;
 }
 
+/*
+ * call-seq:
+ *   expression.append_object(object,
+ *                            operation=Groonga::Operation::PUSH,
+ *                            n_arguments=1) -> self
+ *
+ * _object_を追加し、_n_arguments_個の引数を取る_operation_を追加する。
+ */
 static VALUE
 rb_grn_expression_append_object (int argc, VALUE *argv, VALUE self)
 {
@@ -164,6 +186,14 @@ rb_grn_expression_append_object (int argc, VALUE *argv, VALUE self)
     return self;
 }
 
+/*
+ * call-seq:
+ *   expression.append_constant(constant,
+ *                              operation=Groonga::Operation::PUSH,
+ *                              n_arguments=1) -> self
+ *
+ * _constant_を追加し、_n_arguments_個の引数を取る_operation_を追加する。
+ */
 static VALUE
 rb_grn_expression_append_constant (int argc, VALUE *argv, VALUE self)
 {
@@ -190,6 +220,12 @@ rb_grn_expression_append_constant (int argc, VALUE *argv, VALUE self)
     return self;
 }
 
+/*
+ * call-seq:
+ *   expression.append_operation(operation, n_arguments)
+ *
+ * _n_arguments_個の引数を取る_operation_を追加する。
+ */
 static VALUE
 rb_grn_expression_append_operation (VALUE self, VALUE rb_operation,
 				    VALUE rb_n_arguments)

@@ -22,6 +22,12 @@
 
 VALUE rb_cGrnVariable;
 
+/*
+ * Document-class: Groonga::Variable < Groonga::Object
+ *
+ * Groonga::Expressionで使われる変数。
+ */
+
 grn_obj *
 rb_grn_variable_from_ruby_object (VALUE variable, grn_ctx **context)
 {
@@ -52,6 +58,12 @@ rb_grn_variable_deconstruct (RbGrnVariable *rb_grn_variable,
 			      range_id, range);
 }
 
+/*
+ * call-seq:
+ *   variable.value -> Groonga::Object
+ *
+ * 変数の値を返す。
+ */
 static VALUE
 rb_grn_variable_get_value (VALUE self)
 {
@@ -65,6 +77,12 @@ rb_grn_variable_get_value (VALUE self)
     return GRNOBJ2RVAL(Qnil, context, variable, self);
 }
 
+/*
+ * call-seq:
+ *   variable.value=(value)
+ *
+ * 変数の値を_value_に設定する。
+ */
 static VALUE
 rb_grn_variable_set_value (VALUE self, VALUE value)
 {
