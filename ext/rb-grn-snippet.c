@@ -217,11 +217,11 @@ rb_grn_snippet_initialize (int argc, VALUE *argv, VALUE self)
  *
  * [+:open_tag+]
  *   開始タグ。省略した場合はGroonga::Snippet.newで指定し
- *   た_:default_open_tag_。
+ *   た+:default_open_tag+。
  *
  * [+:close_tag+]
  *   終了タグ。省略した場合はGroonga::Snippet.newで指定し
- *   た_:default_close_tag_。
+ *   た+:default_close_tag+。
  */
 static VALUE
 rb_grn_snippet_add_keyword (int argc, VALUE *argv, VALUE self)
