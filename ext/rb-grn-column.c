@@ -161,6 +161,96 @@ rb_grn_column_get_local_name (VALUE self)
     return rb_name;
 }
 
+/*
+ * call-seq:
+ *   column.select(options) {|record| ...} -> Groonga::Hash
+ *   column.select(query, options) -> Groonga::Hash
+ *   column.select(expression, options) -> Groonga::Hash
+ *
+ * カラムが所属するテーブルからブロックまたは文字列で指定し
+ * た条件にマッチするレコードを返す。返されたテーブルには
+ * +expression+という特異メソッドがあり、指定した条件を表し
+ * ているGroonga::Expressionを取得できる。
+ * Groonga::Expression#snippetを使うことにより、指定した条件
+ * 用のスニペットを簡単に生成できる。
+ *
+ *   results = column.select do |record|
+ *     record["description"] =~ "groonga"
+ *   end
+ *   snippet = results.expression.snippet([["<em>", "</em>"]])
+ *   results.each do |record|
+ *     puts "#{record['name']}の説明文の中で「groonga」が含まれる部分"
+ *     snippet.execute(record["description"].each do |snippet|
+ *       puts "---"
+ *       puts "#{snippet}..."
+ *       puts "---"
+ *     end
+ *   end
+ *
+ * 出力例
+ *   Ruby/groongaの説明文の中で「groonga」が含まれる部分
+ *   ---
+ *   Ruby/<em>groonga</em>は<em>groonga</em>のいわゆるDB-APIの層の...
+ *   ---
+ *
+ * _query_には「[カラム名]:[演算子][値]」という書式で条件を
+ * 指定する。演算子は以下の通り。
+ *
+ * [なし]
+ *   [カラム値] == [値]
+ * [+!+]
+ *   [カラム値] != [値]
+ * [+<+]
+ *   [カラム値] < [値]
+ * [+>+]
+ *   [カラム値] > [値]
+ * [+<=+]
+ *   [カラム値] <= [値]
+ * [+>=+]
+ *   [カラム値] >= [値]
+ * [+@+]
+ *   [カラム値]が[値]を含んでいるかどうか
+ *
+ * 例:
+ *   "groonga" # _column_カラムの値が"groonga"のレコードにマッチ
+ *   "name:daijiro" # "name"カラムの値が"daijiro"のレコードにマッチ
+ *   "description:@groonga" # "description"カラムに
+ *                          # "groonga"を含んでいるレコードにマッチ
+ *
+ * _expression_には既に作成済みのGroonga::Expressionを渡す
+ *
+ * ブロックで条件を指定する場合はGroonga::ExpressionBuilder
+ * を参照。
+ *
+ * _options_に指定可能な値は以下の通り。
+ *
+ * [+:operator+]
+ *   マッチしたレコードをどのように扱うか。指定可能な値は以
+ *   下の通り。省略した場合はGroonga::Operation::OR。
+ *
+ *   [Groonga::Operation::OR]
+ *     マッチしたレコードを追加。すでにレコードが追加され
+ *     ている場合は何もしない。
+ *   [Groonga::Operation::AND]
+ *     マッチしたレコードのスコアを増加。マッチしなかった
+ *     レコードを削除。
+ *   [Groonga::Operation::BUT]
+ *     マッチしたレコードを削除。
+ *   [Groonga::Operation::ADJUST]
+ *     マッチしたレコードのスコアを増加。
+ *
+ * [+:result+]
+ *   検索結果を格納するテーブル。マッチしたレコードが追加さ
+ *   れていく。省略した場合は新しくテーブルを作成して返す。
+ *
+ * [+:name+]
+ *   条件の名前。省略した場合は名前を付けない。
+ *
+ * [+:parser+]
+ *   _query_をパースする時に使用するパーサー。省略した場合は
+ *   _:table_
+ */
+
 static VALUE
 rb_grn_column_select (int argc, VALUE *argv, VALUE self)
 {
