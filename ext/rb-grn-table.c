@@ -1270,7 +1270,7 @@ rb_grn_table_is_locked (int argc, VALUE *argv, VALUE self)
  * 用のスニペットを簡単に生成できる。
  *
  *   results = table.select do |record|
- *     result["description"] =~ "groonga"
+ *     record["description"] =~ "groonga"
  *   end
  *   snippet = results.expression.snippet([["<em>", "</em>"]])
  *   results.each do |record|
