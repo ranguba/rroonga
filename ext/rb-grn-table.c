@@ -22,6 +22,14 @@
 
 VALUE rb_cGrnTable;
 
+/*
+ * Document-class: Groonga::Table < Groonga::Object
+ *
+ * Ruby/groongaが提供するテーブルのベースとなるクラス。このクラス
+ * からGroonga::Array, Groonga::Hash, Groonga::PatriciaTrie
+ * が継承されている。
+ */
+
 grn_obj *
 rb_grn_table_from_ruby_object (VALUE object, grn_ctx **context)
 {
