@@ -204,7 +204,7 @@ class ColumnTest < Test::Unit::TestCase
     expression = Groonga::Expression.new
     variable = expression.define_variable(:domain => @posts)
     expression.append_object(variable)
-    expression.parse("body:%drive", :parser => :script)
+    expression.parse("body:%drive", :parser => :query)
     expression.compile
     result = @body.select(expression)
     assert_equal(["Drive and Eat"],
