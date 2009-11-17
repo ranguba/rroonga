@@ -63,9 +63,10 @@ VALUE rb_cGrnHash;
  *   タベースの場合は例外が発生する。
  *
  * [+:key_type+]
- *   キーの種類を示すオブジェクトを指定する。キーの種類には
- *   Groonga::Typeまたはテーブル（Groonga::Array、
- *   Groonga::Hash、Groonga::PatriciaTrieのどれか）を指定する。
+ *   キーの種類を示すオブジェクトを指定する。キーの種類には型
+ *   名（"Int32"や"ShortText"など）またはGroonga::Typeまたは
+ *   テーブル（Groonga::Array、Groonga::Hash、
+ *   Groonga::PatriciaTrieのどれか）を指定する。
  *
  *   Groonga::Typeを指定した場合は、その型が示す範囲の値をキー
  *   として使用する。ただし、キーの最大サイズは4096バイトで
