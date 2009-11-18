@@ -724,7 +724,9 @@ rb_grn_table_open_grn_cursor (int argc, VALUE *argv, VALUE self,
  * call-seq:
  *   table.open_cursor(options={}) -> Groonga::TableCursor
  *
- * テーブル用のカーソルを生成して返す。
+ * カーソルを生成して返す。ブロックを指定すると、そのブロッ
+ * クに生成したカーソルが渡され、ブロックを抜けると自動的に
+ * カーソルが破棄される。 
  *
  * _options_に指定可能な値は以下の通り。
  *
