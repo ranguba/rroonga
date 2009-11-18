@@ -134,21 +134,39 @@ rb_grn_init_type (VALUE mGrn)
 
     rb_define_method(rb_cGrnType, "initialize", rb_grn_type_initialize, -1);
 
+    /* 任意のテーブルに属する全てのレコード(Object型はv1.2で
+       サポートされます)。 */
     rb_define_const(rb_cGrnType, "OBJECT", INT2NUM(GRN_DB_OBJECT));
+    /* bool型。trueとfalse。 */
     rb_define_const(rb_cGrnType, "BOOLEAN", INT2NUM(GRN_DB_BOOL));
+    /* bool型。trueとfalse。 */
     rb_define_const(rb_cGrnType, "BOOL", INT2NUM(GRN_DB_BOOL));
+    /* 8bit符号付き整数。 */
     rb_define_const(rb_cGrnType, "INT8", INT2NUM(GRN_DB_INT8));
+    /* 8bit符号なし整数。 */
     rb_define_const(rb_cGrnType, "UINT8", INT2NUM(GRN_DB_UINT8));
+    /* 16bit符号付き整数。 */
     rb_define_const(rb_cGrnType, "INT16", INT2NUM(GRN_DB_INT16));
+    /* 16bit符号なし整数。 */
     rb_define_const(rb_cGrnType, "UINT16", INT2NUM(GRN_DB_UINT16));
+    /* 32bit符号付き整数。 */
     rb_define_const(rb_cGrnType, "INT32", INT2NUM(GRN_DB_INT32));
+    /* 32bit符号なし整数。 */
     rb_define_const(rb_cGrnType, "UINT32", INT2NUM(GRN_DB_UINT32));
+    /* 64bit符号付き整数。 */
     rb_define_const(rb_cGrnType, "INT64", INT2NUM(GRN_DB_INT64));
+    /* 64bit符号なし整数。 */
     rb_define_const(rb_cGrnType, "UINT64", INT2NUM(GRN_DB_UINT64));
+    /* ieee754形式の64bit浮動小数点数。 */
     rb_define_const(rb_cGrnType, "FLOAT", INT2NUM(GRN_DB_FLOAT));
+    /* 1970年1月1日0時0分0秒からの経過マイクロ秒数を64bit符
+       号付き整数で表現した値。 */
     rb_define_const(rb_cGrnType, "TIME", INT2NUM(GRN_DB_TIME));
+    /* 4Kbyte以下の文字列。 */
     rb_define_const(rb_cGrnType, "SHORT_TEXT", INT2NUM(GRN_DB_SHORT_TEXT));
+    /* 64Kbyte以下の文字列。 */
     rb_define_const(rb_cGrnType, "TEXT", INT2NUM(GRN_DB_TEXT));
+    /* 2Gbyte以下の文字列。 */
     rb_define_const(rb_cGrnType, "LONG_TEXT", INT2NUM(GRN_DB_LONG_TEXT));
     rb_define_const(rb_cGrnType, "DELIMIT", INT2NUM(GRN_DB_DELIMIT));
     rb_define_const(rb_cGrnType, "UNIGRAM", INT2NUM(GRN_DB_UNIGRAM));
