@@ -349,6 +349,12 @@ rb_grn_table_inspect_content (VALUE self, VALUE inspected)
     return inspected;
 }
 
+/*
+ * call-seq:
+ *   _table_.inspect -> String
+ *
+ * テーブルの中身を人に見やすい文字列で返す。
+ */
 static VALUE
 rb_grn_table_inspect (VALUE self)
 {
