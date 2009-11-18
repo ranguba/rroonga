@@ -101,6 +101,27 @@ class TableCursorTest < Test::Unit::TestCase
     assert_equal((120...140).to_a, results)
   end
 
+  def test_delete
+    bookmarks = create_bookmarks
+    add_ids(bookmarks)
+
+    bookmarks.open_cursor(:limit => 20) do |cursor|
+      20.times do
+        cursor.next
+        cursor.delete
+      end
+    end
+
+    results = []
+    bookmarks.open_cursor do |cursor|
+      cursor.each do |record|
+        results << record["id"]
+      end
+    end
+
+    assert_equal((120...200).to_a, results)
+  end
+
   private
   def create_bookmarks
     bookmarks = Groonga::Array.create(:name => "<bookmarks>")
