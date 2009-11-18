@@ -110,7 +110,7 @@ rb_grn_expression_initialize (int argc, VALUE *argv, VALUE self)
  * _options_に指定可能な値は以下の通り。
  *
  * [+:name+]
- *   変数の名前を指定する。
+ *   変数の名前。省略した場合は名前を付けない。
  *
  * [+:domain+]
  *   テーブルを指定すると、そのテーブル用のレコードとして初期化する。
