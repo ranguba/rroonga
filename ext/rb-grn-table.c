@@ -723,6 +723,7 @@ rb_grn_table_open_grn_cursor (int argc, VALUE *argv, VALUE self,
 /*
  * call-seq:
  *   table.open_cursor(options={}) -> Groonga::TableCursor
+ *   table.open_cursor(options={}) {|cursor| ... }
  *
  * カーソルを生成して返す。ブロックを指定すると、そのブロッ
  * クに生成したカーソルが渡され、ブロックを抜けると自動的に
