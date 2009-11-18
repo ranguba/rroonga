@@ -16,7 +16,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 module Groonga
-  module ExpressionBuildable
+  module ExpressionBuildable # :nodoc:
     attr_reader :table
     attr_accessor :query
     attr_accessor :parser
@@ -54,7 +54,7 @@ module Groonga
       expression
     end
 
-    class ExpressionBuilder
+    class ExpressionBuilder # :nodoc:
       def initialize
         super()
       end
@@ -68,7 +68,7 @@ module Groonga
       end
     end
 
-    class SetExpressionBuilder < ExpressionBuilder
+    class SetExpressionBuilder < ExpressionBuilder # :nodoc:
       def initialize(operation, *expression_builders)
         super()
         @operation = operation
@@ -84,19 +84,19 @@ module Groonga
       end
     end
 
-    class AndExpressionBuilder < SetExpressionBuilder
+    class AndExpressionBuilder < SetExpressionBuilder # :nodoc:
       def initialize(*expression_builders)
         super(Groonga::Operation::AND, *expression_builders)
       end
     end
 
-    class OrExpressionBuilder < SetExpressionBuilder
+    class OrExpressionBuilder < SetExpressionBuilder # :nodoc:
       def initialize(*expression_builders)
         super(Groonga::Operation::OR, *expression_builders)
       end
     end
 
-    class BinaryExpressionBuilder < ExpressionBuilder
+    class BinaryExpressionBuilder < ExpressionBuilder # :nodoc:
       def initialize(operation, column_name, value)
         super()
         @operation = operation
@@ -113,43 +113,43 @@ module Groonga
       end
     end
 
-    class EqualExpressionBuilder < BinaryExpressionBuilder
+    class EqualExpressionBuilder < BinaryExpressionBuilder # :nodoc:
       def initialize(column_name, value)
         super(Groonga::Operation::EQUAL, column_name, value)
       end
     end
 
-    class MatchExpressionBuilder < BinaryExpressionBuilder
+    class MatchExpressionBuilder < BinaryExpressionBuilder # :nodoc:
       def initialize(column_name, value)
         super(Groonga::Operation::MATCH, column_name, value)
       end
     end
 
-    class LessExpressionBuilder < BinaryExpressionBuilder
+    class LessExpressionBuilder < BinaryExpressionBuilder # :nodoc:
       def initialize(column_name, value)
         super(Groonga::Operation::LESS, column_name, value)
       end
     end
 
-    class LessEqualExpressionBuilder < BinaryExpressionBuilder
+    class LessEqualExpressionBuilder < BinaryExpressionBuilder # :nodoc:
       def initialize(column_name, value)
         super(Groonga::Operation::LESS_EQUAL, column_name, value)
       end
     end
 
-    class GreaterExpressionBuilder < BinaryExpressionBuilder
+    class GreaterExpressionBuilder < BinaryExpressionBuilder # :nodoc:
       def initialize(column_name, value)
         super(Groonga::Operation::GREATER, column_name, value)
       end
     end
 
-    class GreaterEqualExpressionBuilder < BinaryExpressionBuilder
+    class GreaterEqualExpressionBuilder < BinaryExpressionBuilder # :nodoc:
       def initialize(column_name, value)
         super(Groonga::Operation::GREATER_EQUAL, column_name, value)
       end
     end
 
-    class SubExpressionBuilder < ExpressionBuilder
+    class SubExpressionBuilder < ExpressionBuilder # :nodoc:
       def initialize(query, options)
         super()
         @query = query
@@ -162,7 +162,7 @@ module Groonga
     end
   end
 
-  class RecordExpressionBuilder
+  class RecordExpressionBuilder # :nodoc:
     include ExpressionBuildable
 
     def initialize(table, name)
@@ -193,7 +193,7 @@ module Groonga
     end
   end
 
-  class ColumnExpressionBuilder
+  class ColumnExpressionBuilder # :nodoc:
     include ExpressionBuildable
 
     def initialize(column, name, query)
