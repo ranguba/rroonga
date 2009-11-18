@@ -747,8 +747,8 @@ rb_grn_table_open_grn_cursor (int argc, VALUE *argv, VALUE self,
  * [+:order+]
  *   +:asc+または+:ascending+を指定すると昇順にレコードを取
  *   り出す。
- *   +:desc+または+:ascending+を指定すると降順にレコードを取
- *   り出す。
+ *   +:desc+または+:descending+を指定すると降順にレコードを
+ *   取り出す。
  *
  * [+:greater_than+]
  *   +true+を指定すると+:min+で指定した値に一致した[+key+]を
