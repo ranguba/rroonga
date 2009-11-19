@@ -610,6 +610,13 @@ rb_grn_table_define_index_column (int argc, VALUE *argv, VALUE self)
     return rb_column;
 }
 
+/*
+ * call-seq:
+ *  table.add_column(name, value_type, path)
+ *
+ * _value_type_を値の型として、_path_に保存されている永続的
+ * なカラムを、テーブルの_name_に対応するカラムとして開く。
+ */
 static VALUE
 rb_grn_table_add_column (VALUE self, VALUE rb_name, VALUE rb_value_type,
 			 VALUE rb_path)
