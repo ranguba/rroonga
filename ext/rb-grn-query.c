@@ -165,6 +165,13 @@ rb_grn_query_initialize (int argc, VALUE *argv, VALUE self)
     return Qnil;
 }
 
+/*
+ * call-seq:
+ *   query.close
+ *
+ * _query_が使用しているリソースを開放する。これ以降_query_を
+ * 使うことはできない。
+ */
 static VALUE
 rb_grn_query_close (VALUE self)
 {
@@ -182,6 +189,13 @@ rb_grn_query_close (VALUE self)
     return Qnil;
 }
 
+/*
+ * call-seq:
+ *   query.closed? -> true/false
+ *
+ * _query_が開放済みの場合は+true+を返し、そうでない場合は
+ * +false+を返す。
+ */
 static VALUE
 rb_grn_query_closed_p (VALUE self)
 {
