@@ -23,7 +23,7 @@
 VALUE rb_cGrnTableCursor;
 
 /*
- * Document-class: Groonga::TableCursor < Groonga::Object
+ * Document-class: Groonga::TableCursor
  *
  * テーブルに登録されているレコードを順番に取り出すための
  * オブジェクト。Groonga::Table#open_cursorで生成できる。

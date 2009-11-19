@@ -31,7 +31,7 @@ struct _RbGrnSnippet
 VALUE rb_cGrnSnippet;
 
 /*
- * Document-class: Groonga::Snippet < Groonga::Object
+ * Document-class: Groonga::Snippet
  *
  * スニペット（検索語周辺のテキスト）を生成するためのオブジェクト。
  */
