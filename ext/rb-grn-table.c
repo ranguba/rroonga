@@ -392,7 +392,8 @@ rb_grn_table_inspect (VALUE self)
 
 /*
  * call-seq:
- *   table.define_column(name, value_type, options={}) -> Groonga::Column
+ *   table.define_column(name, value_type, options={}) ->
+ *     Groonga::FixSizeColumnかGroonga::VariableSizeColumn
  *
  * テーブルに名前が_name_で型が_value_type_のカラムを定義
  * し、新しく定義されたカラムを返す。
@@ -496,7 +497,7 @@ rb_grn_table_define_column (int argc, VALUE *argv, VALUE self)
 
 /*
  * call-seq:
- *   table.define_index_column(name, value_type, options={}) -> Groonga::Column
+ *   table.define_index_column(name, value_type, options={}) -> Groonga::IndexColumn
  *
  * テーブルに名前が_name_で型が_value_type_のインデックスカ
  * ラムを定義し、新しく定義されたカラムを返す。
