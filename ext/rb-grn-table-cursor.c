@@ -156,6 +156,12 @@ rb_grn_table_cursor_next (VALUE self)
     return rb_record;
 }
 
+/*
+ * call-seq:
+ *   table_cursor.each {|record| ...}
+ *
+ * カーソルの範囲内にあるレコードを順番にブロックに渡す。
+ */
 static VALUE
 rb_grn_table_cursor_each (VALUE self)
 {
