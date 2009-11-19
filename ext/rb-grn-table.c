@@ -856,6 +856,12 @@ rb_grn_table_truncate (VALUE self)
     return Qnil;
 }
 
+/*
+ * call-seq:
+ *   table.each {|record| ...}
+ *
+ * テーブルに登録されているレコードを順番にブロックに渡す。
+ */
 static VALUE
 rb_grn_table_each (VALUE self)
 {
