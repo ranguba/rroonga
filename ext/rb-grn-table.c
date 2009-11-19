@@ -1219,7 +1219,7 @@ rb_grn_table_array_reference (VALUE self, VALUE rb_id)
  * Document-method: []=
  *
  * call-seq:
- *   table[id] = value
+ *   table[id] = 値
  *
  * _table_の_id_に対応する値を設定する。既存の値は上書きさ
  * れる。
