@@ -16,8 +16,13 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 module Groonga
+
+  # groongaのレコードのためのオブジェクト。
   class Record
-    attr_reader :table, :id
+    # レコードが所属するテーブルを返す。
+    attr_reader :table
+    # レコードのIDを返す。
+    attr_reader :id
     def initialize(table, id, values=nil)
       @table = table
       @id = id

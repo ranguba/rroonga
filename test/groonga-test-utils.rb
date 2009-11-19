@@ -80,6 +80,7 @@ module GroongaTestUtils
   def setup_database
     @database_path = @tmp_dir + "database"
     @database = Groonga::Database.create(:path => @database_path.to_s)
+    #setup_logger
   end
 
   def teardown_sandbox
