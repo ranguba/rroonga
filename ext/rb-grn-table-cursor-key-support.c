@@ -22,6 +22,12 @@
 
 VALUE rb_mGrnTableCursorKeySupport;
 
+/*
+ * Document-module: Groonga::TableCursor::KeySupport
+ *
+ * カーソルにキーの機能を提供するモジュール。
+ */
+
 static VALUE
 rb_grn_table_cursor_get_key (VALUE self)
 {

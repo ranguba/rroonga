@@ -22,6 +22,12 @@
 
 VALUE rb_mGrnTableKeySupport;
 
+/*
+ * Document-module: Groonga::Table::KeySupport
+ *
+ * テーブルにキーの機能を提供するモジュール。
+ */
+
 void
 rb_grn_table_key_support_deconstruct (RbGrnTableKeySupport *rb_grn_table_key_support,
 				      grn_obj **table_key_support,
