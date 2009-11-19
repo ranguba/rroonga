@@ -494,6 +494,37 @@ rb_grn_table_define_column (int argc, VALUE *argv, VALUE self)
     return GRNCOLUMN2RVAL(Qnil, context, column, RB_GRN_TRUE);
 }
 
+/*
+ * call-seq:
+ *   table.define_index_column(name, value_type, options={}) -> Groonga::Column
+ *
+ * テーブルに名前が_name_で型が_value_type_のインデックスカ
+ * ラムを定義し、新しく定義されたカラムを返す。
+ *
+ * _options_に指定可能な値は以下の通り。
+ *
+ * [+:path+]
+ *   カラムを保存するパス。
+ *
+ * [+:persistent+]
+ *   +true+を指定すると永続カラムとなる。+:path+を省略した
+ *   場合は自動的にパスが付加される。
+ *
+ * [+:with_section+]
+ *   転置索引にsection(段落情報)を合わせて格納する。
+ *
+ * [+:with_weight+]
+ *   転置索引にweight情報を合わせて格納する。
+ *
+ * [+:with_position+]
+ *   転置索引に出現位置情報を合わせて格納する。
+ *
+ * [+:source+]
+ *  インデックス対象となるカラムを指定する。+:sources+との併用はできない。
+ *
+ * [+:sources+]
+ *  インデックス対象となる複数のカラムを指定する。+:source+との併用はできない。
+ */
 static VALUE
 rb_grn_table_define_index_column (int argc, VALUE *argv, VALUE self)
 {
