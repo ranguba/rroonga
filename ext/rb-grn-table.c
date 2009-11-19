@@ -390,6 +390,41 @@ rb_grn_table_inspect (VALUE self)
     return inspected;
 }
 
+/*
+ * call-seq:
+ *   table.define_column(name, value_type, options={}) -> Groonga::Column
+ *
+ * テーブルに名前が_name_で型が_value_type_のカラムを定義
+ * し、新しく定義されたカラムを返す。
+ *
+ * _options_に指定可能な値は以下の通り。
+ *
+ * [+:path+]
+ *   カラムを保存するパス。
+ *
+ * [+:persistent+]
+ *   +true+を指定すると永続カラムとなる。+:path+を省略した
+ *   場合は自動的にパスが付加される。
+ *
+ * [+:type+]
+ *   カラムの値の格納方法について指定する。省略した場合は、
+ *   +:scalar+になる。
+ *
+ *   [+:scalar+]
+ *     スカラ値(単独の値)を格納する。
+ *
+ *   [+:vector+]
+ *     値の配列を格納する。
+ *
+ * [+:compress+]
+ *   値の圧縮方法を指定する。省略した場合は、圧縮しない。
+ *
+ *   [+:zlib+]
+ *     値をzlib圧縮して格納する。
+ *
+ *   [+:lzo+]
+ *     値をlzo圧縮して格納する。
+ */
 static VALUE
 rb_grn_table_define_column (int argc, VALUE *argv, VALUE self)
 {
