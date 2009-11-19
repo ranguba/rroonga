@@ -84,7 +84,7 @@ module Groonga
     end
 
     # call-seq:
-    #   table[id] = 値
+    #   record.value = 値
     #
     # レコードの値を設定する。既存の値は上書きされる。
     def value=(value)
