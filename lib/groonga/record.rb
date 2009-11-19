@@ -75,10 +75,18 @@ module Groonga
       self[".:nsubrecs"]
     end
 
+    # call-seq:
+    #   record.value -> 値
+    #
+    # レコードの値を返す。
     def value
       @table[@id]
     end
 
+    # call-seq:
+    #   table[id] = 値
+    #
+    # レコードの値を設定する。既存の値は上書きされる。
     def value=(value)
       @table[@id] = value
     end

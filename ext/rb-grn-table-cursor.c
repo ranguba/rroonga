@@ -64,6 +64,12 @@ rb_grn_table_cursor_deconstruct (RbGrnTableCursor *rb_grn_table_cursor,
 			      range_id, range);
 }
 
+/*
+ * call-seq:
+ *   cursor.value -> 値
+ *
+ * カレントレコードの値を返す。
+ */
 static VALUE
 rb_grn_table_cursor_get_value (VALUE self)
 {
@@ -84,6 +90,12 @@ rb_grn_table_cursor_get_value (VALUE self)
     return rb_value;
 }
 
+/*
+ * call-seq:
+ *   cursor.value = 値
+ *
+ * カレントレコードの値を設定する。既存の値は上書きされる。
+ */
 static VALUE
 rb_grn_table_cursor_set_value (VALUE self, VALUE value)
 {
