@@ -257,6 +257,27 @@ rb_grn_table_initialize (int argc, VALUE *argv, VALUE self)
     return Qnil;
 }
 
+/*
+ * call-seq:
+ *   Groonga::Table.open(options={})                -> Groonga::Table
+ *   Groonga::Table.open(options={}) {|table| ... }
+ *
+ * 既存のテーブルを開く。ブロックを指定すると、そのブロック
+ * に開かれたテーブルが渡され、ブロックを抜けると自動的にテ
+ * ーブルが破棄される。
+ *
+ * _options_に指定可能な値は以下の通り。
+ *
+ * [+:context+]
+ *   テーブルが利用するGroonga::Context。省略すると
+ *   Groonga::Context.defaultを用いる。
+ *
+ * [+:name+]
+ *   開こうとするテーブルの名前。
+ *
+ * [+:path+]
+ *   開こうとするテーブルのパス。
+ */
 static VALUE
 rb_grn_table_s_open (int argc, VALUE *argv, VALUE klass)
 {
