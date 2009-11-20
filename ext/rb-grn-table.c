@@ -914,6 +914,12 @@ rb_grn_table_get_size (VALUE self)
     return UINT2NUM(size);
 }
 
+/*
+ * call-seq:
+ *   table.truncate
+ *
+ * テーブルの全レコードを一括して削除する。
+ */
 static VALUE
 rb_grn_table_truncate (VALUE self)
 {
