@@ -122,6 +122,15 @@ class TableCursorTest < Test::Unit::TestCase
     assert_equal((120...200).to_a, results)
   end
 
+  def test_patricia_trie_cursor_key
+    bookmarks = Groonga::PatriciaTrie.create(:name => "patricia_trie_table")
+    bookmarks.add("test")
+    bookmarks.open_cursor do |cursor|
+      cursor.next
+      assert_equal("test", cursor.key)
+    end
+  end
+
   private
   def create_bookmarks
     bookmarks = Groonga::Array.create(:name => "<bookmarks>")

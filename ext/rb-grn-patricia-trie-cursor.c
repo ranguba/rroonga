@@ -35,5 +35,5 @@ rb_grn_init_patricia_trie_cursor (VALUE mGrn)
     rb_cGrnPatriciaTrieCursor =
         rb_define_class_under(mGrn, "PatriciaTrieCursor", rb_cGrnTableCursor);
 
-    rb_include_module(rb_cGrnHashCursor, rb_mGrnTableCursorKeySupport);
+    rb_include_module(rb_cGrnPatriciaTrieCursor, rb_mGrnTableCursorKeySupport);
 }

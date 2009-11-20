@@ -56,6 +56,6 @@ rb_grn_init_table_cursor_key_support (VALUE mGrn)
     rb_mGrnTableCursorKeySupport =
 	rb_define_module_under(rb_cGrnTableCursor, "KeySupport");
 
-    rb_define_method(rb_cGrnTableCursor, "key",
+    rb_define_method(rb_mGrnTableCursorKeySupport, "key",
                      rb_grn_table_cursor_get_key, 0);
 }
