@@ -194,6 +194,26 @@ rb_grn_table_cursor_each (VALUE self)
     return Qnil;
 }
 
+/*
+ * Document-method: close
+ *
+ * call-seq:
+ *   cursor.close
+ *
+ * カーソルが使用しているリソースを開放する。これ以降カーソルを
+ * 使うことはできない。
+ */
+
+/*
+ * Document-method: closed?
+ *
+ * call-seq:
+ *   cursor.closed? -> true/false
+ *
+ * カーソルが開放済みの場合は+true+を返し、そうでない場合は
+ * +false+を返す。
+ */
+
 void
 rb_grn_init_table_cursor (VALUE mGrn)
 {
