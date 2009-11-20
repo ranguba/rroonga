@@ -258,6 +258,12 @@ rb_grn_table_key_support_get (VALUE self, VALUE rb_key)
     return id;
 }
 
+/*
+ * call-seq:
+ *   table.find(key) -> Groonga::Record
+ *
+ * テーブルの_key_に対応するレコードを返す。
+ */
 static VALUE
 rb_grn_table_key_support_find (VALUE self, VALUE rb_key)
 {
