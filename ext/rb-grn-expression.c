@@ -365,6 +365,12 @@ rb_grn_expression_parse (int argc, VALUE *argv, VALUE self)
     return Qnil;
 }
 
+/*
+ * call-seq:
+ *   expression.execute
+ *
+ * _expression_を実行する。
+ */
 static VALUE
 rb_grn_expression_execute (VALUE self)
 {
@@ -383,6 +389,12 @@ rb_grn_expression_execute (VALUE self)
     return Qnil;
 }
 
+/*
+ * call-seq:
+ *   expression.compile
+ *
+ * _expression_をコンパイルする。
+ */
 static VALUE
 rb_grn_expression_compile (VALUE self)
 {
