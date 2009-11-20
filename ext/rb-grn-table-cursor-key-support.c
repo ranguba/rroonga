@@ -25,7 +25,9 @@ VALUE rb_mGrnTableCursorKeySupport;
 /*
  * Document-module: Groonga::TableCursor::KeySupport
  *
- * カーソルにキーの機能を提供するモジュール。
+ * 主キーを持つテーブル用のカーソルであるGroonga::HashCursor
+ * とGroonga::PatriciaTrieCursorに主キーの機能を提供するモジ
+ * ュール。
  */
 
 /*

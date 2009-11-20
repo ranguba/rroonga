@@ -25,7 +25,8 @@ VALUE rb_mGrnTableKeySupport;
 /*
  * Document-module: Groonga::Table::KeySupport
  *
- * テーブルにキーの機能を提供するモジュール。
+ * 主キーを持つテーブルであるGroonga::Hashと
+ * Groonga::PatriciaTrieに主キーの機能を提供するモジュール。
  */
 
 void
