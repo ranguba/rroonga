@@ -871,7 +871,7 @@ rb_grn_table_open_cursor (int argc, VALUE *argv, VALUE self)
 
 /*
  * call-seq:
- *   table.get_records -> Groonga::Recordの配列
+ *   table.records -> Groonga::Recordの配列
  *
  * テーブルに登録されている全てのレコードが入っている配列を
  * 返す。
