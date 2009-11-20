@@ -648,6 +648,12 @@ rb_grn_table_add_column (VALUE self, VALUE rb_name, VALUE rb_value_type,
     return rb_column;
 }
 
+/*
+ * call-seq:
+ *   table.column(name) -> Groonga::Column
+ *
+ * テーブルの_name_に対応するカラムを返す。
+ */
 static VALUE
 rb_grn_table_get_column (VALUE self, VALUE rb_name)
 {
@@ -688,6 +694,13 @@ rb_grn_table_get_column (VALUE self, VALUE rb_name)
     return rb_column;
 }
 
+/*
+ * call-seq:
+ *   table.columns(name=nil) -> Groonga::Columnの配列
+ *
+ * テーブルの全てのカラムを返す。_name_が指定された場合はカ
+ * ラム名の先頭が_name_で始まるカラムを返す。
+ */
 static VALUE
 rb_grn_table_get_columns (int argc, VALUE *argv, VALUE self)
 {
