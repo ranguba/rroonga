@@ -133,6 +133,12 @@ rb_grn_table_key_support_add (int argc, VALUE *argv, VALUE self)
 	return rb_grn_record_new(self, id, values);
 }
 
+/*
+ * call-seq:
+ *   table.key(id) -> 主キー
+ *
+ * テーブルの_id_に対応する主キーを返す。
+ */
 static VALUE
 rb_grn_table_key_support_get_key (VALUE self, VALUE rb_id)
 {
