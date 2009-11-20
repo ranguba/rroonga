@@ -970,6 +970,12 @@ rb_grn_table_each (VALUE self)
     return Qnil;
 }
 
+/*
+ * call-seq:
+ *   table.delete[id]
+ *
+ * テーブルの_id_に対応するレコードを削除する。
+ */
 VALUE
 rb_grn_table_delete (VALUE self, VALUE rb_id)
 {

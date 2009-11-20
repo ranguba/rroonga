@@ -221,6 +221,12 @@ rb_grn_table_key_support_delete_by_key (VALUE self, VALUE rb_key)
     return Qnil;
 }
 
+/*
+ * call-seq:
+ *   table.delete[idまたはkey]
+ *
+ * テーブルの_id_または_key_に対応するレコードを削除する。
+ */
 static VALUE
 rb_grn_table_key_support_delete (VALUE self, VALUE rb_id_or_key)
 {
