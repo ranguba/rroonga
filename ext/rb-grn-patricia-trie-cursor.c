@@ -20,6 +20,15 @@
 
 VALUE rb_cGrnPatriciaTrieCursor;
 
+/*
+ * Document-class: Groonga::PatriciaTrieCursor < Groonga::TableCursor
+ *
+ * Groonga::PatriciaTrieに登録されているレコードを順番に取り
+ * 出すためのオブジェクト。利用できるメソッドは
+ * Groonga::TableCursorとGroonga::TableCursor::KeySupportを
+ * 参照。
+ */
+
 void
 rb_grn_init_patricia_trie_cursor (VALUE mGrn)
 {
