@@ -222,6 +222,12 @@ rb_grn_index_column_array_set (VALUE self, VALUE rb_id, VALUE rb_value)
     return original_rb_value;
 }
 
+/*
+ * call-seq:
+ *   column.sources -> Groonga::Columnの配列
+ *
+ * インデックス対象となっているカラムの配列を返す。
+ */
 static VALUE
 rb_grn_index_column_get_sources (VALUE self)
 {
@@ -258,6 +264,12 @@ rb_grn_index_column_get_sources (VALUE self)
     return rb_sources;
 }
 
+/*
+ * call-seq:
+ *   column.sources = Groonga::Columnの配列
+ *
+ * インデックス対象となる複数のカラムを配列で設定する。
+ */
 static VALUE
 rb_grn_index_column_set_sources (VALUE self, VALUE rb_sources)
 {
@@ -309,6 +321,12 @@ rb_grn_index_column_set_sources (VALUE self, VALUE rb_sources)
     return Qnil;
 }
 
+/*
+ * call-seq:
+ *   column.source = Groonga::Column
+ *
+ * インデックス対象となるカラムを設定する。
+ */
 static VALUE
 rb_grn_index_column_set_source (VALUE self, VALUE rb_source)
 {
