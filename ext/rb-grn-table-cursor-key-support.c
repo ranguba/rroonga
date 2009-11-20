@@ -28,6 +28,12 @@ VALUE rb_mGrnTableCursorKeySupport;
  * カーソルにキーの機能を提供するモジュール。
  */
 
+/*
+ * call-seq:
+ *   cursor.key -> 主キー
+ *
+ * カレントレコードの主キーを返す。
+ */
 static VALUE
 rb_grn_table_cursor_get_key (VALUE self)
 {
