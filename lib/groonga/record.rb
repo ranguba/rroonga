@@ -63,6 +63,10 @@ module Groonga
       column(name).search(query, options)
     end
 
+    # call-seq:
+    #   record.key -> 主キー
+    #
+    # レコードの主キーを返す。
     def key
       @table.key(@id)
     end
