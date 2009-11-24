@@ -95,10 +95,20 @@ module Groonga
       @table[@id] = value
     end
 
+    # call-seq:
+    #   record.increment!(name, delta=nil)
+    #
+    # このレコードの_name_で指定されたカラムの値を_delta_だけ増
+    # 加する。_delta_が+nil+の場合は1増加する。
     def increment!(name, delta=nil)
       column(name).increment!(@id, delta)
     end
 
+    # call-seq:
+    #   record.decrement!(name, delta=nil)
+    #
+    # このレコードの_name_で指定されたカラムの値を_delta_だけ減
+    # 少する。_delta_が+nil+の場合は1減少する。
     def decrement!(name, delta=nil)
       column(name).decrement!(@id, delta)
     end
