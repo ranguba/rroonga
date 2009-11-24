@@ -59,6 +59,11 @@ module Groonga
       column(column_name).prepend(@id, value)
     end
 
+    # call-seq:
+    #   record.have_column?(name) -> true/false
+    #
+    # 名前が_name_のカラムがレコードの所属するテーブルで定義され
+    # ているなら+true+を返す。
     def have_column?(name)
       column(name).is_a?(Groonga::Column)
     rescue Groonga::InvalidArgument
@@ -68,7 +73,7 @@ module Groonga
     # call-seq:
     #   record.reference_column?(name) -> true/false
     #
-    # 名前が_name_のカラムが参照カラムであるならtrueを返す。
+    # 名前が_name_のカラムが参照カラムであるなら+true+を返す。
     def reference_column?(name)
       column(name).range.is_a?(Groonga::Table)
     end
