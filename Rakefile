@@ -51,7 +51,6 @@ manifest_contents = []
 base_dir_included_components = %w(AUTHORS Rakefile
                                   README.rdoc README.ja.rdoc
                                   NEWS.rdoc NEWS.ja.rdoc
-                                  TUTORIAL.ja.rdoc
                                   extconf.rb pkg-config.rb)
 excluded_components = %w(.cvsignore .gdb_history CVS depend Makefile pkg
                          .svn .git doc vendor data .test-result)
@@ -108,7 +107,7 @@ Hoe.spec('groonga') do |_project|
   project.spec_extras = {
     :extensions => ['extconf.rb'],
     :require_paths => ["lib", "ext"],
-    :extra_rdoc_files => Dir.glob("*.rdoc"),
+    :extra_rdoc_files => Dir.glob("**/*.rdoc"),
   }
   project.readme_file = "README.ja.rdoc"
 
@@ -145,7 +144,7 @@ ObjectSpace.each_object(Rake::RDocTask) do |rdoc_task|
 
   rdoc_task.rdoc_files = ["ext/rb-groonga.c"] + Dir.glob("ext/rb-grn-*.c")
   rdoc_task.rdoc_files += Dir.glob("lib/**/*.rb")
-  rdoc_task.rdoc_files += Dir.glob("*.rdoc")
+  rdoc_task.rdoc_files += Dir.glob("**/*.rdoc")
 end
 
 task :publish_docs => [:prepare_docs_for_publishing]
