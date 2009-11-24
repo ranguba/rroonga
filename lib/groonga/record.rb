@@ -65,6 +65,10 @@ module Groonga
       false
     end
 
+    # call-seq:
+    #   record.reference_column?(name) -> true/false
+    #
+    # 名前が_name_のカラムが参照カラムであるならtrueを返す。
     def reference_column?(name)
       column(name).range.is_a?(Groonga::Table)
     end
