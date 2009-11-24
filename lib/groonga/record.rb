@@ -41,10 +41,20 @@ module Groonga
       column(column_name)[@id] = value
     end
 
+    # call-seq:
+    #   record.append(column_name, value)
+    #
+    # このレコードの_column_name_で指定されたカラムの値の最後に
+    # _value_を追加する。
     def append(column_name, value)
       column(column_name).append(@id, value)
     end
 
+    # call-seq:
+    #   record.prepend(column_name, value)
+    #
+    # このレコードの_column_name_で指定されたカラムの値の最初に
+    # _value_を追加する。
     def prepend(column_name, value)
       column(column_name).prepend(@id, value)
     end
