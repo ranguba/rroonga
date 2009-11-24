@@ -158,7 +158,8 @@ class ColumnTest < Test::Unit::TestCase
   end
 
   def test_array_set_with_key_of_table
-    users = Groonga::Hash.create(:name => "<users>")
+    users = Groonga::Hash.create(:name => "<users>",
+                                 :key_type => "ShortText")
     bookmarks = Groonga::Hash.create(:name => "<bookmarks>")
     bookmarks.define_column("user", users)
 
