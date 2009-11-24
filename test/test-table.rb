@@ -535,6 +535,19 @@ class TableTest < Test::Unit::TestCase
     assert_not_predicate(bookmarks, :locked?)
   end
 
+  def test_auto_record_register
+    users = Groonga::Hash.create(:name => "Users",
+                                 :key_type => "ShortText")
+    books = Groonga::Hash.create(:name => "Books",
+                                 :key_type => "ShortText")
+    users.define_column("book", "Books")
+
+    assert_equal([], books.select.collect {|book| book.key})
+    users.add("ryoqun", :book => "XP")
+    assert_equal([books.find("XP")],
+                 books.select.collect {|book| book.key})
+  end
+
   private
   def create_bookmarks
     bookmarks = Groonga::Array.create(:name => "<bookmarks>")
