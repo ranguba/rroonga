@@ -131,6 +131,10 @@ module Groonga
       attributes
     end
 
+    # call-seq:
+    #   record.delete
+    #
+    # レコードを削除する。
     def delete
       @table.delete(@id)
     end
