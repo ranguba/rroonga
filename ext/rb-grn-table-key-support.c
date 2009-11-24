@@ -224,7 +224,8 @@ rb_grn_table_key_support_delete_by_key (VALUE self, VALUE rb_key)
 
 /*
  * call-seq:
- *   table.delete[idまたはkey]
+ *   table.delete(id)
+ *   table.delete(key)
  *
  * テーブルの_id_または_key_に対応するレコードを削除する。
  */

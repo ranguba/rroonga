@@ -985,7 +985,7 @@ rb_grn_table_each (VALUE self)
 
 /*
  * call-seq:
- *   table.delete[id]
+ *   table.delete(id)
  *
  * テーブルの_id_に対応するレコードを削除する。
  */
