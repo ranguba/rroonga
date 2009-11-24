@@ -103,6 +103,10 @@ module Groonga
       column(name).decrement!(@id, delta)
     end
 
+    # call-seq:
+    #   record.columns -> Groonga::Columnの配列
+    #
+    # レコードが所属するテーブルの全てのカラムを返す。
     def columns
       @table.columns
     end
