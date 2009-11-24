@@ -200,71 +200,72 @@ rb_grn_bulk_to_ruby_object (grn_ctx *context, grn_obj *bulk,
 grn_obj *
 rb_grn_bulk_from_ruby_object (VALUE object, grn_ctx *context, grn_obj *bulk)
 {
-    const char *string;
-    unsigned int size;
-    int32_t int32_value;
-    int64_t int64_value;
-    int64_t time_value;
-    double double_value;
-    grn_id id_value;
-    grn_obj_flags flags = 0;
-
     if (bulk && bulk->header.domain == GRN_DB_TIME)
         return rb_grn_bulk_from_ruby_object_with_type(
             object, context, bulk, bulk->header.domain,
             grn_ctx_at(context, bulk->header.domain));
 
+    if (!bulk) {
+	bulk = grn_obj_open(context, GRN_BULK, 0, GRN_ID_NIL);
+	rb_grn_context_check(context, object);
+    }
+
     switch (TYPE(object)) {
       case T_NIL:
-	string = NULL;
-	size = 0;
+	grn_obj_reinit(context, bulk, GRN_DB_VOID, 0);
 	break;
       case T_STRING:
-	string = RSTRING_PTR(object);
-	size = RSTRING_LEN(object);
-	flags |= GRN_OBJ_DO_SHALLOW_COPY;
+	grn_obj_reinit(context, bulk, GRN_DB_TEXT, GRN_OBJ_DO_SHALLOW_COPY);
+	GRN_TEXT_SET(context, bulk, RSTRING_PTR(object), RSTRING_LEN(object));
 	break;
       case T_FIXNUM:
-	int32_value = NUM2INT(object);
-	string = (const char *)&int32_value;
-	size = sizeof(int32_value);
+	grn_obj_reinit(context, bulk, GRN_DB_INT32, 0);
+	GRN_INT32_SET(context, bulk, NUM2INT(object));
 	break;
       case T_BIGNUM:
-	int64_value = NUM2LL(object);
-        if (int64_value <= INT32_MAX) {
-            int32_value = int64_value;
-            string = (const char *)&int32_value;
-            size = sizeof(int32_value);
-        } else {
-            string = (const char *)&int64_value;
-            size = sizeof(int64_value);
-        }
+	{
+	    int64_t int64_value;
+	    int64_value = NUM2LL(object);
+	    if (int64_value <= INT32_MAX) {
+		grn_obj_reinit(context, bulk, GRN_DB_INT32, 0);
+		GRN_INT32_SET(context, bulk, int64_value);
+	    } else {
+		grn_obj_reinit(context, bulk, GRN_DB_INT64, 0);
+		GRN_INT64_SET(context, bulk, int64_value);
+	    }
+	}
 	break;
       case T_FLOAT:
-	double_value = NUM2DBL(object);
-	string = (const char *)&double_value;
-	size = sizeof(double_value);
+	grn_obj_reinit(context, bulk, GRN_DB_FLOAT, 0);
+	GRN_FLOAT_SET(context, bulk, NUM2DBL(object));
 	break;
       default:
 	if (RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cTime))) {
 	    VALUE sec, usec;
+	    int64_t time_value;
 
+	    grn_obj_reinit(context, bulk, GRN_DB_TIME, 0);
 	    sec = rb_funcall(object, rb_intern("to_i"), 0);
 	    usec = rb_funcall(object, rb_intern("usec"), 0);
 	    time_value = GRN_TIME_PACK(NUM2LL(sec), NUM2LL(usec));
-	    string = (const char *)&time_value;
-	    size = sizeof(time_value);
+	    GRN_TIME_SET(context, bulk, time_value);
 	} else if (RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cGrnObject))) {
 	    grn_obj *grn_object;
+	    grn_id id_value;
 
 	    grn_object = RVAL2GRNOBJECT(object, &context);
+	    grn_obj_reinit(context, bulk, grn_object->header.domain, 0);
 	    id_value = grn_obj_id(context, grn_object);
-	    string = (const char *)&id_value;
-	    size = sizeof(id_value);
+	    GRN_RECORD_SET(context, bulk, id_value);
 	} else if (RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cGrnRecord))) {
+	    grn_obj *table;
+	    grn_id id_value;
+
+	    table = RVAL2GRNOBJECT(rb_funcall(object, rb_intern("table"), 0),
+				   &context);
+	    grn_obj_reinit(context, bulk, grn_obj_id(context, table), 0);
 	    id_value = NUM2UINT(rb_funcall(object, rb_intern("id"), 0));
-	    string = (const char *)&id_value;
-	    size = sizeof(id_value);
+	    GRN_RECORD_SET(context, bulk, id_value);
 	} else {
 	    rb_raise(rb_eTypeError,
 		     "bulked object should be one of "
@@ -273,12 +274,6 @@ rb_grn_bulk_from_ruby_object (VALUE object, grn_ctx *context, grn_obj *bulk)
 	}
 	break;
     }
-
-    if (!bulk) {
-	bulk = grn_obj_open(context, GRN_BULK, flags, GRN_ID_NIL);
-	rb_grn_context_check(context, object);
-    }
-    GRN_TEXT_SET(context, bulk, string, size);
 
     return bulk;
 }

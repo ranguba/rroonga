@@ -77,46 +77,13 @@ rb_grn_fix_size_column_array_set (VALUE self, VALUE rb_id, VALUE rb_value)
 			      &value, &range_id, &range);
 
     id = NUM2UINT(rb_id);
-
-    if (RVAL2CBOOL(rb_obj_is_kind_of(rb_value, rb_cGrnRecord))) {
-	VALUE rb_id, rb_table;
-	grn_obj *table;
-
-	if (!range)
-	    rb_raise(rb_eArgError,
-		     "%s isn't associated with any table: %s",
-		     rb_grn_inspect(self), rb_grn_inspect(rb_value));
-
-	rb_id = rb_funcall(rb_value, rb_intern("id"), 0);
-	rb_table = rb_funcall(rb_value, rb_intern("table"), 0);
-	table = RVAL2GRNTABLE(rb_table, &context);
-	if (grn_obj_id(context, table) != range_id)
-	    rb_raise(rb_eArgError,
-		     "%s isn't associated with passed record's table: %s",
-		     rb_grn_inspect(self),
-		     rb_grn_inspect(rb_value));
-
-	rb_value = rb_id;
-    } else if (range) {
-	switch (range->header.type) {
-	  case GRN_TABLE_HASH_KEY:
-	  case GRN_TABLE_PAT_KEY:
-	    if (!RVAL2CBOOL(rb_obj_is_kind_of(rb_value, rb_cFixnum))) {
-		VALUE rb_range;
-		grn_id id;
-
-		rb_range = GRNOBJECT2RVAL(Qnil, context, range, RB_GRN_FALSE);
-		id = rb_grn_table_key_support_get(rb_range, rb_value);
-		rb_value = UINT2NUM(id);
-	    }
-	    break;
-	  default:
-	    break;
-	}
-    }
-
-    GRN_BULK_REWIND(value);
     RVAL2GRNBULK(rb_value, context, value);
+    if ((value->header.domain == GRN_DB_INT32 ||
+	 value->header.domain == GRN_DB_UINT32) &&
+	(GRN_TABLE_HASH_KEY <= range->header.type &&
+	 range->header.type <= GRN_TABLE_VIEW)) {
+	value->header.domain = range_id;
+    }
 
     rc = grn_obj_set_value(context, column, id, value, GRN_OBJ_SET);
     rb_grn_context_check(context, self);
