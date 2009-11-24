@@ -135,18 +135,51 @@ module Groonga
       @table.delete(@id)
     end
 
+    # call-seq:
+    #   record.lock(options={})
+    #   record.lock(options={}) {...}
+    #
+    # レコードが所属するテーブルをロックする。ロックに失敗した場
+    # 合はGroonga::ResourceDeadlockAvoided例外が発生する。
+    #
+    # ブロックを指定した場合はブロックを抜けたときにunlockする。
+    #
+    # 利用可能なオプションは以下の通り。
+    #
+    # [_:timeout_]
+    #   ロックを獲得できなかった場合は_:timeout_秒間ロックの獲
+    #   得を試みる。_:timeout_秒以内にロックを獲得できなかった
+    #   場合は例外が発生する。
     def lock(options={}, &block)
       @table.lock(options.merge(:id => @id), &block)
     end
 
+    # call-seq:
+    #   record.unlock(options={})
+    #
+    # レコードが所属するテーブルのロックを解除する。
+    #
+    # 利用可能なオプションは現在は無い。
     def unlock(options={})
       @table.unlock(options.merge(:id => @id))
     end
 
+    # call-seq:
+    #   record.clear_lock(options={})
+    #
+    # レコードが所属するテーブルのロックを強制的に解除する。
+    #
+    # 利用可能なオプションは現在は無い。
     def clear_lock(options={})
       @table.clear_lock(options.merge(:id => @id))
     end
 
+    # call-seq:
+    #   record.locked?(options={}) -> true/false
+    #
+    # レコードが所属するテーブルがロックされていれば+true+を返す。
+    #
+    # 利用可能なオプションは現在は無い。
     def locked?(options={})
       @table.locked?(options.merge(:id => @id))
     end
