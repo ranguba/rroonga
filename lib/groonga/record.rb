@@ -71,10 +71,20 @@ module Groonga
       @table.key(@id)
     end
 
+    # call-seq:
+    #   record.score -> スコア値
+    #
+    # レコードのスコア値を返す。検索結果として生成されたテーブル
+    # のみに定義される。
     def score
       self[".:score"]
     end
 
+    # call-seq:
+    #   record.n_sub_records -> 件数
+    #
+    # 主キーの値が同一であったレコードの件数を返す。検索結果とし
+    # て生成されたテーブルのみに定義される。
     def n_sub_records
       self[".:nsubrecs"]
     end
