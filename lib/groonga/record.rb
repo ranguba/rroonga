@@ -28,6 +28,11 @@ module Groonga
       end
     end
 
+    # call-seq:
+    #   record == other -> true/false
+    #
+    # _record_と_other_が同じgroongaのレコードなら+true+を返し、
+    # そうでなければ+false+を返す。
     def ==(other)
       self.class == other.class and
         [table, id] == [other.table, other.id]
