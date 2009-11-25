@@ -175,6 +175,12 @@ module Groonga
       @table.columns
     end
 
+    # call-seq:
+    #   attributes -> Hash
+    #
+    # レコードが所属しているテーブルで定義されているインデックス
+    # 型のカラムでない全カラムを対象とし、カラムの名前をキーとし
+    # たこのレコードのカラムの値のハッシュを返す。
     def attributes
       attributes = {}
       table_name = @table.name
