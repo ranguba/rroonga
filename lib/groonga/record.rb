@@ -17,7 +17,10 @@
 
 module Groonga
   class Record
-    attr_reader :table, :id
+    # レコードが所属するテーブル
+    attr_reader :table
+    # レコードのID
+    attr_reader :id
     def initialize(table, id, values=nil)
       @table = table
       @id = id
