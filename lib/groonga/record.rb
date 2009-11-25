@@ -21,6 +21,14 @@ module Groonga
     attr_reader :table
     # レコードのID
     attr_reader :id
+    # _table_の_id_に対応するレコードを作成する。_values_には各
+    # カラムに設定する値を以下のような形式で指定する。
+    #
+    #   [
+    #    ["カラム名", 値],
+    #    ["カラム名", 値],
+    #    ...,
+    #   ]
     def initialize(table, id, values=nil)
       @table = table
       @id = id
