@@ -38,10 +38,19 @@ module Groonga
         [table, id] == [other.table, other.id]
     end
 
+    # call-seq:
+    #   record[column_name] -> 値
+    #
+    # このレコードの_column_name_で指定されたカラムの値を返す。
     def [](column_name)
       column(column_name)[@id]
     end
 
+    # call-seq:
+    #   record[column_name] = 値
+    #
+    # このレコードの_column_name_で指定されたカラムの値を設定す
+    # る。
     def []=(column_name, value)
       column(column_name)[@id] = value
     end
