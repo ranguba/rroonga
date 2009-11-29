@@ -46,7 +46,7 @@ p items.add("http://www.ruby-lang.org/")
 p items.define_column("title", "Text", :persistent => persistent)
 
 p(terms = Groonga::Hash.create(:name => "Terms",
-                               :key_type => "<shorttext>",
+                               :key_type => "ShortText",
                                :persistent => persistent,
                                :default_tokenizer => "TokenBigram"))
 p terms.define_index_column("item_title", items,
@@ -59,8 +59,8 @@ p terms.define_index_column("item_title", items,
 p items.find("http://ja.wikipedia.org/wiki/Ruby")["title"] = "Ruby"
 p items.find("http://www.ruby-lang.org/")["title"] = "オブジェクト指向スクリプト言語Ruby"
 
-p(users = Groonga::Hash.create(:name => "<users>",
-                               :key_type => "<shorttext>",
+p(users = Groonga::Hash.create(:name => "Users",
+                               :key_type => "ShortText",
                                :persistent => persistent))
 p users.define_column("name", "Text",
                       :persistent => persistent)

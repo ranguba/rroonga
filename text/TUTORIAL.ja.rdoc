@@ -174,9 +174,9 @@ N-gramを利用した全文検索では、分解したN文字とその出現位�
 
 http://qwik.jp/senna/senna2.files/rect4605.png
 
-まず、<tt><users></tt>テーブルを追加します。
+まず、<tt>Users</tt>テーブルを追加します。
 
-  >> users = Groonga::Hash.create(:name => "<users>",
+  >> users = Groonga::Hash.create(:name => "Users",
                                   :key_type => "ShortText")
   => #<Groonga::Hash ...>
   >> users.define_column("name", "Text")
@@ -299,7 +299,7 @@ http://qwik.jp/senna/senna2.files/rect4605.png
 カラムへのアクセスは、カラム名を+.+で繋いで複合データ型の要素
 を再帰的に辿ることができます。（同様の出力を普通のRDBで実現す
 るためには、<tt>Items</tt>テーブル、<tt>Comments</tt>テー
-ブル、<tt><users></tt>テーブルのJOIN操作が必要になります。）
+ブル、<tt>Users</tt>テーブルのJOIN操作が必要になります。）
 
 上の式の中で、肝心の検索処理は、第一引数の式を評価する時点で
 完了していて、レコードセットオブジェクトとしてメモリに蓄積さ
