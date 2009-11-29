@@ -373,7 +373,7 @@ http://qwik.jp/senna/senna2.files/rect4605.png
 
   >> ruby_comments = @comments.select {|record| record["content"] =~ "Ruby"}
   #<Groonga::Hash ..., size: <2>>
-  >> ruby_items = @items.select("*W1:50 title:%Ruby")
+  >> ruby_items = @items.select("*W1:50 title:@Ruby")
   #<Groonga::Hash ..., size: <2>>
 
 _ruby_comments_の結果をitem毎にグループ化し、_ruby_items_と
