@@ -261,14 +261,15 @@ module Groonga
       end
 
       def define
+        table = context[@name]
         if @options[:change]
-          table = context[@name]
+          raise ArgumentError, "table doesn't exist: #{@name}" if table.nil?
         else
-          table = context[@name]
           if table and @options[:force]
             table.remove
+            table = nil
           end
-          table = @table_type.create(create_options)
+          table ||= @table_type.create(create_options)
         end
         @definitions.each do |definition|
           definition.define(table)
