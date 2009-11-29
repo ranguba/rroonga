@@ -45,7 +45,7 @@ p items.add("http://www.ruby-lang.org/")
 
 p items.define_column("title", "<text>", :persistent => persistent)
 
-p(terms = Groonga::Hash.create(:name => "<terms>",
+p(terms = Groonga::Hash.create(:name => "Terms",
                                :key_type => "<shorttext>",
                                :persistent => persistent,
                                :default_tokenizer => "TokenBigram"))
