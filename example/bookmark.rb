@@ -43,7 +43,7 @@ p(items = Groonga::Hash.create(:name => "Items",
 p items.add("http://ja.wikipedia.org/wiki/Ruby")
 p items.add("http://www.ruby-lang.org/")
 
-p items.define_column("title", "<text>", :persistent => persistent)
+p items.define_column("title", "Text", :persistent => persistent)
 
 p(terms = Groonga::Hash.create(:name => "Terms",
                                :key_type => "<shorttext>",
@@ -62,14 +62,14 @@ p items.find("http://www.ruby-lang.org/")["title"] = "オブジェクト指向�
 p(users = Groonga::Hash.create(:name => "<users>",
                                :key_type => "<shorttext>",
                                :persistent => persistent))
-p users.define_column("name", "<text>",
+p users.define_column("name", "Text",
                       :persistent => persistent)
 
 p(comments = Groonga::Array.create(:name => "<comments>",
                                    :persistent => persistent))
 p comments.define_column("item", items)
 p comments.define_column("author", users)
-p comments.define_column("content", "<text>")
+p comments.define_column("content", "Text")
 p comments.define_column("issued", "<time>")
 
 p terms.define_index_column("comment_content", comments,

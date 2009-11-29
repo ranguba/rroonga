@@ -93,11 +93,11 @@ groongaには以下の3種類のテーブルがあります。
 
 まず<tt>Items</tt>テーブルに+title+という名前のカラムを追加します。
 
-  >> title_column = items.define_column("title", "<text>")
+  >> title_column = items.define_column("title", "Text")
   => #<Groonga::VarSizeColumn ...>
 
 2番目の引数は、追加するカラムのデータ型を示しています。
-<tt><int></tt>、<tt><text></tt>、<tt><longtext></tt>等の型が基本型として用意されて
+<tt><int></tt>、<tt>Text</tt>、<tt><longtext></tt>等の型が基本型として用意されて
 います。
 
 全文検索するためには、文字列を分解して得られる各単語を格納す
@@ -179,7 +179,7 @@ http://qwik.jp/senna/senna2.files/rect4605.png
   >> users = Groonga::Hash.create(:name => "<users>",
                                   :key_type => "<shorttext>")
   => #<Groonga::Hash ...>
-  >> users.define_column("name", "<text>")
+  >> users.define_column("name", "Text")
   => #<Groonga::VarSizeColumn ...>
 
 
@@ -191,7 +191,7 @@ http://qwik.jp/senna/senna2.files/rect4605.png
   => #<Groonga::FixSizeColumn ..>
   >> comments.define_column("author", users)
   => #<Groonga::FixSizeColumn ..>
-  >> comments.define_column("content", "<text>")
+  >> comments.define_column("content", "Text")
   => #<Groonga::VarSizeColumn ..>
   >> comments.define_column("issued", "<time>")
   => #<Groonga::FixSizeColumn ..>
