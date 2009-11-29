@@ -51,9 +51,9 @@ groongaには以下の3種類のテーブルがあります。
   識別します。
 
 ここではハッシュテーブルを利用して、<tt><items></tt>という名前のテー
-ブルを作成します。
+ブルを作成します。キーは文字列とします。
 
-  >> items = Groonga::Hash.create(:name => "<items>")
+  >> items = Groonga::Hash.create(:name => "<items>", :key_type => "ShortText")
   => #<Groonga::Hash ...>
 
 

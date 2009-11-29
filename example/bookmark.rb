@@ -36,7 +36,9 @@ persistent = true
 
 p Groonga::Database.create(:path => path)
 
-p(items = Groonga::Hash.create(:name => "<items>", :persistent => persistent))
+p(items = Groonga::Hash.create(:name => "<items>",
+                               :key_type => "ShortText",
+                               :persistent => persistent))
 
 p items.add("http://ja.wikipedia.org/wiki/Ruby")
 p items.add("http://www.ruby-lang.org/")
