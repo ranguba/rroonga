@@ -256,6 +256,37 @@ class SchemaTest < Test::Unit::TestCase
                  context["<terms>.<posts>_content"].sources)
   end
 
+  def test_index_again
+    Groonga::Schema.create_table("posts") do |table|
+      table.long_text :content
+    end
+    Groonga::Schema.create_table("terms") do |table|
+      table.index "posts.content"
+    end
+
+    assert_nothing_raised do
+      Groonga::Schema.create_table("terms") do |table|
+        table.index "posts.content"
+      end
+    end
+  end
+
+  def test_index_again_with_difference_source
+    Groonga::Schema.create_table("posts") do |table|
+      table.long_text :content
+      table.short_text :name
+    end
+    Groonga::Schema.create_table("terms") do |table|
+      table.index "posts.content"
+    end
+
+    assert_raise(ArgumentError) do
+      Groonga::Schema.create_table("terms") do |table|
+        table.index "posts.name", :name => "posts_content"
+      end
+    end
+  end
+
   def test_dump
     Groonga::Schema.define do |schema|
       schema.create_table("posts") do |table|

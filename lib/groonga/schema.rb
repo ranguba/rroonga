@@ -482,7 +482,7 @@ module Groonga
       def define(table)
         column = table.column(@name)
         if column
-          return if same_column?(column)
+          return column if same_column?(column)
           if @options.delete(:force)
             column.remove
           else
@@ -500,7 +500,7 @@ module Groonga
       private
       def same_column?(column)
         context = column.table.context
-        # TODO: should check other options.
+        # TODO: should check column type and other options.
         column.range == context[Schema.normalize_type(@type)]
       end
     end
@@ -537,11 +537,31 @@ module Groonga
         if target.nil?
           raise ArgumentError, "Unknown index target: #{@target.inspect}"
         end
+        index = table.column(@name)
+        if index
+          return index if same_index?(index, target)
+          if @options.delete(:force)
+            index.remove
+          else
+            raise ArgumentError,
+                  "the same name index column with " +
+                  "different target or options is " +
+                  "already defined: #{target.inspect}(#{@options.inspect}): " +
+                  "#{index.inspect}"
+          end
+        end
         index = table.define_index_column(@name,
                                           target.table,
                                           @options)
         index.source = target
         index
+      end
+
+      private
+      def same_index?(index, target)
+        context = index.table.context
+        # TODO: should check column type and other options.
+        index.range == target.table and index.sources == [target]
       end
     end
 
