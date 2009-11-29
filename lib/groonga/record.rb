@@ -130,7 +130,7 @@ module Groonga
     # 主キーの値が同一であったレコードの件数を返す。検索結果とし
     # て生成されたテーブルのみに定義される。
     def n_sub_records
-      self[".:nsubrecs"]
+      self["._nsubrecs"]
     end
 
     # call-seq:

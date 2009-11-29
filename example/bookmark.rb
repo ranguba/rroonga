@@ -145,7 +145,7 @@ end
 
 records.group([".item"]).each do |record|
   item = record.key
-  p [record[".:nsubrecs"],
+  p [record["._nsubrecs"],
      item.key,
      item[".title"]]
 end
