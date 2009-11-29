@@ -94,6 +94,7 @@ typedef struct _RbGrnContext RbGrnContext;
 struct _RbGrnContext
 {
     grn_ctx *context;
+    VALUE self;
 };
 
 typedef struct _RbGrnObject RbGrnObject;

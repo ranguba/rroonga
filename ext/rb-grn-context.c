@@ -285,6 +285,7 @@ rb_grn_context_initialize (int argc, VALUE *argv, VALUE self)
 
     rb_grn_context = ALLOC(RbGrnContext);
     DATA_PTR(self) = rb_grn_context;
+    rb_grn_context->self = self;
     context = rb_grn_context->context = grn_ctx_open(flags);
     rb_grn_context_check(context, self);
 

@@ -482,10 +482,7 @@ module Groonga
       def define(table)
         column = table.column(@name)
         if column
-          if column.range == table.context[Schema.normalize_type(@type)]
-            # TODO: should check other options.
-            return
-          end
+          return if same_column?(column)
           if @options.delete(:force)
             column.remove
           else
@@ -498,6 +495,13 @@ module Groonga
         table.define_column(@name,
                             Schema.normalize_type(@type),
                             @options)
+      end
+
+      private
+      def same_column?(column)
+        context = column.table.context
+        # TODO: should check other options.
+        column.range == context[Schema.normalize_type(@type)]
       end
     end
 

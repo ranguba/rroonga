@@ -226,7 +226,8 @@ VALUE
 rb_grn_object_to_ruby_object (VALUE klass, grn_ctx *context, grn_obj *object,
 			      rb_grn_boolean owner)
 {
-    VALUE rb_object;
+    RbGrnContext *rb_grn_context;
+    VALUE rb_object, rb_context = Qnil;
     grn_user_data *user_data;
 
     if (!object)
@@ -239,8 +240,11 @@ rb_grn_object_to_ruby_object (VALUE klass, grn_ctx *context, grn_obj *object,
     if (NIL_P(klass))
         klass = GRNOBJECT2RCLASS(object);
 
+    rb_grn_context = GRN_CTX_USER_DATA(context)->ptr;
+    if (rb_grn_context)
+	rb_context = rb_grn_context->self;
     rb_object = rb_obj_alloc(klass);
-    rb_grn_object_assign(klass, rb_object, Qnil, context, object);
+    rb_grn_object_assign(klass, rb_object, rb_context, context, object);
 
     return rb_object;
 }
