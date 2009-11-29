@@ -276,9 +276,9 @@ rb_grn_expression_append_operation (VALUE self, VALUE rb_operation,
  *   Groonga::Operation::MATCH。（FIXME: モードによってどう
  *   いう動作になるかを書く。）
  *
- * [+:parser+]
- *   _query_の構文を解析するパーサーを指定する。指定可
- *   能な値は以下の通り。省略した場合は+:query+。
+ * [+:syntax+]
+ *   _query_の構文を指定する。指定可能な値は以下の通り。省略
+ *   した場合は+:query+。
  *
  *   [+nil+]
  *     +:query+と同様。
@@ -287,16 +287,42 @@ rb_grn_expression_append_operation (VALUE self, VALUE rb_operation,
  *     にマッチという検索エンジンで利用できるような構文を使
  *     う。
  *
- *     参考: grn式のquery形式（FIXME: URLを入れる）
- *   [+:column_query+]
- *     +:query+から別カラムを参照する「[カラム名]:[演算
- *     子][値]」という構文を使えなくしたもの。
- *     +:default_mode+で指定したモードでしか演算できない。
+ *     参考: grn式のquery形式（link:text/expression_rdoc.html）
  *   [+:script+]
  *     「[カラム名] == [値]」というようにECMAScript風の構文
  *     を使う。
  *
- *     参考: grn式のscript形式（FIXME: URLを入れる）
+ *     参考: grn式のscript形式（link:text/expression_rdoc.html）
+ *
+ * [+:allow_pragma+]
+ *   _query_の構文にqueryを用いているとき（+:syntax+オプショ
+ *   ン参照）、「*E-1」というようにクエリの先頭でpragmaを利
+ *   用できるようにする。script構文を用いているときはこのオ
+ *   プションを利用できない。
+ *
+ *   デフォルトではプラグマを利用できる。
+ *
+ *   参考: grn式のquery形式（link:text/expression_rdoc.html）
+ *
+ * [+:allow_column+]
+ *   _query_の構文にqueryを用いているとき（+:syntax+オプショ
+ *   ン参照）、「カラム名:値」というようにカラム名を指定した
+ *   条件式を利用できるようにする。script構文を用いていると
+ *   きはこのオプションを利用できない。
+ *
+ *   デフォルトではカラム名を指定した条件式を利用できる。
+ *
+ *   参考: grn式のquery形式（link:text/expression_rdoc.html）
+ *
+ * [+:allow_update+]
+ *   _query_の構文にscriptを用いているとき（+:syntax+オプショ
+ *   ン参照）、「カラム名 = 値」というように更新操作を利用で
+ *   きるようにする。query構文を用いているときはこのオプショ
+ *   ンを利用できない。
+ *
+ *   デフォルトでは更新操作を利用できる。
+ *
+ *   参考: grn式のscript形式（link:text/expression_rdoc.html）
  */
 static VALUE
 rb_grn_expression_parse (int argc, VALUE *argv, VALUE self)
@@ -308,9 +334,10 @@ rb_grn_expression_parse (int argc, VALUE *argv, VALUE self)
     grn_rc rc;
     char *query = NULL;
     unsigned query_size = 0;
-    int parse_level = 0;
+    grn_expr_flags flags = 0;
     VALUE options, rb_query, rb_default_column, rb_default_operator;
-    VALUE rb_default_mode, rb_parser;
+    VALUE rb_default_mode, rb_syntax;
+    VALUE rb_allow_pragma, rb_allow_column, rb_allow_update;
     VALUE exception = Qnil;
 
     rb_scan_args(argc, argv, "11", &rb_query, &options);
@@ -318,7 +345,10 @@ rb_grn_expression_parse (int argc, VALUE *argv, VALUE self)
                         "default_column", &rb_default_column,
                         "default_operator", &rb_default_operator,
                         "default_mode", &rb_default_mode,
-			"parser", &rb_parser,
+			"syntax", &rb_syntax,
+			"allow_pragma", &rb_allow_pragma,
+			"allow_column", &rb_allow_column,
+			"allow_update", &rb_allow_update,
                         NULL);
 
     query = StringValuePtr(rb_query);
@@ -333,24 +363,55 @@ rb_grn_expression_parse (int argc, VALUE *argv, VALUE self)
 	default_mode = RVAL2GRNOPERATOR(rb_default_mode);
     if (!NIL_P(rb_default_operator))
 	default_operator = RVAL2GRNOPERATOR(rb_default_operator);
-    if (NIL_P(rb_parser) ||
-	rb_grn_equal_option(rb_parser, "query")) {
-	parse_level = 2;
-    } else if (rb_grn_equal_option(rb_parser, "column-query") ||
-	       rb_grn_equal_option(rb_parser, "column_query")) {
-	parse_level = 0;
-    } else if (rb_grn_equal_option(rb_parser, "script")) {
-	parse_level = 4;
+
+    if (NIL_P(rb_syntax) ||
+	rb_grn_equal_option(rb_syntax, "query")) {
+	flags = GRN_EXPR_SYNTAX_QUERY;
+    } else if (rb_grn_equal_option(rb_syntax, "script")) {
+	flags = GRN_EXPR_SYNTAX_SCRIPT;
     } else {
 	rb_raise(rb_eArgError,
-		 "parser should be one of "
-		 "[nil, :query, :column_query, :script]: %s",
-		 rb_grn_inspect(rb_parser));
+		 "syntax should be one of "
+		 "[nil, :query, :script]: %s",
+		 rb_grn_inspect(rb_syntax));
+    }
+
+    if (NIL_P(rb_allow_pragma)) {
+	if ((flags & GRN_EXPR_SYNTAX_QUERY) == GRN_EXPR_SYNTAX_QUERY)
+	    flags |= GRN_EXPR_ALLOW_PRAGMA;
+    } else {
+	if ((flags & GRN_EXPR_SYNTAX_SCRIPT) == GRN_EXPR_SYNTAX_SCRIPT)
+	    rb_raise(rb_eArgError,
+		 ":allow_pragma isn't allowed in script syntax");
+	if (RVAL2CBOOL(rb_allow_pragma))
+	    flags |= GRN_EXPR_ALLOW_PRAGMA;
+    }
+
+    if (NIL_P(rb_allow_column)) {
+	if ((flags & GRN_EXPR_SYNTAX_QUERY) == GRN_EXPR_SYNTAX_QUERY)
+	    flags |= GRN_EXPR_ALLOW_COLUMN;
+    } else {
+	if ((flags & GRN_EXPR_SYNTAX_SCRIPT) == GRN_EXPR_SYNTAX_SCRIPT)
+	    rb_raise(rb_eArgError,
+		     ":allow_column isn't allowed in script syntax");
+	if (RVAL2CBOOL(rb_allow_column))
+	    flags |= GRN_EXPR_ALLOW_COLUMN;
+    }
+
+    if (NIL_P(rb_allow_update)) {
+	if ((flags & GRN_EXPR_SYNTAX_SCRIPT) == GRN_EXPR_SYNTAX_SCRIPT)
+	    flags |= GRN_EXPR_ALLOW_UPDATE;
+    } else {
+	if ((flags & GRN_EXPR_SYNTAX_QUERY) == GRN_EXPR_SYNTAX_QUERY)
+	    rb_raise(rb_eArgError,
+		     ":allow_update isn't allowed in query syntax");
+	if (RVAL2CBOOL(rb_allow_update))
+	    flags |= GRN_EXPR_ALLOW_UPDATE;
     }
 
     rc = grn_expr_parse(context, expression, query, query_size,
 			default_column, default_mode, default_operator,
-			parse_level);
+			flags);
     if (rc != GRN_SUCCESS) {
 	VALUE related_object;
 

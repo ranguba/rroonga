@@ -19,13 +19,19 @@ module Groonga
   module ExpressionBuildable # :nodoc:
     attr_reader :table
     attr_accessor :query
-    attr_accessor :parser
+    attr_accessor :syntax
+    attr_accessor :allow_pragma
+    attr_accessor :allow_column
+    attr_accessor :allow_update
 
     def initialize(*args)
       @table = nil
       @name = nil
       @query = nil
-      @parser = nil
+      @syntax = nil
+      @allow_pragma = nil
+      @allow_column = nil
+      @allow_update = nil
       @default_column = nil
     end
 
@@ -34,7 +40,7 @@ module Groonga
       variable = expression.define_variable(:domain => @table)
 
       builder = nil
-      builder = match(@query, :parser => @parser) if @query
+      builder = match(@query, default_parse_options) if @query
       if block_given?
         if builder
           builder &= yield(self)
@@ -52,6 +58,16 @@ module Groonga
 
       expression.compile
       expression
+    end
+
+    private
+    def default_parse_options
+      {
+        :syntax => @syntax,
+        :allow_pragma => @allow_pragma,
+        :allow_column => @allow_column,
+        :allow_update => @allow_update,
+      }
     end
 
     class ExpressionBuilder # :nodoc:
@@ -188,7 +204,7 @@ module Groonga
         options = options_or_default_column
       end
       options = options.dup
-      options[:parser] ||= :query
+      options[:syntax] ||= :query
       SubExpressionBuilder.new(query, options)
     end
   end
@@ -232,7 +248,7 @@ module Groonga
 
     def match(query, options={})
       options = options.dup
-      options[:parser] ||= :query
+      options[:syntax] ||= :query
       options[:default_column] = @default_column
       SubExpressionBuilder.new(query, options)
     end

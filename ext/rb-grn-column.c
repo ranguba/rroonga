@@ -248,10 +248,28 @@ rb_grn_column_get_local_name (VALUE self)
  * [+:name+]
  *   条件の名前。省略した場合は名前を付けない。
  *
- * [+:parser+]
- *   _query_をパースする時に使用するパーサー。省略した場合は
- *   +:query+。（FIXME: デフォルトを+:column_query+にして、
- *   +:default_mode+も指定できるようにする？）
+ * [+:syntax+]
+ *   _query_の構文。省略した場合は+:query+。
+ *
+ *   参考: Groonga::Expression#parse.
+ *
+ * [+:allow_pragma+]
+ *   query構文時にプラグマを利用するかどうか。省略した場合は
+ *   利用する。
+ *
+ *   参考: Groonga::Expression#parse.
+ *
+ * [+:allow_column+]
+ *   query構文時にカラム指定を利用するかどうか。省略した場合
+ *   は利用する。
+ *
+ *   参考: Groonga::Expression#parse.
+ *
+ * [+:allow_update+]
+ *   script構文時に更新操作を利用するかどうか。省略した場合
+ *   は利用する。
+ *
+ *   参考: Groonga::Expression#parse.
  */
 static VALUE
 rb_grn_column_select (int argc, VALUE *argv, VALUE self)
@@ -261,10 +279,11 @@ rb_grn_column_select (int argc, VALUE *argv, VALUE self)
     grn_operator operator = GRN_OP_OR;
     VALUE options;
     VALUE rb_query, condition_or_options;
-    VALUE rb_name, rb_operator, rb_result, rb_parser = Qnil;
+    VALUE rb_name, rb_operator, rb_result, rb_syntax;
+    VALUE rb_allow_pragma, rb_allow_column, rb_allow_update;
     VALUE builder;
     VALUE rb_expression = Qnil;
-    
+
     rb_query = Qnil;
 
     rb_scan_args(argc, argv, "02", &condition_or_options, &options);
@@ -288,12 +307,15 @@ rb_grn_column_select (int argc, VALUE *argv, VALUE self)
 		     rb_grn_inspect(rb_ary_new4(argc, argv)));
         options = condition_or_options;
     }
-    
+
     rb_grn_scan_options(options,
 			"operator", &rb_operator,
 			"result", &rb_result,
 			"name", &rb_name,
-			"parser", &rb_parser,
+			"syntax", &rb_syntax,
+			"allow_pragma", &rb_allow_pragma,
+			"allow_column", &rb_allow_column,
+			"allow_update", &rb_allow_update,
 			NULL);
 
     if (!NIL_P(rb_operator))
@@ -311,7 +333,10 @@ rb_grn_column_select (int argc, VALUE *argv, VALUE self)
 
     if (NIL_P(rb_expression)) {
       builder = rb_grn_column_expression_builder_new(self, rb_name, rb_query);
-      rb_funcall(builder, rb_intern("parser="), 1, rb_parser);
+      rb_funcall(builder, rb_intern("syntax="), 1, rb_syntax);
+      rb_funcall(builder, rb_intern("allow_pragma="), 1, rb_allow_pragma);
+      rb_funcall(builder, rb_intern("allow_column="), 1, rb_allow_column);
+      rb_funcall(builder, rb_intern("allow_update="), 1, rb_allow_update);
       rb_expression = rb_grn_column_expression_builder_build(builder);
     }
     rb_grn_object_deconstruct(RB_GRN_OBJECT(DATA_PTR(rb_expression)),
