@@ -105,7 +105,7 @@ groongaには以下の3種類のテーブルがあります。
 いう名前でテーブルを定義します。
 
   >> terms = Groonga::Hash.create(:name => "Terms",
-                                  :key_type => "<shorttext>",
+                                  :key_type => "ShortText",
                                   :default_tokenizer => "TokenBigram")
   => #<Groonga::Hash ...>
 
@@ -177,7 +177,7 @@ http://qwik.jp/senna/senna2.files/rect4605.png
 まず、<tt><users></tt>テーブルを追加します。
 
   >> users = Groonga::Hash.create(:name => "<users>",
-                                  :key_type => "<shorttext>")
+                                  :key_type => "ShortText")
   => #<Groonga::Hash ...>
   >> users.define_column("name", "Text")
   => #<Groonga::VarSizeColumn ...>
