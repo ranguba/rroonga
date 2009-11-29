@@ -220,6 +220,30 @@ class SchemaTest < Test::Unit::TestCase
     assert_nil(context["posts.content"])
   end
 
+  def test_column_again
+    Groonga::Schema.create_table("posts") do |table|
+      table.text :content
+    end
+
+    assert_nothing_raised do
+      Groonga::Schema.create_table("posts") do |table|
+        table.text :content
+      end
+    end
+  end
+
+  def test_column_again_with_difference_type
+    Groonga::Schema.create_table("posts") do |table|
+      table.text :content
+    end
+
+    assert_raise(ArgumentError) do
+      Groonga::Schema.create_table("posts") do |table|
+        table.integer :content
+      end
+    end
+  end
+
   def test_index
     assert_nil(context["<terms>.content"])
     Groonga::Schema.create_table("<posts>") do |table|

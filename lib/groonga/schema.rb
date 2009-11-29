@@ -480,6 +480,21 @@ module Groonga
       end
 
       def define(table)
+        column = table.column(@name)
+        if column
+          if column.range == table.context[Schema.normalize_type(@type)]
+            # TODO: should check other options.
+            return
+          end
+          if @options.delete(:force)
+            column.remove
+          else
+            raise ArgumentError,
+                  "the same name column with different type is " +
+                  "already defined: #{@type.inspect}(#{@options.inspect}): " +
+                  "#{column.inspect}"
+          end
+        end
         table.define_column(@name,
                             Schema.normalize_type(@type),
                             @options)
