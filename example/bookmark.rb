@@ -65,7 +65,7 @@ p(users = Groonga::Hash.create(:name => "<users>",
 p users.define_column("name", "Text",
                       :persistent => persistent)
 
-p(comments = Groonga::Array.create(:name => "<comments>",
+p(comments = Groonga::Array.create(:name => "Comments",
                                    :persistent => persistent))
 p comments.define_column("item", items)
 p comments.define_column("author", users)
@@ -77,7 +77,7 @@ p terms.define_index_column("comment_content", comments,
                             :with_weight => true,
                             :with_section => true,
                             :with_position => true,
-                            :source => "<comments>.content")
+                            :source => "Comments.content")
 
 p users.add("moritan", :name => "モリタン")
 p users.add("taporobo", :name => "タポロボ")

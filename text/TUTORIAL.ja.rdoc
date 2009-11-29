@@ -183,9 +183,9 @@ http://qwik.jp/senna/senna2.files/rect4605.png
   => #<Groonga::VarSizeColumn ...>
 
 
-次に、<tt><comments></tt>テーブルを追加します。
+次に、<tt>Comments</tt>テーブルを追加します。
 
-  >> comments = Groonga::Array.create(:name => "<comments>")
+  >> comments = Groonga::Array.create(:name => "Comments")
   => #<Groonga::Array ...>
   >> comments.define_column("item", items)
   => #<Groonga::FixSizeColumn ..>
@@ -196,11 +196,11 @@ http://qwik.jp/senna/senna2.files/rect4605.png
   >> comments.define_column("issued", "<time>")
   => #<Groonga::FixSizeColumn ..>
 
-<tt><comments></tt>テーブルの+content+カラムを全文検索できる
+<tt>Comments</tt>テーブルの+content+カラムを全文検索できる
 ようにインデックスを定義します。
 
   >> terms.define_index_column("comment_content", comments,
-                               :source => "<comments>.content")
+                               :source => "Comments.content")
   => #<Groonga::IndexColumn ...>
 
 これでテーブルが定義できました。
@@ -231,7 +231,7 @@ http://qwik.jp/senna/senna2.files/rect4605.png
   => #<Groonga::Record ...>
 
 次に、登録したitemを+item+カラムの値に指定して
-<tt><comments></tt>にレコードを登録します。
+<tt>Comments</tt>にレコードを登録します。
 
   >> comments.add(:item => "http://d.hatena.ne.jp/brazil/20050829/1125321936",
                   :author => "moritan",
@@ -260,7 +260,7 @@ http://qwik.jp/senna/senna2.files/rect4605.png
 
 * <tt>Items</tt>テーブルに該当ページのレコードがあるかどうか調べる。
 * レコードがなければ追加する。
-* <tt><comments></tt>テーブルにレコードを登録する。
+* <tt>Comments</tt>テーブルにレコードを登録する。
 
 作成したメソッドを呼び出していくつかブックマークを登録してみ
 ましょう。
@@ -298,7 +298,7 @@ http://qwik.jp/senna/senna2.files/rect4605.png
 
 カラムへのアクセスは、カラム名を+.+で繋いで複合データ型の要素
 を再帰的に辿ることができます。（同様の出力を普通のRDBで実現す
-るためには、<tt>Items</tt>テーブル、<tt><comments></tt>テー
+るためには、<tt>Items</tt>テーブル、<tt>Comments</tt>テー
 ブル、<tt><users></tt>テーブルのJOIN操作が必要になります。）
 
 上の式の中で、肝心の検索処理は、第一引数の式を評価する時点で
@@ -352,15 +352,15 @@ http://qwik.jp/senna/senna2.files/rect4605.png
 出する必要性に迫られます。
 
 今のところ検索対象として利用できるのは<tt>Items.title</tt>
-と<tt><comments>.content</tt>ですが、<tt>Items.title</tt>は
+と<tt>Comments.content</tt>ですが、<tt>Items.title</tt>は
 元ページから得られるやや信頼できる情報なのに対して、
-<tt><comments>.content</tt>はブックマークユーザが任意に設定で
+<tt>Comments.content</tt>はブックマークユーザが任意に設定で
 きる情報で、やや信憑性に乏しいと言えます。しかし、再現率を確
 保するためにはユーザのコメントも是非対象に含めたいところです。
 
 そこで、以下のようなポリシーで検索を行うことにします。
 
-* <tt>Items.title</tt>か<tt><comments>.content</tt>のいずれ
+* <tt>Items.title</tt>か<tt>Comments.content</tt>のいずれ
   かにマッチするitemを検索する。
 * ただし、<tt>Items.title</tt>にマッチしたレコードはスコア
   を10倍重み付けする。
