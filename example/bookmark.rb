@@ -36,7 +36,7 @@ persistent = true
 
 p Groonga::Database.create(:path => path)
 
-p(items = Groonga::Hash.create(:name => "<items>",
+p(items = Groonga::Hash.create(:name => "Items",
                                :key_type => "ShortText",
                                :persistent => persistent))
 
@@ -54,7 +54,7 @@ p terms.define_index_column("item_title", items,
                             :with_weight => true,
                             :with_section => true,
                             :with_position => true,
-                            :source => "<items>.title")
+                            :source => "Items.title")
 
 p items.find("http://ja.wikipedia.org/wiki/Ruby")["title"] = "Ruby"
 p items.find("http://www.ruby-lang.org/")["title"] = "オブジェクト指向スクリプト言語Ruby"

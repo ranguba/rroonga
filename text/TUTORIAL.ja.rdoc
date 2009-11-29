@@ -50,14 +50,14 @@ groongaには以下の3種類のテーブルがあります。
   配列。主キーの存在しないテーブルです。レコードはIDによって
   識別します。
 
-ここではハッシュテーブルを利用して、<tt><items></tt>という名前のテー
+ここではハッシュテーブルを利用して、<tt>Items</tt>という名前のテー
 ブルを作成します。キーは文字列とします。
 
-  >> items = Groonga::Hash.create(:name => "<items>", :key_type => "ShortText")
+  >> items = Groonga::Hash.create(:name => "Items", :key_type => "ShortText")
   => #<Groonga::Hash ...>
 
 
-これで<tt><items></tt>という名前のテーブルが作成できました。
+これで<tt>Items</tt>という名前のテーブルが作成できました。
 
 テーブルはRubyのHashのように扱えます。
 
@@ -69,7 +69,7 @@ groongaには以下の3種類のテーブルがあります。
 
 == レコードを追加する
 
-<tt><items></tt>テーブルにレコードを追加します。
+<tt>Items</tt>テーブルにレコードを追加します。
 
   >> items.add("http://ja.wikipedia.org/wiki/Ruby")
   => #<Groonga::Record ...>
@@ -91,7 +91,7 @@ groongaには以下の3種類のテーブルがあります。
 各itemのタイトル文字列を登録して、全文検索できるようにしてみ
 ましょう。
 
-まず<tt><items></tt>テーブルに+title+という名前のカラムを追加します。
+まず<tt>Items</tt>テーブルに+title+という名前のカラムを追加します。
 
   >> title_column = items.define_column("title", "<text>")
   => #<Groonga::VarSizeColumn ...>
@@ -121,18 +121,18 @@ N-gramを利用した全文検索では、分解したN文字とその出現位�
 るかの文字数になります。groongaは1文字で分解するユニグラム、
 2文字のバイグラム、3文字のトリグラムをサポートしています。
 
-単語格納用テーブルの準備ができたので、<tt><items></tt>テーブ
+単語格納用テーブルの準備ができたので、<tt>Items</tt>テーブ
 ルの+title+カラムに対するインデックスを定義します。
 
   >> title_index_column = terms.define_index_column("item_title", items,
-						    :source => "<items>.title")
+						    :source => "Items.title")
   => #<Groonga::IndexColumn ...>
 
-少し違和感を感じるかも知れませんが、<tt><items></tt>テーブル
+少し違和感を感じるかも知れませんが、<tt>Items</tt>テーブル
 のカラムに対するインデックスは、<tt><terms></tt>テーブルのカ
 ラムとして定義します。
 
-<tt><items></tt>にレコードが登録されると、その中に含まれる単
+<tt>Items</tt>にレコードが登録されると、その中に含まれる単
 語に該当するレコードが<tt><terms></tt>に自動的に追加されるよ
 うになります。
 
@@ -157,9 +157,9 @@ N-gramを利用した全文検索では、分解したN文字とその出現位�
   ["http://ja.wikipedia.org/wiki/Ruby", "http://www.ruby-lang.org/"]
 
 検索結果はGroonga::Hashで返されます。ハッシュのキーに見つかっ
-た<tt><items></tt>のレコードが入っています。上の例では
-+record.key+で<tt><items></tt>のレコードを取得して、さらにそ
-のキーを指定して（+record.key.key+）で<tt><items></tt>のキー
+た<tt>Items</tt>のレコードが入っています。上の例では
++record.key+で<tt>Items</tt>のレコードを取得して、さらにそ
+のキーを指定して（+record.key.key+）で<tt>Items</tt>のキー
 を返しています。
 
 
@@ -218,13 +218,13 @@ http://qwik.jp/senna/senna2.files/rect4605.png
 ユーザ+moritan+が、はてなダイアリーのとあるページをブックマーク
 したと想定します。
 
-まず対象のページが<tt><items></tt>テーブルに登録済かどうか調
+まず対象のページが<tt>Items</tt>テーブルに登録済かどうか調
 べます。
 
   >> items.find("http://d.hatena.ne.jp/brazil/20050829/1125321936")
   => nil
 
-未登録なのでまず当該ページを<tt><items></tt>に登録します。
+未登録なのでまず当該ページを<tt>Items</tt>に登録します。
 
   >> items.add("http://d.hatena.ne.jp/brazil/20050829/1125321936",
                :title => "[翻訳]JavaScript: 世界で最も誤解されたプログラミング言語")
@@ -258,7 +258,7 @@ http://qwik.jp/senna/senna2.files/rect4605.png
 
 +add_bookmark+は以下のような手順を実行しています。
 
-* <tt><items></tt>テーブルに該当ページのレコードがあるかどうか調べる。
+* <tt>Items</tt>テーブルに該当ページのレコードがあるかどうか調べる。
 * レコードがなければ追加する。
 * <tt><comments></tt>テーブルにレコードを登録する。
 
@@ -298,7 +298,7 @@ http://qwik.jp/senna/senna2.files/rect4605.png
 
 カラムへのアクセスは、カラム名を+.+で繋いで複合データ型の要素
 を再帰的に辿ることができます。（同様の出力を普通のRDBで実現す
-るためには、<tt><items></tt>テーブル、<tt><comments></tt>テー
+るためには、<tt>Items</tt>テーブル、<tt><comments></tt>テー
 ブル、<tt><users></tt>テーブルのJOIN操作が必要になります。）
 
 上の式の中で、肝心の検索処理は、第一引数の式を評価する時点で
@@ -351,8 +351,8 @@ http://qwik.jp/senna/senna2.files/rect4605.png
 ブックマークが大量に蓄積されるに従って、より的確に適合度を算
 出する必要性に迫られます。
 
-今のところ検索対象として利用できるのは<tt><items>.title</tt>
-と<tt><comments>.content</tt>ですが、<tt><items>.title</tt>は
+今のところ検索対象として利用できるのは<tt>Items.title</tt>
+と<tt><comments>.content</tt>ですが、<tt>Items.title</tt>は
 元ページから得られるやや信頼できる情報なのに対して、
 <tt><comments>.content</tt>はブックマークユーザが任意に設定で
 きる情報で、やや信憑性に乏しいと言えます。しかし、再現率を確
@@ -360,9 +360,9 @@ http://qwik.jp/senna/senna2.files/rect4605.png
 
 そこで、以下のようなポリシーで検索を行うことにします。
 
-* <tt><items>.title</tt>か<tt><comments>.content</tt>のいずれ
+* <tt>Items.title</tt>か<tt><comments>.content</tt>のいずれ
   かにマッチするitemを検索する。
-* ただし、<tt><items>.title</tt>にマッチしたレコードはスコア
+* ただし、<tt>Items.title</tt>にマッチしたレコードはスコア
   を10倍重み付けする。
 * 同一のitemに対して、キーワードにマッチする<tt>comment</tt>
   が複数存在した場合は、それぞれの<tt>comment</tt>のスコアの
