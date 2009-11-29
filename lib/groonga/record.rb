@@ -121,7 +121,7 @@ module Groonga
     # レコードのスコア値を返す。検索結果として生成されたテーブル
     # のみに定義される。
     def score
-      self[".:score"]
+      self["._score"]
     end
 
     # call-seq:

@@ -143,7 +143,7 @@ class ColumnTest < Test::Unit::TestCase
     result = content_index.search("drive")
     assert_equal([["I'm also like drive", "My Hobby"]],
                  result.records.collect do |record|
-                   [record[".content"], record[".post.:key"]]
+                   [record[".content"], record[".post._key"]]
                  end)
   end
 
