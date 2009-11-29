@@ -381,8 +381,8 @@ unionして出力します。
 
   >> ruby_items = ruby_comments.group([".item"]).union!(ruby_items)
   #<Groonga::Hash ..., size: <4>>
-  >> ruby_items.sort([{:key => ".:score", :order => "descendant"}]).each do |record|
-  >>   p [record[".:score"], record[".title"]]
+  >> ruby_items.sort([{:key => "._score", :order => "descendant"}]).each do |record|
+  >>   p [record["._score"], record[".title"]]
   >> end
   [1, "るびま"]
   [1, "オブジェクトスクリプト言語Ruby"]

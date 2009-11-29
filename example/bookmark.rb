@@ -154,6 +154,6 @@ p ruby_comments = @comments.select {|record| record["content"] =~ "Ruby"}
 p ruby_items = @items.select("*W1:50 title:%Ruby")
 
 p ruby_items = ruby_comments.group([".item"]).union!(ruby_items)
-ruby_items.sort([{:key => ".:score", :order => "descending"}]).each do |record|
-  p [record[".:score"], record[".title"]]
+ruby_items.sort([{:key => "._score", :order => "descending"}]).each do |record|
+  p [record["._score"], record[".title"]]
 end
