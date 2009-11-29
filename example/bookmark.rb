@@ -70,7 +70,7 @@ p(comments = Groonga::Array.create(:name => "Comments",
 p comments.define_column("item", items)
 p comments.define_column("author", users)
 p comments.define_column("content", "Text")
-p comments.define_column("issued", "<time>")
+p comments.define_column("issued", "Time")
 
 p terms.define_index_column("comment_content", comments,
                             :persistent => persistent,

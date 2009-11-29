@@ -193,7 +193,7 @@ http://qwik.jp/senna/senna2.files/rect4605.png
   => #<Groonga::FixSizeColumn ..>
   >> comments.define_column("content", "Text")
   => #<Groonga::VarSizeColumn ..>
-  >> comments.define_column("issued", "<time>")
+  >> comments.define_column("issued", "Time")
   => #<Groonga::FixSizeColumn ..>
 
 <tt>Comments</tt>テーブルの+content+カラムを全文検索できる
