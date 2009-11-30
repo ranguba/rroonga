@@ -23,6 +23,7 @@ module Groonga
     attr_accessor :allow_pragma
     attr_accessor :allow_column
     attr_accessor :allow_update
+    attr_accessor :default_column
 
     def initialize(*args)
       @table = nil
@@ -67,6 +68,7 @@ module Groonga
         :allow_pragma => @allow_pragma,
         :allow_column => @allow_column,
         :allow_update => @allow_update,
+        :default_column => @default_column,
       }
     end
 
