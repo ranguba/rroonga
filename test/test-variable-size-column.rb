@@ -36,6 +36,12 @@ class VariableSizeColumnTest < Test::Unit::TestCase
     @friends = @users.define_column("friends", @users,
                                     :type => :vector,
                                     :path => @users_friends_column_path.to_s)
+
+    @users_nick_names_column_path = @columns_dir + "nick_names"
+    @nick_names =
+      @users.define_column("nick_names", "ShortText",
+                           :type => :vector,
+                           :path => @users_nick_names_column_path.to_s)
   end
 
   def setup_users
@@ -78,5 +84,15 @@ class VariableSizeColumnTest < Test::Unit::TestCase
     assert_equal([@yu], @morita["friends"])
     @morita.prepend("friends", @gunyara_kun)
     assert_equal([@gunyara_kun, @yu], @morita["friends"])
+  end
+
+  def test_string_vector
+    omit("append/prepend for non table domain column " +
+         "isn't supported by groonga.")
+    assert_equal([], @morita["nick_names"])
+    @morita.append("nick_names", "morita")
+    assert_equal(["morita"], @morita["nick_names"])
+    @morita.prepend("nick_names", "moritapo")
+    assert_equal(["moritapo", "morita"], @morita["nick_names"])
   end
 end

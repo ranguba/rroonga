@@ -390,30 +390,32 @@ rb_grn_bulk_from_ruby_object_with_type (VALUE object, grn_ctx *context,
 }
 
 
-/* FIXME: maybe not work */
 VALUE
 rb_grn_vector_to_ruby_object (grn_ctx *context, grn_obj *vector)
 {
     VALUE array;
+    grn_obj value;
     unsigned int i, n;
 
     if (!vector)
 	return Qnil;
 
+    GRN_VOID_INIT(&value);
     n = grn_vector_size(context, vector);
     array = rb_ary_new2(n);
     for (i = 0; i < n; i++) {
-	const char *value;
+	const char *_value;
 	unsigned int weight, length;
 	grn_id domain;
 
 	length = grn_vector_get_element(context, vector, i,
-					&value, &weight, &domain);
-	rb_ary_push(array,
-		    rb_ary_new3(2,
-				rb_str_new(value, length), /* FIXME */
-				UINT2NUM(weight)));
+					&_value, &weight, &domain);
+	grn_obj_reinit(context, &value, domain, 0);
+	grn_bulk_write(context, &value, _value, length);
+	rb_ary_push(array, GRNOBJ2RVAL(Qnil, context, &value, Qnil));
+	/* UINT2NUM(weight); */ /* TODO: How handle weight? */
     }
+    GRN_OBJ_FIN(context, &value);
 
     return array;
 }
@@ -422,6 +424,7 @@ grn_obj *
 rb_grn_vector_from_ruby_object (VALUE object, grn_ctx *context, grn_obj *vector)
 {
     VALUE *values;
+    grn_obj value;
     int i, n;
 
     if (vector)
@@ -432,19 +435,19 @@ rb_grn_vector_from_ruby_object (VALUE object, grn_ctx *context, grn_obj *vector)
     if (NIL_P(object))
 	return vector;
 
+    GRN_VOID_INIT(&value);
     n = RARRAY_LEN(object);
     values = RARRAY_PTR(object);
     for (i = 0; i < n; i++) {
-	VALUE rb_value;
-	grn_id id;
-	void *grn_value;
-
-	rb_value = values[i];
-	id = NUM2UINT(rb_value);
-	grn_value = &id;
-	grn_vector_add_element(context, vector, grn_value, sizeof(id),
-			       0, GRN_ID_NIL);
+	grn_obj *_value = &value;
+	RVAL2GRNOBJ(values[i], context, &_value);
+	grn_vector_add_element(context, vector,
+			       GRN_BULK_HEAD(&value),
+			       GRN_BULK_VSIZE(&value),
+			       0,
+			       value.header.domain);
     }
+    GRN_OBJ_FIN(context, &value);
 
     return vector;
 }
@@ -538,6 +541,9 @@ rb_grn_value_to_ruby_object (grn_ctx *context,
 	    }
 	    return rb_value;
 	}
+	break;
+      case GRN_VECTOR:
+	return GRNVECTOR2RVAL(context, value);
 	break;
       default:
 	rb_raise(rb_eGrnError,
@@ -721,7 +727,10 @@ rb_grn_obj_to_ruby_object (VALUE klass, grn_ctx *context,
 
     switch (obj->header.type) {
       case GRN_VOID:
-	return Qnil;
+	if (GRN_BULK_VSIZE(obj) > 0)
+	    return rb_str_new(GRN_BULK_HEAD(obj), GRN_BULK_VSIZE(obj));
+	else
+	    return Qnil;
 	break;
       case GRN_BULK:
 	return GRNBULK2RVAL(context, obj, related_object);
