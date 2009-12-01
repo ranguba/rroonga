@@ -23,12 +23,14 @@ class ProcedureTest < Test::Unit::TestCase
     assert_equal_procedure("TokenUnigram", Groonga::Procedure::UNIGRAM)
     assert_equal_procedure("TokenBigram", Groonga::Procedure::BIGRAM)
     assert_equal_procedure("TokenTrigram", Groonga::Procedure::TRIGRAM)
-    assert_equal_procedure("TokenMecab", Groonga::Procedure::MECAB)
+    assert_equal_procedure("TokenMecab", Groonga::Procedure::MECAB,
+                           :accept_nil => true)
   end
 
   private
-  def assert_equal_procedure(expected_name, id)
+  def assert_equal_procedure(expected_name, id, options={})
     procedure = Groonga::Context.default[id]
+    expected_name = nil if procedure.nil? and options[:accept_nil]
     assert_equal(expected_name,
                  procedure ? procedure.name : procedure)
   end
