@@ -33,9 +33,9 @@ module TestOffsetAndLimitSupport
   end
 
   def test_zero_and_positive_limit
-    assert_equal((100...200).to_a[0,0], get_ids(:limit => 0))
-    assert_equal((100...200).to_a[0,32], get_ids(:limit => 32))
-    assert_equal((100...200).to_a[0,100], get_ids(:limit => 100))
+    assert_equal((100...200).to_a[0, 0], get_ids(:limit => 0))
+    assert_equal((100...200).to_a[0, 32], get_ids(:limit => 32))
+    assert_equal((100...200).to_a[0, 100], get_ids(:limit => 100))
     assert_nothing_raised do
       get_ids(:limit => 101)
     end
