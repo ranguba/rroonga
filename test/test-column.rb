@@ -184,7 +184,8 @@ class ColumnTest < Test::Unit::TestCase
                    record["body"]
                  end)
     assert_equal("#<Groonga::Expression noname(?0:\"\")" +
-                 "{body GET_VALUE \"drive\" MATCH}>", result.expression.inspect)
+                 "{body GET_VALUE \"drive\" MATCH}>",
+                 result.expression.inspect)
   end
 
   def test_select_query_with_parser
@@ -196,7 +197,8 @@ class ColumnTest < Test::Unit::TestCase
                    record["body"]
                  end)
     assert_equal("#<Groonga::Expression noname(?0:\"\")" +
-                 "{body GET_VALUE \"drive\" MATCH}>", result.expression.inspect)
+                 "{body GET_VALUE \"drive\" MATCH}>",
+                 result.expression.inspect)
   end
 
   def test_select_expression
@@ -213,7 +215,8 @@ class ColumnTest < Test::Unit::TestCase
                    record["body"]
                  end)
     assert_equal("#<Groonga::Expression noname(?0:\"\")" +
-                 "{?0 body GET_VALUE \"drive\" MATCH}>", result.expression.inspect)
+                 "{?0 body GET_VALUE \"drive\" MATCH}>",
+                 result.expression.inspect)
   end
 
   def test_select_with_block
@@ -227,7 +230,8 @@ class ColumnTest < Test::Unit::TestCase
                    record["body"]
                  end)
     assert_equal("#<Groonga::Expression noname(?0:\"\")" +
-                 "{?0 body GET_VALUE \"drive\" MATCH}>", result.expression.inspect)
+                 "{?0 body GET_VALUE \"drive\" MATCH}>",
+                 result.expression.inspect)
   end
 
   def test_set_time
