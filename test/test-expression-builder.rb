@@ -135,4 +135,12 @@ class ExpressionBuilderTest < Test::Unit::TestCase
     assert_equal(["http://groonga.org/", "http://ruby-lang.org/"],
                  result.collect {|record| record.key["uri"]})
   end
+
+  def test_nested_column
+    result = @bookmarks.select do |record|
+      record[".user.name"] == @morita["name"]
+    end
+    assert_equal(["http://groonga.org/", "http://ruby-lang.org/"],
+                 result.collect {|record| record.key["uri"]})
+  end
 end
