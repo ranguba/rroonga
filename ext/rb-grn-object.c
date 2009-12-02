@@ -93,10 +93,10 @@ rb_grn_object_finalizer (grn_ctx *context, int n_args, grn_obj **grn_objects,
     grn_obj_user_data(context, grn_object)->ptr = NULL;
     grn_obj_set_finalizer(context, grn_object, NULL);
 
-    debug("finalize %p:%p:%p:%p:%p %x\n",
-	   context, grn_object, rb_grn_object,
-	   rb_grn_object->context, rb_grn_object->object,
-	   grn_object->header.type);
+    debug("finalize: %p:%p:%p:%p:%p 0x%x\n",
+	  context, grn_object, rb_grn_object,
+	  rb_grn_object->context, rb_grn_object->object,
+	  grn_object->header.type);
 
     rb_grn_object->context = NULL;
     rb_grn_object->object = NULL;
