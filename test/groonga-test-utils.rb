@@ -16,7 +16,12 @@
 require 'fileutils'
 require 'pathname'
 require 'time'
-require 'json'
+begin
+  require 'json'
+rescue LoadError
+  require 'rubygems'
+  require 'json'
+end
 require 'pkg-config'
 
 require 'groonga'
