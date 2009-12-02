@@ -198,6 +198,7 @@ static VALUE
 rb_grn_expression_append_constant (int argc, VALUE *argv, VALUE self)
 {
     VALUE rb_constant, rb_operator, rb_n_arguments;
+    VALUE exception;
     grn_ctx *context = NULL;
     grn_obj *expression, *constant = NULL;
     grn_operator operator = GRN_OP_PUSH;
@@ -215,8 +216,12 @@ rb_grn_expression_append_constant (int argc, VALUE *argv, VALUE self)
 
     RVAL2GRNOBJ(rb_constant, context, &constant);
     grn_expr_append_const(context, expression, constant, operator, n_arguments);
+
+    exception = rb_grn_context_to_exception(context, self);
     grn_obj_close(context, constant);
-    rb_grn_context_check(context, self);
+    if (!NIL_P(exception))
+	rb_exc_raise(exception);
+
     return self;
 }
 
