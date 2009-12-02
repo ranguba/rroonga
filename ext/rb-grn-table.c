@@ -657,6 +657,7 @@ rb_grn_table_add_column (VALUE self, VALUE rb_name, VALUE rb_value_type,
 static VALUE
 rb_grn_table_get_column (VALUE self, VALUE rb_name)
 {
+    grn_user_data *user_data;
     grn_ctx *context = NULL;
     grn_obj *table;
     grn_obj *column;
@@ -686,6 +687,13 @@ rb_grn_table_get_column (VALUE self, VALUE rb_name)
 
     column = grn_obj_column(context, table, name, name_size);
     rb_grn_context_check(context, self);
+    user_data = grn_obj_user_data(context, column);
+    if (user_data) {
+	RbGrnObject *rb_grn_object;
+	rb_grn_object = user_data->ptr;
+	if (rb_grn_object)
+	    return rb_grn_object->self;
+    }
 
     owner = (column && column->header.type == GRN_ACCESSOR);
     rb_column = GRNCOLUMN2RVAL(Qnil, context, column, owner);
