@@ -1046,6 +1046,7 @@ rb_grn_table_sort (int argc, VALUE *argv, VALUE self)
     VALUE *rb_sort_keys;
     grn_table_cursor *cursor;
     VALUE rb_result;
+    VALUE exception;
 
     rb_grn_table_deconstruct(SELF(self), &table, &context,
 			     NULL, NULL,
@@ -1116,6 +1117,11 @@ rb_grn_table_sort (int argc, VALUE *argv, VALUE self)
 			      NULL, table);
     n_records = grn_table_sort(context, table, offset, limit,
 			       result, keys, n_keys);
+    exception = rb_grn_context_to_exception(context, self);
+    if (!NIL_P(exception)) {
+        grn_obj_close(context, result);
+        rb_exc_raise(exception);
+    }
 
     rb_result = rb_ary_new();
     cursor = grn_table_cursor_open(context, result, NULL, 0, NULL, 0,
@@ -1130,8 +1136,6 @@ rb_grn_table_sort (int argc, VALUE *argv, VALUE self)
     }
     grn_table_cursor_close(context, cursor);
     grn_obj_close(context, result);
-
-    rb_grn_context_check(context, self); /* FIXME: here is too late */
 
     return rb_result;
 }
