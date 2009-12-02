@@ -851,6 +851,8 @@ rb_grn_table_open_grn_cursor (int argc, VALUE *argv, VALUE self,
  *
  * [+:limit+]
  *   該当する範囲のレコードのうち、_:limit_件のみを取り出す。
+ *   省略された場合または-1が指定された場合は、全件が指定され
+ *   たものとみなす。
  *
  * [+:order+]
  *   +:asc+または+:ascending+を指定すると昇順にレコードを取
@@ -1031,6 +1033,8 @@ rb_grn_table_delete (VALUE self, VALUE rb_id)
  *
  * [+:limit+]
  *   ソートされたレコードのうち、_:limit_件のみを取り出す。
+ *   省略された場合または-1が指定された場合は、全件が指定され
+ *   たものとみなす。
  */
 static VALUE
 rb_grn_table_sort (int argc, VALUE *argv, VALUE self)
