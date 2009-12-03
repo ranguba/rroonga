@@ -15,18 +15,18 @@
 
 module TestOffsetAndLimitSupport
   def test_zero_and_positive_offset
-    assert_equal(((100+0)...200).to_a, ids(:offset => 0))
-    assert_equal(((100+32)...200).to_a, ids(:offset => 32))
-    assert_equal(((100+99)...200).to_a, ids(:offset => 99))
+    assert_equal(((100 + 0)...200).to_a, ids(:offset => 0))
+    assert_equal(((100 + 32)...200).to_a, ids(:offset => 32))
+    assert_equal(((100 + 99)...200).to_a, ids(:offset => 99))
     assert_raise(Groonga::InvalidArgument) do
       ids(:offset => 100)
     end
   end
 
   def test_negative_offset
-    assert_equal(((200-1)...200).to_a, ids(:offset => -1))
-    assert_equal(((200-32)...200).to_a, ids(:offset => -32))
-    assert_equal(((200-100)...200).to_a, ids(:offset => -100))
+    assert_equal(((200 - 1)...200).to_a, ids(:offset => -1))
+    assert_equal(((200 - 32)...200).to_a, ids(:offset => -32))
+    assert_equal(((200 - 100)...200).to_a, ids(:offset => -100))
     assert_raise(Groonga::InvalidArgument) do
       ids(:offset => -101)
     end
@@ -102,4 +102,3 @@ class TestTableSortOffsetAndLimit < TestOffsetAndLimit
     ids
   end
 end
-
