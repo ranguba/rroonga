@@ -15,38 +15,38 @@
 
 module TestOffsetAndLimitSupport
   def test_zero_and_positive_offset
-    assert_equal(((100+0)...200).to_a, get_ids(:offset => 0))
-    assert_equal(((100+32)...200).to_a, get_ids(:offset => 32))
-    assert_equal(((100+99)...200).to_a, get_ids(:offset => 99))
+    assert_equal(((100+0)...200).to_a, ids(:offset => 0))
+    assert_equal(((100+32)...200).to_a, ids(:offset => 32))
+    assert_equal(((100+99)...200).to_a, ids(:offset => 99))
     assert_raise(Groonga::InvalidArgument) do
-      get_ids(:offset => 100)
+      ids(:offset => 100)
     end
   end
 
   def test_negative_offset
-    assert_equal(((200-1)...200).to_a, get_ids(:offset => -1))
-    assert_equal(((200-32)...200).to_a, get_ids(:offset => -32))
-    assert_equal(((200-100)...200).to_a, get_ids(:offset => -100))
+    assert_equal(((200-1)...200).to_a, ids(:offset => -1))
+    assert_equal(((200-32)...200).to_a, ids(:offset => -32))
+    assert_equal(((200-100)...200).to_a, ids(:offset => -100))
     assert_raise(Groonga::InvalidArgument) do
-      get_ids(:offset => -101)
+      ids(:offset => -101)
     end
   end
 
   def test_zero_and_positive_limit
-    assert_equal((100...200).to_a[0, 0], get_ids(:limit => 0))
-    assert_equal((100...200).to_a[0, 32], get_ids(:limit => 32))
-    assert_equal((100...200).to_a[0, 100], get_ids(:limit => 100))
+    assert_equal((100...200).to_a[0, 0], ids(:limit => 0))
+    assert_equal((100...200).to_a[0, 32], ids(:limit => 32))
+    assert_equal((100...200).to_a[0, 100], ids(:limit => 100))
     assert_nothing_raised do
-      get_ids(:limit => 101)
+      ids(:limit => 101)
     end
   end
 
   def test_negative_limit
-    assert_equal((100...200).to_a[0..-1], get_ids(:limit => -1))
-    assert_equal((100...200).to_a[0..-32], get_ids(:limit => -32))
-    assert_equal((100...200).to_a[0..-100], get_ids(:limit => -100))
+    assert_equal((100...200).to_a[0..-1], ids(:limit => -1))
+    assert_equal((100...200).to_a[0..-32], ids(:limit => -32))
+    assert_equal((100...200).to_a[0..-100], ids(:limit => -100))
     assert_raise(Groonga::InvalidArgument) do
-      get_ids(:offset => -101)
+      ids(:offset => -101)
     end
   end
 
@@ -77,8 +77,9 @@ end
 
 class TestTableCursorOffsetAndLimit < TestOffsetAndLimit
   include TestOffsetAndLimitSupport
+
   private
-  def get_ids(options={})
+  def ids(options={})
     ids = []
     @bookmarks.open_cursor(options) do |cursor|
       cursor.each do |record|
@@ -91,8 +92,9 @@ end
 
 class TestTableSortOffsetAndLimit < TestOffsetAndLimit
   include TestOffsetAndLimitSupport
+
   private
-  def get_ids(options={})
+  def ids(options={})
     ids = []
     @bookmarks.sort([:key => "id", :order => :asc], options).each do |record|
       ids << record["id"]
