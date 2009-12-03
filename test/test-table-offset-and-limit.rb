@@ -52,8 +52,8 @@ module TestOffsetAndLimitSupport
 
   private
   def create_bookmarks
-    @bookmarks = Groonga::Array.create(:name => "<bookmarks>")
-    @bookmarks.define_column("id", "<int>")
+    @bookmarks = Groonga::Array.create(:name => "Bookmarks")
+    @bookmarks.define_column("id", "Int32")
     @bookmarks
   end
 
