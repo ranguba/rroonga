@@ -33,18 +33,20 @@ module TestOffsetAndLimitSupport
   end
 
   def test_zero_and_positive_limit
-    assert_equal((100...200).to_a[0, 0], ids(:limit => 0))
-    assert_equal((100...200).to_a[0, 32], ids(:limit => 32))
-    assert_equal((100...200).to_a[0, 100], ids(:limit => 100))
+    all_ids = (100...200).to_a
+    assert_equal(all_ids[0, 0], ids(:limit => 0))
+    assert_equal(all_ids[0, 32], ids(:limit => 32))
+    assert_equal(all_ids[0, 100], ids(:limit => 100))
     assert_nothing_raised do
       ids(:limit => 101)
     end
   end
 
   def test_negative_limit
-    assert_equal((100...200).to_a[0..-1], ids(:limit => -1))
-    assert_equal((100...200).to_a[0..-32], ids(:limit => -32))
-    assert_equal((100...200).to_a[0..-100], ids(:limit => -100))
+    all_ids = (100...200).to_a
+    assert_equal(all_ids[0..-1], ids(:limit => -1))
+    assert_equal(all_ids[0..-32], ids(:limit => -32))
+    assert_equal(all_ids[0..-100], ids(:limit => -100))
     assert_raise(Groonga::InvalidArgument) do
       ids(:offset => -101)
     end
