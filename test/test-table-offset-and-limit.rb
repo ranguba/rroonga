@@ -60,7 +60,7 @@ module TestOffsetAndLimitSupport
   end
 
   def add_ids
-    (0...100).to_a.each do |i|
+    100.times do |i|
       bookmark = @bookmarks.add
       bookmark["id"] = i + 100
     end
