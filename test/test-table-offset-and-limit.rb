@@ -82,13 +82,11 @@ class TestTableCursorOffsetAndLimit < TestOffsetAndLimit
 
   private
   def ids(options={})
-    ids = []
     @bookmarks.open_cursor(options) do |cursor|
-      cursor.each do |record|
-        ids << record["id"]
+      cursor.collect do |record|
+        record["id"]
       end
     end
-    ids
   end
 end
 
@@ -97,10 +95,8 @@ class TestTableSortOffsetAndLimit < TestOffsetAndLimit
 
   private
   def ids(options={})
-    ids = []
-    @bookmarks.sort([:key => "id", :order => :asc], options).each do |record|
-      ids << record["id"]
+    @bookmarks.sort([:key => "id", :order => :asc], options).collect do |record|
+      record["id"]
     end
-    ids
   end
 end
