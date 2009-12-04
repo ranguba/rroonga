@@ -257,7 +257,7 @@ module Groonga
     def match(query, options={})
       options = options.dup
       options[:syntax] ||= :query
-      options[:default_column] = @default_column.local_name
+      options[:default_column] = @column_name
       SubExpressionBuilder.new(query, options)
     end
 
