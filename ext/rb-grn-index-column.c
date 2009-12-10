@@ -132,9 +132,9 @@ rb_grn_index_column_deconstruct (RbGrnIndexColumn *rb_grn_index_column,
  *   articles.define_column("content", "<text>")
  *
  *   terms = Groonga::Hash.create(:name => "<terms>",
- *                                :with_section => true,
  *                                :default_tokenizer => "TokenBigram")
- *   content_index = terms.define_index_column("content", articles)
+ *   content_index = terms.define_index_column("content", articles,
+ *                                             :with_section => true)
  *
  *   content = <<-EOC
  *   groonga は組み込み型の全文検索エンジンライブラリです。
