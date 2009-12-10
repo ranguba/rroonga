@@ -246,6 +246,14 @@ class ColumnTest < Test::Unit::TestCase
     assert_in_delta(Time.at(1251380635.1234567).usec, post[".issued"].usec, 10)
   end
 
+  def test_set_nil_to_time
+    posts = Groonga::Hash.create(:name => "Posts", :key_type => "ShortText")
+    body = posts.define_column("issued", "Time")
+
+    post = posts.add("hello", :issued => nil)
+    assert_equal(Time.at(0), post["issued"])
+  end
+
   private
   def assert_content_search(expected_records, term)
     records = @bookmarks_index_content.search(term).records

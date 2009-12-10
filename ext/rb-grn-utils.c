@@ -341,6 +341,10 @@ rb_grn_bulk_from_ruby_object_with_type (VALUE object, grn_ctx *context,
                 sec = NUM2LL(rb_sec);
                 usec = (int32_t)(NUM2DBL(rb_usec) * 1000000);
                 break;
+	    case T_NIL:
+	        sec = 0;
+	        usec = 0;
+	        break;
             default:
                 sec = NUM2LL(rb_funcall(object, rb_intern("to_i"), 0));
                 usec = NUM2INT(rb_funcall(object, rb_intern("usec"), 0));
