@@ -441,8 +441,6 @@ rb_grn_context_connect (int argc, VALUE *argv, VALUE self)
  *   context.send(string) -> ID
  *
  * groongaサーバにクエリ文字列を送信する。
- *
- * 実験的: APIが変わる可能性があります。
  */
 static VALUE
 rb_grn_context_send (VALUE self, VALUE rb_string)
@@ -467,8 +465,6 @@ rb_grn_context_send (VALUE self, VALUE rb_string)
  *   context.receive -> [ID, String]
  *
  * groongaサーバからクエリ実行結果文字列を受信する。
- *
- * 実験的: APIが変わる可能性があります。
  */
 static VALUE
 rb_grn_context_receive (VALUE self)
