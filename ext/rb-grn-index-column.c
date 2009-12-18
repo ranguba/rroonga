@@ -18,6 +18,8 @@
 
 #include "rb-grn.h"
 
+#include <string.h>
+
 #define SELF(object) ((RbGrnIndexColumn *)DATA_PTR(object))
 
 VALUE rb_cGrnIndexColumn;
@@ -264,6 +266,53 @@ rb_grn_index_column_get_sources (VALUE self)
     return rb_sources;
 }
 
+static grn_id
+resolve_source_id (grn_ctx *context, grn_obj *column, VALUE rb_source)
+{
+    grn_id source_id;
+
+    if (CBOOL2RVAL(rb_obj_is_kind_of(rb_source, rb_cInteger))) {
+	source_id = NUM2UINT(rb_source);
+    } else {
+	grn_obj *source;
+
+	if (TYPE(rb_source) == T_STRING) {
+	    grn_obj *table;
+	    const char *name;
+	    const char *dot_point;
+	    int length;
+
+	    table = grn_ctx_at(context, grn_obj_get_range(context, column));
+	    name = StringValueCStr(rb_source);
+	    length = RSTRING_LEN(rb_source);
+	    dot_point = strstr(name, ".");
+	    if (dot_point) {
+		char table_name[4096];
+		int table_name_length;
+
+		table_name_length = grn_obj_name(context, table,
+						 table_name, sizeof(table_name));
+		table_name[table_name_length] = '\0';
+		if (strncmp(table_name, name, dot_point - name) != 0) {
+		    rb_raise(rb_eArgError,
+			     "wrong table's column: <%s>: "
+			     "expected table: <%s>",
+			     name, table_name);
+		}
+		length -= (dot_point - name) + 1;
+		name = dot_point + 1;
+	    }
+	    source = grn_obj_column(context, table, name, length);
+	} else {
+	    source = RVAL2GRNOBJECT(rb_source, &context);
+	}
+	rb_grn_context_check(context, rb_source);
+	source_id = grn_obj_id(context, source);
+    }
+
+    return source_id;
+}
+
 /*
  * call-seq:
  *   column.sources = Groonga::Columnの配列
@@ -290,19 +339,7 @@ rb_grn_index_column_set_sources (VALUE self, VALUE rb_sources)
     rb_source_values = RARRAY_PTR(rb_sources);
     sources = ALLOCA_N(grn_id, n);
     for (i = 0; i < n; i++) {
-	VALUE rb_source_id;
-	grn_obj *source;
-	grn_id source_id;
-
-	rb_source_id = rb_source_values[i];
-	if (CBOOL2RVAL(rb_obj_is_kind_of(rb_source_id, rb_cInteger))) {
-	    source_id = NUM2UINT(rb_source_id);
-	} else {
-	    source = RVAL2GRNOBJECT(rb_source_id, &context);
-	    rb_grn_context_check(context, rb_source_id);
-	    source_id = grn_obj_id(context, source);
-	}
-	sources[i] = source_id;
+	sources[i] = resolve_source_id(context, column, rb_source_values[i]);
     }
 
     {

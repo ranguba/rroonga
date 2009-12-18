@@ -28,7 +28,7 @@ class TableTestSelect < Test::Unit::TestCase
                                          :default_tokenizer => "TokenBigram")
     terms.define_index_column("comment_content", @comments,
                               :with_section => true,
-                              :source => "comments.content")
+                              :source => "content")
     @comment1 = @comments.add(:content => "Hello Good-bye!",
                               :created_at => Time.parse("2009-08-09"))
     @comment2 = @comments.add(:content => "Hello World",
