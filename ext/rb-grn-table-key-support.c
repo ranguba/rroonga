@@ -181,6 +181,12 @@ rb_grn_table_key_support_get_key (VALUE self, VALUE rb_id)
     return rb_key;
 }
 
+/*
+ * call-seq:
+ *   table.has_key?(key) -> true/false
+ *
+ * テーブルに主キーが_key_のレコードがあるならtrueを返す。
+ */
 static VALUE
 rb_grn_table_key_support_has_key (VALUE self, VALUE rb_key)
 {
