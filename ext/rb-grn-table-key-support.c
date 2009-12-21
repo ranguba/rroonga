@@ -303,6 +303,16 @@ rb_grn_table_key_support_array_reference_by_key (VALUE self, VALUE rb_key)
 	return rb_str_new(GRN_BULK_HEAD(value), GRN_BULK_VSIZE(value));
 }
 
+/*
+ * Document-method: []
+ *
+ * call-seq:
+ *   table[key] -> 値
+ *
+ * _table_の_key_に対応する値を返す。_key_がFixnumの場合
+ * は_id_とみなされ、このメソッドに隠されたTable::[]が呼ば
+ * れる。
+ */
 static VALUE
 rb_grn_table_key_support_array_reference (VALUE self, VALUE rb_id_or_key)
 {
@@ -348,6 +358,16 @@ rb_grn_table_key_support_array_set_by_key (VALUE self,
     return rb_value;
 }
 
+/*
+ * Document-method: []=
+ *
+ * call-seq:
+ *   table[key] = 値
+ *
+ * _table_の_key_に対応する値を設定する。_key_がFixnumの場合
+ * は_id_とみなされ、このメソッドに隠されたTable::[]=が呼ば
+ * れる。既存の値は上書きされる。
+ */
 static VALUE
 rb_grn_table_key_support_array_set (VALUE self,
 				    VALUE rb_id_or_key, VALUE rb_value)
