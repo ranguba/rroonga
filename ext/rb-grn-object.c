@@ -1078,6 +1078,15 @@ rb_grn_object_prepend_value (VALUE self, VALUE rb_id, VALUE rb_value)
     return rb_grn_object_set(self, rb_id, rb_value, GRN_OBJ_PREPEND);
 }
 
+/*
+ * Document-method: remove
+ *
+ * call-seq:
+ *   object.remove
+ *
+ * _object_をメモリから解放し、それが永続オブジェクトであっ
+ * た場合は、該当するファイル一式を削除する。
+ */
 static VALUE
 rb_grn_object_remove (VALUE self)
 {
