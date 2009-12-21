@@ -477,18 +477,18 @@ class TableTest < Test::Unit::TestCase
   end
 
   def test_merge!
-    omit("should write a test")
     bookmarks = Groonga::Hash.create(:name => "bookmarks")
     bookmarks.define_column("title", "ShortText")
 
     bookmarks.add("http://groonga.org/", :title => "groonga")
     bookmarks.add("http://ruby-lang.org/", :title => "Ruby")
 
-    ruby_bookmarks = bookmarks.select {|record| record["title"] == "Ruby"}
+    ruby_bookmarks = bookmarks.select {|record| (record["title"] == "Ruby") &
+                                                (record["title"] == "Ruby") }
     all_bookmarks = bookmarks.select
-    assert_equal(["groonga"],
+    assert_equal([["groonga", 1], ["Ruby", 2]],
                  all_bookmarks.merge!(ruby_bookmarks).collect do |record|
-                   [record[".title"], record[".:score"]]
+                   [record[".title"], record.score]
                  end)
   end
 
