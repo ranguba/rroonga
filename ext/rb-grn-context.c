@@ -603,6 +603,13 @@ rb_grn_context_array_reference (VALUE self, VALUE name_or_id)
     return GRNOBJECT2RVAL(Qnil, context, object, RB_GRN_FALSE);
 }
 
+/*
+ * call-seq:
+ *   context.pop -> 値
+ *
+ * コンテキスト内にあるスタックから値を取り出す。このスタッ
+ * クにはGroonga::Expression#executeの実行結果が格納される。
+ */
 static VALUE
 rb_grn_context_pop (VALUE self)
 {
