@@ -1695,24 +1695,57 @@ rb_grn_table_set_operation_bang (VALUE self, VALUE rb_other,
     return self;
 }
 
+/*
+ * call-seq:
+ *   table.union!(other) -> Groonga::Table
+ *
+ * キーを比較し、_table_には登録されていない_other_のレコー
+ * ドを_table_に作成する。
+ *
+ */
 static VALUE
 rb_grn_table_union_bang (VALUE self, VALUE rb_other)
 {
     return rb_grn_table_set_operation_bang(self ,rb_other, GRN_OP_OR);
 }
 
+
+/*
+ * call-seq:
+ *   table.intersection!(other) -> Groonga::Table
+ *
+ * キーを比較し、_other_には登録されていないレコードを
+ * _table_から削除する。
+ *
+ */
 static VALUE
 rb_grn_table_intersection_bang (VALUE self, VALUE rb_other)
 {
     return rb_grn_table_set_operation_bang(self ,rb_other, GRN_OP_AND);
 }
 
+/*
+ * call-seq:
+ *   table.difference!(other) -> Groonga::Table
+ *
+ * キーを比較し、_other_にも登録されているレコードを_table_
+ * から削除する。
+ *
+ */
 static VALUE
 rb_grn_table_difference_bang (VALUE self, VALUE rb_other)
 {
     return rb_grn_table_set_operation_bang(self ,rb_other, GRN_OP_BUT);
 }
 
+/*
+ * call-seq:
+ *   table.merge!(other) -> Groonga::Table
+ *
+ * キーを比較し、_other_にも登録されている_table_のレコード
+ * のスコアを_other_のスコアと同値にする。
+ *
+ */
 static VALUE
 rb_grn_table_merge_bang (VALUE self, VALUE rb_other)
 {
