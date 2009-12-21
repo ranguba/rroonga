@@ -479,6 +479,15 @@ rb_grn_expression_compile (VALUE self)
     return Qnil;
 }
 
+/*
+ * call-seq:
+ *   expression[name] -> 変数の値
+ *   expression[offset] -> 変数の値
+ *
+ * _expression_で使用可能な変数のうち、名前が_name_または
+ * _offset_番目にExpression#append_objectされた変数の値を返
+ * す。
+ */
 static VALUE
 rb_grn_expression_array_reference (VALUE self, VALUE rb_name_or_offset)
 {
