@@ -19,6 +19,21 @@ class ExpressionTest < Test::Unit::TestCase
 
   setup :setup_database
 
+  def test_array_reference
+    expression = Groonga::Expression.new
+    ryoqun = expression.define_variable({:name => "user"})
+    ryoqun.value = "ryoqun"
+    mori = expression.define_variable
+    mori.value = "mori"
+
+    expression.append_object(ryoqun)
+    expression.append_object(mori)
+
+    assert_equal("ryoqun", expression["user"])
+    assert_equal("ryoqun", expression[0])
+    assert_equal("mori", expression[1])
+  end
+
   def test_get_value
     users = Groonga::Hash.create(:name => "<users>")
     name = users.define_column("name", "<shorttext>")
