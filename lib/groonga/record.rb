@@ -103,6 +103,12 @@ module Groonga
       column(name).range.is_a?(Groonga::Table)
     end
 
+    # call-seq:
+    #   record.search(name, query, options={}) -> Groonga::Hash
+    #
+    # 名前が_name_のGroonga::IndexColumnのsearchメソッドを呼ぶ。
+    # _query_と_options_はそのメソッドにそのまま渡される。詳しく
+    # はGroonga::IndexColumn#searchを参照。
     def search(name, query, options={})
       column(name).search(query, options)
     end
