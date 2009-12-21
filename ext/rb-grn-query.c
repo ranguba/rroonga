@@ -22,8 +22,9 @@
  * Document-class: Groonga::Query
  *
  * インデックスを用いた検索用のクエリのためのオブジェクト。
- * Groonga::IndexColumn#searchに渡すことができる。
- *
+ * Groonga::IndexColumn#searchに渡すことができる。(このクラ
+ * スは非推奨で、代わりにGroonga::Expressionを使用すること)
+ * 
  */
 
 #define SELF(object) (rb_rb_grn_query_from_ruby_object(object))
