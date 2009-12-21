@@ -307,11 +307,11 @@ rb_grn_table_key_support_array_reference_by_key (VALUE self, VALUE rb_key)
  * Document-method: []
  *
  * call-seq:
+ *   table[id] -> 値
  *   table[key] -> 値
  *
- * _table_の_key_に対応する値を返す。_key_がFixnumの場合
- * は_id_とみなされ、このメソッドに隠されたTable::[]が呼ば
- * れる。
+ * _table_の_id_または_key_に対応する値を返す。_id_はFixnumで
+ * 指定する。
  */
 static VALUE
 rb_grn_table_key_support_array_reference (VALUE self, VALUE rb_id_or_key)
@@ -362,11 +362,11 @@ rb_grn_table_key_support_array_set_by_key (VALUE self,
  * Document-method: []=
  *
  * call-seq:
+ *   table[id] = 値
  *   table[key] = 値
  *
- * _table_の_key_に対応する値を設定する。_key_がFixnumの場合
- * は_id_とみなされ、このメソッドに隠されたTable::[]=が呼ば
- * れる。既存の値は上書きされる。
+ * _table_の_id_または_key_に対応する値を設定する。_id_は
+ * Fixnumで指定する。既存の値は上書きされる。
  */
 static VALUE
 rb_grn_table_key_support_array_set (VALUE self,
