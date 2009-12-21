@@ -130,8 +130,8 @@ rb_grn_index_column_deconstruct (RbGrnIndexColumn *rb_grn_index_column,
  *
  * 記事の段落毎に索引を作成する。
  *   articles = Groonga::Array.create(:name => "<articles>")
- *   articles.define_column("title", "<shottext>")
- *   articles.define_column("content", "<text>")
+ *   articles.define_column("title", "ShortText")
+ *   articles.define_column("content", "Text")
  *
  *   terms = Groonga::Hash.create(:name => "<terms>",
  *                                :default_tokenizer => "TokenBigram")
@@ -159,7 +159,7 @@ rb_grn_index_column_deconstruct (RbGrnIndexColumn *rb_grn_index_column,
  *     content_index[groonga] = {:value => sentence, :section => i + 1}
  *   end
  *
- *   content.search("エンジン").collect do |record|
+ *   content_index.search("エンジン").collect do |record|
  *     p record.key["title"] # -> "groonga"
  *   end
  */
