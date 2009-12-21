@@ -1152,6 +1152,15 @@ rb_grn_table_sort (int argc, VALUE *argv, VALUE self)
     return rb_result;
 }
 
+/*
+ * call-seq:
+ *   table.group(keys) -> Groonga::Tableまたは
+ *                        Groonga::Tableの配列
+ *
+ * _table_のレコードを_keys_で渡されてきたカラムあるいはカラ
+ * ム名の配列でグループ化する。
+ *
+ */
 static VALUE
 rb_grn_table_group (int argc, VALUE *argv, VALUE self)
 {
