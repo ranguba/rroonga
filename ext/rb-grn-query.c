@@ -18,6 +18,14 @@
 
 #include "rb-grn.h"
 
+/*
+ * Document-class: Groonga::Query
+ *
+ * インデックスを用いた検索用のクエリのためのオブジェクト。
+ * Groonga::IndexColumn#searchに渡すことができる。
+ *
+ */
+
 #define SELF(object) (rb_rb_grn_query_from_ruby_object(object))
 
 typedef struct _RbGrnQuery RbGrnQuery;
@@ -119,6 +127,34 @@ rb_grn_operator_from_ruby_object (VALUE rb_operator)
     return operator;
 }
 
+/*
+ * call-seq:
+ *   query.new(string, options={})
+ *
+ * _string_をパースした上で、クエリを作成する。作成されたオ
+ * ブジェクトはGroonga::IndexColumn#searchに渡すことで使用す
+ * ることができる。
+ *
+ * _options_に指定可能な値は以下の通り。
+ *
+ * [+:context+]
+ *   クエリが利用するGroonga::Context。省略すると
+ *   Groonga::Context.defaultを用いる。
+ *
+ * [+:default_operator+]
+ *   演算子の既定値(演算子を省略した場合にどの演算を行うか)
+ *   を指定する。
+ *
+ *   [Groonga::Operation::OR]
+ *   [Groonga::Operation::AND]
+ *   [Groonga::Operation::BUT]
+ *   [Groonga::Operation::ADJUST]
+ *     (FIXME: 挙動の違いを検証する必要性あり?
+ *            Groonga::Expressionとの関連性は?)
+ *
+ * [+:max_expressions+]
+ *   検索クエリに指定する式の最大値を指定する。
+ */
 static VALUE
 rb_grn_query_initialize (int argc, VALUE *argv, VALUE self)
 {
