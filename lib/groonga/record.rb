@@ -249,7 +249,7 @@ module Groonga
     end
 
     private
-    def column(name)
+    def column(name) # :nodoc:
       _column = @table.column(name.to_s)
       raise InvalidArgument, "column(#{name.inspect}) is nil" if _column.nil?
       _column
