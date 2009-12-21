@@ -389,7 +389,7 @@ rb_grn_table_key_support_array_set (VALUE self,
 
 /*
  * call-seq:
- *   default_tokenizer -> nilまたはGroonga::Procedure
+ *   table.default_tokenizer -> nilまたはGroonga::Procedure
  *
  * Groonga::IndexColumnで使用するトークナイザを返す。
  */
@@ -413,9 +413,25 @@ rb_grn_table_key_support_get_default_tokenizer (VALUE self)
 
 /*
  * call-seq:
- *   default_tokenizer = "TokenBigram"等のトークナイザ名
+ *   table.default_tokenizer = トークナイザ
  *
  * Groonga::IndexColumnで使用するトークナイザを設定する。
+ *
+ * 例:
+ *   # 2-gramを使用。
+ *   table.default_tokenizer = "TokenBigram"
+ *   # オブジェクトで指定
+ *   table.default_tokenizer = Groonga::Context.default["TokenBigram"]
+ *   # オブジェクトIDで指定
+ *   table.default_tokenizer = Groonga::Type::BIGRAM
+ *   # N-gram用のトークナイザを使うときはGroonga::IndexColumn
+ *   # には自動的に:with_section => trueが指定される。
+ *   index = table.define_index_column("blog_content", "Blogs",
+ *                                     :source => "content")
+ *   p index # -> #<Groonga::IndexColumn ... flags: <WITH_POSITION|...>>
+ *
+ *   # MeCabを使用
+ *   table.default_tokenizer = "TokenMecab"
  */
 static VALUE
 rb_grn_table_key_support_set_default_tokenizer (VALUE self, VALUE rb_tokenizer)
