@@ -1706,7 +1706,7 @@ rb_grn_table_set_operation_bang (VALUE self, VALUE rb_other,
 static VALUE
 rb_grn_table_union_bang (VALUE self, VALUE rb_other)
 {
-    return rb_grn_table_set_operation_bang(self ,rb_other, GRN_OP_OR);
+    return rb_grn_table_set_operation_bang(self, rb_other, GRN_OP_OR);
 }
 
 
@@ -1721,7 +1721,7 @@ rb_grn_table_union_bang (VALUE self, VALUE rb_other)
 static VALUE
 rb_grn_table_intersection_bang (VALUE self, VALUE rb_other)
 {
-    return rb_grn_table_set_operation_bang(self ,rb_other, GRN_OP_AND);
+    return rb_grn_table_set_operation_bang(self, rb_other, GRN_OP_AND);
 }
 
 /*
@@ -1735,7 +1735,7 @@ rb_grn_table_intersection_bang (VALUE self, VALUE rb_other)
 static VALUE
 rb_grn_table_difference_bang (VALUE self, VALUE rb_other)
 {
-    return rb_grn_table_set_operation_bang(self ,rb_other, GRN_OP_BUT);
+    return rb_grn_table_set_operation_bang(self, rb_other, GRN_OP_BUT);
 }
 
 /*
@@ -1749,7 +1749,7 @@ rb_grn_table_difference_bang (VALUE self, VALUE rb_other)
 static VALUE
 rb_grn_table_merge_bang (VALUE self, VALUE rb_other)
 {
-    return rb_grn_table_set_operation_bang(self ,rb_other, GRN_OP_ADJUST);
+    return rb_grn_table_set_operation_bang(self, rb_other, GRN_OP_ADJUST);
 }
 
 void
