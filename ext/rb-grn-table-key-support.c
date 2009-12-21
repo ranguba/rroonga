@@ -381,6 +381,12 @@ rb_grn_table_key_support_array_set (VALUE self,
     }
 }
 
+/*
+ * call-seq:
+ *   default_tokenizer -> nilまたはGroonga::Procedure
+ *
+ * Groonga::IndexColumnで使用するトークナイザを返す。
+ */
 static VALUE
 rb_grn_table_key_support_get_default_tokenizer (VALUE self)
 {
@@ -399,6 +405,12 @@ rb_grn_table_key_support_get_default_tokenizer (VALUE self)
     return GRNOBJECT2RVAL(Qnil, context, tokenizer, RB_GRN_FALSE);
 }
 
+/*
+ * call-seq:
+ *   default_tokenizer = "TokenBigram"等のトークナイザ名
+ *
+ * Groonga::IndexColumnで使用するトークナイザを設定する。
+ */
 static VALUE
 rb_grn_table_key_support_set_default_tokenizer (VALUE self, VALUE rb_tokenizer)
 {
