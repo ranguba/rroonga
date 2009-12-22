@@ -611,7 +611,7 @@ module Groonga
       end
     end
 
-    class TableRemoveDefinition
+    class TableRemoveDefinition # :nodoc:
       def initialize(name, options={})
         @name = name
         @options = options
@@ -623,7 +623,7 @@ module Groonga
       end
     end
 
-    class ColumnDefinition
+    class ColumnDefinition # :nodoc:
       attr_accessor :name, :type
       attr_reader :options
 
@@ -660,7 +660,7 @@ module Groonga
       end
     end
 
-    class ColumnRemoveDefinition
+    class ColumnRemoveDefinition # :nodoc:
       attr_accessor :name
       attr_reader :options
 
@@ -675,7 +675,7 @@ module Groonga
       end
     end
 
-    class IndexColumnDefinition
+    class IndexColumnDefinition # :nodoc:
       attr_accessor :name, :target
       attr_reader :options
 
@@ -720,7 +720,7 @@ module Groonga
       end
     end
 
-    class Dumper
+    class Dumper # :nodoc:
       def initialize(options={})
         @options = (options || {}).dup
       end
