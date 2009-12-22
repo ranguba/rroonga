@@ -64,6 +64,13 @@ VALUE rb_cGrnPatriciaTrie;
  *   Groonga::Contextに結びついているデータベースが一時デー
  *   タベースの場合は例外が発生する。
  *
+ * [+:key_normalize+]
+ *   +true+を指定するとキーを正規化する。
+ *
+ * [+:key_with_sis+]
+ *   +true+を指定するとキーの文字列の全suffixが自動的に登
+ *   録される。
+ *
  * [+:key_type+]
  *   キーの種類を示すオブジェクトを指定する。キーの種類には型
  *   名（"Int32"や"ShortText"など）またはGroonga::Typeまたは
