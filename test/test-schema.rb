@@ -136,6 +136,31 @@ class SchemaTest < Test::Unit::TestCase
                  table.inspect)
   end
 
+  def test_column_with_full_option
+    path = @tmp_dir + "column.groonga"
+    type = Groonga::Type.new("Niku", :size => 29)
+    Groonga::Schema.create_table("<posts>") do |table|
+      table.column("rate",
+                   type,
+                   :path => path,
+                   :persistent => true,
+                   :type => :vector,
+                   :compress => :lzo)
+    end
+
+    table = context["<posts>"]
+    column_name = "<posts>.rate"
+    column = context[column_name]
+    assert_equal("#<Groonga::VariableSizeColumn " +
+                 "id: <#{column.id}>, " +
+                 "name: <#{column_name}>, " +
+                 "path: <#{path}>, " +
+                 "domain: <#{table.inspect}>, " +
+                 "range: <#{type.inspect}>, " +
+                 "flags: <COMPRESS_LZO>>",
+                 column.inspect)
+  end
+
   def test_integer32_column
     assert_nil(context["<posts>.rate"])
     Groonga::Schema.create_table("<posts>") do |table|
@@ -254,6 +279,40 @@ class SchemaTest < Test::Unit::TestCase
     end
     assert_equal([context["<posts>.content"]],
                  context["<terms>.<posts>_content"].sources)
+  end
+
+  def test_index_with_full_option
+    path = @tmp_dir + "index-column.groonga"
+    assert_nil(context["<terms>.content"])
+    index_column_name = "posts-index"
+
+    Groonga::Schema.create_table("<posts>") do |table|
+      table.long_text :content
+    end
+    Groonga::Schema.create_table("<terms>") do |table|
+      table.index("<posts>.content",
+                  :name => index_column_name,
+                  :path => path,
+                  :persistent => true,
+                  :with_section => true,
+                  :with_weight => true,
+                  :with_position => true)
+    end
+
+    posts = context["<posts>"]
+    terms = context["<terms>"]
+    full_index_column_name = "<terms>.#{index_column_name}"
+    index_column = context[full_index_column_name]
+    assert_equal("#<Groonga::IndexColumn " +
+                 "id: <#{index_column.id}>, " +
+                 "name: <#{full_index_column_name}>, " +
+                 "path: <#{path}>, " +
+                 "domain: <#{terms.inspect}>, " +
+                 "range: <#{posts.inspect}>, " +
+                 "flags: <WITH_SECTION|WITH_WEIGHT|WITH_POSITION|" +
+                         "UNIT_DOCUMENT_SECTION|UNIT_DOCUMENT_POSITION|" +
+                         "UNIT_USERDEF_DOCUMENT|UNIT_USERDEF_SECTION>>",
+                 index_column.inspect)
   end
 
   def test_index_again
