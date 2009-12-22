@@ -280,12 +280,24 @@ module Groonga
       instance_eval(dumped_text)
     end
 
+    # call-seq:
+    #   schema.create_table(name, options={}) {|table| ...}
+    #
     # 名前が_name_のテーブルを作成する。
     #
-    # 作成したテーブルは#defineを呼び出すまでは実行されない
-    # ことに注意すること。
+    # テーブルの作成は#defineを呼び出すまでは実行されないこ
+    # とに注意すること。
     #
     # _options_に指定可能な値は以下の通り。
+    #
+    # [+:force+]
+    #   +true+を指定すると既存の同名のテーブルが存在してい
+    #   ても、強制的にテーブルを作成する。
+    #
+    # [+:type+]
+    #   テーブルの型を指定する。+:array+, +:hash+,
+    #   +:patricia_trie+のいずれかを指定する。デフォルトで
+    #   は+:array+になる。
     #
     # [+:context+]
     #   スキーマ定義時に使用するGroonga::Contextを指定する。
@@ -307,17 +319,83 @@ module Groonga
     #   い。値を保存したい場合は必ず指定すること。
     #
     #   参考: Groonga::Type.new
+    #
+    # [+:sub_records+]
+    #   +true+を指定するとGroonga::Table#groupでグループ化
+    #   したときに、Groonga::Record#n_sub_recordsでグルー
+    #   プに含まれるレコードの件数を取得できる。
+    #
+    # 以下は+:type+に+:hash+あるいは+:patricia_trie+を指定
+    # した時に指定可能。
+    #
+    # [+:key_type+]
+    #   キーの種類を示すオブジェクトを指定する。キーの種類
+    #   には型名（"Int32"や"ShortText"など）または
+    #   Groonga::Typeまたはテーブル（Groonga::Array、
+    #   Groonga::Hash、Groonga::PatriciaTrieのどれか）を指
+    #   定する。
+    #
+    #   Groonga::Typeを指定した場合は、その型が示す範囲の
+    #   値をキーとして使用する。ただし、キーの最大サイズは
+    #   4096バイトであるため、Groonga::Type::TEXTや
+    #   Groonga::Type::LONG_TEXTは使用できない。
+    #
+    #   テーブルを指定した場合はレコードIDをキーとして使用
+    #   する。指定したテーブルのGroonga::Recordをキーとし
+    #   て使用することもでき、その場合は自動的に
+    #   Groonga::RecordからレコードIDを取得する。
+    #
+    #   省略した場合は文字列をキーとして使用する。この場合、
+    #   4096バイトまで使用可能である。
+    #
+    # [+:default_tokenizer+]
+    #   Groonga::IndexColumnで使用するトークナイザを指定す
+    #   る。デフォルトでは何も設定されていないので、テーブ
+    #   ルにGroonga::IndexColumnを定義する場合は
+    #   <tt>"TokenBigram"</tt>などを指定する必要がある。
+    #
+    # 以下は+:type+に+:patricia_trie+を指定した時に指定可能。
+    #
+    # [+:key_normalize+]
+    #   +true+を指定するとキーを正規化する。
+    #
+    # [+:key_with_sis+]
+    #   +true+を指定するとキーの文字列の全suffixが自動的に
+    #   登録される。
     def create_table(name, options={})
       definition = TableDefinition.new(name, @options.merge(options || {}))
       yield(definition)
       @definitions << definition
     end
 
+    # 名前が_name_のテーブルを削除する。
+    #
+    # テーブルの削除は#defineを呼び出すまでは実行されないこ
+    # とに注意すること。
+    #
+    # _options_に指定可能な値は以下の通り。
+    #
+    # [+:context+]
+    #   スキーマ定義時に使用するGroonga::Contextを指定する。
+    #   省略した場合はGroonga::Context.defaultを使用する。
     def remove_table(name, options={})
       definition = TableRemoveDefinition.new(name, @options.merge(options || {}))
       @definitions << definition
     end
 
+    # call-seq:
+    #   schema.change_table(name, options={}) {|table| ...}
+    #
+    # 名前が_name_のテーブルを変更する。
+    #
+    # テーブルの変更は#defineを呼び出すまでは実行されないこ
+    # とに注意すること。
+    #
+    # _options_に指定可能な値は以下の通り。
+    #
+    # [+:context+]
+    #   スキーマ定義時に使用するGroonga::Contextを指定する。
+    #   省略した場合はGroonga::Context.defaultを使用する。
     def change_table(name, options={})
       options = @options.merge(options || {}).merge(:change => true)
       definition = TableDefinition.new(name, options)
