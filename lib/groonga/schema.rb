@@ -403,10 +403,14 @@ module Groonga
       @definitions << definition
     end
 
+    # スキーマ定義時にGroonga::Schema.create_tableや
+    # Groonga::Schema#create_tableからブロックに渡されてくる
+    # オブジェクト
     class TableDefinition
+      # テーブルの名前
       attr_reader :name
 
-      def initialize(name, options)
+      def initialize(name, options) # :nodoc:
         @name = name
         @name = @name.to_s if @name.is_a?(Symbol)
         @definitions = []
@@ -415,7 +419,7 @@ module Groonga
         @table_type = table_type
       end
 
-      def define
+      def define # :nodoc:
         table = context[@name]
         if @options[:change]
           raise ArgumentError, "table doesn't exist: #{@name}" if table.nil?
@@ -432,6 +436,39 @@ module Groonga
         table
       end
 
+      # 名前が_name_で型が_type_のカラムを作成する。
+      #
+      # _options_に指定可能な値は以下の通り。
+      #
+      # [+:force+]
+      #   +true+を指定すると既存の同名のカラムが存在してい
+      #   ても、強制的に新しいカラムを作成する。
+      #
+      # [+:path+]
+      #   カラムを保存するパス。
+      #
+      # [+:persistent+]
+      #   +true+を指定すると永続カラムとなる。+:path+を省略
+      #   した場合は自動的にパスが付加される。
+      #
+      # [+:type+]
+      #   カラムの値の格納方法について指定する。省略した場合は、
+      #   +:scalar+になる。
+      #
+      #   [+:scalar+]
+      #     スカラ値(単独の値)を格納する。
+      #
+      #   [+:vector+]
+      #     値の配列を格納する。
+      #
+      # [+:compress+]
+      #   値の圧縮方法を指定する。省略した場合は、圧縮しない。
+      #
+      #   [+:zlib+]
+      #     値をzlib圧縮して格納する。
+      #
+      #   [+:lzo+]
+      #     値をlzo圧縮して格納する。
       def column(name, type, options={})
         definition = self[name, ColumnDefinition]
         if definition.nil?
@@ -443,6 +480,10 @@ module Groonga
         self
       end
 
+      # 名前が_name_のカラムを削除する。
+      #
+      # _options_に指定可能な値はない(TODO _options_は不要?)。
+      #
       def remove_column(name, options={})
         definition = self[name, ColumnRemoveDefinition]
         if definition.nil?
@@ -453,6 +494,33 @@ module Groonga
         self
       end
 
+      # _taget_column_を対象とするインデックスカラムを作成す
+      # る。
+      #
+      # _options_に指定可能な値は以下の通り。
+      #
+      # [+:name+]
+      #   インデックスカラムのカラム名を任意に指定する。
+      #
+      # [+:force+]
+      #   +true+を指定すると既存の同名のカラムが存在してい
+      #   ても、強制的に新しいカラムを作成する。
+      #
+      # [+:path+]
+      #   カラムを保存するパス。
+      #
+      # [+:persistent+]
+      #   +true+を指定すると永続カラムとなる。+:path+を省略
+      #   した場合は自動的にパスが付加される。
+      #
+      # [+:with_section+]
+      #   転置索引にsection(段落情報)を合わせて格納する。
+      #
+      # [+:with_weight+]
+      #   転置索引にweight情報を合わせて格納する。
+      #
+      # [+:with_position+]
+      #   転置索引に出現位置情報を合わせて格納する。
       def index(target_column, options={})
         name = options.delete(:name)
         if name.nil?
@@ -475,66 +543,112 @@ module Groonga
         self
       end
 
+      # 名前が_name_の32bit符号付き整数のカラムを作成する。
+      #
+      # _options_に指定可能な値は
+      # Groonga::Schema::TableDefinition#columnを参照。
       def integer32(name, options={})
         column(name, "Int32", options)
       end
       alias_method :integer, :integer32
       alias_method :int32, :integer32
 
+      # 名前が_name_の64bit符号付き整数のカラムを作成する。
+      #
+      # _options_に指定可能な値は
+      # Groonga::Schema::TableDefinition#columnを参照。
       def integer64(name, options={})
         column(name, "Int64", options)
       end
       alias_method :int64, :integer64
 
+      # 名前が_name_の32bit符号なし整数のカラムを作成する。
+      #
+      # _options_に指定可能な値は
+      # Groonga::Schema::TableDefinition#columnを参照。
       def unsigned_integer32(name, options={})
         column(name, "UInt32", options)
       end
       alias_method :unsigned_integer, :unsigned_integer32
       alias_method :uint32, :unsigned_integer32
 
+      # 名前が_name_の64bit符号なし整数のカラムを作成する。
+      #
+      # _options_に指定可能な値は
+      # Groonga::Schema::TableDefinition#columnを参照。
       def unsigned_integer64(name, options={})
         column(name, "UInt64", options)
       end
       alias_method :uint64, :unsigned_integer64
 
+      # 名前が_name_のieee754形式の64bit浮動小数点数のカラム
+      # を作成する。
+      #
+      # _options_に指定可能な値は
+      # Groonga::Schema::TableDefinition#columnを参照。
       def float(name, options={})
         column(name, "Float", options)
       end
 
+      # 名前が_name_の64bit符号付き整数で1970年1月1日0時0分
+      # 0秒からの経過マイクロ秒数を格納するカラムを作成する。
+      #
+      # _options_に指定可能な値は
+      # Groonga::Schema::TableDefinition#columnを参照。
       def time(name, options={})
         column(name, "Time", options)
       end
 
+      # 名前が_name_の4Kbyte以下の文字列を格納できるカラムを
+      # 作成する。
+      #
+      # _options_に指定可能な値は
+      # Groonga::Schema::TableDefinition#columnを参照。
       def short_text(name, options={})
         column(name, "ShortText", options)
       end
       alias_method :string, :short_text
 
+      # 名前が_name_の64Kbyte以下の文字列を格納できるカラムを
+      # 作成する。
+      #
+      # _options_に指定可能な値は
+      # Groonga::Schema::TableDefinition#columnを参照。
       def text(name, options={})
         column(name, "Text", options)
       end
 
+      # 名前が_name_の2Gbyte以下の文字列を格納できるカラムを
+      # 作成する。
+      #
+      # _options_に指定可能な値は
+      # Groonga::Schema::TableDefinition#columnを参照。
       def long_text(name, options={})
         column(name, "LongText", options)
       end
 
+      # 名前が_name_で_table_のレコードIDを格納する参照カラ
+      # ムを作成する。
+      #
+      # _options_に指定可能な値は
+      # Groonga::Schema::TableDefinition#columnを参照。
       def reference(name, table, options={})
         column(name, table, options)
       end
 
-      def [](name, definition_class=nil)
+      def [](name, definition_class=nil) # :nodoc:
         @definitions.find do |definition|
           definition.name.to_s == name.to_s and
             (definition_class.nil? or definition.is_a?(definition_class))
         end
       end
 
-      def context
+      def context # :nodoc:
         @options[:context] || Groonga::Context.default
       end
 
       private
-      def update_definition(name, definition_class, definition)
+      def update_definition(name, definition_class, definition) # :nodoc:
         old_definition = self[name, definition_class]
         if old_definition
           index = @definitions.index(old_definition)
@@ -548,8 +662,8 @@ module Groonga
                                :type, :path, :persistent,
                                :key_type, :value_type, :sub_records,
                                :default_tokenizer,
-                               :key_normalize, :key_with_sis]
-      def validate_options(options)
+                               :key_normalize, :key_with_sis] # :nodoc:
+      def validate_options(options) # :nodoc:
         return if options.nil?
         unknown_keys = options.keys - AVAILABLE_OPTION_KEYS
         unless unknown_keys.empty?
@@ -559,7 +673,7 @@ module Groonga
         end
       end
 
-      def table_type
+      def table_type # :nodoc:
         type = @options[:type]
         case type
         when :array, nil
@@ -573,7 +687,7 @@ module Groonga
         end
       end
 
-      def create_options
+      def create_options # :nodoc:
         common = {
           :name => @name,
           :path => @options[:path],
@@ -602,11 +716,11 @@ module Groonga
         end
       end
 
-      def column_options
+      def column_options # :nodoc:
         {:persistent => persistent?}
       end
 
-      def persistent?
+      def persistent? # :nodoc:
         @options[:persistent].nil? ? true : @options[:persistent]
       end
     end
