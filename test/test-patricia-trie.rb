@@ -158,4 +158,25 @@ class PatriciaTrieTest < Test::Unit::TestCase
     end
     assert_equal(text, actual)
   end
+
+  def test_prefix_search
+    paths = Groonga::PatriciaTrie.create(:name => "Paths",
+                                         :key_type => 'ShortText')
+    root_path = paths.add('/')
+    tmp_path = paths.add('/tmp')
+    usr_bin_path = paths.add('/usr/bin')
+    usr_local_bin_path = paths.add('/usr/local/bin')
+
+    records = paths.prefix_search('/')
+    assert_equal(["/usr/local/bin", "/usr/bin", "/tmp", "/"],
+                 records.records.collect {|record| record["._key"]})
+
+    records = paths.prefix_search('/usr')
+    assert_equal(["/usr/local/bin", "/usr/bin"],
+                 records.records.collect {|record| record["._key"]})
+
+    records = paths.prefix_search('/usr/local')
+    assert_equal(["/usr/local/bin"],
+                 records.records.collect {|record| record["._key"]})
+  end
 end

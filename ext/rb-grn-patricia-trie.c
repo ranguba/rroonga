@@ -1,4 +1,5 @@
 /* -*- c-file-style: "ruby" -*- */
+/* vim: set sts=4 sw=4 ts=8 noet: */
 /*
   Copyright (C) 2009  Kouhei Sutou <kou@clear-code.com>
 
@@ -430,6 +431,43 @@ rb_grn_patricia_trie_scan (VALUE self, VALUE rb_string)
     return rb_result;
 }
 
+/*
+ * call-seq:
+ *   patricia_trie.prefix_search(prefix) -> Groonga::Hash
+ *
+ * キーが_prefix_に前方一致するレコードのIDがキーに入っている
+ * Groonga::Hashを返す。マッチするレコードがない場合は空の
+ * Groonga::Hashが返る。
+ *
+ */
+static VALUE
+rb_grn_patricia_trie_prefix_search (VALUE self, VALUE rb_prefix)
+{
+    grn_ctx *context;
+    grn_obj *table, *key, *domain, *result;
+    grn_id domain_id;
+    VALUE rb_result;
+
+    rb_grn_table_key_support_deconstruct(SELF(self), &table, &context,
+					 &key, &domain_id, &domain,
+					 NULL, NULL, NULL);
+
+    result = grn_table_create(context, NULL, 0, NULL,
+			      GRN_OBJ_TABLE_HASH_KEY,
+			      table, 0);
+    rb_grn_context_check(context, self);
+    rb_result = GRNOBJECT2RVAL(Qnil, context, result, RB_GRN_TRUE);
+
+    GRN_BULK_REWIND(key);
+    RVAL2GRNKEY(rb_prefix, context, key, domain_id, domain, self);
+    grn_pat_prefix_search(context, (grn_pat *)table,
+			  GRN_BULK_HEAD(key), GRN_BULK_VSIZE(key),
+			  (grn_hash *)result);
+    rb_grn_context_check(context, self);
+
+    return rb_result;
+}
+
 void
 rb_grn_init_patricia_trie (VALUE mGrn)
 {
@@ -444,4 +482,6 @@ rb_grn_init_patricia_trie (VALUE mGrn)
 		     rb_grn_patricia_trie_search, -1);
     rb_define_method(rb_cGrnPatriciaTrie, "scan",
 		     rb_grn_patricia_trie_scan, 1);
+    rb_define_method(rb_cGrnPatriciaTrie, "prefix_search",
+		     rb_grn_patricia_trie_prefix_search, 1);
 }
