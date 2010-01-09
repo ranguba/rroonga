@@ -24,21 +24,21 @@ class FixSizeColumnTest < Test::Unit::TestCase
 
   def setup_bookmarks_table
     @bookmarks_path = @tables_dir + "bookmarks"
-    @bookmarks = Groonga::Array.create(:name => "bookmarks",
+    @bookmarks = Groonga::Array.create(:name => "Bookmarks",
                                        :path => @bookmarks_path.to_s)
 
     @viewed_column_path = @columns_dir + "viewed"
-    @viewed = @bookmarks.define_column("viewed", "<int>",
+    @viewed = @bookmarks.define_column("viewed", "Int32",
                                        :path => @viewed_column_path.to_s)
   end
 
   def test_inspect
     assert_equal("#<Groonga::FixSizeColumn " +
                  "id: <#{@viewed.id}>, " +
-                 "name: <bookmarks.viewed>, " +
+                 "name: <Bookmarks.viewed>, " +
                  "path: <#{@viewed_column_path}>, " +
                  "domain: <#{@bookmarks.inspect}>, " +
-                 "range: <#{context['<int>'].inspect}>, " +
+                 "range: <#{context['Int32'].inspect}>, " +
                  "flags: <KEY_INT>" +
                  ">",
                  @viewed.inspect)
@@ -53,7 +53,7 @@ class FixSizeColumnTest < Test::Unit::TestCase
   end
 
   def test_assign_time
-    comments = Groonga::Array.create(:name => "comments")
+    comments = Groonga::Array.create(:name => "Comments")
     comments.define_column("title", "ShortText")
     comments.define_column("issued", "Time")
     title = "Good"

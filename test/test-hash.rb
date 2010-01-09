@@ -21,7 +21,7 @@ class HashTest < Test::Unit::TestCase
 
   def test_delete
     bookmarks_path = @tables_dir + "bookmarks"
-    bookmarks = Groonga::Hash.create(:name => "bookmarks",
+    bookmarks = Groonga::Hash.create(:name => "Bookmarks",
                                      :path => bookmarks_path.to_s)
 
     groonga = bookmarks.add("groonga")
@@ -44,9 +44,9 @@ class HashTest < Test::Unit::TestCase
     value = "groonga"
     value_type = Groonga::Type.new("Text#{value.size}", :size => value.size)
     bookmarks_path = @tables_dir + "bookmarks"
-    bookmarks = Groonga::Hash.create(:name => "bookmarks",
+    bookmarks = Groonga::Hash.create(:name => "Bookmarks",
                                      :path => bookmarks_path.to_s,
-                                     :key_type => "<shorttext>",
+                                     :key_type => "ShortText",
                                      :value_type => value_type)
     bookmarks["http://google.com/"] = value
     assert_equal(value, bookmarks["http://google.com/"])
@@ -56,7 +56,7 @@ class HashTest < Test::Unit::TestCase
     bookmarks_path = @tables_dir + "bookmarks"
     bookmarks = Groonga::Hash.create(:name => "bookmarks",
                                      :path => bookmarks_path.to_s,
-                                     :key_type => "<shorttext>")
+                                     :key_type => "ShortText")
     bookmark = bookmarks.add("http://google.com/")
     assert_equal(bookmark, bookmarks.find("http://google.com/"))
   end
@@ -93,10 +93,10 @@ class HashTest < Test::Unit::TestCase
 
   def test_inspect_named
     path = @tables_dir + "named.groonga"
-    named_table = Groonga::Hash.create(:name => "name", :path => path.to_s)
+    named_table = Groonga::Hash.create(:name => "Users", :path => path.to_s)
     assert_equal("#<Groonga::Hash " +
                  "id: <#{named_table.id}>, " +
-                 "name: <name>, " +
+                 "name: <Users>, " +
                  "path: <#{path}>, " +
                  "domain: <nil>, " +
                  "range: <nil>, " +
@@ -134,11 +134,11 @@ class HashTest < Test::Unit::TestCase
   end
 
   def test_search
-    users = Groonga::Array.create(:name => "<users>")
-    user_name = users.define_column("name", "<shorttext>")
+    users = Groonga::Array.create(:name => "Users")
+    user_name = users.define_column("name", "ShortText")
 
-    bookmarks = Groonga::Hash.create(:name => "<bookmarks>",
-                                     :key_type => "<shorttext>")
+    bookmarks = Groonga::Hash.create(:name => "Bookmarks",
+                                     :key_type => "ShortText")
     bookmark_user_id = bookmarks.define_column("user_id", users)
 
     daijiro = users.add
@@ -155,33 +155,33 @@ class HashTest < Test::Unit::TestCase
   end
 
   def test_add
-    users = Groonga::Hash.create(:name => "<users>")
-    users.define_column("address", "<text>")
+    users = Groonga::Hash.create(:name => "Users")
+    users.define_column("address", "Text")
     me = users.add("me", :address => "me@example.com")
     assert_equal("me@example.com", me[:address])
   end
 
   def test_default_tokenizer_on_create
-    terms = Groonga::Hash.create(:name => "<terms>",
-                                 :default_tokenizer => "<token:trigram>")
+    terms = Groonga::Hash.create(:name => "Terms",
+                                 :default_tokenizer => "TokenTrigram")
     assert_equal(context[Groonga::Type::TRIGRAM],
                  terms.default_tokenizer)
   end
 
   def test_duplicated_name
-    Groonga::Hash.create(:name => "<users>")
+    Groonga::Hash.create(:name => "Users")
     assert_raise(Groonga::InvalidArgument) do
-      Groonga::Hash.create(:name => "<users>")
+      Groonga::Hash.create(:name => "Users")
     end
   end
 
   def test_define_index_column_implicit_with_position
-    bookmarks = Groonga::Hash.create(:name => "<bookmarks>")
-    bookmarks.define_column("comment", "<text>")
-    terms = Groonga::Hash.create(:name => "<terms>",
-                                 :default_tokenizer => "<token:bigram>")
+    bookmarks = Groonga::Hash.create(:name => "Bookmarks")
+    bookmarks.define_column("comment", "Text")
+    terms = Groonga::Hash.create(:name => "Terms",
+                                 :default_tokenizer => "TokenBigram")
     index = terms.define_index_column("comment", bookmarks,
-                                      :source => "<bookmarks>.comment")
+                                      :source => "Bookmarks.comment")
     groonga = bookmarks.add("groonga", :comment => "search engine by Brazil")
     google = bookmarks.add("google", :comment => "search engine by Google")
     ruby = bookmarks.add("ruby", :comment => "programing language")
@@ -191,14 +191,14 @@ class HashTest < Test::Unit::TestCase
   end
 
   def test_open_same_name
-    users_created = Groonga::Hash.create(:name => "<users>")
-    users_opened = Groonga::Hash.open(:name => "<users>")
+    users_created = Groonga::Hash.create(:name => "Users")
+    users_opened = Groonga::Hash.open(:name => "Users")
     users_opened.add("morita")
     assert_equal(1, users_created.size)
   end
 
   def test_has_key?
-    users = Groonga::Hash.create(:name => "<users>")
+    users = Groonga::Hash.create(:name => "Users")
     assert_false(users.has_key?("morita"))
     users.add("morita")
     assert_true(users.has_key?("morita"))
