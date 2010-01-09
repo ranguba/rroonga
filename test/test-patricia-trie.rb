@@ -178,5 +178,9 @@ class PatriciaTrieTest < Test::Unit::TestCase
     records = paths.prefix_search('/usr/local')
     assert_equal(["/usr/local/bin"],
                  records.records.collect {|record| record["._key"]})
+
+    records = paths.prefix_search('nonexistent')
+    assert_equal([],
+                 records.records.collect {|record| record["._key"]})
   end
 end
