@@ -25,11 +25,11 @@ class VariableSizeColumnTest < Test::Unit::TestCase
 
   def setup_users_table
     @users_path = @tables_dir + "users"
-    @users = Groonga::Array.create(:name => "users",
+    @users = Groonga::Array.create(:name => "Users",
                                    :path => @users_path.to_s)
 
     @users_name_column_path = @columns_dir + "name"
-    @name = @users.define_column("name", "<shorttext>",
+    @name = @users.define_column("name", "ShortText",
                                  :path => @users_name_column_path.to_s)
 
     @users_friends_column_path = @columns_dir + "friends"
@@ -53,7 +53,7 @@ class VariableSizeColumnTest < Test::Unit::TestCase
   def test_inspect
     assert_equal("#<Groonga::VariableSizeColumn " +
                  "id: <#{@name.id}>, " +
-                 "name: <users.name>, " +
+                 "name: <Users.name>, " +
                  "path: <#{@users_name_column_path}>, " +
                  "domain: <#{@users.inspect}>, " +
                  "range: <#{context['<shorttext>'].inspect}>, " +
