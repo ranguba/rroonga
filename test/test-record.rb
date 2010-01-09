@@ -27,23 +27,23 @@ class RecordTest < Test::Unit::TestCase
 
   def setup_addresses_table
     @addresses_path = @tables_dir + "addresses"
-    @addresses = Groonga::Array.create(:name => "addresses",
+    @addresses = Groonga::Array.create(:name => "Addresses",
                                        :path => @addresses_path.to_s)
 
     @addresses_mail_column_path = @columns_dir + "mail"
     @addresses_mail_column =
-      @addresses.define_column("mail", "<shorttext>",
+      @addresses.define_column("mail", "ShortText",
                                :path => @addresses_mail_column_path.to_s)
   end
 
   def setup_users_table
     @users_path = @tables_dir + "users"
-    @users = Groonga::Array.create(:name => "users",
+    @users = Groonga::Array.create(:name => "Users",
                                    :path => @users_path.to_s)
 
     @users_name_column_path = @columns_dir + "name"
     @users_name_column =
-      @users.define_column("name", "<shorttext>",
+      @users.define_column("name", "ShortText",
                            :path => @users_name_column_path.to_s)
 
     @users_addresses_column_path = @columns_dir + "addresses"
@@ -56,25 +56,25 @@ class RecordTest < Test::Unit::TestCase
   def setup_bookmarks_table
     @bookmarks_path = @tables_dir + "bookmarks"
     value_type = Groonga::Type.new("Text512", :size => 512)
-    @bookmarks = Groonga::Array.create(:name => "bookmarks",
+    @bookmarks = Groonga::Array.create(:name => "Bookmarks",
                                        :value_type => value_type,
                                        :path => @bookmarks_path.to_s)
 
     @uri_column_path = @columns_dir + "uri"
-    @bookmarks_uri = @bookmarks.define_column("uri", "<shorttext>",
+    @bookmarks_uri = @bookmarks.define_column("uri", "ShortText",
                                               :path => @uri_column_path.to_s)
 
     @rate_column_path = @columns_dir + "rate"
-    @bookmarks_rate = @bookmarks.define_column("rate", "<int>",
+    @bookmarks_rate = @bookmarks.define_column("rate", "Int32",
                                                :path => @rate_column_path.to_s)
 
     @comment_column_path = @columns_dir + "comment"
     @bookmarks_comment =
-      @bookmarks.define_column("comment", "<text>",
+      @bookmarks.define_column("comment", "Text",
                                :path => @comment_column_path.to_s)
 
     @content_column_path = @columns_dir + "content"
-    @bookmarks_content = @bookmarks.define_column("content", "<longtext>")
+    @bookmarks_content = @bookmarks.define_column("content", "LongText")
 
     @user_column_path = @columns_dir + "user"
     @bookmarks_user = @bookmarks.define_column("user", @users)
@@ -83,7 +83,7 @@ class RecordTest < Test::Unit::TestCase
   def setup_indexes
     @bookmarks_index_path = @tables_dir + "bookmarks-index"
     @bookmarks_index =
-      Groonga::PatriciaTrie.create(:name => "bookmarks-index",
+      Groonga::PatriciaTrie.create(:name => "BookmarksIndex",
                                    :path => @bookmarks_index_path.to_s)
     @bookmarks_index.default_tokenizer = "TokenBigram"
 
@@ -160,8 +160,8 @@ class RecordTest < Test::Unit::TestCase
   end
 
   def test_key
-    documents = Groonga::PatriciaTrie.create(:name => "<documents>",
-                                             :key_type => "<shorttext>")
+    documents = Groonga::PatriciaTrie.create(:name => "Documents",
+                                             :key_type => "ShortText")
     reference = documents.add("reference")
     assert_equal("reference", reference.key)
   end
