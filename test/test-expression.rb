@@ -50,8 +50,8 @@ class ExpressionTest < Test::Unit::TestCase
   end
 
   def test_get_value_with_variable
-    users = Groonga::Hash.create(:name => "<users>")
-    name = users.define_column("name", "<shorttext>")
+    users = Groonga::Hash.create(:name => "Users")
+    name = users.define_column("name", "ShortText")
 
     morita = users.add("morita", :name => "mori daijiro")
     gunyara_kun = users.add("gunyara-kun", :name => "Tasuku SUENAGA")
@@ -82,13 +82,13 @@ class ExpressionTest < Test::Unit::TestCase
   end
 
   def test_snippet
-    users = Groonga::Array.create(:name => "users")
+    users = Groonga::Array.create(:name => "Users")
     name = users.define_column("name", "ShortText")
-    terms = Groonga::Hash.create(:name => "terms",
+    terms = Groonga::Hash.create(:name => "Terms",
                                  :key_type => "ShortText",
                                  :default_tokenizer => "TokenBigram")
     users.define_index_column("user_name", users,
-                              :source => "users.name",
+                              :source => "Users.name",
                               :with_position => true)
 
     expression = Groonga::Expression.new
@@ -111,13 +111,13 @@ class ExpressionTest < Test::Unit::TestCase
   end
 
   def test_snippet_without_tags
-    users = Groonga::Array.create(:name => "users")
+    users = Groonga::Array.create(:name => "Users")
     name = users.define_column("name", "ShortText")
-    terms = Groonga::Hash.create(:name => "terms",
+    terms = Groonga::Hash.create(:name => "Terms",
                                  :key_type => "ShortText",
                                  :default_tokenizer => "TokenBigram")
     users.define_index_column("user_name", users,
-                              :source => "users.name",
+                              :source => "Users.name",
                               :with_position => true)
 
     expression = Groonga::Expression.new

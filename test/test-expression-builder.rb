@@ -21,15 +21,15 @@ class ExpressionBuilderTest < Test::Unit::TestCase
   setup :setup_data
 
   def setup_tables
-    @users = Groonga::Hash.create(:name => "<users>")
-    @name = @users.define_column("name", "<shorttext>")
-    @hp = @users.define_column("hp", "<uint>")
+    @users = Groonga::Hash.create(:name => "Users")
+    @name = @users.define_column("name", "ShortText")
+    @hp = @users.define_column("hp", "UInt32")
 
-    @terms = Groonga::PatriciaTrie.create(:name => "<terms>",
+    @terms = Groonga::PatriciaTrie.create(:name => "Terms",
                                           :default_tokenizer => "TokenBigram")
     @terms.define_index_column("user-name", @users, :source => @name)
 
-    @bookmarks = Groonga::Array.create(:name => "bookmarks")
+    @bookmarks = Groonga::Array.create(:name => "Bookmarks")
     @bookmarks.define_column("user", @users)
     @bookmarks.define_column("uri", "ShortText")
   end
