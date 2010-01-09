@@ -20,7 +20,7 @@ class TableCursorTest < Test::Unit::TestCase
     setup_database
 
     @bookmarks_path = @tables_dir + "table"
-    @bookmarks = Groonga::PatriciaTrie.create(:name => "bookmarks",
+    @bookmarks = Groonga::PatriciaTrie.create(:name => "Bookmarks",
                                               :path => @bookmarks_path.to_s)
     @groonga_bookmark = @bookmarks.add("groonga")
     @cutter_bookmark = @bookmarks.add("Cutter")
@@ -50,62 +50,66 @@ class TableCursorTest < Test::Unit::TestCase
   end
 
   def test_without_limit_and_offset
-    bookmarks = create_bookmarks
-    add_ids(bookmarks)
+    users = create_users
+    add_users(users)
     results = []
-    bookmarks.open_cursor do |cursor|
+    users.open_cursor do |cursor|
       cursor.each do |record|
-        results << record["id"]
+        results << record["name"]
       end
     end
 
-    assert_equal((100..199).to_a, results)
+    assert_equal((100..199).collect {|i| "user#{i}"},
+                 results)
   end
 
   def test_with_limit
-    bookmarks = create_bookmarks
-    add_ids(bookmarks)
+    users = create_users
+    add_users(users)
     results = []
-    bookmarks.open_cursor(:limit => 20) do |cursor|
+    users.open_cursor(:limit => 20) do |cursor|
       cursor.each do |record|
-        results << record["id"]
+        results << record["name"]
       end
     end
 
-    assert_equal((100...120).to_a, results)
+    assert_equal((100...120).collect {|i| "user#{i}"},
+                 results)
   end
 
   def test_with_offset
-    bookmarks = create_bookmarks
-    add_ids(bookmarks)
+    users = create_users
+    add_users(users)
     results = []
-    bookmarks.open_cursor(:offset => 20) do |cursor|
+    users.open_cursor(:offset => 20) do |cursor|
       cursor.each do |record|
-        results << record["id"]
+        results << record["name"]
       end
     end
 
-    assert_equal((120...200).to_a, results)
+    assert_equal((120...200).collect {|i| "user#{i}"},
+                 results)
   end
 
   def test_with_limit_and_offset
-    bookmarks = create_bookmarks
-    add_ids(bookmarks)
+    users = create_users
+    add_users(users)
     results = []
-    bookmarks.open_cursor(:limit => 20, :offset => 20) do |cursor|
+    users.open_cursor(:limit => 20, :offset => 20) do |cursor|
       cursor.each do |record|
-        results << record["id"]
+        results << record["name"]
       end
     end
 
-    assert_equal((120...140).to_a, results)
+    assert_equal((120...140).collect {|i| "user#{i}"},
+                 results)
   end
 
   def test_delete
-    bookmarks = create_bookmarks
-    add_ids(bookmarks)
+    users = create_users
+    add_users(users)
 
-    bookmarks.open_cursor(:limit => 20) do |cursor|
+    users.open_cursor(:limit => 20) do |cursor|
       20.times do
         cursor.next
         cursor.delete
@@ -113,46 +117,37 @@ class TableCursorTest < Test::Unit::TestCase
     end
 
     results = []
-    bookmarks.open_cursor do |cursor|
+    users.open_cursor do |cursor|
       cursor.each do |record|
-        results << record["id"]
+        results << record["name"]
       end
     end
 
-    assert_equal((120...200).to_a, results)
+    assert_equal((120...200).collect {|i| "user#{i}"},
+                 results)
   end
 
   def test_patricia_trie_cursor_key
-    bookmarks = Groonga::PatriciaTrie.create(:name => "patricia_trie_table")
-    bookmarks.add("test")
-    bookmarks.open_cursor do |cursor|
+    sites = Groonga::PatriciaTrie.create(:name => "Sites")
+    sites.add("http://groonga.org/")
+    sites.open_cursor do |cursor|
       cursor.next
-      assert_equal("test", cursor.key)
+      assert_equal("http://groonga.org/", cursor.key)
     end
   end
 
   private
-  def create_bookmarks
-    bookmarks = Groonga::Array.create(:name => "<bookmarks>")
-    bookmarks.define_column("id", "<int>")
-    bookmarks
+  def create_users
+    users = Groonga::Array.create(:name => "Users")
+    users.define_column("name", "ShortText")
+    users
   end
 
-  def add_ids(bookmarks)
+  def add_users(users)
     (0...100).to_a.each do |i|
-      bookmark = bookmarks.add
-      bookmark["id"] = i + 100
+      user = users.add
+      user["name"] = "user#{i + 100}"
     end
-    bookmarks
-  end
-
-  def get_ids_by_cursor(bookmarks, options={})
-    ids = []
-    bookmarks.open_cursor(options) do |cursor|
-      cursor.each do |record|
-        ids << record["id"]
-      end
-    end
-    ids
+    users
   end
 end

@@ -19,11 +19,11 @@ class TableTest < Test::Unit::TestCase
   setup :setup_database
 
   def test_create
-    table_path = @tables_dir + "table"
+    table_path = @tables_dir + "bookmarks"
     assert_not_predicate(table_path, :exist?)
-    table = Groonga::PatriciaTrie.create(:name => "bookmarks",
+    table = Groonga::PatriciaTrie.create(:name => "Bookmarks",
                                          :path => table_path.to_s)
-    assert_equal("bookmarks", table.name)
+    assert_equal("Bookmarks", table.name)
     assert_predicate(table_path, :exist?)
   end
 
@@ -34,16 +34,16 @@ class TableTest < Test::Unit::TestCase
   end
 
   def test_open
-    table_path = @tables_dir + "table"
-    table = Groonga::Hash.create(:name => "bookmarks",
+    table_path = @tables_dir + "bookmarks"
+    table = Groonga::Hash.create(:name => "Bookmarks",
                                  :path => table_path.to_s)
-    assert_equal("bookmarks", table.name)
+    assert_equal("Bookmarks", table.name)
 
     called = false
-    Groonga::Table.open(:name => "bookmarks") do |_table|
+    Groonga::Table.open(:name => "Bookmarks") do |_table|
       table = _table
       assert_not_predicate(table, :closed?)
-      assert_equal("bookmarks", _table.name)
+      assert_equal("Bookmarks", _table.name)
       called = true
     end
     assert_true(called)
@@ -51,10 +51,10 @@ class TableTest < Test::Unit::TestCase
   end
 
   def test_open_by_path
-    table_path = @tables_dir + "table"
-    table = Groonga::PatriciaTrie.create(:name => "bookmarks",
+    table_path = @tables_dir + "bookmarks"
+    table = Groonga::PatriciaTrie.create(:name => "Bookmarks",
                                          :path => table_path.to_s)
-    assert_equal("bookmarks", table.name)
+    assert_equal("Bookmarks", table.name)
     table.close
 
     called = false
@@ -69,17 +69,17 @@ class TableTest < Test::Unit::TestCase
   end
 
   def test_open_override_name
-    table_path = @tables_dir + "table"
-    table = Groonga::PatriciaTrie.create(:name => "bookmarks",
+    table_path = @tables_dir + "bookmarks"
+    table = Groonga::PatriciaTrie.create(:name => "Bookmarks",
                                          :path => table_path.to_s)
-    assert_equal("bookmarks", table.name)
+    assert_equal("Bookmarks", table.name)
     table.close
 
     called = false
-    Groonga::Table.open(:name => "no-name", :path => table_path.to_s) do |_table|
+    Groonga::Table.open(:name => "Marks", :path => table_path.to_s) do |_table|
       table = _table
       assert_not_predicate(table, :closed?)
-      assert_equal("no-name", _table.name)
+      assert_equal("Marks", _table.name)
       called = true
     end
     assert_true(called)
@@ -87,19 +87,19 @@ class TableTest < Test::Unit::TestCase
   end
 
   def test_open_wrong_table
-    table_path = @tables_dir + "table"
-    Groonga::Hash.create(:name => "bookmarks",
+    table_path = @tables_dir + "bookmarks"
+    Groonga::Hash.create(:name => "Bookmarks",
                          :path => table_path.to_s) do
     end
 
     assert_raise(TypeError) do
-      Groonga::PatriciaTrie.open(:name => "bookmarks",
+      Groonga::PatriciaTrie.open(:name => "Bookmarks",
                                  :path => table_path.to_s)
     end
   end
 
   def test_new
-    table_path = @tables_dir + "table"
+    table_path = @tables_dir + "no-name"
     assert_raise(Groonga::NoSuchFileOrDirectory) do
       Groonga::Hash.new(:path => table_path.to_s)
     end
@@ -109,42 +109,42 @@ class TableTest < Test::Unit::TestCase
   end
 
   def test_define_column
-    table_path = @tables_dir + "table"
-    table = Groonga::Hash.create(:name => "bookmarks",
+    table_path = @tables_dir + "bookmarks"
+    table = Groonga::Hash.create(:name => "Bookmarks",
                                  :path => table_path.to_s)
-    column = table.define_column("name", "<text>")
-    assert_equal("bookmarks.name", column.name)
+    column = table.define_column("name", "Text")
+    assert_equal("Bookmarks.name", column.name)
     assert_equal(column, table.column("name"))
   end
 
   def test_define_index_column
-    bookmarks = Groonga::Hash.create(:name => "<bookmarks>")
-    bookmarks.define_column("content", "<text>")
-    terms = Groonga::Hash.create(:name => "<terms>")
-    terms.default_tokenizer = "<token:bigram>"
+    bookmarks = Groonga::Hash.create(:name => "Bookmarks")
+    bookmarks.define_column("content", "Text")
+    terms = Groonga::Hash.create(:name => "Terms")
+    terms.default_tokenizer = "TokenBigram"
     index = terms.define_index_column("content-index", bookmarks,
                                       :with_section => true,
-                                      :source => "<bookmarks>.content")
+                                      :source => "Bookmarks.content")
     bookmarks.add("google", :content => "Search engine")
     assert_equal(["google"],
                  index.search("engine").collect {|record| record.key.key})
   end
 
   def test_add_column
-    bookmarks = Groonga::Hash.create(:name => "bookmarks",
+    bookmarks = Groonga::Hash.create(:name => "Bookmarks",
                                      :path => (@tables_dir + "bookmarks").to_s)
 
     description_column_path = @columns_dir + "description"
     bookmarks_description =
-      bookmarks.define_index_column("description", "<text>",
+      bookmarks.define_index_column("description", "Text",
                                     :path => description_column_path.to_s)
 
-    books = Groonga::Hash.create(:name => "books",
+    books = Groonga::Hash.create(:name => "Books",
                                  :path => (@tables_dir + "books").to_s)
     books_description = books.add_column("description",
-                                         "<longtext>",
+                                         "LongText",
                                          description_column_path.to_s)
-    assert_equal("books.description", books_description.name)
+    assert_equal("Books.description", books_description.name)
     assert_equal(books_description, books.column("description"))
 
     assert_equal(bookmarks_description, bookmarks.column("description"))
@@ -152,7 +152,7 @@ class TableTest < Test::Unit::TestCase
 
   def test_column_nonexistent
     table_path = @tables_dir + "bookmarks"
-    table = Groonga::Hash.create(:name => "bookmarks",
+    table = Groonga::Hash.create(:name => "Bookmarks",
                                  :path => table_path.to_s)
     assert_nil(table.column("nonexistent"))
   end
@@ -160,12 +160,12 @@ class TableTest < Test::Unit::TestCase
   def test_set_value
     value_type = Groonga::Type.new("Text512", :size => 512)
     table_path = @tables_dir + "bookmarks"
-    bookmarks = Groonga::Hash.create(:name => "bookmarks",
+    bookmarks = Groonga::Hash.create(:name => "Bookmarks",
                                      :value_type => value_type,
                                      :path => table_path.to_s)
     comment_column_path = @columns_dir + "comment"
     bookmarks_comment =
-      bookmarks.define_column("comment", "<shorttext>",
+      bookmarks.define_column("comment", "ShortText",
                               :type => "scalar",
                               :path => comment_column_path.to_s)
     groonga = bookmarks.add("groonga")
@@ -180,7 +180,7 @@ class TableTest < Test::Unit::TestCase
 
   def test_array_set
     value_type = Groonga::Type.new("Text512", :size => 512)
-    bookmarks = Groonga::Hash.create(:name => "bookmarks",
+    bookmarks = Groonga::Hash.create(:name => "Bookmarks",
                                      :value_type => value_type)
     url = "http://groonga.org/"
     bookmarks["groonga"] = "#{url}\0"
@@ -193,10 +193,10 @@ class TableTest < Test::Unit::TestCase
 
   def test_add_without_name
     users_path = @tables_dir + "users"
-    users = Groonga::Array.create(:name => "users",
+    users = Groonga::Array.create(:name => "Users",
                                   :path => users_path.to_s)
     name_column_path = @columns_dir + "name"
-    users_name = users.define_column("name", "<shorttext>",
+    users_name = users.define_column("name", "ShortText",
                                      :path => name_column_path.to_s)
     morita = users.add
     users_name[morita.id] = "morita"
@@ -205,12 +205,12 @@ class TableTest < Test::Unit::TestCase
 
   def test_add_by_id
     users_path = @tables_dir + "users"
-    users = Groonga::Hash.create(:name => "users",
+    users = Groonga::Hash.create(:name => "Users",
                                  :path => users_path.to_s)
 
     value_type = Groonga::Type.new("Text512", :size => 512)
     bookmarks_path = @tables_dir + "bookmarks"
-    bookmarks = Groonga::Hash.create(:name => "bookmarks",
+    bookmarks = Groonga::Hash.create(:name => "Bookmarks",
                                      :key_type => users,
                                      :value_type => value_type,
                                      :path => bookmarks_path.to_s)
@@ -224,18 +224,18 @@ class TableTest < Test::Unit::TestCase
 
   def test_columns
     bookmarks_path = @tables_dir + "bookmarks"
-    bookmarks = Groonga::Array.create(:name => "bookmarks",
+    bookmarks = Groonga::Array.create(:name => "Bookmarks",
                                       :path => bookmarks_path.to_s)
 
-    uri_column = bookmarks.define_column("uri", "<shorttext>")
-    comment_column = bookmarks.define_column("comment", "<text>")
+    uri_column = bookmarks.define_column("uri", "ShortText")
+    comment_column = bookmarks.define_column("comment", "Text")
     assert_equal([uri_column.name, comment_column.name].sort,
                  bookmarks.columns.collect {|column| column.name}.sort)
   end
 
   def test_column_by_symbol
     bookmarks_path = @tables_dir + "bookmarks"
-    bookmarks = Groonga::Array.create(:name => "bookmarks",
+    bookmarks = Groonga::Array.create(:name => "Bookmarks",
                                       :path => bookmarks_path.to_s)
 
     uri_column = bookmarks.define_column("uri", "Text")
@@ -244,7 +244,7 @@ class TableTest < Test::Unit::TestCase
 
   def test_size
     bookmarks_path = @tables_dir + "bookmarks"
-    bookmarks = Groonga::Array.create(:name => "bookmarks",
+    bookmarks = Groonga::Array.create(:name => "Bookmarks",
                                       :path => bookmarks_path.to_s)
 
     assert_equal(0, bookmarks.size)
@@ -258,9 +258,9 @@ class TableTest < Test::Unit::TestCase
 
   def test_time_column
     bookmarks_path = @tables_dir + "bookmarks"
-    bookmarks = Groonga::Array.create(:name => "bookmarks",
+    bookmarks = Groonga::Array.create(:name => "Bookmarks",
                                       :path => bookmarks_path.to_s)
-    column = bookmarks.define_column("created_at", "<time>")
+    column = bookmarks.define_column("created_at", "Time")
 
     bookmark = bookmarks.add
     now = Time.now
@@ -271,7 +271,7 @@ class TableTest < Test::Unit::TestCase
 
   def test_delete
     bookmarks_path = @tables_dir + "bookmarks"
-    bookmarks = Groonga::Array.create(:name => "bookmarks",
+    bookmarks = Groonga::Array.create(:name => "Bookmarks",
                                       :path => bookmarks_path.to_s)
 
     bookmark1 = bookmarks.add
@@ -285,7 +285,7 @@ class TableTest < Test::Unit::TestCase
 
   def test_remove
     bookmarks_path = @tables_dir + "bookmarks"
-    bookmarks = Groonga::Array.create(:name => "bookmarks",
+    bookmarks = Groonga::Array.create(:name => "Bookmarks",
                                       :path => bookmarks_path.to_s)
     assert_predicate(bookmarks_path, :exist?)
     bookmarks.remove
@@ -293,15 +293,15 @@ class TableTest < Test::Unit::TestCase
   end
 
   def test_temporary_add
-    table = Groonga::Hash.create(:key_type => "<shorttext>")
+    table = Groonga::Hash.create(:key_type => "ShortText")
     assert_equal(0, table.size)
     table.add("key")
     assert_equal(1, table.size)
   end
 
   def test_each
-    users = Groonga::Array.create(:name => "<users>")
-    user_name = users.define_column("name", "<shorttext>")
+    users = Groonga::Array.create(:name => "Users")
+    user_name = users.define_column("name", "ShortText")
 
     names = ["daijiro", "gunyarakun", "yu"]
     names.each do |name|
@@ -313,7 +313,7 @@ class TableTest < Test::Unit::TestCase
   end
 
   def test_truncate
-    users = Groonga::Array.create(:name => "<users>")
+    users = Groonga::Array.create(:name => "Users")
     users.add
     users.add
     users.add
@@ -397,9 +397,9 @@ class TableTest < Test::Unit::TestCase
   end
 
   def test_group
-    bookmarks = Groonga::Hash.create(:name => "<bookmarks>")
-    bookmarks.define_column("title", "<text>")
-    comments = Groonga::Array.create(:name => "<comments>")
+    bookmarks = Groonga::Hash.create(:name => "Bookmarks")
+    bookmarks.define_column("title", "Text")
+    comments = Groonga::Array.create(:name => "Comments")
     comments.define_column("bookmark", bookmarks)
     comments.define_column("content", "Text")
     comments.define_column("issued", "Int32")
@@ -432,7 +432,7 @@ class TableTest < Test::Unit::TestCase
   end
 
   def test_union!
-    bookmarks = Groonga::Hash.create(:name => "bookmarks")
+    bookmarks = Groonga::Hash.create(:name => "Bookmarks")
     bookmarks.define_column("title", "ShortText")
 
     groonga = bookmarks.add("http://groonga.org/", :title => "groonga")
@@ -462,7 +462,7 @@ class TableTest < Test::Unit::TestCase
   end
 
   def test_difference!
-    bookmarks = Groonga::Hash.create(:name => "bookmarks")
+    bookmarks = Groonga::Hash.create(:name => "Bookmarks")
     bookmarks.define_column("title", "ShortText")
 
     bookmarks.add("http://groonga.org/", :title => "groonga")
@@ -477,7 +477,7 @@ class TableTest < Test::Unit::TestCase
   end
 
   def test_merge!
-    bookmarks = Groonga::Hash.create(:name => "bookmarks")
+    bookmarks = Groonga::Hash.create(:name => "Bookmarks")
     bookmarks.define_column("title", "ShortText")
 
     bookmarks.add("http://groonga.org/", :title => "groonga")
@@ -493,7 +493,7 @@ class TableTest < Test::Unit::TestCase
   end
 
   def test_lock
-    bookmarks = Groonga::Array.create(:name => "<bookmarks>")
+    bookmarks = Groonga::Array.create(:name => "Bookmarks")
     bookmark = bookmarks.add
 
     assert_not_predicate(bookmarks, :locked?)
@@ -504,7 +504,7 @@ class TableTest < Test::Unit::TestCase
   end
 
   def test_lock_failed
-    bookmarks = Groonga::Array.create(:name => "<bookmarks>")
+    bookmarks = Groonga::Array.create(:name => "Bookmarks")
     bookmark = bookmarks.add
 
     bookmarks.lock
@@ -514,7 +514,7 @@ class TableTest < Test::Unit::TestCase
   end
 
   def test_lock_block
-    bookmarks = Groonga::Array.create(:name => "<bookmarks>")
+    bookmarks = Groonga::Array.create(:name => "Bookmarks")
     bookmark = bookmarks.add
 
     assert_not_predicate(bookmarks, :locked?)
@@ -525,7 +525,7 @@ class TableTest < Test::Unit::TestCase
   end
 
   def test_clear_lock
-    bookmarks = Groonga::Array.create(:name => "<bookmarks>")
+    bookmarks = Groonga::Array.create(:name => "Bookmarks")
     bookmark = bookmarks.add
 
     assert_not_predicate(bookmarks, :locked?)
@@ -550,8 +550,8 @@ class TableTest < Test::Unit::TestCase
 
   private
   def create_bookmarks
-    bookmarks = Groonga::Array.create(:name => "<bookmarks>")
-    bookmarks.define_column("id", "<int>")
+    bookmarks = Groonga::Array.create(:name => "Bookmarks")
+    bookmarks.define_column("id", "Int32")
     bookmarks
   end
 
