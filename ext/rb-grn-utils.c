@@ -219,7 +219,7 @@ rb_grn_bulk_from_ruby_object (VALUE object, grn_ctx *context, grn_obj *bulk)
 	grn_obj_reinit(context, bulk, GRN_DB_VOID, 0);
 	break;
       case T_STRING:
-	grn_obj_reinit(context, bulk, GRN_DB_TEXT, GRN_OBJ_DO_SHALLOW_COPY);
+	grn_obj_reinit(context, bulk, GRN_DB_TEXT, 0);
 	GRN_TEXT_SET(context, bulk, RSTRING_PTR(object), RSTRING_LEN(object));
 	break;
       case T_FIXNUM:
@@ -244,9 +244,11 @@ rb_grn_bulk_from_ruby_object (VALUE object, grn_ctx *context, grn_obj *bulk)
 	GRN_FLOAT_SET(context, bulk, NUM2DBL(object));
 	break;
       case T_TRUE:
+	grn_obj_reinit(context, bulk, GRN_DB_BOOL, 0);
 	GRN_BOOL_SET(context, bulk, GRN_TRUE);
 	break;
       case T_FALSE:
+	grn_obj_reinit(context, bulk, GRN_DB_BOOL, 0);
 	GRN_BOOL_SET(context, bulk, GRN_FALSE);
 	break;
       default:
@@ -254,10 +256,10 @@ rb_grn_bulk_from_ruby_object (VALUE object, grn_ctx *context, grn_obj *bulk)
 	    VALUE sec, usec;
 	    int64_t time_value;
 
-	    grn_obj_reinit(context, bulk, GRN_DB_TIME, 0);
 	    sec = rb_funcall(object, rb_intern("to_i"), 0);
 	    usec = rb_funcall(object, rb_intern("usec"), 0);
 	    time_value = GRN_TIME_PACK(NUM2LL(sec), NUM2LL(usec));
+	    grn_obj_reinit(context, bulk, GRN_DB_TIME, 0);
 	    GRN_TIME_SET(context, bulk, time_value);
 	} else if (RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cGrnObject))) {
 	    grn_obj *grn_object;
@@ -273,14 +275,14 @@ rb_grn_bulk_from_ruby_object (VALUE object, grn_ctx *context, grn_obj *bulk)
 
 	    table = RVAL2GRNOBJECT(rb_funcall(object, rb_intern("table"), 0),
 				   &context);
-	    grn_obj_reinit(context, bulk, grn_obj_id(context, table), 0);
 	    id_value = NUM2UINT(rb_funcall(object, rb_intern("id"), 0));
+	    grn_obj_reinit(context, bulk, grn_obj_id(context, table), 0);
 	    GRN_RECORD_SET(context, bulk, id_value);
 	} else {
 	    rb_raise(rb_eTypeError,
 		     "bulked object should be one of "
 		     "[nil, true, false, String, Integer, Float, Time, "
-		     "Groonga::Object]: %s",
+		     "Groonga::Object, Groonga::Record]: %s",
 		     rb_grn_inspect(object));
 	}
 	break;
@@ -659,83 +661,16 @@ rb_grn_key_from_ruby_object (VALUE rb_key, grn_ctx *context,
 grn_obj *
 rb_grn_obj_from_ruby_object (VALUE rb_object, grn_ctx *context, grn_obj **_obj)
 {
-    grn_obj *obj;
-
-    if (*_obj) {
-	obj = *_obj;
-	grn_obj_close(context, obj); /* FIXME: grn_obj_reinit() */
-    } else {
-	*_obj = grn_obj_open(context, GRN_VOID, 0, GRN_ID_NIL);
-	obj = *_obj;
-    }
-
-    switch (TYPE(rb_object)) {
-      case T_NIL:
-	grn_obj_reinit(context, obj, GRN_DB_VOID, 0);
-	break;
-      case T_STRING:
-	grn_obj_reinit(context, obj, GRN_DB_TEXT, 0);
-	GRN_TEXT_SET(context, obj,
-		     RSTRING_PTR(rb_object), RSTRING_LEN(rb_object));
-	break;
-      case T_FIXNUM:
-	grn_obj_reinit(context, obj, GRN_DB_INT32, 0);
-	GRN_INT32_SET(context, obj, NUM2INT(rb_object));
-	break;
-      case T_BIGNUM:
-	grn_obj_reinit(context, obj, GRN_DB_INT64, 0);
-	GRN_INT64_SET(context, obj, NUM2LL(rb_object));
-	break;
-      case T_FLOAT:
-	grn_obj_reinit(context, obj, GRN_DB_FLOAT, 0);
-	GRN_FLOAT_SET(context, obj, NUM2DBL(rb_object));
-	break;
-      case T_TRUE:
-	grn_obj_reinit(context, obj, GRN_DB_BOOL, 0);
-	GRN_BOOL_SET(context, obj, GRN_TRUE);
-	break;
-      case T_FALSE:
-	grn_obj_reinit(context, obj, GRN_DB_BOOL, 0);
-	GRN_BOOL_SET(context, obj, GRN_FALSE);
-	break;
-      default:
-	if (RVAL2CBOOL(rb_obj_is_kind_of(rb_object, rb_cTime))) {
-	    VALUE sec, usec;
-	    int64_t time_value;
-
-	    sec = rb_funcall(rb_object, rb_intern("to_i"), 0);
-	    usec = rb_funcall(rb_object, rb_intern("usec"), 0);
-	    time_value = GRN_TIME_PACK(NUM2LL(sec), NUM2LL(usec));
-	    grn_obj_reinit(context, obj, GRN_DB_TIME, 0);
-	    GRN_TIME_SET(context, obj, time_value);
-	} else if (RVAL2CBOOL(rb_obj_is_kind_of(rb_object, rb_cGrnObject))) {
-	    grn_obj_close(context, obj); /* TODO: reduce memory allocation */
-	    *_obj = RVAL2GRNOBJECT(rb_object, &context);
-	    obj = *_obj;
-	} else if (RVAL2CBOOL(rb_obj_is_kind_of(rb_object, rb_cGrnRecord))) {
-	    grn_id id, table_id;
-	    VALUE rb_table;
-	    grn_obj *table = NULL;
-
-	    id = NUM2UINT(rb_funcall(rb_object, rb_intern("id"), 0));
-	    rb_table = rb_funcall(rb_object, rb_intern("table"), 0);
-	    rb_grn_table_deconstruct(RB_GRN_TABLE(DATA_PTR(rb_table)),
-				     &table, NULL,
-				     NULL, NULL, NULL, NULL, NULL);
-	    table_id = grn_obj_id(context, table);
-	    grn_obj_reinit(context, obj, table_id, 0);
-	    GRN_RECORD_SET(context, obj, id);
-	} else {
-	    rb_raise(rb_eTypeError,
-		     "should be one of "
-		     "[nil, true, false, String, Integer, Float, Time, "
-		     "Groonga::Object, Groonga::Record]: <%s>",
-		     rb_grn_inspect(rb_object));
+    if (RVAL2CBOOL(rb_obj_is_kind_of(rb_object, rb_cGrnObject))) {
+	if (*_obj) {
+	    grn_obj_close(context, *_obj); /* TODO: reduce memory allocation */
 	}
-	break;
+	*_obj = RVAL2GRNOBJECT(rb_object, &context);
+    } else {
+	*_obj = RVAL2GRNBULK(rb_object, context, *_obj);
     }
 
-    return obj;
+    return *_obj;
 }
 
 VALUE
