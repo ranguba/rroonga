@@ -177,7 +177,7 @@ class ColumnTest < Test::Unit::TestCase
 
   def test_select_query
     populate_table_for_select
-    
+
     result = @body.select("drive")
     assert_equal(["Drive and Eat"],
                  result.records.collect do |record|
@@ -252,6 +252,20 @@ class ColumnTest < Test::Unit::TestCase
 
     post = posts.add("hello", :issued => nil)
     assert_equal(Time.at(0), post["issued"])
+  end
+
+  def test_bool
+    posts = Groonga::Hash.create(:name => "Posts", :key_type => "ShortText")
+    hidden = posts.define_column("hidden", "Bool")
+
+    post = posts.add("hello")
+    assert_false(post["hidden"])
+
+    post["hidden"] = true
+    assert_true(post["hidden"])
+
+    post["hidden"] = false
+    assert_false(post["hidden"])
   end
 
   private

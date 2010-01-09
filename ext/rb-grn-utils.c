@@ -1,4 +1,5 @@
 /* -*- c-file-style: "ruby" -*- */
+/* vim: set sts=4 sw=4 ts=8 noet: */
 /*
   Copyright (C) 2009  Kouhei Sutou <kou@clear-code.com>
 
@@ -95,6 +96,9 @@ rb_grn_bulk_to_ruby_object_by_range_id (grn_ctx *context, grn_obj *bulk,
     switch (range_id) {
       case GRN_DB_VOID:
 	*rb_value = rb_str_new(GRN_TEXT_VALUE(bulk), GRN_TEXT_LEN(bulk));
+	break;
+      case GRN_DB_BOOL:
+	*rb_value = GRN_BOOL_VALUE(bulk) ? Qtrue : Qfalse;
 	break;
       case GRN_DB_INT32:
 	*rb_value = INT2NUM(GRN_INT32_VALUE(bulk));
@@ -239,6 +243,12 @@ rb_grn_bulk_from_ruby_object (VALUE object, grn_ctx *context, grn_obj *bulk)
 	grn_obj_reinit(context, bulk, GRN_DB_FLOAT, 0);
 	GRN_FLOAT_SET(context, bulk, NUM2DBL(object));
 	break;
+      case T_TRUE:
+	GRN_BOOL_SET(context, bulk, GRN_TRUE);
+	break;
+      case T_FALSE:
+	GRN_BOOL_SET(context, bulk, GRN_FALSE);
+	break;
       default:
 	if (RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cTime))) {
 	    VALUE sec, usec;
@@ -269,7 +279,8 @@ rb_grn_bulk_from_ruby_object (VALUE object, grn_ctx *context, grn_obj *bulk)
 	} else {
 	    rb_raise(rb_eTypeError,
 		     "bulked object should be one of "
-		     "[nil, String, Integer, Float, Time, Groonga::Object]: %s",
+		     "[nil, true, false, String, Integer, Float, Time, "
+		     "Groonga::Object]: %s",
 		     rb_grn_inspect(object));
 	}
 	break;
@@ -679,6 +690,14 @@ rb_grn_obj_from_ruby_object (VALUE rb_object, grn_ctx *context, grn_obj **_obj)
 	grn_obj_reinit(context, obj, GRN_DB_FLOAT, 0);
 	GRN_FLOAT_SET(context, obj, NUM2DBL(rb_object));
 	break;
+      case T_TRUE:
+	grn_obj_reinit(context, obj, GRN_DB_BOOL, 0);
+	GRN_BOOL_SET(context, obj, GRN_TRUE);
+	break;
+      case T_FALSE:
+	grn_obj_reinit(context, obj, GRN_DB_BOOL, 0);
+	GRN_BOOL_SET(context, obj, GRN_FALSE);
+	break;
       default:
 	if (RVAL2CBOOL(rb_obj_is_kind_of(rb_object, rb_cTime))) {
 	    VALUE sec, usec;
@@ -709,8 +728,8 @@ rb_grn_obj_from_ruby_object (VALUE rb_object, grn_ctx *context, grn_obj **_obj)
 	} else {
 	    rb_raise(rb_eTypeError,
 		     "should be one of "
-		     "[nil, String, Integer, Float, Time, Groonga::Object, "
-		     "Groonga::Record]: <%s>",
+		     "[nil, true, false, String, Integer, Float, Time, "
+		     "Groonga::Object, Groonga::Record]: <%s>",
 		     rb_grn_inspect(rb_object));
 	}
 	break;
