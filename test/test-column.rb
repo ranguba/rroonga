@@ -26,31 +26,31 @@ class ColumnTest < Test::Unit::TestCase
 
   def setup_users_table
     @users_path = @tables_dir + "users"
-    @users = Groonga::Array.create(:name => "users",
+    @users = Groonga::Array.create(:name => "Users",
                                    :path => @users_path.to_s)
 
     @users_name_column_path = @columns_dir + "name"
     @users_name_column =
-      @users.define_column("name", "<shorttext>",
+      @users.define_column("name", "ShortText",
                            :path => @users_name_column_path.to_s)
   end
 
   def setup_bookmarks_table
     @bookmarks_path = @tables_dir + "bookmarks"
-    @bookmarks = Groonga::Array.create(:name => "bookmarks",
+    @bookmarks = Groonga::Array.create(:name => "Bookmarks",
                                        :path => @bookmarks_path.to_s)
 
     @uri_column_path = @columns_dir + "uri"
-    @bookmarks_uri = @bookmarks.define_column("uri", "<shorttext>",
+    @bookmarks_uri = @bookmarks.define_column("uri", "ShortText",
                                               :path => @uri_column_path.to_s)
 
     @comment_column_path = @columns_dir + "comment"
     @bookmarks_comment =
-      @bookmarks.define_column("comment", "<text>",
+      @bookmarks.define_column("comment", "Text",
                                :path => @comment_column_path.to_s)
 
     @content_column_path = @columns_dir + "content"
-    @bookmarks_content = @bookmarks.define_column("content", "<longtext>")
+    @bookmarks_content = @bookmarks.define_column("content", "LongText")
 
     @user_column_path = @columns_dir + "user"
     @bookmarks_user = @bookmarks.define_column("user", @users)
@@ -117,16 +117,16 @@ class ColumnTest < Test::Unit::TestCase
   end
 
   def test_accessor
-    posts = Groonga::Hash.create(:name => "<posts>", :key_type => "<shorttext>")
-    posts.define_column("body", "<text>")
-    comments = Groonga::Hash.create(:name => "<comments>",
-                                    :key_type => "<shorttext>")
-    content = comments.define_column("content", "<shorttext>")
+    posts = Groonga::Hash.create(:name => "Posts", :key_type => "ShortText")
+    posts.define_column("body", "Text")
+    comments = Groonga::Hash.create(:name => "Comments",
+                                    :key_type => "ShortText")
+    content = comments.define_column("content", "ShortText")
     comments.define_column("post", posts)
 
-    index = Groonga::PatriciaTrie.create(:name => "<terms>",
-                                         :key_type => "<shorttext>")
-    index.default_tokenizer = "<token:bigram>"
+    index = Groonga::PatriciaTrie.create(:name => "Terms",
+                                         :key_type => "ShortText")
+    index.default_tokenizer = "TokenBigram"
     content_index = index.define_index_column("content_index", comments,
                                               :with_position => true)
     content_index.source = content
@@ -158,20 +158,20 @@ class ColumnTest < Test::Unit::TestCase
   end
 
   def test_array_set_with_key_of_table
-    users = Groonga::Hash.create(:name => "<users>",
-                                 :key_type => "ShortText")
-    bookmarks = Groonga::Hash.create(:name => "<bookmarks>")
-    bookmarks.define_column("user", users)
+    languages = Groonga::Hash.create(:name => "Languages",
+                                     :key_type => "ShortText")
+    sites = Groonga::Hash.create(:name => "Sites")
+    sites.define_column("language", languages)
 
-    users.add("morita")
-    groonga = bookmarks.add("http://groonga.org/", :user => "morita")
-    assert_equal("morita", groonga[:user].key)
+    languages.add("Ruby")
+    taiyaki_ru = sites.add("http://taiyaki.ru/", :language => "Ruby")
+    assert_equal("Ruby", taiyaki_ru[:language].key)
   end
 
   def test_local_name
-    items = Groonga::Array.create(:name => "<items>")
-    title = items.define_column("title", "<shorttext>")
-    assert_equal("<items>.title", title.name)
+    items = Groonga::Array.create(:name => "Items")
+    title = items.define_column("title", "ShortText")
+    assert_equal("Items.title", title.name)
     assert_equal("title", title.local_name)
   end
 
@@ -235,8 +235,8 @@ class ColumnTest < Test::Unit::TestCase
   end
 
   def test_set_time
-    posts = Groonga::Hash.create(:name => "<posts>", :key_type => "<shorttext>")
-    body = posts.define_column("issued", "<time>")
+    posts = Groonga::Hash.create(:name => "Posts", :key_type => "ShortText")
+    body = posts.define_column("issued", "Time")
 
     post = posts.add("hello", :issued => 123456)
     assert_equal(Time.at(123456), post[".issued"])
@@ -281,13 +281,13 @@ class ColumnTest < Test::Unit::TestCase
   end
 
   def populate_table_for_select
-    @posts = Groonga::Hash.create(:name => "<posts>", :key_type => "<shorttext>")
-    @body = @posts.define_column("body", "<text>")
+    @posts = Groonga::Hash.create(:name => "Posts", :key_type => "ShortText")
+    @body = @posts.define_column("body", "Text")
 
-    index = Groonga::PatriciaTrie.create(:name => "<terms>",
-                                         :key_type => "<shorttext>",
+    index = Groonga::PatriciaTrie.create(:name => "Terms",
+                                         :key_type => "ShortText",
                                          :key_normalize => true)
-    index.default_tokenizer = "<token:bigram>"
+    index.default_tokenizer = "TokenBigram"
     body_index = index.define_index_column("body_index", @posts,
                                            :with_position => true,
                                            :source => @body)
