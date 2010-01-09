@@ -163,9 +163,9 @@ rb_grn_array_s_create (int argc, VALUE *argv, VALUE klass)
  *
  * 使用例では、以下のようなユーザを格納するGroonga::Arrayが
  * 定義されているものとする。
- *   users = Groonga::Array.create(:name => "<users>")
- *   users.define_column("name", "<shorttext>")
- *   users.define_column("uri", "<shorttext>")
+ *   users = Groonga::Array.create(:name => "Users")
+ *   users.define_column("name", "ShortText")
+ *   users.define_column("uri", "ShortText")
  *
  * ユーザを追加する。
  *   user = users.add

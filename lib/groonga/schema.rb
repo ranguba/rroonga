@@ -27,17 +27,17 @@ module Groonga
   # のようなスキーマを定義する場合は以下のようになる。
   #
   #   Groonga::Schema.define do |schema|
-  #     schema.create_table("items") do |table|
+  #     schema.create_table("Items") do |table|
   #       table.short_text("title")
   #     end
   #
-  #     schema.create_table("users") do |table|
+  #     schema.create_table("Users") do |table|
   #       table.short_text("name")
   #     end
   #
   #     schema.create_table("comments") do |table|
-  #       table.reference("item", "items")
-  #       table.reference("author", "users")
+  #       table.reference("item", "Items")
+  #       table.reference("author", "Users")
   #       table.text("content")
   #       table.time("issued")
   #     end

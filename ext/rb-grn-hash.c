@@ -108,7 +108,7 @@ VALUE rb_cGrnHash;
  *
  * 名前付き永続テーブルを生成する。ただし、ファイル名は気に
  * しない。
- *   Groonga::Hash.create(:name => "<bookmarks>",
+ *   Groonga::Hash.create(:name => "Bookmarks",
  *                        :persistent => true)
  *
  * それぞれのレコードに512バイトの値を格納できる無名一時テー
@@ -120,27 +120,27 @@ VALUE rb_cGrnHash;
  *
  * キーとして文字列を使用する無名一時テーブルを生成する。
  * （キーの種類を表すオブジェクトは文字列で指定。）
- *   Groonga::Hash.create(:key_type => "<shorttext>")
+ *   Groonga::Hash.create(:key_type => "ShortText")
  *
- * キーとして<tt><bookmarks></tt>テーブルのレコードを使用す
+ * キーとして<tt>Bookmarks</tt>テーブルのレコードを使用す
  * る無名一時テーブルを生成する。
- *   bookmarks = Groonga::Hash.create(:name => "<bookmarks>")
+ *   bookmarks = Groonga::Hash.create(:name => "Bookmarks")
  *   Groonga::Hash.create(:key_type => bookmarks)
  *
- * キーとして<tt><bookmarks></tt>テーブルのレコードを使用す
+ * キーとして<tt>Bookmarks</tt>テーブルのレコードを使用す
  * る無名一時テーブルを生成する。
  * （テーブルは文字列で指定。）
- *   Groonga::Hash.create(:name => "<bookmarks>")
- *   Groonga::Hash.create(:key_type => "<bookmarks>")
+ *   Groonga::Hash.create(:name => "Bookmarks")
+ *   Groonga::Hash.create(:key_type => "Bookmarks")
  *
  * 全文検索用のトークンをバイグラムで切り出す無名一時テーブ
  * ルを生成する。
- *   bookmarks = Groonga::Hash.create(:name => "<bookmarks>")
- *   bookmarks.define_column("comment", "<text>")
- *   terms = Groonga::Hash.create(:name => "<terms>",
+ *   bookmarks = Groonga::Hash.create(:name => "Bookmarks")
+ *   bookmarks.define_column("comment", "Text")
+ *   terms = Groonga::Hash.create(:name => "Terms",
  *                                :default_tokenizer => "TokenBigram")
  *   terms.define_index_column("content", bookmarks,
- *                             :source => "<bookmarks>.comment")
+ *                             :source => "Bookmarks.comment")
  */
 static VALUE
 rb_grn_hash_s_create (int argc, VALUE *argv, VALUE self)

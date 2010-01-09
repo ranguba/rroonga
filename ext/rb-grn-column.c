@@ -135,9 +135,9 @@ rb_grn_column_get_table (VALUE self)
  *
  * テーブル名を除いたカラム名を返す。
  *
- *   items = Groonga::Array.create(:name => "<items>")
- *   title = items.define_column("title", "<shorttext>")
- *   title.name # => "<items>.title"
+ *   items = Groonga::Array.create(:name => "Items")
+ *   title = items.define_column("title", "ShortText")
+ *   title.name # => "Items.title"
  *   title.local_name # => "title"
  */
 static VALUE
