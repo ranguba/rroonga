@@ -41,21 +41,21 @@ class ArrayTest < Test::Unit::TestCase
   end
 
   def test_add
-    users = Groonga::Array.create(:name => "<users>")
-    users.define_column("name", "<text>")
+    users = Groonga::Array.create(:name => "Users")
+    users.define_column("name", "Text")
     me = users.add(:name => "me")
     assert_equal("me", me[:name])
   end
 
   def test_define_index_column
-    users = Groonga::Array.create(:name => "<users>")
-    users.define_column("name", "<text>")
-    bookmarks = Groonga::Array.create(:name => "<bookmarks>")
-    bookmarks.define_column("title", "<text>")
+    users = Groonga::Array.create(:name => "Users")
+    users.define_column("name", "Text")
+    bookmarks = Groonga::Array.create(:name => "Bookmarks")
+    bookmarks.define_column("title", "Text")
     bookmarks.define_column("user", users)
 
     index = users.define_index_column("bookmarks", bookmarks,
-                                      :source => "<bookmarks>.user")
+                                      :source => "Bookmarks.user")
     morita = users.add(:name => "morita")
     gunyara_kun = users.add(:name => "gunyara-kun")
     groonga = bookmarks.add(:title => "groonga", :user => morita)
@@ -67,15 +67,15 @@ class ArrayTest < Test::Unit::TestCase
   end
 
   def test_create_duplicated_name
-    Groonga::Array.create(:name => "<users>")
+    Groonga::Array.create(:name => "Users")
     assert_raise(Groonga::InvalidArgument) do
-      Groonga::Array.create(:name => "<users>")
+      Groonga::Array.create(:name => "Users")
     end
   end
 
   def test_open_same_name
-    users_created = Groonga::Array.create(:name => "<users>")
-    users_opened = Groonga::Array.open(:name => "<users>")
+    users_created = Groonga::Array.create(:name => "Users")
+    users_opened = Groonga::Array.open(:name => "Users")
     users_opened.add
     assert_equal(1, users_created.size)
   end
