@@ -27,17 +27,17 @@ class PatriciaTrieTest < Test::Unit::TestCase
   def test_tokenizer
     trie = Groonga::PatriciaTrie.create
     assert_nil(trie.default_tokenizer)
-    trie.default_tokenizer = "<token:trigram>"
-    assert_equal(Groonga::Context.default["<token:trigram>"],
+    trie.default_tokenizer = "TokenTrigram"
+    assert_equal(Groonga::Context.default["TokenTrigram"],
                  trie.default_tokenizer)
   end
 
   def test_search
-    users = Groonga::Array.create(:name => "<users>")
-    user_name = users.define_column("name", "<shorttext>")
+    users = Groonga::Array.create(:name => "Users")
+    user_name = users.define_column("name", "ShortText")
 
-    bookmarks = Groonga::PatriciaTrie.create(:name => "<bookmarks>",
-                                             :key_type => "<shorttext>")
+    bookmarks = Groonga::PatriciaTrie.create(:name => "Bookmarks",
+                                             :key_type => "ShortText")
     bookmark_user_id = bookmarks.define_column("user_id", users)
 
     daijiro = users.add
@@ -54,35 +54,35 @@ class PatriciaTrieTest < Test::Unit::TestCase
   end
 
   def test_add
-    users = Groonga::PatriciaTrie.create(:name => "<users>")
+    users = Groonga::PatriciaTrie.create(:name => "Users")
     users.define_column("address", "<text>")
     me = users.add("me", :address => "me@example.com")
     assert_equal("me@example.com", me[:address])
   end
 
   def test_default_tokenizer_on_create
-    terms = Groonga::PatriciaTrie.create(:name => "<terms>",
-                                         :default_tokenizer => "<token:unigram>")
+    terms = Groonga::PatriciaTrie.create(:name => "Terms",
+                                         :default_tokenizer => "TokenUnigram")
     assert_equal(context[Groonga::Type::UNIGRAM],
                  terms.default_tokenizer)
   end
 
   def test_duplicated_name
-    Groonga::PatriciaTrie.create(:name => "<users>")
+    Groonga::PatriciaTrie.create(:name => "Users")
     assert_raise(Groonga::InvalidArgument) do
-      Groonga::PatriciaTrie.create(:name => "<users>")
+      Groonga::PatriciaTrie.create(:name => "Users")
     end
   end
 
   def test_open_same_name
-    users_created = Groonga::PatriciaTrie.create(:name => "<users>")
-    users_opened = Groonga::PatriciaTrie.open(:name => "<users>")
+    users_created = Groonga::PatriciaTrie.create(:name => "Users")
+    users_opened = Groonga::PatriciaTrie.open(:name => "Users")
     users_opened.add("morita")
     assert_equal(1, users_created.size)
   end
 
   def test_has_key?
-    users = Groonga::PatriciaTrie.create(:name => "<users>")
+    users = Groonga::PatriciaTrie.create(:name => "Users")
     assert_false(users.has_key?("morita"))
     users.add("morita")
     assert_true(users.has_key?("morita"))

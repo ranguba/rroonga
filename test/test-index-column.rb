@@ -23,11 +23,11 @@ class IndexColumnTest < Test::Unit::TestCase
   end
 
   def test_array_set_with_record
-    articles = Groonga::Array.create(:name => "<articles>")
-    articles.define_column("content", "<text>")
+    articles = Groonga::Array.create(:name => "Articles")
+    articles.define_column("content", "Text")
 
-    terms = Groonga::Hash.create(:name => "<terms>",
-                                 :default_tokenizer => "<token:bigram>")
+    terms = Groonga::Hash.create(:name => "Terms",
+                                 :default_tokenizer => "TokenBigram")
     content_index = terms.define_index_column("content", articles,
                                               :with_section => true)
 
@@ -56,13 +56,13 @@ class IndexColumnTest < Test::Unit::TestCase
   end
 
   def test_shorter_query_than_ngram
-    articles = Groonga::Array.create(:name => "<articles>")
-    articles.define_column("content", "<text>")
+    articles = Groonga::Array.create(:name => "Articles")
+    articles.define_column("content", "Text")
 
-    terms = Groonga::PatriciaTrie.create(:name => "<terms>",
-                                         :default_tokenizer => "<token:bigram>")
+    terms = Groonga::PatriciaTrie.create(:name => "Terms",
+                                         :default_tokenizer => "TokenBigram")
     content_index = terms.define_index_column("content", articles,
-                                              :source => "<articles>.content")
+                                              :source => "Articles.content")
     articles.add(:content => 'l')
     articles.add(:content => 'll')
     articles.add(:content => 'hello')
