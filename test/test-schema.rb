@@ -142,7 +142,7 @@ class SchemaTest < Test::Unit::TestCase
     Groonga::Schema.create_table("Posts") do |table|
       table.column("rate",
                    type,
-                   :path => path,
+                   :path => path.to_s,
                    :persistent => true,
                    :type => :vector,
                    :compress => :lzo)
@@ -292,7 +292,7 @@ class SchemaTest < Test::Unit::TestCase
     Groonga::Schema.create_table("Terms") do |table|
       table.index("Posts.content",
                   :name => index_column_name,
-                  :path => path,
+                  :path => path.to_s,
                   :persistent => true,
                   :with_section => true,
                   :with_weight => true,
