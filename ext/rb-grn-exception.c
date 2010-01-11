@@ -86,6 +86,7 @@ static VALUE eGrnStackOverFlow;
 static VALUE eGrnSyntaxError;
 static VALUE eGrnRetryMax;
 static VALUE eGrnIncompatibleFileFormat;
+static VALUE eGrnUpdateNotAllowed;
 
 VALUE
 rb_grn_rc_to_exception (grn_rc rc)
@@ -293,6 +294,9 @@ rb_grn_rc_to_exception (grn_rc rc)
         break;
       case GRN_INCOMPATIBLE_FILE_FORMAT:
         exception = eGrnIncompatibleFileFormat;
+        break;
+      case GRN_UPDATE_NOT_ALLOWED:
+        exception = eGrnUpdateNotAllowed;
         break;
     }
 
@@ -508,6 +512,9 @@ rb_grn_rc_to_message (grn_rc rc)
         break;
       case GRN_INCOMPATIBLE_FILE_FORMAT:
         message = "incompatible file format";
+        break;
+      case GRN_UPDATE_NOT_ALLOWED:
+        message = "update isn't allowed";
         break;
     }
 
@@ -1064,7 +1071,7 @@ rb_grn_init_exception (VALUE mGrn)
      * 再試行回数が最大数に達したときに発生する。
      */
     eGrnRetryMax =
-        rb_define_class_under(mGrn, "RertryError", rb_eGrnError);
+        rb_define_class_under(mGrn, "RetryMax", rb_eGrnError);
 
     /*
      * Document-class: Groonga::IncompatibleFileFormat
@@ -1073,4 +1080,12 @@ rb_grn_init_exception (VALUE mGrn)
      */
     eGrnIncompatibleFileFormat =
         rb_define_class_under(mGrn, "IncompatibleFileFormat", rb_eGrnError);
+
+    /*
+     * Document-class: Groonga::UpdateNotAllowed
+     *
+     * 更新操作が許可されていないのに更新操作を行ったときに発生する。
+     */
+    eGrnUpdateNotAllowed =
+        rb_define_class_under(mGrn, "UpdateNotAllowed", rb_eGrnError);
 }

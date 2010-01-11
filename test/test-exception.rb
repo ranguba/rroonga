@@ -81,5 +81,10 @@ class ExceptionTest < Test::Unit::TestCase
     assert_const_defined(Groonga, :AddressIsInUse)
     assert_const_defined(Groonga, :ZLibError)
     assert_const_defined(Groonga, :LZOError)
+    assert_const_defined(Groonga, :StackOverFlow)
+    assert_const_defined(Groonga, :SyntaxError)
+    assert_const_defined(Groonga, :RetryMax)
+    assert_const_defined(Groonga, :IncompatibleFileFormat)
+    assert_const_defined(Groonga, :UpdateNotAllowed)
   end
 end
