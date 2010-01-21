@@ -139,7 +139,8 @@ class TableTest < Test::Unit::TestCase
     path_is_temporary = "name: <Bookmarks.real_name>, path: \(temporary\)"
 
     bookmarks = Groonga::Hash.create(:name => "Bookmarks")
-    assert_raise(ArgumentError.new("should not pass path if persistent is false")) do
+    message = "should not pass :path if :persistent is false: <#{column_path}>"
+    assert_raise(ArgumentError.new(message)) do
       real_name = bookmarks.define_column("real_name", "ShortText",
                                           :path => column_path,
                                           :persistent => false)
@@ -171,7 +172,8 @@ class TableTest < Test::Unit::TestCase
 
     bookmarks = Groonga::Hash.create(:name => "Bookmarks")
     terms = Groonga::Hash.create(:name => "Terms")
-    assert_raise(ArgumentError.new("should not pass path if persistent is false")) do
+    message = "should not pass :path if :persistent is false: <#{column_path}>"
+    assert_raise(ArgumentError.new(message)) do
       real_name = terms.define_index_column("real_name", bookmarks,
                                             :path => column_path,
                                             :persistent => false)
