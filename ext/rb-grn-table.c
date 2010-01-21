@@ -457,16 +457,18 @@ rb_grn_table_define_column (int argc, VALUE *argv, VALUE self)
 
     value_type = RVAL2GRNOBJECT(rb_value_type, &context);
 
-    if (!NIL_P(rb_path)) {
-	path = StringValueCStr(rb_path);
-	flags |= GRN_OBJ_PERSISTENT;
-	if (!NIL_P(rb_persistent) && !RVAL2CBOOL(rb_persistent))
-	    rb_raise(rb_eArgError,
-		     "should not pass path if persistent is false");
-    }
-
     if (NIL_P(rb_persistent) || RVAL2CBOOL(rb_persistent))
 	flags |= GRN_OBJ_PERSISTENT;
+
+    if (!NIL_P(rb_path)) {
+	path = StringValueCStr(rb_path);
+	if ((flags & GRN_OBJ_PERSISTENT) == GRN_OBJ_PERSISTENT) {
+	    rb_raise(rb_eArgError,
+		     "should not pass path if persistent is false: <%s>",
+		     path);
+	}
+	flags |= GRN_OBJ_PERSISTENT;
+    }
 
     if (NIL_P(rb_type) ||
 	(rb_grn_equal_option(rb_type, "scalar"))) {
@@ -566,16 +568,18 @@ rb_grn_table_define_index_column (int argc, VALUE *argv, VALUE self)
 
     value_type = RVAL2GRNOBJECT(rb_value_type, &context);
 
-    if (!NIL_P(rb_path)) {
-	path = StringValueCStr(rb_path);
-	flags |= GRN_OBJ_PERSISTENT;
-	if (!NIL_P(rb_persistent) && !RVAL2CBOOL(rb_persistent))
-	    rb_raise(rb_eArgError,
-		     "should not pass path if persistent is false");
-    }
-
     if (NIL_P(rb_persistent) || RVAL2CBOOL(rb_persistent))
 	flags |= GRN_OBJ_PERSISTENT;
+
+    if (!NIL_P(rb_path)) {
+	path = StringValueCStr(rb_path);
+	if ((flags & GRN_OBJ_PERSISTENT) == GRN_OBJ_PERSISTENT) {
+	    rb_raise(rb_eArgError,
+		     "should not pass path if persistent is false: <%s>",
+		     path);
+	}
+	flags |= GRN_OBJ_PERSISTENT;
+    }
 
     if (RVAL2CBOOL(rb_with_section))
 	flags |= GRN_OBJ_WITH_SECTION;
