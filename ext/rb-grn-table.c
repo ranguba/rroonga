@@ -461,6 +461,9 @@ rb_grn_table_define_column (int argc, VALUE *argv, VALUE self)
     if (!NIL_P(rb_path)) {
 	path = StringValueCStr(rb_path);
 	flags |= GRN_OBJ_PERSISTENT;
+	if (!NIL_P(rb_persistent) && !RVAL2CBOOL(rb_persistent))
+	    rb_raise(rb_eArgError,
+		     "should not pass path if persistent is false");
     }
 
     if (NIL_P(rb_persistent) || RVAL2CBOOL(rb_persistent))
@@ -568,6 +571,9 @@ rb_grn_table_define_index_column (int argc, VALUE *argv, VALUE self)
     if (!NIL_P(rb_path)) {
 	path = StringValueCStr(rb_path);
 	flags |= GRN_OBJ_PERSISTENT;
+	if (!NIL_P(rb_persistent) && !RVAL2CBOOL(rb_persistent))
+	    rb_raise(rb_eArgError,
+		     "should not pass path if persistent is false");
     }
 
     if (NIL_P(rb_persistent) || RVAL2CBOOL(rb_persistent))

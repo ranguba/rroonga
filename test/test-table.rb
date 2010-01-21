@@ -129,17 +129,21 @@ class TableTest < Test::Unit::TestCase
     path_is_temporary = "name: <Bookmarks.real_name>, path: \(temporary\)"
 
     bookmarks = Groonga::Hash.create(:name => "Bookmarks")
-    real_name = bookmarks.define_column("real_name", "ShortText", :persistent => false)
+    real_name = bookmarks.define_column("real_name", "ShortText",
+                                        :persistent => false)
     assert_not_equal(nil, real_name.inspect.index(path_is_temporary))
   end
 
-  def test_define_column_ignore_persistent
+  def test_define_column_not_persistent_and_path
     column_path = @tables_dir + "bookmakrs.real_name.column"
     path_is_temporary = "name: <Bookmarks.real_name>, path: \(temporary\)"
 
     bookmarks = Groonga::Hash.create(:name => "Bookmarks")
-    real_name = bookmarks.define_column("real_name", "ShortText", :path => column_path, :persistent => false)
-    assert_equal(nil, real_name.inspect.index(path_is_temporary))
+    assert_raise(ArgumentError.new("should not pass path if persistent is false")) do
+      real_name = bookmarks.define_column("real_name", "ShortText",
+                                          :path => column_path,
+                                          :persistent => false)
+    end
   end
 
   def test_define_index_column_default_persistent
@@ -156,18 +160,22 @@ class TableTest < Test::Unit::TestCase
 
     bookmarks = Groonga::Hash.create(:name => "Bookmarks")
     terms = Groonga::Hash.create(:name => "Terms")
-    real_name = terms.define_index_column("real_name", bookmarks, :persistent => false)
+    real_name = terms.define_index_column("real_name", bookmarks,
+                                          :persistent => false)
     assert_not_equal(nil, real_name.inspect.index(path_is_temporary))
   end
 
-  def test_define_index_column_ignore_persistent
+  def test_define_index_column_not_persistent_and_path
     column_path = @tables_dir + "bookmakrs.real_name.column"
     path_is_temporary = "name: <Terms.real_name>, path: \(temporary\)"
 
     bookmarks = Groonga::Hash.create(:name => "Bookmarks")
     terms = Groonga::Hash.create(:name => "Terms")
-    real_name = terms.define_index_column("real_name", bookmarks, :path => column_path, :persistent => false)
-    assert_equal(nil, real_name.inspect.index(path_is_temporary))
+    assert_raise(ArgumentError.new("should not pass path if persistent is false")) do
+      real_name = terms.define_index_column("real_name", bookmarks,
+                                            :path => column_path,
+                                            :persistent => false)
+    end
   end
 
   def test_define_index_column
