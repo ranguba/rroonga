@@ -406,8 +406,7 @@ rb_grn_table_inspect (VALUE self)
  * [+:persistent+]
  *   +true+を指定すると永続カラムとなる。省略した場合は永
  *   続カラムとなる。+:path+を省略した場合は自動的にパスが
- *   付加される。また、+:path+を指定すると+:persistent+の
- *   値は無視され、必ず永続カラムとなる。
+ *   付加される。
  *
  * [+:type+]
  *   カラムの値の格納方法について指定する。省略した場合は、
@@ -515,8 +514,7 @@ rb_grn_table_define_column (int argc, VALUE *argv, VALUE self)
  * [+:persistent+]
  *   +true+を指定すると永続カラムとなる。省略した場合は永
  *   続カラムとなる。+:path+を省略した場合は自動的にパスが
- *   付加される。また、+:path+を指定すると+:persistent+の
- *   値は無視され、必ず永続カラムとなる。
+ *   付加される。
  *
  * [+:with_section+]
  *   転置索引にsection(段落情報)を合わせて格納する。
