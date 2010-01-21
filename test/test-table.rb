@@ -319,6 +319,13 @@ class TableTest < Test::Unit::TestCase
     assert_equal(3, bookmarks.size)
   end
 
+  def test_path
+    bookmarks_path = @tables_dir + "bookmarks"
+    bookmarks = Groonga::Array.create(:name => "Bookmarks",
+                                      :path => bookmarks_path.to_s)
+    assert_equal(bookmarks_path.to_s, bookmarks.path)
+  end
+
   def test_time_column
     bookmarks_path = @tables_dir + "bookmarks"
     bookmarks = Groonga::Array.create(:name => "Bookmarks",

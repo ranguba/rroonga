@@ -792,6 +792,33 @@ rb_grn_object_get_id (VALUE self)
 }
 
 /*
+ * Document-method: path
+ *
+ * call-seq:
+ *   object.path -> ファイルパス/nil
+ *
+ * _object_に対応するファイルパスを返す。一時_object_
+ * なら+nil+を返す。
+ */
+static VALUE
+rb_grn_object_get_path (VALUE self)
+{
+    RbGrnObject *rb_grn_object;
+    const char *path;
+
+    rb_grn_object = SELF(self);
+    if (!rb_grn_object->object)
+	return Qnil;
+
+    path = grn_obj_path(rb_grn_object->context, rb_grn_object->object);
+
+    if (!path)
+	return Qnil;
+    else
+	return rb_str_new2(path);
+}
+
+/*
  * Document-method: domain
  *
  * call-seq:
@@ -1121,6 +1148,7 @@ rb_grn_init_object (VALUE mGrn)
     rb_define_method(rb_cGrnObject, "domain", rb_grn_object_get_domain, 0);
     rb_define_method(rb_cGrnObject, "name", rb_grn_object_get_name, 0);
     rb_define_method(rb_cGrnObject, "range", rb_grn_object_get_range, 0);
+    rb_define_method(rb_cGrnObject, "path", rb_grn_object_get_path, 0);
 
     rb_define_method(rb_cGrnObject, "==", rb_grn_object_equal, 1);
 
