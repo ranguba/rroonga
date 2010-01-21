@@ -404,8 +404,10 @@ rb_grn_table_inspect (VALUE self)
  *   カラムを保存するパス。
  *
  * [+:persistent+]
- *   +true+を指定すると永続カラムとなる。+:path+を省略した
- *   場合は自動的にパスが付加される。
+ *   +true+を指定すると永続カラムとなる。省略した場合は永
+ *   続カラムとなる。+:path+を省略した場合は自動的にパスが
+ *   付加される。また、+:path+を指定すると+:persistent+の
+ *   値は無視され、必ず永続カラムとなる。
  *
  * [+:type+]
  *   カラムの値の格納方法について指定する。省略した場合は、
@@ -461,7 +463,7 @@ rb_grn_table_define_column (int argc, VALUE *argv, VALUE self)
 	flags |= GRN_OBJ_PERSISTENT;
     }
 
-    if (RVAL2CBOOL(rb_persistent))
+    if (NIL_P(rb_persistent) || RVAL2CBOOL(rb_persistent))
 	flags |= GRN_OBJ_PERSISTENT;
 
     if (NIL_P(rb_type) ||
@@ -508,8 +510,10 @@ rb_grn_table_define_column (int argc, VALUE *argv, VALUE self)
  *   カラムを保存するパス。
  *
  * [+:persistent+]
- *   +true+を指定すると永続カラムとなる。+:path+を省略した
- *   場合は自動的にパスが付加される。
+ *   +true+を指定すると永続カラムとなる。省略した場合は永
+ *   続カラムとなる。+:path+を省略した場合は自動的にパスが
+ *   付加される。また、+:path+を指定すると+:persistent+の
+ *   値は無視され、必ず永続カラムとなる。
  *
  * [+:with_section+]
  *   転置索引にsection(段落情報)を合わせて格納する。
@@ -566,7 +570,7 @@ rb_grn_table_define_index_column (int argc, VALUE *argv, VALUE self)
 	flags |= GRN_OBJ_PERSISTENT;
     }
 
-    if (RVAL2CBOOL(rb_persistent))
+    if (NIL_P(rb_persistent) || RVAL2CBOOL(rb_persistent))
 	flags |= GRN_OBJ_PERSISTENT;
 
     if (RVAL2CBOOL(rb_with_section))
