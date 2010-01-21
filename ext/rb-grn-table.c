@@ -1166,12 +1166,11 @@ rb_grn_table_sort (int argc, VALUE *argv, VALUE self)
 
 /*
  * call-seq:
- *   table.group(keys) -> Groonga::Tableまたは
- *                        Groonga::Tableの配列
+ *   table.group(key)  -> Groonga::Table
+ *   table.group(keys) -> [Groonga::Table, ...]
  *
  * _table_のレコードを_keys_で渡されてきたカラムあるいはカラ
  * ム名の配列でグループ化する。
- *
  */
 static VALUE
 rb_grn_table_group (int argc, VALUE *argv, VALUE self)
