@@ -431,7 +431,7 @@ module Groonga
           table ||= @table_type.create(create_options)
         end
         @definitions.each do |definition|
-          definition.define(table)
+          definition.define(self, table)
         end
         table
       end
@@ -748,10 +748,10 @@ module Groonga
         @type = nil
       end
 
-      def define(table)
+      def define(table_definition, table)
         column = table.column(@name)
         if column
-          return column if same_column?(column)
+          return column if same_column?(table_definition, column)
           if @options.delete(:force)
             column.remove
           else
@@ -767,8 +767,8 @@ module Groonga
       end
 
       private
-      def same_column?(column)
-        context = column.table.context
+      def same_column?(table_definition, column)
+        context = table_definition.context
         # TODO: should check column type and other options.
         column.range == context[Schema.normalize_type(@type)]
       end
@@ -784,7 +784,7 @@ module Groonga
         @options = (options || {}).dup
       end
 
-      def define(table)
+      def define(table_definition, table)
         table.column(@name).remove
       end
     end
@@ -800,15 +800,17 @@ module Groonga
         @target = nil
       end
 
-      def define(table)
+      def define(table_definition, table)
         target = @target
-        target = table.context[target] unless target.is_a?(Groonga::Object)
+        unless target.is_a?(Groonga::Object)
+          target = table_definition.context[target]
+        end
         if target.nil?
           raise ArgumentError, "Unknown index target: #{@target.inspect}"
         end
         index = table.column(@name)
         if index
-          return index if same_index?(index, target)
+          return index if same_index?(table_definition, index, target)
           if @options.delete(:force)
             index.remove
           else
@@ -827,8 +829,8 @@ module Groonga
       end
 
       private
-      def same_index?(index, target)
-        context = index.table.context
+      def same_index?(table_definition, index, target)
+        context = table_definition.context
         # TODO: should check column type and other options.
         index.range == target.table and index.sources == [target]
       end
