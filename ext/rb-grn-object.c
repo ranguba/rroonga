@@ -65,7 +65,8 @@ rb_grn_object_from_ruby_object (VALUE object, grn_ctx **context)
     }
 
     if (!RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cGrnObject))) {
-	rb_raise(rb_eTypeError, "not a groonga object");
+	rb_raise(rb_eTypeError, "not a groonga object: <%s>",
+		 rb_grn_inspect(object));
     }
 
     Data_Get_Struct(object, RbGrnObject, rb_grn_object);
