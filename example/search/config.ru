@@ -23,14 +23,15 @@ class Searcher
   def call(env)
     request = Rack::Request.new(env)
     response = Rack::Response.new
-    response["Content-Type"] = "text/html"
+    response["Content-Type"] = "text/html; charset=UTF-8"
 
     response.write(<<-EOH)
+<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
 <head>
-  <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
   <meta name="robot" content="noindex,nofollow" />
   <title>groongaで全文検索</title>
   <link rel="stylesheet" href="css/groonga.css" type="text/css" media="all" />
