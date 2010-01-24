@@ -24,6 +24,11 @@ class Searcher
     request = Rack::Request.new(env)
     response = Rack::Response.new
     response["Content-Type"] = "text/html; charset=UTF-8"
+    if /\/\z/ !~ request.path_info
+      request.path_info += "/"
+      response.redirect(request.url)
+      return response.to_a
+    end
 
     response.write(<<-EOH)
 <?xml version="1.0" encoding="utf-8"?>
