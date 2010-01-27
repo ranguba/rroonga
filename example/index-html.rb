@@ -65,9 +65,19 @@ targets.each do |target|
         html_document.css("title").each do |title|
           values[:title] = title.text
         end
+        contents = []
         html_document.css("body").each do |body|
-          values[:content] = body.text
+          contents << body.text
         end
+        html_document.css("img").each do |image|
+          image_content = []
+          title = image['title']
+          alt = image['alt']
+          image_content << title if title and !title.empty?
+          image_content << alt if alt and !alt.empty?
+          contents.concat(image_content) unless image_content.empty?
+        end
+        values[:content] = contents.join("\n")
         values["last-modified"] = path.mtime
 
         values.each do |key, value|
