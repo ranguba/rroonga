@@ -1002,7 +1002,6 @@ rb_grn_object_array_reference (VALUE self, VALUE rb_id)
 	  case GRN_OBJ_COLUMN_VECTOR:
 	    GRN_OBJ_INIT(&value, GRN_VECTOR, 0, range_id);
 	    break;
-	  case GRN_OBJ_COLUMN_INDEX:
 	  case GRN_OBJ_COLUMN_SCALAR:
 	    GRN_OBJ_INIT(&value, GRN_BULK, 0, range_id);
 	    break;
@@ -1011,6 +1010,9 @@ rb_grn_object_array_reference (VALUE self, VALUE rb_id)
 		     range_type, rb_grn_inspect(self));
 	    break;
 	}
+	break;
+      case GRN_COLUMN_INDEX:
+	GRN_UINT32_INIT(&value, 0);
 	break;
       default:
 	rb_raise(rb_eGrnError,
@@ -1046,8 +1048,20 @@ rb_grn_object_set (VALUE self, VALUE rb_id, VALUE rb_value, int flags)
     context = rb_grn_object->context;
     id = NUM2UINT(rb_id);
     if (RVAL2CBOOL(rb_obj_is_kind_of(rb_value, rb_cArray))) {
-	GRN_OBJ_INIT(&value, GRN_VECTOR, 0, GRN_ID_NIL);
-	RVAL2GRNVECTOR(rb_value, context, &value);
+	switch (rb_grn_object->range->header.type) {
+	  case GRN_TABLE_HASH_KEY:
+	  case GRN_TABLE_PAT_KEY:
+	  case GRN_TABLE_NO_KEY:
+	  case GRN_TABLE_VIEW:
+	    GRN_OBJ_INIT(&value, GRN_UVECTOR, 0,
+			 rb_grn_object->object->header.domain);
+	    RVAL2GRNUVECTOR(rb_value, context, &value);
+	    break;
+	  default:
+	    GRN_OBJ_INIT(&value, GRN_VECTOR, 0, GRN_ID_NIL);
+	    RVAL2GRNVECTOR(rb_value, context, &value);
+	    break;
+	}
     } else {
 	GRN_OBJ_INIT(&value, GRN_BULK, 0, GRN_ID_NIL);
 	RVAL2GRNBULK(rb_value, context, &value);

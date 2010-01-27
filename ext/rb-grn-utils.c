@@ -1,7 +1,7 @@
 /* -*- c-file-style: "ruby" -*- */
 /* vim: set sts=4 sw=4 ts=8 noet: */
 /*
-  Copyright (C) 2009  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2010  Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -496,13 +496,8 @@ rb_grn_uvector_from_ruby_object (VALUE object, grn_ctx *context,
     VALUE *values;
     int i, n;
 
-    if (uvector)
-	GRN_OBJ_INIT(uvector, GRN_UVECTOR, 0, GRN_ID_NIL);
-    else
-	uvector = grn_obj_open(context, GRN_UVECTOR, 0, 0);
-
     if (NIL_P(object))
-	return uvector;
+	return NULL;
 
     n = RARRAY_LEN(object);
     values = RARRAY_PTR(object);
@@ -512,9 +507,25 @@ rb_grn_uvector_from_ruby_object (VALUE object, grn_ctx *context,
 	void *grn_value;
 
 	value = values[i];
-	id = NUM2UINT(value);
+	switch (TYPE(value)) {
+	  case T_FIXNUM:
+	    id = NUM2UINT(value);
+	    break;
+	  default:
+	    if (RVAL2CBOOL(rb_obj_is_kind_of(value, rb_cGrnRecord))) {
+		id = NUM2UINT(rb_funcall(value, rb_intern("id"), 0));
+	    } else {
+		grn_obj_close(context, uvector);
+		rb_raise(rb_eArgError,
+			 "uvector value should be one of "
+			 "[Fixnum, Groonga::Record]: %s (%s)",
+			 rb_grn_inspect(value),
+			 rb_grn_inspect(object));
+	    }
+	    break;
+	}
 	grn_value = &id;
-	grn_bulk_write(context, uvector, grn_value, sizeof(id));
+	grn_bulk_write(context, uvector, grn_value, sizeof(grn_id));
     }
 
     return uvector;
