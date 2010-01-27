@@ -261,11 +261,11 @@ rb_grn_object_bind_common (VALUE klass, VALUE self, VALUE rb_context,
 			   RbGrnObject *rb_grn_object,
 			   grn_ctx *context, grn_obj *object)
 {
-    DATA_PTR(self) = rb_grn_object;
-    rb_iv_set(self, "@context", rb_context);
-
+    rb_grn_object->context = context;
+    rb_grn_object->object = object;
     rb_grn_object->self = self;
     rb_grn_object->need_close = RB_GRN_TRUE;
+
     switch (object->header.type) {
       case GRN_DB:
       case GRN_CURSOR_TABLE_HASH_KEY:
@@ -291,9 +291,6 @@ rb_grn_object_bind_common (VALUE klass, VALUE self, VALUE rb_context,
 	break;
     }
 
-    rb_grn_object->context = context;
-    rb_grn_object->object = object;
-
     rb_grn_object->domain_id = GRN_ID_NIL;
     if (object)
 	rb_grn_object->domain_id = object->header.domain;
@@ -309,6 +306,9 @@ rb_grn_object_bind_common (VALUE klass, VALUE self, VALUE rb_context,
 	rb_grn_object->range = NULL;
     else
 	rb_grn_object->range = grn_ctx_at(context, rb_grn_object->range_id);
+
+    DATA_PTR(self) = rb_grn_object;
+    rb_iv_set(self, "@context", rb_context);
 }
 
 void
