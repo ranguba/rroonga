@@ -235,6 +235,10 @@ module Groonga
     end
 
     def =~(other)
+      if other.nil?
+        full_column_name = "#{@table.name}.#{@column_name}"
+        raise ArgumentError, "match word should not be nil: #{full_column_name}"
+      end
       MatchExpressionBuilder.new(@default_column, normalize(other))
     end
 

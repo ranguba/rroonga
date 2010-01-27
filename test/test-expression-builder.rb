@@ -143,4 +143,14 @@ class ExpressionBuilderTest < Test::Unit::TestCase
     assert_equal(["http://groonga.org/", "http://ruby-lang.org/"],
                  result.collect {|record| record.key["uri"]})
   end
+
+  def test_nil_match
+    @users.select do |record|
+      exception = ArgumentError.new("match word should not be nil: Users.name")
+      assert_raise(exception) do
+        record["name"] =~ nil
+      end
+      record["name"] == "dummy"
+    end
+  end
 end
