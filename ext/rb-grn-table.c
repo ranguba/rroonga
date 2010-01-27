@@ -98,6 +98,9 @@ rb_grn_table_mark (void *data)
     int n;
     grn_table_cursor *cursor;
 
+    if (!rb_grn_object)
+	return;
+
     context = rb_grn_object->context;
     table = rb_grn_object->object;
     if (!context || !table)
