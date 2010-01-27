@@ -1,4 +1,5 @@
 /* -*- c-file-style: "ruby" -*- */
+/* vim: set sts=4 sw=4 ts=8 noet: */
 /*
   Copyright (C) 2009  Kouhei Sutou <kou@clear-code.com>
 
@@ -354,6 +355,197 @@ rb_grn_column_select (int argc, VALUE *argv, VALUE self)
     return rb_result;
 }
 
+/*
+ * Document-method: unlock
+ *
+ * call-seq:
+ *   column.unlock(options={})
+ *
+ * _column_のロックを解除する。
+ *
+ * 利用可能なオプションは以下の通り。
+ *
+ * [_:id_]
+ *   _:id_で指定したレコードのロックを解除する。（注:
+ *   groonga側が未実装のため、現在は無視される）
+ */
+static VALUE
+rb_grn_column_unlock (int argc, VALUE *argv, VALUE self)
+{
+    grn_id id = GRN_ID_NIL;
+    grn_ctx *context;
+    grn_obj *column;
+    grn_rc rc;
+    VALUE options, rb_id;
+
+    rb_scan_args(argc, argv, "01",  &options);
+
+    rb_grn_column_deconstruct(SELF(self), &column, &context,
+			     NULL, NULL,
+			     NULL, NULL, NULL);
+
+    rb_grn_scan_options(options,
+			"id", &rb_id,
+			NULL);
+
+    if (!NIL_P(rb_id))
+	id = NUM2UINT(rb_id);
+
+    rc = grn_obj_unlock(context, column, id);
+    rb_grn_context_check(context, self);
+    rb_grn_rc_check(rc, self);
+
+    return Qnil;
+}
+
+static VALUE
+rb_grn_column_unlock_ensure (VALUE self)
+{
+    return rb_grn_column_unlock(0, NULL, self);
+}
+
+/*
+ * Document-method: lock
+ *
+ * call-seq:
+ *   column.lock(options={})
+ *   column.lock(options={}) {...}
+ *
+ * _column_をロックする。ロックに失敗した場合は
+ * Groonga::ResourceDeadlockAvoided例外が発生する。
+ *
+ * ブロックを指定した場合はブロックを抜けたときにunlockする。
+ *
+ * 利用可能なオプションは以下の通り。
+ *
+ * [_:timeout_]
+ *   ロックを獲得できなかった場合は_:timeout_秒間ロックの獲
+ *   得を試みる。_:timeout_秒以内にロックを獲得できなかった
+ *   場合は例外が発生する。
+ * [_:id_]
+ *   _:id_で指定したレコードをロックする。（注: groonga側が
+ *   未実装のため、現在は無視される）
+ */
+static VALUE
+rb_grn_column_lock (int argc, VALUE *argv, VALUE self)
+{
+    grn_id id = GRN_ID_NIL;
+    grn_ctx *context;
+    grn_obj *column;
+    int timeout = 0;
+    grn_rc rc;
+    VALUE options, rb_timeout, rb_id;
+
+    rb_scan_args(argc, argv, "01",  &options);
+
+    rb_grn_column_deconstruct(SELF(self), &column, &context,
+			     NULL, NULL,
+			     NULL, NULL, NULL);
+
+    rb_grn_scan_options(options,
+			"timeout", &rb_timeout,
+			"id", &rb_id,
+			NULL);
+
+    if (!NIL_P(rb_timeout))
+	timeout = NUM2UINT(rb_timeout);
+
+    if (!NIL_P(rb_id))
+	id = NUM2UINT(rb_id);
+
+    rc = grn_obj_lock(context, column, id, timeout);
+    rb_grn_context_check(context, self);
+    rb_grn_rc_check(rc, self);
+
+    if (rb_block_given_p()) {
+	return rb_ensure(rb_yield, Qnil, rb_grn_column_unlock_ensure, self);
+    } else {
+	return Qnil;
+    }
+}
+
+/*
+ * Document-method: clear_lock
+ *
+ * call-seq:
+ *   column.clear_lock(options={})
+ *
+ * _column_のロックを強制的に解除する。
+ *
+ * 利用可能なオプションは以下の通り。
+ *
+ * [_:id_]
+ *   _:id_で指定したレコードのロックを強制的に解除する。
+ *   （注: groonga側が未実装のため、現在は無視される。実装さ
+ *   れるのではないかと思っているが、実装されないかもしれな
+ *   い。）
+ */
+static VALUE
+rb_grn_column_clear_lock (int argc, VALUE *argv, VALUE self)
+{
+    grn_id id = GRN_ID_NIL;
+    grn_ctx *context;
+    grn_obj *column;
+    VALUE options, rb_id;
+
+    rb_scan_args(argc, argv, "01",  &options);
+
+    rb_grn_column_deconstruct(SELF(self), &column, &context,
+			     NULL, NULL,
+			     NULL, NULL, NULL);
+
+    rb_grn_scan_options(options,
+			"id", &rb_id,
+			NULL);
+
+    if (!NIL_P(rb_id))
+	id = NUM2UINT(rb_id);
+
+    grn_obj_clear_lock(context, column);
+
+    return Qnil;
+}
+
+/*
+ * Document-method: locked?
+ *
+ * call-seq:
+ *   column.locked?(options={})
+ *
+ * _column_がロックされていれば+true+を返す。
+ *
+ * 利用可能なオプションは以下の通り。
+ *
+ * [_:id_]
+ *   _:id_で指定したレコードがロックされていれば+true+を返す。
+ *   （注: groonga側が未実装のため、現在は無視される。実装さ
+ *   れるのではないかと思っているが、実装されないかもしれな
+ *   い。）
+ */
+static VALUE
+rb_grn_column_is_locked (int argc, VALUE *argv, VALUE self)
+{
+    grn_id id = GRN_ID_NIL;
+    grn_ctx *context;
+    grn_obj *column;
+    VALUE options, rb_id;
+
+    rb_scan_args(argc, argv, "01",  &options);
+
+    rb_grn_column_deconstruct(SELF(self), &column, &context,
+			     NULL, NULL,
+			     NULL, NULL, NULL);
+
+    rb_grn_scan_options(options,
+			"id", &rb_id,
+			NULL);
+
+    if (!NIL_P(rb_id))
+	id = NUM2UINT(rb_id);
+
+    return CBOOL2RVAL(grn_obj_is_locked(context, column));
+}
+
 void
 rb_grn_init_column (VALUE mGrn)
 {
@@ -364,6 +556,10 @@ rb_grn_init_column (VALUE mGrn)
 		     rb_grn_column_get_local_name, 0);
 
     rb_define_method(rb_cGrnColumn, "select", rb_grn_column_select, -1);
+    rb_define_method(rb_cGrnColumn, "lock", rb_grn_column_lock, -1);
+    rb_define_method(rb_cGrnColumn, "unlock", rb_grn_column_unlock, -1);
+    rb_define_method(rb_cGrnColumn, "clear_lock", rb_grn_column_clear_lock, -1);
+    rb_define_method(rb_cGrnColumn, "locked?", rb_grn_column_is_locked, -1);
 
     rb_grn_init_fix_size_column(mGrn);
     rb_grn_init_variable_size_column(mGrn);
