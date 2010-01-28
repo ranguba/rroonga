@@ -464,8 +464,8 @@ rb_grn_object_inspect_header (VALUE self, VALUE inspected)
 }
 
 static VALUE
-rb_grn_object_inspect_content_id (VALUE inspected,
-				  grn_ctx *context, grn_obj *object)
+rb_grn_object_inspect_content_id_with_label (VALUE inspected,
+					     grn_ctx *context, grn_obj *object)
 {
     grn_id id;
 
@@ -481,9 +481,8 @@ rb_grn_object_inspect_content_id (VALUE inspected,
 }
 
 static VALUE
-rb_grn_object_inspect_content_name_without_label (VALUE inspected,
-						  grn_ctx *context,
-						  grn_obj *object)
+rb_grn_object_inspect_content_name (VALUE inspected,
+				    grn_ctx *context, grn_obj *object)
 {
     int name_size;
 
@@ -507,18 +506,18 @@ rb_grn_object_inspect_content_name_without_label (VALUE inspected,
 }
 
 static VALUE
-rb_grn_object_inspect_content_name (VALUE inspected,
-				    grn_ctx *context, grn_obj *object)
+rb_grn_object_inspect_content_name_with_label (VALUE inspected,
+					       grn_ctx *context, grn_obj *object)
 {
 
     rb_str_cat2(inspected, "name: ");
-    rb_grn_object_inspect_content_name_without_label(inspected, context, object);
+    rb_grn_object_inspect_content_name(inspected, context, object);
     return inspected;
 }
 
 static VALUE
-rb_grn_object_inspect_content_path (VALUE inspected,
-				    grn_ctx *context, grn_obj *object)
+rb_grn_object_inspect_content_path_with_label (VALUE inspected,
+					       grn_ctx *context, grn_obj *object)
 {
     const char *path;
 
@@ -536,8 +535,9 @@ rb_grn_object_inspect_content_path (VALUE inspected,
 }
 
 static VALUE
-rb_grn_object_inspect_content_domain (VALUE inspected,
-				      grn_ctx *context, grn_obj *object)
+rb_grn_object_inspect_content_domain_with_label (VALUE inspected,
+						 grn_ctx *context,
+						 grn_obj *object)
 {
     grn_id domain;
 
@@ -553,9 +553,8 @@ rb_grn_object_inspect_content_domain (VALUE inspected,
 	    if (domain_object == object) {
 		rb_str_cat2(inspected, "(self)");
 	    } else {
-		rb_grn_object_inspect_content_name_without_label(inspected,
-								 context,
-								 domain_object);
+		rb_grn_object_inspect_content_name(inspected,
+						   context, domain_object);
 	    }
 	} else {
 	    rb_str_cat2(inspected, "(");
@@ -568,8 +567,9 @@ rb_grn_object_inspect_content_domain (VALUE inspected,
 }
 
 static VALUE
-rb_grn_object_inspect_content_range (VALUE inspected,
-				     grn_ctx *context, grn_obj *object)
+rb_grn_object_inspect_content_range_with_label (VALUE inspected,
+						grn_ctx *context,
+						grn_obj *object)
 {
     grn_id range;
 
@@ -593,9 +593,8 @@ rb_grn_object_inspect_content_range (VALUE inspected,
 		if (range_object == object) {
 		    rb_str_cat2(inspected, "(self)");
 		} else {
-		    rb_grn_object_inspect_content_name_without_label(inspected,
-								     context,
-								     range_object);
+		    rb_grn_object_inspect_content_name(inspected,
+						       context, range_object);
 		}
 	    } else {
 		rb_str_cat2(inspected, "(");
@@ -609,8 +608,9 @@ rb_grn_object_inspect_content_range (VALUE inspected,
 }
 
 static VALUE
-rb_grn_object_inspect_content_flags (VALUE inspected,
-				     grn_ctx *context, grn_obj *object)
+rb_grn_object_inspect_content_flags_with_label (VALUE inspected,
+						grn_ctx *context,
+						grn_obj *object)
 {
     grn_obj_flags flags;
     VALUE inspected_flags;
@@ -718,17 +718,17 @@ VALUE
 rb_grn_object_inspect_object_content (VALUE inspected,
 				      grn_ctx *context, grn_obj *object)
 {
-    rb_grn_object_inspect_content_id(inspected, context, object);
+    rb_grn_object_inspect_content_id_with_label(inspected, context, object);
     rb_str_cat2(inspected, ", ");
-    rb_grn_object_inspect_content_name(inspected, context, object);
+    rb_grn_object_inspect_content_name_with_label(inspected, context, object);
     rb_str_cat2(inspected, ", ");
-    rb_grn_object_inspect_content_path(inspected, context, object);
+    rb_grn_object_inspect_content_path_with_label(inspected, context, object);
     rb_str_cat2(inspected, ", ");
-    rb_grn_object_inspect_content_domain(inspected, context, object);
+    rb_grn_object_inspect_content_domain_with_label(inspected, context, object);
     rb_str_cat2(inspected, ", ");
-    rb_grn_object_inspect_content_range(inspected, context, object);
+    rb_grn_object_inspect_content_range_with_label(inspected, context, object);
     rb_str_cat2(inspected, ", ");
-    rb_grn_object_inspect_content_flags(inspected, context, object);
+    rb_grn_object_inspect_content_flags_with_label(inspected, context, object);
 
     return inspected;
 }
