@@ -1,4 +1,4 @@
-# Copyright (C) 2009  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2010  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -30,6 +30,8 @@ class TableTest < Test::Unit::TestCase
   def test_temporary
     table = Groonga::PatriciaTrie.create
     assert_nil(table.name)
+    assert_predicate(table, :temporary?)
+    assert_not_predicate(table, :persistent?)
     assert_equal([], @tables_dir.children)
   end
 
@@ -118,25 +120,20 @@ class TableTest < Test::Unit::TestCase
   end
 
   def test_define_column_default_persistent
-    path_is_temporary = "name: <Bookmarks.real_name>, path: \(temporary\)"
-
     bookmarks = Groonga::Hash.create(:name => "Bookmarks")
     real_name = bookmarks.define_column("real_name", "ShortText")
-    assert_equal(nil, real_name.inspect.index(path_is_temporary))
+    assert_predicate(real_name, :persistent?)
   end
 
   def test_define_column_not_persistent
-    path_is_temporary = "name: <Bookmarks.real_name>, path: \(temporary\)"
-
     bookmarks = Groonga::Hash.create(:name => "Bookmarks")
     real_name = bookmarks.define_column("real_name", "ShortText",
                                         :persistent => false)
-    assert_not_equal(nil, real_name.inspect.index(path_is_temporary))
+    assert_predicate(real_name, :temporary?)
   end
 
   def test_define_column_not_persistent_and_path
     column_path = @tables_dir + "bookmakrs.real_name.column"
-    path_is_temporary = "name: <Bookmarks.real_name>, path: \(temporary\)"
 
     bookmarks = Groonga::Hash.create(:name => "Bookmarks")
     message = "should not pass :path if :persistent is false: <#{column_path}>"
@@ -148,27 +145,22 @@ class TableTest < Test::Unit::TestCase
   end
 
   def test_define_index_column_default_persistent
-    path_is_temporary = "name: <Terms.real_name>, path: \(temporary\)"
-
     bookmarks = Groonga::Hash.create(:name => "Bookmarks")
     terms = Groonga::Hash.create(:name => "Terms")
     real_name = terms.define_index_column("real_name", bookmarks)
-    assert_equal(nil, real_name.inspect.index(path_is_temporary))
+    assert_predicate(real_name, :persistent?)
   end
 
   def test_define_index_column_not_persistent
-    path_is_temporary = "name: <Terms.real_name>, path: \(temporary\)"
-
     bookmarks = Groonga::Hash.create(:name => "Bookmarks")
     terms = Groonga::Hash.create(:name => "Terms")
     real_name = terms.define_index_column("real_name", bookmarks,
                                           :persistent => false)
-    assert_not_equal(nil, real_name.inspect.index(path_is_temporary))
+    assert_predicate(real_name, :temporary?)
   end
 
   def test_define_index_column_not_persistent_and_path
     column_path = @tables_dir + "bookmakrs.real_name.column"
-    path_is_temporary = "name: <Terms.real_name>, path: \(temporary\)"
 
     bookmarks = Groonga::Hash.create(:name => "Bookmarks")
     terms = Groonga::Hash.create(:name => "Terms")

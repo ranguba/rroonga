@@ -840,6 +840,54 @@ rb_grn_object_get_path (VALUE self)
 }
 
 /*
+ * Document-method: temporary?
+ *
+ * call-seq:
+ *   object.temporary? -> true/false
+ *
+ * _object_が一時オブジェクトなら+true+、永続オブジェクトな
+ * ら+false+を返す。
+ */
+static VALUE
+rb_grn_object_temporary_p (VALUE self)
+{
+    RbGrnObject *rb_grn_object;
+    const char *path;
+
+    rb_grn_object = SELF(self);
+    if (!rb_grn_object->object)
+	return Qnil;
+
+    path = grn_obj_path(rb_grn_object->context, rb_grn_object->object);
+
+    return path ? Qfalse : Qtrue;
+}
+
+/*
+ * Document-method: persistent?
+ *
+ * call-seq:
+ *   object.persistent? -> true/false
+ *
+ * _object_が永続オブジェクトなら+true+、一時オブジェクトな
+ * ら+false+を返す。
+ */
+static VALUE
+rb_grn_object_persistent_p (VALUE self)
+{
+    RbGrnObject *rb_grn_object;
+    const char *path;
+
+    rb_grn_object = SELF(self);
+    if (!rb_grn_object->object)
+	return Qnil;
+
+    path = grn_obj_path(rb_grn_object->context, rb_grn_object->object);
+
+    return path ? Qtrue : Qfalse;
+}
+
+/*
  * Document-method: domain
  *
  * call-seq:
@@ -1209,6 +1257,10 @@ rb_grn_init_object (VALUE mGrn)
     rb_define_method(rb_cGrnObject, "name", rb_grn_object_get_name, 0);
     rb_define_method(rb_cGrnObject, "range", rb_grn_object_get_range, 0);
     rb_define_method(rb_cGrnObject, "path", rb_grn_object_get_path, 0);
+
+    rb_define_method(rb_cGrnObject, "temporary?", rb_grn_object_temporary_p, 0);
+    rb_define_method(rb_cGrnObject, "persistent?",
+		     rb_grn_object_persistent_p, 0);
 
     rb_define_method(rb_cGrnObject, "==", rb_grn_object_equal, 1);
 
