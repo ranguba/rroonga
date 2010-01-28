@@ -1,6 +1,6 @@
 /* -*- c-file-style: "ruby" -*- */
 /*
-  Copyright (C) 2009  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2010  Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -459,8 +459,8 @@ VALUE          rb_grn_column_expression_builder_build
 #define GRNVECTOR2RVAL(context, vector) \
     (rb_grn_vector_to_ruby_object(context, vector))
 
-#define RVAL2GRNUVECTOR(object, context, uvector) \
-    (rb_grn_uvector_from_ruby_object(object, context, uvector))
+#define RVAL2GRNUVECTOR(object, context, uvector, related_object)	\
+    (rb_grn_uvector_from_ruby_object(object, context, uvector, related_object))
 #define GRNUVECTOR2RVAL(context, uvector) \
     (rb_grn_uvector_to_ruby_object(context, uvector))
 
@@ -572,7 +572,8 @@ VALUE          rb_grn_vector_to_ruby_object         (grn_ctx *context,
 						     grn_obj *vector);
 grn_obj       *rb_grn_uvector_from_ruby_object      (VALUE object,
 						     grn_ctx *context,
-						     grn_obj *uvector);
+						     grn_obj *uvector,
+						     VALUE related_object);
 VALUE          rb_grn_uvector_to_ruby_object        (grn_ctx *context,
 						     grn_obj *uvector);
 

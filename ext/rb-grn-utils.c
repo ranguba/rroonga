@@ -491,7 +491,7 @@ rb_grn_uvector_to_ruby_object (grn_ctx *context, grn_obj *uvector)
 
 grn_obj *
 rb_grn_uvector_from_ruby_object (VALUE object, grn_ctx *context,
-				 grn_obj *uvector)
+				 grn_obj *uvector, VALUE related_object)
 {
     VALUE *values;
     int i, n;
@@ -518,9 +518,10 @@ rb_grn_uvector_from_ruby_object (VALUE object, grn_ctx *context,
 		grn_obj_close(context, uvector);
 		rb_raise(rb_eArgError,
 			 "uvector value should be one of "
-			 "[Fixnum, Groonga::Record]: %s (%s)",
+			 "[Fixnum, Groonga::Record]: %s (%s): %s",
 			 rb_grn_inspect(value),
-			 rb_grn_inspect(object));
+			 rb_grn_inspect(object),
+			 rb_grn_inspect(related_object));
 	    }
 	    break;
 	}

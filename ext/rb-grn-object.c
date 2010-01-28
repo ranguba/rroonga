@@ -1,6 +1,6 @@
 /* -*- c-file-style: "ruby" -*- */
 /*
-  Copyright (C) 2009  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2010  Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -1055,7 +1055,7 @@ rb_grn_object_set (VALUE self, VALUE rb_id, VALUE rb_value, int flags)
 	  case GRN_TABLE_VIEW:
 	    GRN_OBJ_INIT(&value, GRN_UVECTOR, 0,
 			 rb_grn_object->object->header.domain);
-	    RVAL2GRNUVECTOR(rb_value, context, &value);
+	    RVAL2GRNUVECTOR(rb_value, context, &value, self);
 	    break;
 	  default:
 	    GRN_OBJ_INIT(&value, GRN_VECTOR, 0, GRN_ID_NIL);
