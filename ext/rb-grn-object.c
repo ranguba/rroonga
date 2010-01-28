@@ -1051,6 +1051,37 @@ rb_grn_object_array_reference (VALUE self, VALUE rb_id)
     return rb_value;
 }
 
+static rb_grn_boolean
+rb_uvector_value_p (RbGrnObject *rb_grn_object, VALUE rb_value)
+{
+    VALUE first_element;
+
+    switch (rb_grn_object->range->header.type) {
+      case GRN_TYPE:
+	/* TODO: support not sizeof(grn_id) uvector. */
+	/*
+	if (!(rb_grn_object->range->header.flags | GRN_OBJ_KEY_VAR_SIZE)) {
+	    return RB_GRN_TRUE;
+	}
+	*/
+	break;
+      case GRN_TABLE_HASH_KEY:
+      case GRN_TABLE_PAT_KEY:
+      case GRN_TABLE_NO_KEY:
+      case GRN_TABLE_VIEW:
+	first_element = rb_ary_entry(rb_value, 0);
+	if (RVAL2CBOOL(rb_obj_is_kind_of(first_element, rb_cGrnRecord))) {
+	    return RB_GRN_TRUE;
+	}
+	break;
+      default:
+	break;
+    }
+
+    return RB_GRN_FALSE;
+}
+
+
 static VALUE
 rb_grn_object_set (VALUE self, VALUE rb_id, VALUE rb_value, int flags)
 {
@@ -1068,19 +1099,13 @@ rb_grn_object_set (VALUE self, VALUE rb_id, VALUE rb_value, int flags)
     context = rb_grn_object->context;
     id = NUM2UINT(rb_id);
     if (RVAL2CBOOL(rb_obj_is_kind_of(rb_value, rb_cArray))) {
-	switch (rb_grn_object->range->header.type) {
-	  case GRN_TABLE_HASH_KEY:
-	  case GRN_TABLE_PAT_KEY:
-	  case GRN_TABLE_NO_KEY:
-	  case GRN_TABLE_VIEW:
+	if (rb_uvector_value_p(rb_grn_object, rb_value)) {
 	    GRN_OBJ_INIT(&value, GRN_UVECTOR, 0,
 			 rb_grn_object->object->header.domain);
 	    RVAL2GRNUVECTOR(rb_value, context, &value, self);
-	    break;
-	  default:
+	} else {
 	    GRN_OBJ_INIT(&value, GRN_VECTOR, 0, GRN_ID_NIL);
 	    RVAL2GRNVECTOR(rb_value, context, &value);
-	    break;
 	}
     } else {
 	GRN_OBJ_INIT(&value, GRN_BULK, 0, GRN_ID_NIL);
