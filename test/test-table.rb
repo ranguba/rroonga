@@ -119,6 +119,19 @@ class TableTest < Test::Unit::TestCase
     assert_equal(column, table.column("name"))
   end
 
+  def test_temporary_table_define_column_default_persistent
+    table = Groonga::Hash.create
+    name = table.define_column("name", "ShortText")
+    assert_predicate(name, :temporary?)
+  end
+
+  def test_temporary_table_define_index_column_default_persistent
+    bookmarks = Groonga::Hash.create(:name => "Bookmarks")
+    terms = Groonga::Hash.create
+    url = terms.define_index_column("url", bookmarks)
+    assert_predicate(url, :temporary?)
+  end
+
   def test_define_column_default_persistent
     bookmarks = Groonga::Hash.create(:name => "Bookmarks")
     real_name = bookmarks.define_column("real_name", "ShortText")

@@ -460,8 +460,10 @@ rb_grn_table_define_column (int argc, VALUE *argv, VALUE self)
 
     value_type = RVAL2GRNOBJECT(rb_value_type, &context);
 
-    if (NIL_P(rb_persistent) || RVAL2CBOOL(rb_persistent))
+    if ((NIL_P(rb_persistent) && grn_obj_path(context, table)) ||
+	RVAL2CBOOL(rb_persistent)) {
 	flags |= GRN_OBJ_PERSISTENT;
+    }
 
     if (!NIL_P(rb_path)) {
 	path = StringValueCStr(rb_path);
@@ -571,8 +573,10 @@ rb_grn_table_define_index_column (int argc, VALUE *argv, VALUE self)
 
     value_type = RVAL2GRNOBJECT(rb_value_type, &context);
 
-    if (NIL_P(rb_persistent) || RVAL2CBOOL(rb_persistent))
+    if ((NIL_P(rb_persistent) && grn_obj_path(context, table)) ||
+	RVAL2CBOOL(rb_persistent)) {
 	flags |= GRN_OBJ_PERSISTENT;
+    }
 
     if (!NIL_P(rb_path)) {
 	path = StringValueCStr(rb_path);
