@@ -28,8 +28,8 @@ class ArrayTest < Test::Unit::TestCase
                  "id: <#{contain_table.id}>, " +
                  "name: <name>, " +
                  "path: <#{path}>, " +
-                 "domain: <nil>, " +
-                 "range: <nil>, " +
+                 "domain: (nil), " +
+                 "range: (nil), " +
                  "flags: <>, " +
                  "size: <3>>",
                  contain_table.inspect)

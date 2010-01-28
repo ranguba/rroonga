@@ -55,8 +55,8 @@ class VariableSizeColumnTest < Test::Unit::TestCase
                  "id: <#{@name.id}>, " +
                  "name: <Users.name>, " +
                  "path: <#{@users_name_column_path}>, " +
-                 "domain: <#{@users.inspect}>, " +
-                 "range: <#{context['<shorttext>'].inspect}>, " +
+                 "domain: <Users>, " +
+                 "range: <ShortText>, " +
                  "flags: <>" +
                  ">",
                  @name.inspect)

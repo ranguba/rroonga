@@ -46,7 +46,7 @@ class TypeTest < Test::Unit::TestCase
     assert_equal("#<Groonga::Type id: <#{Groonga::Type::LONG_TEXT}>, " +
                  "name: <LongText>, " +
                  "path: (temporary), " +
-                 "domain: <nil>, " +
+                 "domain: (nil), " +
                  "range: <2147483648>, " +
                  "flags: <>>",
                  context["<longtext>"].inspect)

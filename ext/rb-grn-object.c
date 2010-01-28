@@ -481,12 +481,12 @@ rb_grn_object_inspect_content_id (VALUE inspected,
 }
 
 static VALUE
-rb_grn_object_inspect_content_name (VALUE inspected,
-				    grn_ctx *context, grn_obj *object)
+rb_grn_object_inspect_content_name_without_label (VALUE inspected,
+						  grn_ctx *context,
+						  grn_obj *object)
 {
     int name_size;
 
-    rb_str_cat2(inspected, "name: ");
     name_size = grn_obj_name(context, object, NULL, 0);
     if (name_size == 0) {
 	rb_str_cat2(inspected, "(anonymous)");
@@ -503,6 +503,16 @@ rb_grn_object_inspect_content_name (VALUE inspected,
 	grn_obj_close(context, &name);
     }
 
+    return inspected;
+}
+
+static VALUE
+rb_grn_object_inspect_content_name (VALUE inspected,
+				    grn_ctx *context, grn_obj *object)
+{
+
+    rb_str_cat2(inspected, "name: ");
+    rb_grn_object_inspect_content_name_without_label(inspected, context, object);
     return inspected;
 }
 
@@ -533,24 +543,26 @@ rb_grn_object_inspect_content_domain (VALUE inspected,
 
     rb_str_cat2(inspected, "domain: ");
     domain = object->header.domain;
-    rb_str_cat2(inspected, "<");
     if (domain == GRN_ID_NIL) {
-	rb_str_cat2(inspected, "nil");
+	rb_str_cat2(inspected, "(nil)");
     } else {
 	grn_obj *domain_object;
 
 	domain_object = grn_ctx_at(context, domain);
 	if (domain_object) {
 	    if (domain_object == object) {
-		rb_str_cat2(inspected, "self");
+		rb_str_cat2(inspected, "(self)");
 	    } else {
-		rb_grn_object_inspect_object(inspected, context, domain_object);
+		rb_grn_object_inspect_content_name_without_label(inspected,
+								 context,
+								 domain_object);
 	    }
 	} else {
+	    rb_str_cat2(inspected, "(");
 	    rb_str_concat(inspected, rb_obj_as_string(UINT2NUM(domain)));
+	    rb_str_cat2(inspected, ")");
 	}
     }
-    rb_str_cat2(inspected, ">");
 
     return inspected;
 }
@@ -564,26 +576,34 @@ rb_grn_object_inspect_content_range (VALUE inspected,
     rb_str_cat2(inspected, "range: ");
 
     range = grn_obj_get_range(context, object);
-    rb_str_cat2(inspected, "<");
     switch (object->header.type) {
       case GRN_TYPE:
+	rb_str_cat2(inspected, "<");
 	rb_str_concat(inspected, rb_inspect(UINT2NUM(range)));
+	rb_str_cat2(inspected, ">");
 	break;
       default:
 	if (range == GRN_ID_NIL) {
-	    rb_str_cat2(inspected, "nil");
+	    rb_str_cat2(inspected, "(nil)");
 	} else {
 	    grn_obj *range_object;
 
 	    range_object = grn_ctx_at(context, range);
 	    if (range_object) {
-		rb_grn_object_inspect_object(inspected, context, range_object);
+		if (range_object == object) {
+		    rb_str_cat2(inspected, "(self)");
+		} else {
+		    rb_grn_object_inspect_content_name_without_label(inspected,
+								     context,
+								     range_object);
+		}
 	    } else {
+		rb_str_cat2(inspected, "(");
 		rb_str_concat(inspected, rb_obj_as_string(UINT2NUM(range)));
+		rb_str_cat2(inspected, ")");
 	    }
 	}
     }
-    rb_str_cat2(inspected, ">");
 
     return inspected;
 }

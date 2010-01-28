@@ -69,8 +69,8 @@ class SchemaTest < Test::Unit::TestCase
                  "id: <#{table.id}>, " +
                  "name: <Posts>, " +
                  "path: <#{path}>, " +
-                 "domain: <#{context['Int32'].inspect}>, " +
-                 "range: <#{type.inspect}>, " +
+                 "domain: <Int32>, " +
+                 "range: <Niku>, " +
                  "flags: <>, " +
                  "encoding: <#{Groonga::Encoding.default.inspect}>, " +
                  "size: <0>>",
@@ -101,8 +101,8 @@ class SchemaTest < Test::Unit::TestCase
                  "id: <#{table.id}>, " +
                  "name: <Posts>, " +
                  "path: <#{path}>, " +
-                 "domain: <#{context['<int>'].inspect}>, " +
-                 "range: <#{type.inspect}>, " +
+                 "domain: <Int32>, " +
+                 "range: <Niku>, " +
                  "flags: <KEY_WITH_SIS|KEY_NORMALIZE|WITH_SECTION>, " +
                  "encoding: <#{Groonga::Encoding.default.inspect}>, " +
                  "size: <0>>",
@@ -129,8 +129,8 @@ class SchemaTest < Test::Unit::TestCase
                  "id: <#{table.id}>, " +
                  "name: <Posts>, " +
                  "path: <#{path}>, " +
-                 "domain: <#{type.inspect}>, " +
-                 "range: <#{type.inspect}>, " +
+                 "domain: <Niku>, " +
+                 "range: <Niku>, " +
                  "flags: <>, " +
                  "size: <0>>",
                  table.inspect)
@@ -148,15 +148,14 @@ class SchemaTest < Test::Unit::TestCase
                    :compress => :lzo)
     end
 
-    table = context["Posts"]
     column_name = "Posts.rate"
     column = context[column_name]
     assert_equal("#<Groonga::VariableSizeColumn " +
                  "id: <#{column.id}>, " +
                  "name: <#{column_name}>, " +
                  "path: <#{path}>, " +
-                 "domain: <#{table.inspect}>, " +
-                 "range: <#{type.inspect}>, " +
+                 "domain: <Posts>, " +
+                 "range: <Niku>, " +
                  "flags: <COMPRESS_LZO>>",
                  column.inspect)
   end
@@ -307,8 +306,8 @@ class SchemaTest < Test::Unit::TestCase
                  "id: <#{index_column.id}>, " +
                  "name: <#{full_index_column_name}>, " +
                  "path: <#{path}>, " +
-                 "domain: <#{terms.inspect}>, " +
-                 "range: <#{posts.inspect}>, " +
+                 "domain: <Terms>, " +
+                 "range: <Posts>, " +
                  "flags: <WITH_SECTION|WITH_WEIGHT|WITH_POSITION|" +
                          "UNIT_DOCUMENT_SECTION|UNIT_DOCUMENT_POSITION|" +
                          "UNIT_USERDEF_DOCUMENT|UNIT_USERDEF_SECTION>>",

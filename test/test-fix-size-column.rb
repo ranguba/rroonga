@@ -37,8 +37,8 @@ class FixSizeColumnTest < Test::Unit::TestCase
                  "id: <#{@viewed.id}>, " +
                  "name: <Bookmarks.viewed>, " +
                  "path: <#{@viewed_column_path}>, " +
-                 "domain: <#{@bookmarks.inspect}>, " +
-                 "range: <#{context['Int32'].inspect}>, " +
+                 "domain: <Bookmarks>, " +
+                 "range: <Int32>, " +
                  "flags: <KEY_INT>" +
                  ">",
                  @viewed.inspect)
