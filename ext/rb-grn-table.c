@@ -1173,6 +1173,7 @@ rb_grn_table_sort (int argc, VALUE *argv, VALUE self)
 
 /*
  * call-seq:
+ *   table.group(column) -> Groonga::Hash
  *   table.group(column1, column2, ...) -> [Groonga::Hash, Groonga::Hash, ...]
  *
  * _table_のレコードを_column1_, _column2_, _..._で指定したカ
@@ -1248,7 +1249,10 @@ rb_grn_table_group (int argc, VALUE *argv, VALUE self)
     rb_grn_context_check(context, self);
     rb_grn_rc_check(rc, self);
 
-    return rb_results;
+    if (n_results == 1)
+	return rb_ary_pop(rb_results);
+    else
+	return rb_results;
 }
 
 /*
