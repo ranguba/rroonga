@@ -496,13 +496,15 @@ class TableTest < Test::Unit::TestCase
     records = comments.select do |record|
       record["issued"] > 0
     end
-    assert_equal([[2, "groonga", "http://groonga.org/"],
-                  [1, "Ruby", "http://ruby-lang.org/"]],
-                 records.group([".bookmark"]).collect do |record|
-                   bookmark = record.key
-                   [record.n_sub_records,
-                    bookmark["title"],
-                    bookmark.key]
+    assert_equal([[[2, "groonga", "http://groonga.org/"],
+                   [1, "Ruby", "http://ruby-lang.org/"]]],
+                 records.group(".bookmark").collect do |group|
+                   group.collect do |record|
+                     bookmark = record.key
+                     [record.n_sub_records,
+                      bookmark["title"],
+                      bookmark.key]
+                   end
                  end)
   end
 

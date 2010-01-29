@@ -1173,11 +1173,10 @@ rb_grn_table_sort (int argc, VALUE *argv, VALUE self)
 
 /*
  * call-seq:
- *   table.group(key)  -> Groonga::Table
- *   table.group(keys) -> [Groonga::Table, ...]
+ *   table.group(column_name1, column_name2, ...) -> [Groonga::Hash, Groonga::Hash, ...]
  *
- * _table_のレコードを_keys_で渡されてきたカラムあるいはカラ
- * ム名の配列でグループ化する。
+ * _table_のレコードを_column_name1_, _column_name2_, _..._で
+ * 指定したカラムの値でグループ化する。
  */
 static VALUE
 rb_grn_table_group (int argc, VALUE *argv, VALUE self)
@@ -1196,11 +1195,7 @@ rb_grn_table_group (int argc, VALUE *argv, VALUE self)
 			     NULL, NULL,
 			     NULL, NULL, NULL);
 
-    rb_scan_args(argc, argv, "10", &rb_keys);
-
-    if (!RVAL2CBOOL(rb_obj_is_kind_of(rb_keys, rb_cArray)))
-	rb_raise(rb_eArgError, "keys should be an array of key: <%s>",
-		 rb_grn_inspect(rb_keys));
+    rb_scan_args(argc, argv, "00*", &rb_keys);
 
     n_keys = RARRAY_LEN(rb_keys);
     rb_sort_keys = RARRAY_PTR(rb_keys);
@@ -1252,10 +1247,7 @@ rb_grn_table_group (int argc, VALUE *argv, VALUE self)
     rb_grn_context_check(context, self);
     rb_grn_rc_check(rc, self);
 
-    if (n_results == 1)
-	return rb_ary_pop(rb_results);
-    else
-	return rb_results;
+    return rb_results;
 }
 
 /*
