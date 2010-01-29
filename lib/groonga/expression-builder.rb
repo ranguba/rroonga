@@ -61,6 +61,14 @@ module Groonga
       expression
     end
 
+    def &(other)
+      other
+    end
+
+    def |(other)
+      other
+    end
+
     private
     def default_parse_options
       {
