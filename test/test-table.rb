@@ -471,6 +471,15 @@ class TableTest < Test::Unit::TestCase
                  results.collect {|record| record["id"]})
   end
 
+  def test_sort_with_nonexistent_key
+    p "maybe crash!!!"
+    bookmarks = create_bookmarks
+    add_shuffled_ids(bookmarks)
+    results = bookmarks.sort([{:key => "nonexistent", :order => :descending}])
+    assert_equal("unknown",
+                 results.collect {|record| record["id"]})
+  end
+
   def test_group
     bookmarks = Groonga::Hash.create(:name => "Bookmarks")
     bookmarks.define_column("title", "Text")
