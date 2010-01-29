@@ -1173,10 +1173,11 @@ rb_grn_table_sort (int argc, VALUE *argv, VALUE self)
 
 /*
  * call-seq:
- *   table.group(column_name1, column_name2, ...) -> [Groonga::Hash, Groonga::Hash, ...]
+ *   table.group(column1, column2, ...) -> [Groonga::Hash, Groonga::Hash, ...]
  *
- * _table_のレコードを_column_name1_, _column_name2_, _..._で
- * 指定したカラムの値でグループ化する。
+ * _table_のレコードを_column1_, _column2_, _..._で指定したカ
+ * ラムの値でグループ化する。カラムはカラム名（文字列）でも
+ * 指定可能。
  */
 static VALUE
 rb_grn_table_group (int argc, VALUE *argv, VALUE self)
