@@ -384,6 +384,12 @@ rb_grn_object_deconstruct (RbGrnObject *rb_grn_object,
     if (!rb_grn_object)
 	return;
 
+    if (!rb_grn_object->object) {
+	rb_raise(rb_eGrnObjectClosed,
+		 "can't access already closed groonga object: %s",
+		 rb_grn_inspect(CLASS_OF(rb_grn_object->self)));
+    }
+
     if (object)
 	*object = rb_grn_object->object;
     if (context)
@@ -432,15 +438,16 @@ rb_grn_object_close (VALUE self)
 VALUE
 rb_grn_object_closed_p (VALUE self)
 {
+    RbGrnObject *rb_grn_object;
     grn_obj *object;
     grn_ctx *context;
 
-    rb_grn_object_deconstruct(SELF(self), &object, &context,
-			      NULL, NULL, NULL, NULL);
-    if (context && object)
+    rb_grn_object = SELF(self);
+    if (rb_grn_object->context && rb_grn_object->object) {
         return Qfalse;
-    else
+    } else {
         return Qtrue;
+    }
 }
 
 VALUE
