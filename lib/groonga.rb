@@ -66,6 +66,16 @@ module Groonga
     def bindings_version
       BINDINGS_VERSION.join(".")
     end
+
+    ##
+    # call-seq:
+    #   Groonga[name] -> Groonga::Object or nil
+    #   Groonga[id]   -> Groonga::Object or nil
+    #
+    # 便利メソッド。Groonga::Context.default[name]と同じ。
+    def [](name)
+      Context.default[name]
+    end
   end
 end
 

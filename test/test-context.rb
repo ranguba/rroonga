@@ -65,4 +65,9 @@ class ContextTest < Test::Unit::TestCase
     context = Groonga::Context.default
     assert_equal("Bool", context[:Bool].name)
   end
+
+  def test_shortcut_access
+    Groonga::Database.create
+    assert_equal("ShortText", Groonga["ShortText"].name)
+  end
 end
