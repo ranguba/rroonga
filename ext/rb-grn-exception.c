@@ -1,6 +1,6 @@
 /* -*- c-file-style: "ruby" -*- */
 /*
-  Copyright (C) 2009  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2010  Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -19,6 +19,7 @@
 #include "rb-grn.h"
 
 VALUE rb_eGrnError;
+VALUE rb_eGrnObjectClosed;
 
 static VALUE eGrnEndOfData;
 static VALUE eGrnUnknownError;
@@ -551,6 +552,15 @@ rb_grn_init_exception (VALUE mGrn)
      */
     rb_eGrnError =
         rb_define_class_under(mGrn, "Error", rb_eStandardError);
+
+    /*
+     * Document-class: Groonga::ObjectClosed
+     *
+     * groongaレベルでは破棄されたオブジェクトにアクセスした
+     * ときに発生する。
+     */
+    rb_eGrnObjectClosed =
+        rb_define_class_under(mGrn, "ObjectClosed", rb_eGrnError);
 
     /*
      * Document-class: Groonga::EndOfData

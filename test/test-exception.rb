@@ -1,4 +1,4 @@
-# Copyright (C) 2009  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2010  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -18,6 +18,9 @@ class ExceptionTest < Test::Unit::TestCase
 
   def test_defined
     assert_not_const_defined(Groonga, :Success)
+
+    assert_const_defined(Groonga, :Error)
+    assert_const_defined(Groonga, :ObjectClosed)
 
     assert_const_defined(Groonga, :EndOfData)
     assert_const_defined(Groonga, :UnknownError)
