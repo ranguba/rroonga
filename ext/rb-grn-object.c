@@ -439,8 +439,6 @@ VALUE
 rb_grn_object_closed_p (VALUE self)
 {
     RbGrnObject *rb_grn_object;
-    grn_obj *object;
-    grn_ctx *context;
 
     rb_grn_object = SELF(self);
     if (rb_grn_object->context && rb_grn_object->object) {
