@@ -72,17 +72,19 @@ begin
     end
   end
 
-  @hash_file = Tempfile.new("groonga-hash")
+  hash_file = Tempfile.new("groonga-hash")
+  FileUtils.rm_f(hash_file.path)
   item("groonga: Hash: file") do
     @hash = Groonga::Hash.create(:key_type => "<shorttext>",
                                  :value_type => value_type,
-                                 :path => @hash_file.path)
+                                 :path => hash_file.path)
     values.each do |value|
       @hash[value] = value
     end
   end
 
   trie_file = Tempfile.new("groonga-trie")
+  FileUtils.rm_f(trie_file.path)
   item("groonga: Trie: file") do
     @hash = Groonga::PatriciaTrie.create(:key_type => "<shorttext>",
                                          :value_type => value_type,
