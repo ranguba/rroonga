@@ -406,7 +406,7 @@ rb_grn_table_key_support_get_value_by_key (VALUE self, VALUE rb_key)
     grn_obj_get_value(context, table, id, value);
     rb_grn_context_check(context, self);
 
-    return GRNBULK2RVAL(context, value, self);
+    return GRNBULK2RVAL(context, value, range, self);
 }
 
 /*

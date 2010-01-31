@@ -142,10 +142,16 @@ rb_grn_bulk_to_ruby_object_by_range_id (grn_ctx *context, grn_obj *bulk,
 static VALUE
 rb_grn_bulk_to_ruby_object_by_range_type (grn_ctx *context, grn_obj *bulk,
 					  grn_obj *range, grn_id range_id,
-					  VALUE rb_range,
 					  VALUE related_object, VALUE *rb_value)
 {
     rb_grn_boolean success = RB_GRN_TRUE;
+
+    if (!range && range_id != GRN_ID_NIL) {
+	range = grn_ctx_at(context, range_id);
+    }
+
+    if (!range)
+	return RB_GRN_FALSE;
 
     switch (range->header.type) {
       case GRN_TABLE_HASH_KEY:
@@ -158,8 +164,33 @@ rb_grn_bulk_to_ruby_object_by_range_type (grn_ctx *context, grn_obj *bulk,
 	    if (id == GRN_ID_NIL) {
 		*rb_value = Qnil;
 	    } else {
+		VALUE rb_range;
+
+		rb_range = GRNOBJECT2RVAL(Qnil, context, range, RB_GRN_FALSE);
 		*rb_value = rb_grn_record_new(rb_range, id, Qnil);
 	    }
+	}
+	break;
+      case GRN_TYPE:
+	switch (range->header.flags & GRN_OBJ_KEY_MASK) {
+	  case GRN_OBJ_KEY_UINT:
+	    *rb_value = INT2NUM(GRN_UINT32_VALUE(bulk));
+	    break;
+	  case GRN_OBJ_KEY_INT:
+	    *rb_value = INT2NUM(GRN_INT32_VALUE(bulk));
+	    break;
+	  case GRN_OBJ_KEY_FLOAT:
+	    *rb_value = rb_float_new(GRN_FLOAT_VALUE(bulk));
+	    break;
+	  default:
+	    if (range->header.flags & GRN_OBJ_KEY_VAR_SIZE) {
+		*rb_value = rb_grn_context_rb_string_new(context,
+							 GRN_BULK_HEAD(bulk),
+							 GRN_BULK_VSIZE(bulk));
+	    } else {
+		success = RB_GRN_FALSE;
+	    }
+	    break;
 	}
 	break;
       default:
@@ -172,11 +203,9 @@ rb_grn_bulk_to_ruby_object_by_range_type (grn_ctx *context, grn_obj *bulk,
 
 VALUE
 rb_grn_bulk_to_ruby_object (grn_ctx *context, grn_obj *bulk,
-			    VALUE related_object)
+			    grn_obj *range, VALUE related_object)
 {
     grn_id range_id;
-    grn_obj *range;
-    VALUE rb_range;
     VALUE rb_value = Qnil;
 
     if (GRN_BULK_EMPTYP(bulk))
@@ -187,10 +216,8 @@ rb_grn_bulk_to_ruby_object (grn_ctx *context, grn_obj *bulk,
     					       related_object, &rb_value))
     	return rb_value;
 
-    range = grn_ctx_at(context, range_id);
-    rb_range = GRNOBJECT2RVAL(Qnil, context, range, RB_GRN_FALSE);
     if (rb_grn_bulk_to_ruby_object_by_range_type(context, bulk,
-    						 range, range_id, rb_range,
+    						 range, range_id,
     						 related_object, &rb_value))
     	return rb_value;
 
@@ -548,7 +575,7 @@ rb_grn_value_to_ruby_object (grn_ctx *context,
 	    return Qnil;
 	if (value->header.domain == GRN_ID_NIL && range)
 	    value->header.domain = grn_obj_id(context, range);
-	return GRNBULK2RVAL(context, value, related_object);
+	return GRNBULK2RVAL(context, value, range, related_object);
 	break;
       case GRN_UVECTOR:
 	{
@@ -627,11 +654,10 @@ rb_grn_key_to_ruby_object (grn_ctx *context, const void *key, int key_size,
 {
     grn_obj bulk;
 
-    GRN_OBJ_INIT(&bulk, GRN_BULK, GRN_OBJ_DO_SHALLOW_COPY, GRN_ID_NIL);
+    GRN_OBJ_INIT(&bulk, GRN_BULK, GRN_OBJ_DO_SHALLOW_COPY, table->header.domain);
     GRN_TEXT_SET(context, &bulk, key, key_size);
-    bulk.header.domain = table->header.domain;
 
-    return GRNBULK2RVAL(context, &bulk, related_object);
+    return GRNBULK2RVAL(context, &bulk, NULL, related_object);
 }
 
 grn_obj *
@@ -701,7 +727,7 @@ rb_grn_obj_to_ruby_object (VALUE klass, grn_ctx *context,
 	    return Qnil;
 	break;
       case GRN_BULK:
-	return GRNBULK2RVAL(context, obj, related_object);
+	return GRNBULK2RVAL(context, obj, NULL, related_object);
 	break;
       /* case GRN_PTR: */
       /* case GRN_UVECTOR: */

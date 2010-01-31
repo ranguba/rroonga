@@ -457,8 +457,8 @@ VALUE          rb_grn_column_expression_builder_build
     (rb_grn_bulk_from_ruby_object(object, context, bulk))
 #define RVAL2GRNBULK_WITH_TYPE(object, context, bulk, type_id, type)	\
     (rb_grn_bulk_from_ruby_object_with_type(object, context, bulk, type_id, type))
-#define GRNBULK2RVAL(context, bulk, related_object) \
-    (rb_grn_bulk_to_ruby_object(context, bulk, related_object))
+#define GRNBULK2RVAL(context, bulk, range, related_object)	\
+    (rb_grn_bulk_to_ruby_object(context, bulk, range, related_object))
 
 #define RVAL2GRNVECTOR(object, context, vector)	\
     (rb_grn_vector_from_ruby_object(object, context, vector))
@@ -570,6 +570,7 @@ grn_obj       *rb_grn_bulk_from_ruby_object_with_type
 						     grn_obj *type);
 VALUE          rb_grn_bulk_to_ruby_object           (grn_ctx *context,
 						     grn_obj *bulk,
+						     grn_obj *range,
 						     VALUE related_object);
 grn_obj       *rb_grn_vector_from_ruby_object       (VALUE object,
 						     grn_ctx *context,

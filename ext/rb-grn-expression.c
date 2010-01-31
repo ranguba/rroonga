@@ -506,12 +506,12 @@ rb_grn_expression_array_reference (VALUE self, VALUE rb_name_or_offset)
         name = RSTRING_PTR(rb_name_or_offset);
         name_size = RSTRING_LEN(rb_name_or_offset);
         variable = grn_expr_get_var(context, expression, name, name_size);
-        return GRNBULK2RVAL(context, variable, self);
+        return GRNBULK2RVAL(context, variable, NULL, self);
         break;
     case T_FIXNUM:
         offset = NUM2INT(rb_name_or_offset);
         value = grn_expr_get_var_by_offset(context, expression, offset);
-        return GRNBULK2RVAL(context, value, self);
+        return GRNBULK2RVAL(context, value, NULL, self);
         break;
     default:
         rb_raise(rb_eArgError, "xxx");

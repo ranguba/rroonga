@@ -1346,7 +1346,7 @@ rb_grn_table_get_value (VALUE self, VALUE rb_id)
     grn_obj_get_value(context, table, id, value);
     rb_grn_context_check(context, self);
 
-    return GRNBULK2RVAL(context, value, self);
+    return GRNBULK2RVAL(context, value, range, self);
 }
 
 /*
