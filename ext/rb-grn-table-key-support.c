@@ -1,6 +1,6 @@
 /* -*- c-file-style: "ruby" -*- */
 /*
-  Copyright (C) 2009  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2010  Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -387,6 +387,137 @@ rb_grn_table_key_support_array_set (VALUE self,
     }
 }
 
+static VALUE
+rb_grn_table_key_support_get_value_by_key (VALUE self, VALUE rb_key)
+{
+    grn_ctx *context;
+    grn_obj *table, *value, *range;
+    grn_id id;
+
+    id = rb_grn_table_key_support_get(self, rb_key);
+
+    if (id == GRN_ID_NIL)
+	return Qnil;
+
+    rb_grn_table_key_support_deconstruct(SELF(self), &table, &context,
+					 NULL, NULL, NULL,
+					 &value, NULL, &range);
+    GRN_BULK_REWIND(value);
+    grn_obj_get_value(context, table, id, value);
+    rb_grn_context_check(context, self);
+
+    return GRNBULK2RVAL(context, value, self);
+}
+
+/*
+ * Document-method: []
+ *
+ * call-seq:
+ *   table.value(id, :id => true) -> 値
+ *   table.value(key) -> 値
+ *
+ * _table_の_id_または_key_に対応する値を返す。
+ */
+static VALUE
+rb_grn_table_key_support_get_value (int argc, VALUE *argv, VALUE self)
+{
+    VALUE rb_id_or_key, rb_options;
+    rb_grn_boolean use_key;
+
+    rb_scan_args(argc, argv, "11", &rb_id_or_key, &rb_options);
+
+    if (NIL_P(rb_options)) {
+	use_key = RB_GRN_TRUE;
+    } else {
+	VALUE rb_option_id;
+
+	rb_grn_scan_options(rb_options,
+			    "id", &rb_option_id,
+			    NULL);
+	use_key = !RVAL2CBOOL(rb_option_id);
+    }
+
+    if (use_key) {
+	return rb_grn_table_key_support_get_value_by_key(self, rb_id_or_key);
+    } else {
+	return rb_grn_table_get_value(self, rb_id_or_key);
+    }
+}
+
+static VALUE
+rb_grn_table_key_support_set_value_by_key (VALUE self,
+					   VALUE rb_key, VALUE rb_value)
+{
+    grn_ctx *context;
+    grn_obj *table;
+    grn_id id;
+    grn_obj *value;
+    grn_rc rc;
+
+    if (NIL_P(rb_key)) {
+	rb_raise(rb_eArgError, "key should not be nil: <%s>",
+		 rb_grn_inspect(self));
+    }
+
+    rb_grn_table_key_support_deconstruct(SELF(self), &table, &context,
+					 NULL, NULL, NULL,
+					 &value, NULL, NULL);
+
+    id = rb_grn_table_key_support_add_raw(self, rb_key);
+    if (GRN_ID_NIL == id) {
+	rb_raise(rb_eGrnError,
+		 "failed to add new record with key: <%s>: <%s>",
+		 rb_grn_inspect(rb_key),
+		 rb_grn_inspect(self));
+    }
+
+    GRN_BULK_REWIND(value);
+    RVAL2GRNBULK(rb_value, context, value);
+    rc = grn_obj_set_value(context, table, id, value, GRN_OBJ_SET);
+    rb_grn_context_check(context, self);
+    rb_grn_rc_check(rc, self);
+
+    return rb_value;
+}
+
+/*
+ * Document-method: set_value
+ *
+ * call-seq:
+ *   table.set_value(id, value, :id => true)
+ *   table.set_value(key, value)
+ *
+ * _table_の_id_または_key_に対応する値を_value_に設定する。
+ * 既存の値は上書きされる。
+ */
+static VALUE
+rb_grn_table_key_support_set_value (int argc, VALUE *argv, VALUE self)
+{
+    VALUE rb_id_or_key, rb_value, rb_options;
+    rb_grn_boolean use_key;
+
+    rb_scan_args(argc, argv, "21", &rb_id_or_key, &rb_value, &rb_options);
+
+    if (NIL_P(rb_options)) {
+	use_key = RB_GRN_TRUE;
+    } else {
+	VALUE rb_option_id;
+
+	rb_grn_scan_options(rb_options,
+			    "id", &rb_option_id,
+			    NULL);
+	use_key = !RVAL2CBOOL(rb_option_id);
+    }
+
+    if (use_key) {
+	return rb_grn_table_key_support_set_value_by_key(self,
+							 rb_id_or_key,
+							 rb_value);
+    } else {
+	return rb_grn_table_set_value(self, rb_id_or_key, rb_value);
+    }
+}
+
 /*
  * call-seq:
  *   table.default_tokenizer -> nilまたはGroonga::Procedure
@@ -479,6 +610,11 @@ rb_grn_init_table_key_support (VALUE mGrn)
 		     rb_grn_table_key_support_array_reference, 1);
     rb_define_method(rb_mGrnTableKeySupport, "[]=",
 		     rb_grn_table_key_support_array_set, 2);
+
+    rb_define_method(rb_mGrnTableKeySupport, "value",
+		     rb_grn_table_key_support_get_value, -1);
+    rb_define_method(rb_mGrnTableKeySupport, "set_value",
+		     rb_grn_table_key_support_set_value, -1);
 
     rb_define_method(rb_mGrnTableKeySupport, "default_tokenizer",
 		     rb_grn_table_key_support_get_default_tokenizer, 0);

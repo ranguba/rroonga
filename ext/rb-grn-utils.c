@@ -87,8 +87,7 @@ rb_grn_equal_option (VALUE option, const char *key)
 
 static VALUE
 rb_grn_bulk_to_ruby_object_by_range_id (grn_ctx *context, grn_obj *bulk,
-					grn_obj *range, grn_id range_id,
-					VALUE rb_range,
+					grn_id range_id,
 					VALUE related_object, VALUE *rb_value)
 {
     rb_grn_boolean success = RB_GRN_TRUE;
@@ -156,10 +155,11 @@ rb_grn_bulk_to_ruby_object_by_range_type (grn_ctx *context, grn_obj *bulk,
 	    grn_id id;
 
 	    id = *((grn_id *)GRN_BULK_HEAD(bulk));
-	    if (id == GRN_ID_NIL)
+	    if (id == GRN_ID_NIL) {
 		*rb_value = Qnil;
-	    else
+	    } else {
 		*rb_value = rb_grn_record_new(rb_range, id, Qnil);
+	    }
 	}
 	break;
       default:
@@ -183,18 +183,16 @@ rb_grn_bulk_to_ruby_object (grn_ctx *context, grn_obj *bulk,
 	return Qnil;
 
     range_id = bulk->header.domain;
+    if (rb_grn_bulk_to_ruby_object_by_range_id(context, bulk, range_id,
+    					       related_object, &rb_value))
+    	return rb_value;
+
     range = grn_ctx_at(context, range_id);
     rb_range = GRNOBJECT2RVAL(Qnil, context, range, RB_GRN_FALSE);
-
-    if (rb_grn_bulk_to_ruby_object_by_range_id(context, bulk,
-					       range, range_id, rb_range,
-					       related_object, &rb_value))
-	return rb_value;
-
     if (rb_grn_bulk_to_ruby_object_by_range_type(context, bulk,
-						 range, range_id, rb_range,
-						 related_object, &rb_value))
-	return rb_value;
+    						 range, range_id, rb_range,
+    						 related_object, &rb_value))
+    	return rb_value;
 
     return rb_grn_context_rb_string_new(context,
 					GRN_BULK_HEAD(bulk),

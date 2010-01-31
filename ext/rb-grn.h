@@ -322,6 +322,11 @@ VALUE          rb_grn_table_array_reference         (VALUE self,
 VALUE          rb_grn_table_array_set               (VALUE self,
 						     VALUE rb_id,
 						     VALUE rb_value);
+VALUE          rb_grn_table_get_value               (VALUE self,
+						     VALUE rb_id);
+VALUE          rb_grn_table_set_value               (VALUE self,
+						     VALUE rb_id,
+						     VALUE rb_value);
 
 grn_ctx       *rb_grn_table_cursor_ensure_context   (VALUE cursor,
 						     VALUE *rb_context);

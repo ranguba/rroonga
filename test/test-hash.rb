@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (C) 2009  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2010  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -209,5 +209,22 @@ class HashTest < Test::Unit::TestCase
     assert_nothing_raised do
       hash.add(1 << 63)
     end
+  end
+
+  def test_value_by_key
+    users = Groonga::Hash.create(:key_type => "ShortText",
+                                 :value_type => "Int32")
+    key = "niku"
+    users.add(key)
+    users.set_value(key, 29)
+    assert_equal(29, users.value(key))
+  end
+
+  def test_value_by_id
+    users = Groonga::Hash.create(:key_type => "ShortText",
+                                 :value_type => "Int32")
+    user_id = users.add("niku").id
+    users.set_value(user_id, 29, :id => true)
+    assert_equal(29, users.value(user_id, :id => true))
   end
 end

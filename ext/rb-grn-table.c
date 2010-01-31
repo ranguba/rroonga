@@ -1,6 +1,6 @@
 /* -*- c-file-style: "ruby" -*- */
 /*
-  Copyright (C) 2009  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2010  Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -1321,6 +1321,68 @@ rb_grn_table_array_set (VALUE self, VALUE rb_id, VALUE rb_value)
 }
 
 /*
+ * Document-method: value
+ *
+ * call-seq:
+ *   table.value(id) -> 値
+ *
+ * _table_の_id_に対応する値を返す。
+ */
+VALUE
+rb_grn_table_get_value (VALUE self, VALUE rb_id)
+{
+    grn_id id;
+    grn_ctx *context;
+    grn_obj *table;
+    grn_obj *range;
+    grn_obj *value;
+
+    rb_grn_table_deconstruct(SELF(self), &table, &context,
+			     NULL, NULL,
+			     &value, NULL, &range);
+
+    id = NUM2UINT(rb_id);
+    GRN_BULK_REWIND(value);
+    grn_obj_get_value(context, table, id, value);
+    rb_grn_context_check(context, self);
+
+    return GRNBULK2RVAL(context, value, self);
+}
+
+/*
+ * Document-method: set_value
+ *
+ * call-seq:
+ *   table.set_value(id, value)
+ *
+ * _table_の_id_に対応する値として_value_設定する。既存の値は
+ * 上書きされる。
+ */
+VALUE
+rb_grn_table_set_value (VALUE self, VALUE rb_id, VALUE rb_value)
+{
+    grn_id id;
+    grn_ctx *context;
+    grn_obj *table;
+    grn_obj *range;
+    grn_obj *value;
+    grn_rc rc;
+
+    rb_grn_table_deconstruct(SELF(self), &table, &context,
+			     NULL, NULL,
+			     &value, NULL, &range);
+
+    id = NUM2UINT(rb_id);
+    GRN_BULK_REWIND(value);
+    RVAL2GRNBULK(rb_value, context, value);
+    rc = grn_obj_set_value(context, table, id, value, GRN_OBJ_SET);
+    rb_grn_context_check(context, self);
+    rb_grn_rc_check(rc, self);
+
+    return Qnil;
+}
+
+/*
  * Document-method: unlock
  *
  * call-seq:
@@ -1817,6 +1879,9 @@ rb_grn_init_table (VALUE mGrn)
 
     rb_define_method(rb_cGrnTable, "[]", rb_grn_table_array_reference, 1);
     rb_define_method(rb_cGrnTable, "[]=", rb_grn_table_array_set, 2);
+
+    rb_define_method(rb_cGrnTable, "value", rb_grn_table_get_value, 1);
+    rb_define_method(rb_cGrnTable, "set_value", rb_grn_table_set_value, 2);
 
     rb_define_method(rb_cGrnTable, "lock", rb_grn_table_lock, -1);
     rb_define_method(rb_cGrnTable, "unlock", rb_grn_table_unlock, -1);

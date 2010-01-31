@@ -1,4 +1,4 @@
-# Copyright (C) 2009  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2010  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -78,5 +78,12 @@ class ArrayTest < Test::Unit::TestCase
     users_opened = Groonga::Array.open(:name => "Users")
     users_opened.add
     assert_equal(1, users_created.size)
+  end
+
+  def test_value
+    users = Groonga::Array.create(:value_type => "Int32")
+    user_id = users.add.id
+    users.set_value(user_id, 29)
+    assert_equal(29, users.value(user_id))
   end
 end
