@@ -472,7 +472,7 @@ class TableTest < Test::Unit::TestCase
   end
 
   def test_sort_with_nonexistent_key
-    p "maybe crash!!!"
+    omit("maybe crash!!!")
     bookmarks = create_bookmarks
     add_shuffled_ids(bookmarks)
     results = bookmarks.sort([{:key => "nonexistent", :order => :descending}])
