@@ -60,7 +60,7 @@ begin
     @hash = Groonga::Hash.create(:key_type => "ShortText",
                                  :value_type => value_type)
     values.each do |value|
-      @hash[value] = value
+      @hash.set_value(value, value)
     end
   end
 
@@ -68,7 +68,7 @@ begin
     @hash = Groonga::PatriciaTrie.create(:key_type => "ShortText",
                                          :value_type => value_type)
     values.each do |value|
-      @hash[value] = value
+      @hash.set_value(value, value)
     end
   end
 
@@ -79,7 +79,7 @@ begin
                                  :value_type => value_type,
                                  :path => hash_file.path)
     values.each do |value|
-      @hash[value] = value
+      @hash.set_value(value, value)
     end
   end
 
@@ -90,7 +90,7 @@ begin
                                          :value_type => value_type,
                                          :path => trie_file.path)
     values.each do |value|
-      @hash[value] = value
+      @hash.set_value(value, value)
     end
   end
 rescue LoadError
