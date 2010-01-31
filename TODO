@@ -1,0 +1,2 @@
+* TableKeySupport#[key] = {column_name => value, ...}
+* TableKeySupport#[key, column_name] = value
