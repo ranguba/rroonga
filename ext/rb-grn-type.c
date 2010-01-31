@@ -55,13 +55,20 @@ rb_grn_type_to_ruby_object (grn_ctx *context, grn_obj *type,
  * 名前が_name_の型を作成する。_options_に指定可能な値は以下の通
  * り。
  *
+ * [+:type+]
+ *   :integer（符号付き整数）、:int（:integerの省略
+ *   形）、:unsigned_integer（符号なし整
+ *   数）、:uint（:unsigned_integerの省略形）、:float（浮動小
+ *   数点数）、:fixed（固定長文字列）、:variable（可変長文字
+ *   列）のいずれかを指定する。省略した場合は:fixedを指定し
+ *   たものと扱う。
+ *
+ *   :fixedまたは:variableを指定した場合は必ず+:size+を指定
+ *   しなければいけない。
+ *
  * [+:context+]
  *   型の作成時に利用するGroonga::Contextを指定する。省略すると
  *   Groonga::Context.defaultを用いる。
- *
- * [+:option+]
- *   指定する場合には:int, :integer, :uint, :unsigned_integer,
- *   :float, :variableのいずれかを指定する。
  *
  * [+:size+]
  *   +:option+が:variableの場合は最大長、それ以外の場合は長さを
@@ -75,13 +82,13 @@ rb_grn_type_initialize (int argc, VALUE *argv, VALUE self)
     const char *name = NULL;
     unsigned name_size, size = 0;
     grn_obj_flags flags = 0;
-    VALUE rb_name, options, rb_context, rb_option, rb_size;
+    VALUE rb_name, options, rb_context, rb_type, rb_size;
 
     rb_scan_args(argc, argv, "11", &rb_name, &options);
 
     rb_grn_scan_options(options,
 			"context", &rb_context,
-			"option", &rb_option,
+			"type", &rb_type,
 			"size", &rb_size,
 			NULL);
 
@@ -90,25 +97,27 @@ rb_grn_type_initialize (int argc, VALUE *argv, VALUE self)
 
     context = rb_grn_context_ensure(&rb_context);
 
-    if (NIL_P(rb_option)) {
-    } else if (rb_grn_equal_option(rb_option, "integer") ||
-               rb_grn_equal_option(rb_option, "int")) {
+    if (NIL_P(rb_type) ||
+	rb_grn_equal_option(rb_type, "fixed")) {
+	flags = RB_GRN_OBJ_KEY_STRING;
+    } else if (rb_grn_equal_option(rb_type, "integer") ||
+               rb_grn_equal_option(rb_type, "int")) {
 	flags = GRN_OBJ_KEY_INT;
         size = sizeof(int);
-    } else if (rb_grn_equal_option(rb_option, "unsigned_integer") ||
-	       rb_grn_equal_option(rb_option, "uint")) {
+    } else if (rb_grn_equal_option(rb_type, "unsigned_integer") ||
+	       rb_grn_equal_option(rb_type, "uint")) {
 	flags = GRN_OBJ_KEY_UINT;
         size = sizeof(unsigned int);
-    } else if (rb_grn_equal_option(rb_option, "float")) {
+    } else if (rb_grn_equal_option(rb_type, "float")) {
 	flags = GRN_OBJ_KEY_FLOAT;
         size = sizeof(double);
-    } else if (rb_grn_equal_option(rb_option, "variable")) {
+    } else if (rb_grn_equal_option(rb_type, "variable")) {
         flags = GRN_OBJ_KEY_VAR_SIZE;
     } else {
 	rb_raise(rb_eArgError,
-		 ":option should be one of "
-		 "[:int, :integer, :uint, :unsigned_integer, "
-		 ":float, :variable]: %s",
+		 ":type should be one of "
+		 "[:integer, :int, :unsigned_integer, :uint, "
+		 ":float, :fixed, :variable]: %s",
 		 rb_grn_inspect(options));
     }
 

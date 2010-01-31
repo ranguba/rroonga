@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2009  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2010  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -144,7 +144,7 @@ module Groonga
     #
     # レコードの値を返す。
     def value
-      @table[@id]
+      @table.value(@id, :id => true)
     end
 
     # call-seq:
@@ -152,7 +152,7 @@ module Groonga
     #
     # レコードの値を設定する。既存の値は上書きされる。
     def value=(value)
-      @table[@id] = value
+      @table.set_value(@id, value, :id => true)
     end
 
     # call-seq:

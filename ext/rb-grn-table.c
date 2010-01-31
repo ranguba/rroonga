@@ -1320,14 +1320,6 @@ rb_grn_table_array_set (VALUE self, VALUE rb_id, VALUE rb_value)
     return Qnil;
 }
 
-/*
- * Document-method: value
- *
- * call-seq:
- *   table.value(id) -> 値
- *
- * _table_の_id_に対応する値を返す。
- */
 VALUE
 rb_grn_table_get_value (VALUE self, VALUE rb_id)
 {
@@ -1348,16 +1340,40 @@ rb_grn_table_get_value (VALUE self, VALUE rb_id)
 
     return GRNBULK2RVAL(context, value, range, self);
 }
-
 /*
- * Document-method: set_value
+ * Document-method: value
  *
  * call-seq:
- *   table.set_value(id, value)
+ *   table.value(id) -> 値
+ *   table.value(id, :id => true) -> 値
  *
- * _table_の_id_に対応する値として_value_設定する。既存の値は
- * 上書きされる。
+ * _table_の_id_に対応する値を返す。
+ *
+ * <tt>:id => true</tt>が指定できるのは利便性のため。
+ * Groonga::ArrayでもGroonga::HashやGroonga::PatriciaTrieと
+ * 同じ引数で動くようになる。
  */
+static VALUE
+rb_grn_table_get_value_convenience (int argc, VALUE *argv, VALUE self)
+{
+    VALUE rb_id, rb_options;
+
+    rb_scan_args(argc, argv, "11", &rb_id, &rb_options);
+    if (!NIL_P(rb_options)) {
+	VALUE rb_option_id;
+	rb_grn_scan_options(rb_options,
+			    "id", &rb_option_id,
+			    NULL);
+	if (!(NIL_P(rb_option_id) || RVAL2CBOOL(rb_option_id))) {
+	    rb_raise(rb_eArgError, ":id options must be true or nil: %s: %s",
+		     rb_inspect(rb_option_id),
+		     rb_inspect(rb_ary_new3(2, self, rb_ary_new4(argc, argv))));
+	}
+    }
+
+    return rb_grn_table_get_value(self, rb_id);
+}
+
 VALUE
 rb_grn_table_set_value (VALUE self, VALUE rb_id, VALUE rb_value)
 {
@@ -1380,6 +1396,41 @@ rb_grn_table_set_value (VALUE self, VALUE rb_id, VALUE rb_value)
     rb_grn_rc_check(rc, self);
 
     return Qnil;
+}
+
+/*
+ * Document-method: set_value
+ *
+ * call-seq:
+ *   table.set_value(id, value)
+ *   table.set_value(id, value, :id => true)
+ *
+ * _table_の_id_に対応する値として_value_設定する。既存の値は
+ * 上書きされる。
+ *
+ * <tt>:id => true</tt>が指定できるのは利便性のため。
+ * Groonga::ArrayでもGroonga::HashやGroonga::PatriciaTrieと
+ * 同じ引数で動くようになる。
+ */
+static VALUE
+rb_grn_table_set_value_convenience (int argc, VALUE *argv, VALUE self)
+{
+    VALUE rb_id, rb_value, rb_options;
+
+    rb_scan_args(argc, argv, "21", &rb_id, &rb_value, &rb_options);
+    if (!NIL_P(rb_options)) {
+	VALUE rb_option_id;
+	rb_grn_scan_options(rb_options,
+			    "id", &rb_option_id,
+			    NULL);
+	if (!(NIL_P(rb_option_id) || RVAL2CBOOL(rb_option_id))) {
+	    rb_raise(rb_eArgError, ":id options must be true or nil: %s: %s",
+		     rb_inspect(rb_option_id),
+		     rb_inspect(rb_ary_new3(2, self, rb_ary_new4(argc, argv))));
+	}
+    }
+
+    return rb_grn_table_set_value(self, rb_id, rb_value);
 }
 
 /*
@@ -1880,8 +1931,10 @@ rb_grn_init_table (VALUE mGrn)
     rb_define_method(rb_cGrnTable, "[]", rb_grn_table_array_reference, 1);
     rb_define_method(rb_cGrnTable, "[]=", rb_grn_table_array_set, 2);
 
-    rb_define_method(rb_cGrnTable, "value", rb_grn_table_get_value, 1);
-    rb_define_method(rb_cGrnTable, "set_value", rb_grn_table_set_value, 2);
+    rb_define_method(rb_cGrnTable, "value",
+		     rb_grn_table_get_value_convenience, -1);
+    rb_define_method(rb_cGrnTable, "set_value",
+		     rb_grn_table_set_value_convenience, -1);
 
     rb_define_method(rb_cGrnTable, "lock", rb_grn_table_lock, -1);
     rb_define_method(rb_cGrnTable, "unlock", rb_grn_table_unlock, -1);

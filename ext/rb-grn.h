@@ -77,6 +77,8 @@ typedef int rb_grn_boolean;
 
 #define RB_GRN_QUERY_DEFAULT_MAX_EXPRESSIONS 32
 
+#define RB_GRN_OBJ_KEY_STRING             (0x03<<3)
+
 #include <stdint.h>
 
 #define RB_GRN_OBJECT(object) ((RbGrnObject *)(object))

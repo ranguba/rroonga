@@ -172,22 +172,27 @@ rb_grn_bulk_to_ruby_object_by_range_type (grn_ctx *context, grn_obj *bulk,
 	}
 	break;
       case GRN_TYPE:
-	switch (range->header.flags & GRN_OBJ_KEY_MASK) {
-	  case GRN_OBJ_KEY_UINT:
-	    *rb_value = INT2NUM(GRN_UINT32_VALUE(bulk));
-	    break;
-	  case GRN_OBJ_KEY_INT:
-	    *rb_value = INT2NUM(GRN_INT32_VALUE(bulk));
-	    break;
-	  case GRN_OBJ_KEY_FLOAT:
-	    *rb_value = rb_float_new(GRN_FLOAT_VALUE(bulk));
-	    break;
-	  default:
-	    if (range->header.flags & GRN_OBJ_KEY_VAR_SIZE) {
+	if (range->header.flags & GRN_OBJ_KEY_VAR_SIZE) {
+	    *rb_value = rb_grn_context_rb_string_new(context,
+						     GRN_BULK_HEAD(bulk),
+						     GRN_BULK_VSIZE(bulk));
+	} else {
+	    switch (range->header.flags & GRN_OBJ_KEY_MASK) {
+	      case GRN_OBJ_KEY_UINT:
+		*rb_value = INT2NUM(GRN_UINT32_VALUE(bulk));
+		break;
+	      case GRN_OBJ_KEY_INT:
+		*rb_value = INT2NUM(GRN_INT32_VALUE(bulk));
+		break;
+	      case GRN_OBJ_KEY_FLOAT:
+		*rb_value = rb_float_new(GRN_FLOAT_VALUE(bulk));
+		break;
+	      case RB_GRN_OBJ_KEY_STRING:
 		*rb_value = rb_grn_context_rb_string_new(context,
 							 GRN_BULK_HEAD(bulk),
 							 GRN_BULK_VSIZE(bulk));
-	    } else {
+		break;
+	      default:
 		success = RB_GRN_FALSE;
 	    }
 	    break;
