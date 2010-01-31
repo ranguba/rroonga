@@ -146,6 +146,56 @@ rb_grn_table_key_support_add (int argc, VALUE *argv, VALUE self)
 	return rb_grn_record_new(self, id, values);
 }
 
+grn_id
+rb_grn_table_key_support_get (VALUE self, VALUE rb_key)
+{
+    grn_ctx *context;
+    grn_obj *table, *key, *domain;
+    grn_id id, domain_id;
+
+    rb_grn_table_key_support_deconstruct(SELF(self), &table, &context,
+					 &key, &domain_id, &domain,
+					 NULL, NULL, NULL);
+
+    GRN_BULK_REWIND(key);
+    RVAL2GRNKEY(rb_key, context, key, domain_id, domain, self);
+    id = grn_table_get(context, table,
+                       GRN_BULK_HEAD(key), GRN_BULK_VSIZE(key));
+    rb_grn_context_check(context, self);
+
+    return id;
+}
+
+/*
+ * call-seq:
+ *   table.id -> テーブルID
+ *   table.id(key) -> レコードID
+ *
+ * _key_を指定しない場合はテーブルのIDを返す。
+ *
+ * _key_を指定した場合はテーブルの_key_に対応するレコードの
+ * IDを返す。
+ */
+static VALUE
+rb_grn_table_key_support_get_id (int argc, VALUE *argv, VALUE self)
+{
+    VALUE rb_key;
+
+    rb_scan_args(argc, argv, "01", &rb_key);
+    if (NIL_P(rb_key)) {
+	return rb_grn_object_get_id(self);
+    } else {
+	grn_id id;
+
+	id = rb_grn_table_key_support_get(self, rb_key);
+	if (id == GRN_ID_NIL) {
+	    return Qnil;
+	} else {
+	    return UINT2NUM(id);
+	}
+    }
+}
+
 /*
  * call-seq:
  *   table.key(id) -> 主キー
@@ -243,26 +293,6 @@ rb_grn_table_key_support_delete (VALUE self, VALUE rb_id_or_key)
     } else {
 	return rb_grn_table_key_support_delete_by_key(self, rb_id_or_key);
     }
-}
-
-grn_id
-rb_grn_table_key_support_get (VALUE self, VALUE rb_key)
-{
-    grn_ctx *context;
-    grn_obj *table, *key, *domain;
-    grn_id id, domain_id;
-
-    rb_grn_table_key_support_deconstruct(SELF(self), &table, &context,
-					 &key, &domain_id, &domain,
-					 NULL, NULL, NULL);
-
-    GRN_BULK_REWIND(key);
-    RVAL2GRNKEY(rb_key, context, key, domain_id, domain, self);
-    id = grn_table_get(context, table,
-                       GRN_BULK_HEAD(key), GRN_BULK_VSIZE(key));
-    rb_grn_context_check(context, self);
-
-    return id;
 }
 
 /*
@@ -514,6 +544,8 @@ rb_grn_init_table_key_support (VALUE mGrn)
 
     rb_define_method(rb_mGrnTableKeySupport, "add",
 		     rb_grn_table_key_support_add, -1);
+    rb_define_method(rb_mGrnTableKeySupport, "id",
+		     rb_grn_table_key_support_get_id, -1);
     rb_define_method(rb_mGrnTableKeySupport, "key",
 		     rb_grn_table_key_support_get_key, 1);
     rb_define_method(rb_mGrnTableKeySupport, "has_key?",

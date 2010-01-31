@@ -271,6 +271,7 @@ void           rb_grn_object_deconstruct            (RbGrnObject *rb_grn_object,
 						     grn_id *range_id,
 						     grn_obj **range);
 
+VALUE          rb_grn_object_get_id                 (VALUE object);
 VALUE          rb_grn_object_array_reference        (VALUE object,
 						     VALUE rb_id);
 VALUE          rb_grn_object_close                  (VALUE object);

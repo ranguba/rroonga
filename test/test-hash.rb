@@ -227,4 +227,13 @@ class HashTest < Test::Unit::TestCase
     users.set_value(user_id, 29, :id => true)
     assert_equal(29, users.value(user_id, :id => true))
   end
+
+  def test_id
+    users = Groonga::Hash.create(:key_type => "ShortText")
+
+    key = "niku"
+    assert_nil(users.id(key))
+    user_id = users.add(key).id
+    assert_equal(user_id, users.id(key))
+  end
 end

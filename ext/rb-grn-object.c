@@ -800,7 +800,7 @@ rb_grn_object_inspect (VALUE self)
  * _object_のIDを返す。_object_が#closed?なときやIDがない場合
  * は+nil+を返す。
  */
-static VALUE
+VALUE
 rb_grn_object_get_id (VALUE self)
 {
     RbGrnObject *rb_grn_object;
