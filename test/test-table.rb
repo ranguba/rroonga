@@ -251,7 +251,7 @@ class TableTest < Test::Unit::TestCase
     bookmarks = Groonga::Hash.create(:name => "Bookmarks",
                                      :value_type => value_type)
     url = "http://groonga.org/"
-    bookmarks["groonga"] = "#{url}\0"
+    bookmarks.set_value("groonga", "#{url}\0")
 
     values = bookmarks.records.collect do |record|
       record.value.split(/\0/, 2)[0]
@@ -628,7 +628,7 @@ class TableTest < Test::Unit::TestCase
 
     assert_equal([], books.select.collect {|book| book.key})
     users.add("ryoqun", :book => "XP")
-    assert_equal([books.find("XP")],
+    assert_equal([books["XP"]],
                  books.select.collect {|book| book.key})
   end
 

@@ -48,8 +48,8 @@ class HashTest < Test::Unit::TestCase
                                      :path => bookmarks_path.to_s,
                                      :key_type => "ShortText",
                                      :value_type => value_type)
-    bookmarks["http://google.com/"] = value
-    assert_equal(value, bookmarks["http://google.com/"])
+    bookmarks.set_value("http://google.com/", value)
+    assert_equal(value, bookmarks.value("http://google.com/"))
   end
 
   def test_find
@@ -58,7 +58,7 @@ class HashTest < Test::Unit::TestCase
                                      :path => bookmarks_path.to_s,
                                      :key_type => "ShortText")
     bookmark = bookmarks.add("http://google.com/")
-    assert_equal(bookmark, bookmarks.find("http://google.com/"))
+    assert_equal(bookmark, bookmarks["http://google.com/"])
   end
 
 

@@ -394,6 +394,9 @@ void           rb_grn_expression_finalizer          (grn_ctx *context,
 VALUE          rb_grn_record_new                    (VALUE table,
 						     grn_id id,
 						     VALUE values);
+VALUE          rb_grn_record_new_raw                (VALUE table,
+						     VALUE id,
+						     VALUE values);
 
 VALUE          rb_grn_record_expression_builder_new (VALUE table,
 						     VALUE name);

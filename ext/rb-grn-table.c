@@ -1259,65 +1259,16 @@ rb_grn_table_group (int argc, VALUE *argv, VALUE self)
  * Document-method: []
  *
  * call-seq:
- *   table[id] -> 値
+ *   table[id] -> Groonga::Record
  *
- * _table_の_id_に対応する値を返す。
+ * _table_の_id_に対応するGroonga::Recordを返す。
+ *
+ * 0.0.9から値ではなくGroonga::Recordを返すようになった。
  */
 VALUE
 rb_grn_table_array_reference (VALUE self, VALUE rb_id)
 {
-    grn_id id;
-    grn_ctx *context;
-    grn_obj *table;
-    grn_obj *range;
-    grn_obj *value;
-
-    rb_grn_table_deconstruct(SELF(self), &table, &context,
-			     NULL, NULL,
-			     &value, NULL, &range);
-
-    id = NUM2UINT(rb_id);
-    GRN_BULK_REWIND(value);
-    grn_obj_get_value(context, table, id, value);
-    rb_grn_context_check(context, self);
-
-    if (GRN_BULK_EMPTYP(value))
-	return Qnil;
-    else
-	return rb_str_new(GRN_BULK_HEAD(value), GRN_BULK_VSIZE(value));
-}
-
-/*
- * Document-method: []=
- *
- * call-seq:
- *   table[id] = 値
- *
- * _table_の_id_に対応する値を設定する。既存の値は上書きさ
- * れる。
- */
-VALUE
-rb_grn_table_array_set (VALUE self, VALUE rb_id, VALUE rb_value)
-{
-    grn_id id;
-    grn_ctx *context;
-    grn_obj *table;
-    grn_obj *range;
-    grn_obj *value;
-    grn_rc rc;
-
-    rb_grn_table_deconstruct(SELF(self), &table, &context,
-			     NULL, NULL,
-			     &value, NULL, &range);
-
-    id = NUM2UINT(rb_id);
-    GRN_BULK_REWIND(value);
-    RVAL2GRNBULK(rb_value, context, value);
-    rc = grn_obj_set_value(context, table, id, value, GRN_OBJ_SET);
-    rb_grn_context_check(context, self);
-    rb_grn_rc_check(rc, self);
-
-    return Qnil;
+    return rb_grn_record_new_raw(self, rb_id, Qnil);
 }
 
 VALUE
@@ -1340,6 +1291,7 @@ rb_grn_table_get_value (VALUE self, VALUE rb_id)
 
     return GRNBULK2RVAL(context, value, range, self);
 }
+
 /*
  * Document-method: value
  *
@@ -1929,7 +1881,7 @@ rb_grn_init_table (VALUE mGrn)
     rb_define_method(rb_cGrnTable, "group", rb_grn_table_group, -1);
 
     rb_define_method(rb_cGrnTable, "[]", rb_grn_table_array_reference, 1);
-    rb_define_method(rb_cGrnTable, "[]=", rb_grn_table_array_set, 2);
+    rb_undef_method(rb_cGrnTable, "[]=");
 
     rb_define_method(rb_cGrnTable, "value",
 		     rb_grn_table_get_value_convenience, -1);

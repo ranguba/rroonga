@@ -266,125 +266,43 @@ rb_grn_table_key_support_get (VALUE self, VALUE rb_key)
 }
 
 /*
+ * Document-method: []
+ *
+ * call-seq:
+ *   table[key] -> Groonga::Record
+ *
+ * _table_の_key_に対応するGroonga::Recordを返す。
+ *
+ * 0.0.9から値ではなくGroonga::Recordを返すようになった。
+ */
+static VALUE
+rb_grn_table_key_support_array_reference (VALUE self, VALUE rb_key)
+{
+    grn_id id;
+
+    id = rb_grn_table_key_support_get(self, rb_key);
+    if (id == GRN_ID_NIL) {
+	return Qnil;
+    } else {
+	return rb_grn_record_new(self, id, Qnil);
+    }
+}
+
+/*
  * call-seq:
  *   table.find(key) -> Groonga::Record
  *
  * テーブルの_key_に対応するレコードを返す。
+ *
+ * 0.0.9から非推奨。代わりにtable[key]を使うこと。
  */
 static VALUE
 rb_grn_table_key_support_find (VALUE self, VALUE rb_key)
 {
-    grn_id id;
+    rb_warn("#find is deprecated. Use #[] instead: %s",
+	    rb_grn_inspect(self));
 
-    id = rb_grn_table_key_support_get(self, rb_key);
-
-    if (id == GRN_ID_NIL)
-	return Qnil;
-    else
-	return rb_grn_record_new(self, id, Qnil);
-}
-
-static VALUE
-rb_grn_table_key_support_array_reference_by_key (VALUE self, VALUE rb_key)
-{
-    grn_ctx *context;
-    grn_obj *table, *value, *range;
-    grn_id id;
-
-    id = rb_grn_table_key_support_get(self, rb_key);
-
-    if (id == GRN_ID_NIL)
-	return Qnil;
-
-    rb_grn_table_key_support_deconstruct(SELF(self), &table, &context,
-					 NULL, NULL, NULL,
-					 &value, NULL, &range);
-    GRN_BULK_REWIND(value);
-    grn_obj_get_value(context, table, id, value);
-    rb_grn_context_check(context, self);
-
-    if (GRN_BULK_EMPTYP(value))
-	return Qnil;
-    else
-	return rb_str_new(GRN_BULK_HEAD(value), GRN_BULK_VSIZE(value));
-}
-
-/*
- * Document-method: []
- *
- * call-seq:
- *   table[id] -> 値
- *   table[key] -> 値
- *
- * _table_の_id_または_key_に対応する値を返す。_id_はFixnumで
- * 指定する。
- */
-static VALUE
-rb_grn_table_key_support_array_reference (VALUE self, VALUE rb_id_or_key)
-{
-    if (FIXNUM_P(rb_id_or_key)) {
-	return rb_grn_table_array_reference(self, rb_id_or_key);
-    } else {
-	return rb_grn_table_key_support_array_reference_by_key(self,
-							       rb_id_or_key);
-    }
-}
-
-static VALUE
-rb_grn_table_key_support_array_set_by_key (VALUE self,
-					   VALUE rb_key, VALUE rb_value)
-{
-    grn_ctx *context;
-    grn_obj *table;
-    grn_id id;
-    grn_obj *value;
-    grn_rc rc;
-
-    if (NIL_P(rb_key))
-	rb_raise(rb_eArgError, "key should not be nil: <%s>",
-		 rb_grn_inspect(self));
-
-    rb_grn_table_key_support_deconstruct(SELF(self), &table, &context,
-					 NULL, NULL, NULL,
-					 &value, NULL, NULL);
-
-    id = rb_grn_table_key_support_add_raw(self, rb_key);
-    if (GRN_ID_NIL == id)
-	rb_raise(rb_eGrnError,
-		 "failed to add new record with key: <%s>: <%s>",
-		 rb_grn_inspect(rb_key),
-		 rb_grn_inspect(self));
-
-    GRN_BULK_REWIND(value);
-    RVAL2GRNBULK(rb_value, context, value);
-    rc = grn_obj_set_value(context, table, id, value, GRN_OBJ_SET);
-    rb_grn_context_check(context, self);
-    rb_grn_rc_check(rc, self);
-
-    return rb_value;
-}
-
-/*
- * Document-method: []=
- *
- * call-seq:
- *   table[id] = 値
- *   table[key] = 値
- *
- * _table_の_id_または_key_に対応する値を設定する。_id_は
- * Fixnumで指定する。既存の値は上書きされる。
- */
-static VALUE
-rb_grn_table_key_support_array_set (VALUE self,
-				    VALUE rb_id_or_key, VALUE rb_value)
-{
-    if (FIXNUM_P(rb_id_or_key)) {
-	return rb_grn_table_array_set(self, rb_id_or_key, rb_value);
-    } else {
-	return rb_grn_table_key_support_array_set_by_key(self,
-							 rb_id_or_key,
-							 rb_value);
-    }
+    return rb_grn_table_key_support_array_reference(self, rb_key);
 }
 
 static VALUE
@@ -608,8 +526,6 @@ rb_grn_init_table_key_support (VALUE mGrn)
 		     rb_grn_table_key_support_find, 1);
     rb_define_method(rb_mGrnTableKeySupport, "[]",
 		     rb_grn_table_key_support_array_reference, 1);
-    rb_define_method(rb_mGrnTableKeySupport, "[]=",
-		     rb_grn_table_key_support_array_set, 2);
 
     rb_define_method(rb_mGrnTableKeySupport, "value",
 		     rb_grn_table_key_support_get_value, -1);

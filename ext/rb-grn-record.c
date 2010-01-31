@@ -1,6 +1,6 @@
 /* -*- c-file-style: "ruby" -*- */
 /*
-  Copyright (C) 2009  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2010  Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -23,8 +23,14 @@ VALUE rb_cGrnRecord;
 VALUE
 rb_grn_record_new (VALUE table, grn_id id, VALUE values)
 {
+    return rb_grn_record_new_raw(table, UINT2NUM(id), values);
+}
+
+VALUE
+rb_grn_record_new_raw (VALUE table, VALUE rb_id, VALUE values)
+{
     return rb_funcall(rb_cGrnRecord, rb_intern("new"), 3,
-		      table, UINT2NUM(id), values);
+		      table, rb_id, values);
 }
 
 void
