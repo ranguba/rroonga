@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-# Copyright (C) 2009  Kouhei Sutou <kou@clear-code.com>
+#
+# Copyright (C) 2009-2010  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -21,23 +22,31 @@ class TableTestSelect < Test::Unit::TestCase
 
   setup
   def setup_comments
+    @users = Groonga::Hash.create(:name => "Users", :key_type => "ShortText")
+
     @comments = Groonga::Array.create(:name => "Comments")
     @comments.define_column("content", "Text")
     @comments.define_column("created_at", "Time")
+    @comments.define_column("user", "Users")
+
     terms = Groonga::PatriciaTrie.create(:name => "Terms",
                                          :default_tokenizer => "TokenBigram")
     terms.define_index_column("comment_content", @comments,
                               :with_section => true,
                               :source => "content")
     @comment1 = @comments.add(:content => "Hello Good-bye!",
-                              :created_at => Time.parse("2009-08-09"))
+                              :created_at => Time.parse("2009-08-09"),
+                              :user => "morita")
     @comment2 = @comments.add(:content => "Hello World",
-                              :created_at => Time.parse("2009-07-09"))
+                              :created_at => Time.parse("2009-07-09"),
+                              :user => "morita")
     @comment3 = @comments.add(:content => "test",
-                              :created_at => Time.parse("2009-06-09"))
+                              :created_at => Time.parse("2009-06-09"),
+                              :user => "gunyara-kun")
     @japanese_comment =
       @comments.add(:content => "うちのボロTVはまだ現役です",
-                    :created_at => Time.parse("2009-06-09"))
+                    :created_at => Time.parse("2009-06-09"),
+                    :user => "darashi")
   end
 
   def test_select_sub_expression
@@ -113,5 +122,12 @@ class TableTestSelect < Test::Unit::TestCase
       record["content"].match "Say (Hello World)"
     end
     assert_equal_select_result([], result)
+  end
+
+  def test_select_reference_column_by_key
+    result = @comments.select do |record|
+      record["user"] == "darashi"
+    end
+    assert_equal_select_result([@japanese_comment], result)
   end
 end
