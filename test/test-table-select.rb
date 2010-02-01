@@ -38,8 +38,7 @@ class TableTestSelect < Test::Unit::TestCase
                               :created_at => Time.parse("2009-08-09"),
                               :user => "morita")
     @comment2 = @comments.add(:content => "Hello World",
-                              :created_at => Time.parse("2009-07-09"),
-                              :user => "morita")
+                              :created_at => Time.parse("2009-07-09"))
     @comment3 = @comments.add(:content => "test",
                               :created_at => Time.parse("2009-06-09"),
                               :user => "gunyara-kun")
