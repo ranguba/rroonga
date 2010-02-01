@@ -110,13 +110,14 @@ class PatriciaTrieTest < Test::Unit::TestCase
     Groonga::Context.default_options = {:encoding => "utf-8"}
     words = Groonga::PatriciaTrie.create(:key_type => "ShortText",
                                          :key_normalize => true)
+    words.add('リンク')
     words.add('リンクの冒険')
     words.add('冒険')
     words.add('㍊')
     words.add('ｶﾞｯ')
     words.add('ＭＵＴＥＫＩ')
 
-    text = 'muTEki リンク リンクの冒険 マッチしない ミリバール ガッ おわり'
+    text = 'muTEki リンクの冒険 マッチしない ミリバール ガッ おわり'
     actual = words.tag_keys(text) do |record, word|
       "<#{word}(#{record.key})>"
     end
