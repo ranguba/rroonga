@@ -123,10 +123,16 @@ class TableTestSelect < Test::Unit::TestCase
     assert_equal_select_result([], result)
   end
 
-  def test_select_reference_column_by_key
+  def test_select_equal_reference_column_by_key
     result = @comments.select do |record|
       record["user"] == "darashi"
     end
     assert_equal_select_result([@japanese_comment], result)
+  end
+
+  def test_select_not_equal_reference_column_by_key
+    result = @comments.select('user != "darashi"', :syntax => :script)
+    assert_equal_select_result([@comment1, @comment2, @comment3],
+                               result)
   end
 end
