@@ -135,4 +135,11 @@ class TableSelectTest < Test::Unit::TestCase
     assert_equal_select_result([@comment1, @comment2, @comment3],
                                result)
   end
+
+  def test_select_equal_reference_column_by_nonexistent_key
+    result = @comments.select do |record|
+      record["user"] == "nonexistent"
+    end
+    assert_equal_select_result([], result)
+  end
 end
