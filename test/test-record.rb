@@ -253,4 +253,17 @@ class RecordTest < Test::Unit::TestCase
     groonga.clear_lock
     assert_not_predicate(groonga, :locked?)
   end
+
+  def test_attributes
+    values = {
+      "uri" => "http://groonga.org/",
+      "rate" => 5,
+      "comment" => "Grate!"
+    }
+    groonga = @bookmarks.add(values)
+    assert_equal(values.merge("id" => groonga.id,
+                              "content" => nil,
+                              "user" => nil),
+                 groonga.attributes)
+  end
 end

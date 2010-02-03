@@ -117,8 +117,15 @@ module Groonga
     #   record.key -> 主キー
     #
     # レコードの主キーを返す。
+    #
+    # _record_が所属するテーブルがGroonga:::Arrayの場合は常
+    # に+nil+を返す。
     def key
-      @table.key(@id)
+      if @table.is_a?(Groonga::Array)
+        nil
+      else
+        @key ||= @table.key(@id)
+      end
     end
 
     # call-seq:
@@ -188,11 +195,16 @@ module Groonga
     # 型のカラムでない全カラムを対象とし、カラムの名前をキーとし
     # たこのレコードのカラムの値のハッシュを返す。
     def attributes
-      attributes = {}
+      attributes = {"id" => id}
+      _key = key
+      attributes["key"] = _key if _key
       table_name = @table.name
       columns.each do |column|
         next if column.is_a?(Groonga::IndexColumn)
-        attributes[column.local_name] = column[@id]
+        value = column[@id]
+        # TODO: support recursive reference.
+        value = value.attributes if value.is_a?(Groonga::Record)
+        attributes[column.local_name] = value
       end
       attributes
     end
