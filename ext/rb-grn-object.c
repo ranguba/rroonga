@@ -1161,8 +1161,12 @@ rb_grn_object_set (VALUE self, VALUE rb_id, VALUE rb_value, int flags)
 	    RVAL2GRNVECTOR(rb_value, context, &value);
 	}
     } else {
-	GRN_OBJ_INIT(&value, GRN_BULK, 0, GRN_ID_NIL);
-	RVAL2GRNBULK(rb_value, context, &value);
+	if (NIL_P(rb_value)) {
+	    GRN_OBJ_INIT(&value, GRN_BULK, 0, GRN_ID_NIL);
+	} else {
+	    GRN_OBJ_INIT(&value, GRN_BULK, 0, GRN_ID_NIL);
+	    RVAL2GRNBULK(rb_value, context, &value);
+	}
     }
     rc = grn_obj_set_value(context, rb_grn_object->object, id,
 			   &value, flags);

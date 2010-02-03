@@ -64,4 +64,13 @@ class VectorColumnTest < Test::Unit::TestCase
     assert_equal(["groonga", "Senna"],
                  shinjuku["communities"].collect {|record| record.key})
   end
+
+  def test_set_nil
+    groonga = @communities.add("groonga")
+    assert_equal([], groonga["users"])
+    groonga["users"] = nil
+    assert_equal([], groonga["users"]) # should return nil?
+                                       # Can groonga tell us
+                                       # that the value is empty?
+  end
 end
