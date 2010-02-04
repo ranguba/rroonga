@@ -357,6 +357,12 @@ set_value (VALUE args, SetValueData *data)
     rb_grn_object = &(data->rb_grn_object);
     context = rb_grn_object->context;
     column = grn_obj_column(context, data->table, name, name_size);
+    if (!column) {
+	rb_raise(rb_eGrnNoSuchColumn,
+		 "no such column: <%s>: <%s>",
+		 rb_grn_inspect(rb_name), rb_grn_inspect(data->self));
+    }
+
     rb_grn_object->object = column;
     if (column->header.type == GRN_TYPE) {
 	rb_grn_object->range = NULL;

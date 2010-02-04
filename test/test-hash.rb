@@ -278,11 +278,26 @@ class HashTest < Test::Unit::TestCase
     }
 
     assert_equal({
-                   "id" => niku.id,
+                   "id" => users[key].id,
                    "key" => key,
                    "self_introduction" => "I'm a meet lover.",
                    "age" => 29,
                  },
                  users[key].attributes)
+  end
+
+  def test_set_multi_values_with_nonexistent_column
+    users = Groonga::Hash.create(:name => "Users",
+                                 :key_type => "ShortText")
+    users.define_column("self_introduction", "ShortText")
+    users.define_column("age", "UInt32")
+
+    key = "niku"
+    message = "no such column: <\"nonexistent\">: <#{users.inspect}>"
+    assert_raise(Groonga::NoSuchColumn.new(message)) do
+      users[key] = {
+        "nonexistent" => "No!",
+      }
+    end
   end
 end

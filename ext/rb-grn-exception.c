@@ -20,6 +20,7 @@
 
 VALUE rb_eGrnError;
 VALUE rb_eGrnObjectClosed;
+VALUE rb_eGrnNoSuchColumn;
 
 static VALUE eGrnEndOfData;
 static VALUE eGrnUnknownError;
@@ -556,11 +557,19 @@ rb_grn_init_exception (VALUE mGrn)
     /*
      * Document-class: Groonga::ObjectClosed
      *
-     * groongaレベルでは破棄されたオブジェクトにアクセスした
-     * ときに発生する。
+     * groongaレベルでは破棄されているが、Rubyレベルでは生き
+     * ているオブジェクトにアクセスすると発生する。
      */
     rb_eGrnObjectClosed =
         rb_define_class_under(mGrn, "ObjectClosed", rb_eGrnError);
+
+    /*
+     * Document-class: Groonga::NoSuchColumn
+     *
+     * 存在しないカラムにアクセスすると発生する。
+     */
+    rb_eGrnNoSuchColumn =
+        rb_define_class_under(mGrn, "NoSuchColumn", rb_eGrnError);
 
     /*
      * Document-class: Groonga::EndOfData
