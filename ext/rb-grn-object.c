@@ -1134,28 +1134,21 @@ rb_uvector_value_p (RbGrnObject *rb_grn_object, VALUE rb_value)
     return RB_GRN_FALSE;
 }
 
-
-static VALUE
-rb_grn_object_set (VALUE self, VALUE rb_id, VALUE rb_value, int flags)
+VALUE
+rb_grn_object_set_raw (RbGrnObject *rb_grn_object, grn_id id,
+		       VALUE rb_value, int flags, VALUE related_object)
 {
-    RbGrnObject *rb_grn_object;
     grn_ctx *context;
-    grn_id id;
     grn_obj value;
     grn_rc rc;
     VALUE exception;
 
-    rb_grn_object = SELF(self);
-    if (!rb_grn_object->object)
-	return Qnil;
-
     context = rb_grn_object->context;
-    id = NUM2UINT(rb_id);
     if (RVAL2CBOOL(rb_obj_is_kind_of(rb_value, rb_cArray))) {
 	if (rb_uvector_value_p(rb_grn_object, rb_value)) {
 	    GRN_OBJ_INIT(&value, GRN_UVECTOR, 0,
 			 rb_grn_object->object->header.domain);
-	    RVAL2GRNUVECTOR(rb_value, context, &value, self);
+	    RVAL2GRNUVECTOR(rb_value, context, &value, related_object);
 	} else {
 	    GRN_OBJ_INIT(&value, GRN_VECTOR, 0, GRN_ID_NIL);
 	    RVAL2GRNVECTOR(rb_value, context, &value);
@@ -1170,13 +1163,30 @@ rb_grn_object_set (VALUE self, VALUE rb_id, VALUE rb_value, int flags)
     }
     rc = grn_obj_set_value(context, rb_grn_object->object, id,
 			   &value, flags);
-    exception = rb_grn_context_to_exception(context, self);
+    exception = rb_grn_context_to_exception(context, related_object);
     grn_obj_close(context, &value);
     if (!NIL_P(exception))
 	rb_exc_raise(exception);
-    rb_grn_rc_check(rc, self);
+    rb_grn_rc_check(rc, related_object);
 
     return Qnil;
+}
+
+static VALUE
+rb_grn_object_set (VALUE self, VALUE rb_id, VALUE rb_value, int flags)
+{
+    RbGrnObject *rb_grn_object;
+    grn_ctx *context;
+    grn_id id;
+
+    rb_grn_object = SELF(self);
+    if (!rb_grn_object->object)
+	return Qnil;
+
+    context = rb_grn_object->context;
+    id = NUM2UINT(rb_id);
+
+    return rb_grn_object_set_raw(rb_grn_object, id, rb_value, flags, self);
 }
 
 /*

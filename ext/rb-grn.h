@@ -274,6 +274,11 @@ void           rb_grn_object_deconstruct            (RbGrnObject *rb_grn_object,
 VALUE          rb_grn_object_get_id                 (VALUE object);
 VALUE          rb_grn_object_array_reference        (VALUE object,
 						     VALUE rb_id);
+VALUE          rb_grn_object_set_raw                (RbGrnObject *rb_grn_object,
+						     grn_id id,
+						     VALUE rb_value,
+						     int flags,
+						     VALUE related_object);
 VALUE          rb_grn_object_close                  (VALUE object);
 VALUE          rb_grn_object_closed_p               (VALUE object);
 VALUE          rb_grn_object_inspect_object         (VALUE inspected,

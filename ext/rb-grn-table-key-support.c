@@ -318,6 +318,100 @@ rb_grn_table_key_support_array_reference (VALUE self, VALUE rb_key)
     }
 }
 
+typedef struct _SetValueData
+{
+    VALUE self;
+    grn_id id;
+    grn_obj *table;
+    RbGrnObject rb_grn_object;
+} SetValueData;
+
+static VALUE
+set_value (VALUE args, SetValueData *data)
+{
+    grn_obj *column;
+    grn_ctx *context;
+    char *name = NULL;
+    unsigned name_size = 0;
+    VALUE rb_name, rb_value;
+    RbGrnObject *rb_grn_object;
+
+    rb_name = rb_ary_entry(args, 0);
+    rb_value = rb_ary_entry(args, 1);
+
+    switch (TYPE(rb_name)) {
+      case T_SYMBOL:
+	rb_name = rb_str_new2(rb_id2name(SYM2ID(rb_name)));
+	break;
+      case T_STRING:
+	break;
+      default:
+	rb_raise(rb_eArgError,
+		 "column name should be String or Symbol: %s",
+		 rb_grn_inspect(rb_name));
+	break;
+    }
+    name = StringValuePtr(rb_name);
+    name_size = RSTRING_LEN(rb_name);
+
+    rb_grn_object = &(data->rb_grn_object);
+    context = rb_grn_object->context;
+    column = grn_obj_column(context, data->table, name, name_size);
+    rb_grn_object->object = column;
+    if (column->header.type == GRN_TYPE) {
+	rb_grn_object->range = NULL;
+    } else {
+	grn_id range_id;
+	range_id = grn_obj_get_range(context, column);
+	rb_grn_object->range = grn_ctx_at(context, range_id);
+    }
+    return rb_grn_object_set_raw(rb_grn_object, data->id,
+				 rb_value, GRN_OBJ_SET, data->self);
+}
+
+/*
+ * Document-method: []=
+ *
+ * call-seq:
+ *   table[key] = {:column_name => value, ...}
+ *
+ * _table_の_key_に対応するカラムの値を設定する。_key_に対応
+ * するレコードがない場合は新しく作成される。
+ *
+ * 0.0.9から値ではなくカラムの値を設定するようになった。
+ */
+static VALUE
+rb_grn_table_key_support_array_set (VALUE self, VALUE rb_key, VALUE rb_values)
+{
+    grn_id id;
+    SetValueData data;
+    grn_ctx *context;
+    grn_obj *table;
+
+    rb_grn_table_key_support_deconstruct(SELF(self), &table, &context,
+					 NULL, NULL, NULL,
+					 NULL, NULL, NULL);
+
+    id = rb_grn_table_key_support_get(self, rb_key);
+    if (id == GRN_ID_NIL) {
+	id = rb_grn_table_key_support_add_raw(self, rb_key);
+    }
+
+    if (id == GRN_ID_NIL) {
+	rb_raise(rb_eGrnError,
+		 "failed to add record: %s",
+		 rb_grn_inspect(rb_ary_new3(3, self, rb_key, rb_values)));
+    }
+
+    data.self = self;
+    data.id = id;
+    data.table = table;
+    data.rb_grn_object.context = context;
+    rb_iterate(rb_each, rb_values, set_value, (VALUE)&data);
+
+    return Qnil;
+}
+
 /*
  * call-seq:
  *   table.find(key) -> Groonga::Record
@@ -558,6 +652,8 @@ rb_grn_init_table_key_support (VALUE mGrn)
 		     rb_grn_table_key_support_find, 1);
     rb_define_method(rb_mGrnTableKeySupport, "[]",
 		     rb_grn_table_key_support_array_reference, 1);
+    rb_define_method(rb_mGrnTableKeySupport, "[]=",
+		     rb_grn_table_key_support_array_set, 2);
 
     rb_define_method(rb_mGrnTableKeySupport, "value",
 		     rb_grn_table_key_support_get_value, -1);

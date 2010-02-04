@@ -40,7 +40,7 @@ class HashTest < Test::Unit::TestCase
                  bookmarks.collect {|bookmark| bookmark.key})
   end
 
-  def test_array_reference
+  def test_value
     value = "groonga"
     value_type = Groonga::Type.new("Text#{value.size}", :size => value.size)
     bookmarks_path = @tables_dir + "bookmarks"
@@ -52,7 +52,7 @@ class HashTest < Test::Unit::TestCase
     assert_equal(value, bookmarks.value("http://google.com/"))
   end
 
-  def test_find
+  def test_array_reference
     bookmarks_path = @tables_dir + "bookmarks"
     bookmarks = Groonga::Hash.create(:name => "bookmarks",
                                      :path => bookmarks_path.to_s,
@@ -235,5 +235,54 @@ class HashTest < Test::Unit::TestCase
     assert_nil(users.id(key))
     user_id = users.add(key).id
     assert_equal(user_id, users.id(key))
+  end
+
+  def test_set_multi_values
+    users = Groonga::Hash.create(:name => "Users",
+                                 :key_type => "ShortText")
+    users.define_column("self_introduction", "ShortText")
+    users.define_column("age", "UInt32")
+
+    key = "niku"
+    niku = users.add(key)
+    assert_equal({
+                   "id" => niku.id,
+                   "key" => key,
+                   "self_introduction" => nil,
+                   "age" => 0,
+                 },
+                 niku.attributes)
+    users[key] = {
+      "self_introduction" => "I'm a meet lover.",
+      "age" => 29
+    }
+    assert_equal({
+                   "id" => niku.id,
+                   "key" => key,
+                   "self_introduction" => "I'm a meet lover.",
+                   "age" => 29,
+                 },
+                 niku.attributes)
+  end
+
+  def test_set_multi_values_for_nonexistent_record
+    users = Groonga::Hash.create(:name => "Users",
+                                 :key_type => "ShortText")
+    users.define_column("self_introduction", "ShortText")
+    users.define_column("age", "UInt32")
+
+    key = "niku"
+    users[key] = {
+      "self_introduction" => "I'm a meet lover.",
+      "age" => 29
+    }
+
+    assert_equal({
+                   "id" => niku.id,
+                   "key" => key,
+                   "self_introduction" => "I'm a meet lover.",
+                   "age" => 29,
+                 },
+                 users[key].attributes)
   end
 end
