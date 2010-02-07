@@ -381,8 +381,8 @@ set_value (VALUE args, SetValueData *data)
  * call-seq:
  *   table[key] = {:column_name => value, ...}
  *
- * _table_の_key_に対応するカラムの値を設定する。_key_に対応
- * するレコードがない場合は新しく作成される。
+ * _table_の_key_に対応するカラム_column_name_の値を設定する。
+ * _key_に対応するレコードがない場合は新しく作成される。
  *
  * 0.0.9から値ではなくカラムの値を設定するようになった。
  */
