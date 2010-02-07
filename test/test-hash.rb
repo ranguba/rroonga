@@ -293,7 +293,8 @@ class HashTest < Test::Unit::TestCase
     users.define_column("age", "UInt32")
 
     key = "niku"
-    message = "no such column: <\"nonexistent\">: <#{users.inspect}>"
+    inspected_users = users.inspect.sub(/size: <0>/, "size: <1>")
+    message = "no such column: <\"nonexistent\">: <#{inspected_users}>"
     assert_raise(Groonga::NoSuchColumn.new(message)) do
       users[key] = {
         "nonexistent" => "No!",
