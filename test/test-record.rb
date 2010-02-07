@@ -1,4 +1,4 @@
-# Copyright (C) 2009  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2010  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -122,14 +122,14 @@ class RecordTest < Test::Unit::TestCase
 
   def test_get_nonexistent_column
     groonga = @bookmarks.add
-    assert_raise(Groonga::InvalidArgument) do
+    assert_raise(Groonga::NoSuchColumn) do
       groonga["nonexistent"]
     end
   end
 
   def test_set_nonexistent_column
     groonga = @bookmarks.add
-    assert_raise(Groonga::InvalidArgument) do
+    assert_raise(Groonga::NoSuchColumn) do
       groonga["nonexistent"] = "value"
     end
   end

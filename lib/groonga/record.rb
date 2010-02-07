@@ -91,7 +91,7 @@ module Groonga
     # ているなら+true+を返す。
     def have_column?(name)
       column(name).is_a?(Groonga::Column)
-    rescue Groonga::InvalidArgument
+    rescue Groonga::NoSuchColumn
       false
     end
 
@@ -269,7 +269,7 @@ module Groonga
     private
     def column(name) # :nodoc:
       _column = @table.column(name.to_s)
-      raise InvalidArgument, "column(#{name.inspect}) is nil" if _column.nil?
+      raise NoSuchColumn, "column(#{name.inspect}) is nil" if _column.nil?
       _column
     end
   end
