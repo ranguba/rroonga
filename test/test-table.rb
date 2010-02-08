@@ -152,7 +152,7 @@ class TableTest < Test::Unit::TestCase
     message = "should not pass :path if :persistent is false: <#{column_path}>"
     assert_raise(ArgumentError.new(message)) do
       real_name = bookmarks.define_column("real_name", "ShortText",
-                                          :path => column_path,
+                                          :path => column_path.to_s,
                                           :persistent => false)
     end
   end
@@ -180,7 +180,7 @@ class TableTest < Test::Unit::TestCase
     message = "should not pass :path if :persistent is false: <#{column_path}>"
     assert_raise(ArgumentError.new(message)) do
       real_name = terms.define_index_column("real_name", bookmarks,
-                                            :path => column_path,
+                                            :path => column_path.to_s,
                                             :persistent => false)
     end
   end
