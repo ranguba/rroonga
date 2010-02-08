@@ -98,7 +98,8 @@ def install_groonga_locally(major, minor, micro)
     groonga_source_dir = "groonga-#{major}.#{minor}.#{micro}"
     Dir.chdir(groonga_source_dir) do
       message("configuring...")
-      if xsystem("./configure CFLAGS='-g -O0' --prefix=#{Shellwords.escape(install_dir)}")
+      prefix = Shellwords.escape(install_dir)
+      if xsystem("./configure CFLAGS='-g -O0' --prefix=#{prefix}")
         message(" done\n")
       else
         message(" failed\n")
