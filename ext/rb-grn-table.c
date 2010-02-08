@@ -54,6 +54,7 @@ rb_grn_table_finalizer (grn_ctx *context, grn_obj *object,
     if (context && rb_grn_table->value)
 	grn_obj_close(context, rb_grn_table->value);
     rb_grn_table->value = NULL;
+    rb_grn_table->columns = Qnil;
 }
 
 void
@@ -65,6 +66,7 @@ rb_grn_table_bind (RbGrnTable *rb_grn_table,
     rb_grn_object = RB_GRN_OBJECT(rb_grn_table);
     rb_grn_table->value = grn_obj_open(context, GRN_BULK, 0,
 				       rb_grn_object->range_id);
+    rb_grn_table->columns = rb_ary_new();
 }
 
 void
@@ -75,7 +77,8 @@ rb_grn_table_deconstruct (RbGrnTable *rb_grn_table,
 			  grn_obj **domain,
 			  grn_obj **value,
 			  grn_id *range_id,
-			  grn_obj **range)
+			  grn_obj **range,
+			  VALUE *columns)
 {
     RbGrnObject *rb_grn_object;
 
@@ -86,17 +89,17 @@ rb_grn_table_deconstruct (RbGrnTable *rb_grn_table,
 
     if (value)
 	*value = rb_grn_table->value;
+    if (columns)
+	*columns = rb_grn_table->columns;
 }
 
 static void
 rb_grn_table_mark (void *data)
 {
     RbGrnObject *rb_grn_object = data;
+    RbGrnTable *rb_grn_table = data;
     grn_ctx *context;
     grn_obj *table;
-    grn_obj *column_ids;
-    int n;
-    grn_table_cursor *cursor;
 
     if (!rb_grn_object)
 	return;
@@ -112,107 +115,13 @@ rb_grn_table_mark (void *data)
     if (grn_obj_name(context, table, NULL, 0) == 0)
 	return;
 
-    column_ids = grn_table_create(context, NULL, 0, NULL,
-				  GRN_TABLE_HASH_KEY, NULL, 0);
-    n = grn_table_columns(context, table, NULL, 0, column_ids);
-    if (n == 0) {
-	grn_obj_close(context, column_ids);
-	return;
-    }
-
-    cursor = grn_table_cursor_open(context, column_ids, NULL, 0, NULL, 0,
-				   0, -1, GRN_CURSOR_ASCENDING);
-    while (grn_table_cursor_next(context, cursor) != GRN_ID_NIL) {
-	void *key;
-	grn_id *column_id;
-	grn_obj *column;
-	RbGrnObject *rb_grn_column;
-
-	grn_table_cursor_get_key(context, cursor, &key);
-	column_id = key;
-	column = grn_ctx_at(context, *column_id);
-	rb_grn_column = grn_obj_user_data(context, column)->ptr;
-	if (rb_grn_column)
-	    rb_gc_mark(rb_grn_column->self);
-    }
-    grn_table_cursor_close(context, cursor);
-    grn_obj_close(context, column_ids);
+    rb_gc_mark(rb_grn_table->columns);
 }
 
 static VALUE
 rb_grn_table_alloc (VALUE klass)
 {
     return Data_Wrap_Struct(klass, rb_grn_table_mark, rb_grn_object_free, NULL);
-}
-
-VALUE
-rb_grn_table_s_create (int argc, VALUE *argv, VALUE klass,
-		       grn_obj_flags key_store)
-{
-    grn_ctx *context;
-    grn_obj *key_type = NULL, *value_type = NULL, *table;
-    const char *name = NULL, *path = NULL;
-    unsigned name_size = 0;
-    grn_obj_flags flags = key_store;
-    VALUE rb_table;
-    VALUE options, rb_context, rb_name, rb_path, rb_persistent;
-    VALUE rb_key_normalize, rb_key_with_sis, rb_key_type;
-    VALUE rb_value_type;
-
-    rb_scan_args(argc, argv, "01", &options);
-
-    rb_grn_scan_options(options,
-			"context", &rb_context,
-			"name", &rb_name,
-                        "path", &rb_path,
-			"persistent", &rb_persistent,
-			"key_normalize", &rb_key_normalize,
-			"key_with_sis", &rb_key_with_sis,
-			"key_type", &rb_key_type,
-			"value_type", &rb_value_type,
-			NULL);
-
-    context = rb_grn_context_ensure(&rb_context);
-
-    if (!NIL_P(rb_name)) {
-        name = StringValuePtr(rb_name);
-	name_size = RSTRING_LEN(rb_name);
-	flags |= GRN_OBJ_PERSISTENT;
-    }
-
-    if (!NIL_P(rb_path)) {
-        path = StringValueCStr(rb_path);
-	flags |= GRN_OBJ_PERSISTENT;
-    }
-
-    if (RVAL2CBOOL(rb_persistent))
-	flags |= GRN_OBJ_PERSISTENT;
-
-    if (RVAL2CBOOL(rb_key_normalize))
-	flags |= GRN_OBJ_KEY_NORMALIZE;
-
-    if (RVAL2CBOOL(rb_key_with_sis))
-	flags |= GRN_OBJ_KEY_WITH_SIS;
-
-    if (NIL_P(rb_key_type)) {
-	flags |= GRN_OBJ_KEY_VAR_SIZE;
-    } else {
-	key_type = RVAL2GRNOBJECT(rb_key_type, &context);
-    }
-
-    if (!NIL_P(rb_value_type))
-	value_type = RVAL2GRNOBJECT(rb_value_type, &context);
-
-    table = grn_table_create(context, name, name_size, path,
-			     flags, key_type, value_type);
-    rb_table = rb_grn_object_alloc(klass);
-    rb_grn_table_assign(rb_table, rb_context, context, table, RB_GRN_TRUE);
-    rb_grn_context_check(context, rb_table);
-
-    if (rb_block_given_p())
-        return rb_ensure(rb_yield, rb_table, rb_grn_object_close, rb_table);
-    else
-        return rb_table;
 }
 
 grn_obj *
@@ -330,12 +239,19 @@ rb_grn_table_s_open (int argc, VALUE *argv, VALUE klass)
 static VALUE
 rb_grn_table_inspect_content (VALUE self, VALUE inspected)
 {
+    RbGrnTable *rb_grn_table;
     grn_ctx *context = NULL;
     grn_obj *table;
+    VALUE columns;
 
-    rb_grn_table_deconstruct(SELF(self), &table, &context,
+    rb_grn_table = SELF(self);
+    if (!rb_grn_table)
+	return inspected;
+
+    rb_grn_table_deconstruct(rb_grn_table, &table, &context,
 			     NULL, NULL,
-			     NULL, NULL, NULL);
+			     NULL, NULL, NULL,
+			     &columns);
 
     if (!table)
 	return inspected;
@@ -369,6 +285,13 @@ rb_grn_table_inspect_content (VALUE self, VALUE inspected)
 	rb_str_cat2(inspected, buf);
     }
     rb_str_cat2(inspected, ">");
+
+    /*
+    rb_str_cat2(inspected, ", ");
+    rb_str_cat2(inspected, "columns: <");
+    rb_str_concat(inspected, rb_inspect(columns));
+    rb_str_cat2(inspected, ">");
+    */
 
     return inspected;
 }
@@ -441,10 +364,13 @@ rb_grn_table_define_column (int argc, VALUE *argv, VALUE self)
     grn_obj_flags flags = 0;
     VALUE rb_name, rb_value_type;
     VALUE options, rb_path, rb_persistent, rb_compress, rb_type;
+    VALUE columns;
+    VALUE rb_column;
 
     rb_grn_table_deconstruct(SELF(self), &table, &context,
 			     NULL, NULL,
-			     NULL, NULL, NULL);
+			     NULL, NULL, NULL,
+			     &columns);
 
     rb_scan_args(argc, argv, "21", &rb_name, &rb_value_type, &options);
 
@@ -503,7 +429,12 @@ rb_grn_table_define_column (int argc, VALUE *argv, VALUE self)
 			       path, flags, value_type);
     rb_grn_context_check(context, self);
 
-    return GRNCOLUMN2RVAL(Qnil, context, column, RB_GRN_TRUE);
+    rb_column = GRNCOLUMN2RVAL(Qnil, context, column, RB_GRN_TRUE);
+    rb_ary_push(columns, rb_column);
+    rb_grn_named_object_set_name(RB_GRN_NAMED_OBJECT(DATA_PTR(rb_column)),
+				 name, name_size);
+
+    return rb_column;
 }
 
 /*
@@ -551,10 +482,12 @@ rb_grn_table_define_index_column (int argc, VALUE *argv, VALUE self)
     VALUE options, rb_path, rb_persistent;
     VALUE rb_with_section, rb_with_weight, rb_with_position;
     VALUE rb_column, rb_source, rb_sources;
+    VALUE columns;
 
     rb_grn_table_deconstruct(SELF(self), &table, &context,
 			     NULL, NULL,
-			     NULL, NULL, NULL);
+			     NULL, NULL, NULL,
+			     &columns);
 
     rb_scan_args(argc, argv, "21", &rb_name, &rb_value_type, &options);
 
@@ -626,6 +559,10 @@ rb_grn_table_define_index_column (int argc, VALUE *argv, VALUE self)
     if (!NIL_P(rb_sources))
 	rb_funcall(rb_column, rb_intern("sources="), 1, rb_sources);
 
+    rb_ary_push(columns, rb_column);
+    rb_grn_named_object_set_name(RB_GRN_NAMED_OBJECT(DATA_PTR(rb_column)),
+				 name, name_size);
+
     return rb_column;
 }
 
@@ -646,10 +583,12 @@ rb_grn_table_add_column (VALUE self, VALUE rb_name, VALUE rb_value_type,
     char *name = NULL, *path = NULL;
     unsigned name_size = 0;
     VALUE rb_column;
+    VALUE columns;
 
     rb_grn_table_deconstruct(SELF(self), &table, &context,
 			     NULL, NULL,
-			     NULL, NULL, NULL);
+			     NULL, NULL, NULL,
+			     &columns);
 
     name = StringValuePtr(rb_name);
     name_size = RSTRING_LEN(rb_name);
@@ -664,6 +603,10 @@ rb_grn_table_add_column (VALUE self, VALUE rb_name, VALUE rb_value_type,
 
     rb_column = GRNCOLUMN2RVAL(Qnil, context, column, RB_GRN_TRUE);
     rb_iv_set(rb_column, "table", self);
+    rb_ary_push(columns, rb_column);
+    rb_grn_named_object_set_name(RB_GRN_NAMED_OBJECT(DATA_PTR(rb_column)),
+				 name, name_size);
+
     return rb_column;
 }
 
@@ -673,27 +616,34 @@ rb_grn_table_add_column (VALUE self, VALUE rb_name, VALUE rb_value_type,
  *
  * テーブルの_name_に対応するカラムを返す。
  */
-static VALUE
+VALUE
 rb_grn_table_get_column (VALUE self, VALUE rb_name)
 {
     grn_user_data *user_data;
     grn_ctx *context = NULL;
     grn_obj *table;
     grn_obj *column;
-    char *name = NULL;
+    const char *name = NULL;
     unsigned name_size = 0;
     rb_grn_boolean owner;
     VALUE rb_column;
+    VALUE columns;
+    VALUE *raw_columns;
+    long i, n;
 
     rb_grn_table_deconstruct(SELF(self), &table, &context,
 			     NULL, NULL,
-			     NULL, NULL, NULL);
+			     NULL, NULL, NULL,
+			     &columns);
 
     switch (TYPE(rb_name)) {
       case T_SYMBOL:
-	rb_name = rb_str_new2(rb_id2name(SYM2ID(rb_name)));
+	name = rb_id2name(SYM2ID(rb_name));
+	name_size = strlen(name);
 	break;
       case T_STRING:
+	name = StringValuePtr(rb_name);
+	name_size = RSTRING_LEN(rb_name);
 	break;
       default:
 	rb_raise(rb_eArgError,
@@ -701,23 +651,42 @@ rb_grn_table_get_column (VALUE self, VALUE rb_name)
 		 rb_grn_inspect(rb_name));
 	break;
     }
-    name = StringValuePtr(rb_name);
-    name_size = RSTRING_LEN(rb_name);
+
+    raw_columns = RARRAY_PTR(columns);
+    n = RARRAY_LEN(columns);
+    for (i = 0; i < n; i++) {
+	VALUE rb_column = raw_columns[i];
+	RbGrnNamedObject *rb_grn_named_object;
+
+	rb_grn_named_object = RB_GRN_NAMED_OBJECT(DATA_PTR(rb_column));
+	if (rb_grn_named_object->name_size > 0 &&
+	    strncmp(name, rb_grn_named_object->name, name_size) == 0) {
+	    return rb_column;
+	}
+    }
 
     column = grn_obj_column(context, table, name, name_size);
     rb_grn_context_check(context, self);
+    if (!column)
+	return Qnil;
+
     user_data = grn_obj_user_data(context, column);
     if (user_data) {
 	RbGrnObject *rb_grn_object;
 	rb_grn_object = user_data->ptr;
-	if (rb_grn_object)
+	if (rb_grn_object) {
+	    rb_ary_push(columns, rb_grn_object->self);
 	    return rb_grn_object->self;
+	}
     }
 
-    owner = (column && column->header.type == GRN_ACCESSOR);
+    owner = column->header.type == GRN_ACCESSOR;
     rb_column = GRNCOLUMN2RVAL(Qnil, context, column, owner);
-    if (owner)
+    if (owner) {
 	rb_iv_set(rb_column, "table", self);
+    }
+    rb_ary_push(columns, rb_column);
+
     return rb_column;
 }
 
@@ -743,7 +712,8 @@ rb_grn_table_get_columns (int argc, VALUE *argv, VALUE self)
 
     rb_grn_table_deconstruct(SELF(self), &table, &context,
 			     NULL, NULL,
-			     NULL, NULL, NULL);
+			     NULL, NULL, NULL,
+			     NULL);
 
     rb_scan_args(argc, argv, "01", &rb_name);
 
@@ -800,7 +770,8 @@ rb_grn_table_open_grn_cursor (int argc, VALUE *argv, VALUE self,
 
     rb_grn_table_deconstruct(SELF(self), &table, context,
 			     NULL, NULL,
-			     NULL, NULL, NULL);
+			     NULL, NULL, NULL,
+			     NULL);
 
     rb_scan_args(argc, argv, "01", &options);
 
@@ -951,7 +922,8 @@ rb_grn_table_get_size (VALUE self)
 
     rb_grn_table_deconstruct(SELF(self), &table, &context,
 			     NULL, NULL,
-			     NULL, NULL, NULL);
+			     NULL, NULL, NULL,
+			     NULL);
     size = grn_table_size(context, table);
     return UINT2NUM(size);
 }
@@ -971,7 +943,8 @@ rb_grn_table_truncate (VALUE self)
 
     rb_grn_table_deconstruct(SELF(self), &table, &context,
 			     NULL, NULL,
-			     NULL, NULL, NULL);
+			     NULL, NULL, NULL,
+			     NULL);
     rc = grn_table_truncate(context, table);
     rb_grn_rc_check(rc, self);
 
@@ -998,7 +971,8 @@ rb_grn_table_each (VALUE self)
     rb_table = SELF(self);
     rb_grn_table_deconstruct(rb_table, &table, &context,
 			     NULL, NULL,
-			     NULL, NULL, NULL);
+			     NULL, NULL, NULL,
+			     NULL);
     cursor = grn_table_cursor_open(context, table, NULL, 0, NULL, 0,
 				   0, -1, GRN_CURSOR_ASCENDING);
     rb_cursor = GRNTABLECURSOR2RVAL(Qnil, context, cursor);
@@ -1028,7 +1002,8 @@ rb_grn_table_delete (VALUE self, VALUE rb_id)
 
     rb_grn_table_deconstruct(SELF(self), &table, &context,
 			     NULL, NULL,
-			     NULL, NULL, NULL);
+			     NULL, NULL, NULL,
+			     NULL);
 
     id = NUM2UINT(rb_id);
     rc = grn_table_delete_by_id(context, table, id);
@@ -1081,7 +1056,8 @@ rb_grn_table_sort (int argc, VALUE *argv, VALUE self)
 
     rb_grn_table_deconstruct(SELF(self), &table, &context,
 			     NULL, NULL,
-			     NULL, NULL, NULL);
+			     NULL, NULL, NULL,
+			     NULL);
 
     rb_scan_args(argc, argv, "11", &rb_keys, &options);
 
@@ -1195,7 +1171,8 @@ rb_grn_table_group (int argc, VALUE *argv, VALUE self)
 
     rb_grn_table_deconstruct(SELF(self), &table, &context,
 			     NULL, NULL,
-			     NULL, NULL, NULL);
+			     NULL, NULL, NULL,
+			     NULL);
 
     rb_scan_args(argc, argv, "00*", &rb_keys);
 
@@ -1282,7 +1259,8 @@ rb_grn_table_get_value (VALUE self, VALUE rb_id)
 
     rb_grn_table_deconstruct(SELF(self), &table, &context,
 			     NULL, NULL,
-			     &value, NULL, &range);
+			     &value, NULL, &range,
+			     NULL);
 
     id = NUM2UINT(rb_id);
     GRN_BULK_REWIND(value);
@@ -1338,7 +1316,8 @@ rb_grn_table_set_value (VALUE self, VALUE rb_id, VALUE rb_value)
 
     rb_grn_table_deconstruct(SELF(self), &table, &context,
 			     NULL, NULL,
-			     &value, NULL, &range);
+			     &value, NULL, &range,
+			     NULL);
 
     id = NUM2UINT(rb_id);
     GRN_BULK_REWIND(value);
@@ -1412,7 +1391,8 @@ rb_grn_table_unlock (int argc, VALUE *argv, VALUE self)
 
     rb_grn_table_deconstruct(SELF(self), &table, &context,
 			     NULL, NULL,
-			     NULL, NULL, NULL);
+			     NULL, NULL, NULL,
+			     NULL);
 
     rb_grn_scan_options(options,
 			"id", &rb_id,
@@ -1470,7 +1450,8 @@ rb_grn_table_lock (int argc, VALUE *argv, VALUE self)
 
     rb_grn_table_deconstruct(SELF(self), &table, &context,
 			     NULL, NULL,
-			     NULL, NULL, NULL);
+			     NULL, NULL, NULL,
+			     NULL);
 
     rb_grn_scan_options(options,
 			"timeout", &rb_timeout,
@@ -1522,7 +1503,8 @@ rb_grn_table_clear_lock (int argc, VALUE *argv, VALUE self)
 
     rb_grn_table_deconstruct(SELF(self), &table, &context,
 			     NULL, NULL,
-			     NULL, NULL, NULL);
+			     NULL, NULL, NULL,
+			     NULL);
 
     rb_grn_scan_options(options,
 			"id", &rb_id,
@@ -1564,7 +1546,8 @@ rb_grn_table_is_locked (int argc, VALUE *argv, VALUE self)
 
     rb_grn_table_deconstruct(SELF(self), &table, &context,
 			     NULL, NULL,
-			     NULL, NULL, NULL);
+			     NULL, NULL, NULL,
+			     NULL);
 
     rb_grn_scan_options(options,
 			"id", &rb_id,
@@ -1698,7 +1681,8 @@ rb_grn_table_select (int argc, VALUE *argv, VALUE self)
 
     rb_grn_table_deconstruct(SELF(self), &table, &context,
 			     NULL, NULL,
-			     NULL, NULL, NULL);
+			     NULL, NULL, NULL,
+			     NULL);
 
     if (RVAL2CBOOL(rb_obj_is_kind_of(condition_or_options, rb_cString))) {
 	rb_query = condition_or_options;
@@ -1772,10 +1756,12 @@ rb_grn_table_set_operation_bang (VALUE self, VALUE rb_other,
 
     rb_grn_table_deconstruct(SELF(self), &table, &context,
 			     NULL, NULL,
-			     NULL, NULL, NULL);
+			     NULL, NULL, NULL,
+			     NULL);
     rb_grn_table_deconstruct(SELF(rb_other), &other, NULL,
 			     NULL, NULL,
-			     NULL, NULL, NULL);
+			     NULL, NULL, NULL,
+			     NULL);
 
     rc = grn_table_setoperation(context, table, other, table, operator);
     rb_grn_context_check(context, self);

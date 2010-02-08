@@ -254,7 +254,8 @@ rb_grn_hash_search (int argc, VALUE *argv, VALUE self)
 
     rb_grn_table_key_support_deconstruct(SELF(self), &table, &context,
 					 &key, &domain_id, &domain,
-					 NULL, NULL, NULL);
+					 NULL, NULL, NULL,
+					 NULL);
 
     rb_scan_args(argc, argv, "11", &rb_key, &options);
 

@@ -107,7 +107,6 @@ rb_grn_object_finalizer (grn_ctx *context, int n_args, grn_obj **grn_objects,
 	grn_ctx_use(context, NULL);
 	break;
       case GRN_TYPE:
-      case GRN_ACCESSOR:
       case GRN_PROC:
       case GRN_CURSOR_TABLE_HASH_KEY:
       case GRN_CURSOR_TABLE_PAT_KEY:
@@ -130,6 +129,10 @@ rb_grn_object_finalizer (grn_ctx *context, int n_args, grn_obj **grn_objects,
       case GRN_COLUMN_INDEX:
 	rb_grn_index_column_finalizer(context, grn_object,
 				      RB_GRN_INDEX_COLUMN(rb_grn_object));
+	break;
+      case GRN_ACCESSOR:
+	rb_grn_named_object_finalizer(context, grn_object,
+				      RB_GRN_NAMED_OBJECT(rb_grn_object));
 	break;
       case GRN_EXPR:
 	rb_grn_expression_finalizer(context, grn_object,
@@ -328,7 +331,6 @@ rb_grn_object_assign (VALUE klass, VALUE self, VALUE rb_context,
 	klass == rb_cGrnHashCursor ||
 	klass == rb_cGrnPatriciaTrieCursor ||
 	klass == rb_cGrnArrayCursor ||
-	klass == rb_cGrnAccessor ||
 	klass == rb_cGrnProcedure ||
 	klass == rb_cGrnVariable) {
 	rb_grn_object = ALLOC(RbGrnObject);
@@ -356,6 +358,12 @@ rb_grn_object_assign (VALUE klass, VALUE self, VALUE rb_context,
 	rb_grn_object_bind_common(klass, self, rb_context, rb_grn_object,
 				  context, object);
 	rb_grn_column_bind(RB_GRN_COLUMN(rb_grn_object), context, object);
+    } else if (klass == rb_cGrnAccessor) {
+	rb_grn_object = ALLOC(RbGrnNamedObject);
+	rb_grn_object_bind_common(klass, self, rb_context, rb_grn_object,
+				  context, object);
+	rb_grn_named_object_bind(RB_GRN_NAMED_OBJECT(rb_grn_object),
+				 context, object);
     } else if (klass == rb_cGrnExpression) {
 	rb_grn_object = ALLOC(RbGrnExpression);
 	rb_grn_object_bind_common(klass, self, rb_context, rb_grn_object,
@@ -371,6 +379,43 @@ rb_grn_object_assign (VALUE klass, VALUE self, VALUE rb_context,
     debug("assign: %p:%p:%p 0x%x\n", context, object, rb_grn_object,
 	   object->header.type);
 }
+
+void
+rb_grn_named_object_bind (RbGrnNamedObject *rb_grn_named_object,
+			  grn_ctx *context, grn_obj *object)
+{
+    RbGrnObject *rb_grn_object;
+
+    rb_grn_object = RB_GRN_OBJECT(rb_grn_named_object);
+
+    rb_grn_named_object->name = NULL;
+    rb_grn_named_object->name_size = 0;
+}
+
+void
+rb_grn_named_object_finalizer (grn_ctx *context, grn_obj *grn_object,
+			       RbGrnNamedObject *rb_grn_named_object)
+{
+    if (rb_grn_named_object->name)
+	free(rb_grn_named_object->name);
+    rb_grn_named_object->name = NULL;
+    rb_grn_named_object->name_size = 0;
+}
+
+void
+rb_grn_named_object_set_name (RbGrnNamedObject *rb_grn_named_object,
+			      const char *name, unsigned name_size)
+{
+    if (rb_grn_named_object->name) {
+	free(rb_grn_named_object->name);
+	rb_grn_named_object->name = NULL;
+    }
+    if (name_size > 0) {
+	rb_grn_named_object->name = strndup(name, name_size);
+    }
+    rb_grn_named_object->name_size = name_size;
+}
+
 
 void
 rb_grn_object_deconstruct (RbGrnObject *rb_grn_object,

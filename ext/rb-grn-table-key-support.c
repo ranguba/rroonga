@@ -38,7 +38,8 @@ rb_grn_table_key_support_deconstruct (RbGrnTableKeySupport *rb_grn_table_key_sup
 				      grn_obj **domain,
 				      grn_obj **value,
 				      grn_id *range_id,
-				      grn_obj **range)
+				      grn_obj **range,
+				      VALUE *columns)
 {
     RbGrnTable *rb_grn_table;
 
@@ -46,7 +47,8 @@ rb_grn_table_key_support_deconstruct (RbGrnTableKeySupport *rb_grn_table_key_sup
 
     rb_grn_table_deconstruct(rb_grn_table, table_key_support, context,
 			     domain_id, domain,
-			     value, range_id, range);
+			     value, range_id, range,
+			     columns);
 
     if (key)
 	*key = rb_grn_table_key_support->key;
@@ -109,7 +111,8 @@ rb_grn_table_key_support_add_raw (VALUE self, VALUE rb_key)
 
     rb_grn_table_key_support_deconstruct(SELF(self), &table, &context,
 					 &key, &domain_id, &domain,
-					 NULL, NULL, NULL);
+					 NULL, NULL, NULL,
+					 NULL);
 
     GRN_BULK_REWIND(key);
     RVAL2GRNKEY(rb_key, context, key, domain_id, domain, self);
@@ -155,7 +158,8 @@ rb_grn_table_key_support_get (VALUE self, VALUE rb_key)
 
     rb_grn_table_key_support_deconstruct(SELF(self), &table, &context,
 					 &key, &domain_id, &domain,
-					 NULL, NULL, NULL);
+					 NULL, NULL, NULL,
+					 NULL);
 
     GRN_BULK_REWIND(key);
     RVAL2GRNKEY(rb_key, context, key, domain_id, domain, self);
@@ -213,7 +217,8 @@ rb_grn_table_key_support_get_key (VALUE self, VALUE rb_id)
 
     rb_grn_table_key_support_deconstruct(SELF(self), &table, &context,
 					 &key, NULL, NULL,
-					 NULL, NULL, NULL);
+					 NULL, NULL, NULL,
+					 NULL);
 
     id = NUM2UINT(rb_id);
     GRN_BULK_REWIND(key);
@@ -246,7 +251,8 @@ rb_grn_table_key_support_has_key (VALUE self, VALUE rb_key)
 
     rb_grn_table_key_support_deconstruct(SELF(self), &table, &context,
 					 &key, &domain_id, &domain,
-					 NULL, NULL, NULL);
+					 NULL, NULL, NULL,
+					 NULL);
 
     GRN_BULK_REWIND(key);
     RVAL2GRNKEY(rb_key, context, key, domain_id, domain, self);
@@ -266,7 +272,8 @@ rb_grn_table_key_support_delete_by_key (VALUE self, VALUE rb_key)
 
     rb_grn_table_key_support_deconstruct(SELF(self), &table, &context,
 					 &key, &domain_id, &domain,
-					 NULL, NULL, NULL);
+					 NULL, NULL, NULL,
+					 NULL);
 
     GRN_BULK_REWIND(key);
     RVAL2GRNKEY(rb_key, context, key, domain_id, domain, self);
@@ -329,50 +336,22 @@ typedef struct _SetValueData
 static VALUE
 set_value (VALUE args, SetValueData *data)
 {
-    grn_obj *column;
-    grn_ctx *context;
-    char *name = NULL;
-    unsigned name_size = 0;
-    VALUE rb_name, rb_value;
+    VALUE rb_name, rb_value, rb_column;
     RbGrnObject *rb_grn_object;
 
     rb_name = rb_ary_entry(args, 0);
     rb_value = rb_ary_entry(args, 1);
 
-    switch (TYPE(rb_name)) {
-      case T_SYMBOL:
-	rb_name = rb_str_new2(rb_id2name(SYM2ID(rb_name)));
-	break;
-      case T_STRING:
-	break;
-      default:
-	rb_raise(rb_eArgError,
-		 "column name should be String or Symbol: %s",
-		 rb_grn_inspect(rb_name));
-	break;
-    }
-    name = StringValuePtr(rb_name);
-    name_size = RSTRING_LEN(rb_name);
-
-    rb_grn_object = &(data->rb_grn_object);
-    context = rb_grn_object->context;
-    column = grn_obj_column(context, data->table, name, name_size);
-    if (!column) {
+    rb_column = rb_grn_table_get_column(data->self, rb_name);
+    if (NIL_P(rb_column)) {
 	rb_raise(rb_eGrnNoSuchColumn,
 		 "no such column: <%s>: <%s>",
 		 rb_grn_inspect(rb_name), rb_grn_inspect(data->self));
     }
 
-    rb_grn_object->object = column;
-    if (column->header.type == GRN_TYPE) {
-	rb_grn_object->range = NULL;
-    } else {
-	grn_id range_id;
-	range_id = grn_obj_get_range(context, column);
-	rb_grn_object->range = grn_ctx_at(context, range_id);
-    }
-    return rb_grn_object_set_raw(rb_grn_object, data->id,
-				 rb_value, GRN_OBJ_SET, data->self);
+    rb_grn_object = RB_GRN_OBJECT(DATA_PTR(rb_column));
+    return rb_grn_object_set_raw(rb_grn_object,
+				 data->id, rb_value, GRN_OBJ_SET, data->self);
 }
 
 /*
@@ -396,12 +375,10 @@ rb_grn_table_key_support_array_set (VALUE self, VALUE rb_key, VALUE rb_values)
 
     rb_grn_table_key_support_deconstruct(SELF(self), &table, &context,
 					 NULL, NULL, NULL,
-					 NULL, NULL, NULL);
+					 NULL, NULL, NULL,
+					 NULL);
 
-    id = rb_grn_table_key_support_get(self, rb_key);
-    if (id == GRN_ID_NIL) {
-	id = rb_grn_table_key_support_add_raw(self, rb_key);
-    }
+    id = rb_grn_table_key_support_add_raw(self, rb_key);
 
     if (id == GRN_ID_NIL) {
 	rb_raise(rb_eGrnError,
@@ -449,7 +426,8 @@ rb_grn_table_key_support_get_value_by_key (VALUE self, VALUE rb_key)
 
     rb_grn_table_key_support_deconstruct(SELF(self), &table, &context,
 					 NULL, NULL, NULL,
-					 &value, NULL, &range);
+					 &value, NULL, &range,
+					 NULL);
     GRN_BULK_REWIND(value);
     grn_obj_get_value(context, table, id, value);
     rb_grn_context_check(context, self);
@@ -509,7 +487,8 @@ rb_grn_table_key_support_set_value_by_key (VALUE self,
 
     rb_grn_table_key_support_deconstruct(SELF(self), &table, &context,
 					 NULL, NULL, NULL,
-					 &value, NULL, NULL);
+					 &value, NULL, NULL,
+					 NULL);
 
     id = rb_grn_table_key_support_add_raw(self, rb_key);
     if (GRN_ID_NIL == id) {
@@ -581,7 +560,8 @@ rb_grn_table_key_support_get_default_tokenizer (VALUE self)
 
     rb_grn_table_key_support_deconstruct(SELF(self), &table, &context,
 					 NULL, NULL, NULL,
-					 NULL, NULL, NULL);
+					 NULL, NULL, NULL,
+					 NULL);
 
     tokenizer = grn_obj_get_info(context, table, GRN_INFO_DEFAULT_TOKENIZER,
 				 NULL);
@@ -622,7 +602,8 @@ rb_grn_table_key_support_set_default_tokenizer (VALUE self, VALUE rb_tokenizer)
 
     rb_grn_table_key_support_deconstruct(SELF(self), &table, &context,
 					 NULL, NULL, NULL,
-					 NULL, NULL, NULL);
+					 NULL, NULL, NULL,
+					 NULL);
 
     tokenizer = RVAL2GRNOBJECT(rb_tokenizer, &context);
     rc = grn_obj_set_info(context, table,

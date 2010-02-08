@@ -80,11 +80,13 @@ typedef int rb_grn_boolean;
 #include <stdint.h>
 
 #define RB_GRN_OBJECT(object) ((RbGrnObject *)(object))
+#define RB_GRN_NAMED_OBJECT(object) ((RbGrnNamedObject *)(object))
 #define RB_GRN_TABLE(object) ((RbGrnTable *)(object))
 #define RB_GRN_TABLE_KEY_SUPPORT(object) ((RbGrnTableKeySupport *)(object))
 #define RB_GRN_TABLE_CURSOR(object) ((RbGrnTableCursort *)(object))
 #define RB_GRN_COLUMN(object) ((RbGrnColumn *)(object))
 #define RB_GRN_INDEX_COLUMN(object) ((RbGrnIndexColumn *)(object))
+#define RB_GRN_ACCESSOR(object) ((RbGrnAccessor *)(object))
 #define RB_GRN_EXPRESSION(object) ((RbGrnExpression *)(object))
 #define RB_GRN_UNBIND_FUNCTION(function) ((RbGrnUnbindFunction)(function))
 
@@ -110,11 +112,20 @@ struct _RbGrnObject
     rb_grn_boolean need_close;
 };
 
+typedef struct _RbGrnNamedObject RbGrnNamedObject;
+struct _RbGrnNamedObject
+{
+    RbGrnObject parent;
+    char *name;
+    unsigned name_size;
+};
+
 typedef struct _RbGrnTable RbGrnTable;
 struct _RbGrnTable
 {
     RbGrnObject parent;
     grn_obj *value;
+    VALUE columns;
 };
 
 typedef struct _RbGrnTableKeySupport RbGrnTableKeySupport;
@@ -127,7 +138,7 @@ struct _RbGrnTableKeySupport
 typedef struct _RbGrnColumn RbGrnColumn;
 struct _RbGrnColumn
 {
-    RbGrnObject parent;
+    RbGrnNamedObject parent;
     grn_obj *value;
 };
 
@@ -138,6 +149,12 @@ struct _RbGrnIndexColumn
     grn_obj *old_value;
     grn_obj *id_query;
     grn_obj *string_query;
+};
+
+typedef struct _RbGrnAccessor RbGrnAccessor;
+struct _RbGrnAccessor
+{
+    RbGrnNamedObject parent;
 };
 
 typedef struct _RbGrnTableCursor RbGrnTableCursor;
@@ -293,17 +310,22 @@ VALUE          rb_grn_object_inspect_content        (VALUE object,
 VALUE          rb_grn_object_inspect_footer         (VALUE object,
 						     VALUE inspected);
 
+void           rb_grn_named_object_bind             (RbGrnNamedObject *rb_grn_named_object,
+						     grn_ctx *context,
+						     grn_obj *object);
+void           rb_grn_named_object_finalizer        (grn_ctx *context,
+						     grn_obj *column,
+						     RbGrnNamedObject *rb_grn_named_object);
+void           rb_grn_named_object_set_name         (RbGrnNamedObject *rb_grn_named_object,
+						     const char *name,
+						     unsigned name_size);
+
 void           rb_grn_table_bind                    (RbGrnTable *rb_grn_table,
 						     grn_ctx *context,
 						     grn_obj *table_key_support);
 void           rb_grn_table_finalizer               (grn_ctx *context,
 						     grn_obj *grn_object,
 						     RbGrnTable *rb_grn_table);
-void           rb_grn_table_assign                  (VALUE self,
-						     VALUE rb_context,
-						     grn_ctx *context,
-						     grn_obj *table,
-						     rb_grn_boolean owner);
 void           rb_grn_table_deconstruct             (RbGrnTable *rb_grn_table,
 						     grn_obj **table,
 						     grn_ctx **context,
@@ -311,16 +333,13 @@ void           rb_grn_table_deconstruct             (RbGrnTable *rb_grn_table,
 						     grn_obj **domain,
 						     grn_obj **value,
 						     grn_id *range_id,
-						     grn_obj **range);
+						     grn_obj **range,
+						     VALUE *columns);
 
 grn_obj       *rb_grn_table_open_raw                (int argc,
 						     VALUE *argv,
 						     grn_ctx **context,
 						     VALUE *rb_context);
-VALUE          rb_grn_table_s_create                (int argc,
-						     VALUE *argv,
-						     VALUE klass,
-						     grn_obj_flags key_store);
 
 VALUE          rb_grn_table_delete                  (VALUE self,
 						     VALUE rb_id);
@@ -334,6 +353,8 @@ VALUE          rb_grn_table_get_value               (VALUE self,
 VALUE          rb_grn_table_set_value               (VALUE self,
 						     VALUE rb_id,
 						     VALUE rb_value);
+VALUE          rb_grn_table_get_column              (VALUE self,
+						     VALUE rb_name);
 
 grn_ctx       *rb_grn_table_cursor_ensure_context   (VALUE cursor,
 						     VALUE *rb_context);
@@ -352,7 +373,8 @@ void           rb_grn_table_key_support_deconstruct (RbGrnTableKeySupport *rb_gr
 						     grn_obj **domain,
 						     grn_obj **value,
 						     grn_id *range_id,
-						     grn_obj **range);
+						     grn_obj **range,
+						     VALUE *columns);
 grn_id         rb_grn_table_key_support_get         (VALUE self,
 						     VALUE rb_key);
 
@@ -388,6 +410,13 @@ void           rb_grn_index_column_deconstruct      (RbGrnIndexColumn *rb_grn_in
 						     grn_obj **range,
 						     grn_obj **id_query,
 						     grn_obj **string_query);
+
+void           rb_grn_accessor_bind                 (RbGrnAccessor *rb_grn_accessor,
+						     grn_ctx *context,
+						     grn_obj *accessor);
+void           rb_grn_accessor_finalizer            (grn_ctx *context,
+						     grn_obj *accessor,
+						     RbGrnAccessor *rb_grn_accessor);
 
 void           rb_grn_expression_bind               (RbGrnExpression *rb_grn_expression,
 						     grn_ctx *context,

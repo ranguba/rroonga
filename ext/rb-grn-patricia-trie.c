@@ -294,7 +294,8 @@ rb_grn_patricia_trie_search (int argc, VALUE *argv, VALUE self)
 
     rb_grn_table_key_support_deconstruct(SELF(self), &table, &context,
 					 &key, &domain_id, &domain,
-					 NULL, NULL, NULL);
+					 NULL, NULL, NULL,
+					 NULL);
 
     rb_scan_args(argc, argv, "11", &rb_key, &options);
 
@@ -387,7 +388,8 @@ rb_grn_patricia_trie_scan (VALUE self, VALUE rb_string)
 
     rb_grn_table_key_support_deconstruct(SELF(self), &table, &context,
 					 NULL, NULL, NULL,
-					 NULL, NULL, NULL);
+					 NULL, NULL, NULL,
+					 NULL);
 
     block_given = rb_block_given_p();
     if (!block_given)
@@ -450,7 +452,8 @@ rb_grn_patricia_trie_prefix_search (VALUE self, VALUE rb_prefix)
 
     rb_grn_table_key_support_deconstruct(SELF(self), &table, &context,
 					 &key, &domain_id, &domain,
-					 NULL, NULL, NULL);
+					 NULL, NULL, NULL,
+					 NULL);
 
     result = grn_table_create(context, NULL, 0, NULL,
 			      GRN_OBJ_TABLE_HASH_KEY,
