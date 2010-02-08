@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 #
-# Copyright (C) 2009  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2010  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -143,6 +143,15 @@ real_major, real_minor, real_micro = real_version.split(/\./)
 $defs << "-DGRN_MAJOR_VERSION=#{real_major}"
 $defs << "-DGRN_MINOR_VERSION=#{real_minor}"
 $defs << "-DGRN_MICRO_VERSION=#{real_micro}"
+
+checking_for(checking_message("debug flag")) do
+  debug = with_config("debug")
+  if debug
+    debug_flag = "-DRB_GRN_DEBUG"
+    $defs << debug_flag unless $defs.include?(debug_flag)
+  end
+  debug
+end
 
 have_header("ruby/st.h") unless have_macro("HAVE_RUBY_ST_H", "ruby.h")
 have_func("rb_errinfo", "ruby.h")
