@@ -396,8 +396,6 @@ rb_grn_table_key_support_array_set (VALUE self, VALUE rb_key, VALUE rb_values)
 }
 
 /*
- * Document-method: set_column_value
- *
  * call-seq:
  *   table.set_column_value(key, name, value)
  *
@@ -442,6 +440,44 @@ rb_grn_table_key_support_set_column_value (VALUE self, VALUE rb_key,
 
 /*
  * call-seq:
+ *   table.column_value(key, name)
+ *
+ * _table_の_key_に対応するカラム_name_の値を設定する。
+ *
+ * TODO: _key_に対応するレコードがない場合は例外？
+ */
+static VALUE
+rb_grn_table_key_support_get_column_value (VALUE self, VALUE rb_key,
+					   VALUE rb_name)
+{
+    grn_id id;
+    grn_ctx *context;
+    grn_obj *table;
+    VALUE rb_column;
+
+    rb_grn_table_key_support_deconstruct(SELF(self), &table, &context,
+					 NULL, NULL, NULL,
+					 NULL, NULL, NULL,
+					 NULL);
+
+    id = rb_grn_table_key_support_get(self, rb_key);
+    if (id == GRN_ID_NIL) {
+	return Qnil;
+    }
+
+    rb_column = rb_grn_table_get_column(self, rb_name);
+    if (NIL_P(rb_column)) {
+	rb_raise(rb_eGrnNoSuchColumn,
+		 "no such column: <%s>: <%s>",
+		 rb_grn_inspect(rb_name), rb_grn_inspect(self));
+    }
+
+    /* TODO: improve speed. */
+    return rb_funcall(rb_column, rb_intern("[]"), 1, INT2NUM(id));
+}
+
+/*
+ * call-seq:
  *   table.find(key) -> Groonga::Record
  *
  * テーブルの_key_に対応するレコードを返す。
@@ -481,8 +517,6 @@ rb_grn_table_key_support_get_value_by_key (VALUE self, VALUE rb_key)
 }
 
 /*
- * Document-method: []
- *
  * call-seq:
  *   table.value(id, :id => true) -> 値
  *   table.value(key) -> 値
@@ -553,8 +587,6 @@ rb_grn_table_key_support_set_value_by_key (VALUE self,
 }
 
 /*
- * Document-method: set_value
- *
  * call-seq:
  *   table.set_value(id, value, :id => true)
  *   table.set_value(key, value)
@@ -687,6 +719,8 @@ rb_grn_init_table_key_support (VALUE mGrn)
     rb_define_method(rb_mGrnTableKeySupport, "[]=",
 		     rb_grn_table_key_support_array_set, 2);
 
+    rb_define_method(rb_mGrnTableKeySupport, "column_value",
+		     rb_grn_table_key_support_get_column_value, 2);
     rb_define_method(rb_mGrnTableKeySupport, "set_column_value",
 		     rb_grn_table_key_support_set_column_value, 3);
 

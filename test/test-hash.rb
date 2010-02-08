@@ -50,14 +50,14 @@ class HashTest < Test::Unit::TestCase
     assert_equal(29, bookmarks.value("http://google.com/"))
   end
 
-  def test_set_column_value
+  def test_column_value
     bookmarks_path = @tables_dir + "bookmarks"
     bookmarks = Groonga::Hash.create(:name => "Bookmarks",
                                      :path => bookmarks_path.to_s,
                                      :key_type => "ShortText")
     uri = bookmarks.define_column("uri", "ShortText")
     bookmarks.set_column_value("google", "uri", "http://google.com/")
-    assert_equal("http://google.com/", bookmarks["google"]["uri"])
+    assert_equal("http://google.com/", bookmarks.column_value("google", "uri"))
   end
 
   def test_array_reference
