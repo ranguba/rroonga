@@ -53,44 +53,28 @@ begin
   $LOAD_PATH.unshift(File.join(base_dir, "lib"))
 
   require 'groonga'
-  @database = Groonga::Database.create
-  value_type = Groonga::Type.new("Text8", :size => 8)
+  tmp_dir = "/tmp/groonga"
+  FileUtils.rm_rf(tmp_dir)
+  FileUtils.mkdir(tmp_dir)
+  @database = Groonga::Database.create(:path => "#{tmp_dir}/db")
 
-  item("groonga: Hash: memory") do
-    @hash = Groonga::Hash.create(:key_type => "ShortText",
-                                 :value_type => value_type)
-    values.each do |value|
-      @hash.set_value(value, value)
-    end
-  end
-
-  item("groonga: Trie: memory") do
-    @hash = Groonga::PatriciaTrie.create(:key_type => "ShortText",
-                                         :value_type => value_type)
-    values.each do |value|
-      @hash.set_value(value, value)
-    end
-  end
-
-  hash_file = Tempfile.new("groonga-hash")
-  FileUtils.rm_f(hash_file.path)
   item("groonga: Hash: file") do
-    @hash = Groonga::Hash.create(:key_type => "ShortText",
-                                 :value_type => value_type,
-                                 :path => hash_file.path)
+    @hash = Groonga::Hash.create(:name => "Hash",
+                                 :key_type => "ShortText")
+    column_name = "value"
+    @column = @hash.define_column(column_name, "ShortText")
     values.each do |value|
-      @hash.set_value(value, value)
+      @hash.set_column_value(value, column_name, value)
     end
   end
 
-  trie_file = Tempfile.new("groonga-trie")
-  FileUtils.rm_f(trie_file.path)
   item("groonga: Trie: file") do
-    @hash = Groonga::PatriciaTrie.create(:key_type => "ShortText",
-                                         :value_type => value_type,
-                                         :path => trie_file.path)
+    @trie = Groonga::PatriciaTrie.create(:name => "PatriciaTrie",
+                                         :key_type => "ShortText")
+    column_name = "value"
+    @column = @trie.define_column(column_name, "ShortText")
     values.each do |value|
-      @hash.set_value(value, value)
+      @trie.set_column_value(value, column_name, value)
     end
   end
 rescue LoadError
