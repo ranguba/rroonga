@@ -59,12 +59,10 @@ rb_grn_type_to_ruby_object (grn_ctx *context, grn_obj *type,
  *   :integer（符号付き整数）、:int（:integerの省略
  *   形）、:unsigned_integer（符号なし整
  *   数）、:uint（:unsigned_integerの省略形）、:float（浮動小
- *   数点数）、:fixed（固定長文字列）、:variable（可変長文字
- *   列）のいずれかを指定する。省略した場合は:fixedを指定し
- *   たものと扱う。
+ *   数点数）、:variable（可変長文字列）のいずれかを指定する。
+ *   省略した場合は:variableを指定したものと扱う。
  *
- *   :fixedまたは:variableを指定した場合は必ず+:size+を指定
- *   しなければいけない。
+ *   :variableを指定した場合は必ず+:size+を指定しなければいけない。
  *
  * [+:context+]
  *   型の作成時に利用するGroonga::Contextを指定する。省略すると
@@ -98,8 +96,8 @@ rb_grn_type_initialize (int argc, VALUE *argv, VALUE self)
     context = rb_grn_context_ensure(&rb_context);
 
     if (NIL_P(rb_type) ||
-	rb_grn_equal_option(rb_type, "fixed")) {
-	flags = RB_GRN_OBJ_KEY_STRING;
+	rb_grn_equal_option(rb_type, "variable")) {
+        flags = GRN_OBJ_KEY_VAR_SIZE;
     } else if (rb_grn_equal_option(rb_type, "integer") ||
                rb_grn_equal_option(rb_type, "int")) {
 	flags = GRN_OBJ_KEY_INT;
@@ -111,13 +109,11 @@ rb_grn_type_initialize (int argc, VALUE *argv, VALUE self)
     } else if (rb_grn_equal_option(rb_type, "float")) {
 	flags = GRN_OBJ_KEY_FLOAT;
         size = sizeof(double);
-    } else if (rb_grn_equal_option(rb_type, "variable")) {
-        flags = GRN_OBJ_KEY_VAR_SIZE;
     } else {
 	rb_raise(rb_eArgError,
 		 ":type should be one of "
 		 "[:integer, :int, :unsigned_integer, :uint, "
-		 ":float, :fixed, :variable]: %s",
+		 ":float, :variable]: %s",
 		 rb_grn_inspect(options));
     }
 

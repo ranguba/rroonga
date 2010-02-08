@@ -55,9 +55,8 @@ class RecordTest < Test::Unit::TestCase
 
   def setup_bookmarks_table
     @bookmarks_path = @tables_dir + "bookmarks"
-    value_type = Groonga::Type.new("Text512", :size => 512)
     @bookmarks = Groonga::Array.create(:name => "Bookmarks",
-                                       :value_type => value_type,
+                                       :value_type => "Int32",
                                        :path => @bookmarks_path.to_s)
 
     @uri_column_path = @columns_dir + "uri"
@@ -168,9 +167,9 @@ class RecordTest < Test::Unit::TestCase
 
   def test_value
     bookmark = @bookmarks.add
-    assert_equal("", bookmark.value.split(/\0/, 2)[0])
-    bookmark.value = "http://groonga.org/\0"
-    assert_equal("http://groonga.org/", bookmark.value.split(/\0/, 2)[0])
+    assert_equal(0, bookmark.value)
+    bookmark.value = 100
+    assert_equal(100, bookmark.value)
   end
 
   def test_reference_column?

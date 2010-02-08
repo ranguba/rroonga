@@ -226,10 +226,9 @@ class TableTest < Test::Unit::TestCase
   end
 
   def test_set_value
-    value_type = Groonga::Type.new("Text512", :size => 512)
     table_path = @tables_dir + "bookmarks"
     bookmarks = Groonga::Hash.create(:name => "Bookmarks",
-                                     :value_type => value_type,
+                                     :value_type => "Int32",
                                      :path => table_path.to_s)
     comment_column_path = @columns_dir + "comment"
     bookmarks_comment =
@@ -237,26 +236,22 @@ class TableTest < Test::Unit::TestCase
                               :type => "scalar",
                               :path => comment_column_path.to_s)
     groonga = bookmarks.add("groonga")
-    url = "http://groonga.org/"
-    groonga.value = url
+    groonga.value = 29
     bookmarks_comment[groonga.id] = "fulltext search engine"
 
-    assert_equal([url, "fulltext search engine"],
-                 [groonga.value[0, url.length],
-                  bookmarks_comment[groonga.id]])
+    assert_equal([29, "fulltext search engine"],
+                 [groonga.value, bookmarks_comment[groonga.id]])
   end
 
   def test_array_set
-    value_type = Groonga::Type.new("Text512", :size => 512)
     bookmarks = Groonga::Hash.create(:name => "Bookmarks",
-                                     :value_type => value_type)
-    url = "http://groonga.org/"
-    bookmarks.set_value("groonga", "#{url}\0")
+                                     :value_type => "Int32")
+    bookmarks.set_value("groonga", 29)
 
     values = bookmarks.records.collect do |record|
-      record.value.split(/\0/, 2)[0]
+      record.value
     end
-    assert_equal([url], values)
+    assert_equal([29], values)
   end
 
   def test_add_without_name
@@ -276,18 +271,15 @@ class TableTest < Test::Unit::TestCase
     users = Groonga::Hash.create(:name => "Users",
                                  :path => users_path.to_s)
 
-    value_type = Groonga::Type.new("Text512", :size => 512)
     bookmarks_path = @tables_dir + "bookmarks"
     bookmarks = Groonga::Hash.create(:name => "Bookmarks",
                                      :key_type => users,
-                                     :value_type => value_type,
+                                     :value_type => "Int32",
                                      :path => bookmarks_path.to_s)
     morita = users.add("morita")
     groonga = bookmarks.add(morita.id)
-    url = "http://groonga.org/"
-    groonga.value = url
-
-    assert_equal(url, groonga.value[0, url.length])
+    groonga.value = 29
+    assert_equal(29, groonga.value)
   end
 
   def test_columns

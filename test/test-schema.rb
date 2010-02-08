@@ -56,12 +56,11 @@ class SchemaTest < Test::Unit::TestCase
   def test_define_hash_with_full_option
     path = @tmp_dir + "hash.groonga"
     tokenizer = context["TokenTrigram"]
-    type = Groonga::Type.new("Niku", :size => 29)
     Groonga::Schema.create_table("Posts",
                                  :type => :hash,
                                  :key_type => "integer",
                                  :path => path.to_s,
-                                 :value_type => type,
+                                 :value_type => "UInt32",
                                  :default_tokenizer => tokenizer) do |table|
     end
     table = context["Posts"]
@@ -70,7 +69,7 @@ class SchemaTest < Test::Unit::TestCase
                  "name: <Posts>, " +
                  "path: <#{path}>, " +
                  "domain: <Int32>, " +
-                 "range: <Niku>, " +
+                 "range: <UInt32>, " +
                  "flags: <>, " +
                  "encoding: <#{Groonga::Encoding.default.inspect}>, " +
                  "size: <0>>",
@@ -86,12 +85,11 @@ class SchemaTest < Test::Unit::TestCase
 
   def test_define_patricia_trie_with_full_option
     path = @tmp_dir + "patricia-trie.groonga"
-    type = Groonga::Type.new("Niku", :size => 29)
     Groonga::Schema.create_table("Posts",
                                  :type => :patricia_trie,
                                  :key_type => "integer",
                                  :path => path.to_s,
-                                 :value_type => type,
+                                 :value_type => "Float",
                                  :default_tokenizer => "TokenBigram",
                                  :key_normalize => true,
                                  :key_with_sis => true) do |table|
@@ -102,7 +100,7 @@ class SchemaTest < Test::Unit::TestCase
                  "name: <Posts>, " +
                  "path: <#{path}>, " +
                  "domain: <Int32>, " +
-                 "range: <Niku>, " +
+                 "range: <Float>, " +
                  "flags: <KEY_WITH_SIS|KEY_NORMALIZE|WITH_SECTION>, " +
                  "encoding: <#{Groonga::Encoding.default.inspect}>, " +
                  "size: <0>>",
@@ -118,19 +116,18 @@ class SchemaTest < Test::Unit::TestCase
 
   def test_define_array_with_full_option
     path = @tmp_dir + "array.groonga"
-    type = Groonga::Type.new("Niku", :size => 29)
     Groonga::Schema.create_table("Posts",
                                  :type => :array,
                                  :path => path.to_s,
-                                 :value_type => type) do |table|
+                                 :value_type => "Int32") do |table|
     end
     table = context["Posts"]
     assert_equal("#<Groonga::Array " +
                  "id: <#{table.id}>, " +
                  "name: <Posts>, " +
                  "path: <#{path}>, " +
-                 "domain: <Niku>, " +
-                 "range: <Niku>, " +
+                 "domain: <Int32>, " +
+                 "range: <Int32>, " +
                  "flags: <>, " +
                  "size: <0>>",
                  table.inspect)

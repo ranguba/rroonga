@@ -187,11 +187,6 @@ rb_grn_bulk_to_ruby_object_by_range_type (grn_ctx *context, grn_obj *bulk,
 	      case GRN_OBJ_KEY_FLOAT:
 		*rb_value = rb_float_new(GRN_FLOAT_VALUE(bulk));
 		break;
-	      case RB_GRN_OBJ_KEY_STRING:
-		*rb_value = rb_grn_context_rb_string_new(context,
-							 GRN_BULK_HEAD(bulk),
-							 GRN_BULK_VSIZE(bulk));
-		break;
 	      default:
 		success = RB_GRN_FALSE;
 	    }

@@ -46,7 +46,8 @@ class RemoteTest < Test::Unit::TestCase
     assert_equal(0, _context.send("status"))
     id, result = _context.receive
     assert_equal(0, id)
-    assert_equal(["alloc_count", "starttime", "uptime"],
-                 JSON.load(result).keys.sort)
+    return_code, values = JSON.load(result)
+    assert_equal([[0], ["alloc_count", "starttime", "uptime"]],
+                 [return_code, values.keys.sort])
   end
 end
