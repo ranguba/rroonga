@@ -36,7 +36,7 @@ package_name = "groonga"
 module_name = "groonga"
 ext_dir_name = "ext"
 src_dir = File.join(File.expand_path(File.dirname(__FILE__)), ext_dir_name)
-major, minor, micro = 0, 1, 5
+major, minor, micro = 0, 1, 6
 
 def local_groonga_base_dir
   File.join(File.dirname(__FILE__), "vendor")
@@ -115,7 +115,7 @@ def install_groonga_locally(major, minor, micro)
       end
 
       message("installing...")
-      if [major, minor, micro] == [0, 1, 5]
+      if [major, minor, micro] == [0, 1, 6]
         make_install_args = " MKDIR_P='mkdir -p --'"
       else
         make_install_args = ""

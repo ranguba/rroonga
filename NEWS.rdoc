@@ -1,5 +1,9 @@
 = NEWS
 
+== 0.9.1: 2010-02-09
+
+* Supported groonga 0.1.6
+
 == 0.9.0: 2010-02-09
 
 * Supported groonga 0.1.5
