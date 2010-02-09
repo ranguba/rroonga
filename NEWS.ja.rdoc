@@ -1,5 +1,61 @@
 = お知らせ
 
+== 0.9.0: 2010-02-09
+
+* groonga 0.1.5対応
+* APIの追加
+  * Groonga::Object#context
+  * Groonga::Record#n_sub_records
+  * Groonga::Context#send
+  * Groonga::Context#receive
+  * Groonga::PatriciaTrie#prefix_search [Tasuku SUENAGA]
+  * Groonga::Object#path [Ryo Onodera]
+  * Groonga::Object#lock [Tasuku SUENAGA]
+  * Groonga::Object#unlock [Tasuku SUENAGA]
+  * Groonga::Object#locked? [Tasuku SUENAGA]
+  * Groonga::Object#temporary?
+  * Groonga::Object#persistent?
+  * Groonga::ObjectClosed
+  * Groonga::Context.[]
+  * Groonga::Table#column_value
+  * Groonga::Table#set_column_value
+* APIの変更
+  * Groonga::Table#select, Groonga::Column#select
+    * Groonga::Expressionも受け付けるようになった
+    * grn式のシンタックスを指定する:syntaxオプションの追加
+  * Groonga::Table#open_cursor
+    * 開始位置を指定する:offsetオプションの追加
+    * 最大レコード数を指定する:limitオプションの追加
+  * Groonga::Expression.parseの引数を変更
+    * (nil (default) -> :column) -> (nil (default) -> :query)
+    * :column -> 廃止
+    * :table -> :query
+    * :table_query -> :query
+    * :expression -> :script
+    * :language -> :script
+  * Groonga::Table#define_column, Groonga::Table#define_index_column
+    * 永続テーブルをデフォルトにした
+  * Groonga::Table#[]をGroonga::Table#valueに変更
+  * Groonga::Table#[]=をGroonga::Table#set_valueに変更
+  * Groonga::Table#findをGroonga::Table#[]に変更
+  * Groonga::Table#findは非推奨
+  * Groonga::Table#[]=を削除
+  * Groonga::TableKeySupport#[]=はGroonga::TableKeySupport#addの別名
+  * Groonga::Recordで存在しないカラムにアクセスしたときの例外を
+    Groonga::InvalidArgumentからGroonga::NoSuchColumnに変更
+* バグ修正
+  * スキーマにコンテキストが伝搬されない問題の修正 [dara]
+  * Groonga::PatriciaTrie#tag_keysが最後のテキストを返さない問題の修正
+    [Ryo Onodera]
+* extconf.rbにデバッグモードでビルドする--with-debugオプションを追加
+* Ruby 1.9.1でextconf.rbが失敗する問題の修正
+
+=== 感謝
+
+* dara
+* Ryo Onodera
+* Tasuku SUENAGA
+
 == 0.0.7: 2009-10-02
 
 * groonga 0.1.4対応

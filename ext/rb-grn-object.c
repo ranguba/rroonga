@@ -162,6 +162,8 @@ rb_grn_object_free (RbGrnObject *rb_grn_object)
 	rb_grn_object->object = NULL;
 	debug("type: %x\n", grn_object->header.type);
 	if (rb_grn_object->need_close) {
+	    if (grn_object->header.type == GRN_EXPR)
+		grn_p(context, grn_object);
 	    grn_obj_unlink(context, grn_object);
 	}
     }

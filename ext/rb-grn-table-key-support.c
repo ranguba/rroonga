@@ -310,7 +310,7 @@ rb_grn_table_key_support_delete (VALUE self, VALUE rb_id_or_key)
  *
  * _table_の_key_に対応するGroonga::Recordを返す。
  *
- * 0.0.9から値ではなくGroonga::Recordを返すようになった。
+ * 0.9.0から値ではなくGroonga::Recordを返すようになった。
  */
 static VALUE
 rb_grn_table_key_support_array_reference (VALUE self, VALUE rb_key)
@@ -363,7 +363,7 @@ set_value (VALUE args, SetValueData *data)
  * _table_の_key_に対応するカラム_column_name_の値を設定する。
  * _key_に対応するレコードがない場合は新しく作成される。
  *
- * 0.0.9から値ではなくカラムの値を設定するようになった。
+ * 0.9.0から値ではなくカラムの値を設定するようになった。
  */
 static VALUE
 rb_grn_table_key_support_array_set (VALUE self, VALUE rb_key, VALUE rb_values)
@@ -477,7 +477,7 @@ rb_grn_table_key_support_get_column_value (int argc, VALUE *argv, VALUE self)
  *
  * テーブルの_key_に対応するレコードを返す。
  *
- * 0.0.9から非推奨。代わりにtable[key]を使うこと。
+ * 0.9.0から非推奨。代わりにtable[key]を使うこと。
  */
 static VALUE
 rb_grn_table_key_support_find (VALUE self, VALUE rb_key)

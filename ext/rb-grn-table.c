@@ -1257,7 +1257,7 @@ rb_grn_table_group (int argc, VALUE *argv, VALUE self)
  *
  * _table_の_id_に対応するGroonga::Recordを返す。
  *
- * 0.0.9から値ではなくGroonga::Recordを返すようになった。
+ * 0.9.0から値ではなくGroonga::Recordを返すようになった。
  */
 VALUE
 rb_grn_table_array_reference (VALUE self, VALUE rb_id)

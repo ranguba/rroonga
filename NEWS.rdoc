@@ -1,5 +1,63 @@
 = NEWS
 
+== 0.9.0: 2010-02-09
+
+* Supported groonga 0.1.5
+* Added API
+  * Groonga::Object#context
+  * Groonga::Record#n_sub_records
+  * Groonga::Context#send
+  * Groonga::Context#receive
+  * Groonga::PatriciaTrie#prefix_search [Tasuku SUENAGA]
+  * Groonga::Object#path [Ryo Onodera]
+  * Groonga::Object#lock [Tasuku SUENAGA]
+  * Groonga::Object#unlock [Tasuku SUENAGA]
+  * Groonga::Object#locked? [Tasuku SUENAGA]
+  * Groonga::Object#temporary?
+  * Groonga::Object#persistent?
+  * Groonga::ObjectClosed
+  * Groonga::Context.[]
+  * Groonga::Table#column_value
+  * Groonga::Table#set_column_value
+* Changed API
+  * Groonga::Table#select, Groonga::Column#select
+    * They also accept Groonga::Expression
+    * Added :syntax option that specifies grn expression syntax
+  * Groonga::Table#open_cursor
+    * Added :offset option that specifies offset.
+    * Added :limit option that specifies max number of records.
+  * Changed Groonga::Expression.parse options:
+    * (nil (default) -> :column) -> (nil (default) -> :query)
+    * :column -> removed
+    * :table -> :query
+    * :table_query -> :query
+    * :expression -> :script
+    * :language -> :script
+  * Groonga::Table#define_column, Groonga::Table#define_index_column
+    * Defined column becomes persistent table by default
+  * Groonga::Table#[] -> Groonga::Table#value
+  * Groonga::Table#[]= -> Groonga::Table#set_value
+  * Groonga::Table#find -> Groonga::Table#[]
+  * Groonga::Table#find -> obsolete
+  * Groonga::Table#[]= -> removed
+  * Groonga::TableKeySupport#[]= is alias of Groonga::TableKeySupport#add
+  * Changed exception class to Groonga::NoSuchColumn from
+    Groonga::InvalidArgument when Groonga::Record accesses nonexistent
+    a column.
+* Bug fixes
+  * Fixed a bug that context isn't passed to schema [dara]
+  * Fixed a bug that Groonga::PatriciaTrie#tag_keys doesn't return
+    that last text.
+    [Ryo Onodera]
+* Added --with-debug option to extconf.rb for debug build.
+* Fixed a bug that Ruby 1.9.1 may fail extconf.rb.
+
+=== Thanks
+
+* dara
+* Ryo Onodera
+* Tasuku SUENAGA
+
 == 0.0.7: 2009-10-02
 
 * Supported groonga 0.1.4
