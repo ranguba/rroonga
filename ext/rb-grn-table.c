@@ -22,6 +22,9 @@
 
 VALUE rb_cGrnTable;
 
+static ID id_array_reference;
+static ID id_array_set;
+
 /*
  * Document-class: Groonga::Table < Groonga::Object
  *
@@ -1389,7 +1392,7 @@ rb_grn_table_get_column_value_raw (VALUE self, grn_id id, VALUE rb_name)
     rb_column = rb_grn_table_get_column_surely(self, rb_name);
 
     /* TODO: improve speed. */
-    return rb_funcall(rb_column, rb_intern("[]"), 1, INT2NUM(id));
+    return rb_funcall(rb_column, id_array_reference, 1, INT2NUM(id));
 }
 
 VALUE
@@ -1437,12 +1440,11 @@ rb_grn_table_set_column_value_raw (VALUE self, grn_id id,
 				   VALUE rb_name, VALUE rb_value)
 {
     VALUE rb_column;
-    RbGrnObject *rb_grn_object;
 
     rb_column = rb_grn_table_get_column_surely(self, rb_name);
 
-    rb_grn_object = RB_GRN_OBJECT(DATA_PTR(rb_column));
-    return rb_grn_object_set_raw(rb_grn_object, id, rb_value, GRN_OBJ_SET, self);
+    /* TODO: improve speed. */
+    return rb_funcall(rb_column, id_array_set, 2, INT2NUM(id), rb_value);
 }
 
 VALUE
@@ -1954,6 +1956,9 @@ rb_grn_table_merge_bang (VALUE self, VALUE rb_other)
 void
 rb_grn_init_table (VALUE mGrn)
 {
+    id_array_reference = rb_intern("[]");
+    id_array_set = rb_intern("[]=");
+
     rb_cGrnTable = rb_define_class_under(mGrn, "Table", rb_cGrnObject);
     rb_define_alloc_func(rb_cGrnTable, rb_grn_table_alloc);
 

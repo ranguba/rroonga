@@ -398,16 +398,31 @@ rb_grn_table_key_support_array_set (VALUE self, VALUE rb_key, VALUE rb_values)
 /*
  * call-seq:
  *   table.set_column_value(key, name, value)
+ *   table.set_column_value(id, name, value, :id => true)
  *
  * _table_の_key_に対応するカラム_name_の値を設定する。
  * _key_に対応するレコードがない場合は新しく作成される。
  */
 static VALUE
-rb_grn_table_key_support_set_column_value (VALUE self, VALUE rb_key,
-					   VALUE rb_name, VALUE rb_value)
+rb_grn_table_key_support_set_column_value (int argc, VALUE *argv, VALUE self)
 {
     grn_id id;
+    VALUE rb_key, rb_id_or_key, rb_name, rb_value, rb_options;
 
+    rb_scan_args(argc, argv, "31",
+		 &rb_id_or_key, &rb_name, &rb_value, &rb_options);
+    if (!NIL_P(rb_options)) {
+	VALUE rb_option_id;
+	rb_grn_scan_options(rb_options,
+			    "id", &rb_option_id,
+			    NULL);
+	if (RVAL2CBOOL(rb_option_id)) {
+	    VALUE rb_id = rb_id_or_key;
+	    return rb_grn_table_set_column_value(self, rb_id, rb_name, rb_value);
+	}
+    }
+
+    rb_key = rb_id_or_key;
     id = rb_grn_table_key_support_add_raw(self, rb_key);
     if (id == GRN_ID_NIL) {
 	rb_raise(rb_eGrnError,
@@ -423,17 +438,31 @@ rb_grn_table_key_support_set_column_value (VALUE self, VALUE rb_key,
 /*
  * call-seq:
  *   table.column_value(key, name)
+ *   table.column_value(id, name, :id => true)
  *
  * _table_の_key_に対応するカラム_name_の値を設定する。
  *
  * TODO: _key_に対応するレコードがない場合は例外？
  */
 static VALUE
-rb_grn_table_key_support_get_column_value (VALUE self, VALUE rb_key,
-					   VALUE rb_name)
+rb_grn_table_key_support_get_column_value (int argc, VALUE *argv, VALUE self)
 {
     grn_id id;
+    VALUE rb_key, rb_id_or_key, rb_name, rb_options;
 
+    rb_scan_args(argc, argv, "21", &rb_id_or_key, &rb_name, &rb_options);
+    if (!NIL_P(rb_options)) {
+	VALUE rb_option_id;
+	rb_grn_scan_options(rb_options,
+			    "id", &rb_option_id,
+			    NULL);
+	if (RVAL2CBOOL(rb_option_id)) {
+	    VALUE rb_id = rb_id_or_key;
+	    return rb_grn_table_get_column_value(self, rb_id, rb_name);
+	}
+    }
+
+    rb_key = rb_id_or_key;
     id = rb_grn_table_key_support_get(self, rb_key);
     if (id == GRN_ID_NIL) {
 	return Qnil;
@@ -686,9 +715,9 @@ rb_grn_init_table_key_support (VALUE mGrn)
 		     rb_grn_table_key_support_array_set, 2);
 
     rb_define_method(rb_mGrnTableKeySupport, "column_value",
-		     rb_grn_table_key_support_get_column_value, 2);
+		     rb_grn_table_key_support_get_column_value, -1);
     rb_define_method(rb_mGrnTableKeySupport, "set_column_value",
-		     rb_grn_table_key_support_set_column_value, 3);
+		     rb_grn_table_key_support_set_column_value, -1);
 
     rb_define_method(rb_mGrnTableKeySupport, "value",
 		     rb_grn_table_key_support_get_value, -1);

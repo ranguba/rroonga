@@ -54,7 +54,7 @@ module Groonga
     #
     # このレコードの_column_name_で指定されたカラムの値を返す。
     def [](column_name)
-      column(column_name)[@id]
+      @table.column_value(@id, column_name, :id => true)
     end
 
     # call-seq:
@@ -63,7 +63,7 @@ module Groonga
     # このレコードの_column_name_で指定されたカラムの値を設定す
     # る。
     def []=(column_name, value)
-      column(column_name)[@id] = value
+      @table.set_column_value(@id, column_name, value, :id => true)
     end
 
     # call-seq:
