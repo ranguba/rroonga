@@ -398,7 +398,7 @@ rb_grn_named_object_finalizer (grn_ctx *context, grn_obj *grn_object,
 			       RbGrnNamedObject *rb_grn_named_object)
 {
     if (rb_grn_named_object->name)
-	free(rb_grn_named_object->name);
+	xfree(rb_grn_named_object->name);
     rb_grn_named_object->name = NULL;
     rb_grn_named_object->name_size = 0;
 }
@@ -412,7 +412,9 @@ rb_grn_named_object_set_name (RbGrnNamedObject *rb_grn_named_object,
 	rb_grn_named_object->name = NULL;
     }
     if (name_size > 0) {
-	rb_grn_named_object->name = strndup(name, name_size);
+	rb_grn_named_object->name = ALLOC_N(char, name_size + 1);
+	memcpy(rb_grn_named_object->name, name, name_size);
+	rb_grn_named_object->name[name_size] = '\0';
     }
     rb_grn_named_object->name_size = name_size;
 }
