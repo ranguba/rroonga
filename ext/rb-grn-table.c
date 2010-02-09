@@ -1166,12 +1166,14 @@ rb_grn_table_sort (int argc, VALUE *argv, VALUE self)
 
 /*
  * call-seq:
- *   table.group(column) -> Groonga::Hash
- *   table.group(column1, column2, ...) -> [Groonga::Hash, Groonga::Hash, ...]
+ *   table.group(column, options={}) -> Groonga::Hash
+ *   table.group(column1, column2, ..., options={}) -> [Groonga::Hash, ...]
  *
  * _table_のレコードを_column1_, _column2_, _..._で指定したカ
  * ラムの値でグループ化する。カラムはカラム名（文字列）でも
  * 指定可能。
+ *
+ * このAPIは将来変更されます。
  */
 static VALUE
 rb_grn_table_group (int argc, VALUE *argv, VALUE self)
@@ -1195,6 +1197,10 @@ rb_grn_table_group (int argc, VALUE *argv, VALUE self)
 
     n_keys = RARRAY_LEN(rb_keys);
     rb_sort_keys = RARRAY_PTR(rb_keys);
+    if (n_keys == 1 && TYPE(rb_sort_keys[0]) == T_ARRAY) {
+	n_keys = RARRAY_LEN(rb_sort_keys[0]);
+	rb_sort_keys = RARRAY_PTR(rb_sort_keys[0]);
+    }
     keys = ALLOCA_N(grn_table_sort_key, n_keys);
     for (i = 0; i < n_keys; i++) {
 	VALUE rb_sort_options, rb_key;
