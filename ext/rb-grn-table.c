@@ -1432,8 +1432,10 @@ rb_grn_table_get_column_value_convenience (int argc, VALUE *argv, VALUE self)
 			    NULL);
 	if (!(NIL_P(rb_option_id) || RVAL2CBOOL(rb_option_id))) {
 	    rb_raise(rb_eArgError, ":id options must be true or nil: %s: %s",
-		     rb_inspect(rb_option_id),
-		     rb_inspect(rb_ary_new3(2, self, rb_ary_new4(argc, argv))));
+		     rb_grn_inspect(rb_option_id),
+		     rb_grn_inspect(rb_ary_new3(2,
+						self,
+						rb_ary_new4(argc, argv))));
 	}
     }
 
@@ -1487,8 +1489,10 @@ rb_grn_table_set_column_value_convenience (int argc, VALUE *argv, VALUE self)
 			    NULL);
 	if (!(NIL_P(rb_option_id) || RVAL2CBOOL(rb_option_id))) {
 	    rb_raise(rb_eArgError, ":id options must be true or nil: %s: %s",
-		     rb_inspect(rb_option_id),
-		     rb_inspect(rb_ary_new3(2, self, rb_ary_new4(argc, argv))));
+		     rb_grn_inspect(rb_option_id),
+		     rb_grn_inspect(rb_ary_new3(2,
+						self,
+						rb_ary_new4(argc, argv))));
 	}
     }
 
