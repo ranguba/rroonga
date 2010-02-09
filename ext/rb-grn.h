@@ -355,6 +355,22 @@ VALUE          rb_grn_table_set_value               (VALUE self,
 						     VALUE rb_value);
 VALUE          rb_grn_table_get_column              (VALUE self,
 						     VALUE rb_name);
+VALUE          rb_grn_table_get_column_surely       (VALUE self,
+						     VALUE rb_name);
+VALUE          rb_grn_table_get_column_value_raw    (VALUE self,
+						     grn_id id,
+						     VALUE rb_name);
+VALUE          rb_grn_table_get_column_value        (VALUE self,
+						     VALUE rb_id,
+						     VALUE rb_name);
+VALUE          rb_grn_table_set_column_value_raw    (VALUE self,
+						     grn_id id,
+						     VALUE rb_name,
+						     VALUE rb_value);
+VALUE          rb_grn_table_set_column_value        (VALUE self,
+						     VALUE rb_id,
+						     VALUE rb_name,
+						     VALUE rb_value);
 
 grn_ctx       *rb_grn_table_cursor_ensure_context   (VALUE cursor,
 						     VALUE *rb_context);

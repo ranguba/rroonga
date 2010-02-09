@@ -612,9 +612,10 @@ rb_grn_table_add_column (VALUE self, VALUE rb_name, VALUE rb_value_type,
 
 /*
  * call-seq:
- *   table.column(name) -> Groonga::Column
+ *   table.column(name) -> Groonga::Column or nil
  *
- * テーブルの_name_に対応するカラムを返す。
+ * テーブルの_name_に対応するカラムを返す。カラムが存在しな
+ * い場合は+nil+を返す。
  */
 VALUE
 rb_grn_table_get_column (VALUE self, VALUE rb_name)
@@ -687,6 +688,20 @@ rb_grn_table_get_column (VALUE self, VALUE rb_name)
     }
     rb_ary_push(columns, rb_column);
 
+    return rb_column;
+}
+
+VALUE
+rb_grn_table_get_column_surely (VALUE self, VALUE rb_name)
+{
+    VALUE rb_column;
+
+    rb_column = rb_grn_table_get_column(self, rb_name);
+    if (NIL_P(rb_column)) {
+	rb_raise(rb_eGrnNoSuchColumn,
+		 "no such column: <%s>: <%s>",
+		 rb_grn_inspect(rb_name), rb_grn_inspect(self));
+    }
     return rb_column;
 }
 
@@ -833,7 +848,7 @@ rb_grn_table_open_grn_cursor (int argc, VALUE *argv, VALUE self,
  *
  * カーソルを生成して返す。ブロックを指定すると、そのブロッ
  * クに生成したカーソルが渡され、ブロックを抜けると自動的に
- * カーソルが破棄される。 
+ * カーソルが破棄される。
  *
  * _options_に指定可能な値は以下の通り。
  *
@@ -1366,6 +1381,113 @@ rb_grn_table_set_value_convenience (int argc, VALUE *argv, VALUE self)
     return rb_grn_table_set_value(self, rb_id, rb_value);
 }
 
+VALUE
+rb_grn_table_get_column_value_raw (VALUE self, grn_id id, VALUE rb_name)
+{
+    VALUE rb_column;
+
+    rb_column = rb_grn_table_get_column_surely(self, rb_name);
+
+    /* TODO: improve speed. */
+    return rb_funcall(rb_column, rb_intern("[]"), 1, INT2NUM(id));
+}
+
+VALUE
+rb_grn_table_get_column_value (VALUE self, VALUE rb_id, VALUE rb_name)
+{
+    return rb_grn_table_get_column_value_raw(self, NUM2INT(rb_id), rb_name);
+}
+
+/*
+ * Document-method: column_value
+ *
+ * call-seq:
+ *   table.column_value(id, name) -> 値
+ *   table.column_value(id, name, :id => true) -> 値
+ *
+ * _table_の_id_に対応するカラム_name_の値を返す。
+ *
+ * <tt>:id => true</tt>が指定できるのは利便性のため。
+ * Groonga::ArrayでもGroonga::HashやGroonga::PatriciaTrieと
+ * 同じ引数で動くようになる。
+ */
+static VALUE
+rb_grn_table_get_column_value_convenience (int argc, VALUE *argv, VALUE self)
+{
+    VALUE rb_id, rb_name, rb_options;
+
+    rb_scan_args(argc, argv, "21", &rb_id, &rb_name, &rb_options);
+    if (!NIL_P(rb_options)) {
+	VALUE rb_option_id;
+	rb_grn_scan_options(rb_options,
+			    "id", &rb_option_id,
+			    NULL);
+	if (!(NIL_P(rb_option_id) || RVAL2CBOOL(rb_option_id))) {
+	    rb_raise(rb_eArgError, ":id options must be true or nil: %s: %s",
+		     rb_inspect(rb_option_id),
+		     rb_inspect(rb_ary_new3(2, self, rb_ary_new4(argc, argv))));
+	}
+    }
+
+    return rb_grn_table_get_column_value(self, rb_id, rb_name);
+}
+
+VALUE
+rb_grn_table_set_column_value_raw (VALUE self, grn_id id,
+				   VALUE rb_name, VALUE rb_value)
+{
+    VALUE rb_column;
+    RbGrnObject *rb_grn_object;
+
+    rb_column = rb_grn_table_get_column_surely(self, rb_name);
+
+    rb_grn_object = RB_GRN_OBJECT(DATA_PTR(rb_column));
+    return rb_grn_object_set_raw(rb_grn_object, id, rb_value, GRN_OBJ_SET, self);
+}
+
+VALUE
+rb_grn_table_set_column_value (VALUE self, VALUE rb_id,
+			       VALUE rb_name, VALUE rb_value)
+{
+    return rb_grn_table_set_column_value_raw(self, NUM2INT(rb_id),
+					     rb_name, rb_value);
+}
+
+/*
+ * Document-method: set_column_value
+ *
+ * call-seq:
+ *   table.set_column_value(id, name, value)
+ *   table.set_column_value(id, name, value, :id => true)
+ *
+ * _table_の_id_に対応するカラム_name_の値として_value_設定す
+ * る。既存の値は上書きされる。
+ *
+ * <tt>:id => true</tt>が指定できるのは利便性のため。
+ * Groonga::ArrayでもGroonga::HashやGroonga::PatriciaTrieと
+ * 同じ引数で動くようになる。
+ */
+static VALUE
+rb_grn_table_set_column_value_convenience (int argc, VALUE *argv, VALUE self)
+{
+    VALUE rb_id, rb_name, rb_value, rb_options;
+
+    rb_scan_args(argc, argv, "31", &rb_id, &rb_name, &rb_value, &rb_options);
+    if (!NIL_P(rb_options)) {
+	VALUE rb_option_id;
+	rb_grn_scan_options(rb_options,
+			    "id", &rb_option_id,
+			    NULL);
+	if (!(NIL_P(rb_option_id) || RVAL2CBOOL(rb_option_id))) {
+	    rb_raise(rb_eArgError, ":id options must be true or nil: %s: %s",
+		     rb_inspect(rb_option_id),
+		     rb_inspect(rb_ary_new3(2, self, rb_ary_new4(argc, argv))));
+	}
+    }
+
+    return rb_grn_table_set_column_value(self, rb_id, rb_name, rb_value);
+}
+
 /*
  * Document-method: unlock
  *
@@ -1875,6 +1997,10 @@ rb_grn_init_table (VALUE mGrn)
 		     rb_grn_table_get_value_convenience, -1);
     rb_define_method(rb_cGrnTable, "set_value",
 		     rb_grn_table_set_value_convenience, -1);
+    rb_define_method(rb_cGrnTable, "column_value",
+		     rb_grn_table_get_column_value_convenience, -1);
+    rb_define_method(rb_cGrnTable, "set_column_value",
+		     rb_grn_table_set_column_value_convenience, -1);
 
     rb_define_method(rb_cGrnTable, "lock", rb_grn_table_lock, -1);
     rb_define_method(rb_cGrnTable, "unlock", rb_grn_table_unlock, -1);

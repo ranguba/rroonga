@@ -407,18 +407,8 @@ rb_grn_table_key_support_set_column_value (VALUE self, VALUE rb_key,
 					   VALUE rb_name, VALUE rb_value)
 {
     grn_id id;
-    grn_ctx *context;
-    grn_obj *table;
-    VALUE rb_column;
-    RbGrnObject *rb_grn_object;
-
-    rb_grn_table_key_support_deconstruct(SELF(self), &table, &context,
-					 NULL, NULL, NULL,
-					 NULL, NULL, NULL,
-					 NULL);
 
     id = rb_grn_table_key_support_add_raw(self, rb_key);
-
     if (id == GRN_ID_NIL) {
 	rb_raise(rb_eGrnError,
 		 "failed to add record: %s",
@@ -427,15 +417,7 @@ rb_grn_table_key_support_set_column_value (VALUE self, VALUE rb_key,
 					    rb_name, rb_value)));
     }
 
-    rb_column = rb_grn_table_get_column(self, rb_name);
-    if (NIL_P(rb_column)) {
-	rb_raise(rb_eGrnNoSuchColumn,
-		 "no such column: <%s>: <%s>",
-		 rb_grn_inspect(rb_name), rb_grn_inspect(self));
-    }
-
-    rb_grn_object = RB_GRN_OBJECT(DATA_PTR(rb_column));
-    return rb_grn_object_set_raw(rb_grn_object, id, rb_value, GRN_OBJ_SET, self);
+    return rb_grn_table_set_column_value_raw(self, id, rb_name, rb_value);
 }
 
 /*
@@ -451,29 +433,13 @@ rb_grn_table_key_support_get_column_value (VALUE self, VALUE rb_key,
 					   VALUE rb_name)
 {
     grn_id id;
-    grn_ctx *context;
-    grn_obj *table;
-    VALUE rb_column;
-
-    rb_grn_table_key_support_deconstruct(SELF(self), &table, &context,
-					 NULL, NULL, NULL,
-					 NULL, NULL, NULL,
-					 NULL);
 
     id = rb_grn_table_key_support_get(self, rb_key);
     if (id == GRN_ID_NIL) {
 	return Qnil;
     }
 
-    rb_column = rb_grn_table_get_column(self, rb_name);
-    if (NIL_P(rb_column)) {
-	rb_raise(rb_eGrnNoSuchColumn,
-		 "no such column: <%s>: <%s>",
-		 rb_grn_inspect(rb_name), rb_grn_inspect(self));
-    }
-
-    /* TODO: improve speed. */
-    return rb_funcall(rb_column, rb_intern("[]"), 1, INT2NUM(id));
+    return rb_grn_table_get_column_value_raw(self, id, rb_name);
 }
 
 /*

@@ -86,4 +86,12 @@ class ArrayTest < Test::Unit::TestCase
     users.set_value(user_id, 29)
     assert_equal(29, users.value(user_id))
   end
+
+  def test_column_value
+    users = Groonga::Array.create(:name => "Users")
+    name = users.define_column("name", "ShortText")
+    morita_id = users.add.id
+    users.set_column_value(morita_id, "name", "morita")
+    assert_equal("morita", users.column_value(morita_id, "name"))
+  end
 end
