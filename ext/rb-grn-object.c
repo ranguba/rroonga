@@ -903,15 +903,12 @@ static VALUE
 rb_grn_object_temporary_p (VALUE self)
 {
     RbGrnObject *rb_grn_object;
-    const char *path;
 
     rb_grn_object = SELF(self);
     if (!rb_grn_object->object)
 	return Qnil;
 
-    path = grn_obj_path(rb_grn_object->context, rb_grn_object->object);
-
-    return path ? Qfalse : Qtrue;
+    return !(rb_grn_object->object->header.flags & GRN_OBJ_PERSISTENT);
 }
 
 /*
@@ -927,15 +924,12 @@ static VALUE
 rb_grn_object_persistent_p (VALUE self)
 {
     RbGrnObject *rb_grn_object;
-    const char *path;
 
     rb_grn_object = SELF(self);
     if (!rb_grn_object->object)
 	return Qnil;
 
-    path = grn_obj_path(rb_grn_object->context, rb_grn_object->object);
-
-    return path ? Qtrue : Qfalse;
+    return rb_grn_object->object->header.flags & GRN_OBJ_PERSISTENT;
 }
 
 /*
