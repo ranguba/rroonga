@@ -1,5 +1,1 @@
-* TableKeySupport#[key, column_name] = value
-* Table#column_value(key, column_name)
-* Table#column_value(id, column_name, :id => true)
-* Table#set_column_value(key, column_name, colum_value)
-* Table#set_column_value(id, column_name, column_value, :id => true)
+* improve Table#column_value and Table#set_column_value speed.
