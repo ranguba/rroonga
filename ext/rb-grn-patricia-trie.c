@@ -153,7 +153,7 @@ VALUE rb_cGrnPatriciaTrie;
  *                             :source => "Bookmarks.comment")
  */
 static VALUE
-rb_grn_patricia_trie_s_create (int argc, VALUE *argv, VALUE self)
+rb_grn_patricia_trie_s_create (int argc, VALUE *argv, VALUE klass)
 {
     grn_ctx *context;
     grn_obj *key_type = NULL, *value_type = NULL, *table;
@@ -219,9 +219,7 @@ rb_grn_patricia_trie_s_create (int argc, VALUE *argv, VALUE self)
 			     flags, key_type, value_type);
     if (!table)
 	rb_grn_context_check(context, rb_ary_new4(argc, argv));
-    rb_table = rb_grn_object_alloc(self);
-    rb_grn_object_assign(Qnil, rb_table, rb_context, context, table);
-    rb_grn_context_check(context, rb_table);
+    rb_table = GRNOBJECT2RVAL(klass, context, table, RB_GRN_TRUE);
 
     if (!NIL_P(rb_default_tokenizer))
 	rb_funcall(rb_table, rb_intern("default_tokenizer="), 1,

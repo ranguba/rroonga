@@ -238,8 +238,9 @@ rb_grn_object_to_ruby_object (VALUE klass, grn_ctx *context, grn_obj *object,
         return Qnil;
 
     user_data = grn_obj_user_data(context, object);
-    if (user_data && user_data->ptr)
+    if (user_data && user_data->ptr) {
 	return RB_GRN_OBJECT(user_data->ptr)->self;
+    }
 
     if (NIL_P(klass))
         klass = GRNOBJECT2RCLASS(object);

@@ -229,8 +229,7 @@ rb_grn_table_s_open (int argc, VALUE *argv, VALUE klass)
 	    }
 	}
 
-	rb_table = rb_grn_object_alloc(klass);
-	rb_grn_object_assign(klass, rb_table, rb_context, context, table);
+	rb_table = GRNOBJECT2RVAL(klass, context, table, RB_GRN_TRUE);
     }
 
     if (rb_block_given_p())
