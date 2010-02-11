@@ -1,4 +1,4 @@
-# Copyright (C) 2009  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2010  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -227,6 +227,14 @@ class SchemaTest < Test::Unit::TestCase
       table.long_text :content
     end
     assert_equal(context["LongText"], context["Posts.content"].range)
+  end
+
+  def test_boolean_column
+    assert_nil(context["Posts.public"])
+    Groonga::Schema.create_table("Posts") do |table|
+      table.boolean :public
+    end
+    assert_equal(context["Bool"], context["Posts.public"].range)
   end
 
   def test_remove_column

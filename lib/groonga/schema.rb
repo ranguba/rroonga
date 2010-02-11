@@ -636,6 +636,15 @@ module Groonga
         column(name, table, options)
       end
 
+      # 名前が_name_の真偽値を格納できるカラムを作成する。
+      #
+      # _options_に指定可能な値は
+      # Groonga::Schema::TableDefinition#columnを参照。
+      def boolean(name, options={})
+        column(name, "Bool", options)
+      end
+      alias_method :bool, :boolean
+
       def [](name, definition_class=nil) # :nodoc:
         @definitions.find do |definition|
           definition.name.to_s == name.to_s and
