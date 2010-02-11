@@ -111,7 +111,7 @@ EOS
         record["content"].match(_query)
       end
       total_records = records.size
-      records = records.sort([[".:score", "descending"],
+      records = records.sort([["._score", "descending"],
                               [".last-modified", "descending"]],
                              :offset => _page * limit,
                              :limit => limit)
