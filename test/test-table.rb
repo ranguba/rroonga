@@ -624,6 +624,14 @@ class TableTest < Test::Unit::TestCase
                  books.select.collect {|book| book.key})
   end
 
+  def test_get_common_prefix_column
+    users = Groonga::Array.create(:name => "Users")
+    name_kana = users.define_column("name_kana", "ShortText")
+    name = users.define_column("name", "ShortText")
+
+    assert_equal(name, users.column("name"))
+  end
+
   private
   def create_bookmarks
     bookmarks = Groonga::Array.create(:name => "Bookmarks")

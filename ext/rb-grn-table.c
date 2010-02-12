@@ -662,8 +662,8 @@ rb_grn_table_get_column (VALUE self, VALUE rb_name)
 	RbGrnNamedObject *rb_grn_named_object;
 
 	rb_grn_named_object = RB_GRN_NAMED_OBJECT(DATA_PTR(rb_column));
-	if (rb_grn_named_object->name_size > 0 &&
-	    strncmp(name, rb_grn_named_object->name, name_size) == 0) {
+	if (name_size == rb_grn_named_object->name_size &&
+	    memcmp(name, rb_grn_named_object->name, name_size) == 0) {
 	    return rb_column;
 	}
     }
