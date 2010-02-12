@@ -910,7 +910,7 @@ rb_grn_object_temporary_p (VALUE self)
     if (!rb_grn_object->object)
 	return Qnil;
 
-    return !(rb_grn_object->object->header.flags & GRN_OBJ_PERSISTENT);
+    return CBOOL2RVAL(!(rb_grn_object->object->header.flags & GRN_OBJ_PERSISTENT));
 }
 
 /*
@@ -931,7 +931,7 @@ rb_grn_object_persistent_p (VALUE self)
     if (!rb_grn_object->object)
 	return Qnil;
 
-    return rb_grn_object->object->header.flags & GRN_OBJ_PERSISTENT;
+    return CBOOL2RVAL(rb_grn_object->object->header.flags & GRN_OBJ_PERSISTENT);
 }
 
 /*
