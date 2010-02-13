@@ -265,4 +265,15 @@ class RecordTest < Test::Unit::TestCase
                               "user" => nil),
                  groonga.attributes)
   end
+
+  def test_dynamic_accessor
+    groonga = @bookmarks.add
+    assert_equal([],
+                 ["uri", "uri="] - groonga.methods.collect {|name| name.to_s})
+    assert_equal([true, true],
+                 [groonga.respond_to?(:uri),
+                  groonga.respond_to?(:uri=)])
+    groonga.uri = "http://groonga.org/"
+    assert_equal("http://groonga.org/", groonga.uri)
+  end
 end

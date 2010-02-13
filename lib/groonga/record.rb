@@ -266,11 +266,46 @@ module Groonga
       @table.locked?(options.merge(:id => @id))
     end
 
+    def methods(include_inherited=true) # :nodoc:
+      _methods = super
+      return _methods unless include_inherited
+      columns.each do |column|
+        name = column.local_name
+        _methods << name
+        _methods << "#{name}="
+      end
+      _methods
+    end
+
+    def respond_to?(name) # :nodoc:
+      super or !@table.column(name.to_s.sub(/=\z/, '')).nil?
+    end
+
     private
     def column(name) # :nodoc:
       _column = @table.column(name.to_s)
       raise NoSuchColumn, "column(#{name.inspect}) is nil" if _column.nil?
       _column
+    end
+
+    def method_missing(name, *args, &block)
+      if /=\z/ =~ name.to_s
+        base_name = $PREMATCH
+        is_setter = true
+      else
+        base_name = name.to_s
+        is_setter = false
+      end
+      _column = @table.column(base_name)
+      if _column
+        if is_setter
+          _column.send("[]=", @id, *args, &block)
+        else
+          _column.send("[]", @id, *args, &block)
+        end
+      else
+        super
+      end
     end
   end
 end
