@@ -388,7 +388,8 @@ class TableTest < Test::Unit::TestCase
     assert_nothing_raised do
       users.truncate
     end
-    # assert_equal(0, users.size) # truncate isn't implemented in groonga.
+    omit("truncate isn't implemented in groonga.")
+    assert_equal(0, users.size)
   end
 
   def test_sort
