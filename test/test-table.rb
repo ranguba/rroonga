@@ -465,12 +465,12 @@ class TableTest < Test::Unit::TestCase
   end
 
   def test_sort_with_nonexistent_key
-    omit("maybe crash!!!")
     bookmarks = create_bookmarks
     add_shuffled_ids(bookmarks)
-    results = bookmarks.sort([{:key => "nonexistent", :order => :descending}])
-    assert_equal("unknown",
-                 results.collect {|record| record["id"]})
+    message = "no such column: <\"nonexistent\">: <#{bookmarks.inspect}>"
+    assert_raise(Groonga::NoSuchColumn.new(message)) do
+      bookmarks.sort([{:key => "nonexistent", :order => :descending}])
+    end
   end
 
   def test_group

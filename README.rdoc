@@ -62,3 +62,4 @@ http://rubyforge.org/mailman/listinfo/groonga-users-en
   * wrote tests.
   * fixed bugs.
 * id:mat_aki: sent bug reports.
+* @yune_kotomi: sent a bug report.

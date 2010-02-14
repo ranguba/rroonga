@@ -1087,7 +1087,7 @@ rb_grn_table_sort (int argc, VALUE *argv, VALUE self)
     rb_sort_keys = RARRAY_PTR(rb_keys);
     keys = ALLOCA_N(grn_table_sort_key, n_keys);
     for (i = 0; i < n_keys; i++) {
-	VALUE rb_sort_options, rb_key, rb_order;
+	VALUE rb_sort_options, rb_key, rb_resolved_key, rb_order;
 
 	if (RVAL2CBOOL(rb_obj_is_kind_of(rb_sort_keys[i], rb_cHash))) {
 	    rb_sort_options = rb_sort_keys[i];
@@ -1109,9 +1109,17 @@ rb_grn_table_sort (int argc, VALUE *argv, VALUE self)
 			    "key", &rb_key,
 			    "order", &rb_order,
 			    NULL);
-	if (RVAL2CBOOL(rb_obj_is_kind_of(rb_key, rb_cString)))
-	    rb_key = rb_grn_table_get_column(self, rb_key);
-	keys[i].key = RVAL2GRNOBJECT(rb_key, &context);
+	if (RVAL2CBOOL(rb_obj_is_kind_of(rb_key, rb_cString))) {
+	    rb_resolved_key = rb_grn_table_get_column(self, rb_key);
+	} else {
+	    rb_resolved_key = rb_key;
+	}
+	keys[i].key = RVAL2GRNOBJECT(rb_resolved_key, &context);
+	if (!keys[i].key) {
+	    rb_raise(rb_eGrnNoSuchColumn,
+		     "no such column: <%s>: <%s>",
+		     rb_grn_inspect(rb_key), rb_grn_inspect(self));
+	}
 	if (NIL_P(rb_order)) {
 	    keys[i].flags = 0;
 	} else if (rb_grn_equal_option(rb_order, "desc") ||
