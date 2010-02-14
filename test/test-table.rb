@@ -473,6 +473,16 @@ class TableTest < Test::Unit::TestCase
     end
   end
 
+  def test_sort_with_nonexistent_value
+    bookmarks = create_bookmarks
+    bookmarks.define_column("uri", "ShortText")
+    empty1 = bookmarks.add
+    groonga = bookmarks.add(:uri => "http://groonga.org/")
+    empty2 = bookmarks.add
+    assert_equal([groonga, empty1, empty2],
+                 bookmarks.sort([{:key => "uri", :order => :descending}]))
+  end
+
   def test_group
     bookmarks = Groonga::Hash.create(:name => "Bookmarks")
     bookmarks.define_column("title", "Text")
