@@ -306,7 +306,7 @@ rb_grn_column_select (int argc, VALUE *argv, VALUE self)
         if (!NIL_P(options))
             rb_raise(rb_eArgError,
 		     "should be [query_string, option_hash], "
-		     "[expression, opion_hash] "
+		     "[expression, option_hash] "
 		     "or [option_hash]: %s",
 		     rb_grn_inspect(rb_ary_new4(argc, argv)));
         options = condition_or_options;
