@@ -188,6 +188,24 @@ class ColumnTest < Test::Unit::TestCase
                  result.expression.inspect)
   end
 
+  def test_select_query_from_ctx
+    populate_table_for_select
+
+    body = Groonga::Context.default['Posts.body']
+    # select twice.
+    result = body.select("drive")
+    assert_equal(["Drive and Eat"],
+                 result.records.collect do |record|
+                   record["body"]
+                 end)
+
+    result = body.select("drive")
+    assert_equal(["Drive and Eat"],
+                 result.records.collect do |record|
+                   record["body"]
+                 end)
+  end
+
   def test_select_query_with_parser
     populate_table_for_select
 
