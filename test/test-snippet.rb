@@ -36,6 +36,14 @@ class SnippetTest < Test::Unit::TestCase
                  snippet.execute(text))
   end
 
+  def test_execute_invalid_str
+    snippet = Groonga::Snippet.new
+    snippet.add_keyword("検索", :open_tag => "[[", :close_tag => "]]")
+    assert_raise(Groonga::InvalidArgument) do
+      snippet.execute(nil)
+    end
+  end
+
   def test_invalid_encoding
     Groonga::Context.default.encoding = :shift_jis
     snippet = Groonga::Snippet.new
