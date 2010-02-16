@@ -181,6 +181,7 @@ RB_GRN_VAR rb_grn_boolean rb_grn_exited;
 RB_GRN_VAR VALUE rb_eGrnError;
 RB_GRN_VAR VALUE rb_eGrnObjectClosed;
 RB_GRN_VAR VALUE rb_eGrnNoSuchColumn;
+RB_GRN_VAR VALUE rb_eGrnInvalidArgument;
 RB_GRN_VAR VALUE rb_cGrnObject;
 RB_GRN_VAR VALUE rb_mGrnEncodingSupport;
 RB_GRN_VAR VALUE rb_cGrnDatabase;

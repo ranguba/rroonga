@@ -1,6 +1,6 @@
 /* -*- c-file-style: "ruby" -*- */
 /*
-  Copyright (C) 2009  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2010  Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -283,6 +283,12 @@ rb_grn_snippet_execute (VALUE self, VALUE rb_string)
     unsigned int i, n_results, max_tagged_length;
     VALUE rb_results;
     char *result;
+
+    if (TYPE(rb_string) != T_STRING) {
+	rb_raise(rb_eGrnInvalidArgument,
+		 "snippet text must be String: <%s>",
+		 rb_grn_inspect(rb_string));
+    }
 
     rb_grn_snippet = SELF(self);
     context = rb_grn_snippet->context;

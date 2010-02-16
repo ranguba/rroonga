@@ -44,7 +44,7 @@ static VALUE eGrnImproperLink;
 static VALUE eGrnNoSuchDevice;
 static VALUE eGrnNotADirectory;
 static VALUE eGrnIsADirectory;
-static VALUE eGrnInvalidArgument;
+VALUE rb_eGrnInvalidArgument;
 static VALUE eGrnTooManyOpenFilesInSystem;
 static VALUE eGrnTooManyOpenFiles;
 static VALUE eGrnInappropriateIOControlOperation;
@@ -166,7 +166,7 @@ rb_grn_rc_to_exception (grn_rc rc)
         exception = eGrnIsADirectory;
         break;
       case GRN_INVALID_ARGUMENT:
-        exception = eGrnInvalidArgument;
+        exception = rb_eGrnInvalidArgument;
         break;
       case GRN_TOO_MANY_OPEN_FILES_IN_SYSTEM:
         exception = eGrnTooManyOpenFilesInSystem;
@@ -753,7 +753,7 @@ rb_grn_init_exception (VALUE mGrn)
      *
      * 引数に問題があるときに発生する。
      */
-    eGrnInvalidArgument =
+    rb_eGrnInvalidArgument =
         rb_define_class_under(mGrn, "InvalidArgument", rb_eGrnError);
 
     /*

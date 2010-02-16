@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2009  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2010  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -36,10 +36,11 @@ class SnippetTest < Test::Unit::TestCase
                  snippet.execute(text))
   end
 
-  def test_execute_invalid_str
+  def test_execute_with_nil
     snippet = Groonga::Snippet.new
     snippet.add_keyword("検索", :open_tag => "[[", :close_tag => "]]")
-    assert_raise(Groonga::InvalidArgument) do
+    message = "snippet text must be String: <nil>"
+    assert_raise(Groonga::InvalidArgument.new(message)) do
       snippet.execute(nil)
     end
   end
