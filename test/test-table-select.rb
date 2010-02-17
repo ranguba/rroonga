@@ -66,6 +66,11 @@ class TableSelectTest < Test::Unit::TestCase
     assert_equal_select_result([@comment1, @comment2], result)
   end
 
+  def test_select_query_with_default_column
+    result = @comments.select("Hello", {:default_column => 'content'})
+    assert_equal_select_result([@comment1, @comment2], result)
+  end
+
   def test_select_expression
     expression = Groonga::Expression.new
     variable = expression.define_variable(:domain => @comments)
