@@ -1765,6 +1765,10 @@ rb_grn_table_is_locked (int argc, VALUE *argv, VALUE self)
  *
  * _options_に指定可能な値は以下の通り。
  *
+ * [+:default_column+]
+ *   "column_name:hoge"ではなく"hoge"のようにcolumn_nameが指
+ *   定されない条件の検索対象となるカラムを指定する。
+ *
  * [+:operator+]
  *   マッチしたレコードをどのように扱うか。指定可能な値は以
  *   下の通り。省略した場合はGroonga::Operation::OR。
@@ -1819,6 +1823,7 @@ rb_grn_table_select (int argc, VALUE *argv, VALUE self)
     VALUE rb_query = Qnil, condition_or_options, options;
     VALUE rb_name, rb_operator, rb_result, rb_syntax;
     VALUE rb_allow_pragma, rb_allow_column, rb_allow_update;
+    VALUE rb_default_column;
     VALUE rb_expression = Qnil, builder;
 
     rb_scan_args(argc, argv, "02", &condition_or_options, &options);
@@ -1851,6 +1856,7 @@ rb_grn_table_select (int argc, VALUE *argv, VALUE self)
 			"allow_pragma", &rb_allow_pragma,
 			"allow_column", &rb_allow_column,
 			"allow_update", &rb_allow_update,
+			"default_column", &rb_default_column,
 			NULL);
 
     if (!NIL_P(rb_operator))
@@ -1873,6 +1879,7 @@ rb_grn_table_select (int argc, VALUE *argv, VALUE self)
       rb_funcall(builder, rb_intern("allow_pragma="), 1, rb_allow_pragma);
       rb_funcall(builder, rb_intern("allow_column="), 1, rb_allow_column);
       rb_funcall(builder, rb_intern("allow_update="), 1, rb_allow_update);
+      rb_funcall(builder, rb_intern("default_column="), 1, rb_default_column);
       rb_expression = rb_grn_record_expression_builder_build(builder);
     }
     rb_grn_object_deconstruct(RB_GRN_OBJECT(DATA_PTR(rb_expression)),
