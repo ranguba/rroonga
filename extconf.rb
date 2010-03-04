@@ -167,6 +167,7 @@ makefile = File.read("Makefile")
 File.open("Makefile", "w") do |f|
   objs = []
   co = nil
+  dllib = nil
   makefile.each_line do |line|
     case line
     when /^DLLIB\s*=\s*/
@@ -195,6 +196,10 @@ File.open("Makefile", "w") do |f|
       co = line
       f.puts(line)
     else
+      if dllib
+        line = line.gsub(/\$\(RUBYARCHDIR\)\/\$\(DLLIB\)/,
+                         "$(RUBYARCHDIR)/#{dllib.chomp}")
+      end
       f.puts(line)
     end
   end
