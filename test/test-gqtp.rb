@@ -50,13 +50,13 @@ class GQTPTest < Test::Unit::TestCase
   end
 
   def test_select_filter_by_existent_user
-    assert_equal([[0], [[1], ["user"], ["darashi"]]],
+    assert_equal([[0, 0.0, 0.0], [[[1], [["user", "Users"]], ["darashi"]]]],
                  process("select Comments --output_columns user " +
                          "--filter 'user == \"darashi\"'"))
   end
 
   def test_select_filter_by_nonexistent_user
-    assert_equal([[0], [[0], ["user"]]],
+    assert_equal([[0, 0.0, 0.0], [[[0], [["user", "Users"]]]]],
                  process("select Comments --output_columns user " +
                          "--filter 'user == \"yu\"'"))
   end
@@ -65,6 +65,8 @@ class GQTPTest < Test::Unit::TestCase
   def process(gqtp)
     context.send(gqtp)
     id, result = context.receive
-    JSON.parse(result)
+    result = JSON.parse(result)
+    result[0][1..2] = [0.0, 0.0] if result[0][0].zero?
+    result
   end
 end

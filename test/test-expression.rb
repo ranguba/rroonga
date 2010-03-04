@@ -78,7 +78,8 @@ class ExpressionTest < Test::Unit::TestCase
     expression.append_operation(Groonga::Operation::PLUS, 2)
     expression.compile
 
-    assert_equal("#<Groonga::Expression noname(){1 1 PLUS}>", expression.inspect)
+    assert_equal("#<Groonga::Expression noname(){21,01,0PLUS}>",
+                 expression.inspect)
   end
 
   def test_snippet
