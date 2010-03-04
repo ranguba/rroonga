@@ -158,11 +158,16 @@ rb_grn_object_free (RbGrnObject *rb_grn_object)
     grn_object = rb_grn_object->object;
     debug("rb-free: %p:%p:%p\n", context, grn_object, rb_grn_object);
     if (!rb_grn_exited && context && grn_object) {
-	rb_grn_object->context = NULL;
-	rb_grn_object->object = NULL;
-	debug("type: %x; need_close: %d\n",
+	grn_user_data *user_data;
+
+	user_data = grn_obj_user_data(context, grn_object);
+	debug("type: %x; need_close: %d; user_data: %p\n",
 	      grn_object->header.type,
-	      rb_grn_object->need_close);
+	      rb_grn_object->need_close,
+	      user_data);
+	if (user_data && user_data->ptr) {
+	    rb_grn_object_finalizer(context, 1, &grn_object, user_data);
+	}
 	if (rb_grn_object->need_close) {
 	    grn_obj_unlink(context, grn_object);
 	}

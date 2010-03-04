@@ -67,7 +67,7 @@ rb_grn_context_fin (grn_ctx *context)
     database = grn_ctx_db(context);
     debug("context:database: %p:%p\n", context, database);
     if (database && database->header.type == GRN_DB) {
-	grn_obj_close(context, database);
+	grn_obj_unlink(context, database);
     }
     grn_ctx_fin(context);
 }
