@@ -171,8 +171,9 @@ File.open("Makefile", "w") do |f|
   makefile.each_line do |line|
     case line
     when /^DLLIB\s*=\s*/
-      dllib = $POSTMATCH
-      f.puts("DLLIB = #{ext_dir_name}/#{dllib}")
+      raw_dllib = $POSTMATCH
+      dllib = raw_dllib.chomp
+      f.puts("DLLIB = #{ext_dir_name}/#{raw_dllib}")
       f.puts("IMPLIB = #{ext_dir_name}/libruby-#{dllib.gsub(/\..+?$/, '.lib')}")
     when /^(SRCS)\s*=\s*/
       name = $1
@@ -198,7 +199,7 @@ File.open("Makefile", "w") do |f|
     else
       if dllib
         line = line.gsub(/\$\(RUBYARCHDIR\)\/\$\(DLLIB\)/,
-                         "$(RUBYARCHDIR)/#{dllib.chomp}")
+                         "$(RUBYARCHDIR)/#{dllib}")
       end
       f.puts(line)
     end
