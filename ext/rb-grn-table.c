@@ -107,6 +107,8 @@ rb_grn_table_mark (void *data)
     if (!rb_grn_object)
 	return;
 
+    rb_gc_mark(rb_grn_table->columns);
+
     context = rb_grn_object->context;
     table = rb_grn_object->object;
     if (!context || !table)
@@ -117,8 +119,6 @@ rb_grn_table_mark (void *data)
 
     if (grn_obj_name(context, table, NULL, 0) == 0)
 	return;
-
-    rb_gc_mark(rb_grn_table->columns);
 }
 
 static VALUE
