@@ -51,6 +51,61 @@ rb_grn_database_to_ruby_object (grn_ctx *context, grn_obj *database,
 }
 
 static void
+rb_grn_database_mark_existing_ruby_object (grn_ctx *context, grn_obj *database)
+{
+    grn_table_cursor *cursor;
+    grn_id id;
+
+    cursor = grn_table_cursor_open(context, database, NULL, 0, NULL, 0,
+				   0, -1, GRN_CURSOR_ASCENDING);
+    if (!cursor)
+	return;
+
+    while ((id = grn_table_cursor_next(context, cursor)) != GRN_ID_NIL) {
+	grn_obj *object;
+	grn_user_data *user_data;
+	RbGrnObject *rb_grn_object;
+
+	object = grn_ctx_at(context, id);
+	if (!object)
+	    continue;
+	user_data = grn_obj_user_data(context, object);
+	if (!user_data)
+	    continue;
+	rb_grn_object = RB_GRN_OBJECT(user_data->ptr);
+	if (!rb_grn_object)
+	    continue;
+	rb_gc_mark(rb_grn_object->self);
+    }
+    grn_table_cursor_close(context, cursor);
+}
+
+static void
+rb_grn_database_mark (void *data)
+{
+    RbGrnObject *rb_grn_database = data;
+    grn_ctx *context;
+    grn_obj *database;
+
+    if (!rb_grn_database)
+	return;
+
+    context = rb_grn_database->context;
+    database = rb_grn_database->object;
+    if (!context || !database)
+	return;
+
+    rb_grn_database_mark_existing_ruby_object(context, database);
+}
+
+static VALUE
+rb_grn_database_alloc (VALUE klass)
+{
+    return Data_Wrap_Struct(klass, rb_grn_database_mark, rb_grn_object_free,
+			    NULL);
+}
+
+static void
 rb_grn_database_deconstruct (RbGrnObject *rb_grn_database,
 			     grn_obj **database,
 			     grn_ctx **context,
@@ -390,6 +445,8 @@ void
 rb_grn_init_database (VALUE mGrn)
 {
     rb_cGrnDatabase = rb_define_class_under(mGrn, "Database", rb_cGrnObject);
+    rb_define_alloc_func(rb_cGrnDatabase, rb_grn_database_alloc);
+
     rb_include_module(rb_cGrnDatabase, rb_mEnumerable);
     rb_include_module(rb_cGrnDatabase, rb_mGrnEncodingSupport);
 
