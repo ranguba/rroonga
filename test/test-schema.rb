@@ -288,7 +288,7 @@ class SchemaTest < Test::Unit::TestCase
   def test_index_with_full_option
     path = @tmp_dir + "index-column.groonga"
     assert_nil(context["Terms.content"])
-    index_column_name = "Posts-index"
+    index_column_name = "Posts_index"
 
     Groonga::Schema.create_table("Posts") do |table|
       table.long_text :content

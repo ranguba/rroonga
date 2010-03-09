@@ -190,7 +190,7 @@ class TableTest < Test::Unit::TestCase
     bookmarks.define_column("content", "Text")
     terms = Groonga::Hash.create(:name => "Terms")
     terms.default_tokenizer = "TokenBigram"
-    index = terms.define_index_column("content-index", bookmarks,
+    index = terms.define_index_column("content_index", bookmarks,
                                       :with_section => true,
                                       :source => "Bookmarks.content")
     bookmarks.add("google", :content => "Search engine")

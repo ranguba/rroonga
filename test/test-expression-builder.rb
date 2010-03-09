@@ -27,7 +27,7 @@ class ExpressionBuilderTest < Test::Unit::TestCase
 
     @terms = Groonga::PatriciaTrie.create(:name => "Terms",
                                           :default_tokenizer => "TokenBigram")
-    @terms.define_index_column("user-name", @users, :source => @name)
+    @terms.define_index_column("user_name", @users, :source => @name)
 
     @bookmarks = Groonga::Array.create(:name => "Bookmarks")
     @bookmarks.define_column("user", @users)

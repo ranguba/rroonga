@@ -19,8 +19,18 @@ class TypeTest < Test::Unit::TestCase
   setup :setup_database
 
   def test_new
-    type = Groonga::Type.new("user-id", :type => :integer)
-    assert_equal("user-id", type.name)
+    type = Groonga::Type.new("user_id", :type => :integer)
+    assert_equal("user_id", type.name)
+  end
+
+  def test_new_with_hyphen_name
+    exception = assert_raise(Groonga::InvalidArgument) do
+      Groonga::Type.new("user-id", :type => :integer)
+    end
+    message =
+      "name can't start with '_' and 0-9, and contains only 0-9, A-Z, a-z, or _"
+    assert_match(/#{Regexp.escape(message)}/,
+                 exception.message)
   end
 
   def test_builtins

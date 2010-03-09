@@ -59,7 +59,7 @@ class ColumnTest < Test::Unit::TestCase
   def setup_indexes
     @bookmarks_index_path = @tables_dir + "bookmarks-index"
     @bookmarks_index =
-      Groonga::PatriciaTrie.create(:name => "bookmarks-index",
+      Groonga::PatriciaTrie.create(:name => "BookmarksIndex",
                                    :path => @bookmarks_index_path.to_s,
                                    :key_type => "ShortText")
     @bookmarks_index.default_tokenizer = "TokenBigram"

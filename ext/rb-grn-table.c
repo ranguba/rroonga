@@ -429,7 +429,10 @@ rb_grn_table_define_column (int argc, VALUE *argv, VALUE self)
 
     column = grn_column_create(context, table, name, name_size,
 			       path, flags, value_type);
-    rb_grn_context_check(context, self);
+    if (context->rc) {
+	rb_grn_context_check(context,
+			     rb_ary_new3(2, self, rb_ary_new4(argc, argv)));
+    }
 
     rb_column = GRNCOLUMN2RVAL(Qnil, context, column, RB_GRN_TRUE);
     rb_ary_push(columns, rb_column);
@@ -553,7 +556,10 @@ rb_grn_table_define_index_column (int argc, VALUE *argv, VALUE self)
 
     column = grn_column_create(context, table, name, name_size,
 			       path, flags, value_type);
-    rb_grn_context_check(context, self);
+    if (context->rc) {
+	rb_grn_context_check(context,
+			     rb_ary_new3(2, self, rb_ary_new4(argc, argv)));
+    }
 
     rb_column = GRNCOLUMN2RVAL(Qnil, context, column, RB_GRN_TRUE);
     if (!NIL_P(rb_source))
