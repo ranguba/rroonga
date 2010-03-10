@@ -110,6 +110,7 @@ struct _RbGrnObject
     grn_obj *range;
     grn_id range_id;
     rb_grn_boolean need_close;
+    rb_grn_boolean have_finalizer;
 };
 
 typedef struct _RbGrnNamedObject RbGrnNamedObject;

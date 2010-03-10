@@ -156,15 +156,17 @@ rb_grn_object_free (RbGrnObject *rb_grn_object)
 
     context = rb_grn_object->context;
     grn_object = rb_grn_object->object;
-    debug("rb-free: %p:%p:%p\n", context, grn_object, rb_grn_object);
-    if (!rb_grn_exited && context && grn_object) {
+    debug("rb-free: %p:%p:%p; %d\n", context, grn_object, rb_grn_object,
+	  rb_grn_object->have_finalizer);
+    if (!rb_grn_exited && context && grn_object && rb_grn_object->have_finalizer) {
 	grn_user_data *user_data;
 
 	user_data = grn_obj_user_data(context, grn_object);
-	debug("type: %x; need_close: %d; user_data: %p\n",
+	debug("type: %x; need_close: %d; user_data: %p; ptr: %p\n",
 	      grn_object->header.type,
 	      rb_grn_object->need_close,
-	      user_data);
+	      user_data,
+	      user_data ? user_data->ptr : NULL);
 	if (user_data && user_data->ptr) {
 	    rb_grn_object_finalizer(context, 1, &grn_object, user_data);
 	}
@@ -272,26 +274,25 @@ rb_grn_object_bind_common (VALUE klass, VALUE self, VALUE rb_context,
 			   RbGrnObject *rb_grn_object,
 			   grn_ctx *context, grn_obj *object)
 {
+    grn_user_data *user_data;
+
     rb_grn_object->context = context;
     rb_grn_object->object = object;
     rb_grn_object->self = self;
     rb_grn_object->need_close = RB_GRN_TRUE;
+    rb_grn_object->have_finalizer = RB_GRN_FALSE;
+
+    user_data = grn_obj_user_data(context, object);
+    if (user_data) {
+	debug("set-finalizer: %p:%p:%p 0x%x\n",
+	      context, object, rb_grn_object,
+	      object->header.type);
+	user_data->ptr = rb_grn_object;
+	grn_obj_set_finalizer(context, object, rb_grn_object_finalizer);
+	rb_grn_object->have_finalizer = RB_GRN_TRUE;
+    }
 
     switch (object->header.type) {
-      case GRN_DB:
-      case GRN_CURSOR_TABLE_HASH_KEY:
-      case GRN_CURSOR_TABLE_PAT_KEY:
-      case GRN_CURSOR_TABLE_NO_KEY:
-      case GRN_TABLE_HASH_KEY:
-      case GRN_TABLE_PAT_KEY:
-      case GRN_TABLE_NO_KEY:
-      case GRN_COLUMN_FIX_SIZE:
-      case GRN_COLUMN_VAR_SIZE:
-      case GRN_COLUMN_INDEX:
-      case GRN_EXPR:
-	grn_obj_user_data(context, object)->ptr = rb_grn_object;
-	grn_obj_set_finalizer(context, object, rb_grn_object_finalizer);
-	break;
       case GRN_PROC:
       case GRN_TYPE:
 	rb_grn_object->need_close = RB_GRN_FALSE;
