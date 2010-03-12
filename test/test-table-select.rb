@@ -57,7 +57,7 @@ class TableSelectTest < Test::Unit::TestCase
   end
 
   def test_select_query
-    result = @comments.select("content:%Hello")
+    result = @comments.select("content:@Hello")
     assert_equal_select_result([@comment1, @comment2], result)
   end
 
@@ -83,14 +83,14 @@ class TableSelectTest < Test::Unit::TestCase
   end
 
   def test_select_query_with_block
-    result = @comments.select("content:%Hello") do |record|
+    result = @comments.select("content:@Hello") do |record|
       record["created_at"] < Time.parse("2009-08-01")
     end
     assert_equal_select_result([@comment2], result)
   end
 
   def test_select_query_with_block_match
-    result = @comments.select("content:%Hello") do |record|
+    result = @comments.select("content:@Hello") do |record|
       record.match("World", "content")
     end
     assert_equal_select_result([@comment2], result)
@@ -103,7 +103,7 @@ class TableSelectTest < Test::Unit::TestCase
   end
 
   def test_select_query_japanese
-    result = @comments.select("content:%ボロTV")
+    result = @comments.select("content:@ボロTV")
     assert_equal_select_result([@japanese_comment], result)
   end
 
