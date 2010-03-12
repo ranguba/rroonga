@@ -75,7 +75,7 @@ class TableSelectTest < Test::Unit::TestCase
     expression = Groonga::Expression.new
     variable = expression.define_variable(:domain => @comments)
     expression.append_object(variable)
-    expression.parse("content:%Hello", :syntax => :query)
+    expression.parse("content:@Hello", :syntax => :query)
     expression.compile
     result = @comments.select(expression)
     assert_equal(expression, result.expression)
