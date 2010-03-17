@@ -643,6 +643,17 @@ class TableTest < Test::Unit::TestCase
     assert_equal(name, users.column("name"))
   end
 
+  def test_empty_reference_column_value
+    users = Groonga::Hash.create(:name => "Users",
+                                 :key_type => "ShortText")
+    books = Groonga::Hash.create(:name => "Books",
+                                 :key_type => "ShortText")
+    book = users.define_column("book", books)
+    users.add("morita", :book => "")
+    assert_equal({"id" => 1, "key" => "morita", "book" => nil},
+                 users["morita"].attributes)
+  end
+
   private
   def create_bookmarks
     bookmarks = Groonga::Array.create(:name => "Bookmarks")
