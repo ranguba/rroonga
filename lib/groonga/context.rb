@@ -41,8 +41,8 @@ module Groonga
                                     :n_hits, :columns, :values,
                                     :drill_down)
       class << self
-        def parse(json)
-          status, (select_result, drill_down_results) = parse_json(json)
+        def parse(json, drill_down_keys)
+          status, (select_result, *drill_down_results) = parse_json(json)
           result = new
           return_code, start_time, elapsed, error_message = status
           result.return_code = return_code
@@ -54,7 +54,8 @@ module Groonga
           result.columns = columns
           result.values = values
           if drill_down_results
-            result.drill_down = parse_drill_down_results(drill_down_results)
+            result.drill_down = parse_drill_down_results(drill_down_results,
+                                                         drill_down_keys)
           end
           result
         end
@@ -72,15 +73,17 @@ module Groonga
         end
 
         private
-        def parse_drill_down_results(results)
-          results.collect do |result|
+        def parse_drill_down_results(results, keys)
+          named_results = {}
+          results.each_with_index do |drill_down, i|
             n_hits, columns, values = extract_result(drill_down)
             drill_down_result = DrillDownResult.new
             drill_down_result.n_hits = n_hits
             drill_down_result.columns = columns
             drill_down_result.values = values
-            drill_down_result
+            named_results[keys[i]] = drill_down_result
           end
+          named_results
         end
 
         def extract_result(result)
@@ -121,19 +124,34 @@ module Groonga
       def initialize(context, table, options)
         @context = context
         @table = table
-        @options = options
+        @options = normalize_options(options)
       end
 
       def exec
         request_id = @context.send(query)
         loop do
           response_id, result = @context.receive
-          return SelectResult.parse(result) if request_id == response_id
+          if request_id == response_id
+            drill_down_keys = @options["drilldown"]
+            if drill_down_keys.is_a?(String)
+              drill_down_keys = drill_down_keys.split(/(?:\s+|\s*,\s*)/)
+            end
+            return SelectResult.parse(result, drill_down_keys)
+          end
           # raise if request_id < response_id
         end
       end
 
       private
+      def normalize_options(options)
+        normalized_options = {}
+        options.each do |key, value|
+          key = key.to_s.gsub(/-/, "_").gsub(/drill_down/, "drilldown")
+          normalized_options[key] = value
+        end
+        normalized_options
+      end
+
       def query
         if @table.is_a?(String)
           table_name = @table
@@ -143,7 +161,7 @@ module Groonga
         _query = "select #{table_name}"
         @options.each do |key, value|
           value = value.join(", ") if value.is_a?(::Array)
-          escaped_value = value.gsub(/"/, '\\"')
+          escaped_value = value.to_s.gsub(/"/, '\\"')
           _query << " --#{key} \"#{escaped_value}\""
         end
         _query

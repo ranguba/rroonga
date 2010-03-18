@@ -20,17 +20,22 @@ class ContextSelectTest < Test::Unit::TestCase
   setup
   def setup_data
     @users = Groonga::Hash.create(:name => "Users", :key_type => "ShortText")
-    @users.add("morita")
-    @users.add("gunyara-kun")
+    @books = Groonga::Hash.create(:name => "Books", :key_type => "ShortText")
+    @users.define_column("book", "Books")
+    @users.add("morita", :book => "the groonga book")
+    @users.add("gunyara-kun", :book => "the groonga book")
     @users.add("yu")
   end
 
   def test_no_option
     result = context.select(@users)
     assert_equal([3,
-                  [{"_id" => 1, "_key" => "morita"},
-                   {"_id" => 2, "_key" => "gunyara-kun"},
-                   {"_id" => 3, "_key" => "yu"}]],
+                  [{"_id" => 1, "_key" => "morita",
+                     "book" => "the groonga book"},
+                   {"_id" => 2, "_key" => "gunyara-kun",
+                     "book" => "the groonga book"},
+                   {"_id" => 3, "_key" => "yu",
+                     "book" => ""}]],
                  [result.n_hits, result.records])
   end
 
@@ -47,5 +52,29 @@ class ContextSelectTest < Test::Unit::TestCase
                    {"_key" => "gunyara-kun"},
                    {"_key" => "yu"}]],
                  [result.n_hits, result.records])
+  end
+
+  def test_drill_down
+    result = context.select(@users,
+                            :output_columns => ["_key"],
+                            :drill_down => ["_key", "book"],
+                            :drill_down_output_columns => "_key",
+                            :drill_down_limit => 10)
+    normalized_drill_down = {}
+    result.drill_down.each do |key, drill_down|
+      normalized_drill_down[key] = [drill_down.n_hits, drill_down.records]
+    end
+    assert_equal([3,
+                  [{"_key" => "morita"},
+                   {"_key" => "gunyara-kun"},
+                   {"_key" => "yu"}],
+                  {
+                    "_key" => [3, [{"_key" => "morita"},
+                                   {"_key" => "gunyara-kun"},
+                                   {"_key" => "yu"}]],
+                    "book" => [1, [{"_key" => "the groonga book"}]],
+                  },
+                 ],
+                 [result.n_hits, result.records, normalized_drill_down])
   end
 end
