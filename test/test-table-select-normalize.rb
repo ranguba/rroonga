@@ -32,12 +32,17 @@ class TableSelectNormalizeTest < Test::Unit::TestCase
                               :with_section => true,
                               :source => "Comments.content")
     @japanese_comment =
-      @comments.add(:content => "うちのボロTVはまだ現役です",
+      @comments.add(:content => "うちのボロTV（アナログ...）はまだ現役です",
                     :created_at => Time.parse("2009-06-09"))
   end
 
   def test_select_query_with_japanese
     result = @comments.select("content:@ボロTV")
+    assert_equal_select_result([@japanese_comment], result)
+  end
+
+  def test_select_query_with_japanese_parenthesis
+    result = @comments.select("content:@）は")
     assert_equal_select_result([@japanese_comment], result)
   end
 
