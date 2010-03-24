@@ -654,6 +654,14 @@ class TableTest < Test::Unit::TestCase
                  users["morita"].attributes)
   end
 
+  def test_have_column
+    users = Groonga::Hash.create(:name => "Users",
+                                 :key_type => "ShortText")
+    users.define_column("name", "ShortText")
+    assert_true(users.have_column?("name"), "name")
+    assert_false(users.have_column?("description"), "description")
+  end
+
   private
   def create_bookmarks
     bookmarks = Groonga::Array.create(:name => "Bookmarks")

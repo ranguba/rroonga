@@ -618,6 +618,27 @@ rb_grn_table_add_column (VALUE self, VALUE rb_name, VALUE rb_value_type,
     return rb_column;
 }
 
+static void
+ruby_object_to_column_name (VALUE rb_name,
+			    const char **name, unsigned *name_size)
+{
+    switch (TYPE(rb_name)) {
+      case T_SYMBOL:
+	*name = rb_id2name(SYM2ID(rb_name));
+	*name_size = strlen(*name);
+	break;
+      case T_STRING:
+	*name = StringValuePtr(rb_name);
+	*name_size = RSTRING_LEN(rb_name);
+	break;
+      default:
+	rb_raise(rb_eArgError,
+		 "column name should be String or Symbol: %s",
+		 rb_grn_inspect(rb_name));
+	break;
+    }
+}
+
 /*
  * call-seq:
  *   table.column(name) -> Groonga::Column or nil
@@ -645,22 +666,7 @@ rb_grn_table_get_column (VALUE self, VALUE rb_name)
 			     NULL, NULL, NULL,
 			     &columns);
 
-    switch (TYPE(rb_name)) {
-      case T_SYMBOL:
-	name = rb_id2name(SYM2ID(rb_name));
-	name_size = strlen(name);
-	break;
-      case T_STRING:
-	name = StringValuePtr(rb_name);
-	name_size = RSTRING_LEN(rb_name);
-	break;
-      default:
-	rb_raise(rb_eArgError,
-		 "column name should be String or Symbol: %s",
-		 rb_grn_inspect(rb_name));
-	break;
-    }
-
+    ruby_object_to_column_name(rb_name, &name, &name_size);
     raw_columns = RARRAY_PTR(columns);
     n = RARRAY_LEN(columns);
     for (i = 0; i < n; i++) {
@@ -777,6 +783,39 @@ rb_grn_table_get_columns (int argc, VALUE *argv, VALUE self)
     }
 
     return rb_columns;
+}
+
+/*
+ * call-seq:
+ *   table.have_column?(name) -> true/false
+ *
+ * テーブルが_name_カラムを持っている場合は+true+を返す。
+ */
+static VALUE
+rb_grn_table_have_column (VALUE self, VALUE rb_name)
+{
+    grn_ctx *context = NULL;
+    grn_obj *table;
+    grn_obj *column;
+    const char *name = NULL;
+    unsigned name_size = 0;
+    VALUE result = Qfalse;
+
+    rb_grn_table_deconstruct(SELF(self), &table, &context,
+			     NULL, NULL,
+			     NULL, NULL, NULL,
+			     NULL);
+
+    ruby_object_to_column_name(rb_name, &name, &name_size);
+    column = grn_obj_column(context, table, name, name_size);
+    if (!column)
+	return Qfalse;
+
+    if (column->header.type != GRN_ACCESSOR)
+	result = Qtrue;
+    grn_obj_unlink(context, column);
+
+    return result;
 }
 
 static grn_table_cursor *
@@ -2012,6 +2051,8 @@ rb_grn_init_table (VALUE mGrn)
 		     rb_grn_table_get_column, 1);
     rb_define_method(rb_cGrnTable, "columns",
 		     rb_grn_table_get_columns, -1);
+    rb_define_method(rb_cGrnTable, "have_column?",
+		     rb_grn_table_have_column, 1);
 
     rb_define_method(rb_cGrnTable, "open_cursor", rb_grn_table_open_cursor, -1);
     rb_define_method(rb_cGrnTable, "records", rb_grn_table_get_records, -1);
