@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2009  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2010  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -494,8 +494,19 @@ module Groonga
         self
       end
 
-      # _taget_column_を対象とするインデックスカラムを作成す
-      # る。
+      # call-seq:
+      #   table.index(target_column_full_name, options={})
+      #   table.index(target_table, target_column, options={})
+      #
+      # _target_table_の_target_column_を対象とするインデッ
+      # クスカラムを作成する。
+      #
+      # _target_column_full_name_で指定するときはテーブル名
+      # とカラム名を"."でつなげます。例えば、「Users」テーブ
+      # ルの「name」カラムのインデックスカラムを指定する場合
+      # はこうなります。
+      #
+      #   table.index("Users.name")
       #
       # _options_に指定可能な値は以下の通り。
       #
@@ -521,26 +532,24 @@ module Groonga
       #
       # [+:with_position+]
       #   転置索引に出現位置情報を合わせて格納する。
-      def index(target_column, options={})
-        name = options.delete(:name)
-        if name.nil?
-          target_column_name = nil
-          if target_column.is_a?(Groonga::Column)
-            target_column_name = target_column.name
-          else
-            target_column_name = target_column
+      def index(target_table_or_target_column_full_name, *args)
+        if args.size > 2
+          n_args = args.size + 1
+          raise ArgumentError, "wrong number of arguments (#{n_args} for 2 or 3)"
+        end
+        options = nil
+        options = args.pop if args.last.is_a?(::Hash)
+        if args.empty?
+          target_column_full_name = target_table_or_target_column_full_name
+          if target_column_full_name.is_a?(Groonga::Column)
+            target_column_full_name = target_column_full_name.name
           end
-          name = target_column_name.gsub(/\./, "_")
+          target_table, target_column = target_column_full_name.split(/\./, 2)
+        else
+          target_table = target_table_or_target_column_full_name
+          target_column = args.pop
         end
-
-        definition = self[name, IndexColumnDefinition]
-        if definition.nil?
-          definition = IndexColumnDefinition.new(name, options)
-          update_definition(name, IndexColumnDefinition, definition)
-        end
-        definition.target = target_column
-        definition.options.merge!(column_options.merge(options))
-        self
+        define_index(target_table, target_column, options || {})
       end
 
       # 名前が_name_の32bit符号付き整数のカラムを作成する。
@@ -732,6 +741,21 @@ module Groonga
       def persistent? # :nodoc:
         @options[:persistent].nil? ? true : @options[:persistent]
       end
+
+      def define_index(target_table, target_column, options)
+        name = options.delete(:name)
+        name ||= "#{target_table}_#{target_column}".gsub(/\./, "_")
+
+        definition = self[name, IndexColumnDefinition]
+        if definition.nil?
+          definition = IndexColumnDefinition.new(name, options)
+          update_definition(name, IndexColumnDefinition, definition)
+        end
+        definition.target_table = target_table
+        definition.target_column = target_column
+        definition.options.merge!(column_options.merge(options))
+        self
+      end
     end
 
     class TableRemoveDefinition # :nodoc:
@@ -799,49 +823,58 @@ module Groonga
     end
 
     class IndexColumnDefinition # :nodoc:
-      attr_accessor :name, :target
+      attr_accessor :name, :target_table, :target_column
       attr_reader :options
 
       def initialize(name, options={})
         @name = name
         @name = @name.to_s if @name.is_a?(Symbol)
         @options = (options || {}).dup
-        @target = nil
+        @target_table = nil
+        @target_column = nil
       end
 
       def define(table_definition, table)
-        target = @target
-        unless target.is_a?(Groonga::Object)
-          target = table_definition.context[target]
-        end
-        if target.nil?
-          raise ArgumentError, "Unknown index target: #{@target.inspect}"
+        target_name = "#{@target_table}.#{@target_column}"
+        target_table = table_definition.context[@target_table]
+        if target_table.nil? or
+            !(@target_column == "_key" or
+              target_table.have_column?(@target_column))
+          raise ArgumentError, "Unknown index target: <#{target_name}>"
         end
         index = table.column(@name)
         if index
-          return index if same_index?(table_definition, index, target)
+          return index if same_index?(table_definition, index)
           if @options.delete(:force)
             index.remove
           else
             raise ArgumentError,
                   "the same name index column with " +
                   "different target or options is " +
-                  "already defined: #{target.inspect}(#{@options.inspect}): " +
-                  "#{index.inspect}"
+                  "already defined: #{target_name.inspect}" +
+                  "(#{@options.inspect}): #{index.inspect}"
           end
         end
         index = table.define_index_column(@name,
-                                          target.table,
+                                          @target_table,
                                           @options)
-        index.source = target
+        index.source = target_table.column(@target_column)
         index
       end
 
       private
-      def same_index?(table_definition, index, target)
+      def same_index?(table_definition, index)
         context = table_definition.context
         # TODO: should check column type and other options.
-        index.range == target.table and index.sources == [target]
+        return false if index.range.name != @target_table
+        source_names = index.sources.collect do |source|
+          if source.nil?
+            "#{index.range.name}._key"
+          else
+            source.name
+          end
+        end
+        source_names == ["#{@target_table}.#{@target_column}"]
       end
     end
 

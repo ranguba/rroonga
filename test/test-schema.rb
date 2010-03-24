@@ -313,9 +313,7 @@ class SchemaTest < Test::Unit::TestCase
                  "path: <#{path}>, " +
                  "domain: <Terms>, " +
                  "range: <Posts>, " +
-                 "flags: <WITH_SECTION|WITH_WEIGHT|WITH_POSITION|" +
-                         "UNIT_DOCUMENT_SECTION|UNIT_DOCUMENT_POSITION|" +
-                         "UNIT_USERDEF_DOCUMENT|UNIT_USERDEF_SECTION>>",
+                 "flags: <WITH_SECTION|WITH_WEIGHT|WITH_POSITION>>",
                  index_column.inspect)
   end
 
@@ -346,6 +344,43 @@ class SchemaTest < Test::Unit::TestCase
     assert_raise(ArgumentError) do
       Groonga::Schema.create_table("Terms") do |table|
         table.index "Posts.name", :name => "Posts_content"
+      end
+    end
+  end
+
+  def test_index_key
+    Groonga::Schema.create_table("Posts",
+                                 :type => :hash,
+                                 :key_type => "ShortText") do |table|
+    end
+    Groonga::Schema.create_table("Terms") do |table|
+      table.index "Posts._key", :with_position => true
+    end
+
+    full_index_column_name = "Terms.Posts__key"
+    index_column = context[full_index_column_name]
+    assert_equal("#<Groonga::IndexColumn " +
+                 "id: <#{index_column.id}>, " +
+                 "name: <#{full_index_column_name}>, " +
+                 "path: <#{index_column.path}>, " +
+                 "domain: <Terms>, " +
+                 "range: <Posts>, " +
+                 "flags: <WITH_POSITION>>",
+                 index_column.inspect)
+  end
+
+  def test_index_key_again
+    Groonga::Schema.create_table("Posts",
+                                 :type => :hash,
+                                 :key_type => "ShortText") do |table|
+    end
+    Groonga::Schema.create_table("Terms") do |table|
+      table.index "Posts._key", :with_position => true
+    end
+
+    assert_nothing_raised do
+      Groonga::Schema.create_table("Terms") do |table|
+        table.index "Posts._key"
       end
     end
   end
