@@ -756,23 +756,24 @@ rb_grn_object_inspect_content_flags_with_label (VALUE inspected,
     if (flags & GRN_OBJ_WITH_BUFFER)
 	rb_ary_push(inspected_flags, rb_str_new2("WITH_BUFFER"));
 
-    if (flags & GRN_OBJ_UNIT_DOCUMENT_SECTION)
-	rb_ary_push(inspected_flags, rb_str_new2("UNIT_DOCUMENT_SECTION"));
-    if (flags & GRN_OBJ_UNIT_DOCUMENT_POSITION)
-	rb_ary_push(inspected_flags, rb_str_new2("UNIT_DOCUMENT_POSITION"));
-
-    if (flags & GRN_OBJ_UNIT_SECTION_POSITION)
-	rb_ary_push(inspected_flags, rb_str_new2("UNIT_SECTION_POSITION"));
-
-    if (flags & GRN_OBJ_UNIT_USERDEF_DOCUMENT)
-	rb_ary_push(inspected_flags, rb_str_new2("UNIT_USERDEF_DOCUMENT"));
-    if (flags & GRN_OBJ_UNIT_USERDEF_SECTION)
-	rb_ary_push(inspected_flags, rb_str_new2("UNIT_USERDEF_SECTION"));
-    if (flags & GRN_OBJ_UNIT_USERDEF_POSITION)
-	rb_ary_push(inspected_flags, rb_str_new2("UNIT_USERDEF_POSITION"));
-
-    if (flags & GRN_OBJ_WITH_SUBREC)
+    if (flags & GRN_OBJ_WITH_SUBREC) {
 	rb_ary_push(inspected_flags, rb_str_new2("WITH_SUBREC"));
+
+	if (flags & GRN_OBJ_UNIT_DOCUMENT_SECTION)
+	    rb_ary_push(inspected_flags, rb_str_new2("UNIT_DOCUMENT_SECTION"));
+	if (flags & GRN_OBJ_UNIT_DOCUMENT_POSITION)
+	    rb_ary_push(inspected_flags, rb_str_new2("UNIT_DOCUMENT_POSITION"));
+
+	if (flags & GRN_OBJ_UNIT_SECTION_POSITION)
+	    rb_ary_push(inspected_flags, rb_str_new2("UNIT_SECTION_POSITION"));
+
+	if (flags & GRN_OBJ_UNIT_USERDEF_DOCUMENT)
+	    rb_ary_push(inspected_flags, rb_str_new2("UNIT_USERDEF_DOCUMENT"));
+	if (flags & GRN_OBJ_UNIT_USERDEF_SECTION)
+	    rb_ary_push(inspected_flags, rb_str_new2("UNIT_USERDEF_SECTION"));
+	if (flags & GRN_OBJ_UNIT_USERDEF_POSITION)
+	    rb_ary_push(inspected_flags, rb_str_new2("UNIT_USERDEF_POSITION"));
+    }
 
     rb_str_cat2(inspected, "<");
     rb_str_concat(inspected, rb_ary_join(inspected_flags, rb_str_new2("|")));
