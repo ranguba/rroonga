@@ -1,6 +1,6 @@
 # -*- coding: utf-8; mode: ruby -*-
 #
-# Copyright (C) 2009  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2010  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -86,7 +86,7 @@ end
 ENV["VERSION"] ||= guess_version
 version = ENV["VERSION"]
 project = nil
-Hoe.spec('groonga') do |_project|
+Hoe.spec('rroonga') do |_project|
   Hoe::Test::SUPPORTED_TEST_FRAMEWORKS[:testunit2] = "test/run-test.rb"
   project = _project
   project.version = version
@@ -118,7 +118,7 @@ Hoe.spec('groonga') do |_project|
   description = cleanup_white_space(entries[entries.index("Description") + 1])
   project.summary, project.description, = description.split(/\n\n+/, 3)
 
-  project.remote_rdoc_dir = "groonga"
+  project.remote_rdoc_dir = "rroonga"
 end
 
 project.spec.dependencies.delete_if {|dependency| dependency.name == "hoe"}
@@ -140,7 +140,7 @@ ObjectSpace.each_object(Rake::RDocTask) do |rdoc_task|
   options = rdoc_task.options
   t_option_index = options.index("--title") || options.index("-t")
   rdoc_task.options[t_option_index, 2] = nil
-  rdoc_task.title = "Ruby/groonga - #{version}"
+  rdoc_task.title = "rroonga - #{version}"
 
   rdoc_task.rdoc_files = ["ext/rb-groonga.c"] + Dir.glob("ext/rb-grn-*.c")
   rdoc_task.rdoc_files += Dir.glob("lib/**/*.rb")
@@ -204,7 +204,7 @@ task :publish_html do
 end
 
 task :tag do
-  repository = "svn+ssh://rubyforge.org/var/svn/groonga/groonga"
+  repository = "svn+ssh://rubyforge.org/var/svn/groonga/rroonga"
   sh("svn cp -m 'release #{version}!!!' " +
      "#{repository}/trunk #{repository}/tags/#{version}")
 end
