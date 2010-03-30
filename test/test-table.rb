@@ -316,6 +316,16 @@ class TableTest < Test::Unit::TestCase
     assert_equal(3, bookmarks.size)
   end
 
+  def test_empty?
+    bookmarks_path = @tables_dir + "bookmarks"
+    bookmarks = Groonga::Array.create(:name => "Bookmarks",
+                                      :path => bookmarks_path.to_s)
+
+    assert_predicate(bookmarks, :empty?)
+    bookmarks.add
+    assert_not_predicate(bookmarks, :empty?)
+  end
+
   def test_path
     bookmarks_path = @tables_dir + "bookmarks"
     bookmarks = Groonga::Array.create(:name => "Bookmarks",

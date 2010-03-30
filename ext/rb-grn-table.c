@@ -993,6 +993,27 @@ rb_grn_table_get_size (VALUE self)
 
 /*
  * call-seq:
+ *   table.empty? -> true/false
+ *
+ * テーブルにレコードが登録されていなければ+true+を返す。
+ */
+static VALUE
+rb_grn_table_empty_p (VALUE self)
+{
+    grn_ctx *context = NULL;
+    grn_obj *table;
+    unsigned int size;
+
+    rb_grn_table_deconstruct(SELF(self), &table, &context,
+			     NULL, NULL,
+			     NULL, NULL, NULL,
+			     NULL);
+    size = grn_table_size(context, table);
+    return size == 0;
+}
+
+/*
+ * call-seq:
  *   table.truncate
  *
  * テーブルの全レコードを一括して削除する。
@@ -2058,6 +2079,7 @@ rb_grn_init_table (VALUE mGrn)
     rb_define_method(rb_cGrnTable, "records", rb_grn_table_get_records, -1);
 
     rb_define_method(rb_cGrnTable, "size", rb_grn_table_get_size, 0);
+    rb_define_method(rb_cGrnTable, "empty?", rb_grn_table_empty_p, 0);
     rb_define_method(rb_cGrnTable, "truncate", rb_grn_table_truncate, 0);
 
     rb_define_method(rb_cGrnTable, "each", rb_grn_table_each, 0);
