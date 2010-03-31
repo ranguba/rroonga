@@ -111,6 +111,7 @@ rb_grn_object_finalizer (grn_ctx *context, int n_args, grn_obj **grn_objects,
       case GRN_CURSOR_TABLE_HASH_KEY:
       case GRN_CURSOR_TABLE_PAT_KEY:
       case GRN_CURSOR_TABLE_NO_KEY:
+      case GRN_CURSOR_TABLE_VIEW:
 	break;
       case GRN_TABLE_HASH_KEY:
       case GRN_TABLE_PAT_KEY:
@@ -118,6 +119,7 @@ rb_grn_object_finalizer (grn_ctx *context, int n_args, grn_obj **grn_objects,
 					   RB_GRN_TABLE_KEY_SUPPORT(rb_grn_object));
 	break;
       case GRN_TABLE_NO_KEY:
+      case GRN_TABLE_VIEW:
 	rb_grn_table_finalizer(context, grn_object,
 			       RB_GRN_TABLE(rb_grn_object));
 	break;

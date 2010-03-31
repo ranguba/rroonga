@@ -243,4 +243,5 @@ rb_grn_init_table_cursor (VALUE mGrn)
     rb_grn_init_array_cursor(mGrn);
     rb_grn_init_hash_cursor(mGrn);
     rb_grn_init_patricia_trie_cursor(mGrn);
+    rb_grn_init_view_cursor(mGrn);
 }
