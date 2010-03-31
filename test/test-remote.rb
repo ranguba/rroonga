@@ -1,4 +1,4 @@
-# Copyright (C) 2009  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2010  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -48,7 +48,7 @@ class RemoteTest < Test::Unit::TestCase
     assert_equal(0, id)
     status, values = JSON.load(result)
     return_code, start_time, elapsed,  = status
-    assert_equal([0, ["alloc_count", "starttime", "uptime"]],
+    assert_equal([0, ["alloc_count", "starttime", "uptime", "version"]],
                  [return_code, values.keys.sort])
   end
 end
