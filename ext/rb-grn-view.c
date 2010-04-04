@@ -137,7 +137,7 @@ rb_grn_view_s_create (int argc, VALUE *argv, VALUE klass)
 
 /*
  * call-seq:
- *   view.add(table)
+ *   view.add_table(table)
  *
  * _table_をビューからアクセスできるようにする。
  */
