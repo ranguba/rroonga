@@ -943,16 +943,19 @@ module Groonga
           end
           view ||= Groonga::View.create(create_options)
         end
+        _context = context
         @tables.each do |table|
+          _table = table
+          table = context[table] unless table.is_a?(Groonga::Table)
+          raise ArgumentError, "table doesn't exist: #{_table}" if table.nil?
           view.add_table(table)
         end
         view
       end
 
-      # 名前が_name_のテーブルをビューに追加する。
-      def add(name)
-        table = context[name]
-        raise ArgumentError, "table doesn't exist: #{name}" if table.nil?
+      # 名前が_table_のテーブルをビューに追加する。
+      def add(table)
+        table = table.to_s if table.is_a?(Symbol)
         @tables << table
         self
       end

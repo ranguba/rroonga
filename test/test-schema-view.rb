@@ -73,4 +73,18 @@ class SchemaViewTest < Test::Unit::TestCase
     assert_equal(["morita", "pochi"],
                  context["Entries"].collect {|entry| entry["name"]})
   end
+
+  def test_define_lazy
+    assert_nothing_raised do
+      Groonga::Schema.define do |schema|
+        schema.create_table("People") do |table|
+          table.string("name")
+        end
+
+        schema.create_view("Entries") do |view|
+          view.add("People")
+        end
+      end
+    end
+  end
 end
