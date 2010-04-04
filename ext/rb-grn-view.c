@@ -238,6 +238,154 @@ rb_grn_view_get_column_value (VALUE self, VALUE rb_id, VALUE rb_name)
     return rb_value;
 }
 
+/*
+ * call-seq:
+ *   view.sort(keys, options={}) -> Groonga::ViewRecordの配列
+ *
+ * テーブルに登録されているレコードを_keys_で指定されたルー
+ * ルに従ってソートしたレコードの配列を返す。
+ *
+ *   [
+ *    {:key => "カラム名", :order => :asc, :ascending,
+ *                                   :desc, :descendingのいずれか},
+ *    {:key => "カラム名", :order => :asc, :ascending,
+ *                                   :desc, :descendingのいずれか},
+ *    ...,
+ *   ]
+ *
+ * _options_に指定可能な値は以下の通り。
+ *
+ * [+:offset+]
+ *   ソートされたレコードのうち、(0ベースで)_:offset_番目
+ *   からレコードを取り出す。
+ *
+ * [+:limit+]
+ *   ソートされたレコードのうち、_:limit_件のみを取り出す。
+ *   省略された場合または-1が指定された場合は、全件が指定され
+ *   たものとみなす。
+ */
+/* FIXME: DON'T WORK!!! */
+static VALUE
+rb_grn_view_sort (int argc, VALUE *argv, VALUE self)
+{
+    grn_ctx *context = NULL;
+    grn_obj *view;
+    grn_obj *result;
+    grn_table_sort_key *keys;
+    int i, n_keys;
+    int n_records, offset = 0, limit = -1;
+    VALUE rb_keys, options;
+    VALUE rb_offset, rb_limit;
+    VALUE *rb_sort_keys;
+    grn_table_cursor *cursor;
+    VALUE rb_result;
+    VALUE exception;
+    grn_obj id;
+
+    rb_grn_table_deconstruct(SELF(self), &view, &context,
+			     NULL, NULL,
+			     NULL, NULL, NULL,
+			     NULL);
+
+    rb_scan_args(argc, argv, "11", &rb_keys, &options);
+
+    if (!RVAL2CBOOL(rb_obj_is_kind_of(rb_keys, rb_cArray)))
+	rb_raise(rb_eArgError, "keys should be an array of key: <%s>",
+		 rb_grn_inspect(rb_keys));
+
+    n_keys = RARRAY_LEN(rb_keys);
+    rb_sort_keys = RARRAY_PTR(rb_keys);
+    keys = ALLOCA_N(grn_table_sort_key, n_keys);
+    for (i = 0; i < n_keys; i++) {
+	VALUE rb_sort_options, rb_key, rb_resolved_key, rb_order;
+
+	if (RVAL2CBOOL(rb_obj_is_kind_of(rb_sort_keys[i], rb_cHash))) {
+	    rb_sort_options = rb_sort_keys[i];
+	} else if (RVAL2CBOOL(rb_obj_is_kind_of(rb_sort_keys[i], rb_cArray))) {
+	    rb_sort_options = rb_hash_new();
+	    rb_hash_aset(rb_sort_options,
+			 RB_GRN_INTERN("key"),
+			 rb_ary_entry(rb_sort_keys[i], 0));
+	    rb_hash_aset(rb_sort_options,
+			 RB_GRN_INTERN("order"),
+			 rb_ary_entry(rb_sort_keys[i], 1));
+	} else {
+	    rb_sort_options = rb_hash_new();
+	    rb_hash_aset(rb_sort_options,
+			 RB_GRN_INTERN("key"),
+			 rb_sort_keys[i]);
+	}
+	rb_grn_scan_options(rb_sort_options,
+			    "key", &rb_key,
+			    "order", &rb_order,
+			    NULL);
+	if (RVAL2CBOOL(rb_obj_is_kind_of(rb_key, rb_cString))) {
+	    rb_resolved_key = rb_grn_table_get_column(self, rb_key);
+	} else {
+	    rb_resolved_key = rb_key;
+	}
+	keys[i].key = RVAL2GRNOBJECT(rb_resolved_key, &context);
+	if (!keys[i].key) {
+	    rb_raise(rb_eGrnNoSuchColumn,
+		     "no such column: <%s>: <%s>",
+		     rb_grn_inspect(rb_key), rb_grn_inspect(self));
+	}
+	if (NIL_P(rb_order)) {
+	    keys[i].flags = 0;
+	} else if (rb_grn_equal_option(rb_order, "desc") ||
+		   rb_grn_equal_option(rb_order, "descending")) {
+	    keys[i].flags = GRN_TABLE_SORT_DESC;
+	} else if (rb_grn_equal_option(rb_order, "asc") ||
+		   rb_grn_equal_option(rb_order, "ascending")) {
+	    keys[i].flags = GRN_TABLE_SORT_ASC;
+	} else {
+	    rb_raise(rb_eArgError,
+		     "order should be one of "
+		     "[nil, :desc, :descending, :asc, :ascending]: %s",
+		     rb_grn_inspect(rb_order));
+	}
+    }
+
+    rb_grn_scan_options(options,
+			"offset", &rb_offset,
+			"limit", &rb_limit,
+			NULL);
+
+    if (!NIL_P(rb_offset))
+	offset = NUM2INT(rb_offset);
+    if (!NIL_P(rb_limit))
+	limit = NUM2INT(rb_limit);
+
+    result = grn_table_create(context, NULL, 0, NULL, GRN_TABLE_VIEW,
+			      NULL, NULL);
+    grn_view_add(context, result,
+		 grn_table_create(context, NULL, 0, NULL, GRN_TABLE_NO_KEY,
+				  NULL, grn_ctx_get(context, "People", strlen("People"))));
+    grn_view_add(context, result,
+		 grn_table_create(context, NULL, 0, NULL, GRN_TABLE_NO_KEY,
+				  NULL, grn_ctx_get(context, "People", strlen("People"))));
+    n_records = grn_table_sort(context, view, offset, limit,
+			       result, keys, n_keys);
+    exception = rb_grn_context_to_exception(context, self);
+    if (!NIL_P(exception)) {
+        grn_obj_close(context, result);
+        rb_exc_raise(exception);
+    }
+
+    rb_result = rb_ary_new();
+    cursor = grn_table_cursor_open(context, result, NULL, 0, NULL, 0,
+				   0, -1, GRN_CURSOR_ASCENDING);
+    GRN_TEXT_INIT(&id, 0);
+    while (grn_table_cursor_next_o(context, cursor, &id) == GRN_SUCCESS) {
+	rb_ary_push(rb_result, rb_grn_view_record_new(self, &id));
+    }
+    GRN_OBJ_FIN(context, &id);
+    grn_table_cursor_close(context, cursor);
+    grn_obj_close(context, result);
+
+    return rb_result;
+}
+
 void
 rb_grn_init_view (VALUE mGrn)
 {
@@ -250,4 +398,5 @@ rb_grn_init_view (VALUE mGrn)
     rb_define_method(rb_cGrnView, "each", rb_grn_view_each, 0);
     rb_define_method(rb_cGrnView, "column_value",
 		     rb_grn_view_get_column_value, 2);
+    rb_define_method(rb_cGrnView, "sort", rb_grn_view_sort, -1);
 }

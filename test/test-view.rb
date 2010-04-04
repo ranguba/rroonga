@@ -51,4 +51,22 @@ class ViewTest < Test::Unit::TestCase
     dogs.add
     assert_equal(2, entries.size)
   end
+
+  def test_sort
+    users = Groonga::Hash.create(:name => "Users", :key_type => "ShortText")
+    dogs = Groonga::Hash.create(:name => "Dogs", :key_type => "ShortText")
+    entries = Groonga::View.create(:name => "Entries")
+    entries.add_table(users)
+    entries.add_table(dogs)
+
+    users.add("morita")
+    users.add("tasuku")
+    users.add("yu")
+    dogs.add("pochi")
+    dogs.add("bob")
+    dogs.add("fuga")
+    omit("View#sort is broken!!!")
+    assert_equal(["XXX"],
+                 entries.sort(["_key"], :limit => 2).collect {|entry| entry["_key"]})
+  end
 end
