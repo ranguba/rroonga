@@ -197,11 +197,17 @@ rb_grn_object_to_ruby_class (grn_obj *object)
       case GRN_TABLE_NO_KEY:
 	klass = rb_cGrnArray;
 	break;
+      case GRN_TABLE_VIEW:
+	klass = rb_cGrnView;
+	break;
       case GRN_TYPE:
 	klass = rb_cGrnType;
 	break;
       case GRN_ACCESSOR:
 	klass = rb_cGrnAccessor;
+	break;
+      case GRN_ACCESSOR_VIEW:
+	klass = rb_cGrnViewAccessor;
 	break;
       case GRN_PROC:
 	klass = rb_cGrnProcedure;
@@ -226,6 +232,9 @@ rb_grn_object_to_ruby_class (grn_obj *object)
 	break;
       case GRN_CURSOR_TABLE_NO_KEY:
 	klass = rb_cGrnArrayCursor;
+	break;
+      case GRN_CURSOR_TABLE_VIEW:
+	klass = rb_cGrnViewCursor;
 	break;
       default:
 	rb_raise(rb_eTypeError,
@@ -342,6 +351,7 @@ rb_grn_object_assign (VALUE klass, VALUE self, VALUE rb_context,
 	klass == rb_cGrnHashCursor ||
 	klass == rb_cGrnPatriciaTrieCursor ||
 	klass == rb_cGrnArrayCursor ||
+	klass == rb_cGrnViewCursor ||
 	klass == rb_cGrnProcedure ||
 	klass == rb_cGrnVariable) {
 	rb_grn_object = ALLOC(RbGrnObject);
@@ -369,7 +379,8 @@ rb_grn_object_assign (VALUE klass, VALUE self, VALUE rb_context,
 	rb_grn_object_bind_common(klass, self, rb_context, rb_grn_object,
 				  context, object);
 	rb_grn_column_bind(RB_GRN_COLUMN(rb_grn_object), context, object);
-    } else if (klass == rb_cGrnAccessor) {
+    } else if (klass == rb_cGrnAccessor ||
+	       klass == rb_cGrnViewAccessor) {
 	rb_grn_object = ALLOC(RbGrnNamedObject);
 	rb_grn_object_bind_common(klass, self, rb_context, rb_grn_object,
 				  context, object);
@@ -1126,6 +1137,7 @@ rb_grn_object_array_reference (VALUE self, VALUE rb_id)
 	break;
       case GRN_TYPE:
       case GRN_ACCESSOR: /* FIXME */
+      case GRN_ACCESSOR_VIEW: /* FIXME */
 	GRN_OBJ_INIT(&value, GRN_BULK, 0, range_id);
 	break;
       case GRN_COLUMN_VAR_SIZE:

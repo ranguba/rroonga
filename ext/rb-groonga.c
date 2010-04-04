@@ -102,7 +102,9 @@ Init_groonga (void)
     rb_grn_init_procedure(mGrn);
     rb_grn_init_column(mGrn);
     rb_grn_init_accessor(mGrn);
+    rb_grn_init_view_accessor(mGrn);
     rb_grn_init_record(mGrn);
+    rb_grn_init_view_record(mGrn);
     rb_grn_init_query(mGrn);
     rb_grn_init_variable(mGrn);
     rb_grn_init_operation(mGrn);

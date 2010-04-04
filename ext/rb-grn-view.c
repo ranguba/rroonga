@@ -20,8 +20,10 @@
 
 /* FIXME */
 grn_id grn_view_add(grn_ctx *ctx, grn_obj *view, grn_obj *table);
+grn_rc grn_table_cursor_next_o(grn_ctx *ctx, grn_table_cursor *tc, grn_obj *id);
+grn_obj *grn_obj_get_value_o(grn_ctx *ctx, grn_obj *obj, grn_obj *id, grn_obj *value);
 
-#define SELF(object, context) (RVAL2GRNTABLE(object, context))
+#define SELF(object) ((RbGrnTable *)DATA_PTR(object))
 
 VALUE rb_cGrnView;
 
@@ -147,13 +149,93 @@ rb_grn_view_add_table (VALUE self, VALUE rb_table)
     grn_ctx *context = NULL;
     grn_obj *view, *table;
 
-    view = SELF(self, &context);
-
+    rb_grn_table_deconstruct(SELF(self), &view, &context,
+			     NULL, NULL,
+			     NULL, NULL, NULL,
+			     NULL);
     table = RVAL2GRNOBJECT(rb_table, &context);
     grn_view_add(context, view, table);
     rb_grn_context_check(context, self);
 
     return Qnil;
+}
+
+/*
+ * call-seq:
+ *   view.each {|record| ...}
+ *
+ * ビューに登録されているテーブルのレコードを順番にブロック
+ * に渡す。
+ */
+static VALUE
+rb_grn_view_each (VALUE self)
+{
+    RbGrnTable *rb_grn_view;
+    RbGrnObject *rb_grn_object;
+    grn_ctx *context = NULL;
+    grn_obj *view;
+    grn_table_cursor *cursor;
+    VALUE rb_cursor;
+    grn_obj id;
+    grn_rc rc = GRN_SUCCESS;
+
+    rb_grn_view = SELF(self);
+    rb_grn_table_deconstruct(rb_grn_view, &view, &context,
+			     NULL, NULL,
+			     NULL, NULL, NULL,
+			     NULL);
+    cursor = grn_table_cursor_open(context, view, NULL, 0, NULL, 0,
+				   0, -1, GRN_CURSOR_ASCENDING);
+    rb_cursor = GRNTABLECURSOR2RVAL(Qnil, context, cursor);
+    rb_grn_object = RB_GRN_OBJECT(rb_grn_view);
+    GRN_TEXT_INIT(&id, 0);
+    while (rb_grn_object->object &&
+	   (rc = grn_table_cursor_next_o(context, cursor, &id)) == GRN_SUCCESS) {
+	rb_yield(rb_grn_view_record_new(self, &id));
+    }
+    GRN_OBJ_FIN(context, &id);
+    rb_grn_object_close(rb_cursor);
+
+    if (!(rc == GRN_SUCCESS || rc == GRN_END_OF_DATA)) {
+	rb_grn_context_check(context, self);
+    }
+
+    return Qnil;
+}
+
+/*
+ * Document-method: column_value
+ *
+ * call-seq:
+ *   view.column_value(id, name) -> 値
+ *
+ * _view_の_id_に対応するカラム_name_の値を返す。
+ */
+static VALUE
+rb_grn_view_get_column_value (VALUE self, VALUE rb_id, VALUE rb_name)
+{
+    RbGrnTable *rb_view;
+    grn_ctx *context = NULL;
+    grn_obj *view, *value, *accessor;
+    VALUE rb_value;
+    grn_obj id;
+
+    rb_view = SELF(self);
+    rb_grn_table_deconstruct(rb_view, &view, &context,
+			     NULL, NULL,
+			     &value, NULL, NULL,
+			     NULL);
+    GRN_BULK_REWIND(value);
+    GRN_TEXT_INIT(&id, 0);
+    GRN_TEXT_PUT(context, &id, RSTRING_PTR(rb_id), RSTRING_LEN(rb_id));
+    accessor = grn_obj_column(context, view,
+			      RSTRING_PTR(rb_name), RSTRING_LEN(rb_name));
+    grn_obj_get_value_o(context, accessor, &id, value);
+    grn_obj_unlink(context, accessor);
+    rb_value = GRNOBJ2RVAL(Qnil, context, value, self);
+    GRN_OBJ_FIN(context, &id);
+
+    return rb_value;
 }
 
 void
@@ -165,4 +247,7 @@ rb_grn_init_view (VALUE mGrn)
 			       rb_grn_view_s_create, -1);
 
     rb_define_method(rb_cGrnView, "add_table", rb_grn_view_add_table, 1);
+    rb_define_method(rb_cGrnView, "each", rb_grn_view_each, 0);
+    rb_define_method(rb_cGrnView, "column_value",
+		     rb_grn_view_get_column_value, 2);
 }

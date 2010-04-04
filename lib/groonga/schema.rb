@@ -197,6 +197,84 @@ module Groonga
         end
       end
 
+      # call-seq:
+      #   Groonga::Schema.create_view(name, options={}) {|view| ...}
+      #
+      # 名前が_name_のビューを作成する。以下の省略形。
+      #
+      #   Groonga::Schema.define do |schema|
+      #     schema.create_view(name, options) do |view|
+      #       ...
+      #     end
+      #   end
+      #
+      # ブロックにはGroonga::Schema::ViewDefinitionオブジェ
+      # クトがわたるので、そのオブジェクトを利用してビュー
+      # の詳細を定義する。
+      #
+      # _options_に指定可能な値は以下の通り。
+      #
+      # [+:force+]
+      #   +true+を指定すると既存の同名のビューが存在してい
+      #   ても、強制的にビューを作成する。
+      #
+      # [+:context+]
+      #   スキーマ定義時に使用するGroonga::Contextを指定する。
+      #   省略した場合はGroonga::Context.defaultを使用する。
+      #
+      # [+:path+]
+      #   ビューを保存するパスを指定する。パスを指定すると
+      #   永続ビューになる。
+      #
+      # [+:persistent+]
+      #   ビューを永続ビューとする。+:path:+を省略した場
+      #   合はパス名は自動的に作成される。デフォルトでは永続
+      #   ビューとなる。
+      def create_view(name, options={}, &block)
+        define do |schema|
+          schema.create_view(name, options, &block)
+        end
+      end
+
+      # 名前が_name_のテーブルを削除する。
+      #
+      # _options_に指定可能な値は以下の通り。
+      #
+      # [+:context+]
+      #   スキーマ定義時に使用するGroonga::Contextを指定する。
+      #   省略した場合はGroonga::Context.defaultを使用する。
+      def remove_view(name, options={})
+        define do |schema|
+          schema.remove_view(name, options)
+        end
+      end
+
+      # call-seq:
+      #   Groonga::Schema.change_view(name, options={}) {|view| ...}
+      #
+      # 名前が_name_のビューを変更する。以下の省略形。
+      #
+      #   Groonga::Schema.define do |schema|
+      #     schema.change_view(name, options) do |view|
+      #       ...
+      #     end
+      #   end
+      #
+      # ブロックにはGroonga::Schema::ViewDefinitionオブジェ
+      # クトがわたるので、そのオブジェクトを利用してテーブル
+      # の詳細を定義する。
+      #
+      # _options_に指定可能な値は以下の通り。
+      #
+      # [+:context+]
+      #   スキーマ定義時に使用するGroonga::Contextを指定する。
+      #   省略した場合はGroonga::Context.defaultを使用する。
+      def change_view(name, options={}, &block)
+        define do |schema|
+          schema.change_view(name, options, &block)
+        end
+      end
+
       # スキーマの内容を文字列で返す。返された値は
       # Groonga::Schema.restoreすることによりスキーマ内に組
       # み込むことができる。
@@ -399,6 +477,75 @@ module Groonga
     def change_table(name, options={})
       options = @options.merge(options || {}).merge(:change => true)
       definition = TableDefinition.new(name, options)
+      yield(definition)
+      @definitions << definition
+    end
+
+    # call-seq:
+    #   schema.create_view(name, options={}) {|view| ...}
+    #
+    # 名前が_name_のビューを作成する。
+    #
+    # ビューの作成は#defineを呼び出すまでは実行されないこ
+    # とに注意すること。
+    #
+    # _options_に指定可能な値は以下の通り。
+    #
+    # [+:force+]
+    #   +true+を指定すると既存の同名のビューが存在してい
+    #   ても、強制的にビューを作成する。
+    #
+    # [+:context+]
+    #   スキーマ定義時に使用するGroonga::Contextを指定する。
+    #   省略した場合はGroonga::Schema.newで指定した
+    #   Groonga::Contextを使用する。Groonga::Schema.newで指
+    #   定していない場合はGroonga::Context.defaultを使用する。
+    #
+    # [+:path+]
+    #   テーブルを保存するパスを指定する。パスを指定すると
+    #   永続テーブルになる。
+    #
+    # [+:persistent+]
+    #   テーブルを永続テーブルとする。+:path:+を省略した場
+    #   合はパス名は自動的に作成される。デフォルトでは永続
+    #   テーブルとなる。
+    def create_view(name, options={})
+      definition = ViewDefinition.new(name, @options.merge(options || {}))
+      yield(definition)
+      @definitions << definition
+    end
+
+    # 名前が_name_のビューを削除する。
+    #
+    # ビューの削除は#defineを呼び出すまでは実行されないことに
+    # 注意すること。
+    #
+    # _options_に指定可能な値は以下の通り。
+    #
+    # [+:context+]
+    #   スキーマ定義時に使用するGroonga::Contextを指定する。
+    #   省略した場合はGroonga::Context.defaultを使用する。
+    def remove_view(name, options={})
+      definition = ViewRemoveDefinition.new(name, @options.merge(options || {}))
+      @definitions << definition
+    end
+
+    # call-seq:
+    #   schema.change_view(name, options={}) {|table| ...}
+    #
+    # 名前が_name_のビューを変更する。
+    #
+    # ビューの変更は#defineを呼び出すまでは実行されないこ
+    # とに注意すること。
+    #
+    # _options_に指定可能な値は以下の通り。
+    #
+    # [+:context+]
+    #   スキーマ定義時に使用するGroonga::Contextを指定する。
+    #   省略した場合はGroonga::Context.defaultを使用する。
+    def change_view(name, options={})
+      options = @options.merge(options || {}).merge(:change => true)
+      definition = ViewDefinition.new(name, options)
       yield(definition)
       @definitions << definition
     end
@@ -759,6 +906,89 @@ module Groonga
     end
 
     class TableRemoveDefinition # :nodoc:
+      def initialize(name, options={})
+        @name = name
+        @options = options
+      end
+
+      def define
+        context = @options[:context] || Groonga::Context.default
+        context[@name].remove
+      end
+    end
+
+    # スキーマ定義時にGroonga::Schema.create_viewや
+    # Groonga::Schema#create_viewからブロックに渡されてくる
+    # オブジェクト
+    class ViewDefinition
+      # ビューの名前
+      attr_reader :name
+
+      def initialize(name, options) # :nodoc:
+        @name = name
+        @name = @name.to_s if @name.is_a?(Symbol)
+        @tables = []
+        validate_options(options)
+        @options = options
+      end
+
+      def define # :nodoc:
+        view = context[@name]
+        if @options[:change]
+          raise ArgumentError, "view doesn't exist: #{@name}" if view.nil?
+        else
+          if view and @options[:force]
+            view.remove
+            view = nil
+          end
+          view ||= Groonga::View.create(create_options)
+        end
+        @tables.each do |table|
+          view.add_table(table)
+        end
+        view
+      end
+
+      # 名前が_name_のテーブルをビューに追加する。
+      def add(name)
+        table = context[name]
+        raise ArgumentError, "table doesn't exist: #{name}" if table.nil?
+        @tables << table
+        self
+      end
+
+      def context # :nodoc:
+        @options[:context] || Groonga::Context.default
+      end
+
+      private
+      AVAILABLE_OPTION_KEYS = [:context, :change, :force,
+                               :path, :persistent] # :nodoc:
+      def validate_options(options) # :nodoc:
+        return if options.nil?
+        unknown_keys = options.keys - AVAILABLE_OPTION_KEYS
+        unless unknown_keys.empty?
+          message = "unknown keys are specified: #{unknown_keys.inspect}"
+          message << ": available keys: #{AVAILABLE_OPTION_KEYS.inspect}"
+          raise ArgumentError, message
+        end
+      end
+
+      def create_options # :nodoc:
+        {
+          :name => @name,
+          :path => @options[:path],
+          :persistent => persistent?,
+          :context => context,
+        }
+      end
+
+      def persistent? # :nodoc:
+        @options[:persistent].nil? ? true : @options[:persistent]
+      end
+    end
+
+    class ViewRemoveDefinition # :nodoc:
       def initialize(name, options={})
         @name = name
         @options = options

@@ -87,6 +87,7 @@ typedef int rb_grn_boolean;
 #define RB_GRN_COLUMN(object) ((RbGrnColumn *)(object))
 #define RB_GRN_INDEX_COLUMN(object) ((RbGrnIndexColumn *)(object))
 #define RB_GRN_ACCESSOR(object) ((RbGrnAccessor *)(object))
+#define RB_GRN_ACCESSOR_VIEW(object) ((RbGrnAccessor *)(object))
 #define RB_GRN_EXPRESSION(object) ((RbGrnExpression *)(object))
 #define RB_GRN_UNBIND_FUNCTION(function) ((RbGrnUnbindFunction)(function))
 
@@ -205,7 +206,9 @@ RB_GRN_VAR VALUE rb_cGrnFixSizeColumn;
 RB_GRN_VAR VALUE rb_cGrnVariableSizeColumn;
 RB_GRN_VAR VALUE rb_cGrnIndexColumn;
 RB_GRN_VAR VALUE rb_cGrnAccessor;
+RB_GRN_VAR VALUE rb_cGrnViewAccessor;
 RB_GRN_VAR VALUE rb_cGrnRecord;
+RB_GRN_VAR VALUE rb_cGrnViewRecord;
 RB_GRN_VAR VALUE rb_cGrnQuery;
 RB_GRN_VAR VALUE rb_cGrnLogger;
 RB_GRN_VAR VALUE rb_cGrnSnippet;
@@ -241,7 +244,9 @@ void           rb_grn_init_fix_size_column          (VALUE mGrn);
 void           rb_grn_init_variable_size_column     (VALUE mGrn);
 void           rb_grn_init_index_column             (VALUE mGrn);
 void           rb_grn_init_accessor                 (VALUE mGrn);
+void           rb_grn_init_view_accessor            (VALUE mGrn);
 void           rb_grn_init_record                   (VALUE mGrn);
+void           rb_grn_init_view_record              (VALUE mGrn);
 void           rb_grn_init_query                    (VALUE mGrn);
 void           rb_grn_init_variable                 (VALUE mGrn);
 void           rb_grn_init_operation                (VALUE mGrn);
@@ -453,6 +458,11 @@ VALUE          rb_grn_record_new                    (VALUE table,
 VALUE          rb_grn_record_new_raw                (VALUE table,
 						     VALUE id,
 						     VALUE values);
+
+VALUE          rb_grn_view_record_new               (VALUE    view,
+						     grn_obj *id);
+VALUE          rb_grn_view_record_new_raw           (VALUE view,
+						     VALUE id);
 
 VALUE          rb_grn_record_expression_builder_new (VALUE table,
 						     VALUE name);

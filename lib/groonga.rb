@@ -34,6 +34,7 @@ if local_groonga_library_dir.exist?
   end
 end
 
+require 'groonga/view-record'
 require 'groonga/record'
 require 'groonga/expression-builder'
 require 'groonga.so'
