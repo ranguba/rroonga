@@ -36,6 +36,8 @@ module GroongaTestUtils
 
   def setup_sandbox
     setup_tmp_directory
+    setup_log_path
+
     setup_tables_directory
     setup_columns_directory
 
@@ -47,6 +49,12 @@ module GroongaTestUtils
     @tmp_dir = Pathname(File.dirname(__FILE__)) + "tmp"
     FileUtils.rm_rf(@tmp_dir.to_s)
     FileUtils.mkdir_p(@tmp_dir.to_s)
+  end
+
+  def setup_log_path
+    @dump_log = false
+    Groonga::Logger.log_path = (@tmp_dir + "groonga.log").to_s
+    Groonga::Logger.query_log_path = (@tmp_dir + "groonga-query.log").to_s
   end
 
   def setup_tables_directory
@@ -90,7 +98,26 @@ module GroongaTestUtils
   def teardown_sandbox
     @database = nil
     GC.start
+    teardown_log_path
     teardown_tmp_directory
+  end
+
+  def teardown_log_path
+    return unless @dump_log
+    log_path = Groonga::Logger.log_path
+    query_log_path = Groonga::Logger.query_log_path
+    if File.exist?(log_path)
+      header = "--- log: #{log_path} ---"
+      puts(header)
+      puts(File.read(log_path))
+      puts("-" * header.length)
+    end
+    if File.exist?(query_log_path)
+      header = "--- query log: #{query_log_path} ---"
+      puts(header)
+      puts(File.read(query_log_path))
+      puts("-" * header.length)
+    end
   end
 
   def teardown_tmp_directory

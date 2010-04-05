@@ -1,6 +1,6 @@
 /* -*- c-file-style: "ruby" -*- */
 /*
-  Copyright (C) 2009  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2010  Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -17,6 +17,12 @@
 */
 
 #include "rb-grn.h"
+
+/* FIXME */
+void grn_log_reopen(grn_ctx *ctx);
+extern const char *grn_log_path;
+extern const char *grn_qlog_path;
+
 
 /*
  * Document-class: Groonga::Logger
@@ -286,20 +292,21 @@ rb_grn_logger_initialize (int argc, VALUE *argv, VALUE self)
 static VALUE
 rb_grn_logger_s_register (int argc, VALUE *argv, VALUE klass)
 {
-    VALUE logger;
-    grn_rc  rc;
+    VALUE logger, rb_context = Qnil;
+    grn_ctx *context;
 
     logger = rb_funcall2(klass, rb_intern("new"), argc, argv);
     rb_grn_logger_set_handler(logger, rb_block_proc());
-    rc = grn_logger_info_set(NULL, RVAL2GRNLOGGER(logger));
-    rb_grn_rc_check(rc, logger);
+    context = rb_grn_context_ensure(&rb_context);
+    grn_logger_info_set(context, RVAL2GRNLOGGER(logger));
+    rb_grn_context_check(context, logger);
     rb_cv_set(klass, "@@current_logger", logger);
 
     return Qnil;
 }
 
 static void
-rb_grn_logger_reset (VALUE klass)
+rb_grn_logger_reset_with_error_check (VALUE klass, grn_ctx *context)
 {
     VALUE current_logger;
 
@@ -307,7 +314,141 @@ rb_grn_logger_reset (VALUE klass)
     if (NIL_P(current_logger))
         return;
 
-    grn_logger_info_set(NULL, NULL);
+    rb_cv_set(klass, "@@current_logger", Qnil);
+    if (context) {
+	grn_logger_info_set(context, NULL);
+	rb_grn_context_check(context, current_logger);
+    } else {
+	grn_logger_info_set(NULL, NULL);
+    }
+}
+
+static void
+rb_grn_logger_reset (VALUE klass)
+{
+    rb_grn_logger_reset_with_error_check(klass, NULL);
+}
+
+static VALUE
+rb_grn_logger_s_reopen_with_related_object (VALUE klass, VALUE related_object)
+{
+    VALUE rb_context = Qnil;
+    grn_ctx *context;
+
+    context = rb_grn_context_ensure(&rb_context);
+    rb_grn_logger_reset_with_error_check(klass, context);
+    grn_log_reopen(context);
+    rb_grn_context_check(context, related_object);
+
+    return Qnil;
+}
+
+/*
+ * call-seq:
+ *   Groonga::Logger.reopen
+ *
+ * groongaのデフォルトロガーがログを出力するファイルを再オー
+ * プンする。ログファイルのバックアップ時などに使用する。
+ *
+ * Groonga::Logger.registerで独自のロガーを設定している場合
+ * は例外が発生する。
+ */
+static VALUE
+rb_grn_logger_s_reopen (VALUE klass)
+{
+    return rb_grn_logger_s_reopen_with_related_object(klass, klass);
+}
+
+static VALUE
+rb_grn_logger_s_set_path (VALUE klass, VALUE rb_path,
+			  const char **path, const char *class_variable_name)
+{
+    rb_grn_boolean need_reopen = RB_GRN_FALSE;
+
+    if (NIL_P(rb_path)) {
+	need_reopen = *path != NULL;
+	*path = NULL;
+    } else {
+	const char *current_path = *path;
+	*path = RSTRING_PTR(rb_path);
+	if (!current_path || strcmp(*path, current_path) != 0) {
+	    need_reopen = RB_GRN_TRUE;
+	}
+    }
+    rb_cv_set(klass, class_variable_name, rb_path);
+
+    if (need_reopen) {
+	rb_grn_logger_s_reopen_with_related_object(klass, rb_path);
+    }
+
+    return Qnil;
+}
+
+/*
+ * call-seq:
+ *   Groonga::Logger.log_path # => log_path
+ *
+ * groongaのデフォルトロガーがログを出力するファイルの
+ * パスを返す。
+ */
+static VALUE
+rb_grn_logger_s_get_log_path (VALUE klass)
+{
+    if (grn_log_path) {
+	return rb_str_new2(grn_log_path);
+    } else {
+	return Qnil;
+    }
+}
+
+/*
+ * call-seq:
+ *   Groonga::Logger.log_path = log_path
+ *
+ * groongaのデフォルトロガーがログを出力するファイルのパスを
+ * 指定する。
+ *
+ * Groonga::Logger.registerで独自のロガーを設定している場合、
+ * 設定している独自ロガーは無効になる。
+ */
+static VALUE
+rb_grn_logger_s_set_log_path (VALUE klass, VALUE path)
+{
+    return rb_grn_logger_s_set_path(klass, path, &grn_log_path, "@@log_path");
+}
+
+/*
+ * call-seq:
+ *   Groonga::Logger.query_log_path # => query_log_path
+ *
+ * groongaのデフォルトロガーがクエリログを出力するファイルの
+ * パスを返す。
+ */
+static VALUE
+rb_grn_logger_s_get_query_log_path (VALUE klass)
+{
+    if (grn_qlog_path) {
+	return rb_str_new2(grn_qlog_path);
+    } else {
+	return Qnil;
+    }
+}
+
+/*
+ * call-seq:
+ *   Groonga::Logger.query_log_path = query_log_path
+ *
+ * groongaのデフォルトロガーがクエリログを出力するファイルの
+ * パスを指定する。
+ *
+ * Groonga::Logger.registerで独自のロガーを設定している場合、
+ * 設定している独自ロガーは無効になる。
+ */
+static VALUE
+rb_grn_logger_s_set_query_log_path (VALUE klass, VALUE path)
+{
+    return rb_grn_logger_s_set_path(klass, path, &grn_qlog_path,
+				    "@@query_log_path");
 }
 
 void
@@ -317,8 +458,20 @@ rb_grn_init_logger (VALUE mGrn)
     rb_define_alloc_func(cGrnLogger, rb_grn_logger_alloc);
 
     rb_cv_set(cGrnLogger, "@@current_logger", Qnil);
+    rb_cv_set(cGrnLogger, "@@log_path", Qnil);
+    rb_cv_set(cGrnLogger, "@@query_log_path", Qnil);
     rb_define_singleton_method(cGrnLogger, "register",
                                rb_grn_logger_s_register, -1);
+    rb_define_singleton_method(cGrnLogger, "reopen",
+                               rb_grn_logger_s_reopen, 0);
+    rb_define_singleton_method(cGrnLogger, "log_path",
+                               rb_grn_logger_s_get_log_path, 0);
+    rb_define_singleton_method(cGrnLogger, "log_path=",
+                               rb_grn_logger_s_set_log_path, 1);
+    rb_define_singleton_method(cGrnLogger, "query_log_path",
+                               rb_grn_logger_s_get_query_log_path, 0);
+    rb_define_singleton_method(cGrnLogger, "query_log_path=",
+                               rb_grn_logger_s_set_query_log_path, 1);
     rb_set_end_proc(rb_grn_logger_reset, cGrnLogger);
 
     rb_define_method(cGrnLogger, "initialize", rb_grn_logger_initialize, -1);
