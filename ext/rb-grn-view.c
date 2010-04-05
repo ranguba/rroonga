@@ -368,7 +368,7 @@ rb_grn_view_sort (int argc, VALUE *argv, VALUE self)
 			       result, keys, n_keys);
     exception = rb_grn_context_to_exception(context, self);
     if (!NIL_P(exception)) {
-        grn_obj_close(context, result);
+        grn_obj_unlink(context, result);
         rb_exc_raise(exception);
     }
 
@@ -381,7 +381,7 @@ rb_grn_view_sort (int argc, VALUE *argv, VALUE self)
     }
     GRN_OBJ_FIN(context, &id);
     grn_table_cursor_close(context, cursor);
-    grn_obj_close(context, result);
+    grn_obj_unlink(context, result);
 
     return rb_result;
 }

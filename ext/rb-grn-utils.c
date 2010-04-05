@@ -540,7 +540,7 @@ rb_grn_uvector_from_ruby_object (VALUE object, grn_ctx *context,
 	    if (RVAL2CBOOL(rb_obj_is_kind_of(value, rb_cGrnRecord))) {
 		id = NUM2UINT(rb_funcall(value, rb_intern("id"), 0));
 	    } else {
-		grn_obj_close(context, uvector);
+		grn_obj_unlink(context, uvector);
 		rb_raise(rb_eArgError,
 			 "uvector value should be one of "
 			 "[Fixnum, Groonga::Record]: %s (%s): %s",
@@ -699,7 +699,7 @@ rb_grn_obj_from_ruby_object (VALUE rb_object, grn_ctx *context, grn_obj **_obj)
 {
     if (RVAL2CBOOL(rb_obj_is_kind_of(rb_object, rb_cGrnObject))) {
 	if (*_obj) {
-	    grn_obj_close(context, *_obj); /* TODO: reduce memory allocation */
+	    grn_obj_unlink(context, *_obj); /* TODO: reduce memory allocation */
 	}
 	*_obj = RVAL2GRNOBJECT(rb_object, &context);
     } else {

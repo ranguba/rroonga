@@ -497,7 +497,7 @@ rb_grn_object_close (VALUE self)
     rb_grn_object_deconstruct(SELF(self), &object, &context,
 			      NULL, NULL, NULL, NULL);
     if (object && context)
-	grn_obj_close(context, object);
+	grn_obj_unlink(context, object);
     return Qnil;
 }
 
@@ -579,7 +579,7 @@ rb_grn_object_inspect_content_name (VALUE inspected,
 	rb_str_cat2(inspected, "<");
 	rb_str_cat2(inspected, GRN_BULK_HEAD(&name));
 	rb_str_cat2(inspected, ">");
-	grn_obj_close(context, &name);
+	grn_obj_unlink(context, &name);
     }
 
     return inspected;
@@ -1168,7 +1168,7 @@ rb_grn_object_array_reference (VALUE self, VALUE rb_id)
     exception = rb_grn_context_to_exception(context, self);
     if (NIL_P(exception))
 	rb_value = GRNVALUE2RVAL(context, &value, range, self);
-    grn_obj_close(context, &value);
+    grn_obj_unlink(context, &value);
     if (!NIL_P(exception))
 	rb_exc_raise(exception);
 
@@ -1235,7 +1235,7 @@ rb_grn_object_set_raw (RbGrnObject *rb_grn_object, grn_id id,
     rc = grn_obj_set_value(context, rb_grn_object->object, id,
 			   &value, flags);
     exception = rb_grn_context_to_exception(context, related_object);
-    grn_obj_close(context, &value);
+    grn_obj_unlink(context, &value);
     if (!NIL_P(exception))
 	rb_exc_raise(exception);
     rb_grn_rc_check(rc, related_object);

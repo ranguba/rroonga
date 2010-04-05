@@ -123,7 +123,7 @@ rb_grn_context_to_exception (grn_ctx *context, VALUE related_object)
     exception = rb_funcall(exception_class, rb_intern("new"), 1,
 			   rb_str_new(GRN_BULK_HEAD(&bulk),
 				      GRN_BULK_VSIZE(&bulk)));
-    grn_obj_close(context, &bulk);
+    grn_obj_unlink(context, &bulk);
 
     return exception;
 }

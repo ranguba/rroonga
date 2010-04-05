@@ -84,7 +84,7 @@ rb_grn_column_finalizer (grn_ctx *context, grn_obj *grn_object,
     rb_grn_named_object_finalizer(context, grn_object,
 				  RB_GRN_NAMED_OBJECT(rb_column));
     if (context && rb_column->value)
-	grn_obj_close(context, rb_column->value);
+	grn_obj_unlink(context, rb_column->value);
     rb_column->value = NULL;
 }
 

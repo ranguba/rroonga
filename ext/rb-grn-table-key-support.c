@@ -63,7 +63,7 @@ rb_grn_table_key_support_finalizer (grn_ctx *context,
 	return;
 
     if (rb_grn_table_key_support->key)
-	grn_obj_close(context, rb_grn_table_key_support->key);
+	grn_obj_unlink(context, rb_grn_table_key_support->key);
     rb_grn_table_key_support->key = NULL;
 
     rb_grn_table_finalizer(context, grn_object,

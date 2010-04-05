@@ -49,7 +49,7 @@ rb_grn_encoding_support_get_encoding (VALUE self)
     rb_grn_context_check(context, self);
 
     memcpy(&encoding, GRN_BULK_HEAD(encoding_value), sizeof(encoding));
-    grn_obj_close(context, encoding_value);
+    grn_obj_unlink(context, encoding_value);
 
     return GRNENCODING2RVAL(encoding);
 }

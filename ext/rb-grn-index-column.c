@@ -41,9 +41,9 @@ rb_grn_index_column_finalizer (grn_ctx *context, grn_obj *object,
     if (!context)
 	return;
 
-    grn_obj_close(context, rb_grn_index_column->id_query);
-    grn_obj_close(context, rb_grn_index_column->string_query);
-    grn_obj_close(context, rb_grn_index_column->old_value);
+    grn_obj_unlink(context, rb_grn_index_column->id_query);
+    grn_obj_unlink(context, rb_grn_index_column->string_query);
+    grn_obj_unlink(context, rb_grn_index_column->old_value);
 
     rb_grn_column_finalizer(context, object, RB_GRN_COLUMN(rb_grn_index_column));
 }
@@ -261,7 +261,7 @@ rb_grn_index_column_get_sources (VALUE self)
 	rb_ary_push(rb_sources, rb_source);
 	source_ids++;
     }
-    grn_obj_close(context, &sources);
+    grn_obj_unlink(context, &sources);
 
     return rb_sources;
 }
@@ -348,7 +348,7 @@ rb_grn_index_column_set_sources (VALUE self, VALUE rb_sources)
 	GRN_TEXT_SET(context, &bulk_sources, sources, n * sizeof(grn_id));
 	rc = grn_obj_set_info(context, column, GRN_INFO_SOURCE, &bulk_sources);
 	exception = rb_grn_context_to_exception(context, self);
-	grn_obj_close(context, &bulk_sources);
+	grn_obj_unlink(context, &bulk_sources);
     }
 
     if (!NIL_P(exception))

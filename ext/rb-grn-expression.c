@@ -34,7 +34,7 @@ rb_grn_expression_finalizer (grn_ctx *context, grn_obj *object,
 			     RbGrnExpression *rb_grn_expression)
 {
     if (context && rb_grn_expression->value)
-	grn_obj_close(context, rb_grn_expression->value);
+	grn_obj_unlink(context, rb_grn_expression->value);
 
     rb_grn_expression->value = NULL;
 }
@@ -218,7 +218,7 @@ rb_grn_expression_append_constant (int argc, VALUE *argv, VALUE self)
     grn_expr_append_const(context, expression, constant, operator, n_arguments);
 
     exception = rb_grn_context_to_exception(context, self);
-    grn_obj_close(context, constant);
+    grn_obj_unlink(context, constant);
     if (!NIL_P(exception))
 	rb_exc_raise(exception);
 
@@ -423,7 +423,7 @@ rb_grn_expression_parse (int argc, VALUE *argv, VALUE self)
 	related_object = rb_ary_new3(2, self, rb_ary_new4(argc, argv));
 	exception = rb_grn_context_to_exception(context, related_object);
     }
-    grn_obj_close(context, default_column);
+    grn_obj_unlink(context, default_column);
 
     if (!NIL_P(exception))
 	rb_exc_raise(exception);

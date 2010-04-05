@@ -55,7 +55,7 @@ rb_grn_table_finalizer (grn_ctx *context, grn_obj *object,
 			RbGrnTable *rb_grn_table)
 {
     if (context && rb_grn_table->value)
-	grn_obj_close(context, rb_grn_table->value);
+	grn_obj_unlink(context, rb_grn_table->value);
     rb_grn_table->value = NULL;
     rb_grn_table->columns = Qnil;
 }
@@ -269,7 +269,7 @@ rb_grn_table_inspect_content (VALUE self, VALUE inspected)
 	GRN_OBJ_INIT(&value, GRN_BULK, 0, GRN_ID_NIL);
 	grn_obj_get_info(context, table, GRN_INFO_ENCODING, &value);
 	encoding = *((grn_encoding *)GRN_BULK_HEAD(&value));
-	grn_obj_close(context, &value);
+	grn_obj_unlink(context, &value);
 
 	if (context->rc == GRN_SUCCESS)
 	    rb_str_concat(inspected, rb_inspect(GRNENCODING2RVAL(encoding)));
@@ -1218,7 +1218,7 @@ rb_grn_table_sort (int argc, VALUE *argv, VALUE self)
 			       result, keys, n_keys);
     exception = rb_grn_context_to_exception(context, self);
     if (!NIL_P(exception)) {
-        grn_obj_close(context, result);
+        grn_obj_unlink(context, result);
         rb_exc_raise(exception);
     }
 
@@ -1234,7 +1234,7 @@ rb_grn_table_sort (int argc, VALUE *argv, VALUE self)
 	rb_ary_push(rb_result, rb_grn_record_new(self, *id, Qnil));
     }
     grn_table_cursor_close(context, cursor);
-    grn_obj_close(context, result);
+    grn_obj_unlink(context, result);
 
     return rb_result;
 }
