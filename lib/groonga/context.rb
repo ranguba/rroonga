@@ -146,10 +146,14 @@ module Groonga
       def normalize_options(options)
         normalized_options = {}
         options.each do |key, value|
-          key = key.to_s.gsub(/-/, "_").gsub(/drill_down/, "drilldown")
-          normalized_options[key] = value
+          normalized_options[normalize_option_name(key)] = value
         end
         normalized_options
+      end
+
+      def normalize_option_name(name)
+        name = name.to_s.gsub(/-/, "_").gsub(/drill_down/, "drilldown")
+        name.gsub(/sort_by/, 'sortby')
       end
 
       def query
