@@ -42,6 +42,17 @@ class ContextSelectTest < Test::Unit::TestCase
                  [result.n_hits, result.records])
   end
 
+  def test_after_other_command
+    context.send("status")
+
+    result = nil
+    assert_nothing_raised do
+      result = context.select(@users)
+    end
+    assert_equal([true, 0, nil],
+                 [result.success?, result.return_code, result.error_message])
+  end
+
   def test_success
     result = context.select(@users)
     assert_equal([true, 0, nil],

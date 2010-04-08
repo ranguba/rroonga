@@ -137,6 +137,7 @@ module Groonga
       end
 
       def exec
+        @context.receive # before we pollute the buffer, just flush it
         request_id = @context.send(query)
         loop do
           response_id, result = @context.receive
