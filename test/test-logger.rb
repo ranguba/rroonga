@@ -27,7 +27,9 @@ class LoggerTest < Test::Unit::TestCase
   end
 
   def test_reopen
-    FileUtils.mv(@default_log_path, "#{@default_log_path}.old")
+    if File.exist?(@default_log_path)
+      FileUtils.mv(@default_log_path, "#{@default_log_path}.old")
+    end
     assert_false(File.exist?(@default_log_path))
     Groonga::Logger.reopen
     assert_true(File.exist?(@default_log_path))
