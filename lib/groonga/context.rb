@@ -65,7 +65,7 @@ module Groonga
           values.each do |value|
             record = {}
             columns.each_with_index do |(name, type), i|
-              record[name] = value[i]
+              record[name] = convert_value(value[i], type)
             end
             records << record
           end
@@ -90,6 +90,15 @@ module Groonga
           meta_data, columns, *values = result
           n_hits, = meta_data
           [n_hits, columns, values]
+        end
+
+        def convert_value(value, type)
+          case type
+          when "Time"
+            Time.at(value)
+          else
+            value
+          end
         end
 
         begin

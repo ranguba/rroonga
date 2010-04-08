@@ -19,9 +19,12 @@ class ContextSelectTest < Test::Unit::TestCase
   setup :setup_database
   setup
   def setup_data
-    @users = Groonga::Hash.create(:name => "Users", :key_type => "ShortText")
     @books = Groonga::Hash.create(:name => "Books", :key_type => "ShortText")
+    @books.define_column("published", "Time")
+    @users = Groonga::Hash.create(:name => "Users", :key_type => "ShortText")
     @users.define_column("book", "Books")
+
+    @books.add("the groonga book", :published => Time.parse("2010/04/01"))
     @users.add("morita", :book => "the groonga book")
     @users.add("gunyara-kun", :book => "the groonga book")
     @users.add("yu")
@@ -76,5 +79,15 @@ class ContextSelectTest < Test::Unit::TestCase
                   },
                  ],
                  [result.n_hits, result.records, normalized_drill_down])
+  end
+
+  def test_time
+    result = context.select(@books)
+    assert_equal([{
+                    "_id" => 1,
+                    "_key" => "the groonga book",
+                    "published" => Time.parse("2010/04/01"),
+                  }],
+                 result.records)
   end
 end
