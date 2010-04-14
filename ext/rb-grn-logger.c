@@ -363,6 +363,7 @@ rb_grn_logger_s_reopen (VALUE klass)
     return rb_grn_logger_s_reopen_with_related_object(klass, klass);
 }
 
+#ifndef WIN32
 static VALUE
 rb_grn_logger_s_set_path (VALUE klass, VALUE rb_path,
 			  const char **path, const char *class_variable_name)
@@ -387,6 +388,7 @@ rb_grn_logger_s_set_path (VALUE klass, VALUE rb_path,
 
     return Qnil;
 }
+#endif
 
 /*
  * call-seq:

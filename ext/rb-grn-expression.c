@@ -533,7 +533,6 @@ grn_rc grn_expr_inspect(grn_ctx *ctx, grn_obj *buf, grn_obj *expr);
 static VALUE
 rb_grn_expression_inspect (VALUE self)
 {
-    grn_rc rc;
     grn_ctx *context = NULL;
     grn_obj inspected;
     grn_obj *expression;
@@ -548,7 +547,7 @@ rb_grn_expression_inspect (VALUE self)
 #ifdef WIN32
     GRN_TEXT_PUTS(context, &inspected, "(not supported on Windows)");
 #else
-    rc = grn_expr_inspect(context, &inspected, expression);
+    grn_expr_inspect(context, &inspected, expression);
 #endif
     GRN_TEXT_PUTS(context, &inspected, ">");
     rb_inspected = rb_str_new(GRN_TEXT_VALUE(&inspected),
