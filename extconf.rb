@@ -23,20 +23,13 @@ require 'pkg-config'
 require 'fileutils'
 require 'shellwords'
 
-checking_for(checking_message("GCC")) do
-  if macro_defined?("__GNUC__", "")
-    $CFLAGS += ' -Wall'
-    true
-  else
-    false
-  end
-end
-
 package_name = "groonga"
 module_name = "groonga"
 ext_dir_name = "ext"
 src_dir = File.join(File.expand_path(File.dirname(__FILE__)), ext_dir_name)
 major, minor, micro = 0, 1, 7
+win32 = false
+wine = false
 
 def local_groonga_base_dir
   File.join(File.dirname(__FILE__), "vendor")
@@ -132,18 +125,55 @@ def install_groonga_locally(major, minor, micro)
   prepend_pkg_config_path_for_local_groonga
 end
 
-unless PKGConfig.have_package(package_name, major, minor, micro)
-  unless have_local_groonga?(package_name, major, minor, micro)
-    install_groonga_locally(major, minor, micro)
-    PKGConfig.have_package(package_name, major, minor, micro) or exit 1
+def check_win32
+  checking_for(checking_message("Win32 OS")) do
+    win32 = /cygwin|mingw|mswin32/ =~ RUBY_PLATFORM
+    $defs << "-DRB_GRN_PLATFORM_WIN32" if win32
+    win32
   end
 end
 
-real_version = PKGConfig.modversion(package_name)
-real_major, real_minor, real_micro = real_version.split(/\./)
+win32 = check_win32
+if win32
+  $CFLAGS += " -I#{local_groonga_install_dir}/include"
+  $DLDFLAGS += " -L#{local_groonga_install_dir}/bin"
+  $libs += " -lgroonga"
+
+  real_major, real_minor, real_micro = major, minor, micro
+
+  checking_for(checking_message("Wine")) do
+    wine = with_config("wine")
+  end
+else
+  checking_for(checking_message("GCC")) do
+    if macro_defined?("__GNUC__", "")
+      $CFLAGS += ' -Wall'
+      true
+    else
+      false
+    end
+  end
+
+  unless PKGConfig.have_package(package_name, major, minor, micro)
+    unless have_local_groonga?(package_name, major, minor, micro)
+      install_groonga_locally(major, minor, micro)
+      PKGConfig.have_package(package_name, major, minor, micro) or exit 1
+    end
+  end
+
+  real_version = PKGConfig.modversion(package_name)
+  real_major, real_minor, real_micro = real_version.split(/\./)
+end
+
 $defs << "-DGRN_MAJOR_VERSION=#{real_major}"
 $defs << "-DGRN_MINOR_VERSION=#{real_minor}"
 $defs << "-DGRN_MICRO_VERSION=#{real_micro}"
+
+unless wine
+  have_header("ruby/st.h") unless have_macro("HAVE_RUBY_ST_H", "ruby.h")
+  have_func("rb_errinfo", "ruby.h")
+  have_type("enum ruby_value_type", "ruby.h")
+end
 
 checking_for(checking_message("debug flag")) do
   debug = with_config("debug")
@@ -153,10 +183,6 @@ checking_for(checking_message("debug flag")) do
   end
   debug
 end
-
-have_header("ruby/st.h") unless have_macro("HAVE_RUBY_ST_H", "ruby.h")
-have_func("rb_errinfo", "ruby.h")
-have_type("enum ruby_value_type", "ruby.h")
 
 $INSTALLFILES ||= []
 $INSTALLFILES << ["../lib/**/*.rb", "$(RUBYLIBDIR)", "../lib"]
@@ -169,6 +195,7 @@ File.open("Makefile", "w") do |f|
   co = nil
   dllib = nil
   makefile.each_line do |line|
+    line = line.gsub(/Z:/, '') if wine
     case line
     when /^DLLIB\s*=\s*/
       raw_dllib = $POSTMATCH
