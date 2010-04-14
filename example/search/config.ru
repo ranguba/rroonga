@@ -100,9 +100,9 @@ EOF
 
   def render_search_box(request, response)
     response.write(<<-EOF)
-<form method="post" action="#{path(request, '/')}">
+<form method="post" action="#{path(request, '')}">
   <p>
-    <a href="#{path(request, '/')}">
+    <a href="#{path(request, '')}">
       <img src="#{path(request, 'images/mini-groonga.png')}" alt="groonga" />
     </a>
     <input name="query" type="text" value="#{escape_html(query(request))}" />
