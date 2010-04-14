@@ -165,6 +165,8 @@ else
   real_major, real_minor, real_micro = real_version.split(/\./)
 end
 
+$defs << "-DRB_GRN_COMPILATION"
+
 $defs << "-DGRN_MAJOR_VERSION=#{real_major}"
 $defs << "-DGRN_MINOR_VERSION=#{real_minor}"
 $defs << "-DGRN_MICRO_VERSION=#{real_micro}"
