@@ -87,7 +87,7 @@ EOF
   end
 
   def query(request)
-    request.path_info.gsub(/\A\/|\/\z/, '')
+    unescape(request.path_info.gsub(/\A\/|\/\z/, ''))
   end
 
   def page(request)
