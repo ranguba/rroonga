@@ -17,13 +17,14 @@
 
 require 'pathname'
 
-base_dir = Pathname.new(__FILE__).dirname.dirname
+base_dir = Pathname.new(__FILE__).dirname.dirname.expand_path
 local_groonga_dir = base_dir + "vendor" + "local"
 local_groonga_bin_dir = local_groonga_dir + "bin"
 if local_groonga_bin_dir.exist?
   prepend_path = Proc.new do |environment_name, separator|
     paths = (ENV[environment_name] || '').split(/#{separator}/)
     dir = local_groonga_bin_dir.to_s
+    dir = dir.gsub(/\//, File::ALT_SEPARATOR) if File::ALT_SEPARATOR
     unless paths.include?(dir)
       paths = [dir] + paths
       ENV[environment_name] = paths.join(separator)
@@ -33,6 +34,8 @@ if local_groonga_bin_dir.exist?
   case RUBY_PLATFORM
   when /mingw|mswin/
     prepend_path.call("PATH", ";")
+  when /cygwin/
+    prepend_path.call("PATH", ":")
   end
 end
 
