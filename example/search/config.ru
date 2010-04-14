@@ -217,7 +217,7 @@ EOS
   end
 
   def render_pagination_link(request, response, query, page, label)
-    href = "./?query=#{escape_html(query)};page=#{escape_html(page)}"
+    href = "./?page=#{escape_html(page)}"
     response.write(pagination_span("<a href='#{href}'>#{label}</a>"))
   end
 
