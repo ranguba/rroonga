@@ -34,7 +34,7 @@ class Searcher
       else
         request.path_info = "/#{escape(query)}/"
       end
-      response.redirect(request.url)
+      response.redirect(request.url.split(/\?/, 2)[0])
       return response.to_a
     end
 
