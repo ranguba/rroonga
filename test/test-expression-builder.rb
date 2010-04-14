@@ -1,4 +1,4 @@
-# Copyright (C) 2009  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2010  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -21,7 +21,7 @@ class ExpressionBuilderTest < Test::Unit::TestCase
   setup :setup_data
 
   def setup_tables
-    @users = Groonga::Hash.create(:name => "Users")
+    @users = Groonga::Hash.create(:name => "Users", :key_type => "ShortText")
     @name = @users.define_column("name", "ShortText")
     @hp = @users.define_column("hp", "UInt32")
 
@@ -152,5 +152,43 @@ class ExpressionBuilderTest < Test::Unit::TestCase
       end
       record["name"] == "dummy"
     end
+  end
+
+  def test_id
+    result = @users.select do |record|
+      record.id == 1
+    end
+    assert_equal(["morita"],
+                 result.collect {|record| record.key.key})
+  end
+
+  def test_key
+    result = @users.select do |record|
+      record.key == "morita"
+    end
+    assert_equal(["morita"],
+                 result.collect {|record| record.key.key})
+  end
+
+  def test_score
+    result = @users.select do |record|
+      (record.name =~ "o") | (record.hp >= 150)
+    end
+    result = result.select do |record|
+      record.score > 1
+    end
+    assert_equal(["yu"],
+                 result.collect {|record| record["_key"]})
+  end
+
+  def test_n_sub_records
+    result = @users.select do |record|
+      (record.name =~ "o") | (record.hp >= 150)
+    end
+    result = result.select do |record|
+      record.n_sub_records > 1
+    end
+    assert_equal(["yu"],
+                 result.collect {|record| record["_key"]})
   end
 end

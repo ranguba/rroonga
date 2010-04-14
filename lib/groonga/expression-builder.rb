@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2009  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2010  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -213,6 +213,22 @@ module Groonga
                                   :column_name => name)
     end
 
+    def id
+      self["_id"]
+    end
+
+    def key
+      self["_key"]
+    end
+
+    def score
+      self["_score"]
+    end
+
+    def n_sub_records
+      self["_nsubrecs"]
+    end
+
     def match(query, options_or_default_column={})
       if options_or_default_column.is_a?(String)
         options = {:default_column => options_or_default_column}
@@ -222,6 +238,17 @@ module Groonga
       options = options.dup
       options[:syntax] ||= :query
       SubExpressionBuilder.new(query, options)
+    end
+
+    private
+    def method_missing(name, *args, &block)
+      return super if block
+      return super unless args.empty?
+      if /\A[a-zA-Z\d_]+\z/ =~ name.to_s
+        self[name]
+      else
+        super
+      end
     end
   end
 
