@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2009  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2010  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -18,12 +18,14 @@
 require 'pathname'
 
 base_dir = Pathname.new(__FILE__).dirname.dirname
-local_groonga_library_dir = base_dir + "vendor" + "local" + "lib"
-if local_groonga_library_dir.exist?
+local_groonga_dir = base_dir + "vendor" + "local"
+local_groonga_bin_dir = local_groonga_dir + "bin"
+if local_groonga_bin_dir.exist?
   prepend_path = Proc.new do |environment_name, separator|
     paths = (ENV[environment_name] || '').split(/#{separator}/)
-    unless paths.include?(local_groonga_library_dir.to_s)
-      paths = [local_groonga_library_dir.to_s] + paths
+    dir = local_groonga_bin_dir.to_s
+    unless paths.include?(dir)
+      paths = [dir] + paths
       ENV[environment_name] = paths.join(separator)
     end
   end
