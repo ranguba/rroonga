@@ -1013,6 +1013,7 @@ rb_grn_object_get_name (VALUE self)
 {
     RbGrnObject *rb_grn_object;
     VALUE rb_name;
+    char *name;
     int name_size;
 
     rb_grn_object = SELF(self);
@@ -1024,10 +1025,12 @@ rb_grn_object_get_name (VALUE self)
     if (name_size == 0)
 	return Qnil;
 
-    rb_name = rb_str_buf_new(name_size);
-    rb_str_set_len(rb_name, name_size);
+    name = xmalloc(name_size);
     grn_obj_name(rb_grn_object->context, rb_grn_object->object,
-		 RSTRING_PTR(rb_name), name_size);
+		 name, name_size);
+    rb_name = rb_str_new(name, name_size);
+    xfree(name);
+
     return rb_name;
 }
 

@@ -148,8 +148,9 @@ rb_grn_column_get_local_name (VALUE self)
     RbGrnColumn *rb_grn_column;
     grn_ctx *context = NULL;
     grn_obj *column;
-    int name_size;
     VALUE rb_name;
+    char *name;
+    int name_size;
 
     rb_grn_column = SELF(self);
     rb_grn_object_deconstruct(RB_GRN_OBJECT(rb_grn_column), &column, &context,
@@ -159,9 +160,11 @@ rb_grn_column_get_local_name (VALUE self)
     if (name_size == 0)
 	return Qnil;
 
-    rb_name = rb_str_buf_new(name_size);
-    rb_str_set_len(rb_name, name_size);
-    grn_column_name(context, column, RSTRING_PTR(rb_name), name_size);
+    name = xmalloc(name_size);
+    grn_column_name(context, column, name, name_size);
+    rb_name = rb_str_new(name, name_size);
+    xfree(name);
+
     return rb_name;
 }
 
