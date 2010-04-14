@@ -102,8 +102,9 @@ EOF
     response.write(<<-EOF)
 <form method="post" action="#{path(request, '/')}">
   <p>
-    <a href="."><img src="#{path(request, 'images/mini-groonga.png')}"
-                     alt="groonga" /></a>
+    <a href="#{path(request, '/')}">
+      <img src="#{path(request, 'images/mini-groonga.png')}" alt="groonga" />
+    </a>
     <input name="query" type="text" value="#{escape_html(query(request))}" />
     <input type="submit" value="検索" />
   </p>
