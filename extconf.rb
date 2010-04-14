@@ -133,10 +133,21 @@ def check_win32
   end
 end
 
+def set_output_lib(module_name, directory)
+  case RUBY_PLATFORM
+  when /cygwin|mingw/
+    filename = File.join(*([directory, "libruby-#{module_name}.a"].compact))
+    $DLDFLAGS << " -Wl,--out-implib=#{filename}"
+    $cleanfiles << filename
+  end
+end
+
 win32 = check_win32
 if win32
   $CFLAGS += " -I#{local_groonga_install_dir}/include"
   $libs += " #{local_groonga_install_dir}/lib/libgroonga.lib"
+
+  set_output_lib(module_name, ext_dir_name)
 
   real_major, real_minor, real_micro = major, minor, micro
 
@@ -196,7 +207,12 @@ File.open("Makefile", "w") do |f|
   co = nil
   dllib = nil
   makefile.each_line do |line|
-    line = line.gsub(/Z:/, '') if wine
+    if wine
+      line.gsub!(/\s+gcc\b/, " i586-mingw32msvc-gcc")
+      line.gsub!(/C:/, "$(HOME)/.wine/drive_c")
+      line.gsub!(/Z:/, "")
+    end
+
     case line
     when /^DLLIB\s*=\s*/
       raw_dllib = $POSTMATCH
