@@ -25,6 +25,8 @@ module Groonga
     attr_accessor :allow_update
     attr_accessor :default_column
 
+    VALID_COLUMN_NAME_RE = /\A[a-zA-Z\d_]+\z/
+
     def initialize(*args)
       @table = nil
       @name = nil
@@ -244,7 +246,7 @@ module Groonga
     def method_missing(name, *args, &block)
       return super if block
       return super unless args.empty?
-      if /\A[a-zA-Z\d_]+\z/ =~ name.to_s
+      if VALID_COLUMN_NAME_RE =~ name.to_s
         self[name]
       else
         super
@@ -306,6 +308,16 @@ module Groonga
         Groonga::Record.new(@range, other)
       else
         other
+      end
+    end
+
+    def method_missing(name, *args, &block)
+      return super if block
+      return super unless args.empty?
+      if VALID_COLUMN_NAME_RE =~ name.to_s
+        RecordExpressionBuilder.new(@table, @name)["#{@column_name}.#{name}"]
+      else
+        super
       end
     end
   end

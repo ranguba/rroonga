@@ -21,9 +21,13 @@ class ExpressionBuilderTest < Test::Unit::TestCase
   setup :setup_data
 
   def setup_tables
+    @pets = Groonga::Hash.create(:name => "Pets", :key_type => "ShortText")
+    @pets.define_column("name", "ShortText")
+
     @users = Groonga::Hash.create(:name => "Users", :key_type => "ShortText")
     @name = @users.define_column("name", "ShortText")
     @hp = @users.define_column("hp", "UInt32")
+    @users.define_column("pet", @pets)
 
     @terms = Groonga::PatriciaTrie.create(:name => "Terms",
                                           :default_tokenizer => "TokenBigram")
@@ -141,7 +145,26 @@ class ExpressionBuilderTest < Test::Unit::TestCase
       record[".user.name"] == @morita["name"]
     end
     assert_equal(["http://groonga.org/", "http://ruby-lang.org/"],
-                 result.collect {|record| record.key["uri"]})
+                 result.collect {|record| record["uri"]})
+  end
+
+  def test_method_chain
+    result = @bookmarks.select do |record|
+      record.user.name == @morita["name"]
+    end
+    assert_equal(["http://groonga.org/", "http://ruby-lang.org/"],
+                 result.collect {|record| record["uri"]})
+  end
+
+  def test_deep_method_chain
+    @pets.add("bob", :name => "morita Bob")
+    @morita["pet"] = "bob"
+
+    result = @bookmarks.select do |record|
+      record.user.pet.name == "morita Bob"
+    end
+    assert_equal(["http://groonga.org/", "http://ruby-lang.org/"],
+                 result.collect {|record| record["uri"]})
   end
 
   def test_nil_match
