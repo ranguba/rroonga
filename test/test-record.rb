@@ -26,81 +26,39 @@ class RecordTest < Test::Unit::TestCase
   end
 
   def setup_addresses_table
-    @addresses_path = @tables_dir + "addresses"
-    @addresses = Groonga::Array.create(:name => "Addresses",
-                                       :path => @addresses_path.to_s)
-
-    @addresses_mail_column_path = @columns_dir + "mail"
-    @addresses_mail_column =
-      @addresses.define_column("mail", "ShortText",
-                               :path => @addresses_mail_column_path.to_s)
+    @addresses = Groonga::Array.create(:name => "Addresses")
+    @addresses.define_column("mail", "ShortText")
   end
 
   def setup_users_table
-    @users_path = @tables_dir + "users"
-    @users = Groonga::Array.create(:name => "Users",
-                                   :path => @users_path.to_s)
-
-    @users_name_column_path = @columns_dir + "name"
-    @users_name_column =
-      @users.define_column("name", "ShortText",
-                           :path => @users_name_column_path.to_s)
-
-    @users_addresses_column_path = @columns_dir + "addresses"
-    @users_addresses_column =
-      @users.define_column("addresses", @addresses,
-                           :path => @users_addresses_column_path.to_s,
-                           :type => "vector")
+    @users = Groonga::Array.create(:name => "Users")
+    @users.define_column("name", "ShortText")
+    @users.define_column("addresses", @addresses, :type => "vector")
   end
 
   def setup_bookmarks_table
-    @bookmarks_path = @tables_dir + "bookmarks"
     @bookmarks = Groonga::Array.create(:name => "Bookmarks",
-                                       :value_type => "Int32",
-                                       :path => @bookmarks_path.to_s)
-
-    @uri_column_path = @columns_dir + "uri"
-    @bookmarks_uri = @bookmarks.define_column("uri", "ShortText",
-                                              :path => @uri_column_path.to_s)
-
-    @rate_column_path = @columns_dir + "rate"
-    @bookmarks_rate = @bookmarks.define_column("rate", "Int32",
-                                               :path => @rate_column_path.to_s)
-
-    @comment_column_path = @columns_dir + "comment"
-    @bookmarks_comment =
-      @bookmarks.define_column("comment", "Text",
-                               :path => @comment_column_path.to_s)
-
-    @content_column_path = @columns_dir + "content"
-    @bookmarks_content = @bookmarks.define_column("content", "LongText")
-
-    @user_column_path = @columns_dir + "user"
-    @bookmarks_user = @bookmarks.define_column("user", @users)
+                                       :value_type => "Int32")
+    @bookmarks.define_column("uri", "ShortText")
+    @bookmarks.define_column("rate", "Int32")
+    @bookmarks.define_column("comment", "Text")
+    @bookmarks.define_column("content", "LongText")
+    @bookmarks.define_column("user", @users)
   end
 
   def setup_indexes
-    @bookmarks_index_path = @tables_dir + "bookmarks-index"
-    @bookmarks_index =
-      Groonga::PatriciaTrie.create(:name => "BookmarksIndex",
-                                   :path => @bookmarks_index_path.to_s)
+    @bookmarks_index =  Groonga::PatriciaTrie.create(:name => "BookmarksIndex")
     @bookmarks_index.default_tokenizer = "TokenBigram"
 
-    @content_index_column_path = @columns_dir + "content-index"
     @bookmarks_content_index =
       @bookmarks_index.define_index_column("content", @bookmarks,
                                            :with_section => true,
                                            :with_weight => true,
                                            :with_position => true,
-                                           :path => @content_index_column_path.to_s)
-    @bookmarks_content_index.source = @bookmarks_content
-
-    @uri_index_column_path = @columns_dir + "uri-index"
-    @bookmarks_uri_index =
-      @bookmarks_index.define_index_column("uri", @bookmarks,
-                                           :with_position => true,
-                                           :path => @uri_index_column_path.to_s)
-    @bookmarks_uri_index.source = @bookmarks_uri
+                                           :source => "Bookmarks.content")
+    @bookmarks_index.define_index_column("uri", @bookmarks,
+                                         :with_position => true,
+                                         :source => "Bookmarks.uri")
   end
 
   def test_column_accessor
@@ -275,5 +233,11 @@ class RecordTest < Test::Unit::TestCase
                   groonga.respond_to?(:uri=)])
     groonga.uri = "http://groonga.org/"
     assert_equal("http://groonga.org/", groonga.uri)
+  end
+
+  def test_method_chain
+    morita = @users.add(:name => "morita")
+    groonga = @bookmarks.add(:user => morita, :uri => "http://groonga.org")
+    assert_equal("morita", groonga.user.name)
   end
 end
