@@ -18,6 +18,12 @@
 
 #include "rb-grn.h"
 
+grn_obj *grn_table_open(grn_ctx *ctx,
+                        const char *name, unsigned name_size, const char *path);
+grn_obj *grn_column_open(grn_ctx *ctx, grn_obj *table,
+                         const char *name, unsigned name_size,
+                         const char *path, grn_obj *type);
+
 #define SELF(object) ((RbGrnTable *)DATA_PTR(object))
 
 VALUE rb_cGrnTable;
