@@ -87,20 +87,20 @@ EOF
   end
 
   def query(request)
-    request.path_info.sub(/\A\/|\/\z/, '')
+    request.path_info.gsub(/\A\/|\/\z/, '')
   end
 
   def page(request)
     (request['page'] || 0).to_i
   end
 
-  def path(request, component)
+  def path(request, component='')
     escape_html("#{request.script_name}/#{component}")
   end
 
   def render_search_box(request, response)
     response.write(<<-EOF)
-<form method="post" action="#{path(request, '')}">
+<form method="post" action="#{path(request, '/')}">
   <p>
     <a href="."><img src="#{path(request, 'images/mini-groonga.png')}"
                      alt="groonga" /></a>
