@@ -332,6 +332,9 @@ rb_grn_logger_reset (VALUE klass)
 static VALUE
 rb_grn_logger_s_reopen_with_related_object (VALUE klass, VALUE related_object)
 {
+#ifdef WIN32
+    rb_raise(rb_eNotImpError, "grn_log_reopen() isn't available on Windows.");
+#else
     VALUE rb_context = Qnil;
     grn_ctx *context;
 
@@ -339,6 +342,7 @@ rb_grn_logger_s_reopen_with_related_object (VALUE klass, VALUE related_object)
     rb_grn_logger_reset_with_error_check(klass, context);
     grn_log_reopen(context);
     rb_grn_context_check(context, related_object);
+#endif
 
     return Qnil;
 }
@@ -394,11 +398,16 @@ rb_grn_logger_s_set_path (VALUE klass, VALUE rb_path,
 static VALUE
 rb_grn_logger_s_get_log_path (VALUE klass)
 {
+#ifdef WIN32
+    rb_raise(rb_eNotImpError, "grn_log_path isn't available on Windows.");
+    return Qnil;
+#else
     if (grn_log_path) {
 	return rb_str_new2(grn_log_path);
     } else {
 	return Qnil;
     }
+#endif
 }
 
 /*
@@ -414,7 +423,12 @@ rb_grn_logger_s_get_log_path (VALUE klass)
 static VALUE
 rb_grn_logger_s_set_log_path (VALUE klass, VALUE path)
 {
+#ifdef WIN32
+    rb_raise(rb_eNotImpError, "grn_qlog_path isn't available on Windows.");
+    return Qnil;
+#else
     return rb_grn_logger_s_set_path(klass, path, &grn_log_path, "@@log_path");
+#endif
 }
 
 /*
@@ -427,11 +441,16 @@ rb_grn_logger_s_set_log_path (VALUE klass, VALUE path)
 static VALUE
 rb_grn_logger_s_get_query_log_path (VALUE klass)
 {
+#ifdef WIN32
+    rb_raise(rb_eNotImpError, "grn_qlog_path isn't available on Windows.");
+    return Qnil;
+#else
     if (grn_qlog_path) {
 	return rb_str_new2(grn_qlog_path);
     } else {
 	return Qnil;
     }
+#endif
 }
 
 /*
@@ -447,8 +466,13 @@ rb_grn_logger_s_get_query_log_path (VALUE klass)
 static VALUE
 rb_grn_logger_s_set_query_log_path (VALUE klass, VALUE path)
 {
+#ifdef WIN32
+    rb_raise(rb_eNotImpError, "grn_qlog_path isn't available on Windows.");
+    return Qnil;
+#else
     return rb_grn_logger_s_set_path(klass, path, &grn_qlog_path,
 				    "@@query_log_path");
+#endif
 }
 
 void

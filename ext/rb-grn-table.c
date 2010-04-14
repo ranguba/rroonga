@@ -137,7 +137,11 @@ grn_obj *
 rb_grn_table_open_raw (int argc, VALUE *argv,
 		       grn_ctx **context, VALUE *rb_context)
 {
-    grn_obj *table;
+    grn_obj *table = NULL;
+
+#ifdef WIN32
+    rb_raise(rb_eNotImpError, "grn_table_open() isn't available on Windows.");
+#else
     char *name = NULL, *path = NULL;
     unsigned name_size = 0;
     VALUE rb_path, options, rb_name;
@@ -161,6 +165,8 @@ rb_grn_table_open_raw (int argc, VALUE *argv,
 	path = StringValueCStr(rb_path);
 
     table = grn_table_open(*context, name, name_size, path);
+#endif
+
     return table;
 }
 
@@ -591,12 +597,16 @@ static VALUE
 rb_grn_table_add_column (VALUE self, VALUE rb_name, VALUE rb_value_type,
 			 VALUE rb_path)
 {
+    VALUE rb_column = Qnil;
+
+#ifdef WIN32
+    rb_raise(rb_eNotImpError, "grn_column_open() isn't available on Windows.");
+#else
     grn_ctx *context = NULL;
     grn_obj *table;
     grn_obj *value_type, *column;
     char *name = NULL, *path = NULL;
     unsigned name_size = 0;
-    VALUE rb_column;
     VALUE columns;
 
     rb_grn_table_deconstruct(SELF(self), &table, &context,
@@ -620,6 +630,7 @@ rb_grn_table_add_column (VALUE self, VALUE rb_name, VALUE rb_value_type,
     rb_ary_push(columns, rb_column);
     rb_grn_named_object_set_name(RB_GRN_NAMED_OBJECT(DATA_PTR(rb_column)),
 				 name, name_size);
+#endif
 
     return rb_column;
 }

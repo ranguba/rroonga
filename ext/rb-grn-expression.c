@@ -1,6 +1,6 @@
 /* -*- c-file-style: "ruby" -*- */
 /*
-  Copyright (C) 2009  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2010  Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -545,7 +545,11 @@ rb_grn_expression_inspect (VALUE self)
 
     GRN_TEXT_INIT(&inspected, 0);
     GRN_TEXT_PUTS(context, &inspected, "#<Groonga::Expression ");
+#ifdef WIN32
+    GRN_TEXT_PUTS(context, &inspected, "(not supported on Windows)");
+#else
     rc = grn_expr_inspect(context, &inspected, expression);
+#endif
     GRN_TEXT_PUTS(context, &inspected, ">");
     rb_inspected = rb_str_new(GRN_TEXT_VALUE(&inspected),
 			      GRN_TEXT_LEN(&inspected));

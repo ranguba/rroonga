@@ -146,6 +146,9 @@ rb_grn_view_s_create (int argc, VALUE *argv, VALUE klass)
 static VALUE
 rb_grn_view_add_table (VALUE self, VALUE rb_table)
 {
+#ifdef WIN32
+    rb_raise(rb_eNotImpError, "grn_view_add() isn't available on Windows.");
+#else
     grn_ctx *context = NULL;
     grn_obj *view, *table;
 
@@ -156,6 +159,7 @@ rb_grn_view_add_table (VALUE self, VALUE rb_table)
     table = RVAL2GRNOBJECT(rb_table, &context);
     grn_view_add(context, view, table);
     rb_grn_context_check(context, self);
+#endif
 
     return Qnil;
 }
@@ -170,6 +174,10 @@ rb_grn_view_add_table (VALUE self, VALUE rb_table)
 static VALUE
 rb_grn_view_each (VALUE self)
 {
+#ifdef WIN32
+    rb_raise(rb_eNotImpError,
+	     "grn_table_cursor_next_o() isn't available on Windows.");
+#else
     RbGrnTable *rb_grn_view;
     RbGrnObject *rb_grn_object;
     grn_ctx *context = NULL;
@@ -199,6 +207,7 @@ rb_grn_view_each (VALUE self)
     if (!(rc == GRN_SUCCESS || rc == GRN_END_OF_DATA)) {
 	rb_grn_context_check(context, self);
     }
+#endif
 
     return Qnil;
 }
@@ -214,10 +223,14 @@ rb_grn_view_each (VALUE self)
 static VALUE
 rb_grn_view_get_column_value (VALUE self, VALUE rb_id, VALUE rb_name)
 {
+    VALUE rb_value = Qnil;
+#ifdef WIN32
+    rb_raise(rb_eNotImpError,
+	     "grn_obj_get_value_o() isn't available on Windows.");
+#else
     RbGrnTable *rb_view;
     grn_ctx *context = NULL;
     grn_obj *view, *value, *accessor;
-    VALUE rb_value;
     grn_obj id;
 
     rb_view = SELF(self);
@@ -234,6 +247,7 @@ rb_grn_view_get_column_value (VALUE self, VALUE rb_id, VALUE rb_name)
     grn_obj_unlink(context, accessor);
     rb_value = GRNOBJ2RVAL(Qnil, context, value, self);
     GRN_OBJ_FIN(context, &id);
+#endif
 
     return rb_value;
 }
@@ -268,6 +282,11 @@ rb_grn_view_get_column_value (VALUE self, VALUE rb_id, VALUE rb_name)
 static VALUE
 rb_grn_view_sort (int argc, VALUE *argv, VALUE self)
 {
+    VALUE rb_result = Qnil;
+
+#ifdef WIN32
+    rb_raise(rb_eNotImpError, "grn_view_add() isn't available on Windows.");
+#else
     grn_ctx *context = NULL;
     grn_obj *view;
     grn_obj *result;
@@ -278,7 +297,6 @@ rb_grn_view_sort (int argc, VALUE *argv, VALUE self)
     VALUE rb_offset, rb_limit;
     VALUE *rb_sort_keys;
     grn_table_cursor *cursor;
-    VALUE rb_result;
     VALUE exception;
     grn_obj id;
 
@@ -382,6 +400,7 @@ rb_grn_view_sort (int argc, VALUE *argv, VALUE self)
     GRN_OBJ_FIN(context, &id);
     grn_table_cursor_close(context, cursor);
     grn_obj_unlink(context, result);
+#endif
 
     return rb_result;
 }

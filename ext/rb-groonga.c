@@ -1,6 +1,6 @@
 /* -*- c-file-style: "ruby" -*- */
 /*
-  Copyright (C) 2009  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2010  Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -24,6 +24,7 @@ extern grn_ctx grn_gctx;
 static VALUE
 finish_groonga (VALUE self, VALUE object_id)
 {
+#ifndef WIN32
     grn_ctx *context = grn_gctx.next;
 
     debug("finish\n");
@@ -33,6 +34,7 @@ finish_groonga (VALUE self, VALUE object_id)
     }
     grn_fin();
     debug("finish: done\n");
+#endif
     rb_grn_exited = RB_GRN_TRUE;
 
     return Qnil;
