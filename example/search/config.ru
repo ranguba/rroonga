@@ -9,7 +9,9 @@ require 'rack'
 require 'groonga'
 
 use Rack::CommonLogger
+use Rack::Runtime
 use Rack::Static, :urls => ["/css", "/images"], :root => "public"
+use Rack::ContentLength
 
 Groonga::Database.new("data/database")
 
@@ -24,12 +26,23 @@ class Searcher
     request = Rack::Request.new(env)
     response = Rack::Response.new
     response["Content-Type"] = "text/html; charset=UTF-8"
-    if /\/\z/ !~ request.path_info
-      request.path_info += "/"
+
+    if request.post? or request['query']
+      query = request['query'] || ''
+      if query.empty?
+        request.path_info = "/"
+      else
+        request.path_info = "/#{escape(query)}/"
+      end
       response.redirect(request.url)
       return response.to_a
     end
 
+    search(request, response)
+  end
+
+  private
+  def search(request, response)
     response.write(<<-EOH)
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
@@ -39,7 +52,8 @@ class Searcher
   <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
   <meta name="robot" content="noindex,nofollow" />
   <title>groongaで全文検索</title>
-  <link rel="stylesheet" href="css/groonga.css" type="text/css" media="all" />
+  <link rel="stylesheet" href="#{path(request, 'css/groonga.css')}"
+        type="text/css" media="all" />
 </head>
 <body>
 <div class="header">
@@ -72,20 +86,24 @@ EOF
     response.to_a
   end
 
-  private
   def query(request)
-    request['query'] || ''
+    request.path_info.sub(/\A\/|\/\z/, '')
   end
 
   def page(request)
     (request['page'] || 0).to_i
   end
 
+  def path(request, component)
+    escape_html("#{request.script_name}/#{component}")
+  end
+
   def render_search_box(request, response)
     response.write(<<-EOF)
-<form method="get" action="./">
+<form method="post" action="#{path(request, '')}">
   <p>
-    <a href="."><img src="images/mini-groonga.png" alt="groonga" /></a>
+    <a href="."><img src="#{path(request, 'images/mini-groonga.png')}"
+                     alt="groonga" /></a>
     <input name="query" type="text" value="#{escape_html(query(request))}" />
     <input type="submit" value="検索" />
   </p>
