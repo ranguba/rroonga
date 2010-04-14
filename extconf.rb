@@ -136,8 +136,7 @@ end
 win32 = check_win32
 if win32
   $CFLAGS += " -I#{local_groonga_install_dir}/include"
-  $DLDFLAGS += " #{local_groonga_install_dir}/lib/libgroonga.lib"
-  $libs += " -lgroonga"
+  $libs += " #{local_groonga_install_dir}/lib/libgroonga.lib"
 
   real_major, real_minor, real_micro = major, minor, micro
 
