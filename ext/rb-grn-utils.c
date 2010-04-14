@@ -245,7 +245,7 @@ rb_grn_bulk_from_ruby_object (VALUE object, grn_ctx *context, grn_obj *bulk)
 	break;
       case T_STRING:
 	grn_obj_reinit(context, bulk, GRN_DB_TEXT, 0);
-	GRN_TEXT_SET(context, bulk, RSTRING_PTR(object), RSTRING_LEN(object));
+	rb_grn_context_text_set(context, bulk, object);
 	break;
       case T_FIXNUM:
 	grn_obj_reinit(context, bulk, GRN_DB_INT32, 0);

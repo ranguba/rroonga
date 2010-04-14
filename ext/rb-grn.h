@@ -578,6 +578,9 @@ VALUE          rb_grn_context_rb_string_new         (grn_ctx *context,
 						     long length);
 VALUE          rb_grn_context_rb_string_encode      (grn_ctx *context,
 						     VALUE rb_string);
+void           rb_grn_context_text_set              (grn_ctx *context,
+						     grn_obj *bulk,
+						     VALUE rb_string);
 
 grn_obj       *rb_grn_object_from_ruby_object       (VALUE object,
 						     grn_ctx **context);

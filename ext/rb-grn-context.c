@@ -176,6 +176,13 @@ rb_grn_context_rb_string_encode (grn_ctx *context, VALUE rb_string)
     return rb_string;
 }
 
+void
+rb_grn_context_text_set (grn_ctx *context, grn_obj *bulk, VALUE rb_string)
+{
+    rb_string = rb_grn_context_rb_string_encode(context, rb_string);
+    GRN_TEXT_SET(context, bulk, RSTRING_PTR(rb_string), RSTRING_LEN(rb_string));
+}
+
 /*
  * call-seq:
  *   Groonga::Context.default -> Groonga::Context
