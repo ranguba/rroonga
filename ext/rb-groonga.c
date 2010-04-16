@@ -19,22 +19,12 @@
 #include "rb-grn.h"
 
 rb_grn_boolean rb_grn_exited = RB_GRN_FALSE;
-extern grn_ctx grn_gctx;
 
 static VALUE
 finish_groonga (VALUE self, VALUE object_id)
 {
-#ifndef WIN32
-    grn_ctx *context = grn_gctx.next;
-
     debug("finish\n");
-    while (context && context != &grn_gctx) {
-	rb_grn_context_fin(context);
-	context = context->next;
-    }
     grn_fin();
-    debug("finish: done\n");
-#endif
     rb_grn_exited = RB_GRN_TRUE;
 
     return Qnil;
