@@ -51,7 +51,7 @@ class DatabaseTest < Test::Unit::TestCase
 
   def test_new
     db_path = @tmp_dir + "db"
-    assert_raise(Groonga::NoMemoryAvailable) do
+    assert_raise(Groonga::NoSuchFileOrDirectory) do
       Groonga::Database.new(db_path.to_s)
     end
 
