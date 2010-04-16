@@ -1099,14 +1099,12 @@ rb_grn_table_sort (int argc, VALUE *argv, VALUE self)
 
 /*
  * call-seq:
- *   table.group(column, options={}) -> Groonga::Hash
- *   table.group(column1, column2, ..., options={}) -> [Groonga::Hash, ...]
+ *   table.group(key, options={}) -> Groonga::Hash
+ *   table.group([key1, key1, ...], options={}) -> [Groonga::Hash, ...]
  *
- * _table_のレコードを_column1_, _column2_, _..._で指定したカ
- * ラムの値でグループ化する。カラムはカラム名（文字列）でも
- * 指定可能。
- *
- * このAPIは将来変更されます。
+ * _table_のレコードを_key1_, _key2_, _..._で指定したキーの
+ * 値でグループ化する。多くの場合、キーにはカラムを指定する。
+ * カラムはカラム名（文字列）でも指定可能。
  */
 static VALUE
 rb_grn_table_group (int argc, VALUE *argv, VALUE self)
@@ -1117,8 +1115,8 @@ rb_grn_table_group (int argc, VALUE *argv, VALUE self)
     grn_table_group_result *results;
     int i, n_keys, n_results;
     grn_rc rc;
-    VALUE rb_keys;
-    VALUE *rb_sort_keys;
+    VALUE rb_keys, rb_options;
+    VALUE *rb_group_keys;
     VALUE rb_results;
 
     rb_grn_table_deconstruct(SELF(self), &table, &context,
@@ -1126,25 +1124,27 @@ rb_grn_table_group (int argc, VALUE *argv, VALUE self)
 			     NULL, NULL, NULL,
 			     NULL);
 
-    rb_scan_args(argc, argv, "00*", &rb_keys);
+    rb_scan_args(argc, argv, "11", &rb_keys, &rb_options);
 
-    n_keys = RARRAY_LEN(rb_keys);
-    rb_sort_keys = RARRAY_PTR(rb_keys);
-    if (n_keys == 1 && TYPE(rb_sort_keys[0]) == T_ARRAY) {
-	n_keys = RARRAY_LEN(rb_sort_keys[0]);
-	rb_sort_keys = RARRAY_PTR(rb_sort_keys[0]);
+    if (TYPE(rb_keys) == rb_cArray) {
+	n_keys = RARRAY_LEN(rb_keys);
+	rb_group_keys = RARRAY_PTR(rb_keys);
+    } else {
+	n_keys = 1;
+	rb_group_keys = &rb_keys;
     }
+
     keys = ALLOCA_N(grn_table_sort_key, n_keys);
     for (i = 0; i < n_keys; i++) {
 	VALUE rb_sort_options, rb_key;
 
-	if (RVAL2CBOOL(rb_obj_is_kind_of(rb_sort_keys[i], rb_cHash))) {
-	    rb_sort_options = rb_sort_keys[i];
+	if (RVAL2CBOOL(rb_obj_is_kind_of(rb_group_keys[i], rb_cHash))) {
+	    rb_sort_options = rb_group_keys[i];
 	} else {
 	    rb_sort_options = rb_hash_new();
 	    rb_hash_aset(rb_sort_options,
 			 RB_GRN_INTERN("key"),
-			 rb_sort_keys[i]);
+			 rb_group_keys[i]);
 	}
 	rb_grn_scan_options(rb_sort_options,
 			    "key", &rb_key,
