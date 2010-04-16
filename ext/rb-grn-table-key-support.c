@@ -87,20 +87,6 @@ rb_grn_table_key_support_bind (RbGrnTableKeySupport *rb_grn_table_key_support,
 	grn_obj_open(context, GRN_BULK, 0, rb_grn_object->domain_id);
 }
 
-static VALUE
-rb_grn_table_key_support_initialize (int argc, VALUE *argv, VALUE self)
-{
-    grn_ctx *context = NULL;
-    grn_obj *table;
-    VALUE rb_context;
-
-    table = rb_grn_table_open_raw(argc, argv, &context, &rb_context);
-    rb_grn_context_check(context, self);
-    rb_grn_object_assign(Qnil, self, rb_context, context, table);
-
-    return Qnil;
-}
-
 static grn_id
 rb_grn_table_key_support_add_raw (VALUE self, VALUE rb_key)
 {
@@ -691,9 +677,6 @@ rb_grn_init_table_key_support (VALUE mGrn)
 {
     rb_mGrnTableKeySupport = rb_define_module_under(rb_cGrnTable, "KeySupport");
     rb_include_module(rb_mGrnTableKeySupport, rb_mGrnEncodingSupport);
-
-    rb_define_method(rb_mGrnTableKeySupport, "initialize",
-		     rb_grn_table_key_support_initialize, -1);
 
     rb_define_method(rb_mGrnTableKeySupport, "add",
 		     rb_grn_table_key_support_add, -1);

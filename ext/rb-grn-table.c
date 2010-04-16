@@ -133,121 +133,11 @@ rb_grn_table_alloc (VALUE klass)
     return Data_Wrap_Struct(klass, rb_grn_table_mark, rb_grn_object_free, NULL);
 }
 
-grn_obj *
-rb_grn_table_open_raw (int argc, VALUE *argv,
-		       grn_ctx **context, VALUE *rb_context)
-{
-    grn_obj *table = NULL;
-
-#ifdef WIN32
-    rb_raise(rb_eNotImpError, "grn_table_open() isn't available on Windows.");
-#else
-    char *name = NULL, *path = NULL;
-    unsigned name_size = 0;
-    VALUE rb_path, options, rb_name;
-
-    rb_scan_args(argc, argv, "01", &options);
-
-    rb_grn_scan_options(options,
-			"context", rb_context,
-			"name", &rb_name,
-			"path", &rb_path,
-			NULL);
-
-    *context = rb_grn_context_ensure(rb_context);
-
-    if (!NIL_P(rb_name)) {
-	name = StringValuePtr(rb_name);
-	name_size = RSTRING_LEN(rb_name);
-    }
-
-    if (!NIL_P(rb_path))
-	path = StringValueCStr(rb_path);
-
-    table = grn_table_open(*context, name, name_size, path);
-#endif
-
-    return table;
-}
-
 static VALUE
-rb_grn_table_initialize (int argc, VALUE *argv, VALUE self)
+rb_grn_table_initialize (VALUE self)
 {
-    grn_ctx *context = NULL;
-    grn_obj *table;
-    VALUE rb_context;
-
-    table = rb_grn_table_open_raw(argc, argv, &context, &rb_context);
-    rb_grn_object_assign(Qnil, self, rb_context, context, table);
-    rb_grn_context_check(context, self);
-
+    rb_raise(rb_eArgError, "Use Groonga::Context#[] for get existing table.");
     return Qnil;
-}
-
-/*
- * call-seq:
- *   Groonga::Table.open(options={})                -> Groonga::Table
- *   Groonga::Table.open(options={}) {|table| ... }
- *
- * 既存のテーブルを開く。ブロックを指定すると、そのブロック
- * に開かれたテーブルが渡され、ブロックを抜けると自動的にテ
- * ーブルが破棄される。
- *
- * _options_に指定可能な値は以下の通り。
- *
- * [+:context+]
- *   テーブルが利用するGroonga::Context。省略すると
- *   Groonga::Context.defaultを用いる。
- *
- * [+:name+]
- *   開こうとするテーブルの名前。
- *
- * [+:path+]
- *   開こうとするテーブルのパス。
- */
-static VALUE
-rb_grn_table_s_open (int argc, VALUE *argv, VALUE klass)
-{
-    grn_user_data *user_data;
-    VALUE rb_table = Qnil;
-    grn_obj *table;
-    grn_ctx *context = NULL;
-    VALUE rb_context;
-
-    table = rb_grn_table_open_raw(argc, argv, &context, &rb_context);
-    rb_grn_context_check(context, rb_ary_new4(argc, argv));
-
-    if (!table)
-	rb_raise(rb_eGrnError,
-		 "unable to open table: %s: %s",
-		 rb_grn_inspect(klass),
-		 rb_grn_inspect(rb_ary_new4(argc, argv)));
-
-    user_data = grn_obj_user_data(context, table);
-    if (user_data && user_data->ptr) {
-	rb_table = RB_GRN_OBJECT(user_data->ptr)->self;
-    } else {
-	if (klass == rb_cGrnTable) {
-	    klass = GRNOBJECT2RCLASS(table);
-	} else {
-	    VALUE rb_class;
-
-	    rb_class = GRNOBJECT2RCLASS(table);
-	    if (rb_class != klass) {
-		rb_raise(rb_eTypeError,
-			 "unexpected existing table type: %s: expected %s",
-			 rb_grn_inspect(rb_class),
-			 rb_grn_inspect(klass));
-	    }
-	}
-
-	rb_table = GRNOBJECT2RVAL(klass, context, table, RB_GRN_TRUE);
-    }
-
-    if (rb_block_given_p())
-        return rb_ensure(rb_yield, rb_table, rb_grn_object_close, rb_table);
-    else
-        return rb_table;
 }
 
 static VALUE
@@ -2072,10 +1962,7 @@ rb_grn_init_table (VALUE mGrn)
 
     rb_include_module(rb_cGrnTable, rb_mEnumerable);
 
-    rb_define_singleton_method(rb_cGrnTable, "open",
-			       rb_grn_table_s_open, -1);
-
-    rb_define_method(rb_cGrnTable, "initialize", rb_grn_table_initialize, -1);
+    rb_define_method(rb_cGrnTable, "initialize", rb_grn_table_initialize, 0);
 
     rb_define_method(rb_cGrnTable, "inspect", rb_grn_table_inspect, 0);
 

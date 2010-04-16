@@ -73,13 +73,6 @@ class ArrayTest < Test::Unit::TestCase
     end
   end
 
-  def test_open_same_name
-    users_created = Groonga::Array.create(:name => "Users")
-    users_opened = Groonga::Array.open(:name => "Users")
-    users_opened.add
-    assert_equal(1, users_created.size)
-  end
-
   def test_value
     users = Groonga::Array.create(:value_type => "Int32")
     user_id = users.add.id

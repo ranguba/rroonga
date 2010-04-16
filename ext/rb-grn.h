@@ -347,11 +347,6 @@ void           rb_grn_table_deconstruct             (RbGrnTable *rb_grn_table,
 						     grn_obj **range,
 						     VALUE *columns);
 
-grn_obj       *rb_grn_table_open_raw                (int argc,
-						     VALUE *argv,
-						     grn_ctx **context,
-						     VALUE *rb_context);
-
 VALUE          rb_grn_table_delete                  (VALUE self,
 						     VALUE rb_id);
 VALUE          rb_grn_table_array_reference         (VALUE self,

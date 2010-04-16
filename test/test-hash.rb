@@ -198,13 +198,6 @@ class HashTest < Test::Unit::TestCase
                  index.search("engine").collect {|record| record.key.key})
   end
 
-  def test_open_same_name
-    users_created = Groonga::Hash.create(:name => "Users")
-    users_opened = Groonga::Hash.open(:name => "Users")
-    users_opened.add("morita")
-    assert_equal(1, users_created.size)
-  end
-
   def test_has_key?
     users = Groonga::Hash.create(:name => "Users")
     assert_false(users.has_key?("morita"))

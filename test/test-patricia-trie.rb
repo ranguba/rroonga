@@ -74,13 +74,6 @@ class PatriciaTrieTest < Test::Unit::TestCase
     end
   end
 
-  def test_open_same_name
-    users_created = Groonga::PatriciaTrie.create(:name => "Users")
-    users_opened = Groonga::PatriciaTrie.open(:name => "Users")
-    users_opened.add("morita")
-    assert_equal(1, users_created.size)
-  end
-
   def test_has_key?
     users = Groonga::PatriciaTrie.create(:name => "Users")
     assert_false(users.has_key?("morita"))
