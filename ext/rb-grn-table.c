@@ -476,55 +476,6 @@ rb_grn_table_define_index_column (int argc, VALUE *argv, VALUE self)
     return rb_column;
 }
 
-/*
- * call-seq:
- *  table.add_column(name, value_type, path)
- *
- * _value_type_を値の型として、_path_に保存されている永続的
- * なカラムを、テーブルの_name_に対応するカラムとして開く。
- */
-static VALUE
-rb_grn_table_add_column (VALUE self, VALUE rb_name, VALUE rb_value_type,
-			 VALUE rb_path)
-{
-    VALUE rb_column = Qnil;
-
-#ifdef WIN32
-    rb_raise(rb_eNotImpError, "grn_column_open() isn't available on Windows.");
-#else
-    grn_ctx *context = NULL;
-    grn_obj *table;
-    grn_obj *value_type, *column;
-    char *name = NULL, *path = NULL;
-    unsigned name_size = 0;
-    VALUE columns;
-
-    rb_grn_table_deconstruct(SELF(self), &table, &context,
-			     NULL, NULL,
-			     NULL, NULL, NULL,
-			     &columns);
-
-    name = StringValuePtr(rb_name);
-    name_size = RSTRING_LEN(rb_name);
-
-    value_type = RVAL2GRNOBJECT(rb_value_type, &context);
-
-    path = StringValueCStr(rb_path);
-
-    column = grn_column_open(context, table, name, name_size,
-			     path, value_type);
-    rb_grn_context_check(context, self);
-
-    rb_column = GRNCOLUMN2RVAL(Qnil, context, column, RB_GRN_TRUE);
-    rb_iv_set(rb_column, "table", self);
-    rb_ary_push(columns, rb_column);
-    rb_grn_named_object_set_name(RB_GRN_NAMED_OBJECT(DATA_PTR(rb_column)),
-				 name, name_size);
-#endif
-
-    return rb_column;
-}
-
 static void
 ruby_object_to_column_name (VALUE rb_name,
 			    const char **name, unsigned *name_size)
@@ -1970,8 +1921,6 @@ rb_grn_init_table (VALUE mGrn)
 		     rb_grn_table_define_column, -1);
     rb_define_method(rb_cGrnTable, "define_index_column",
 		     rb_grn_table_define_index_column, -1);
-    rb_define_method(rb_cGrnTable, "add_column",
-		     rb_grn_table_add_column, 3);
     rb_define_method(rb_cGrnTable, "column",
 		     rb_grn_table_get_column, 1);
     rb_define_method(rb_cGrnTable, "columns",
