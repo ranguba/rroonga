@@ -387,7 +387,7 @@ rb_grn_expression_parse (int argc, VALUE *argv, VALUE self)
     } else {
 	if ((flags & GRN_EXPR_SYNTAX_SCRIPT) == GRN_EXPR_SYNTAX_SCRIPT)
 	    rb_raise(rb_eArgError,
-		 ":allow_pragma isn't allowed in script syntax");
+		     ":allow_pragma isn't allowed in script syntax");
 	if (RVAL2CBOOL(rb_allow_pragma))
 	    flags |= GRN_EXPR_ALLOW_PRAGMA;
     }
@@ -404,12 +404,8 @@ rb_grn_expression_parse (int argc, VALUE *argv, VALUE self)
     }
 
     if (NIL_P(rb_allow_update)) {
-	if ((flags & GRN_EXPR_SYNTAX_SCRIPT) == GRN_EXPR_SYNTAX_SCRIPT)
-	    flags |= GRN_EXPR_ALLOW_UPDATE;
+	flags |= GRN_EXPR_ALLOW_UPDATE;
     } else {
-	if ((flags & GRN_EXPR_SYNTAX_QUERY) == GRN_EXPR_SYNTAX_QUERY)
-	    rb_raise(rb_eArgError,
-		     ":allow_update isn't allowed in query syntax");
 	if (RVAL2CBOOL(rb_allow_update))
 	    flags |= GRN_EXPR_ALLOW_UPDATE;
     }
