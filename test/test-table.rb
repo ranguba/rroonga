@@ -123,26 +123,6 @@ class TableTest < Test::Unit::TestCase
                  index.search("engine").collect {|record| record.key.key})
   end
 
-  def test_add_column
-    bookmarks = Groonga::Hash.create(:name => "Bookmarks",
-                                     :path => (@tables_dir + "bookmarks").to_s)
-
-    description_column_path = @columns_dir + "description"
-    bookmarks_description =
-      bookmarks.define_index_column("description", "Text",
-                                    :path => description_column_path.to_s)
-
-    books = Groonga::Hash.create(:name => "Books",
-                                 :path => (@tables_dir + "books").to_s)
-    books_description = books.add_column("description",
-                                         "LongText",
-                                         description_column_path.to_s)
-    assert_equal("Books.description", books_description.name)
-    assert_equal(books_description, books.column("description"))
-
-    assert_equal(bookmarks_description, bookmarks.column("description"))
-  end
-
   def test_column_nonexistent
     table_path = @tables_dir + "bookmarks"
     table = Groonga::Hash.create(:name => "Bookmarks",
