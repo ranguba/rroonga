@@ -15,50 +15,21 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-$LOAD_PATH.unshift(File.dirname(__FILE__))
+require 'pathname'
+
+base_dir = Pathname(__FILE__).dirname.realpath
+$LOAD_PATH.unshift(base_dir.to_s)
 
 require 'English'
-require 'mkmf'
 require 'pkg-config'
+require 'rroonga-build'
 require 'fileutils'
-require 'shellwords'
+
+include RroongaBuild
 
 package_name = "groonga"
 module_name = "groonga"
-ext_dir_name = "ext"
-src_dir = File.join(File.expand_path(File.dirname(__FILE__)), ext_dir_name)
-major, minor, micro = 0, 1, 8
-win32 = false
-wine = false
-
-def local_groonga_base_dir
-  File.join(File.dirname(__FILE__), "vendor")
-end
-
-def local_groonga_install_dir
-  File.expand_path(File.join(local_groonga_base_dir, "local"))
-end
-
-def have_local_groonga?(package_name, major, minor, micro)
-  return false unless File.exist?(File.join(local_groonga_install_dir, "lib"))
-
-  prepend_pkg_config_path_for_local_groonga
-  PKGConfig.have_package(package_name, major, minor, micro)
-end
-
-def prepend_pkg_config_path_for_local_groonga
-  pkg_config_dir = File.join(local_groonga_install_dir, "lib", "pkgconfig")
-  PackageConfig.prepend_default_path(pkg_config_dir)
-
-  lib_dir = File.join(local_groonga_install_dir, "lib")
-  original_LDFLAGS = $LDFLAGS
-  checking_for(checking_message("-Wl,-rpath is available")) do
-    $LDFLAGS += " -Wl,-rpath,#{Shellwords.escape(lib_dir)}"
-    available = try_compile("int main() {return 0;}")
-    $LDFLAGS = original_LDFLAGS unless available
-    available
-  end
-end
+major, minor, micro = RequiredGroongaVersion::VERSION
 
 def install_groonga_locally(major, minor, micro)
   require 'open-uri'
@@ -125,142 +96,35 @@ def install_groonga_locally(major, minor, micro)
   prepend_pkg_config_path_for_local_groonga
 end
 
-def check_win32
-  checking_for(checking_message("Win32 OS")) do
-    win32 = /cygwin|mingw|mswin32/ =~ RUBY_PLATFORM
-    $defs << "-DRB_GRN_PLATFORM_WIN32" if win32
-    win32
+unless PKGConfig.have_package(package_name, major, minor, micro)
+  unless have_local_groonga?(package_name, major, minor, micro)
+    install_groonga_locally(major, minor, micro)
+    PKGConfig.have_package(package_name, major, minor, micro) or exit 1
   end
 end
 
-def set_output_lib(module_name, directory)
-  case RUBY_PLATFORM
-  when /cygwin|mingw/
-    filename = File.join(*([directory, "libruby-#{module_name}.a"].compact))
-    $DLDFLAGS << " -Wl,--out-implib=#{filename}"
-    $cleanfiles << filename
+source_ext_dir = Pathname("ext") + "groonga"
+FileUtils.mkdir_p(source_ext_dir.to_s)
+
+require 'rbconfig'
+ext_dir = base_dir + "ext" + "groonga"
+Dir.chdir(source_ext_dir.to_s) do
+  config = Proc.new do |key|
+    RbConfig::CONFIG[key]
   end
+  ruby = "#{config['bindir']}/#{config['ruby_install_name']}#{config['EXEEXT']}"
+  message("checking in #{ext_dir}...\n")
+  system("#{ruby} #{ext_dir + 'extconf.rb'}") or exit 1
+  message("checking in #{ext_dir}: done.\n")
 end
 
-win32 = check_win32
-if win32
-  $CFLAGS += " -I#{local_groonga_install_dir}/include"
-  $libs += " #{local_groonga_install_dir}/lib/libgroonga.lib"
-
-  set_output_lib(module_name, ext_dir_name)
-
-  real_major, real_minor, real_micro = major, minor, micro
-
-  checking_for(checking_message("Wine")) do
-    wine = with_config("wine")
-  end
-else
-  checking_for(checking_message("GCC")) do
-    if macro_defined?("__GNUC__", "")
-      $CFLAGS += ' -Wall'
-      true
-    else
-      false
-    end
-  end
-
-  unless PKGConfig.have_package(package_name, major, minor, micro)
-    unless have_local_groonga?(package_name, major, minor, micro)
-      install_groonga_locally(major, minor, micro)
-      PKGConfig.have_package(package_name, major, minor, micro) or exit 1
-    end
-  end
-
-  real_version = PKGConfig.modversion(package_name)
-  real_major, real_minor, real_micro = real_version.split(/\./)
-end
-
-$defs << "-DRB_GRN_COMPILATION"
-
-$defs << "-DGRN_MAJOR_VERSION=#{real_major}"
-$defs << "-DGRN_MINOR_VERSION=#{real_minor}"
-$defs << "-DGRN_MICRO_VERSION=#{real_micro}"
-
-unless wine
-  have_header("ruby/st.h") unless have_macro("HAVE_RUBY_ST_H", "ruby.h")
-  have_func("rb_errinfo", "ruby.h")
-  have_type("enum ruby_value_type", "ruby.h")
-end
-
-checking_for(checking_message("debug flag")) do
-  debug = with_config("debug")
-  if debug
-    debug_flag = "-DRB_GRN_DEBUG"
-    $defs << debug_flag unless $defs.include?(debug_flag)
-  end
-  debug
-end
-
-$INSTALLFILES ||= []
-$INSTALLFILES << ["../lib/**/*.rb", "$(RUBYLIBDIR)", "../lib"]
-
-create_makefile(module_name, src_dir)
-
-makefile = File.read("Makefile")
-File.open("Makefile", "w") do |f|
-  objs = []
-  co = nil
-  dllib = nil
-  makefile.each_line do |line|
-    if wine
-      line.gsub!(/\s+gcc\b/, " i586-mingw32msvc-gcc")
-      line.gsub!(/C:/, "$(HOME)/.wine/drive_c")
-      line.gsub!(/Z:/, "")
-    end
-
-    case line
-    when /^DLLIB\s*=\s*/
-      raw_dllib = $POSTMATCH
-      dllib = raw_dllib.chomp
-      f.puts("DLLIB = #{ext_dir_name}/#{raw_dllib}")
-      f.puts("IMPLIB = #{ext_dir_name}/libruby-#{dllib.gsub(/\..+?$/, '.lib')}")
-    when /^(SRCS)\s*=\s*/
-      name = $1
-      vars = $POSTMATCH.split.collect {|var| "$(srcdir)/#{var}"}.join(" ")
-      f.puts("#{name} = #{vars}")
-    when /^(OBJS|CLEANLIBS|CLEANOBJS)\s*=\s*/
-      name = $1
-      vars = $POSTMATCH.split.collect {|var| "#{ext_dir_name}/#{var}"}
-      objs = vars if name == "OBJS"
-      vars = vars.join(" ")
-      f.puts("#{name} = #{vars}")
-    when /^\t\$\(CC\)/
-      if PKGConfig.msvc?
-        output_option = "-Fo"
-      else
-        output_option = "-o"
-      end
-      unless /#{Regexp.escape(output_option)}/ =~ line
-        line = "#{line.chomp} #{output_option}$@"
-      end
-      co = line
-      f.puts(line)
-    else
-      if dllib
-        line = line.gsub(/\$\(RUBYARCHDIR\)\/\$\(DLLIB\)/,
-                         "$(RUBYARCHDIR)/#{dllib}")
-      end
-      f.puts(line)
-    end
-  end
-
-  if co and !objs.empty?
-    f.puts
-    if PKGConfig.msvc?
-      f.puts "{$(srcdir)}.c{#{ext_dir_name}}.obj:"
-      f.puts co
-    else
-      objs.each do |obj|
-        f.puts "#{obj}: $(srcdir)/#{File.basename(obj).sub(/\..+?$/, '.c')}"
-        f.puts co
-      end
-    end
+message("creating top-level Makefile\n")
+File.open("Makefile", "w") do |makefile|
+  targets = ["all", "clean", "install"]
+  targets.each do |target|
+    makefile.puts <<-EOM
+#{target}:
+	cd #{source_ext_dir}; $(MAKE) $(MAKE_ARGS) #{target}
+EOM
   end
 end
-
-FileUtils.mkdir_p(ext_dir_name)
