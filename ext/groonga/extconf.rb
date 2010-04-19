@@ -45,11 +45,9 @@ $defs << "-DGRN_MAJOR_VERSION=#{real_major}"
 $defs << "-DGRN_MINOR_VERSION=#{real_minor}"
 $defs << "-DGRN_MICRO_VERSION=#{real_micro}"
 
-gcc = false
 checking_for(checking_message("GCC")) do
   if macro_defined?("__GNUC__", "")
     $CFLAGS += ' -Wall'
-    gcc = true
     true
   else
     false
@@ -65,11 +63,7 @@ checking_for(checking_message("Win32 OS")) do
     $cleanfiles << import_library_name
     local_groonga_install_dir = base_dir + "vendor" + "local"
     $CFLAGS += " -I#{local_groonga_install_dir}/include"
-    if gcc
-      $DLDFLAGS << " -L#{local_groonga_install_dir}/lib"
-    else
-      $libs += " #{local_groonga_install_dir}/lib/libgroonga.lib"
-    end
+    $libs += " #{local_groonga_install_dir}/lib/libgroonga.lib"
   end
   win32
 end
