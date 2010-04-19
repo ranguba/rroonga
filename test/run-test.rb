@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 #
-# Copyright (C) 2009  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2010  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -21,7 +21,7 @@ $KCODE = "u" if RUBY_VERSION < "1.9"
 
 base_dir = File.expand_path(File.join(File.dirname(__FILE__), ".."))
 test_unit_dir = File.join(base_dir, "test-unit", "lib")
-ext_dir = File.join(base_dir, "ext")
+ext_dir = File.join(base_dir, "ext", "groonga")
 lib_dir = File.join(base_dir, "lib")
 test_dir = File.join(base_dir, "test")
 
