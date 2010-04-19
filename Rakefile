@@ -24,6 +24,7 @@ require 'erb'
 require 'rubygems'
 gem 'rdoc'
 require 'hoe'
+require 'rake/extensiontask'
 
 ENV["NODOT"] = "yes"
 
@@ -32,7 +33,7 @@ truncate_base_dir = Proc.new do |x|
   x.gsub(/^#{Regexp.escape(base_dir + File::SEPARATOR)}/, '')
 end
 
-groonga_ext_dir = File.join(base_dir, 'ext')
+groonga_ext_dir = File.join(base_dir, "ext", "groonga")
 groonga_lib_dir = File.join(base_dir, 'lib')
 $LOAD_PATH.unshift(groonga_ext_dir)
 $LOAD_PATH.unshift(groonga_lib_dir)
@@ -146,6 +147,10 @@ ObjectSpace.each_object(Rake::RDocTask) do |rdoc_task|
   rdoc_task.rdoc_files = ["ext/rb-groonga.c"] + Dir.glob("ext/rb-grn-*.c")
   rdoc_task.rdoc_files += Dir.glob("lib/**/*.rb")
   rdoc_task.rdoc_files += Dir.glob("**/*.rdoc")
+end
+
+Rake::ExtensionTask.new("groonga", project.spec) do |ext|
+  ext.cross_compile = true
 end
 
 task :publish_docs => [:prepare_docs_for_publishing]
