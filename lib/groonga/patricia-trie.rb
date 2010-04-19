@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2009  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2010  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -18,14 +18,42 @@
 module Groonga
   class PatriciaTrie
     # call-seq:
-    #   patricia_trie.tag_keys(text) {|record, word| ...} -> String
+    #   patricia_trie.tag_keys(text, options={}) {|record, word| ...} -> String
     #
     # _text_を走査し、レコードのキーとマッチする部分文字列ごとに
     # そのレコードが_record_として、その部分文字列が_word_として、
     # ブロックが呼び出される。ブロックから返された文字列が元の部
     # 分文字列と置換される。全てのヒットに対してのその置換処理が
     # 行われた文字列が返される。
-    def tag_keys(text)
+    #
+    # _options_に指定可能な値は以下の通り。
+    #
+    # [+:other_text_handler+]
+    #   マッチした部分文字列の前後の文字列を変換するProcを指
+    #   定する。
+    #
+    # 例:
+    #   include ERB::Util
+    #   Groonga::Context.default_options = {:encoding => "utf-8"}
+    #   words = Groonga::PatriciaTrie.create(:key_type => "ShortText",
+    #                                        :key_normalize => true)
+    #   words.add('ｶﾞｯ')
+    #   words.add('ＭＵＴＥＫＩ')
+    #
+    #   text = 'muTEki マッチしない <> ガッ'
+    #   other_text_handler = Proc.new do |string|
+    #     h(string)
+    #   end
+    #   words.tag_keys(text) do |record, word|
+    #     "<span class=\"keyword\">#{h(word)}(#{h(record.key)})</span>\n"
+    #   end
+    #   # =>
+    #   # "<span class=\"keyword\">muTEki(muteki)</span>\n" +
+    #   # " マッチしない &lt;&gt; " +
+    #   # "<span class=\"keyword\">ガッ(ガッ)</span>\n"
+    def tag_keys(text, options={})
+      options ||= {}
+      other_text_handler = options[:other_text_handler]
       position = 0
       result = ''
       if text.respond_to?(:encoding)
@@ -38,6 +66,9 @@ module Groonga
       scan(text) do |record, word, start, length|
         previous_text = bytes[position...start]
         previous_text.force_encoding(encoding) if encoding
+        if other_text_handler
+          previous_text = other_text_handler.call(previous_text)
+        end
         result << previous_text
         result << yield(record, word)
         position = start + length
@@ -45,6 +76,7 @@ module Groonga
       last_text = bytes[position..-1]
       unless last_text.empty?
         last_text.force_encoding(encoding) if encoding
+        last_text = other_text_handler.call(last_text) if other_text_handler
         result << last_text
       end
       result

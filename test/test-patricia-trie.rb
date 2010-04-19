@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-# Copyright (C) 2009  Kouhei Sutou <kou@clear-code.com>
+#
+# Copyright (C) 2009-2010  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -16,6 +17,7 @@
 
 class PatriciaTrieTest < Test::Unit::TestCase
   include GroongaTestUtils
+  include ERB::Util
 
   setup :setup_database
 
@@ -120,6 +122,27 @@ class PatriciaTrieTest < Test::Unit::TestCase
                  "<ミリバール(ミリバール)> " +
                  "<ガッ(ガッ)> " +
                  "おわり",
+                 actual)
+  end
+
+  def test_tag_keys_other_text_handler
+    Groonga::Context.default_options = {:encoding => "utf-8"}
+    words = Groonga::PatriciaTrie.create(:key_type => "ShortText",
+                                         :key_normalize => true)
+    words.add('ｶﾞｯ')
+    words.add('ＭＵＴＥＫＩ')
+
+    text = 'muTEki マッチしない <> ガッ'
+    other_text_handler = Proc.new do |string|
+      h(string)
+    end
+    options = {:other_text_handler => other_text_handler}
+    actual = words.tag_keys(text, options) do |record, word|
+      "<span class=\"keyword\">#{h(word)}(#{h(record.key)})</span>\n"
+    end
+    assert_equal("<span class=\"keyword\">muTEki(muteki)</span>\n" +
+                 " マッチしない &lt;&gt; " +
+                 "<span class=\"keyword\">ガッ(ガッ)</span>\n",
                  actual)
   end
 

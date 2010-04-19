@@ -16,6 +16,7 @@
 require 'fileutils'
 require 'pathname'
 require 'time'
+require 'erb'
 begin
   require 'json'
 rescue LoadError
