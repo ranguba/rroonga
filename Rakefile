@@ -64,18 +64,6 @@ Find.find(base_dir) do |target|
   manifest_contents << target if File.file?(target)
 end
 
-platform = ENV["FORCE_PLATFORM"]
-groonga_win32_files = []
-if /mswin32/ =~ platform.to_s
-  groonga_win32_files += ["ext/groonga.so", "ext/libruby-groonga.a"]
-
-  groonga_dir = File.join(base_dir, "vendor", "local")
-  Find.find(groonga_dir) do |file|
-    groonga_win32_files << truncate_base_dir[file]
-  end
-end
-manifest_contents += groonga_win32_files
-
 File.open(manifest, "w") do |f|
   f.puts manifest_contents.sort.join("\n")
 end
@@ -132,11 +120,6 @@ Hoe.spec('rroonga') do |_project|
 end
 
 project.spec.dependencies.delete_if {|dependency| dependency.name == "hoe"}
-project.spec.platform = platform || project.spec.platform
-
-if /mswin32/ =~ project.spec.platform.to_s
-  project.spec.extensions = []
-end
 
 ObjectSpace.each_object(Rake::RDocTask) do |rdoc_task|
   options = rdoc_task.options
