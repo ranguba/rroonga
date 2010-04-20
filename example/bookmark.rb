@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 base_dir = File.join(File.dirname(__FILE__), "..")
-groonga_ext_dir = File.join(base_dir, 'ext')
+groonga_ext_dir = File.join(base_dir, 'ext', 'groonga')
 groonga_lib_dir = File.join(base_dir, 'lib')
 $LOAD_PATH.unshift(groonga_ext_dir)
 $LOAD_PATH.unshift(groonga_lib_dir)
