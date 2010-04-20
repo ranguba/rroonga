@@ -2,7 +2,7 @@
 
 == 名前
 
-Ruby/groonga
+rroonga
 
 == 説明
 
@@ -36,15 +36,15 @@ pkg-config.rbはrcairoに付属しているもので、これはRubyライセ
 == 依存ソフトウェア
 
 * Ruby >= 1.8 （1.9.1対応）
-* groonga >= 0.1.4
+* groonga >= 0.1.9
 
 == インストール
 
-  % sudo gem install groonga
+  % sudo gem install rroonga
 
 == ドキュメント
 
-http://groonga.rubyforge.org/groonga/
+http://groonga.rubyforge.org/rroonga/
 
 == メーリングリスト
 

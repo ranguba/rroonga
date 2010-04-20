@@ -2,15 +2,15 @@
 
 == Name
 
-Ruby/groonga
+rroonga
 
 == Description
 
 Ruby bindings for groonga that provides full text search and
 column store features.
 
-Ruby/groonga is a extension library to use groonga's DB-API
-layer. Ruby/groonga provides Rubyish readable and writable
+rroonga is a extension library to use groonga's DB-API
+layer. rroonga provides Rubyish readable and writable
 API. You can use groonga's first and highly functional
 features from Ruby.
 
@@ -37,17 +37,17 @@ license/GPL for details.
 == Dependencies
 
 * Ruby >= 1.8 (including 1.9.1)
-* groonga >= 0.1.4
+* groonga >= 0.1.9
 
 == Install
 
-  % sudo gem install groonga
+  % sudo gem install rroonga
 
 == Documents
 
 Japanese only. Sorry.
 
-http://groonga.rubyforge.org/groonga/
+http://groonga.rubyforge.org/rroonga/
 
 == Mailing list
 
