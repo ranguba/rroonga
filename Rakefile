@@ -51,7 +51,7 @@ base_dir_included_components = %w(AUTHORS Rakefile
                                   NEWS.rdoc NEWS.ja.rdoc
                                   rroonga-build.rb extconf.rb pkg-config.rb)
 excluded_components = %w(.cvsignore .gdb_history CVS depend Makefile doc pkg
-                         .svn .git doc vendor data .test-result)
+                         .svn .git doc vendor data .test-result tmp)
 excluded_suffixes = %w(.png .ps .pdf .o .so .a .txt .~)
 Find.find(base_dir) do |target|
   target = truncate_base_dir[target]
