@@ -51,8 +51,11 @@ base_dir_included_components = %w(AUTHORS Rakefile
                                   NEWS.rdoc NEWS.ja.rdoc
                                   rroonga-build.rb extconf.rb pkg-config.rb)
 excluded_components = %w(.cvsignore .gdb_history CVS depend Makefile doc pkg
-                         .svn .git doc vendor data .test-result tmp)
-excluded_suffixes = %w(.png .ps .pdf .o .so .a .txt .~)
+                         .svn .git doc data .test-result tmp)
+excluded_suffixes = %w(.png .ps .pdf .o .so .a .txt .h .~)
+unless ENV["RUBY_CC_VERSION"]
+  excluded_components << "vendor"
+end
 Find.find(base_dir) do |target|
   target = truncate_base_dir[target]
   components = target.split(File::SEPARATOR)
@@ -134,6 +137,7 @@ end
 
 Rake::ExtensionTask.new("groonga", project.spec) do |ext|
   ext.cross_compile = true
+  ext.cross_platform = 'x86-mingw32'
 end
 
 task :publish_docs => [:prepare_docs_for_publishing]
