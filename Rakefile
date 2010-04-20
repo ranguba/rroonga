@@ -104,7 +104,7 @@ Hoe.spec('rroonga') do |_project|
   project.test_globs = ["test/run-test.rb"]
   project.spec_extras = {
     :extensions => ['extconf.rb'],
-    :require_paths => ["lib", "ext"],
+    :require_paths => ["lib", "ext/groonga"],
     :extra_rdoc_files => Dir.glob("**/*.rdoc"),
   }
   project.readme_file = "README.ja.rdoc"
