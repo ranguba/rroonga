@@ -1,13 +1,13 @@
 = チュートリアル
 
 このページでは簡単なアプリケーションの作成を通して
-Ruby/groongaの操作方法を紹介します。
+rroongaの操作方法を紹介します。
 
 == インストール
 
 Ruby/groongaはRubyGemsでインストールできます。
 
-  % sudo gem install groonga
+  % sudo gem install rroonga
 
 == データベースの作成
 
@@ -328,7 +328,7 @@ http://qwik.jp/senna/senna2.files/rect4605.png
 同じitemが何度も出てくると検索結果が見にくいので、item毎にグ
 ループ化してみます。
 
-  >> records.group([".item"]).each do |record|
+  >> records.group("item").each do |record|
   >>   item = record.key
   >>   p [record.n_sub_records,
   >>      item.key,
@@ -379,7 +379,7 @@ http://qwik.jp/senna/senna2.files/rect4605.png
 _ruby_comments_の結果をitem毎にグループ化し、_ruby_items_と
 unionして出力します。
 
-  >> ruby_items = ruby_comments.group([".item"]).union!(ruby_items)
+  >> ruby_items = ruby_comments.group("item").union!(ruby_items)
   #<Groonga::Hash ..., size: <4>>
   >> ruby_items.sort([{:key => "._score", :order => "descendant"}]).each do |record|
   >>   p [record["._score"], record[".title"]]

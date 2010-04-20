@@ -145,7 +145,7 @@ records.sort([{:key => ".issued", :order => "descending"}]).each do |record|
      record[".content"]]
 end
 
-records.group([".item"]).each do |record|
+records.group("item").each do |record|
   item = record.key
   p [record.n_sub_records,
      item.key,
@@ -155,7 +155,7 @@ end
 p ruby_comments = @comments.select {|record| record["content"] =~ "Ruby"}
 p ruby_items = @items.select("*W1:50 title:@Ruby")
 
-p ruby_items = ruby_comments.group([".item"]).union!(ruby_items)
+p ruby_items = ruby_comments.group(".item").union!(ruby_items)
 ruby_items.sort([{:key => "._score", :order => "descending"}]).each do |record|
   p [record["._score"], record[".title"]]
 end
