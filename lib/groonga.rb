@@ -42,7 +42,12 @@ end
 require 'groonga/view-record'
 require 'groonga/record'
 require 'groonga/expression-builder'
-require 'groonga.so'
+begin
+  major, minor, micro, = RUBY_VERSION.split(/\./)
+  require "#{major}.#{minor}/groonga.so"
+rescue LoadError
+  require 'groonga.so'
+end
 
 ##
 # Ruby/groonga用のネームスペース。Ruby/groongaのクラスやメソッ
