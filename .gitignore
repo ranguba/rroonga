@@ -7,3 +7,6 @@
 /mkmf.log
 /pkg
 /test-unit
+/ext/groonga/Makefile
+/ext/groonga/mkmf.log
+/test/tmp
