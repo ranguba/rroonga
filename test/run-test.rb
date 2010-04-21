@@ -20,7 +20,8 @@ $VERBOSE = true
 $KCODE = "u" if RUBY_VERSION < "1.9"
 
 base_dir = File.expand_path(File.join(File.dirname(__FILE__), ".."))
-test_unit_dir = File.join(base_dir, "test-unit", "lib")
+test_unit_dir = File.join(base_dir, "test-unit")
+test_unit_lib_dir = File.join(test_unit_dir, "lib")
 ext_dir = File.join(base_dir, "ext", "groonga")
 lib_dir = File.join(base_dir, "lib")
 test_dir = File.join(base_dir, "test")
@@ -32,10 +33,15 @@ elsif system("which make > /dev/null")
   make = "make"
 end
 if make
-  system("cd #{base_dir.dump} && #{make} > /dev/null") or exit(1)
+  system("cd #{base_dir.dump} && #{make} > /dev/null") or exit(false)
 end
 
-$LOAD_PATH.unshift(test_unit_dir)
+unless File.exist?(test_unit_dir)
+  test_unit_repository = "http://test-unit.rubyforge.org/svn/trunk/"
+  system("svn co #{test_unit_repository} #{test_unit_dir}") or exit(false)
+end
+
+$LOAD_PATH.unshift(test_unit_lib_dir)
 
 require 'test/unit'
 
