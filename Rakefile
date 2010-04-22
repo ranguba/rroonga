@@ -197,9 +197,7 @@ task :publish_html do
 end
 
 task :tag do
-  repository = "svn+ssh://rubyforge.org/var/svn/groonga/rroonga"
-  sh("svn cp -m 'release #{version}!!!' " +
-     "#{repository}/trunk #{repository}/tags/#{version}")
+  sh("git tag -a #{version} -m 'release #{version}!!!'")
 end
 
 # fix Hoe's incorrect guess.
