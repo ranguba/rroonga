@@ -63,10 +63,11 @@ checking_for(checking_message("Win32 OS")) do
     $cleanfiles << import_library_name
     local_groonga_install_dir = base_dir + "vendor" + "local"
     $CFLAGS += " -I#{local_groonga_install_dir}/include"
+    local_groonga_lib_dir = local_groonga_install_dir + "lib"
     ["libgroonga.lib", "libgroonga.dll.a"].each do |libgroonga_base|
-      libgroonga = "#{local_groonga_install_dir}/lib/#{libgroonga_base}"
-      if File.exist?(libgroonga)
-        $libs += " #{libgroonga}"
+      libgroonga = local_groonga_lib_dir + libgroonga_base
+      if libgroonga.exist?
+        $DLDFLAGS += " -L#{local_groonga_lib_dir}"
         break
       end
     end
