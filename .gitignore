@@ -10,3 +10,6 @@
 /ext/groonga/Makefile
 /ext/groonga/mkmf.log
 /test/tmp
+/tmp
+/vendor
+*.so
