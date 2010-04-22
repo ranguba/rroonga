@@ -69,7 +69,7 @@ RB_GRN_BEGIN_DECLS
 
 #define RB_GRN_MAJOR_VERSION 0
 #define RB_GRN_MINOR_VERSION 9
-#define RB_GRN_MICRO_VERSION 4
+#define RB_GRN_MICRO_VERSION 5
 
 typedef int rb_grn_boolean;
 #define RB_GRN_FALSE (0)
