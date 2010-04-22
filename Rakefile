@@ -52,7 +52,7 @@ base_dir_included_components = %w(AUTHORS Rakefile
                                   rroonga-build.rb extconf.rb pkg-config.rb)
 excluded_components = %w(.cvsignore .gdb_history CVS depend Makefile doc pkg
                          .svn .git doc data .test-result tmp)
-excluded_suffixes = %w(.png .ps .pdf .o .so .a .txt .h .~)
+excluded_suffixes = %w(.png .ps .pdf .o .so .a .txt .~)
 unless ENV["RUBY_CC_VERSION"]
   excluded_components << "vendor"
 end
