@@ -220,7 +220,7 @@ class PackageConfig
       extern "const char *dln_find_exe(const char *, const char *)"
     end
     path = dln.dln_find_exe(pkg_config.to_s, nil)
-    if path.size.zero?
+    if path and path.size.zero?
       nil
     else
       Pathname(path.to_s)
