@@ -73,7 +73,7 @@ module Groonga
           builder = yield(self)
         end
       end
-      if builder.nil?
+      if builder.nil? or builder == self
         expression.append_constant(1)
         expression.append_constant(1)
         expression.append_operation(Groonga::Operation::OR, 2)
@@ -127,79 +127,180 @@ module Groonga
       end
     end
 
-    class BinaryExpressionBuilder < ExpressionBuilder # :nodoc:
-      def initialize(operation, column, value)
+    class ColumnValueExpressionBuilder < ExpressionBuilder # :nodoc:
+      def initialize(column, options={})
         super()
-        @operation = operation
-        @default_column = column
-        @value = value
+        @table = options[:table] || column.table
+        @column = column
+        @column_name = options[:column_name] || @column.local_name
+        @range = options[:range] || @column.range
+        @name = options[:name]
       end
 
       def build(expression, variable)
         expression.append_object(variable)
-        if @default_column.is_a?(String)
-          expression.append_constant(@default_column)
+        if @column.is_a?(String)
+          expression.append_constant(@column)
         else
-          expression.append_object(@default_column)
+          expression.append_object(@column)
         end
         expression.append_operation(Groonga::Operation::GET_VALUE, 2)
+      end
+
+      def ==(other)
+        EqualExpressionBuilder.new(self, normalize(other))
+      end
+
+      def =~(other)
+        if other.nil?
+          full_column_name = "#{@table.name}.#{@column_name}"
+          raise ArgumentError,
+                 "match word should not be nil: #{full_column_name}"
+        end
+        MatchExpressionBuilder.new(self, normalize(other))
+      end
+
+      def <(other)
+        LessExpressionBuilder.new(self, normalize(other))
+      end
+
+      def <=(other)
+        LessEqualExpressionBuilder.new(self, normalize(other))
+      end
+
+      def >(other)
+        GreaterExpressionBuilder.new(self, normalize(other))
+      end
+
+      def >=(other)
+        GreaterEqualExpressionBuilder.new(self, normalize(other))
+      end
+
+      def +(other)
+        PlusExpressionBuilder.new(self, normalize(other))
+      end
+
+      def -(other)
+        MinusExpressionBuilder.new(self, normalize(other))
+      end
+
+      def *(other)
+        StarExpressionBuilder.new(self, normalize(other))
+      end
+
+      def /(other)
+        SlashExpressionBuilder.new(self, normalize(other))
+      end
+
+      def %(other)
+        ModExpressionBuilder.new(self, normalize(other))
+      end
+
+      def match(query, options={})
+        options = options.dup
+        options[:syntax] ||= :query
+        options[:default_column] = @column_name
+        SubExpressionBuilder.new(query, options)
+      end
+
+      private
+      def normalize(other)
+        if @range.is_a?(Groonga::Table) and other.is_a?(Integer)
+          Groonga::Record.new(@range, other)
+        else
+          other
+        end
+      end
+
+      def method_missing(name, *args, &block)
+        return super if block
+        return super unless args.empty?
+        if VALID_COLUMN_NAME_RE =~ name.to_s
+          RecordExpressionBuilder.new(@table, @name)["#{@column_name}.#{name}"]
+        else
+          super
+        end
+      end
+    end
+
+    class BinaryExpressionBuilder < ExpressionBuilder # :nodoc:
+      def initialize(operation, column_value_builder, value)
+        super()
+        @operation = operation
+        @column_value_builder = column_value_builder
+        @value = value
+      end
+
+      def build(expression, variable)
+        @column_value_builder.build(expression, variable)
         expression.append_constant(@value)
         expression.append_operation(@operation, 2)
       end
     end
 
     class EqualExpressionBuilder < BinaryExpressionBuilder # :nodoc:
-      def initialize(column, value)
-        super(Groonga::Operation::EQUAL, column, value)
+      def initialize(column_value_builder, value)
+        super(Groonga::Operation::EQUAL, column_value_builder, value)
       end
     end
 
     class MatchExpressionBuilder < BinaryExpressionBuilder # :nodoc:
-      def initialize(column, value)
-        super(Groonga::Operation::MATCH, column, value)
+      def initialize(column_value_builder, value)
+        super(Groonga::Operation::MATCH, column_value_builder, value)
       end
     end
 
     class LessExpressionBuilder < BinaryExpressionBuilder # :nodoc:
-      def initialize(column, value)
-        super(Groonga::Operation::LESS, column, value)
+      def initialize(column_value_builder, value)
+        super(Groonga::Operation::LESS, column_value_builder, value)
       end
     end
 
     class LessEqualExpressionBuilder < BinaryExpressionBuilder # :nodoc:
-      def initialize(column, value)
-        super(Groonga::Operation::LESS_EQUAL, column, value)
+      def initialize(column_value_builder, value)
+        super(Groonga::Operation::LESS_EQUAL, column_value_builder, value)
       end
     end
 
     class GreaterExpressionBuilder < BinaryExpressionBuilder # :nodoc:
-      def initialize(column, value)
-        super(Groonga::Operation::GREATER, column, value)
+      def initialize(column_value_builder, value)
+        super(Groonga::Operation::GREATER, column_value_builder, value)
       end
     end
 
     class GreaterEqualExpressionBuilder < BinaryExpressionBuilder # :nodoc:
-      def initialize(column, value)
-        super(Groonga::Operation::GREATER_EQUAL, column, value)
+      def initialize(column_value_builder, value)
+        super(Groonga::Operation::GREATER_EQUAL, column_value_builder, value)
       end
     end
 
-    class WeightExpressionBuilder < ExpressionBuilder # :nodoc:
-      def initialize(column, value)
-        super()
-        @default_column = column
-        @value = value
+    class PlusExpressionBuilder < BinaryExpressionBuilder # :nodoc:
+      def initialize(column_value_builder, value)
+        super(Groonga::Operation::PLUS, column_value_builder, value)
       end
+    end
 
-      def build(expression, variable)
-        if @default_column.is_a?(String)
-          expression.append_constant(@default_column)
-        else
-          expression.append_object(@default_column)
-        end
-        expression.append_operation(Groonga::Operation::GET_VALUE, 1)
-        expression.append_constant(@value)
-        expression.append_operation(Groonga::Operation::STAR, 2)
+    class MinusExpressionBuilder < BinaryExpressionBuilder # :nodoc:
+      def initialize(column_value_builder, value)
+        super(Groonga::Operation::MINUS, column_value_builder, value)
+      end
+    end
+
+    class StarExpressionBuilder < BinaryExpressionBuilder # :nodoc:
+      def initialize(column_value_builder, value)
+        super(Groonga::Operation::STAR, column_value_builder, value)
+      end
+    end
+
+    class SlashExpressionBuilder < BinaryExpressionBuilder # :nodoc:
+      def initialize(column_value_builder, value)
+        super(Groonga::Operation::SLASH, column_value_builder, value)
+      end
+    end
+
+    class ModExpressionBuilder < BinaryExpressionBuilder # :nodoc:
+      def initialize(column_value_builder, value)
+        super(Groonga::Operation::MOD, column_value_builder, value)
       end
     end
 
@@ -232,9 +333,9 @@ module Groonga
           "for table <#{@table.inspect}>"
         raise ArgumentError, message
       end
-      ColumnExpressionBuilder.new(column, nil, nil,
-                                  :table => @table,
-                                  :column_name => name)
+      ColumnValueExpressionBuilder.new(column,
+                                       :table => @table,
+                                       :column_name => name)
     end
 
     def id
@@ -296,73 +397,66 @@ module Groonga
     end
 
     def ==(other)
-      EqualExpressionBuilder.new(@default_column, normalize(other))
+      column_value_builder == other
     end
 
     def =~(other)
-      if other.nil?
-        full_column_name = "#{@table.name}.#{@column_name}"
-        raise ArgumentError, "match word should not be nil: #{full_column_name}"
-      end
-      MatchExpressionBuilder.new(@default_column, normalize(other))
+      column_value_builder =~ other
     end
 
     def <(other)
-      LessExpressionBuilder.new(@default_column, normalize(other))
+      column_value_builder < other
     end
 
     def <=(other)
-      LessEqualExpressionBuilder.new(@default_column, normalize(other))
+      column_value_builder <= other
     end
 
     def >(other)
-      GreaterExpressionBuilder.new(@default_column, normalize(other))
+      column_value_builder > other
     end
 
     def >=(other)
-      GreaterEqualExpressionBuilder.new(@default_column, normalize(other))
+      column_value_builder >= other
     end
 
-    def *(weight)
-      WeightExpressionBuilder.new(@default_column, weight)
+    def +(other)
+      column_value_builder + other
     end
 
-    def match(query, options={})
-      options = options.dup
-      options[:syntax] ||= :query
-      options[:default_column] = @column_name
-      SubExpressionBuilder.new(query, options)
+    def -(other)
+      column_value_builder - other
     end
 
-    def build(expression=nil, variable=nil, &block)
-      if expression.nil?
-        expression = Expression.new(:name => @name)
-        variable = expression.define_variable(:domain => @table)
-        build_expression(expression, variable, &block)
-      else
-        if @default_column.is_a?(String)
-          expression.append_constant(@default_column)
-        else
-          expression.append_object(@default_column)
-        end
-        expression.append_operation(Groonga::Operation::GET_VALUE, 1)
-      end
+    def *(other)
+      column_value_builder * other
+    end
+
+    def /(other)
+      column_value_builder / other
+    end
+
+    def %(other)
+      column_value_builder % other
+    end
+
+    def match(query, options={}, &block)
+      column_value_builder.match(query, options, &block)
     end
 
     private
-    def normalize(other)
-      if @range.is_a?(Groonga::Table) and other.is_a?(Integer)
-        Groonga::Record.new(@range, other)
-      else
-        other
-      end
+    def column_value_builder
+      ColumnValueExpressionBuilder.new(@default_column,
+                                       :table => @table,
+                                       :column_name => @column_name,
+                                       :range => @range)
     end
 
     def method_missing(name, *args, &block)
       return super if block
       return super unless args.empty?
       if VALID_COLUMN_NAME_RE =~ name.to_s
-        RecordExpressionBuilder.new(@table, @name)["#{@column_name}.#{name}"]
+        column_value_builder.send(name)
       else
         super
       end
