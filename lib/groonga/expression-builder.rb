@@ -64,21 +64,30 @@ module Groonga
     end
 
     def build_expression(expression, variable)
-      builder = nil
-      builder = match(@query, default_parse_options) if @query
+      builders = []
+      builders << match(@query, default_parse_options) if @query
       if block_given?
-        if builder
-          builder &= yield(self)
+        builder = yield(self)
+        if builder.is_a?(::Array)
+          builders.concat(builder)
         else
-          builder = yield(self)
+          builders << builder
         end
       end
-      if builder.nil? or builder == self
+
+      if builders.empty? or builders == [self]
         expression.append_constant(1)
         expression.append_constant(1)
         expression.append_operation(Groonga::Operation::OR, 2)
       else
-        builder.build(expression, variable)
+        combined_builder = builders.inject(nil) do |previous, builder|
+          if previous.nil?
+            builder
+          else
+            previous & builder
+          end
+        end
+        combined_builder.build(expression, variable)
       end
 
       expression.compile

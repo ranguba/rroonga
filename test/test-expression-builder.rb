@@ -214,4 +214,15 @@ class ExpressionBuilderTest < Test::Unit::TestCase
     assert_equal(["yu"],
                  result.collect {|record| record["_key"]})
   end
+
+  def test_array_result
+    result = @users.select do |record|
+      conditions = []
+      conditions << (record.hp > 100)
+      conditions << (record.hp < 200)
+      conditions
+    end
+    assert_equal(["gunyara-kun"],
+                 result.collect {|record| record.key.key})
+  end
 end
