@@ -223,6 +223,26 @@ module Groonga
       end
     end
 
+    class MatchTargetExpressionBuilder < ExpressionBuilder # :nodoc:
+      def initialize(target)
+        super()
+        @target = target
+      end
+
+      def build(expression, variable)
+        expression.append_object(variable)
+        expression.append_object(@target)
+        expression.append_operation(Groonga::Operation::GET_VALUE, 2)
+      end
+
+      def =~(query)
+        if query.nil?
+          raise ArgumentError, "match word should not be nil"
+        end
+        MatchExpressionBuilder.new(self, query)
+      end
+    end
+
     class BinaryExpressionBuilder < ExpressionBuilder # :nodoc:
       def initialize(operation, column_value_builder, value)
         super()
@@ -363,15 +383,23 @@ module Groonga
       options = options.dup
       options[:syntax] ||= :query
       if block_given? and options[:default_column].nil?
-        default_column = self.class.new(@table, nil)
-        options[:default_column] = default_column.build do |record|
-          block.call(record)
-        end
+        options[:default_column] = build_match_target(&block)
       end
       SubExpressionBuilder.new(query, options)
     end
 
+    def match_target(&block)
+      MatchTargetExpressionBuilder.new(build_match_target(&block))
+    end
+
     private
+    def build_match_target(&block)
+      sub_builder = self.class.new(@table, nil)
+      sub_builder.build do |record|
+        block.call(record)
+      end
+    end
+
     def method_missing(name, *args, &block)
       return super if block
       return super unless args.empty?
