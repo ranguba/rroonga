@@ -46,15 +46,17 @@ class TableTest < Test::Unit::TestCase
 
   def test_temporary_table_define_column_default_persistent
     table = Groonga::Hash.create
-    name = table.define_column("name", "ShortText")
-    assert_predicate(name, :temporary?)
+    assert_raise(Groonga::InvalidArgument) do
+      table.define_column("name", "ShortText")
+    end
   end
 
   def test_temporary_table_define_index_column_default_persistent
     bookmarks = Groonga::Hash.create(:name => "Bookmarks")
     terms = Groonga::Hash.create
-    url = terms.define_index_column("url", bookmarks)
-    assert_predicate(url, :temporary?)
+    assert_raise(Groonga::InvalidArgument) do
+      terms.define_index_column("url", bookmarks)
+    end
   end
 
   def test_define_column_default_persistent
