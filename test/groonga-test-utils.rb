@@ -126,9 +126,10 @@ module GroongaTestUtils
   end
 
   private
-  def assert_equal_select_result(expected, actual)
+  def assert_equal_select_result(expected, actual, &normalizer)
+    normalizer ||= Proc.new {|record| record.key}
     assert_equal(expected,
-                 actual.collect {|record| record.key},
+                 actual.collect(&normalizer),
                  actual.expression.inspect)
   end
 end

@@ -333,7 +333,8 @@ static VALUE
 rb_grn_expression_parse (int argc, VALUE *argv, VALUE self)
 {
     grn_ctx *context = NULL;
-    grn_obj *expression, *default_column = NULL;
+    grn_obj *expression, *default_column;
+    rb_grn_boolean default_column_is_created = RB_GRN_FALSE;
     grn_operator default_operator = GRN_OP_AND;
     grn_operator default_mode = GRN_OP_MATCH;
     grn_rc rc;
@@ -363,7 +364,15 @@ rb_grn_expression_parse (int argc, VALUE *argv, VALUE self)
                                   NULL, NULL,
                                   NULL, NULL, NULL);
 
-    default_column = RVAL2GRNBULK(rb_default_column, context, default_column);
+    if (NIL_P(rb_default_column)) {
+	default_column = NULL;
+    } else if (RVAL2CBOOL(rb_obj_is_kind_of(rb_default_column, rb_cGrnObject))) {
+	default_column = RVAL2GRNOBJECT(rb_default_column, &context);
+    } else {
+	default_column = RVAL2GRNBULK(rb_default_column, context, NULL);
+	default_column_is_created = RB_GRN_TRUE;
+    }
+
     if (!NIL_P(rb_default_mode))
 	default_mode = RVAL2GRNOPERATOR(rb_default_mode);
     if (!NIL_P(rb_default_operator))
@@ -382,10 +391,10 @@ rb_grn_expression_parse (int argc, VALUE *argv, VALUE self)
     }
 
     if (NIL_P(rb_allow_pragma)) {
-	if ((flags & GRN_EXPR_SYNTAX_QUERY) == GRN_EXPR_SYNTAX_QUERY)
+	if (!(flags & GRN_EXPR_SYNTAX_SCRIPT))
 	    flags |= GRN_EXPR_ALLOW_PRAGMA;
     } else {
-	if ((flags & GRN_EXPR_SYNTAX_SCRIPT) == GRN_EXPR_SYNTAX_SCRIPT)
+	if ((flags & GRN_EXPR_SYNTAX_SCRIPT))
 	    rb_raise(rb_eArgError,
 		     ":allow_pragma isn't allowed in script syntax");
 	if (RVAL2CBOOL(rb_allow_pragma))
@@ -393,10 +402,10 @@ rb_grn_expression_parse (int argc, VALUE *argv, VALUE self)
     }
 
     if (NIL_P(rb_allow_column)) {
-	if ((flags & GRN_EXPR_SYNTAX_QUERY) == GRN_EXPR_SYNTAX_QUERY)
+	if (!(flags & GRN_EXPR_SYNTAX_SCRIPT))
 	    flags |= GRN_EXPR_ALLOW_COLUMN;
     } else {
-	if ((flags & GRN_EXPR_SYNTAX_SCRIPT) == GRN_EXPR_SYNTAX_SCRIPT)
+	if ((flags & GRN_EXPR_SYNTAX_SCRIPT))
 	    rb_raise(rb_eArgError,
 		     ":allow_column isn't allowed in script syntax");
 	if (RVAL2CBOOL(rb_allow_column))
@@ -419,7 +428,8 @@ rb_grn_expression_parse (int argc, VALUE *argv, VALUE self)
 	related_object = rb_ary_new3(2, self, rb_ary_new4(argc, argv));
 	exception = rb_grn_context_to_exception(context, related_object);
     }
-    grn_obj_unlink(context, default_column);
+    if (default_column_is_created)
+	grn_obj_unlink(context, default_column);
 
     if (!NIL_P(exception))
 	rb_exc_raise(exception);

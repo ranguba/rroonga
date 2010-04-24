@@ -38,29 +38,10 @@ module Groonga
       @default_column = nil
     end
 
-    def build
+    def build(&block)
       expression = Expression.new(:name => @name)
       variable = expression.define_variable(:domain => @table)
-
-      builder = nil
-      builder = match(@query, default_parse_options) if @query
-      if block_given?
-        if builder
-          builder &= yield(self)
-        else
-          builder = yield(self)
-        end
-      end
-      if builder.nil? or builder == self
-        expression.append_constant(1)
-        expression.append_constant(1)
-        expression.append_operation(Groonga::Operation::OR, 2)
-      else
-        builder.build(expression, variable)
-      end
-
-      expression.compile
-      expression
+      build_expression(expression, variable, &block)
     end
 
     def &(other)
@@ -80,6 +61,28 @@ module Groonga
         :allow_update => @allow_update,
         :default_column => @default_column,
       }
+    end
+
+    def build_expression(expression, variable)
+      builder = nil
+      builder = match(@query, default_parse_options) if @query
+      if block_given?
+        if builder
+          builder &= yield(self)
+        else
+          builder = yield(self)
+        end
+      end
+      if builder.nil?
+        expression.append_constant(1)
+        expression.append_constant(1)
+        expression.append_operation(Groonga::Operation::OR, 2)
+      else
+        builder.build(expression, variable)
+      end
+
+      expression.compile
+      expression
     end
 
     class ExpressionBuilder # :nodoc:
@@ -181,6 +184,25 @@ module Groonga
       end
     end
 
+    class WeightExpressionBuilder < ExpressionBuilder # :nodoc:
+      def initialize(column, value)
+        super()
+        @default_column = column
+        @value = value
+      end
+
+      def build(expression, variable)
+        if @default_column.is_a?(String)
+          expression.append_constant(@default_column)
+        else
+          expression.append_object(@default_column)
+        end
+        expression.append_operation(Groonga::Operation::GET_VALUE, 1)
+        expression.append_constant(@value)
+        expression.append_operation(Groonga::Operation::STAR, 2)
+      end
+    end
+
     class SubExpressionBuilder < ExpressionBuilder # :nodoc:
       def initialize(query, options)
         super()
@@ -231,7 +253,7 @@ module Groonga
       self["_nsubrecs"]
     end
 
-    def match(query, options_or_default_column={})
+    def match(query, options_or_default_column={}, &block)
       if options_or_default_column.is_a?(String)
         options = {:default_column => options_or_default_column}
       else
@@ -239,6 +261,12 @@ module Groonga
       end
       options = options.dup
       options[:syntax] ||= :query
+      if block_given? and options[:default_column].nil?
+        default_column = self.class.new(@table, nil)
+        options[:default_column] = default_column.build do |record|
+          block.call(record)
+        end
+      end
       SubExpressionBuilder.new(query, options)
     end
 
@@ -295,11 +323,30 @@ module Groonga
       GreaterEqualExpressionBuilder.new(@default_column, normalize(other))
     end
 
+    def *(weight)
+      WeightExpressionBuilder.new(@default_column, weight)
+    end
+
     def match(query, options={})
       options = options.dup
       options[:syntax] ||= :query
       options[:default_column] = @column_name
       SubExpressionBuilder.new(query, options)
+    end
+
+    def build(expression=nil, variable=nil, &block)
+      if expression.nil?
+        expression = Expression.new(:name => @name)
+        variable = expression.define_variable(:domain => @table)
+        build_expression(expression, variable, &block)
+      else
+        if @default_column.is_a?(String)
+          expression.append_constant(@default_column)
+        else
+          expression.append_object(@default_column)
+        end
+        expression.append_operation(Groonga::Operation::GET_VALUE, 1)
+      end
     end
 
     private
