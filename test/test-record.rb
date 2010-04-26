@@ -116,8 +116,7 @@ class RecordTest < Test::Unit::TestCase
   def test_set_nil_reference
     groonga = @bookmarks.add(:user => "daijiro",
                              :uri => "http://groonga.org/")
-    assert_equal(@users["daijiro"], groonga.user)
-    groonga["user"] = nil
+    groonga.user = nil
     assert_nil(groonga.user)
   end
 
