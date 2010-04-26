@@ -129,6 +129,12 @@ class RecordTest < Test::Unit::TestCase
     assert_nil(groonga.user)
   end
 
+  def test_set_string_to_integer_column
+    groonga = @bookmarks.add(:content => "groonga")
+    groonga.rate = "100"
+    assert_equal(100, groonga.rate)
+  end
+
   def test_delete
     bookmark1 = @bookmarks.add
     bookmark2 = @bookmarks.add

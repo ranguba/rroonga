@@ -332,6 +332,14 @@ rb_grn_bulk_from_ruby_object_with_type (VALUE object, grn_ctx *context,
     grn_id record_id, range;
     VALUE rb_type_object;
     grn_obj_flags flags = 0;
+    rb_grn_boolean string_p, table_type_p;
+
+    string_p = rb_type(object) == T_STRING;
+    table_type_p = (GRN_TABLE_HASH_KEY <= type->header.type &&
+		    type->header.type <= GRN_TABLE_VIEW);
+    if (string_p && !table_type_p) {
+	return RVAL2GRNBULK(object, context, bulk);
+    }
 
     switch (type_id) {
       case GRN_DB_INT32:
@@ -418,16 +426,11 @@ rb_grn_bulk_from_ruby_object_with_type (VALUE object, grn_ctx *context,
 		 rb_grn_inspect(rb_type_object));
 	break;
       default:
-	if (GRN_TABLE_HASH_KEY <= type->header.type &&
-	    type->header.type <= GRN_TABLE_VIEW) {
-	    if (NIL_P(object) ||
-		(rb_type(object) == T_STRING && RSTRING_LEN(object) == 0)) {
-		record_id = GRN_ID_NIL;
-		string = (const char *)&record_id;
-		size = sizeof(record_id);
-	    } else {
-		return RVAL2GRNBULK(object, context, bulk);
-	    }
+	if (table_type_p &&
+	    (NIL_P(object) || (string_p && RSTRING_LEN(object) == 0))) {
+	    record_id = GRN_ID_NIL;
+	    string = (const char *)&record_id;
+	    size = sizeof(record_id);
 	} else {
 	    return RVAL2GRNBULK(object, context, bulk);
 	}
