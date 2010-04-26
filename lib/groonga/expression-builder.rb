@@ -67,11 +67,11 @@ module Groonga
       builders = []
       builders << match(@query, default_parse_options) if @query
       if block_given?
-        builder = yield(self)
+        custom_builder = yield(self)
         if builder.is_a?(::Array)
-          builders.concat(builder)
+          builders.concat(custom_builder)
         else
-          builders << builder
+          builders << custom_builder
         end
       end
 
