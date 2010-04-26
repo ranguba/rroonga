@@ -31,8 +31,8 @@ class RecordTest < Test::Unit::TestCase
   end
 
   def setup_users_table
-    @users = Groonga::Array.create(:name => "Users")
-    @users.define_column("name", "ShortText")
+    @users = Groonga::Hash.create(:name => "Users",
+                                  :key_type => "ShortText")
     @users.define_column("addresses", @addresses, :type => "vector")
   end
 
@@ -93,17 +93,40 @@ class RecordTest < Test::Unit::TestCase
 
   def test_set_object_id
     groonga = @bookmarks.add
-    daijiro = @users.add
-    daijiro["name"] = "daijiro"
+    daijiro = @users.add("daijiro")
     assert_nil(groonga["user"])
     groonga["user"] = daijiro.id
     assert_equal(daijiro, groonga["user"])
   end
 
   def test_set_nil
-    groonga = @bookmarks.add
+    groonga = @bookmarks.add(:content => "groonga")
+    assert_equal("groonga", groonga["content"])
     groonga["content"] = nil
     assert_nil(groonga["content"])
+  end
+
+  def test_set_empty_string
+    groonga = @bookmarks.add(:content => "groonga")
+    assert_equal("groonga", groonga["content"])
+    groonga["content"] = ""
+    assert_nil(groonga["content"])
+  end
+
+  def test_set_nil_reference
+    groonga = @bookmarks.add(:user => "daijiro",
+                             :uri => "http://groonga.org/")
+    assert_equal(@users["daijiro"], groonga.user)
+    groonga["user"] = nil
+    assert_nil(groonga.user)
+  end
+
+  def test_set_empty_key_reference
+    groonga = @bookmarks.add(:user => "daijiro",
+                             :uri => "http://groonga.org/")
+    assert_equal(@users["daijiro"], groonga.user)
+    groonga["user"] = ""
+    assert_nil(groonga.user)
   end
 
   def test_delete
@@ -236,8 +259,8 @@ class RecordTest < Test::Unit::TestCase
   end
 
   def test_method_chain
-    morita = @users.add(:name => "morita")
+    morita = @users.add("morita")
     groonga = @bookmarks.add(:user => morita, :uri => "http://groonga.org")
-    assert_equal("morita", groonga.user.name)
+    assert_equal("morita", groonga.user.key)
   end
 end

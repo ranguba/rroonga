@@ -1,6 +1,6 @@
 /* -*- c-file-style: "ruby" -*- */
 /*
-  Copyright (C) 2009  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2010  Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -77,13 +77,7 @@ rb_grn_fix_size_column_array_set (VALUE self, VALUE rb_id, VALUE rb_value)
 			      &value, &range_id, &range);
 
     id = NUM2UINT(rb_id);
-    RVAL2GRNBULK(rb_value, context, value);
-    if ((value->header.domain == GRN_DB_INT32 ||
-	 value->header.domain == GRN_DB_UINT32) &&
-	(GRN_TABLE_HASH_KEY <= range->header.type &&
-	 range->header.type <= GRN_TABLE_VIEW)) {
-	value->header.domain = range_id;
-    }
+    RVAL2GRNBULK_WITH_TYPE(rb_value, context, value, range_id, range);
 
     rc = grn_obj_set_value(context, column, id, value, GRN_OBJ_SET);
     rb_grn_context_check(context, self);
