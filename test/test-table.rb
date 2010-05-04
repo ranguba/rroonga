@@ -434,6 +434,14 @@ class TableTest < Test::Unit::TestCase
                  end)
   end
 
+  def test_group_with_unknown_key
+    bookmarks = Groonga::Hash.create(:name => "Bookmarks")
+    message = "unknown group key: <\"nonexistent\">: <#{bookmarks.inspect}>"
+    assert_raise(ArgumentError.new(message)) do
+      bookmarks.group("nonexistent")
+    end
+  end
+
   def test_union!
     bookmarks = Groonga::Hash.create(:name => "Bookmarks")
     bookmarks.define_column("title", "ShortText")

@@ -1149,8 +1149,17 @@ rb_grn_table_group (int argc, VALUE *argv, VALUE self)
 	rb_grn_scan_options(rb_sort_options,
 			    "key", &rb_key,
 			    NULL);
-	if (RVAL2CBOOL(rb_obj_is_kind_of(rb_key, rb_cString)))
-	    rb_key = rb_grn_table_get_column(self, rb_key);
+	if (RVAL2CBOOL(rb_obj_is_kind_of(rb_key, rb_cString))) {
+	    VALUE resolved_rb_key;
+	    resolved_rb_key = rb_grn_table_get_column(self, rb_key);
+	    if (NIL_P(resolved_rb_key)) {
+		rb_raise(rb_eArgError,
+			 "unknown group key: <%s>: <%s>",
+			 rb_grn_inspect(rb_key),
+			 rb_grn_inspect(self));
+	    }
+	    rb_key = resolved_rb_key;
+	}
 	keys[i].key = RVAL2GRNOBJECT(rb_key, &context);
 	keys[i].flags = 0;
     }
