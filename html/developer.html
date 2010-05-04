@@ -56,6 +56,20 @@
           <dd><pre class="command">% git clone git://github.com/ranguba/examples.git</pre></dd>
         </dl>
 
+	<h2>ビルド方法</h2>
+	<p>
+	  rroongaをビルドするためにはextconf.rbとMakefileを使います。Rakefileは使いません。
+        </p>
+	<p>
+	  ビルドしたいrubyでextconf.rbを実行してから、makeを実行します。
+        </p>
+        <pre class="command">% ruby extconf.rb
+% make</pre>
+	<p>
+          うまくいくとext/groonga/groonga.soができます。インストールせずにそのまま使う場合は以下のように$LOAD_PATHを設定してからrequireしてください。
+        </p>
+        <pre class="command">% irb -I lib -I ext/groonga -r groonga</pre>
+
 	<h2>バグ報告・メーリングリスト</h2>
 	<p>
 	  バグ報告は<a href="http://lists.sourceforge.jp/mailman/listinfo/groonga-dev">groongaのメーリングリスト</a>または<a href="http://redmine.groonga.org/projects/rroonga/issues/new">Redmine</a>にお願いします。
