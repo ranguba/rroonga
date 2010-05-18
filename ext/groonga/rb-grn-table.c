@@ -1126,7 +1126,7 @@ rb_grn_table_group (int argc, VALUE *argv, VALUE self)
 
     rb_scan_args(argc, argv, "11", &rb_keys, &rb_options);
 
-    if (TYPE(rb_keys) == rb_cArray) {
+    if (TYPE(rb_keys) == T_ARRAY) {
 	n_keys = RARRAY_LEN(rb_keys);
 	rb_group_keys = RARRAY_PTR(rb_keys);
     } else {
