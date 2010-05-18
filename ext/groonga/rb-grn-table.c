@@ -1799,7 +1799,7 @@ rb_grn_table_select (int argc, VALUE *argv, VALUE self)
 	result = grn_table_create(context, NULL, 0, NULL,
 				  GRN_TABLE_HASH_KEY | GRN_OBJ_WITH_SUBREC,
 				  table,
-				  0);
+				  NULL);
 	rb_result = GRNTABLE2RVAL(context, result, RB_GRN_TRUE);
     } else {
 	result = RVAL2GRNTABLE(rb_result, &context);
