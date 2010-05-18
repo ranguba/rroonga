@@ -396,7 +396,7 @@ rb_grn_patricia_trie_scan (VALUE self, VALUE rb_string)
     while (string_length > 0) {
 	const char *rest;
 	int i, n_hits;
-	long previous_offset = 0;
+	unsigned int previous_offset = 0;
 
 	n_hits = grn_pat_scan(context, (grn_pat *)table,
 			      string, string_length,

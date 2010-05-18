@@ -410,7 +410,7 @@ static VALUE
 rb_grn_context_connect (int argc, VALUE *argv, VALUE self)
 {
     grn_ctx *context;
-    char *host;
+    const char *host;
     int port;
     int flags = 0;
     grn_rc rc;
