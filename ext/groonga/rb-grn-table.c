@@ -1100,7 +1100,7 @@ rb_grn_table_sort (int argc, VALUE *argv, VALUE self)
 /*
  * call-seq:
  *   table.group(key, options={}) -> Groonga::Hash
- *   table.group([key1, key1, ...], options={}) -> [Groonga::Hash, ...]
+ *   table.group([key1, key2, ...], options={}) -> [Groonga::Hash, ...]
  *
  * _table_のレコードを_key1_, _key2_, _..._で指定したキーの
  * 値でグループ化する。多くの場合、キーにはカラムを指定する。
