@@ -432,6 +432,14 @@ class TableTest < Test::Unit::TestCase
                     bookmark["title"],
                     bookmark.key]
                  end)
+    assert_equal([[2, "groonga", "http://groonga.org/"],
+                  [1, "Ruby", "http://ruby-lang.org/"]],
+                 records.group(%w".bookmark").collect do |record|
+                   bookmark = record.key
+                   [record.n_sub_records,
+                    bookmark["title"],
+                    bookmark.key]
+                 end)
   end
 
   def test_group_with_unknown_key
