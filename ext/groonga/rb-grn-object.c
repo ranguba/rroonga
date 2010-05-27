@@ -429,7 +429,7 @@ rb_grn_named_object_set_name (RbGrnNamedObject *rb_grn_named_object,
 			      const char *name, unsigned name_size)
 {
     if (rb_grn_named_object->name) {
-	free(rb_grn_named_object->name);
+	xfree(rb_grn_named_object->name);
 	rb_grn_named_object->name = NULL;
     }
     if (name_size > 0) {
