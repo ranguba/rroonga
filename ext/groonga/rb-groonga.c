@@ -30,14 +30,60 @@ finish_groonga (VALUE self, VALUE object_id)
     return Qnil;
 }
 
+static void
+rb_grn_init_version (VALUE mGrn)
+{
+    long i, runtime_version_length;
+    VALUE runtime_version, build_version, bindings_version;
+    VALUE *runtime_version_pointer;
+
+    build_version = rb_ary_new3(3,
+				INT2NUM(GRN_MAJOR_VERSION),
+				INT2NUM(GRN_MINOR_VERSION),
+				INT2NUM(GRN_MICRO_VERSION));
+    rb_obj_freeze(build_version);
+    /*
+     * ビルドしたgroongaのバージョン。<tt>[メジャーバージョン,
+     * マイナーバージョン, マイクロバージョン]</tt>の配列。
+     */
+    rb_define_const(mGrn, "BUILD_VERSION", build_version);
+
+    runtime_version = rb_str_split(rb_str_new2(grn_get_version()), ".");
+    runtime_version_length = RARRAY_LEN(runtime_version);
+    runtime_version_pointer = RARRAY_PTR(runtime_version);
+    for (i = 0; i < runtime_version_length; i++) {
+	runtime_version_pointer[i] = rb_Integer(runtime_version_pointer[i]);
+    }
+    rb_obj_freeze(runtime_version);
+    /*
+     * 利用しているgroongaのバージョン。<tt>[メジャーバージョ
+     * ン, マイナーバージョン, マイクロバージョン]</tt>の配列。
+     */
+    rb_define_const(mGrn, "VERSION", runtime_version);
+
+    bindings_version = rb_ary_new3(3,
+				   INT2NUM(RB_GRN_MAJOR_VERSION),
+				   INT2NUM(RB_GRN_MINOR_VERSION),
+				   INT2NUM(RB_GRN_MICRO_VERSION));
+    rb_obj_freeze(bindings_version);
+    /*
+     * Ruby/groongaのバージョン。<tt>[メジャーバージョン, マ
+     * イナーバージョン, マイクロバージョン]</tt>の配列。
+     */
+    rb_define_const(mGrn, "BINDINGS_VERSION", bindings_version);
+}
+
 void
 Init_groonga (void)
 {
     VALUE mGrn;
-    VALUE cGrnBuildVersion, cGrnBindingsVersion;
     VALUE groonga_finalizer, groonga_finalizer_keeper;
 
     mGrn = rb_define_module("Groonga");
+
+    rb_grn_init_exception(mGrn);
+
+    rb_grn_rc_check(grn_init(), Qnil);
 
     groonga_finalizer = rb_funcall(rb_cObject, rb_intern("new"), 0);
     rb_define_singleton_method(groonga_finalizer, "call", finish_groonga, 1);
@@ -47,40 +93,7 @@ Init_groonga (void)
 	       2, groonga_finalizer_keeper, groonga_finalizer);
     rb_iv_set(mGrn, "finalizer", groonga_finalizer_keeper);
 
-    cGrnBuildVersion = rb_ary_new3(3,
-				   INT2NUM(GRN_MAJOR_VERSION),
-				   INT2NUM(GRN_MINOR_VERSION),
-				   INT2NUM(GRN_MICRO_VERSION));
-    rb_obj_freeze(cGrnBuildVersion);
-    /*
-     * ビルドしたgroongaのバージョン。<tt>[メジャーバージョン,
-     * マイナーバージョン, マイクロバージョン]</tt>の配列。
-     */
-    rb_define_const(mGrn, "BUILD_VERSION", cGrnBuildVersion);
-
-    /* FIXME: API to get runtime groonga version doesn't exist */
-
-    /*
-     * 利用しているgroongaのバージョン（にしたい。現在は
-     * BUILD_VERSIONと同じ）。<tt>[メジャーバージョ
-     * ン, マイナーバージョン, マイクロバージョン]</tt>の配列。
-     */
-    rb_define_const(mGrn, "VERSION", cGrnBuildVersion);
-
-    cGrnBindingsVersion = rb_ary_new3(3,
-				      INT2NUM(RB_GRN_MAJOR_VERSION),
-				      INT2NUM(RB_GRN_MINOR_VERSION),
-				      INT2NUM(RB_GRN_MICRO_VERSION));
-    rb_obj_freeze(cGrnBindingsVersion);
-    /*
-     * Ruby/groongaのバージョン。<tt>[メジャーバージョン, マ
-     * イナーバージョン, マイクロバージョン]</tt>の配列。
-     */
-    rb_define_const(mGrn, "BINDINGS_VERSION", cGrnBindingsVersion);
-
-    rb_grn_init_exception(mGrn);
-
-    rb_grn_rc_check(grn_init(), Qnil);
+    rb_grn_init_version(mGrn);
 
     rb_grn_init_utils(mGrn);
     rb_grn_init_encoding(mGrn);
