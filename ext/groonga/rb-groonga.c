@@ -31,11 +31,59 @@ finish_groonga (VALUE self, VALUE object_id)
 }
 
 static void
+rb_grn_init_runtime_version (VALUE mGrn)
+{
+    const char *component_start, *component_end;
+    int component_length;
+    VALUE runtime_version;
+    VALUE major, minor, micro, tag;
+
+    runtime_version = rb_ary_new();
+
+    component_start = grn_get_version();
+    component_end = strstr(component_start, ".");
+    component_length = component_end - component_start;
+    major = rb_str_new(component_start, component_length);
+    rb_ary_push(runtime_version, rb_Integer(major));
+
+    component_start = component_end + 1;
+    component_end = strstr(component_start, ".");
+    component_length = component_end - component_start;
+    minor = rb_str_new(component_start, component_length);
+    rb_ary_push(runtime_version, rb_Integer(minor));
+
+    component_start = component_end + 1;
+    component_end = strstr(component_start, "-");
+    if (component_end) {
+	component_length = component_end - component_start;
+    } else {
+	component_length = strlen(component_start);
+    }
+    micro = rb_str_new(component_start, component_length);
+    rb_ary_push(runtime_version, rb_Integer(micro));
+
+    if (component_end) {
+	tag = rb_str_new2(component_end + 1);
+    } else {
+	tag = Qnil;
+    }
+    rb_ary_push(runtime_version, tag);
+
+    rb_obj_freeze(runtime_version);
+    /*
+     * 利用しているgroongaのバージョン。<tt>[メジャーバージョ
+     * ン, マイナーバージョン, マイクロバージョン, タグ]</tt>の
+     * 配列。
+     */
+    rb_define_const(mGrn, "VERSION", runtime_version);
+}
+
+static void
 rb_grn_init_version (VALUE mGrn)
 {
-    long i, runtime_version_length;
-    VALUE runtime_version, build_version, bindings_version;
-    VALUE *runtime_version_pointer;
+    VALUE build_version, bindings_version;
+
+    rb_grn_init_runtime_version(mGrn);
 
     build_version = rb_ary_new3(3,
 				INT2NUM(GRN_MAJOR_VERSION),
@@ -47,19 +95,6 @@ rb_grn_init_version (VALUE mGrn)
      * マイナーバージョン, マイクロバージョン]</tt>の配列。
      */
     rb_define_const(mGrn, "BUILD_VERSION", build_version);
-
-    runtime_version = rb_str_split(rb_str_new2(grn_get_version()), ".");
-    runtime_version_length = RARRAY_LEN(runtime_version);
-    runtime_version_pointer = RARRAY_PTR(runtime_version);
-    for (i = 0; i < runtime_version_length; i++) {
-	runtime_version_pointer[i] = rb_Integer(runtime_version_pointer[i]);
-    }
-    rb_obj_freeze(runtime_version);
-    /*
-     * 利用しているgroongaのバージョン。<tt>[メジャーバージョ
-     * ン, マイナーバージョン, マイクロバージョン]</tt>の配列。
-     */
-    rb_define_const(mGrn, "VERSION", runtime_version);
 
     bindings_version = rb_ary_new3(3,
 				   INT2NUM(RB_GRN_MAJOR_VERSION),
