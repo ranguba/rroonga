@@ -439,26 +439,25 @@ rb_grn_expression_parse (int argc, VALUE *argv, VALUE self)
 
 /*
  * call-seq:
- *   expression.execute
+ *   expression.execute -> 値
  *
- * _expression_を実行する。
+ * _expression_を実行し、実行した結果を返す。
  */
 static VALUE
 rb_grn_expression_execute (VALUE self)
 {
     grn_ctx *context = NULL;
     grn_obj *expression;
-    grn_rc rc;
+    grn_obj *result;
 
     rb_grn_expression_deconstruct(SELF(self), &expression, &context,
                                   NULL, NULL,
                                   NULL, NULL, NULL);
 
-    rc = grn_expr_exec(context, expression, 0);
+    result = grn_expr_exec(context, expression, 0);
     rb_grn_context_check(context, self);
-    rb_grn_rc_check(rc, self);
 
-    return Qnil;
+    return GRNOBJ2RVAL(Qnil, context, result, self);
 }
 
 /*
