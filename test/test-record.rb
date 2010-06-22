@@ -95,7 +95,7 @@ class RecordTest < Test::Unit::TestCase
     groonga = @bookmarks.add
     daijiro = @users.add("daijiro")
     assert_nil(groonga["user"])
-    groonga["user"] = daijiro.id
+    groonga["user"] = daijiro
     assert_equal(daijiro, groonga["user"])
   end
 
