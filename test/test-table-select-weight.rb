@@ -23,10 +23,12 @@ class TableSelectWeightTest < Test::Unit::TestCase
   setup
   def setup_tables
     Groonga::Schema.define do |schema|
-      schema.create_table("Users", :key_type => "ShortText") do |table|
+      schema.create_table("Users",
+                          :type => :hash,
+                          :key_type => "ShortText") do |table|
       end
 
-      schema.create_table("Comments", :type => :array) do |table|
+      schema.create_table("Comments") do |table|
         table.short_text("title")
         table.text("content")
         table.time("created_at")
@@ -38,6 +40,10 @@ class TableSelectWeightTest < Test::Unit::TestCase
                           :default_tokenizer => "TokenBigram") do |table|
         table.index("Comments.title", :with_section => true)
         table.index("Comments.content", :with_section => true)
+      end
+
+      schema.change_table("Users") do |table|
+        table.index("Comments.user")
       end
     end
   end
@@ -64,7 +70,7 @@ class TableSelectWeightTest < Test::Unit::TestCase
                     :user => "darashi")
   end
 
-  def test_weight
+  def test_full_text_search
     result = @comments.select do |record|
       record.match("Hello") do |match_record|
         (match_record.title * 100) |
@@ -72,6 +78,25 @@ class TableSelectWeightTest < Test::Unit::TestCase
       end
     end
     assert_equal_select_result([["Hello", 101], ["(no title)", 3]],
+                               result) do |record|
+      [record.title, record.score]
+    end
+  end
+
+  def test_reference
+    result = @comments.select do |record|
+      full_text_match = record.match("Hello") do |match_record|
+        (match_record.title * 100) |
+          match_record.content
+      end
+      reference_match = record.match("darashi") do |match_record|
+        match_record.user * 1000
+      end
+      full_text_match | reference_match
+    end
+    assert_equal_select_result([["Hello", 101],
+                                ["(no title)", 3],
+                                ["日本語", 1000]],
                                result) do |record|
       [record.title, record.score]
     end

@@ -232,6 +232,21 @@ module Groonga
       end
     end
 
+    class MatchTargetColumnExpressionBuilder < ColumnValueExpressionBuilder # :nodoc:
+      def build(expression, variable)
+        if @column.is_a?(String)
+          expression.append_constant(@column)
+        else
+          expression.append_object(@column)
+        end
+      end
+
+      private
+      def normalize(other)
+        other
+      end
+    end
+
     class MatchTargetExpressionBuilder < ExpressionBuilder # :nodoc:
       def initialize(target)
         super()
@@ -362,9 +377,7 @@ module Groonga
           "for table <#{@table.inspect}>"
         raise ArgumentError, message
       end
-      ColumnValueExpressionBuilder.new(column,
-                                       :table => @table,
-                                       :column_name => name)
+      column_expression_builder(column, name)
     end
 
     def id
@@ -403,10 +416,16 @@ module Groonga
 
     private
     def build_match_target(&block)
-      sub_builder = self.class.new(@table, nil)
+      sub_builder = MatchTargetRecordExpressionBuilder.new(@table, nil)
       sub_builder.build do |record|
         block.call(record)
       end
+    end
+
+    def column_expression_builder(column, name)
+      ColumnValueExpressionBuilder.new(column,
+                                       :table => @table,
+                                       :column_name => name)
     end
 
     def method_missing(name, *args, &block)
@@ -417,6 +436,15 @@ module Groonga
       else
         super
       end
+    end
+  end
+
+  class MatchTargetRecordExpressionBuilder < RecordExpressionBuilder # :nodoc:
+    private
+    def column_expression_builder(column, name)
+      MatchTargetColumnExpressionBuilder.new(column,
+                                             :table => @table,
+                                             :column_name => name)
     end
   end
 
