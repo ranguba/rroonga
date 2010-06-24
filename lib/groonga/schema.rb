@@ -571,9 +571,17 @@ module Groonga
         if @options[:change]
           raise ArgumentError, "table doesn't exist: #{@name}" if table.nil?
         else
-          if table and @options[:force]
-            table.remove
-            table = nil
+          if table
+            unless same_table?(table, create_options)
+              if @options[:force]
+                table.remove
+                table = nil
+              else
+                message = "table already exist: " +
+                  "#{table.inspect}: #{create_options.inspect}"
+                raise ArgumentError, message
+              end
+            end
           end
           table ||= @table_type.create(create_options)
         end
@@ -902,6 +910,29 @@ module Groonga
         definition.target_column = target_column
         definition.options.merge!(column_options.merge(options))
         self
+      end
+
+      def same_table?(table, options)
+        return false # TODO
+
+        return false unless table.class == @table_type
+        return false unless table.range == options[:value_type]
+        return false unless table.sub_records == options[:sub_records]
+
+        case table
+        when Groonga::Array
+          true
+        when Groonga::Hash, Groonga::PatriciaTrie
+          return false unless table.domain == options[:key_type]
+          return false unless table.default_tokenizer == options[:default_tokenizer]
+          if table.is_a?(Groonga::PatriciaTrie)
+            return false unless table.key_normalize == options[:key_normalize]
+            return false unless table.key_with_sis == options[:key_with_sis]
+          end
+          true
+        else
+          false
+        end
       end
     end
 

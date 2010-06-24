@@ -1,1 +1,1 @@
-* improve Table#column_value and Table#set_column_value speed.
+* support clever table creation schema.
