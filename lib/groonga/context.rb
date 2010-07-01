@@ -36,19 +36,12 @@ module Groonga
       select.exec
     end
 
-    class SelectResult < Struct.new(:return_code, :start_time, :elapsed,
-                                    :error_message,
-                                    :n_hits, :columns, :values,
+    class SelectResult < Struct.new(:n_hits, :columns, :values,
                                     :drill_down)
       class << self
         def parse(json, drill_down_keys)
-          status, (select_result, *drill_down_results) = parse_json(json)
+          select_result, *drill_down_results = parse_json(json)
           result = new
-          return_code, start_time, elapsed, error_message = status
-          result.return_code = return_code
-          result.start_time = Time.at(start_time)
-          result.elapsed = elapsed
-          result.error_message = error_message
           n_hits, columns, values = extract_result(select_result)
           result.n_hits = n_hits
           result.columns = columns
@@ -116,10 +109,6 @@ module Groonga
 
       def records
         @records ||= self.class.create_records(columns, values)
-      end
-
-      def success?
-        return_code.zero?
       end
 
       class DrillDownResult < Struct.new(:n_hits, :columns, :values)
