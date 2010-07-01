@@ -63,10 +63,7 @@ class ContextSelectTest < Test::Unit::TestCase
                             :drill_down => ["_key", "book"],
                             :drill_down_output_columns => "_key",
                             :drill_down_limit => 10)
-    normalized_drill_down = {}
-    result.drill_down.each do |key, drill_down|
-      normalized_drill_down[key] = [drill_down.n_hits, drill_down.records]
-    end
+    drill_down = normalize_drill_down(result.drill_down)
     assert_equal([3,
                   [{"_key" => "morita"},
                    {"_key" => "gunyara-kun"},
@@ -78,7 +75,24 @@ class ContextSelectTest < Test::Unit::TestCase
                     "book" => [1, [{"_key" => "the groonga book"}]],
                   },
                  ],
-                 [result.n_hits, result.records, normalized_drill_down])
+                 [result.n_hits, result.records, drill_down])
+  end
+
+  def test_drill_down_with_no_hit
+    result = context.select(@users,
+                            :filter => "_key == \"no hit\"",
+                            :output_columns => ["_key"],
+                            :drill_down => ["_key", "book"],
+                            :drill_down_output_columns => "_key",
+                            :drill_down_limit => 10)
+    drill_down = normalize_drill_down(result.drill_down)
+    assert_equal([0, [],
+                  {
+                    "_key" => [0, []],
+                    "book" => [0, []],
+                  },
+                 ],
+                 [result.n_hits, result.records, drill_down])
   end
 
   def test_time
@@ -89,5 +103,14 @@ class ContextSelectTest < Test::Unit::TestCase
                     "published" => Time.parse("2010/04/01"),
                   }],
                  result.records)
+  end
+
+  private
+  def normalize_drill_down(drill_down)
+    normalized_drill_down = {}
+    drill_down.each do |key, drill_down|
+      normalized_drill_down[key] = [drill_down.n_hits, drill_down.records]
+    end
+    normalized_drill_down
   end
 end
