@@ -90,7 +90,7 @@ project = nil
 Hoe.spec('rroonga') do
   Hoe::Test::SUPPORTED_TEST_FRAMEWORKS[:testunit2] = "test/run-test.rb"
   project = self
-  project.version = version
+  project.version = version.dup
   project.rubyforge_name = 'groonga'
   authors = File.join(base_dir, "AUTHORS")
   project.author = File.readlines(authors).collect do |line|
