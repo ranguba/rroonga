@@ -87,9 +87,9 @@ end
 ENV["VERSION"] ||= guess_version
 version = ENV["VERSION"]
 project = nil
-Hoe.spec('rroonga') do |_project|
+Hoe.spec('rroonga') do
   Hoe::Test::SUPPORTED_TEST_FRAMEWORKS[:testunit2] = "test/run-test.rb"
-  project = _project
+  project = self
   project.version = version
   project.rubyforge_name = 'groonga'
   authors = File.join(base_dir, "AUTHORS")
