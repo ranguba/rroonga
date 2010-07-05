@@ -20,14 +20,12 @@
 
 rb_grn_boolean rb_grn_exited = RB_GRN_FALSE;
 
-static VALUE
-finish_groonga (VALUE self, VALUE object_id)
+static void
+finish_groonga (VALUE data)
 {
     debug("finish\n");
     grn_fin();
     rb_grn_exited = RB_GRN_TRUE;
-
-    return Qnil;
 }
 
 static void
@@ -112,21 +110,13 @@ void
 Init_groonga (void)
 {
     VALUE mGrn;
-    VALUE groonga_finalizer, groonga_finalizer_keeper;
 
     mGrn = rb_define_module("Groonga");
 
     rb_grn_init_exception(mGrn);
 
     rb_grn_rc_check(grn_init(), Qnil);
-
-    groonga_finalizer = rb_funcall(rb_cObject, rb_intern("new"), 0);
-    rb_define_singleton_method(groonga_finalizer, "call", finish_groonga, 1);
-    groonga_finalizer_keeper = rb_funcall(rb_cObject, rb_intern("new"), 0);
-    rb_funcall(rb_const_get(rb_cObject, rb_intern("ObjectSpace")),
-	       rb_intern("define_finalizer"),
-	       2, groonga_finalizer_keeper, groonga_finalizer);
-    rb_iv_set(mGrn, "finalizer", groonga_finalizer_keeper);
+    rb_set_end_proc(finish_groonga, Qnil);
 
     rb_grn_init_version(mGrn);
 
