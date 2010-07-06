@@ -108,6 +108,7 @@ FileUtils.mkdir_p(source_ext_dir.to_s)
 
 require 'rbconfig'
 ext_dir = base_dir + "ext" + "groonga"
+definitions = ""
 Dir.chdir(source_ext_dir.to_s) do
   config = Proc.new do |key|
     RbConfig::CONFIG[key]
@@ -116,15 +117,30 @@ Dir.chdir(source_ext_dir.to_s) do
   message("checking in #{ext_dir}...\n")
   system("#{ruby} #{ext_dir + 'extconf.rb'}") or exit 1
   message("checking in #{ext_dir}: done.\n")
+  File.open("Makefile") do |file|
+    file.each_line do |line|
+      case line
+      when /\A\w+\s*=/
+        definitions << line
+      end
+    end
+  end
 end
 
 message("creating top-level Makefile\n")
 File.open("Makefile", "w") do |makefile|
+  makefile.puts(definitions)
+  makefile.puts
   targets = ["all", "clean", "install"]
   targets.each do |target|
+    # overriding RUBYARCHDIR and RUBYLIBDIR for RubyGems.
     makefile.puts <<-EOM
 #{target}:
-	cd #{source_ext_dir}; $(MAKE) $(MAKE_ARGS) #{target}
+	cd #{source_ext_dir}; \\
+	  $(MAKE) $(MAKE_ARGS) \\
+	    RUBYARCHDIR=$(RUBYARCHDIR) \\
+	    RUBYLIBDIR=$(RUBYLIBDIR) \\
+	    #{target}
 EOM
   end
 end
