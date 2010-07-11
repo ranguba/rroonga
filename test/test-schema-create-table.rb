@@ -127,6 +127,29 @@ module SchemaCreateTableWithKeyTests
       end
     end
   end
+
+  def test_same_default_tokenizer
+    _options = options(:key_type => "ShortText",
+                       :default_tokenizer => "TokenBigram")
+    Groonga::Schema.create_table("Posts", _options) do |table|
+    end
+
+    Groonga::Schema.create_table("Posts", _options) do |table|
+    end
+    assert_equal(context["TokenBigram"], context["Posts"].default_tokenizer)
+  end
+
+  def test_differnt_default_tokenizer
+    _options = options(:key_type => "ShortText")
+    Groonga::Schema.create_table("Posts", _options) do |table|
+    end
+
+    _options = _options.merge(:default_tokenizer => "TokenBigram")
+    assert_raise(Groonga::Schema::TableCreationWithDifferentOptions) do
+      Groonga::Schema.create_table("Posts", _options) do |table|
+      end
+    end
+  end
 end
 
 class SchemaCreateTableArrayTest < Test::Unit::TestCase

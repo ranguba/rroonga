@@ -980,7 +980,7 @@ module Groonga
 
       def same_table?(table, options)
         return false unless table.class == @table_type
-        return false unless table.range == resolve_type(options[:value_type])
+        return false unless table.range == resolve_name(options[:value_type])
         sub_records = options[:sub_records]
         sub_records = false if sub_records.nil?
         return false unless table.support_sub_records? == sub_records
@@ -989,8 +989,8 @@ module Groonga
         when Groonga::Array
           true
         when Groonga::Hash, Groonga::PatriciaTrie
-          return false unless table.domain == resolve_type(options[:key_type])
-          default_tokenizer = options[:default_tokenizer]
+          return false unless table.domain == resolve_name(options[:key_type])
+          default_tokenizer = resolve_name(options[:default_tokenizer])
           return false unless table.default_tokenizer == default_tokenizer
           if table.is_a?(Groonga::PatriciaTrie)
             return false unless table.key_normalize == options[:key_normalize]
@@ -1002,7 +1002,7 @@ module Groonga
         end
       end
 
-      def resolve_type(type)
+      def resolve_name(type)
         if type.nil?
           nil
         elsif type.is_a?(String)
