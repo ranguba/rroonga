@@ -980,8 +980,8 @@ module Groonga
 
       def same_table?(table, options)
         return false unless table.class == @table_type
+        return false unless table.range == resolve_type(options[:value_type])
         return true
-        return false unless table.range == options[:value_type]
         return false unless table.sub_records == options[:sub_records]
 
         case table
@@ -997,6 +997,16 @@ module Groonga
           true
         else
           false
+        end
+      end
+
+      def resolve_type(type)
+        if type.nil?
+          nil
+        elsif type.is_a?(String)
+          context[type]
+        else
+          type
         end
       end
     end

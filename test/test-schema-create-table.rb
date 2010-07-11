@@ -54,5 +54,25 @@ class SchemaCreateTableArrayTest < Test::Unit::TestCase
 
     Groonga::Schema.create_table("Posts") do |table|
     end
+    assert_not_nil(context["Posts"])
+  end
+
+  def test_with_same_value_type
+    Groonga::Schema.create_table("Posts", :value_type => "UInt32") do |table|
+    end
+
+    Groonga::Schema.create_table("Posts", :value_type => "UInt32") do |table|
+    end
+    assert_equal(context["UInt32"], context["Posts"].range)
+  end
+
+  def test_with_differnt_value_type
+    Groonga::Schema.create_table("Posts") do |table|
+    end
+
+    assert_raise(Groonga::Schema::TableCreationWithDifferentOptions) do
+      Groonga::Schema.create_table("Posts", :value_type => "Int32") do |table|
+      end
+    end
   end
 end
