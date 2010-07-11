@@ -108,8 +108,8 @@ class ContextSelectTest < Test::Unit::TestCase
   private
   def normalize_drill_down(drill_down)
     normalized_drill_down = {}
-    drill_down.each do |key, drill_down|
-      normalized_drill_down[key] = [drill_down.n_hits, drill_down.records]
+    drill_down.each do |key, drill|
+      normalized_drill_down[key] = [drill.n_hits, drill.records]
     end
     normalized_drill_down
   end
