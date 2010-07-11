@@ -67,21 +67,16 @@ module Groonga
       limit = page_size
       records = sort(sort_keys, :offset => offset, :limit => limit)
       records.extend(Pagination)
-      records.set_pagination_info(page, page_size, _size)
+      records.send(:set_pagination_info, page, page_size, _size)
       records
     end
   end
 
   # ページネーション機能を追加するモジュール。
+  #
+  # ページ番号など、0ベースではなく1ベースです。
   module Pagination
     attr_reader :current_page, :page_size, :n_pages, :n_records
-
-    def set_pagination_info(current_page, page_size, n_records)
-      @current_page = current_page
-      @page_size = page_size
-      @n_records = n_records
-      @n_pages = [(@n_records / @page_size.to_f).ceil, 1].max
-    end
 
     def have_pages?
       @n_pages > 1
@@ -123,15 +118,26 @@ module Groonga
       size
     end
 
-    def record_range_in_page
+    def start_offset
       return nil if @n_records.zero?
-      start_offset = 1 + (@current_page - 1) * @page_size
-      end_offset = [start_offset + @page_size - 1, @n_records].min
-      start_offset..end_offset
+      1 + (@current_page - 1) * @page_size
+    end
+
+    def end_offset
+      return nil if @n_records.zero?
+      [start_offset + @page_size - 1, @n_records].min
     end
 
     def pages
       first_page..last_page
+    end
+
+    private
+    def set_pagination_info(current_page, page_size, n_records)
+      @current_page = current_page
+      @page_size = page_size
+      @n_records = n_records
+      @n_pages = [(@n_records / @page_size.to_f).ceil, 1].max
     end
   end
 end
