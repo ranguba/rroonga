@@ -570,7 +570,7 @@ rb_grn_init_exception (VALUE mGrn)
     /*
      * Document-class: Groonga::Error
      *
-     * Ruby/groongaが発生する例外のスーパークラス。
+     * rroongaが発生する例外のスーパークラス。
      */
     rb_eGrnError =
         rb_define_class_under(mGrn, "Error", rb_eStandardError);
