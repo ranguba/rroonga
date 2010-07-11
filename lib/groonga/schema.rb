@@ -215,10 +215,13 @@ module Groonga
       #   ルにGroonga::IndexColumnを定義する場合は
       #   <tt>"TokenBigram"</tt>などを指定する必要がある。
       #
-      # 以下は+:type+に+:patricia_trie+を指定した時に指定可能。
+      # 以下は+:type+に+:hash+または+:patricia_trie+を指定し
+      # た時に指定可能。
       #
       # [+:key_normalize+]
       #   +true+を指定するとキーを正規化する。
+      #
+      # 以下は+:type+に+:patricia_trie+を指定した時に指定可能。
       #
       # [+:key_with_sis+]
       #   +true+を指定するとキーの文字列の全suffixが自動的に
@@ -939,6 +942,7 @@ module Groonga
         }
         key_support_table_common = {
           :key_type => Schema.normalize_type(@options[:key_type]),
+          :key_normalize => @options[:key_normalize],
           :default_tokenizer => @options[:default_tokenizer],
         }
 
@@ -948,7 +952,6 @@ module Groonga
           common.merge(key_support_table_common)
         elsif @table_type == Groonga::PatriciaTrie
           options = {
-            :key_normalize => @options[:key_normalize],
             :key_with_sis => @options[:key_with_sis],
           }
           common.merge(key_support_table_common).merge(options)
@@ -992,11 +995,13 @@ module Groonga
           return false unless table.domain == resolve_name(options[:key_type])
           default_tokenizer = resolve_name(options[:default_tokenizer])
           return false unless table.default_tokenizer == default_tokenizer
+          key_normalize = options[:key_normalize]
+          key_normalize = false if key_normalize.nil?
+          return false unless table.normalize_key? == key_normalize
           if table.is_a?(Groonga::PatriciaTrie)
-            normalize_key = options[:key_normalize]
-            normalize_key = false if normalize_key.nil?
-            return false unless table.normalize_key? == normalize_key
-            # return false unless table.key_with_sis == options[:key_with_sis]
+            key_with_sis = options[:key_with_sis]
+            key_with_sis = false if key_with_sis.nil?
+            return false unless table.register_key_with_sis? == key_with_sis
           end
           true
         else

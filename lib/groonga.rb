@@ -93,3 +93,4 @@ end
 require 'groonga/context'
 require 'groonga/patricia-trie'
 require 'groonga/schema'
+require 'groonga/pagination'

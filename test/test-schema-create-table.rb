@@ -150,6 +150,30 @@ module SchemaCreateTableWithKeyTests
       end
     end
   end
+
+  def test_same_key_normalize
+    _options = options(:key_type => "ShortText",
+                       :key_normalize => true)
+    Groonga::Schema.create_table("Posts", _options) do |table|
+    end
+
+    Groonga::Schema.create_table("Posts", _options) do |table|
+    end
+    assert_true(context["Posts"].normalize_key?)
+  end
+
+  def test_differnt_key_normalize
+    _options = options(:key_type => "ShortText",
+                       :key_normalize => true)
+    Groonga::Schema.create_table("Posts", _options) do |table|
+    end
+
+    _options = _options.merge(:key_normalize => false)
+    assert_raise(Groonga::Schema::TableCreationWithDifferentOptions) do
+      Groonga::Schema.create_table("Posts", _options) do |table|
+      end
+    end
+  end
 end
 
 class SchemaCreateTableArrayTest < Test::Unit::TestCase
@@ -192,25 +216,26 @@ class SchemaCreateTablePatriciaTrieTest < Test::Unit::TestCase
 
   setup :setup_database
 
-  def test_same_key_normalize
-    Groonga::Schema.create_table("Posts",
-                                 options(:key_normalize => true)) do |table|
+  def test_same_key_with_sis
+    _options = options(:key_type => "ShortText",
+                       :key_with_sis => true)
+    Groonga::Schema.create_table("Posts", _options) do |table|
     end
 
-    Groonga::Schema.create_table("Posts",
-                                 options(:key_normalize => true)) do |table|
+    Groonga::Schema.create_table("Posts", _options) do |table|
     end
-    assert_true(context["Posts"].normalize_key?)
+    assert_true(context["Posts"].register_key_with_sis?)
   end
 
-  def test_differnt_key_normalize
-    Groonga::Schema.create_table("Posts",
-                                 options(:key_normalize => true)) do |table|
+  def test_differnt_key_with_sis
+    _options = options(:key_type => "ShortText",
+                       :key_with_sis => true)
+    Groonga::Schema.create_table("Posts", _options) do |table|
     end
 
+    _options = _options.merge(:key_with_sis => false)
     assert_raise(Groonga::Schema::TableCreationWithDifferentOptions) do
-      Groonga::Schema.create_table("Posts",
-                                   options(:key_normalize => false)) do |table|
+      Groonga::Schema.create_table("Posts", _options) do |table|
       end
     end
   end
