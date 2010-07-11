@@ -39,7 +39,11 @@ class PaginationTest < Test::Unit::TestCase
                       :page_size => 10,
                       :n_pages => 15,
                       :n_records => 150,
-                      :record_range_in_page => 1..10
+                      :record_range_in_page => 1..10,
+                      :have_previous_page? => false,
+                      :previous_page => nil,
+                      :have_next_page? => true,
+                      :next_page => 2,
                     })
   end
 
@@ -49,7 +53,11 @@ class PaginationTest < Test::Unit::TestCase
                       :page_size => 10,
                       :n_pages => 15,
                       :n_records => 150,
-                      :record_range_in_page => 51..60
+                      :record_range_in_page => 51..60,
+                      :have_previous_page? => true,
+                      :previous_page => 5,
+                      :have_next_page? => true,
+                      :next_page => 7,
                     },
                     :page => 6)
   end
@@ -61,6 +69,10 @@ class PaginationTest < Test::Unit::TestCase
                       :n_pages => 15,
                       :n_records => 150,
                       :record_range_in_page => 141..150,
+                      :have_previous_page? => true,
+                      :previous_page => 14,
+                      :have_next_page? => false,
+                      :next_page => nil,
                     },
                     :page => 15)
   end
@@ -86,6 +98,57 @@ class PaginationTest < Test::Unit::TestCase
     end
   end
 
+  def test_size
+    assert_paginate({
+                      :current_page => 1,
+                      :page_size => 7,
+                      :n_pages => 22,
+                      :n_records => 150,
+                      :record_range_in_page => 1..7,
+                      :have_previous_page? => false,
+                      :previous_page => nil,
+                      :have_next_page? => true,
+                      :next_page => 2,
+                    },
+                    :size => 7)
+  end
+
+  def test_max_size
+    assert_paginate({
+                      :current_page => 1,
+                      :page_size => 150,
+                      :n_pages => 1,
+                      :n_records => 150,
+                      :record_range_in_page => 1..150,
+                      :have_previous_page? => false,
+                      :previous_page => nil,
+                      :have_next_page? => false,
+                      :next_page => nil,
+                    },
+                    :size => 150)
+  end
+
+  def test_too_large_size
+    assert_raise(Groonga::TooLargePageSize) do
+      assert_paginate({},
+                      :size => 151)
+    end
+  end
+
+  def test_zero_size
+    assert_raise(Groonga::TooSmallPageSize) do
+      assert_paginate({},
+                      :size => 0)
+    end
+  end
+
+  def test_negative_size
+    assert_raise(Groonga::TooSmallPageSize) do
+      assert_paginate({},
+                      :size => -1)
+    end
+  end
+
   private
   def assert_paginate(expected, options={})
     users = @users.paginate([["number"]], options)
@@ -96,6 +159,10 @@ class PaginationTest < Test::Unit::TestCase
                  :n_pages => users.n_pages,
                  :n_records => users.n_records,
                  :record_range_in_page => users.record_range_in_page,
+                 :previous_page => users.previous_page,
+                 :have_previous_page? => users.have_previous_page?,
+                 :next_page => users.next_page,
+                 :have_next_page? => users.have_next_page?,
                  :keys => users.collect(&:key))
   end
 end

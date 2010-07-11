@@ -17,7 +17,7 @@
 
 module Groonga
   class TooSmallPage < Error
-    attr_reader :page
+    attr_reader :page, :available_pages
     def initialize(page, available_pages)
       @page = page
       @available_pages = available_pages
@@ -32,14 +32,42 @@ module Groonga
       @page = page
       @available_pages = available_pages
       super("too large page: #{@page}: " +
-            "available pages: #{@available_apges.inspect}")
+            "available pages: #{@available_pages.inspect}")
+    end
+  end
+
+  class TooSmallPageSize < Error
+    attr_reader :page_size, :available_page_sizes
+    def initialize(page_size, available_page_sizes)
+      @page_size = page_size
+      @available_page_sizes = available_page_sizes
+      super("too small page size: #{@page_size}: " +
+            "available page sizes: #{@available_page_sizes.inspect}")
+    end
+  end
+
+  class TooLargePageSize < Error
+    attr_reader :page_size, :available_page_sizes
+    def initialize(page_size, available_page_sizes)
+      @page_size = page_size
+      @available_page_sizes = available_page_sizes
+      super("too large page size: #{@page_size}: " +
+            "available page sizes: #{@available_page_sizes.inspect}")
     end
   end
 
   class Table
     def paginate(sort_keys, options={})
+      _size = size
       page_size = options[:size] || 10
-      n_pages = (size / page_size.to_f).ceil
+      minimum_size = [1, _size].min
+      if page_size < 1
+        raise TooSmallPageSize.new(page_size, minimum_size.._size)
+      elsif page_size > _size
+        raise TooLargePageSize.new(page_size, minimum_size.._size)
+      end
+
+      n_pages = (_size / page_size.to_f).ceil
       available_pages = 0..n_pages
       page = options[:page] || 1
       if page < 1
@@ -47,11 +75,12 @@ module Groonga
       elsif n_pages < page
         raise TooLargePage.new(page, 1..n_pages)
       end
+
       offset = (page - 1) * page_size
       limit = page_size
       records = sort(sort_keys, :offset => offset, :limit => limit)
       records.extend(Pagination)
-      records.set_pagination_info(page, page_size, size)
+      records.set_pagination_info(page, page_size, _size)
       records
     end
   end
@@ -92,7 +121,7 @@ module Groonga
     end
 
     def have_previous_page?
-      @current_page > 0
+      @current_page > 1
     end
 
     def previous_page
