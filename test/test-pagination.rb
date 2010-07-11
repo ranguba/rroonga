@@ -44,6 +44,8 @@ class PaginationTest < Test::Unit::TestCase
                       :previous_page => nil,
                       :have_next_page? => true,
                       :next_page => 2,
+                      :first_page? => true,
+                      :last_page? => false,
                     })
   end
 
@@ -58,6 +60,8 @@ class PaginationTest < Test::Unit::TestCase
                       :previous_page => 5,
                       :have_next_page? => true,
                       :next_page => 7,
+                      :first_page? => false,
+                      :last_page? => false,
                     },
                     :page => 6)
   end
@@ -73,6 +77,8 @@ class PaginationTest < Test::Unit::TestCase
                       :previous_page => 14,
                       :have_next_page? => false,
                       :next_page => nil,
+                      :first_page? => false,
+                      :last_page? => true,
                     },
                     :page => 15)
   end
@@ -109,6 +115,8 @@ class PaginationTest < Test::Unit::TestCase
                       :previous_page => nil,
                       :have_next_page? => true,
                       :next_page => 2,
+                      :first_page? => true,
+                      :last_page? => false,
                     },
                     :size => 7)
   end
@@ -124,6 +132,8 @@ class PaginationTest < Test::Unit::TestCase
                       :previous_page => nil,
                       :have_next_page? => false,
                       :next_page => nil,
+                      :first_page? => true,
+                      :last_page? => true,
                     },
                     :size => 150)
   end
@@ -163,6 +173,8 @@ class PaginationTest < Test::Unit::TestCase
                  :have_previous_page? => users.have_previous_page?,
                  :next_page => users.next_page,
                  :have_next_page? => users.have_next_page?,
+                 :first_page? => users.first_page?,
+                 :last_page? => users.last_page?,
                  :keys => users.collect(&:key))
   end
 end
