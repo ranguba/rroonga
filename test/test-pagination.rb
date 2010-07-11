@@ -46,6 +46,7 @@ class PaginationTest < Test::Unit::TestCase
                       :next_page => 2,
                       :first_page? => true,
                       :last_page? => false,
+                      :have_pages? => true,
                     })
   end
 
@@ -62,6 +63,7 @@ class PaginationTest < Test::Unit::TestCase
                       :next_page => 7,
                       :first_page? => false,
                       :last_page? => false,
+                      :have_pages? => true,
                     },
                     :page => 6)
   end
@@ -79,6 +81,7 @@ class PaginationTest < Test::Unit::TestCase
                       :next_page => nil,
                       :first_page? => false,
                       :last_page? => true,
+                      :have_pages? => true,
                     },
                     :page => 15)
   end
@@ -117,6 +120,7 @@ class PaginationTest < Test::Unit::TestCase
                       :next_page => 2,
                       :first_page? => true,
                       :last_page? => false,
+                      :have_pages? => true,
                     },
                     :size => 7)
   end
@@ -134,15 +138,27 @@ class PaginationTest < Test::Unit::TestCase
                       :next_page => nil,
                       :first_page? => true,
                       :last_page? => true,
+                      :have_pages? => false,
                     },
                     :size => 150)
   end
 
   def test_too_large_size
-    assert_raise(Groonga::TooLargePageSize) do
-      assert_paginate({},
-                      :size => 151)
-    end
+    assert_paginate({
+                      :current_page => 1,
+                      :page_size => 151,
+                      :n_pages => 1,
+                      :n_records => 150,
+                      :record_range_in_page => 1..150,
+                      :have_previous_page? => false,
+                      :previous_page => nil,
+                      :have_next_page? => false,
+                      :next_page => nil,
+                      :first_page? => true,
+                      :last_page? => true,
+                      :have_pages? => false,
+                    },
+                    :size => 151)
   end
 
   def test_zero_size
@@ -172,6 +188,7 @@ class PaginationTest < Test::Unit::TestCase
                       :next_page => 3,
                       :first_page? => false,
                       :last_page? => false,
+                      :have_pages? => true,
                     },
                     :page => 2,
                     :size => 50)
@@ -193,6 +210,7 @@ class PaginationTest < Test::Unit::TestCase
                  :have_next_page? => users.have_next_page?,
                  :first_page? => users.first_page?,
                  :last_page? => users.last_page?,
+                 :have_pages? => users.have_pages?,
                  :keys => users.collect(&:key))
   end
 end

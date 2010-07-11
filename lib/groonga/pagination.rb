@@ -46,16 +46,6 @@ module Groonga
     end
   end
 
-  class TooLargePageSize < Error
-    attr_reader :page_size, :available_page_sizes
-    def initialize(page_size, available_page_sizes)
-      @page_size = page_size
-      @available_page_sizes = available_page_sizes
-      super("too large page size: #{@page_size}: " +
-            "available page sizes: #{@available_page_sizes.inspect}")
-    end
-  end
-
   class Table
     def paginate(sort_keys, options={})
       _size = size
@@ -63,8 +53,6 @@ module Groonga
       minimum_size = [1, _size].min
       if page_size < 1
         raise TooSmallPageSize.new(page_size, minimum_size.._size)
-      elsif page_size > _size
-        raise TooLargePageSize.new(page_size, minimum_size.._size)
       end
 
       n_pages = (_size / page_size.to_f).ceil
@@ -94,6 +82,10 @@ module Groonga
       @page_size = page_size
       @n_records = n_records
       @n_pages = (@n_records / @page_size.to_f).ceil
+    end
+
+    def have_pages?
+      @n_pages > 1
     end
 
     def first_page
@@ -134,7 +126,7 @@ module Groonga
 
     def record_range_in_page
       start_offset = 1 + (@current_page - 1) * @page_size
-      end_offset = start_offset + @page_size - 1
+      end_offset = [start_offset + @page_size - 1, @n_records].min
       start_offset..end_offset
     end
   end
