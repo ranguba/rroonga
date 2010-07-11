@@ -28,7 +28,7 @@ module SchemaCreateTableTests
     assert_not_nil(context["Posts.name"])
 
     Groonga::Schema.create_table("Posts",
-                                 options(:type => :hash,
+                                 options(:type => differnt_type,
                                          :force => true)) do |table|
     end
     assert_nil(context["Posts.name"])
@@ -118,5 +118,21 @@ class SchemaCreateTableArrayTest < Test::Unit::TestCase
 
   def differnt_type
     :hash
+  end
+end
+
+class SchemaCreateTableHashTest < Test::Unit::TestCase
+  include GroongaTestUtils
+  include SchemaCreateTableTests
+
+  setup :setup_database
+
+  private
+  def default_options
+    {:type => :hash}
+  end
+
+  def differnt_type
+    :patricia_trie
   end
 end
