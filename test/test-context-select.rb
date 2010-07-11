@@ -42,12 +42,6 @@ class ContextSelectTest < Test::Unit::TestCase
                  [result.n_hits, result.records])
   end
 
-  def test_success
-    result = context.select(@users)
-    assert_equal([true, 0, nil],
-                 [result.success?, result.return_code, result.error_message])
-  end
-
   def test_output_columns
     result = context.select(@users, :output_columns => ["_key"])
     assert_equal([3,
