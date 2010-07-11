@@ -993,8 +993,10 @@ module Groonga
           default_tokenizer = resolve_name(options[:default_tokenizer])
           return false unless table.default_tokenizer == default_tokenizer
           if table.is_a?(Groonga::PatriciaTrie)
-            return false unless table.key_normalize == options[:key_normalize]
-            return false unless table.key_with_sis == options[:key_with_sis]
+            normalize_key = options[:key_normalize]
+            normalize_key = false if normalize_key.nil?
+            return false unless table.normalize_key? == normalize_key
+            # return false unless table.key_with_sis == options[:key_with_sis]
           end
           true
         else

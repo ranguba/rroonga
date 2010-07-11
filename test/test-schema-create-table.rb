@@ -184,3 +184,43 @@ class SchemaCreateTableHashTest < Test::Unit::TestCase
     :patricia_trie
   end
 end
+
+class SchemaCreateTablePatriciaTrieTest < Test::Unit::TestCase
+  include GroongaTestUtils
+  include SchemaCreateTableTests
+  include SchemaCreateTableWithKeyTests
+
+  setup :setup_database
+
+  def test_same_key_normalize
+    Groonga::Schema.create_table("Posts",
+                                 options(:key_normalize => true)) do |table|
+    end
+
+    Groonga::Schema.create_table("Posts",
+                                 options(:key_normalize => true)) do |table|
+    end
+    assert_true(context["Posts"].normalize_key?)
+  end
+
+  def test_differnt_key_normalize
+    Groonga::Schema.create_table("Posts",
+                                 options(:key_normalize => true)) do |table|
+    end
+
+    assert_raise(Groonga::Schema::TableCreationWithDifferentOptions) do
+      Groonga::Schema.create_table("Posts",
+                                   options(:key_normalize => false)) do |table|
+      end
+    end
+  end
+
+  private
+  def default_options
+    {:type => :patricia_trie}
+  end
+
+  def differnt_type
+    :array
+  end
+end

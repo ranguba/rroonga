@@ -469,6 +469,25 @@ rb_grn_patricia_trie_prefix_search (VALUE self, VALUE rb_prefix)
     return rb_result;
 }
 
+/*
+ * call-seq:
+ *   table.normalize_key? -> true/false
+ *
+ * キーを正規化する場合は+true+、正規化しない場合は+false+を返
+ * す。
+ */
+static VALUE
+rb_grn_patricia_trie_normalize_key_p (VALUE self)
+{
+    grn_obj *table;
+
+    rb_grn_table_deconstruct(SELF(self), &table, NULL,
+			     NULL, NULL,
+			     NULL, NULL, NULL,
+			     NULL);
+    return CBOOL2RVAL(table->header.flags & GRN_OBJ_KEY_NORMALIZE);
+}
+
 void
 rb_grn_init_patricia_trie (VALUE mGrn)
 {
@@ -485,4 +504,7 @@ rb_grn_init_patricia_trie (VALUE mGrn)
 		     rb_grn_patricia_trie_scan, 1);
     rb_define_method(rb_cGrnPatriciaTrie, "prefix_search",
 		     rb_grn_patricia_trie_prefix_search, 1);
+
+    rb_define_method(rb_cGrnPatriciaTrie, "normalize_key?",
+		     rb_grn_patricia_trie_normalize_key_p, 0);
 }
