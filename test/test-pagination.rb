@@ -159,6 +159,24 @@ class PaginationTest < Test::Unit::TestCase
     end
   end
 
+  def test_full
+    assert_paginate({
+                      :current_page => 2,
+                      :page_size => 50,
+                      :n_pages => 3,
+                      :n_records => 150,
+                      :record_range_in_page => 51..100,
+                      :have_previous_page? => true,
+                      :previous_page => 1,
+                      :have_next_page? => true,
+                      :next_page => 3,
+                      :first_page? => false,
+                      :last_page? => false,
+                    },
+                    :page => 2,
+                    :size => 50)
+  end
+
   private
   def assert_paginate(expected, options={})
     users = @users.paginate([["number"]], options)
