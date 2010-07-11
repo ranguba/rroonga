@@ -18,7 +18,7 @@ module TestOffsetAndLimitSupport
     assert_equal(((100 + 0)...200).to_a, ids(:offset => 0))
     assert_equal(((100 + 32)...200).to_a, ids(:offset => 32))
     assert_equal(((100 + 99)...200).to_a, ids(:offset => 99))
-    assert_raise(Groonga::InvalidArgument) do
+    assert_raise(Groonga::TooLargeOffset) do
       ids(:offset => 100)
     end
   end
@@ -27,7 +27,7 @@ module TestOffsetAndLimitSupport
     assert_equal(((200 - 1)...200).to_a, ids(:offset => -1))
     assert_equal(((200 - 32)...200).to_a, ids(:offset => -32))
     assert_equal(((200 - 100)...200).to_a, ids(:offset => -100))
-    assert_raise(Groonga::InvalidArgument) do
+    assert_raise(Groonga::TooSmallOffset) do
       ids(:offset => -101)
     end
   end
@@ -47,9 +47,7 @@ module TestOffsetAndLimitSupport
     assert_equal(all_ids[0..-1], ids(:limit => -1))
     assert_equal(all_ids[0..-32], ids(:limit => -32))
     assert_equal(all_ids[0..-100], ids(:limit => -100))
-    assert_raise(Groonga::InvalidArgument) do
-      ids(:offset => -101)
-    end
+    assert_equal([], ids(:limit => -101))
   end
 
   private

@@ -89,5 +89,8 @@ class ExceptionTest < Test::Unit::TestCase
     assert_const_defined(Groonga, :RetryMax)
     assert_const_defined(Groonga, :IncompatibleFileFormat)
     assert_const_defined(Groonga, :UpdateNotAllowed)
+    assert_const_defined(Groonga, :TooSmallOffset)
+    assert_const_defined(Groonga, :TooLargeOffset)
+    assert_const_defined(Groonga, :TooSmallLimit)
   end
 end

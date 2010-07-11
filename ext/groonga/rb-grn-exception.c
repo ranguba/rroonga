@@ -89,6 +89,9 @@ static VALUE eGrnSyntaxError;
 static VALUE eGrnRetryMax;
 static VALUE eGrnIncompatibleFileFormat;
 static VALUE eGrnUpdateNotAllowed;
+static VALUE eGrnTooSmallOffset;
+static VALUE eGrnTooLargeOffset;
+static VALUE eGrnTooSmallLimit;
 
 VALUE
 rb_grn_rc_to_exception (grn_rc rc)
@@ -299,6 +302,15 @@ rb_grn_rc_to_exception (grn_rc rc)
         break;
       case GRN_UPDATE_NOT_ALLOWED:
         exception = eGrnUpdateNotAllowed;
+        break;
+      case GRN_TOO_SMALL_OFFSET:
+        exception = eGrnTooSmallOffset;
+        break;
+      case GRN_TOO_LARGE_OFFSET:
+        exception = eGrnTooLargeOffset;
+        break;
+      case GRN_TOO_SMALL_LIMIT:
+        exception = eGrnTooSmallLimit;
         break;
     }
 
@@ -517,6 +529,15 @@ rb_grn_rc_to_message (grn_rc rc)
         break;
       case GRN_UPDATE_NOT_ALLOWED:
         message = "update isn't allowed";
+        break;
+      case GRN_TOO_SMALL_OFFSET:
+        message = "too small offset";
+        break;
+      case GRN_TOO_LARGE_OFFSET:
+        message = "too large offset";
+        break;
+      case GRN_TOO_SMALL_LIMIT:
+        message = "too small limit";
         break;
     }
 
@@ -1107,4 +1128,28 @@ rb_grn_init_exception (VALUE mGrn)
      */
     eGrnUpdateNotAllowed =
         rb_define_class_under(mGrn, "UpdateNotAllowed", rb_eGrnError);
+
+    /*
+     * Document-class: Groonga::TooSmallOffset
+     *
+     * offset値が小さすぎるときに発生する。
+     */
+    eGrnTooSmallOffset =
+        rb_define_class_under(mGrn, "TooSmallOffset", rb_eGrnError);
+
+    /*
+     * Document-class: Groonga::TooLargeOffset
+     *
+     * offset値が大きすぎるときに発生する。
+     */
+    eGrnTooLargeOffset =
+        rb_define_class_under(mGrn, "TooLargeOffset", rb_eGrnError);
+
+    /*
+     * Document-class: Groonga::TooSmallLimit
+     *
+     * limit値が小さすぎるときに発生する。
+     */
+    eGrnTooSmallLimit =
+        rb_define_class_under(mGrn, "TooSmallLimit", rb_eGrnError);
 }
