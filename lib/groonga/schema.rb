@@ -43,6 +43,77 @@ module Groonga
   #     end
   #   end
   class Schema
+    # スキーマ操作で発生する例外のスーパークラス。
+    class Error < Groonga::Error
+    end
+
+    # テーブルが存在しないときに発生する。
+    class TableNotExists < Error
+      attr_reader :name
+      def initialize(name)
+        @name = name
+        super("table doesn't exist: <#{@name}>")
+      end
+    end
+
+    # すでに存在するテーブルと違うオプションでテーブルを作ろ
+    # うとしたときに発生する。
+    class TableCreationWithDifferentOptions < Error
+      attr_reader :table, :options
+      def initialize(table, options)
+        @table = table
+        @options = options
+        super("creating table with differnt options: " +
+              "#{@table.inspect}: #{@options.inspect}")
+      end
+    end
+
+    # すでに存在するカラムと違うオプションでテーブルを作ろ
+    # うとしたときに発生する。
+    class ColumnCreationWithDifferentOptions < Error
+      attr_reader :column, :options
+      def initialize(column, options)
+        @column = column
+        @options = options
+        super("creating column with differnt option: " +
+              "#{@column.inspect}: #{@options.inspect}")
+      end
+    end
+
+    # 未知のインデックス対象を指定したときに発生する。
+    class UnknownIndexTarget < Error
+      attr_reader :target_name
+      def initialize(target_name)
+        @target_name = target_name
+        super("unknown index target: <#{@target_name}>")
+      end
+    end
+
+    # 未知のオプションを指定したときに発生する。
+    class UnknownOptions < Error
+      attr_reader :options, :unknown_keys, :available_keys
+      def initialize(options, unknown_keys, available_keys)
+        @options = options
+        @unknown_keys = unknown_keys
+        @available_keys = available_keys
+        message = "unknown keys are specified: #{u@nknown_keys.inspect}"
+        message << ": available keys: #{@available_keys.inspect}"
+        message << ": options: #{@options.inspect}"
+        super(message)
+      end
+    end
+
+    # 未知のテーブルの種類を指定したときに発生する。
+    class UnknownTableType < Error
+      attr_reader :type, :available_types
+      def initialize(type, available_types)
+        @type = type
+        @available_types = available_types
+        super("unknown table type: #{@type.inspect}: " +
+              "available types: #{@available_types.inspect}")
+      end
+    end
+
     class << self
 
       # call-seq:
@@ -569,7 +640,7 @@ module Groonga
       def define # :nodoc:
         table = context[@name]
         if @options[:change]
-          raise ArgumentError, "table doesn't exist: #{@name}" if table.nil?
+          raise TableNotExists.new(@name) if table.nil?
         else
           if table
             unless same_table?(table, create_options)
@@ -577,9 +648,8 @@ module Groonga
                 table.remove
                 table = nil
               else
-                message = "table already exist: " +
-                  "#{table.inspect}: #{create_options.inspect}"
-                raise ArgumentError, message
+                options = create_options
+                raise TableCreationWithDifferentOptions.new(table, options)
               end
             end
           end
@@ -840,9 +910,7 @@ module Groonga
         return if options.nil?
         unknown_keys = options.keys - AVAILABLE_OPTION_KEYS
         unless unknown_keys.empty?
-          message = "unknown keys are specified: #{unknown_keys.inspect}"
-          message << ": available keys: #{AVAILABLE_OPTION_KEYS.inspect}"
-          raise ArgumentError, message
+          raise UnknownOptions.new(options, unknown_keys, AVAILABLE_OPTION_KEYS)
         end
       end
 
@@ -856,7 +924,7 @@ module Groonga
         when :patricia_trie
           Groonga::PatriciaTrie
         else
-          raise ArgumentError, "unknown table type: #{type.inspect}"
+          raise UnknownTableType.new(type, [nil, :array, :hash, :patricia_trie])
         end
       end
 
@@ -884,8 +952,6 @@ module Groonga
             :key_with_sis => @options[:key_with_sis],
           }
           common.merge(key_support_table_common).merge(options)
-        else
-          raise ArgumentError, "unknown table type: #{@table_type.inspect}"
         end
       end
 
@@ -913,9 +979,8 @@ module Groonga
       end
 
       def same_table?(table, options)
-        return false # TODO
-
         return false unless table.class == @table_type
+        return true
         return false unless table.range == options[:value_type]
         return false unless table.sub_records == options[:sub_records]
 
@@ -966,7 +1031,7 @@ module Groonga
       def define # :nodoc:
         view = context[@name]
         if @options[:change]
-          raise ArgumentError, "view doesn't exist: #{@name}" if view.nil?
+          raise TableNotExists.new(@name) if view.nil?
         else
           if view and @options[:force]
             view.remove
@@ -976,9 +1041,11 @@ module Groonga
         end
         _context = context
         @tables.each do |table|
-          _table = table
-          table = context[table] unless table.is_a?(Groonga::Table)
-          raise ArgumentError, "table doesn't exist: #{_table}" if table.nil?
+          unless table.is_a?(Groonga::Table)
+            table_name = table
+            table = context[table_name]
+            raise TableNotExists.new(table_name) if table.nil?
+          end
           view.add_table(table)
         end
         view
@@ -1002,9 +1069,7 @@ module Groonga
         return if options.nil?
         unknown_keys = options.keys - AVAILABLE_OPTION_KEYS
         unless unknown_keys.empty?
-          message = "unknown keys are specified: #{unknown_keys.inspect}"
-          message << ": available keys: #{AVAILABLE_OPTION_KEYS.inspect}"
-          raise ArgumentError, message
+          raise UnknownOptions.new(options, unknown_keys, AVAILABLE_OPTION_KEYS)
         end
       end
 
@@ -1052,10 +1117,8 @@ module Groonga
           if @options.delete(:force)
             column.remove
           else
-            raise ArgumentError,
-                  "the same name column with different type is " +
-                  "already defined: #{@type.inspect}(#{@options.inspect}): " +
-                  "#{column.inspect}"
+            options = @options.merge(:type => @type)
+            raise ColumnCreationWithDifferentOptions.new(column, options)
           end
         end
         table.define_column(@name,
@@ -1104,7 +1167,7 @@ module Groonga
         if target_table.nil? or
             !(@target_column == "_key" or
               target_table.have_column?(@target_column))
-          raise ArgumentError, "Unknown index target: <#{target_name}>"
+          raise UnknownIndexTarget.new(target_name)
         end
         index = table.column(@name)
         if index
@@ -1112,11 +1175,9 @@ module Groonga
           if @options.delete(:force)
             index.remove
           else
-            raise ArgumentError,
-                  "the same name index column with " +
-                  "different target or options is " +
-                  "already defined: #{target_name.inspect}" +
-                  "(#{@options.inspect}): #{index.inspect}"
+            options = @options.merge(:type => :index,
+                                     :target_name => target_name)
+            raise ColumnCreationWithDifferentOptions.new(index, options)
           end
         end
         index = table.define_index_column(@name,
