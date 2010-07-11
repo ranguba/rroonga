@@ -50,7 +50,7 @@ rescue LoadError
 end
 
 ##
-# Ruby/groonga用のネームスペース。Ruby/groongaのクラスやメソッ
+# rroonga用のネームスペース。rroongaのクラスやメソッ
 # ドなどはこのモジュール以下に定義される。
 module Groonga
   class << self
