@@ -50,6 +50,27 @@ class PaginationTest < Test::Unit::TestCase
                     })
   end
 
+  def test_no_entries
+    @users.each do |user|
+      user.delete
+    end
+    assert_paginate({
+                      :current_page => 1,
+                      :page_size => 10,
+                      :n_pages => 1,
+                      :n_records => 0,
+                      :record_range_in_page => nil,
+                      :have_previous_page? => false,
+                      :previous_page => nil,
+                      :have_next_page? => false,
+                      :next_page => nil,
+                      :first_page? => true,
+                      :last_page? => true,
+                      :have_pages? => false,
+                      :keys => [],
+                    })
+  end
+
   def test_page
     assert_paginate({
                       :current_page => 6,

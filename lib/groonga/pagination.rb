@@ -55,13 +55,12 @@ module Groonga
         raise TooSmallPageSize.new(page_size, minimum_size.._size)
       end
 
-      n_pages = (_size / page_size.to_f).ceil
-      available_pages = 0..n_pages
+      max_page = [(_size / page_size.to_f).ceil, 1].max
       page = options[:page] || 1
       if page < 1
-        raise TooSmallPage.new(page, 1..n_pages)
-      elsif n_pages < page
-        raise TooLargePage.new(page, 1..n_pages)
+        raise TooSmallPage.new(page, 1..max_page)
+      elsif max_page < page
+        raise TooLargePage.new(page, 1..max_page)
       end
 
       offset = (page - 1) * page_size
@@ -81,7 +80,7 @@ module Groonga
       @current_page = current_page
       @page_size = page_size
       @n_records = n_records
-      @n_pages = (@n_records / @page_size.to_f).ceil
+      @n_pages = [(@n_records / @page_size.to_f).ceil, 1].max
     end
 
     def have_pages?
@@ -125,9 +124,14 @@ module Groonga
     end
 
     def record_range_in_page
+      return nil if @n_records.zero?
       start_offset = 1 + (@current_page - 1) * @page_size
       end_offset = [start_offset + @page_size - 1, @n_records].min
       start_offset..end_offset
+    end
+
+    def pages
+      first_page..last_page
     end
   end
 end
