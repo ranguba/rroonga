@@ -981,8 +981,9 @@ module Groonga
       def same_table?(table, options)
         return false unless table.class == @table_type
         return false unless table.range == resolve_type(options[:value_type])
-        return true
-        return false unless table.sub_records == options[:sub_records]
+        sub_records = options[:sub_records]
+        sub_records = false if sub_records.nil?
+        return false unless table.support_sub_records? == sub_records
 
         case table
         when Groonga::Array

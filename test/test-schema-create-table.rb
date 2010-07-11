@@ -48,7 +48,7 @@ class SchemaCreateTableArrayTest < Test::Unit::TestCase
     end
   end
 
-  def test_with_same_options
+  def test_same_options
     Groonga::Schema.create_table("Posts") do |table|
     end
 
@@ -57,7 +57,7 @@ class SchemaCreateTableArrayTest < Test::Unit::TestCase
     assert_not_nil(context["Posts"])
   end
 
-  def test_with_same_value_type
+  def test_same_value_type
     Groonga::Schema.create_table("Posts", :value_type => "UInt32") do |table|
     end
 
@@ -66,12 +66,31 @@ class SchemaCreateTableArrayTest < Test::Unit::TestCase
     assert_equal(context["UInt32"], context["Posts"].range)
   end
 
-  def test_with_differnt_value_type
+  def test_differnt_value_type
     Groonga::Schema.create_table("Posts") do |table|
     end
 
     assert_raise(Groonga::Schema::TableCreationWithDifferentOptions) do
       Groonga::Schema.create_table("Posts", :value_type => "Int32") do |table|
+      end
+    end
+  end
+
+  def test_same_sub_records
+    Groonga::Schema.create_table("Posts", :sub_records => true) do |table|
+    end
+
+    Groonga::Schema.create_table("Posts", :sub_records => true) do |table|
+    end
+    assert_true(context["Posts"].support_sub_records?)
+  end
+
+  def test_differnt_sub_records
+    Groonga::Schema.create_table("Posts", :sub_records => true) do |table|
+    end
+
+    assert_raise(Groonga::Schema::TableCreationWithDifferentOptions) do
+      Groonga::Schema.create_table("Posts", :sub_records => false) do |table|
       end
     end
   end

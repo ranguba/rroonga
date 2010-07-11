@@ -1911,6 +1911,26 @@ rb_grn_table_merge_bang (VALUE self, VALUE rb_other)
     return rb_grn_table_set_operation_bang(self, rb_other, GRN_OP_ADJUST);
 }
 
+/*
+ * call-seq:
+ *   table.support_sub_records? -> true/false
+ *
+ * グループ化したとき、テーブルにグループに含まれるレコード
+ * 数を格納できる場合は+true+、格納できない場合は+false+を返
+ * す。
+ */
+static VALUE
+rb_grn_table_support_sub_records_p (VALUE self)
+{
+    grn_obj *table;
+
+    rb_grn_table_deconstruct(SELF(self), &table, NULL,
+			     NULL, NULL,
+			     NULL, NULL, NULL,
+			     NULL);
+    return CBOOL2RVAL(table->header.flags & GRN_OBJ_WITH_SUBREC);
+}
+
 void
 rb_grn_init_table (VALUE mGrn)
 {
@@ -1977,6 +1997,9 @@ rb_grn_init_table (VALUE mGrn)
 		     rb_grn_table_difference_bang, 1);
     rb_define_method(rb_cGrnTable, "merge!",
 		     rb_grn_table_merge_bang, 1);
+
+    rb_define_method(rb_cGrnTable, "support_sub_records?",
+		     rb_grn_table_support_sub_records_p, 0);
 
     rb_grn_init_table_key_support(mGrn);
     rb_grn_init_array(mGrn);
