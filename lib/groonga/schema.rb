@@ -989,8 +989,9 @@ module Groonga
         when Groonga::Array
           true
         when Groonga::Hash, Groonga::PatriciaTrie
-          return false unless table.domain == options[:key_type]
-          return false unless table.default_tokenizer == options[:default_tokenizer]
+          return false unless table.domain == resolve_type(options[:key_type])
+          default_tokenizer = options[:default_tokenizer]
+          return false unless table.default_tokenizer == default_tokenizer
           if table.is_a?(Groonga::PatriciaTrie)
             return false unless table.key_normalize == options[:key_normalize]
             return false unless table.key_with_sis == options[:key_with_sis]

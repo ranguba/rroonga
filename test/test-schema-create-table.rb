@@ -105,6 +105,30 @@ module SchemaCreateTableTests
   end
 end
 
+module SchemaCreateTableWithKeyTests
+  def test_same_key_type
+    Groonga::Schema.create_table("Posts",
+                                 options(:key_type => "ShortText")) do |table|
+    end
+
+    Groonga::Schema.create_table("Posts",
+                                 options(:key_type => "ShortText")) do |table|
+    end
+    assert_equal(context["ShortText"], context["Posts"].domain)
+  end
+
+  def test_differnt_key_type
+    Groonga::Schema.create_table("Posts", options) do |table|
+    end
+
+    assert_raise(Groonga::Schema::TableCreationWithDifferentOptions) do
+      Groonga::Schema.create_table("Posts",
+                                   options(:key_type => "ShortText")) do |table|
+      end
+    end
+  end
+end
+
 class SchemaCreateTableArrayTest < Test::Unit::TestCase
   include GroongaTestUtils
   include SchemaCreateTableTests
@@ -124,6 +148,7 @@ end
 class SchemaCreateTableHashTest < Test::Unit::TestCase
   include GroongaTestUtils
   include SchemaCreateTableTests
+  include SchemaCreateTableWithKeyTests
 
   setup :setup_database
 
