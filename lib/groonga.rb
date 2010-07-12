@@ -31,12 +31,7 @@ if local_groonga_bin_dir.exist?
     end
   end
 
-  case RUBY_PLATFORM
-  when /mingw|mswin/
-    prepend_path.call("PATH", ";")
-  when /cygwin/
-    prepend_path.call("PATH", ":")
-  end
+  prepend_path.call("PATH", File::PATH_SEPARATOR)
 end
 
 require 'groonga/view-record'
