@@ -1,4 +1,4 @@
-# Copyright (C) 2009  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2010  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -183,7 +183,7 @@ class ColumnTest < Test::Unit::TestCase
                  result.records.collect do |record|
                    record["body"]
                  end)
-    assert_equal("#<Groonga::Expression noname(?0:\"\")" +
+    assert_equal("#<Groonga::Expression noname($1:\"\")" +
                  "{2body GET_VALUE,0\"drive\",0MATCH}>",
                  result.expression.inspect)
   end
@@ -214,7 +214,7 @@ class ColumnTest < Test::Unit::TestCase
                  result.records.collect do |record|
                    record["body"]
                  end)
-    assert_equal("#<Groonga::Expression noname(?0:\"\")" +
+    assert_equal("#<Groonga::Expression noname($1:\"\")" +
                  "{2body GET_VALUE,0\"drive\",0MATCH}>",
                  result.expression.inspect)
   end
@@ -232,8 +232,8 @@ class ColumnTest < Test::Unit::TestCase
                  result.records.collect do |record|
                    record["body"]
                  end)
-    assert_equal("#<Groonga::Expression noname(?0:\"\")" +
-                 "{0?0,2body GET_VALUE,0\"drive\",0MATCH}>",
+    assert_equal("#<Groonga::Expression noname($1:\"\")" +
+                 "{0\"\",2body GET_VALUE,0\"drive\",0MATCH}>",
                  result.expression.inspect)
   end
 
@@ -247,8 +247,8 @@ class ColumnTest < Test::Unit::TestCase
                  result.records.collect do |record|
                    record["body"]
                  end)
-    assert_equal("#<Groonga::Expression noname(?0:\"\")" +
-                 "{1?0,2body GET_VALUE,0\"drive\",0MATCH}>",
+    assert_equal("#<Groonga::Expression noname($1:\"\")" +
+                 "{1\"\",2body GET_VALUE,0\"drive\",0MATCH}>",
                  result.expression.inspect)
   end
 

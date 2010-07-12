@@ -469,6 +469,25 @@ rb_grn_patricia_trie_prefix_search (VALUE self, VALUE rb_prefix)
     return rb_result;
 }
 
+/*
+ * call-seq:
+ *   table.register_key_with_sis? -> true/false
+ *
+ * キーを登録するときに文字列の全suffixも一緒に登録する場合
+ * は+true+、登録しない場合は+false+を返す。
+ */
+static VALUE
+rb_grn_patricia_trie_register_key_with_sis_p (VALUE self)
+{
+    grn_obj *table;
+
+    rb_grn_table_key_support_deconstruct(SELF(self), &table, NULL,
+					 NULL, NULL, NULL,
+					 NULL, NULL, NULL,
+					 NULL);
+    return CBOOL2RVAL(table->header.flags & GRN_OBJ_KEY_WITH_SIS);
+}
+
 void
 rb_grn_init_patricia_trie (VALUE mGrn)
 {
@@ -485,4 +504,7 @@ rb_grn_init_patricia_trie (VALUE mGrn)
 		     rb_grn_patricia_trie_scan, 1);
     rb_define_method(rb_cGrnPatriciaTrie, "prefix_search",
 		     rb_grn_patricia_trie_prefix_search, 1);
+
+    rb_define_method(rb_cGrnPatriciaTrie, "register_key_with_sis?",
+		     rb_grn_patricia_trie_register_key_with_sis_p, 0);
 }

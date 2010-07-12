@@ -62,6 +62,9 @@ VALUE rb_cGrnHash;
  *   Groonga::Contextに結びついているデータベースが一時デー
  *   タベースの場合は例外が発生する。
  *
+ * [+:key_normalize+]
+ *   +true+を指定するとキーを正規化する。
+ *
  * [+:key_type+]
  *   キーの種類を示すオブジェクトを指定する。キーの種類には型
  *   名（"Int32"や"ShortText"など）またはGroonga::Typeまたは
@@ -152,7 +155,7 @@ rb_grn_hash_s_create (int argc, VALUE *argv, VALUE klass)
     grn_obj_flags flags = GRN_TABLE_HASH_KEY;
     VALUE rb_table;
     VALUE options, rb_context, rb_name, rb_path, rb_persistent;
-    VALUE rb_key_type, rb_value_type, rb_default_tokenizer;
+    VALUE rb_key_normalize, rb_key_type, rb_value_type, rb_default_tokenizer;
     VALUE rb_sub_records;
 
     rb_scan_args(argc, argv, "01", &options);
@@ -162,6 +165,7 @@ rb_grn_hash_s_create (int argc, VALUE *argv, VALUE klass)
 			"name", &rb_name,
                         "path", &rb_path,
 			"persistent", &rb_persistent,
+			"key_normalize", &rb_key_normalize,
 			"key_type", &rb_key_type,
 			"value_type", &rb_value_type,
 			"default_tokenizer", &rb_default_tokenizer,
@@ -183,6 +187,9 @@ rb_grn_hash_s_create (int argc, VALUE *argv, VALUE klass)
 
     if (RVAL2CBOOL(rb_persistent))
 	flags |= GRN_OBJ_PERSISTENT;
+
+    if (RVAL2CBOOL(rb_key_normalize))
+	flags |= GRN_OBJ_KEY_NORMALIZE;
 
     if (NIL_P(rb_key_type)) {
 	flags |= GRN_OBJ_KEY_VAR_SIZE;

@@ -83,7 +83,7 @@ VALUE rb_cGrnArray;
  *
  * 名前付き永続テーブルを生成する。ただし、ファイル名は気に
  * しない。
- *   Groonga::Array.create(:name => "<bookmarks>",
+ *   Groonga::Array.create(:name => "Bookmarks",
  *                         :persistent => true)
  *
  * それぞれのレコードに512バイトの値を格納できる無名一時テー

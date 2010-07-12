@@ -20,7 +20,7 @@ class VersionTest < Test::Unit::TestCase
   end
 
   def test_version
-    assert_match(/\A\d+\.\d+\.\d+\z/, Groonga.version)
+    assert_match(/\A\d+\.\d+\.\d+(?:\.\d+-[a-zA-Z\d]+)?\z/, Groonga.version)
     assert_match(Groonga.version, Groonga::VERSION.join("."))
   end
 

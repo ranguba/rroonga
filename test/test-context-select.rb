@@ -42,12 +42,6 @@ class ContextSelectTest < Test::Unit::TestCase
                  [result.n_hits, result.records])
   end
 
-  def test_success
-    result = context.select(@users)
-    assert_equal([true, 0, nil],
-                 [result.success?, result.return_code, result.error_message])
-  end
-
   def test_output_columns
     result = context.select(@users, :output_columns => ["_key"])
     assert_equal([3,
@@ -108,8 +102,8 @@ class ContextSelectTest < Test::Unit::TestCase
   private
   def normalize_drill_down(drill_down)
     normalized_drill_down = {}
-    drill_down.each do |key, drill_down|
-      normalized_drill_down[key] = [drill_down.n_hits, drill_down.records]
+    drill_down.each do |key, drill|
+      normalized_drill_down[key] = [drill.n_hits, drill.records]
     end
     normalized_drill_down
   end

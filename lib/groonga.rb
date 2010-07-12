@@ -50,7 +50,7 @@ rescue LoadError
 end
 
 ##
-# Ruby/groonga用のネームスペース。Ruby/groongaのクラスやメソッ
+# rroonga用のネームスペース。rroongaのクラスやメソッ
 # ドなどはこのモジュール以下に定義される。
 module Groonga
   class << self
@@ -93,3 +93,4 @@ end
 require 'groonga/context'
 require 'groonga/patricia-trie'
 require 'groonga/schema'
+require 'groonga/pagination'

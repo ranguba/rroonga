@@ -18,28 +18,6 @@ class SchemaTest < Test::Unit::TestCase
 
   setup :setup_database
 
-  def test_create_table
-    assert_nil(context["Posts"])
-    Groonga::Schema.create_table("Posts") do |table|
-    end
-    assert_not_nil(context["Posts"])
-  end
-
-  def test_create_table_force
-    Groonga::Schema.create_table("Posts") do |table|
-      table.string("name")
-    end
-    assert_not_nil(context["Posts.name"])
-
-    Groonga::Schema.create_table("Posts") do |table|
-    end
-    assert_not_nil(context["Posts.name"])
-
-    Groonga::Schema.create_table("Posts", :force => true) do |table|
-    end
-    assert_nil(context["Posts.name"])
-  end
-
   def test_remove_table
     Groonga::Array.create(:name => "Posts")
     assert_not_nil(context["Posts"])
@@ -266,7 +244,7 @@ class SchemaTest < Test::Unit::TestCase
       table.text :content
     end
 
-    assert_raise(ArgumentError) do
+    assert_raise(Groonga::Schema::ColumnCreationWithDifferentOptions) do
       Groonga::Schema.create_table("Posts") do |table|
         table.integer :content
       end
@@ -341,7 +319,7 @@ class SchemaTest < Test::Unit::TestCase
       table.index "Posts.content"
     end
 
-    assert_raise(ArgumentError) do
+    assert_raise(Groonga::Schema::ColumnCreationWithDifferentOptions) do
       Groonga::Schema.create_table("Terms") do |table|
         table.index "Posts.name", :name => "Posts_content"
       end
@@ -455,5 +433,7 @@ EOS
 
     assert_not_nil(context["Items.text"])
     assert_not_nil(context["TermsText.Items_text"])
+    assert_nil(Groonga::Context.default["Items.text"])
+    assert_nil(Groonga::Context.default["TermsText.Items_text"])
   end
 end
