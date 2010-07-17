@@ -187,6 +187,7 @@ task :prepare_docs_for_publishing do
   end
 end
 
+desc "Publish HTML to Web site."
 task :publish_html do
   config = YAML.load(File.read(File.expand_path("~/.rubyforge/user-config.yml")))
   host = "#{config["username"]}@rubyforge.org"
@@ -196,6 +197,7 @@ task :publish_html do
   sh "rsync #{rsync_args} html/ #{host}:#{remote_dir}"
 end
 
+desc "Tag the current revision."
 task :tag do
   sh("git tag -a #{version} -m 'release #{version}!!!'")
 end
