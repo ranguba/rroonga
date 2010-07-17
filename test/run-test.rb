@@ -22,6 +22,8 @@ $KCODE = "u" if RUBY_VERSION < "1.9"
 base_dir = File.expand_path(File.join(File.dirname(__FILE__), ".."))
 test_unit_dir = File.join(base_dir, "test-unit")
 test_unit_lib_dir = File.join(test_unit_dir, "lib")
+test_unit_notify_dir = File.join(base_dir, "test-unit-notify")
+test_unit_notify_lib_dir = File.join(test_unit_notify_dir, "lib")
 ext_dir = File.join(base_dir, "ext", "groonga")
 lib_dir = File.join(base_dir, "lib")
 test_dir = File.join(base_dir, "test")
@@ -36,16 +38,26 @@ if make
   system("cd #{base_dir.dump} && #{make} > /dev/null") or exit(false)
 end
 
+test_unit_repository_base = "http://test-unit.rubyforge.org/svn/"
 unless File.exist?(test_unit_dir)
-  test_unit_repository = "http://test-unit.rubyforge.org/svn/trunk/"
-  system("svn co #{test_unit_repository} #{test_unit_dir}") or exit(false)
+  test_unit_repository = "#{test_unit_repository_base}trunk/"
+  system("svn", "co", test_unit_repository, test_unit_dir) or exit(false)
+end
+
+unless File.exist?(test_unit_notify_dir)
+  test_unit_notify_repository = "#{test_unit_repository_base}/extensions/test-unit-notify/trunk/"
+  system("svn", "co", test_unit_notify_repository, test_unit_notify_dir) or exit(false)
+  system("svn", "up", test_unit_dir) or exit(false)
 end
 
 $LOAD_PATH.unshift(test_unit_lib_dir)
+$LOAD_PATH.unshift(test_unit_notify_lib_dir)
 
 require 'test/unit'
+require 'test/unit/notify'
 
 ARGV.unshift("--priority-mode")
+ARGV.unshift("--notify")
 
 $LOAD_PATH.unshift(ext_dir)
 $LOAD_PATH.unshift(lib_dir)

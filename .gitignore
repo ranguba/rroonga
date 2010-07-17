@@ -6,7 +6,8 @@
 /email.txt
 /mkmf.log
 /pkg
-/test-unit
+/test-unit/
+/test-unit-notify/
 /ext/groonga/Makefile
 /ext/groonga/mkmf.log
 /test/tmp
