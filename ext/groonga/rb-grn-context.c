@@ -107,7 +107,7 @@ rb_grn_context_to_exception (grn_ctx *context, VALUE related_object)
 
     GRN_OBJ_INIT(&bulk, GRN_BULK, 0, GRN_ID_NIL);
     GRN_TEXT_PUTS(context, &bulk, message);
-    if (strlen(context->errbuf)) {
+    if (context->errbuf[0]) {
         GRN_TEXT_PUTS(context, &bulk, ": ");
         GRN_TEXT_PUTS(context, &bulk, context->errbuf);
     }
@@ -115,7 +115,7 @@ rb_grn_context_to_exception (grn_ctx *context, VALUE related_object)
 	GRN_TEXT_PUTS(context, &bulk, ": ");
 	GRN_TEXT_PUTS(context, &bulk, rb_grn_inspect(related_object));
     }
-    if (context->errline) {
+    if (context->errline > 0) {
         GRN_TEXT_PUTS(context, &bulk, "\n");
         GRN_TEXT_PUTS(context, &bulk, context->errfile);
         GRN_TEXT_PUTS(context, &bulk, ":");
