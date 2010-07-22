@@ -99,6 +99,12 @@ class ContextSelectTest < Test::Unit::TestCase
                  result.records)
   end
 
+  def test_invalid_select
+    assert_raise(Groonga::SyntaxError) do
+      context.select(@books, :query => "<")
+    end
+  end
+
   private
   def normalize_drill_down(drill_down)
     normalized_drill_down = {}

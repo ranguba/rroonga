@@ -50,4 +50,12 @@ class RemoteTest < Test::Unit::TestCase
     assert_equal(["alloc_count", "starttime", "uptime", "version"],
                  values.keys.sort)
   end
+
+  def test_invalid_select
+    context.connect(:host => @host, :port => @port)
+
+    assert_raise(Groonga::InvalidArgument) do
+      context.select("bogus", :query => "()()")
+    end
+  end
 end
