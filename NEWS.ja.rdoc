@@ -1,5 +1,34 @@
 = お知らせ
 
+== 0.9.5: 2010-07-29
+
+* groonga 0.7.4対応。
+* Groonga::Table#selectの改良:
+  * 重み付きマッチ対応:
+
+    sourceカラムとtitleカラムにマッチするが、
+    titleカラムの方がスコアが大きくなる例:
+      table.select do |record|
+        (record.title * 10 | record.source) =~ "query"
+      end
+  * 配列で複数条件のand表現に対応:
+
+    以下は同じ条件になる:
+      table.select do |record|
+        conditions = []
+        conditions << record.title =~ "query"
+        conditions << record.updated_at > Time.parse("2010-07-29T21:14:29+09:00")
+        conditions
+      end
+
+      table.select do |record|
+        (record.title =~ "query") &
+          (record.updated_at > Time.parse("2010-07-29T21:14:29+09:00"))
+      end
+* 利用しているgroongaのバージョン取得対応: Groonga::VERSION
+* Groonga::Table#support_sub_records?追加
+* ページネーション対応: Groonga::Table#paginate, Groonga::Pagination
+
 == 0.9.4: 2010-04-22
 
 * リリースミス修正。

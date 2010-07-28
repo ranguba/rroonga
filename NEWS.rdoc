@@ -1,5 +1,34 @@
 = NEWS
 
+== 0.9.5: 2010-07-20
+
+* Supported groonga 0.7.4.
+* Imporoved Groonga::Table#select:
+  * Supported weight match:
+
+    Here is an example to match source column or title column and
+    title column has high score:
+      table.select do |record|
+        (record.title * 10 | record.source) =~ "query"
+      end
+  * Supported and representation for and conditions:
+
+    Here are examples that represents the same condition:
+      table.select do |record|
+        conditions = []
+        conditions << record.title =~ "query"
+        conditions << record.updated_at > Time.parse("2010-07-29T21:14:29+09:00")
+        conditions
+      end
+
+      table.select do |record|
+        (record.title =~ "query") &
+          (record.updated_at > Time.parse("2010-07-29T21:14:29+09:00"))
+      end
+* Provided groonga runtime version: Groonga::VERSION
+* Added Groonga::Table#support_sub_records?
+* Supported pagination: Groonga::Table#paginate, Groonga::Pagination
+
 == 0.9.4: 2010-04-22
 
 * Fixed release miss.
