@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 
 = grn式 (grn_expr)
 
