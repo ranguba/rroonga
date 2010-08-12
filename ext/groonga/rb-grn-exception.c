@@ -92,6 +92,7 @@ static VALUE eGrnUpdateNotAllowed;
 static VALUE eGrnTooSmallOffset;
 static VALUE eGrnTooLargeOffset;
 static VALUE eGrnTooSmallLimit;
+static VALUE eGrnCASError;
 
 VALUE
 rb_grn_rc_to_exception (grn_rc rc)
@@ -311,6 +312,9 @@ rb_grn_rc_to_exception (grn_rc rc)
         break;
       case GRN_TOO_SMALL_LIMIT:
         exception = eGrnTooSmallLimit;
+        break;
+      case GRN_CAS_ERROR:
+        exception = eGrnCASError;
         break;
     }
 
@@ -538,6 +542,9 @@ rb_grn_rc_to_message (grn_rc rc)
         break;
       case GRN_TOO_SMALL_LIMIT:
         message = "too small limit";
+        break;
+      case GRN_CAS_ERROR:
+        message = "CAS error";
         break;
     }
 
@@ -1152,4 +1159,11 @@ rb_grn_init_exception (VALUE mGrn)
      */
     eGrnTooSmallLimit =
         rb_define_class_under(mGrn, "TooSmallLimit", rb_eGrnError);
+
+    /*
+     * Document-class: Groonga::CASError
+     *
+     * CAS（Compare and Swap）が失敗したときに発生する。
+     */
+    eGrnCASError = rb_define_class_under(mGrn, "CASError", rb_eGrnError);
 }
