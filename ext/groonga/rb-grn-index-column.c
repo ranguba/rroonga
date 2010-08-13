@@ -307,7 +307,19 @@ resolve_source_id (grn_ctx *context, grn_obj *column, VALUE rb_source)
 	    source = RVAL2GRNOBJECT(rb_source, &context);
 	}
 	rb_grn_context_check(context, rb_source);
-	source_id = grn_obj_id(context, source);
+	if (source->header.type == GRN_ACCESSOR) {
+	    char name[256];
+	    int length;
+	    length = grn_column_name(context, source, name, sizeof(name));
+	    name[length] = '\0';
+	    if (strcmp(name, "_key") != 0) {
+		rb_raise(rb_eArgError,
+			 "source accessor must be '_key': <%s>", name);
+	    }
+	    source_id = grn_obj_id(context, column);
+	} else {
+	    source_id = grn_obj_id(context, source);
+	}
     }
 
     return source_id;
