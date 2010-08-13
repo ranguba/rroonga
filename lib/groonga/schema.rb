@@ -1212,7 +1212,7 @@ module Groonga
         # TODO: should check column type and other options.
         return false if index.range.name != @target_table
         source_names = index.sources.collect do |source|
-          if source.nil?
+          if source == index
             "#{index.range.name}._key"
           else
             source.name
