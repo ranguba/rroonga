@@ -1,4 +1,4 @@
-# Copyright (C) 2009  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2010  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -134,6 +134,40 @@ class TableCursorTest < Test::Unit::TestCase
       cursor.next
       assert_equal("http://groonga.org/", cursor.key)
     end
+  end
+
+  def test_order_by_id
+    sites = Groonga::PatriciaTrie.create(:name => "Sites")
+    sites.add("http://qwik.jp/senna/")
+    sites.add("http://www.ruby-lang.org/")
+    sites.add("http://groonga.org/")
+    keys = []
+    sites.open_cursor(:order_by => :id) do |cursor|
+      while cursor.next
+        keys << cursor.key
+      end
+    end
+    assert_equal(["http://qwik.jp/senna/",
+                  "http://www.ruby-lang.org/",
+                  "http://groonga.org/"],
+                 keys)
+  end
+
+  def test_order_by_key
+    sites = Groonga::PatriciaTrie.create(:name => "Sites")
+    sites.add("http://www.ruby-lang.org/")
+    sites.add("http://qwik.jp/senna/")
+    sites.add("http://groonga.org/")
+    keys = []
+    sites.open_cursor(:order_by => :key) do |cursor|
+      while cursor.next
+        keys << cursor.key
+      end
+    end
+    assert_equal(["http://groonga.org/",
+                  "http://qwik.jp/senna/",
+                  "http://www.ruby-lang.org/"],
+                 keys)
   end
 
   private

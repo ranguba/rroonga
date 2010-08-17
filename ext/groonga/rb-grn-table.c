@@ -686,8 +686,8 @@ rb_grn_table_open_grn_cursor (int argc, VALUE *argv, VALUE self,
     unsigned min_key_size = 0, max_key_size = 0;
     int offset = 0, limit = -1;
     int flags = 0;
-    VALUE options, rb_min, rb_max, rb_order, rb_greater_than, rb_less_than;
-    VALUE rb_offset, rb_limit;
+    VALUE options, rb_min, rb_max, rb_order, rb_order_by;
+    VALUE rb_greater_than, rb_less_than, rb_offset, rb_limit;
 
     rb_grn_table_deconstruct(SELF(self), &table, context,
 			     NULL, NULL,
@@ -702,6 +702,7 @@ rb_grn_table_open_grn_cursor (int argc, VALUE *argv, VALUE self,
                         "offset", &rb_offset,
                         "limit", &rb_limit,
 			"order", &rb_order,
+			"order_by", &rb_order_by,
 			"greater_than", &rb_greater_than,
 			"less_than", &rb_less_than,
 			NULL);
@@ -731,6 +732,23 @@ rb_grn_table_open_grn_cursor (int argc, VALUE *argv, VALUE self,
 		 "order should be one of "
 		 "[:asc, :ascending, :desc, :descending]: %s",
 		 rb_grn_inspect(rb_order));
+    }
+    if (NIL_P(rb_order_by)) {
+    } else if (rb_grn_equal_option(rb_order_by, "id")) {
+	flags |= GRN_CURSOR_BY_ID;
+    } else if (rb_grn_equal_option(rb_order_by, "key")) {
+	if (table->header.type != GRN_TABLE_PAT_KEY) {
+	    rb_raise(rb_eArgError,
+		     "order_by => :key is available "
+		     "only for Groonga::PatriciaTrie: %s",
+		     rb_grn_inspect(self));
+	}
+	flags |= GRN_CURSOR_BY_KEY;
+    } else {
+	rb_raise(rb_eArgError,
+		 "order_by should be one of [:id%s]: %s",
+		 table->header.type == GRN_TABLE_PAT_KEY ? ", :key" : "",
+		 rb_grn_inspect(rb_order_by));
     }
 
     if (RVAL2CBOOL(rb_greater_than))
@@ -778,6 +796,12 @@ rb_grn_table_open_grn_cursor (int argc, VALUE *argv, VALUE self,
  *   り出す。
  *   +:desc+または+:descending+を指定すると降順にレコードを
  *   取り出す。
+ *
+ * [+:order_by+]
+ *   +:id+を指定するとID順にレコードを取り出す。（デフォルト）
+ *
+ *   +:key+指定するとキー順にレコードを取り出す。ただし、
+ *   Groonga::PatriciaTrieにしか使えない。
  *
  * [+:greater_than+]
  *   +true+を指定すると+:min+で指定した値に一致した[+key+]を
