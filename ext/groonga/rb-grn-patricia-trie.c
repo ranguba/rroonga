@@ -490,17 +490,18 @@ rb_grn_patricia_trie_register_key_with_sis_p (VALUE self)
 
 static grn_table_cursor *
 rb_grn_patricia_trie_open_grn_prefix_cursor (int argc, VALUE *argv, VALUE self,
-					     grn_ctx **context)
+					     grn_ctx **context, int flags)
 {
     grn_obj *table;
     grn_table_cursor *cursor;
     void *prefix = NULL;
     unsigned prefix_size = 0;
     int offset = 0, limit = -1;
-    int flags = GRN_CURSOR_PREFIX;
     VALUE options, rb_prefix, rb_key_bytes, rb_key_bits;
     VALUE rb_order, rb_order_by;
     VALUE rb_greater_than, rb_less_than, rb_offset, rb_limit;
+
+    flags |= GRN_CURSOR_PREFIX;
 
     rb_grn_table_deconstruct((RbGrnTable *)SELF(self), &table, context,
 			     NULL, NULL,
@@ -637,7 +638,73 @@ rb_grn_patricia_trie_open_prefix_cursor (int argc, VALUE *argv, VALUE self)
     VALUE rb_cursor;
 
     cursor = rb_grn_patricia_trie_open_grn_prefix_cursor(argc, argv,
-							 self, &context);
+							 self, &context, 0);
+    rb_cursor = GRNTABLECURSOR2RVAL(Qnil, context, cursor);
+    rb_iv_set(rb_cursor, "@table", self); /* FIXME: cursor should mark table */
+    if (rb_block_given_p())
+	return rb_ensure(rb_yield, rb_cursor, rb_grn_object_close, rb_cursor);
+    else
+	return rb_cursor;
+}
+
+
+/*
+ * call-seq:
+ *   table.open_rk_cursor(key, options={}) -> Groonga::PatriciaTrieCursor
+ *   table.open_rk_cursor(key, options={}) {|cursor| ... }
+ *
+ * _table_のキーはカタカナである必要がある。また、エンコーディ
+ * ングはUTF-8である必要がある。ローマ字やひらがなで_key_を指
+ * 定しても、_key_に対応するカタカナのキーを検索するカーソル
+ * を生成して返す。ブロックを指定すると、そのブロックに生成し
+ * たカーソルが渡され、ブロックを抜けると自動的にカーソルが破
+ * 棄される。
+ *
+ * _options_に指定可能な値は以下の通り。
+ *
+ * [+:key_bytes+]
+ *  _key_のサイズ（byte）
+ *
+ * [+:key_bits+]
+ *  _key_のサイズ（bit）（現在は未サポート）
+ *
+ * [+:offset+]
+ *   該当する範囲のレコードのうち、(0ベースで)_:offset_番目
+ *   からレコードを取り出す。
+ *
+ * [+:limit+]
+ *   該当する範囲のレコードのうち、_:limit_件のみを取り出す。
+ *   省略された場合または-1が指定された場合は、全件が指定され
+ *   たものとみなす。
+ *
+ * [+:order+]
+ *   +:asc+または+:ascending+を指定すると昇順にレコードを取
+ *   り出す。
+ *   +:desc+または+:descending+を指定すると降順にレコードを
+ *   取り出す。
+ *
+ * [+:order_by+]
+ *   +:id+を指定するとID順にレコードを取り出す。（デフォルト）
+ *
+ *   +:key+指定するとキー順にレコードを取り出す。
+ *
+ * [+:greater_than+]
+ *   +true+を指定すると_key_で指定した値に一致した[+key+]を
+ *   範囲に含まない。
+ *
+ * [+:less_than+]
+ *   +true+を指定すると_key_で指定した値に一致した[+key+]を
+ *   範囲に含まない。
+ */
+static VALUE
+rb_grn_patricia_trie_open_rk_cursor (int argc, VALUE *argv, VALUE self)
+{
+    grn_ctx *context = NULL;
+    grn_table_cursor *cursor;
+    VALUE rb_cursor;
+
+    cursor = rb_grn_patricia_trie_open_grn_prefix_cursor(argc, argv,
+								self, &context, GRN_CURSOR_RK);
     rb_cursor = GRNTABLECURSOR2RVAL(Qnil, context, cursor);
     rb_iv_set(rb_cursor, "@table", self); /* FIXME: cursor should mark table */
     if (rb_block_given_p())
@@ -668,5 +735,8 @@ rb_grn_init_patricia_trie (VALUE mGrn)
 
     rb_define_method(rb_cGrnPatriciaTrie, "open_prefix_cursor",
 		     rb_grn_patricia_trie_open_prefix_cursor,
+		     -1);
+    rb_define_method(rb_cGrnPatriciaTrie, "open_rk_cursor",
+		     rb_grn_patricia_trie_open_rk_cursor,
 		     -1);
 }

@@ -233,4 +233,67 @@ class PatriciaTrieTest < Test::Unit::TestCase
     end
     assert_equal(expected, actual)
   end
+
+  def test_rk_cursor
+    terms = Groonga::PatriciaTrie.create(:name => "Terms",
+                                         :key_type => 'ShortText')
+    ["インデックス",
+     "エヌグラム",
+     "エンジン",
+     "カネソナエタ",
+     "カノウ",
+     "キノウ",
+     "キョウカ",
+     "クミコミ",
+     "クミコム",
+     "グルンガ",
+     "ケンサク",
+     "ケンサクヨウキュウ",
+     "ゲンゴ",
+     "コウセイド",
+     "コウソク",
+     "コンパクト",
+     "サクセイ",
+     "ショリ",
+     "ショリケイ",
+     "ジッソウ",
+     "ジュンスイ",
+     "スクリプト",
+     "セッケイ",
+     "ゼンブン",
+     "タイプ",
+     "タンゴ",
+     "ダイキボ",
+     "テンチ",
+     "ディービーエムエス",
+     "トウ",
+     "トクチョウ",
+     "ブンショリョウ",
+     "ヨウキュウ"].each do |term|
+      terms.add(term)
+    end
+
+    assert_rk_cursor(["カネソナエタ",
+                      "カノウ",
+                      "キノウ",
+                      "キョウカ",
+                      "クミコミ",
+                      "クミコム",
+                      "ケンサク",
+                      "ケンサクヨウキュウ",
+                      "コウセイド",
+                      "コウソク",
+                      "コンパクト"],
+                     terms, "k")
+  end
+
+  def assert_rk_cursor(expected, tables, prefix, options={})
+    actual = []
+    tables.open_rk_cursor(prefix, options) do |cursor|
+      cursor.each do |record|
+        actual << record.key
+      end
+    end
+    assert_equal(expected, actual.sort)
+  end
 end
