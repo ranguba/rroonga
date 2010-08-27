@@ -19,6 +19,8 @@
 
 #include "rb-grn.h"
 
+grn_rc grn_obj_cast(grn_ctx *ctx, grn_obj *src, grn_obj *dest, int addp);
+
 #define SELF(object) ((RbGrnTableKeySupport *)DATA_PTR(object))
 
 VALUE rb_cGrnPatriciaTrie;
@@ -713,6 +715,114 @@ rb_grn_patricia_trie_open_rk_cursor (int argc, VALUE *argv, VALUE self)
 	return rb_cursor;
 }
 
+
+static grn_table_cursor *
+rb_grn_patricia_trie_open_grn_near_cursor (int argc, VALUE *argv, VALUE self,
+					     grn_ctx **context, int flags)
+{
+    grn_obj *table;
+    grn_obj *key_p = NULL, casted_key;
+    grn_table_cursor *cursor;
+    unsigned min_size = 0;
+    int offset = 0, limit = -1;
+    VALUE options, rb_key, rb_min_size;
+    VALUE rb_greater_than, rb_less_than, rb_offset, rb_limit;
+
+    flags |= GRN_CURSOR_PREFIX;
+
+    rb_grn_table_deconstruct((RbGrnTable *)SELF(self), &table, context,
+			     NULL, NULL,
+			     NULL, NULL, NULL,
+			     NULL);
+
+    rb_scan_args(argc, argv, "11", &rb_key, &options);
+
+    rb_grn_scan_options(options,
+			"size", &rb_min_size,
+                        "offset", &rb_offset,
+                        "limit", &rb_limit,
+			"greater_than", &rb_greater_than,
+			"less_than", &rb_less_than,
+			NULL);
+
+    key_p = RVAL2GRNBULK_WITH_TYPE(rb_key, *context, key_p,
+				   table->header.domain, grn_ctx_at(*context, table->header.domain));
+    GRN_OBJ_INIT(&casted_key, GRN_BULK, 0, table->header.domain);
+    if (key_p->header.domain != table->header.domain) {
+	grn_obj_cast(*context, key_p, &casted_key, 0);
+	key_p = &casted_key;
+    }
+
+    if (!NIL_P(rb_min_size))
+	min_size = NUM2UINT(rb_min_size);
+    if (!NIL_P(rb_offset))
+	offset = NUM2INT(rb_offset);
+    if (!NIL_P(rb_limit))
+	limit = NUM2INT(rb_limit);
+
+    if (RVAL2CBOOL(rb_greater_than))
+	flags |= GRN_CURSOR_GT;
+    if (RVAL2CBOOL(rb_less_than))
+	flags |= GRN_CURSOR_LT;
+
+    cursor = grn_table_cursor_open(*context, table,
+				   NULL, min_size,
+				   GRN_BULK_HEAD(key_p), GRN_BULK_VSIZE(key_p),
+				   offset, limit, flags);
+    GRN_OBJ_FIN(*context, &casted_key);
+    rb_grn_context_check(*context, self);
+
+    return cursor;
+}
+
+/*
+ * call-seq:
+ *   table.open_near_cursor(key, options={}) -> Groonga::PatriciaTrieCursor
+ *   table.open_near_cursor(key, options={}) {|cursor| ... }
+ *
+ * _key_に近い順にレコードを取り出すカーソルを生成して返す。
+ * ブロックを指定すると、そのブロックに生成したカーソルが渡さ
+ * れ、ブロックを抜けると自動的にカーソルが破棄される。
+ *
+ * _options_に指定可能な値は以下の通り。
+ *
+ * [+:size+]
+ *   _size_バイト以降のデータが同じキーのレコードに限定する。
+ *
+ * [+:offset+]
+ *   該当する範囲のレコードのうち、(0ベースで)_:offset_番目
+ *   からレコードを取り出す。
+ *
+ * [+:limit+]
+ *   該当する範囲のレコードのうち、_:limit_件のみを取り出す。
+ *   省略された場合または-1が指定された場合は、全件が指定され
+ *   たものとみなす。
+ *
+ * [+:greater_than+]
+ *   +true+を指定すると_key_で指定した値に一致した[+key+]を
+ *   範囲に含まない。
+ *
+ * [+:less_than+]
+ *   +true+を指定すると_key_で指定した値に一致した[+key+]を
+ *   範囲に含まない。
+ */
+static VALUE
+rb_grn_patricia_trie_open_near_cursor (int argc, VALUE *argv, VALUE self)
+{
+    grn_ctx *context = NULL;
+    grn_table_cursor *cursor;
+    VALUE rb_cursor;
+
+    cursor = rb_grn_patricia_trie_open_grn_near_cursor(argc, argv,
+								self, &context, GRN_CURSOR_RK);
+    rb_cursor = GRNTABLECURSOR2RVAL(Qnil, context, cursor);
+    rb_iv_set(rb_cursor, "@table", self); /* FIXME: cursor should mark table */
+    if (rb_block_given_p())
+	return rb_ensure(rb_yield, rb_cursor, rb_grn_object_close, rb_cursor);
+    else
+	return rb_cursor;
+}
+
 void
 rb_grn_init_patricia_trie (VALUE mGrn)
 {
@@ -738,5 +848,8 @@ rb_grn_init_patricia_trie (VALUE mGrn)
 		     -1);
     rb_define_method(rb_cGrnPatriciaTrie, "open_rk_cursor",
 		     rb_grn_patricia_trie_open_rk_cursor,
+		     -1);
+    rb_define_method(rb_cGrnPatriciaTrie, "open_near_cursor",
+		     rb_grn_patricia_trie_open_near_cursor,
 		     -1);
 }
