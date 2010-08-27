@@ -202,4 +202,35 @@ class PatriciaTrieTest < Test::Unit::TestCase
     assert_equal([],
                  records.records.collect {|record| record["._key"]})
   end
+
+
+  def test_prefix_cursor
+    paths = Groonga::PatriciaTrie.create(:name => "Paths",
+                                         :key_type => 'ShortText')
+    root_path = paths.add('/')
+    tmp_path = paths.add('/tmp')
+    usr_bin_path = paths.add('/usr/bin')
+    usr_local_bin_path = paths.add('/usr/local/bin')
+
+    assert_prefix_cursor(["/usr/local/bin", "/usr/bin", "/tmp", "/"],
+                         paths, "/", {:order => :desc})
+    assert_prefix_cursor(["/", "/tmp", "/usr/bin", "/usr/local/bin"],
+                         paths, "/")
+    assert_prefix_cursor(["/usr/local/bin", "/usr/bin"],
+                         paths, "/usr/local",
+                         {:key_bytes => "/usr".size, :order => :desc})
+    assert_prefix_cursor(["/tmp", "/usr/bin"],
+                         paths, "/",
+                         {:offset => 1, :limit => 2})
+  end
+
+  def assert_prefix_cursor(expected, tables, prefix, options={})
+    actual = []
+    tables.open_prefix_cursor(prefix, options) do |cursor|
+      cursor.each do |record|
+        actual << record.key
+      end
+    end
+    assert_equal(expected, actual)
+  end
 end
