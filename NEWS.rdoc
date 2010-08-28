@@ -1,5 +1,18 @@
 = NEWS
 
+== 1.0.0: 2010-08-29
+
+* Supported groonga 1.0.0.
+  * Added Groonga::CASError.
+  * Added :order_by option to Groonga::Table#open_cursor.
+  * Added Groonga::PatriciaTrie#open_prefix_cursor that creates a cursor
+    to retrieve each records by prefix search.
+  * Added Groonga::PatriciaTrie#open_rk_cursor that creats a cursor to
+    retrieve katakana keys from roman letters and/or hiragana.
+  * Added Groonga::PatriciaTrie#open_near_cursor that creates a cursor to
+    retrieve records order by distance from key.
+* Supported _key as index source.
+
 == 0.9.5: 2010-07-20
 
 * Supported groonga 0.7.4.

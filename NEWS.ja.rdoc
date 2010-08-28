@@ -1,5 +1,18 @@
 = お知らせ
 
+== 1.0.0: 2010-08-29
+
+* groonga 1.0.0対応。
+  * Groonga::CASErrorを追加。
+  * Groonga::Table#open_cursorに:order_byオプションを追加。
+  * 前方一致検索がマッチしたレコードを順に取り出すカーソルを作る
+    Groonga::PatriciaTrie#open_prefix_cursorを追加。
+  * ローマ字・ひらがなでカタカナのキーを検索するカーソルを作る
+    Groonga::PatriciaTrie#open_rk_cursorを追加。
+  * 値の近い順にレコードを取り出すカーソルを作る
+    Groonga::PatriciaTrie#open_near_cursorを追加。
+* インデックスのソースに_keyを指定できるようになった。
+
 == 0.9.5: 2010-07-29
 
 * groonga 0.7.4対応。
