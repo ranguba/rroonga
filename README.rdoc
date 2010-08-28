@@ -36,8 +36,8 @@ license/GPL for details.
 
 == Dependencies
 
-* Ruby >= 1.8 (including 1.9.1)
-* groonga >= 0.7.7
+* Ruby >= 1.8 (including 1.9.1 and 1.9.2)
+* groonga >= 1.0.0
 
 == Install
 
