@@ -492,18 +492,17 @@ rb_grn_patricia_trie_register_key_with_sis_p (VALUE self)
 
 static grn_table_cursor *
 rb_grn_patricia_trie_open_grn_prefix_cursor (int argc, VALUE *argv, VALUE self,
-					     grn_ctx **context, int flags)
+					     grn_ctx **context)
 {
     grn_obj *table;
     grn_table_cursor *cursor;
     void *prefix = NULL;
     unsigned prefix_size = 0;
     int offset = 0, limit = -1;
+    int flags = GRN_CURSOR_PREFIX;
     VALUE options, rb_prefix, rb_key_bytes, rb_key_bits;
     VALUE rb_order, rb_order_by;
     VALUE rb_greater_than, rb_less_than, rb_offset, rb_limit;
-
-    flags |= GRN_CURSOR_PREFIX;
 
     rb_grn_table_deconstruct((RbGrnTable *)SELF(self), &table, context,
 			     NULL, NULL,
@@ -640,7 +639,7 @@ rb_grn_patricia_trie_open_prefix_cursor (int argc, VALUE *argv, VALUE self)
     VALUE rb_cursor;
 
     cursor = rb_grn_patricia_trie_open_grn_prefix_cursor(argc, argv,
-							 self, &context, 0);
+							 self, &context);
     rb_cursor = GRNTABLECURSOR2RVAL(Qnil, context, cursor);
     rb_iv_set(rb_cursor, "@table", self); /* FIXME: cursor should mark table */
     if (rb_block_given_p())
@@ -649,6 +648,66 @@ rb_grn_patricia_trie_open_prefix_cursor (int argc, VALUE *argv, VALUE self)
 	return rb_cursor;
 }
 
+static grn_table_cursor *
+rb_grn_patricia_trie_open_grn_rk_cursor (int argc, VALUE *argv, VALUE self,
+					     grn_ctx **context)
+{
+    grn_obj *table;
+    grn_table_cursor *cursor;
+    void *prefix = NULL;
+    unsigned prefix_size = 0;
+    int offset = 0, limit = -1;
+    int flags = GRN_CURSOR_PREFIX | GRN_CURSOR_RK;
+    VALUE options, rb_prefix, rb_key_bytes, rb_key_bits;
+    VALUE rb_greater_than, rb_less_than, rb_offset, rb_limit;
+
+    rb_grn_table_deconstruct((RbGrnTable *)SELF(self), &table, context,
+			     NULL, NULL,
+			     NULL, NULL, NULL,
+			     NULL);
+
+    rb_scan_args(argc, argv, "11", &rb_prefix, &options);
+
+    rb_grn_scan_options(options,
+			"key_bytes", &rb_key_bytes,
+                        "key_bites", &rb_key_bits,
+                        "offset", &rb_offset,
+                        "limit", &rb_limit,
+			"greater_than", &rb_greater_than,
+			"less_than", &rb_less_than,
+			NULL);
+
+    prefix = StringValuePtr(rb_prefix);
+    if (!NIL_P(rb_key_bytes) && !NIL_P(rb_key_bits)) {
+	rb_raise(rb_eArgError,
+		 "should not specify both :key_bytes and :key_bits once: %s",
+		 rb_grn_inspect(rb_ary_new4(argc, argv)));
+    } else if (!NIL_P(rb_key_bytes)) {
+	prefix_size = NUM2UINT(rb_key_bytes);
+    } else if (!NIL_P(rb_key_bits)) {
+	prefix_size = NUM2UINT(rb_key_bits);
+	flags |= GRN_CURSOR_SIZE_BY_BIT;
+    } else {
+	prefix_size = RSTRING_LEN(rb_prefix);
+    }
+    if (!NIL_P(rb_offset))
+	offset = NUM2INT(rb_offset);
+    if (!NIL_P(rb_limit))
+	limit = NUM2INT(rb_limit);
+
+    if (RVAL2CBOOL(rb_greater_than))
+	flags |= GRN_CURSOR_GT;
+    if (RVAL2CBOOL(rb_less_than))
+	flags |= GRN_CURSOR_LT;
+
+    cursor = grn_table_cursor_open(*context, table,
+				   prefix, prefix_size,
+				   NULL, 0,
+				   offset, limit, flags);
+    rb_grn_context_check(*context, self);
+
+    return cursor;
+}
 
 /*
  * call-seq:
@@ -679,17 +738,6 @@ rb_grn_patricia_trie_open_prefix_cursor (int argc, VALUE *argv, VALUE self)
  *   省略された場合または-1が指定された場合は、全件が指定され
  *   たものとみなす。
  *
- * [+:order+]
- *   +:asc+または+:ascending+を指定すると昇順にレコードを取
- *   り出す。
- *   +:desc+または+:descending+を指定すると降順にレコードを
- *   取り出す。
- *
- * [+:order_by+]
- *   +:id+を指定するとID順にレコードを取り出す。（デフォルト）
- *
- *   +:key+指定するとキー順にレコードを取り出す。
- *
  * [+:greater_than+]
  *   +true+を指定すると_key_で指定した値に一致した[+key+]を
  *   範囲に含まない。
@@ -705,8 +753,8 @@ rb_grn_patricia_trie_open_rk_cursor (int argc, VALUE *argv, VALUE self)
     grn_table_cursor *cursor;
     VALUE rb_cursor;
 
-    cursor = rb_grn_patricia_trie_open_grn_prefix_cursor(argc, argv,
-								self, &context, GRN_CURSOR_RK);
+    cursor = rb_grn_patricia_trie_open_grn_rk_cursor(argc, argv,
+								self, &context);
     rb_cursor = GRNTABLECURSOR2RVAL(Qnil, context, cursor);
     rb_iv_set(rb_cursor, "@table", self); /* FIXME: cursor should mark table */
     if (rb_block_given_p())
