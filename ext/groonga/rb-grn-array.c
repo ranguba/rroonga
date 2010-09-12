@@ -97,7 +97,7 @@ rb_grn_array_s_create (int argc, VALUE *argv, VALUE klass)
     grn_obj *value_type = NULL, *table;
     const char *name = NULL, *path = NULL;
     unsigned name_size = 0;
-    grn_obj_flags flags = GRN_TABLE_NO_KEY;
+    grn_obj_flags flags = GRN_OBJ_TABLE_NO_KEY;
     VALUE rb_table;
     VALUE options, rb_context, rb_name, rb_path, rb_persistent;
     VALUE rb_value_type, rb_sub_records;

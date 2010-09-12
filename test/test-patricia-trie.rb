@@ -363,4 +363,14 @@ class PatriciaTrieTest < Test::Unit::TestCase
     end
     assert_equal(expected, actual)
   end
+
+  def test_add_uint_key
+    numbers = Groonga::PatriciaTrie.create(:name => "Numbers",
+                                           :key_type => "UInt32")
+    numbers.add(1)
+    numbers.add(2)
+    numbers.add(5)
+    numbers.add(7)
+    assert_equal([1, 2, 5, 7], numbers.collect {|number| number.key})
+  end
 end
