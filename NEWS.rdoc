@@ -1,5 +1,16 @@
 = NEWS
 
+== 1.0.1: 2010-09-12
+
+=== Fixes
+
+* Fixed wrong flag used on creating a table.
+  [Reported by ono matope]
+
+=== Thanks
+
+* ono matope
+
 == 1.0.0: 2010-08-29
 
 * Supported groonga 1.0.0.
