@@ -144,8 +144,20 @@ module Groonga
     #
     # 主キーの値が同一であったレコードの件数を返す。検索結果とし
     # て生成されたテーブルのみに定義される。
+    #
+    # Groonga::Record#support_sub_recordsでこの値を利用でき
+    # るかがわかる。
     def n_sub_records
       self["._nsubrecs"]
+    end
+
+    # call-seq:
+    #   record.support_sub_records -> true/false
+    #
+    # Groonga::Record#n_sub_recordsが利用できる場合はtrueを
+    # 返す。
+    def support_sub_records?
+      @table.support_sub_records?
     end
 
     # call-seq:

@@ -268,4 +268,11 @@ class RecordTest < Test::Unit::TestCase
     groonga = @bookmarks.add(:user => morita, :uri => "http://groonga.org")
     assert_equal("morita", groonga.user.key)
   end
+
+  def test_support_sub_records
+    morita = @users.add("morita")
+    assert_not_predicate(morita, :support_sub_records?)
+    users = @users.select {|record| record.key == "morita"}
+    assert_predicate(users.to_a[0], :support_sub_records?)
+  end
 end
