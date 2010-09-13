@@ -152,7 +152,7 @@ module Groonga
     end
 
     # call-seq:
-    #   record.support_sub_records -> true/false
+    #   record.support_sub_records? -> true/false
     #
     # Groonga::Record#n_sub_recordsが利用できる場合はtrueを
     # 返す。
