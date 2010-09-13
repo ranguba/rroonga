@@ -57,7 +57,7 @@ class PatriciaTrieTest < Test::Unit::TestCase
 
   def test_add
     users = Groonga::PatriciaTrie.create(:name => "Users")
-    users.define_column("address", "<text>")
+    users.define_column("address", "Text")
     me = users.add("me", :address => "me@example.com")
     assert_equal("me@example.com", me[:address])
   end
