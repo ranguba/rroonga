@@ -25,11 +25,15 @@ class TableSelectNormalizeTest < Test::Unit::TestCase
     @comments = Groonga::Array.create(:name => "Comments")
     @comments.define_column("content", "Text")
     @comments.define_column("created_at", "Time")
-    terms = Groonga::PatriciaTrie.create(:name => "Terms",
-                                         :default_tokenizer => "TokenBigram",
-                                         :key_normalize => true)
+    options = {
+      :name => "Terms",
+      :default_tokenizer => "TokenBigramSplitSymbol",
+      :key_normalize => true,
+    }
+    terms = Groonga::PatriciaTrie.create(options)
     terms.define_index_column("comment_content", @comments,
                               :with_section => true,
+                              :with_position => true,
                               :source => "Comments.content")
     @japanese_comment =
       @comments.add(:content => "うちのボロTV（アナログ...）はまだ現役です",
