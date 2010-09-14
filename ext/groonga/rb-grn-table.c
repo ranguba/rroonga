@@ -734,6 +734,11 @@ rb_grn_table_open_grn_cursor (int argc, VALUE *argv, VALUE self,
 		 rb_grn_inspect(rb_order));
     }
     if (NIL_P(rb_order_by)) {
+	if (table->header.type == GRN_TABLE_PAT_KEY) {
+	    flags |= GRN_CURSOR_BY_KEY;
+	} else {
+	    flags |= GRN_CURSOR_BY_ID;
+	}
     } else if (rb_grn_equal_option(rb_order_by, "id")) {
 	flags |= GRN_CURSOR_BY_ID;
     } else if (rb_grn_equal_option(rb_order_by, "key")) {
@@ -798,10 +803,12 @@ rb_grn_table_open_grn_cursor (int argc, VALUE *argv, VALUE self,
  *   取り出す。
  *
  * [+:order_by+]
- *   +:id+を指定するとID順にレコードを取り出す。（デフォルト）
+ *   +:id+を指定するとID順にレコードを取り出す。（Arrayと
+ *   Hashのデフォルト）
  *
  *   +:key+指定するとキー順にレコードを取り出す。ただし、
- *   Groonga::PatriciaTrieにしか使えない。
+ *   Groonga::PatriciaTrieにしか使えない。（PatriciaTrieのデ
+ *   フォルト）
  *
  * [+:greater_than+]
  *   +true+を指定すると+:min+で指定した値に一致した[+key+]を
