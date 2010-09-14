@@ -44,11 +44,29 @@ module Groonga
     # call-seq:
     #   record == other -> true/false
     #
-    # _record_と_other_が同じgroongaのレコードなら+true+を返し、
-    # そうでなければ+false+を返す。
+    # _record_と_other_が同じテーブルに属していて、さらに、
+    # 同じレコードIDを持つなら+true+を返し、そうでなければ
+    # +false+を返す。
     def ==(other)
       self.class == other.class and
         [table, id] == [other.table, other.id]
+    end
+
+    # call-seq:
+    #   record.eql?(other) -> true/false
+    #
+    # Groonga::Record#==と同じ。
+    def eql?(other)
+      self == other
+    end
+
+    # call-seq:
+    #   record.hash -> ハッシュ値
+    #
+    # 同じテーブルの同じIDのレコードに対しては常に同じハッシュ
+    # 値を返す。
+    def hash
+      @table.hash ^ @id.hash
     end
 
     # call-seq:
