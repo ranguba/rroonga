@@ -49,13 +49,10 @@ manifest_contents = []
 base_dir_included_components = %w(AUTHORS Rakefile
                                   README.rdoc README.ja.rdoc
                                   NEWS.rdoc NEWS.ja.rdoc
-                                  rroonga-build.rb extconf.rb pkg-config.rb)
+                                  rroonga-build.rb extconf.rb)
 excluded_components = %w(.cvsignore .gdb_history CVS depend Makefile doc pkg
-                         .svn .git doc data .test-result tmp)
+                         .svn .git doc data .test-result tmp vendor)
 excluded_suffixes = %w(.png .ps .pdf .o .so .a .txt .~)
-unless ENV["RUBY_CC_VERSION"]
-  excluded_components << "vendor"
-end
 Find.find(base_dir) do |target|
   target = truncate_base_dir[target]
   components = target.split(File::SEPARATOR)
@@ -110,6 +107,7 @@ Hoe.spec('rroonga') do
     :require_paths => ["lib", "ext/groonga"],
     :extra_rdoc_files => Dir.glob("**/*.rdoc"),
   }
+  project.extra_dev_deps << ['pkg-config', '>= 0']
   project.readme_file = "README.ja.rdoc"
 
   news_of_current_release = File.read("NEWS.rdoc").split(/^==\s.*$/)[1]
@@ -135,9 +133,20 @@ ObjectSpace.each_object(Rake::RDocTask) do |rdoc_task|
   rdoc_task.rdoc_files += Dir.glob("**/*.rdoc")
 end
 
+binary_dir = File.join("vendor", "local")
 Rake::ExtensionTask.new("groonga", project.spec) do |ext|
   ext.cross_compile = true
-  ext.cross_platform = 'x86-mingw32'
+  ext.cross_compiling do |spec|
+    if /mingw|mswin/ =~ spec.platform.to_s
+      binary_files = []
+      Find.find(binary_dir) do |name|
+        next unless File.file?(name)
+        next if /\.zip\z/i =~ name
+        binary_files << name
+      end
+      spec.files += binary_files
+    end
+  end
 end
 
 task :publish_docs => [:prepare_docs_for_publishing]

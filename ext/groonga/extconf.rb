@@ -22,8 +22,14 @@ $LOAD_PATH.unshift(base_dir.to_s)
 
 require 'English'
 require 'mkmf'
-require 'pkg-config'
 require 'rroonga-build'
+
+begin
+  require 'pkg-config'
+rescue LoadError
+  require 'rubygems'
+  require 'pkg-config'
+end
 
 include RroongaBuild
 
@@ -61,16 +67,11 @@ checking_for(checking_message("Win32 OS")) do
     import_library_name = "libruby-#{module_name}.a"
     $DLDFLAGS << " -Wl,--out-implib=#{import_library_name}"
     $cleanfiles << import_library_name
-    local_groonga_install_dir = base_dir + "vendor" + "local"
-    $CFLAGS += " -I#{local_groonga_install_dir}/include"
-    local_groonga_lib_dir = local_groonga_install_dir + "lib"
-    ["libgroonga.lib", "libgroonga.dll.a"].each do |libgroonga_base|
-      libgroonga = local_groonga_lib_dir + libgroonga_base
-      if libgroonga.exist?
-        $DLDFLAGS += " -L#{local_groonga_lib_dir}"
-        break
-      end
-    end
+    binary_base_dir = base_dir + "vendor" + "local"
+    $CFLAGS += " -I#{binary_base_dir}/include"
+    pkg_config_dir = binary_base_dir + "lib" + "pkgconfig"
+    PKGConfig.add_path(pkg_config_dir.to_s)
+    PKGConfig.set_override_variable("prefix", binary_base_dir.to_s)
   end
   win32
 end
