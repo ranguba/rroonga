@@ -96,7 +96,7 @@ module Groonga
         @options = options
         @unknown_keys = unknown_keys
         @available_keys = available_keys
-        message = "unknown keys are specified: #{u@nknown_keys.inspect}"
+        message = "unknown keys are specified: #{@unknown_keys.inspect}"
         message << ": available keys: #{@available_keys.inspect}"
         message << ": options: #{@options.inspect}"
         super(message)
