@@ -24,7 +24,8 @@ div.header
   padding: 0px;
 }
 
-div.header div.title
+div.header div.title,
+div.header h1.title
 {
   background: url(logo.png) no-repeat;
   font-family: sans-serif;
@@ -37,31 +38,38 @@ div.header div.title
 }
 
 div.header div.title a,
+div.header h1.title a,
 div.header div.title a:link,
-div.header div.title a:visited
+div.header h1.title a:link,
+div.header div.title a:visited,
+div.header h1.title a:visited
 {
   color: black;
   text-decoration: none;
 }
 
-div.header div.title span
+div.header div.title span,
+div.header h1.title span
 {
   display: block;
   padding-left: 300px;
   margin-bottom: 2px;
 }
 
-div.header div.title span.title
+div.header div.title span.title,
+div.header h1.title span.title
 {
   padding-top: 20px;
 }
 
-div.header div.title span.title-separator
+div.header div.title span.title-separator,
+div.header h1.title span.title-separator
 {
   display: none;
 }
 
-div.header div.title span.title-project
+div.header div.title span.title-project,
+div.header h1.title span.title-project
 {
   padding-bottom: 20px;
 }
