@@ -159,6 +159,11 @@ ul.menu li#menu-reference
   background: url(reference.png) no-repeat;
 }
 
+ul.menu li#menu-readme
+{
+  background: url(readme.png) no-repeat;
+}
+
 ul.menu li#menu-tutorial
 {
   background: url(tutorial.png) no-repeat;
