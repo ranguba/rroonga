@@ -66,6 +66,41 @@ div.header div.title span.title-project
   padding-bottom: 20px;
 }
 
+ul.other-languages
+{
+  position: absolute;
+  top: 0px;
+  right: 50px;
+  padding: 0px;
+  margin: 0px;
+}
+
+ul.other-languages li
+{
+  display: block;
+  float: left;
+  margin-left: 10px;
+}
+
+ul.other-languages li a
+{
+  display: block;
+  height: 11px;
+  width: 16px;
+  text-indent: -100000px;
+  outline: none;
+}
+
+ul.other-languages li#other-language-english
+{
+  background: url(us.png) no-repeat;
+}
+
+ul.other-languages li#other-language-japanese
+{
+  background: url(jp.png) no-repeat;
+}
+
 ul.menu
 {
   background: url(bar.png) repeat-x;
