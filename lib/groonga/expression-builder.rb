@@ -214,11 +214,15 @@ module Groonga
 
       private
       def normalize(other)
-        if @range.is_a?(Groonga::Table) and other.is_a?(Integer)
-          Groonga::Record.new(@range, other)
-        else
-          other
+        if @range.is_a?(Groonga::Table)
+          if other.respond_to?(:record_id)
+            id = other.record_id
+          else
+            id = other
+          end
+          return Groonga::Record.new(@range, id) if id.is_a?(Integer)
         end
+        other
       end
 
       def method_missing(name, *args, &block)
