@@ -457,23 +457,6 @@ rb_grn_table_key_support_get_column_value (int argc, VALUE *argv, VALUE self)
     return rb_grn_table_get_column_value_raw(self, id, rb_name);
 }
 
-/*
- * call-seq:
- *   table.find(key) -> Groonga::Record
- *
- * テーブルの_key_に対応するレコードを返す。
- *
- * 0.9.0から非推奨。代わりにtable[key]を使うこと。
- */
-static VALUE
-rb_grn_table_key_support_find (VALUE self, VALUE rb_key)
-{
-    rb_warn("#find is deprecated. Use #[] instead: %s",
-	    rb_grn_inspect(self));
-
-    return rb_grn_table_key_support_array_reference(self, rb_key);
-}
-
 static VALUE
 rb_grn_table_key_support_get_value_by_key (VALUE self, VALUE rb_key)
 {
@@ -709,8 +692,6 @@ rb_grn_init_table_key_support (VALUE mGrn)
     rb_define_method(rb_mGrnTableKeySupport, "delete",
 		     rb_grn_table_key_support_delete, 1);
 
-    rb_define_method(rb_mGrnTableKeySupport, "find",
-		     rb_grn_table_key_support_find, 1);
     rb_define_method(rb_mGrnTableKeySupport, "[]",
 		     rb_grn_table_key_support_array_reference, 1);
     rb_define_method(rb_mGrnTableKeySupport, "[]=",
