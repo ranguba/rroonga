@@ -118,7 +118,8 @@ module SchemaCreateTableWithKeyTests
   end
 
   def test_differnt_key_type
-    Groonga::Schema.create_table("Posts", options) do |table|
+    Groonga::Schema.create_table("Posts",
+                                 options(:key_type => "Int32")) do |table|
     end
 
     assert_raise(Groonga::Schema::TableCreationWithDifferentOptions) do

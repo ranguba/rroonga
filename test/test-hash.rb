@@ -77,7 +77,7 @@ class HashTest < Test::Unit::TestCase
                  "id: <#{anonymous_table.id}>, " +
                  "name: (anonymous), " +
                  "path: <#{path}>, " +
-                 "domain: (nil), " +
+                 "domain: <ShortText>, " +
                  "range: (nil), " +
                  "flags: <>, " +
                  "encoding: <#{encoding.inspect}>, " +
@@ -91,7 +91,7 @@ class HashTest < Test::Unit::TestCase
                  "id: <#{anonymous_table.id}>, " +
                  "name: (anonymous), " +
                  "path: (temporary), " +
-                 "domain: (nil), " +
+                 "domain: <ShortText>, " +
                  "range: (nil), " +
                  "flags: <>, " +
                  "encoding: <#{encoding.inspect}>, " +
@@ -106,7 +106,7 @@ class HashTest < Test::Unit::TestCase
                  "id: <#{named_table.id}>, " +
                  "name: <Users>, " +
                  "path: <#{path}>, " +
-                 "domain: (nil), " +
+                 "domain: <ShortText>, " +
                  "range: (nil), " +
                  "flags: <>, " +
                  "encoding: <#{encoding.inspect}>, " +
@@ -120,7 +120,7 @@ class HashTest < Test::Unit::TestCase
                  "id: <#{named_table.id}>, " +
                  "name: (anonymous), " +
                  "path: (temporary), " +
-                 "domain: (nil), " +
+                 "domain: <ShortText>, " +
                  "range: (nil), " +
                  "flags: <>, " +
                  "encoding: <#{encoding.inspect}>, " +

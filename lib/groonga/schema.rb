@@ -941,7 +941,7 @@ module Groonga
           :sub_records => @options[:sub_records],
         }
         key_support_table_common = {
-          :key_type => Schema.normalize_type(@options[:key_type]),
+          :key_type => normalize_key_type(@options[:key_type] || "ShortText"),
           :key_normalize => @options[:key_normalize],
           :default_tokenizer => @options[:default_tokenizer],
         }
@@ -992,7 +992,8 @@ module Groonga
         when Groonga::Array
           true
         when Groonga::Hash, Groonga::PatriciaTrie
-          return false unless table.domain == resolve_name(options[:key_type])
+          key_type = normalize_key_type(options[:key_type])
+          return false unless table.domain == resolve_name(key_type)
           default_tokenizer = resolve_name(options[:default_tokenizer])
           return false unless table.default_tokenizer == default_tokenizer
           key_normalize = options[:key_normalize]
@@ -1009,10 +1010,12 @@ module Groonga
         end
       end
 
+      def normalize_key_type(key_type)
+        Schema.normalize_type(key_type || "ShortText")
+      end
+
       def resolve_name(type)
-        if type.nil?
-          nil
-        elsif type.is_a?(String)
+        if type.is_a?(String)
           context[type]
         else
           type

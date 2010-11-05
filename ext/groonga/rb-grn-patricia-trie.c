@@ -90,7 +90,7 @@ VALUE rb_cGrnPatriciaTrie;
  *   ともでき、その場合は自動的にGroonga::Recordからレコード
  *   IDを取得する。
  *
- *   省略した場合は文字列をキーとして使用する。この場合、
+ *   省略した場合はShortText型をキーとして使用する。この場合、
  *   4096バイトまで使用可能である。
  *
  * [+:value_type+]
@@ -206,7 +206,7 @@ rb_grn_patricia_trie_s_create (int argc, VALUE *argv, VALUE klass)
 	flags |= GRN_OBJ_KEY_WITH_SIS;
 
     if (NIL_P(rb_key_type)) {
-	flags |= GRN_OBJ_KEY_VAR_SIZE;
+	key_type = grn_ctx_at(context, GRN_DB_SHORT_TEXT);
     } else {
 	key_type = RVAL2GRNOBJECT(rb_key_type, &context);
     }
