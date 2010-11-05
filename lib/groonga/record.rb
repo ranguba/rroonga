@@ -133,6 +133,15 @@ module Groonga
     end
 
     # call-seq:
+    #   record.index_column?(name) -> true/false
+    #
+    # 名前が_name_のカラムが索引カラム
+    # （Groonga::IndexColumn）であるなら+true+を返す。
+    def index_column?(name)
+      column(name).index_column?
+    end
+
+    # call-seq:
     #   record.search(name, query, options={}) -> Groonga::Hash
     #
     # 名前が_name_のGroonga::IndexColumnのsearchメソッドを呼ぶ。

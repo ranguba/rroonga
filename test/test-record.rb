@@ -164,6 +164,13 @@ class RecordTest < Test::Unit::TestCase
     assert_true(bookmark.reference_column?("user"))
   end
 
+  def test_index_column?
+    bookmark = @bookmarks.add
+    assert_false(bookmark.index_column?("uri"))
+    index = @bookmarks_index.add("token")
+    assert_true(index.index_column?("content"))
+  end
+
   def test_score
     groonga = @bookmarks.add
     groonga["content"] = "full text search search search engine."

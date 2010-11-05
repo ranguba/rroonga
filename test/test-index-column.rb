@@ -22,6 +22,17 @@ class IndexColumnTest < Test::Unit::TestCase
     setup_database
   end
 
+  def test_index_column?
+    articles = Groonga::Array.create(:name => "Articles")
+    articles.define_column("content", "Text")
+
+    terms = Groonga::Hash.create(:name => "Terms",
+                                 :default_tokenizer => "TokenBigram")
+    content_index = terms.define_index_column("content", articles,
+                                              :with_section => true)
+    assert_predicate(content_index, :index_column?)
+  end
+
   def test_array_set_with_record
     articles = Groonga::Array.create(:name => "Articles")
     articles.define_column("content", "Text")

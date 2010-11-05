@@ -588,6 +588,32 @@ rb_grn_column_reference_column_p (VALUE self)
     }
 }
 
+/*
+ * Document-method: index_column?
+ *
+ * call-seq:
+ *   column.index_column? -> true/false
+ *
+ * _column_がGroonga::IndexColumnの場合は+true+を返し、
+ * そうでない場合は+false+を返す。
+ */
+static VALUE
+rb_grn_column_index_column_p (VALUE self)
+{
+    grn_ctx *context;
+    grn_obj *column;
+
+    rb_grn_column_deconstruct(SELF(self), &column, &context,
+			     NULL, NULL,
+			     NULL, NULL, NULL);
+
+    if (column->header.type == GRN_COLUMN_INDEX) {
+	return Qtrue;
+    } else {
+	return Qfalse;
+    }
+}
+
 void
 rb_grn_init_column (VALUE mGrn)
 {
@@ -604,6 +630,8 @@ rb_grn_init_column (VALUE mGrn)
     rb_define_method(rb_cGrnColumn, "locked?", rb_grn_column_is_locked, -1);
     rb_define_method(rb_cGrnColumn, "reference_column?",
 		     rb_grn_column_reference_column_p, 0);
+    rb_define_method(rb_cGrnColumn, "index_column?",
+		     rb_grn_column_index_column_p, 0);
 
     rb_grn_init_fix_size_column(mGrn);
     rb_grn_init_variable_size_column(mGrn);

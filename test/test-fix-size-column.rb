@@ -32,6 +32,10 @@ class FixSizeColumnTest < Test::Unit::TestCase
                                        :path => @viewed_column_path.to_s)
   end
 
+  def test_index_column?
+    assert_not_predicate(@viewed, :index_column?)
+  end
+
   def test_inspect
     assert_equal("#<Groonga::FixSizeColumn " +
                  "id: <#{@viewed.id}>, " +

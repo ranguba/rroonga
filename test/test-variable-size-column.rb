@@ -50,6 +50,10 @@ class VariableSizeColumnTest < Test::Unit::TestCase
     @yu = @users.add(:name => "Yutaro Shimamura")
   end
 
+  def test_index_column?
+    assert_not_predicate(@nick_names, :index_column?)
+  end
+
   def test_inspect
     assert_equal("#<Groonga::VariableSizeColumn " +
                  "id: <#{@name.id}>, " +
