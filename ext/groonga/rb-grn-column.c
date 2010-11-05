@@ -552,6 +552,42 @@ rb_grn_column_is_locked (int argc, VALUE *argv, VALUE self)
     return CBOOL2RVAL(grn_obj_is_locked(context, column));
 }
 
+/*
+ * Document-method: reference_column?
+ *
+ * call-seq:
+ *   column.reference_column? -> true/false
+ *
+ * _column_の値がテーブルのレコードとなる場合は+true+を返し、
+ * そうでない場合は+false+を返す。
+ */
+static VALUE
+rb_grn_column_reference_column_p (VALUE self)
+{
+    grn_ctx *context;
+    grn_obj *column;
+    grn_id range_id;
+    grn_obj *range;
+    unsigned short int type;
+
+    rb_grn_column_deconstruct(SELF(self), &column, &context,
+			     NULL, NULL,
+			     NULL, NULL, NULL);
+
+    range_id = grn_obj_get_range(context, column);
+    range = grn_ctx_at(context, range_id);
+    type = range->header.type;
+    grn_obj_unlink(context, range);
+    switch (type) {
+      case GRN_TABLE_HASH_KEY:
+      case GRN_TABLE_PAT_KEY:
+      case GRN_TABLE_NO_KEY:
+	return Qtrue;
+      default:
+	return Qfalse;
+    }
+}
+
 void
 rb_grn_init_column (VALUE mGrn)
 {
@@ -566,6 +602,8 @@ rb_grn_init_column (VALUE mGrn)
     rb_define_method(rb_cGrnColumn, "unlock", rb_grn_column_unlock, -1);
     rb_define_method(rb_cGrnColumn, "clear_lock", rb_grn_column_clear_lock, -1);
     rb_define_method(rb_cGrnColumn, "locked?", rb_grn_column_is_locked, -1);
+    rb_define_method(rb_cGrnColumn, "reference_column?",
+		     rb_grn_column_reference_column_p, 0);
 
     rb_grn_init_fix_size_column(mGrn);
     rb_grn_init_variable_size_column(mGrn);

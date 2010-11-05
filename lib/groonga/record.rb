@@ -129,7 +129,7 @@ module Groonga
     #
     # 名前が_name_のカラムが参照カラムであるなら+true+を返す。
     def reference_column?(name)
-      column(name).range.is_a?(Groonga::Table)
+      column(name).reference_column?
     end
 
     # call-seq:
