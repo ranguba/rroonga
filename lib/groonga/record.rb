@@ -149,6 +149,21 @@ module Groonga
     end
 
     # call-seq:
+    #   record.record_id -> IDまたは主キー
+    #
+    # レコードを一意に識別するための情報を返す。
+    #
+    # _record_が所属するテーブルがGroonga:::Arrayの場合はID
+    # を返し、それ以外の場合は主キーを返す。
+    def record_id
+      if @table.is_a?(Groonga::Array)
+        id
+      else
+        key
+      end
+    end
+
+    # call-seq:
     #   record.score -> スコア値
     #
     # レコードのスコア値を返す。検索結果として生成されたテーブル
