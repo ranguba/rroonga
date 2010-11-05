@@ -674,6 +674,25 @@ rb_grn_table_key_support_normalize_key_p (VALUE self)
     return CBOOL2RVAL(table->header.flags & GRN_OBJ_KEY_NORMALIZE);
 }
 
+/*
+ * call-seq:
+ *   table.support_key? -> true/false
+ *
+ * テーブルでキーを使えるなら+true+、使えないなら+false+を返
+ * す。キーを使えないテーブルはGroonga::Arrayだけ。
+ */
+static VALUE
+rb_grn_table_key_support_support_key_p (VALUE self)
+{
+    grn_obj *table;
+
+    rb_grn_table_key_support_deconstruct(SELF(self), &table, NULL,
+					 NULL, NULL, NULL,
+					 NULL, NULL, NULL,
+					 NULL);
+    return table->header.domain == GRN_ID_NIL ? Qfalse : Qtrue;
+}
+
 void
 rb_grn_init_table_key_support (VALUE mGrn)
 {
@@ -714,4 +733,7 @@ rb_grn_init_table_key_support (VALUE mGrn)
 
     rb_define_method(rb_mGrnTableKeySupport, "normalize_key?",
 		     rb_grn_table_key_support_normalize_key_p, 0);
+
+    rb_define_method(rb_mGrnTableKeySupport, "support_key?",
+		     rb_grn_table_key_support_support_key_p, 0);
 }

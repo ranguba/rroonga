@@ -19,6 +19,12 @@ class HashTest < Test::Unit::TestCase
 
   setup :setup_database
 
+  def test_support_key?
+    assert_predicate(Groonga::Hash.create(:name => "Users",
+                                          :key_type => "ShortText"),
+                     :support_key?)
+  end
+
   def test_delete
     bookmarks_path = @tables_dir + "bookmarks"
     bookmarks = Groonga::Hash.create(:name => "Bookmarks",

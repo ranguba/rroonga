@@ -21,6 +21,12 @@ class PatriciaTrieTest < Test::Unit::TestCase
 
   setup :setup_database
 
+  def test_support_key?
+    assert_predicate(Groonga::PatriciaTrie.create(:name => "Users",
+                                                  :key_type => "ShortText"),
+                     :support_key?)
+  end
+
   def test_encoding
     assert_equal(Groonga::Encoding.default,
                  Groonga::PatriciaTrie.create.encoding)

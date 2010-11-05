@@ -18,6 +18,10 @@ class ArrayTest < Test::Unit::TestCase
 
   setup :setup_database
 
+  def test_support_key?
+    assert_not_predicate(Groonga::Array.create(:name => "Users"), :support_key?)
+  end
+
   def test_inspect_size
     path = @tables_dir + "named.groonga"
     contain_table = Groonga::Array.create(:name => "name", :path => path.to_s)

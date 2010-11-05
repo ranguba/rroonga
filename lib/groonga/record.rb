@@ -105,6 +105,15 @@ module Groonga
     end
 
     # call-seq:
+    #   record.support_key? -> true/false
+    #
+    # _record_が所属するテーブルで主キーを使える場合は+true+
+    # を返し、使えない場合は+false+を返す。
+    def support_key?
+      @table.support_key?
+    end
+
+    # call-seq:
     #   record.have_column?(name) -> true/false
     #
     # 名前が_name_のカラムがレコードの所属するテーブルで定義され
@@ -141,10 +150,10 @@ module Groonga
     # _record_が所属するテーブルがGroonga:::Arrayの場合は常
     # に+nil+を返す。
     def key
-      if @table.is_a?(Groonga::Array)
-        nil
-      else
+      if support_key?
         @key ||= @table.key(@id)
+      else
+        nil
       end
     end
 
@@ -156,10 +165,10 @@ module Groonga
     # _record_が所属するテーブルがGroonga:::Arrayの場合はID
     # を返し、それ以外の場合は主キーを返す。
     def record_id
-      if @table.is_a?(Groonga::Array)
-        id
-      else
+      if support_key?
         key
+      else
+        id
       end
     end
 
@@ -243,8 +252,7 @@ module Groonga
     # たこのレコードのカラムの値のハッシュを返す。
     def attributes
       attributes = {"id" => id}
-      _key = key
-      attributes["key"] = _key if _key
+      attributes["key"] = key if support_key?
       table_name = @table.name
       columns.each do |column|
         next if column.is_a?(Groonga::IndexColumn)

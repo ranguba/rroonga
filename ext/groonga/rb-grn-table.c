@@ -202,7 +202,7 @@ rb_grn_table_inspect_content (VALUE self, VALUE inspected)
 
 /*
  * call-seq:
- *   _table_.inspect -> String
+ *   table.inspect -> String
  *
  * テーブルの中身を人に見やすい文字列で返す。
  */
@@ -1944,6 +1944,19 @@ rb_grn_table_merge_bang (VALUE self, VALUE rb_other)
 
 /*
  * call-seq:
+ *   table.support_key? -> true/false
+ *
+ * _table_に主キーが設定されていれば+true+、されていなければ
+ * +false+を返す。
+ */
+static VALUE
+rb_grn_table_support_key_p (VALUE self)
+{
+    return Qfalse;
+}
+
+/*
+ * call-seq:
  *   table.support_sub_records? -> true/false
  *
  * グループ化したとき、テーブルにグループに含まれるレコード
@@ -2029,6 +2042,8 @@ rb_grn_init_table (VALUE mGrn)
     rb_define_method(rb_cGrnTable, "merge!",
 		     rb_grn_table_merge_bang, 1);
 
+    rb_define_method(rb_cGrnTable, "support_key?",
+		     rb_grn_table_support_key_p, 0);
     rb_define_method(rb_cGrnTable, "support_sub_records?",
 		     rb_grn_table_support_sub_records_p, 0);
 
