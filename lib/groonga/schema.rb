@@ -1254,7 +1254,7 @@ module Groonga
         header + dump_schema(database) + footer
       end
 
-      def dump_schema
+      def dump_schema(database)
         reference_columns = []
         definitions = []
         database.each do |object|
