@@ -415,7 +415,7 @@ module Groonga
     #   スキーマ定義時に使用するGroonga::Contextを指定する。
     #   省略した場合はGroonga::Context.defaultを使用する。
     def initialize(options={})
-      @options = (options || {}).dup
+      @options = {:context => Groonga::Context.default}.merge(options || {})
       @definitions = []
     end
 
@@ -634,6 +634,10 @@ module Groonga
       definition = ViewDefinition.new(name, options)
       yield(definition)
       @definitions << definition
+    end
+
+    def context # :nodoc:
+      @options[:context]
     end
 
     # スキーマ定義時にGroonga::Schema.create_tableや
@@ -902,7 +906,7 @@ module Groonga
       end
 
       def context # :nodoc:
-        @options[:context] || Groonga::Context.default
+        @options[:context]
       end
 
       private
@@ -1042,7 +1046,7 @@ module Groonga
       end
 
       def define
-        context = @options[:context] || Groonga::Context.default
+        context = @options[:context]
         context[@name].remove
       end
     end
@@ -1093,7 +1097,7 @@ module Groonga
       end
 
       def context # :nodoc:
-        @options[:context] || Groonga::Context.default
+        @options[:context]
       end
 
       private
@@ -1243,7 +1247,7 @@ module Groonga
       end
 
       def dump
-        context = @options[:context] || Groonga::Context.default
+        context = @options[:context]
         database = context.database
         return nil if database.nil?
 
@@ -1251,31 +1255,27 @@ module Groonga
         definitions = []
         database.each do |object|
           next unless object.is_a?(Groonga::Table)
-          schema = "create_table(#{object.name.inspect}) do |table|\n"
-          object.columns.sort_by {|column| column.local_name}.each do |column|
+          table = object
+          schema = create_table_header(table)
+          table.columns.sort_by {|column| column.local_name}.each do |column|
             if column.range.is_a?(Groonga::Table)
               reference_columns << column
             else
-              type = column_method(column)
-              name = column.local_name
-              schema << "  table.#{type}(#{name.inspect})\n"
+              schema << define_column(table, column)
             end
           end
-          schema << "end"
+          schema << create_table_footer(table)
           definitions << schema
         end
 
         reference_columns.group_by do |column|
           column.table
         end.each do |table, columns|
-          schema = "change_table(#{table.name.inspect}) do |table|\n"
+          schema = change_table_header(table)
           columns.each do |column|
-            name = column.local_name
-            reference = column.range
-            schema << "  table.reference(#{name.inspect}, " +
-                                        "#{reference.name.inspect})\n"
+            schema << define_reference_column(table, column)
           end
-          schema << "end"
+          schema << change_table_footer(table)
           definitions << schema
         end
 
@@ -1287,6 +1287,34 @@ module Groonga
       end
 
       private
+      def create_table_header(table)
+        "create_table(#{table.name.inspect}) do |table|\n"
+      end
+
+      def create_table_footer(table)
+        "end"
+      end
+
+      def change_table_header(table)
+        "change_table(#{table.name.inspect}) do |table|\n"
+      end
+
+      def change_table_footer(table)
+        "end"
+      end
+
+      def define_column(table, column)
+        type = column_method(column)
+        name = column.local_name
+        "  table.#{type}(#{name.inspect})\n"
+      end
+
+      def define_reference_column(table, column)
+        name = column.local_name
+        reference = column.range
+        "  table.reference(#{name.inspect}, #{reference.name.inspect})\n"
+      end
+
       def column_method(column)
         range = column.range
         case range.name
