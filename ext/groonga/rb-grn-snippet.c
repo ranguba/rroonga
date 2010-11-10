@@ -302,6 +302,7 @@ rb_grn_snippet_execute (VALUE self, VALUE rb_string)
 
     rc = grn_snip_exec(context, snippet, string, string_length,
                        &n_results, &max_tagged_length);
+    rb_grn_context_check(context, self);
     rb_grn_rc_check(rc, self);
 
     rb_results = rb_ary_new2(n_results);
