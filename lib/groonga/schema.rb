@@ -1251,6 +1251,10 @@ module Groonga
         database = context.database
         return nil if database.nil?
 
+        header + dump_schema(database) + footer
+      end
+
+      def dump_schema
         reference_columns = []
         definitions = []
         database.each do |object|
@@ -1287,6 +1291,14 @@ module Groonga
       end
 
       private
+      def header
+        ""
+      end
+
+      def footer
+        ""
+      end
+
       def create_table_header(table)
         "create_table(#{table.name.inspect}) do |table|\n"
       end
