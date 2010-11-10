@@ -30,8 +30,8 @@ SHIDARA Yoji:: <tt><dara@shidara.net></tt>
 
 LGPL 2.1です。詳しくはlicense/LGPLを見てください。
 
-pkg-config.rbはrcairoに付属しているもので、これはRubyライセ
-ンスです。詳しくはlicense/RUBYとlicense/GPLを見てください。
+（コントリビュートされたパッチなども含み、Kouhei Sutouが
+rroongaのライセンスを変更する権利を持ちます。）
 
 == 依存ソフトウェア
 

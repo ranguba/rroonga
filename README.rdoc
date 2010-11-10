@@ -30,9 +30,8 @@ SHIDARA Yoji:: <tt><dara@shidara.net></tt>
 
 LGPL 2.1. See license/LGPL for details.
 
-pkg-config.rb is a library that is bundled with rcairo. It's
-distributed under Ruby license. See license/RUBY and
-license/GPL for details.
+(Kouhei Sutou has a right to change rroonga's license
+inclidng contributed patches.)
 
 == Dependencies
 
