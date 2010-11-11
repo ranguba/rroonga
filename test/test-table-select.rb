@@ -33,7 +33,12 @@ class TableSelectTest < Test::Unit::TestCase
                                          :default_tokenizer => "TokenBigram")
     terms.define_index_column("comment_content", @comments,
                               :with_section => true,
+                              :with_position => true,
                               :source => "content")
+    terms.define_index_column("users_key", @users,
+                              :with_section => true,
+                              :with_position => true,
+                              :source => "_key")
     @comment1 = @comments.add(:content => "Hello Good-bye!",
                               :created_at => Time.parse("2009-08-09"),
                               :user => "morita")
@@ -146,5 +151,12 @@ class TableSelectTest < Test::Unit::TestCase
       record["user"] == "nonexistent"
     end
     assert_equal_select_result([], result)
+  end
+
+  def test_select_query_key
+    result = @users.select do |record|
+      record["_key"] =~ "mori"
+    end
+    assert_equal_select_result([@users["morita"]], result)
   end
 end
