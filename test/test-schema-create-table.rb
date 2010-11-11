@@ -87,7 +87,7 @@ module SchemaCreateTableTests
     assert_true(context["Posts"].support_sub_records?)
   end
 
-  def test_differnt_sub_records
+  def test_different_sub_records
     Groonga::Schema.create_table("Posts",
                                  options(:sub_records => true)) do |table|
     end
@@ -95,6 +95,28 @@ module SchemaCreateTableTests
     assert_raise(Groonga::Schema::TableCreationWithDifferentOptions) do
       Groonga::Schema.create_table("Posts",
                                    options(:sub_records => false)) do |table|
+      end
+    end
+  end
+
+  def test_same_path
+    path = (@tmp_dir + "posts.groonga").to_s
+    Groonga::Schema.create_table("Posts", options(:path => path)) do |table|
+    end
+
+    Groonga::Schema.create_table("Posts", options(:path => path)) do |table|
+    end
+    assert_equal(path, context["Posts"].path)
+  end
+
+  def test_different_path
+    path = (@tmp_dir + "posts.groonga").to_s
+    Groonga::Schema.create_table("Posts", options(:path => path)) do |table|
+    end
+
+    assert_raise(Groonga::Schema::TableCreationWithDifferentOptions) do
+      path = (@tmp_dir + "posts.grn").to_s
+      Groonga::Schema.create_table("Posts", options(:path => path)) do |table|
       end
     end
   end

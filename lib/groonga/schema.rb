@@ -1010,6 +1010,8 @@ module Groonga
         sub_records = options[:sub_records]
         sub_records = false if sub_records.nil?
         return false unless table.support_sub_records? == sub_records
+        path = options[:path]
+        return false if path and table.path != path
 
         case table
         when Groonga::Array
