@@ -1242,9 +1242,10 @@ module Groonga
       def same_index?(table_definition, index)
         context = table_definition.context
         # TODO: should check column type and other options.
-        return false if index.range.name != @target_table
+        range = index.range
+        return false if range.name != @target_table
         source_names = index.sources.collect do |source|
-          if source == index
+          if source == range
             "_key"
           else
             source.local_name
