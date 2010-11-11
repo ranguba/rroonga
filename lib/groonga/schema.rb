@@ -985,7 +985,7 @@ module Groonga
         return user_path if user_path
         tables_dir = "#{context.database.path}.tables"
         FileUtils.mkdir_p(tables_dir)
-        File.join(tables_dir, "#{@name}.groonga")
+        File.join(tables_dir, @name)
       end
 
       def column_options # :nodoc:
