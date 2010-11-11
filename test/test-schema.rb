@@ -376,7 +376,7 @@ end
 EOS
   end
 
-  def test_reference_dump
+  def test_dump_reference
     Groonga::Schema.define do |schema|
       schema.create_table("Items") do |table|
         table.short_text("title")
@@ -411,6 +411,37 @@ end
 change_table("Comments") do |table|
   table.reference("author", "Users")
   table.reference("item", "Items")
+end
+EOS
+  end
+
+  def test_dump_index
+    Groonga::Schema.define do |schema|
+      schema.create_table("Items",
+                          :type => :patricia_trie,
+                          :key_type => "ShortText") do |table|
+        table.short_text("title")
+      end
+
+      schema.create_table("Terms",
+                          :type => :patricia_trie,
+                          :key_type => "ShortText") do |table|
+        table.index("Items", "_key")
+        table.index("Items", "title")
+      end
+    end
+
+    assert_equal(<<-EOS, Groonga::Schema.dump)
+create_table("Items", :type => :patricia_trie, :key_type => "ShortText") do |table|
+  table.short_text("title")
+end
+
+create_table("Terms", :type => :patricia_trie, :key_type => "ShortText") do |table|
+end
+
+change_table("Terms") do |table|
+  table.index("Items", "_key", :name => "Items__key")
+  table.index("Items", "title", :name => "Items_title")
 end
 EOS
   end

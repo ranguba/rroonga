@@ -415,7 +415,8 @@ module Groonga
     #   スキーマ定義時に使用するGroonga::Contextを指定する。
     #   省略した場合はGroonga::Context.defaultを使用する。
     def initialize(options={})
-      @options = {:context => Groonga::Context.default}.merge(options || {})
+      @options = (options || {}).dup
+      @options[:context] ||= Groonga::Context.default
       @definitions = []
     end
 
@@ -741,9 +742,11 @@ module Groonga
       # call-seq:
       #   table.index(target_column_full_name, options={})
       #   table.index(target_table, target_column, options={})
+      #   table.index(target_table, target_column1, target_column2, ..., options={})
       #
       # _target_table_の_target_column_を対象とするインデッ
-      # クスカラムを作成する。
+      # クスカラムを作成する。複数のカラムを指定することもで
+      # きます。
       #
       # _target_column_full_name_で指定するときはテーブル名
       # とカラム名を"."でつなげます。例えば、「Users」テーブ
@@ -770,6 +773,8 @@ module Groonga
       #
       # [+:with_section+]
       #   転置索引にsection(段落情報)を合わせて格納する。
+      #   複数のカラムを指定した場合は自動できに有効になりま
+      #   す。
       #
       # [+:with_weight+]
       #   転置索引にweight情報を合わせて格納する。
@@ -789,11 +794,12 @@ module Groonga
             target_column_full_name = target_column_full_name.name
           end
           target_table, target_column = target_column_full_name.split(/\./, 2)
+          target_columns = [target_column]
         else
           target_table = target_table_or_target_column_full_name
-          target_column = args.pop
+          target_columns = args
         end
-        define_index(target_table, target_column, options || {})
+        define_index(target_table, target_columns, options || {})
       end
 
       # 名前が_name_の32bit符号付き整数のカラムを作成する。
@@ -982,9 +988,10 @@ module Groonga
         @options[:persistent].nil? ? true : @options[:persistent]
       end
 
-      def define_index(target_table, target_column, options)
+      def define_index(target_table, target_columns, options)
         name = options.delete(:name)
-        name ||= "#{target_table}_#{target_column}".gsub(/\./, "_")
+        name ||= "#{target_table}_#{target_columns.join('_')}".gsub(/\./, "_")
+        options[:context] ||= @options[:context]
 
         definition = self[name, IndexColumnDefinition]
         if definition.nil?
@@ -992,7 +999,7 @@ module Groonga
           update_definition(name, IndexColumnDefinition, definition)
         end
         definition.target_table = target_table
-        definition.target_column = target_column
+        definition.target_columns = target_columns
         definition.options.merge!(column_options.merge(options))
         self
       end
@@ -1188,7 +1195,7 @@ module Groonga
     end
 
     class IndexColumnDefinition # :nodoc:
-      attr_accessor :name, :target_table, :target_column
+      attr_accessor :name, :target_table, :target_columns
       attr_reader :options
 
       def initialize(name, options={})
@@ -1196,15 +1203,13 @@ module Groonga
         @name = @name.to_s if @name.is_a?(Symbol)
         @options = (options || {}).dup
         @target_table = nil
-        @target_column = nil
+        @target_columns = nil
       end
 
       def define(table_definition, table)
-        target_name = "#{@target_table}.#{@target_column}"
+        target_name = "#{@target_table}.#{@target_columns.join('_')}"
         target_table = table_definition.context[@target_table]
-        if target_table.nil? or
-            !(@target_column == "_key" or
-              target_table.have_column?(@target_column))
+        if target_table.nil? or have_nonexistent_column?
           raise UnknownIndexTarget.new(target_name)
         end
         index = table.column(@name)
@@ -1218,10 +1223,17 @@ module Groonga
             raise ColumnCreationWithDifferentOptions.new(index, options)
           end
         end
+        options = @options.dup
+        if @target_columns.size > 1
+          options[:with_section] = true
+        end
         index = table.define_index_column(@name,
                                           @target_table,
-                                          @options)
-        index.source = target_table.column(@target_column)
+                                          options)
+        target_table = resolved_target_table
+        index.sources = @target_columns.collect do |column|
+          target_table.column(column)
+        end
         index
       end
 
@@ -1232,12 +1244,23 @@ module Groonga
         return false if index.range.name != @target_table
         source_names = index.sources.collect do |source|
           if source == index
-            "#{index.range.name}._key"
+            "_key"
           else
-            source.name
+            source.local_name
           end
         end
-        source_names == ["#{@target_table}.#{@target_column}"]
+        source_names.sort == @target_columns.sort
+      end
+
+      def have_nonexistent_column?
+        table = resolved_target_table
+        @target_columns.any? do |column|
+          column != "_key" and !table.have_column?(column)
+        end
+      end
+
+      def resolved_target_table
+        @resolved_target_table ||= @options.delete(:context)[@target_table]
       end
     end
 
@@ -1255,6 +1278,7 @@ module Groonga
       end
 
       def dump_schema(database)
+        index_columns = []
         reference_columns = []
         definitions = []
         database.each do |object|
@@ -1262,10 +1286,14 @@ module Groonga
           table = object
           schema = create_table_header(table)
           table.columns.sort_by {|column| column.local_name}.each do |column|
-            if column.range.is_a?(Groonga::Table)
-              reference_columns << column
+            if column.is_a?(Groonga::IndexColumn)
+              index_columns << column
             else
-              schema << define_column(table, column)
+              if column.range.is_a?(Groonga::Table)
+                reference_columns << column
+              else
+                schema << define_column(table, column)
+              end
             end
           end
           schema << create_table_footer(table)
@@ -1278,6 +1306,17 @@ module Groonga
           schema = change_table_header(table)
           columns.each do |column|
             schema << define_reference_column(table, column)
+          end
+          schema << change_table_footer(table)
+          definitions << schema
+        end
+
+        index_columns.group_by do |column|
+          column.table
+        end.each do |table, columns|
+          schema = change_table_header(table)
+          columns.each do |column|
+            schema << define_index_column(table, column)
           end
           schema << change_table_footer(table)
           definitions << schema
@@ -1300,7 +1339,21 @@ module Groonga
       end
 
       def create_table_header(table)
-        "create_table(#{table.name.inspect}) do |table|\n"
+        parameters = []
+        unless table.is_a?(Groonga::Array)
+          case table
+          when Groonga::Hash
+            parameters << ":type => :hash"
+          when Groonga::PatriciaTrie
+            parameters << ":type => :patricia_trie"
+          end
+          if table.domain
+            parameters << ":key_type => #{table.domain.name.dump}"
+          end
+        end
+        arguments = [table.name.dump]
+        arguments << parameters.join(', ') unless parameters.empty?
+        "create_table(#{arguments.join(', ')}) do |table|\n"
       end
 
       def create_table_footer(table)
@@ -1324,7 +1377,23 @@ module Groonga
       def define_reference_column(table, column)
         name = column.local_name
         reference = column.range
-        "  table.reference(#{name.inspect}, #{reference.name.inspect})\n"
+        "  table.reference(#{name.dump}, #{reference.name.dump})\n"
+      end
+
+      def define_index_column(table, column)
+        target_table_name = column.range.name
+        sources = column.sources
+        source_names = sources.collect do |source|
+          if source.is_a?(table.class)
+            "_key".dump
+          else
+            source.local_name.dump
+          end
+        end.join(", ")
+        arguments = [target_table_name.dump,
+                     sources.size == 1 ? source_names : "[#{source_names}]",
+                     ":name => #{column.local_name.dump}"]
+        "  table.index(#{arguments.join(', ')})\n"
       end
 
       def column_method(column)
