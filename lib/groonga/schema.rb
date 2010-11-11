@@ -956,7 +956,7 @@ module Groonga
       def create_options # :nodoc:
         common = {
           :name => @name,
-          :path => @options[:path],
+          :path => path,
           :persistent => persistent?,
           :value_type => @options[:value_type],
           :context => context,
@@ -978,6 +978,14 @@ module Groonga
           }
           common.merge(key_support_table_common).merge(options)
         end
+      end
+
+      def path
+        user_path = @options[:path]
+        return user_path if user_path
+        tables_dir = "#{context.database.path}.tables"
+        FileUtils.mkdir_p(tables_dir)
+        File.join(tables_dir, "#{@name}.groonga")
       end
 
       def column_options # :nodoc:
