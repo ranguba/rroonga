@@ -638,7 +638,7 @@ module Groonga
     end
 
     def context # :nodoc:
-      @options[:context]
+      @options[:context] || Groonga::Context.default
     end
 
     # スキーマ定義時にGroonga::Schema.create_tableや
@@ -912,7 +912,7 @@ module Groonga
       end
 
       def context # :nodoc:
-        @options[:context]
+        @options[:context] || Groonga::Context.default
       end
 
       private
@@ -991,7 +991,7 @@ module Groonga
       def define_index(target_table, target_columns, options)
         name = options.delete(:name)
         name ||= "#{target_table}_#{target_columns.join('_')}".gsub(/\./, "_")
-        options[:context] ||= @options[:context]
+        options[:context] ||= @options[:context] || Groonga::Context.default
 
         definition = self[name, IndexColumnDefinition]
         if definition.nil?
@@ -1104,7 +1104,7 @@ module Groonga
       end
 
       def context # :nodoc:
-        @options[:context]
+        @options[:context] || Groonga::Context.default
       end
 
       private
@@ -1224,6 +1224,7 @@ module Groonga
           end
         end
         options = @options.dup
+        options.delete(:context)
         if @target_columns.size > 1
           options[:with_section] = true
         end
@@ -1260,7 +1261,11 @@ module Groonga
       end
 
       def resolved_target_table
-        @resolved_target_table ||= @options.delete(:context)[@target_table]
+        @resolved_target_table ||= context[@target_table]
+      end
+
+      def context
+        @options[:context] || Groonga::Context.default
       end
     end
 
@@ -1270,7 +1275,7 @@ module Groonga
       end
 
       def dump
-        context = @options[:context]
+        context = @options[:context] || Groonga::Context.default
         database = context.database
         return nil if database.nil?
 
