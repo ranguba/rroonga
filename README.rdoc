@@ -30,7 +30,7 @@ SHIDARA Yoji:: <tt><dara@shidara.net></tt>
 
 LGPL 2.1. See license/LGPL for details.
 
-(Kouhei Sutou has a right to change rroonga's license
+(Kouhei Sutou has a right to change the license
 inclidng contributed patches.)
 
 == Dependencies
