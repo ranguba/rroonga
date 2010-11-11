@@ -114,6 +114,18 @@ module Groonga
       end
     end
 
+    # 参照先のテーブルを推測できないときに発生する。
+    class UnguessableReferenceTable < Error
+      attr_reader :name, :tried_table_names
+      def initialize(name, tried_table_names)
+        @name = name
+        @tried_table_names = tried_table_names
+        super("failed to guess referenced table name " +
+              "for reference column: #{@name.inspect}: " +
+              "tried table names: #{@tried_table_names.inspect}")
+      end
+    end
+
     class << self
 
       # call-seq:
@@ -889,9 +901,33 @@ module Groonga
       # 名前が_name_で_table_のレコードIDを格納する参照カラ
       # ムを作成する。
       #
+      # _table_が省略された場合は_name_の複数形が使われる。
+      # 例えば、_name_が"user"な場合は_table_は"users"になる。
+      #
       # _options_に指定可能な値は
       # Groonga::Schema::TableDefinition#columnを参照。
-      def reference(name, table, options={})
+      def reference(name, table=nil, options={})
+        table ||= lambda do |context|
+          name = name.to_s
+          candidate_names = [name]
+          if name.respond_to?(:pluralize)
+            pluralized_name = name.pluralize
+          else
+            pluralized_name = "#{name}s"
+          end
+          candidate_names << pluralized_name
+          if pluralized_name.respond_to?(:camelize)
+            candidate_names << pluralized_name.camelize
+          else
+            candidate_names << pluralized_name.split(/_/).collect do |word|
+              word.capitalize
+            end.join
+          end
+          candidate_names.each do |table_name|
+            return table_name if context[table_name]
+          end
+          raise UnguessableReferenceTable.new(name, candidate_names)
+        end
         column(name, table, options)
       end
 
@@ -1167,25 +1203,32 @@ module Groonga
 
       def define(table_definition, table)
         column = table.column(@name)
+        options = define_options(table_definition, table)
         if column
           return column if same_column?(table_definition, column)
           if @options[:force]
             column.remove
           else
-            options = @options.merge(:type => @type)
             raise ColumnCreationWithDifferentOptions.new(column, options)
           end
         end
-        table.define_column(@name,
-                            Schema.normalize_type(@type),
-                            define_options(table_definition, table))
+        table.define_column(@name, type(table_definition.context), options)
       end
 
       private
+      def type(context)
+        if @type.respond_to?(:call)
+          resolved_type = @type.call(context)
+        else
+          resolved_type = @type
+        end
+        Schema.normalize_type(resolved_type)
+      end
+
       def same_column?(table_definition, column)
         context = table_definition.context
         # TODO: should check column type and other options.
-        column.range == context[Schema.normalize_type(@type)]
+        column.range == context[type(context)]
       end
 
       def define_options(table_definition, table)

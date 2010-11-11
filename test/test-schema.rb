@@ -363,6 +363,33 @@ class SchemaTest < Test::Unit::TestCase
     end
   end
 
+  def test_reference_guess
+    Groonga::Schema.define do |schema|
+      schema.create_table("Items", :type => :hash) do |table|
+        table.short_text("title")
+      end
+
+      schema.create_table("Users", :type => :hash) do |table|
+        table.reference("item")
+      end
+    end
+
+    assert_equal(context["Items"], context["Users.item"].range)
+  end
+
+  def test_reference_ungeussable
+    candidates = ["item", "items", "Items"]
+    exception =
+      Groonga::Schema::UnguessableReferenceTable.new("item", candidates)
+    assert_raise(exception) do
+      Groonga::Schema.define do |schema|
+        schema.create_table("Users", :type => :hash) do |table|
+          table.reference("item")
+        end
+      end
+    end
+  end
+
   def test_dump
     Groonga::Schema.define do |schema|
       schema.create_table("Posts") do |table|
