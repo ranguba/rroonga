@@ -267,7 +267,8 @@ rb_grn_index_column_get_sources (VALUE self)
 }
 
 static grn_id
-resolve_source_id (grn_ctx *context, grn_obj *column, VALUE rb_source)
+resolve_source_id (grn_ctx *context, grn_obj *column, grn_id range_id,
+		   VALUE rb_source)
 {
     grn_id source_id;
 
@@ -316,7 +317,7 @@ resolve_source_id (grn_ctx *context, grn_obj *column, VALUE rb_source)
 		rb_raise(rb_eArgError,
 			 "source accessor must be '_key': <%s>", name);
 	    }
-	    source_id = grn_obj_id(context, column);
+	    source_id = range_id;
 	} else {
 	    source_id = grn_obj_id(context, source);
 	}
@@ -339,19 +340,22 @@ rb_grn_index_column_set_sources (VALUE self, VALUE rb_sources)
     grn_obj *column;
     int i, n;
     VALUE *rb_source_values;
+    grn_id range_id;
     grn_id *sources;
     grn_rc rc;
 
     rb_grn_index_column_deconstruct(SELF(self), &column, &context,
 				    NULL, NULL,
-				    NULL, NULL, NULL, NULL,
+				    NULL, NULL,
+				    &range_id, NULL,
 				    NULL, NULL);
 
     n = RARRAY_LEN(rb_sources);
     rb_source_values = RARRAY_PTR(rb_sources);
     sources = ALLOCA_N(grn_id, n);
     for (i = 0; i < n; i++) {
-	sources[i] = resolve_source_id(context, column, rb_source_values[i]);
+	sources[i] = resolve_source_id(context, column, range_id,
+				       rb_source_values[i]);
     }
 
     {
