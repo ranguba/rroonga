@@ -1169,7 +1169,7 @@ module Groonga
         column = table.column(@name)
         if column
           return column if same_column?(table_definition, column)
-          if @options.delete(:force)
+          if @options[:force]
             column.remove
           else
             options = @options.merge(:type => @type)
@@ -1178,7 +1178,7 @@ module Groonga
         end
         table.define_column(@name,
                             Schema.normalize_type(@type),
-                            @options)
+                            define_options(table_definition, table))
       end
 
       private
@@ -1186,6 +1186,22 @@ module Groonga
         context = table_definition.context
         # TODO: should check column type and other options.
         column.range == context[Schema.normalize_type(@type)]
+      end
+
+      def define_options(table_definition, table)
+        {
+          :path => path(table_definition, table),
+          :type => @options[:type],
+          :compress => @options[:compress],
+        }
+      end
+
+      def path(table_definition, table)
+        user_path = @options[:path]
+        return user_path if user_path
+        columns_dir = "#{table.path}.columns"
+        FileUtils.mkdir_p(columns_dir)
+        File.join(columns_dir, @name)
       end
     end
 
