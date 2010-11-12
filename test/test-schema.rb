@@ -401,7 +401,8 @@ class SchemaTest < Test::Unit::TestCase
       end
     end
     assert_equal(<<-EOS, Groonga::Schema.dump)
-create_table("Posts") do |table|
+create_table("Posts",
+             :force => true) do |table|
   table.short_text("title")
 end
 EOS
@@ -426,16 +427,19 @@ EOS
     end
 
     assert_equal(<<-EOS, Groonga::Schema.dump)
-create_table("Comments") do |table|
+create_table("Comments",
+             :force => true) do |table|
   table.text("content")
   table.time("issued")
 end
 
-create_table("Items") do |table|
+create_table("Items",
+             :force => true) do |table|
   table.short_text("title")
 end
 
-create_table("Users") do |table|
+create_table("Users",
+             :force => true) do |table|
   table.short_text("name")
 end
 
@@ -463,11 +467,17 @@ EOS
     end
 
     assert_equal(<<-EOS, Groonga::Schema.dump)
-create_table("Items", :type => :patricia_trie, :key_type => "ShortText") do |table|
+create_table("Items",
+             :type => :patricia_trie,
+             :key_type => "ShortText",
+             :force => true) do |table|
   table.short_text("title")
 end
 
-create_table("Terms", :type => :patricia_trie, :key_type => "ShortText") do |table|
+create_table("Terms",
+             :type => :patricia_trie,
+             :key_type => "ShortText",
+             :force => true) do |table|
 end
 
 change_table("Terms") do |table|
