@@ -361,6 +361,20 @@ module Groonga
         end
       end
 
+      # call-seq:
+      #   Groonga::Schema.remove_column(table_name, column_name)
+      #
+      # 以下と同様:
+      #
+      #   Groonga::Schema.change_table(table_name) do |table|
+      #     table.remove_column(column_name)
+      #   end
+      def remove_column(table_name, column_name)
+        change_table(table_name) do |table|
+          table.remove_column(column_name)
+        end
+      end
+
       # スキーマの内容を文字列で返す。返された値は
       # Groonga::Schema.restoreすることによりスキーマ内に組
       # み込むことができる。
@@ -647,6 +661,20 @@ module Groonga
       definition = ViewDefinition.new(name, options)
       yield(definition)
       @definitions << definition
+    end
+
+    # call-seq:
+    #   schema.remove_column(table_name, column_name)
+    #
+    # 以下と同様:
+    #
+    #   schema.change_table(table_name) do |table|
+    #     table.remove_column(column_name)
+    #   end
+    def remove_column(table_name, column_name)
+      change_table(table_name) do |table|
+        table.remove_column(column_name)
+      end
     end
 
     def context # :nodoc:

@@ -227,9 +227,7 @@ class SchemaTest < Test::Unit::TestCase
     end
     assert_not_nil(context["Posts.content"])
 
-    Groonga::Schema.change_table("Posts") do |table|
-      table.remove_column("content")
-    end
+    Groonga::Schema.remove_column("Posts", "content")
     assert_nil(context["Posts.content"])
   end
 
