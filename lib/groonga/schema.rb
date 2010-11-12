@@ -1478,9 +1478,10 @@ module Groonga
             parameters << ":key_type => #{table.domain.name.dump}"
           end
         end
-        arguments = [table.name.dump]
-        arguments << parameters.join(', ') unless parameters.empty?
-        "create_table(#{arguments.join(', ')}) do |table|\n"
+        parameters << ":force => true"
+        parameters.unshift("")
+        parameters = parameters.join(",\n             ")
+        "create_table(#{table.name.dump}#{parameters}) do |table|\n"
       end
 
       def create_table_footer(table)
