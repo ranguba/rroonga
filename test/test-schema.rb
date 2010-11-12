@@ -28,7 +28,9 @@ class SchemaTest < Test::Unit::TestCase
   def test_define_hash
     Groonga::Schema.create_table("Posts", :type => :hash) do |table|
     end
-    assert_kind_of(Groonga::Hash, context["Posts"])
+    posts = context["Posts"]
+    assert_kind_of(Groonga::Hash, posts)
+    assert_equal("#{@database_path}.tables/Posts", posts.path)
   end
 
   def test_define_hash_with_full_option
@@ -58,7 +60,9 @@ class SchemaTest < Test::Unit::TestCase
   def test_define_patricia_trie
     Groonga::Schema.create_table("Posts", :type => :patricia_trie) do |table|
     end
-    assert_kind_of(Groonga::PatriciaTrie, context["Posts"])
+    posts = context["Posts"]
+    assert_kind_of(Groonga::PatriciaTrie, posts)
+    assert_equal("#{@database_path}.tables/Posts", posts.path)
   end
 
   def test_define_patricia_trie_with_full_option
@@ -89,7 +93,9 @@ class SchemaTest < Test::Unit::TestCase
   def test_define_array
     Groonga::Schema.create_table("Posts", :type => :array) do |table|
     end
-    assert_kind_of(Groonga::Array, context["Posts"])
+    posts = context["Posts"]
+    assert_kind_of(Groonga::Array, posts)
+    assert_equal("#{@database_path}.tables/Posts", posts.path)
   end
 
   def test_define_array_with_full_option

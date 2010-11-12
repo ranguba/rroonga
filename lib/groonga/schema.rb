@@ -784,15 +784,19 @@ module Groonga
       #   した場合は自動的にパスが付加される。
       #
       # [+:with_section+]
-      #   転置索引にsection(段落情報)を合わせて格納する。
-      #   複数のカラムを指定した場合は自動できに有効になりま
-      #   す。
+      #   +true+を指定すると転置索引にsection(段落情報)を合
+      #   わせて格納する。未指定または+nil+を指定した場合、
+      #   複数のカラムを指定すると自動的に有効になる。
       #
       # [+:with_weight+]
-      #   転置索引にweight情報を合わせて格納する。
+      #   +true+を指定すると転置索引にweight情報を合わせて格
+      #   納する。
       #
       # [+:with_position+]
-      #   転置索引に出現位置情報を合わせて格納する。
+      #   +true+を指定すると転置索引に出現位置情報を合わせて
+      #   格納する。未指定または+nil+を指定した場合、テーブ
+      #   ルがN-gram系のトークナイザーを利用している場合は自
+      #   動的に有効になる。
       def index(target_table_or_target_column_full_name, *args)
         if args.size > 2
           n_args = args.size + 1
@@ -807,11 +811,16 @@ module Groonga
           end
           target_table, target_column = target_column_full_name.split(/\./, 2)
           target_columns = [target_column]
+          key = [target_table, target_columns]
         else
-          target_table = target_table_or_target_column_full_name
+          target_table_name = target_table_or_target_column_full_name
+          target_table = lambda do |context|
+            guess_table_name(context, target_table_name)
+          end
           target_columns = args
+          key = [target_table_name, target_columns]
         end
-        define_index(target_table, target_columns, options || {})
+        define_index(key, target_table, target_columns, options || {})
       end
 
       # 名前が_name_の32bit符号付き整数のカラムを作成する。
@@ -907,27 +916,7 @@ module Groonga
       # _options_に指定可能な値は
       # Groonga::Schema::TableDefinition#columnを参照。
       def reference(name, table=nil, options={})
-        table ||= lambda do |context|
-          name = name.to_s
-          candidate_names = [name]
-          if name.respond_to?(:pluralize)
-            pluralized_name = name.pluralize
-          else
-            pluralized_name = "#{name}s"
-          end
-          candidate_names << pluralized_name
-          if pluralized_name.respond_to?(:camelize)
-            candidate_names << pluralized_name.camelize
-          else
-            candidate_names << pluralized_name.split(/_/).collect do |word|
-              word.capitalize
-            end.join
-          end
-          candidate_names.each do |table_name|
-            return table_name if context[table_name]
-          end
-          raise UnguessableReferenceTable.new(name, candidate_names)
-        end
+        table ||= lambda {|context| guess_table_name(context, name)}
         column(name, table, options)
       end
 
@@ -952,8 +941,8 @@ module Groonga
       end
 
       private
-      def update_definition(name, definition_class, definition) # :nodoc:
-        old_definition = self[name, definition_class]
+      def update_definition(key, definition_class, definition) # :nodoc:
+        old_definition = self[key, definition_class]
         if old_definition
           index = @definitions.index(old_definition)
           @definitions[index] = definition
@@ -1032,15 +1021,12 @@ module Groonga
         @options[:persistent].nil? ? true : @options[:persistent]
       end
 
-      def define_index(target_table, target_columns, options)
+      def define_index(key, target_table, target_columns, options)
         name = options.delete(:name)
-        name ||= "#{target_table}_#{target_columns.join('_')}".gsub(/\./, "_")
-        options[:context] ||= @options[:context] || Groonga::Context.default
-
-        definition = self[name, IndexColumnDefinition]
+        definition = self[key, IndexColumnDefinition]
         if definition.nil?
           definition = IndexColumnDefinition.new(name, options)
-          update_definition(name, IndexColumnDefinition, definition)
+          update_definition(key, IndexColumnDefinition, definition)
         end
         definition.target_table = target_table
         definition.target_columns = target_columns
@@ -1089,6 +1075,29 @@ module Groonga
         else
           type
         end
+      end
+
+      def guess_table_name(context, name)
+        original_name = name
+        name = name.to_s
+        candidate_names = [name]
+        if name.respond_to?(:pluralize)
+          pluralized_name = name.pluralize
+        else
+          pluralized_name = "#{name}s"
+        end
+        candidate_names << pluralized_name
+        if pluralized_name.respond_to?(:camelize)
+          candidate_names << pluralized_name.camelize
+        else
+          candidate_names << pluralized_name.split(/_/).collect do |word|
+            word.capitalize
+          end.join
+        end
+        candidate_names.each do |table_name|
+          return table_name if context[table_name]
+        end
+        raise UnguessableReferenceTable.new(original_name, candidate_names)
       end
     end
 
@@ -1202,10 +1211,11 @@ module Groonga
       end
 
       def define(table_definition, table)
+        context = table_definition.context
         column = table.column(@name)
-        options = define_options(table_definition, table)
+        options = define_options(context, table)
         if column
-          return column if same_column?(table_definition, column)
+          return column if same_column?(context, column)
           if @options[:force]
             column.remove
           else
@@ -1213,7 +1223,7 @@ module Groonga
           end
         end
         table.define_column(@name,
-                            normalize_type(table_definition.context),
+                            normalize_type(context),
                             options)
       end
 
@@ -1227,21 +1237,20 @@ module Groonga
         Schema.normalize_type(resolved_type)
       end
 
-      def same_column?(table_definition, column)
-        context = table_definition.context
+      def same_column?(context, column)
         # TODO: should check column type and other options.
         column.range == context[normalize_type(context)]
       end
 
-      def define_options(table_definition, table)
+      def define_options(context, table)
         {
-          :path => path(table_definition, table),
+          :path => path(context, table),
           :type => @options[:type],
           :compress => @options[:compress],
         }
       end
 
-      def path(table_definition, table)
+      def path(context, table)
         user_path = @options[:path]
         return user_path if user_path
         columns_dir = "#{table.path}.columns"
@@ -1278,15 +1287,17 @@ module Groonga
       end
 
       def define(table_definition, table)
-        target_name = "#{@target_table}.#{@target_columns.join('_')}"
-        target_table = table_definition.context[@target_table]
-        if target_table.nil? or have_nonexistent_column?
+        context = table_definition.context
+        target_table = resolve_target_table(context)
+        target_name = "#{target_table.name}.#{@target_columns.join('_')}"
+        if target_table.nil? or have_nonexistent_column?(target_table)
           raise UnknownIndexTarget.new(target_name)
         end
-        index = table.column(@name)
+        name = @name || "#{target_table.name}_#{@target_columns.join('_')}"
+        index = table.column(name)
         if index
-          return index if same_index?(table_definition, index)
-          if @options.delete(:force)
+          return index if same_index?(context, index, target_table)
+          if @options[:force]
             index.remove
           else
             options = @options.merge(:type => :index,
@@ -1294,15 +1305,9 @@ module Groonga
             raise ColumnCreationWithDifferentOptions.new(index, options)
           end
         end
-        options = @options.dup
-        options.delete(:context)
-        if @target_columns.size > 1
-          options[:with_section] = true
-        end
-        index = table.define_index_column(@name,
-                                          @target_table,
-                                          options)
-        target_table = resolved_target_table
+        index = table.define_index_column(name,
+                                          target_table,
+                                          define_options(context, table, name))
         index.sources = @target_columns.collect do |column|
           target_table.column(column)
         end
@@ -1310,11 +1315,10 @@ module Groonga
       end
 
       private
-      def same_index?(table_definition, index)
-        context = table_definition.context
+      def same_index?(context, index, target_table)
         # TODO: should check column type and other options.
         range = index.range
-        return false if range.name != @target_table
+        return false if range != target_table
         source_names = index.sources.collect do |source|
           if source == range
             "_key"
@@ -1325,19 +1329,37 @@ module Groonga
         source_names.sort == @target_columns.sort
       end
 
-      def have_nonexistent_column?
-        table = resolved_target_table
+      def have_nonexistent_column?(target_table)
         @target_columns.any? do |column|
-          column != "_key" and !table.have_column?(column)
+          column != "_key" and !target_table.have_column?(column)
         end
       end
 
-      def resolved_target_table
-        @resolved_target_table ||= context[@target_table]
+      def resolve_target_table(context)
+        if @target_table.respond_to?(:call)
+          target_table = @target_table.call(context)
+        else
+          target_table = @target_table
+        end
+        return if target_table.nil?
+        context[target_table]
       end
 
-      def context
-        @options[:context] || Groonga::Context.default
+      def define_options(context, table, name)
+        {
+          :path => path(context, table, name),
+          :with_section => @options[:with_section],
+          :with_weight => @options[:with_weight],
+          :with_position => @options[:with_position],
+        }
+      end
+
+      def path(context, table, name)
+        user_path = @options[:path]
+        return user_path if user_path
+        columns_dir = "#{table.path}.columns"
+        FileUtils.mkdir_p(columns_dir)
+        File.join(columns_dir, name)
       end
     end
 

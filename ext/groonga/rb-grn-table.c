@@ -428,8 +428,14 @@ rb_grn_table_define_index_column (int argc, VALUE *argv, VALUE self)
 	flags |= GRN_OBJ_PERSISTENT;
     }
 
-    if (RVAL2CBOOL(rb_with_section))
+    if (NIL_P(rb_with_section)) {
+	if (TYPE(rb_sources) == T_ARRAY && RARRAY_LEN(rb_sources) > 1) {
+	    flags |= GRN_OBJ_WITH_SECTION;
+	}
+    } else if (RVAL2CBOOL(rb_with_section)) {
 	flags |= GRN_OBJ_WITH_SECTION;
+    }
+
 
     if (RVAL2CBOOL(rb_with_weight))
 	flags |= GRN_OBJ_WITH_WEIGHT;
