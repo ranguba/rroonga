@@ -1212,11 +1212,13 @@ module Groonga
             raise ColumnCreationWithDifferentOptions.new(column, options)
           end
         end
-        table.define_column(@name, type(table_definition.context), options)
+        table.define_column(@name,
+                            normalize_type(table_definition.context),
+                            options)
       end
 
       private
-      def type(context)
+      def normalize_type(context)
         if @type.respond_to?(:call)
           resolved_type = @type.call(context)
         else
@@ -1228,7 +1230,7 @@ module Groonga
       def same_column?(table_definition, column)
         context = table_definition.context
         # TODO: should check column type and other options.
-        column.range == context[type(context)]
+        column.range == context[normalize_type(context)]
       end
 
       def define_options(table_definition, table)
