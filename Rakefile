@@ -224,3 +224,68 @@ project.spec.executables.clear
 # project.lib_files = project.spec.files.grep(%r|^src/lib/|)
 
 task(:release).prerequisites.reject! {|name| name == "clean"}
+
+namespace :win32 do
+  vendor_local = File.join(base_dir, "vendor", "local")
+
+  desc "Build MeCab and groonga and install them into vendor/local/."
+  task(:build => :build_groonga)
+
+  desc "Build MeCab and install it into vendor/local/."
+  task(:build_mecab) do
+    tmp_dir = "tmp/mecab"
+    rm_rf(tmp_dir)
+    mkdir_p(tmp_dir)
+    require 'open-uri'
+    mecab_version = "0.98"
+    mecab_tar_gz = "mecab-#{mecab_version}.tar.gz"
+    mecab_tar_gz_url = "http://sourceforge.net/projects/mecab/files/mecab/#{mecab_version}/#{mecab_tar_gz}/download"
+    Dir.chdir(tmp_dir) do
+      open(mecab_tar_gz_url) do |downloaded_tar_gz|
+        File.open(mecab_tar_gz, "wb") do |tar_gz|
+          tar_gz.print(downloaded_tar_gz.read)
+        end
+      end
+      sh("tar", "xzf", mecab_tar_gz) or exit(false)
+    end
+    Dir.chdir(File.join(tmp_dir, "mecab-#{mecab_version}")) do
+      sh("./configure",
+         "--prefix=#{vendor_local}",
+         "--host=i586-mingw32msvc") or exit(false)
+      sh("make", "-j8") or exit(false)
+      sh("make", "install") or exit(false)
+
+      mecab_files_dir = File.join(vendor_local, "mecab")
+      mkdir_p(mecab_files_dir)
+      files = ["AUTHORS", "BSD", "COPYING", "GPL", "LGPL"]
+      cp(files, mecab_files_dir)
+    end
+  end
+
+  desc "Build groonga and install it into vendor/local/."
+  task(:build_groonga => :build_mecab) do
+    tmp_dir = "tmp/groonga"
+    rm_rf(tmp_dir)
+    mkdir_p(tmp_dir)
+    Dir.chdir(tmp_dir) do
+      sh("git", "clone", "git://github.com/groonga/groonga.git") or exit(false)
+    end
+    Dir.chdir(File.join(tmp_dir, "groonga")) do
+      sh("./autogen.sh") or exit(false)
+      mecab_config = File.join(vendor_local, "bin", "mecab-config")
+      sh("./configure",
+         "--prefix=#{vendor_local}",
+         "--host=i586-mingw32msvc",
+         "--with-mecab-config=#{mecab_config}",
+         "--without-cutter",
+         "--disable-benchmark") or exit(false)
+      sh("make", "-j8") or exit(false)
+      sh("make", "install") or exit(false)
+
+      groonga_files_dir = File.join(vendor_local, "groonga")
+      mkdir_p(groonga_files_dir)
+      files = ["AUTHORS", "COPYING"]
+      cp(files, groonga_files_dir)
+    end
+  end
+end
