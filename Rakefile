@@ -22,7 +22,9 @@ require 'fileutils'
 require 'pathname'
 require 'erb'
 require 'rubygems'
-gem 'rdoc'
+if RUBY_VERSION < "1.9"
+  gem 'rdoc'
+end
 require 'hoe'
 require 'rake/extensiontask'
 
