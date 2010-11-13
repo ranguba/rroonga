@@ -228,6 +228,7 @@ project.spec.executables.clear
 
 task(:release).prerequisites.reject! {|name| name == "clean"}
 
+<<<<<<< HEAD
 namespace :win32 do
   desc "Build MeCab and groonga and install them into vendor/local/."
   task(:build => :build_groonga)
@@ -326,5 +327,14 @@ namespace :win32 do
       files = ["AUTHORS", "COPYING"]
       cp(files, groonga_files_dir)
     end
+  end
+end
+
+desc "generate rroonga.gemspec"
+task :generate_gemspec do
+  spec = project.spec
+  spec_name = File.join(base_dir, project.spec.spec_name)
+  File.open(spec_name, "w") do |spec_file|
+    spec_file.puts(spec.to_ruby)
   end
 end
