@@ -39,9 +39,17 @@ $LOAD_PATH.unshift(groonga_ext_dir)
 $LOAD_PATH.unshift(groonga_lib_dir)
 ENV["RUBYLIB"] = "#{groonga_lib_dir}:#{groonga_ext_dir}:#{ENV['RUBYLIB']}"
 
-def guess_version
-  require 'groonga'
-  Groonga.bindings_version
+def guess_version(groonga_ext_dir)
+  version = {}
+  File.open(File.join(groonga_ext_dir, "rb-grn.h")) do |rb_grn_h|
+    rb_grn_h.each_line do |line|
+      case line
+      when /\A#define RB_GRN_([A-Z]+)_VERSION (\d+)/
+        version[$1.downcase] = $2
+      end
+    end
+  end
+  [version["major"], version["minor"], version["micro"]].join(".")
 end
 
 manifest = File.join(base_dir, "Manifest.txt")
@@ -81,7 +89,7 @@ def cleanup_white_space(entry)
   entry.gsub(/(\A\n+|\n+\z)/, '') + "\n"
 end
 
-ENV["VERSION"] ||= guess_version
+ENV["VERSION"] ||= guess_version(groonga_ext_dir)
 version = ENV["VERSION"]
 project = nil
 Hoe.spec('rroonga') do
