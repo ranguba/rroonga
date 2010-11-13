@@ -115,7 +115,7 @@ Hoe.spec('rroonga') do
     :require_paths => ["lib", "ext/groonga"],
     :extra_rdoc_files => Dir.glob("**/*.rdoc"),
   }
-  project.extra_dev_deps << ['pkg-config', '>= 0']
+  project.extra_deps << ['pkg-config', '>= 0']
   project.readme_file = "README.ja.rdoc"
 
   news_of_current_release = File.read("NEWS.rdoc").split(/^==\s.*$/)[1]
