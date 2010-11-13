@@ -228,7 +228,6 @@ project.spec.executables.clear
 
 task(:release).prerequisites.reject! {|name| name == "clean"}
 
-<<<<<<< HEAD
 namespace :win32 do
   desc "Build MeCab and groonga and install them into vendor/local/."
   task(:build => :build_groonga)
