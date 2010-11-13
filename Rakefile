@@ -141,13 +141,16 @@ ObjectSpace.each_object(Rake::RDocTask) do |rdoc_task|
   rdoc_task.rdoc_files += Dir.glob("**/*.rdoc")
 end
 
-binary_dir = File.join("vendor", "local")
+relative_vendor_dir = "vendor"
+relative_binary_dir = File.join("vendor", "local")
+vendor_dir = File.join(base_dir, relative_vendor_dir)
+binary_dir = File.join(base_dir, relative_binary_dir)
 Rake::ExtensionTask.new("groonga", project.spec) do |ext|
   ext.cross_compile = true
   ext.cross_compiling do |spec|
     if /mingw|mswin/ =~ spec.platform.to_s
       binary_files = []
-      Find.find(binary_dir) do |name|
+      Find.find(relative_binary_dir) do |name|
         next unless File.file?(name)
         next if /\.zip\z/i =~ name
         binary_files << name
@@ -226,8 +229,6 @@ project.spec.executables.clear
 task(:release).prerequisites.reject! {|name| name == "clean"}
 
 namespace :win32 do
-  vendor_local = File.join(base_dir, "vendor", "local")
-
   desc "Build MeCab and groonga and install them into vendor/local/."
   task(:build => :build_groonga)
 
@@ -238,7 +239,8 @@ namespace :win32 do
     mkdir_p(tmp_dir)
     require 'open-uri'
     mecab_version = "0.98"
-    mecab_tar_gz = "mecab-#{mecab_version}.tar.gz"
+    mecab_base = "mecab-#{mecab_version}"
+    mecab_tar_gz = "#{mecab_base}.tar.gz"
     mecab_tar_gz_url = "http://sourceforge.net/projects/mecab/files/mecab/#{mecab_version}/#{mecab_tar_gz}/download"
     Dir.chdir(tmp_dir) do
       open(mecab_tar_gz_url) do |downloaded_tar_gz|
@@ -248,22 +250,59 @@ namespace :win32 do
       end
       sh("tar", "xzf", mecab_tar_gz) or exit(false)
     end
-    Dir.chdir(File.join(tmp_dir, "mecab-#{mecab_version}")) do
+    Dir.chdir(File.join(tmp_dir, mecab_base)) do
       sh("./configure",
-         "--prefix=#{vendor_local}",
+         "--prefix=#{binary_dir}",
          "--host=i586-mingw32msvc") or exit(false)
       sh("make", "-j8") or exit(false)
       sh("make", "install") or exit(false)
 
-      mecab_files_dir = File.join(vendor_local, "mecab")
+      mecab_files_dir = File.join(vendor_dir, "mecab")
       mkdir_p(mecab_files_dir)
       files = ["AUTHORS", "BSD", "COPYING", "GPL", "LGPL"]
       cp(files, mecab_files_dir)
     end
   end
 
+  task(:build_mecab_dict => :build_mecab) do
+    tmp_dir = "tmp/mecab_dict"
+    rm_rf(tmp_dir)
+    mkdir_p(tmp_dir)
+    require 'open-uri'
+    naist_jdic_base = "mecab-naist-jdic-0.6.3-20100801"
+    naist_jdic_tar_gz = "#{naist_jdic_base}.tar.gz"
+    naist_jdic_tar_gz_url = "http://osdn.dl.sourceforge.jp/naist-jdic/48487/#{naist_jdic_tar_gz}"
+    Dir.chdir(tmp_dir) do
+      open(naist_jdic_tar_gz_url) do |downloaded_tar_gz|
+        File.open(naist_jdic_tar_gz, "wb") do |tar_gz|
+          tar_gz.print(downloaded_tar_gz.read)
+        end
+      end
+      sh("tar", "xzf", naist_jdic_tar_gz) or exit(false)
+    end
+    Dir.chdir(File.join(tmp_dir, naist_jdic_base)) do
+      sh("./configure",
+         "--with-dicdir=#{binary_dir}/share/mecab/dic/naist-jdic",
+         "--with-charset=utf-8") or exit(false)
+      sh("make", "-j8") or exit(false)
+      sh("make", "install-data") or exit(false)
+
+      naist_jdic_files_dir = File.join(vendor_dir, "mecab-naist-jdic")
+      mkdir_p(naist_jdic_files_dir)
+      files = ["AUTHORS", "COPYING"]
+      cp(files, naist_jdic_files_dir)
+    end
+    dictionary_dir = '$(rcpath)\..\share/mecab\dic\naist-jdic'
+    mecab_rc_path = File.join(binary_dir, "etc", "mecabrc")
+    mecab_rc_content = File.read(mecab_rc_path)
+    File.open(mecab_rc_path, "w") do |mecab_rc|
+      mecab_rc.print(mecab_rc_content.gsub(/\Adictdir\s*=.+$/,
+                                           "dictdir = #{dictionary_dir}"))
+    end
+  end
+
   desc "Build groonga and install it into vendor/local/."
-  task(:build_groonga => :build_mecab) do
+  task(:build_groonga => :build_mecab_dict) do
     tmp_dir = "tmp/groonga"
     rm_rf(tmp_dir)
     mkdir_p(tmp_dir)
@@ -272,9 +311,9 @@ namespace :win32 do
     end
     Dir.chdir(File.join(tmp_dir, "groonga")) do
       sh("./autogen.sh") or exit(false)
-      mecab_config = File.join(vendor_local, "bin", "mecab-config")
+      mecab_config = File.join(binary_dir, "bin", "mecab-config")
       sh("./configure",
-         "--prefix=#{vendor_local}",
+         "--prefix=#{binary_dir}",
          "--host=i586-mingw32msvc",
          "--with-mecab-config=#{mecab_config}",
          "--without-cutter",
@@ -282,7 +321,7 @@ namespace :win32 do
       sh("make", "-j8") or exit(false)
       sh("make", "install") or exit(false)
 
-      groonga_files_dir = File.join(vendor_local, "groonga")
+      groonga_files_dir = File.join(vendor_dir, "groonga")
       mkdir_p(groonga_files_dir)
       files = ["AUTHORS", "COPYING"]
       cp(files, groonga_files_dir)
