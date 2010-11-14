@@ -189,6 +189,16 @@ class SchemaTest < Test::Unit::TestCase
     assert_equal(context["Time"], context["Posts.last_modified"].range)
   end
 
+  def test_timestamps
+    assert_nil(context["Posts.created_at"])
+    assert_nil(context["Posts.updated_at"])
+    Groonga::Schema.create_table("Posts") do |table|
+      table.timestamps
+    end
+    assert_equal(context["Time"], context["Posts.created_at"].range)
+    assert_equal(context["Time"], context["Posts.updated_at"].range)
+  end
+
   def test_short_text_column
     assert_nil(context["Posts.title"])
     Groonga::Schema.create_table("Posts") do |table|

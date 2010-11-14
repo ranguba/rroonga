@@ -945,6 +945,14 @@ module Groonga
         column(name, "Time", options)
       end
 
+      # 以下と同様:
+      #   table.time("updated_at")
+      #   table.time("created_at")
+      def timestamps(options={})
+        time("created_at", options)
+        time("updated_at", options)
+      end
+
       # 名前が_name_の4Kbyte以下の文字列を格納できるカラムを
       # 作成する。
       #
