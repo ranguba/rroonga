@@ -555,7 +555,7 @@ module Groonga
     #   登録される。
     def create_table(name, options={})
       definition = TableDefinition.new(name, @options.merge(options || {}))
-      yield(definition)
+      yield(definition) if block_given?
       @definitions << definition
     end
 
