@@ -80,12 +80,22 @@ module Groonga
       end
     end
 
+    # 未知のインデックス対象テーブルを指定したときに発生する。
+    class UnknownIndexTargetTable < Error
+      attr_reader :table
+      def initialize(table)
+        @table = table
+        super("unknown index target table: <#{@table.inspect}>")
+      end
+    end
+
     # 未知のインデックス対象を指定したときに発生する。
     class UnknownIndexTarget < Error
-      attr_reader :target_name
-      def initialize(target_name)
-        @target_name = target_name
-        super("unknown index target: <#{@target_name}>")
+      attr_reader :table, :targets
+      def initialize(table, targets)
+        @table = table
+        @targets = targets
+        super("unknown index target: <#{@table.inspect}>: <#{@targets.inspect}>")
       end
     end
 
@@ -765,9 +775,9 @@ module Groonga
         self
       end
 
-      # 名前が_name_のカラムを削除する。
+      # 名前が_name_のカラムを削除します。
       #
-      # _options_に指定可能な値はない(TODO _options_は不要?)。
+      # _options_に指定可能な値はありません(TODO _options_は不要?)。
       #
       def remove_column(name, options={})
         definition = self[name, ColumnRemoveDefinition]
@@ -784,8 +794,8 @@ module Groonga
       #   table.index(target_table, target_column, options={})
       #   table.index(target_table, target_column1, target_column2, ..., options={})
       #
-      # _target_table_の_target_column_を対象とするインデッ
-      # クスカラムを作成する。複数のカラムを指定することもで
+      # _target_table_の_target_column_を対象とするインデック
+      # スカラムを作成します。複数のカラムを指定することもで
       # きます。
       #
       # _target_column_full_name_で指定するときはテーブル名
@@ -826,29 +836,57 @@ module Groonga
       #   ルがN-gram系のトークナイザーを利用している場合は自
       #   動的に有効になる。
       def index(target_table_or_target_column_full_name, *args)
-        if args.size > 2
-          n_args = args.size + 1
-          raise ArgumentError, "wrong number of arguments (#{n_args} for 2 or 3)"
+        key, target_table, target_columns, options =
+          parse_index_argument(target_table_or_target_column_full_name, *args)
+
+        name = options.delete(:name)
+        definition = self[key, IndexColumnDefinition]
+        if definition.nil?
+          definition = IndexColumnDefinition.new(name, options)
+          update_definition(key, IndexColumnDefinition, definition)
         end
-        options = nil
-        options = args.pop if args.last.is_a?(::Hash)
-        if args.empty?
-          target_column_full_name = target_table_or_target_column_full_name
-          if target_column_full_name.is_a?(Groonga::Column)
-            target_column_full_name = target_column_full_name.name
-          end
-          target_table, target_column = target_column_full_name.split(/\./, 2)
-          target_columns = [target_column]
-          key = [target_table, target_columns]
-        else
-          target_table_name = target_table_or_target_column_full_name
-          target_table = lambda do |context|
-            guess_table_name(context, target_table_name)
-          end
-          target_columns = args
-          key = [target_table_name, target_columns]
+        definition.target_table = target_table
+        definition.target_columns = target_columns
+        definition.options.merge!(column_options.merge(options))
+        self
+      end
+
+      # call-seq:
+      #   table.index(target_column_full_name, options={})
+      #   table.index(target_table, target_column, options={})
+      #   table.index(target_table, target_column1, target_column2, ..., options={})
+      #
+      # _target_table_の_target_column_を対象とするインデッ
+      # クスカラムを削除します。
+      #
+      # _target_column_full_name_で指定するときはテーブル名
+      # とカラム名を"."でつなげます。例えば、「Users」テーブ
+      # ルの「name」カラムのインデックスカラムを指定する場合
+      # はこうなります。
+      #
+      #   table.index("Users.name")
+      #
+      # _options_に指定可能な値は以下の通り。
+      #
+      # [+:name+]
+      #   インデックスカラムのカラム名を任意に指定する。
+      def remove_index(target_table_or_target_column_full_name, *args)
+        key, target_table, target_columns, options =
+          parse_index_argument(target_table_or_target_column_full_name, *args)
+
+        name = options.delete(:name)
+        name ||= lambda do |context|
+          IndexColumnDefinition.column_name(context,
+                                            target_table,
+                                            target_columns)
         end
-        define_index(key, target_table, target_columns, options || {})
+        definition = self[key, ColumnRemoveDefinition]
+        if definition.nil?
+          definition = ColumnRemoveDefinition.new(name, options)
+          update_definition(key, ColumnRemoveDefinition, definition)
+        end
+        definition.options.merge!(options)
+        self
       end
 
       # 名前が_name_の32bit符号付き整数のカラムを作成する。
@@ -1049,17 +1087,26 @@ module Groonga
         @options[:persistent].nil? ? true : @options[:persistent]
       end
 
-      def define_index(key, target_table, target_columns, options)
-        name = options.delete(:name)
-        definition = self[key, IndexColumnDefinition]
-        if definition.nil?
-          definition = IndexColumnDefinition.new(name, options)
-          update_definition(key, IndexColumnDefinition, definition)
+      def parse_index_argument(target_table_or_target_column_full_name, *args)
+        options = nil
+        options = args.pop if args.last.is_a?(::Hash)
+        if args.empty?
+          target_column_full_name = target_table_or_target_column_full_name
+          if target_column_full_name.is_a?(Groonga::Column)
+            target_column_full_name = target_column_full_name.name
+          end
+          target_table, target_column = target_column_full_name.split(/\./, 2)
+          target_columns = [target_column]
+          key = [target_table, target_columns]
+        else
+          target_table_name = target_table_or_target_column_full_name
+          target_table = lambda do |context|
+            guess_table_name(context, target_table_name)
+          end
+          target_columns = args
+          key = [target_table_name, target_columns]
         end
-        definition.target_table = target_table
-        definition.target_columns = target_columns
-        definition.options.merge!(column_options.merge(options))
-        self
+        [key, target_table, target_columns, options || {}]
       end
 
       def same_table?(table, options)
@@ -1298,11 +1345,32 @@ module Groonga
       end
 
       def define(table_definition, table)
-        table.column(@name).remove
+        if @name.respond_to?(:call)
+          name = @name.call(table_definition.context)
+        else
+          name = @name
+        end
+        table.column(name).remove
       end
     end
 
     class IndexColumnDefinition # :nodoc:
+      class << self
+        def column_name(context, target_table, target_columns)
+          target_table = resolve(context, target_table)
+          "#{target_table.name}_#{target_columns.join('_')}"
+        end
+
+        def resolve(context, object)
+          return object if object.is_a?(Groonga::Object)
+          if object.respond_to?(:call)
+            object = object.call(context)
+          end
+          return nil if object.nil?
+          context[object]
+        end
+      end
+
       attr_accessor :name, :target_table, :target_columns
       attr_reader :options
 
@@ -1317,11 +1385,16 @@ module Groonga
       def define(table_definition, table)
         context = table_definition.context
         target_table = resolve_target_table(context)
-        target_name = "#{target_table.name}.#{@target_columns.join('_')}"
-        if target_table.nil? or have_nonexistent_column?(target_table)
-          raise UnknownIndexTarget.new(target_name)
+        if target_table.nil?
+          raise UnknownIndexTargetTable.new(@target_table)
         end
-        name = @name || "#{target_table.name}_#{@target_columns.join('_')}"
+        nonexistent_columns = nonexistent_columns(target_table)
+        unless nonexistent_columns.empty?
+          raise UnknownIndexTarget.new(target_table, nonexistent_columns)
+        end
+        name = @name || self.class.column_name(context,
+                                               target_table,
+                                               @target_columns)
         index = table.column(name)
         if index
           return index if same_index?(context, index, target_table)
@@ -1329,7 +1402,8 @@ module Groonga
             index.remove
           else
             options = @options.merge(:type => :index,
-                                     :target_name => target_name)
+                                     :target_table => target_table,
+                                     :target_columns => @target_columns)
             raise ColumnCreationWithDifferentOptions.new(index, options)
           end
         end
@@ -1357,20 +1431,14 @@ module Groonga
         source_names.sort == @target_columns.sort
       end
 
-      def have_nonexistent_column?(target_table)
-        @target_columns.any? do |column|
-          column != "_key" and !target_table.have_column?(column)
+      def nonexistent_columns(target_table)
+        @target_columns.reject do |column|
+          column == "_key" or target_table.have_column?(column)
         end
       end
 
       def resolve_target_table(context)
-        if @target_table.respond_to?(:call)
-          target_table = @target_table.call(context)
-        else
-          target_table = @target_table
-        end
-        return if target_table.nil?
-        context[target_table]
+        self.class.resolve(context, @target_table)
       end
 
       def define_options(context, table, name)

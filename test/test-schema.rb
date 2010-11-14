@@ -367,6 +367,21 @@ class SchemaTest < Test::Unit::TestCase
     end
   end
 
+  def test_remove_index
+    Groonga::Schema.create_table("Posts") do |table|
+      table.long_text :content
+    end
+    Groonga::Schema.create_table("Terms") do |table|
+      table.index "Posts.content"
+    end
+    assert_equal([context["Posts.content"]],
+                 context["Terms.Posts_content"].sources)
+    Groonga::Schema.change_table("Terms") do |table|
+      table.remove_index("Posts.content")
+    end
+    assert_nil(context["Terms.Posts_content"])
+  end
+
   def test_reference_guess
     Groonga::Schema.define do |schema|
       schema.create_table("Items", :type => :hash) do |table|
