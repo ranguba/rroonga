@@ -256,8 +256,8 @@ namespace :win32 do
       sh("./configure",
          "--prefix=#{binary_dir}",
          "--host=i586-mingw32msvc") or exit(false)
-      sh("make", "-j8") or exit(false)
-      sh("make", "install") or exit(false)
+      sh("env", "GREP_OPTIONS=--text", "make", "-j8") or exit(false)
+      sh("env", "GREP_OPTIONS=--text", "make", "install") or exit(false)
 
       mecab_files_dir = File.join(vendor_dir, "mecab")
       mkdir_p(mecab_files_dir)
@@ -320,8 +320,8 @@ namespace :win32 do
          "--with-mecab-config=#{mecab_config}",
          "--without-cutter",
          "--disable-benchmark") or exit(false)
-      sh("make", "-j8") or exit(false)
-      sh("make", "install") or exit(false)
+      sh("env", "GREP_OPTIONS=--text", "make", "-j8") or exit(false)
+      sh("env", "GREP_OPTIONS=--text", "make", "install") or exit(false)
 
       groonga_files_dir = File.join(vendor_dir, "groonga")
       mkdir_p(groonga_files_dir)
