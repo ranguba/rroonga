@@ -304,7 +304,7 @@ namespace :win32 do
   end
 
   desc "Build groonga and install it into vendor/local/."
-  task(:build_groonga => :build_mecab_dict) do
+  task(:build_groonga) do
     tmp_dir = "tmp/groonga"
     rm_rf(tmp_dir)
     mkdir_p(tmp_dir)
@@ -314,12 +314,17 @@ namespace :win32 do
     Dir.chdir(File.join(tmp_dir, "groonga")) do
       sh("./autogen.sh") or exit(false)
       mecab_config = File.join(binary_dir, "bin", "mecab-config")
-      sh("./configure",
-         "--prefix=#{binary_dir}",
-         "--host=i586-mingw32msvc",
-         "--with-mecab-config=#{mecab_config}",
-         "--without-cutter",
-         "--disable-benchmark") or exit(false)
+      args = ["./configure",
+              "--prefix=#{binary_dir}",
+              "--host=i586-mingw32msvc",
+              "--without-cutter",
+              "--disable-benchmark"]
+      if File.exist?(mecab_config)
+        args << "--with-mecab-config=#{mecab_config}"
+      else
+        args << "--without-mecab"
+      end
+      sh(*args) or exit(false)
       sh("env", "GREP_OPTIONS=--text", "nice", "make", "-j8") or exit(false)
       sh("env", "GREP_OPTIONS=--text", "make", "install") or exit(false)
 
