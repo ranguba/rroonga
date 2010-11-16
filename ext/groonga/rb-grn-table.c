@@ -1247,7 +1247,11 @@ rb_grn_table_group (int argc, VALUE *argv, VALUE self)
 VALUE
 rb_grn_table_array_reference (VALUE self, VALUE rb_id)
 {
-    return rb_grn_record_new_raw(self, rb_id, Qnil);
+    if (FIXNUM_P(rb_id)) {
+	return rb_grn_record_new_raw(self, rb_id, Qnil);
+    } else {
+	return Qnil;
+    }
 }
 
 VALUE
