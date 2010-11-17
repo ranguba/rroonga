@@ -255,7 +255,7 @@ namespace :win32 do
     Dir.chdir(File.join(tmp_dir, mecab_base)) do
       sh("./configure",
          "--prefix=#{binary_dir}",
-         "--host=i586-mingw32msvc") or exit(false)
+         "--host=amd64-mingw32msvc") or exit(false)
       sh("env", "GREP_OPTIONS=--text", "nice", "make", "-j8") or exit(false)
       sh("env", "GREP_OPTIONS=--text", "make", "install") or exit(false)
 
@@ -316,7 +316,7 @@ namespace :win32 do
       mecab_config = File.join(binary_dir, "bin", "mecab-config")
       args = ["./configure",
               "--prefix=#{binary_dir}",
-              "--host=i586-mingw32msvc",
+              "--host=amd64-mingw32msvc",
               "--without-cutter",
               "--disable-benchmark"]
       if File.exist?(mecab_config)
