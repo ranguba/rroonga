@@ -330,6 +330,14 @@ module Groonga
       @table.locked?(options.merge(:id => @id))
     end
 
+    # call-seq:
+    #   record.valid_id? -> true/false
+    #
+    # レコードが持つIDが有効なIDであれば+true+を返す。
+    def valid_id?
+      @table.exist?(@id)
+    end
+
     def methods(include_inherited=true) # :nodoc:
       _methods = super
       return _methods unless include_inherited
