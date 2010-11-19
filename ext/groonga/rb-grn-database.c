@@ -1,6 +1,6 @@
 /* -*- c-file-style: "ruby" -*- */
 /*
-  Copyright (C) 2009  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2010  Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -441,6 +441,27 @@ rb_grn_database_is_locked (VALUE self)
     return CBOOL2RVAL(grn_obj_is_locked(context, database));
 }
 
+/*
+ * Document-method: touch
+ *
+ * call-seq:
+ *   database.touch
+ *
+ * _database_の最終更新時刻を現在時刻にする。
+ */
+static VALUE
+rb_grn_database_touch (VALUE self)
+{
+    grn_ctx *context;
+    grn_obj *database;
+
+    rb_grn_database_deconstruct(SELF(self), &database, &context,
+				NULL, NULL, NULL, NULL);
+
+    grn_db_touch(context, database);
+    return Qnil;
+}
+
 void
 rb_grn_init_database (VALUE mGrn)
 {
@@ -469,4 +490,6 @@ rb_grn_init_database (VALUE mGrn)
     rb_define_method(rb_cGrnDatabase, "clear_lock",
 		     rb_grn_database_clear_lock, 0);
     rb_define_method(rb_cGrnDatabase, "locked?", rb_grn_database_is_locked, 0);
+
+    rb_define_method(rb_cGrnDatabase, "touch", rb_grn_database_touch, 0);
 }

@@ -1,4 +1,4 @@
-# Copyright (C) 2009  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2010  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -109,5 +109,12 @@ class DatabaseTest < Test::Unit::TestCase
     assert_predicate(database, :locked?)
     database.clear_lock
     assert_not_predicate(database, :locked?)
+  end
+
+  def test_touch
+    database = Groonga::Database.create
+    assert_nothing_raised do
+      database.touch
+    end
   end
 end
