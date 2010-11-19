@@ -382,6 +382,52 @@ rb_grn_context_set_encoding (VALUE self, VALUE rb_encoding)
 
 /*
  * call-seq:
+ *   context.support_zlib?
+ *
+ * groongaがZlibサポート付きでビルドされていれば+true+、そう
+ * でなければ+false+を返す。
+ */
+static VALUE
+rb_grn_context_support_zlib_p (VALUE self)
+{
+    VALUE rb_support_p;
+    grn_ctx *context;
+    grn_obj support_p;
+
+    context = SELF(self);
+    GRN_BOOL_INIT(&support_p, 0);
+    grn_obj_get_info(context, NULL, GRN_INFO_SUPPORT_ZLIB, &support_p);
+    rb_support_p = CBOOL2RVAL(GRN_BOOL_VALUE(&support_p));
+    GRN_OBJ_FIN(context, &support_p);
+
+    return rb_support_p;
+}
+
+/*
+ * call-seq:
+ *   context.support_lzo?
+ *
+ * groongaがLZOサポート付きでビルドされていれば+true+、そう
+ * でなければ+false+を返す。
+ */
+static VALUE
+rb_grn_context_support_lzo_p (VALUE self)
+{
+    VALUE rb_support_p;
+    grn_ctx *context;
+    grn_obj support_p;
+
+    context = SELF(self);
+    GRN_BOOL_INIT(&support_p, 0);
+    grn_obj_get_info(context, NULL, GRN_INFO_SUPPORT_LZO, &support_p);
+    rb_support_p = CBOOL2RVAL(GRN_BOOL_VALUE(&support_p));
+    GRN_OBJ_FIN(context, &support_p);
+
+    return rb_support_p;
+}
+
+/*
+ * call-seq:
  *   context.database -> Groonga::Database
  *
  * コンテキストが使うデータベースを返す。
@@ -638,6 +684,11 @@ rb_grn_init_context (VALUE mGrn)
 
     rb_define_method(cGrnContext, "encoding", rb_grn_context_get_encoding, 0);
     rb_define_method(cGrnContext, "encoding=", rb_grn_context_set_encoding, 1);
+
+    rb_define_method(cGrnContext, "support_zlib?",
+		     rb_grn_context_support_zlib_p, 0);
+    rb_define_method(cGrnContext, "support_lzo?",
+		     rb_grn_context_support_lzo_p, 0);
 
     rb_define_method(cGrnContext, "database", rb_grn_context_get_database, 0);
 

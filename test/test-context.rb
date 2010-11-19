@@ -70,4 +70,12 @@ class ContextTest < Test::Unit::TestCase
     Groonga::Database.create
     assert_equal("ShortText", Groonga["ShortText"].name)
   end
+
+  def test_support_zlib?
+    assert_boolean(Groonga::Context.default.support_zlib?)
+  end
+
+  def test_support_lzo?
+    assert_boolean(Groonga::Context.default.support_lzo?)
+  end
 end
