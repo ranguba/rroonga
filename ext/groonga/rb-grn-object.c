@@ -829,7 +829,9 @@ rb_grn_object_inspect_content (VALUE self, VALUE inspected)
     object = rb_grn_object->object;
 
     rb_str_cat2(inspected, " ");
-    if (object) {
+    if (rb_grn_exited) {
+	rb_str_cat2(inspected, "(finished)");
+    } else if (object) {
 	rb_grn_object_inspect_object_content(inspected, context, object);
     } else {
 	rb_str_cat2(inspected, "(closed)");
