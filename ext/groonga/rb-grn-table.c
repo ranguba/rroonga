@@ -1985,6 +1985,29 @@ rb_grn_table_support_sub_records_p (VALUE self)
     return CBOOL2RVAL(table->header.flags & GRN_OBJ_WITH_SUBREC);
 }
 
+/*
+ * call-seq:
+ *   table.exist?(id) -> true/false
+ *
+ * _table_に_id_で指定したIDのレコードが存在する場合は+true+、
+ * 存在しない場合は+false+を返す。
+ *
+ * 注意: 実行には相応のコストがかかるのであまり頻繁に呼ばな
+ * いようにして下さい。
+ */
+static VALUE
+rb_grn_table_exist_p (VALUE self, VALUE id)
+{
+    grn_ctx *context;
+    grn_obj *table;
+
+    rb_grn_table_deconstruct(SELF(self), &table, &context,
+			     NULL, NULL,
+			     NULL, NULL, NULL,
+			     NULL);
+    return CBOOL2RVAL(grn_table_at(context, table, NUM2UINT(id)));
+}
+
 void
 rb_grn_init_table (VALUE mGrn)
 {
@@ -2056,6 +2079,8 @@ rb_grn_init_table (VALUE mGrn)
 		     rb_grn_table_support_key_p, 0);
     rb_define_method(rb_cGrnTable, "support_sub_records?",
 		     rb_grn_table_support_sub_records_p, 0);
+
+    rb_define_method(rb_cGrnTable, "exist?", rb_grn_table_exist_p, 1);
 
     rb_grn_init_table_key_support(mGrn);
     rb_grn_init_array(mGrn);

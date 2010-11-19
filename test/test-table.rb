@@ -594,6 +594,13 @@ class TableTest < Test::Unit::TestCase
     assert_false(users.have_column?("description"), "description")
   end
 
+  def test_exist?
+    users = Groonga::Hash.create(:name => "Users")
+    morita = users.add("morita")
+    assert_true(users.exist?(morita.id))
+    assert_false(users.exist?(morita.id + 1))
+  end
+
   private
   def create_bookmarks
     bookmarks = Groonga::Array.create(:name => "Bookmarks")
