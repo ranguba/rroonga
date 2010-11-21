@@ -56,19 +56,27 @@ rb_grn_context_from_ruby_object (VALUE object)
     return rb_grn_context->context;
 }
 
-void
-rb_grn_context_fin (grn_ctx *context)
+static void
+rb_grn_context_unlink_database (grn_ctx *context)
 {
     grn_obj *database;
-
-    if (context->stat == GRN_CTX_FIN)
-	return;
 
     database = grn_ctx_db(context);
     debug("context:database: %p:%p\n", context, database);
     if (database && database->header.type == GRN_DB) {
+	debug("context:database: %p:%p: unlink\n", context, database);
 	grn_obj_unlink(context, database);
     }
+    debug("context:database: %p:%p: done\n", context, database);
+}
+
+void
+rb_grn_context_fin (grn_ctx *context)
+{
+    if (context->stat == GRN_CTX_FIN)
+	return;
+
+    rb_grn_context_unlink_database(context);
     grn_ctx_fin(context);
 }
 
