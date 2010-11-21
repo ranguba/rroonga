@@ -26,6 +26,7 @@ finish_groonga (VALUE data)
     debug("finish\n");
     grn_fin();
     rb_grn_exited = RB_GRN_TRUE;
+    debug("finish: done\n");
 }
 
 static void
