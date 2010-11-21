@@ -100,6 +100,35 @@ rb_grn_context_alloc (VALUE klass)
     return Data_Wrap_Struct(klass, NULL, rb_grn_context_free, NULL);
 }
 
+#ifdef GRN_CTX_FINALIZER
+static grn_obj *
+rb_grn_context_finalizer (grn_ctx *context, int n_args, grn_obj **grn_objects,
+			  grn_user_data *user_data)
+{
+    RbGrnContext *rb_grn_context;
+
+    if (rb_grn_exited)
+	return NULL;
+
+    rb_grn_context = user_data->ptr;
+
+    GRN_CTX_USER_DATA(context)->ptr = NULL;
+    GRN_CTX_FINALIZER(context) = NULL;
+
+    debug("context-finalize: %p:%p:%p\n",
+	  context, rb_grn_context, rb_grn_context->context);
+
+    rb_grn_context->context = NULL;
+
+    rb_grn_context_unlink_database(context);
+
+    debug("context-finalize: %p:%p:%p: done\n",
+	  context, rb_grn_context, rb_grn_context->context);
+
+    return NULL;
+}
+#endif
+
 VALUE
 rb_grn_context_to_exception (grn_ctx *context, VALUE related_object)
 {
@@ -309,6 +338,9 @@ rb_grn_context_initialize (int argc, VALUE *argv, VALUE self)
     rb_grn_context_check(context, self);
 
     GRN_CTX_USER_DATA(context)->ptr = rb_grn_context;
+#ifdef GRN_CTX_FINALIZER
+    GRN_CTX_FINALIZER(context) = rb_grn_context_finalizer;
+#endif
 
     if (!NIL_P(rb_encoding)) {
 	grn_encoding encoding;
