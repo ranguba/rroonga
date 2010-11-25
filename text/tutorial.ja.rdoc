@@ -55,11 +55,15 @@ groongaには以下の3種類のテーブルがあります。
 ここではハッシュテーブルを利用して、<tt>Items</tt>という名前のテー
 ブルを作成します。キーは文字列とします。
 
-  >> items = Groonga::Hash.create(:name => "Items", :key_type => "ShortText")
-  => #<Groonga::Hash ...>
-
+  >> Groonga::Schema.create_table("Items", :type => :hash)
+  => [...]
 
 これで<tt>Items</tt>という名前のテーブルが作成できました。
+
+定義したテーブルはGroonga.[]で参照できます。
+
+  >> items = Groonga["Items"]
+  => #<Groonga::Hash ...>
 
 テーブルはRubyのHashのように扱えます。
 
@@ -67,7 +71,7 @@ groongaには以下の3種類のテーブルがあります。
 の件数を取得できます。
 
   >> items.size
-  0
+  => 0
 
 == レコードを追加する
 
@@ -75,7 +79,7 @@ groongaには以下の3種類のテーブルがあります。
 
   >> items.add("http://ja.wikipedia.org/wiki/Ruby")
   => #<Groonga::Record ...>
-  >> items.add("http://www.ruby-lang.org/")
+  >> items.add("http://www.ruby-lang.org/ja/")
   => #<Groonga::Record ...>
 
 件数を確認すると確かに2件増えています。
@@ -85,7 +89,7 @@ groongaには以下の3種類のテーブルがあります。
 
 主キーを指定してレコードを取り出す時には以下のようにします。
 
-  >> items.find("http://ja.wikipedia.org/wiki/Ruby")
+  >> items["http://ja.wikipedia.org/wiki/Ruby"]
   => #<Groonga::Record ...>
 
 == 全文検索を行う
@@ -93,30 +97,35 @@ groongaには以下の3種類のテーブルがあります。
 各itemのタイトル文字列を登録して、全文検索できるようにしてみ
 ましょう。
 
-まず<tt>Items</tt>テーブルに+title+という名前のカラムを追加します。
+まず<tt>Items</tt>テーブルに+title+という名前のカラムを追加し
+ます。ここでは、<tt>Text</tt>型のデータを持つカラムとして定義
+します。
 
-  >> title_column = items.define_column("title", "Text")
-  => #<Groonga::VarSizeColumn ...>
+  >> Groonga::Schema.change_table("Items") do |table|
+  ?>     table.text("title")
+  >>   end
+  => [...]
 
-2番目の引数は、追加するカラムのデータ型を示しています。
-<tt><int></tt>、<tt>Text</tt>、<tt><longtext></tt>等の型が基本型として用意されて
-います。
+定義したカラムは「#{テーブル名}.#{カラム名}」という名前になります。
+テーブルと同じようにGroonga.[]で参照できます。
 
-全文検索するためには、文字列を分解して得られる各単語を格納す
-るためのテーブルを別途しなければなりません。ここではTermsと
-いう名前でテーブルを定義します。
+  >> title_column = Groonga["Items.title"]
+  => #<Groonga::VariableSizeColumn ...>
 
-  >> terms = Groonga::Hash.create(:name => "Terms",
-                                  :key_type => "ShortText",
-                                  :default_tokenizer => "TokenBigram")
-  => #<Groonga::Hash ...>
+全文検索するために、文字列を分解して得られる各単語を格納する
+ためのテーブルを別途用意します。ここではTermsという名前でテー
+ブルを定義します。
+
+  >> Groonga::Schema.create_table("Terms",
+  ?>                              :type => :patricia_trie,
+  ?>                              :default_tokenizer => "TokenBigram")
 
 ここでは、トークナイザとして<tt>:default_tokenzier =>
-"TokenBigram"</tt> を指定しています。トークナイザとは文字
-列を単語に分解するオブジェクトのことです。デフォルトではトー
-クナイザは指定されていません。全文検索を利用するためにはトー
-クナイザを指定する必要があるので、ここではN-gramの一種である
-バイグラムを指定しています。
+"TokenBigram"</tt> を指定しています。トークナイザとは文字列を
+単語に分解するオブジェクトのことです。デフォルトではトークナ
+イザは指定されていません。全文検索を利用するためにはトークナ
+イザを指定する必要があるので、ここではN-gramの一種であるバイ
+グラムを指定しています。
 
 N-gramを利用した全文検索では、分解したN文字とその出現位置を利
 用して全文検索を行います。N-gramのNは文字列を何文字毎に分解す
@@ -126,9 +135,10 @@ N-gramを利用した全文検索では、分解したN文字とその出現位�
 単語格納用テーブルの準備ができたので、<tt>Items</tt>テーブ
 ルの+title+カラムに対するインデックスを定義します。
 
-  >> title_index_column = terms.define_index_column("item_title", items,
-						    :source => "Items.title")
-  => #<Groonga::IndexColumn ...>
+  >> Groonga::Schema.change_table("Terms") do |table|
+  ?>     table.index("Items.title")
+  >>   end
+  => [...]
 
 少し違和感を感じるかも知れませんが、<tt>Items</tt>テーブル
 のカラムに対するインデックスは、<tt>Terms</tt>テーブルのカ
@@ -148,22 +158,31 @@ N-gramを利用した全文検索では、分解したN文字とその出現位�
 
 先ほど登録した各レコードの+title+カラムに値をセットします。
 
-  >> items.find("http://ja.wikipedia.org/wiki/Ruby")["title"] = "Ruby"
+  >> items["http://ja.wikipedia.org/wiki/Ruby"].title = "Ruby"
   => "Ruby"
-  >> items.find("http://www.ruby-lang.org/")["title"] = "オブジェクトスクリプト言語Ruby"
+  >> items["http://www.ruby-lang.org/ja/"].title = "オブジェクトスクリプト言語Ruby"
   "オブジェクトスクリプト言語Ruby"
 
 以下のようにして検索することができます。
 
-  >> title_index_column.search("Ruby").collect {|record| record.key.key}
-  ["http://ja.wikipedia.org/wiki/Ruby", "http://www.ruby-lang.org/"]
+  >> ruby_items = items.select {|record| record.title =~ "Ruby"}
+  => #<Groonga::Hash ..., size: <2>>
 
 検索結果はGroonga::Hashで返されます。ハッシュのキーに見つかっ
-た<tt>Items</tt>のレコードが入っています。上の例では
-+record.key+で<tt>Items</tt>のレコードを取得して、さらにそ
-のキーを指定して（+record.key.key+）で<tt>Items</tt>のキー
-を返しています。
+た<tt>Items</tt>のレコードが入っています。
 
+  >> ruby_items.collect {|record| record.key.key}
+  => ["http://ja.wikipedia.org/wiki/Ruby", "http://www.ruby-lang.org/ja/"]
+
+上の例では+record.key+で<tt>Items</tt>のレコードを取得して、
+さらにそのキーを指定して（+record.key.key+）で<tt>Items</tt>
+のキーを返しています。
+
++record["_key"]+でアクセスすると自動的に参照しているレコード
+を辿っていき、参照先のキーにアクセスできます。
+
+  >> ruby_items.collect {|record| record["_key"]}
+  => ["http://ja.wikipedia.org/wiki/Ruby", "http://www.ruby-lang.org/ja/"]
 
 == マルチユーザ向けのブックマークアプリケーション
 
@@ -178,37 +197,35 @@ http://qwik.jp/senna/senna2.files/rect4605.png
 
 まず、<tt>Users</tt>テーブルを追加します。
 
-  >> users = Groonga::Hash.create(:name => "Users",
-                                  :key_type => "ShortText")
-  => #<Groonga::Hash ...>
-  >> users.define_column("name", "Text")
-  => #<Groonga::VarSizeColumn ...>
-
+  >> Groonga::Schema.create_table("Users", :type => :hash) do |table|
+  ?>     table.text("name")
+  >>   end
+  => [...]
 
 次に、<tt>Comments</tt>テーブルを追加します。
 
-  >> comments = Groonga::Array.create(:name => "Comments")
-  => #<Groonga::Array ...>
-  >> comments.define_column("item", items)
-  => #<Groonga::FixSizeColumn ..>
-  >> comments.define_column("author", users)
-  => #<Groonga::FixSizeColumn ..>
-  >> comments.define_column("content", "Text")
-  => #<Groonga::VarSizeColumn ..>
-  >> comments.define_column("issued", "Time")
-  => #<Groonga::FixSizeColumn ..>
+  >> Groonga::Schema.create_table("Comments") do |table|
+  ?>     table.reference("item")
+  >>   table.reference("author", "Users")
+  >>   table.text("content")
+  >>   table.time("issued")
+  >>   end
+  => [...]
 
 <tt>Comments</tt>テーブルの+content+カラムを全文検索できる
 ようにインデックスを定義します。
 
-  >> terms.define_index_column("comment_content", comments,
-                               :source => "Comments.content")
-  => #<Groonga::IndexColumn ...>
+  >> Groonga::Schema.change_table("Terms") do |table|
+  ?>     table.index("Comments.content")
+  >>   end
+  => [...]
 
 これでテーブルが定義できました。
 
 続いてユーザを何人か追加します。
 
+  >> users = Groonga["Users"]
+  => #<Groonga::Hash ...>
   >> users.add("moritan", :name => "モリタン")
   => #<Groonga::Record ...>
   >> users.add("taporobo", :name => "タポロボ")
@@ -217,28 +234,32 @@ http://qwik.jp/senna/senna2.files/rect4605.png
 次に、実際にユーザがブックマークを貼る時の処理を実行してみま
 しょう。
 
-ユーザ+moritan+が、はてなダイアリーのとあるページをブックマーク
-したと想定します。
+ユーザ+moritan+が、Ruby関連のとあるページをブックマークしたと
+想定します。
 
 まず対象のページが<tt>Items</tt>テーブルに登録済かどうか調
 べます。
 
-  >> items.find("http://d.hatena.ne.jp/brazil/20050829/1125321936")
-  => nil
+  >> items.has_key?("http://www.rubyist.net/~matz/")
+  => false
 
 未登録なのでまず当該ページを<tt>Items</tt>に登録します。
 
-  >> items.add("http://d.hatena.ne.jp/brazil/20050829/1125321936",
-               :title => "[翻訳]JavaScript: 世界で最も誤解されたプログラミング言語")
+  >> items.add("http://www.rubyist.net/~matz/",
+  ?>           :title => "Matzにっき")
   => #<Groonga::Record ...>
 
 次に、登録したitemを+item+カラムの値に指定して
 <tt>Comments</tt>にレコードを登録します。
 
-  >> comments.add(:item => "http://d.hatena.ne.jp/brazil/20050829/1125321936",
-                  :author => "moritan",
-                  :content => "JavaScript LISP",
-                  :issued => 1187430026)
+  >> require "time"
+  => true
+  >> comments = Groonga["Comments"]
+  => #<Groonga::Array ...>
+  >> comments.add(:item => "http://www.rubyist.net/~matz/",
+  ?>              :author => "moritan",
+  ?>              :content => "Ruby Matz",
+  ?>              :issued => Time.parse("2010-11-20T18:01:22+09:00"))
   => #<Groonga::Record ...>
 
 == メソッド化
@@ -246,14 +267,17 @@ http://qwik.jp/senna/senna2.files/rect4605.png
 上記の一連の手続きをメソッドにまとめてみます。
 
   >> @items = items
+  => #<Groonga::Hash ...>
   >> @comments = comments
+  => #<Groonga::Array ...>
   >> def add_bookmark(url, title, author, content, issued)
-  >>   item = @items.find(url) || @items.add(url, :title => title)
+  >>   item = @items[url] || @items.add(url, :title => title)
   >>   @comments.add(:item => item,
-  >>                 :author => author,
-  >>                 :content => content,
-  >>                 :issued => issued)
-  >> end
+  ?>                 :author => author,
+  ?>                 :content => content,
+  ?>                 :issued => issued)
+  >>   end
+  => nil
 
 +itmes+と+comments+をインスタンス変数に代入しているのはメソッ
 ド内からでも見えるようにするためです。
@@ -267,15 +291,18 @@ http://qwik.jp/senna/senna2.files/rect4605.png
 作成したメソッドを呼び出していくつかブックマークを登録してみ
 ましょう。
 
-  >> add_bookmark("http://practical-scheme.net/docs/cont-j.html",
-                  "なんでも継続", "moritan", "継続 LISP Scheme", 1187568692)
+  >> add_bookmark("http://jp.rubyist.net/magazine/",
+  ?>              "Rubyist Magazine - るびま", "moritan", "Ruby 記事",
+  ?>              Time.parse("2010-10-07T14:18:28+09:00"))
   => #<Groonga::Record ...>
-  >> add_bookmark("http://d.hatena.ne.jp/higepon/20070815/1187192864",
-                  "末尾再帰", "taporobo", "末尾再帰 Scheme LISP", 1187568793)
+  >> add_bookmark("http://groonga.rubyforge.org/",
+  ?>              "Rubyでgroonga使って全文検索 - ラングバ", "taporobo",
+  ?>              "Ruby groonga 全文検索",
+  ?>              Time.parse("2010-11-11T12:39:59+09:00"))
   => #<Groonga::Record ...>
-  >> add_bookmark("http://practical-scheme.net/docs/cont-j.html",
-                  "なんでも継続", "taporobo", "トランポリン LISP continuation",
-                  1187568692)
+  >> add_bookmark("http://www.rubyist.net/~matz/",
+  ?>              "Matz日記", "taporobo", "Ruby 日記",
+  ?>              Time.parse("2010-07-28T20:46:23+09:00"))
   => #<Groonga::Record ...>
 
 == 全文検索その2
@@ -283,25 +310,27 @@ http://qwik.jp/senna/senna2.files/rect4605.png
 登録したレコードに対して全文検索を実行してみます。
 
   >> records = comments.select do |record|
-  >>   record["content"] =~ "LISP"
-  >> end
+  ?>     record["content"] =~ "Ruby"
+  >>   end
+  => #<Groonga::Hash ...>
   >> records.each do |record|
-  >>   record = record.key
+  ?>     record = record.key
   >>   p [record.id,
-  >>      record[".issued"],
-  >>      record[".item.title"],
-  >>      record[".author.name"],
-  >>      record[".content"]]
-  >> end
-  [1, Sat Aug 18 18:40:26 +0900 2007, "[翻訳]JavaScript: 世界で最も誤解されたプログラミング言語", "モリタン", "JavaScript LISP"]
-  [2, Mon Aug 20 09:11:32 +0900 2007, "なんでも継続", "モリタン", "継続 LISP Scheme"]
-  [3, Mon Aug 20 09:13:13 +0900 2007, "末尾再帰", "タポロボ", "末尾再帰 Scheme LISP"]
-  [4, Mon Aug 20 09:11:32 +0900 2007, "なんでも継続", "タポロボ", "トランポリン LISP continuation"]
+  ?>       record.issued,
+  ?>       record.item.title,
+  ?>       record.author.name,
+  ?>       record.content]
+  >>   end
+  [1, Sat Nov 20 18:01:22 +0900 2010, "Matzにっき", "モリタン", "Ruby Matz"]
+  [2, Thu Oct 07 14:18:28 +0900 2010, "Rubyist Magazine - るびま", "モリタン", "Ruby 記事"]
+  [3, Thu Nov 11 12:39:59 +0900 2010, "Rubyでgroonga使って全文検索 - ラングバ", "タポロボ", "Ruby groonga 全文検索検"]
+  [4, Wed Jul 28 20:46:23 +0900 2010, "Matzにっき", "タポロボ", "Ruby 日記"]
 
-カラムへのアクセスは、カラム名を+.+で繋いで複合データ型の要素
-を再帰的に辿ることができます。（同様の出力を普通のRDBで実現す
-るためには、<tt>Items</tt>テーブル、<tt>Comments</tt>テー
-ブル、<tt>Users</tt>テーブルのJOIN操作が必要になります。）
+カラム名と同じメソッドでカラムへのアクセスできます。複合デー
+タ型の要素も再帰的に辿ることができます。（同様の出力を普通の
+RDBで実現するためには、<tt>Items</tt>テーブル、
+<tt>Comments</tt>テーブル、<tt>Users</tt>テーブルのJOIN操作が
+必要になります。）
 
 上の式の中で、肝心の検索処理は、第一引数の式を評価する時点で
 完了していて、レコードセットオブジェクトとしてメモリに蓄積さ
@@ -314,39 +343,39 @@ http://qwik.jp/senna/senna2.files/rect4605.png
 
 以下は、日付で降順にソートしてから出力した例です。
 
-  >> records.sort([{:key => ".issued", :order => "descending"}]).each do |record|
-  >>   record = record.key
+  >> records.sort([{:key => "issued", :order => "descending"}]).each do |record|
+  ?>     record = record.key
   >>   p [record.id,
-  >>      record[".issued"],
-  >>      record[".item.title"],
-  >>      record[".author.name"],
-  >>      record[".content"]]
-  >> end
-  [3, Mon Aug 20 09:13:13 +0900 2007, "末尾再帰", "タポロボ", "末尾再帰 Scheme LISP"]
-  [2, Mon Aug 20 09:11:32 +0900 2007, "なんでも継続", "モリタン", "継続 LISP Scheme"]
-  [4, Mon Aug 20 09:11:32 +0900 2007, "なんでも継続", "タポロボ", "トランポリン LISP continuation"]
-  [1, Sat Aug 18 18:40:26 +0900 2007, "[翻訳]JavaScript: 世界で最も誤解されたプログラミング言語", "モリタン", "JavaScript LISP"]
+  ?>       record.issued,
+  ?>       record.item.title,
+  ?>       record.author.name,
+  ?>       record.content]
+  >>   end
+  [1, Sat Nov 20 18:01:22 +0900 2010, "Matzにっき", "モリタン", "Ruby Matz"]
+  [3, Thu Nov 11 12:39:59 +0900 2010, "Rubyでgroonga使って全文検索 - ラングバ", "タポロボ", "Ruby groonga 全文検索"]
+  [2, Thu Oct 07 14:18:28 +0900 2010, "Rubyist Magazine - るびま", "モリタン", "Ruby 記事"]
+  [4, Wed Jul 28 20:46:23 +0900 2010, "Matzにっき, "タポロボ", "Ruby 日記"]
+  => [...]
 
 同じitemが何度も出てくると検索結果が見にくいので、item毎にグ
 ループ化してみます。
 
   >> records.group("item").each do |record|
-  >>   item = record.key
+  ?>     item = record.key
   >>   p [record.n_sub_records,
-  >>      item.key,
-  >>      item[".title"]]
-  >> end
-  [1, "http://d.hatena.ne.jp/brazil/20050829/1125321936", "[翻訳]JavaScript: 世界で最も誤解されたプログラミング言語"]
-  [2, "http://practical-scheme.net/docs/cont-j.html", "なんでも継続"]
-  [1, "http://d.hatena.ne.jp/higepon/20070815/1187192864", "末尾再帰"]
+  ?>       item.key,
+  ?>       item.title]
+  >>   end
+  [2, "http://www.rubyist.net/~matz/", "Matzにっき"]
+  [1, "http://jp.rubyist.net/magazine/", "Rubyist Magazine - るびま"]
+  [1, "http://groonga.rubyforge.org/", "Rubyでgroonga使って全文検索 - ラングバ"]
+  => nil
 
 +n_sub_records+というのはグループ化した単位に含まれるレコード
 の件数を示します。SQLで言えば、GROUP BY句を含むクエリのcount
 関数のような働きです。
 
 == 少し複雑な検索
-
-↓はまだ動かない！！！
 
 さらに実用的な検索について考えてみましょう。
 
@@ -373,22 +402,28 @@ http://qwik.jp/senna/senna2.files/rect4605.png
 以下のようにして、commentとitemとそれぞれに対する検索結果を求
 めます。
 
-  >> ruby_comments = @comments.select {|record| record["content"] =~ "Ruby"}
-  #<Groonga::Hash ..., size: <2>>
-  >> ruby_items = @items.select("*W1:50 title:@Ruby")
-  #<Groonga::Hash ..., size: <2>>
+  >> ruby_comments = @comments.select {|record| record.content =~ "Ruby"}
+  => #<Groonga::Hash ..., size: <4>
+  >> ruby_items = @items.select do |record|
+  ?>     target = record.match_target do |match_record|
+  ?>       match_record.title * 10
+  >>     end
+  >>   target =~ "Ruby"
+  >>   end
+  #<Groonga::Hash ..., size: <4>>
 
 _ruby_comments_の結果をitem毎にグループ化し、_ruby_items_と
 unionして出力します。
 
   >> ruby_items = ruby_comments.group("item").union!(ruby_items)
-  #<Groonga::Hash ..., size: <4>>
-  >> ruby_items.sort([{:key => "._score", :order => "descendant"}]).each do |record|
-  >>   p [record["._score"], record[".title"]]
+  #<Groonga::Hash ..., size: <5>>
+  >> ruby_items.sort([{:key => "_score", :order => "descending"}]).each do |record|
+  >>   p [record.score, record.title]
   >> end
-  [1, "るびま"]
-  [1, "オブジェクトスクリプト言語Ruby"]
-  [1, "Ruby"]
-  [1, "ラングバ"]
+  [10, "Rubyist Magazine - るびま"]
+  [10, "Ruby"]
+  [10, "Rubyでgroonga使って全文検索 - ラングバ"]
+  [10, "オブジェクトスクリプト言語Ruby"]
+  [2, "Matzにっき"]
 
-これで目的の結果が得られました。（FIXME: 得られていない！）
+これで目的の結果が得られました。
