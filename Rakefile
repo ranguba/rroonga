@@ -207,6 +207,10 @@ task :prepare_docs_for_publishing do
       apply_template(file, head, header, footer)
     end
   end
+  File.open("doc/.htaccess", "w") do |file|
+    file.puts("Redirect permanent /rroonga/text/TUTORIAL_ja_rdoc.html " +
+              "http://groonga.rubyforge.org/rroonga/text/tutorial_ja_rdoc.html")
+  end
 end
 
 desc "Publish HTML to Web site."
