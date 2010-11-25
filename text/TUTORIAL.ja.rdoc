@@ -7,7 +7,7 @@ rroongaの操作方法を紹介します。
 
 == インストール
 
-Ruby/groongaはRubyGemsでインストールできます。
+rroongaはRubyGemsでインストールできます。
 
   % sudo gem install rroonga
 
