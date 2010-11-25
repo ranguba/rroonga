@@ -31,7 +31,7 @@ SHIDARA Yoji:: <tt><dara@shidara.net></tt>
 LGPL 2.1です。詳しくはlicense/LGPLを見てください。
 
 （コントリビュートされたパッチなども含み、Kouhei Sutouが
-のライセンスを変更する権利を持ちます。）
+ライセンスを変更する権利を持ちます。）
 
 == 依存ソフトウェア
 
