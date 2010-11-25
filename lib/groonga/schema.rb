@@ -852,19 +852,19 @@ module Groonga
       end
 
       # call-seq:
-      #   table.index(target_column_full_name, options={})
-      #   table.index(target_table, target_column, options={})
-      #   table.index(target_table, target_column1, target_column2, ..., options={})
+      #   table.remove_index(target_column_full_name, options={})
+      #   table.remove_index(target_table, target_column, options={})
+      #   table.remove_index(target_table, target_column1, target_column2, ..., options={})
       #
       # _target_table_の_target_column_を対象とするインデッ
       # クスカラムを削除します。
       #
       # _target_column_full_name_で指定するときはテーブル名
       # とカラム名を"."でつなげます。例えば、「Users」テーブ
-      # ルの「name」カラムのインデックスカラムを指定する場合
+      # ルの「name」カラムのインデックスカラムを削除する場合
       # はこうなります。
       #
-      #   table.index("Users.name")
+      #   table.remove_index("Users.name")
       #
       # _options_に指定可能な値は以下の通り。
       #
