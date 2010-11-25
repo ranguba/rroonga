@@ -1,5 +1,51 @@
 = お知らせ
 
+== 1.0.2: 2010-11-25
+
+=== 改良
+
+* groonga 1.0.4対応。
+  * Groonga::UnsupportedCommandVersionを追加。
+* Groonga::Record#support_sub_records?を追加。
+* Groonga::Record#eql?とGroonga::Record#hashを追加。
+  （同じテーブルの同じレコードIDのオブジェクトを同一のHashキーとして扱う。）
+* pkg-config gemを利用するようにした。
+* Groonga::Table#select内でrecord_idメソッドを持っているメソッドはレコード
+  として扱うようにした。
+* Groonga::Record#record_idを追加。
+* Groonga::Table#support_key?を追加。
+* Groonga::Record#support_key?を追加。
+* Groonga::Record#support_key?を追加。
+* Groonga::Column#reference_key?を追加。
+* Groonga::Column#index_column?を追加。
+* Groonga::Schema#dumpを追加。
+* Groonga::Schemaが複数のカラムのインデックス作成に対応。
+* Groonga::Schemaで定義したオブジェクトに対応するファイル名に
+  わかりやすいファイル名を利用するようにした。
+* Groonga::Schemaで参照カラムを定義時に参照先のテーブル名を省略可能になった。
+* Groonga::Schema.remove_columnを追加。
+* Groonga::Schemaでcreated_atカラムとupdated_atカラムを作るための
+  timestamps便利メソッドを追加。
+* Groonga::Context#support_zlib?を追加。
+* Groonga::Context#support_lzo?を追加。
+* Groonga::Database#touchを追加。
+* Groonga::Table#exist?を追加。
+* Groonga::Record#valid?を追加。
+
+== 変更
+
+* Groonga::PatriciaTrie#open_cursorでは:order_byのデフォルト値として:key
+  を使うようにした。
+* 非推奨扱いのGroonga::TableKeySupport#findを削除。
+* Groonga::Hash#createとGroonga::PatriciaTrie#createでキーの型を省略した
+  場合はShortTextを使用するようにした。
+* Groonga::Schema#loadをGroonga::Schema#restoreに改名。
+
+=== 修正
+
+* keyにインデックスを張れない問題を修正。
+* GC時にクラッシュする問題を修正。
+
 == 1.0.1: 2010-09-12
 
 === 修正

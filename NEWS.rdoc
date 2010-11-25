@@ -1,5 +1,51 @@
 = NEWS
 
+== 1.0.2: 2010-11-25
+
+=== Improvements
+
+* Supported groonga 1.0.4.
+  * Added Groonga::UnsupportedCommandVersion.
+* Added Groonga::Record#support_sub_records?.
+* Added Groonga::Record#eql?とGroonga::Record#hash.
+  (treat two the same table and the same record ID object as the same Hash key.)
+* Supported pkg-config gem.
+* Supported generic #record_id object handle for custom record object
+  in Groonga::Table#select.
+* Added Groonga::Record#record_id.
+* Added Groonga::Table#support_key?.
+* Added Groonga::Record#support_key?.
+* Added Groonga::Record#support_key?.
+* Added Groonga::Column#reference_key?.
+* Added Groonga::Column#index_column?.
+* Added Groonga::Schema#dump.
+* Supported multi columns index creation in Groonga::Schema.
+* Supported meaningful path in Groonga::Schema.
+* Made reference table omissible when index column definition
+  in Groonga::Schema.
+* Added Groonga::Schema.remove_column.
+* Added convenience timestamps methods to define "created_at" and
+  "updated_at" columns in Groonga::Schema.
+* Added Groonga::Context#support_zlib?.
+* Added Groonga::Context#support_lzo?.
+* Added Groonga::Database#touch.
+* Added Groonga::Table#exist?.
+* Added Groonga::Record#valid?.
+
+== Changes
+
+* Used :key as the default value of :order_by of
+  Groonga::PatriciaTrie#open_cursor.
+* Removed a deprecated Groonga::TableKeySupport#find.
+* Used ShortText as the default key type of
+  Groonga::Hash#create and Groonga::PatriciaTrie#create.
+* Renamed Groonga::Schema#load to Groonga::Schema#restore.
+
+=== Fixes
+
+* Fixed index for key isn't be able to define.
+* Fixed a crash problem on GC.
+
 == 1.0.1: 2010-09-12
 
 === Fixes
