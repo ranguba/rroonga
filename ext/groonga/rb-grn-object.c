@@ -19,7 +19,7 @@
 /*
  * Document-class: Groonga::Object
  *
- * Ruby/groongaが提供するクラスのベースとなるクラス。
+ * rroongaが提供するクラスのベースとなるクラス。
  * Groonga::ContextとGroonga::Logger以外はGroonga::Objectを継
  * 承している。
  */
