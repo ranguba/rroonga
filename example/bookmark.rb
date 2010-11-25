@@ -55,6 +55,7 @@ p(title_column = Groonga["Items.title"])
 
 p(Groonga::Schema.create_table("Terms",
                                :type => :patricia_trie,
+                               :key_normalize => true,
                                :default_tokenizer => "TokenBigram"))
 p(Groonga::Schema.change_table("Terms") do |table|
     table.index("Items.title")

@@ -118,6 +118,7 @@ groongaには以下の3種類のテーブルがあります。
 
   >> Groonga::Schema.create_table("Terms",
   ?>                              :type => :patricia_trie,
+  ?>                              :key_normalize => true,
   ?>                              :default_tokenizer => "TokenBigram")
 
 ここでは、トークナイザとして<tt>:default_tokenzier =>
@@ -131,6 +132,9 @@ N-gramを利用した全文検索では、分解したN文字とその出現位�
 用して全文検索を行います。N-gramのNは文字列を何文字毎に分解す
 るかの文字数になります。groongaは1文字で分解するユニグラム、
 2文字のバイグラム、3文字のトリグラムをサポートしています。
+
+また、大文字小文字の区別なく検索するために<tt>:key_normalize
+=> true</tt>も指定しています。
 
 単語格納用テーブルの準備ができたので、<tt>Items</tt>テーブ
 ルの+title+カラムに対するインデックスを定義します。
