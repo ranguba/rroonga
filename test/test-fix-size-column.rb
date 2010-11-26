@@ -37,7 +37,7 @@ class FixSizeColumnTest < Test::Unit::TestCase
   end
 
   def test_vector?
-    assert_not_predicate(@viewed, :scalar?)
+    assert_not_predicate(@viewed, :vector?)
   end
 
   def test_scalar?
