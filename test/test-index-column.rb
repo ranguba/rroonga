@@ -22,7 +22,7 @@ class IndexColumnTest < Test::Unit::TestCase
     setup_database
   end
 
-  def test_index_column?
+  def test_index?
     articles = Groonga::Array.create(:name => "Articles")
     articles.define_column("content", "Text")
 
@@ -30,7 +30,29 @@ class IndexColumnTest < Test::Unit::TestCase
                                  :default_tokenizer => "TokenBigram")
     content_index = terms.define_index_column("content", articles,
                                               :with_section => true)
-    assert_predicate(content_index, :index_column?)
+    assert_predicate(content_index, :index?)
+  end
+
+  def test_vector?
+    articles = Groonga::Array.create(:name => "Articles")
+    articles.define_column("content", "Text")
+
+    terms = Groonga::Hash.create(:name => "Terms",
+                                 :default_tokenizer => "TokenBigram")
+    content_index = terms.define_index_column("content", articles,
+                                              :with_section => true)
+    assert_not_predicate(content_index, :vector?)
+  end
+
+  def test_scalar?
+    articles = Groonga::Array.create(:name => "Articles")
+    articles.define_column("content", "Text")
+
+    terms = Groonga::Hash.create(:name => "Terms",
+                                 :default_tokenizer => "TokenBigram")
+    content_index = terms.define_index_column("content", articles,
+                                              :with_section => true)
+    assert_not_predicate(content_index, :scalar?)
   end
 
   def test_array_set_with_record

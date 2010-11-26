@@ -553,16 +553,18 @@ rb_grn_column_is_locked (int argc, VALUE *argv, VALUE self)
 }
 
 /*
- * Document-method: reference_column?
+ * Document-method: reference?
  *
  * call-seq:
- *   column.reference_column? -> true/false
+ *   column.reference? -> true/false
  *
  * _column_の値がテーブルのレコードとなる場合は+true+を返し、
  * そうでない場合は+false+を返す。
+ *
+ * @since: 1.0.5
  */
 static VALUE
-rb_grn_column_reference_column_p (VALUE self)
+rb_grn_column_reference_p (VALUE self)
 {
     grn_ctx *context;
     grn_obj *column;
@@ -589,16 +591,18 @@ rb_grn_column_reference_column_p (VALUE self)
 }
 
 /*
- * Document-method: index_column?
+ * Document-method: index?
  *
  * call-seq:
- *   column.index_column? -> true/false
+ *   column.index? -> true/false
  *
  * _column_がGroonga::IndexColumnの場合は+true+を返し、
  * そうでない場合は+false+を返す。
+ *
+ * @since: 1.0.5
  */
 static VALUE
-rb_grn_column_index_column_p (VALUE self)
+rb_grn_column_index_p (VALUE self)
 {
     grn_ctx *context;
     grn_obj *column;
@@ -610,6 +614,72 @@ rb_grn_column_index_column_p (VALUE self)
     if (column->header.type == GRN_COLUMN_INDEX) {
 	return Qtrue;
     } else {
+	return Qfalse;
+    }
+}
+
+/*
+ * Document-method: vector?
+ *
+ * call-seq:
+ *   column.vector? -> true/false
+ *
+ * _column_がベクターカラムの場合は+true+を返し、
+ * そうでない場合は+false+を返す。
+ *
+ * @since: 1.0.5
+ */
+static VALUE
+rb_grn_column_vector_p (VALUE self)
+{
+    grn_ctx *context;
+    grn_obj *column;
+
+    rb_grn_column_deconstruct(SELF(self), &column, &context,
+			     NULL, NULL,
+			     NULL, NULL, NULL);
+
+    if (column->header.type == GRN_COLUMN_VAR_SIZE &&
+	((column->header.flags && GRN_OBJ_COLUMN_TYPE_MASK) ==
+	 GRN_OBJ_COLUMN_VECTOR)) {
+	return Qtrue;
+    } else {
+	return Qfalse;
+    }
+}
+
+/*
+ * Document-method: scalar?
+ *
+ * call-seq:
+ *   column.scalar? -> true/false
+ *
+ * _column_がスカラーカラムの場合は+true+を返し、
+ * そうでない場合は+false+を返す。
+ *
+ * @since: 1.0.5
+ */
+static VALUE
+rb_grn_column_scalar_p (VALUE self)
+{
+    grn_ctx *context;
+    grn_obj *column;
+
+    rb_grn_column_deconstruct(SELF(self), &column, &context,
+			     NULL, NULL,
+			     NULL, NULL, NULL);
+
+    switch (column->header.type) {
+      case GRN_COLUMN_FIX_SIZE:
+	return Qtrue;
+      case GRN_COLUMN_VAR_SIZE:
+	if ((column->header.flags && GRN_OBJ_COLUMN_TYPE_MASK) ==
+	    GRN_OBJ_COLUMN_SCALAR) {
+	    return Qtrue;
+	} else {
+	    return Qfalse;
+	}
+      default:
 	return Qfalse;
     }
 }
@@ -628,10 +698,14 @@ rb_grn_init_column (VALUE mGrn)
     rb_define_method(rb_cGrnColumn, "unlock", rb_grn_column_unlock, -1);
     rb_define_method(rb_cGrnColumn, "clear_lock", rb_grn_column_clear_lock, -1);
     rb_define_method(rb_cGrnColumn, "locked?", rb_grn_column_is_locked, -1);
-    rb_define_method(rb_cGrnColumn, "reference_column?",
-		     rb_grn_column_reference_column_p, 0);
-    rb_define_method(rb_cGrnColumn, "index_column?",
-		     rb_grn_column_index_column_p, 0);
+    rb_define_method(rb_cGrnColumn, "reference?", rb_grn_column_reference_p, 0);
+    /* deprecated: backward compatibility */
+    rb_define_alias(rb_cGrnColumn, "reference_column?", "reference?");
+    rb_define_method(rb_cGrnColumn, "index?", rb_grn_column_index_p, 0);
+    /* deprecated: backward compatibility */
+    rb_define_alias(rb_cGrnColumn, "index_column?", "index?");
+    rb_define_method(rb_cGrnColumn, "vector?", rb_grn_column_vector_p, 0);
+    rb_define_method(rb_cGrnColumn, "scalar?", rb_grn_column_scalar_p, 0);
 
     rb_grn_init_fix_size_column(mGrn);
     rb_grn_init_variable_size_column(mGrn);

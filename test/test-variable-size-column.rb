@@ -50,8 +50,16 @@ class VariableSizeColumnTest < Test::Unit::TestCase
     @yu = @users.add(:name => "Yutaro Shimamura")
   end
 
-  def test_index_column?
-    assert_not_predicate(@nick_names, :index_column?)
+  def test_index?
+    assert_not_predicate(@nick_names, :index?)
+  end
+
+  def test_vector?
+    assert_predicate(@nick_names, :vector?)
+  end
+
+  def test_scalar?
+    assert_not_predicate(@nick_names, :scalar?)
   end
 
   def test_inspect
