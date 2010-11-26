@@ -1217,24 +1217,25 @@ rb_grn_object_set_raw (RbGrnObject *rb_grn_object, grn_id id,
     grn_ctx *context;
     grn_obj value;
     grn_rc rc;
-    VALUE exception;
+    VALUE exception, rb_values;
 
     context = rb_grn_object->context;
-    if (RVAL2CBOOL(rb_obj_is_kind_of(rb_value, rb_cArray))) {
-	if (rb_uvector_value_p(rb_grn_object, rb_value)) {
-	    GRN_OBJ_INIT(&value, GRN_UVECTOR, 0,
-			 rb_grn_object->object->header.domain);
-	    RVAL2GRNUVECTOR(rb_value, context, &value, related_object);
-	} else {
-	    GRN_OBJ_INIT(&value, GRN_VECTOR, 0, GRN_ID_NIL);
-	    RVAL2GRNVECTOR(rb_value, context, &value);
-	}
-    } else {
+    rb_values = rb_check_array_type(rb_value);
+    if (NIL_P(rb_values)) {
 	if (NIL_P(rb_value)) {
 	    GRN_OBJ_INIT(&value, GRN_BULK, 0, GRN_ID_NIL);
 	} else {
 	    GRN_OBJ_INIT(&value, GRN_BULK, 0, GRN_ID_NIL);
 	    RVAL2GRNBULK(rb_value, context, &value);
+	}
+    } else {
+	if (rb_uvector_value_p(rb_grn_object, rb_values)) {
+	    GRN_OBJ_INIT(&value, GRN_UVECTOR, 0,
+			 rb_grn_object->object->header.domain);
+	    RVAL2GRNUVECTOR(rb_values, context, &value, related_object);
+	} else {
+	    GRN_OBJ_INIT(&value, GRN_VECTOR, 0, GRN_ID_NIL);
+	    RVAL2GRNVECTOR(rb_values, context, &value);
 	}
     }
     rc = grn_obj_set_value(context, rb_grn_object->object, id,

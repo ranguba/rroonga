@@ -296,4 +296,20 @@ class RecordTest < Test::Unit::TestCase
     users = @users.select {|record| record.key == "morita"}
     assert_predicate(users.to_a[0], :support_sub_records?)
   end
+
+  def test_set_array_like_records
+    kou_at_clear_code = @addresses.add(:mail => "kou@clear-code.com")
+    array_like_class = Class.new do
+      def initialize(records)
+        @records = records
+      end
+
+      def to_ary
+        @records
+      end
+    end
+    array_like_object = array_like_class.new([kou_at_clear_code])
+    kou = @users.add("kou")
+    kou.addresses = array_like_object
+  end
 end
