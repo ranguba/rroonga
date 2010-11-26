@@ -331,7 +331,6 @@ rb_grn_object_bind_common (VALUE klass, VALUE self, VALUE rb_context,
 	rb_grn_object->range = grn_ctx_at(context, rb_grn_object->range_id);
 
     DATA_PTR(self) = rb_grn_object;
-    rb_iv_set(self, "@context", rb_context);
 }
 
 void
@@ -397,6 +396,8 @@ rb_grn_object_assign (VALUE klass, VALUE self, VALUE rb_context,
 		 "unsupported groonga object type for assignment: 0x%x",
 		 object->header.type);
     }
+
+    rb_iv_set(self, "@context", rb_context);
 
     debug("assign: %p:%p:%p 0x%x\n", context, object, rb_grn_object,
 	   object->header.type);
