@@ -173,8 +173,6 @@ class RecordTest < Test::Unit::TestCase
 
   def test_vector_column?
     bookmark = @bookmarks.add
-    p [bookmark.vector_column?("uri"),
-       bookmark.scalar_column?("uri")]
     assert_false(bookmark.vector_column?("uri"))
     morita = @users.add("morita")
     assert_true(morita.vector_column?("addresses"))
