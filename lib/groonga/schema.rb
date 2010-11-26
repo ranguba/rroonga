@@ -421,6 +421,7 @@ module Groonga
       def normalize_type(type) # :nodoc:
         return type if type.nil?
         return type if type.is_a?(Groonga::Object)
+        type = type.to_s if type.is_a?(Symbol)
         case type.to_s
         when "string"
           "ShortText"
