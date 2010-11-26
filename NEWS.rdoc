@@ -31,6 +31,14 @@
 * Added Groonga::Database#touch.
 * Added Groonga::Table#exist?.
 * Added Groonga::Record#valid?.
+* Added Groonga::Column#vector?.
+* Added Groonga::Column#scalar?.
+* Added Groonga::Record#vector_column?.
+* Added Groonga::Record#scalar_column?.
+* Accepted any object that has record_raw_id method for record ID required
+  location. Groonga::Record isn't required.
+* Added Groonga::Record#record_raw_id.
+* Accepted any object that as to_ary method for reference vector column value.
 
 == Changes
 
@@ -41,6 +49,9 @@
   Groonga::Hash#create and Groonga::PatriciaTrie#create.
 * Renamed Groonga::Schema#load to Groonga::Schema#restore.
 * Supported pkg-confg 1.0.7.
+* Added Groonga::Column#index? and deprecated Groonga::Column#index_column?.
+* Added Groonga::Column#reference? and deprecated
+  Groonga::Column#reference_column?.
 
 === Fixes
 

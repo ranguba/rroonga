@@ -1,6 +1,6 @@
 = お知らせ
 
-== 1.0.3: 2010-11-29
+== 1.0.4: 2010-11-29
 
 === 改良
 
@@ -31,6 +31,15 @@
 * Groonga::Database#touchを追加。
 * Groonga::Table#exist?を追加。
 * Groonga::Record#valid?を追加。
+* Groonga::Column#vector?を追加。
+* Groonga::Column#scalar?を追加。
+* Groonga::Record#vector_column?を追加。
+* Groonga::Record#scalar_column?を追加。
+* レコードIDが必要なところにrecord_raw_idを持つオブジェクトなら
+  Groonga::Record以外も渡せるようにした。
+* Groonga::Record#record_raw_idを追加。
+* ベクタの参照カラムの値にArray以外でもto_aryを持つオブジェクトを
+  設定できるようにした。
 
 == 変更
 
@@ -41,6 +50,8 @@
   場合はShortTextを使用するようにした。
 * Groonga::Schema#loadをGroonga::Schema#restoreに改名。
 * pkg-config 1.0.7対応。
+* Groonga::Column#index?を追加。Groonga::Column#index_column?は非推奨。
+* Groonga::Column#reference?を追加。Groonga::Column#reference_column?は非推奨。
 
 === 修正
 
