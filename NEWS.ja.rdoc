@@ -1,6 +1,6 @@
 = お知らせ
 
-== 1.0.2: 2010-11-29
+== 1.0.3: 2010-11-29
 
 === 改良
 
@@ -40,6 +40,7 @@
 * Groonga::Hash#createとGroonga::PatriciaTrie#createでキーの型を省略した
   場合はShortTextを使用するようにした。
 * Groonga::Schema#loadをGroonga::Schema#restoreに改名。
+* pkg-config 1.0.7対応。
 
 === 修正
 
