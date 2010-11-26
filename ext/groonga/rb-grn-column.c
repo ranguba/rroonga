@@ -640,7 +640,7 @@ rb_grn_column_vector_p (VALUE self)
 			     NULL, NULL, NULL);
 
     if (column->header.type == GRN_COLUMN_VAR_SIZE &&
-	((column->header.flags && GRN_OBJ_COLUMN_TYPE_MASK) ==
+	((column->header.flags & GRN_OBJ_COLUMN_TYPE_MASK) ==
 	 GRN_OBJ_COLUMN_VECTOR)) {
 	return Qtrue;
     } else {
@@ -673,7 +673,7 @@ rb_grn_column_scalar_p (VALUE self)
       case GRN_COLUMN_FIX_SIZE:
 	return Qtrue;
       case GRN_COLUMN_VAR_SIZE:
-	if ((column->header.flags && GRN_OBJ_COLUMN_TYPE_MASK) ==
+	if ((column->header.flags & GRN_OBJ_COLUMN_TYPE_MASK) ==
 	    GRN_OBJ_COLUMN_SCALAR) {
 	    return Qtrue;
 	} else {

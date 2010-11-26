@@ -171,6 +171,22 @@ class RecordTest < Test::Unit::TestCase
     assert_true(index.index_column?("content"))
   end
 
+  def test_vector_column?
+    bookmark = @bookmarks.add
+    p [bookmark.vector_column?("uri"),
+       bookmark.scalar_column?("uri")]
+    assert_false(bookmark.vector_column?("uri"))
+    morita = @users.add("morita")
+    assert_true(morita.vector_column?("addresses"))
+  end
+
+  def test_scalar_column?
+    bookmark = @bookmarks.add
+    assert_true(bookmark.scalar_column?("uri"))
+    morita = @users.add("morita")
+    assert_false(morita.scalar_column?("addresses"))
+  end
+
   def test_score
     groonga = @bookmarks.add
     groonga["content"] = "full text search search search engine."

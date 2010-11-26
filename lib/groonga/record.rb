@@ -129,7 +129,7 @@ module Groonga
     #
     # 名前が_name_のカラムが参照カラムであるなら+true+を返す。
     def reference_column?(name)
-      column(name).reference_column?
+      column(name).reference?
     end
 
     # call-seq:
@@ -138,7 +138,27 @@ module Groonga
     # 名前が_name_のカラムが索引カラム
     # （Groonga::IndexColumn）であるなら+true+を返す。
     def index_column?(name)
-      column(name).index_column?
+      column(name).index?
+    end
+
+    # call-seq:
+    #   record.vector_column?(name) -> true/false
+    #
+    # 名前が_name_のカラムの値がベクターであるなら+true+を返す。
+    #
+    # @since: 1.0.5
+    def vector_column?(name)
+      column(name).vector?
+    end
+
+    # call-seq:
+    #   record.scalar_column?(name) -> true/false
+    #
+    # 名前が_name_のカラムの値がスカラーであるなら+true+を返す。
+    #
+    # @since: 1.0.5
+    def scalar_column?(name)
+      column(name).scalar?
     end
 
     # call-seq:
