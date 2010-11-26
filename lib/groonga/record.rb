@@ -207,7 +207,7 @@ module Groonga
     # レコードのスコア値を返す。検索結果として生成されたテーブル
     # のみに定義される。
     def score
-      self["._score"]
+      self["_score"]
     end
 
     # call-seq:
@@ -219,7 +219,7 @@ module Groonga
     # Groonga::Record#support_sub_recordsでこの値を利用でき
     # るかがわかる。
     def n_sub_records
-      self["._nsubrecs"]
+      self["_nsubrecs"]
     end
 
     # call-seq:

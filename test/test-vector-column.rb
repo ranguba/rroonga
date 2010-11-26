@@ -52,7 +52,7 @@ class VectorColumnTest < Test::Unit::TestCase
     groonga["users"] = [morita]
 
     assert_equal([29], @users.collect {|record| record.key})
-    assert_equal([29], groonga["users"].collect {|record| record.key})
+    assert_equal([29], groonga["users"].collect {|record| record.id})
   end
 
   def test_set_nonexistent_keys
