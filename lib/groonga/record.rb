@@ -21,8 +21,6 @@ module Groonga
   class Record
     # レコードが所属するテーブル
     attr_reader :table
-    # レコードのID
-    attr_reader :id
     # _table_の_id_に対応するレコードを作成する。_values_には各
     # カラムに設定する値を以下のような形式で指定する。
     #
@@ -200,6 +198,15 @@ module Groonga
         id
       end
     end
+
+    # call-seq:
+    #   record.record_raw_id -> ID
+    #
+    # レコードのIDを返す。
+    def record_raw_id
+      @id
+    end
+    alias_method :id, :record_raw_id
 
     # call-seq:
     #   record.score -> スコア値

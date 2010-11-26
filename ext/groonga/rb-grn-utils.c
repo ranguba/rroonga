@@ -555,13 +555,14 @@ rb_grn_uvector_from_ruby_object (VALUE object, grn_ctx *context,
 	    id = NUM2UINT(value);
 	    break;
 	  default:
-	    if (RVAL2CBOOL(rb_obj_is_kind_of(value, rb_cGrnRecord))) {
-		id = NUM2UINT(rb_funcall(value, rb_intern("id"), 0));
+	    if (rb_respond_to(value, rb_intern("record_raw_id"))) {
+		id = NUM2UINT(rb_funcall(value, rb_intern("record_raw_id"), 0));
 	    } else {
 		grn_obj_unlink(context, uvector);
 		rb_raise(rb_eArgError,
 			 "uvector value should be one of "
-			 "[Fixnum, Groonga::Record]: %s (%s): %s",
+			 "[Fixnum or object that has #record_raw_id]: "
+			 "%s (%s): %s",
 			 rb_grn_inspect(value),
 			 rb_grn_inspect(object),
 			 rb_grn_inspect(related_object));

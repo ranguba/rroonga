@@ -297,6 +297,19 @@ class RecordTest < Test::Unit::TestCase
     assert_predicate(users.to_a[0], :support_sub_records?)
   end
 
+  def test_set_record_like_object
+    kou_at_clear_code = @addresses.add(:mail => "kou@clear-code.com")
+    record_like_class = Class.new do
+      attr_reader :record_raw_id
+      def initialize(record_raw_id)
+        @record_raw_id = record_raw_id
+      end
+    end
+    record_like_object = record_like_class.new(kou_at_clear_code.record_raw_id)
+    kou = @users.add("kou")
+    kou.addresses = [record_like_object]
+  end
+
   def test_set_array_like_records
     kou_at_clear_code = @addresses.add(:mail => "kou@clear-code.com")
     array_like_class = Class.new do

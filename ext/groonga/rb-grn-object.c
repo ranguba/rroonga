@@ -1199,7 +1199,7 @@ rb_uvector_value_p (RbGrnObject *rb_grn_object, VALUE rb_value)
       case GRN_TABLE_NO_KEY:
       case GRN_TABLE_VIEW:
 	first_element = rb_ary_entry(rb_value, 0);
-	if (RVAL2CBOOL(rb_obj_is_kind_of(first_element, rb_cGrnRecord))) {
+	if (rb_respond_to(first_element, rb_intern("record_raw_id"))) {
 	    return RB_GRN_TRUE;
 	}
 	break;
