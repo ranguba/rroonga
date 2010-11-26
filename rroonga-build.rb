@@ -41,7 +41,7 @@ module RroongaBuild
 
   def prepend_pkg_config_path_for_local_groonga
     pkg_config_dir = File.join(local_groonga_install_dir, "lib", "pkgconfig")
-    PackageConfig.prepend_default_path(pkg_config_dir)
+    PKGConfig.add_path(pkg_config_dir)
   end
 
   def add_rpath_for_local_groonga
