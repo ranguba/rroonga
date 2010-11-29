@@ -423,7 +423,7 @@ module Groonga
         return type if type.is_a?(Groonga::Object)
         type = type.to_s if type.is_a?(Symbol)
         case type.to_s
-        when "string"
+        when "short_text", "string"
           "ShortText"
         when "text"
           "Text"
