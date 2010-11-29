@@ -418,30 +418,66 @@ module Groonga
 	end
       end
 
+      NORMALIZE_TYPE_TABLE = {
+        "short_text" => "ShortText",
+        "string" => "ShortText",
+        "text" => "Text",
+        "binary" => "LongText",
+        "long_text" => "LongText",
+        "int" => "Int32",
+        "integer" => "Int32",
+        "int32" => "Int32",
+        "integer32" => "Int32",
+        "decimal" => "Int64",
+        "int64" => "Int64",
+        "integer64" => "Int64",
+        "uint" => "UInt32",
+        "unsigned_integer" => "UInt32",
+        "uint32" => "UInt32",
+        "unsigned_integer32" => "UInt32",
+        "uint64" => "UInt64",
+        "unsigned_integer64" => "UInt64",
+        "float" => "Float",
+        "datetime" => "Time",
+        "timestamp" => "Time",
+        "time" => "Time",
+        "date" => "Time",
+        "boolean" => "Bool",
+        "unigram" => "TokenUnigram",
+        "token_unigram" => "TokenUnigram",
+        "bigram" => "TokenBigram",
+        "token_bigram" => "TokenBigram",
+        "bigram_split_symbol" => "TokenBigramSplitSymbol",
+        "token_bigram_split_symbol" => "TokenBigramSplitSymbol",
+        "bigram_split_symbol_alpha" => "TokenBigramSplitSymbolAlpha",
+        "token_bigram_split_symbol_alpha" => "TokenBigramSplitSymbolAlpha",
+        "bigram_split_symbol_alpha_digit" => "TokenBigramSplitSymbolAlphaDigit",
+        "token_bigram_split_symbol_alpha_digit" =>
+          "TokenBigramSplitSymbolAlphaDigit",
+        "bigram_ignore_blank" => "TokenBigramIgnoreBlank",
+        "token_bigram_ignore_blank" => "TokenBigramIgnoreBlank",
+        "bigram_ignore_blank_split_symbol" =>
+          "TokenBigramIgnoreBlankSplitSymbol",
+        "token_bigram_ignore_blank_split_symbol" =>
+          "TokenBigramIgnoreBlankSplitSymbol",
+        "bigram_ignore_blank_split_symbol_alpha" =>
+          "TokenBigramIgnoreBlankSplitSymbolAlpha",
+        "token_bigram_ignore_blank_split_symbol_alpha" =>
+          "TokenBigramIgnoreBlankSplitSymbolAlpha",
+        "bigram_ignore_blank_split_symbol_alpha_digit" =>
+          "TokenBigramIgnoreBlankSplitSymbolAlphaDigit",
+        "token_bigram_ignore_blank_split_symbol_alpha_digit" =>
+          "TokenBigramIgnoreBlankSplitSymbolAlphaDigit",
+        "trigram" => "TokenTrigram",
+        "token_trigram" => "TokenTrigram",
+        "mecab" => "TokenMecab",
+        "token_mecab"=> "TokenMecab",
+      }
       def normalize_type(type) # :nodoc:
         return type if type.nil?
         return type if type.is_a?(Groonga::Object)
         type = type.to_s if type.is_a?(Symbol)
-        case type.to_s
-        when "short_text", "string"
-          "ShortText"
-        when "text"
-          "Text"
-        when "int", "integer"
-          "Int32"
-        when "float"
-          "Float"
-        when "decimal"
-          "Int64"
-        when "datetime", "timestamp", "time", "date"
-          "Time"
-        when "binary"
-          "LongText"
-        when "boolean"
-          "Bool"
-        else
-          type
-        end
+        NORMALIZE_TYPE_TABLE[type] || type
       end
     end
 
