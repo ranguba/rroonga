@@ -1,6 +1,17 @@
 = NEWS
 
-== 1.0.3: 2010-11-29
+== 1.0.5: 2010-11-29
+
+=== Improvements
+
+* Added snail_case type name aliases for built-in groonga types
+  to Groonga::Schema.
+
+=== Fixes
+
+* Fixed a crash bug on GC. [Ryo Onodera]
+
+== 1.0.4: 2010-11-29
 
 === Improvements
 
