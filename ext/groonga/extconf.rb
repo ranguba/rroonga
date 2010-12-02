@@ -15,14 +15,9 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-require 'pathname'
-
-base_dir = Pathname(__FILE__).dirname.parent.parent
-$LOAD_PATH.unshift(base_dir.to_s)
-
 require 'English'
+require 'pathname'
 require 'mkmf'
-require 'rroonga-build'
 
 begin
   require 'pkg-config'
@@ -30,6 +25,11 @@ rescue LoadError
   require 'rubygems'
   require 'pkg-config'
 end
+
+base_dir = Pathname(__FILE__).dirname.parent.parent
+$LOAD_PATH.unshift(base_dir.to_s)
+
+require 'rroonga-build'
 
 include RroongaBuild
 
