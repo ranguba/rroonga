@@ -64,3 +64,4 @@ http://rubyforge.org/mailman/listinfo/groonga-users-en
 * @yune_kotomi: sent a bug report.
 * m_seki: sent bug reports.
 * ono matope: sent bug reports.
+* @kamipo: send a bug report.

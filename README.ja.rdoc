@@ -61,6 +61,7 @@ http://lists.sourceforge.jp/mailman/listinfo/groonga-dev
   * テストを書いてくれました。
   * バグを直してくれました。
 * id:mat_akiさん: チュートリアルのバグを教えてくれました。
-* @yune_kotomi: バグレポートしてくれました。
+* @yune_kotomiさん: バグレポートしてくれました。
 * 咳さん: バグレポートしてくれました。
 * 小野マトペさん: バグレポートしてくれました。
+* @kamipoさん: バグレポートしてくれました。
