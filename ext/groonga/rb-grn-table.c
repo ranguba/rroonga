@@ -243,20 +243,14 @@ rb_grn_table_inspect (VALUE self)
  *   カラムの値の格納方法について指定する。省略した場合は、
  *   +:scalar+になる。
  *
- *   [+:scalar+]
- *     スカラ値(単独の値)を格納する。
- *
- *   [+:vector+]
- *     値の配列を格納する。
+ *   [+:scalar+] スカラ値(単独の値)を格納する。
+ *   [+:vector+] 値の配列を格納する。
  *
  * [+:compress+]
  *   値の圧縮方法を指定する。省略した場合は、圧縮しない。
  *
- *   [+:zlib+]
- *     値をzlib圧縮して格納する。
- *
- *   [+:lzo+]
- *     値をlzo圧縮して格納する。
+ *   [+:zlib+] 値をzlib圧縮して格納する。
+ *   [+:lzo+] 値をlzo圧縮して格納する。
  */
 static VALUE
 rb_grn_table_define_column (int argc, VALUE *argv, VALUE self)
@@ -783,7 +777,7 @@ rb_grn_table_open_grn_cursor (int argc, VALUE *argv, VALUE self,
 /*
  * call-seq:
  *   table.open_cursor(options={}) -> Groonga::TableCursor
- *   table.open_cursor(options={}) {|cursor| ... }
+ *   table.open_cursor(options={}) {|cursor| }
  *
  * カーソルを生成して返す。ブロックを指定すると、そのブロッ
  * クに生成したカーソルが渡され、ブロックを抜けると自動的に
@@ -936,7 +930,7 @@ rb_grn_table_truncate (VALUE self)
 
 /*
  * call-seq:
- *   table.each {|record| ...}
+ *   table.each {|record| } -> nil
  *
  * テーブルに登録されているレコードを順番にブロックに渡す。
  */
@@ -1140,8 +1134,8 @@ rb_grn_table_sort (int argc, VALUE *argv, VALUE self)
 
 /*
  * call-seq:
- *   table.group(key, options={}) -> Groonga::Hash
  *   table.group([key1, key2, ...], options={}) -> [Groonga::Hash, ...]
+ *   table.group(key, options={}) -> Groonga::Hash
  *
  * _table_のレコードを_key1_, _key2_, _..._で指定したキーの
  * 値でグループ化する。多くの場合、キーにはカラムを指定する。
@@ -1541,7 +1535,7 @@ rb_grn_table_unlock_ensure (VALUE self)
  *
  * call-seq:
  *   table.lock(options={})
- *   table.lock(options={}) {...}
+ *   table.lock(options={}) {}
  *
  * _table_をロックする。ロックに失敗した場合は
  * Groonga::ResourceDeadlockAvoided例外が発生する。
