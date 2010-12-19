@@ -248,7 +248,7 @@ rb_grn_object_to_ruby_class (grn_obj *object)
 
 VALUE
 rb_grn_object_to_ruby_object (VALUE klass, grn_ctx *context, grn_obj *object,
-			      rb_grn_boolean owner)
+			      grn_bool owner)
 {
     RbGrnContext *rb_grn_context;
     VALUE rb_object, rb_context = Qnil;
@@ -290,8 +290,8 @@ rb_grn_object_bind_common (VALUE klass, VALUE self, VALUE rb_context,
     rb_grn_object->context = context;
     rb_grn_object->object = object;
     rb_grn_object->self = self;
-    rb_grn_object->need_close = RB_GRN_TRUE;
-    rb_grn_object->have_finalizer = RB_GRN_FALSE;
+    rb_grn_object->need_close = GRN_TRUE;
+    rb_grn_object->have_finalizer = GRN_FALSE;
 
     user_data = grn_obj_user_data(context, object);
     if (user_data) {
@@ -300,17 +300,17 @@ rb_grn_object_bind_common (VALUE klass, VALUE self, VALUE rb_context,
 	      object->header.type);
 	user_data->ptr = rb_grn_object;
 	grn_obj_set_finalizer(context, object, rb_grn_object_finalizer);
-	rb_grn_object->have_finalizer = RB_GRN_TRUE;
+	rb_grn_object->have_finalizer = GRN_TRUE;
     }
 
     switch (object->header.type) {
       case GRN_PROC:
       case GRN_TYPE:
-	rb_grn_object->need_close = RB_GRN_FALSE;
+	rb_grn_object->need_close = GRN_FALSE;
 	break;
       default:
 	if (klass == rb_cGrnVariable)
-	    rb_grn_object->need_close = RB_GRN_FALSE;
+	    rb_grn_object->need_close = GRN_FALSE;
 	break;
     }
 
@@ -529,7 +529,7 @@ rb_grn_object_inspect_object (VALUE inspected, grn_ctx *context, grn_obj *object
 {
     VALUE rb_object;
 
-    rb_object = GRNOBJECT2RVAL(Qnil, context, object, RB_GRN_FALSE);
+    rb_object = GRNOBJECT2RVAL(Qnil, context, object, GRN_FALSE);
     rb_str_concat(inspected, rb_inspect(rb_object));
 
     return inspected;
@@ -997,7 +997,7 @@ rb_grn_object_get_domain (VALUE self)
 
 	domain_object = grn_ctx_at(context, domain);
 	if (domain_object)
-	    return GRNOBJECT2RVAL(Qnil, context, domain_object, RB_GRN_FALSE);
+	    return GRNOBJECT2RVAL(Qnil, context, domain_object, GRN_FALSE);
 	else
 	    return UINT2NUM(domain);
     }
@@ -1071,7 +1071,7 @@ rb_grn_object_get_range (VALUE self)
 
 	range_object = grn_ctx_at(context, range);
 	if (range_object)
-	    return GRNOBJECT2RVAL(Qnil, context, range_object, RB_GRN_FALSE);
+	    return GRNOBJECT2RVAL(Qnil, context, range_object, GRN_FALSE);
 	else
 	    return UINT2NUM(range);
     }
@@ -1181,7 +1181,7 @@ rb_grn_object_array_reference (VALUE self, VALUE rb_id)
     return rb_value;
 }
 
-static rb_grn_boolean
+static grn_bool
 rb_uvector_value_p (RbGrnObject *rb_grn_object, VALUE rb_value)
 {
     VALUE first_element;
@@ -1191,7 +1191,7 @@ rb_uvector_value_p (RbGrnObject *rb_grn_object, VALUE rb_value)
 	/* TODO: support not sizeof(grn_id) uvector. */
 	/*
 	if (!(rb_grn_object->range->header.flags | GRN_OBJ_KEY_VAR_SIZE)) {
-	    return RB_GRN_TRUE;
+	    return GRN_TRUE;
 	}
 	*/
 	break;
@@ -1201,14 +1201,14 @@ rb_uvector_value_p (RbGrnObject *rb_grn_object, VALUE rb_value)
       case GRN_TABLE_VIEW:
 	first_element = rb_ary_entry(rb_value, 0);
 	if (rb_respond_to(first_element, rb_intern("record_raw_id"))) {
-	    return RB_GRN_TRUE;
+	    return GRN_TRUE;
 	}
 	break;
       default:
 	break;
     }
 
-    return RB_GRN_FALSE;
+    return GRN_FALSE;
 }
 
 VALUE
@@ -1345,7 +1345,7 @@ rb_grn_init_object (VALUE mGrn)
     rb_cGrnObject = rb_define_class_under(mGrn, "Object", rb_cObject);
     rb_define_alloc_func(rb_cGrnObject, rb_grn_object_alloc);
 
-    rb_define_attr(rb_cGrnObject, "context", RB_GRN_TRUE, RB_GRN_FALSE);
+    rb_define_attr(rb_cGrnObject, "context", GRN_TRUE, GRN_FALSE);
 
     rb_define_method(rb_cGrnObject, "inspect", rb_grn_object_inspect, 0);
 

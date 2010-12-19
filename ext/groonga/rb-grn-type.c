@@ -43,7 +43,7 @@ rb_grn_type_from_ruby_object (VALUE object)
 
 VALUE
 rb_grn_type_to_ruby_object (grn_ctx *context, grn_obj *type,
-			    rb_grn_boolean owner)
+			    grn_bool owner)
 {
     return GRNOBJECT2RVAL(rb_cGrnType, context, type, owner);
 }

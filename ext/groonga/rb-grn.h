@@ -69,11 +69,7 @@ RB_GRN_BEGIN_DECLS
 
 #define RB_GRN_MAJOR_VERSION 1
 #define RB_GRN_MINOR_VERSION 0
-#define RB_GRN_MICRO_VERSION 6
-
-typedef int rb_grn_boolean;
-#define RB_GRN_FALSE (0)
-#define RB_GRN_TRUE (!RB_GRN_FALSE)
+#define RB_GRN_MICRO_VERSION 7
 
 #define RB_GRN_QUERY_DEFAULT_MAX_EXPRESSIONS 32
 
@@ -110,8 +106,8 @@ struct _RbGrnObject
     grn_id domain_id;
     grn_obj *range;
     grn_id range_id;
-    rb_grn_boolean need_close;
-    rb_grn_boolean have_finalizer;
+    grn_bool need_close;
+    grn_bool have_finalizer;
 };
 
 typedef struct _RbGrnNamedObject RbGrnNamedObject;
@@ -178,7 +174,7 @@ struct _RbGrnExpression
     grn_obj *value;
 };
 
-RB_GRN_VAR rb_grn_boolean rb_grn_exited;
+RB_GRN_VAR grn_bool rb_grn_exited;
 
 RB_GRN_VAR VALUE rb_eGrnError;
 RB_GRN_VAR VALUE rb_eGrnObjectClosed;
@@ -275,7 +271,7 @@ grn_obj       *rb_grn_context_get_backward_compatibility
 const char    *rb_grn_inspect                       (VALUE object);
 void           rb_grn_scan_options                  (VALUE options, ...)
                                                      RB_GRN_GNUC_NULL_TERMINATED;
-rb_grn_boolean rb_grn_equal_option                  (VALUE option,
+grn_bool rb_grn_equal_option                  (VALUE option,
 						     const char *key);
 
 VALUE          rb_grn_object_alloc                  (VALUE klass);
@@ -504,7 +500,7 @@ VALUE          rb_grn_column_expression_builder_build
 
 #define RVAL2GRNTABLECURSOR(object)   (rb_grn_table_cursor_from_ruby_object(object))
 #define GRNTABLECURSOR2RVAL(klass, context, cursor) \
-    (rb_grn_table_cursor_to_ruby_object(klass, context, cursor, RB_GRN_TRUE))
+    (rb_grn_table_cursor_to_ruby_object(klass, context, cursor, GRN_TRUE))
 #define GRNTABLECURSOR2RCLASS(object) (rb_grn_table_cursor_to_ruby_class(object))
 
 #define RVAL2GRNCOLUMN(object, context) \
@@ -582,19 +578,19 @@ grn_obj       *rb_grn_object_from_ruby_object       (VALUE object,
 VALUE          rb_grn_object_to_ruby_object         (VALUE klass,
 						     grn_ctx *context,
 						     grn_obj *object,
-						     rb_grn_boolean owner);
+						     grn_bool owner);
 VALUE          rb_grn_object_to_ruby_class          (grn_obj *object);
 
 grn_obj       *rb_grn_database_from_ruby_object     (VALUE object);
 VALUE          rb_grn_database_to_ruby_object       (grn_ctx *context,
 						     grn_obj *db,
-						     rb_grn_boolean owner);
+						     grn_bool owner);
 
 grn_obj       *rb_grn_table_from_ruby_object        (VALUE object,
 						     grn_ctx **context);
 VALUE          rb_grn_table_to_ruby_object          (grn_ctx *context,
 						     grn_obj *table,
-						     rb_grn_boolean owner);
+						     grn_bool owner);
 
 grn_table_cursor *
                rb_grn_table_cursor_from_ruby_object (VALUE object,
@@ -602,7 +598,7 @@ grn_table_cursor *
 VALUE          rb_grn_table_cursor_to_ruby_object   (VALUE klass,
 						     grn_ctx *context,
 						     grn_table_cursor *cursor,
-						     rb_grn_boolean owner);
+						     grn_bool owner);
 VALUE          rb_grn_table_cursor_to_ruby_class    (grn_table_cursor *cursor);
 void           rb_grn_table_cursor_deconstruct      (RbGrnTableCursor *rb_grn_table_cursor,
 						     grn_table_cursor **cursor,
@@ -617,7 +613,7 @@ grn_obj       *rb_grn_column_from_ruby_object       (VALUE object,
 VALUE          rb_grn_column_to_ruby_object         (VALUE klass,
 						     grn_ctx *context,
 						     grn_obj *column,
-						     rb_grn_boolean owner);
+						     grn_bool owner);
 
 grn_query     *rb_grn_query_from_ruby_object        (VALUE object);
 VALUE          rb_grn_query_to_ruby_object          (grn_ctx *context,
@@ -691,7 +687,7 @@ VALUE          rb_grn_obj_to_ruby_object            (VALUE klass,
 grn_snip      *rb_grn_snippet_from_ruby_object      (VALUE rb_snippet);
 VALUE          rb_grn_snippet_to_ruby_object        (grn_ctx *context,
 						     grn_snip *snippet,
-						     rb_grn_boolean owner);
+						     grn_bool owner);
 
 RB_GRN_END_DECLS
 

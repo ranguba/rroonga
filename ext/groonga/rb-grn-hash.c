@@ -207,7 +207,7 @@ rb_grn_hash_s_create (int argc, VALUE *argv, VALUE klass)
 			     flags, key_type, value_type);
     if (!table)
 	rb_grn_context_check(context, rb_ary_new4(argc, argv));
-    rb_table = GRNOBJECT2RVAL(klass, context, table, RB_GRN_TRUE);
+    rb_table = GRNOBJECT2RVAL(klass, context, table, GRN_TRUE);
 
     if (!NIL_P(rb_default_tokenizer))
 	rb_funcall(rb_table, rb_intern("default_tokenizer="), 1,
@@ -275,7 +275,7 @@ rb_grn_hash_search (int argc, VALUE *argv, VALUE self)
 				  GRN_OBJ_TABLE_HASH_KEY | GRN_OBJ_WITH_SUBREC,
 				  table, 0);
 	rb_grn_context_check(context, self);
-	rb_result = GRNOBJECT2RVAL(Qnil, context, result, RB_GRN_TRUE);
+	rb_result = GRNOBJECT2RVAL(Qnil, context, result, GRN_TRUE);
     } else {
 	result = RVAL2GRNOBJECT(rb_result, &context);
     }

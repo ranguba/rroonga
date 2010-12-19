@@ -25,7 +25,7 @@ struct _RbGrnSnippet
 {
     grn_ctx *context;
     grn_snip *snippet;
-    rb_grn_boolean owner;
+    grn_bool owner;
 };
 
 VALUE rb_cGrnSnippet;
@@ -76,7 +76,7 @@ rb_rb_grn_snippet_free (void *object)
 
 VALUE
 rb_grn_snippet_to_ruby_object (grn_ctx *context, grn_snip *snippet,
-			       rb_grn_boolean owner)
+			       grn_bool owner)
 {
     RbGrnSnippet *rb_grn_snippet;
 
@@ -201,7 +201,7 @@ rb_grn_snippet_initialize (int argc, VALUE *argv, VALUE self)
     DATA_PTR(self) = rb_grn_snippet;
     rb_grn_snippet->context = context;
     rb_grn_snippet->snippet = snippet;
-    rb_grn_snippet->owner = RB_GRN_TRUE;
+    rb_grn_snippet->owner = GRN_TRUE;
 
     rb_iv_set(self, "@context", rb_context);
 

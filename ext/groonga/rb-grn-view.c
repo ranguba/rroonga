@@ -129,7 +129,7 @@ rb_grn_view_s_create (int argc, VALUE *argv, VALUE klass)
     table = grn_table_create(context, name, name_size, path, flags, NULL, NULL);
     if (!table)
 	rb_grn_context_check(context, rb_ary_new4(argc, argv));
-    rb_table = GRNOBJECT2RVAL(klass, context, table, RB_GRN_TRUE);
+    rb_table = GRNOBJECT2RVAL(klass, context, table, GRN_TRUE);
 
     if (rb_block_given_p())
         return rb_ensure(rb_yield, rb_table, rb_grn_object_close, rb_table);

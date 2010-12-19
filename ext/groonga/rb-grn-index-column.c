@@ -257,7 +257,7 @@ rb_grn_index_column_get_sources (VALUE self)
 	VALUE rb_source;
 
 	source = grn_ctx_at(context, *source_ids);
-	rb_source = GRNOBJECT2RVAL(Qnil, context, source, RB_GRN_FALSE);
+	rb_source = GRNOBJECT2RVAL(Qnil, context, source, GRN_FALSE);
 	rb_ary_push(rb_sources, rb_source);
 	source_ids++;
     }
@@ -470,7 +470,7 @@ rb_grn_index_column_search (int argc, VALUE *argv, VALUE self)
 				  GRN_OBJ_TABLE_HASH_KEY | GRN_OBJ_WITH_SUBREC,
 				  range, 0);
 	rb_grn_context_check(context, self);
-	rb_result = GRNOBJECT2RVAL(Qnil, context, result, RB_GRN_TRUE);
+	rb_result = GRNOBJECT2RVAL(Qnil, context, result, GRN_TRUE);
     } else {
 	result = RVAL2GRNOBJECT(rb_result, &context);
     }

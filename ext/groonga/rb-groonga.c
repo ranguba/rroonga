@@ -18,14 +18,14 @@
 
 #include "rb-grn.h"
 
-rb_grn_boolean rb_grn_exited = RB_GRN_FALSE;
+grn_bool rb_grn_exited = GRN_FALSE;
 
 static void
 finish_groonga (VALUE data)
 {
     debug("finish\n");
     grn_fin();
-    rb_grn_exited = RB_GRN_TRUE;
+    rb_grn_exited = GRN_TRUE;
     debug("finish: done\n");
 }
 

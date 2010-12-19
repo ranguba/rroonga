@@ -334,7 +334,7 @@ rb_grn_expression_parse (int argc, VALUE *argv, VALUE self)
 {
     grn_ctx *context = NULL;
     grn_obj *expression, *default_column;
-    rb_grn_boolean default_column_is_created = RB_GRN_FALSE;
+    grn_bool default_column_is_created = GRN_FALSE;
     grn_operator default_operator = GRN_OP_AND;
     grn_operator default_mode = GRN_OP_MATCH;
     grn_rc rc;
@@ -370,7 +370,7 @@ rb_grn_expression_parse (int argc, VALUE *argv, VALUE self)
 	default_column = RVAL2GRNOBJECT(rb_default_column, &context);
     } else {
 	default_column = RVAL2GRNBULK(rb_default_column, context, NULL);
-	default_column_is_created = RB_GRN_TRUE;
+	default_column_is_created = GRN_TRUE;
     }
 
     if (!NIL_P(rb_default_mode))
@@ -701,7 +701,7 @@ rb_grn_expression_snippet (int argc, VALUE *argv, VALUE self)
     rb_grn_context_check(context,
 			 rb_ary_new3(2, self, rb_ary_new4(argc, argv)));
 
-    return GRNSNIPPET2RVAL(context, snippet, RB_GRN_TRUE);
+    return GRNSNIPPET2RVAL(context, snippet, GRN_TRUE);
 }
 
 void

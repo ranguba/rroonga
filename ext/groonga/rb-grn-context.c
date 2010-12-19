@@ -376,7 +376,7 @@ rb_grn_context_inspect (VALUE self)
 
     rb_str_cat2(inspected, "database: <");
     database = grn_ctx_db(context);
-    rb_database = GRNDB2RVAL(context, database, RB_GRN_FALSE);
+    rb_database = GRNDB2RVAL(context, database, GRN_FALSE);
     rb_str_concat(inspected, rb_inspect(rb_database));
     rb_str_cat2(inspected, ">");
 
@@ -474,7 +474,7 @@ rb_grn_context_get_database (VALUE self)
     grn_ctx *context;
 
     context = SELF(self);
-    return GRNDB2RVAL(context, grn_ctx_db(context), RB_GRN_FALSE);
+    return GRNDB2RVAL(context, grn_ctx_db(context), GRN_FALSE);
 }
 
 /*
@@ -693,7 +693,7 @@ rb_grn_context_array_reference (VALUE self, VALUE name_or_id)
 	break;
     }
 
-    return GRNOBJECT2RVAL(Qnil, context, object, RB_GRN_FALSE);
+    return GRNOBJECT2RVAL(Qnil, context, object, GRN_FALSE);
 }
 
 void

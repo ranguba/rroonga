@@ -221,7 +221,7 @@ rb_grn_patricia_trie_s_create (int argc, VALUE *argv, VALUE klass)
 			     flags, key_type, value_type);
     if (!table)
 	rb_grn_context_check(context, rb_ary_new4(argc, argv));
-    rb_table = GRNOBJECT2RVAL(klass, context, table, RB_GRN_TRUE);
+    rb_table = GRNOBJECT2RVAL(klass, context, table, GRN_TRUE);
 
     if (!NIL_P(rb_default_tokenizer))
 	rb_funcall(rb_table, rb_intern("default_tokenizer="), 1,
@@ -289,7 +289,7 @@ rb_grn_patricia_trie_search (int argc, VALUE *argv, VALUE self)
     grn_obj *key, *domain, *result;
     grn_operator operator;
     grn_search_optarg search_options;
-    rb_grn_boolean search_options_is_set = RB_GRN_FALSE;
+    grn_bool search_options_is_set = GRN_FALSE;
     VALUE rb_key, options, rb_result, rb_operator, rb_type;
 
     rb_grn_table_key_support_deconstruct(SELF(self), &table, &context,
@@ -312,7 +312,7 @@ rb_grn_patricia_trie_search (int argc, VALUE *argv, VALUE self)
 				  GRN_OBJ_TABLE_HASH_KEY | GRN_OBJ_WITH_SUBREC,
 				  table, 0);
 	rb_grn_context_check(context, self);
-	rb_result = GRNOBJECT2RVAL(Qnil, context, result, RB_GRN_TRUE);
+	rb_result = GRNOBJECT2RVAL(Qnil, context, result, GRN_TRUE);
     } else {
 	result = RVAL2GRNOBJECT(rb_result, &context);
     }
@@ -381,7 +381,7 @@ rb_grn_patricia_trie_scan (VALUE self, VALUE rb_string)
     grn_pat_scan_hit hits[1024];
     const char *string;
     long string_length;
-    rb_grn_boolean block_given;
+    grn_bool block_given;
 
     string = StringValuePtr(rb_string);
     string_length = RSTRING_LEN(rb_string);
@@ -459,7 +459,7 @@ rb_grn_patricia_trie_prefix_search (VALUE self, VALUE rb_prefix)
 			      GRN_OBJ_TABLE_HASH_KEY,
 			      table, 0);
     rb_grn_context_check(context, self);
-    rb_result = GRNOBJECT2RVAL(Qnil, context, result, RB_GRN_TRUE);
+    rb_result = GRNOBJECT2RVAL(Qnil, context, result, GRN_TRUE);
 
     GRN_BULK_REWIND(key);
     RVAL2GRNKEY(rb_prefix, context, key, domain_id, domain, self);

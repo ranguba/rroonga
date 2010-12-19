@@ -69,20 +69,20 @@ rb_grn_scan_options (VALUE options, ...)
              rb_grn_inspect(available_keys));
 }
 
-rb_grn_boolean
+grn_bool
 rb_grn_equal_option (VALUE option, const char *key)
 {
     VALUE key_string, key_symbol;
 
     key_string = rb_str_new2(key);
     if (RVAL2CBOOL(rb_funcall(option, rb_intern("=="), 1, key_string)))
-	return RB_GRN_TRUE;
+	return GRN_TRUE;
 
     key_symbol = rb_str_intern(key_string);
     if (RVAL2CBOOL(rb_funcall(option, rb_intern("=="), 1, key_symbol)))
-	return RB_GRN_TRUE;
+	return GRN_TRUE;
 
-    return RB_GRN_FALSE;
+    return GRN_FALSE;
 }
 
 static VALUE
@@ -90,7 +90,7 @@ rb_grn_bulk_to_ruby_object_by_range_id (grn_ctx *context, grn_obj *bulk,
 					grn_id range_id,
 					VALUE related_object, VALUE *rb_value)
 {
-    rb_grn_boolean success = RB_GRN_TRUE;
+    grn_bool success = GRN_TRUE;
 
     switch (range_id) {
       case GRN_DB_VOID:
@@ -132,7 +132,7 @@ rb_grn_bulk_to_ruby_object_by_range_id (grn_ctx *context, grn_obj *bulk,
 						 GRN_TEXT_LEN(bulk));
 	break;
       default:
-	success = RB_GRN_FALSE;
+	success = GRN_FALSE;
 	break;
     }
 
@@ -144,14 +144,14 @@ rb_grn_bulk_to_ruby_object_by_range_type (grn_ctx *context, grn_obj *bulk,
 					  grn_obj *range, grn_id range_id,
 					  VALUE related_object, VALUE *rb_value)
 {
-    rb_grn_boolean success = RB_GRN_TRUE;
+    grn_bool success = GRN_TRUE;
 
     if (!range && range_id != GRN_ID_NIL) {
 	range = grn_ctx_at(context, range_id);
     }
 
     if (!range)
-	return RB_GRN_FALSE;
+	return GRN_FALSE;
 
     switch (range->header.type) {
       case GRN_TABLE_HASH_KEY:
@@ -166,7 +166,7 @@ rb_grn_bulk_to_ruby_object_by_range_type (grn_ctx *context, grn_obj *bulk,
 	    } else {
 		VALUE rb_range;
 
-		rb_range = GRNOBJECT2RVAL(Qnil, context, range, RB_GRN_FALSE);
+		rb_range = GRNOBJECT2RVAL(Qnil, context, range, GRN_FALSE);
 		*rb_value = rb_grn_record_new(rb_range, id, Qnil);
 	    }
 	}
@@ -188,13 +188,13 @@ rb_grn_bulk_to_ruby_object_by_range_type (grn_ctx *context, grn_obj *bulk,
 		*rb_value = rb_float_new(GRN_FLOAT_VALUE(bulk));
 		break;
 	      default:
-		success = RB_GRN_FALSE;
+		success = GRN_FALSE;
 	    }
 	    break;
 	}
 	break;
       default:
-	success = RB_GRN_FALSE;
+	success = GRN_FALSE;
 	break;
     }
 
@@ -332,7 +332,7 @@ rb_grn_bulk_from_ruby_object_with_type (VALUE object, grn_ctx *context,
     grn_id record_id, range;
     VALUE rb_type_object;
     grn_obj_flags flags = 0;
-    rb_grn_boolean string_p, table_type_p;
+    grn_bool string_p, table_type_p;
 
     string_p = rb_type(object) == T_STRING;
     table_type_p = (GRN_TABLE_HASH_KEY <= type->header.type &&
@@ -420,7 +420,7 @@ rb_grn_bulk_from_ruby_object_with_type (VALUE object, grn_ctx *context,
       case GRN_DB_BIGRAM:
       case GRN_DB_TRIGRAM:
       case GRN_DB_MECAB:
-	rb_type_object = GRNOBJECT2RVAL(Qnil, context, type, RB_GRN_FALSE);
+	rb_type_object = GRNOBJECT2RVAL(Qnil, context, type, GRN_FALSE);
 	rb_raise(rb_eArgError,
 		 "unbulkable type: %s",
 		 rb_grn_inspect(rb_type_object));
@@ -603,7 +603,7 @@ rb_grn_value_to_ruby_object (grn_ctx *context,
 
 	    rb_value = rb_ary_new();
 	    if (range)
-		rb_range = GRNTABLE2RVAL(context, range, RB_GRN_FALSE);
+		rb_range = GRNTABLE2RVAL(context, range, GRN_FALSE);
 	    uvector = (grn_id *)GRN_BULK_HEAD(value);
 	    uvector_end = (grn_id *)GRN_BULK_CURR(value);
 	    for (; uvector < uvector_end; uvector++) {
@@ -626,7 +626,7 @@ rb_grn_value_to_ruby_object (grn_ctx *context,
     }
 
     if (!range)
-	return GRNOBJECT2RVAL(Qnil, context, value, RB_GRN_FALSE);
+	return GRNOBJECT2RVAL(Qnil, context, value, GRN_FALSE);
 
     return Qnil;
 }
@@ -647,7 +647,7 @@ rb_grn_id_from_ruby_object (VALUE object, grn_ctx *context, grn_obj *table,
 	    VALUE rb_expected_table;
 
 	    rb_expected_table =
-		GRNOBJECT2RVAL(Qnil, context, table, RB_GRN_FALSE);
+		GRNOBJECT2RVAL(Qnil, context, table, GRN_FALSE);
 	    rb_raise(rb_eGrnError,
 		     "wrong table: expected <%s>: actual <%s>",
 		     rb_grn_inspect(rb_expected_table),

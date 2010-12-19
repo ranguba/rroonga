@@ -38,7 +38,7 @@ VALUE
 rb_grn_variable_to_ruby_object (grn_ctx *context, grn_obj *variable)
 {
     return rb_grn_object_to_ruby_object(rb_cGrnVariable, context, variable,
-                                        RB_GRN_TRUE);
+                                        GRN_TRUE);
 }
 
 void

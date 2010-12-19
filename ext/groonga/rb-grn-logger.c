@@ -368,7 +368,7 @@ static VALUE
 rb_grn_logger_s_set_path (VALUE klass, VALUE rb_path,
 			  const char **path, const char *class_variable_name)
 {
-    rb_grn_boolean need_reopen = RB_GRN_FALSE;
+    grn_bool need_reopen = GRN_FALSE;
 
     if (NIL_P(rb_path)) {
 	need_reopen = *path != NULL;
@@ -377,7 +377,7 @@ rb_grn_logger_s_set_path (VALUE klass, VALUE rb_path,
 	const char *current_path = *path;
 	*path = RSTRING_PTR(rb_path);
 	if (!current_path || strcmp(*path, current_path) != 0) {
-	    need_reopen = RB_GRN_TRUE;
+	    need_reopen = GRN_TRUE;
 	}
     }
     rb_cv_set(klass, class_variable_name, rb_path);

@@ -42,7 +42,7 @@ rb_grn_table_cursor_from_ruby_object (VALUE object, grn_ctx **context)
 VALUE
 rb_grn_table_cursor_to_ruby_object (VALUE klass, grn_ctx *context,
 				    grn_table_cursor *cursor,
-				    rb_grn_boolean owner)
+				    grn_bool owner)
 {
     return GRNOBJECT2RVAL(klass, context, cursor, owner);
 }

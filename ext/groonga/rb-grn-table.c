@@ -51,7 +51,7 @@ rb_grn_table_from_ruby_object (VALUE object, grn_ctx **context)
 
 VALUE
 rb_grn_table_to_ruby_object (grn_ctx *context, grn_obj *table,
-			     rb_grn_boolean owner)
+			     grn_bool owner)
 {
     return GRNOBJECT2RVAL(Qnil, context, table, owner);
 }
@@ -337,7 +337,7 @@ rb_grn_table_define_column (int argc, VALUE *argv, VALUE self)
 			     rb_ary_new3(2, self, rb_ary_new4(argc, argv)));
     }
 
-    rb_column = GRNCOLUMN2RVAL(Qnil, context, column, RB_GRN_TRUE);
+    rb_column = GRNCOLUMN2RVAL(Qnil, context, column, GRN_TRUE);
     rb_ary_push(columns, rb_column);
     rb_grn_named_object_set_name(RB_GRN_NAMED_OBJECT(DATA_PTR(rb_column)),
 				 name, name_size);
@@ -470,7 +470,7 @@ rb_grn_table_define_index_column (int argc, VALUE *argv, VALUE self)
 			     rb_ary_new3(2, self, rb_ary_new4(argc, argv)));
     }
 
-    rb_column = GRNCOLUMN2RVAL(Qnil, context, column, RB_GRN_TRUE);
+    rb_column = GRNCOLUMN2RVAL(Qnil, context, column, GRN_TRUE);
     if (!NIL_P(rb_source))
 	rb_funcall(rb_column, rb_intern("source="), 1, rb_source);
     if (!NIL_P(rb_sources))
@@ -520,7 +520,7 @@ rb_grn_table_get_column (VALUE self, VALUE rb_name)
     grn_obj *column;
     const char *name = NULL;
     unsigned name_size = 0;
-    rb_grn_boolean owner;
+    grn_bool owner;
     VALUE rb_column;
     VALUE columns;
     VALUE *raw_columns;
@@ -640,7 +640,7 @@ rb_grn_table_get_columns (int argc, VALUE *argv, VALUE self)
 	grn_table_cursor_get_key(context, cursor, &key);
 	column_id = key;
 	column = grn_ctx_at(context, *column_id);
-	rb_column = GRNOBJECT2RVAL(Qnil, context, column, RB_GRN_FALSE);
+	rb_column = GRNOBJECT2RVAL(Qnil, context, column, GRN_FALSE);
 	rb_ary_push(rb_columns, rb_column);
     }
     rc = grn_table_cursor_close(context, cursor);
@@ -1224,7 +1224,7 @@ rb_grn_table_group (int argc, VALUE *argv, VALUE self)
 	results[i].flags = 0;
 	results[i].op = GRN_OP_OR;
 
-	rb_result = GRNOBJECT2RVAL(Qnil, context, result, RB_GRN_TRUE);
+	rb_result = GRNOBJECT2RVAL(Qnil, context, result, GRN_TRUE);
 	rb_ary_push(rb_results, rb_result);
     }
 
@@ -1845,7 +1845,7 @@ rb_grn_table_select (int argc, VALUE *argv, VALUE self)
 				  GRN_TABLE_HASH_KEY | GRN_OBJ_WITH_SUBREC,
 				  table,
 				  NULL);
-	rb_result = GRNTABLE2RVAL(context, result, RB_GRN_TRUE);
+	rb_result = GRNTABLE2RVAL(context, result, GRN_TRUE);
     } else {
 	result = RVAL2GRNTABLE(rb_result, &context);
     }
@@ -1869,7 +1869,7 @@ rb_grn_table_select (int argc, VALUE *argv, VALUE self)
 
     rb_attr(rb_singleton_class(rb_result),
 	    rb_intern("expression"),
-	    RB_GRN_TRUE, RB_GRN_FALSE, RB_GRN_FALSE);
+	    GRN_TRUE, GRN_FALSE, GRN_FALSE);
     rb_iv_set(rb_result, "@expression", rb_expression);
 
     return rb_result;

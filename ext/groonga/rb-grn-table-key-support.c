@@ -491,12 +491,12 @@ static VALUE
 rb_grn_table_key_support_get_value (int argc, VALUE *argv, VALUE self)
 {
     VALUE rb_id_or_key, rb_options;
-    rb_grn_boolean use_key;
+    grn_bool use_key;
 
     rb_scan_args(argc, argv, "11", &rb_id_or_key, &rb_options);
 
     if (NIL_P(rb_options)) {
-	use_key = RB_GRN_TRUE;
+	use_key = GRN_TRUE;
     } else {
 	VALUE rb_option_id;
 
@@ -562,12 +562,12 @@ static VALUE
 rb_grn_table_key_support_set_value (int argc, VALUE *argv, VALUE self)
 {
     VALUE rb_id_or_key, rb_value, rb_options;
-    rb_grn_boolean use_key;
+    grn_bool use_key;
 
     rb_scan_args(argc, argv, "21", &rb_id_or_key, &rb_value, &rb_options);
 
     if (NIL_P(rb_options)) {
-	use_key = RB_GRN_TRUE;
+	use_key = GRN_TRUE;
     } else {
 	VALUE rb_option_id;
 
@@ -608,7 +608,7 @@ rb_grn_table_key_support_get_default_tokenizer (VALUE self)
 				 NULL);
     rb_grn_context_check(context, self);
 
-    return GRNOBJECT2RVAL(Qnil, context, tokenizer, RB_GRN_FALSE);
+    return GRNOBJECT2RVAL(Qnil, context, tokenizer, GRN_FALSE);
 }
 
 /*

@@ -60,7 +60,7 @@ rb_grn_column_from_ruby_object (VALUE object, grn_ctx **context)
 
 VALUE
 rb_grn_column_to_ruby_object (VALUE klass, grn_ctx *context, grn_obj *column,
-			      rb_grn_boolean owner)
+			      grn_bool owner)
 {
     return GRNOBJECT2RVAL(klass, context, column, owner);
 }
@@ -128,7 +128,7 @@ rb_grn_column_get_table (VALUE self)
     table = grn_column_table(context, column);
     rb_grn_context_check(context, self);
 
-    return GRNOBJECT2RVAL(Qnil, context, table, RB_GRN_FALSE);
+    return GRNOBJECT2RVAL(Qnil, context, table, GRN_FALSE);
 }
 
 /*
@@ -333,7 +333,7 @@ rb_grn_column_select (int argc, VALUE *argv, VALUE self)
 				  GRN_TABLE_HASH_KEY | GRN_OBJ_WITH_SUBREC,
 				  table,
 				  0);
-	rb_result = GRNTABLE2RVAL(context, result, RB_GRN_TRUE);
+	rb_result = GRNTABLE2RVAL(context, result, GRN_TRUE);
     } else {
 	result = RVAL2GRNTABLE(rb_result, &context);
     }
@@ -355,7 +355,7 @@ rb_grn_column_select (int argc, VALUE *argv, VALUE self)
 
     rb_attr(rb_singleton_class(rb_result),
 	    rb_intern("expression"),
-	    RB_GRN_TRUE, RB_GRN_FALSE, RB_GRN_FALSE);
+	    GRN_TRUE, GRN_FALSE, GRN_FALSE);
     rb_iv_set(rb_result, "@expression", rb_expression);
 
     return rb_result;

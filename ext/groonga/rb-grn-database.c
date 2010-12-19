@@ -45,7 +45,7 @@ rb_grn_database_from_ruby_object (VALUE object)
 
 VALUE
 rb_grn_database_to_ruby_object (grn_ctx *context, grn_obj *database,
-				rb_grn_boolean owner)
+				grn_bool owner)
 {
     return GRNOBJECT2RVAL(rb_cGrnDatabase, context, database, owner);
 }
@@ -195,7 +195,7 @@ rb_grn_database_s_create (int argc, VALUE *argv, VALUE klass)
 	grn_obj_unlink(context, old_database);
     database = grn_db_create(context, path, &create_args);
     rb_grn_context_check(context, rb_ary_new4(argc, argv));
-    rb_database = GRNOBJECT2RVAL(klass, context, database, RB_GRN_TRUE);
+    rb_database = GRNOBJECT2RVAL(klass, context, database, GRN_TRUE);
     rb_iv_set(rb_database, "@context", rb_context);
     if (!NIL_P(rb_context))
 	rb_iv_set(rb_context, "database", rb_database);
@@ -315,7 +315,7 @@ rb_grn_database_each (VALUE self)
 
 	object = grn_ctx_at(context, id);
 	if (object)
-	    rb_yield(GRNOBJECT2RVAL(Qnil, context, object, RB_GRN_FALSE));
+	    rb_yield(GRNOBJECT2RVAL(Qnil, context, object, GRN_FALSE));
     }
     rb_grn_object_close(rb_cursor);
     rb_iv_set(self, "cursor", Qnil);
