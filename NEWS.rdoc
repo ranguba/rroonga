@@ -1,5 +1,17 @@
 = NEWS
 
+== 1.0.7: 2010-12-19
+
+=== Fixes
+
+* Supported pkg-config installed by RubyGems on Ruby 1.8.
+  [Reported by @kamipo]
+* Fixed a memory leak in Groonga::Table#columns.
+
+=== Thanks
+
+* @kamipo
+
 == 1.0.5: 2010-11-29
 
 === Improvements
