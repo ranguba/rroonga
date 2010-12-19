@@ -36,7 +36,7 @@ inclidng contributed patches.)
 == Dependencies
 
 * Ruby >= 1.8 (including 1.9.1 and 1.9.2)
-* groonga >= 1.0.0
+* groonga >= 1.0.4
 
 == Install
 
