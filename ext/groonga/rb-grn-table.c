@@ -623,8 +623,10 @@ rb_grn_table_get_columns (int argc, VALUE *argv, VALUE self)
     rb_grn_context_check(context, self);
 
     rb_columns = rb_ary_new2(n);
-    if (n == 0)
+    if (n == 0) {
+	grn_obj_unlink(context, columns);
 	return rb_columns;
+    }
 
     cursor = grn_table_cursor_open(context, columns, NULL, 0, NULL, 0,
 				   0, -1, GRN_CURSOR_ASCENDING);
@@ -642,6 +644,7 @@ rb_grn_table_get_columns (int argc, VALUE *argv, VALUE self)
 	rb_ary_push(rb_columns, rb_column);
     }
     rc = grn_table_cursor_close(context, cursor);
+    grn_obj_unlink(context, columns);
     if (rc != GRN_SUCCESS) {
 	rb_grn_context_check(context, self);
 	rb_grn_rc_check(rc, self);
