@@ -98,6 +98,8 @@ rb_grn_expression_initialize (int argc, VALUE *argv, VALUE self)
     rb_grn_object_assign(Qnil, self, rb_context, context, expression);
     rb_grn_context_check(context, self);
 
+    rb_iv_set(self, "@objects", rb_ary_new());
+
     return Qnil;
 }
 
@@ -183,6 +185,8 @@ rb_grn_expression_append_object (int argc, VALUE *argv, VALUE self)
     grn_expr_append_obj(context, expression, object,
                         operation, n_arguments);
     rb_grn_context_check(context, self);
+    rb_ary_push(rb_iv_get(self, "@objects"), rb_object);
+
     return self;
 }
 
