@@ -339,6 +339,27 @@ rb_grn_table_define_column (int argc, VALUE *argv, VALUE self)
     return rb_column;
 }
 
+static grn_bool
+n_gram_tokenizer_p(grn_ctx *context, grn_obj *tokenizer)
+{
+    char tokenizer_name[GRN_TABLE_MAX_KEY_SIZE];
+    int name_size;
+
+    name_size = grn_obj_name(context, tokenizer,
+			     tokenizer_name, sizeof(tokenizer_name) - 1);
+    if (name_size == 0)
+	return GRN_FALSE;
+
+    tokenizer_name[name_size] = '\0';
+
+#define HAVE_PREFIX_P(prefix) \
+    (strncmp(tokenizer_name, prefix, strlen(prefix)) == 0)
+    return (HAVE_PREFIX_P("TokenUnigram") ||
+	    HAVE_PREFIX_P("TokenBigram") ||
+	    HAVE_PREFIX_P("TokenTrigram"));
+#undef HAVE_PREFIX_P
+}
+
 /*
  * call-seq:
  *   table.define_index_column(name, value_type, options={}) -> Groonga::IndexColumn
@@ -438,16 +459,12 @@ rb_grn_table_define_index_column (int argc, VALUE *argv, VALUE self)
     if (NIL_P(rb_with_position) &&
 	(table->header.type == GRN_TABLE_HASH_KEY ||
 	 table->header.type == GRN_TABLE_PAT_KEY)) {
-	grn_id tokenizer_id;
 	grn_obj *tokenizer;
 
 	tokenizer = grn_obj_get_info(context, table,
 				     GRN_INFO_DEFAULT_TOKENIZER,
 				     NULL);
-	tokenizer_id = grn_obj_id(context, tokenizer);
-	if ((tokenizer_id == GRN_DB_UNIGRAM) ||
-	    (tokenizer_id == GRN_DB_BIGRAM) ||
-	    (tokenizer_id == GRN_DB_TRIGRAM)) {
+	if (tokenizer && n_gram_tokenizer_p(context, tokenizer)) {
 	    rb_with_position = Qtrue;
 	}
     }
