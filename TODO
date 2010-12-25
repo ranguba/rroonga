@@ -1,1 +1,3 @@
-* support clever table creation schema.
+* support :default_tokenizer dump support.
+* support :key_normalize dump support.
+* support index specification in match_target.
