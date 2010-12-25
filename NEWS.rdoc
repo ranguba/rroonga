@@ -1,5 +1,15 @@
 = NEWS
 
+== 1.0.8: 2010-12-25
+
+=== Improvements
+
+* Improved Groonga::Schema's n-gram tokenizer detect process.
+
+=== Fixes
+
+* Fixed GC problem caused by match_target in select.
+
 == 1.0.7: 2010-12-19
 
 === Fixes
