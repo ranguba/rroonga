@@ -144,27 +144,39 @@ ObjectSpace.each_object(Rake::RDocTask) do |rdoc_task|
   rdoc_task.rdoc_files += Dir.glob("**/*.rdoc")
 end
 
+def windows_os?
+  RUBY_PLATFORM =~ /mswin(?!ce)|mingw|cygwin|bccwin/
+end
+
+def get_binary_files(dir)
+  binary_files = []
+  Find.find(dir) do |name|
+    next unless File.file?(name)
+    next if /\.zip\z/i =~ name
+    binary_files << name
+  end
+  binary_files
+end
+
 relative_vendor_dir = "vendor"
 relative_binary_dir = File.join("vendor", "local")
 vendor_dir = File.join(base_dir, relative_vendor_dir)
 binary_dir = File.join(base_dir, relative_binary_dir)
+
 Rake::ExtensionTask.new("groonga", project.spec) do |ext|
-  ext.cross_compile = true
-  ext.cross_compiling do |spec|
-    if /mingw|mswin/ =~ spec.platform.to_s
-      binary_files = []
-      Find.find(relative_binary_dir) do |name|
-        next unless File.file?(name)
-        next if /\.zip\z/i =~ name
-        binary_files << name
+  unless (windows_os?)
+    ext.cross_compile = true
+    ext.cross_compiling do |spec|
+      if /mingw|mswin/ =~ spec.platform.to_s
+        spec.files += get_binary_files(relative_binary_dir)
       end
-      spec.files += binary_files
     end
+  else
+    ext.gem_spec.files += get_binary_files(relative_binary_dir)
   end
 end
 
 task :publish_docs => [:prepare_docs_for_publishing]
-
 
 include ERB::Util
 
