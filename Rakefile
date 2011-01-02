@@ -144,13 +144,14 @@ ObjectSpace.each_object(Rake::RDocTask) do |rdoc_task|
   rdoc_task.rdoc_files += Dir.glob("**/*.rdoc")
 end
 
-def windows_os?
-  RUBY_PLATFORM =~ /mswin(?!ce)|mingw|cygwin|bccwin/
+def windows?(platform=nil)
+  platform ||= RUBY_PLATFORM
+  platform =~ /mswin(?!ce)|mingw|cygwin|bccwin/
 end
 
-def get_binary_files(dir)
+def collect_binary_files(binary_dir)
   binary_files = []
-  Find.find(dir) do |name|
+  Find.find(binary_dir) do |name|
     next unless File.file?(name)
     next if /\.zip\z/i =~ name
     binary_files << name
@@ -164,15 +165,15 @@ vendor_dir = File.join(base_dir, relative_vendor_dir)
 binary_dir = File.join(base_dir, relative_binary_dir)
 
 Rake::ExtensionTask.new("groonga", project.spec) do |ext|
-  unless (windows_os?)
+  if windows?
+    ext.gem_spec.files += collect_binary_files(relative_binary_dir)
+  else
     ext.cross_compile = true
     ext.cross_compiling do |spec|
-      if /mingw|mswin/ =~ spec.platform.to_s
-        spec.files += get_binary_files(relative_binary_dir)
+      if windows?(spec.platform.to_s)
+        spec.files += collect_binary_files(relative_binary_dir)
       end
     end
-  else
-    ext.gem_spec.files += get_binary_files(relative_binary_dir)
   end
 end
 
