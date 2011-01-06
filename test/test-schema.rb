@@ -533,4 +533,50 @@ EOS
     assert_nil(Groonga::Context.default["Items.text"])
     assert_nil(Groonga::Context.default["TermsText.Items_text"])
   end
+
+  def test_auto_columns_sub_directory_removed
+    table = "Posts"
+    dir = create_table_with_column(table)
+
+    Groonga::Schema.remove_table(table)
+
+    assert_table_removed(table)
+    assert_directory_removed(dir)
+  end
+
+  def test_auto_columns_sub_directory_not_removed
+    table = "Posts"
+    dir = create_table_with_column(table)
+
+    Groonga::Context.default[table].remove
+
+    assert_table_removed(table)
+    assert_directory_not_removed(dir)
+  end
+
+  private
+  def columns_directory_path(table)
+    Groonga::Schema::TableDefinition.columns_directory_path(table)
+  end
+
+  def create_table_with_column(name)
+    Groonga::Schema.create_table(name) do |table|
+      table.integer64 :rate
+    end
+    context = Groonga::Context.default
+    columns_directory_path(context[name])
+  end
+
+  def assert_directory_removed(dir)
+    assert_false(File.exist?(dir))
+  end
+
+  def assert_directory_not_removed(dir)
+    assert_true(File.exist?(dir))
+  end
+
+  def assert_table_removed(name)
+    context = Groonga::Context.default
+    assert_nil(context[name])
+  end
 end

@@ -1220,6 +1220,12 @@ module Groonga
         end
         raise UnguessableReferenceTable.new(original_name, candidate_names)
       end
+
+      class << self
+        def columns_directory_path(table)
+          "#{table.path}.columns"
+        end
+      end
     end
 
     class TableRemoveDefinition # :nodoc:
@@ -1230,7 +1236,11 @@ module Groonga
 
       def define
         context = @options[:context]
-        context[@name].remove
+        table = context[@name]
+        dir = TableDefinition.columns_directory_path(table)
+        returned_object = table.remove
+        Dir.rmdir(dir)
+        returned_object
       end
     end
 
@@ -1374,7 +1384,7 @@ module Groonga
       def path(context, table)
         user_path = @options[:path]
         return user_path if user_path
-        columns_dir = "#{table.path}.columns"
+        columns_dir = TableDefinition.columns_directory_path(table)
         FileUtils.mkdir_p(columns_dir)
         File.join(columns_dir, @name)
       end
