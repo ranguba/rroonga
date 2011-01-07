@@ -729,10 +729,31 @@ module Groonga
       @options[:context] || Groonga::Context.default
     end
 
+    module Path # :nodoc:
+      module_function
+
+      def tables_directory_path(database)
+        "#{database.path}.tables"
+      end
+
+      def columns_directory_path(table)
+        "#{table.path}.columns"
+      end
+
+      def rmdir_if_dir_exists(dir)
+        begin
+          Dir.rmdir(dir)
+        rescue Errno::ENOENT
+        end
+      end
+    end
+
     # スキーマ定義時にGroonga::Schema.create_tableや
     # Groonga::Schema#create_tableからブロックに渡されてくる
     # オブジェクト
     class TableDefinition
+      include Path
+
       # テーブルの名前
       attr_reader :name
 
@@ -1120,7 +1141,7 @@ module Groonga
       def path
         user_path = @options[:path]
         return user_path if user_path
-        tables_dir = "#{context.database.path}.tables"
+        tables_dir = tables_directory_path(context.database)
         FileUtils.mkdir_p(tables_dir)
         File.join(tables_dir, @name)
       end
@@ -1220,15 +1241,11 @@ module Groonga
         end
         raise UnguessableReferenceTable.new(original_name, candidate_names)
       end
-
-      class << self
-        def columns_directory_path(table)
-          "#{table.path}.columns"
-        end
-      end
     end
 
     class TableRemoveDefinition # :nodoc:
+      include Path
+
       def initialize(name, options={})
         @name = name
         @options = options
@@ -1237,10 +1254,10 @@ module Groonga
       def define
         context = @options[:context]
         table = context[@name]
-        dir = TableDefinition.columns_directory_path(table)
-        returned_object = table.remove
-        Dir.rmdir(dir)
-        returned_object
+        dir = columns_directory_path(table)
+        result = table.remove
+        rmdir_if_dir_exists(dir)
+        result
       end
     end
 
@@ -1331,6 +1348,8 @@ module Groonga
     end
 
     class ColumnDefinition # :nodoc:
+      include Path
+
       attr_accessor :name, :type
       attr_reader :options
 
@@ -1384,7 +1403,7 @@ module Groonga
       def path(context, table)
         user_path = @options[:path]
         return user_path if user_path
-        columns_dir = TableDefinition.columns_directory_path(table)
+        columns_dir = columns_directory_path(table)
         FileUtils.mkdir_p(columns_dir)
         File.join(columns_dir, @name)
       end
@@ -1411,6 +1430,8 @@ module Groonga
     end
 
     class IndexColumnDefinition # :nodoc:
+      include Path
+
       class << self
         def column_name(context, target_table, target_columns)
           target_table = resolve(context, target_table)

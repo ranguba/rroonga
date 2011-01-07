@@ -534,7 +534,7 @@ EOS
     assert_nil(Groonga::Context.default["TermsText.Items_text"])
   end
 
-  def test_auto_columns_sub_directory_removed
+  def test_columns_directory_removed
     table = "Posts"
     dir = create_table_with_column(table)
 
@@ -544,7 +544,7 @@ EOS
     assert_directory_removed(dir)
   end
 
-  def test_auto_columns_sub_directory_not_removed
+  def test__columns_directory_not_removed
     table = "Posts"
     dir = create_table_with_column(table)
 
@@ -556,7 +556,7 @@ EOS
 
   private
   def columns_directory_path(table)
-    Groonga::Schema::TableDefinition.columns_directory_path(table)
+    Groonga::Schema::Path.columns_directory_path(table)
   end
 
   def create_table_with_column(name)
