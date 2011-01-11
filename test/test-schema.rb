@@ -544,7 +544,7 @@ EOS
     assert_directory_removed(dir)
   end
 
-  def test__columns_directory_not_removed
+  def test_columns_directory_not_removed
     table = "Posts"
     dir = create_table_with_column(table)
 
