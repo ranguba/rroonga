@@ -556,7 +556,7 @@ EOS
 
   private
   def columns_directory_path(table)
-    Groonga::Schema::Path.columns_directory_path(table)
+    "#{table.path}.columns"
   end
 
   def create_table_with_column(name)

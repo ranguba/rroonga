@@ -730,8 +730,6 @@ module Groonga
     end
 
     module Path # :nodoc:
-      module_function
-
       def tables_directory_path(database)
         "#{database.path}.tables"
       end
