@@ -32,6 +32,21 @@ class Query
     @options[:table]
   end
 
+  def filter
+    if @options[:match_columns] and @options[:query]
+      #raise "unsupported" if @options[:filter]
+      "#{@options[:match_columns]}:@#{@options[:query]}"
+    else
+      @options[:filter]
+    end
+  end
+
+  def parameters
+    @options.dup.tap do |options|
+      options.delete(:table)
+    end
+  end
+
   class GroongaLogParser
     def initialize(log)
       @log = log
@@ -211,8 +226,8 @@ class SelectorByCommand < Selector
   end
 
   def select(query)
-    #@context.select(query.table_name, query.parameters)
-    Result.new
+    result = @context.select(query.table_name, query.parameters)
+    CommandResult.new(result)
   end
 
   class << self
@@ -234,14 +249,14 @@ class SelectorByMethod < Selector
 
   def select(query)
     table = @context[query.table_name]
-    result = table.select do |record|#("_key:@example.net")
-      record["_key"] =~ "example.net"
-    end
-    raise result.size.inspect
+    result = table.select(query.filter)
+    #result = table.select do |record|#("_key:@example.net")
+    #  record["_key"] =~ "example.net"
+    #end
     #if not query.drilldown_columns.empty?
     #  drilldown
     #end
-    Result.new
+    MethodResult.new(result)
   end
 
   def drilldown
@@ -250,7 +265,28 @@ end
 
 class Result
   def ==(other)
-    true #XXX
+    #p "#{hit_count} != #{other.hit_count}"
+    hit_count == other.hit_count #XXX
+  end
+end
+
+class CommandResult < Result
+  def initialize(result)
+    @result = result
+  end
+
+  def hit_count
+    @result.n_hits
+  end
+end
+
+class MethodResult < Result
+  def initialize(result)
+    @result = result
+  end
+
+  def hit_count
+    @result.size
   end
 end
 
@@ -314,6 +350,8 @@ class Runner
     benchmarks = @profiles.collect do |profile|
       profile.take_benchmark(query)
     end
+    #pp query
+    #pp benchmarks
     verify_results(benchmarks)
     create_report(benchmarks)
   end
@@ -363,7 +401,7 @@ runner.add_profile(Profile.new("select by method", select_method))
 puts "setup is completed!"
 puts
 
-query_log = "select --table Site"
+query_log = "select --table Site --match_columns title --query f"
 puts "select command:"
 puts "  #{query_log}"
 query = Query.parse_groonga_query_log(query_log)
