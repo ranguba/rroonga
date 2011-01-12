@@ -307,8 +307,8 @@ class SelectorByMethod < Selector
 
   def select(query)
     table = @context[query.table_name]
-    result = table.select(query.filter)
-
+    filter = query.filter
+    result = table.select(filter)
 
     sorted_result = sort(query, result)
     formatted_result = format(query, sorted_result || result)
