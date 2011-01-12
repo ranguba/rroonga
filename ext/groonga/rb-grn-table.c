@@ -1813,6 +1813,7 @@ rb_grn_table_select (int argc, VALUE *argv, VALUE self)
     VALUE rb_allow_pragma, rb_allow_column, rb_allow_update;
     VALUE rb_default_column;
     VALUE rb_expression = Qnil, builder;
+    VALUE rb_context;
 
     rb_scan_args(argc, argv, "02", &condition_or_options, &options);
 
@@ -1820,6 +1821,7 @@ rb_grn_table_select (int argc, VALUE *argv, VALUE self)
 			     NULL, NULL,
 			     NULL, NULL, NULL,
 			     NULL);
+    rb_context = rb_iv_get(self, "@context");
 
     if (RVAL2CBOOL(rb_obj_is_kind_of(condition_or_options, rb_cString))) {
 	rb_query = condition_or_options;
@@ -1862,6 +1864,7 @@ rb_grn_table_select (int argc, VALUE *argv, VALUE self)
 
     if (NIL_P(rb_expression)) {
       builder = rb_grn_record_expression_builder_new(self, rb_name);
+      rb_funcall(builder, rb_intern("context="), 1, rb_context);
       rb_funcall(builder, rb_intern("query="), 1, rb_query);
       rb_funcall(builder, rb_intern("syntax="), 1, rb_syntax);
       rb_funcall(builder, rb_intern("allow_pragma="), 1, rb_allow_pragma);

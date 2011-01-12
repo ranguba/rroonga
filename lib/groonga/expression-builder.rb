@@ -18,6 +18,7 @@
 module Groonga
   module ExpressionBuildable # :nodoc:
     attr_reader :table
+    attr_accessor :context
     attr_accessor :query
     attr_accessor :syntax
     attr_accessor :allow_pragma
@@ -29,6 +30,7 @@ module Groonga
 
     def initialize(*args)
       @table = nil
+      @context = nil #XXX or should use @table.context????
       @name = nil
       @query = nil
       @syntax = nil
@@ -39,7 +41,7 @@ module Groonga
     end
 
     def build(&block)
-      expression = Expression.new(:name => @name)
+      expression = Expression.new(:name => @name, :context => @context)
       variable = expression.define_variable(:domain => @table)
       build_expression(expression, variable, &block)
     end
