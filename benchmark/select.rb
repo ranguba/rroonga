@@ -66,6 +66,30 @@ class Query
     end
   end
 
+  def drilldown_limit
+    if @options[:drilldown_limit]
+      @options[:drilldown_limit].to_i
+    else
+      nil
+    end
+  end
+
+  def drilldown_offset
+    if @options[:drilldown_offset]
+      @options[:drilldown_offset].to_i
+    else
+      nil
+    end
+  end
+
+  def drilldown_sort_by
+    if @options[:drilldown_sortby]
+      @options[:drilldown_sortby]
+    else
+      nil
+    end
+  end
+
   def parameters
     @options.dup.tap do |options|
       options.delete(:table)
@@ -286,10 +310,21 @@ class SelectorByMethod < Selector
 
   def sort(query, result)
     if needs_sort?(query)
-      sort_key = sort_key(query)
-      window_options = window_options(query)
+      sort_key = sort_key(query.sort_by)
+      window_options = window_options(query.limit, query.offset)
       sorted_result = result.sort(sort_key, window_options).collect do |record|
         record.key
+      end
+    end
+  end
+
+  def drilldown_sort(query, result)
+    if needs_drilldown_sort?(query)
+      sort_key = sort_key(query.drilldown_sort_by)
+      window_options = window_options(query.drilldown_limit, query.drilldown_offset)
+
+      sorted_result = result.sort(sort_key, window_options).collect do |record|
+        record
       end
     end
   end
@@ -302,14 +337,20 @@ class SelectorByMethod < Selector
 
   def drilldown(query, result)
     if needs_drilldown?(query)
-      drilldown_results = drilldown_result(result, query.drilldown_columns)
+      drilldown_results = drilldown_result(result, query.drilldown_columns, query)
     end
   end
 
-  def drilldown_result(result, drilldown_columns)
+  def drilldown_result(result, drilldown_columns, query)
     columns = tokenize_column_list(drilldown_columns)
     columns.collect do |column|
-      result.group(column)
+      drilldown_result = result.group(column)
+
+      {
+        :column => column,
+        :result => drilldown_result,
+        :sort => drilldown_sort(query, drilldown_result),
+      }
     end
   end
 
@@ -325,10 +366,14 @@ class SelectorByMethod < Selector
     query.drilldown_columns
   end
 
+  def needs_drilldown_sort?(query)
+    query.drilldown_limit or query.drilldown_offset or query.drilldown_sort_by
+  end
+
   DESCENDING_ORDER_PREFIX = /\A-/
-  def sort_key(query)
-    if query.sort_by
-      build_sort_key(query.sort_by)
+  def sort_key(sort_by)
+    if sort_by
+      build_sort_key(sort_by)
     else
       default_sort_key
     end
@@ -370,13 +415,13 @@ class SelectorByMethod < Selector
     ]
   end
 
-  def window_options(query)
+  def window_options(limit, offset)
     window_options = {}
-    if query.limit
-      window_options[:limit] = query.limit
+    if limit
+      window_options[:limit] = limit
     end
-    if query.offset
-      window_options[:offset] = query.offset
+    if offset
+      window_options[:offset] = offset
     end
     window_options
   end
@@ -587,7 +632,7 @@ runner.add_profile(Profile.new("select by method", select_method))
 puts "setup is completed!"
 puts
 
-query_log = "select --table Site --limit 3 --offset 2 --sortby '-title, _id' --output_columns title --drilldown title,_id,_key"
+query_log = "select --table Site --limit 3 --offset 2 --sortby '-title, _id' --output_columns title --drilldown title,_id,_key --drilldown_limit 7 --drilldown_offset 3 --drilldown_sortby _key"
 puts "select command:"
 puts "  #{query_log}"
 puts
