@@ -36,6 +36,7 @@ class Query
       tokenize
       build_parameter_list
       build_parameters
+      create_query
     end
 
     class << self
@@ -102,6 +103,7 @@ class Query
     end
 
     IMPLICIT_PARAMETER_ORDER = [
+      :table,
       :match_columns,
       :query,
       :filter,
@@ -119,13 +121,15 @@ class Query
       :match_escalation_threshold,
     ]
 
+    NAMED_PARAMETER_PREFIX = /\A--/
+
     def build_parameter_list
       command, parameter_tokens = @tokens.shift, @tokens
       raise "command is not \"select\": #{command.inspect}" unless command == "select"
 
       parameter_name = nil
       parameter_tokens.each do |token|
-        if token =~ /\A--/
+        if token =~ NAMED_PARAMETER_PREFIX
           raise "bad" unless parameter_name.nil?
           parameter_name = token
         elsif parameter_name
@@ -135,6 +139,24 @@ class Query
           @parameter_list << token
         end
       end
+    end
+
+    def build_parameters
+      index = 0
+      @parameter_list.each do |parameter|
+        case parameter
+        when Array
+          name, value = parameter
+          @parameters[to_parameter_symbol(name)] = value
+        else
+          @parameters[IMPLICIT_PARAMETER_ORDER[index]] = parameter
+          index += 1
+        end
+      end
+    end
+
+    def to_parameter_symbol(name)
+      name.sub(NAMED_PARAMETER_PREFIX, '').to_sym
     end
   end
 
