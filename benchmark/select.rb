@@ -380,9 +380,11 @@ end
 class Result
   def ==(other) # XXX needs more strict/rigid check
     if ENV["DEBUG"]
-      p "#{hit_count} == #{other.hit_count} and #{result_count} == #{other.result_count}"
+      pp "#{hit_count} == #{other.hit_count} and #{result_count} == #{other.result_count} and "
+      pp "#{formatted_result} == #{other.formatted_result}"
     end
-    hit_count == other.hit_count and result_count == other.result_count
+
+    hit_count == other.hit_count and result_count == other.result_count and formatted_result == other.formatted_result
   end
 end
 
@@ -397,6 +399,10 @@ class CommandResult < Result
 
   def result_count
     @result.records.size
+  end
+
+  def formatted_result
+    @result.values
   end
 end
 
@@ -413,6 +419,10 @@ class MethodResult < Result
 
   def result_count
     sorted_result.size
+  end
+
+  def formatted_result
+    @formatted_result
   end
 
   private
