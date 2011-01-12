@@ -24,6 +24,10 @@ class Query
   class OutputColumnsPrameter < Parameter
   end
 
+  def initialize(options)
+    @options = options
+  end
+
   class GroongaLogParser
     def initialize(log)
       @log = log
@@ -157,6 +161,10 @@ class Query
 
     def to_parameter_symbol(name)
       name.sub(NAMED_PARAMETER_PREFIX, '').to_sym
+    end
+
+    def create_query
+      Query.new(@parameters)
     end
   end
 
