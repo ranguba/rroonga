@@ -296,15 +296,21 @@ class Benchmark
 
   class Time < Benchmark
     attr_reader :start_time, :end_time
-    def initialize(profile)
+    def initialize(profile, &block)
       @profile = profile
-      @start_time = ::Time.now
-      @result = yield
-      @end_time = ::Time.now
+
+      measure_time(&block)
     end
 
     def time
       @end_time - @start_time
+    end
+
+    private
+    def measure_time
+      @start_time = ::Time.now
+      @result = yield
+      @end_time = ::Time.now
     end
   end
 
