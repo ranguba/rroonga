@@ -283,7 +283,8 @@ class SelectorByCommand < Selector
   end
 
   def select(query)
-    result = @context.select(query.table_name, query.parameters)
+    parameters = query.parameters.merge(:cache => :no)
+    result = @context.select(query.table_name, parameters)
     CommandResult.new(result)
   end
 
