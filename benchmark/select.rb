@@ -302,11 +302,20 @@ class Benchmark
       @result = yield
       @end_time = ::Time.now
     end
+
+    def time
+      @end_time - @start_time
+    end
+  end
+
+  def name
+    profile.name
   end
 end
 
 class Profile
   attr_accessor :mode
+  attr_reader :name
   def initialize(name, selector)
     @name = name
     @selector = selector
@@ -383,7 +392,9 @@ class Report
   end
 
   def print
-    puts "fast or slow.."
+    @benchmarks.each do |benchmark|
+      puts "#{benchmark.name}: time: #{benchmark.time}"
+    end
   end
 end
 
