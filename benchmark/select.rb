@@ -1,3 +1,13 @@
+require 'groonga'
+
+module Groonga
+  class Context
+    def open_database(database_path, options = {})
+      Database.open(database_path, options.merge(:context => self))
+    end
+  end
+end
+
 class Query
   class Parameter
   end
@@ -54,6 +64,13 @@ class SelectorByCommand < Selector #XXX spawn groonga server by itself, using Co
 end
 
 class SelectorByMethod < Selector
+  def initialize(database_path)
+    @context = Groonga::Context.new
+
+    @database_path = database_path
+    @database = @context.open_database(@database_path)
+  end
+
   def select(query)
     #table = @context[query.table_name]
     #table.select #...
