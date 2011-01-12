@@ -51,21 +51,49 @@ class Configuration
 end
 
 class Selector
+  attr_reader :context
+  def initialize
+    @context = Groonga::Context.new
+  end
+
   def select(query)
     raise "implement"
   end
+
+  class << self
+    def setup(configuration)
+      raise "implement"
+    end
+  end
 end
 
-class SelectorByCommand < Selector #XXX spawn groonga server by itself, using Configuration
+class SelectorByCommand < Selector
+  attr_reader :host, :port
+  def initialize(host, port)
+    super()
+
+    @host = host
+    @port = port
+    @context.connect(:host => @host, :port => @port)
+  end
+
   def select(query)
     #@context.select(query.table_name, query.parameters)
     Result.new
   end
+
+  class << self
+    def setup(configuration)
+      #XXX spawn groonga server by itself, using Configuration
+      raise "implement"
+    end
+  end
 end
 
 class SelectorByMethod < Selector
+  attr_reader :database_path
   def initialize(database_path)
-    @context = Groonga::Context.new
+    super()
 
     @database_path = database_path
     @database = @context.open_database(@database_path)
@@ -196,6 +224,7 @@ runner.add_profile(Profile.new("select by commnd", select_command))
 runner.add_profile(Profile.new("select by method", select_method))
 
 # at this point, setup is done
+puts "setup is completed!"
 
 #query = Query.new("select foo bar...")
 query = Query.parse_groonga_query_log("select foo bar...")
