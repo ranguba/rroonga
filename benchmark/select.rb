@@ -555,23 +555,33 @@ class Benchmark
     end
 
     def setup_intercepted_methods
+      @profile.intercepted_methods.each do |method|
+        case method
+        when Symbol
+          intercept_method(@target_object.class, method)
+        when Method
+          intercept_method(method.owner, method.name)
+        else
+          raise "bad"
+        end
+      end
+    end
+
+    def intercept_method(klass, method_name)
       intercepted_method_times = @intercepted_method_times
+      original_method_name = :"__intercepted__#{method_name}"
 
-      @profile.intercepted_methods.each do |method_name|
-        original_method_name = :"__intercepted__#{method_name}"
-
-        @target_object.class.class_exec do
-          alias_method original_method_name, method_name
-          define_method method_name do |*arguments, &block|
-            start_time = ::Time.now
-            returned_object = send(original_method_name, *arguments, &block)
-            end_time = ::Time.now
-            intercepted_method_times[method_name] = {
-              :start_time => start_time,
-              :end_time => end_time,
-            }
-            returned_object
-          end
+      klass.class_exec do
+        alias_method original_method_name, method_name
+        define_method method_name do |*arguments, &block|
+          start_time = ::Time.now
+          returned_object = send(original_method_name, *arguments, &block)
+          end_time = ::Time.now
+          intercepted_method_times[method_name] = { # XXX include klass into key # XXX support multiple invocations
+            :start_time => start_time,
+            :end_time => end_time,
+          }
+          returned_object
         end
       end
     end
@@ -677,7 +687,7 @@ select_command = SelectorByCommand.new("localhost", 10041)
 select_method = SelectorByMethod.new(configuration.database_path)
 
 runner = Runner.new(:method => [:measure_time])
-runner.add_profile(Profile.new("select by commnd", select_command))
+runner.add_profile(Profile.new("select by commnd", select_command, [Groonga::Context::SelectResult.method(:parse)]))
 runner.add_profile(Profile.new("select by method", select_method, [:do_select, :sort, :format, :drilldown]))
 
 # at this point, setup is done
