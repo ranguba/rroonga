@@ -65,6 +65,14 @@ class Query
     end
   end
 
+  def output_columns
+    if @options[:output_columns]
+      @options[:output_columns]
+    else
+      nil
+    end
+  end
+
   def parameters
     @options.dup.tap do |options|
       options.delete(:table)
@@ -288,7 +296,12 @@ class SelectorByMethod < Selector
       end
     end
 
-    MethodResult.new(result, sorted_result)
+    if needs_format?(query)
+      formatted_result = format_result(sorted_result || result,
+                                       query.output_columns)
+    end
+
+    MethodResult.new(result, sorted_result, formatted_result)
   end
 
   def drilldown
@@ -296,6 +309,10 @@ class SelectorByMethod < Selector
 
   def needs_sort?(query)
     query.limit or query.offset or query.sort_by
+  end
+
+  def needs_format?(query)
+    query.output_columns
   end
 
   DESCENDING_ORDER_PREFIX = /\A-/
@@ -308,14 +325,7 @@ class SelectorByMethod < Selector
   end
 
   def build_sort_key(sort_by)
-    tokens = sort_by.split(/\s/)
-    tokens.reject!(&:empty?)
-    tokens.select! do |token|
-      token =~ /[A-Za-z0-9_]/
-    end
-    tokens.each do |token|
-      token.sub!(/[^A-Za-z0-9_]\z/, '')
-    end
+    tokens = tokenize_column_list(sort_by)
 
     tokens.collect do |token|
       key = token.sub(DESCENDING_ORDER_PREFIX, '')
@@ -341,7 +351,7 @@ class SelectorByMethod < Selector
     }
   end
 
-  def default_sort_key
+  def default_sort_key #XX use #ascending_order_sort_key("_id")
     [
       {
         :key => "_id",
@@ -359,6 +369,26 @@ class SelectorByMethod < Selector
       window_options[:offset] = query.offset
     end
     window_options
+  end
+
+  def format_result(result, output_columns)
+    columns = tokenize_column_list(output_columns)
+    result.collect do |record|
+      columns.collect do |column|
+        record[column]
+      end
+    end
+  end
+
+  def tokenize_column_list(column_list)
+    tokens = column_list.split(/[\s,]/)
+    tokens.reject!(&:empty?)
+    tokens.select! do |token|
+      token =~ /[A-Za-z0-9_]/
+    end
+    tokens.each do |token|
+      token.sub!(/[^A-Za-z0-9_]\z/, '')
+    end
   end
 end
 
@@ -384,9 +414,10 @@ class CommandResult < Result
 end
 
 class MethodResult < Result
-  def initialize(result, sorted_result)
+  def initialize(result, sorted_result, formatted_result)
     @result = result
     @sorted_result = sorted_result
+    @formatted_result = formatted_result
   end
 
   def hit_count
@@ -533,7 +564,7 @@ runner.add_profile(Profile.new("select by method", select_method))
 puts "setup is completed!"
 puts
 
-query_log = "select --table Site --limit 3 --offset 2 --sortby '-title, _id'"
+query_log = "select --table Site --limit 3 --offset 2 --sortby '-title, _id' --output_columns title,_id,_key"
 puts "select command:"
 puts "  #{query_log}"
 puts
