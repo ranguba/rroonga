@@ -275,12 +275,7 @@ class SelectorByMethod < Selector
   def select(query)
     table = @context[query.table_name]
     result = table.select(query.filter)
-    #result = table.select do |record|#("_key:@example.net")
-    #  record["_key"] =~ "example.net"
-    #end
-    #if not query.drilldown_columns.empty?
-    #  drilldown
-    #end
+
     if needs_sort?(query)
       sort_key = sort_key(query)
       window_options = window_options(query)
