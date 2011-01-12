@@ -27,15 +27,79 @@ class Query
   class GroongaLogParser
     def initialize(log)
       @log = log
+      @tokens = []
+      @parameter_list = []
     end
 
     def parse
+      tokenize
+      build_parameter_list
     end
 
     class << self
       def parse(log)
         new(log).parse
       end
+    end
+
+    private
+    def next_token(token)
+      @tokens << token
+      ""
+    end
+
+    def tokenize
+      escape = nil
+      litaral = nil
+      token = ""
+
+      @log.each_char do |character|
+        #puts "#{character.inspect} #{escape.inspect}"
+        case character
+        when / /
+          if escape.nil? and litaral.nil?
+            token = next_token(token)
+          elsif escape == "\\"
+            escape = nil
+            token << character
+          else
+            token << character
+          end
+        when /[\"\']/
+          if escape.nil? and litaral.nil?
+            litaral = character
+          elsif escape == "\\"
+            escape = nil
+            token << character
+          elsif character == litaral
+            litaral = nil
+            token = next_token(token)
+          else
+            token << character
+          end
+        when "\\"
+          if escape.nil?
+            escape = "\\"
+          else
+            escape = nil
+            token << character
+          end
+        else
+          if escape == "\\"
+            escape = nil
+          end
+
+          token << character
+        end
+        #puts "#{token.inspect} #{escape.inspect}"
+      end
+
+      raise "parse error (terminated with escape: #{escape.inspect})" unless escape.nil?
+      @tokens << token
+      @tokens = @tokens.reject(&:empty?)
+    end
+
+    def build_parameter_list
     end
   end
 
@@ -225,8 +289,12 @@ runner.add_profile(Profile.new("select by method", select_method))
 
 # at this point, setup is done
 puts "setup is completed!"
+puts
 
 query_log = "select --table Site"
+puts "select command:"
+puts "  #{query_log}"
 query = Query.parse_groonga_query_log(query_log)
 report = runner.run_once(query)
+puts
 report.print
