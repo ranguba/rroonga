@@ -90,6 +90,14 @@ class Query
     end
   end
 
+  def drilldown_output_columns
+    if @options[:drilldown_output_columns]
+      @options[:drilldown_output_columns]
+    else
+      nil
+    end
+  end
+
   def parameters
     @options.dup.tap do |options|
       options.delete(:table)
@@ -335,6 +343,10 @@ class SelectorByMethod < Selector
     end
   end
 
+  def drilldown_format(query, result)
+    format_result(result, query.drilldown_output_columns || "_key, _nsubrecs")
+  end
+
   def drilldown(query, result)
     if needs_drilldown?(query)
       drilldown_results = drilldown_result(result, query.drilldown_columns, query)
@@ -345,11 +357,14 @@ class SelectorByMethod < Selector
     columns = tokenize_column_list(drilldown_columns)
     columns.collect do |column|
       drilldown_result = result.group(column)
+      sorted_drilldown_result = drilldown_sort(query, drilldown_result)
+      formatted_drilldown_result = drilldown_format(query, sorted_drilldown_result || drilldown_result)
 
       {
         :column => column,
         :result => drilldown_result,
-        :sort => drilldown_sort(query, drilldown_result),
+        :sort => sorted_drilldown_result,
+        :format => formatted_drilldown_result,
       }
     end
   end
