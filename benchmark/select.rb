@@ -596,7 +596,7 @@ class Runner
       pp query
       pp benchmarks
     end
-    verify_results(benchmarks)
+    verify_results(benchmarks) unless ENV["NO_VERIFY"]
     create_report(benchmarks)
   end
 
@@ -634,7 +634,7 @@ class Report
 end
 
 configuration = Configuration.new
-configuration.database_path = "/tmp/tutorial.db"
+configuration.database_path = ENV["DATABASE_PATH"] || "/tmp/tutorial.db"
 
 select_command = SelectorByCommand.new("localhost", 10041)
 select_method = SelectorByMethod.new(configuration.database_path)
@@ -647,7 +647,7 @@ runner.add_profile(Profile.new("select by method", select_method))
 puts "setup is completed!"
 puts
 
-query_log = "select --table Site --limit 3 --offset 2 --sortby '-title, _id' --output_columns title --drilldown title,_id,_key --drilldown_limit 7 --drilldown_offset 3 --drilldown_sortby _key"
+query_log = ENV["QUERY_LOG"] || "select --table Site --limit 3 --offset 2 --sortby '-title, _id' --output_columns title --drilldown title,_id,_key --drilldown_limit 7 --drilldown_offset 3 --drilldown_sortby _key"
 puts "select command:"
 puts "  #{query_log}"
 puts
