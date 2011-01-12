@@ -276,6 +276,15 @@ class SelectorByMethod < Selector
     table = @context[query.table_name]
     result = table.select(query.filter)
 
+
+    sorted_result = sort(query, result)
+    formatted_result = format(query, sorted_result || result)
+    drilldown_results = drilldown(query, result)
+
+    MethodResult.new(result, sorted_result, formatted_result, drilldown_results)
+  end
+
+  def sort(query, result)
     if needs_sort?(query)
       sort_key = sort_key(query)
       window_options = window_options(query)
@@ -283,20 +292,21 @@ class SelectorByMethod < Selector
         record.key
       end
     end
-
-    if needs_format?(query)
-      formatted_result = format_result(sorted_result || result,
-                                       query.output_columns)
-    end
-
-    if needs_drilldown?(query)
-      drilldown_results = drilldown(result, query.drilldown_columns)
-    end
-
-    MethodResult.new(result, sorted_result, formatted_result, drilldown_results)
   end
 
-  def drilldown(result, drilldown_columns)
+  def format(query, result)
+    if needs_format?(query)
+      formatted_result = format_result(result, query.output_columns)
+    end
+  end
+
+  def drilldown(query, result)
+    if needs_drilldown?(query)
+      drilldown_results = drilldown_result(result, query.drilldown_columns)
+    end
+  end
+
+  def drilldown_result(result, drilldown_columns)
     columns = tokenize_column_list(drilldown_columns)
     columns.collect do |column|
       result.group(column)
