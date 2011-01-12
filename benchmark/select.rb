@@ -58,6 +58,14 @@ class Query
     end
   end
 
+  def drilldown_columns
+    if @options[:drilldown]
+      @options[:drilldown]
+    else
+      nil
+    end
+  end
+
   def parameters
     @options.dup.tap do |options|
       options.delete(:table)
@@ -286,10 +294,18 @@ class SelectorByMethod < Selector
                                        query.output_columns)
     end
 
-    MethodResult.new(result, sorted_result, formatted_result)
+    if needs_drilldown?(query)
+      drilldown_results = drilldown(result, query.drilldown_columns)
+    end
+
+    MethodResult.new(result, sorted_result, formatted_result, drilldown_results)
   end
 
-  def drilldown
+  def drilldown(result, drilldown_columns)
+    columns = tokenize_column_list(drilldown_columns)
+    columns.collect do |column|
+      result.group(column)
+    end
   end
 
   def needs_sort?(query)
@@ -298,6 +314,10 @@ class SelectorByMethod < Selector
 
   def needs_format?(query)
     query.output_columns
+  end
+
+  def needs_drilldown?(query)
+    query.drilldown_columns
   end
 
   DESCENDING_ORDER_PREFIX = /\A-/
@@ -407,10 +427,11 @@ class CommandResult < Result
 end
 
 class MethodResult < Result
-  def initialize(result, sorted_result, formatted_result)
+  def initialize(result, sorted_result, formatted_result, drilldown_results)
     @result = result
     @sorted_result = sorted_result
     @formatted_result = formatted_result
+    @drilldown_results = drilldown_results
   end
 
   def hit_count
@@ -561,7 +582,7 @@ runner.add_profile(Profile.new("select by method", select_method))
 puts "setup is completed!"
 puts
 
-query_log = "select --table Site --limit 3 --offset 2 --sortby '-title, _id' --output_columns title,_id,_key"
+query_log = "select --table Site --limit 3 --offset 2 --sortby '-title, _id' --output_columns title --drilldown title,_id,_key"
 puts "select command:"
 puts "  #{query_log}"
 puts
