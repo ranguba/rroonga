@@ -17,10 +17,16 @@ class Query
     @options[:table]
   end
 
+  def match_columns
+    #raise "unsupported: #{@options[:match_columns].inspect}" if @options[:match_columns] =~ /\b/ # XXX
+
+    @options[:match_columns]
+  end
+
   def filter
-    if @options[:match_columns] and @options[:query]
+    if match_columns and @options[:query]
       #raise "unsupported" if @options[:filter]
-      "#{@options[:match_columns]}:@#{@options[:query]}"
+      "#{match_columns} @ #{@options[:query]}" #XXX correct escape
     else
       @options[:filter]
     end
@@ -308,8 +314,9 @@ class SelectorByMethod < Selector
   def select(query)
     table = @context[query.table_name]
     filter = query.filter
+    default_column = table.column(query.match_columns)
 
-    result = do_select(filter, table)
+    result = do_select(filter, table, default_column)
     sorted_result = sort(query, result)
     formatted_result = format(query, sorted_result || result)
     drilldown_results = drilldown(query, result)
@@ -317,8 +324,8 @@ class SelectorByMethod < Selector
     MethodResult.new(result, sorted_result, formatted_result, drilldown_results)
   end
 
-  def do_select(filter, table)
-    table.select(filter)
+  def do_select(filter, table, default_column)
+    table.select(filter, :default_column => default_column, :syntax => :script)
   end
 
   def sort(query, result)
@@ -469,12 +476,12 @@ end
 
 class Result
   def ==(other) # XXX needs more strict/rigid check
-    if ENV["DEBUG"]
-      #pp "#{hit_count} == #{other.hit_count} and #{result_count} == #{other.result_count} and "
+    if ENV["DEBUG"] or ENV["DEBUG_VERIFY"]
+      pp "#{hit_count} == #{other.hit_count} and #{result_count} == #{other.result_count} and "
       #pp "#{formatted_result} == #{other.formatted_result}"
     end
 
-    hit_count == other.hit_count and result_count == other.result_count and formatted_result == other.formatted_result
+    hit_count == other.hit_count and result_count == other.result_count #and formatted_result == other.formatted_result
   end
 end
 
