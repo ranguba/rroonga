@@ -59,7 +59,6 @@ class Query
 
   def sort_by
     if @options[:sortby]
-      raise "implement"
       @options[:sortby]
     else
       nil
@@ -282,7 +281,9 @@ class SelectorByMethod < Selector
     #  drilldown
     #end
     if needs_sort?(query)
-      sorted_result = result.sort(sort_key(query), window_options(query)).collect do |record|
+      sort_key = sort_key(query)
+      window_options = window_options(query)
+      sorted_result = result.sort(sort_key, window_options).collect do |record|
         record.key
       end
     end
@@ -297,8 +298,47 @@ class SelectorByMethod < Selector
     query.limit or query.offset or query.sort_by
   end
 
+  DESCENDING_ORDER_PREFIX = /\A-/
   def sort_key(query)
-    default_sort_key #XXX
+    if query.sort_by
+      build_sort_key(query.sort_by)
+    else
+      default_sort_key
+    end
+  end
+
+  def build_sort_key(sort_by)
+    tokens = sort_by.split(/\s/)
+    tokens.reject!(&:empty?)
+    tokens.select! do |token|
+      token =~ /[A-Za-z0-9_]/
+    end
+    tokens.each do |token|
+      token.sub!(/[^A-Za-z0-9_]\z/, '')
+    end
+
+    tokens.collect do |token|
+      key = token.sub(DESCENDING_ORDER_PREFIX, '')
+      if token =~ DESCENDING_ORDER_PREFIX
+        descending_order_sort_key(key)
+      else
+        ascending_order_sort_key(key)
+      end
+    end
+  end
+
+  def descending_order_sort_key(key)
+    {
+      :key => key,
+      :order => "descending",
+    }
+  end
+
+  def ascending_order_sort_key(key)
+    {
+      :key => key,
+      :order => "ascending",
+    }
   end
 
   def default_sort_key
@@ -438,8 +478,10 @@ class Runner
     benchmarks = @profiles.collect do |profile|
       profile.take_benchmark(query)
     end
-    #pp query
-    pp benchmarks if ENV["DEBUG"]
+    if ENV["DEBUG"]
+      pp query
+      pp benchmarks
+    end
     verify_results(benchmarks)
     create_report(benchmarks)
   end
@@ -491,7 +533,7 @@ runner.add_profile(Profile.new("select by method", select_method))
 puts "setup is completed!"
 puts
 
-query_log = "select --table Site --limit 3 --offset 1"
+query_log = "select --table Site --limit 3 --offset 2 --sortby '-title, _id'"
 puts "select command:"
 puts "  #{query_log}"
 puts
