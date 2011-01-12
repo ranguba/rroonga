@@ -41,6 +41,31 @@ class Query
     end
   end
 
+  def limit
+    if @options[:limit]
+      @options[:limit].to_i
+    else
+      nil
+    end
+  end
+
+  def offset
+    if @options[:offset]
+      @options[:offset].to_i
+    else
+      nil
+    end
+  end
+
+  def sort_by
+    if @options[:sortby]
+      raise "implement"
+      @options[:sortby]
+    else
+      nil
+    end
+  end
+
   def parameters
     @options.dup.tap do |options|
       options.delete(:table)
@@ -256,17 +281,51 @@ class SelectorByMethod < Selector
     #if not query.drilldown_columns.empty?
     #  drilldown
     #end
-    MethodResult.new(result)
+    if needs_sort?(query)
+      sorted_result = result.sort(sort_key(query), window_options(query)).collect do |record|
+        record.key
+      end
+    end
+
+    MethodResult.new(result, sorted_result)
   end
 
   def drilldown
   end
+
+  def needs_sort?(query)
+    query.limit or query.offset or query.sort_by
+  end
+
+  def sort_key(query)
+    default_sort_key #XXX
+  end
+
+  def default_sort_key
+    [
+      {
+        :key => "_id",
+        :order => "ascending",
+      }
+    ]
+  end
+
+  def window_options(query)
+    window_options = {}
+    if query.limit
+      window_options[:limit] = query.limit
+    end
+    if query.offset
+      window_options[:offset] = query.offset
+    end
+    window_options
+  end
 end
 
 class Result
-  def ==(other)
-    #p "#{hit_count} != #{other.hit_count}"
-    hit_count == other.hit_count #XXX
+  def ==(other) # XXX needs more strict/rigid check
+    p "#{hit_count} == #{other.hit_count} and #{result_count} == #{other.result_count}"
+    hit_count == other.hit_count and result_count == other.result_count
   end
 end
 
@@ -278,15 +337,29 @@ class CommandResult < Result
   def hit_count
     @result.n_hits
   end
+
+  def result_count
+    @result.records.size
+  end
 end
 
 class MethodResult < Result
-  def initialize(result)
+  def initialize(result, sorted_result)
     @result = result
+    @sorted_result = sorted_result
   end
 
   def hit_count
     @result.size
+  end
+
+  def result_count
+    sorted_result.size
+  end
+
+  private
+  def sorted_result
+    @sorted_result || @result
   end
 end
 
@@ -366,7 +439,7 @@ class Runner
       profile.take_benchmark(query)
     end
     #pp query
-    #pp benchmarks
+    pp benchmarks if ENV["DEBUG"]
     verify_results(benchmarks)
     create_report(benchmarks)
   end
@@ -418,7 +491,7 @@ runner.add_profile(Profile.new("select by method", select_method))
 puts "setup is completed!"
 puts
 
-query_log = "select --table Site --match_columns title --query f"
+query_log = "select --table Site --limit 3 --offset 1"
 puts "select command:"
 puts "  #{query_log}"
 puts
