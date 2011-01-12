@@ -29,11 +29,13 @@ class Query
       @log = log
       @tokens = []
       @parameter_list = []
+      @parameters = {}
     end
 
     def parse
       tokenize
       build_parameter_list
+      build_parameters
     end
 
     class << self
@@ -99,7 +101,40 @@ class Query
       @tokens = @tokens.reject(&:empty?)
     end
 
+    IMPLICIT_PARAMETER_ORDER = [
+      :match_columns,
+      :query,
+      :filter,
+      :scorer,
+      :sortby,
+      :output_columns,
+      :offset,
+      :limit,
+      :drilldown,
+      :drilldown_sortby,
+      :drilldwon_output_columns,
+      :drilldown_offset,
+      :drilldown_limit,
+      :cache,
+      :match_escalation_threshold,
+    ]
+
     def build_parameter_list
+      command, parameter_tokens = @tokens.shift, @tokens
+      raise "command is not \"select\": #{command.inspect}" unless command == "select"
+
+      parameter_name = nil
+      parameter_tokens.each do |token|
+        if token =~ /\A--/
+          raise "bad" unless parameter_name.nil?
+          parameter_name = token
+        elsif parameter_name
+          @parameter_list << [parameter_name, token]
+          parameter_name = nil
+        else
+          @parameter_list << token
+        end
+      end
     end
   end
 
