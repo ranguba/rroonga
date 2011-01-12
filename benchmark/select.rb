@@ -28,6 +28,10 @@ class Query
     @options = options
   end
 
+  def table_name
+    @options[:table]
+  end
+
   class GroongaLogParser
     def initialize(log)
       @log = log
@@ -229,8 +233,11 @@ class SelectorByMethod < Selector
   end
 
   def select(query)
-    #table = @context[query.table_name]
-    #table.select #...
+    table = @context[query.table_name]
+    result = table.select do |record|#("_key:@example.net")
+      record["_key"] =~ "example.net"
+    end
+    raise result.size.inspect
     #if not query.drilldown_columns.empty?
     #  drilldown
     #end
