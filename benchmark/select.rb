@@ -226,7 +226,7 @@ runner.add_profile(Profile.new("select by method", select_method))
 # at this point, setup is done
 puts "setup is completed!"
 
-#query = Query.new("select foo bar...")
-query = Query.parse_groonga_query_log("select foo bar...")
+query_log = "select --table Site"
+query = Query.parse_groonga_query_log(query_log)
 report = runner.run_once(query)
 report.print
