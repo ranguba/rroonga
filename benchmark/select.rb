@@ -379,7 +379,9 @@ end
 
 class Result
   def ==(other) # XXX needs more strict/rigid check
-    p "#{hit_count} == #{other.hit_count} and #{result_count} == #{other.result_count}"
+    if ENV["DEBUG"]
+      p "#{hit_count} == #{other.hit_count} and #{result_count} == #{other.result_count}"
+    end
     hit_count == other.hit_count and result_count == other.result_count
   end
 end
