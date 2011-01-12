@@ -404,7 +404,8 @@ puts
 query_log = "select --table Site --match_columns title --query f"
 puts "select command:"
 puts "  #{query_log}"
+puts
+
 query = Query.parse_groonga_query_log(query_log)
 report = runner.run_once(query)
-puts
 report.print
