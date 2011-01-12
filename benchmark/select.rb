@@ -9,21 +9,6 @@ module Groonga
 end
 
 class Query
-  class Parameter
-  end
-
-  class MatchParameter < Parameter
-  end
-
-  class FilterParameter < Parameter
-  end
-
-  class MatchColumnParameter < Parameter
-  end
-
-  class OutputColumnsPrameter < Parameter
-  end
-
   def initialize(options)
     @options = options
   end
