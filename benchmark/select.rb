@@ -308,13 +308,17 @@ class SelectorByMethod < Selector
   def select(query)
     table = @context[query.table_name]
     filter = query.filter
-    result = table.select(filter)
 
+    result = do_select(filter, table)
     sorted_result = sort(query, result)
     formatted_result = format(query, sorted_result || result)
     drilldown_results = drilldown(query, result)
 
     MethodResult.new(result, sorted_result, formatted_result, drilldown_results)
+  end
+
+  def do_select(filter, table)
+    table.select(filter)
   end
 
   def sort(query, result)
@@ -674,7 +678,7 @@ select_method = SelectorByMethod.new(configuration.database_path)
 
 runner = Runner.new(:method => [:measure_time])
 runner.add_profile(Profile.new("select by commnd", select_command))
-runner.add_profile(Profile.new("select by method", select_method, [:sort, :format, :drilldown]))
+runner.add_profile(Profile.new("select by method", select_method, [:do_select, :sort, :format, :drilldown]))
 
 # at this point, setup is done
 puts "setup is completed!"
