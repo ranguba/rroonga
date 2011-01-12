@@ -171,8 +171,8 @@ end
 configuration = Configuration.new
 configuration.database_path = "/tmp/tutorial.db"
 
-select_command = SelectorByCommand.new(configuration.database_path)
-select_method = SelectorByMethod.new("localhost", 10041)
+select_command = SelectorByCommand.new("localhost", 10041)
+select_method = SelectorByMethod.new(configuration.database_path)
 
 runner = Runner.new(:method => [:measure_time])
 runner.add_profile(Profile.new("select by commnd", select_command))
