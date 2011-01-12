@@ -466,8 +466,8 @@ end
 class Result
   def ==(other) # XXX needs more strict/rigid check
     if ENV["DEBUG"]
-      pp "#{hit_count} == #{other.hit_count} and #{result_count} == #{other.result_count} and "
-      pp "#{formatted_result} == #{other.formatted_result}"
+      #pp "#{hit_count} == #{other.hit_count} and #{result_count} == #{other.result_count} and "
+      #pp "#{formatted_result} == #{other.formatted_result}"
     end
 
     hit_count == other.hit_count and result_count == other.result_count and formatted_result == other.formatted_result
@@ -524,8 +524,11 @@ class Benchmark
 
   class Time < Benchmark
     attr_reader :start_time, :end_time
-    def initialize(profile, &block)
+    def initialize(profile, target_object, &block)
+      @intercepted_method_times = {}
       @profile = profile
+      @target_object = target_object
+      setup_intercepted_methods
 
       measure_time(&block)
     end
@@ -534,11 +537,39 @@ class Benchmark
       @end_time - @start_time
     end
 
+    def intercepted_method_times
+      @intercepted_method_times.collect do |method, time|
+        "#{method}: #{"%0.9f" % (time[:end_time] - time[:start_time])}"
+      end.join(", ")
+    end
+
     private
     def measure_time
       @start_time = ::Time.now
       @result = yield
       @end_time = ::Time.now
+    end
+
+    def setup_intercepted_methods
+      intercepted_method_times = @intercepted_method_times
+
+      @profile.intercepted_methods.each do |method_name|
+        original_method_name = :"__intercepted__#{method_name}"
+
+        @target_object.class.class_exec do
+          alias_method original_method_name, method_name
+          define_method method_name do |*arguments, &block|
+            start_time = ::Time.now
+            returned_object = send(original_method_name, *arguments, &block)
+            end_time = ::Time.now
+            intercepted_method_times[method_name] = {
+              :start_time => start_time,
+              :end_time => end_time,
+            }
+            returned_object
+          end
+        end
+      end
     end
   end
 
@@ -549,10 +580,11 @@ end
 
 class Profile
   attr_accessor :mode
-  attr_reader :name
-  def initialize(name, selector)
+  attr_reader :name, :intercepted_methods
+  def initialize(name, selector, intercepted_methods=[])
     @name = name
     @selector = selector
+    @intercepted_methods = intercepted_methods
   end
 
   def take_benchmark(query)
@@ -565,7 +597,7 @@ class Profile
 
   private
   def measure_time(query)
-    Benchmark::Time.new(self) do
+    Benchmark::Time.new(self, @selector) do
       result = @selector.select(query)
       result
     end
@@ -629,7 +661,7 @@ class Report
 
   def print
     @benchmarks.each do |benchmark|
-      puts "#{benchmark.name}: time: #{benchmark.time}"
+      puts "#{benchmark.name}: time: #{benchmark.time} #{benchmark.intercepted_method_times}"
     end
   end
 end
@@ -642,7 +674,7 @@ select_method = SelectorByMethod.new(configuration.database_path)
 
 runner = Runner.new(:method => [:measure_time])
 runner.add_profile(Profile.new("select by commnd", select_command))
-runner.add_profile(Profile.new("select by method", select_method))
+runner.add_profile(Profile.new("select by method", select_method, [:sort, :format, :drilldown]))
 
 # at this point, setup is done
 puts "setup is completed!"
