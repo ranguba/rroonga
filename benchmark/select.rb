@@ -168,7 +168,10 @@ class Report
   end
 end
 
-select_command = SelectorByCommand.new("/tmp/foo/bar.db")
+configuration = Configuration.new
+configuration.database_path = "/tmp/tutorial.db"
+
+select_command = SelectorByCommand.new(configuration.database_path)
 select_method = SelectorByMethod.new("localhost", 10041)
 
 runner = Runner.new(:method => [:measure_time])
