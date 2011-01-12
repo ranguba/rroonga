@@ -48,14 +48,15 @@ end
 
 class SelectorByCommand < Selector #XXX spawn groonga server by itself, using Configuration
   def select(query)
-    #@context.send(query.to_s)
+    #@context.select(query.table_name, query.parameters)
     Result.new
   end
 end
 
 class SelectorByMethod < Selector
   def select(query)
-    #query.table.select #...
+    #table = @context[query.table_name]
+    #table.select #...
     #if not query.drilldown_columns.empty?
     #  drilldown
     #end
