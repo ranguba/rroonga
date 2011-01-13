@@ -488,7 +488,12 @@ class Result
       #pp "#{formatted_result} == #{other.formatted_result}"
     end
 
-    hit_count == other.hit_count and result_count == other.result_count and formatted_result == other.formatted_result
+    [
+      hit_count == other.hit_count,
+      result_count == other.result_count,
+      formatted_result == other.formatted_result,
+      drilldown_results == other.drilldown_results,
+    ].all?
   end
 end
 
@@ -507,6 +512,10 @@ class CommandResult < Result
 
   def formatted_result
     @result.values
+  end
+
+  def drilldown_results
+    @result.drill_down.values.collect(&:values)
   end
 end
 
@@ -528,6 +537,12 @@ class MethodResult < Result
 
   def formatted_result
     @formatted_result
+  end
+
+  def drilldown_results
+    @drilldown_results.collect do |result|
+      result[:format]
+    end
   end
 
   private
