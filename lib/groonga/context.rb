@@ -18,6 +18,48 @@
 module Groonga
   class Context
     # call-seq:
+    #   context.open_database(path) -> Groonga::Database
+    #
+    # _path_にある既存のデータベースを開く。ブロックを指定した場
+    # 合はブロックに開いたデータベースを渡し、ブロックを抜けると
+    # きに閉じる。
+    def open_database(path, &block)
+      options = {:context => self}
+
+      Database.open(path, options, &block)
+    end
+
+    # call-seq:
+    #   context.create_database(path=nil) -> Groonga::Database
+    #
+    # _path_に新しくデータベースを作成する。_path_を省略すると
+    # 一時データベースとなる。
+    #
+    # 使用例は以下の通り。
+    #
+    # 一時データベースを作成:
+    #   context.create_database
+    #
+    # 永続データベースを作成:
+    #   context.create_database("/tmp/db.groonga")
+    def create_database(path=nil)
+      options = {:context => self}
+      if path
+        options[:path] = path
+      end
+
+      Database.create(options)
+    end
+
+    # call-seq:
+    #   context.close_database
+    #
+    # _context_が使用しているデータベースのリソースを開放する。
+    def close_database
+      database.close
+    end
+
+    # call-seq:
     #   context.select(table, options={}) -> SelectResult
     #
     # _table_から指定した条件にマッチするレコードの値を取得

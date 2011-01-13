@@ -29,6 +29,54 @@ class ContextTest < Test::Unit::TestCase
     assert_equal(Groonga::Encoding::UTF8, context.encoding)
   end
 
+  def test_create_database
+    db_path = @tmp_dir + "db"
+    assert_not_predicate(db_path, :exist?)
+    context = Groonga::Context.new
+    assert_equal(nil, context.database)
+    database = context.create_database(db_path.to_s)
+    assert_predicate(db_path, :exist?)
+    assert_not_predicate(database, :closed?)
+    assert_equal(database, context.database)
+  end
+
+  def test_create_temporary_database
+    before_files = @tmp_dir.children
+    context = Groonga::Context.new
+    database = context.create_database
+    assert_nil(database.name)
+    assert_equal(before_files, @tmp_dir.children)
+  end
+
+  def test_open_database
+    db_path = @tmp_dir + "db"
+    database = Groonga::Database.create(:path => db_path.to_s)
+    database.close
+
+    assert_predicate(database, :closed?)
+    called = false
+    context = Groonga::Context.new
+    context.open_database(db_path.to_s) do |_database|
+      database = _database
+      assert_not_predicate(database, :closed?)
+      called = true
+    end
+    assert_true(called)
+    assert_predicate(database, :closed?)
+  end
+
+  def test_close_database
+    db_path = @tmp_dir + "db"
+    database = Groonga::Database.create(:path => db_path.to_s)
+    database.close
+
+    context = Groonga::Context.new
+    database = context.open_database(db_path.to_s)
+    assert_not_predicate(database, :closed?)
+    context.close_database
+    assert_predicate(database, :closed?)
+  end
+
   def test_encoding
     context = Groonga::Context.new
     assert_equal(Groonga::Encoding.default, context.encoding)

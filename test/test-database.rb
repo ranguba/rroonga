@@ -38,7 +38,9 @@ class DatabaseTest < Test::Unit::TestCase
   def test_open
     db_path = @tmp_dir + "db"
     database = Groonga::Database.create(:path => db_path.to_s)
+    database.close
 
+    assert_predicate(database, :closed?)
     called = false
     Groonga::Database.open(db_path.to_s) do |_database|
       database = _database
@@ -46,6 +48,17 @@ class DatabaseTest < Test::Unit::TestCase
       called = true
     end
     assert_true(called)
+    assert_predicate(database, :closed?)
+  end
+
+  def test_close
+    db_path = @tmp_dir + "db"
+    database = Groonga::Database.create(:path => db_path.to_s)
+    database.close
+
+    database = Groonga::Database.open(db_path.to_s)
+    assert_not_predicate(database, :closed?)
+    database.close
     assert_predicate(database, :closed?)
   end
 
