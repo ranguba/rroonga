@@ -432,8 +432,20 @@ class SelectorByMethod < Selector
     end
     result.collect do |record|
       columns.collect do |column|
-        record[column] || ""
+        value = record[column]
+        to_json(value)
       end
+    end
+  end
+
+  def to_json(value)
+    case value
+    when ::Time
+      value.to_f
+    when nil
+      ""
+    else
+      value
     end
   end
 
