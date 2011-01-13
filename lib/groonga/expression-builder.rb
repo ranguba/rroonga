@@ -39,7 +39,7 @@ module Groonga
     end
 
     def build(&block)
-      expression = Expression.new(:name => @name)
+      expression = Expression.new(:name => @name, :context => @table.context)
       variable = expression.define_variable(:domain => @table)
       build_expression(expression, variable, &block)
     end
