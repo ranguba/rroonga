@@ -3,7 +3,7 @@ require 'groonga'
 module Groonga
   class Record
     def include?(column)
-      table.have_column?(column)
+      not table.column(column).nil?
     end
   end
 end
@@ -432,7 +432,7 @@ class SelectorByMethod < Selector
     end
     result.collect do |record|
       columns.collect do |column|
-        record[column]
+        record[column] || ""
       end
     end
   end
@@ -456,7 +456,7 @@ class Result
       #pp "#{formatted_result} == #{other.formatted_result}"
     end
 
-    hit_count == other.hit_count and result_count == other.result_count #and formatted_result == other.formatted_result
+    hit_count == other.hit_count and result_count == other.result_count and formatted_result == other.formatted_result
   end
 end
 
