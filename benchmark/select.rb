@@ -425,30 +425,44 @@ class SelectorByMethod < Selector
     window_options
   end
 
+  def access_column(table, column)
+    columns = column.split(".")
+    columns.each do |name|
+      table = table.column(name).range
+    end
+    table
+  end
+
   def format_result(result, output_columns)
     columns = tokenize_column_list(output_columns)
     columns = columns.select do |column|
       result.first.include?(column)
     end
+
+    table = result.first.table
     result.collect do |record|
       columns.collect do |column|
         value = record[column]
-        to_json(value)
+        to_json(value, access_column(table, column))
       end
     end
   end
 
-  def to_json(value)
+  def to_json(value, column)
     case value
     when ::Time
       value.to_f
     when nil
-      ""
+      if column.name =~ /Int/
+        0
+      else
+        ""
+      end
     when Groonga::Record
       value["_key"]
     when Array
       value.collect do |element|
-        to_json(element)
+        to_json(element, value)
       end
     else
       value
