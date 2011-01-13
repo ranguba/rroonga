@@ -438,9 +438,16 @@ class SelectorByMethod < Selector
       return []
     end
     columns = tokenize_column_list(output_columns)
-    columns = columns.select do |column|
-      result.first.include?(column)
-    end
+    table = result.first.key
+    columns = columns.collect do |column|
+      if column == "*"
+        table.columns.collect(&:name).collect do |name|
+          name.sub(/\A[A-Za-z0-9_]+\./, '')
+        end
+      else
+        column if result.first.include?(column)
+      end
+    end.flatten.compact
 
     table = result.first.table
     result.collect do |record|
@@ -476,10 +483,12 @@ class SelectorByMethod < Selector
     tokens = column_list.split(/[\s,]/)
     tokens.reject!(&:empty?)
     tokens.select! do |token|
-      token =~ /[A-Za-z0-9_]/
+      token == "*" || token =~ /[A-Za-z0-9_]/
     end
     tokens.each do |token|
-      token.sub!(/[^A-Za-z0-9_]\z/, '')
+      unless token == "*"
+        token.sub!(/[^A-Za-z0-9_]\z/, '')
+      end
     end
   end
 end
