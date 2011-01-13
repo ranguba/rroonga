@@ -339,7 +339,7 @@ class SelectorByMethod < Selector
 
   def drilldown_result(result, drilldown_columns, query)
     columns = tokenize_column_list(drilldown_columns)
-    columns.collect do |column|
+    columns.uniq.collect do |column|
       drilldown_result = result.group(column)
       sorted_drilldown_result = drilldown_sort(query, drilldown_result)
       formatted_drilldown_result = drilldown_format(query, sorted_drilldown_result || drilldown_result)
