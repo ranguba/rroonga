@@ -1,5 +1,13 @@
 require 'groonga'
 
+module Groonga
+  class Record
+    def include?(column)
+      table.have_column?(column)
+    end
+  end
+end
+
 class Query
   def initialize(options)
     @options = options
@@ -419,6 +427,9 @@ class SelectorByMethod < Selector
 
   def format_result(result, output_columns)
     columns = tokenize_column_list(output_columns)
+    columns = columns.select do |column|
+      result.first.include?(column)
+    end
     result.collect do |record|
       columns.collect do |column|
         record[column]
