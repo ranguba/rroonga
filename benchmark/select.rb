@@ -444,6 +444,12 @@ class SelectorByMethod < Selector
       value.to_f
     when nil
       ""
+    when Groonga::Record
+      value["_key"]
+    when Array
+      value.collect do |element|
+        to_json(element)
+      end
     else
       value
     end
