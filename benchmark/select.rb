@@ -434,6 +434,9 @@ class SelectorByMethod < Selector
   end
 
   def format_result(result, output_columns)
+    if result.empty?
+      return []
+    end
     columns = tokenize_column_list(output_columns)
     columns = columns.select do |column|
       result.first.include?(column)
