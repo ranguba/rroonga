@@ -272,12 +272,6 @@ class Selector
   def select(query)
     raise "implement"
   end
-
-  class << self
-    def setup(configuration)
-      raise "implement"
-    end
-  end
 end
 
 class SelectorByCommand < Selector
@@ -285,13 +279,6 @@ class SelectorByCommand < Selector
     parameters = query.parameters.merge(:cache => :no)
     result = @context.select(query.table_name, parameters)
     CommandResult.new(result)
-  end
-
-  class << self
-    def setup(configuration)
-      #XXX spawn groonga server by itself, using Configuration
-      raise "implement"
-    end
   end
 end
 
