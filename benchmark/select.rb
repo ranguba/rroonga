@@ -2,7 +2,7 @@ require 'groonga'
 
 module Groonga
   class Context
-    def open_database(database_path, options = {})
+    def open_database(database_path, options={})
       Database.open(database_path, options.merge(:context => self))
     end
   end
