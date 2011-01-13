@@ -262,9 +262,11 @@ class Configuration
 end
 
 class Selector
-  attr_reader :context
-  def initialize
+  attr_reader :context, :database_path
+  def initialize(database_path)
     @context = Groonga::Context.new
+    @database_path = database_path
+    @database = @context.open_database(@database_path)
   end
 
   def select(query)
@@ -279,15 +281,6 @@ class Selector
 end
 
 class SelectorByCommand < Selector
-  attr_reader :host, :port
-  def initialize(host, port)
-    super()
-
-    @host = host
-    @port = port
-    @context.connect(:host => @host, :port => @port)
-  end
-
   def select(query)
     parameters = query.parameters.merge(:cache => :no)
     result = @context.select(query.table_name, parameters)
@@ -303,14 +296,6 @@ class SelectorByCommand < Selector
 end
 
 class SelectorByMethod < Selector
-  attr_reader :database_path
-  def initialize(database_path)
-    super()
-
-    @database_path = database_path
-    @database = @context.open_database(@database_path)
-  end
-
   def select(query)
     table = @context[query.table_name]
     filter = query.filter
@@ -690,7 +675,7 @@ end
 configuration = Configuration.new
 configuration.database_path = ENV["DATABASE_PATH"] || "/tmp/tutorial.db"
 
-select_command = SelectorByCommand.new("localhost", 10041)
+select_command = SelectorByCommand.new(configuration.database_path)
 select_method = SelectorByMethod.new(configuration.database_path)
 
 runner = Runner.new(:method => [:measure_time])
