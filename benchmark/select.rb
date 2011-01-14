@@ -571,7 +571,6 @@ class BenchmarkResult
   attr_reader :benchmark_result
 
   class Time < BenchmarkResult
-    attr_reader :start_time, :end_time
     def initialize(profile, target_object, &block)
       @intercepted_method_times = {}
       @profile = profile
@@ -579,16 +578,6 @@ class BenchmarkResult
       setup_intercepted_methods
 
       measure_time(&block)
-    end
-
-    def time
-      @end_time - @start_time
-    end
-
-    def intercepted_method_times
-      @intercepted_method_times.collect do |method, time|
-        "#{method}: #{"%0.9f" % (time[:end_time] - time[:start_time])}"
-      end.join(", ")
     end
 
     def lines
@@ -599,11 +588,9 @@ class BenchmarkResult
 
     private
     def measure_time
-      @start_time = ::Time.now
       @benchmark_result = Benchmark.measure do
         @result = yield
       end
-      @end_time = ::Time.now
     end
 
     def setup_intercepted_methods
@@ -626,15 +613,11 @@ class BenchmarkResult
       klass.class_exec do
         alias_method original_method_name, method_name
         define_method method_name do |*arguments, &block|
-          start_time = ::Time.now
           returned_object = nil
           benchmark_result = Benchmark.measure do
             returned_object = send(original_method_name, *arguments, &block)
           end
-          end_time = ::Time.now
           intercepted_method_times[method_name] = { # XXX include klass into key # XXX support multiple invocations
-            :start_time => start_time,
-            :end_time => end_time,
             :benchmark_result => benchmark_result,
           }
           returned_object
