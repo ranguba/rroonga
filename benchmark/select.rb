@@ -599,7 +599,11 @@ class BenchmarkResult
         when Symbol
           intercept_method(@target_object.class, method)
         when Method
-          intercept_method(method.owner, method.name)
+          if method.receiver.is_a?(Class)
+            intercept_method(method.owner, method.name)
+          else
+            intercept_method(method.receiver.class, method.name)
+          end
         else
           raise "bad"
         end
@@ -615,7 +619,7 @@ class BenchmarkResult
         define_method method_name do |*arguments, &block|
           returned_object = nil
           benchmark_result = Benchmark.measure do
-            returned_object = send(original_method_name, *arguments, &block)
+            returned_object = __send__(original_method_name, *arguments, &block)
           end
           intercepted_method_times[method_name] = { # XXX include klass into key # XXX support multiple invocations
             :benchmark_result => benchmark_result,
@@ -740,7 +744,7 @@ select_command = SelectorByCommand.new(configuration.database_path)
 select_method = SelectorByMethod.new(configuration.database_path)
 
 runner = Runner.new(:method => [:measure_time])
-runner.add_profile(Profile.new("select by commnd", select_command, [Groonga::Context::SelectResult.method(:parse)]))
+runner.add_profile(Profile.new("select by commnd", select_command, [select_command.context.method(:send), Groonga::Context::SelectResult.method(:parse)]))
 runner.add_profile(Profile.new("select by method", select_method, [:do_select, :sort, :format, :drilldown]))
 
 # at this point, setup is done
@@ -760,4 +764,3 @@ rescue Exception => error
   pp error
   pp error.back_trace
 end
-
