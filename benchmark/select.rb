@@ -752,10 +752,6 @@ runner = Runner.new(:method => [:measure_time])
 runner.add_profile(Profile.new("select by commnd", select_command, [select_command.context.method(:send), Groonga::Context::SelectResult.method(:parse)]))
 runner.add_profile(Profile.new("select by method", select_method, [:do_select, :sort, :format, :drilldown]))
 
-# at this point, setup is done
-puts "setup is completed!"
-puts
-
 query_log = ENV["QUERY_LOG"] || "select --table Site --limit 3 --offset 2 --sortby '-title, _id' --output_columns title --drilldown title,_id,_key --drilldown_limit 7 --drilldown_offset 3 --drilldown_sortby _key"
 
 begin
