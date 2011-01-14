@@ -747,10 +747,12 @@ configuration.database_path = ENV["DATABASE_PATH"] || "/tmp/tutorial.db"
 
 select_command = SelectorByCommand.new(configuration.database_path)
 select_method = SelectorByMethod.new(configuration.database_path)
+select_command_profile = Profile.new("select by commnd", select_command, [select_command.context.method(:send), Groonga::Context::SelectResult.method(:parse)]))
+select_method_profile = Profile.new("select by method", select_method, [:do_select, :sort, :format, :drilldown]))
 
 runner = Runner.new(:method => [:measure_time])
-runner.add_profile(Profile.new("select by commnd", select_command, [select_command.context.method(:send), Groonga::Context::SelectResult.method(:parse)]))
-runner.add_profile(Profile.new("select by method", select_method, [:do_select, :sort, :format, :drilldown]))
+runner.add_profile(select_command_profile)
+runner.add_profile(select_method_profile)
 
 query_log = ENV["QUERY_LOG"] || "select --table Site --limit 3 --offset 2 --sortby '-title, _id' --output_columns title --drilldown title,_id,_key --drilldown_limit 7 --drilldown_offset 3 --drilldown_sortby _key"
 
