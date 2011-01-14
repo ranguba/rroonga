@@ -11,6 +11,7 @@ module Groonga
 end
 
 class Query
+  attr_reader :options
   def initialize(options)
     @options = options
   end
@@ -248,7 +249,7 @@ class Query
     end
 
     def create_query
-      Query.new(@parameters)
+      Query.new(@parameters.merge(:original_log_entry => @log))
     end
   end
 
@@ -691,7 +692,7 @@ class Runner
       pp benchmarks
     end
     verify_results(benchmarks) unless ENV["NO_VERIFY"]
-    create_report(benchmarks)
+    create_report(query, benchmarks)
   end
 
   def verify_results(benchmarks)
@@ -707,13 +708,14 @@ class Runner
     first_result == second_result
   end
 
-  def create_report(benchmarks)
-    Report.new(benchmarks)
+  def create_report(query, benchmarks)
+    Report.new(query, benchmarks)
   end
 end
 
 class Report
-  def initialize(benchmarks)
+  def initialize(query, benchmarks)
+    @query = query
     @benchmarks = benchmarks
   end
 
@@ -722,6 +724,9 @@ class Report
 
   def print
     lines = []
+
+    puts "select command:"
+    puts "  #{@query.options[:original_log_entry]}"
 
     @benchmarks.each do |benchmark|
       lines += benchmark.lines
@@ -752,9 +757,6 @@ puts "setup is completed!"
 puts
 
 query_log = ENV["QUERY_LOG"] || "select --table Site --limit 3 --offset 2 --sortby '-title, _id' --output_columns title --drilldown title,_id,_key --drilldown_limit 7 --drilldown_offset 3 --drilldown_sortby _key"
-puts "select command:"
-puts "  #{query_log}"
-puts
 
 begin
   query = Query.parse_groonga_query_log(query_log)
