@@ -1,3 +1,5 @@
+require 'benchmark'
+
 require 'groonga'
 
 module Groonga
@@ -563,11 +565,12 @@ class MethodResult < Result
   end
 end
 
-class Benchmark
+class BenchmarkResult
   attr_accessor :result
   attr_accessor :profile
+  attr_reader :benchmark_result
 
-  class Time < Benchmark
+  class Time < BenchmarkResult
     attr_reader :start_time, :end_time
     def initialize(profile, target_object, &block)
       @intercepted_method_times = {}
@@ -588,10 +591,18 @@ class Benchmark
       end.join(", ")
     end
 
+    def lines
+      super + @intercepted_method_times.collect do |method_name, status|
+        ["  #{method_name}", status[:benchmark_result]]
+      end
+    end
+
     private
     def measure_time
       @start_time = ::Time.now
-      @result = yield
+      @benchmark_result = Benchmark.measure do
+        @result = yield
+      end
       @end_time = ::Time.now
     end
 
@@ -616,16 +627,24 @@ class Benchmark
         alias_method original_method_name, method_name
         define_method method_name do |*arguments, &block|
           start_time = ::Time.now
-          returned_object = send(original_method_name, *arguments, &block)
+          returned_object = nil
+          benchmark_result = Benchmark.measure do
+            returned_object = send(original_method_name, *arguments, &block)
+          end
           end_time = ::Time.now
           intercepted_method_times[method_name] = { # XXX include klass into key # XXX support multiple invocations
             :start_time => start_time,
             :end_time => end_time,
+            :benchmark_result => benchmark_result,
           }
           returned_object
         end
       end
     end
+  end
+
+  def lines
+    [[name, @benchmark_result]]
   end
 
   def name
@@ -652,7 +671,7 @@ class Profile
 
   private
   def measure_time(query)
-    Benchmark::Time.new(self, @selector) do
+    BenchmarkResult::Time.new(self, @selector) do
       result = @selector.select(query)
       result
     end
@@ -715,8 +734,18 @@ class Report
   end
 
   def print
+    lines = []
+
     @benchmarks.each do |benchmark|
-      puts "#{benchmark.name}: time: #{benchmark.time} #{benchmark.intercepted_method_times}"
+      lines += benchmark.lines
+    end
+    width = lines.collect(&:first).collect(&:size).max
+    #pp lines#.collect(&:first)
+    #puts "#{benchmark.name}: time: #{benchmark.time} #{benchmark.intercepted_method_times}"
+
+    puts(" " * (width - 1) + Benchmark::Tms::CAPTION.rstrip)
+    lines.each do |label, result|
+      puts "#{label.ljust(width)} #{result.to_s.strip}"
     end
   end
 end
@@ -740,6 +769,12 @@ puts "select command:"
 puts "  #{query_log}"
 puts
 
-query = Query.parse_groonga_query_log(query_log)
-report = runner.run_once(query)
-report.print
+begin
+  query = Query.parse_groonga_query_log(query_log)
+  report = runner.run_once(query)
+  report.print
+rescue Exception => error
+  pp error
+  pp error.back_trace
+end
+
