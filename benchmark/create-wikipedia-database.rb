@@ -114,40 +114,13 @@ class WikipediaImporter
   end
 end
 
-module Groonga
-  class Context
-    def create_patricia_trie(name, options=nil, &block)
-      create_table(PatriciaTrie, name, options, &block)
-    end
-
-    def create_hash(name, options=nil, &block)
-      create_table(Hash, name, options, &block)
-    end
-
-    private
-    def create_table(table_class, name, options=nil, &block)
-      options ||= {}
-      options = options.merge(:name => name, :context => self)
-      table_class.create(options, &block)
-    end
-  end
-
-  class Table
-    def define_vector_column(name, value_type, options=nil)
-      options ||= {}
-      options = options.merge(:type => :vector)
-      define_column(name, value_type, options)
-    end
-  end
-end
-
 module TimeDrilldownable
-  def define_columns(table)
-    table.define_column("year", "Int32")
-    table.define_column("month", "Int32")
-    table.define_column("date", "ShortText")
-    table.define_column("wday", "Int32")
-    table.define_column("hour", "Int32")
+  def define_time_columns(table)
+    table.int32("year")
+    table.int32("month")
+    table.short_text("date")
+    table.int32("wday")
+    table.int32("hour")
   end
 
   def add_time(table, key, time)
@@ -168,20 +141,27 @@ class GroongaLoader
     @context = Groonga::Context.new
     @context.create_database("/tmp/wikipedia-db/db")
 
-    @documents = @context.create_patricia_trie("Documents")
-    @users = @context.create_hash("Users", :key_type => "Int64")
+    Groonga::Schema.define(:context => @context) do |schema|
+      schema.create_table("Users", :type => :hash, :key_type => "Int64") do |table|
+        table.short_text("name")
+      end
 
-    @documents.define_column("content", "LongText")
-    @documents.define_column("timestamp", "Time")
-    define_columns(@documents)
-    @documents.define_column("last_contributor", "Users")
-    @documents.define_vector_column("links", "Documents")
+      schema.create_table("Documents", :type => :patricia_trie, :key_type => "ShortText") do |table|
+        table.long_text("content")
+        table.time("timestamp")
+        define_time_columns(table)
+        table.reference("last_contributor", "Users")
+        table.column("links", "Documents", :type => :vector)
+      end
 
-    @users.define_column("name", "ShortText")
-
-    @terms = @context.create_hash("Terms", :default_tokenizer => "TokenBigram")
-    @terms.define_index_column("title", @documents, :source => "Documents._key") # :(
-    @terms.define_index_column("content", @documents, :source => "Documents.content")
+      schema.create_table("Terms", :type => :hash, :default_tokenizer => "TokenBigram") do |table|
+        table.index("Documents._key")
+        table.index("Documents.content")
+      end
+    end
+    @documents = @context["Documents"]
+    @users = @context["Users"]
+    @terms = @context["Terms"]
   end
 
   def load(page)
