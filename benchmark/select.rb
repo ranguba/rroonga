@@ -666,7 +666,7 @@ class Profile
   end
 end
 
-class Runner
+class BenchmarkRunner
   DEFAULT_MODE = :measure_time # :mesure_memory, :mesure_io, :mesure_???
 
   def initialize(options={})
@@ -711,6 +711,23 @@ class Runner
   def create_report(query, benchmarks)
     Report.new(query, benchmarks)
   end
+
+  class << self
+    def select_benchmark_default_setup(runner, options=nil)
+      options ||= {}
+
+      configuration = Configuration.new
+      configuration.database_path = ENV["DATABASE_PATH"] || "/tmp/tutorial.db"
+
+      select_command = SelectorByCommand.new(configuration.database_path)
+      select_method = SelectorByMethod.new(configuration.database_path)
+      select_command_profile = Profile.new("select by commnd", select_command, [select_command.context.method(:send), Groonga::Context::SelectResult.method(:parse)])
+      select_method_profile = Profile.new("select by method", select_method, [:do_select, :sort, :format, :drilldown])
+
+      runner.add_profile(select_command_profile)
+      runner.add_profile(select_method_profile)
+    end
+  end
 end
 
 class Report
@@ -742,21 +759,16 @@ class Report
   end
 end
 
-configuration = Configuration.new
-configuration.database_path = ENV["DATABASE_PATH"] || "/tmp/tutorial.db"
+options = {
+  :method => [:measure_time]
+}
 
-select_command = SelectorByCommand.new(configuration.database_path)
-select_method = SelectorByMethod.new(configuration.database_path)
-select_command_profile = Profile.new("select by commnd", select_command, [select_command.context.method(:send), Groonga::Context::SelectResult.method(:parse)]))
-select_method_profile = Profile.new("select by method", select_method, [:do_select, :sort, :format, :drilldown]))
-
-runner = Runner.new(:method => [:measure_time])
-runner.add_profile(select_command_profile)
-runner.add_profile(select_method_profile)
-
-query_log = ENV["QUERY_LOG"] || "select --table Site --limit 3 --offset 2 --sortby '-title, _id' --output_columns title --drilldown title,_id,_key --drilldown_limit 7 --drilldown_offset 3 --drilldown_sortby _key"
+runner = BenchmarkRunner.new(options).tap do |runner|
+  BenchmarkRunner.select_benchmark_default_setup(runner, options)
+end
 
 begin
+  query_log = ENV["QUERY_LOG"] || "select --table Site --limit 3 --offset 2 --sortby '-title, _id' --output_columns title --drilldown title,_id,_key --drilldown_limit 7 --drilldown_offset 3 --drilldown_sortby _key"
   query = Query.parse_groonga_query_log(query_log)
   report = runner.run_once(query)
   report.print
