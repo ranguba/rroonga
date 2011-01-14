@@ -131,6 +131,14 @@ module Groonga
       table_class.create(options, &block)
     end
   end
+
+  class Table
+    def define_vector_column(name, value_type, options=nil)
+      options ||= {}
+      options = options.merge(:type => :vector)
+      define_column(name, value_type, options)
+    end
+  end
 end
 
 module TimeDrilldownable
@@ -159,10 +167,17 @@ class GroongaLoader
     FileUtils.mkdir_p("/tmp/wikipedia-db")
     @context = Groonga::Context.new
     @context.create_database("/tmp/wikipedia-db/db")
+
     @documents = @context.create_patricia_trie("Documents")
+    @users = @context.create_hash("Users", :key_type => "Int64")
+
     @documents.define_column("content", "LongText")
     @documents.define_column("timestamp", "Time")
     define_columns(@documents)
+    @documents.define_column("last_contributor", "Users")
+    @documents.define_vector_column("links", "Documents")
+
+    @users.define_column("name", "ShortText")
 
     @terms = @context.create_hash("Terms", :default_tokenizer => "TokenBigram")
     @terms.define_index_column("title", @documents, :source => "Documents._key") # :(
@@ -173,9 +188,24 @@ class GroongaLoader
     content = page.delete(:content)
     timestamp = page.delete(:timestamp)
     title = page.delete(:title)
+    contributor = page.delete(:contributor)
+
     @documents.add(title, :content => content, :timestamp => timestamp)
+    load_links(title, content)
     add_time(@documents, title, timestamp)
-    pp page
+
+    if not contributor.empty?
+      @documents.add(title, :last_contributor => contributor[:id])
+      @users[contributor[:id]][:name] = contributor[:name]
+    end
+  end
+
+  def load_links(title, content)
+    links = content.scan(/\[\[.*?\]\]/)
+    links = links.collect do |link|
+      link.sub(/\A\[\[/, '').sub(/\]\]\z/, '').sub(/\|[^\|]+\z/, '')
+    end
+    @documents.add(title, :links => links)
   end
 end
 
