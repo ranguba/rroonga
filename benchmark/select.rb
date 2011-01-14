@@ -598,8 +598,7 @@ class BenchmarkResult
 
         if count == 1
           result = results.first
-
-          lines << ["  #{method_name}", result]
+          lines << single_line(method_name, result, depth)
         else
           total = results.inject do |result, _total|
             result + _total
@@ -609,19 +608,27 @@ class BenchmarkResult
           total_result = ["#{padding}#{method_name}(called #{count}times)", total]
           lines << total_result
 
-          depth += 1
-          index = 0
-          result_lines = results.collect do |result|
-            index += 1
-            padding = "  " * (depth + 1)
-            ["#{padding}#{index}", result]
-          end
-
-          lines += result_lines
+          lines += multile_lines(results, depth + 1)
         end
       end
 
       lines
+    end
+
+    def single_line(method_name, result, depth)
+      padding = "  " * (depth + 1)
+
+      ["#{padding}#{method_name}", result]
+    end
+
+    def multile_lines(results, depth)
+      index = 0
+
+      results.collect do |result|
+        index += 1
+        padding = "  " * (depth + 1)
+        ["#{padding}#{index}", result]
+      end
     end
 
     private
