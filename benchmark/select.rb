@@ -502,11 +502,6 @@ end
 
 class Result
   def ==(other) # XXX needs more strict/rigid check
-    if ENV["DEBUG"] or ENV["DEBUG_VERIFY"]
-      pp "#{hit_count} == #{other.hit_count} and #{result_count} == #{other.result_count} and "
-      #pp "#{formatted_result} == #{other.formatted_result}"
-    end
-
     [
       hit_count == other.hit_count,
       result_count == other.result_count,
@@ -559,8 +554,12 @@ class MethodResult < Result
   end
 
   def drilldown_results
-    @drilldown_results.collect do |result|
-      result[:format]
+    if @drilldown_results.nil?
+      []
+    else
+      @drilldown_results.collect do |result|
+        result[:format]
+      end
     end
   end
 
@@ -599,6 +598,8 @@ class BenchmarkResult
         if count == 1
           result = results.first
           lines << single_line(method_name, result, depth)
+        elsif count == 0
+          # do nothing
         else
           total = results.inject do |result, _total|
             result + _total
