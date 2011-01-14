@@ -343,7 +343,7 @@ class SelectorByMethod < Selector
   def drilldown_result(result, drilldown_columns, query)
     columns = tokenize_column_list(drilldown_columns)
     columns.uniq.collect do |column|
-      drilldown_result = result.group(column)
+      drilldown_result = do_group(result, column)
       sorted_drilldown_result = drilldown_sort(query, drilldown_result)
       formatted_drilldown_result = drilldown_format(query, sorted_drilldown_result || drilldown_result)
 
@@ -354,6 +354,10 @@ class SelectorByMethod < Selector
         :format => formatted_drilldown_result,
       }
     end
+  end
+
+  def do_group(result, column)
+    result.group(column)
   end
 
   def needs_sort?(query)
@@ -576,15 +580,48 @@ class BenchmarkResult
       @intercepted_method_times = {}
       @profile = profile
       @target_object = target_object
-      setup_intercepted_methods
+      setup_intercepted_methods(@profile.intercepted_methods)
 
       measure_time(&block)
     end
 
     def lines
-      super + @intercepted_method_times.collect do |method_name, status|
-        ["  #{method_name}", status[:benchmark_result]]
+      super + intercepted_method_lines
+    end
+
+    def intercepted_method_lines
+      lines = []
+      @intercepted_method_times.each do |method_name, status|
+        depth = status[:depth]
+        count = status[:benchmark_results].size
+        results = status[:benchmark_results]
+
+        if count == 1
+          result = results.first
+
+          lines << ["  #{method_name}", result]
+        else
+          total = results.inject do |result, _total|
+            result + _total
+          end
+          padding = "  " * (depth + 1)
+
+          total_result = ["#{padding}#{method_name}(called #{count}times)", total]
+          lines << total_result
+
+          depth += 1
+          index = 0
+          result_lines = results.collect do |result|
+            index += 1
+            padding = "  " * (depth + 1)
+            ["#{padding}#{index}", result]
+          end
+
+          lines += result_lines
+        end
       end
+
+      lines
     end
 
     private
@@ -594,26 +631,32 @@ class BenchmarkResult
       end
     end
 
-    def setup_intercepted_methods
-      @profile.intercepted_methods.each do |method|
+    def setup_intercepted_methods(intercepted_methods, depth=0)
+      intercepted_methods.each do |method|
         case method
         when Symbol
-          intercept_method(@target_object.class, method)
+          intercept_method(@target_object.class, method, depth)
         when Method
           if method.receiver.is_a?(Class)
-            intercept_method(method.owner, method.name)
+            intercept_method(method.owner, method.name, depth)
           else
-            intercept_method(method.receiver.class, method.name)
+            intercept_method(method.receiver.class, method.name, depth)
           end
+        when Array
+          setup_intercepted_methods(method, depth + 1)
         else
           raise "bad"
         end
       end
     end
 
-    def intercept_method(klass, method_name)
+    def intercept_method(klass, method_name, depth)
       intercepted_method_times = @intercepted_method_times
       original_method_name = :"__intercepted__#{method_name}"
+
+      intercepted_method_times[method_name] = {}
+      intercepted_method_times[method_name][:benchmark_results] = []
+      intercepted_method_times[method_name][:depth] = depth
 
       klass.class_exec do
         alias_method original_method_name, method_name
@@ -622,9 +665,7 @@ class BenchmarkResult
           benchmark_result = Benchmark.measure do
             returned_object = __send__(original_method_name, *arguments, &block)
           end
-          intercepted_method_times[method_name] = { # XXX include klass into key # XXX support multiple invocations
-            :benchmark_result => benchmark_result,
-          }
+          intercepted_method_times[method_name][:benchmark_results] << benchmark_result
           returned_object
         end
       end
@@ -722,7 +763,7 @@ class BenchmarkRunner
       select_command = SelectorByCommand.new(configuration.database_path)
       select_method = SelectorByMethod.new(configuration.database_path)
       select_command_profile = Profile.new("select by commnd", select_command, [select_command.context.method(:send), Groonga::Context::SelectResult.method(:parse)])
-      select_method_profile = Profile.new("select by method", select_method, [:do_select, :sort, :format, :drilldown])
+      select_method_profile = Profile.new("select by method", select_method, [:do_select, :sort, :format, :drilldown, [:do_group, :drilldown_sort, :drilldown_format]])
 
       runner.add_profile(select_command_profile)
       runner.add_profile(select_method_profile)
@@ -774,5 +815,5 @@ begin
   report.print
 rescue Exception => error
   pp error
-  pp error.back_trace
+  pp error.backtrace
 end
