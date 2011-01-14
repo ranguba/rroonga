@@ -65,18 +65,6 @@ class ContextTest < Test::Unit::TestCase
     assert_predicate(database, :closed?)
   end
 
-  def test_close_database
-    db_path = @tmp_dir + "db"
-    database = Groonga::Database.create(:path => db_path.to_s)
-    database.close
-
-    context = Groonga::Context.new
-    database = context.open_database(db_path.to_s)
-    assert_not_predicate(database, :closed?)
-    context.close_database
-    assert_predicate(database, :closed?)
-  end
-
   def test_encoding
     context = Groonga::Context.new
     assert_equal(Groonga::Encoding.default, context.encoding)

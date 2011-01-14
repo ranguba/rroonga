@@ -52,14 +52,6 @@ module Groonga
     end
 
     # call-seq:
-    #   context.close_database
-    #
-    # _context_が使用しているデータベースのリソースを開放する。
-    def close_database
-      database.close
-    end
-
-    # call-seq:
     #   context.select(table, options={}) -> SelectResult
     #
     # _table_から指定した条件にマッチするレコードの値を取得
