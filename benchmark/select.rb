@@ -5,6 +5,7 @@ require 'groonga'
 module Groonga
   class Record
     def include?(column)
+      raise("should use have_column?")
       not table.column(column).nil?
     end
   end
