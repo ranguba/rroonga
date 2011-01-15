@@ -146,6 +146,7 @@ class Query
       litaral = nil
       token = ""
 
+      raise("What about using Shellwords.split?")
       @log.each_char do |character|
         #puts "#{character.inspect} #{escape.inspect}"
         case character
