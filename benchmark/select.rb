@@ -10,8 +10,11 @@ module Groonga
   end
 end
 
+Groonga::Logger.query_log_path = "/tmp/query.log"
+
 class Query
   attr_reader :options
+  attr_accessor :original_log_entry
   def initialize(options)
     @options = options
   end
@@ -249,7 +252,9 @@ class Query
     end
 
     def create_query
-      Query.new(@parameters.merge(:original_log_entry => @log))
+      query = Query.new(@parameters)
+      query.original_log_entry = @log
+      query
     end
   end
 
@@ -772,7 +777,7 @@ class BenchmarkRunner
   end
 
 
-  def debug_benchmarks(benchmarks)
+  def debug_benchmarks(query, benchmarks)
     if ENV["DEBUG"]
       pp query
       pp benchmarks
@@ -781,7 +786,7 @@ class BenchmarkRunner
 
   def run_once(query)
     benchmarks = collect_benchmarks(query)
-    debug_benchmarks(benchmarks)
+    debug_benchmarks(query, benchmarks)
     verify_results(benchmarks)
     create_report(query, benchmarks)
   end
@@ -837,7 +842,7 @@ class Report
     lines = []
 
     puts "select command:"
-    puts "  #{@query.options[:original_log_entry]}"
+    puts "  #{@query.original_log_entry}"
 
     @benchmarks.each do |benchmark|
       lines += benchmark.lines
