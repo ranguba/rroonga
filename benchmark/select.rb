@@ -303,10 +303,13 @@ class SelectorByMethod < Selector
     table.select(filter, :default_column => default_column, :syntax => :script)
   end
 
+  DEFAULT_LIMIT = 10
+  DEFAULT_DRILLDOWN_LIMIT = DEFAULT_LIMIT
+
   def sort(query, result)
     if needs_sort?(query)
       sort_key = sort_key(query.sort_by)
-      window_options = window_options(query.limit, query.offset)
+      window_options = window_options(query.limit || DEFAULT_LIMIT, query.offset)
       sorted_result = result.sort(sort_key, window_options).collect do |record|
         record.key
       end
@@ -316,7 +319,7 @@ class SelectorByMethod < Selector
   def drilldown_sort(query, result)
     if needs_drilldown_sort?(query)
       sort_key = sort_key(query.drilldown_sort_by)
-      window_options = window_options(query.drilldown_limit, query.drilldown_offset)
+      window_options = window_options(query.drilldown_limit || DEFAULT_DRILLDOWN_LIMIT, query.drilldown_offset)
 
       sorted_result = result.sort(sort_key, window_options).collect do |record|
         record
@@ -361,7 +364,7 @@ class SelectorByMethod < Selector
   end
 
   def needs_sort?(query)
-    query.limit or query.offset or query.sort_by
+    (query.limit.nil? or query.limit > 0) or query.offset or query.sort_by
   end
 
   def needs_format?(query)
