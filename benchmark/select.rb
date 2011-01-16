@@ -1,12 +1,13 @@
 require 'benchmark'
+require 'shellwords'
 
 require 'groonga'
 
 module Groonga
   class Record
+    BUILT_IN_COLUMNS = ["_id", "_key", "_score", "_nsubrecs"]
     def include?(column)
-      raise("should use have_column?")
-      not table.column(column).nil?
+      BUILT_IN_COLUMNS.include?(column) or table.have_column?(column)
     end
   end
 end
