@@ -1,3 +1,4 @@
+require 'time'
 require 'fileutils'
 require 'groonga'
 
