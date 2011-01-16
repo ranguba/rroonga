@@ -512,6 +512,9 @@ class SelectorByMethod < Selector
     access_table = result.first.table
 
     table = result.first.key
+    unless table.is_a?(Groonga::Table)
+      table = result.first.table
+    end
     columns = columns.collect do |column|
       if column == "*"
         table.columns.collect(&:name).collect do |name|
