@@ -5,6 +5,7 @@ require 'groonga'
 module Groonga
   class Record
     def include?(column)
+      raise("should use have_column?")
       not table.column(column).nil?
     end
   end
@@ -148,6 +149,7 @@ class Query
       litaral = nil
       token = ""
 
+      raise("What about using Shellwords.split?")
       @log.each_char do |character|
         #puts "#{character.inspect} #{escape.inspect}"
         case character
