@@ -616,6 +616,10 @@ class BenchmarkResult
       super + intercepted_method_lines
     end
 
+    def padding(depth)
+      "  " * (depth + 1)
+    end
+
     def intercepted_method_lines
       lines = []
       @intercepted_method_times.each do |method_name, status|
@@ -632,9 +636,8 @@ class BenchmarkResult
           total = results.inject do |result, _total|
             result + _total
           end
-          padding = "  " * (depth + 1)
 
-          total_result = ["#{padding}#{method_name} (called #{count}times)", total]
+          total_result = ["#{padding(depth)}#{method_name} (called #{count}times)", total]
           lines << total_result
 
           lines += multile_lines(results, depth + 1)
@@ -645,9 +648,8 @@ class BenchmarkResult
     end
 
     def single_line(method_name, result, depth)
-      padding = "  " * (depth + 1)
 
-      ["#{padding}#{method_name}", result]
+      ["#{padding(depth)}#{method_name}", result]
     end
 
     def multile_lines(results, depth)
@@ -655,8 +657,7 @@ class BenchmarkResult
 
       results.collect do |result|
         index += 1
-        padding = "  " * (depth + 1)
-        ["#{padding}#{index}", result]
+        ["#{padding(depth)}#{index}", result]
       end
     end
 
