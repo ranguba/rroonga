@@ -634,7 +634,7 @@ class BenchmarkResult
           end
           padding = "  " * (depth + 1)
 
-          total_result = ["#{padding}#{method_name}(called #{count}times)", total]
+          total_result = ["#{padding}#{method_name} (called #{count}times)", total]
           lines << total_result
 
           lines += multile_lines(results, depth + 1)
@@ -709,7 +709,7 @@ class BenchmarkResult
   end
 
   def lines
-    [[name, @benchmark_result]]
+    [["#{name} (#{result.hit_count} hits)", @benchmark_result]]
   end
 
   def name
@@ -857,11 +857,10 @@ class Report
   end
 
   def print
-    lines = []
-
     puts "select command:"
     puts "  #{@query.original_log_entry}"
 
+    lines = []
     @benchmarks.each do |benchmark|
       lines += benchmark.lines
     end
