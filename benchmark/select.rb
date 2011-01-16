@@ -733,8 +733,15 @@ class BenchmarkRunner
     @profiles << profile
   end
 
+  LOCK_TIMEOUT_SECONDS = 10
+  def lock
+    @context.database.lock(:timeout => LOCK_TIMEOUT_SECONDS * 1000) do
+      yield
+    end
+  end
+
   def collect_benchmarks(query)
-    @context.database.lock(:timeout => 10000) do
+    lock do
       @profiles.collect do |profile|
         profile.take_benchmark(query)
       end

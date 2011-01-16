@@ -164,22 +164,33 @@ class GroongaLoader
     @terms = @context["Terms"]
   end
 
+  LOCK_TIMEOUT_SECONDS = 10
+  def lock
+    @context.database.lock(:timeout => LOCK_TIMEOUT_SECONDS * 1000) do
+      yield
+    end
+  end
+
   def load(page)
+    lock do
+      do_load(page)
+    end
+  end
+
+  def do_load(page)
     content = page.delete(:content)
     timestamp = page.delete(:timestamp)
     title = page.delete(:title)
     contributor = page.delete(:contributor)
 
-    @context.database.lock(:timeout => 10000) do
-      puts "loading: #{title}"
-      @documents.add(title, :content => content, :timestamp => timestamp)
-      load_links(title, content)
-      add_time(@documents, title, timestamp)
+    puts "loading: #{title}"
+    @documents.add(title, :content => content, :timestamp => timestamp)
+    load_links(title, content)
+    add_time(@documents, title, timestamp)
 
-      if not contributor.empty?
-        @documents.add(title, :last_contributor => contributor[:id])
-        @users[contributor[:id]][:name] = contributor[:name]
-      end
+    if not contributor.empty?
+      @documents.add(title, :last_contributor => contributor[:id])
+      @users[contributor[:id]][:name] = contributor[:name]
     end
   end
 
