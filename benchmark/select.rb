@@ -32,7 +32,7 @@ class Query
   def filter
     if match_columns and @options[:query]
       #raise "unsupported" if @options[:filter]
-      "#{match_columns} @ #{@options[:query]}" #XXX correct escape
+      @options[:query]
     else
       @options[:filter]
     end
