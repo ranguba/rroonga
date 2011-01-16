@@ -3,15 +3,6 @@ require 'shellwords'
 
 require 'groonga'
 
-module Groonga
-  class Record
-    BUILT_IN_COLUMNS = ["_id", "_key", "_score", "_nsubrecs"]
-    def include?(column)
-      BUILT_IN_COLUMNS.include?(column) or table.have_column?(column)
-    end
-  end
-end
-
 Groonga::Logger.query_log_path = "/tmp/query.log"
 
 class Query
@@ -477,6 +468,15 @@ class SelectorByMethod < Selector
     end
   end
 
+  BUILT_IN_COLUMNS = ["_id", "_key", "_score", "_nsubrecs"]
+  def column_included_in_record?(column, record)
+    if record.respond_to?(:table)
+      BUILT_IN_COLUMNS.include?(column) or record.table.have_column?(column)
+    else
+      record.include?(column)
+    end
+  end
+
   def build_column_list(result, columns)
     access_table = result.first.table
 
@@ -490,7 +490,7 @@ class SelectorByMethod < Selector
           name.sub(/\A[A-Za-z0-9_]+\./, '')
         end
       else
-        column if result.first.include?(column)
+        column if column_included_in_record?(column, result.first)
       end
     end.flatten.compact
 
