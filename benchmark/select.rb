@@ -309,7 +309,10 @@ class SelectorByMethod < Selector
   def sort(query, result)
     if needs_sort?(query)
       sort_key = sort_key(query.sort_by)
-      window_options = window_options(query.limit || DEFAULT_LIMIT, query.offset)
+      limit = query.limit || DEFAULT_LIMIT
+      offset = query.offset
+
+      window_options = create_window_options(limit, offset)
       sorted_result = result.sort(sort_key, window_options).collect do |record|
         record.key
       end
@@ -319,7 +322,10 @@ class SelectorByMethod < Selector
   def drilldown_sort(query, result)
     if needs_drilldown_sort?(query)
       sort_key = sort_key(query.drilldown_sort_by)
-      window_options = window_options(query.drilldown_limit || DEFAULT_DRILLDOWN_LIMIT, query.drilldown_offset)
+      limit = query.drilldown_limit || DEFAULT_DRILLDOWN_LIMIT
+      offset = query.drilldown_offset
+
+      window_options = create_window_options(limit, offset)
 
       sorted_result = result.sort(sort_key, window_options).collect do |record|
         record
@@ -424,7 +430,7 @@ class SelectorByMethod < Selector
     ]
   end
 
-  def window_options(limit, offset)
+  def create_window_options(limit, offset)
     window_options = {}
     if limit
       window_options[:limit] = limit
