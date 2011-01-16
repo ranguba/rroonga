@@ -294,7 +294,9 @@ class SelectorByMethod < Selector
   def select(query)
     table = @context[query.table_name]
     filter = query.filter
-    default_column = table.column(query.match_columns)
+    if query.match_columns
+      default_column = table.column(query.match_columns)
+    end
 
     result = do_select(filter, table, default_column)
     sorted_result = sort(query, result)
@@ -305,7 +307,15 @@ class SelectorByMethod < Selector
   end
 
   def do_select(filter, table, default_column)
-    table.select(filter, :default_column => default_column, :syntax => :script)
+    options = {
+      :syntax => :script
+    }
+    if default_column
+      options[:default_column] = default_column
+      options[:syntax] = :query
+    end
+
+    table.select(filter, options)
   end
 
   DEFAULT_LIMIT = 10
