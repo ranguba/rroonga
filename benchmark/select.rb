@@ -791,6 +791,7 @@ class BenchmarkRunner
 
       configuration = Configuration.new
       configuration.database_path = ENV["DATABASE_PATH"] || "/tmp/wikipedia-db/db"
+      ensure_database(configuration)
 
       context = Groonga::Context.new
       select_command = SelectorByCommand.new(context, configuration.database_path)
@@ -801,6 +802,19 @@ class BenchmarkRunner
       runner.context = context
       runner.add_profile(select_command_profile)
       runner.add_profile(select_method_profile)
+    end
+
+    def ensure_database(configuration)
+      unless File.exist?(configuration.database_path)
+        puts 'you must create wikipedia database to use, or specify it via "DATABASE_PATH" environment variable'
+        puts
+        puts 'how to create wikipedia database'
+        puts '1. download wikipedia dump.'
+        puts '   $ wget -c http://download.wikimedia.org/jawiki/latest/jawiki-latest-pages-articles.xml.bz2'
+        puts '2. create groonga database from the dump'
+        puts '   $ cat jawiki-latest-pages-articles.xml.bz2 | bunzip2 | ruby1.9.1 ./benchmark/create-wikipedia-database.rb'
+        exit 1
+      end
     end
 
     def command_selector_profile(select_command)
