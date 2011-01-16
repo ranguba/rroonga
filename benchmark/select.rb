@@ -763,7 +763,8 @@ class BenchmarkRunner
     benchmarks = collect_benchmarks(query)
     debug_benchmarks(query, benchmarks)
     verify_results(benchmarks)
-    create_report(query, benchmarks)
+    report = create_report(query, benchmarks)
+    report.print
   end
 
   def verify_results(benchmarks)
@@ -860,8 +861,7 @@ end
 begin
   query_log = ENV["QUERY_LOG"] || "select Documents --drilldown 'year,date,month,wday' --match_columns 'content' --query 'アルミ'"
   query = Query.parse_groonga_query_log(query_log)
-  report = runner.run_once(query)
-  report.print
+  runner.run_once(query)
 rescue Exception => error
   pp error
   pp error.backtrace
