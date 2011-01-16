@@ -444,24 +444,19 @@ class SelectorByMethod < Selector
     if result.empty?
       return []
     end
-    columns = tokenize_column_list(output_columns)
-    table = result.first.key
-    columns = columns.collect do |column|
-      if column == "*"
-        table.columns.collect(&:name).collect do |name|
-          name.sub(/\A[A-Za-z0-9_]+\./, '')
-        end
-      else
-        column if result.first.include?(column)
-      end
-    end.flatten.compact
 
-    table = result.first.table
+    column_tokens = tokenize_column_list(output_columns)
+    column_list = build_column_list(result, column_tokens)
+
     result.collect do |record|
-      columns.collect do |column|
-        value = record[column]
-        to_json(value, access_column(table, column))
-      end
+      format_record(column_list, record)
+    end
+  end
+
+  def format_record(column_list, record)
+    column_list.collect do |column, access_column|
+      value = record[column]
+      to_json(value, access_column)
     end
   end
 
@@ -496,6 +491,25 @@ class SelectorByMethod < Selector
       unless token == "*"
         token.sub!(/[^A-Za-z0-9_]\z/, '')
       end
+    end
+  end
+
+  def build_column_list(result, columns)
+    access_table = result.first.table
+
+    table = result.first.key
+    columns = columns.collect do |column|
+      if column == "*"
+        table.columns.collect(&:name).collect do |name|
+          name.sub(/\A[A-Za-z0-9_]+\./, '')
+        end
+      else
+        column if result.first.include?(column)
+      end
+    end.flatten.compact
+
+    columns.collect do |column|
+      [column, access_column(access_table, column)]
     end
   end
 end
