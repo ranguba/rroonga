@@ -1,3 +1,5 @@
+#encoding: UTF-8
+
 require 'benchmark'
 require 'shellwords'
 
@@ -787,7 +789,7 @@ class BenchmarkRunner
       options ||= {}
 
       configuration = Configuration.new
-      configuration.database_path = ENV["DATABASE_PATH"] || "/tmp/tutorial.db"
+      configuration.database_path = ENV["DATABASE_PATH"] || "/tmp/wikipedia-db/db"
 
       context = Groonga::Context.new
       select_command = SelectorByCommand.new(context, configuration.database_path)
@@ -838,8 +840,6 @@ class Report
       lines += benchmark.lines
     end
     width = lines.collect(&:first).collect(&:size).max
-    #pp lines#.collect(&:first)
-    #puts "#{benchmark.name}: time: #{benchmark.time} #{benchmark.intercepted_method_times}"
 
     puts(" " * (width - 1) + Benchmark::Tms::CAPTION.rstrip)
     lines.each do |label, result|
@@ -856,8 +856,9 @@ runner = BenchmarkRunner.new(options).tap do |runner|
   BenchmarkRunner.select_benchmark_default_setup(runner, options)
 end
 
+# this it to prevent rroonga SEGV at the exit of program
 begin
-  query_log = ENV["QUERY_LOG"] || "select --table Site --limit 3 --offset 2 --sortby '-title, _id' --output_columns title --drilldown title,_id,_key --drilldown_limit 7 --drilldown_offset 3 --drilldown_sortby _key"
+  query_log = ENV["QUERY_LOG"] || "select Documents --drilldown 'year,date,month,wday' --match_columns 'content' --query 'アルミ'"
   query = Query.parse_groonga_query_log(query_log)
   report = runner.run_once(query)
   report.print
