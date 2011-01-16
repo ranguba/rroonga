@@ -340,6 +340,7 @@ class SelectorByMethod < Selector
 
   DEFAULT_OUTPUT_COLUMNS = "_id, _key, *"
   DEFAULT_DRILLDOWN_OUTPUT_COLUMNS = "_key, _nsubrecs"
+
   def format(query, result)
     columns = query.output_columns || DEFAULT_OUTPUT_COLUMNS
     format_result(result, columns)
@@ -377,7 +378,7 @@ class SelectorByMethod < Selector
   end
 
   def needs_sort?(query)
-    (query.limit.nil? or query.limit > 0) or query.offset or query.sort_by
+    (query.limit.nil? or query.limit >= 0) or query.offset or query.sort_by
   end
 
   def needs_drilldown?(query)
@@ -385,7 +386,7 @@ class SelectorByMethod < Selector
   end
 
   def needs_drilldown_sort?(query)
-    query.drilldown_limit or query.drilldown_offset or query.drilldown_sort_by
+    (query.drilldown_limit.nil? or query.drilldown_limit >= 0) or query.drilldown_offset or query.drilldown_sort_by
   end
 
   DESCENDING_ORDER_PREFIX = /\A-/
