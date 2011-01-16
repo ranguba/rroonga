@@ -266,8 +266,8 @@ end
 
 class Selector
   attr_reader :context, :database_path
-  def initialize(database_path)
-    @context = Groonga::Context.new
+  def initialize(context, database_path)
+    @context = context
     @database_path = database_path
     @database = @context.open_database(@database_path)
   end
@@ -716,6 +716,7 @@ class Profile
 end
 
 class BenchmarkRunner
+  attr_accessor :context
   DEFAULT_MODE = :measure_time # :mesure_memory, :mesure_io, :mesure_???
 
   def initialize(options={})
@@ -732,19 +733,31 @@ class BenchmarkRunner
     @profiles << profile
   end
 
-  def run_once(query)
-    benchmarks = @profiles.collect do |profile|
-      profile.take_benchmark(query)
+  def collect_benchmarks(query)
+    @context.database.lock(:timeout => 10000) do
+      @profiles.collect do |profile|
+        profile.take_benchmark(query)
+      end
     end
+  end
+
+
+  def debug_benchmarks(benchmarks)
     if ENV["DEBUG"]
       pp query
       pp benchmarks
     end
-    verify_results(benchmarks) unless ENV["NO_VERIFY"]
+  end
+
+  def run_once(query)
+    benchmarks = collect_benchmarks(query)
+    debug_benchmarks(benchmarks)
+    verify_results(benchmarks)
     create_report(query, benchmarks)
   end
 
   def verify_results(benchmarks)
+    return if ENV["NO_VERIFY"]
     benchmarks = benchmarks.dup
 
     expected_result = benchmarks.shift.result
@@ -768,11 +781,13 @@ class BenchmarkRunner
       configuration = Configuration.new
       configuration.database_path = ENV["DATABASE_PATH"] || "/tmp/tutorial.db"
 
-      select_command = SelectorByCommand.new(configuration.database_path)
-      select_method = SelectorByMethod.new(configuration.database_path)
+      context = Groonga::Context.new
+      select_command = SelectorByCommand.new(context, configuration.database_path)
+      select_method = SelectorByMethod.new(context, configuration.database_path)
       select_command_profile = Profile.new("select by commnd", select_command, [select_command.context.method(:send), Groonga::Context::SelectResult.method(:parse)])
       select_method_profile = Profile.new("select by method", select_method, [:do_select, :sort, :format, :drilldown, [:do_group, :drilldown_sort, :drilldown_format]])
 
+      runner.context = context
       runner.add_profile(select_command_profile)
       runner.add_profile(select_method_profile)
     end

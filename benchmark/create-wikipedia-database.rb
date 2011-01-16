@@ -170,13 +170,16 @@ class GroongaLoader
     title = page.delete(:title)
     contributor = page.delete(:contributor)
 
-    @documents.add(title, :content => content, :timestamp => timestamp)
-    load_links(title, content)
-    add_time(@documents, title, timestamp)
+    @context.database.lock(:timeout => 10000) do
+      puts "loading: #{title}"
+      @documents.add(title, :content => content, :timestamp => timestamp)
+      load_links(title, content)
+      add_time(@documents, title, timestamp)
 
-    if not contributor.empty?
-      @documents.add(title, :last_contributor => contributor[:id])
-      @users[contributor[:id]][:name] = contributor[:name]
+      if not contributor.empty?
+        @documents.add(title, :last_contributor => contributor[:id])
+        @users[contributor[:id]][:name] = contributor[:name]
+      end
     end
   end
 
