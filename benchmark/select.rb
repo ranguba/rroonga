@@ -819,12 +819,30 @@ class BenchmarkRunner
       context = Groonga::Context.new
       select_command = SelectorByCommand.new(context, configuration.database_path)
       select_method = SelectorByMethod.new(context, configuration.database_path)
-      select_command_profile = Profile.new("select by commnd", select_command, [select_command.context.method(:send), Groonga::Context::SelectResult.method(:parse)])
-      select_method_profile = Profile.new("select by method", select_method, [:do_select, :sort, :format, :drilldown, [:do_group, :drilldown_sort, :drilldown_format]])
+      select_command_profile = command_selector_profile(select_command)
+      select_method_profile = method_selector_profile(select_method)
 
       runner.context = context
       runner.add_profile(select_command_profile)
       runner.add_profile(select_method_profile)
+    end
+
+    def command_selector_profile(select_command)
+      Profile.new("select by commnd",
+                  select_command,
+                  [select_command.context.method(:send),
+                   Groonga::Context::SelectResult.method(:parse)])
+    end
+
+    def method_selector_profile(select_method)
+      Profile.new("select by method",
+                  select_method,
+                  [:do_select,
+                   :sort,
+                   :format,
+                   :drilldown, [:do_group,
+                                :drilldown_sort,
+                                :drilldown_format]])
     end
   end
 end
