@@ -338,12 +338,16 @@ class SelectorByMethod < Selector
     end
   end
 
+  DEFAULT_OUTPUT_COLUMNS = "_id, _key, *"
+  DEFAULT_DRILLDOWN_OUTPUT_COLUMNS = "_key, _nsubrecs"
   def format(query, result)
-    format_result(result, query.output_columns || "_id, _key, *")
+    columns = query.output_columns || DEFAULT_OUTPUT_COLUMNS
+    format_result(result, columns)
   end
 
   def drilldown_format(query, result)
-    format_result(result, query.drilldown_output_columns || "_key, _nsubrecs")
+    columns = query.drilldown_output_columns || DEFAULT_DRILLDOWN_OUTPUT_COLUMNS
+    format_result(result, columns)
   end
 
   def drilldown(query, result)
