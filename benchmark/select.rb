@@ -339,9 +339,7 @@ class SelectorByMethod < Selector
   end
 
   def format(query, result)
-    if needs_format?(query)
-      formatted_result = format_result(result, query.output_columns)
-    end
+    format_result(result, query.output_columns || "_id, _key, *")
   end
 
   def drilldown_format(query, result)
@@ -376,10 +374,6 @@ class SelectorByMethod < Selector
 
   def needs_sort?(query)
     (query.limit.nil? or query.limit > 0) or query.offset or query.sort_by
-  end
-
-  def needs_format?(query)
-    query.output_columns
   end
 
   def needs_drilldown?(query)
