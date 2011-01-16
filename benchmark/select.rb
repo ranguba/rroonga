@@ -149,50 +149,7 @@ class Query
       litaral = nil
       token = ""
 
-      raise("What about using Shellwords.split?")
-      @log.each_char do |character|
-        #puts "#{character.inspect} #{escape.inspect}"
-        case character
-        when / /
-          if escape.nil? and litaral.nil?
-            token = next_token(token)
-          elsif escape == "\\"
-            escape = nil
-            token << character
-          else
-            token << character
-          end
-        when /[\"\']/
-          if escape.nil? and litaral.nil?
-            litaral = character
-          elsif escape == "\\"
-            escape = nil
-            token << character
-          elsif character == litaral
-            litaral = nil
-            token = next_token(token)
-          else
-            token << character
-          end
-        when "\\"
-          if escape.nil?
-            escape = "\\"
-          else
-            escape = nil
-            token << character
-          end
-        else
-          if escape == "\\"
-            escape = nil
-          end
-
-          token << character
-        end
-        #puts "#{token.inspect} #{escape.inspect}"
-      end
-
-      raise "parse error (terminated with escape: #{escape.inspect})" unless escape.nil?
-      @tokens << token
+      @tokens = Shellwords.split(@log)
       @tokens = @tokens.reject(&:empty?)
     end
 
