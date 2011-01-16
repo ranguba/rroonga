@@ -260,15 +260,19 @@ class SelectorByMethod < Selector
   end
 
   def do_select(filter, table, default_column)
-    options = {
-      :syntax => :script
-    }
-    if default_column
-      options[:default_column] = default_column
-      options[:syntax] = :query
-    end
+    if filter
+      options = {
+        :syntax => :script
+      }
+      if default_column
+        options[:default_column] = default_column
+        options[:syntax] = :query
+      end
 
-    table.select(filter, options)
+      table.select(filter, options)
+    else
+      table.select
+    end
   end
 
   DEFAULT_LIMIT = 10
