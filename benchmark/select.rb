@@ -938,10 +938,18 @@ class BenchmarkRunner
                                 :drilldown_format]])
     end
 
+    PREDEFINED_QUERIES = [
+      [
+        "select Documents content アルミ --output_columns '_id _key year wday timestamp month hour date last_contributor' --drilldown 'last_contributor, year,date,month,wday' --drilldown_output_columns '_key _nsubrecs _score'",
+        "normal",
+      ]
+    ]
+
     def load_predefined_queries(runner, options)
-      query_log = "select Documents content アルミ --output_columns '_id _key year wday timestamp month hour date last_contributor' --drilldown 'last_contributor, year,date,month,wday' --drilldown_output_columns '_key _nsubrecs _score'"
-      query = Query.parse_groonga_query_log(query_log)
-      runner.add_query(query, "normal")
+      PREDEFINED_QUERIES.each do |command, label|
+        query = Query.parse_groonga_query_log(command)
+        runner.add_query(query, label)
+      end
     end
   end
 end
