@@ -254,6 +254,7 @@ end
 class SelectorByCommand < Selector
   def select(query)
     parameters = query.parameters.merge(:cache => :no)
+    parameters[:sortby] ||= :_id
     parameters[:drilldown_sortby] ||= :_key
     result = @context.select(query.table_name, parameters)
     CommandResult.new(result)
