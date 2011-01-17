@@ -223,7 +223,7 @@ module Groonga
     # 主キーの値が同一であったレコードの件数を返す。検索結果とし
     # て生成されたテーブルのみに定義される。
     #
-    # Groonga::Record#support_sub_recordsでこの値を利用でき
+    # Groonga::Record#support_sub_records?でこの値を利用でき
     # るかがわかる。
     def n_sub_records
       self["_nsubrecs"]
