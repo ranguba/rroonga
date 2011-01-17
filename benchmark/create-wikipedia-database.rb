@@ -204,10 +204,5 @@ class GroongaLoader
   end
 end
 
-begin
-  extractor = WikipediaExtractor.new(WikipediaImporter.new(GroongaLoader.new))
-  extractor.extract(ARGF)
-rescue Exception => error
-  pp error
-  pp error.backtrace
-end
+extractor = WikipediaExtractor.new(WikipediaImporter.new(GroongaLoader.new))
+extractor.extract(ARGF)

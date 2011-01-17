@@ -872,12 +872,6 @@ runner = BenchmarkRunner.new(options).tap do |runner|
   BenchmarkRunner.select_benchmark_default_setup(runner, options)
 end
 
-# this it to prevent rroonga SEGV at the exit of program
-begin
-  query_log = ENV["QUERY_LOG"] || "select Documents content アルミ --output_columns '_id _key year wday timestamp month hour date last_contributor' --drilldown 'last_contributor, year,date,month,wday' --drilldown_output_columns '_key _nsubrecs _score'"
-  query = Query.parse_groonga_query_log(query_log)
-  runner.run_once(query)
-rescue Exception => error
-  pp error
-  pp error.backtrace
-end
+query_log = ENV["QUERY_LOG"] || "select Documents content アルミ --output_columns '_id _key year wday timestamp month hour date last_contributor' --drilldown 'last_contributor, year,date,month,wday' --drilldown_output_columns '_key _nsubrecs _score'"
+query = Query.parse_groonga_query_log(query_log)
+runner.run_once(query)
