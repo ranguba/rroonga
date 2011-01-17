@@ -781,6 +781,7 @@ class BenchmarkRunner
   def initialize(options={})
     @options = options
     @profiles = []
+    @queries = []
   end
 
   def benchmark_mode
@@ -790,6 +791,10 @@ class BenchmarkRunner
   def add_profile(profile)
     profile.mode = benchmark_mode
     @profiles << profile
+  end
+
+  def add_query(query, label=nil)
+    @queries << [query, label]
   end
 
   LOCK_TIMEOUT_SECONDS = 10
@@ -816,7 +821,7 @@ class BenchmarkRunner
 
   def run_once(query)
     benchmarks = do_run_once(query)
-    report_benchmarks(query, benchmarks)
+    report_benchmarks(benchmarks, query)
   end
 
   def do_run_once(query)
@@ -828,8 +833,8 @@ class BenchmarkRunner
     benchmarks
   end
 
-  def report_benchmarks(query, benchmarks)
-    report = create_report(query, benchmarks)
+  def report_benchmarks(benchmarks, query, label)
+    report = create_report(benchmarks, query, label)
     report.print
   end
 
@@ -838,7 +843,19 @@ class BenchmarkRunner
     @options[:repeat_count] || DEFAULT_REPEAT_COUNT
   end
 
-  def run(query)
+  def run(query=nil)
+    if query
+      do_run(query)
+    else
+      raise "no query" if @queries.empty?
+
+      @queries.each do |query, label|
+        do_run(query, label)
+      end
+    end
+  end
+
+  def do_run(query, label=nil)
     benchmarks_set = repeat_count.times.collect do
       do_run_once(query)
     end
@@ -848,7 +865,7 @@ class BenchmarkRunner
         total_benchmarks[index] += benchmark
       end
     end
-    report_benchmarks(query, total_benchmarks)
+    report_benchmarks(total_benchmarks, query, label)
   end
 
   def verify_results(benchmarks)
@@ -865,8 +882,8 @@ class BenchmarkRunner
     first_result == second_result
   end
 
-  def create_report(query, benchmarks)
-    Report.new(query, benchmarks, repeat_count)
+  def create_report(benchmarks, query, label=nil)
+    Report.new(query, label, benchmarks, repeat_count)
   end
 
   class << self
@@ -918,12 +935,19 @@ class BenchmarkRunner
                                 :drilldown_sort,
                                 :drilldown_format]])
     end
+
+    def load_predefined_queries(runner, options)
+      query_log = ENV["QUERY_LOG"] || "select Documents content アルミ --output_columns '_id _key year wday timestamp month hour date last_contributor' --drilldown 'last_contributor, year,date,month,wday' --drilldown_output_columns '_key _nsubrecs _score'"
+      query = Query.parse_groonga_query_log(query_log)
+      runner.add_query(query, "normal")
+    end
   end
 end
 
 class Report
-  def initialize(query, benchmarks, repeat_count)
+  def initialize(query, query_label, benchmarks, repeat_count)
     @query = query
+    @query_label = query_label
     @benchmarks = benchmarks
     @repeat_count = repeat_count
   end
@@ -932,7 +956,7 @@ class Report
   end
 
   def print
-    puts "select command:"
+    puts "select command: #{@query_label}"
     puts "  #{@query.original_log_entry}"
     puts
     puts "repeated #{@repeat_count} time(s). accumulated result is:"
@@ -957,9 +981,8 @@ options = {
 
 runner = BenchmarkRunner.new(options).tap do |runner|
   BenchmarkRunner.select_benchmark_default_setup(runner, options)
+  BenchmarkRunner.load_predefined_queries(runner, options)
 end
 
-query_log = ENV["QUERY_LOG"] || "select Documents content アルミ --output_columns '_id _key year wday timestamp month hour date last_contributor' --drilldown 'last_contributor, year,date,month,wday' --drilldown_output_columns '_key _nsubrecs _score'"
-query = Query.parse_groonga_query_log(query_log)
-#runner.run_once(query)
-runner.run(query)
+#runner.run(Query.parse_groonga_query_log("select Documents content --sortby _key"))
+runner.run(Query.parse_groonga_query_log("select Documents content --sortby _key"))
