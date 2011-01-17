@@ -238,6 +238,7 @@ end
 class SelectorByCommand < Selector
   def select(query)
     parameters = query.parameters.merge(:cache => :no)
+    parameters[:drilldown_sortby] ||= :_key
     result = @context.select(query.table_name, parameters)
     CommandResult.new(result)
   end
@@ -292,16 +293,14 @@ class SelectorByMethod < Selector
   end
 
   def drilldown_sort(query, result)
-    if needs_drilldown_sort?(query)
-      sort_key = sort_key(query.drilldown_sort_by)
-      limit = query.drilldown_limit || DEFAULT_DRILLDOWN_LIMIT
-      offset = query.drilldown_offset
+    sort_key = sort_key(query.drilldown_sort_by || "_key")
+    limit = query.drilldown_limit || DEFAULT_DRILLDOWN_LIMIT
+    offset = query.drilldown_offset
 
-      window_options = create_window_options(limit, offset)
+    window_options = create_window_options(limit, offset)
 
-      sorted_result = result.sort(sort_key, window_options).collect do |record|
-        record
-      end
+    sorted_result = result.sort(sort_key, window_options).collect do |record|
+      record
     end
   end
 
@@ -350,10 +349,6 @@ class SelectorByMethod < Selector
 
   def needs_drilldown?(query)
     query.drilldown_columns
-  end
-
-  def needs_drilldown_sort?(query)
-    (query.drilldown_limit.nil? or query.drilldown_limit >= 0) or query.drilldown_offset or query.drilldown_sort_by
   end
 
   DESCENDING_ORDER_PREFIX = /\A-/
@@ -508,12 +503,14 @@ end
 
 class Result
   def ==(other) # XXX needs more strict/rigid check
-    [
+    results = [
       hit_count == other.hit_count,
       result_count == other.result_count,
       formatted_result == other.formatted_result,
       drilldown_results == other.drilldown_results,
-    ].all?
+    ]
+
+    results.all?
   end
 end
 
@@ -877,7 +874,7 @@ end
 
 # this it to prevent rroonga SEGV at the exit of program
 begin
-  query_log = ENV["QUERY_LOG"] || "select Documents content アルミ --output_columns '_id _key year wday timestamp month hour date last_contributor' --drilldown 'year,date,month,wday'"
+  query_log = ENV["QUERY_LOG"] || "select Documents content アルミ --output_columns '_id _key year wday timestamp month hour date last_contributor' --drilldown 'last_contributor, year,date,month,wday' --drilldown_output_columns '_key _nsubrecs _score'"
   query = Query.parse_groonga_query_log(query_log)
   runner.run_once(query)
 rescue Exception => error
