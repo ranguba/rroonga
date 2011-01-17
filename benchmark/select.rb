@@ -887,12 +887,13 @@ class BenchmarkRunner
     Report.new(query, label, benchmarks, repeat_count)
   end
 
+  DEFAULT_WIKIPEDIA_DATABASE_LOCATION = "/tmp/wikipedia-db/db"
   class << self
     def select_benchmark_default_setup(runner, options=nil)
       options ||= {}
 
       configuration = Configuration.new
-      configuration.database_path = ENV["DATABASE_PATH"] || "/tmp/wikipedia-db/db"
+      configuration.database_path = options[:database_path] || DEFAULT_WIKIPEDIA_DATABASE_LOCATION
       ensure_database(configuration)
 
       context = Groonga::Context.new
@@ -989,6 +990,12 @@ OptionParser.new do |parser|
   parser.on("--command=COMMAND",
             "use COMMAND instead of default predefined ones") do |command|
     options[:query] = Query.parse_groonga_query_log(command)
+  end
+
+  parser.on("--database=PATH",
+            "use database located at PATH",
+            "(default: #{BenchmarkRunner::DEFAULT_WIKIPEDIA_DATABASE_LOCATION})") do |command|
+    options[:database_path] = command
   end
 end.parse!(ARGV)
 
