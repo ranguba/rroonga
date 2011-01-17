@@ -850,8 +850,12 @@ class BenchmarkRunner
     else
       raise "no query" if @queries.empty?
 
+      index = 0
       @queries.each do |query, label|
-        do_run(query, label)
+        index += 1
+        do_run(query, "#{index}. #{label}")
+        puts
+        puts
       end
     end
   end
@@ -956,14 +960,20 @@ class BenchmarkRunner
          "select none"],
         ["select Documents content アルミ #{output_columns_without_content}",
          "full text search"],
+        ["select Documents content アルミ #{output_columns_without_content} --limit 0",
+         "full text search with no limit"],
         ["select Documents content アルミ #{output_columns_with_content}",
          "full text search output long text column"],
-        ["select Documents --limit 1000 #{output_columns_without_content}",
-         "large limit"],
-        ["select Documents --limit 0 --drilldown last_contributor --drilldown_limit 1000",
-         "large drilldown_limit"],
+        ["select Documents content アルミ --limit 1000 #{output_columns_without_content}",
+         "full text search with large limit"],
+        ["select Documents --filter true --limit 0 --drilldown last_contributor --drilldown_sortby _nsubrecs",
+         "drilldown"],
+        ["select Documents --filter true --limit 0 --drilldown last_contributor --drilldown_sortby _nsubrecs --drilldown_limit 1000",
+         "drilldown with large drilldown_limit"],
+        ["select Documents --sortby _key",
+         "sort"],
         ["select Documents --sortby _key --drilldown 'year month date wday hour, last_contributor links' --drilldown_sortby _nsubrecs",
-         "drilldown with sort"],
+         "sort with drilldown"],
       ]
     end
 
