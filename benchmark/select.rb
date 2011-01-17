@@ -7,6 +7,22 @@ require 'groonga'
 
 Groonga::Logger.query_log_path = "/tmp/query.log"
 
+module ColumnTokenizer
+  def tokenize_column_list(column_list)
+    tokens = column_list.split(/[\s,]/)
+    tokens.reject!(&:empty?)
+    tokens.select! do |token|
+      token == "*" || token =~ /[A-Za-z0-9_]/
+    end
+    tokens.each do |token|
+      unless token == "*"
+        token.sub!(/[^A-Za-z0-9_]\z/, '')
+      end
+    end
+  end
+
+end
+
 class Query
   attr_reader :options
   attr_accessor :original_log_entry
@@ -245,6 +261,8 @@ class SelectorByCommand < Selector
 end
 
 class SelectorByMethod < Selector
+  include ColumnTokenizer
+
   def select(query)
     table = @context[query.table_name]
     filter = query.filter
@@ -324,8 +342,8 @@ class SelectorByMethod < Selector
   end
 
   def drilldown_result(result, drilldown_columns, query)
-    columns = tokenize_column_list(drilldown_columns)
-    columns.uniq.collect do |column|
+    columns = tokenize_column_list(drilldown_columns).uniq
+    columns.collect do |column|
       drilldown_result = do_group(result, column)
       sorted_drilldown_result = drilldown_sort(query, drilldown_result)
       formatted_drilldown_result = drilldown_format(query, sorted_drilldown_result || drilldown_result)
@@ -456,19 +474,6 @@ class SelectorByMethod < Selector
     end
   end
 
-  def tokenize_column_list(column_list)
-    tokens = column_list.split(/[\s,]/)
-    tokens.reject!(&:empty?)
-    tokens.select! do |token|
-      token == "*" || token =~ /[A-Za-z0-9_]/
-    end
-    tokens.each do |token|
-      unless token == "*"
-        token.sub!(/[^A-Za-z0-9_]\z/, '')
-      end
-    end
-  end
-
   BUILT_IN_COLUMNS = ["_id", "_key", "_score", "_nsubrecs"]
   def column_included_in_record?(column, record)
     if record.respond_to?(:table)
@@ -578,10 +583,11 @@ class BenchmarkResult
   attr_reader :benchmark_result
 
   class Time < BenchmarkResult
-    def initialize(profile, target_object, &block)
+    def initialize(profile, target_object, query, &block)
       @intercepted_method_times = {}
       @profile = profile
       @target_object = target_object
+      @query = query
       each_intercepted_methods(@profile.intercepted_methods) do |klass, method_name, depth|
         intercept_method(klass, method_name, depth)
       end
@@ -618,10 +624,10 @@ class BenchmarkResult
             result + _total
           end
 
-          total_result = ["#{padding(depth)}#{method_name} (called #{count}times)", total]
+          total_result = ["#{padding(depth)}#{method_name}", total]
           lines << total_result
 
-          lines += multile_lines(results, depth + 1)
+          lines += multile_lines(method_name, results, depth + 1)
         end
       end
 
@@ -633,12 +639,17 @@ class BenchmarkResult
       ["#{padding(depth)}#{method_name}", result]
     end
 
-    def multile_lines(results, depth)
+    def multile_lines(method_name, results, depth)
       index = 0
 
       results.collect do |result|
         index += 1
-        ["#{padding(depth)}#{index}", result]
+        if @profile.respond_to?(:guess_invocation_label)
+          label = @profile.guess_invocation_label(@query, method_name, index)
+        end
+        label ||= index
+
+        ["#{padding(depth)}#{label}", result]
       end
     end
 
@@ -727,6 +738,8 @@ class BenchmarkResult
 end
 
 class Profile
+  include ColumnTokenizer
+
   attr_accessor :mode
   attr_reader :name, :intercepted_methods
   def initialize(name, selector, intercepted_methods=[])
@@ -743,9 +756,18 @@ class Profile
     end
   end
 
+  def guess_invocation_label(query, method_name, index)
+    if method_name.to_s =~ /drilldown|do_group/
+      columns = tokenize_column_list(query.drilldown_columns).uniq
+      columns[index - 1]
+    else
+      raise "bad: #{method_name}"
+    end
+  end
+
   private
   def measure_time(query)
-    BenchmarkResult::Time.new(self, @selector) do
+    BenchmarkResult::Time.new(self, @selector, query) do
       result = @selector.select(query)
       result
     end
