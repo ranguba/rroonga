@@ -839,7 +839,7 @@ class BenchmarkRunner
     report.print
   end
 
-  DEFAULT_REPEAT_COUNT = 1
+  DEFAULT_REPEAT_COUNT = 5
   def repeat_count
     @options[:repeat_count] || DEFAULT_REPEAT_COUNT
   end
@@ -1001,7 +1001,7 @@ class Report
     puts "select command: #{@query_label}"
     puts "  #{@query.original_log_entry}"
     puts
-    puts "repeated #{@repeat_count} time(s). accumulated result is:"
+    puts "repeated #{@repeat_count} time(s). Average times are:"
 
     lines = []
     @benchmarks.each do |benchmark|
@@ -1011,7 +1011,7 @@ class Report
 
     puts(" " * (width - 1) + Benchmark::Tms::CAPTION.rstrip)
     lines.each do |label, result|
-      puts "#{label.ljust(width)} #{result.to_s.strip}"
+      puts "#{label.ljust(width)} #{(result / @repeat_count).to_s.strip}"
     end
   end
 end
