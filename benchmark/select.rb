@@ -582,9 +582,15 @@ class BenchmarkResult
       @intercepted_method_times = {}
       @profile = profile
       @target_object = target_object
-      setup_intercepted_methods(@profile.intercepted_methods)
+      each_intercepted_methods(@profile.intercepted_methods) do |klass, method_name, depth|
+        intercept_method(klass, method_name, depth)
+      end
 
       measure_time(&block)
+
+      each_intercepted_methods(@profile.intercepted_methods) do |klass, method_name, depth|
+        reset_intercepted_method(klass, method_name, depth)
+      end
     end
 
     def lines
@@ -636,6 +642,16 @@ class BenchmarkResult
       end
     end
 
+    def +(other)
+      intercepted_method_times = other.instance_variable_get(:@intercepted_method_times)
+      intercepted_method_times.each do |method_name, time|
+        time[:benchmark_results].each_with_index do |result, index|
+          @intercepted_method_times[method_name][:benchmark_results][index] += result
+        end
+      end
+      super(other)
+    end
+
     private
     def measure_time
       @benchmark_result = Benchmark.measure do
@@ -643,19 +659,19 @@ class BenchmarkResult
       end
     end
 
-    def setup_intercepted_methods(intercepted_methods, depth=0)
+    def each_intercepted_methods(intercepted_methods, depth=0, &block)
       intercepted_methods.each do |method|
         case method
         when Symbol
-          intercept_method(@target_object.class, method, depth)
+          yield(@target_object.class, method, depth)
         when Method
           if method.receiver.is_a?(Class)
-            intercept_method(method.owner, method.name, depth)
+            yield(method.owner, method.name, depth)
           else
-            intercept_method(method.receiver.class, method.name, depth)
+            yield(method.receiver.class, method.name, depth)
           end
         when Array
-          setup_intercepted_methods(method, depth + 1)
+          each_intercepted_methods(method, depth + 1, &block)
         else
           raise "bad"
         end
@@ -664,7 +680,7 @@ class BenchmarkResult
 
     def intercept_method(klass, method_name, depth)
       intercepted_method_times = @intercepted_method_times
-      original_method_name = :"__intercepted__#{method_name}"
+      original_method_name = original_method_name(method_name)
 
       intercepted_method_times[method_name] = {}
       intercepted_method_times[method_name][:benchmark_results] = []
@@ -682,6 +698,18 @@ class BenchmarkResult
         end
       end
     end
+
+    def reset_intercepted_method(klass, method_name, depth)
+      original_method_name = original_method_name(method_name)
+
+      klass.class_exec do
+        alias_method method_name, original_method_name
+      end
+    end
+
+    def original_method_name(method_name)
+      :"__intercepted__#{method_name}"
+    end
   end
 
   def lines
@@ -690,6 +718,11 @@ class BenchmarkResult
 
   def name
     profile.name
+  end
+
+  def +(other)
+    @benchmark_result += other.benchmark_result
+    self
   end
 end
 
@@ -761,11 +794,39 @@ class BenchmarkRunner
   end
 
   def run_once(query)
+    benchmarks = do_run_once(query)
+    report_benchmarks(query, benchmarks)
+  end
+
+  def do_run_once(query)
     benchmarks = collect_benchmarks(query)
+
     debug_benchmarks(query, benchmarks)
     verify_results(benchmarks)
+
+    benchmarks
+  end
+
+  def report_benchmarks(query, benchmarks)
     report = create_report(query, benchmarks)
     report.print
+  end
+
+  def repeat_count
+    3
+  end
+
+  def run(query)
+    benchmarks_set = repeat_count.times.collect do
+      do_run_once(query)
+    end
+    total_benchmarks = benchmarks_set.shift
+    benchmarks_set.each do |benchmarks|
+      benchmarks.each_with_index do |benchmark, index|
+        total_benchmarks[index] += benchmark
+      end
+    end
+    report_benchmarks(query, total_benchmarks)
   end
 
   def verify_results(benchmarks)
@@ -783,7 +844,7 @@ class BenchmarkRunner
   end
 
   def create_report(query, benchmarks)
-    Report.new(query, benchmarks)
+    Report.new(query, benchmarks, repeat_count)
   end
 
   class << self
@@ -839,9 +900,10 @@ class BenchmarkRunner
 end
 
 class Report
-  def initialize(query, benchmarks)
+  def initialize(query, benchmarks, repeat_count)
     @query = query
     @benchmarks = benchmarks
+    @repeat_count = repeat_count
   end
 
   def compare
@@ -850,6 +912,8 @@ class Report
   def print
     puts "select command:"
     puts "  #{@query.original_log_entry}"
+    puts
+    puts "repeated #{@repeat_count} time(s). accumulated result is:"
 
     lines = []
     @benchmarks.each do |benchmark|
@@ -874,4 +938,5 @@ end
 
 query_log = ENV["QUERY_LOG"] || "select Documents content アルミ --output_columns '_id _key year wday timestamp month hour date last_contributor' --drilldown 'last_contributor, year,date,month,wday' --drilldown_output_columns '_key _nsubrecs _score'"
 query = Query.parse_groonga_query_log(query_log)
-runner.run_once(query)
+#runner.run_once(query)
+runner.run(query)
