@@ -839,7 +839,7 @@ class BenchmarkRunner
     report.print
   end
 
-  DEFAULT_REPEAT_COUNT = 3
+  DEFAULT_REPEAT_COUNT = 1
   def repeat_count
     @options[:repeat_count] || DEFAULT_REPEAT_COUNT
   end
@@ -938,15 +938,37 @@ class BenchmarkRunner
                                 :drilldown_format]])
     end
 
-    PREDEFINED_QUERIES = [
+    def output_columns_without_content
+      "--output_columns '_id _key year wday timestamp month hour date last_contributor'"
+    end
+
+    def output_columns_with_content
+      "--output_columns '_id _key year wday timestamp month hour date last_contributor content'"
+    end
+
+    def predefined_queries
       [
-        "select Documents content アルミ --output_columns '_id _key year wday timestamp month hour date last_contributor' --drilldown 'last_contributor, year,date,month,wday' --drilldown_output_columns '_key _nsubrecs _score'",
-        "normal",
+        ["select Documents",
+         "minimum command"],
+        ["select Documents --filter true",
+         "select all"],
+        ["select Documents --filter false",
+         "select none"],
+        ["select Documents content アルミ #{output_columns_without_content}",
+         "full text search"],
+        ["select Documents content アルミ #{output_columns_with_content}",
+         "full text search output long text column"],
+        ["select Documents --limit 1000 #{output_columns_without_content}",
+         "large limit"],
+        ["select Documents --limit 0 --drilldown last_contributor --drilldown_limit 1000",
+         "large drilldown_limit"],
+        ["select Documents --sortby _key --drilldown 'year month date wday hour, last_contributor links' --drilldown_sortby _nsubrecs",
+         "drilldown with sort"],
       ]
-    ]
+    end
 
     def load_predefined_queries(runner, options)
-      PREDEFINED_QUERIES.each do |command, label|
+      predefined_queries.each do |command, label|
         query = Query.parse_groonga_query_log(command)
         runner.add_query(query, label)
       end
