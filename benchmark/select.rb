@@ -21,7 +21,6 @@ module ColumnTokenizer
       end
     end
   end
-
 end
 
 class Query
