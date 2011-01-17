@@ -807,7 +807,6 @@ class BenchmarkRunner
     end
   end
 
-
   def debug_benchmarks(query, benchmarks)
     if ENV["DEBUG"]
       pp query
@@ -834,8 +833,9 @@ class BenchmarkRunner
     report.print
   end
 
+  DEFAULT_REPEAT_COUNT = 3
   def repeat_count
-    3
+    @options[:repeat_count] || DEFAULT_REPEAT_COUNT
   end
 
   def run(query)
@@ -951,7 +951,8 @@ class Report
 end
 
 options = {
-  :method => [:measure_time]
+  :method => [:measure_time],
+  :repeat_count => 1,
 }
 
 runner = BenchmarkRunner.new(options).tap do |runner|
