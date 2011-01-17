@@ -2,6 +2,7 @@
 
 require 'benchmark'
 require 'shellwords'
+require 'optparse'
 
 require 'groonga'
 
@@ -937,7 +938,7 @@ class BenchmarkRunner
     end
 
     def load_predefined_queries(runner, options)
-      query_log = ENV["QUERY_LOG"] || "select Documents content アルミ --output_columns '_id _key year wday timestamp month hour date last_contributor' --drilldown 'last_contributor, year,date,month,wday' --drilldown_output_columns '_key _nsubrecs _score'"
+      query_log = "select Documents content アルミ --output_columns '_id _key year wday timestamp month hour date last_contributor' --drilldown 'last_contributor, year,date,month,wday' --drilldown_output_columns '_key _nsubrecs _score'"
       query = Query.parse_groonga_query_log(query_log)
       runner.add_query(query, "normal")
     end
@@ -976,13 +977,30 @@ end
 
 options = {
   :method => [:measure_time],
-  :repeat_count => 1,
 }
+
+OptionParser.new do |parser|
+  parser.on("--repeat=COUNT",
+            "repeat each query COUNT times",
+            "(default: #{BenchmarkRunner::DEFAULT_REPEAT_COUNT})") do |count|
+    options[:repeat_count] = count.to_i
+  end
+
+  parser.on("--command=COMMAND",
+            "use COMMAND instead of default predefined ones") do |command|
+    options[:query] = Query.parse_groonga_query_log(command)
+  end
+end.parse!(ARGV)
 
 runner = BenchmarkRunner.new(options).tap do |runner|
   BenchmarkRunner.select_benchmark_default_setup(runner, options)
-  BenchmarkRunner.load_predefined_queries(runner, options)
+  if options[:query].nil?
+    BenchmarkRunner.load_predefined_queries(runner, options)
+  end
 end
 
-#runner.run(Query.parse_groonga_query_log("select Documents content --sortby _key"))
-runner.run(Query.parse_groonga_query_log("select Documents content --sortby _key"))
+if options[:query]
+  runner.run(options[:query])
+else
+  runner.run
+end
