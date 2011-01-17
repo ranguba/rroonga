@@ -370,7 +370,9 @@ rb_grn_context_inspect (VALUE self)
     rb_str_concat(inspected, rb_inspect(rb_obj_class(self)));
     rb_str_cat2(inspected, " ");
 
-    if (context) {
+    if (rb_grn_exited) {
+      rb_str_cat2(inspected, "(finished)");
+    } else if (context) {
       rb_str_cat2(inspected, "encoding: <");
       rb_str_concat(inspected, rb_inspect(GRNENCODING2RVAL(context->encoding)));
       rb_str_cat2(inspected, ">, ");
@@ -381,7 +383,7 @@ rb_grn_context_inspect (VALUE self)
       rb_str_concat(inspected, rb_inspect(rb_database));
       rb_str_cat2(inspected, ">");
     } else {
-      rb_str_cat2(inspected, "CLOSED");
+      rb_str_cat2(inspected, "(closed)");
     }
 
     rb_str_cat2(inspected, ">");
