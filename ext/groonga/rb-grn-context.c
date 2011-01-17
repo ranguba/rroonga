@@ -370,15 +370,19 @@ rb_grn_context_inspect (VALUE self)
     rb_str_concat(inspected, rb_inspect(rb_obj_class(self)));
     rb_str_cat2(inspected, " ");
 
-    rb_str_cat2(inspected, "encoding: <");
-    rb_str_concat(inspected, rb_inspect(GRNENCODING2RVAL(context->encoding)));
-    rb_str_cat2(inspected, ">, ");
+    if (context) {
+      rb_str_cat2(inspected, "encoding: <");
+      rb_str_concat(inspected, rb_inspect(GRNENCODING2RVAL(context->encoding)));
+      rb_str_cat2(inspected, ">, ");
 
-    rb_str_cat2(inspected, "database: <");
-    database = grn_ctx_db(context);
-    rb_database = GRNDB2RVAL(context, database, GRN_FALSE);
-    rb_str_concat(inspected, rb_inspect(rb_database));
-    rb_str_cat2(inspected, ">");
+      rb_str_cat2(inspected, "database: <");
+      database = grn_ctx_db(context);
+      rb_database = GRNDB2RVAL(context, database, GRN_FALSE);
+      rb_str_concat(inspected, rb_inspect(rb_database));
+      rb_str_cat2(inspected, ">");
+    } else {
+      rb_str_cat2(inspected, "CLOSED");
+    }
 
     rb_str_cat2(inspected, ">");
     return inspected;
