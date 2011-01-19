@@ -204,5 +204,7 @@ class GroongaLoader
   end
 end
 
-extractor = WikipediaExtractor.new(WikipediaImporter.new(GroongaLoader.new))
-extractor.extract(ARGF)
+if __FILE__ == $0
+  extractor = WikipediaExtractor.new(WikipediaImporter.new(GroongaLoader.new))
+  extractor.extract(ARGF)
+end
