@@ -1,3 +1,5 @@
+# Wikipedia data: http://download.wikimedia.org/jawiki/latest/jawiki-latest-pages-articles.xml.bz2
+
 require 'time'
 require 'fileutils'
 require 'groonga'
