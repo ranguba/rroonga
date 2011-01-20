@@ -190,14 +190,14 @@ class RepeatLoadRunner
   end
 
   def execute_du(options=nil)
-    `find #{database_directory} -print0 | xargs -0 du --human-readable #{options.to_s}`
+    `find #{database_directory} -print0 | xargs -0 du --human-readable #{options.to_s} | sort -k 2 | uniq`
   end
 end
 
 sample_records = SampleRecords.new(1000)
 
-puts "load one record, repeat one time"
-RepeatLoadRunner.new(sample_records).run
+#puts "load one record, repeat one time"
+#RepeatLoadRunner.new(sample_records).run
 
 #puts "load one record, repeat 100 time"
 #RepeatLoadRunner.new(sample_records, :repeat_count => 100).run
