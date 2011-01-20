@@ -925,7 +925,7 @@ class BenchmarkRunner
     end
 
     def command_selector_profile(select_command)
-      Profile.new("select by commnd",
+      Profile.new("select by command",
                   select_command,
                   [select_command.context.method(:send),
                    Groonga::Context::SelectResult.method(:parse)])
