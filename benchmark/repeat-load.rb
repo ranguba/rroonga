@@ -28,8 +28,8 @@ class SampleRecords
   def load(page)
     @current_count += 1
     record = {
-      :_key => "FIXED_KEY", #"#{page[:title]}",
-      :content => "#{page[:content][0, 30]}",
+      :_key => page[:title],
+      :content => page[:content],
     }
     #pp record
     @records << record
@@ -73,13 +73,13 @@ class RepeatLoadRunner
   end
 
   DEFAULT_REPEAT_COUNT = 1
-  DEFAULT_USER_COUNT = 1
+  DEFAULT_RECORD_COUNT = 1
   def repeat_count
     @options[:repeat_count] || DEFAULT_REPEAT_COUNT
   end
 
   def record_count
-    @options[:record_count] || DEFAULT_USER_COUNT
+    @options[:record_count] || DEFAULT_RECORD_COUNT
   end
 
   def with_index?
@@ -100,14 +100,14 @@ class RepeatLoadRunner
 
     @context.create_database(database_path)
     Groonga::Schema.define(:context => @context) do |schema|
-      schema.create_table("Users", :type => :hash, :key_type => "ShortText") do |table|
+      schema.create_table("Contents", :type => :hash, :key_type => "ShortText") do |table|
         table.long_text("content")
       end
 
       if with_index?
         schema.create_table("Terms", :type => :hash, :default_tokenizer => "TokenBigram") do |table|
-          table.index("Users._key")
-          table.index("Users.content")
+          table.index("Contents._key")
+          table.index("Contents.content")
         end
       end
     end
@@ -135,11 +135,25 @@ class RepeatLoadRunner
   end
 
   def add_record_via_load_command
+    puts "iteration: loading #{record_count} records"
+    count = 0
     @sample_records.n_records(record_count).each do |record|
-      command = "load --table Users --input_type json --values '#{Shellwords.escape(JSON.generate(record).force_encoding("BINARY"))}'"
-      puts command
+      mangle_record(record)
+
+      #pp record
+      command = "load --table Contents --input_type json --values '#{JSON.generate(record).gsub(/\'/, '').gsub(/\"/, '\\\"')}'"
+      #puts command
       @context.send(command)
+      if record_count != 1 and count.zero?
+        after_first_load
+      end
+      count += 1
     end
+  end
+
+  def mangle_record(record)
+    record[:content] = record[:content][0, 400]
+    record[:_key] = :FIXED_KEY
   end
 
   def before_load
@@ -161,7 +175,7 @@ class RepeatLoadRunner
   end
 
   def measure_database_size
-    measure_apparent_size
+    #measure_apparent_size
     measure_actual_size
   end
 
@@ -185,8 +199,14 @@ sample_records = SampleRecords.new(1000)
 puts "load one record, repeat one time"
 RepeatLoadRunner.new(sample_records).run
 
-puts "load one record, repeat 100 time"
-RepeatLoadRunner.new(sample_records, :repeat_count => 100).run
+#puts "load one record, repeat 100 time"
+#RepeatLoadRunner.new(sample_records, :repeat_count => 100).run
 
-puts "load one record, repeat 100 time with index column defined"
-RepeatLoadRunner.new(sample_records, :repeat_count => 100, :with_index => true).run
+#puts "load one record, repeat 100 time with index column defined"
+#RepeatLoadRunner.new(sample_records, :repeat_count => 100, :with_index => true).run
+
+puts "load 100 records, repeat 1 time"
+RepeatLoadRunner.new(sample_records, :record_count => 100).run
+
+puts "load 100 records, repeat 1 time with index column defined"
+RepeatLoadRunner.new(sample_records, :record_count => 100, :with_index => true).run
