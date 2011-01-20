@@ -190,6 +190,7 @@ class RepeatLoadRunner
   end
 
   def execute_du(options=nil)
+    `sync`
     `find #{database_directory} -print0 | xargs -0 du --human-readable #{options.to_s} | sort -k 2 | uniq`
   end
 end
