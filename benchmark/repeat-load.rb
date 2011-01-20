@@ -180,7 +180,7 @@ class RepeatLoadRunner
   end
 
   def measure_apparent_size
-    puts "apparnet disk usage:"
+    puts "apparent disk usage:"
     puts execute_du("--apparent-size")
   end
 
