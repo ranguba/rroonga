@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2010  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2011  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -284,6 +284,36 @@ class ColumnTest < Test::Unit::TestCase
 
     post["hidden"] = false
     assert_false(post["hidden"])
+  end
+
+  def test_indexes
+    Groonga::Schema.define do |schema|
+      schema.create_table("Comments") do |table|
+        table.short_text("title")
+      end
+    end
+    title = Groonga["Comments.title"]
+    assert_equal([], title.indexes)
+
+    Groonga::Schema.define do |schema|
+      schema.create_table("Terms",
+                          :type => :patricia_trie,
+                          :default_tokenizer => "TokenBigram") do |table|
+        table.index("Comments.title")
+      end
+    end
+    assert_equal([Groonga["Terms.Comments_title"]],
+                 title.indexes)
+
+    Groonga::Schema.define do |schema|
+      schema.create_table("Titles",
+                          :type => :hash) do |table|
+        table.index("Comments.title")
+      end
+    end
+    assert_equal([Groonga["Titles.Comments_title"],
+                  Groonga["Terms.Comments_title"]],
+                 title.indexes)
   end
 
   private
