@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2010  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2010-2011  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -40,6 +40,11 @@ class TableSelectWeightTest < Test::Unit::TestCase
                           :default_tokenizer => "TokenBigram") do |table|
         table.index("Comments.title", :with_section => true)
         table.index("Comments.content", :with_section => true)
+      end
+
+      schema.create_table("Titles",
+                          :type => :hash) do |table|
+        table.index("Comments.title")
       end
 
       schema.change_table("Users") do |table|
@@ -97,6 +102,20 @@ class TableSelectWeightTest < Test::Unit::TestCase
     assert_equal_select_result([["Hello", 101],
                                 ["(no title)", 3],
                                 ["日本語", 1000]],
+                               result) do |record|
+      [record.title, record.score]
+    end
+  end
+
+  def test_index
+    result = @comments.select do |record|
+      record.match("Hello") do |match_record|
+        (match_record.index("Titles.Comments_title") * 1000) |
+          (match_record.index("Terms.Comments_title") * 100) |
+          match_record.content
+      end
+    end
+    assert_equal_select_result([["Hello", 1101], ["(no title)", 3]],
                                result) do |record|
       [record.title, record.score]
     end

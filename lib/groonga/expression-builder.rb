@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2009-2010  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2011  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -416,6 +416,18 @@ module Groonga
 
     def match_target(&block)
       MatchTargetExpressionBuilder.new(build_match_target(&block))
+    end
+
+    def index(name)
+      object = @table.context[name]
+      if object.nil?
+        raise ArgumentError, "unknown index column: <#{name}>"
+      end
+      if object.range != @table
+        raise ArgumentError,
+              "differenct index column: <#{name}>: #{object.inspet}"
+      end
+      column_expression_builder(object, name)
     end
 
     private
