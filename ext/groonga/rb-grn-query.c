@@ -146,10 +146,10 @@ rb_grn_operator_from_ruby_object (VALUE rb_operator)
  *   演算子の既定値(演算子を省略した場合にどの演算を行うか)
  *   を指定する。
  *
- *   [Groonga::Operation::OR]
- *   [Groonga::Operation::AND]
- *   [Groonga::Operation::BUT]
- *   [Groonga::Operation::ADJUST]
+ *   [Groonga::Operator::OR]
+ *   [Groonga::Operator::AND]
+ *   [Groonga::Operator::BUT]
+ *   [Groonga::Operator::ADJUST]
  *     (FIXME: 挙動の違いを検証する必要性あり?
  *            Groonga::Expressionとの関連性は?)
  *

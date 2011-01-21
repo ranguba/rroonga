@@ -157,7 +157,7 @@ rb_grn_expression_define_variable (int argc, VALUE *argv, VALUE self)
 /*
  * call-seq:
  *   expression.append_object(object,
- *                            operation=Groonga::Operation::PUSH,
+ *                            operation=Groonga::Operator::PUSH,
  *                            n_arguments=1) -> self
  *
  * _object_を追加し、_n_arguments_個の引数を取る_operation_を追加する。
@@ -193,7 +193,7 @@ rb_grn_expression_append_object (int argc, VALUE *argv, VALUE self)
 /*
  * call-seq:
  *   expression.append_constant(constant,
- *                              operation=Groonga::Operation::PUSH,
+ *                              operation=Groonga::Operator::PUSH,
  *                              n_arguments=1) -> self
  *
  * _constant_を追加し、_n_arguments_個の引数を取る_operation_を追加する。
@@ -270,19 +270,19 @@ rb_grn_expression_append_operation (VALUE self, VALUE rb_operation,
  * [+:default_operator+]
  *   "+"や"OR"で繋がれず、ただ列挙された複数の条件があった時、
  *   _expression_全体として各レコードをヒットとみなすかの論理
- *   条件を指定する。省略した場合はGroonga::Operation::AND。
+ *   条件を指定する。省略した場合はGroonga::Operator::AND。
  *
- *   [Groonga::Operation::OR]
+ *   [Groonga::Operator::OR]
  *     レコードはいずれかの条件にマッチすればいい。
- *   [Groonga::Operation::AND]
+ *   [Groonga::Operator::AND]
  *     レコードは全ての条件にマッチしなければならない。
- *   [Groonga::Operation::BUT]
+ *   [Groonga::Operator::BUT]
  *     最初の条件にレコードはマッチし、残りの条件にレコードは
  *     マッチしてはならない。
  *
  * [+:default_mode+]
  *   検索時のモードを指定する。省略した場合は
- *   Groonga::Operation::MATCH。（FIXME: モードによってどう
+ *   Groonga::Operator::MATCH。（FIXME: モードによってどう
  *   いう動作になるかを書く。）
  *
  * [+:syntax+]

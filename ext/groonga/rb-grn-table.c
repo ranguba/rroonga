@@ -1760,17 +1760,17 @@ rb_grn_table_is_locked (int argc, VALUE *argv, VALUE self)
  *
  * [+:operator+]
  *   マッチしたレコードをどのように扱うか。指定可能な値は以
- *   下の通り。省略した場合はGroonga::Operation::OR。
+ *   下の通り。省略した場合はGroonga::Operator::OR。
  *
- *   [Groonga::Operation::OR] マッチしたレコードを追加。すで
- *                            にレコードが追加されている場合
- *                            は何もしない。
- *   [Groonga::Operation::AND] マッチしたレコードのスコアを増
- *                             加。マッチしなかったレコード
- *                             を削除。
- *   [Groonga::Operation::BUT] マッチしたレコードを削除。
- *   [Groonga::Operation::ADJUST] マッチしたレコードのスコア
- *                                を増加。
+ *   [Groonga::Operator::OR] マッチしたレコードを追加。すで
+ *                           にレコードが追加されている場合
+ *                           は何もしない。
+ *   [Groonga::Operator::AND] マッチしたレコードのスコアを増
+ *                            加。マッチしなかったレコード
+ *                            を削除。
+ *   [Groonga::Operator::BUT] マッチしたレコードを削除。
+ *   [Groonga::Operator::ADJUST] マッチしたレコードのスコア
+ *                               を増加。
  *
  * [+:result+]
  *   検索結果を格納するテーブル。マッチしたレコードが追加さ

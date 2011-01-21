@@ -252,17 +252,17 @@ rb_grn_patricia_trie_s_create (int argc, VALUE *argv, VALUE klass)
  *
  * [+:operator+]
  *   マッチしたレコードをどのように扱うか。指定可能な値は以
- *   下の通り。省略した場合はGroonga::Operation::OR。
+ *   下の通り。省略した場合はGroonga::Operator::OR。
  *
- *   [Groonga::Operation::OR]
+ *   [Groonga::Operator::OR]
  *     マッチしたレコードを追加。すでにレコードが追加され
  *     ている場合は何もしない。
- *   [Groonga::Operation::AND]
+ *   [Groonga::Operator::AND]
  *     マッチしたレコードのスコアを増加。マッチしなかった
  *     レコードを削除。
- *   [Groonga::Operation::BUT]
+ *   [Groonga::Operator::BUT]
  *     マッチしたレコードを削除。
- *   [Groonga::Operation::ADJUST]
+ *   [Groonga::Operator::ADJUST]
  *     マッチしたレコードのスコアを増加。
  *
  * [+:type+]
