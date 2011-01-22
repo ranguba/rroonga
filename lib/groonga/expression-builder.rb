@@ -212,6 +212,14 @@ module Groonga
         SubExpressionBuilder.new(query, options)
       end
 
+      def prefix_search(other)
+        PrefixSearchExpressionBuilder.new(self, normalize(other))
+      end
+
+      def suffix_search(other)
+        SuffixSearchExpressionBuilder.new(self, normalize(other))
+      end
+
       private
       def normalize(other)
         if @range.is_a?(Groonga::Table)
@@ -361,6 +369,18 @@ module Groonga
 
       def build(expression, variable)
         expression.parse(@query, @options)
+      end
+    end
+
+    class PrefixSearchExpressionBuilder < BinaryExpressionBuilder # :nodoc:
+      def initialize(column_value_builder, value)
+        super(Groonga::Operation::PREFIX, column_value_builder, value)
+      end
+    end
+
+    class SuffixSearchExpressionBuilder < BinaryExpressionBuilder # :nodoc:
+      def initialize(column_value_builder, value)
+        super(Groonga::Operation::SUFFIX, column_value_builder, value)
       end
     end
   end

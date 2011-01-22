@@ -24,30 +24,41 @@ class ExpressionBuilderTest < Test::Unit::TestCase
     @pets = Groonga::Hash.create(:name => "Pets", :key_type => "ShortText")
     @pets.define_column("name", "ShortText")
 
+    @sections = Groonga::PatriciaTrie.create(:name => "Sections",
+                                             :key_type => "ShortText")
+
     @users = Groonga::Hash.create(:name => "Users", :key_type => "ShortText")
     @name = @users.define_column("name", "ShortText")
     @hp = @users.define_column("hp", "UInt32")
-    @users.define_column("pet", @pets)
+    @user_pet = @users.define_column("pet", @pets)
+    @user_section = @users.define_column("section", @sections)
 
     @terms = Groonga::PatriciaTrie.create(:name => "Terms",
-                                          :default_tokenizer => "TokenBigram")
+                                          :default_tokenizer => "TokenBigram",
+                                          :key_type => "ShortText")
     @terms.define_index_column("user_name", @users, :source => @name)
 
     @bookmarks = Groonga::Array.create(:name => "Bookmarks")
     @bookmarks.define_column("user", @users)
     @bookmarks.define_column("uri", "ShortText")
+
+    @sections.define_index_column("user_section", @users,
+                                  :source => @user_section)
   end
 
   def setup_data
     @morita = @users.add("morita",
                          :name => "mori daijiro",
-                         :hp => 100)
+                         :hp => 100,
+                         :section => "search/core")
     @gunyara_kun = @users.add("gunyara-kun",
                               :name => "Tasuku SUENAGA",
-                              :hp => 150)
+                              :hp => 150,
+                              :section => "suggest/all")
     @yu = @users.add("yu",
                      :name => "Yutaro Shimamura",
-                     :hp => 200)
+                     :hp => 200,
+                     :section => "search/all")
 
     @groonga = @bookmarks.add(:user => @morita, :uri => "http://groonga.org/")
     @ruby = @bookmarks.add(:user => @morita, :uri => "http://ruby-lang.org/")
@@ -116,6 +127,22 @@ class ExpressionBuilderTest < Test::Unit::TestCase
     end
     assert_equal(["morita", "yu"],
                  result.collect {|record| record.key.key})
+  end
+
+  def test_prefix_saerch
+    result = @users.select do |record|
+      record.section.prefix_search("search")
+    end
+    assert_equal(["morita", "yu"].sort,
+                 result.collect {|record| record.key.key}.sort)
+  end
+
+  def test_suffix_search
+    result = @users.select do |record|
+      record.name.suffix_search("jiro")
+    end
+    assert_equal(["morita"].sort,
+                 result.collect {|record| record.key.key}.sort)
   end
 
   def test_query_string
