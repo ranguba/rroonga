@@ -19,35 +19,58 @@ class ContextSelectTest < Test::Unit::TestCase
   setup :setup_database
   setup
   def setup_data
-    @books = Groonga::Hash.create(:name => "Books", :key_type => "ShortText")
-    @books.define_column("published", "Time")
-    @users = Groonga::Hash.create(:name => "Users", :key_type => "ShortText")
-    @users.define_column("book", "Books")
+    Groonga::Schema.define do |schema|
+      schema.create_table("Books",
+                          :type => :hash, :key_type => "ShortText") do |table|
+        table.time("published")
+      end
+
+      schema.create_table("Users",
+                          :type => :hash, :key_type => "ShortText") do |table|
+        table.reference("book", "Books")
+      end
+
+      schema.create_table("Bigram",
+                          :type => :patricia_trie,
+                          :key_type => "ShortText",
+                          :default_tokenizer => "TokenBigramSplitSymbolAlpha") do |table|
+        table.index("Books._key")
+      end
+    end
+
+    @books = Groonga["Books"]
+    @users = Groonga["Users"]
 
     @books.add("the groonga book", :published => Time.parse("2010/04/01"))
+    @books.add("the groonga book (2)", :published => Time.parse("2011/04/01"))
+
     @users.add("morita", :book => "the groonga book")
     @users.add("gunyara-kun", :book => "the groonga book")
     @users.add("yu")
+    @users.add("ryoqun", :book => "the groonga book (2)")
   end
 
   def test_no_option
     result = context.select(@users)
-    assert_equal([3,
+    assert_equal([4,
                   [{"_id" => 1, "_key" => "morita",
                      "book" => "the groonga book"},
                    {"_id" => 2, "_key" => "gunyara-kun",
                      "book" => "the groonga book"},
                    {"_id" => 3, "_key" => "yu",
-                     "book" => ""}]],
+                     "book" => ""},
+                   {"_id" => 4, "_key" => "ryoqun",
+                     "book" => "the groonga book (2)"}]],
                  [result.n_hits, result.records])
   end
 
   def test_output_columns
     result = context.select(@users, :output_columns => ["_key"])
-    assert_equal([3,
+    assert_equal([4,
                   [{"_key" => "morita"},
                    {"_key" => "gunyara-kun"},
-                   {"_key" => "yu"}]],
+                   {"_key" => "yu"},
+                   {"_key" => "ryoqun"}]],
                  [result.n_hits, result.records])
   end
 
@@ -58,15 +81,18 @@ class ContextSelectTest < Test::Unit::TestCase
                             :drill_down_output_columns => "_key",
                             :drill_down_limit => 10)
     drill_down = normalize_drill_down(result.drill_down)
-    assert_equal([3,
+    assert_equal([4,
                   [{"_key" => "morita"},
                    {"_key" => "gunyara-kun"},
-                   {"_key" => "yu"}],
+                   {"_key" => "yu"},
+                   {"_key" => "ryoqun"}],
                   {
-                    "_key" => [3, [{"_key" => "morita"},
+                    "_key" => [4, [{"_key" => "morita"},
                                    {"_key" => "gunyara-kun"},
-                                   {"_key" => "yu"}]],
-                    "book" => [1, [{"_key" => "the groonga book"}]],
+                                   {"_key" => "yu"},
+                                   {"_key" => "ryoqun"}]],
+                    "book" => [2, [{"_key" => "the groonga book"},
+                                   {"_key" => "the groonga book (2)"}]],
                   },
                  ],
                  [result.n_hits, result.records, drill_down])
@@ -95,11 +121,16 @@ class ContextSelectTest < Test::Unit::TestCase
                     "_id" => 1,
                     "_key" => "the groonga book",
                     "published" => Time.parse("2010/04/01"),
+                  },
+                  {
+                    "_id" => 2,
+                    "_key" => "the groonga book (2)",
+                    "published" => Time.parse("2011/04/01"),
                   }],
                  result.records)
   end
 
-  def test_invalid_select
+  def test_invalid
     assert_raise(Groonga::SyntaxError) do
       context.select(@books, :query => "<")
     end
