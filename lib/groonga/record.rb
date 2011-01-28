@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2009-2010  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2011  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -117,7 +117,16 @@ module Groonga
     # 名前が_name_のカラムがレコードの所属するテーブルで定義され
     # ているなら+true+を返す。
     def have_column?(name)
-      column(name).is_a?(Groonga::Column)
+      case name.to_s
+      when "_id"
+        true
+      when "_key"
+        support_key?
+      when "_nsubrecs"
+        support_sub_records?
+      else
+        column(name).is_a?(Groonga::Column)
+      end
     rescue Groonga::NoSuchColumn
       false
     end

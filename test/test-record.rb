@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2010  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2011  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -75,6 +75,34 @@ class RecordTest < Test::Unit::TestCase
     groonga = @bookmarks.add
     assert_true(groonga.have_column?(:uri))
     assert_false(groonga.have_column?(:nonexistent))
+  end
+
+  def test_have_column_id
+    groonga = @bookmarks.add
+    assert_true(groonga.have_column?(:_id))
+  end
+
+  def test_have_column_key_existent
+    mori = @users.add("mori")
+    assert_true(mori.have_column?(:_key))
+  end
+
+  def test_have_column_key_nonexistent
+    groonga = @bookmarks.add
+    assert_false(groonga.have_column?(:_key))
+  end
+
+  def test_have_column_nsubrecs_existent
+    @users.add("mori")
+    bookmarks = @users.select do |record|
+      record.key == "mori"
+    end
+    assert_true(bookmarks.to_a.first.have_column?(:_nsubrecs))
+  end
+
+  def test_have_column_nsubrecs_nonexistent
+    groonga = @bookmarks.add
+    assert_false(groonga.have_column?(:_nsubrecs))
   end
 
   def test_get_nonexistent_column
