@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2009-2010  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2011  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -1619,6 +1619,10 @@ module Groonga
           end
           if table.domain
             parameters << ":key_type => #{table.domain.name.dump}"
+          end
+          default_tokenizer = table.default_tokenizer
+          if default_tokenizer
+            parameters << ":default_tokenizer => #{default_tokenizer.name.dump}"
           end
         end
         parameters << ":force => true"

@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2010  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2011  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -485,7 +485,8 @@ EOS
 
       schema.create_table("Terms",
                           :type => :patricia_trie,
-                          :key_type => "ShortText") do |table|
+                          :key_type => "ShortText",
+                          :default_tokenizer => "TokenBigram") do |table|
         table.index("Items", "_key")
         table.index("Items", "title")
       end
@@ -502,6 +503,7 @@ end
 create_table("Terms",
              :type => :patricia_trie,
              :key_type => "ShortText",
+             :default_tokenizer => "TokenBigram",
              :force => true) do |table|
 end
 
