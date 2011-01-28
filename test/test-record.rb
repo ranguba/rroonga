@@ -82,14 +82,19 @@ class RecordTest < Test::Unit::TestCase
     assert_true(groonga.have_column?(:_id))
   end
 
-  def test_have_column_key_existent
+  def test_have_column_key_hash
     mori = @users.add("mori")
     assert_true(mori.have_column?(:_key))
   end
 
-  def test_have_column_key_nonexistent
+  def test_have_column_key_array_with_value_type
     groonga = @bookmarks.add
-    assert_false(groonga.have_column?(:_key))
+    assert_true(groonga.have_column?(:_key))
+  end
+
+  def test_have_column_key_array_without_value_type
+    groonga_ml = @addresses.add
+    assert_false(groonga_ml.have_column?(:_key))
   end
 
   def test_have_column_nsubrecs_existent

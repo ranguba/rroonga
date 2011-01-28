@@ -117,18 +117,7 @@ module Groonga
     # 名前が_name_のカラムがレコードの所属するテーブルで定義され
     # ているなら+true+を返す。
     def have_column?(name)
-      case name.to_s
-      when "_id"
-        true
-      when "_key"
-        support_key?
-      when "_nsubrecs"
-        support_sub_records?
-      else
-        column(name).is_a?(Groonga::Column)
-      end
-    rescue Groonga::NoSuchColumn
-      false
+      not @table.column(normalize_column_name(name)).nil?
     end
 
     # call-seq:
@@ -390,8 +379,12 @@ module Groonga
     end
 
     private
+    def normalize_column_name(name)
+      name.to_s
+    end
+
     def column(name) # :nodoc:
-      _column = @table.column(name.to_s)
+      _column = @table.column(normalize_column_name(name))
       raise NoSuchColumn, "column(#{name.inspect}) is nil" if _column.nil?
       _column
     end

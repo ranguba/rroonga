@@ -678,7 +678,6 @@ rb_grn_table_have_column (VALUE self, VALUE rb_name)
     grn_obj *column;
     const char *name = NULL;
     unsigned name_size = 0;
-    VALUE result = Qfalse;
 
     rb_grn_table_deconstruct(SELF(self), &table, &context,
 			     NULL, NULL,
@@ -687,14 +686,12 @@ rb_grn_table_have_column (VALUE self, VALUE rb_name)
 
     ruby_object_to_column_name(rb_name, &name, &name_size);
     column = grn_obj_column(context, table, name, name_size);
-    if (!column)
+    if (column) {
+	grn_obj_unlink(context, column);
+	return Qtrue;
+    } else {
 	return Qfalse;
-
-    if (column->header.type != GRN_ACCESSOR)
-	result = Qtrue;
-    grn_obj_unlink(context, column);
-
-    return result;
+    }
 }
 
 static grn_table_cursor *

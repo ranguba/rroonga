@@ -594,6 +594,64 @@ class TableTest < Test::Unit::TestCase
     assert_false(users.have_column?("description"), "description")
   end
 
+  def test_have_column_id
+    users = Groonga::Array.create(:name => "Users")
+    assert_true(users.have_column?(:_id))
+  end
+
+  def test_have_column_key_hash
+    users = Groonga::Hash.create(:name => "Users",
+                                 :key_type => "ShortText")
+    assert_true(users.have_column?(:_key))
+  end
+
+  def test_have_column_key_array
+    users = Groonga::Array.create(:name => "Users")
+    assert_false(users.have_column?(:_key))
+  end
+
+  def test_have_column_value_hash_with_value_type
+    users = Groonga::Hash.create(:name => "Users",
+                                 :key_type => "ShortText",
+                                 :value_type => "Int32")
+    assert_true(users.have_column?(:_value))
+  end
+
+  def test_have_column_value_hash_without_value_type
+    users = Groonga::Hash.create(:name => "Users",
+                                 :key_type => "ShortText")
+    assert_false(users.have_column?(:_value))
+  end
+
+  def test_have_column_value_array
+    users = Groonga::Array.create(:name => "Users")
+    assert_false(users.have_column?(:_value))
+  end
+
+  def test_have_column_nsubrecs_existent
+    users = Groonga::Hash.create(:name => "Users",
+                                 :key_type => "ShortText")
+    assert_true(users.select.have_column?(:_nsubrecs))
+  end
+
+  def test_have_column_nsubrecs_nonexistent
+    users = Groonga::Hash.create(:name => "Users",
+                                 :key_type => "ShortText")
+    assert_false(users.have_column?(:_nsubrecs))
+  end
+
+  def test_have_column_score_existent
+    users = Groonga::Hash.create(:name => "Users",
+                                 :key_type => "ShortText")
+    assert_true(users.select.have_column?(:_score))
+  end
+
+  def test_have_column_score_nonexistent
+    users = Groonga::Hash.create(:name => "Users",
+                                 :key_type => "ShortText")
+    assert_false(users.have_column?(:_score))
+  end
+
   def test_exist?
     users = Groonga::Hash.create(:name => "Users")
     morita = users.add("morita")
