@@ -1619,6 +1619,9 @@ module Groonga
           end
           if table.domain
             parameters << ":key_type => #{table.domain.name.dump}"
+            if table.normalize_key?
+              parameters << ":key_normalize => true"
+            end
           end
           default_tokenizer = table.default_tokenizer
           if default_tokenizer

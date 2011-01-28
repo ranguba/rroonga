@@ -486,6 +486,7 @@ EOS
       schema.create_table("Terms",
                           :type => :patricia_trie,
                           :key_type => "ShortText",
+                          :key_normalize => true,
                           :default_tokenizer => "TokenBigram") do |table|
         table.index("Items", "_key")
         table.index("Items", "title")
@@ -503,6 +504,7 @@ end
 create_table("Terms",
              :type => :patricia_trie,
              :key_type => "ShortText",
+             :key_normalize => true,
              :default_tokenizer => "TokenBigram",
              :force => true) do |table|
 end
