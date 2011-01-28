@@ -475,10 +475,9 @@ class SelectorByMethod < Selector
     end
   end
 
-  BUILT_IN_COLUMNS = ["_id", "_key", "_score", "_nsubrecs"]
   def column_included_in_record?(column, record)
-    if record.respond_to?(:table)
-      BUILT_IN_COLUMNS.include?(column) or record.table.have_column?(column)
+    if record.respond_to?(:have_column?)
+      record.have_column?(column)
     else
       record.include?(column)
     end
