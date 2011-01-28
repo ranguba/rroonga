@@ -249,8 +249,14 @@ project.spec.executables.clear
 task(:release).prerequisites.reject! {|name| name == "clean"}
 
 namespace :win32 do
+  if ENV["GROONGA64"] == "yes"
+    host = "amd64-mingw32msvc"
+  else
+    host = "i586-mingw32msvc"
+  end
+
   desc "Build MeCab and groonga and install them into vendor/local/."
-  task(:build => :build_groonga)
+  task(:build => [:build_mecab, :build_mecab_dict, :build_groonga])
 
   desc "Build MeCab and install it into vendor/local/."
   task(:build_mecab) do
@@ -273,7 +279,7 @@ namespace :win32 do
     Dir.chdir(File.join(tmp_dir, mecab_base)) do
       sh("./configure",
          "--prefix=#{binary_dir}",
-         "--host=amd64-mingw32msvc") or exit(false)
+         "--host=#{host}") or exit(false)
       sh("env", "GREP_OPTIONS=--text", "nice", "make", "-j8") or exit(false)
       sh("env", "GREP_OPTIONS=--text", "make", "install") or exit(false)
 
@@ -334,7 +340,7 @@ namespace :win32 do
       mecab_config = File.join(binary_dir, "bin", "mecab-config")
       args = ["./configure",
               "--prefix=#{binary_dir}",
-              "--host=amd64-mingw32msvc",
+              "--host=#{host}",
               "--without-cutter",
               "--disable-benchmark"]
       if File.exist?(mecab_config)
