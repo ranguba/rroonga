@@ -65,3 +65,4 @@ http://rubyforge.org/mailman/listinfo/groonga-users-en
 * m_seki: sent bug reports.
 * ono matope: sent bug reports.
 * @kamipo: send a bug report.
+* ongaeshi: sent a patch to build gem on Windows.

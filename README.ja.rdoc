@@ -65,3 +65,4 @@ http://lists.sourceforge.jp/mailman/listinfo/groonga-dev
 * 咳さん: バグレポートしてくれました。
 * 小野マトペさん: バグレポートしてくれました。
 * @kamipoさん: バグレポートしてくれました。
+* ongaeshiさん: Windows上でgemをビルドするためのパッチをくれました。
