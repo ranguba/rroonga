@@ -1,5 +1,52 @@
 = お知らせ
 
+== 1.0.9: 2011-01-29
+
+=== 改良
+
+* Windows上でのgem作成に対応。
+  [ongaeshiさんがパッチ提供]
+* Groonga::Schemaでテーブル・カラムを削除した時に作成したディレクトリを
+  削除するようにした。
+* Groonga::Context#create_databaseを追加。
+* Groonga::Context#open_databaseを追加。
+* Groonga::Column#indexesを追加。
+* Groonga::Table#select内でのインデックスカラムにマッチする記法をサポート。
+    table.select do |record|
+      record.match("query") do |match_record|
+        (match_record.index("Terms.title") * 1000) |
+          (match_record.index("Terms.description") * 100)
+          match_record.content
+      end
+    end
+* Groonga::Table#select内での前方一致検索に対応。
+    table.select do |record|
+      record.name.prefix_search("groo")
+    end
+* Groonga::Table#select内での後方一致検索に対応。
+    table.select do |record|
+      record.name.suffix_search("nga")
+    end
+* :default_tokenizerのスキーマダンプに対応。
+* :key_normalizeのスキーマダンプに対応。
+* Groonga::Table#have_column?が擬似カラムに対応。
+* Groonga::Record#have_column?が擬似カラムに対応。
+
+=== 変更
+
+* Groonga::OperatoionをGroonga::Operatorに変更。
+  （しばらくはGroonga::Operationも使えるが、非推奨。）
+
+=== 修正
+
+* 複数のGroonga::Contextを利用した場合に
+  Groonga::Table#selectでクラッシュする問題を修正。
+* 例外発生時にクラッシュする問題を修正。
+
+=== 感謝
+
+* ongaeshioさん
+
 == 1.0.8: 2010-12-25
 
 === 改良

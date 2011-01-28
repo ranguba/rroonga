@@ -1,5 +1,53 @@
 = NEWS
 
+== 1.0.9: 2011-01-29
+
+=== Improvements
+
+* Supported gem creation on Windows.
+  [Patch by ongaeshi]
+* Supported generated directory that is created by Groonga::Schema removal
+  when table or column is removed.
+* Added Groonga::Context#create_database.
+* Added Groonga::Context#open_database.
+* Added Groonga::Column#indexes.
+* Supported a notation for specifying index column as match target in
+  Groonga::Table#select:
+    table.select do |record|
+      record.match("query") do |match_record|
+        (match_record.index("Terms.title") * 1000) |
+          (match_record.index("Terms.description") * 100)
+          match_record.content
+      end
+    end
+* Supported prefix search in Groonga::Table#select:
+    table.select do |record|
+      record.name.prefix_search("groo")
+    end
+* Supported suffix search in Groonga::Table#select:
+    table.select do |record|
+      record.name.suffix_search("nga")
+    end
+* Supported :default_tokenizer schema dump.
+* Supported :key_normalize schema dump.
+* Supported pseudo columns by Groonga::Table#have_column?.
+* Supported pseudo columns by Groonga::Record#have_column?.
+
+=== Changes
+
+* Renamed Groonga::Operatoion to Groonga::Operator.
+  (Groonga::Operation is deprecated but still usable.)
+
+=== Fixes
+
+* Fixed a crash bug when not default Groonga::Context is used in
+  Groonga::Table#select.
+* Fixed a crash bug when an exception is occurred.
+
+=== Thanks
+
+* ongaeshio
+
 == 1.0.8: 2010-12-25
 
 === Improvements
