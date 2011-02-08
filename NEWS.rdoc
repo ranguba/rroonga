@@ -1,5 +1,12 @@
 = NEWS
 
+== 1.1.0: 2011-02-09
+
+=== Improvements
+
+* Supported groonga 1.1.0.
+* Added Groonga::Plugin.register.
+
 == 1.0.9: 2011-01-29
 
 === Improvements
