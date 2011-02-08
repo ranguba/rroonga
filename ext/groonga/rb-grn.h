@@ -1,6 +1,6 @@
 /* -*- c-file-style: "ruby" -*- */
 /*
-  Copyright (C) 2009-2010  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2011  Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -174,6 +174,14 @@ struct _RbGrnExpression
     grn_obj *value;
 };
 
+typedef struct _RbGrnPlugin RbGrnPlugin;
+struct _RbGrnPlugin
+{
+    VALUE self;
+    grn_ctx *context;
+    grn_id id;
+};
+
 RB_GRN_VAR grn_bool rb_grn_exited;
 
 RB_GRN_VAR VALUE rb_eGrnError;
@@ -213,6 +221,7 @@ RB_GRN_VAR VALUE rb_cGrnOperator;
 RB_GRN_VAR VALUE rb_cGrnExpression;
 RB_GRN_VAR VALUE rb_cGrnRecordExpressionBuilder;
 RB_GRN_VAR VALUE rb_cGrnColumnExpressionBuilder;
+RB_GRN_VAR VALUE rb_cGrnPlugin;
 
 void           rb_grn_init_utils                    (VALUE mGrn);
 void           rb_grn_init_exception                (VALUE mGrn);
@@ -250,6 +259,7 @@ void           rb_grn_init_expression               (VALUE mGrn);
 void           rb_grn_init_expression_builder       (VALUE mGrn);
 void           rb_grn_init_logger                   (VALUE mGrn);
 void           rb_grn_init_snippet                  (VALUE mGrn);
+void           rb_grn_init_plugin                   (VALUE mGrn);
 
 VALUE          rb_grn_rc_to_exception               (grn_rc rc);
 const char    *rb_grn_rc_to_message                 (grn_rc rc);

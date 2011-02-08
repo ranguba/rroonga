@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2010  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2010-2011  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -49,6 +49,23 @@ module Groonga
       end
 
       Database.create(options)
+    end
+
+    # call-seq:
+    #   context.register_plugin(name)
+    #   context.register_plugin({:path => path})
+    #
+    # groongaのプラグインディレクトリにあるプラグイン_name_
+    # を登録する。_path_を指定するとプラグインディレクトリ以
+    # 外にあるプラグインを登録することができる。
+    def register_plugin(name_or_options)
+      options = {:context => self}
+      if name_or_options.is_a?(String)
+        name = name_or_options
+        Plugin.register(name, options)
+      else
+        Plugin.register(name_or_options.merge(options))
+      end
     end
 
     # call-seq:
