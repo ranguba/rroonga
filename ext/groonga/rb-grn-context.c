@@ -569,16 +569,22 @@ static VALUE
 rb_grn_context_receive (VALUE self)
 {
     grn_ctx *context;
-    char *string;
-    unsigned string_size;
+    char *result = NULL;
+    unsigned result_size;
+    VALUE rb_result;
     int flags = 0;
     unsigned int query_id;
 
     context = SELF(self);
-    query_id = grn_ctx_recv(context, &string, &string_size, &flags);
+    query_id = grn_ctx_recv(context, &result, &result_size, &flags);
+    if (result) {
+	rb_result = rb_str_new(result, result_size);
+    } else {
+	rb_result = Qnil;
+    }
     rb_grn_context_check(context, self);
 
-    return rb_ary_new3(2, UINT2NUM(query_id), rb_str_new(string, string_size));
+    return rb_ary_new3(2, UINT2NUM(query_id), rb_result);
 }
 
 static const char *
