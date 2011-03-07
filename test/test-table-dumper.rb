@@ -16,18 +16,37 @@
 class TableDumperTest < Test::Unit::TestCase
   include GroongaTestUtils
 
-  setup :setup_database
+  setup :setup_database, :before => :append
 
   def setup
     @output = StringIO.new
     @dumper = Groonga::TableDumper.new(@output)
+    setup_tables
+  end
+
+  def setup_tables
+    Groonga::Schema.define do |schema|
+      schema.create_table("Users") do |table|
+        table.text("name")
+      end
+
+      schema.create_table("Posts") do |table|
+        table.text("title")
+        table.reference("author", "Users")
+        table.integer("rank")
+        table.unsigned_integer("n_goods")
+        table.text("tags", :type => :vector)
+        table.boolean("published")
+        table.time("created_at")
+      end
+
+      schema.change_table("Users") do |table|
+        table.index("Posts.author")
+      end
+    end
   end
 
   def test_dump_empty
-    Groonga::Schema.define do |schema|
-      schema.create_table("Posts") do |table|
-      end
-    end
     @dumper.dump(context["Posts"])
     assert_equal(<<-EOS, @output.string)
 load --table Posts
