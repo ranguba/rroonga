@@ -260,6 +260,7 @@ void           rb_grn_init_expression_builder       (VALUE mGrn);
 void           rb_grn_init_logger                   (VALUE mGrn);
 void           rb_grn_init_snippet                  (VALUE mGrn);
 void           rb_grn_init_plugin                   (VALUE mGrn);
+void           rb_grn_init_table_dumper             (VALUE mGrn);
 
 VALUE          rb_grn_rc_to_exception               (grn_rc rc);
 const char    *rb_grn_rc_to_message                 (grn_rc rc);

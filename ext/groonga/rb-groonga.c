@@ -144,4 +144,5 @@ Init_groonga (void)
     rb_grn_init_logger(mGrn);
     rb_grn_init_snippet(mGrn);
     rb_grn_init_plugin(mGrn);
+    rb_grn_init_table_dumper(mGrn);
 }
