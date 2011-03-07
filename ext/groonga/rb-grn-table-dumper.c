@@ -26,12 +26,21 @@
 
 #define SELF(object) ((RbGrnTableDumper *)DATA_PTR(object))
 
+typedef struct _RbGrnTableDumperCache RbGrnTableDumperCache;
+struct _RbGrnTableDumperCache
+{
+    grn_obj *table;
+    VALUE rb_buffer;
+    VALUE rb_output;
+};
+
 typedef struct _RbGrnTableDumper RbGrnTableDumper;
 struct _RbGrnTableDumper
 {
     grn_ctx *context;
     grn_obj *buffer;
     grn_obj *target;
+    RbGrnTableDumperCache cache;
 };
 
 static VALUE rb_cGrnTableDumper;
@@ -96,6 +105,20 @@ rb_grn_table_dumper_initialize (int argc, VALUE *argv, VALUE self)
     return Qnil;
 }
 
+static inline void
+dumper_flush (RbGrnTableDumper *dumper)
+{
+    RbGrnTableDumperCache *cache;
+
+    cache = &(dumper->cache);
+    rb_funcall(cache->rb_buffer, rb_intern("clear"), 0);
+    rb_str_cat(cache->rb_buffer,
+	       GRN_TEXT_VALUE(dumper->buffer),
+	       GRN_TEXT_LEN(dumper->buffer));
+    rb_io_write(cache->rb_output, cache->rb_buffer);
+    GRN_BULK_REWIND(dumper->buffer);
+}
+
 /*
  * Document-method: dump
  *
@@ -108,29 +131,35 @@ static VALUE
 rb_grn_table_dumper_dump (VALUE self, VALUE rb_table)
 {
     RbGrnTableDumper *dumper;
-    VALUE rb_output, rb_buffer;
-    grn_ctx *table_context;
-    grn_obj *table;
-    char name[GRN_TABLE_MAX_KEY_SIZE];
+    RbGrnTableDumperCache *cache;
+    grn_ctx *context, *table_context;
+    grn_obj *buffer;
     int name_size;
 
     dumper = SELF(self);
+    cache = &(dumper->cache);
+    cache->table = RVAL2GRNTABLE(rb_table, &table_context);
+    cache->rb_output = rb_iv_get(self, "@output");
+    cache->rb_buffer = rb_iv_get(self, "@buffer");
 
-    table = RVAL2GRNTABLE(rb_table, &table_context);
+    context = dumper->context;
+    buffer = dumper->buffer;
 
-    rb_output = rb_iv_get(self, "@output");
-    rb_buffer = rb_iv_get(self, "@buffer");
+    GRN_TEXT_PUTS(context, buffer, "load --table ");
+    name_size = grn_obj_name(context, cache->table, NULL, 0);
+    grn_bulk_space(context, buffer, name_size);
+    name_size = grn_obj_name(context, cache->table,
+			     GRN_BULK_CURR(buffer) - name_size, name_size);
+    GRN_TEXT_PUTS(context, buffer, "\n");
+    GRN_TEXT_PUTS(context, buffer, "[\n");
+    dumper_flush(dumper);
 
-    name_size = grn_obj_name(dumper->context, table, name, sizeof(name));
-    rb_str_cat2(rb_buffer, "load --table ");
-    rb_str_cat(rb_buffer, name, name_size);
-    rb_str_cat2(rb_buffer, "\n");
-    rb_str_cat2(rb_buffer, "[\n");
-    rb_io_write(rb_output, rb_buffer);
+    GRN_TEXT_PUTS(context, buffer, "]\n");
+    dumper_flush(dumper);
 
-    rb_funcall(rb_buffer, rb_intern("clear"), 0);
-    rb_str_cat2(rb_buffer, "]\n");
-    rb_io_write(rb_output, rb_buffer);
+    cache->table = NULL;
+    cache->rb_output = Qnil;
+    cache->rb_buffer = Qnil;
 
     return self;
 }
