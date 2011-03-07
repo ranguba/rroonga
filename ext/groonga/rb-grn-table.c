@@ -43,7 +43,9 @@ grn_obj *
 rb_grn_table_from_ruby_object (VALUE object, grn_ctx **context)
 {
     if (!RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cGrnTable))) {
-	rb_raise(rb_eTypeError, "not a groonga table");
+	rb_raise(rb_eTypeError,
+		 "not a groonga table: <%s>",
+		 rb_grn_inspect(object));
     }
 
     return RVAL2GRNOBJECT(object, context);
