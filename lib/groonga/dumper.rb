@@ -15,33 +15,41 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+require 'stringio'
+
 module Groonga
   # データベースの内容をgrn式形式の文字列として出力するクラス。
   class DatabaseDumper
-    def initialize(output, options={})
-      @output = output
+    def initialize(options={})
       @options = options
-      @context = @options[:context] || Groonga::Context.default
     end
 
     def dump
-      tables.each do
+      options = @options.dup
+      have_output = !@options[:output].nil?
+      options[:output] ||= StringIO.new
+      options[:context] ||= Groonga::Context.default
+      database = options[:context].database
+
+      dump_schema(options)
+      database.each do |object|
+        dump_records(object, options) if object.is_a?(Groonga::Table)
+      end
+
+      if have_output
+        nil
+      else
+        options[:output].string
       end
     end
 
     private
-    def dump_records(table)
-      @output.write("load --table #{table}\n")
-      @output.write("[\n")
-      columns = table.columns.reject do |column|
-        false
-      end
-      column_names = columns.collect do |column|
-        "\"#{column.name}\""
-      end
-      @output.write("[#{column_names.join(', ')}]\n")
-      dump_records(table, columns)
-      @output.write("]\n")
+    def dump_schema(options)
+      SchemaDumper.new(options.merge(:syntax => :command)).dump
+    end
+
+    def dump_records(table, options)
+      TableDumper.new(table, options).dump
     end
   end
 
@@ -263,5 +271,45 @@ module Groonga
   end
 
   class TableDumper
+    def initialize(table, options={})
+      @table = table
+      @options = options
+    end
+
+    def dump
+      output = @options[:output]
+      have_output = !output.nil?
+      output ||= StringIO.new
+      output.write("load --table #{@table.name}\n")
+      output.write("[\n")
+      dump_columns(output)
+      output.write("]\n")
+      if have_output
+        nil
+      else
+        output.string
+      end
+    end
+
+    private
+    def write(content)
+      @output.write(content)
+    end
+
+    def dump_columns(output)
+      column_names = @table.columns.collect do |column|
+        column.local_name
+      end.sort
+      pseudo_column_names = []
+      if @table.support_key?
+        pseudo_column_names << "_key"
+      else
+        pseudo_column_names << "_id"
+      end
+      pseudo_column_names << "_value" unless @table.domain.nil?
+      output.write((pseudo_column_names + column_names).to_json)
+      output.write(",") unless @table.size.zero?
+      output.write("\n")
+    end
   end
 end

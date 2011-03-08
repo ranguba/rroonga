@@ -19,8 +19,6 @@ class TableDumperTest < Test::Unit::TestCase
   setup :setup_database, :before => :append
 
   def setup
-    @output = StringIO.new
-    @dumper = Groonga::TableDumper.new(@output)
     setup_tables
   end
 
@@ -47,11 +45,16 @@ class TableDumperTest < Test::Unit::TestCase
   end
 
   def test_dump_empty
-    @dumper.dump(context["Posts"])
-    assert_equal(<<-EOS, @output.string)
+    assert_equal(<<-EOS, dump("Posts"))
 load --table Posts
 [
+["_id","author","created_at","n_goods","published","rank","tags","title"]
 ]
 EOS
+  end
+
+  private
+  def dump(table_name)
+    Groonga::TableDumper.new(context[table_name]).dump
   end
 end
