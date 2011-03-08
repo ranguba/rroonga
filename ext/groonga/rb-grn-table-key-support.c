@@ -663,7 +663,7 @@ rb_grn_table_key_support_set_default_tokenizer (VALUE self, VALUE rb_tokenizer)
  * す。
  */
 static VALUE
-rb_grn_table_key_support_normalize_key_p (VALUE self)
+rb_grn_table_key_normalize_key_p (VALUE self)
 {
     grn_obj *table;
 
@@ -732,7 +732,7 @@ rb_grn_init_table_key_support (VALUE mGrn)
 		     rb_grn_table_key_support_set_default_tokenizer, 1);
 
     rb_define_method(rb_mGrnTableKeySupport, "normalize_key?",
-		     rb_grn_table_key_support_normalize_key_p, 0);
+		     rb_grn_table_key_normalize_key_p, 0);
 
     rb_define_method(rb_mGrnTableKeySupport, "support_key?",
 		     rb_grn_table_key_support_support_key_p, 0);
