@@ -274,20 +274,17 @@ module Groonga
     def initialize(table, options={})
       @table = table
       @options = options
+      @output = @options[:output]
+      @have_output = !@output.nil?
+      @output ||= StringIO.new
     end
 
     def dump
-      output = @options[:output]
-      have_output = !output.nil?
-      output ||= StringIO.new
-      output.write("load --table #{@table.name}\n")
-      output.write("[\n")
-      dump_columns(output)
-      output.write("]\n")
-      if have_output
+      dump_load_command
+      if @have_output
         nil
       else
-        output.string
+        @output.string
       end
     end
 
@@ -296,20 +293,56 @@ module Groonga
       @output.write(content)
     end
 
-    def dump_columns(output)
-      column_names = @table.columns.collect do |column|
+    def dump_load_command
+      write("load --table #{@table.name}\n")
+      write("[\n")
+      columns = available_columns
+      dump_columns(columns)
+      dump_records(columns)
+      write("\n]\n")
+    end
+
+    def dump_columns(columns)
+      column_names = columns.collect do |column|
         column.local_name
-      end.sort
-      pseudo_column_names = []
-      if @table.support_key?
-        pseudo_column_names << "_key"
-      else
-        pseudo_column_names << "_id"
       end
-      pseudo_column_names << "_value" unless @table.domain.nil?
-      output.write((pseudo_column_names + column_names).to_json)
-      output.write(",") unless @table.size.zero?
-      output.write("\n")
+      write(column_names.to_json)
+    end
+
+    def dump_records(columns)
+      @table.each do |record|
+        write(",\n")
+        values = columns.collect do |column|
+          value = column[record.id]
+          while value.is_a?(Groonga::Record)
+            if value.support_key?
+              value = value.key
+            else
+              value = value.id
+            end
+          end
+          if value.is_a?(Time)
+            value = value.utc.strftime("%Y-%m-%d %H:%M:%S.%L")
+          end
+          value
+        end
+        write(values.to_json)
+      end
+    end
+
+    def available_columns
+      columns = []
+      if @table.support_key?
+        columns << @table.column("_key")
+      else
+        columns << @table.column("_id")
+      end
+      columns << "_value" unless @table.domain.nil?
+      sorted_columns = @table.columns.sort_by do |column|
+        column.local_name
+      end
+      columns.concat(sorted_columns)
+      columns
     end
   end
 end
