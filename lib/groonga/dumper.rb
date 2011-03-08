@@ -28,8 +28,11 @@ module Groonga
       options = @options.dup
       have_output = !@options[:output].nil?
       options[:output] ||= StringIO.new
-      options[:context] ||= Groonga::Context.default
-      database = options[:context].database
+      database = options[:database]
+      if database.nil?
+        options[:context] ||= Groonga::Context.default
+        options[:database] = options[:context].database
+      end
 
       dump_schema(options)
       database.each do |object|
@@ -61,8 +64,11 @@ module Groonga
     end
 
     def dump
-      context = @options[:context] || Groonga::Context.default
-      database = context.database
+      database = @options[:database]
+      if database.nil?
+        context = @options[:context] || Groonga::Context.default
+        database = context.database
+      end
       return nil if database.nil?
 
       output = @options[:output]
