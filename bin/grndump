@@ -1,0 +1,40 @@
+#!/usr/bin/env ruby
+# -*- coding: utf-8 -*-
+#
+# Copyright (C) 2011  Kouhei Sutou <kou@clear-code.com>
+#
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public
+# License version 2.1 as published by the Free Software Foundation.
+#
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public
+# License along with this library; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+require 'ostruct'
+require 'optparse'
+require 'pathname'
+
+require 'groonga'
+
+options = OpenStruct.new
+option_parser = OptionParser.new do |parser|
+  parser.banner += " DB_PATH"
+end
+args = option_parser.parse!(ARGV)
+
+if args.size != 1
+  puts(option_parser)
+  exit(false)
+end
+db_path = args[0]
+
+database = Groonga::Database.open(db_path)
+database_dumper = Groonga::DatabaseDumper.new(:options => database,
+                                              :output => STDOUT)
+database_dumper.dump
