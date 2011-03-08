@@ -87,5 +87,6 @@ end
 
 require 'groonga/context'
 require 'groonga/patricia-trie'
+require 'groonga/dumper'
 require 'groonga/schema'
 require 'groonga/pagination'
