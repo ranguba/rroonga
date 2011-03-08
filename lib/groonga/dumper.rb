@@ -438,7 +438,10 @@ module Groonga
         columns << @table.column("_id")
       end
       columns << @table.column("_value") unless @table.range.nil?
-      sorted_columns = @table.columns.sort_by do |column|
+      data_columns = @table.columns.reject do |column|
+        column.index?
+      end
+      sorted_columns = data_columns.sort_by do |column|
         column.local_name
       end
       columns.concat(sorted_columns)
