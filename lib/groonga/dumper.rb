@@ -37,10 +37,10 @@ module Groonga
 
       dump_schema(options)
       database.each do |object|
-        if object.is_a?(Groonga::Table)
-          output.write("\n")
-          dump_records(object, options)
-        end
+        next unless object.is_a?(Groonga::Table)
+        next if lexicon_table?(object)
+        output.write("\n")
+        dump_records(object, options)
       end
 
       if have_output
@@ -57,6 +57,11 @@ module Groonga
 
     def dump_records(table, options)
       TableDumper.new(table, options).dump
+    end
+
+    def lexicon_table?(table)
+      table.default_tokenizer and
+        table.columns.any? {|column| column.index?}
     end
   end
 
