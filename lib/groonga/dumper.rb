@@ -28,15 +28,19 @@ module Groonga
       options = @options.dup
       have_output = !@options[:output].nil?
       options[:output] ||= StringIO.new
+      output = options[:output]
       database = options[:database]
       if database.nil?
         options[:context] ||= Groonga::Context.default
-        options[:database] = options[:context].database
+        database = options[:database] = options[:context].database
       end
 
       dump_schema(options)
       database.each do |object|
-        dump_records(object, options) if object.is_a?(Groonga::Table)
+        if object.is_a?(Groonga::Table)
+          output.write("\n")
+          dump_records(object, options)
+        end
       end
 
       if have_output
@@ -427,7 +431,7 @@ module Groonga
       else
         columns << @table.column("_id")
       end
-      columns << "_value" unless @table.domain.nil?
+      columns << @table.column("_value") unless @table.range.nil?
       sorted_columns = @table.columns.sort_by do |column|
         column.local_name
       end
