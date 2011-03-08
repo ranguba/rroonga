@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2009  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2011  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -105,10 +105,76 @@ class IndexColumnTest < Test::Unit::TestCase
     assert_search(["l", "ll", "hello"], content_index, "l")
   end
 
+  def test_with_section?
+    define_index_column_with_flags
+    assert_equal({
+                   :section => true,
+                   :weight => false,
+                   :position => false,
+                 },
+                 {
+                   :section => context["Tags.section"].with_section?,
+                   :weight => context["Tags.weight"].with_section?,
+                   :position => context["Tags.position"].with_section?,
+                 })
+  end
+
+  def test_with_weight?
+    define_index_column_with_flags
+    assert_equal({
+                   :section => false,
+                   :weight => true,
+                   :position => false,
+                 },
+                 {
+                   :section => context["Tags.section"].with_weight?,
+                   :weight => context["Tags.weight"].with_weight?,
+                   :position => context["Tags.position"].with_weight?,
+                 })
+  end
+
+  def test_with_position?
+    define_index_column_with_flags
+    assert_equal({
+                   :section => false,
+                   :weight => false,
+                   :position => true,
+                 },
+                 {
+                   :section => context["Tags.section"].with_position?,
+                   :weight => context["Tags.weight"].with_position?,
+                   :position => context["Tags.position"].with_position?,
+                 })
+  end
+
+  private
   def assert_search(expected, content_index, keyword)
     result = content_index.search(keyword).collect do |entry|
       entry.key["content"]
     end
     assert_equal(expected, result)
+  end
+
+  def define_index_column_with_flags
+    Groonga::Schema.define do |schema|
+      schema.create_table("Articles") do |table|
+        table.text("tags", :type => :vector)
+      end
+
+      schema.create_table("Tags",
+                          :type => :patricia_trie,
+                          :key_type => "ShortText",
+                          :default_tokenizer => "TokenDelimit") do |table|
+        table.index("Articles.tags",
+                    :name => "section",
+                    :with_section => true)
+        table.index("Articles.tags",
+                    :name => "weight",
+                    :with_weight => true)
+        table.index("Articles.tags",
+                    :name => "position",
+                    :with_position => true)
+      end
+    end
   end
 end

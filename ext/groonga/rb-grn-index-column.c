@@ -400,26 +400,26 @@ rb_grn_index_column_set_source (VALUE self, VALUE rb_source)
  *
  * 利用可能なオプションは以下の通り。
  *
- * [_:result_]
+ * [+:result+]
  *   結果を格納するGroonga::Hash。指定しない場合は新しく
  *   Groonga::Hashを生成し、それに結果を格納して返す。
- * [_:operator_]
+ * [+:operator+]
  *   以下のどれかの値を指定する。+nil+, <tt>"or"</tt>, <tt>"||"</tt>,
  *   <tt>"and"</tt>, <tt>"+"</tt>, <tt>"&&"</tt>, <tt>"but"</tt>,
  *   <tt>"not"</tt>, <tt>"-"</tt>, <tt>"adjust"</tt>, <tt>">"</tt>。
  *   それぞれ以下のようになる。（FIXME: 「以下」）
- * [_:exact_]
+ * [+:exact+]
  *   +true+を指定すると完全一致で検索する
- * [_:longest_common_prefix_]
+ * [+:longest_common_prefix+]
  *   +true+を指定すると_query_と同じ接頭辞をもつエントリのう
  *   ち、もっとも長いエントリを検索する
- * [_:suffix_]
+ * [+:suffix+]
  *   +true+を指定すると_query_が後方一致するエントリを検索す
  *   る
- * [_:prefix_]
+ * [+:prefix+]
  *   +true+を指定すると_query_が前方一致するレコードを検索す
  *   る
- * [_:near_]
+ * [+:near+]
  *   +true+を指定すると_query_に指定した複数の語が近傍に含ま
  *   れるレコードを検索する
  * [...]
@@ -483,6 +483,69 @@ rb_grn_index_column_search (int argc, VALUE *argv, VALUE self)
     return rb_result;
 }
 
+/*
+ * Document-method: with_section?
+ *
+ * call-seq:
+ *   column.with_section? -> true/false
+ *
+ * _column_が段落情報も格納する場合は+true+を返します。
+ */
+static VALUE
+rb_grn_index_column_with_section_p (VALUE self)
+{
+    grn_obj *column;
+
+    rb_grn_index_column_deconstruct(SELF(self), &column, NULL,
+				    NULL, NULL,
+				    NULL, NULL, NULL, NULL,
+				    NULL, NULL);
+
+    return CBOOL2RVAL(column->header.flags & GRN_OBJ_WITH_SECTION);
+}
+
+/*
+ * Document-method: with_weight?
+ *
+ * call-seq:
+ *   column.with_weight? -> true/false
+ *
+ * _column_がウェイト情報も格納する場合は+true+を返します。
+ */
+static VALUE
+rb_grn_index_column_with_weight_p (VALUE self)
+{
+    grn_obj *column;
+
+    rb_grn_index_column_deconstruct(SELF(self), &column, NULL,
+				    NULL, NULL,
+				    NULL, NULL, NULL, NULL,
+				    NULL, NULL);
+
+    return CBOOL2RVAL(column->header.flags & GRN_OBJ_WITH_WEIGHT);
+}
+
+/*
+ * Document-method: with_position?
+ *
+ * call-seq:
+ *   column.with_position? -> true/false
+ *
+ * _column_が位置情報も格納する場合は+true+を返します。
+ */
+static VALUE
+rb_grn_index_column_with_position_p (VALUE self)
+{
+    grn_obj *column;
+
+    rb_grn_index_column_deconstruct(SELF(self), &column, NULL,
+				    NULL, NULL,
+				    NULL, NULL, NULL, NULL,
+				    NULL, NULL);
+
+    return CBOOL2RVAL(column->header.flags & GRN_OBJ_WITH_POSITION);
+}
+
 void
 rb_grn_init_index_column (VALUE mGrn)
 {
@@ -501,4 +564,11 @@ rb_grn_init_index_column (VALUE mGrn)
 
     rb_define_method(rb_cGrnIndexColumn, "search",
 		     rb_grn_index_column_search, -1);
+
+    rb_define_method(rb_cGrnIndexColumn, "with_section?",
+		     rb_grn_index_column_with_section_p, 0);
+    rb_define_method(rb_cGrnIndexColumn, "with_weight?",
+		     rb_grn_index_column_with_weight_p, 0);
+    rb_define_method(rb_cGrnIndexColumn, "with_position?",
+		     rb_grn_index_column_with_position_p, 0);
 }
