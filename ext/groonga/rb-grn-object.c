@@ -133,8 +133,8 @@ rb_grn_object_finalizer (grn_ctx *context, int n_args, grn_obj **grn_objects,
 				      RB_GRN_INDEX_COLUMN(rb_grn_object));
 	break;
       case GRN_ACCESSOR:
-	rb_grn_named_object_finalizer(context, grn_object,
-				      RB_GRN_NAMED_OBJECT(rb_grn_object));
+	rb_grn_accessor_finalizer(context, grn_object,
+				  RB_GRN_ACCESSOR(rb_grn_object));
 	break;
       case GRN_EXPR:
 	rb_grn_expression_finalizer(context, grn_object,
@@ -378,8 +378,12 @@ rb_grn_object_assign (VALUE klass, VALUE self, VALUE rb_context,
 	rb_grn_object_bind_common(klass, self, rb_context, rb_grn_object,
 				  context, object);
 	rb_grn_column_bind(RB_GRN_COLUMN(rb_grn_object), context, object);
-    } else if (klass == rb_cGrnAccessor ||
-	       klass == rb_cGrnViewAccessor) {
+    } else if (klass == rb_cGrnAccessor) {
+	rb_grn_object = ALLOC(RbGrnAccessor);
+	rb_grn_object_bind_common(klass, self, rb_context, rb_grn_object,
+				  context, object);
+	rb_grn_accessor_bind(RB_GRN_ACCESSOR(rb_grn_object), context, object);
+    } else if (klass == rb_cGrnViewAccessor) {
 	rb_grn_object = ALLOC(RbGrnNamedObject);
 	rb_grn_object_bind_common(klass, self, rb_context, rb_grn_object,
 				  context, object);

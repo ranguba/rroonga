@@ -18,7 +18,7 @@
 
 #include "rb-grn.h"
 
-#define SELF(object) (RVAL2GRNACCESSOR(object))
+#define SELF(object) ((RbGrnAccessor *)DATA_PTR(object))
 
 VALUE rb_cGrnAccessor;
 
@@ -39,6 +39,66 @@ rb_grn_accessor_to_ruby_object (grn_ctx *context, grn_obj *table,
     return GRNOBJECT2RVAL(rb_cGrnAccessor, context, table, owner);
 }
 
+void
+rb_grn_accessor_bind (RbGrnAccessor *rb_accessor,
+		      grn_ctx *context, grn_obj *accessor)
+{
+    RbGrnObject *rb_grn_object;
+    RbGrnNamedObject *rb_grn_named_object;
+    char name[GRN_TABLE_MAX_KEY_SIZE];
+    int name_size;
+
+    rb_grn_object = RB_GRN_OBJECT(rb_accessor);
+    rb_grn_named_object = RB_GRN_NAMED_OBJECT(rb_accessor);
+    rb_grn_named_object_bind(rb_grn_named_object, context, accessor);
+
+    name_size = grn_column_name(context, accessor, name, sizeof(name));
+    if (name_size > 0) {
+	rb_grn_named_object_set_name(rb_grn_named_object, name, name_size);
+    }
+
+    rb_accessor->value = grn_obj_open(context, GRN_BULK, 0,
+				      rb_grn_object->range_id);
+}
+
+
+void
+rb_grn_accessor_finalizer (grn_ctx *context, grn_obj *grn_object,
+			   RbGrnAccessor *rb_accessor)
+{
+    rb_grn_named_object_finalizer(context, grn_object,
+				  RB_GRN_NAMED_OBJECT(rb_accessor));
+    if (context && rb_accessor->value)
+	grn_obj_unlink(context, rb_accessor->value);
+    rb_accessor->value = NULL;
+}
+
+/*
+ * call-seq:
+ *   accessor.local_name
+ *
+ * アクセサ名を返す。
+ *
+ *   items = Groonga::Array.create(:name => "Items")
+ *   id = items.column("_id")
+ *   id.name # => nil
+ *   id.local_name # => "_id"
+ */
+static VALUE
+rb_grn_accessor_get_local_name (VALUE self)
+{
+    RbGrnAccessor *rb_grn_accessor;
+    RbGrnNamedObject *rb_grn_named_object;
+
+    rb_grn_accessor = SELF(self);
+    rb_grn_named_object = RB_GRN_NAMED_OBJECT(rb_grn_accessor);
+    if (rb_grn_named_object->name_size == 0)
+	return Qnil;
+
+    return rb_str_new(rb_grn_named_object->name,
+		      rb_grn_named_object->name_size);
+}
+
 /*
  * Document-class: Groonga::Accessor < Groonga::Object
  *
@@ -49,4 +109,7 @@ void
 rb_grn_init_accessor (VALUE mGrn)
 {
     rb_cGrnAccessor = rb_define_class_under(mGrn, "Accessor", rb_cGrnObject);
+
+    rb_define_method(rb_cGrnAccessor, "local_name",
+		     rb_grn_accessor_get_local_name, 0);
 }

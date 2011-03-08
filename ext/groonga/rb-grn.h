@@ -153,6 +153,7 @@ typedef struct _RbGrnAccessor RbGrnAccessor;
 struct _RbGrnAccessor
 {
     RbGrnNamedObject parent;
+    grn_obj *value;
 };
 
 typedef struct _RbGrnTableCursor RbGrnTableCursor;
@@ -518,6 +519,11 @@ VALUE          rb_grn_column_expression_builder_build
     (rb_grn_column_from_ruby_object(object, context))
 #define GRNCOLUMN2RVAL(klass, context, column, owner) \
     (rb_grn_column_to_ruby_object(klass, context, column, owner))
+
+#define RVAL2GRNACCESSOR(object) \
+    (rb_grn_accessor_from_ruby_object(object))
+#define GRNACCESSOR2RVAL(context, accessor, owner) \
+    (rb_grn_accessor_to_ruby_object(context, accessor, owner))
 
 #define RVAL2GRNQUERY(object)         (rb_grn_query_from_ruby_object(object))
 #define GRNQUERY2RVAL(context, column)(rb_grn_query_to_ruby_object(context, column))
