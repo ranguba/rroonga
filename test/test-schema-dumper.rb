@@ -68,7 +68,7 @@ class SchemaDumperTest < Test::Unit::TestCase
   class RubySyntaxSchemaDumperTest < SchemaDumperTest
     def test_simple
       define_simple_schema
-      assert_equal(<<-EOS, Groonga::Schema.dump)
+      assert_equal(<<-EOS, dump)
 create_table("Posts",
              :force => true) do |table|
   table.short_text("title")
@@ -78,7 +78,7 @@ EOS
 
     def test_reference
       define_reference_schema
-      assert_equal(<<-EOS, Groonga::Schema.dump)
+      assert_equal(<<-EOS, dump)
 create_table("Comments",
              :force => true) do |table|
   table.text("content")
@@ -104,7 +104,7 @@ EOS
 
     def test_index
       define_index_schema
-      assert_equal(<<-EOS, Groonga::Schema.dump)
+      assert_equal(<<-EOS, dump)
 create_table("Items",
              :type => :patricia_trie,
              :key_type => "ShortText",
@@ -125,6 +125,57 @@ change_table("Terms") do |table|
   table.index("Items", "title", :name => "Items_title")
 end
 EOS
+    end
+
+    private
+    def dump
+      Groonga::Schema.dump
+    end
+  end
+
+  class CommandSyntaxSchemaDumperTest < SchemaDumperTest
+    def test_simple
+      define_simple_schema
+      assert_equal(<<-EOS, dump)
+table_create Posts TABLE_NO_KEY
+column_create Posts title COLUMN_SCALAR ShortText
+EOS
+    end
+
+    def test_reference
+      define_reference_schema
+      assert_equal(<<-EOS, dump)
+table_create Comments TABLE_NO_KEY
+column_create Comments content COLUMN_SCALAR Text
+column_create Comments issued COLUMN_SCALAR Time
+
+table_create Items TABLE_NO_KEY
+column_create Items title COLUMN_SCALAR ShortText
+
+table_create Users TABLE_NO_KEY
+column_create Users name COLUMN_SCALAR ShortText
+
+column_create Comments author COLUMN_SCALAR Users
+column_create Comments item COLUMN_SCALAR Items
+EOS
+    end
+
+    def test_index
+      define_index_schema
+      assert_equal(<<-EOS, dump)
+table_create Items TABLE_PAT_KEY --key_type ShortText
+column_create Items title COLUMN_SCALAR ShortText
+
+table_create Terms TABLE_PAT_KEY --key_type ShortText --default_tokenizer TokenBigram
+
+column_create Terms Items__key COLUMN_INDEX|WITH_POSITION Items _key
+column_create Terms Items_title COLUMN_INDEX|WITH_POSITION Items title
+EOS
+    end
+
+    private
+    def dump
+      Groonga::Schema.dump(:syntax => :command)
     end
   end
 end

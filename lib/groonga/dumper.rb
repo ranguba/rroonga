@@ -273,6 +273,90 @@ module Groonga
     end
 
     class CommandSyntax < BaseSyntax # :nodoc:
+      private
+      def create_table_header(table)
+        parameters = []
+        flags = []
+        case table
+        when Groonga::Array
+          flags << "TABLE_NO_KEY"
+        when Groonga::Hash
+          flags << "TABLE_HASH_KEY"
+          if table.domain and table.normalize_key?
+            flags << "KEY_NORMALIZE"
+          end
+        when Groonga::PatriciaTrie
+          flags << "TABLE_PAT_KEY"
+          if table.domain and table.register_key_with_sis?
+            flags << "KEY_WITH_SIS"
+          end
+        end
+        parameters << "#{flags.join('|')}"
+        if table.domain
+          parameters << "--key_type #{table.domain.name}"
+        end
+        if table.range
+          parameters << "--value_type #{table.range.name}"
+        end
+        if table.domain
+          default_tokenizer = table.default_tokenizer
+          if default_tokenizer
+            parameters << "--default_tokenizer #{default_tokenizer.name}"
+          end
+        end
+        write("table_create #{table.name} #{parameters.join(' ')}\n")
+      end
+
+      def create_table_footer(table)
+      end
+
+      def change_table_header(table)
+      end
+
+      def change_table_footer(table)
+      end
+
+      def define_column(table, column)
+        parameters = []
+        parameters << table.name
+        parameters << column.local_name
+        flags = []
+        if column.scalar?
+          flags << "COLUMN_SCALAR"
+        elsif column.vector?
+          flags << "COLUMN_VECTOR"
+        end
+        # TODO: support COMPRESS_ZLIB and COMPRESS_LZO?
+        parameters << "#{flags.join('|')}"
+        parameters << "#{column.range.name}"
+        write("column_create #{parameters.join(' ')}\n")
+      end
+
+      def define_reference_column(table, column)
+        define_column(table, column)
+      end
+
+      def define_index_column(table, column)
+        parameters = []
+        parameters << table.name
+        parameters << column.local_name
+        flags = []
+        flags << "COLUMN_INDEX"
+        flags << "WITH_SECTION" if column.with_section?
+        flags << "WITH_WEIGHT" if column.with_weight?
+        flags << "WITH_POSITION" if column.with_position?
+        parameters << "#{flags.join('|')}"
+        parameters << "#{column.range.name}"
+        source_names = column.sources.collect do |source|
+          if source.is_a?(table.class)
+            "_key"
+          else
+            source.local_name
+          end
+        end
+        parameters << "#{source_names.join(',')}" unless source_names.empty?
+        write("column_create #{parameters.join(' ')}\n")
+      end
     end
   end
 

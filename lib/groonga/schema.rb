@@ -386,9 +386,11 @@ module Groonga
         end
       end
 
-      # スキーマの内容を文字列で返す。返された値は
-      # Groonga::Schema.restoreすることによりスキーマ内に組
-      # み込むことができる。
+      # スキーマの内容を文字列をRubyスクリプト形式またはgrn式
+      # 形式で返す。デフォルトはRubyスクリプト形式である。
+      # Rubyスクリプト形式で返された値は
+      # Groonga::Schema.restoreすることによりスキーマ内に組み
+      # 込むことができる。
       #
       #   dump.rb:
       #     File.open("/tmp/groonga-schema.rb", "w") do |schema|
@@ -400,14 +402,35 @@ module Groonga
       #     Groonga::Database.create(:path => "/tmp/new-db.grn")
       #     Groonga::Schema.restore(dumped_text)
       #
+      # grn式形式で返された値はgroongaコマンドで読み込むこと
+      # ができる。
+      #
+      #   dump.rb:
+      #     File.open("/tmp/groonga-schema.grn", "w") do |schema|
+      #       dumped_text = Groonga::Schema.dump(:syntax => :command)
+      #     end
+      #
+      #   % groonga db/path < /tmp/groonga-schema.grn
+      #
       # _options_に指定可能な値は以下の通り。
       #
       # [+:context+]
       #   スキーマ定義時に使用するGroonga::Contextを指定する。
       #   省略した場合はGroonga::Context.defaultを使用する。
+      #
+      # [+:syntax+]
+      #   スキーマの文字列の形式を指定する。指定可能な値は以
+      #   下の通り。
+      #
+      #   [+:ruby+]
+      #     Rubyスクリプト形式。省略した場合、+nil+の場合も
+      #     Rubyスクリプト形式になる。
+      #
+      #   [+:command+]
+      #     grn式形式。groongaコマンドで読み込むことができる。
       def dump(options={})
-        options = options.dup
-        schema = new(:context => options.delete(:context))
+        schema = new(:context => options[:context],
+                     :syntax => options[:syntax])
         schema.dump
       end
 
@@ -516,7 +539,7 @@ module Groonga
     # Groonga::Schema#restoreすることによりスキーマ内に組み込むことができる。
     def dump
       dumper = SchemaDumper.new(:context => @options[:context],
-                                :syntax => :ruby)
+                                :syntax => @options[:syntax] || :ruby)
       dumper.dump
     end
 
