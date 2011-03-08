@@ -413,20 +413,29 @@ module Groonga
       @table.each do |record|
         write(",\n")
         values = columns.collect do |column|
-          value = column[record.id]
-          while value.is_a?(Groonga::Record)
-            if value.support_key?
-              value = value.key
-            else
-              value = value.id
-            end
-          end
-          if value.is_a?(Time)
-            value = value.utc.strftime("%Y-%m-%d %H:%M:%S.%L")
-          end
-          value
+          resolve_value(column[record.id])
         end
         write(values.to_json)
+      end
+    end
+
+    def resolve_value(value)
+      case value
+      when ::Array
+        value.collect do |v|
+          resolve_value(v)
+        end
+      when Groonga::Record
+        if value.support_key?
+          value = value.key
+        else
+          value = value.id
+        end
+        resolve_value(value)
+      when Time
+        value.utc.strftime("%Y-%m-%d %H:%M:%S.%L")
+      else
+        value
       end
     end
 
