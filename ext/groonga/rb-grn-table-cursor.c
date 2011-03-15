@@ -69,9 +69,9 @@ rb_grn_table_cursor_order_to_flag (VALUE rb_order)
 {
     int flag = 0;
 
-    if (NIL_P(rb_order)) {
-    } else if (rb_grn_equal_option(rb_order, "asc") ||
-	       rb_grn_equal_option(rb_order, "ascending")) {
+    if (NIL_P(rb_order) ||
+	rb_grn_equal_option(rb_order, "asc") ||
+	rb_grn_equal_option(rb_order, "ascending")) {
 	flag |= GRN_CURSOR_ASCENDING;
     } else if (rb_grn_equal_option(rb_order, "desc") ||
 	       rb_grn_equal_option(rb_order, "descending")) {
