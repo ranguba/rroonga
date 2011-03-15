@@ -387,6 +387,10 @@ VALUE          rb_grn_table_set_column_value        (VALUE self,
 
 grn_ctx       *rb_grn_table_cursor_ensure_context   (VALUE cursor,
 						     VALUE *rb_context);
+int            rb_grn_table_cursor_order_to_flag    (VALUE rb_order);
+int            rb_grn_table_cursor_order_by_to_flag (unsigned char table_type,
+						     VALUE rb_table,
+						     VALUE rb_order_by);
 
 void           rb_grn_table_key_support_bind        (RbGrnTableKeySupport *rb_grn_table_key_support,
 						     grn_ctx *context,

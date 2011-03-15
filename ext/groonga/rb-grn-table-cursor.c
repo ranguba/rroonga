@@ -1,6 +1,6 @@
 /* -*- c-file-style: "ruby" -*- */
 /*
-  Copyright (C) 2009-2010  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2011  Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -62,6 +62,61 @@ rb_grn_table_cursor_deconstruct (RbGrnTableCursor *rb_grn_table_cursor,
     rb_grn_object_deconstruct(rb_grn_object, cursor, context,
 			      domain_id, domain,
 			      range_id, range);
+}
+
+int
+rb_grn_table_cursor_order_to_flag (VALUE rb_order)
+{
+    int flag = 0;
+
+    if (NIL_P(rb_order)) {
+    } else if (rb_grn_equal_option(rb_order, "asc") ||
+	       rb_grn_equal_option(rb_order, "ascending")) {
+	flag |= GRN_CURSOR_ASCENDING;
+    } else if (rb_grn_equal_option(rb_order, "desc") ||
+	       rb_grn_equal_option(rb_order, "descending")) {
+	flag |= GRN_CURSOR_DESCENDING;
+    } else {
+	rb_raise(rb_eArgError,
+		 "order should be one of "
+		 "[:asc, :ascending, :desc, :descending]: %s",
+		 rb_grn_inspect(rb_order));
+    }
+
+    return flag;
+}
+
+int
+rb_grn_table_cursor_order_by_to_flag (unsigned char table_type,
+				      VALUE rb_table,
+				      VALUE rb_order_by)
+{
+    int flag = 0;
+
+    if (NIL_P(rb_order_by)) {
+	if (table_type == GRN_TABLE_PAT_KEY) {
+	    flag |= GRN_CURSOR_BY_KEY;
+	} else {
+	    flag |= GRN_CURSOR_BY_ID;
+	}
+    } else if (rb_grn_equal_option(rb_order_by, "id")) {
+	flag |= GRN_CURSOR_BY_ID;
+    } else if (rb_grn_equal_option(rb_order_by, "key")) {
+	if (table_type != GRN_TABLE_PAT_KEY) {
+	    rb_raise(rb_eArgError,
+		     "order_by => :key is available "
+		     "only for Groonga::PatriciaTrie: %s",
+		     rb_grn_inspect(rb_table));
+	}
+	flag |= GRN_CURSOR_BY_KEY;
+    } else {
+	rb_raise(rb_eArgError,
+		 "order_by should be one of [:id%s]: %s",
+		 table_type == GRN_TABLE_PAT_KEY ? ", :key" : "",
+		 rb_grn_inspect(rb_order_by));
+    }
+
+    return flag;
 }
 
 /*

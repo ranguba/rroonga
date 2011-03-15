@@ -1,6 +1,6 @@
 /* -*- c-file-style: "ruby" -*- */
 /*
-  Copyright (C) 2009-2010  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2011  Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -740,41 +740,10 @@ rb_grn_table_open_grn_cursor (int argc, VALUE *argv, VALUE self,
     if (!NIL_P(rb_limit))
 	limit = NUM2INT(rb_limit);
 
-    if (NIL_P(rb_order)) {
-    } else if (rb_grn_equal_option(rb_order, "asc") ||
-	       rb_grn_equal_option(rb_order, "ascending")) {
-	flags |= GRN_CURSOR_ASCENDING;
-    } else if (rb_grn_equal_option(rb_order, "desc") ||
-	       rb_grn_equal_option(rb_order, "descending")) {
-	flags |= GRN_CURSOR_DESCENDING;
-    } else {
-	rb_raise(rb_eArgError,
-		 "order should be one of "
-		 "[:asc, :ascending, :desc, :descending]: %s",
-		 rb_grn_inspect(rb_order));
-    }
-    if (NIL_P(rb_order_by)) {
-	if (table->header.type == GRN_TABLE_PAT_KEY) {
-	    flags |= GRN_CURSOR_BY_KEY;
-	} else {
-	    flags |= GRN_CURSOR_BY_ID;
-	}
-    } else if (rb_grn_equal_option(rb_order_by, "id")) {
-	flags |= GRN_CURSOR_BY_ID;
-    } else if (rb_grn_equal_option(rb_order_by, "key")) {
-	if (table->header.type != GRN_TABLE_PAT_KEY) {
-	    rb_raise(rb_eArgError,
-		     "order_by => :key is available "
-		     "only for Groonga::PatriciaTrie: %s",
-		     rb_grn_inspect(self));
-	}
-	flags |= GRN_CURSOR_BY_KEY;
-    } else {
-	rb_raise(rb_eArgError,
-		 "order_by should be one of [:id%s]: %s",
-		 table->header.type == GRN_TABLE_PAT_KEY ? ", :key" : "",
-		 rb_grn_inspect(rb_order_by));
-    }
+    flags |= rb_grn_table_cursor_order_to_flag(rb_order);
+    flags |= rb_grn_table_cursor_order_by_to_flag(table->header.type,
+						  self,
+						  rb_order_by);
 
     if (RVAL2CBOOL(rb_greater_than))
 	flags |= GRN_CURSOR_GT;
@@ -819,6 +788,7 @@ rb_grn_table_open_grn_cursor (int argc, VALUE *argv, VALUE self,
  * [+:order+]
  *   +:asc+または+:ascending+を指定すると昇順にレコードを取
  *   り出す。
+ *
  *   +:desc+または+:descending+を指定すると降順にレコードを
  *   取り出す。
  *
