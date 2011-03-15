@@ -1,6 +1,6 @@
 /* -*- c-file-style: "ruby" -*- */
 /*
-  Copyright (C) 2009-2010  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2011  Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -287,27 +287,69 @@ rb_grn_database_s_open (int argc, VALUE *argv, VALUE klass)
 /*
  * call-seq:
  *   database.each {|object| ...}
+ *   database.each(options=nil) {|object| ...}
  *
  * データベース内のオブジェクトを順番にブロックに渡す。
+ *
+ * _options_にはハッシュでオプションを指定する。指定できるオ
+ * プションは以下の通り。
+ *
+ * [+:order+]
+ *   +:asc+または+:ascending+を指定すると昇順にレコードを取
+ *   り出す。（デフォルト）
+ *
+ *   +:desc+または+:descending+を指定すると降順にレコードを
+ *   取り出す。
+ *
+ * [+:order_by+]
+ *   +:id+を指定するとID順にレコードを取り出す。
+ *
+ *   +:key+指定するとキー順にレコードを取り出す。（デフォル
+ *   ト）
  *
  * すべてのオブジェクトの名前を表示する:
  *   database.each do |object|
  *     p object.name
  *   end
+ *
+ * すべてのオブジェクトの名前をID順で表示する:
+ *   database.each(:order_by => :id) do |object|
+ *     p object.name
+ *   end
+ *
+ * すべてのオブジェクトの名前をキー名の降順で表示する:
+ *   database.each(:order_by => :key, :order => :desc) do |object|
+ *     p object.name
+ *   end
  */
 static VALUE
-rb_grn_database_each (VALUE self)
+rb_grn_database_each (int argc, VALUE *argv, VALUE self)
 {
     grn_ctx *context = NULL;
     grn_obj *database;
     grn_table_cursor *cursor;
-    VALUE rb_cursor;
+    VALUE rb_cursor, rb_options, rb_order, rb_order_by;
+    int flags = 0;
     grn_id id;
 
     rb_grn_database_deconstruct(SELF(self), &database, &context,
 				NULL, NULL, NULL, NULL);
+
+    rb_scan_args(argc, argv, "01", &rb_options);
+
+    rb_grn_scan_options(rb_options,
+			"order", &rb_order,
+			"order_by", &rb_order_by,
+			NULL);
+
+    flags |= rb_grn_table_cursor_order_to_flag(rb_order);
+    flags |= rb_grn_table_cursor_order_by_to_flag(GRN_TABLE_PAT_KEY,
+						  self,
+						  rb_order_by);
+
     cursor = grn_table_cursor_open(context, database, NULL, 0, NULL, 0,
-				   0, -1, GRN_CURSOR_ASCENDING);
+				   0, -1,
+				   flags);
     rb_cursor = GRNTABLECURSOR2RVAL(Qnil, context, cursor);
     rb_iv_set(self, "cursor", rb_cursor);
     while ((id = grn_table_cursor_next(context, cursor)) != GRN_ID_NIL) {
@@ -480,7 +522,7 @@ rb_grn_init_database (VALUE mGrn)
 		     rb_grn_database_initialize, -1);
 
     rb_define_method(rb_cGrnDatabase, "each",
-		     rb_grn_database_each, 0);
+		     rb_grn_database_each, -1);
 
     rb_define_method(rb_cGrnDatabase, "close",
 		     rb_grn_database_close, 0);
