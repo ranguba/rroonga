@@ -36,7 +36,7 @@ module Groonga
       end
 
       dump_schema(options)
-      database.each do |object|
+      database.each(:order_by => :key) do |object|
         next unless object.is_a?(Groonga::Table)
         next if object.size.zero?
         next if lexicon_table?(object)
