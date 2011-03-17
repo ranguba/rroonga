@@ -67,7 +67,7 @@ EOS
 load --table Posts
 [
 ["_id","author","created_at","n_goods","published","rank","tags","title"],
-[1,"mori","2010-03-08 07:52:00.000000",4,true,10,["search","mori"],"Why search engine find?"]
+[1,"mori",1268034720.0,4,true,10,["search","mori"],"Why search engine find?"]
 ]
 EOS
   end

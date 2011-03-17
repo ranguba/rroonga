@@ -433,7 +433,9 @@ module Groonga
         end
         resolve_value(value)
       when Time
-        value.utc.strftime("%Y-%m-%d %H:%M:%S.%6N")
+        # TODO: groonga should support UTC format literal
+        # value.utc.strftime("%Y-%m-%d %H:%M:%S.%6N")
+        value.to_f
       when NilClass
         # TODO: remove me. nil reference column value
         # doesn't accept null.
