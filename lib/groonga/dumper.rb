@@ -433,7 +433,7 @@ module Groonga
         end
         resolve_value(value)
       when Time
-        value.utc.strftime("%Y-%m-%d %H:%M:%S.%L")
+        value.utc.strftime("%Y-%m-%d %H:%M:%S.%6N")
       when NilClass
         # TODO: remove me. nil reference column value
         # doesn't accept null.
