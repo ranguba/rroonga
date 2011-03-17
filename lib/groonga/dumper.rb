@@ -292,15 +292,12 @@ module Groonga
           flags << "TABLE_NO_KEY"
         when Groonga::Hash
           flags << "TABLE_HASH_KEY"
-          if table.domain and table.normalize_key?
-            flags << "KEY_NORMALIZE"
-          end
         when Groonga::PatriciaTrie
           flags << "TABLE_PAT_KEY"
-          if table.domain and table.normalize_key?
-            flags << "KEY_NORMALIZE"
-          end
-          if table.domain and table.register_key_with_sis?
+        end
+        if table.domain
+          flags << "KEY_NORMALIZE" if table.normalize_key?
+          if table.is_a?(Groonga::PatriciaTrie) and table.register_key_with_sis?
             flags << "KEY_WITH_SIS"
           end
         end
