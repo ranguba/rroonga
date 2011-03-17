@@ -297,6 +297,9 @@ module Groonga
           end
         when Groonga::PatriciaTrie
           flags << "TABLE_PAT_KEY"
+          if table.domain and table.normalize_key?
+            flags << "KEY_NORMALIZE"
+          end
           if table.domain and table.register_key_with_sis?
             flags << "KEY_WITH_SIS"
           end

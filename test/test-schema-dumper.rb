@@ -166,7 +166,7 @@ EOS
 table_create Items TABLE_PAT_KEY --key_type ShortText
 column_create Items title COLUMN_SCALAR ShortText
 
-table_create Terms TABLE_PAT_KEY --key_type ShortText --default_tokenizer TokenBigram
+table_create Terms TABLE_PAT_KEY|KEY_NORMALIZE --key_type ShortText --default_tokenizer TokenBigram
 
 column_create Terms Items__key COLUMN_INDEX|WITH_POSITION Items _key
 column_create Terms Items_title COLUMN_INDEX|WITH_POSITION Items title
