@@ -118,7 +118,7 @@ module Groonga
       end
 
       def dump_schema
-        @database.each do |object|
+        @database.each(:order_by => :key) do |object|
           create_table(object) if object.is_a?(Groonga::Table)
         end
 
