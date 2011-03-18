@@ -1,6 +1,6 @@
 /* -*- c-file-style: "ruby" -*- */
 /*
-  Copyright (C) 2010  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2010-2011  Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -424,6 +424,41 @@ rb_grn_context_set_encoding (VALUE self, VALUE rb_encoding)
 
 /*
  * call-seq:
+ *   context.match_escalation_threshold -> Integer
+ *
+ * このコンテキストを使って検索したときに検索の挙動をエスカレー
+ * ションする閾値を返します。エスカレーションの詳細はgroonga
+ * の検索の仕様に関するドキュメントを参照してください。
+ * http://groonga.org/docs/spec/search.html#spec-search
+ */
+static VALUE
+rb_grn_context_get_match_escalation_threshold (VALUE self)
+{
+    return LL2NUM(grn_ctx_get_match_escalation_threshold(SELF(self)));
+}
+
+/*
+ * call-seq:
+ *   context.match_escalation_threshold=(match_escalation_threshold)
+ *
+ * このコンテキストを使って検索したときに検索の挙動をエスカレー
+ * ションする閾値を設定します。エスカレーションの詳細はgroonga
+ * の検索の仕様に関するドキュメントを参照してください。
+ * http://groonga.org/docs/spec/search.html#spec-search
+ */
+static VALUE
+rb_grn_context_set_match_escalation_threshold (VALUE self, VALUE threshold)
+{
+    grn_ctx *context;
+
+    context = SELF(self);
+    grn_ctx_set_match_escalation_threshold(context, NUM2LL(threshold));
+
+    return threshold;
+}
+
+/*
+ * call-seq:
  *   context.support_zlib?
  *
  * groongaがZlibサポート付きでビルドされていれば+true+、そう
@@ -732,6 +767,10 @@ rb_grn_init_context (VALUE mGrn)
 
     rb_define_method(cGrnContext, "encoding", rb_grn_context_get_encoding, 0);
     rb_define_method(cGrnContext, "encoding=", rb_grn_context_set_encoding, 1);
+    rb_define_method(cGrnContext, "match_escalation_threshold",
+		     rb_grn_context_get_match_escalation_threshold, 0);
+    rb_define_method(cGrnContext, "match_escalation_threshold=",
+		     rb_grn_context_set_match_escalation_threshold, 1);
 
     rb_define_method(cGrnContext, "support_zlib?",
 		     rb_grn_context_support_zlib_p, 0);
