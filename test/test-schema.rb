@@ -31,6 +31,28 @@ class SchemaTest < Test::Unit::TestCase
     end
   end
 
+  def test_path_canonicalization
+    directory = @tmp_dir.to_s
+    table_filename = "hash.groonga"
+
+    canonical_path = directory + "/#{table_filename}"
+    uncanonical_path = directory + "/./#{table_filename}"
+
+    Groonga::Schema.create_table("Posts",
+                                 :type => :hash,
+                                 :key_type => "integer",
+                                 :path => canonical_path) do |table|
+    end
+
+    assert_nothing_raised do
+      Groonga::Schema.create_table("Posts",
+                                   :type => :hash,
+                                   :key_type => "integer",
+                                   :path => uncanonical_path) do |table|
+      end
+    end
+  end
+
   def test_define_hash
     Groonga::Schema.create_table("Posts", :type => :hash) do |table|
     end
