@@ -25,6 +25,12 @@ class SchemaTest < Test::Unit::TestCase
     assert_nil(context["Posts"])
   end
 
+  def test_remove_not_existing_table
+    assert_raise(Groonga::Schema::TableNotExists) do
+      Groonga::Schema.remove_table("NotExistingTable")
+    end
+  end
+
   def test_define_hash
     Groonga::Schema.create_table("Posts", :type => :hash) do |table|
     end

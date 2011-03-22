@@ -1274,12 +1274,19 @@ module Groonga
       end
 
       def define
-        context = @options[:context]
-        table = context[@name]
+        table = removed_table
         dir = columns_directory_path(table)
         result = table.remove
         rmdir_if_dir_exists(dir)
         result
+      end
+
+      private
+      def removed_table
+        context = @options[:context]
+        table = context[@name]
+        raise TableNotExists.new(@name) if table.nil?
+        table
       end
     end
 
