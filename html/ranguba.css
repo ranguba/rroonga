@@ -277,10 +277,29 @@ pre
   overflow: auto;
 }
 
+pre.command,
+pre.code,
+dd
+{
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  -moz-box-shadow: 0.2em 0.2em 0.5em rgb(100, 100, 100);
+  -webkit-box-shadow: 0.2em 0.2em 0.5em rgb(100, 100, 100);
+  box-shadow: 0.2em 0.2em 0.5em rgb(100, 100, 100);
+}
+
 pre.command
 {
   color: white;
   background-color: black;
+  padding: 5px 10px;
+}
+
+pre.code
+{
+  border: solid 1px #abf562;
+  background: #d8ffb2;
   padding: 5px 10px;
 }
 
