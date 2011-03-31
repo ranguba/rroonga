@@ -1,5 +1,23 @@
 = NEWS
 
+== 1.2.0: 2011-04-01
+
+=== Improvements
+
+* Supported groonga 1.2.0.
+* Added Groonga::Accessor#local_name.
+* Added Groonga::IndexColumn#with_section?.
+* Added Groonga::IndexColumn#with_weight?.
+* Added Groonga::IndexColumn#with_position?.
+* Groonga::Schema.dump supported groonga command format dump.
+* Added grndump command.
+* Groonga::Database#each supports order customize.
+* Added Groonga::Context#match_escalation_threshold.
+* Added Groonga::Context#match_escalation_threshold=.
+* Improved error message.
+* Supported Rubyish name like :short_text instead of the
+  official type name like "ShortText" in Groonga::Schema.
+
 == 1.1.0: 2011-02-09
 
 === Improvements

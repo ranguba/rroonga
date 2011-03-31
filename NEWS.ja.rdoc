@@ -1,5 +1,23 @@
 = お知らせ
 
+== 1.2.0: 2011-04-01
+
+=== 改良
+
+* groonga 1.2.0対応。
+* Groonga::Accessor#local_nameを追加。
+* Groonga::IndexColumn#with_section?を追加。
+* Groonga::IndexColumn#with_weight?を追加。
+* Groonga::IndexColumn#with_position?を追加。
+* Groonga::Schema.dumpがgroongaコマンド形式でのダンプに対応。
+* grndumpを追加。
+* Groonga::Database#eachで繰り返す順序を指定可能にした。
+* Groonga::Context#match_escalation_thresholdを追加。
+* Groonga::Context#match_escalation_threshold=を追加。
+* エラーメッセージの改良。
+* Groonga::Schemaの型指定で"ShortText"など正式型名だけではなく、
+  :short_textなどよりRubyらしい名前を使えるようにした。
+
 == 1.1.0: 2011-02-09
 
 === 改良
