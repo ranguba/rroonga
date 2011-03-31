@@ -115,5 +115,30 @@ load --table Users
 ]
 EOS
     end
+
+    def test_limit_tables
+      assert_equal(<<-EOS, dump(:tables => ["Posts"]))
+table_create Posts TABLE_NO_KEY
+column_create Posts created_at COLUMN_SCALAR Time
+column_create Posts n_goods COLUMN_SCALAR UInt32
+column_create Posts published COLUMN_SCALAR Bool
+column_create Posts rank COLUMN_SCALAR Int32
+column_create Posts tags COLUMN_VECTOR Text
+column_create Posts title COLUMN_SCALAR Text
+
+table_create Users TABLE_HASH_KEY --key_type ShortText
+column_create Users name COLUMN_SCALAR Text
+
+column_create Posts author COLUMN_SCALAR Users
+
+column_create Users Posts_author COLUMN_INDEX Posts author
+
+load --table Posts
+[
+["_id","author","created_at","n_goods","published","rank","tags","title"],
+[1,"mori",1268034720.0,4,true,10,["search","mori"],"Why search engine find?"]
+]
+EOS
+    end
   end
 end

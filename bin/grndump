@@ -23,8 +23,15 @@ require 'pathname'
 require 'groonga'
 
 options = OpenStruct.new
+options.tables = []
 option_parser = OptionParser.new do |parser|
   parser.banner += " DB_PATH"
+
+  parser.on("-t=TABLE", "--table=TABLE",
+            "dump only TABLE.",
+            "use this option multiple to dump multiple tables.") do |table|
+    options.tables << table
+  end
 end
 args = option_parser.parse!(ARGV)
 
@@ -35,6 +42,7 @@ end
 db_path = args[0]
 
 database = Groonga::Database.open(db_path)
-database_dumper = Groonga::DatabaseDumper.new(:options => database,
+database_dumper = Groonga::DatabaseDumper.new(:database => database,
+                                              :tables => options.tables,
                                               :output => STDOUT)
 database_dumper.dump

@@ -40,6 +40,7 @@ module Groonga
         next unless object.is_a?(Groonga::Table)
         next if object.size.zero?
         next if lexicon_table?(object)
+        next unless target_table?(options[:tables], object)
         output.write("\n")
         dump_records(object, options)
       end
@@ -64,6 +65,13 @@ module Groonga
       table.support_key? and
         table.default_tokenizer and
         table.columns.any? {|column| column.index?}
+    end
+
+    def target_table?(target_tables, table)
+      return true if target_tables.nil? or target_tables.empty?
+      target_tables.any? do |name|
+        name === table.name
+      end
     end
   end
 
