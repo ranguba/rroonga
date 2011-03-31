@@ -489,6 +489,18 @@ class SchemaTest < Test::Unit::TestCase
     assert_directory_not_removed(dir)
   end
 
+  def test_default_tokenizer_name_shortcut
+    Groonga::Schema.define do |schema|
+      schema.create_table("Terms",
+                          :type => :patricia_trie,
+                          :key_normalize => true,
+                          :default_tokenizer => :bigram) do |table|
+      end
+    end
+
+    assert_equal(Groonga["TokenBigram"], Groonga["Terms"].default_tokenizer)
+  end
+
   private
   def columns_directory_path(table)
     "#{table.path}.columns"
