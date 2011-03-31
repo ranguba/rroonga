@@ -41,8 +41,14 @@ option_parser = OptionParser.new do |parser|
 
   parser.on("-t=TABLE", "--table=TABLE",
             "dump only TABLE.",
-            "use this option multiple to dump multiple tables.") do |table|
-    options.tables << table
+            "use this option multiple to dump multiple tables.",
+            "use /.../ as TABLE to match table name with regexp.") do |table|
+    case table
+    when /\A\/(.*)\/(i)?\z/
+      options.tables << Regexp.new($1, $2 == "i")
+    when
+      options.tables << table
+    end
   end
 end
 args = option_parser.parse!(ARGV)

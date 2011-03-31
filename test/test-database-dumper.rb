@@ -119,6 +119,18 @@ load --table Posts
 EOS
     end
 
+    def test_limit_tables_with_regexp
+      assert_equal(<<-EOS, dump(:tables => [/Posts?/]))
+#{dumped_schema.chomp}
+
+load --table Posts
+[
+["_id","author","created_at","n_goods","published","rank","tags","title"],
+[1,"mori",1268034720.0,4,true,10,["search","mori"],"Why search engine find?"]
+]
+EOS
+    end
+
     def test_no_schema
       assert_equal(<<-EOS, dump(:dump_schema => false))
 load --table Posts
