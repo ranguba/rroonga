@@ -25,12 +25,18 @@ require 'groonga'
 options = OpenStruct.new
 options.tables = []
 options.dump_schema = true
+options.dump_tables = true
 option_parser = OptionParser.new do |parser|
   parser.banner += " DB_PATH"
 
   parser.on("--no-dump-schema",
             "don't dump schema.") do |boolean|
     options.dump_schema = boolean
+  end
+
+  parser.on("--no-dump-tables",
+            "don't dump tables.") do |boolean|
+    options.dump_tables = boolean
   end
 
   parser.on("-t=TABLE", "--table=TABLE",
@@ -50,9 +56,10 @@ db_path = args[0]
 database = Groonga::Database.open(db_path)
 dumper_options = {
   :database => database,
-  :tables => options.tables,
-  :dump_schema => options.dump_schema,
   :output => STDOUT,
+  :dump_schema => options.dump_schema,
+  :dump_tables => options.dump_tables,
+  :tables => options.tables,
 }
 database_dumper = Groonga::DatabaseDumper.new(dumper_options)
 database_dumper.dump

@@ -28,26 +28,15 @@ module Groonga
       options = @options.dup
       have_output = !@options[:output].nil?
       options[:output] ||= StringIO.new
-      output = options[:output]
-      database = options[:database]
-      if database.nil?
+      if options[:database].nil?
         options[:context] ||= Groonga::Context.default
-        database = options[:database] = options[:context].database
+        options[:database] = options[:context].database
       end
       options[:dump_schema] = true if options[:dump_schema].nil?
+      options[:dump_tables] = true if options[:dump_tables].nil?
 
-      dump_schema_p = options[:dump_schema]
-      dump_schema(options) if dump_schema_p
-      first_table = true
-      database.each(:order_by => :key) do |object|
-        next unless object.is_a?(Groonga::Table)
-        next if object.size.zero?
-        next if lexicon_table?(object)
-        next unless target_table?(options[:tables], object)
-        output.write("\n") if !first_table or dump_schema_p
-        first_table = false
-        dump_records(object, options)
-      end
+      dump_schema(options) if options[:dump_schema]
+      dump_tables(options) if options[:dump_tables]
 
       if have_output
         nil
@@ -59,6 +48,19 @@ module Groonga
     private
     def dump_schema(options)
       SchemaDumper.new(options.merge(:syntax => :command)).dump
+    end
+
+    def dump_tables(options)
+      first_table = true
+      options[:database].each(:order_by => :key) do |object|
+        next unless object.is_a?(Groonga::Table)
+        next if object.size.zero?
+        next if lexicon_table?(object)
+        next unless target_table?(options[:tables], object)
+        options[:output].write("\n") if !first_table or options[:dump_schema]
+        first_table = false
+        dump_records(object, options)
+      end
     end
 
     def dump_records(table, options)
