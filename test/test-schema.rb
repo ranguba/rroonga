@@ -501,6 +501,19 @@ class SchemaTest < Test::Unit::TestCase
     assert_equal(Groonga["TokenBigram"], Groonga["Terms"].default_tokenizer)
   end
 
+  def test_duplicated_shortcut_name
+    short_text = Groonga::Type.new("short_text", :size => 1024)
+    Groonga::Schema.define do |schema|
+      schema.create_table("Users",
+                          :type => :patricia_trie,
+                          :key_normalize => true,
+                          :key_type => :short_text) do |table|
+      end
+    end
+
+    assert_equal(short_text, Groonga["Users"].domain)
+  end
+
   private
   def columns_directory_path(table)
     "#{table.path}.columns"

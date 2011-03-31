@@ -496,10 +496,11 @@ module Groonga
         "mecab" => "TokenMecab",
         "token_mecab"=> "TokenMecab",
       }
-      def normalize_type(type) # :nodoc:
+      def normalize_type(type, options={}) # :nodoc:
         return type if type.nil?
         return type if type.is_a?(Groonga::Object)
         type = type.to_s if type.is_a?(Symbol)
+        return type if (options[:context] || Groonga::Context.default)[type]
         NORMALIZE_TYPE_TABLE[type] || type
       end
     end
@@ -1237,7 +1238,7 @@ module Groonga
       end
 
       def normalize_type(type)
-        Schema.normalize_type(type)
+        Schema.normalize_type(type, :context => context)
       end
 
       def resolve_name(type)
@@ -1420,7 +1421,7 @@ module Groonga
         else
           resolved_type = @type
         end
-        Schema.normalize_type(resolved_type)
+        Schema.normalize_type(resolved_type, :context => context)
       end
 
       def same_column?(context, column)
