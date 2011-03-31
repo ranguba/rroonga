@@ -61,7 +61,8 @@ module Groonga
     end
 
     def lexicon_table?(table)
-      table.default_tokenizer and
+      table.support_key? and
+        table.default_tokenizer and
         table.columns.any? {|column| column.index?}
     end
   end
