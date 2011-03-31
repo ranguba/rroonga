@@ -34,14 +34,18 @@ module Groonga
         options[:context] ||= Groonga::Context.default
         database = options[:database] = options[:context].database
       end
+      options[:dump_schema] = true if options[:dump_schema].nil?
 
-      dump_schema(options)
+      dump_schema_p = options[:dump_schema]
+      dump_schema(options) if dump_schema_p
+      first_table = true
       database.each(:order_by => :key) do |object|
         next unless object.is_a?(Groonga::Table)
         next if object.size.zero?
         next if lexicon_table?(object)
         next unless target_table?(options[:tables], object)
-        output.write("\n")
+        output.write("\n") if !first_table or dump_schema_p
+        first_table = false
         dump_records(object, options)
       end
 

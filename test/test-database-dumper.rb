@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2010  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2011  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -137,6 +137,22 @@ load --table Posts
 [
 ["_id","author","created_at","n_goods","published","rank","tags","title"],
 [1,"mori",1268034720.0,4,true,10,["search","mori"],"Why search engine find?"]
+]
+EOS
+    end
+
+    def test_no_schema
+      assert_equal(<<-EOS, dump(:dump_schema => false))
+load --table Posts
+[
+["_id","author","created_at","n_goods","published","rank","tags","title"],
+[1,"mori",1268034720.0,4,true,10,["search","mori"],"Why search engine find?"]
+]
+
+load --table Users
+[
+["_key","name"],
+["mori",""]
 ]
 EOS
     end
