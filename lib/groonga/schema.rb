@@ -427,7 +427,8 @@ module Groonga
       #     Rubyスクリプト形式になる。
       #
       #   [+:command+]
-      #     grn式形式。groongaコマンドで読み込むことができる。
+      #     groongaコマンド形式。groongaコマンドで読み込むこ
+      #     とができる。
       def dump(options={})
         schema = new(:context => options[:context],
                      :syntax => options[:syntax])
