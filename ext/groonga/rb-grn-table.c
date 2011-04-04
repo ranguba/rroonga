@@ -1065,14 +1065,13 @@ rb_grn_table_sort (int argc, VALUE *argv, VALUE self)
 		     "no such column: <%s>: <%s>",
 		     rb_grn_inspect(rb_key), rb_grn_inspect(self));
 	}
-	if (NIL_P(rb_order)) {
-	    keys[i].flags = 0;
+	if (NIL_P(rb_order) ||
+	    rb_grn_equal_option(rb_order, "asc") ||
+	    rb_grn_equal_option(rb_order, "ascending")) {
+	    keys[i].flags = GRN_TABLE_SORT_ASC;
 	} else if (rb_grn_equal_option(rb_order, "desc") ||
 		   rb_grn_equal_option(rb_order, "descending")) {
 	    keys[i].flags = GRN_TABLE_SORT_DESC;
-	} else if (rb_grn_equal_option(rb_order, "asc") ||
-		   rb_grn_equal_option(rb_order, "ascending")) {
-	    keys[i].flags = GRN_TABLE_SORT_ASC;
 	} else {
 	    rb_raise(rb_eArgError,
 		     "order should be one of "
