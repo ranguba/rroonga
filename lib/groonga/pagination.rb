@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2010  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2010-2011  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -17,7 +17,13 @@
 
 module Groonga
   class TooSmallPage < Error
-    attr_reader :page, :available_pages
+    # Table#paginate で小さすぎるページ番号を指定した場合に
+    # 発生する。
+
+    # 指定したページ番号。
+    attr_reader :page
+    # 有効なページ。Range。
+    attr_reader :available_pages
     def initialize(page, available_pages)
       @page = page
       @available_pages = available_pages
@@ -27,7 +33,13 @@ module Groonga
   end
 
   class TooLargePage < Error
-    attr_reader :page, :available_pages
+    # Table#paginate で大きすぎるページ番号を指定した場合に
+    # 発生する。
+
+    # 指定したページ番号。
+    attr_reader :page
+    # 有効なページ。Range。
+    attr_reader :available_pages
     def initialize(page, available_pages)
       @page = page
       @available_pages = available_pages
@@ -37,7 +49,13 @@ module Groonga
   end
 
   class TooSmallPageSize < Error
-    attr_reader :page_size, :available_page_sizes
+    # Table#paginate で小さすぎるページサイズを指定した場合
+    # に発生する。
+
+    # 指定したページサイズ。
+    attr_reader :page_size
+    # 有効なページサイズ。Range。
+    attr_reader :available_page_sizes
     def initialize(page_size, available_page_sizes)
       @page_size = page_size
       @available_page_sizes = available_page_sizes
@@ -112,60 +130,96 @@ module Groonga
 
   # ページネーション機能を追加するモジュール。
   #
-  # ページ番号など、0ベースではなく1ベースです。
+  # ページ番号やレコードが何番目かは0ベースではなく1ベースで
+  # あることに注意すること。
   module Pagination
-    attr_reader :current_page, :page_size, :n_pages, :n_records
+    # 現在のページ番号。
+    attr_reader :current_page
+    # 1ページあたりのレコード数。
+    attr_reader :page_size
+    # 全ページ数。
+    attr_reader :n_pages
+    # 全レコード数。
+    attr_reader :n_records
 
+    # 2ページ以上ある場合は+true+を返す。
     def have_pages?
       @n_pages > 1
     end
 
+    # 最初のページ番号。常に1を返す。
     def first_page
       1
     end
 
+    # 現在のページが最初のページなら+true+を返す。
     def first_page?
       @current_page == first_page
     end
 
+    # 最後のページ番号。
     def last_page
       @n_pages
     end
 
+    # 現在のページが最後のページなら+true+を返す。
     def last_page?
       @current_page == last_page
     end
 
+    # 次のページがあるなら+true+を返す。
     def have_next_page?
       @current_page < @n_pages
     end
 
+    # 次のページ番号を返す。次のページがない場合は+nil+を返
+    # す。
     def next_page
       have_next_page? ? @current_page + 1 : nil
     end
 
+    # 前のページがあるなら+true+を返す。
     def have_previous_page?
       @current_page > 1
     end
 
+    # 前のページ番号を返す。前のページがない場合は+nil+を返
+    # す。
     def previous_page
       have_previous_page? ? @current_page - 1 : nil
     end
 
+    # 1ページあたりのレコード数を返す。
     def n_records_in_page
       size
     end
 
+    # 現在のページに含まれているレコードのうち、先頭のレコー
+    # ドが何番目のレコードかを返す。0ベースではなく1ベースで
+    # あることに注意。つまり、最初のレコードは0番目のレコー
+    # ドではなく、1番目のレコードになる。
+    #
+    # レコードが1つもない場合は+nil+を返す。
     def start_offset
       return nil if @n_records.zero?
       1 + (@current_page - 1) * @page_size
     end
 
+    # 現在のページに含まれているレコードのうち、最後のレコー
+    # ドが何番目のレコードかを返す。0ベースではなく1ベースで
+    # あることに注意。つまり、最初のレコードは0番目のレコー
+    # ドではなく、1番目のレコードになる。
+    #
+    # レコードが1つもない場合は+nil+を返す。
     def end_offset
       return nil if @n_records.zero?
       [start_offset + @page_size - 1, @n_records].min
     end
 
+    # 最初のページから最後のページまでを含んだRangeを返す。
+    #
+    # 例えば、10ページある場合は以下を返す。
+    #   1..10
     def pages
       first_page..last_page
     end
