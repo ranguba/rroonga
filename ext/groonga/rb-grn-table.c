@@ -34,7 +34,7 @@ static ID id_array_set;
 /*
  * Document-class: Groonga::Table < Groonga::Object
  *
- * Ruby/groongaが提供するテーブルのベースとなるクラス。このクラス
+ * rroongaが提供するテーブルのベースとなるクラス。このクラス
  * からGroonga::Array, Groonga::Hash, Groonga::PatriciaTrie
  * が継承されている。
  */
