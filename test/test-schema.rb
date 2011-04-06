@@ -32,9 +32,6 @@ class SchemaTest < Test::Unit::TestCase
   end
 
   def test_remove_not_existing_column
-    rate_column_name = "rate"
-    not_existing_column_name = "not_existing_column"
-
     create_table = Proc.new do |&block|
       Groonga::Schema.create_table("Posts", :type => :hash) do |table|
         block.call(table)
@@ -42,18 +39,11 @@ class SchemaTest < Test::Unit::TestCase
     end
 
     create_table.call do |table|
-      table.int32(rate_column_name)
-    end
-
-    assert_nothing_raised do
-      create_table.call do |table|
-        table.remove_column(rate_column_name)
-      end
     end
 
     assert_raise(Groonga::Schema::ColumnNotExists) do
       create_table.call do |table|
-        table.remove_column(not_existing_column_name)
+        table.remove_column("not_existing_column")
       end
     end
   end
