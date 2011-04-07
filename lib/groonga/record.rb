@@ -416,9 +416,9 @@ module Groonga
     private
     def build_attributes(record)
       attributes = {"_id" => record.id}
-      if record.support_key?
-        attributes["_key"] = build_value(record, record.key)
-      end
+      build_key(attributes, record)
+      build_n_sub_records(attributes, record)
+
       record.columns.each do |column|
         next if column.is_a?(Groonga::IndexColumn)
         attributes[column.local_name] = build_value(record, column[record.id])
@@ -447,6 +447,18 @@ module Groonga
       end
 
       value
+    end
+
+    def build_key(attributes, record)
+      if record.support_key?
+        attributes["_key"] = build_value(record, record.key)
+      end
+    end
+
+    def build_n_sub_records(attributes, record)
+      if record.support_sub_records?
+        attributes["_nsubrecs"] = record.n_sub_records
+      end
     end
   end
 end
