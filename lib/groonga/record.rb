@@ -424,7 +424,7 @@ module Groonga
 
         if value.is_a?(Groonga::Record)
           push_then_pop(value) do
-            if not @record_stack.include?(record)
+            if recursive?(record)
               value = create_attributes(value)
             end
           end
@@ -440,6 +440,10 @@ module Groonga
       @record_stack.push(value)
       yield
       @record_stack.pop
+    end
+
+    def recursive?(record)
+      not @record_stack.include?(record)
     end
   end
 end
