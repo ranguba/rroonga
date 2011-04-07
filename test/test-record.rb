@@ -370,6 +370,7 @@ class RecordTest < Test::Unit::TestCase
         "user" => nil
       },
       "_nsubrecs" => 1,
+      "_score" => 1,
     }
 
     assert_equal(expected_attributes, select_result_result.attributes)

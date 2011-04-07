@@ -216,6 +216,15 @@ module Groonga
     end
 
     # call-seq:
+    #   record.support_score? -> true/false
+    #
+    # Groonga::Record#scoreが利用できる場合はtrueを
+    # 返す。
+    def support_score?
+      @table.have_column?("_score") # TODO delegate to Table
+    end
+
+    # call-seq:
     #   record.n_sub_records -> 件数
     #
     # 主キーの値が同一であったレコードの件数を返す。検索結果とし
@@ -417,6 +426,7 @@ module Groonga
     def build_attributes(record)
       attributes = {"_id" => record.id}
       build_key(attributes, record)
+      build_score(attributes, record)
       build_n_sub_records(attributes, record)
 
       record.columns.each do |column|
@@ -452,6 +462,12 @@ module Groonga
     def build_key(attributes, record)
       if record.support_key?
         attributes["_key"] = build_value(record, record.key)
+      end
+    end
+
+    def build_score(attributes, record)
+      if record.support_score?
+        attributes["_score"] = record.score
       end
     end
 
