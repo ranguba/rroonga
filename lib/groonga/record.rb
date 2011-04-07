@@ -407,7 +407,7 @@ module Groonga
 
     def initialize(root_record)
       @root_record = root_record
-      @record_stack = []
+      @built_records = []
     end
 
     def run
@@ -427,13 +427,13 @@ module Groonga
     end
 
     def push_then_pop(value)
-      @record_stack.push(value)
+      @built_records.push(value)
       yield
-      @record_stack.pop
+      @built_records.pop
     end
 
     def recursive?(record)
-      @record_stack.include?(record)
+      @built_records.include?(record)
     end
 
     def build_value(record, value)
