@@ -253,8 +253,8 @@ class HashTest < Test::Unit::TestCase
     key = "niku"
     niku = users.add(key)
     assert_equal({
-                   "id" => niku.id,
-                   "key" => key,
+                   "_id" => niku.id,
+                   "_key" => key,
                    "self_introduction" => nil,
                    "age" => 0,
                  },
@@ -264,8 +264,8 @@ class HashTest < Test::Unit::TestCase
       "age" => 29
     }
     assert_equal({
-                   "id" => niku.id,
-                   "key" => key,
+                   "_id" => niku.id,
+                   "_key" => key,
                    "self_introduction" => "I'm a meet lover.",
                    "age" => 29,
                  },
@@ -285,8 +285,8 @@ class HashTest < Test::Unit::TestCase
     }
 
     assert_equal({
-                   "id" => users[key].id,
-                   "key" => key,
+                   "_id" => users[key].id,
+                   "_key" => key,
                    "self_introduction" => "I'm a meet lover.",
                    "age" => 29,
                  },

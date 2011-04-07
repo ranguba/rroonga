@@ -300,7 +300,7 @@ class RecordTest < Test::Unit::TestCase
       "comment" => "Grate!"
     }
     groonga = @bookmarks.add(values)
-    assert_equal(values.merge("id" => groonga.id,
+    assert_equal(values.merge("_id" => groonga.id,
                               "content" => nil,
                               "user" => nil),
                  groonga.attributes)
@@ -328,12 +328,12 @@ class RecordTest < Test::Unit::TestCase
     doc_page_record["next"] = top_page_record
 
     expected = {
-      "id" => 1,
+      "_id" => 1,
       "user" => nil,
       "uri" => "http://groonga.org/",
       "rate" => 5,
       "next" => {
-        "id" => 2,
+        "_id" => 2,
         "user" => nil,
         "uri" => "http://groonga.org/document.html",
         "rate" => 8,
@@ -360,11 +360,11 @@ class RecordTest < Test::Unit::TestCase
     select_result_result = select_result.first
 
     expected_attributes = {
-      "id" => 1,
-      "key" => {
+      "_id" => 1,
+      "_key" => {
         "comment" => "Great!",
         "content" => nil,
-        "id" => 1,
+        "_id" => 1,
         "rate" => 5,
         "uri" => "http://groonga.org/",
         "user" => nil
@@ -387,7 +387,7 @@ class RecordTest < Test::Unit::TestCase
     top_page_record["next"] = top_page_record
 
     expected = {
-      "id" => 1,
+      "_id" => 1,
       "user" => nil,
       "uri" => "http://groonga.org/",
       "rate" => 5,
