@@ -285,17 +285,9 @@ module Groonga
     # 型のカラムでない全カラムを対象とし、カラムの名前をキーとし
     # たこのレコードのカラムの値のハッシュを返す。
     def attributes
-      attributes = {"id" => id}
-      attributes["key"] = key if support_key?
-      table_name = @table.name
-      columns.each do |column|
-        next if column.is_a?(Groonga::IndexColumn)
-        value = column[@id]
-        # TODO: support recursive reference.
-        value = value.attributes if value.is_a?(Groonga::Record)
-        attributes[column.local_name] = value
-      end
-      attributes
+      accessor = AttributesAccessor.new(self)
+      accessor.run
+      accessor.attributes
     end
 
     # call-seq:
@@ -407,6 +399,30 @@ module Groonga
       else
         super
       end
+    end
+  end
+
+  class AttributesAccessor
+    def initialize(target)
+      @target = target
+    end
+
+    def run
+      attributes = {"id" => @target.id}
+      attributes["key"] = key if @target.support_key?
+      table_name = @target.table.name
+      @target.columns.each do |column|
+        next if column.is_a?(Groonga::IndexColumn)
+        value = column[@target.id]
+        # TODO: support recursive reference.
+        value = value.attributes if value.is_a?(Groonga::Record)
+        attributes[column.local_name] = value
+      end
+      @attributes = attributes
+    end
+
+    def attributes
+      @attributes
     end
   end
 end
