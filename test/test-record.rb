@@ -327,10 +327,26 @@ class RecordTest < Test::Unit::TestCase
     top_page_record["next"] = doc_page_record
     doc_page_record["next"] = top_page_record
 
-    pp @bookmarks.columns
+    expected = {
+      "id" => 1,
+      "user" => nil,
+      "uri" => "http://groonga.org/",
+      "rate" => 5,
+      "next" => {
+        "id" => 2,
+        "user" => nil,
+        "uri" => "http://groonga.org/document.html",
+        "rate" => 8,
+        "next" => top_page_record,
+        "content" => nil,
+        "comment" => "Informative"
+      },
+      "content" => nil,
+      "comment" => "Great!"
+    }
 
-    pp top_page_record.attributes
-   end
+    assert_equal(expected, top_page_record.attributes)
+  end
 
   def test_dynamic_accessor
     groonga = @bookmarks.add

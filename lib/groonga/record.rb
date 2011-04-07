@@ -403,25 +403,36 @@ module Groonga
   end
 
   class AttributesAccessor
+    attr_reader :attributes
+
     def initialize(target)
       @target = target
+      @record_stack = []
     end
 
     def run
-      attributes = {"id" => @target.id}
-      attributes["key"] = key if @target.support_key?
-      @target.columns.each do |column|
-        next if column.is_a?(Groonga::IndexColumn)
-        value = column[@target.id]
-        # TODO: support recursive reference.
-        value = value.attributes if value.is_a?(Groonga::Record)
-        attributes[column.local_name] = value
-      end
-      @attributes = attributes
+      @attributes = create_attributes(@target)
     end
 
-    def attributes
-      @attributes
+    def create_attributes(target)
+      attributes = {"id" => target.id}
+      attributes["key"] = key if target.support_key?
+      target.columns.each do |column|
+        next if column.is_a?(Groonga::IndexColumn)
+        value = column[target.id]
+
+        if value.is_a?(Groonga::Record)
+          @record_stack.push value
+          if @record_stack.index(target).nil?
+            value = create_attributes(value)
+          end
+          @record_stack.pop
+        end
+
+        attributes[column.local_name] = value
+      end
+
+      attributes
     end
   end
 end
