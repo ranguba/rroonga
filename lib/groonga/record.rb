@@ -423,17 +423,23 @@ module Groonga
         value = column[record.id]
 
         if value.is_a?(Groonga::Record)
-          @record_stack.push(value)
-          if not @record_stack.include?(record)
-            value = create_attributes(value)
+          push_then_pop(value) do
+            if not @record_stack.include?(record)
+              value = create_attributes(value)
+            end
           end
-          @record_stack.pop
         end
 
         attributes[column.local_name] = value
       end
 
       attributes
+    end
+
+    def push_then_pop(value)
+      @record_stack.push(value)
+      yield
+      @record_stack.pop
     end
   end
 end
