@@ -416,7 +416,7 @@ module Groonga
 
     def create_attributes(record)
       attributes = {"id" => record.id}
-      attributes["key"] = key if record.support_key?
+      attributes["key"] = record.key if record.support_key?
       record.columns.each do |column|
         next if column.is_a?(Groonga::IndexColumn)
         value = column[record.id]
