@@ -348,6 +348,32 @@ class RecordTest < Test::Unit::TestCase
     assert_equal(expected, top_page_record.attributes)
   end
 
+  def test_select_result_attributes
+    top_page = {
+      "uri" => "http://groonga.org/",
+      "rate" => 5,
+      "comment" => "Great!",
+    }
+
+    top_page_record = @bookmarks.add(top_page)
+    select_result = @bookmarks.select
+    select_result_result = select_result.first
+
+    expected_attributes = {
+      "id" => 1,
+      "key" => {
+        "comment"=>"Great!",
+        "content"=>nil,
+        "id"=>1,
+        "rate"=>5,
+        "uri"=>"http://groonga.org/",
+        "user"=>nil
+      }
+    }
+
+    assert_equal(expected_attributes, select_result_result.attributes)
+  end
+
   def test_self_referencing_attributes
     @bookmarks.define_column("next", @bookmarks)
 
