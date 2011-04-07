@@ -286,8 +286,7 @@ module Groonga
     # たこのレコードのカラムの値のハッシュを返す。
     def attributes
       accessor = AttributeHashBuilder.new(self)
-      accessor.run
-      accessor.attributes
+      accessor.build
     end
 
     # call-seq:
@@ -410,8 +409,8 @@ module Groonga
       @built_records = []
     end
 
-    def run
-      @attributes = build_attributes(@root_record)
+    def build
+      build_attributes(@root_record)
     end
 
     private
