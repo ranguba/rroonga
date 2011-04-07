@@ -402,7 +402,7 @@ module Groonga
     end
   end
 
-  class AttributesAccessor
+  class AttributesAccessor # :nodoc:
     attr_reader :attributes
 
     def initialize(root_record)
