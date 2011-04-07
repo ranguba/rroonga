@@ -420,17 +420,7 @@ module Groonga
       attributes["key"] = record.key if record.support_key?
       record.columns.each do |column|
         next if column.is_a?(Groonga::IndexColumn)
-        value = column[record.id]
-
-        if value.is_a?(Groonga::Record)
-          push_then_pop(value) do
-            unless recursive?(record)
-              value = build_attributes(value)
-            end
-          end
-        end
-
-        attributes[column.local_name] = value
+        attributes[column.local_name] = build_value(record, column[record.id])
       end
 
       attributes
@@ -444,6 +434,18 @@ module Groonga
 
     def recursive?(record)
       @record_stack.include?(record)
+    end
+
+    def build_value(record, value)
+      if value.is_a?(Groonga::Record)
+        push_then_pop(value) do
+          unless recursive?(record)
+            value = build_attributes(value)
+          end
+        end
+      end
+
+      value
     end
   end
 end
