@@ -306,6 +306,32 @@ class RecordTest < Test::Unit::TestCase
                  groonga.attributes)
   end
 
+  def test_recursive_attributes
+    @bookmarks.define_column("next", @bookmarks)
+
+    top_page = {
+      "uri" => "http://groonga.org/",
+      "rate" => 5,
+      "comment" => "Great!",
+    }
+
+    doc_page = {
+      "uri" => "http://groonga.org/document.html",
+      "rate" => 8,
+      "comment" => "Informative"
+    }
+
+    top_page_record = @bookmarks.add(top_page)
+    doc_page_record = @bookmarks.add(doc_page)
+
+    top_page_record["next"] = doc_page_record
+    doc_page_record["next"] = top_page_record
+
+    pp @bookmarks.columns
+
+    pp top_page_record.attributes
+   end
+
   def test_dynamic_accessor
     groonga = @bookmarks.add
     assert_equal([],
