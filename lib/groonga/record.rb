@@ -285,7 +285,7 @@ module Groonga
     # 型のカラムでない全カラムを対象とし、カラムの名前をキーとし
     # たこのレコードのカラムの値のハッシュを返す。
     def attributes
-      accessor = AttributesAccessor.new(self)
+      accessor = AttributeHashBuilder.new(self)
       accessor.run
       accessor.attributes
     end
@@ -402,7 +402,7 @@ module Groonga
     end
   end
 
-  class AttributesAccessor # :nodoc:
+  class AttributeHashBuilder # :nodoc:
     attr_reader :attributes
 
     def initialize(root_record)
@@ -411,11 +411,11 @@ module Groonga
     end
 
     def run
-      @attributes = create_attributes(@root_record)
+      @attributes = build_attributes(@root_record)
     end
 
     private
-    def create_attributes(record)
+    def build_attributes(record)
       attributes = {"id" => record.id}
       attributes["key"] = record.key if record.support_key?
       record.columns.each do |column|
@@ -425,7 +425,7 @@ module Groonga
         if value.is_a?(Groonga::Record)
           push_then_pop(value) do
             unless recursive?(record)
-              value = create_attributes(value)
+              value = build_attributes(value)
             end
           end
         end
