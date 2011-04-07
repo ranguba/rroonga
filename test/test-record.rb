@@ -362,12 +362,12 @@ class RecordTest < Test::Unit::TestCase
     expected_attributes = {
       "id" => 1,
       "key" => {
-        "comment"=>"Great!",
-        "content"=>nil,
-        "id"=>1,
-        "rate"=>5,
-        "uri"=>"http://groonga.org/",
-        "user"=>nil
+        "comment" => "Great!",
+        "content" => nil,
+        "id" => 1,
+        "rate" => 5,
+        "uri" => "http://groonga.org/",
+        "user" => nil
       }
     }
 
