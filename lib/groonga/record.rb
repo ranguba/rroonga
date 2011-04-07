@@ -410,7 +410,6 @@ module Groonga
     def run
       attributes = {"id" => @target.id}
       attributes["key"] = key if @target.support_key?
-      table_name = @target.table.name
       @target.columns.each do |column|
         next if column.is_a?(Groonga::IndexColumn)
         value = column[@target.id]
