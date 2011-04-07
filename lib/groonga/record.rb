@@ -405,25 +405,25 @@ module Groonga
   class AttributesAccessor
     attr_reader :attributes
 
-    def initialize(target)
-      @target = target
+    def initialize(root_record)
+      @root_record = root_record
       @record_stack = []
     end
 
     def run
-      @attributes = create_attributes(@target)
+      @attributes = create_attributes(@root_record)
     end
 
-    def create_attributes(target)
-      attributes = {"id" => target.id}
-      attributes["key"] = key if target.support_key?
-      target.columns.each do |column|
+    def create_attributes(record)
+      attributes = {"id" => record.id}
+      attributes["key"] = key if record.support_key?
+      record.columns.each do |column|
         next if column.is_a?(Groonga::IndexColumn)
-        value = column[target.id]
+        value = column[record.id]
 
         if value.is_a?(Groonga::Record)
-          @record_stack.push value
-          if @record_stack.index(target).nil?
+          @record_stack.push(value)
+          if @record_stack.index(record).nil?
             value = create_attributes(value)
           end
           @record_stack.pop
