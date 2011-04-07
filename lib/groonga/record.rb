@@ -423,7 +423,7 @@ module Groonga
 
         if value.is_a?(Groonga::Record)
           @record_stack.push(value)
-          if @record_stack.index(record).nil?
+          if not @record_stack.include?(record)
             value = create_attributes(value)
           end
           @record_stack.pop
