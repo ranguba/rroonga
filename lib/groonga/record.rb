@@ -414,6 +414,7 @@ module Groonga
       @attributes = create_attributes(@root_record)
     end
 
+    private
     def create_attributes(record)
       attributes = {"id" => record.id}
       attributes["key"] = record.key if record.support_key?
