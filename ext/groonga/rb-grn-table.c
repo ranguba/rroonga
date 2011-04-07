@@ -34,7 +34,7 @@ static ID id_array_set;
 /*
  * Document-class: Groonga::Table < Groonga::Object
  *
- * Ruby/groongaが提供するテーブルのベースとなるクラス。このクラス
+ * rroongaが提供するテーブルのベースとなるクラス。このクラス
  * からGroonga::Array, Groonga::Hash, Groonga::PatriciaTrie
  * が継承されている。
  */
@@ -982,13 +982,32 @@ rb_grn_table_delete (VALUE self, VALUE rb_id)
  * テーブルに登録されているレコードを_keys_で指定されたルー
  * ルに従ってソートしたレコードの配列を返す。
  *
- *   [
- *    {:key => "カラム名", :order => :asc, :ascending,
- *                                   :desc, :descendingのいずれか},
- *    {:key => "カラム名", :order => :asc, :ascending,
- *                                   :desc, :descendingのいずれか},
- *    ...,
- *   ]
+ * _order_には+:asc+, +:ascending+, +:desc+, +:descending+の
+ * いずれを指定する。
+ *
+ * [ハッシュの配列で指定する方法]
+ *   オーソドックスな指定方法。
+ *
+ *     [
+ *      {:key => "第1ソートキー", :order => order},
+ *      {:key => "第2ソートキー", :order => order},
+ *      ...,
+ *     ]
+ *
+ * [配列の配列で指定する方法]
+ *   少し簡単化した指定方法。
+ *
+ *     [
+ *      ["第1ソートキー", order],
+ *      ["第2ソートキー", order],
+ *      ...,
+ *     ]
+ *
+ * [ソートキーの配列で指定する方法]
+ *   _order_は常に昇順（+:ascending+）になるが、最も簡単
+ *   に指定できる。
+ *
+ *     ["第1ソートキー", "第2ソートキー", ...]
  *
  * _options_に指定可能な値は以下の通り。
  *
@@ -1065,14 +1084,13 @@ rb_grn_table_sort (int argc, VALUE *argv, VALUE self)
 		     "no such column: <%s>: <%s>",
 		     rb_grn_inspect(rb_key), rb_grn_inspect(self));
 	}
-	if (NIL_P(rb_order)) {
-	    keys[i].flags = 0;
+	if (NIL_P(rb_order) ||
+	    rb_grn_equal_option(rb_order, "asc") ||
+	    rb_grn_equal_option(rb_order, "ascending")) {
+	    keys[i].flags = GRN_TABLE_SORT_ASC;
 	} else if (rb_grn_equal_option(rb_order, "desc") ||
 		   rb_grn_equal_option(rb_order, "descending")) {
 	    keys[i].flags = GRN_TABLE_SORT_DESC;
-	} else if (rb_grn_equal_option(rb_order, "asc") ||
-		   rb_grn_equal_option(rb_order, "ascending")) {
-	    keys[i].flags = GRN_TABLE_SORT_ASC;
 	} else {
 	    rb_raise(rb_eArgError,
 		     "order should be one of "

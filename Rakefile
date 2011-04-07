@@ -242,10 +242,6 @@ task :tag do
   sh("git tag -a #{version} -m 'release #{version}!!!'")
 end
 
-# fix Hoe's incorrect guess.
-project.spec.executables.clear
-# project.lib_files = project.spec.files.grep(%r|^src/lib/|)
-
 task(:release).prerequisites.reject! {|name| name == "clean"}
 
 namespace :win32 do

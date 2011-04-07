@@ -57,6 +57,15 @@ module Groonga
       end
     end
 
+    # カラムが存在しないときに発生する。
+    class ColumnNotExists < Error
+      attr_reader :name
+      def initialize(name)
+        @name = name
+        super("column doesn't exist: <#{@name}>")
+      end
+    end
+
     # すでに存在するテーブルと違うオプションでテーブルを作ろ
     # うとしたときに発生する。
     class TableCreationWithDifferentOptions < Error
@@ -1463,7 +1472,13 @@ module Groonga
         else
           name = @name
         end
-        table.column(name).remove
+        column = table.column(name)
+
+        if column.nil?
+          raise ColumnNotExists.new(name)
+        end
+
+        column.remove
       end
     end
 
