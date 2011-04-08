@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2010  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2011  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -582,7 +582,7 @@ class TableTest < Test::Unit::TestCase
                                  :key_type => "ShortText")
     book = users.define_column("book", books)
     users.add("morita", :book => "")
-    assert_equal({"id" => 1, "key" => "morita", "book" => nil},
+    assert_equal({"_id" => 1, "_key" => "morita", "book" => nil},
                  users["morita"].attributes)
   end
 
