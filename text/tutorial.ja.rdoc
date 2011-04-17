@@ -182,7 +182,7 @@ N-gramを利用した全文検索では、分解したN文字とその出現位�
 さらにそのキーを指定して（+record.key.key+）で<tt>Items</tt>
 のキーを返しています。
 
-+record["_key"]+でアクセスすると自動的に参照しているレコード
+<tt>record["_key"]</tt>でアクセスすると自動的に参照しているレコード
 を辿っていき、参照先のキーにアクセスできます。
 
   >> ruby_items.collect {|record| record["_key"]}
