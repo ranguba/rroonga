@@ -286,7 +286,7 @@ namespace :win32 do
     end
   end
 
-  task(:build_mecab_dict => :build_mecab) do
+  task(:build_mecab_dict) do
     tmp_dir = "tmp/mecab_dict"
     rm_rf(tmp_dir)
     mkdir_p(tmp_dir)
