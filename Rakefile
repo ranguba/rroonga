@@ -246,7 +246,7 @@ task(:release).prerequisites.reject! {|name| name == "clean"}
 
 namespace :win32 do
   if ENV["GROONGA64"] == "yes"
-    host = "amd64-mingw32msvc"
+    host = "x86_64-w64-mingw32"
   else
     host = "i586-mingw32msvc"
   end
