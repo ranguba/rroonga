@@ -245,10 +245,13 @@ end
 task(:release).prerequisites.reject! {|name| name == "clean"}
 
 namespace :win32 do
+  patches_dir = (Pathname.new(base_dir) + "patches").expand_path
   if ENV["GROONGA64"] == "yes"
     host = "x86_64-w64-mingw32"
+    mecab_patches = ["mecab-0.98-mingw-w64.diff"]
   else
     host = "i586-mingw32msvc"
+    mecab_patches = []
   end
 
   desc "Build MeCab and groonga and install them into vendor/local/."
@@ -273,6 +276,9 @@ namespace :win32 do
       sh("tar", "xzf", mecab_tar_gz) or exit(false)
     end
     Dir.chdir(File.join(tmp_dir, mecab_base)) do
+      mecab_patches.each do |patch|
+        sh("patch -p1 < #{patches_dir + patch}")
+      end
       sh("./configure",
          "--prefix=#{binary_dir}",
          "--host=#{host}") or exit(false)
