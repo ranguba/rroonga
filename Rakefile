@@ -248,7 +248,10 @@ namespace :win32 do
   patches_dir = (Pathname.new(base_dir) + "patches").expand_path
   if ENV["GROONGA64"] == "yes"
     host = "x86_64-w64-mingw32"
-    mecab_patches = ["mecab-0.98-mingw-w64.diff"]
+    mecab_patches = [
+      "mecab-0.98-mingw-w64.diff",
+      "mecab-0.98-not-use-locale-on-mingw.diff",
+    ]
   else
     host = "i586-mingw32msvc"
     mecab_patches = []
