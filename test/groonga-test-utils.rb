@@ -18,12 +18,7 @@ require 'pathname'
 require 'time'
 require 'erb'
 require 'stringio'
-begin
-  require 'json'
-rescue LoadError
-  require 'rubygems'
-  require 'json'
-end
+require 'json'
 require 'pkg-config'
 
 require 'groonga'
