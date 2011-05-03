@@ -121,10 +121,10 @@ YARD::Rake::YardocTask.new do |task|
   task.options += ["--title", "#{spec.name} - #{version}"]
   # task.options += ["--charset", "UTF-8"]
   task.options += ["--readme", "README.textile"]
+  task.options += ["--files", "text/tutorial.textile"]
   task.files += FileList["ext/groonga/**/rb-groonga.c"]
   task.files += FileList["ext/groonga/**/*.c"]
   task.files += FileList["lib/**/*.rb"]
-  task.files += FileList["**/*.rdoc"]
 end
 
 def windows?(platform=nil)
@@ -229,7 +229,7 @@ namespace :reference do
       namespace language do
         po_file = "#{po_dir}/#{language}.po"
 
-        file po_file => html_files do |t|
+        file po_file do |t|
           sh("xml2po", "--keep-entities", "--update", t.name, *html_files)
         end
 
@@ -248,7 +248,7 @@ namespace :reference do
 
       doc_dir = Pathname("doc")
       desc "Translates documents to #{language}."
-      task language => [po_file, reference_base_dir] do
+      task language => [po_file, reference_base_dir, *html_files] do
         doc_dir.find do |path|
           base_path = path.relative_path_from(doc_dir)
           translated_path = "#{translate_doc_dir}/#{base_path}"
