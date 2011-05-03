@@ -204,30 +204,46 @@ def rsync_to_rubyforge(spec, source, destination)
 end
 
 namespace :reference do
-  supported_languages = [:en, :ja]
-  translate_languages = []
+  translate_languages = [:ja]
+  supported_languages = [:en, *translate_languages]
   reference_base_dir = "references"
+  html_files = FileList["doc/**/*.html"].to_a
+
   directory reference_base_dir
   CLOBBER.include(reference_base_dir)
 
-  namespace :translate do
-    po_dir = "po"
+  po_dir = "po"
+  namespace :pot do
     pot_file = "#{po_dir}/#{spec.name}.pot"
 
-    html_files = FileList["doc/**/*.html"].to_a
     directory po_dir
     file pot_file => ["po", *html_files] do |t|
       sh("xml2po", "--keep-entities", "--output", t.name, *html_files)
     end
 
     desc "Generates pot file."
-    task :pot => pot_file
+    task :generate => pot_file
+  end
 
+  namespace :po do
+    translate_languages.each do |language|
+      namespace language do
+        po_file = "#{po_dir}/#{language}.po"
+
+        file po_file => html_files do |t|
+          sh("xml2po", "--keep-entities", "--update", t.name, *html_files)
+        end
+
+        desc "Updates po file for #{language}."
+        task :update => po_file
+      end
+    end
+  end
+
+  namespace :translate do
     directory reference_base_dir
 
-    supported_languages.each do |language|
-      next if language == :en
-      translate_languages << language
+    translate_languages.each do |language|
       po_file = "#{po_dir}/#{language}.po"
       translate_doc_dir = "#{reference_base_dir}/#{language}"
 
