@@ -561,7 +561,7 @@ rb_grn_column_is_locked (int argc, VALUE *argv, VALUE self)
  * _column_の値がテーブルのレコードとなる場合は+true+を返し、
  * そうでない場合は+false+を返す。
  *
- * @since: 1.0.5
+ * @since 1.0.5
  */
 static VALUE
 rb_grn_column_reference_p (VALUE self)
@@ -599,7 +599,7 @@ rb_grn_column_reference_p (VALUE self)
  * _column_がGroonga::IndexColumnの場合は+true+を返し、
  * そうでない場合は+false+を返す。
  *
- * @since: 1.0.5
+ * @since 1.0.5
  */
 static VALUE
 rb_grn_column_index_p (VALUE self)
@@ -627,7 +627,7 @@ rb_grn_column_index_p (VALUE self)
  * _column_がベクターカラムの場合は+true+を返し、
  * そうでない場合は+false+を返す。
  *
- * @since: 1.0.5
+ * @since 1.0.5
  */
 static VALUE
 rb_grn_column_vector_p (VALUE self)
@@ -657,7 +657,7 @@ rb_grn_column_vector_p (VALUE self)
  * _column_がスカラーカラムの場合は+true+を返し、
  * そうでない場合は+false+を返す。
  *
- * @since: 1.0.5
+ * @since 1.0.5
  */
 static VALUE
 rb_grn_column_scalar_p (VALUE self)
@@ -692,7 +692,7 @@ rb_grn_column_scalar_p (VALUE self)
  *
  * _operation_を実行できる_column_のインデックスを返す。
  *
- * @since: 1.0.9
+ * @since 1.0.9
  */
 static VALUE
 rb_grn_column_get_indexes (int argc, VALUE *argv, VALUE self)
