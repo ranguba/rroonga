@@ -6,13 +6,13 @@ rroonga
 
 h2. Description
 
-Ruby bindings for groonga that provides full text search and
+Ruby bindings for groonga that provide full text search and
 column store features.
 
-rroonga is a extension library to use groonga's DB-API
-layer. rroonga provides Rubyish readable and writable
-API. You can use groonga's first and highly functional
-features from Ruby.
+rroonga is an extension library to use groonga's DB-API
+layer. rroonga provides Rubyish readable and writable API
+not C like API. You can use groonga's fast and highly
+functional features from Ruby with Rubyish form.
 
 See the following URL about groonga.
 
@@ -22,7 +22,7 @@ h2. Authors
 
 * Kouhei Sutou <kou@clear-code.com>
 * Tasuku SUENAGA <a@razil.jp>
-* daijiro <morita@razil.jp>
+* Daijiro MORI <morita@razil.jp>
 * Yuto HAYAMIZU <y.hayamizu@gmail.com>
 * SHIDARA Yoji <dara@shidara.net>
 
@@ -30,13 +30,13 @@ h2. License
 
 LGPL 2.1. See license/LGPL for details.
 
-(Kouhei Sutou has a right to change the license
-inclidng contributed patches.)
+(Kouhei Sutou has a right to change the license including
+contributed patches.)
 
 h2. Dependencies
 
 * Ruby >= 1.8 (including 1.9.2)
-* groonga >= 1.1.0
+* groonga >= 1.2.0
 
 h2. Install
 
@@ -47,15 +47,17 @@ h2. Install
 
 h2. Documents
 
-"Reference manual":http://groonga.rubyforge.org/rroonga/
+* "Reference manual in English":http://groonga.rubyforge.org/rroonga/en/
+* "Reference manual in Japanese":http://groonga.rubyforge.org/rroonga/ja/
 
 h2. Mailing list
 
-"groonga-users-en":http://rubyforge.org/mailman/listinfo/groonga-users-en
+* English: "groonga-users-en":http://rubyforge.org/mailman/listinfo/groonga-users-en
+* Japanese: "groonga-dev":http://lists.sourceforge.jp/mailman/listinfo/groonga-dev
 
 h2. Thanks
 
-* mori: sent patches to support the latest groonga.
+* Daijiro MORI: sent patches to support the latest groonga.
 * Tasuku SUENAGA: sent bug reports.
 * niku: sent bug reports.
 * dara:
