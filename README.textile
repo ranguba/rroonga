@@ -1,10 +1,10 @@
-= README
+h1. README
 
-== Name
+h2. Name
 
 rroonga
 
-== Description
+h2. Description
 
 Ruby bindings for groonga that provides full text search and
 column store features.
@@ -16,50 +16,51 @@ features from Ruby.
 
 See the following URL about groonga.
 
-* groonga: http://groonga.org/
+* "The groonga official site":http://groonga.org/
 
-== Authors
+h2. Authors
 
-Kouhei Sutou:: <tt><kou@clear-code.com></tt>
-Tasuku SUENAGA:: <tt><a@razil.jp></tt>
-daijiro:: <tt><morita@razil.jp></tt>
-Yuto HAYAMIZU:: <tt><y.hayamizu@gmail.com></tt>
-SHIDARA Yoji:: <tt><dara@shidara.net></tt>
+* Kouhei Sutou <kou@clear-code.com>
+* Tasuku SUENAGA <a@razil.jp>
+* daijiro <morita@razil.jp>
+* Yuto HAYAMIZU <y.hayamizu@gmail.com>
+* SHIDARA Yoji <dara@shidara.net>
 
-== License
+h2. License
 
 LGPL 2.1. See license/LGPL for details.
 
 (Kouhei Sutou has a right to change the license
 inclidng contributed patches.)
 
-== Dependencies
+h2. Dependencies
 
 * Ruby >= 1.8 (including 1.9.2)
 * groonga >= 1.1.0
 
-== Install
+h2. Install
 
-  % sudo gem install rroonga
+<pre>
+!!!command_line
+% sudo gem install rroonga
+</pre>
 
-== Documents
+h2. Documents
 
-Japanese only. Sorry.
+"Reference manual":http://groonga.rubyforge.org/rroonga/
 
-http://groonga.rubyforge.org/rroonga/
+h2. Mailing list
 
-== Mailing list
+"groonga-users-en":http://rubyforge.org/mailman/listinfo/groonga-users-en
 
-http://rubyforge.org/mailman/listinfo/groonga-users-en
-
-== Thanks
+h2. Thanks
 
 * mori: sent patches to support the latest groonga.
 * Tasuku SUENAGA: sent bug reports.
 * niku: sent bug reports.
 * dara:
-  * wrote tests.
-  * fixed bugs.
+** wrote tests.
+** fixed bugs.
 * id:mat_aki: sent bug reports.
 * @yune_kotomi: sent a bug report.
 * m_seki: sent bug reports.
