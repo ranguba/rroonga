@@ -27,7 +27,7 @@ module Groonga
 
     VALID_COLUMN_NAME_RE = /\A[a-zA-Z\d_]+\z/
 
-    def initialize(*args)
+    def initialize
       @table = nil
       @name = nil
       @query = nil
