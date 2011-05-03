@@ -121,7 +121,6 @@ YARD::Rake::YardocTask.new do |task|
   task.options += ["--title", "#{spec.name} - #{version}"]
   # task.options += ["--charset", "UTF-8"]
   task.options += ["--readme", "README.textile"]
-  task.options += ["--files", "text/expression.rdoc"]
   task.files += FileList["ext/groonga/**/rb-groonga.c"]
   task.files += FileList["ext/groonga/**/*.c"]
   task.files += FileList["lib/**/*.rb"]
