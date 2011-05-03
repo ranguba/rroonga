@@ -123,10 +123,14 @@ module YARD
       alias_method :initialize_original, :initialize
       def initialize(namespace, name)
         name = name.gsub(/\AGrn(.*)\z/) do
-          if $1.empty?
+          suffix = $1
+          case suffix
+          when ""
             "Groonga"
+          when "TableKeySupport"
+            "Groonga::Table::KeySupport"
           else
-            "Groonga::#{$1}"
+            "Groonga::#{suffix}"
           end
         end
         initialize_original(namespace, name)
