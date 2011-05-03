@@ -37,6 +37,7 @@ end
 require 'groonga/view-record'
 require 'groonga/record'
 require 'groonga/expression-builder'
+require 'groonga/posting'
 begin
   major, minor, micro, = RUBY_VERSION.split(/\./)
   require "#{major}.#{minor}/groonga.so"
