@@ -1,6 +1,6 @@
 /* -*- c-file-style: "ruby" -*- */
 /*
-  Copyright (C) 2009-2010  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2011  Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -392,7 +392,7 @@ rb_grn_logger_s_set_path (VALUE klass, VALUE rb_path,
 
 /*
  * call-seq:
- *   Groonga::Logger.log_path # => log_path
+ *   Groonga::Logger.log_path # => path
  *
  * groongaのデフォルトロガーがログを出力するファイルの
  * パスを返す。
@@ -414,7 +414,7 @@ rb_grn_logger_s_get_log_path (VALUE klass)
 
 /*
  * call-seq:
- *   Groonga::Logger.log_path = log_path
+ *   Groonga::Logger.log_path= path
  *
  * groongaのデフォルトロガーがログを出力するファイルのパスを
  * 指定する。
@@ -435,7 +435,7 @@ rb_grn_logger_s_set_log_path (VALUE klass, VALUE path)
 
 /*
  * call-seq:
- *   Groonga::Logger.query_log_path # => query_log_path
+ *   Groonga::Logger.query_log_path # => path
  *
  * groongaのデフォルトロガーがクエリログを出力するファイルの
  * パスを返す。
@@ -457,7 +457,7 @@ rb_grn_logger_s_get_query_log_path (VALUE klass)
 
 /*
  * call-seq:
- *   Groonga::Logger.query_log_path = query_log_path
+ *   Groonga::Logger.query_log_path= path
  *
  * groongaのデフォルトロガーがクエリログを出力するファイルの
  * パスを指定する。

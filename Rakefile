@@ -117,12 +117,29 @@ end
 Jeweler::RubygemsDotOrgTasks.new do
 end
 
+module YARD
+  module CodeObjects
+    class Proxy
+      alias_method :initialize_original, :initialize
+      def initialize(namespace, name)
+        name = name.gsub(/\AGrn(.*)\z/) do
+          if $1.empty?
+            "Groonga"
+          else
+            "Groonga::#{$1}"
+          end
+        end
+        initialize_original(namespace, name)
+      end
+    end
+  end
+end
+
 YARD::Rake::YardocTask.new do |task|
   task.options += ["--title", "#{spec.name} - #{version}"]
   # task.options += ["--charset", "UTF-8"]
   task.options += ["--readme", "README.textile"]
   task.options += ["--files", "text/tutorial.textile"]
-  task.files += FileList["ext/groonga/**/rb-groonga.c"]
   task.files += FileList["ext/groonga/**/*.c"]
   task.files += FileList["lib/**/*.rb"]
 end
