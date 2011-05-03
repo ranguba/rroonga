@@ -1,11 +1,10 @@
-/
 /.gdb_history
 /.test-result
 /Makefile
-/doc
+/doc/
 /email.txt
 /mkmf.log
-/pkg
+/pkg/
 /test-unit/
 /test-unit-notify/
 /ext/groonga/Makefile
@@ -15,3 +14,6 @@
 /vendor
 *.so
 /*.gemspec
+/po/rroonga.pot
+/.yardoc/
+/references/

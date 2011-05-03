@@ -1,6 +1,6 @@
 # -*- coding: utf-8; mode: ruby -*-
 #
-# Copyright (C) 2009-2010  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2011  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -22,13 +22,9 @@ require 'fileutils'
 require 'pathname'
 require 'erb'
 require 'rubygems'
-if RUBY_VERSION < "1.9"
-  gem 'rdoc'
-end
-require 'hoe'
+require 'yard'
+require 'jeweler'
 require 'rake/extensiontask'
-
-ENV["NODOT"] = "yes"
 
 base_dir = File.join(File.dirname(__FILE__))
 truncate_base_dir = Proc.new do |x|
@@ -93,55 +89,43 @@ end
 
 ENV["VERSION"] ||= guess_version(groonga_ext_dir)
 version = ENV["VERSION"]
-project = nil
-Hoe.spec('rroonga') do
-  Hoe::Test::SUPPORTED_TEST_FRAMEWORKS[:testunit2] = "test/run-test.rb"
-  project = self
-  project.version = version.dup
-  project.rubyforge_name = 'groonga'
+spec = nil
+Jeweler::Tasks.new do |_spec|
+  spec = _spec
+  spec.name = "rroonga"
+  spec.version = version.dup
+  spec.rubyforge_project = "groonga"
+  spec.homepage = "http://groonga.rubyforge.org/"
   authors = File.join(base_dir, "AUTHORS")
-  project.author = File.readlines(authors).collect do |line|
+  spec.authors = File.readlines(authors).collect do |line|
     if /\s*<[^<>]*>$/ =~ line
       $PREMATCH
     else
       nil
     end
   end.compact
-  project.email = ['groonga-users-en@rubyforge.org',
-                   'groonga-dev@lists.sourceforge.jp']
-  project.url = 'http://groonga.rubyforge.org/'
-  project.testlib = :testunit2
-  project.test_globs = ["test/run-test.rb"]
-  project.spec_extras = {
-    :extensions => ['extconf.rb'],
-    :require_paths => ["lib", "ext/groonga"],
-    :extra_rdoc_files => Dir.glob("**/*.rdoc"),
-  }
-  project.extra_deps << ['pkg-config', '>= 1.0.7']
-  project.readme_file = "README.ja.rdoc"
-
-  news_of_current_release = File.read("NEWS.rdoc").split(/^==\s.*$/)[1]
-  project.changes = cleanup_white_space(news_of_current_release)
-
-  entries = File.read("README.rdoc").split(/^==\s(.*)$/)
+  spec.email = [
+    'groonga-users-en@rubyforge.org',
+    'groonga-dev@lists.sourceforge.jp',
+  ]
+  entries = File.read("README.textile").split(/^h2\.\s(.*)$/)
   description = cleanup_white_space(entries[entries.index("Description") + 1])
-  project.summary, project.description, = description.split(/\n\n+/, 3)
-
-  project.remote_rdoc_dir = "rroonga"
+  spec.summary, spec.description, = description.split(/\n\n+/, 3)
+  spec.license = "LGPLv2"
 end
 
-project.spec.dependencies.delete_if {|dependency| dependency.name == "hoe"}
+Jeweler::RubygemsDotOrgTasks.new do
+end
 
-ObjectSpace.each_object(Rake::RDocTask) do |rdoc_task|
-  options = rdoc_task.options
-  t_option_index = options.index("--title") || options.index("-t")
-  rdoc_task.options[t_option_index, 2] = nil
-  rdoc_task.title = "rroonga - #{version}"
-
-  rdoc_task.rdoc_files = ["ext/groonga/rb-groonga.c"]
-  rdoc_task.rdoc_files += Dir.glob("ext/groonga/rb-grn-*.c")
-  rdoc_task.rdoc_files += Dir.glob("lib/**/*.rb")
-  rdoc_task.rdoc_files += Dir.glob("**/*.rdoc")
+YARD::Rake::YardocTask.new do |task|
+  task.options += ["--title", "#{spec.name} - #{version}"]
+  # task.options += ["--charset", "UTF-8"]
+  task.options += ["--readme", "README.textile"]
+  task.options += ["--files", "text/expression.rdoc"]
+  task.files += FileList["ext/groonga/**/rb-groonga.c"]
+  task.files += FileList["ext/groonga/**/*.c"]
+  task.files += FileList["lib/**/*.rb"]
+  task.files += FileList["**/*.rdoc"]
 end
 
 def windows?(platform=nil)
@@ -164,7 +148,7 @@ relative_binary_dir = File.join("vendor", "local")
 vendor_dir = File.join(base_dir, relative_vendor_dir)
 binary_dir = File.join(base_dir, relative_binary_dir)
 
-Rake::ExtensionTask.new("groonga", project.spec) do |ext|
+Rake::ExtensionTask.new("groonga", spec) do |ext|
   if windows?
     ext.gem_spec.files += collect_binary_files(relative_binary_dir)
   else
@@ -177,13 +161,11 @@ Rake::ExtensionTask.new("groonga", project.spec) do |ext|
   end
 end
 
-task :publish_docs => [:prepare_docs_for_publishing]
-
 include ERB::Util
 
-def apply_template(file, head, header, footer)
+def apply_template(file, head, header, footer, language)
   content = File.read(file)
-  content = content.sub(/lang="en"/, 'lang="ja"')
+  content = content.sub(/lang="en"/, 'lang="#{language}"')
 
   title = nil
   content = content.sub(/<title>(.+?)<\/title>/) do
@@ -212,37 +194,116 @@ def erb_template(name)
   erb
 end
 
-task :prepare_docs_for_publishing do
-  head = erb_template("head")
-  header = erb_template("header")
-  footer = erb_template("footer")
-  Find.find("doc") do |file|
-    if /\.html\z/ =~ file and /_(?:c|rb)\.html\z/ !~ file
-      apply_template(file, head, header, footer)
-    end
-  end
-  File.open("doc/.htaccess", "w") do |file|
-    file.puts("Redirect permanent /rroonga/text/TUTORIAL_ja_rdoc.html " +
-              "http://groonga.rubyforge.org/rroonga/text/tutorial_ja_rdoc.html")
-  end
-end
-
-desc "Publish HTML to Web site."
-task :publish_html do
+def rsync_to_rubyforge(spec, source, destination)
   config = YAML.load(File.read(File.expand_path("~/.rubyforge/user-config.yml")))
   host = "#{config["username"]}@rubyforge.org"
 
-  rsync_args = "-av --exclude '*.erb' --exclude '*.svg' --exclude .svn"
-  remote_dir = "/var/www/gforge-projects/#{project.rubyforge_name}/"
-  sh "rsync #{rsync_args} html/ #{host}:#{remote_dir}"
+  rsync_args = "-av --exclude '*.erb' --delete --dry-run"
+  remote_dir = "/var/www/gforge-projects/#{spec.rubyforge_name}/"
+  sh("rsync #{rsync_args} #{source} #{host}:#{remote_dir}#{destination}")
 end
+
+namespace :reference do
+  supported_languages = [:en, :ja]
+  translate_languages = []
+  reference_base_dir = "references"
+  directory reference_base_dir
+  CLOBBER.include(reference_base_dir)
+
+  namespace :translate do
+    po_dir = "po"
+    pot_file = "#{po_dir}/#{spec.name}.pot"
+
+    html_files = FileList["doc/**/*.html"].to_a
+    directory po_dir
+    file pot_file => ["po", *html_files] do |t|
+      sh("xml2po", "--keep-entities", "--output", t.name, *html_files)
+    end
+
+    desc "Generates pot file."
+    task :pot => pot_file
+
+    directory reference_base_dir
+
+    supported_languages.each do |language|
+      next if language == :en
+      translate_languages << language
+      po_file = "#{po_dir}/#{language}.po"
+      translate_doc_dir = "#{reference_base_dir}/#{language}"
+
+      doc_dir = Pathname("doc")
+      desc "Translates documents to #{language}."
+      task language => [po_file, reference_base_dir, *html_files] do
+        doc_dir.find do |path|
+          base_path = path.relative_path_from(doc_dir)
+          translated_path = "#{translate_doc_dir}/#{base_path}"
+          if path.directory?
+            mkdir_p(translated_path)
+            next
+          end
+          case path.extname
+          when ".html"
+            sh("xml2po --keep-entities " +
+               "--po-file #{po_file} --language #{language} " +
+               "#{path} > #{translated_path}")
+          else
+            cp(path.to_s, translated_path, :preserve => true)
+          end
+        end
+      end
+    end
+  end
+
+  translate_task_names = translate_languages.collect do |language|
+    "reference:translate:#{language}"
+  end
+  desc "Translates references."
+  task :translate => translate_task_names
+
+  desc "Generates references."
+  task :generate => [:yard, :translate] do
+    cp_r("doc", "#{reference_base_dir}/en", :preserve => true)
+  end
+
+  namespace :publication do
+    task :prepare do
+      head = erb_template("head")
+      header = erb_template("header")
+      footer = erb_template("footer")
+      supported_languages.each do |language|
+        doc_dir = "#{reference_base_dir}/#{language}"
+        Find.find(doc_dir) do |file|
+          if /\.html\z/ =~ file and /_(?:c|rb)\.html\z/ !~ file
+            apply_template(file, head, header, footer, language)
+          end
+        end
+      end
+      File.open("#{reference_base_dir}/.htaccess", "w") do |file|
+        file.puts("Redirect permanent /rroonga/text/TUTORIAL_ja_rdoc.html " +
+                  "http://groonga.rubyforge.org/rroonga/ja/file.tutorial.html")
+        file.puts("Redirect permanent /rroonga/ " +
+                  "http://groonga.rubyforge.org/rroonga/en/")
+      end
+    end
+  end
+
+  task :publish => [:generate, "reference:publication:prepare"] do
+    rsync_to_rubyforge(spec, "#{reference_base_dir}/", "/#{spec.name}")
+  end
+end
+
+namespace :html do
+  desc "Publish HTML to Web site."
+  task :publish do
+    rsync_to_rubyforge(spec, "html/", "")
+  end
+end
+task :publish => ["reference:publish", "html:publish"]
 
 desc "Tag the current revision."
 task :tag do
   sh("git tag -a #{version} -m 'release #{version}!!!'")
 end
-
-task(:release).prerequisites.reject! {|name| name == "clean"}
 
 namespace :win32 do
   patches_dir = (Pathname.new(base_dir) + "patches").expand_path
@@ -362,14 +423,5 @@ namespace :win32 do
       files = ["AUTHORS", "COPYING"]
       cp(files, groonga_files_dir)
     end
-  end
-end
-
-desc "generate rroonga.gemspec"
-task :generate_gemspec do
-  spec = project.spec
-  spec_name = File.join(base_dir, project.spec.spec_name)
-  File.open(spec_name, "w") do |spec_file|
-    spec_file.puts(spec.to_ruby)
   end
 end
