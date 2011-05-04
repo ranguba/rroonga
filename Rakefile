@@ -26,6 +26,11 @@ require 'yard'
 require 'jeweler'
 require 'rake/extensiontask'
 
+begin
+  YAML::ENGINE.yamler = "psych"
+rescue LoadError
+end
+
 base_dir = File.join(File.dirname(__FILE__))
 truncate_base_dir = Proc.new do |x|
   x.gsub(/^#{Regexp.escape(base_dir + File::SEPARATOR)}/, '')
