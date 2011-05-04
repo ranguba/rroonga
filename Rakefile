@@ -32,9 +32,6 @@ rescue LoadError
 end
 
 base_dir = File.join(File.dirname(__FILE__))
-truncate_base_dir = Proc.new do |x|
-  x.gsub(/^#{Regexp.escape(base_dir + File::SEPARATOR)}/, '')
-end
 
 groonga_ext_dir = File.join(base_dir, "ext", "groonga")
 groonga_lib_dir = File.join(base_dir, 'lib')
@@ -53,39 +50,6 @@ def guess_version(groonga_ext_dir)
     end
   end
   [version["major"], version["minor"], version["micro"]].join(".")
-end
-
-manifest = File.join(base_dir, "Manifest.txt")
-manifest_contents = []
-base_dir_included_components = %w(AUTHORS Rakefile
-                                  README.rdoc README.ja.rdoc
-                                  NEWS.rdoc NEWS.ja.rdoc
-                                  rroonga-build.rb extconf.rb)
-excluded_components = %w(.cvsignore .gdb_history CVS depend Makefile doc pkg
-                         .svn .git doc data .test-result tmp vendor)
-excluded_suffixes = %w(.png .ps .pdf .o .so .a .txt .~)
-Find.find(base_dir) do |target|
-  target = truncate_base_dir[target]
-  components = target.split(File::SEPARATOR)
-  if components.size == 1 and !File.directory?(target)
-    next unless base_dir_included_components.include?(components[0])
-  end
-  Find.prune if (excluded_components - components) != excluded_components
-  next if excluded_suffixes.include?(File.extname(target))
-  manifest_contents << target if File.file?(target)
-end
-
-File.open(manifest, "w") do |f|
-  f.puts manifest_contents.sort.join("\n")
-end
-
-# For Hoe's no user friendly default behavior. :<
-File.open("README.txt", "w") {|file| file << "= Dummy README\n== XXX\n"}
-FileUtils.cp("NEWS.rdoc", "History.txt")
-at_exit do
-  FileUtils.rm_f("README.txt")
-  FileUtils.rm_f("History.txt")
-  FileUtils.rm_f(manifest)
 end
 
 def cleanup_white_space(entry)
@@ -117,6 +81,13 @@ Jeweler::Tasks.new do |_spec|
   description = cleanup_white_space(entries[entries.index("Description") + 1])
   spec.summary, spec.description, = description.split(/\n\n+/, 3)
   spec.license = "LGPLv2"
+  spec.files = FileList["{lib,benchmark,misc}/**/*.rb",
+                        "bin/*",
+                        "*.rb",
+                        "example/*.rb",
+                        "Rakefile",
+                        "ext/**/*"]
+  spec.test_files = FileList["test/**/*.rb"]
 end
 
 Jeweler::RubygemsDotOrgTasks.new do
