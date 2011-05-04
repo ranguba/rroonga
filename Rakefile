@@ -179,9 +179,9 @@ Rake::ExtensionTask.new("groonga", spec) do |ext|
     ext.gem_spec.files += collect_binary_files(relative_binary_dir)
   else
     ext.cross_compile = true
-    ext.cross_compiling do |spec|
-      if windows?(spec.platform.to_s)
-        spec.files += collect_binary_files(relative_binary_dir)
+    ext.cross_compiling do |_spec|
+      if windows?(_spec.platform.to_s)
+        _spec.files += collect_binary_files(relative_binary_dir)
       end
     end
   end
