@@ -2,107 +2,109 @@
 <!DOCTYPE html
   PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja">
   <head>
     <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
     <link rel="stylesheet" href="ranguba.css" type="text/css" />
     <link rel="shortcut icon" href="/favicon.ico" />
     <link rel="icon" href="/favicon.png" />
-    <title>Fulltext search by Ruby with groonga - Ranguba</title>
+    <title>Rubyでgroonga使って全文検索 - ラングバ</title>
   </head>
   <body>
     <div class="header">
       <div class="title">
-        <a href="./">
-	  <span class="title">Fulltext search by Ruby with groonga</span>
+        <a href="index.html.ja">
+	  <span class="title">Rubyでgroonga使って全文検索</span>
 	  <span class="title-separator">-</span>
-	  <span class="title-project">Ranguba</span>
+	  <span class="title-project">ラングバ</span>
         </a>
       </div>
       <ul class="other-languages">
-        <li id="other-language-japanese" lang="ja" xml:lang="ja"><a href="index.html.ja">日本語</a></li>
+        <li id="other-language-english" lang="en" xml:lang="en"><a href="./">English</a></li>
       </ul>
       <ul class="menu">
-	<li id="menu-reference"><a href="rroonga/en/">Reference Manual</a></li>
-	<li id="menu-tutorial"><a href="rroonga/en/file.tutorial.html">Tutorial</a></li>
-	<li id="menu-install"><a href="#install-rroonga">Install</a></li>
-	<li id="menu-developer"><a href="developer.html">Developer</a></li>
+	<li id="menu-reference"><a href="rroonga/ja/">リファレンスマニュアル</a></li>
+	<li id="menu-tutorial"><a href="rroonga/ja/text/tutorial_ja_rdoc.html">チュートリアル</a></li>
+	<li id="menu-install"><a href="#install-rroonga">インストール</a></li>
+	<li id="menu-developer"><a href="developer.html.ja">開発者向け情報</a></li>
       </ul>
     </div>
 
     <div class="content">
       <div class="main">
-	<h1>The Ranguba project</h1>
+	<h1>ラングバプロジェクト</h1>
 	<p>
-	  The Ranguba project is a project to provide a fulltext search system built on <a href="http://groonga.org/">groonga</a>. Groonga is a fast fulltext search engine with culumn store. The project provides libraries to use groonga features, text extraction utility, search Web interface and so on. Here are provided features:
+	  ラングバプロジェクトは<a href="http://groonga.org/">カラムストア機能も備える高速・高機能な全文検索エンジンgroonga</a>を用いた全文検索システムを提供するプロジェクトです。groongaの機能をRubyから利用するためのライブラリ、様々な文書から検索対象のテキストを抽出するユーティリティ、検索用Webインターフェイスなどを提供します。提供する機能の一覧は以下の通りです。
 	</p>
         <ul>
-          <li><a href="#about-rroonga">rroonga</a>: A library to use groonga features from Ruby.</li>
-          <li><a href="#about-active-groonga">ActiveGroonga</a>: A library to use rroonga easily from Web applications.</li>
-          <li><a href="#about-active-groonga-fabrication">ActiveGroonga Fabrication</a>: A library that adds ActiveGroonga support to Fabrication.</li>
-          <li><a href="#about-racknga">racknga</a>: Utilities for building and operating a search Web application.</li>
-          <li><a href="#about-chupatext">ChupaText</a>: A text extract utility.</li>
-          <li><a href="#about-chuparuby">ChupaRuby</a>: A library to use ChupaText features from Ruby.</li>
-          <li><a href="#about-ranguba">Document Search Ranguba</a>: A fulltext search system.</li>
+          <li><a href="#about-rroonga">rroonga</a>: groongaの機能をRubyから利用するためのライブラリ</li>
+          <li><a href="#about-active-groonga">ActiveGroonga</a>: rroongaをWebアプリケーションから使いやすくするためのライブラリ</li>
+          <li><a href="#about-active-groonga-fabrication">ActiveGroonga Fabrication</a>: FabricationにActiveGroongaサポートを追加するライブラリ</li>
+          <li><a href="#about-racknga">racknga</a>: 検索用Webアプリケーションの構築・運用を支援するユーティリティ</li>
+          <li><a href="#about-chupatext">ChupaText</a>: テキスト抽出ユーティリティ</li>
+          <li><a href="#about-chuparuby">ChupaRuby</a>: ChupaTextの機能をRubyから利用するためのライブラリ</li>
+          <li><a href="#about-ranguba">文書検索ラングバ</a>: 全文検索システム</li>
 	</ul>
 
 	<h2 id="about-rroonga">rroonga</h2>
 	<p>
-	  Rroonga provides groong's DB-API layer features to Ruby. Features specialized to Web applications built on rroonga are provided by <a href="#about-active-groonga">ActiveGroonga</a>. Convenience features for search Web applications are provided by <a href="#about-racknga">racknga</a>. All of them have the same merit that you can use groonga features via Rubyish useful API.
+	  rroonga（るるんが）はgroonga（ぐるんが）のいわゆるDB-APIの層の機能をRubyレベルに提供します。rroongaの機能を特にWebアプリケーションから使いやすくするための機能は<a href="#about-active-groonga">ActiveGroonga</a>で提供します。検索用Webアプリケーションを構築・運用するときに便利な機能は<a href="#about-racknga">racknga</a>で提供します。どのライブラリもgroongaの機能をRubyらしい読み書きしやすい構文で利用できることが利点です。
 	</p>
 
-	<h3>rroonga: The latest release</h3>
+	<h3>rroongaの最新リリース</h3>
 	<p>
-	  1.2.0 is the latest release. It had been released at 2011-04-01.
+	  2011-04-01にリリースされた1.2.0が最新です。
         </p>
 
-	<h3 id="install-rroonga">rroonga: Install</h3>
+	<h3 id="install-rroonga">rroongaのインストール</h3>
 	<p>
-	  You can install by RubyGems. If you don't have groonga, it is downloaded and built automatically.
+	  RubyGemsでインストールできます。groongaがインストールされていない場合は自動でダウンロード・ビルドし利用します。
         </p>
         <pre class="command">% sudo gem install rroonga</pre>
 
-	<h3>rroonga: Document</h3>
+	<h3>rroongaのドキュメント</h3>
 	<p>
-	  There are a reference manual and a tutorial.
+	  リファレンスマニュアルとチュートリアルがあります。
+	  どちらもまだ未完成で、半分位できています。
         </p>
         <ul>
-	  <li><a href="rroonga/en/">rroonga's reference manual</a></li>
-	  <li><a href="rroonga/en/tutorial.html">rroonga's tutorial</a></li>
+	  <li><a href="rroonga/ja/">rroongaのリファレンスマニュアル</a></li>
+	  <li><a href="rroonga/ja/file.tutorial.html">rroongaのチュートリアル</a></li>
         </ul>
 
 	<h2 id="about-active-groonga">ActiveGroonga</h2>
 	<p>
-	  ActiveGroonga is a library that provides more easy-to-use fulltext search and data store features. ActiveGroonga is built on rroonga.
-          You can access to your data administrated by groonga via ActiveRecord like API.
+	  ActiveGroongaはrroongaの機能を使ってより利用しやすい全文検索機能・データストア機能を提供するライブラリです。
+          ActiveRecordのようなAPIでgroongaで管理しているデータを通常のオブジェクトのように扱えます。
 	</p>
 	<p>
-	  ActiveGroonga supports Ruby on Rails. You can develop a Rails application that uses groonga instead of RDB as data store and has rich fulltext search feature.
-          You can still use the current Rails application knowledge because ActiveGroonga has the following features:
+	  ActiveGroongaはRuby on Railsに対応しています。データストアにRDBではなくgroongaを利用し、全文検索機能を強化したRailsアプリケーションを開発できます。
+          ActiveGroongaは以下のようにActiveRecordのような機能を持っているため、これまでのRailsアプリケーションの知識を利用することができます。
           <ul>
-            <li>Migration</li>
-            <li>Validation</li>
-            <li>Relation</li>
+            <li>マイグレーション</li>
+            <li>バリデーション</li>
+            <li>リレーション</li>
           </ul>
 	</p>
 
-	<h3>ActiveGroonga: The latest release</h3>
+	<h3>ActiveGroongaの最新リリース</h3>
 	<p>
-	  1.0.4 is the latest release. It had been released at 2011-04-01.
+	  2011-04-01にリリースされた1.0.4が最新です。
         </p>
 
-	<h3 id="install-active-groonga">ActiveGroonga: Install</h3>
+	<h3 id="install-active-groonga">ActiveGroongaのインストール</h3>
 	<p>
-	  You can install by RubyGems.
+	  ActiveGroonagaもRubyGemsでインストールできます。
         </p>
         <pre class="command">% sudo gem install activegroonga</pre>
 
-	<h3>ActiveGroonga: Document</h3>
+	<h3>ActiveGroongaのドキュメント</h3>
 	<p>
-	  There is a reference manual.
+	  ActiveGroonagaのドキュメントはそれほどありません。
+          これから徐々に追加されていく予定です。
         </p>
 	<ul>
-	  <li><a href="activegroonga/en/">ActiveGroonga's reference manual</a></li>
+	  <li><a href="activegroonga/">ActiveGroongaのリファレンスマニュアル</a></li>
 	</ul>
 
 	<h2 id="about-active-groonga-fabrication">ActiveGroonga Fabrication</h2>
@@ -217,20 +219,22 @@
 	  未リリース。
         </p>
 
-	<h2>License</h2>
+	<h2>ライセンス</h2>
 	<p>
-          rroonga, ActiveGroonga, racknga and ChupaText are free softwares; you can redistribute it and/or modify it under the terms of <a href="http://www.gnu.org/licenses/lgpl-2.1.txt">the GNU Lesser General Public License version 2.1</a> as published by the Free Software Foundation.
+	  rroonga、ActiveGroonga、racknga、ChupaTextはフリーソフトウェアです。あなたは、Free Software Foundationが公表した<a href="http://www.gnu.org/licenses/lgpl-2.1.txt">GNU Lesser General Public License 2.1</a>に定める条項に従って本プログラムを再頒布または変更することができます。
         </p>
 
         <p>
-          rroonga, ActiveGroonga, racknga and ChupaText are distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See <a href="http://www.gnu.org/licenses/lgpl-2.1.txt">the GNU Lesser General Public License 2.1</a> for more details.
+          rroonga、ActiveGroonga、racknga、ChupaTextは有用とは思いますが、頒布にあたっては、市場性及び特定目的適合性についての暗黙の保証を含めて、いかなる保証も行ないません。詳細については<a href="http://www.gnu.org/licenses/lgpl-2.1.txt">GNU Lesser General Public License 2.1</a>をお読みください。
+        </p>
       </div>
 
       <div class="sidebar">
 	<ul>
-	  <li><a href="http://rubyforge.org/projects/groonga/">Project page</a></li>
+	  <li><a href="http://rubyforge.org/projects/groonga/">プロジェクトページ</a></li>
 	  <li>
-	    <a href="http://rubyforge.org/mailman/listinfo/groonga-users-en">Mailinglist</a>
+	    <a href="http://lists.sourceforge.jp/mailman/listinfo/groonga-dev">メーリングリスト</a>
+            （groongaのメーリングリストにお願いします）
 	  </li>
 	</ul>
       </div>
@@ -239,22 +243,22 @@
     <div class="sponsors">
       <p id="sponsor-rubyforge">
         <a href="http://rubyforge.org/projects/groonga/">
-          <img src="rubyforge.png" width="120" height="24" border="0" alt="Test::Unit is hosted on RubyForge.org." />
+          <img src="rubyforge.png" width="120" height="24" border="0" alt="ラングバプロジェクトはRubyForge.orgにホスティングしてもらっています。" />
         </a>
       </p>
       <p id="sponsor-github">
-        <a href="https://github.com/ranguba/">
-          <img src="github-logo.png" width="100" height="45" border="0" alt="GitHub's git repositories are used." />
+        <a href="http://github.com/ranguba/">
+          <img src="github-logo.png" width="100" height="45" border="0" alt="ラングバプロジェクトはGitHubにホスティングしてもらっています。" />
         </a>
       </p>
       <p id="sponsor-tango">
 	<a href="http://tango.freedesktop.org/">
-          <img width="120" height="53" border="0" alt="Tango Desktop Project's icons are used." src="tango-logo.png" />
+          <img width="120" height="53" border="0" alt="Tango Desktop Projectのアイコンを利用しています。" src="tango-logo.png" />
         </a>
       </p>
       <p id="sponsor-famfamfam">
 	<a href="http://www.famfamfam.com/">
-          <img width="120" height="18" border="0" alt="famfamfam.com's flags are used." src="famfamfam-logo.png" />
+          <img width="120" height="18" border="0" alt="famfamfam.comの国旗を利用しています。" src="famfamfam-logo.png" />
         </a>
       </p>
 

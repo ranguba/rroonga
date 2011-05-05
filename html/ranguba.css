@@ -262,6 +262,14 @@ div.sponsors p#sponsor-tango
   right: 50px;
 }
 
+div.sponsors p#sponsor-famfamfam
+{
+  position: absolute;
+  top: 168px;
+  right: 50px;
+  padding-bottom: 50px;
+}
+
 dt
 {
   margin-bottom: 0.25em;
