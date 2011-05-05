@@ -191,11 +191,12 @@ def erb_template(name)
   erb
 end
 
-def rsync_to_rubyforge(spec, source, destination)
+def rsync_to_rubyforge(spec, source, destination, options={})
   config = YAML.load(File.read(File.expand_path("~/.rubyforge/user-config.yml")))
   host = "#{config["username"]}@rubyforge.org"
 
-  rsync_args = "-av --exclude '*.erb' --delete --dry-run"
+  rsync_args = "-av --exclude '*.erb' --dry-run"
+  rsync_args << " --delete" if options[:delete]
   remote_dir = "/var/www/gforge-projects/#{spec.rubyforge_name}/"
   sh("rsync #{rsync_args} #{source} #{host}:#{remote_dir}#{destination}")
 end
@@ -301,7 +302,8 @@ namespace :reference do
   end
 
   task :publish => [:generate, "reference:publication:prepare"] do
-    rsync_to_rubyforge(spec, "#{reference_base_dir}/", "/#{spec.name}")
+    rsync_to_rubyforge(spec, "#{reference_base_dir}/", "/#{spec.name}",
+                       :delete => true)
   end
 end
 
