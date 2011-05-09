@@ -124,23 +124,23 @@ p(records = comments.select do |record|
   end)
 
 records.each do |record|
-  record = record.key
-  p [record.id,
-     record.issued,
-     record.item.title,
-     record.author.name,
-     record.content]
+  comment = record.key
+  p [comment.id,
+     comment.issued,
+     comment.item.title,
+     comment.author.name,
+     comment.content]
 end
 
 p records
 
 records.sort([{:key => "issued", :order => "descending"}]).each do |record|
-  record = record.key
-  p [record.id,
-     record.issued,
-     record.item.title,
-     record.author.name,
-     record.content]
+  comment = record.key
+  p [comment.id,
+     comment.issued,
+     comment.item.title,
+     comment.author.name,
+     comment.content]
 end
 
 records.group("item").each do |record|

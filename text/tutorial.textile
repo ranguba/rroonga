@@ -404,12 +404,12 @@ h2. 全文検索その2
 >>   end
 => #<Groonga::Hash ...>
 >> records.each do |record|
-?>     record = record.key
->>   p [record.id,
-?>       record.issued,
-?>       record.item.title,
-?>       record.author.name,
-?>       record.content]
+?>     comment = record.key
+>>   p [comment.id,
+?>       comment.issued,
+?>       comment.item.title,
+?>       comment.author.name,
+?>       comment.content]
 >>   end
 [1, Sat Nov 20 18:01:22 +0900 2010, "Matzにっき", "モリタン", "Ruby Matz"]
 [2, Thu Oct 07 14:18:28 +0900 2010, "Rubyist Magazine - るびま", "モリタン", "Ruby 記事"]
@@ -440,12 +440,12 @@ RDBで実現するためには、 @Items@ テーブル、
 <pre>
 !!!irb
 >> records.sort([{:key => "issued", :order => "descending"}]).each do |record|
-?>     record = record.key
->>   p [record.id,
-?>       record.issued,
-?>       record.item.title,
-?>       record.author.name,
-?>       record.content]
+?>     comment = record.key
+>>   p [comment.id,
+?>       comment.issued,
+?>       comment.item.title,
+?>       comment.author.name,
+?>       comment.content]
 >>   end
 [1, Sat Nov 20 18:01:22 +0900 2010, "Matzにっき", "モリタン", "Ruby Matz"]
 [3, Thu Nov 11 12:39:59 +0900 2010, "Rubyでgroonga使って全文検索 - ラングバ", "タポロボ", "Ruby groonga 全文検索"]
