@@ -445,7 +445,7 @@ module Groonga
       end
       if object.range != @table
         raise ArgumentError,
-              "differenct index column: <#{name}>: #{object.inspect}"
+              "different index column: <#{name}>: #{object.inspect}"
       end
       column_expression_builder(object, name)
     end
