@@ -101,7 +101,7 @@ rb_grn_init_version (VALUE mGrn)
 				   INT2NUM(RB_GRN_MICRO_VERSION));
     rb_obj_freeze(bindings_version);
     /*
-     * Ruby/groongaのバージョン。<tt>[メジャーバージョン, マ
+     * rroongaのバージョン。<tt>[メジャーバージョン, マ
      * イナーバージョン, マイクロバージョン]</tt>の配列。
      */
     rb_define_const(mGrn, "BINDINGS_VERSION", bindings_version);
