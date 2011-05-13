@@ -79,6 +79,12 @@ class SchemaTypeTest < Test::Unit::TestCase
     assert_normalize_type("Bool", "Bool")
   end
 
+  def test_normalize_delimit
+    assert_normalize_type("TokenDelimit", "delimit")
+    assert_normalize_type("TokenDelimit", "token_delimit")
+    assert_normalize_type("TokenDelimit", "TokenDelimit")
+  end
+
   def test_normalize_unigram
     assert_normalize_type("TokenUnigram", "unigram")
     assert_normalize_type("TokenUnigram", "token_unigram")

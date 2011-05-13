@@ -476,6 +476,8 @@ module Groonga
         "time" => "Time",
         "date" => "Time",
         "boolean" => "Bool",
+        "delimit" => "TokenDelimit",
+        "token_delimit" => "TokenDelimit",
         "unigram" => "TokenUnigram",
         "token_unigram" => "TokenUnigram",
         "bigram" => "TokenBigram",
