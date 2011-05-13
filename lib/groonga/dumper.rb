@@ -55,7 +55,6 @@ module Groonga
       options[:database].each(:order_by => :key) do |object|
         next unless object.is_a?(Groonga::Table)
         next if object.size.zero?
-        next if lexicon_table?(object)
         next unless target_table?(options[:tables], object)
         options[:output].write("\n") if !first_table or options[:dump_schema]
         first_table = false
@@ -65,12 +64,6 @@ module Groonga
 
     def dump_records(table, options)
       TableDumper.new(table, options).dump
-    end
-
-    def lexicon_table?(table)
-      table.support_key? and
-        table.default_tokenizer and
-        table.columns.any? {|column| column.index?}
     end
 
     def target_table?(target_tables, table)

@@ -21,6 +21,13 @@ class DatabaseDumperTest < Test::Unit::TestCase
   setup
   def setup_tables
     Groonga::Schema.define do |schema|
+      schema.create_table("Tags",
+                          :type => :hash,
+                          :key_type => :short_text,
+                          :default_tokenizer => :delimit) do |table|
+        table.text("name")
+      end
+
       schema.create_table("Users",
                           :type => :hash,
                           :key_type => "ShortText") do |table|
@@ -32,13 +39,18 @@ class DatabaseDumperTest < Test::Unit::TestCase
         table.reference("author", "Users")
         table.integer("rank")
         table.unsigned_integer("n_goods")
-        table.text("tags", :type => :vector)
+        table.short_text("tag_text")
+        table.reference("tags", "Tags", :type => :vector)
         table.boolean("published")
         table.time("created_at")
       end
 
       schema.change_table("Users") do |table|
         table.index("Posts.author")
+      end
+
+      schema.change_table("Tags") do |table|
+        table.index("Posts.tag_text")
       end
     end
   end
@@ -59,13 +71,19 @@ column_create Posts created_at COLUMN_SCALAR Time
 column_create Posts n_goods COLUMN_SCALAR UInt32
 column_create Posts published COLUMN_SCALAR Bool
 column_create Posts rank COLUMN_SCALAR Int32
-column_create Posts tags COLUMN_VECTOR Text
+column_create Posts tag_text COLUMN_SCALAR ShortText
 column_create Posts title COLUMN_SCALAR Text
+
+table_create Tags TABLE_HASH_KEY --key_type ShortText --default_tokenizer TokenDelimit
+column_create Tags name COLUMN_SCALAR Text
 
 table_create Users TABLE_HASH_KEY --key_type ShortText
 column_create Users name COLUMN_SCALAR Text
 
 column_create Posts author COLUMN_SCALAR Users
+column_create Posts tags COLUMN_VECTOR Tags
+
+column_create Tags Posts_tag_text COLUMN_INDEX Posts tag_text
 
 column_create Users Posts_author COLUMN_INDEX Posts author
 EOS
@@ -85,6 +103,7 @@ EOS
                 :n_goods => 4,
                 :published => true,
                 :rank => 10,
+                :tag_text => "search mori",
                 :tags => ["search", "mori"],
                 :title => "Why search engine find?")
     end
@@ -95,8 +114,15 @@ EOS
 
 load --table Posts
 [
-["_id","author","created_at","n_goods","published","rank","tags","title"],
-[1,"mori",1268034720.0,4,true,10,["search","mori"],"Why search engine find?"]
+["_id","author","created_at","n_goods","published","rank","tag_text","tags","title"],
+[1,"mori",1268034720.0,4,true,10,"search mori",["search","mori"],"Why search engine find?"]
+]
+
+load --table Tags
+[
+["_key","name"],
+["search",""],
+["mori",""]
 ]
 
 load --table Users
@@ -113,8 +139,8 @@ EOS
 
 load --table Posts
 [
-["_id","author","created_at","n_goods","published","rank","tags","title"],
-[1,"mori",1268034720.0,4,true,10,["search","mori"],"Why search engine find?"]
+["_id","author","created_at","n_goods","published","rank","tag_text","tags","title"],
+[1,"mori",1268034720.0,4,true,10,"search mori",["search","mori"],"Why search engine find?"]
 ]
 EOS
     end
@@ -125,8 +151,8 @@ EOS
 
 load --table Posts
 [
-["_id","author","created_at","n_goods","published","rank","tags","title"],
-[1,"mori",1268034720.0,4,true,10,["search","mori"],"Why search engine find?"]
+["_id","author","created_at","n_goods","published","rank","tag_text","tags","title"],
+[1,"mori",1268034720.0,4,true,10,"search mori",["search","mori"],"Why search engine find?"]
 ]
 EOS
     end
@@ -135,8 +161,15 @@ EOS
       assert_equal(<<-EOS, dump(:dump_schema => false))
 load --table Posts
 [
-["_id","author","created_at","n_goods","published","rank","tags","title"],
-[1,"mori",1268034720.0,4,true,10,["search","mori"],"Why search engine find?"]
+["_id","author","created_at","n_goods","published","rank","tag_text","tags","title"],
+[1,"mori",1268034720.0,4,true,10,"search mori",["search","mori"],"Why search engine find?"]
+]
+
+load --table Tags
+[
+["_key","name"],
+["search",""],
+["mori",""]
 ]
 
 load --table Users
