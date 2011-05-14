@@ -145,7 +145,8 @@ vendor_dir = File.join(base_dir, relative_vendor_dir)
 binary_dir = File.join(base_dir, relative_binary_dir)
 
 Rake::ExtensionTask.new("groonga", spec) do |ext|
-  ext.cross_platform = ["x64-mingw32", "x64-mswin64"]
+  ext.cross_platform = ["x64-mingw32"]
+  # ext.cross_platform << "x64-mswin64" # We need to build with VC++ 2010. :<
   if windows?
     ext.gem_spec.files += collect_binary_files(relative_binary_dir)
   else
