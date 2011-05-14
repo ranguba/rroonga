@@ -365,6 +365,10 @@ namespace :win32 do
       sh("env", "GREP_OPTIONS=--text", "nice", "make", "-j8") or exit(false)
       sh("env", "GREP_OPTIONS=--text", "make", "install") or exit(false)
 
+      mecab_rc_path = File.join(binary_dir, "etc", "mecabrc")
+      win32_mecab_rc_path = File.join(binary_dir, "bin", "mecabrc")
+      mv(mecab_rc_path, win32_mecab_rc_path)
+
       mecab_files_dir = File.join(vendor_dir, "mecab")
       mkdir_p(mecab_files_dir)
       files = ["AUTHORS", "BSD", "COPYING", "GPL", "LGPL"]
@@ -401,11 +405,9 @@ namespace :win32 do
       cp(files, naist_jdic_files_dir)
     end
     dictionary_dir = '$(rcpath)\..\share\mecab\dic\naist-jdic'
-    mecab_rc_path = File.join(binary_dir, "etc", "mecabrc")
-    win32_mecab_rc_path = File.join(binary_dir, "bin", "mecabrc")
-    mv(mecab_rc_path, win32_mecab_rc_path)
-    mecab_rc_content = File.read(win32_mecab_rc_path)
-    File.open(win32_mecab_rc_path, "w") do |mecab_rc|
+    mecab_rc_path = File.join(binary_dir, "bin", "mecabrc")
+    mecab_rc_content = File.read(mecab_rc_path)
+    File.open(mecab_rc_path, "w") do |mecab_rc|
       mecab_rc.print(mecab_rc_content.gsub(/^dicdir\s*=.+$/,
                                            "dicdir = #{dictionary_dir}"))
     end
