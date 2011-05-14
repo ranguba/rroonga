@@ -47,7 +47,7 @@ checking_for(checking_message("GCC")) do
 end
 
 checking_for(checking_message("Win32 OS")) do
-  win32 = /cygwin|mingw|mswin32/ =~ RUBY_PLATFORM
+  win32 = /cygwin|mingw|mswin/ =~ RUBY_PLATFORM
   if win32
     $defs << "-DRB_GRN_PLATFORM_WIN32"
     import_library_name = "libruby-#{module_name}.a"
