@@ -404,8 +404,8 @@ namespace :win32 do
     mecab_rc_path = File.join(binary_dir, "etc", "mecabrc")
     mecab_rc_content = File.read(mecab_rc_path)
     File.open(mecab_rc_path, "w") do |mecab_rc|
-      mecab_rc.print(mecab_rc_content.gsub(/\Adictdir\s*=.+$/,
-                                           "dictdir = #{dictionary_dir}"))
+      mecab_rc.print(mecab_rc_content.gsub(/\Adicdir\s*=.+$/,
+                                           "dicdir = #{dictionary_dir}"))
     end
   end
 
