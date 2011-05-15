@@ -186,4 +186,14 @@ EOS
 EOS
     end
   end
+
+  class PluginTest < DatabaseDumperTest
+    def test_standard_plugin
+      Groonga::Plugin.register("suggest/suggest")
+      assert_equal("register suggest/suggest\n" +
+                   "\n" +
+                   dumped_schema,
+                   dump)
+    end
+  end
 end

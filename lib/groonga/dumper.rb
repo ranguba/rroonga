@@ -32,9 +32,11 @@ module Groonga
         options[:context] ||= Groonga::Context.default
         options[:database] = options[:context].database
       end
+      options[:dump_plugins] = true if options[:dump_plugins].nil?
       options[:dump_schema] = true if options[:dump_schema].nil?
       options[:dump_tables] = true if options[:dump_tables].nil?
 
+      dump_plugins(options) if options[:dump_plugins]
       dump_schema(options) if options[:dump_schema]
       dump_tables(options) if options[:dump_tables]
 
@@ -46,6 +48,22 @@ module Groonga
     end
 
     private
+    def dump_plugins(options)
+      max_built_in_object_id = 255
+      first_table = true
+      plugin_paths = {}
+      options[:database].each(:order_by => :id) do |object|
+        next unless object.is_a?(Groonga::Procedure)
+        next if object.id <= max_built_in_object_id
+        path = object.path
+        next if path.nil?
+        next if plugin_paths.has_key?(path)
+        plugin_paths[path] = true
+        dump_plugin(object, options)
+      end
+      options[:output].write("\n") unless plugin_paths.empty?
+    end
+
     def dump_schema(options)
       SchemaDumper.new(options.merge(:syntax => :command)).dump
     end
@@ -64,6 +82,16 @@ module Groonga
 
     def dump_records(table, options)
       TableDumper.new(table, options).dump
+    end
+
+    def dump_plugin(plugin, options)
+      output = options[:output]
+      plugins_dir_re = Regexp.escape(Groonga::Plugin.system_plugins_dir)
+      suffix_re = Regexp.escape(Groonga::Plugin.suffix)
+      plugin_name = plugin.path.gsub!(/(?:\A#{plugins_dir_re}\/|
+                                          #{suffix_re}\z)/x,
+                                      '')
+      output.write("register #{plugin_name}\n")
     end
 
     def target_table?(target_tables, table)
