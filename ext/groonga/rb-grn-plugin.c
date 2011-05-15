@@ -123,6 +123,34 @@ rb_grn_plugin_s_register (int argc, VALUE *argv, VALUE klass)
     return Qnil;
 }
 
+/**
+ * call-seq:
+ *   Groonga::Plugin.system_plugins_dir
+ *
+ * Returns the system plugins directory.
+ *
+ * @return The system plugins directory.
+ */
+static VALUE
+rb_grn_plugin_s_system_plugins_dir (VALUE klass)
+{
+    return rb_str_new2(grn_plugin_get_system_plugins_dir());
+}
+
+/**
+ * call-seq:
+ *   Groonga::Plugin.suffix
+ *
+ * Returns the plugin file suffix. (e.g. ".so", ".dll" and so on.)
+ *
+ * @return The plugin file suffix.
+ */
+static VALUE
+rb_grn_plugin_s_suffix (VALUE klass)
+{
+    return rb_str_new2(grn_plugin_get_suffix());
+}
+
 void
 rb_grn_init_plugin (VALUE mGrn)
 {
@@ -131,4 +159,8 @@ rb_grn_init_plugin (VALUE mGrn)
 
     rb_define_singleton_method(cGrnPlugin, "register",
 			       rb_grn_plugin_s_register, -1);
+    rb_define_singleton_method(cGrnPlugin, "system_plugins_dir",
+			       rb_grn_plugin_s_system_plugins_dir, 0);
+    rb_define_singleton_method(cGrnPlugin, "suffix",
+			       rb_grn_plugin_s_suffix, 0);
 }

@@ -26,4 +26,10 @@ class PluginTest < Test::Unit::TestCase
     context.register_plugin("suggest/suggest")
     assert_not_nil(context["suggest"])
   end
+
+  def test_system_plugins_dir
+    suggest_plugin_path = "#{Groonga::Plugin.system_plugins_dir}/"
+    suggest_plugin_path << "suggest/suggest#{Groonga::Plugin.suffix}"
+    assert_send([File, :exist?, suggest_plugin_path])
+  end
 end
