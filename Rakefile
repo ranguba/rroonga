@@ -148,7 +148,7 @@ groonga_win32_i386_p = ENV["GROONGA32"] == "yes"
 
 Rake::ExtensionTask.new("groonga", spec) do |ext|
   if groonga_win32_i386_p
-    ext.cross_platform = ["i386-mingw32", "i386-mswin32"]
+    ext.cross_platform = ["x86-mingw32", "i386-mswin32"]
   else
     ext.cross_platform = ["x64-mingw32"]
     # ext.cross_platform << "x64-mswin64" # We need to build with VC++ 2010. :<
