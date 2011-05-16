@@ -239,6 +239,7 @@ void           rb_grn_init_patricia_trie            (VALUE mGrn);
 void           rb_grn_init_view                     (VALUE mGrn);
 void           rb_grn_init_table_cursor             (VALUE mGrn);
 void           rb_grn_init_table_cursor_key_support (VALUE mGrn);
+void           rb_grn_init_index_cursor             (VALUE mGrn);
 void           rb_grn_init_array_cursor             (VALUE mGrn);
 void           rb_grn_init_hash_cursor              (VALUE mGrn);
 void           rb_grn_init_patricia_trie_cursor     (VALUE mGrn);
