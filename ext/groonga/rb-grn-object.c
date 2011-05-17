@@ -123,6 +123,8 @@ rb_grn_object_finalizer (grn_ctx *context, int n_args, grn_obj **grn_objects,
 	rb_grn_table_finalizer(context, grn_object,
 			       RB_GRN_TABLE(rb_grn_object));
 	break;
+      case GRN_CURSOR_COLUMN_INDEX:
+	  break;
       case GRN_COLUMN_FIX_SIZE:
       case GRN_COLUMN_VAR_SIZE:
 	rb_grn_column_finalizer(context, grn_object,
@@ -351,6 +353,7 @@ rb_grn_object_assign (VALUE klass, VALUE self, VALUE rb_context,
 	klass == rb_cGrnPatriciaTrieCursor ||
 	klass == rb_cGrnArrayCursor ||
 	klass == rb_cGrnViewCursor ||
+	klass == rb_cGrnIndexCursor ||
 	klass == rb_cGrnProcedure ||
 	klass == rb_cGrnVariable) {
 	rb_grn_object = ALLOC(RbGrnObject);

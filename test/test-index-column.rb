@@ -147,6 +147,25 @@ class IndexColumnTest < Test::Unit::TestCase
                  })
   end
 
+  def test_open_cursor
+    articles = Groonga::Array.create(:name => "Articles")
+    articles.define_column("content", "Text")
+
+    terms = Groonga::Hash.create(:name => "Terms",
+                                 :default_tokenizer => "TokenBigramSplitSymbolAlpha")
+    content_index = terms.define_index_column("content", articles,
+                                              :with_section => true)
+
+    articles.add(:content => "l")
+    articles.add(:content => "ll")
+    articles.add(:content => "hello")
+
+    terms.open_cursor do |table_cursor|
+      cursor = content_index.open_cursor(table_cursor)
+      assert_instance_of(Groonga::IndexCursor, cursor)
+    end
+  end
+
   private
   def assert_search(expected, content_index, keyword)
     result = content_index.search(keyword).collect do |entry|

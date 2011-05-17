@@ -546,6 +546,28 @@ rb_grn_index_column_with_position_p (VALUE self)
     return CBOOL2RVAL(column->header.flags & GRN_OBJ_WITH_POSITION);
 }
 
+static VALUE
+rb_grn_index_column_open_cursor (VALUE self, VALUE rb_table_cursor)
+{
+    grn_ctx *context;
+    grn_obj *column;
+    grn_table_cursor *table_cursor;
+    grn_id rid_min = GRN_ID_NIL;
+    grn_id rid_max = GRN_ID_MAX;
+    int flags = 0;
+    grn_obj *index_cursor;
+
+    rb_grn_index_column_deconstruct(SELF(self), &column, &context,
+				    NULL, NULL,
+				    NULL, NULL, NULL, NULL,
+				    NULL, NULL);
+    table_cursor = RVAL2GRNTABLECURSOR(rb_table_cursor, NULL);
+
+    index_cursor = grn_index_cursor_open(context, table_cursor,
+					 column, rid_min, rid_max, flags);
+    return GRNINDEXCURSOR2RVAL(context, index_cursor);
+}
+
 void
 rb_grn_init_index_column (VALUE mGrn)
 {
@@ -571,4 +593,6 @@ rb_grn_init_index_column (VALUE mGrn)
 		     rb_grn_index_column_with_weight_p, 0);
     rb_define_method(rb_cGrnIndexColumn, "with_position?",
 		     rb_grn_index_column_with_position_p, 0);
+    rb_define_method(rb_cGrnIndexColumn, "open_cursor",
+		     rb_grn_index_column_open_cursor, 1);
 }
