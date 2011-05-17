@@ -32,11 +32,16 @@ VALUE rb_cGrnTableCursor;
 grn_table_cursor *
 rb_grn_table_cursor_from_ruby_object (VALUE object, grn_ctx **context)
 {
+    grn_table_cursor *table_cursor;
+
     if (!RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cGrnTableCursor))) {
 	rb_raise(rb_eTypeError, "not a groonga table cursor");
     }
 
-    return RVAL2GRNOBJECT(object, context);
+    rb_grn_table_cursor_deconstruct(SELF(object), &table_cursor, NULL,
+				    NULL, NULL,
+				    NULL, NULL);
+    return table_cursor;
 }
 
 VALUE
