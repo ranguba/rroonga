@@ -46,8 +46,8 @@ module Groonga
     # Creates a new Posting.
     #
     # @return The new Posting.
-    def initialize
-      update({})
+    def initialize(parameters=nil)
+      update(parameters || {})
     end
 
     # Updates all values.
