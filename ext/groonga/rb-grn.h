@@ -149,6 +149,12 @@ struct _RbGrnIndexColumn
     grn_obj *string_query;
 };
 
+typedef struct _RbGrnIndexCursor RbGrnIndexCursor;
+struct _RbGrnIndexCursor
+{
+    RbGrnObject parent;
+};
+
 typedef struct _RbGrnAccessor RbGrnAccessor;
 struct _RbGrnAccessor
 {
@@ -240,7 +246,6 @@ void           rb_grn_init_patricia_trie            (VALUE mGrn);
 void           rb_grn_init_view                     (VALUE mGrn);
 void           rb_grn_init_table_cursor             (VALUE mGrn);
 void           rb_grn_init_table_cursor_key_support (VALUE mGrn);
-void           rb_grn_init_index_cursor             (VALUE mGrn);
 void           rb_grn_init_array_cursor             (VALUE mGrn);
 void           rb_grn_init_hash_cursor              (VALUE mGrn);
 void           rb_grn_init_patricia_trie_cursor     (VALUE mGrn);
@@ -251,6 +256,8 @@ void           rb_grn_init_column                   (VALUE mGrn);
 void           rb_grn_init_fix_size_column          (VALUE mGrn);
 void           rb_grn_init_variable_size_column     (VALUE mGrn);
 void           rb_grn_init_index_column             (VALUE mGrn);
+void           rb_grn_init_index_cursor             (VALUE mGrn);
+void           rb_grn_init_posting                  (VALUE mGrn);
 void           rb_grn_init_accessor                 (VALUE mGrn);
 void           rb_grn_init_view_accessor            (VALUE mGrn);
 void           rb_grn_init_record                   (VALUE mGrn);
@@ -459,6 +466,9 @@ void           rb_grn_expression_bind               (RbGrnExpression *rb_grn_exp
 void           rb_grn_expression_finalizer          (grn_ctx *context,
 						     grn_obj *grn_object,
 						     RbGrnExpression *rb_grn_expression);
+
+VALUE          rb_grn_posting_new                   (grn_posting *posting,
+						     grn_id term_id);
 
 VALUE          rb_grn_record_new                    (VALUE table,
 						     grn_id id,
