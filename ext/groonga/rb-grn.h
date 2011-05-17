@@ -514,7 +514,7 @@ VALUE          rb_grn_column_expression_builder_build
 #define GRNTABLE2RVAL(context, table, owner) \
     (rb_grn_table_to_ruby_object(context, table, owner))
 
-#define RVAL2GRNTABLECURSOR(object)   (rb_grn_table_cursor_from_ruby_object(object))
+#define RVAL2GRNTABLECURSOR(object, context)   (rb_grn_table_cursor_from_ruby_object(object, context))
 #define GRNTABLECURSOR2RVAL(klass, context, cursor) \
     (rb_grn_table_cursor_to_ruby_object(klass, context, cursor, GRN_TRUE))
 #define GRNTABLECURSOR2RCLASS(object) (rb_grn_table_cursor_to_ruby_class(object))
