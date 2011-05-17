@@ -210,6 +210,7 @@ RB_GRN_VAR VALUE rb_cGrnColumn;
 RB_GRN_VAR VALUE rb_cGrnFixSizeColumn;
 RB_GRN_VAR VALUE rb_cGrnVariableSizeColumn;
 RB_GRN_VAR VALUE rb_cGrnIndexColumn;
+RB_GRN_VAR VALUE rb_cGrnIndexCursor;
 RB_GRN_VAR VALUE rb_cGrnAccessor;
 RB_GRN_VAR VALUE rb_cGrnViewAccessor;
 RB_GRN_VAR VALUE rb_cGrnRecord;
@@ -524,6 +525,9 @@ VALUE          rb_grn_column_expression_builder_build
 #define GRNCOLUMN2RVAL(klass, context, column, owner) \
     (rb_grn_column_to_ruby_object(klass, context, column, owner))
 
+#define GRNINDEXCURSOR2RVAL(context, cursor) \
+    (rb_grn_index_cursor_to_ruby_object(context, cursor, GRN_TRUE))
+
 #define RVAL2GRNACCESSOR(object) \
     (rb_grn_accessor_from_ruby_object(object))
 #define GRNACCESSOR2RVAL(context, accessor, owner) \
@@ -634,6 +638,9 @@ grn_obj       *rb_grn_column_from_ruby_object       (VALUE object,
 VALUE          rb_grn_column_to_ruby_object         (VALUE klass,
 						     grn_ctx *context,
 						     grn_obj *column,
+						     grn_bool owner);
+VALUE          rb_grn_index_cursor_to_ruby_object   (grn_ctx *context,
+						     grn_obj *cursor,
 						     grn_bool owner);
 
 grn_query     *rb_grn_query_from_ruby_object        (VALUE object);
