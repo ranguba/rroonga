@@ -284,7 +284,7 @@ grn_obj       *rb_grn_context_get_backward_compatibility
 const char    *rb_grn_inspect                       (VALUE object);
 void           rb_grn_scan_options                  (VALUE options, ...)
                                                      RB_GRN_GNUC_NULL_TERMINATED;
-grn_bool rb_grn_equal_option                  (VALUE option,
+grn_bool       rb_grn_equal_option                  (VALUE option,
 						     const char *key);
 
 VALUE          rb_grn_object_alloc                  (VALUE klass);
