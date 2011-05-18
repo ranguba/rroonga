@@ -396,7 +396,10 @@ class RecordTest < Test::Unit::TestCase
       "user" => nil,
       "uri" => "http://groonga.org/",
       "rate" => 5,
-      "next" => top_page_record,
+      "next" => {
+        "_table" => "Bookmarks",
+        "_id" => 1
+      },
       "content" => nil,
       "comment" => "Great!"
     }
