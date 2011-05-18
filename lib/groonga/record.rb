@@ -426,10 +426,10 @@ module Groonga
     def build_attributes(record)
       push_then_pop(record) do
         attributes = create_attributes(record)
-        build_key(attributes, record)
-        build_score(attributes, record)
-        build_n_sub_records(attributes, record)
-        build_columns(attributes, record)
+        add_key(attributes, record)
+        add_score(attributes, record)
+        add_n_sub_records(attributes, record)
+        add_columns(attributes, record)
 
         attributes
       end
@@ -437,8 +437,8 @@ module Groonga
 
     def build_recursive_attributes(record)
       attributes = create_attributes(record)
-      build_table(attributes, record)
-      build_key(attributes, record)
+      add_table(attributes, record)
+      add_key(attributes, record)
 
       attributes
     end
@@ -471,30 +471,30 @@ module Groonga
       {"_id" => record.id}
     end
 
-    def build_table(attributes, record)
+    def add_table(attributes, record)
       attributes["_table"] = record.table.name
     end
 
-    def build_columns(attributes, record)
+    def add_columns(attributes, record)
       record.columns.each do |column|
         next if column.is_a?(IndexColumn)
         attributes[column.local_name] = build_value(column[record.id])
       end
     end
 
-    def build_key(attributes, record)
+    def add_key(attributes, record)
       if record.support_key?
         attributes["_key"] = build_value(record.key)
       end
     end
 
-    def build_score(attributes, record)
+    def add_score(attributes, record)
       if record.support_score?
         attributes["_score"] = record.score
       end
     end
 
-    def build_n_sub_records(attributes, record)
+    def add_n_sub_records(attributes, record)
       if record.support_sub_records?
         attributes["_nsubrecs"] = record.n_sub_records
       end
