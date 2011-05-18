@@ -425,7 +425,7 @@ module Groonga
     private
     def build_attributes(record)
       push_then_pop(record) do
-        attributes = {"_id" => record.id}
+        attributes = create_attributes(record)
         build_key(attributes, record)
         build_score(attributes, record)
         build_n_sub_records(attributes, record)
@@ -454,9 +454,7 @@ module Groonga
     def build_value(value)
       if value.is_a?(Groonga::Record)
         if recursive?(value)
-          attributes = {
-            "_id" => value.id,
-          }
+          attributes = create_attributes(value)
           build_table(attributes, value)
           build_key(attributes, value)
           value = attributes
@@ -466,6 +464,10 @@ module Groonga
       end
 
       value
+    end
+
+    def create_attributes(record)
+      {"_id" => record.id}
     end
 
     def build_table(attributes, record)
