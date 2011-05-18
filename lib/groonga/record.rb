@@ -429,11 +429,7 @@ module Groonga
         build_key(attributes, record)
         build_score(attributes, record)
         build_n_sub_records(attributes, record)
-
-        record.columns.each do |column|
-          next if column.is_a?(Groonga::IndexColumn)
-          attributes[column.local_name] = build_value(column[record.id])
-        end
+        build_columns(attributes, record)
 
         attributes
       end
@@ -477,6 +473,13 @@ module Groonga
 
     def build_table(attributes, record)
       attributes["_table"] = record.table.name
+    end
+
+    def build_columns(attributes, record)
+      record.columns.each do |column|
+        next if column.is_a?(Groonga::IndexColumn)
+        attributes[column.local_name] = build_value(column[record.id])
+      end
     end
 
     def build_key(attributes, record)
