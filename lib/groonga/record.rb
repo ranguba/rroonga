@@ -477,7 +477,7 @@ module Groonga
 
     def build_columns(attributes, record)
       record.columns.each do |column|
-        next if column.is_a?(Groonga::IndexColumn)
+        next if column.is_a?(IndexColumn)
         attributes[column.local_name] = build_value(column[record.id])
       end
     end
