@@ -424,7 +424,7 @@ module Groonga
 
     private
     def build_attributes(record)
-      push_then_pop(record) do
+      building(record) do
         attributes = create_attributes(record)
         add_key(attributes, record)
         add_score(attributes, record)
@@ -443,7 +443,7 @@ module Groonga
       attributes
     end
 
-    def push_then_pop(record)
+    def building(record)
       @built_records.push(record)
       returned_object = yield
       @built_records.pop
