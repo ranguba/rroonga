@@ -439,6 +439,14 @@ module Groonga
       end
     end
 
+    def build_recursive_attributes(record)
+      attributes = create_attributes(record)
+      build_table(attributes, record)
+      build_key(attributes, record)
+
+      attributes
+    end
+
     def push_then_pop(value)
       @built_records.push(value)
       returned_object = yield
@@ -454,10 +462,7 @@ module Groonga
     def build_value(value)
       if value.is_a?(Groonga::Record)
         if recursive?(value)
-          attributes = create_attributes(value)
-          build_table(attributes, value)
-          build_key(attributes, value)
-          value = attributes
+          value = build_recursive_attributes(value)
         else
           value = build_attributes(value)
         end
