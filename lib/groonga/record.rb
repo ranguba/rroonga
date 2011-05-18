@@ -443,8 +443,8 @@ module Groonga
       attributes
     end
 
-    def push_then_pop(value)
-      @built_records.push(value)
+    def push_then_pop(record)
+      @built_records.push(record)
       returned_object = yield
       @built_records.pop
 
