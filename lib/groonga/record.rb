@@ -443,18 +443,6 @@ module Groonga
       attributes
     end
 
-    def building(record)
-      @built_records.push(record)
-      returned_object = yield
-      @built_records.pop
-
-      returned_object
-    end
-
-    def recursive?(record)
-      @built_records.include?(record)
-    end
-
     def build_value(value)
       if value.is_a?(Record)
         if recursive?(value)
@@ -498,6 +486,18 @@ module Groonga
       if record.support_sub_records?
         attributes["_nsubrecs"] = record.n_sub_records
       end
+    end
+
+    def building(record)
+      @built_records.push(record)
+      returned_object = yield
+      @built_records.pop
+
+      returned_object
+    end
+
+    def recursive?(record)
+      @built_records.include?(record)
     end
   end
 end
