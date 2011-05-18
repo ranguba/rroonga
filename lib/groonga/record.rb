@@ -453,15 +453,15 @@ module Groonga
 
     def build_value(value)
       if value.is_a?(Groonga::Record)
-        if not recursive?(value)
-          value = build_attributes(value)
-        else
+        if recursive?(value)
           attributes = {
             "_table" => value.table.name,
             "_id" => value.id,
           }
           build_key(attributes, value)
           value = attributes
+        else
+          value = build_attributes(value)
         end
       end
 
