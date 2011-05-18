@@ -456,7 +456,7 @@ module Groonga
     end
 
     def build_value(value)
-      if value.is_a?(Groonga::Record)
+      if value.is_a?(Record)
         if recursive?(value)
           build_recursive_attributes(value)
         else
