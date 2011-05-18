@@ -455,9 +455,9 @@ module Groonga
       if value.is_a?(Groonga::Record)
         if recursive?(value)
           attributes = {
-            "_table" => value.table.name,
             "_id" => value.id,
           }
+          build_table(attributes, value)
           build_key(attributes, value)
           value = attributes
         else
@@ -466,6 +466,10 @@ module Groonga
       end
 
       value
+    end
+
+    def build_table(attributes, record)
+      attributes["_table"] = record.table.name
     end
 
     def build_key(attributes, record)
