@@ -439,8 +439,10 @@ module Groonga
 
     def push_then_pop(value)
       @built_records.push(value)
-      yield
+      returned_object = yield
       @built_records.pop
+
+      returned_object
     end
 
     def recursive?(record)
