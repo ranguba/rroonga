@@ -413,6 +413,43 @@ class RecordTest < Test::Unit::TestCase
     assert_equal(expected, top_page_record.attributes)
   end
 
+  def test_self_referencing_vector_attributes
+    @bookmarks.define_column("related_bookmarks", @bookmarks, :type => :vector)
+
+    top_page_record = @bookmarks.add(top_page)
+    doc_page_record = @bookmarks.add(doc_page)
+    top_page_record["related_bookmarks"] = [
+      top_page_record,
+      doc_page_record
+    ]
+
+    expected = {
+      "_id" => 1,
+      "user" => nil,
+      "uri" => "http://groonga.org/",
+      "rate" => 5,
+      "related_bookmarks" => [
+        {
+          "_table" => "Bookmarks",
+          "_id" => 1
+        },
+        {
+          "_id" => 2,
+          "comment" => "Informative",
+          "content" => nil,
+          "rate" => 8,
+          "related_bookmarks" => [],
+          "uri" => "http://groonga.org/document.html",
+          "user" => nil,
+        }
+      ],
+      "content" => nil,
+      "comment" => "Great!"
+    }
+
+    assert_equal(expected, top_page_record.attributes)
+  end
+
   def test_dynamic_accessor
     groonga = @bookmarks.add
     assert_equal([],
