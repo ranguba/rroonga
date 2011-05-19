@@ -309,18 +309,6 @@ class RecordTest < Test::Unit::TestCase
   def test_recursive_attributes
     @bookmarks.define_column("next", @bookmarks)
 
-    top_page = {
-      "uri" => "http://groonga.org/",
-      "rate" => 5,
-      "comment" => "Great!",
-    }
-
-    doc_page = {
-      "uri" => "http://groonga.org/document.html",
-      "rate" => 8,
-      "comment" => "Informative"
-    }
-
     top_page_record = @bookmarks.add(top_page)
     doc_page_record = @bookmarks.add(doc_page)
 
@@ -352,12 +340,6 @@ class RecordTest < Test::Unit::TestCase
   end
 
   def test_select_result_attributes
-    top_page = {
-      "uri" => "http://groonga.org/",
-      "rate" => 5,
-      "comment" => "Great!",
-    }
-
     top_page_record = @bookmarks.add(top_page)
     select_result = @bookmarks.select
     select_result_result = select_result.first
@@ -382,12 +364,6 @@ class RecordTest < Test::Unit::TestCase
   def test_self_referencing_attributes
     @bookmarks.define_column("next", @bookmarks)
 
-    top_page = {
-      "uri" => "http://groonga.org/",
-      "rate" => 5,
-      "comment" => "Great!",
-    }
-
     top_page_record = @bookmarks.add(top_page)
     top_page_record["next"] = top_page_record
 
@@ -409,18 +385,6 @@ class RecordTest < Test::Unit::TestCase
 
   def test_vector_attributes
     @bookmarks.define_column("related_bookmarks", @bookmarks, :type => :vector)
-
-    top_page = {
-      "uri" => "http://groonga.org/",
-      "rate" => 5,
-      "comment" => "Great!",
-    }
-
-    doc_page = {
-      "uri" => "http://groonga.org/document.html",
-      "rate" => 8,
-      "comment" => "Informative"
-    }
 
     top_page_record = @bookmarks.add(top_page)
     doc_page_record = @bookmarks.add(doc_page)
@@ -500,5 +464,22 @@ class RecordTest < Test::Unit::TestCase
     array_like_object = array_like_class.new([kou_at_clear_code])
     kou = @users.add("kou")
     kou.addresses = array_like_object
+  end
+
+  private
+  def top_page
+    {
+      "uri" => "http://groonga.org/",
+      "rate" => 5,
+      "comment" => "Great!",
+    }
+  end
+
+  def doc_page
+    {
+      "uri" => "http://groonga.org/document.html",
+      "rate" => 8,
+      "comment" => "Informative"
+    }
   end
 end
