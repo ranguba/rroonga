@@ -455,6 +455,12 @@ module Groonga
       end
     end
 
+    def build_vector(vector)
+      vector.collect do |element|
+        build_value(element)
+      end
+    end
+
     def create_attributes(record)
       {"_id" => record.id}
     end
@@ -466,7 +472,17 @@ module Groonga
     def add_columns(attributes, record)
       record.columns.each do |column|
         next if column.is_a?(IndexColumn)
-        attributes[column.local_name] = build_value(column[record.id])
+
+        value = column[record.id]
+        attributes[column.local_name] = build_column(column, value)
+      end
+    end
+
+    def build_column(column, value)
+      if column.vector?
+        build_vector(value)
+      else
+        build_value(value)
       end
     end
 
