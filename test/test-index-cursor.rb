@@ -29,7 +29,8 @@ class IndexCursorTest < Test::Unit::TestCase
     postings = []
     terms.open_cursor do |table_cursor|
       cursor = content_index.open_cursor(table_cursor)
-      while (posting = cursor.next)
+
+      cursor.each do |posting|
         postings << posting
       end
     end
