@@ -72,11 +72,32 @@ rb_grn_index_cursor_next (VALUE self)
 
 }
 
+static VALUE
+rb_grn_index_cursor_each (VALUE self)
+{
+    grn_obj *cursor;
+    grn_ctx *context;
+
+    rb_grn_index_cursor_deconstruct(SELF(self), &cursor, &context,
+				    NULL, NULL, NULL, NULL);
+
+    if (context && cursor) {
+	grn_posting *posting;
+	grn_id tid;
+
+	while ((posting = grn_index_cursor_next(context, cursor, &tid))) {
+	    rb_yield(rb_grn_posting_new(posting, tid));
+	}
+    }
+
+    return Qnil;
+}
+
 void
 rb_grn_init_index_cursor (VALUE mGrn)
 {
     rb_cGrnIndexCursor = rb_define_class_under(mGrn, "IndexCursor", rb_cObject);
     rb_define_alloc_func(rb_cGrnIndexCursor, rb_grn_object_alloc);
     rb_define_method(rb_cGrnIndexCursor, "next", rb_grn_index_cursor_next, 0);
-
+    rb_define_method(rb_cGrnIndexCursor, "each", rb_grn_index_cursor_each, 0);
 }
