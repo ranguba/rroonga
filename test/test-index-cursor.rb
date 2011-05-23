@@ -78,35 +78,29 @@ class IndexCursorTest < Test::Unit::TestCase
       assert_equal(0, postings[4].weight)
       assert_equal(0, postings[4].n_rest_postings)
 
-      assert_equal({:record_id => 3,
+
+      assert_equal({
+                     :record_id => 3,
                      :section_id => 1,
                      :term_id => 4,
                      :postion => 1,
                      :term_frequency => 1,
                      :weight => 0,
-                     :n_rest_postings => 0},
-                   {:record_id => postings[5].record_id,
-                     :section_id => postings[5].section_id,
-                     :term_id => postings[5].term_id,
-                     :postion => postings[5].position,
-                     :term_frequency => postings[5].term_frequency,
-                     :weight => postings[5].weight,
-                     :n_rest_postings => postings[5].n_rest_postings})
-
-      assert_equal({:record_id => 3,
+                     :n_rest_postings => 0
+                   },
+                   postings[5].to_hash)
+      assert_equal({
+                     :record_id => 3,
                      :section_id => 1,
                      :term_id => 5,
                      :postion => 3,
                      :term_frequency => 1,
                      :weight => 0,
-                     :n_rest_postings => 0},
-                   {:record_id => postings[6].record_id,
-                     :section_id => postings[6].section_id,
-                     :term_id => postings[6].term_id,
-                     :postion => postings[6].position,
-                     :term_frequency => postings[6].term_frequency,
-                     :weight => postings[6].weight,
-                     :n_rest_postings => postings[6].n_rest_postings})
+                     :n_rest_postings => 0
+                   },
+                   postings[6].to_hash)
+
+
 
       assert_equal({:record_id => 3,
                      :section_id => 1,
