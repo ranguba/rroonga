@@ -70,5 +70,18 @@ module Groonga
       @weight = parameters[:weight] || 0
       @n_rest_postings = parameters[:n_rest_postings] || 0
     end
+
+    # Returns Hash created from attributes.
+    def to_hash
+      {
+        :record_id => @record_id,
+        :section_id => @section_id,
+        :term_id => @term_id,
+        :postion => @position,
+        :term_frequency => @term_frequency,
+        :weight => @weight,
+        :n_rest_postings => @n_rest_postings
+      }
+    end
   end
 end
