@@ -26,13 +26,19 @@ rb_grn_posting_new (grn_posting *posting, grn_id term_id)
     VALUE parameters;
 
     parameters = rb_hash_new();
-    rb_hash_aset(parameters, ID2SYM(rb_to_id(rb_str_new2("record_id"))), INT2NUM(posting->rid));
-    rb_hash_aset(parameters, ID2SYM(rb_to_id(rb_str_new2("section_id"))), INT2NUM(posting->sid));
-    rb_hash_aset(parameters, ID2SYM(rb_to_id(rb_str_new2("term_id"))), INT2NUM(term_id));
-    rb_hash_aset(parameters, ID2SYM(rb_to_id(rb_str_new2("position"))), INT2NUM(posting->pos));
-    rb_hash_aset(parameters, ID2SYM(rb_to_id(rb_str_new2("term_frequency"))), INT2NUM(posting->tf));
-    rb_hash_aset(parameters, ID2SYM(rb_to_id(rb_str_new2("weight"))), INT2NUM(posting->weight));
-    rb_hash_aset(parameters, ID2SYM(rb_to_id(rb_str_new2("n_rest_postings"))), INT2NUM(posting->rest));
+
+#define SET_PARAMETER(key, value) \
+    rb_hash_aset(parameters, ID2SYM(rb_intern((key))), INT2NUM((value)))
+
+    SET_PARAMETER("record_id", posting->rid);
+    SET_PARAMETER("section_id", posting->sid);
+    SET_PARAMETER("term_id", term_id);
+    SET_PARAMETER("position", posting->pos);
+    SET_PARAMETER("term_frequency", posting->tf);
+    SET_PARAMETER("weight", posting->weight);
+    SET_PARAMETER("n_rest_postings", posting->rest);
+
+#undef SET_PARAMETER
 
     return rb_funcall(rb_cGrnPosting, rb_intern("new"), 1,
 		      parameters);
