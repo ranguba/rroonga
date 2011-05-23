@@ -77,7 +77,7 @@ module Groonga
         :record_id => @record_id,
         :section_id => @section_id,
         :term_id => @term_id,
-        :postion => @position,
+        :position => @position,
         :term_frequency => @term_frequency,
         :weight => @weight,
         :n_rest_postings => @n_rest_postings
