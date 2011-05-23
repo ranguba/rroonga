@@ -346,7 +346,7 @@ rb_grn_patricia_trie_search (int argc, VALUE *argv, VALUE self)
  *   _string_内での_word_の出現位置。（バイト単位）
  *
  * [_length_]
- *   _word_の長さ。（バイト探知）
+ *   _word_の長さ。（バイト単位）
  *
  * ブロックを指定しない場合は、マッチした部分文字列の情報を
  * まとめて配列として返す。
