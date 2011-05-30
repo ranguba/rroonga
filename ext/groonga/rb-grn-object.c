@@ -505,7 +505,30 @@ rb_grn_object_close (VALUE self)
     rb_grn_object_deconstruct(SELF(self), &object, &context,
 			      NULL, NULL, NULL, NULL);
     if (object && context)
+	grn_obj_close(context, object);
+
+    return Qnil;
+}
+
+/*
+ * Document-method: unlink
+ *
+ * call-seq:
+ *   object.unlink
+ *
+ * _object_のリファレンスカウンタを1減少する。
+ */
+VALUE
+rb_grn_object_unlink (VALUE self)
+{
+    grn_obj *object;
+    grn_ctx *context;
+
+    rb_grn_object_deconstruct(SELF(self), &object, &context,
+			      NULL, NULL, NULL, NULL);
+    if (object && context)
 	grn_obj_unlink(context, object);
+
     return Qnil;
 }
 
@@ -1370,6 +1393,8 @@ rb_grn_init_object (VALUE mGrn)
 
     rb_define_method(rb_cGrnObject, "close", rb_grn_object_close, 0);
     rb_define_method(rb_cGrnObject, "closed?", rb_grn_object_closed_p, 0);
+
+    rb_define_method(rb_cGrnObject, "unlink", rb_grn_object_unlink, 0);
 
     rb_define_method(rb_cGrnObject, "[]", rb_grn_object_array_reference, 1);
     rb_define_method(rb_cGrnObject, "[]=", rb_grn_object_array_set, 2);
