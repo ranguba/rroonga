@@ -49,12 +49,11 @@ module Groonga
 
     private
     def dump_plugins(options)
-      max_built_in_object_id = 255
       first_table = true
       plugin_paths = {}
       options[:database].each(:order_by => :id) do |object|
         next unless object.is_a?(Groonga::Procedure)
-        next if object.id <= max_built_in_object_id
+        next if object.builtin?
         path = object.path
         next if path.nil?
         next if plugin_paths.has_key?(path)
