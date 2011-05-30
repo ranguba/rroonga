@@ -28,11 +28,14 @@ class IndexCursorTest < Test::Unit::TestCase
 
     postings = []
     terms.open_cursor do |table_cursor|
-      cursor = content_index.open_cursor(table_cursor)
-
-      cursor.each do |posting|
-        postings << posting
+      index_cursor = nil
+      content_index.open_cursor(table_cursor) do |cursor|
+        cursor.each do |posting|
+          postings << posting
+        end
+        index_cursor = cursor
       end
+      assert_predicate(index_cursor, :closed?)
     end
 
     parameters =
