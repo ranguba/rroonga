@@ -62,9 +62,17 @@ class TypeTest < Test::Unit::TestCase
                  context["<longtext>"].inspect)
   end
 
+  data("builtin - Int32" => "Int32",
+       "builtin - ShortText" => "ShortText",
+       "builtin - Time" => "Time")
+  def test_builtin?(name)
+    type = Groonga[name]
+    assert_predicate(type, :builtin?)
+  end
+
   private
   def assert_equal_type(expected_name, id)
-    type = Groonga::Context.default[id]
+    type = Groonga[id]
     assert_equal(expected_name,
                  type ? type.name : type)
   end

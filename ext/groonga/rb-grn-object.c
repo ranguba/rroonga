@@ -1369,6 +1369,23 @@ rb_grn_object_remove (VALUE self)
     return Qnil;
 }
 
+static VALUE
+rb_grn_object_builtin_p (VALUE self)
+{
+    grn_ctx *context;
+    grn_obj *object;
+    grn_bool builtin = GRN_FALSE;
+
+    rb_grn_object_deconstruct(SELF(self), &object, &context,
+			      NULL, NULL, NULL, NULL);
+
+    if (context && object) {
+	builtin = grn_obj_is_builtin(context, object);
+    }
+
+    return CBOOL2RVAL(builtin);
+}
+
 void
 rb_grn_init_object (VALUE mGrn)
 {
@@ -1402,4 +1419,7 @@ rb_grn_init_object (VALUE mGrn)
     rb_define_method(rb_cGrnObject, "prepend", rb_grn_object_prepend_value, 2);
 
     rb_define_method(rb_cGrnObject, "remove", rb_grn_object_remove, 0);
+
+    rb_define_method(rb_cGrnObject, "builtin?", rb_grn_object_builtin_p, 0);
+
 }

@@ -659,6 +659,11 @@ class TableTest < Test::Unit::TestCase
     assert_false(users.exist?(morita.id + 1))
   end
 
+  def test_builtin?
+    bookmarks = Groonga::PatriciaTrie.create(:name => "Bookmarks")
+    assert_not_predicate(bookmarks, :builtin?)
+  end
+
   private
   def create_bookmarks
     bookmarks = Groonga::Array.create(:name => "Bookmarks")

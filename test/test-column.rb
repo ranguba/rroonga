@@ -316,6 +316,10 @@ class ColumnTest < Test::Unit::TestCase
                  title.indexes)
   end
 
+  def test_builtin?
+    assert_not_predicate(@users_name_column, :builtin?)
+  end
+
   private
   def assert_content_search(expected_records, term)
     records = @bookmarks_index_content.search(term).records
