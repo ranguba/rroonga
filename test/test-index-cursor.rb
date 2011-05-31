@@ -33,22 +33,7 @@ class IndexCursorTest < Test::Unit::TestCase
       end
     end
 
-    parameters =
-      [:record_id, :section_id, :term_id, :position,
-       :term_frequency, :weight, :n_rest_postings]
-    expected =
-      [
-       [1, 1, 1, 0, 1, 0, 1],
-       [2, 1, 1, 0, 1, 0, 1],
-       [2, 1, 2, 0, 1, 0, 1],
-       [3, 1, 2, 0, 1, 0, 1],
-       [3, 1, 3, 0, 1, 0, 0],
-       [3, 1, 4, 1, 1, 0, 0],
-       [3, 1, 5, 3, 1, 0, 0],
-       [3, 1, 6, 4, 1, 0, 0]
-      ]
-
-    assert_equal(create_hashes(parameters, expected), postings)
+    assert_equal(expected_postings, postings)
   end
 
   private
