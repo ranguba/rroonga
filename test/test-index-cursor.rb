@@ -3,11 +3,10 @@ class IndexCursorTest < Test::Unit::TestCase
 
   def setup
     setup_database
+    setup_table
   end
 
   def test_open_cursor
-    setup_table
-
     postings = []
     @terms.open_cursor do |table_cursor|
       index_cursor = nil
@@ -39,8 +38,6 @@ class IndexCursorTest < Test::Unit::TestCase
   end
 
   def test_enumerable
-    setup_table
-
     postings = []
     @terms.open_cursor do |table_cursor|
       @content_index.open_cursor(table_cursor) do |cursor|
