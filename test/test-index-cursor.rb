@@ -12,15 +12,14 @@ class IndexCursorTest < Test::Unit::TestCase
       index_cursor = nil
       @content_index.open_cursor(table_cursor) do |cursor|
         cursor.each do |posting|
-          postings << posting
+          postings << posting.to_hash
         end
         index_cursor = cursor
       end
       assert_predicate(index_cursor, :closed?)
     end
 
-    assert_equal(expected_postings,
-                 postings.collect {|posting| posting.to_hash})
+    assert_equal(expected_postings, postings)
   end
 
   def test_enumerable
