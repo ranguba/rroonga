@@ -23,7 +23,7 @@ class IndexCursorTest < Test::Unit::TestCase
   end
 
   def test_enumerable
-    postings = []
+    postings = nil
     @terms.open_cursor do |table_cursor|
       @content_index.open_cursor(table_cursor) do |cursor|
         postings = cursor.collect do |posting|
