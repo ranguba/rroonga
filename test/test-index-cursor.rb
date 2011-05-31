@@ -3,7 +3,8 @@ class IndexCursorTest < Test::Unit::TestCase
 
   def setup
     setup_database
-    setup_table
+    setup_schema
+    setup_records
   end
 
   def test_open_cursor
@@ -48,7 +49,7 @@ class IndexCursorTest < Test::Unit::TestCase
     hashes
   end
 
-  def setup_table
+  def setup_schema
     Groonga::Schema.define do |schema|
       schema.create_table("Articles") do |table|
         table.text("content")
@@ -64,7 +65,9 @@ class IndexCursorTest < Test::Unit::TestCase
     @articles = Groonga["Articles"]
     @terms = Groonga["Terms"]
     @content_index = Groonga["Terms.Articles_content"]
+  end
 
+  def setup_records
     @articles.add(:content => "l")
     @articles.add(:content => "ll")
     @articles.add(:content => "hello")
