@@ -96,9 +96,11 @@ rb_grn_index_cursor_each (VALUE self)
 void
 rb_grn_init_index_cursor (VALUE mGrn)
 {
-    rb_cGrnIndexCursor = rb_define_class_under(mGrn, "IndexCursor", rb_cGrnObject);
+    rb_cGrnIndexCursor =
+	rb_define_class_under(mGrn, "IndexCursor", rb_cGrnObject);
     rb_define_alloc_func(rb_cGrnIndexCursor, rb_grn_object_alloc);
+    rb_include_module(rb_cGrnIndexCursor, rb_mEnumerable);
+
     rb_define_method(rb_cGrnIndexCursor, "next", rb_grn_index_cursor_next, 0);
     rb_define_method(rb_cGrnIndexCursor, "each", rb_grn_index_cursor_each, 0);
-    rb_include_module(rb_cGrnIndexCursor, rb_mEnumerable);
 }
