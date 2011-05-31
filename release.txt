@@ -1,0 +1,44 @@
+1.
+NEWS.rdoc, NEWS.ja.rdocに変更点をまとめる。
+　タグの打ち忘れを確認しつつバージョンを確かめる。
+　git log -p --reverse (最新バージョン)..
+
+NEWS.ja.rdoc:
+== バージョン: yyyy-mm-dd
+
+=== 改良
+
+* 
+
+=== 変更
+
+* 
+
+=== 修正
+
+* 
+
+=== 感謝
+
+* 
+
+NEWS.rdoc:
+== バージョン: yyyy-mm-dd
+
+=== Improvements
+
+* 
+
+=== Changes
+
+* 
+
+=== Fixes
+
+* 
+
+=== Thanks
+
+* 
+
+2.

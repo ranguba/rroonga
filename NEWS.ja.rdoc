@@ -1,5 +1,33 @@
 = お知らせ
 
+== 1.2.1: 2011-05-31
+
+=== 改良
+
+* Groonga::Table#paginationのドキュメントを追加。
+* grndumpをパッケージに追加。
+* Groonga::Record#attributesによるレコード内での再帰参照に対応した。[mooz]
+  （補足：ただし実験的実装）
+* Groonga::Record#attributesにて_scoreも含めたデータを返すようにした。
+* Windowsの64bitに対応。（ただし、rubyの64bit版が存在しないため、動作環境がない）
+* Groonga::Postingを追加。
+* TokenDelimitのエイリアスに:delimit, :token_delimiterを追加。
+* Groonga::DatabaseDumper#dumpにてlexiconテーブルのダンプに対応。
+* Groonga::DatabaseDumper#dumpにてプラグインを含んだダンプに対応。
+* Groonga::IndexColumn#open_cursorを追加。[yoshihara]
+* Groonga::IndexCursorを追加。[yoshihara]
+* Groonga::Object#builtin?を追加。[yoshihara]
+
+=== 変更
+
+* カラムが削除される前に、そのカラムがあるかチェックするようにした。
+* ドキュメントからgrn式のページを削除。
+
+=== 感謝
+
+* moozさん
+* yoshiharaさん
+
 == 1.2.0: 2011-04-01
 
 === 改良

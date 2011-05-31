@@ -1,5 +1,34 @@
 = NEWS
 
+== 1.2.1: 2011-05-31
+
+=== Improvements
+
+* added document of Groonga::Table#pagination.
+* added grndump in package.
+* corresponded recursive reference of Records by Groonga::Record#attributes.
+  (experimental) [mooz]
+* Groonga::Record#attributes supported data including _score.
+* corresponded Windows for 64-bit.
+  (but there's not 64-bit ruby, so rroonga for 64-bit windows cannot run.)
+* added Groonga::Posting.
+* added :delimit, :token_delimiter for alias of TokenDelimit.
+* Groonga::DatabaseDumper#dump corresponded lexicon table.
+* Groonga::DatabaseDumper#dump corresponded data including plugin.
+* added Groonga::IndexColumn#open_cursor. [yoshihara]
+* added Groonga::IndexCursor. [yoshihara]
+* added Groonga::Object#builtin?. [yoshihara]
+
+=== Changes
+
+* check existence of column before removing it.
+* removed grn expression document.
+
+=== Thanks
+
+* mooz
+* yoshihara
+
 == 1.2.0: 2011-04-01
 
 === Improvements
