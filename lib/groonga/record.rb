@@ -408,112 +408,112 @@ module Groonga
         super
       end
     end
-  end
 
-  class AttributeHashBuilder # :nodoc:
-    attr_reader :attributes
+    class AttributeHashBuilder # :nodoc:
+      attr_reader :attributes
 
-    def initialize(root_record)
-      @root_record = root_record
-      @built_records = []
-    end
+      def initialize(root_record)
+        @root_record = root_record
+        @built_records = []
+      end
 
-    def build
-      build_attributes(@root_record)
-    end
+      def build
+        build_attributes(@root_record)
+      end
 
-    private
-    def build_attributes(record)
-      building(record) do
+      private
+      def build_attributes(record)
+        building(record) do
+          attributes = create_attributes(record)
+          add_key(attributes, record)
+          add_score(attributes, record)
+          add_n_sub_records(attributes, record)
+          add_columns(attributes, record)
+
+          attributes
+        end
+      end
+
+      def build_recursive_attributes(record)
         attributes = create_attributes(record)
+        add_table(attributes, record)
         add_key(attributes, record)
-        add_score(attributes, record)
-        add_n_sub_records(attributes, record)
-        add_columns(attributes, record)
 
         attributes
       end
-    end
 
-    def build_recursive_attributes(record)
-      attributes = create_attributes(record)
-      add_table(attributes, record)
-      add_key(attributes, record)
-
-      attributes
-    end
-
-    def build_value(value)
-      if value.is_a?(Record)
-        if recursive?(value)
-          build_recursive_attributes(value)
+      def build_value(value)
+        if value.is_a?(Record)
+          if recursive?(value)
+            build_recursive_attributes(value)
+          else
+            build_attributes(value)
+          end
         else
-          build_attributes(value)
+          value
         end
-      else
-        value
       end
-    end
 
-    def build_vector(vector)
-      vector.collect do |element|
-        build_value(element)
+      def build_vector(vector)
+        vector.collect do |element|
+          build_value(element)
+        end
       end
-    end
 
-    def create_attributes(record)
-      {"_id" => record.id}
-    end
-
-    def add_table(attributes, record)
-      attributes["_table"] = record.table.name
-    end
-
-    def add_columns(attributes, record)
-      record.columns.each do |column|
-        next if column.is_a?(IndexColumn)
-
-        value = column[record.id]
-        attributes[column.local_name] = build_column(column, value)
+      def create_attributes(record)
+        {"_id" => record.id}
       end
-    end
 
-    def build_column(column, value)
-      if column.vector?
-        build_vector(value)
-      else
-        build_value(value)
+      def add_table(attributes, record)
+        attributes["_table"] = record.table.name
       end
-    end
 
-    def add_key(attributes, record)
-      if record.support_key?
-        attributes["_key"] = build_value(record.key)
+      def add_columns(attributes, record)
+        record.columns.each do |column|
+          next if column.is_a?(IndexColumn)
+
+          value = column[record.id]
+          attributes[column.local_name] = build_column(column, value)
+        end
       end
-    end
 
-    def add_score(attributes, record)
-      if record.support_score?
-        attributes["_score"] = record.score
+      def build_column(column, value)
+        if column.vector?
+          build_vector(value)
+        else
+          build_value(value)
+        end
       end
-    end
 
-    def add_n_sub_records(attributes, record)
-      if record.support_sub_records?
-        attributes["_nsubrecs"] = record.n_sub_records
+      def add_key(attributes, record)
+        if record.support_key?
+          attributes["_key"] = build_value(record.key)
+        end
       end
-    end
 
-    def building(record)
-      @built_records.push(record)
-      returned_object = yield
-      @built_records.pop
+      def add_score(attributes, record)
+        if record.support_score?
+          attributes["_score"] = record.score
+        end
+      end
 
-      returned_object
-    end
+      def add_n_sub_records(attributes, record)
+        if record.support_sub_records?
+          attributes["_nsubrecs"] = record.n_sub_records
+        end
+      end
 
-    def recursive?(record)
-      @built_records.include?(record)
+      def building(record)
+        @built_records.push(record)
+        returned_object = yield
+        @built_records.pop
+
+        returned_object
+      end
+
+      def recursive?(record)
+        @built_records.include?(record)
+      end
     end
   end
 end
