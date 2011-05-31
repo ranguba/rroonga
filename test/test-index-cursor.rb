@@ -39,29 +39,11 @@ class IndexCursorTest < Test::Unit::TestCase
   end
 
   def test_enumerable
-    Groonga::Schema.define do |schema|
-      schema.create_table("Articles") do |table|
-        table.text("content")
-      end
-
-      schema.create_table("Terms",
-                          :type => :hash,
-                          :default_tokenizer => :bigram_split_symbol_alpha) do |table|
-        table.index("Articles.content")
-      end
-    end
-
-    articles = Groonga["Articles"]
-    terms = Groonga["Terms"]
-    content_index = Groonga["Terms.Articles_content"]
-
-    articles.add(:content => "l")
-    articles.add(:content => "ll")
-    articles.add(:content => "hello")
+    setup_table
 
     postings = []
-    terms.open_cursor do |table_cursor|
-      content_index.open_cursor(table_cursor) do |cursor|
+    @terms.open_cursor do |table_cursor|
+      @content_index.open_cursor(table_cursor) do |cursor|
         postings = cursor.collect do |posting|
           posting.to_hash
         end
