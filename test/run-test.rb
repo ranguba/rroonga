@@ -25,10 +25,12 @@ lib_dir = File.join(base_dir, "lib")
 test_dir = File.join(base_dir, "test")
 
 make = nil
-if system("which gmake > /dev/null")
-  make = "gmake"
-elsif system("which make > /dev/null")
-  make = "make"
+if ENV["NO_MAKE"] != "yes"
+  if system("which gmake > /dev/null")
+    make = "gmake"
+  elsif system("which make > /dev/null")
+    make = "make"
+  end
 end
 if make
   system("cd #{base_dir.dump} && #{make} > /dev/null") or exit(false)
