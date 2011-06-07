@@ -24,7 +24,7 @@
       </ul>
       <ul class="menu">
 	<li id="menu-reference"><a href="rroonga/ja/">リファレンスマニュアル</a></li>
-	<li id="menu-tutorial"><a href="rroonga/ja/text/tutorial_ja_rdoc.html">チュートリアル</a></li>
+	<li id="menu-tutorial"><a href="rroonga/ja/file.tutorial.html">チュートリアル</a></li>
 	<li id="menu-install"><a href="#install-rroonga">インストール</a></li>
 	<li id="menu-developer"><a href="developer.html.ja">開発者向け情報</a></li>
       </ul>
