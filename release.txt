@@ -56,3 +56,35 @@ $ gem install pkg/rroonga-VERSION.gem --user-install
 
 インストールできたら、パッケージをインストールしたディレクトリにあるテストを実行して動作を確認する。
 $ ruby test/run-test.rb
+
+4.
+タグを打ってpushする。
+jewelerの場合、
+$ rake release
+をすると、タグの頭にvがつくので、
+
+$ git tag -d vVERSION
+$ git push origin :refs/tags/vVERSION
+
+してタグを一度消してから、
+
+$ rake tag VERSION
+$ git push --tags origin
+
+してタグをつけ直す。
+
+その後rubygems.orgにアップロードするには、
+
+$ rake gemcutter:release
+
+をする。
+
+rubyforgeにアップロードするには、
+
+$ rubyforge --setup
+
+をしてユーザの設定をしてから、
+
+$ rake publish
+
+をする。
