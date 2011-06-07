@@ -169,12 +169,12 @@ end
 
 include ERB::Util
 
-def apply_template(file, head, header, footer, language)
+def apply_template(file, top_path, head, header, footer, language)
   content = File.read(file)
   content = content.sub(/lang="en"/, 'lang="#{language}"')
 
   title = nil
-  content = content.sub(/<title>(.+?)<\/title>/) do
+  content = content.sub(/<title>(.+?)<\/title>/m) do
     title = $1
     head.result(binding)
   end
@@ -290,14 +290,19 @@ namespace :reference do
 
   namespace :publication do
     task :prepare do
-      head = erb_template("head")
-      header = erb_template("header")
-      footer = erb_template("footer")
       supported_languages.each do |language|
-        doc_dir = "#{reference_base_dir}/#{language}"
-        Find.find(doc_dir) do |file|
-          if /\.html\z/ =~ file and /_(?:c|rb)\.html\z/ !~ file
-            apply_template(file, head, header, footer, language)
+        doc_dir = Pathname.new("#{reference_base_dir}/#{language}")
+        head = erb_template("head.#{language}")
+        header = erb_template("header.#{language}")
+        footer = erb_template("footer.#{language}")
+        doc_dir.find do |file|
+          case file.basename.to_s
+          when "_index.html", /\A(?:class|method|file)_list.html\z/
+            next
+          when /\.html\z/
+            relative_top_path = file.relative_path_from(doc_dir).dirname
+            apply_template(file, "../../#{relative_top_path}",
+                           head, header, footer, language)
           end
         end
       end
