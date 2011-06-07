@@ -312,7 +312,7 @@ namespace :reference do
 
   desc "Upload document to rubyforge."
   task :publish => [:generate, "reference:publication:prepare"] do
-    rsync_to_rubyforge(spec, "#{reference_base_dir}/", "/#{spec.name}",
+    rsync_to_rubyforge(spec, "#{reference_base_dir}/", spec.name,
                        :delete => true)
   end
 end
