@@ -3,7 +3,8 @@ NEWS.rdoc, NEWS.ja.rdocに変更点をまとめる。
 　タグの打ち忘れを確認しつつバージョンを確かめる。
 　git log -p --reverse (最新バージョン)..
 
-NEWS.ja.rdoc:
+---NEWS.ja.rdocテンプレ---
+
 == バージョン: yyyy-mm-dd
 
 === 改良
@@ -22,7 +23,7 @@ NEWS.ja.rdoc:
 
 * 
 
-NEWS.rdoc:
+---NEWS.rdocテンプレ---
 == バージョン: yyyy-mm-dd
 
 === Improvements
@@ -42,3 +43,6 @@ NEWS.rdoc:
 * 
 
 2.
+プロジェクトページ（html/index.html、html/index.html.ja）のrroongaの項にある最新バージョンとリリース日を更新する。
+
+3.
