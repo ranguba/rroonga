@@ -26,9 +26,11 @@ require 'yard'
 require 'jeweler'
 require 'rake/extensiontask'
 
-begin
-  YAML::ENGINE.yamler = "psych"
-rescue LoadError
+if YAML.const_defined?(:ENGINE)
+  begin
+    YAML::ENGINE.yamler = "psych"
+  rescue LoadError
+  end
 end
 
 base_dir = File.join(File.dirname(__FILE__))
