@@ -304,7 +304,7 @@ namespace :reference do
       File.open("#{reference_base_dir}/.htaccess", "w") do |file|
         file.puts("Redirect permanent /rroonga/text/TUTORIAL_ja_rdoc.html " +
                   "http://groonga.rubyforge.org/rroonga/ja/file.tutorial.html")
-        file.puts("Redirect permanent /rroonga/ " +
+        file.puts("RedirectMatch permanent ^/rroonga/$ " +
                   "http://groonga.rubyforge.org/rroonga/en/")
       end
     end
