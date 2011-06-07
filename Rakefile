@@ -206,7 +206,7 @@ def rsync_to_rubyforge(spec, source, destination, options={})
 
   rsync_args = "-av --exclude '*.erb'"
   rsync_args << " --delete" if options[:delete]
-  remote_dir = "/var/www/gforge-projects/#{spec.rubyforge_name}/"
+  remote_dir = "/var/www/gforge-projects/#{spec.rubyforge_project}/"
   sh("rsync #{rsync_args} #{source} #{host}:#{remote_dir}#{destination}")
 end
 
