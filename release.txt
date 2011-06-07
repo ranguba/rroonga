@@ -88,3 +88,7 @@ $ rubyforge --setup
 $ rake publish
 
 をする。
+
+6.
+メーリングリストにリリースしたよメールを流す。
+rubyforgeの最新ニュースを更新する。
