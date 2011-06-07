@@ -310,6 +310,7 @@ namespace :reference do
     end
   end
 
+  desc "Upload document to rubyforge."
   task :publish => [:generate, "reference:publication:prepare"] do
     rsync_to_rubyforge(spec, "#{reference_base_dir}/", "/#{spec.name}",
                        :delete => true)
@@ -322,6 +323,8 @@ namespace :html do
     rsync_to_rubyforge(spec, "html/", "")
   end
 end
+
+desc "Upload document and HTML to rubyforge."
 task :publish => ["reference:publish", "html:publish"]
 
 desc "Tag the current revision."
