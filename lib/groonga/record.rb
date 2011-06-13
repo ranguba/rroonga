@@ -415,6 +415,7 @@ module Groonga
       def initialize(root_record)
         @root_record = root_record
         @built_records = []
+        @all_built_attributes = {}
       end
 
       def build
@@ -423,8 +424,8 @@ module Groonga
 
       private
       def build_attributes(record)
-        building(record) do
-          attributes = create_attributes(record)
+        building(record) do |attributes|
+          create_attributes(record, attributes)
           add_key(attributes, record)
           add_score(attributes, record)
           add_n_sub_records(attributes, record)
@@ -434,18 +435,10 @@ module Groonga
         end
       end
 
-      def build_recursive_attributes(record)
-        attributes = create_attributes(record)
-        add_table(attributes, record)
-        add_key(attributes, record)
-
-        attributes
-      end
-
       def build_value(value)
         if value.is_a?(Record)
-          if recursive?(value)
-            build_recursive_attributes(value)
+          if attributes_exist?(value)
+            @all_built_attributes[value]
           else
             build_attributes(value)
           end
@@ -460,8 +453,8 @@ module Groonga
         end
       end
 
-      def create_attributes(record)
-        {"_id" => record.id}
+      def create_attributes(record, attributes)
+        attributes["_id"] = record.id
       end
 
       def add_table(attributes, record)
@@ -504,15 +497,15 @@ module Groonga
       end
 
       def building(record)
-        @built_records.push(record)
-        returned_object = yield
-        @built_records.pop
+        attributes = {}
+        @all_built_attributes[record] = attributes
+        returned_object = yield(attributes)
 
         returned_object
       end
 
-      def recursive?(record)
-        @built_records.include?(record)
+      def attributes_exist?(record)
+        @all_built_attributes[record]
       end
     end
   end

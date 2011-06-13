@@ -325,18 +325,55 @@ class RecordTest < Test::Unit::TestCase
         "user" => nil,
         "uri" => "http://groonga.org/document.html",
         "rate" => 8,
-        "next" => {
-          "_table" => "Bookmarks",
-          "_id" => 1,
-        },
         "content" => nil,
         "comment" => "Informative"
       },
       "content" => nil,
       "comment" => "Great!"
     }
+    expected["next"]["next"] = expected
 
     assert_equal(expected, top_page_record.attributes)
+  end
+
+  def test_duplicate_records_attributes
+    @bookmarks.define_column("next1", @bookmarks)
+    @bookmarks.define_column("next2", @bookmarks)
+
+    top_page_record = @bookmarks.add(top_page)
+    doc_page_record = @bookmarks.add(doc_page)
+
+    top_page_record["next1"] = doc_page_record
+    top_page_record["next2"] = doc_page_record
+    doc_page_record["next1"] = top_page_record
+
+    doc_page_attributes = {
+      "_id" => 2,
+      "user" => nil,
+      "uri" => "http://groonga.org/document.html",
+      "rate" => 8,
+      "content" => nil,
+      "comment" => "Informative",
+      "next2" => nil
+    }
+
+    expected = {
+      "_id" => 1,
+      "user" => nil,
+      "uri" => "http://groonga.org/",
+      "rate" => 5,
+      "next1" => doc_page_attributes,
+      "next2" => doc_page_attributes,
+      "content" => nil,
+      "comment" => "Great!"
+    }
+
+    doc_page_attributes["next1"] = expected
+
+    actual_records = top_page_record.attributes
+    assert_equal(expected, actual_records)
+    assert_equal(actual_records["next1"].object_id,
+                 actual_records["next2"].object_id)
   end
 
   def test_select_result_attributes
