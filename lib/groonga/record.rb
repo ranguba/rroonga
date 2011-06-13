@@ -414,7 +414,6 @@ module Groonga
 
       def initialize(root_record)
         @root_record = root_record
-        @built_records = []
         @all_built_attributes = {}
       end
 
