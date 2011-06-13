@@ -407,13 +407,10 @@ class RecordTest < Test::Unit::TestCase
       "user" => nil,
       "uri" => "http://groonga.org/",
       "rate" => 5,
-      "next" => {
-        "_table" => "Bookmarks",
-        "_id" => 1
-      },
       "content" => nil,
       "comment" => "Great!"
     }
+    expected["next"] = expected
 
     assert_equal(expected, top_page_record.attributes)
   end
@@ -458,31 +455,28 @@ class RecordTest < Test::Unit::TestCase
       doc_page_record
     ]
 
-    expected = {
+    top_page_attributes = {
       "_id" => 1,
       "user" => nil,
       "uri" => "http://groonga.org/",
       "rate" => 5,
-      "related_bookmarks" => [
-        {
-          "_table" => "Bookmarks",
-          "_id" => 1
-        },
-        {
-          "_id" => 2,
-          "comment" => "Informative",
-          "content" => nil,
-          "rate" => 8,
-          "related_bookmarks" => [],
-          "uri" => "http://groonga.org/document.html",
-          "user" => nil,
-        }
-      ],
       "content" => nil,
       "comment" => "Great!"
     }
-
-    assert_equal(expected, top_page_record.attributes)
+    doc_page_attributes = {
+      "_id" => 2,
+      "comment" => "Informative",
+      "content" => nil,
+      "rate" => 8,
+      "related_bookmarks" => [],
+      "uri" => "http://groonga.org/document.html",
+      "user" => nil,
+    }
+    top_page_attributes["related_bookmarks"] = [
+      top_page_attributes,
+      doc_page_attributes
+    ]
+    assert_equal(top_page_attributes, top_page_record.attributes)
   end
 
   def test_dynamic_accessor
