@@ -356,8 +356,7 @@ class RecordTest < Test::Unit::TestCase
       "comment" => "Informative",
       "next2" => nil
     }
-
-    expected = {
+    top_page_attributes = {
       "_id" => 1,
       "user" => nil,
       "uri" => "http://groonga.org/",
@@ -367,11 +366,10 @@ class RecordTest < Test::Unit::TestCase
       "content" => nil,
       "comment" => "Great!"
     }
-
-    doc_page_attributes["next1"] = expected
+    doc_page_attributes["next1"] = top_page_attributes
 
     actual_records = top_page_record.attributes
-    assert_equal(expected, actual_records)
+    assert_equal(top_page_attributes, actual_records)
     assert_equal(actual_records["next1"].object_id,
                  actual_records["next2"].object_id)
   end
