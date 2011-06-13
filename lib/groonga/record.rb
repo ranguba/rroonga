@@ -423,24 +423,25 @@ module Groonga
 
       private
       def build_attributes(record)
-        building(record) do |attributes|
-          create_attributes(record, attributes)
-          add_key(attributes, record)
-          add_score(attributes, record)
-          add_n_sub_records(attributes, record)
-          add_columns(attributes, record)
-
-          attributes
+        if @all_built_attributes.has_key?(record)
+          return @all_built_attributes[record]
         end
+
+        attributes = {}
+        @all_built_attributes[record] = attributes
+
+        add_id(attributes, record)
+        add_key(attributes, record)
+        add_score(attributes, record)
+        add_n_sub_records(attributes, record)
+        add_columns(attributes, record)
+
+        attributes
       end
 
       def build_value(value)
         if value.is_a?(Record)
-          if attributes_exist?(value)
-            @all_built_attributes[value]
-          else
-            build_attributes(value)
-          end
+          build_attributes(value)
         else
           value
         end
@@ -452,7 +453,7 @@ module Groonga
         end
       end
 
-      def create_attributes(record, attributes)
+      def add_id(attributes, record)
         attributes["_id"] = record.id
       end
 
@@ -493,18 +494,6 @@ module Groonga
         if record.support_sub_records?
           attributes["_nsubrecs"] = record.n_sub_records
         end
-      end
-
-      def building(record)
-        attributes = {}
-        @all_built_attributes[record] = attributes
-        returned_object = yield(attributes)
-
-        returned_object
-      end
-
-      def attributes_exist?(record)
-        @all_built_attributes[record]
       end
     end
   end
