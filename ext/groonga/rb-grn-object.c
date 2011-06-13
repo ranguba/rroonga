@@ -1,6 +1,6 @@
 /* -*- c-file-style: "ruby" -*- */
 /*
-  Copyright (C) 2009-2010  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2011  Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -414,10 +414,6 @@ void
 rb_grn_named_object_bind (RbGrnNamedObject *rb_grn_named_object,
 			  grn_ctx *context, grn_obj *object)
 {
-    RbGrnObject *rb_grn_object;
-
-    rb_grn_object = RB_GRN_OBJECT(rb_grn_named_object);
-
     rb_grn_named_object->name = NULL;
     rb_grn_named_object->name_size = 0;
 }
@@ -1284,14 +1280,12 @@ static VALUE
 rb_grn_object_set (VALUE self, VALUE rb_id, VALUE rb_value, int flags)
 {
     RbGrnObject *rb_grn_object;
-    grn_ctx *context;
     grn_id id;
 
     rb_grn_object = SELF(self);
     if (!rb_grn_object->object)
 	return Qnil;
 
-    context = rb_grn_object->context;
     id = NUM2UINT(rb_id);
 
     return rb_grn_object_set_raw(rb_grn_object, id, rb_value, flags, self);

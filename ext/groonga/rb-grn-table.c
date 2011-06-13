@@ -1028,7 +1028,7 @@ rb_grn_table_sort (int argc, VALUE *argv, VALUE self)
     grn_obj *result;
     grn_table_sort_key *keys;
     int i, n_keys;
-    int n_records, offset = 0, limit = -1;
+    int offset = 0, limit = -1;
     VALUE rb_keys, options;
     VALUE rb_offset, rb_limit;
     VALUE *rb_sort_keys;
@@ -1111,8 +1111,10 @@ rb_grn_table_sort (int argc, VALUE *argv, VALUE self)
 
     result = grn_table_create(context, NULL, 0, NULL, GRN_TABLE_NO_KEY,
 			      NULL, table);
-    n_records = grn_table_sort(context, table, offset, limit,
-			       result, keys, n_keys);
+    /* use n_records that is return value from
+       grn_table_sort() when rroonga user become specifying
+       output table. */
+    grn_table_sort(context, table, offset, limit, result, keys, n_keys);
     exception = rb_grn_context_to_exception(context, self);
     if (!NIL_P(exception)) {
         grn_obj_unlink(context, result);
