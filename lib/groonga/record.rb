@@ -293,6 +293,8 @@ module Groonga
     # レコードが所属しているテーブルで定義されているインデックス
     # 型のカラムでない全カラムを対象とし、カラムの名前をキーとし
     # たこのレコードのカラムの値のハッシュを返す。
+    #
+    # return same attributes object if duplicate records exist.
     def attributes
       accessor = AttributeHashBuilder.new(self)
       accessor.build
