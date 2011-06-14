@@ -19,6 +19,9 @@
 	  <span class="title-project">ラングバ</span>
         </a>
       </div>
+      <ul class="other-languages">
+        <li id="other-language-english" lang="en" xml:lang="en"><a href="developer.html">English</a></li>
+      </ul>
       <ul class="menu">
 	<li id="menu-reference"><a href="rroonga/">リファレンスマニュアル</a></li>
 	<li id="menu-tutorial"><a href="rroonga/text/TUTORIAL_ja_rdoc.html">チュートリアル</a></li>
