@@ -1,5 +1,24 @@
 = NEWS
 
+== 1.2.2: 2011-06-27
+
+=== Improvements
+
+* created "Developers" page in English.
+
+=== Changes
+
+* Groonga::Record#attributes return same attributes object for duplicate records.
+* added document for Groonga::Record#attributes.
+* changed tool name in document page for creating document.
+* moved NEWS*.rdoc and tutorial.texttile to doc/text/.
+
+=== Fixes
+
+* fixed the wrong path of reference page.
+* fixed the tutorial path.
+* fixed the path of tutorial in English.
+
 == 1.2.1: 2011-06-07
 
 === Improvements

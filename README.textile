@@ -25,6 +25,7 @@ h2. Authors
 * Daijiro MORI <morita@razil.jp>
 * Yuto HAYAMIZU <y.hayamizu@gmail.com>
 * SHIDARA Yoji <dara@shidara.net>
+* yoshihara haruka <yoshihara@clear-code.com>
 
 h2. License
 
