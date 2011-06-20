@@ -5,6 +5,7 @@
 === Improvements
 
 * created "Developers" page in English.
+* added description for tasks of "html:publish" and "publish".
 
 === Changes
 
@@ -15,9 +16,8 @@
 
 === Fixes
 
-* fixed the path of reference page.
-* fixed the tutorial path.
-* fixed the path of tutorial in English.
+* fixed the tutorial path in index page.
+* fixed the path of tutorial in index page in English.
 
 == 1.2.1: 2011-06-07
 
