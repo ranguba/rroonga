@@ -214,8 +214,8 @@ end
 namespace :reference do
   translate_languages = [:ja]
   supported_languages = [:en, *translate_languages]
-  reference_base_dir = "references"
-  html_files = FileList["doc/**/*.html"].to_a
+  reference_base_dir = "doc/html"
+  html_files = FileList["doc/html/**/*.html"].to_a
 
   directory reference_base_dir
   CLOBBER.include(reference_base_dir)
@@ -255,7 +255,7 @@ namespace :reference do
       po_file = "#{po_dir}/#{language}.po"
       translate_doc_dir = "#{reference_base_dir}/#{language}"
 
-      doc_dir = Pathname("doc")
+      doc_dir = Pathname("#{reference_base_dir}/en")
       desc "Translates documents to #{language}."
       task language => [po_file, reference_base_dir, *html_files] do
         doc_dir.find do |path|
