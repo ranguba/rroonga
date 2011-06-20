@@ -215,7 +215,7 @@ namespace :reference do
   translate_languages = [:ja]
   supported_languages = [:en, *translate_languages]
   reference_base_dir = "doc/html"
-  html_files = FileList["doc/html/**/*.html"].to_a
+  html_files = FileList["doc/html/en/**/*.html"].to_a
 
   directory reference_base_dir
   CLOBBER.include(reference_base_dir)
@@ -238,7 +238,7 @@ namespace :reference do
       namespace language do
         po_file = "#{po_dir}/#{language}.po"
 
-        file po_file do |t|
+        file po_file => html_files do |t|
           sh("xml2po", "--keep-entities", "--update", t.name, *html_files)
         end
 
