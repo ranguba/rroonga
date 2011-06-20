@@ -47,15 +47,14 @@ $ git log -p --reverse (最新バージョン)..
 
 3.
 gemパッケージを作る。
-$ rake build
-もしくは
-$ ruby -S rake build
+パースできないオブジェクトがある関係上、ruby1.8で作成する。
+$ ruby1.8 -S rake build
 
-その後そのパッケージをインストールする。
-$ gem install pkg/rroonga-VERSION.gem --user-install
+その後そのパッケージをインストールする。（これは1.9でよい）
+$ gem1.9 install pkg/rroonga-VERSION.gem --user-install
 
 インストールできたら、パッケージをインストールしたディレクトリにあるテストを実行して動作を確認する。
-$ ruby test/run-test.rb
+$ NO_MAKE=yes ruby1.9.1 test/run-test.rb
 
 4.
 タグを打ってpushする。
