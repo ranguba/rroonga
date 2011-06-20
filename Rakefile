@@ -220,7 +220,7 @@ namespace :reference do
   directory reference_base_dir
   CLOBBER.include(reference_base_dir)
 
-  po_dir = "po"
+  po_dir = "doc/po"
   namespace :pot do
     pot_file = "#{po_dir}/#{spec.name}.pot"
 
