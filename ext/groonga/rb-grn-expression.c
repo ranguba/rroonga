@@ -559,8 +559,9 @@ rb_grn_expression_inspect (VALUE self)
     grn_expr_inspect(context, &inspected, expression);
 #endif
     GRN_TEXT_PUTS(context, &inspected, ">");
-    rb_inspected = rb_str_new(GRN_TEXT_VALUE(&inspected),
-			      GRN_TEXT_LEN(&inspected));
+    rb_inspected = rb_grn_context_rb_string_new(context,
+						GRN_TEXT_VALUE(&inspected),
+						GRN_TEXT_LEN(&inspected));
     GRN_OBJ_FIN(context, &inspected);
 
     return rb_inspected;
