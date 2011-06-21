@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: rroonga 1.2.1\n"
-"POT-Creation-Date: 2011-06-21 14:55+0900\n"
+"POT-Creation-Date: 2011-06-21 16:53+0900\n"
 "PO-Revision-Date: 2011-05-03 22:35+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
@@ -2802,7 +2802,7 @@ msgid ""
 "BUILD_VERSION. 57 58 59 # File 'lib/groonga.rb', line 57 def build_version "
 "BUILD_VERSION.join(.) end + (Object) version VERSION. 65 66 67 # File 'lib/"
 "groonga.rb', line 65 def version VERSION.join(.) end Generated on Tue Jun 21 "
-"14:55:09 2011 by yard 0.7.1 (ruby-1.9.2)."
+"16:53:24 2011 by yard 0.7.1 (ruby-1.9.2)."
 msgstr ""
 
 #: doc/html/en/file.news.ja.html:6(title)
@@ -6035,11 +6035,27 @@ msgid "yard"
 msgstr ""
 
 #: doc/html/en/file.news.ja.html:1199(div)
-#: doc/html/en/file.news.html:1220(div) doc/html/en/index.html:120(div)
-#: doc/html/en/file.tutorial.html:424(div) doc/html/en/_index.html:1472(div)
-#: doc/html/en/file.README.html:120(div)
+#: doc/html/en/file.news.html:1220(div)
+#: doc/html/en/Groonga/Schema.html:2358(div)
+#: doc/html/en/Groonga/Schema/ColumnDefinition.html:520(div)
+#: doc/html/en/Groonga/Schema/ViewRemoveDefinition.html:254(div)
+#: doc/html/en/Groonga/Schema/TableCreationWithDifferentOptions.html:382(div)
+#: doc/html/en/Groonga/Schema/Path.html:274(div)
+#: doc/html/en/Groonga/Schema/ViewDefinition.html:533(div)
+#: doc/html/en/Groonga/Schema/UnguessableReferenceTable.html:384(div)
+#: doc/html/en/Groonga/Schema/ColumnRemoveDefinition.html:424(div)
+#: doc/html/en/Groonga/Schema/UnknownOptions.html:457(div)
+#: doc/html/en/Groonga/Schema/UnknownTableType.html:382(div)
+#: doc/html/en/Groonga/Schema/ColumnCreationWithDifferentOptions.html:382(div)
+#: doc/html/en/Groonga/Schema/UnknownIndexTargetTable.html:309(div)
+#: doc/html/en/Groonga/Schema/TableNotExists.html:309(div)
+#: doc/html/en/Groonga/Schema/ColumnNotExists.html:309(div)
+#: doc/html/en/Groonga/Schema/TableDefinition.html:1859(div)
+#: doc/html/en/Groonga/Schema/UnknownIndexTarget.html:380(div)
+#: doc/html/en/Groonga/Schema/Error.html:138(div)
+#: doc/html/en/Groonga/Schema/TableRemoveDefinition.html:281(div)
 msgid ""
-"Generated on Tue Jun 21 14:55:09 2011 by <placeholder-1/> 0.7.1 (ruby-1.9.2)."
+"Generated on Tue Jun 21 16:53:24 2011 by <placeholder-1/> 0.7.1 (ruby-1.9.2)."
 msgstr ""
 
 #: doc/html/en/class_list.html:21(script)
@@ -9798,42 +9814,25 @@ msgstr ""
 #: doc/html/en/Groonga/UnknownError.html:134(div)
 #: doc/html/en/Groonga/Operator.html:476(div)
 #: doc/html/en/Groonga/NoSuchColumn.html:134(div)
-#: doc/html/en/Groonga/NoSuchFileOrDirectory.html:134(div)
-#: doc/html/en/Groonga/ImproperLink.html:134(div)
-#: doc/html/en/Groonga/TooManyOpenFilesInSystem.html:134(div)
-#: doc/html/en/Groonga/PermissionDenied.html:134(div)
-#: doc/html/en/Groonga/NoSuchProcess.html:134(div)
-#: doc/html/en/Groonga/ExecFormatError.html:134(div)
 #: doc/html/en/Groonga/EndOfData.html:134(div)
 #: doc/html/en/Groonga/Database.html:1470(div)
-#: doc/html/en/Groonga/NoSuchDeviceOrAddress.html:134(div)
-#: doc/html/en/Groonga/InvalidArgument.html:134(div)
-#: doc/html/en/Groonga/NoChildProcesses.html:134(div)
-#: doc/html/en/Groonga/InputOutputError.html:134(div)
-#: doc/html/en/Groonga/BadFileDescriptor.html:134(div)
 #: doc/html/en/Groonga/Object.html:1694(div)
 #: doc/html/en/Groonga/Plugin.html:446(div)
+#: doc/html/en/Groonga/Array.html:633(div)
 #: doc/html/en/Groonga/ObjectClosed.html:135(div)
 #: doc/html/en/Groonga/OperationNotPermitted.html:134(div)
 #: doc/html/en/Groonga/Logger.html:779(div)
-#: doc/html/en/Groonga/ArgumentListTooLong.html:134(div)
-#: doc/html/en/Groonga/IsADirectory.html:134(div)
-#: doc/html/en/Groonga/ResourceBusy.html:134(div)
-#: doc/html/en/Groonga/NoSuchDevice.html:134(div)
 #: doc/html/en/Groonga/Encoding.html:443(div)
+#: doc/html/en/Groonga/Query.html:496(div)
+#: doc/html/en/Groonga/Pagination.html:1309(div)
 #: doc/html/en/Groonga/Procedure.html:155(div)
-#: doc/html/en/Groonga/NotEnoughSpace.html:134(div)
 #: doc/html/en/Groonga/PatriciaTrie.html:2080(div)
-#: doc/html/en/Groonga/ResourceTemporarilyUnavailable.html:134(div)
-#: doc/html/en/Groonga/BadAddress.html:134(div)
-#: doc/html/en/Groonga/FileExists.html:134(div)
-#: doc/html/en/Groonga/InterruptedFunctionCall.html:134(div)
+#: doc/html/en/Groonga/ViewRecord.html:521(div)
 #: doc/html/en/Groonga/Error.html:124(div)
 #: doc/html/en/Groonga/Accessor.html:242(div)
 #: doc/html/en/Groonga/Variable.html:307(div)
-#: doc/html/en/Groonga/NotADirectory.html:134(div)
 msgid ""
-"Generated on Tue Jun 21 14:55:12 2011 by <placeholder-1/> 0.7.1 (ruby-1.9.2)."
+"Generated on Tue Jun 21 16:53:26 2011 by <placeholder-1/> 0.7.1 (ruby-1.9.2)."
 msgstr ""
 
 #: doc/html/en/Groonga/InappropriateIOControlOperation.html:6(title)
@@ -9872,24 +9871,32 @@ msgstr ""
 #: doc/html/en/Groonga/InappropriateIOControlOperation.html:134(div)
 #: doc/html/en/Groonga/FileTooLarge.html:134(div)
 #: doc/html/en/Groonga/InvalidFormat.html:134(div)
+#: doc/html/en/Groonga/NoSuchFileOrDirectory.html:134(div)
+#: doc/html/en/Groonga/ImproperLink.html:134(div)
 #: doc/html/en/Groonga/DirectoryNotEmpty.html:134(div)
+#: doc/html/en/Groonga/TooManyOpenFilesInSystem.html:134(div)
+#: doc/html/en/Groonga/PermissionDenied.html:134(div)
+#: doc/html/en/Groonga/NoSuchProcess.html:134(div)
+#: doc/html/en/Groonga/ExecFormatError.html:134(div)
 #: doc/html/en/Groonga/RangeError.html:134(div)
 #: doc/html/en/Groonga/NoBuffer.html:134(div)
-#: doc/html/en/Groonga/IndexCursor.html:209(div)
+#: doc/html/en/Groonga/NoSuchDeviceOrAddress.html:134(div)
 #: doc/html/en/Groonga/InvalidSeek.html:134(div)
+#: doc/html/en/Groonga/InvalidArgument.html:134(div)
+#: doc/html/en/Groonga/NoChildProcesses.html:134(div)
 #: doc/html/en/Groonga/SyntaxError.html:134(div)
 #: doc/html/en/Groonga/TooManyOpenFiles.html:134(div)
+#: doc/html/en/Groonga/InputOutputError.html:134(div)
+#: doc/html/en/Groonga/BadFileDescriptor.html:134(div)
 #: doc/html/en/Groonga/LZOError.html:134(div)
 #: doc/html/en/Groonga/NetworkIsDown.html:134(div)
 #: doc/html/en/Groonga/OperationNotSupported.html:134(div)
 #: doc/html/en/Groonga/ReadOnlyFileSystem.html:134(div)
 #: doc/html/en/Groonga/UnsupportedCommandVersion.html:134(div)
 #: doc/html/en/Groonga/BrokenPipe.html:134(div)
-#: doc/html/en/Groonga/ArrayCursor.html:158(div)
 #: doc/html/en/Groonga/TooManyLinks.html:134(div)
 #: doc/html/en/Groonga/TooLargeOffset.html:134(div)
 #: doc/html/en/Groonga/ConnectionRefused.html:134(div)
-#: doc/html/en/Groonga/IndexColumn.html:1194(div)
 #: doc/html/en/Groonga/NoLocksAvailable.html:134(div)
 #: doc/html/en/Groonga/RetryMax.html:134(div)
 #: doc/html/en/Groonga/OperationTimeout.html:134(div)
@@ -9898,32 +9905,40 @@ msgstr ""
 #: doc/html/en/Groonga/TooManySymbolicLinks.html:134(div)
 #: doc/html/en/Groonga/DomainError.html:134(div)
 #: doc/html/en/Groonga/FunctionNotImplemented.html:134(div)
+#: doc/html/en/Groonga/ArgumentListTooLong.html:134(div)
 #: doc/html/en/Groonga/AddressIsInUse.html:134(div)
 #: doc/html/en/Groonga/OperationWouldBlock.html:134(div)
+#: doc/html/en/Groonga/IsADirectory.html:134(div)
 #: doc/html/en/Groonga/ResourceDeadlockAvoided.html:134(div)
 #: doc/html/en/Groonga/NoMemoryAvailable.html:134(div)
+#: doc/html/en/Groonga/ResourceBusy.html:134(div)
+#: doc/html/en/Groonga/NoSuchDevice.html:134(div)
 #: doc/html/en/Groonga/SocketIsAlreadyShutdowned.html:134(div)
 #: doc/html/en/Groonga/FileCorrupt.html:134(div)
 #: doc/html/en/Groonga/IncompatibleFileFormat.html:134(div)
 #: doc/html/en/Groonga/CASError.html:134(div)
+#: doc/html/en/Groonga/NotEnoughSpace.html:134(div)
 #: doc/html/en/Groonga/TokenizerError.html:134(div)
 #: doc/html/en/Groonga/TooSmallOffset.html:134(div)
 #: doc/html/en/Groonga/SocketIsAlreadyConnected.html:134(div)
 #: doc/html/en/Groonga/UpdateNotAllowed.html:134(div)
-#: doc/html/en/Groonga/HashCursor.html:165(div)
+#: doc/html/en/Groonga/ResourceTemporarilyUnavailable.html:134(div)
 #: doc/html/en/Groonga/IllegalByteSequence.html:134(div)
 #: doc/html/en/Groonga/ObjectCorrupt.html:134(div)
+#: doc/html/en/Groonga/BadAddress.html:134(div)
 #: doc/html/en/Groonga/ZLibError.html:134(div)
 #: doc/html/en/Groonga/SocketNotInitialized.html:134(div)
-#: doc/html/en/Groonga/ViewCursor.html:157(div)
 #: doc/html/en/Groonga/NoSpaceLeftOnDevice.html:134(div)
 #: doc/html/en/Groonga/SocketIsNotConnected.html:134(div)
+#: doc/html/en/Groonga/FileExists.html:134(div)
 #: doc/html/en/Groonga/NotSocket.html:134(div)
+#: doc/html/en/Groonga/InterruptedFunctionCall.html:134(div)
 #: doc/html/en/Groonga/ResultTooLarge.html:134(div)
 #: doc/html/en/Groonga/AddressIsNotAvailable.html:134(div)
 #: doc/html/en/Groonga/StackOverFlow.html:134(div)
+#: doc/html/en/Groonga/NotADirectory.html:134(div)
 msgid ""
-"Generated on Tue Jun 21 14:55:13 2011 by <placeholder-1/> 0.7.1 (ruby-1.9.2)."
+"Generated on Tue Jun 21 16:53:27 2011 by <placeholder-1/> 0.7.1 (ruby-1.9.2)."
 msgstr ""
 
 #: doc/html/en/Groonga/ViewAccessor.html:6(title)
@@ -10611,15 +10626,15 @@ msgstr ""
 
 #: doc/html/en/Groonga/ViewAccessor.html:135(div)
 #: doc/html/en/Groonga/TableCursor.html:715(div)
-#: doc/html/en/Groonga/PatriciaTrieCursor.html:165(div)
+#: doc/html/en/Groonga/IndexCursor.html:209(div)
 #: doc/html/en/Groonga/FixSizeColumn.html:494(div)
-#: doc/html/en/Groonga/VariableSizeColumn.html:153(div)
-#: doc/html/en/Groonga/TableCursor/KeySupport.html:206(div)
-#: doc/html/en/Groonga/Table/KeySupport.html:1537(div)
+#: doc/html/en/Groonga/ArrayCursor.html:158(div)
+#: doc/html/en/Groonga/IndexColumn.html:1194(div)
+#: doc/html/en/Groonga/HashCursor.html:165(div)
+#: doc/html/en/Groonga/ViewCursor.html:157(div)
 #: doc/html/en/Groonga/EncodingSupport.html:206(div)
-#: doc/html/en/top-level-namespace.html:96(div)
 msgid ""
-"Generated on Tue Jun 21 14:55:14 2011 by <placeholder-1/> 0.7.1 (ruby-1.9.2)."
+"Generated on Tue Jun 21 16:53:28 2011 by <placeholder-1/> 0.7.1 (ruby-1.9.2)."
 msgstr ""
 
 #: doc/html/en/Groonga/Operator.html:6(title)
@@ -14266,22 +14281,26 @@ msgid ""
 msgstr ""
 
 #: doc/html/en/Groonga/Hash.html:832(div)
+#: doc/html/en/Groonga/SchemaDumper.html:290(div)
 #: doc/html/en/Groonga/View.html:962(div)
 #: doc/html/en/Groonga/TooLargePage.html:357(div)
-#: doc/html/en/Groonga/Array.html:633(div)
 #: doc/html/en/Groonga/Context/SelectResult/DrillDownResult.html:449(div)
 #: doc/html/en/Groonga/Context/SelectCommand.html:265(div)
 #: doc/html/en/Groonga/Context/SelectResult.html:696(div)
+#: doc/html/en/Groonga/TableDumper.html:257(div)
 #: doc/html/en/Groonga/TooSmallPageSize.html:357(div)
 #: doc/html/en/Groonga/Type.html:613(div)
 #: doc/html/en/Groonga/Record/AttributeHashBuilder.html:331(div)
 #: doc/html/en/Groonga/TooSmallPage.html:357(div)
-#: doc/html/en/Groonga/Query.html:496(div)
-#: doc/html/en/Groonga/Pagination.html:1309(div)
+#: doc/html/en/Groonga/DatabaseDumper.html:288(div)
 #: doc/html/en/Groonga/Context.html:2183(div)
-#: doc/html/en/Groonga/ViewRecord.html:521(div)
+#: doc/html/en/Groonga/Record.html:3014(div)
+#: doc/html/en/Groonga/SchemaDumper/CommandSyntax.html:140(div)
+#: doc/html/en/Groonga/SchemaDumper/BaseSyntax.html:359(div)
+#: doc/html/en/Groonga/SchemaDumper/RubySyntax.html:140(div)
+#: doc/html/en/Groonga/Schema/IndexColumnDefinition.html:750(div)
 msgid ""
-"Generated on Tue Jun 21 14:55:11 2011 by <placeholder-1/> 0.7.1 (ruby-1.9.2)."
+"Generated on Tue Jun 21 16:53:25 2011 by <placeholder-1/> 0.7.1 (ruby-1.9.2)."
 msgstr ""
 
 #: doc/html/en/Groonga/InvalidFormat.html:6(title)
@@ -16445,36 +16464,6 @@ msgstr ""
 msgid "string"
 msgstr ""
 
-#: doc/html/en/Groonga/SchemaDumper.html:290(div)
-#: doc/html/en/Groonga/TableDumper.html:257(div)
-#: doc/html/en/Groonga/DatabaseDumper.html:288(div)
-#: doc/html/en/Groonga/Schema.html:2358(div)
-#: doc/html/en/Groonga/Record.html:3014(div)
-#: doc/html/en/Groonga/SchemaDumper/CommandSyntax.html:140(div)
-#: doc/html/en/Groonga/SchemaDumper/BaseSyntax.html:359(div)
-#: doc/html/en/Groonga/SchemaDumper/RubySyntax.html:140(div)
-#: doc/html/en/Groonga/Schema/ColumnDefinition.html:520(div)
-#: doc/html/en/Groonga/Schema/ViewRemoveDefinition.html:254(div)
-#: doc/html/en/Groonga/Schema/TableCreationWithDifferentOptions.html:382(div)
-#: doc/html/en/Groonga/Schema/Path.html:274(div)
-#: doc/html/en/Groonga/Schema/ViewDefinition.html:533(div)
-#: doc/html/en/Groonga/Schema/UnguessableReferenceTable.html:384(div)
-#: doc/html/en/Groonga/Schema/IndexColumnDefinition.html:750(div)
-#: doc/html/en/Groonga/Schema/ColumnRemoveDefinition.html:424(div)
-#: doc/html/en/Groonga/Schema/UnknownOptions.html:457(div)
-#: doc/html/en/Groonga/Schema/UnknownTableType.html:382(div)
-#: doc/html/en/Groonga/Schema/ColumnCreationWithDifferentOptions.html:382(div)
-#: doc/html/en/Groonga/Schema/UnknownIndexTargetTable.html:309(div)
-#: doc/html/en/Groonga/Schema/TableNotExists.html:309(div)
-#: doc/html/en/Groonga/Schema/ColumnNotExists.html:309(div)
-#: doc/html/en/Groonga/Schema/TableDefinition.html:1859(div)
-#: doc/html/en/Groonga/Schema/UnknownIndexTarget.html:380(div)
-#: doc/html/en/Groonga/Schema/Error.html:138(div)
-#: doc/html/en/Groonga/Schema/TableRemoveDefinition.html:281(div)
-msgid ""
-"Generated on Tue Jun 21 14:55:10 2011 by <placeholder-1/> 0.7.1 (ruby-1.9.2)."
-msgstr ""
-
 #: doc/html/en/Groonga/PermissionDenied.html:6(title)
 msgid "Exception: Groonga::PermissionDenied &mdash; rroonga - 1.2.2"
 msgstr ""
@@ -17992,7 +17981,7 @@ msgid ""
 "(column_value_builder, value) A new instance of StarExpressionBuilder 346 "
 "347 348 # File 'lib/groonga/expression-builder.rb', line 346 def initialize"
 "(column_value_builder, value) super(Groonga::Operation::STAR, "
-"column_value_builder, value) end Generated on Tue Jun 21 14:55:14 2011 by "
+"column_value_builder, value) end Generated on Tue Jun 21 16:53:28 2011 by "
 "yard 0.7.1 (ruby-1.9.2)."
 msgstr ""
 
@@ -18031,7 +18020,7 @@ msgid ""
 "(column_value_builder, value) A new instance of LessExpressionBuilder 310 "
 "311 312 # File 'lib/groonga/expression-builder.rb', line 310 def initialize"
 "(column_value_builder, value) super(Groonga::Operation::LESS, "
-"column_value_builder, value) end Generated on Tue Jun 21 14:55:14 2011 by "
+"column_value_builder, value) end Generated on Tue Jun 21 16:53:28 2011 by "
 "yard 0.7.1 (ruby-1.9.2)."
 msgstr ""
 
@@ -18065,7 +18054,7 @@ msgid ""
 "316 317 318 # File 'lib/groonga/expression-builder.rb', line 316 def "
 "initialize(column_value_builder, value) super(Groonga::Operation::"
 "LESS_EQUAL, column_value_builder, value) end Generated on Tue Jun 21 "
-"14:55:14 2011 by yard 0.7.1 (ruby-1.9.2)."
+"16:53:28 2011 by yard 0.7.1 (ruby-1.9.2)."
 msgstr ""
 
 #: doc/html/en/Groonga/ExpressionBuildable/ModExpressionBuilder.html:6(title)
@@ -18105,7 +18094,7 @@ msgid ""
 "(column_value_builder, value) A new instance of ModExpressionBuilder 358 359 "
 "360 # File 'lib/groonga/expression-builder.rb', line 358 def initialize"
 "(column_value_builder, value) super(Groonga::Operation::MOD, "
-"column_value_builder, value) end Generated on Tue Jun 21 14:55:14 2011 by "
+"column_value_builder, value) end Generated on Tue Jun 21 16:53:28 2011 by "
 "yard 0.7.1 (ruby-1.9.2)."
 msgstr ""
 
@@ -18162,7 +18151,7 @@ msgid ""
 "super() @query = query @options = options end Instance Method Details - "
 "(Object) build(expression, variable) 370 371 372 # File 'lib/groonga/"
 "expression-builder.rb', line 370 def build(expression, variable) expression."
-"parse(@query, @options) end Generated on Tue Jun 21 14:55:14 2011 by yard "
+"parse(@query, @options) end Generated on Tue Jun 21 16:53:28 2011 by yard "
 "0.7.1 (ruby-1.9.2)."
 msgstr ""
 
@@ -18195,7 +18184,7 @@ msgid ""
 "(column_value_builder, value) A new instance of MinusExpressionBuilder 340 "
 "341 342 # File 'lib/groonga/expression-builder.rb', line 340 def initialize"
 "(column_value_builder, value) super(Groonga::Operation::MINUS, "
-"column_value_builder, value) end Generated on Tue Jun 21 14:55:14 2011 by "
+"column_value_builder, value) end Generated on Tue Jun 21 16:53:28 2011 by "
 "yard 0.7.1 (ruby-1.9.2)."
 msgstr ""
 
@@ -18227,7 +18216,7 @@ msgid ""
 "(*expression_builders) A new instance of OrExpressionBuilder 134 135 136 # "
 "File 'lib/groonga/expression-builder.rb', line 134 def initialize"
 "(*expression_builders) super(Groonga::Operation::OR, *expression_builders) "
-"end Generated on Tue Jun 21 14:55:13 2011 by yard 0.7.1 (ruby-1.9.2)."
+"end Generated on Tue Jun 21 16:53:28 2011 by yard 0.7.1 (ruby-1.9.2)."
 msgstr ""
 
 #: doc/html/en/Groonga/ExpressionBuildable/PrefixSearchExpressionBuilder.html:6(title)
@@ -18261,7 +18250,7 @@ msgid ""
 "PrefixSearchExpressionBuilder 376 377 378 # File 'lib/groonga/expression-"
 "builder.rb', line 376 def initialize(column_value_builder, value) super"
 "(Groonga::Operation::PREFIX, column_value_builder, value) end Generated on "
-"Tue Jun 21 14:55:14 2011 by yard 0.7.1 (ruby-1.9.2)."
+"Tue Jun 21 16:53:28 2011 by yard 0.7.1 (ruby-1.9.2)."
 msgstr ""
 
 #: doc/html/en/Groonga/ExpressionBuildable/SuffixSearchExpressionBuilder.html:6(title)
@@ -18295,7 +18284,7 @@ msgid ""
 "SuffixSearchExpressionBuilder 382 383 384 # File 'lib/groonga/expression-"
 "builder.rb', line 382 def initialize(column_value_builder, value) super"
 "(Groonga::Operation::SUFFIX, column_value_builder, value) end Generated on "
-"Tue Jun 21 14:55:14 2011 by yard 0.7.1 (ruby-1.9.2)."
+"Tue Jun 21 16:53:28 2011 by yard 0.7.1 (ruby-1.9.2)."
 msgstr ""
 
 #: doc/html/en/Groonga/ExpressionBuildable/ColumnValueExpressionBuilder.html:6(title)
@@ -18702,7 +18691,7 @@ msgid ""
 "groonga/expression-builder.rb', line 118 def build(expression, variable) "
 "return if @expression_builders.empty? @expression_builders.each do |builder| "
 "builder.build(expression, variable) end expression.append_operation"
-"(@operation, @expression_builders.size) end Generated on Tue Jun 21 14:55:13 "
+"(@operation, @expression_builders.size) end Generated on Tue Jun 21 16:53:28 "
 "2011 by yard 0.7.1 (ruby-1.9.2)."
 msgstr ""
 
@@ -18763,7 +18752,7 @@ msgid ""
 "293 294 # File 'lib/groonga/expression-builder.rb', line 290 def build"
 "(expression, variable) @column_value_builder.build(expression, variable) "
 "expression.append_constant(@value) expression.append_operation(@operation, "
-"2) end Generated on Tue Jun 21 14:55:14 2011 by yard 0.7.1 (ruby-1.9.2)."
+"2) end Generated on Tue Jun 21 16:53:28 2011 by yard 0.7.1 (ruby-1.9.2)."
 msgstr ""
 
 #: doc/html/en/Groonga/ExpressionBuildable/MatchExpressionBuilder.html:6(title)
@@ -18795,7 +18784,7 @@ msgid ""
 "(column_value_builder, value) A new instance of MatchExpressionBuilder 304 "
 "305 306 # File 'lib/groonga/expression-builder.rb', line 304 def initialize"
 "(column_value_builder, value) super(Groonga::Operation::MATCH, "
-"column_value_builder, value) end Generated on Tue Jun 21 14:55:14 2011 by "
+"column_value_builder, value) end Generated on Tue Jun 21 16:53:28 2011 by "
 "yard 0.7.1 (ruby-1.9.2)."
 msgstr ""
 
@@ -18962,7 +18951,7 @@ msgid ""
 "(column_value_builder, value) A new instance of GreaterExpressionBuilder 322 "
 "323 324 # File 'lib/groonga/expression-builder.rb', line 322 def initialize"
 "(column_value_builder, value) super(Groonga::Operation::GREATER, "
-"column_value_builder, value) end Generated on Tue Jun 21 14:55:14 2011 by "
+"column_value_builder, value) end Generated on Tue Jun 21 16:53:28 2011 by "
 "yard 0.7.1 (ruby-1.9.2)."
 msgstr ""
 
@@ -18995,7 +18984,7 @@ msgid ""
 "(column_value_builder, value) A new instance of SlashExpressionBuilder 352 "
 "353 354 # File 'lib/groonga/expression-builder.rb', line 352 def initialize"
 "(column_value_builder, value) super(Groonga::Operation::SLASH, "
-"column_value_builder, value) end Generated on Tue Jun 21 14:55:14 2011 by "
+"column_value_builder, value) end Generated on Tue Jun 21 16:53:28 2011 by "
 "yard 0.7.1 (ruby-1.9.2)."
 msgstr ""
 
@@ -19038,7 +19027,7 @@ msgid ""
 "(*expression_builders) A new instance of AndExpressionBuilder 128 129 130 # "
 "File 'lib/groonga/expression-builder.rb', line 128 def initialize"
 "(*expression_builders) super(Groonga::Operation::AND, *expression_builders) "
-"end Generated on Tue Jun 21 14:55:13 2011 by yard 0.7.1 (ruby-1.9.2)."
+"end Generated on Tue Jun 21 16:53:28 2011 by yard 0.7.1 (ruby-1.9.2)."
 msgstr ""
 
 #: doc/html/en/Groonga/ExpressionBuildable/PlusExpressionBuilder.html:6(title)
@@ -19069,7 +19058,7 @@ msgid ""
 "(column_value_builder, value) A new instance of PlusExpressionBuilder 334 "
 "335 336 # File 'lib/groonga/expression-builder.rb', line 334 def initialize"
 "(column_value_builder, value) super(Groonga::Operation::PLUS, "
-"column_value_builder, value) end Generated on Tue Jun 21 14:55:14 2011 by "
+"column_value_builder, value) end Generated on Tue Jun 21 16:53:28 2011 by "
 "yard 0.7.1 (ruby-1.9.2)."
 msgstr ""
 
@@ -19112,7 +19101,7 @@ msgid ""
 "builder.rb', line 268 def build(expression, variable) expression."
 "append_object(variable) expression.append_object(@target) expression."
 "append_operation(Groonga::Operation::GET_VALUE, 2) end Generated on Tue Jun "
-"21 14:55:14 2011 by yard 0.7.1 (ruby-1.9.2)."
+"21 16:53:28 2011 by yard 0.7.1 (ruby-1.9.2)."
 msgstr ""
 
 #: doc/html/en/Groonga/ExpressionBuildable/ExpressionBuilder.html:6(title)
@@ -19184,7 +19173,7 @@ msgid ""
 "line 102 def (other) AndExpressionBuilder.new(self, other) end - (Object) |"
 "(other) 106 107 108 # File 'lib/groonga/expression-builder.rb', line 106 def "
 "|(other) OrExpressionBuilder.new(self, other) end Generated on Tue Jun 21 "
-"14:55:13 2011 by yard 0.7.1 (ruby-1.9.2)."
+"16:53:28 2011 by yard 0.7.1 (ruby-1.9.2)."
 msgstr ""
 
 #: doc/html/en/Groonga/ExpressionBuildable/EqualExpressionBuilder.html:6(title)
@@ -19216,7 +19205,7 @@ msgid ""
 "(column_value_builder, value) A new instance of EqualExpressionBuilder 298 "
 "299 300 # File 'lib/groonga/expression-builder.rb', line 298 def initialize"
 "(column_value_builder, value) super(Groonga::Operation::EQUAL, "
-"column_value_builder, value) end Generated on Tue Jun 21 14:55:14 2011 by "
+"column_value_builder, value) end Generated on Tue Jun 21 16:53:28 2011 by "
 "yard 0.7.1 (ruby-1.9.2)."
 msgstr ""
 
@@ -19251,7 +19240,7 @@ msgid ""
 "GreaterEqualExpressionBuilder 328 329 330 # File 'lib/groonga/expression-"
 "builder.rb', line 328 def initialize(column_value_builder, value) super"
 "(Groonga::Operation::GREATER_EQUAL, column_value_builder, value) end "
-"Generated on Tue Jun 21 14:55:14 2011 by yard 0.7.1 (ruby-1.9.2)."
+"Generated on Tue Jun 21 16:53:28 2011 by yard 0.7.1 (ruby-1.9.2)."
 msgstr ""
 
 #: doc/html/en/Groonga/InputOutputError.html:6(title)
@@ -19338,6 +19327,15 @@ msgstr ""
 #: doc/html/en/Groonga/HashCursor.html:149(a)
 #: doc/html/en/Groonga/ViewCursor.html:141(a)
 msgid "#value="
+msgstr ""
+
+#: doc/html/en/Groonga/PatriciaTrieCursor.html:165(div)
+#: doc/html/en/Groonga/VariableSizeColumn.html:153(div)
+#: doc/html/en/Groonga/TableCursor/KeySupport.html:206(div)
+#: doc/html/en/Groonga/Table/KeySupport.html:1537(div)
+#: doc/html/en/top-level-namespace.html:96(div)
+msgid ""
+"Generated on Tue Jun 21 16:53:29 2011 by <placeholder-1/> 0.7.1 (ruby-1.9.2)."
 msgstr ""
 
 #: doc/html/en/Groonga/NetworkIsDown.html:6(title)
@@ -21933,7 +21931,7 @@ msgid ""
 "(const char **)close_tags, close_tag_lengths, mapping); rb_grn_context_check"
 "(context, rb_ary_new3(2, self, rb_ary_new4(argc, argv))); return "
 "GRNSNIPPET2RVAL(context, snippet, GRN_TRUE); } Generated on Tue Jun 21 "
-"14:55:13 2011 by yard 0.7.1 (ruby-1.9.2)."
+"16:53:28 2011 by yard 0.7.1 (ruby-1.9.2)."
 msgstr ""
 
 #: doc/html/en/Groonga/BrokenPipe.html:6(title)
@@ -26257,7 +26255,7 @@ msgid ""
 "(rb_eArgError, :id options must be true or nil: %s: %s, rb_grn_inspect"
 "(rb_option_id), rb_grn_inspect(rb_ary_new3(2, self, rb_ary_new4(argc, "
 "argv)))); } } return rb_grn_table_get_value(self, rb_id); } Generated on Tue "
-"Jun 21 14:55:11 2011 by yard 0.7.1 (ruby-1.9.2)."
+"Jun 21 16:53:26 2011 by yard 0.7.1 (ruby-1.9.2)."
 msgstr ""
 
 #: doc/html/en/Groonga/TooSmallPage.html:6(title)
@@ -26523,7 +26521,7 @@ msgid ""
 "@query = nil @syntax = nil @allow_pragma = nil @allow_column = nil "
 "@allow_update = nil @default_column = nil end - (Object) |(other) 51 52 53 # "
 "File 'lib/groonga/expression-builder.rb', line 51 def |(other) other end "
-"Generated on Tue Jun 21 14:55:13 2011 by yard 0.7.1 (ruby-1.9.2)."
+"Generated on Tue Jun 21 16:53:28 2011 by yard 0.7.1 (ruby-1.9.2)."
 msgstr ""
 
 #: doc/html/en/Groonga/Encoding.html:6(title)
@@ -27378,7 +27376,7 @@ msgid ""
 "section_id] || nil @term_id = parameters[:term_id] || nil @position = "
 "parameters[:position] || 0 @term_frequency = parameters[:term_frequency] || "
 "0 @weight = parameters[:weight] || 0 @n_rest_postings = parameters[:"
-"n_rest_postings] || 0 end Generated on Tue Jun 21 14:55:11 2011 by yard "
+"n_rest_postings] || 0 end Generated on Tue Jun 21 16:53:25 2011 by yard "
 "0.7.1 (ruby-1.9.2)."
 msgstr ""
 
@@ -30654,7 +30652,7 @@ msgid ""
 "#, #build, #initialize, #| Constructor Details This class inherits a "
 "constructor from Groonga::RecordExpressionBuilder Dynamic Method Handling "
 "This class handles dynamic methods through the method_missing method in the "
-"class Groonga::RecordExpressionBuilder Generated on Tue Jun 21 14:55:14 2011 "
+"class Groonga::RecordExpressionBuilder Generated on Tue Jun 21 16:53:28 2011 "
 "by yard 0.7.1 (ruby-1.9.2)."
 msgstr ""
 
@@ -33015,7 +33013,7 @@ msgid ""
 "seq: * column.vector? - true/false * * _column_column, context, NULL, NULL, "
 "NULL, NULL, NULL); if (column-header.type == GRN_COLUMN_VAR_SIZE ((column-"
 "header.flags GRN_OBJ_COLUMN_TYPE_MASK) == GRN_OBJ_COLUMN_VECTOR)) { return "
-"Qtrue; } else { return Qfalse; } } Generated on Tue Jun 21 14:55:12 2011 by "
+"Qtrue; } else { return Qfalse; } } Generated on Tue Jun 21 16:53:26 2011 by "
 "yard 0.7.1 (ruby-1.9.2)."
 msgstr ""
 
@@ -33420,7 +33418,7 @@ msgid ""
 "grn_snip_get_result(context, snippet, i, result, result_length); "
 "rb_grn_rc_check(rc, self); rb_result = rb_grn_context_rb_string_new(context, "
 "result, result_length); rb_ary_push(rb_results, rb_result); } return "
-"rb_results; } Generated on Tue Jun 21 14:55:12 2011 by yard 0.7.1 "
+"rb_results; } Generated on Tue Jun 21 16:53:26 2011 by yard 0.7.1 "
 "(ruby-1.9.2)."
 msgstr ""
 
@@ -33503,7 +33501,7 @@ msgid ""
 "(block)) end - (Object) n_sub_records 419 420 421 # File 'lib/groonga/"
 "expression-builder.rb', line 419 def n_sub_records self[_nsubrecs] end - "
 "(Object) score 415 416 417 # File 'lib/groonga/expression-builder.rb', line "
-"415 def score self[_score] end Generated on Tue Jun 21 14:55:14 2011 by yard "
+"415 def score self[_score] end Generated on Tue Jun 21 16:53:28 2011 by yard "
 "0.7.1 (ruby-1.9.2)."
 msgstr ""
 
@@ -36625,6 +36623,12 @@ msgstr "@kamipoさん: バグレポートをしてくれました。"
 #: doc/html/en/index.html:117(li) doc/html/en/file.README.html:117(li)
 msgid "ongaeshi: sent a patch to build gem on Windows."
 msgstr "ongaeshiさん: Windows上でgemをビルドするためのパッチをくれました。"
+
+#: doc/html/en/index.html:120(div) doc/html/en/file.tutorial.html:424(div)
+#: doc/html/en/_index.html:1472(div) doc/html/en/file.README.html:120(div)
+msgid ""
+"Generated on Tue Jun 21 16:53:23 2011 by <placeholder-1/> 0.7.1 (ruby-1.9.2)."
+msgstr ""
 
 #: doc/html/en/method_list.html:60(span)
 msgid ""
