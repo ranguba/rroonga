@@ -302,7 +302,8 @@ namespace :reference do
             next
           when /\.html\z/
             relative_top_path = file.relative_path_from(doc_dir).dirname
-            apply_template(file, "../../#{relative_top_path}",
+            current_page = file.basename.to_s
+            apply_template(file, "#{relative_top_path}", current_page,
                            head, header, footer, language)
           end
         end
