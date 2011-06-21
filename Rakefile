@@ -285,9 +285,7 @@ namespace :reference do
   task :translate => translate_task_names
 
   desc "Generates references."
-  task :generate => [:yard, :translate] do
-    cp_r("doc", "#{reference_base_dir}/en", :preserve => true)
-  end
+  task :generate => [:yard, :translate]
 
   namespace :publication do
     task :prepare do
