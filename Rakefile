@@ -170,7 +170,7 @@ end
 
 include ERB::Util
 
-def apply_template(file, top_path, head, header, footer, language)
+def apply_template(file, top_path, current_page, head, header, footer, language)
   content = File.read(file)
   content = content.sub(/lang="en"/, 'lang="#{language}"')
 
