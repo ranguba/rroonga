@@ -18,6 +18,11 @@
 
 * fixed the tutorial path in index page.
 * fixed the path of tutorial in index page in English.
+* follow the groonga downlowd URL change. [mallowlabs]
+
+=== Thanks
+
+* mallowlabs
 
 == 1.2.1: 2011-06-07
 
