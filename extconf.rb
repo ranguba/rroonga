@@ -46,7 +46,7 @@ def install_groonga_locally(major, minor, micro)
 
   install_dir = local_groonga_install_dir
   Dir.chdir(local_groonga_base_dir) do
-    url = "http://groonga.org/files/groonga/#{tar_gz}"
+    url = "http://packages.groonga.org/source/groonga/#{tar_gz}"
     message("downloading %s...", url)
     open(url, "rb") do |input|
       File.open(tar_gz, "wb") do |output|
