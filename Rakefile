@@ -227,6 +227,10 @@ def rsync_to_rubyforge(spec, source, destination, options={})
   sh("rsync #{rsync_args} #{source} #{host}:#{remote_dir}#{destination}")
 end
 
+def rake(*arguments)
+  ruby($0, *arguments)
+end
+
 namespace :reference do
   translate_languages = [:ja]
   supported_languages = [:en, *translate_languages]
@@ -259,6 +263,15 @@ namespace :reference do
 
         desc "Updates po file for #{language}."
         task :update => po_file
+      end
+    end
+
+    desc "Updates po files."
+    task :update do
+      ruby($0, "clobber")
+      ruby($0, "yard")
+      translate_languages.each do |language|
+        ruby($0, "reference:po:#{language}:update")
       end
     end
   end
