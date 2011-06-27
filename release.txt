@@ -58,36 +58,46 @@ $ NO_MAKE=yes ruby1.9.1 test/run-test.rb
 
 4.
 タグを打ってpushする。
-jewelerの場合、
+
+$ rake tag
+$ git push --tags
+
+とする。
+
+うっかり、
 $ rake release
-をすると、タグの頭にvがつくので、
+やった場合は、タグの頭にvがついてしまうので、
 
 $ git tag -d vVERSION
 $ git push origin :refs/tags/vVERSION
 
-してタグを一度消してから、
+してタグを一度消してから上記作業をする。
 
-$ rake tag VERSION
-$ git push --tags origin
+5.
+アップロードする。
 
-してタグをつけ直す。
+rubygems.orgにアップロードするには、
 
-その後rubygems.orgにアップロードするには、
-
-$ rake gemcutter:release
+$ ruby1.8 -S rake gemcutter:release
 
 をする。
 
 rubyforgeにアップロードするには、
 
-$ rubyforge --setup
-
-をしてユーザの設定をしてから、
-
-$ rake publish
+$ ruby1.8 -S rake publish
 
 をする。
+
+いちどもrubyforgeにアップロードしてない場合、
+
+$ rubyforge --setup
+
+をしてユーザの設定をする。
 
 6.
 メーリングリストにリリースしたよメールを流す。
 rubyforgeの最新ニュースを更新する。
+
+7.
+ext/groonga/rb-grn.hにある、RB_GRN_MAJOR_VERSIONなどの値を次回アップデート時の
+バージョンの値に変更する。
