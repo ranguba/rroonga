@@ -366,9 +366,9 @@
 
 == 0.0.3: 2009-07-18
 
-* [#26145] Added Groonga::TableKeySupport#has_key? [Tasuku SUENAGA]
-* [#26146] Groonga::Record#[] raises an exception for nonexistent
-  column name. [Tasuku SUENAGA]
+* Added Groonga::TableKeySupport#has_key? [#26145] [Tasuku SUENAGA]
+* Groonga::Record#[] raises an exception for nonexistent
+  column name. [#26146] [Tasuku SUENAGA]
 * Supported 32bit environment [niku]
 * Added a test for N-gram index search [dara]
 * Added APIs
