@@ -89,6 +89,7 @@ Jeweler::Tasks.new do |_spec|
                         "example/*.rb",
                         "Rakefile",
                         "ext/**/*"]
+  spec.extensions = ["extconf.rb"]
   spec.test_files = FileList["test/**/*.rb"]
 end
 
