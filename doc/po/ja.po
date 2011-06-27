@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: rroonga 1.2.1\n"
-"POT-Creation-Date: 2011-06-27 13:31+0900\n"
-"PO-Revision-Date: 2011-06-27 13:56+0900\n"
+"POT-Creation-Date: 2011-06-27 14:27+0900\n"
+"PO-Revision-Date: 2011-06-27 14:40+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: \n"
@@ -316,9 +316,7 @@ msgstr ""
 #: doc/html/en/top-level-namespace.html:29(script)
 #: doc/html/en/file.tutorial.html:29(script) doc/html/en/index.html:29(script)
 #: doc/html/en/_index.html:27(script) doc/html/en/file.news.html:29(script)
-#: doc/html/en/Groonga.html:29(script)
-#: doc/html/en/file.news.ja.html:29(script)
-#: doc/html/en/file.README.html:29(script)
+#: doc/html/en/Groonga.html:29(script) doc/html/en/file.README.html:29(script)
 msgid "if (window.top.frames.main) document.body.className = 'frames';"
 msgstr ""
 
@@ -536,7 +534,7 @@ msgstr ""
 #: doc/html/en/Groonga/SchemaDumper/BaseSyntax.html:329(span)
 #: doc/html/en/Groonga/SchemaDumper/RubySyntax.html:37(a)
 #: doc/html/en/Groonga/LZOError.html:37(a)
-#: doc/html/en/top-level-namespace.html:81(a) doc/html/en/_index.html:470(a)
+#: doc/html/en/top-level-namespace.html:81(a) doc/html/en/_index.html:467(a)
 #: doc/html/en/Groonga.html:39(span) doc/html/en/Groonga.html:320(span)
 #: doc/html/en/Groonga.html:321(span) doc/html/en/class_list.html:42(a)
 #: doc/html/en/class_list.html:42(small)
@@ -544,7 +542,7 @@ msgid "Groonga"
 msgstr ""
 
 #: doc/html/en/Groonga/FileExists.html:39(span)
-#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:413(a)
+#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:410(a)
 #: doc/html/en/Groonga.html:117(a) doc/html/en/class_list.html:42(a)
 msgid "FileExists"
 msgstr ""
@@ -1215,16 +1213,6 @@ msgstr ""
 #: doc/html/en/file.news.html:557(span) doc/html/en/Groonga.html:42(span)
 #: doc/html/en/Groonga.html:345(span) doc/html/en/Groonga.html:388(span)
 #: doc/html/en/Groonga.html:430(span) doc/html/en/Groonga.html:472(span)
-#: doc/html/en/file.news.ja.html:40(span)
-#: doc/html/en/file.news.ja.html:234(span)
-#: doc/html/en/file.news.ja.html:235(span)
-#: doc/html/en/file.news.ja.html:236(span)
-#: doc/html/en/file.news.ja.html:246(span)
-#: doc/html/en/file.news.ja.html:254(span)
-#: doc/html/en/file.news.ja.html:537(span)
-#: doc/html/en/file.news.ja.html:550(span)
-#: doc/html/en/file.news.ja.html:555(span)
-#: doc/html/en/file.news.ja.html:556(span)
 #: doc/html/en/file.README.html:40(span)
 msgid "("
 msgstr ""
@@ -1398,8 +1386,7 @@ msgstr ""
 #: doc/html/en/top-level-namespace.html:42(a)
 #: doc/html/en/file.tutorial.html:40(a) doc/html/en/index.html:40(a)
 #: doc/html/en/_index.html:38(a) doc/html/en/file.news.html:40(a)
-#: doc/html/en/Groonga.html:42(a) doc/html/en/file.news.ja.html:40(a)
-#: doc/html/en/file.README.html:40(a)
+#: doc/html/en/Groonga.html:42(a) doc/html/en/file.README.html:40(a)
 msgid "no frames"
 msgstr "フレーム無し"
 
@@ -2068,16 +2055,6 @@ msgstr "フレーム無し"
 #: doc/html/en/file.news.html:557(span) doc/html/en/Groonga.html:42(span)
 #: doc/html/en/Groonga.html:345(span) doc/html/en/Groonga.html:388(span)
 #: doc/html/en/Groonga.html:430(span) doc/html/en/Groonga.html:472(span)
-#: doc/html/en/file.news.ja.html:40(span)
-#: doc/html/en/file.news.ja.html:234(span)
-#: doc/html/en/file.news.ja.html:235(span)
-#: doc/html/en/file.news.ja.html:236(span)
-#: doc/html/en/file.news.ja.html:246(span)
-#: doc/html/en/file.news.ja.html:254(span)
-#: doc/html/en/file.news.ja.html:537(span)
-#: doc/html/en/file.news.ja.html:550(span)
-#: doc/html/en/file.news.ja.html:555(span)
-#: doc/html/en/file.news.ja.html:556(span)
 #: doc/html/en/file.README.html:40(span)
 msgid ")"
 msgstr ""
@@ -2252,7 +2229,7 @@ msgstr ""
 #: doc/html/en/file.tutorial.html:45(a) doc/html/en/index.html:45(a)
 #: doc/html/en/_index.html:43(a) doc/html/en/file.news.html:45(a)
 #: doc/html/en/Groonga.html:47(a) doc/html/en/class_list.html:28(h1)
-#: doc/html/en/file.news.ja.html:45(a) doc/html/en/file.README.html:45(a)
+#: doc/html/en/file.README.html:45(a)
 msgid "Class List"
 msgstr "クラスリスト"
 
@@ -2426,7 +2403,7 @@ msgstr "クラスリスト"
 #: doc/html/en/file.tutorial.html:47(a) doc/html/en/method_list.html:28(h1)
 #: doc/html/en/index.html:47(a) doc/html/en/_index.html:45(a)
 #: doc/html/en/file.news.html:47(a) doc/html/en/Groonga.html:49(a)
-#: doc/html/en/file.news.ja.html:47(a) doc/html/en/file.README.html:47(a)
+#: doc/html/en/file.README.html:47(a)
 msgid "Method List"
 msgstr "メソッドリスト"
 
@@ -2599,8 +2576,8 @@ msgstr "メソッドリスト"
 #: doc/html/en/top-level-namespace.html:51(a)
 #: doc/html/en/file.tutorial.html:49(a) doc/html/en/index.html:49(a)
 #: doc/html/en/_index.html:47(a) doc/html/en/file.news.html:49(a)
-#: doc/html/en/Groonga.html:51(a) doc/html/en/file.news.ja.html:49(a)
-#: doc/html/en/file_list.html:28(h1) doc/html/en/file.README.html:49(a)
+#: doc/html/en/Groonga.html:51(a) doc/html/en/file_list.html:28(h1)
+#: doc/html/en/file.README.html:49(a)
 msgid "File List"
 msgstr "ファイルリスト"
 
@@ -2956,8 +2933,8 @@ msgstr ""
 #: doc/html/en/Groonga/Schema/UnknownIndexTarget.html:76(a)
 #: doc/html/en/Groonga/Schema/UnknownIndexTarget.html:78(a)
 #: doc/html/en/Groonga/LZOError.html:69(a)
-#: doc/html/en/Groonga/LZOError.html:76(a) doc/html/en/_index.html:356(a)
-#: doc/html/en/_index.html:363(a) doc/html/en/Groonga.html:117(a)
+#: doc/html/en/Groonga/LZOError.html:76(a) doc/html/en/_index.html:353(a)
+#: doc/html/en/_index.html:360(a) doc/html/en/Groonga.html:117(a)
 #: doc/html/en/class_list.html:42(a)
 msgid "Error"
 msgstr ""
@@ -3592,7 +3569,7 @@ msgstr ""
 #: doc/html/en/Groonga/SchemaDumper/BaseSyntax.html:255(a)
 #: doc/html/en/Groonga/SchemaDumper/BaseSyntax.html:288(a)
 #: doc/html/en/Groonga/SchemaDumper/RubySyntax.html:72(li)
-#: doc/html/en/Groonga/LZOError.html:72(li) doc/html/en/_index.html:821(a)
+#: doc/html/en/Groonga/LZOError.html:72(li) doc/html/en/_index.html:818(a)
 #: doc/html/en/Groonga.html:117(a) doc/html/en/Groonga.html:310(a)
 #: doc/html/en/Groonga.html:320(span) doc/html/en/Groonga.html:321(span)
 #: doc/html/en/Groonga.html:357(a) doc/html/en/Groonga.html:399(a)
@@ -4271,170 +4248,6 @@ msgstr ""
 msgid "ファイルが存在しているときに発生する。"
 msgstr ""
 
-#: doc/html/en/Groonga/FileExists.html:136(a)
-#: doc/html/en/Groonga/TableCursor/KeySupport.html:199(a)
-#: doc/html/en/Groonga/DatabaseDumper.html:292(a)
-#: doc/html/en/Groonga/UpdateNotAllowed.html:136(a)
-#: doc/html/en/Groonga/NoMemoryAvailable.html:136(a)
-#: doc/html/en/Groonga/Expression.html:1294(a)
-#: doc/html/en/Groonga/View.html:785(a) doc/html/en/Groonga/Query.html:446(a)
-#: doc/html/en/Groonga/Plugin.html:385(a)
-#: doc/html/en/Groonga/NoSuchFileOrDirectory.html:136(a)
-#: doc/html/en/Groonga/BadFileDescriptor.html:136(a)
-#: doc/html/en/Groonga/TooManySymbolicLinks.html:136(a)
-#: doc/html/en/Groonga/Logger.html:682(a)
-#: doc/html/en/Groonga/Schema.html:2419(a)
-#: doc/html/en/Groonga/ZLibError.html:136(a)
-#: doc/html/en/Groonga/FileCorrupt.html:136(a)
-#: doc/html/en/Groonga/NoBuffer.html:136(a)
-#: doc/html/en/Groonga/SocketIsAlreadyConnected.html:136(a)
-#: doc/html/en/Groonga/ViewRecord.html:528(a)
-#: doc/html/en/Groonga/NotEnoughSpace.html:136(a)
-#: doc/html/en/Groonga/Operator.html:554(a)
-#: doc/html/en/Groonga/TooLargeOffset.html:136(a)
-#: doc/html/en/Groonga/ResourceDeadlockAvoided.html:136(a)
-#: doc/html/en/Groonga/DomainError.html:136(a)
-#: doc/html/en/Groonga/TokenizerError.html:136(a)
-#: doc/html/en/Groonga/ObjectClosed.html:137(a)
-#: doc/html/en/Groonga/NoSuchColumn.html:136(a)
-#: doc/html/en/Groonga/ResourceBusy.html:136(a)
-#: doc/html/en/Groonga/CASError.html:136(a)
-#: doc/html/en/Groonga/IncompatibleFileFormat.html:136(a)
-#: doc/html/en/Groonga/ViewCursor.html:159(a)
-#: doc/html/en/Groonga/NoChildProcesses.html:136(a)
-#: doc/html/en/Groonga/NoLocksAvailable.html:136(a)
-#: doc/html/en/Groonga/NoSpaceLeftOnDevice.html:136(a)
-#: doc/html/en/Groonga/RetryMax.html:136(a)
-#: doc/html/en/Groonga/Array.html:517(a)
-#: doc/html/en/Groonga/SyntaxError.html:136(a)
-#: doc/html/en/Groonga/EndOfData.html:136(a)
-#: doc/html/en/Groonga/Procedure.html:162(a)
-#: doc/html/en/Groonga/IndexColumn.html:1014(a)
-#: doc/html/en/Groonga/TooManyOpenFilesInSystem.html:136(a)
-#: doc/html/en/Groonga/Table/KeySupport.html:1342(a)
-#: doc/html/en/Groonga/AddressIsInUse.html:136(a)
-#: doc/html/en/Groonga/DirectoryNotEmpty.html:136(a)
-#: doc/html/en/Groonga/NoSuchDeviceOrAddress.html:136(a)
-#: doc/html/en/Groonga/InputOutputError.html:136(a)
-#: doc/html/en/Groonga/IsADirectory.html:136(a)
-#: doc/html/en/Groonga/UnsupportedCommandVersion.html:136(a)
-#: doc/html/en/Groonga/PatriciaTrie.html:1651(a)
-#: doc/html/en/Groonga/AddressIsNotAvailable.html:136(a)
-#: doc/html/en/Groonga/FilenameTooLong.html:136(a)
-#: doc/html/en/Groonga/TooSmallOffset.html:136(a)
-#: doc/html/en/Groonga/TooLargePage.html:362(a)
-#: doc/html/en/Groonga/StackOverFlow.html:136(a)
-#: doc/html/en/Groonga/Hash.html:637(a)
-#: doc/html/en/Groonga/InvalidArgument.html:136(a)
-#: doc/html/en/Groonga/NetworkIsDown.html:136(a)
-#: doc/html/en/Groonga/Column.html:1679(a)
-#: doc/html/en/Groonga/ExecFormatError.html:136(a)
-#: doc/html/en/Groonga/TooManyOpenFiles.html:136(a)
-#: doc/html/en/Groonga/NoSuchDevice.html:136(a)
-#: doc/html/en/Groonga/TableDumper.html:261(a)
-#: doc/html/en/Groonga/Snippet.html:477(a)
-#: doc/html/en/Groonga/ArgumentListTooLong.html:136(a)
-#: doc/html/en/Groonga/TooSmallPage.html:362(a)
-#: doc/html/en/Groonga/OperationWouldBlock.html:136(a)
-#: doc/html/en/Groonga/HashCursor.html:167(a)
-#: doc/html/en/Groonga/NotSocket.html:136(a)
-#: doc/html/en/Groonga/BrokenPipe.html:136(a)
-#: doc/html/en/Groonga/Error.html:126(a)
-#: doc/html/en/Groonga/InterruptedFunctionCall.html:136(a)
-#: doc/html/en/Groonga/InvalidSeek.html:136(a)
-#: doc/html/en/Groonga/OperationNotPermitted.html:136(a)
-#: doc/html/en/Groonga/Context/SelectCommand.html:269(a)
-#: doc/html/en/Groonga/Context/SelectResult/DrillDownResult.html:455(a)
-#: doc/html/en/Groonga/Context/SelectResult.html:339(a)
-#: doc/html/en/Groonga/UnknownError.html:136(a)
-#: doc/html/en/Groonga/IndexCursor.html:211(a)
-#: doc/html/en/Groonga/ViewAccessor.html:137(a)
-#: doc/html/en/Groonga/EncodingSupport.html:202(a)
-#: doc/html/en/Groonga/ResourceTemporarilyUnavailable.html:136(a)
-#: doc/html/en/Groonga/Record/AttributeHashBuilder.html:336(a)
-#: doc/html/en/Groonga/SocketIsNotConnected.html:136(a)
-#: doc/html/en/Groonga/FileTooLarge.html:136(a)
-#: doc/html/en/Groonga/OperationTimeout.html:136(a)
-#: doc/html/en/Groonga/TooSmallLimit.html:136(a)
-#: doc/html/en/Groonga/Database.html:1367(a)
-#: doc/html/en/Groonga/PatriciaTrieCursor.html:167(a)
-#: doc/html/en/Groonga/ArrayCursor.html:160(a)
-#: doc/html/en/Groonga/SocketIsAlreadyShutdowned.html:136(a)
-#: doc/html/en/Groonga/PermissionDenied.html:136(a)
-#: doc/html/en/Groonga/VariableSizeColumn.html:155(a)
-#: doc/html/en/Groonga/SchemaDumper.html:295(a)
-#: doc/html/en/Groonga/Accessor.html:234(a)
-#: doc/html/en/Groonga/ObjectCorrupt.html:136(a)
-#: doc/html/en/Groonga/ResultTooLarge.html:136(a)
-#: doc/html/en/Groonga/InvalidFormat.html:136(a)
-#: doc/html/en/Groonga/RangeError.html:136(a)
-#: doc/html/en/Groonga/TableCursor.html:671(a)
-#: doc/html/en/Groonga/Record.html:3055(a)
-#: doc/html/en/Groonga/BadAddress.html:136(a)
-#: doc/html/en/Groonga/InappropriateIOControlOperation.html:136(a)
-#: doc/html/en/Groonga/Type.html:579(a)
-#: doc/html/en/Groonga/Object.html:1655(a)
-#: doc/html/en/Groonga/Encoding.html:427(a)
-#: doc/html/en/Groonga/TooManyLinks.html:136(a)
-#: doc/html/en/Groonga/ReadOnlyFileSystem.html:136(a)
-#: doc/html/en/Groonga/Table.html:3654(a)
-#: doc/html/en/Groonga/Context.html:1996(a)
-#: doc/html/en/Groonga/Variable.html:297(a)
-#: doc/html/en/Groonga/IllegalByteSequence.html:136(a)
-#: doc/html/en/Groonga/OperationNotSupported.html:136(a)
-#: doc/html/en/Groonga/ImproperLink.html:136(a)
-#: doc/html/en/Groonga/SocketNotInitialized.html:136(a)
-#: doc/html/en/Groonga/NotADirectory.html:136(a)
-#: doc/html/en/Groonga/Pagination.html:1342(a)
-#: doc/html/en/Groonga/TooSmallPageSize.html:362(a)
-#: doc/html/en/Groonga/FunctionNotImplemented.html:136(a)
-#: doc/html/en/Groonga/NoSuchProcess.html:136(a)
-#: doc/html/en/Groonga/ConnectionRefused.html:136(a)
-#: doc/html/en/Groonga/FixSizeColumn.html:470(a)
-#: doc/html/en/Groonga/Schema/Path.html:279(a)
-#: doc/html/en/Groonga/Schema/TableDefinition.html:1902(a)
-#: doc/html/en/Groonga/Schema/ColumnCreationWithDifferentOptions.html:388(a)
-#: doc/html/en/Groonga/Schema/TableCreationWithDifferentOptions.html:388(a)
-#: doc/html/en/Groonga/Schema/UnknownTableType.html:387(a)
-#: doc/html/en/Groonga/Schema/UnknownIndexTargetTable.html:313(a)
-#: doc/html/en/Groonga/Schema/TableNotExists.html:313(a)
-#: doc/html/en/Groonga/Schema/Error.html:140(a)
-#: doc/html/en/Groonga/Schema/ViewDefinition.html:542(a)
-#: doc/html/en/Groonga/Schema/ColumnDefinition.html:527(a)
-#: doc/html/en/Groonga/Schema/TableRemoveDefinition.html:285(a)
-#: doc/html/en/Groonga/Schema/UnguessableReferenceTable.html:389(a)
-#: doc/html/en/Groonga/Schema/ColumnNotExists.html:313(a)
-#: doc/html/en/Groonga/Schema/IndexColumnDefinition.html:760(a)
-#: doc/html/en/Groonga/Schema/UnknownOptions.html:463(a)
-#: doc/html/en/Groonga/Schema/UnknownIndexTarget.html:385(a)
-#: doc/html/en/Groonga/Schema/ColumnRemoveDefinition.html:430(a)
-#: doc/html/en/Groonga/Schema/ViewRemoveDefinition.html:258(a)
-#: doc/html/en/Groonga/SchemaDumper/CommandSyntax.html:142(a)
-#: doc/html/en/Groonga/SchemaDumper/BaseSyntax.html:364(a)
-#: doc/html/en/Groonga/SchemaDumper/RubySyntax.html:142(a)
-#: doc/html/en/Groonga/LZOError.html:136(a)
-#: doc/html/en/top-level-namespace.html:98(a)
-#: doc/html/en/file.tutorial.html:426(a) doc/html/en/index.html:122(a)
-#: doc/html/en/_index.html:1474(a) doc/html/en/file.news.html:906(a)
-#: doc/html/en/Groonga.html:486(a) doc/html/en/file.news.ja.html:906(a)
-#: doc/html/en/file.README.html:122(a)
-msgid "yard"
-msgstr ""
-
-#: doc/html/en/Groonga/FileExists.html:134(div)
-#: doc/html/en/Groonga/TooManySymbolicLinks.html:134(div)
-#: doc/html/en/Groonga/EndOfData.html:134(div)
-#: doc/html/en/Groonga/TooSmallOffset.html:134(div)
-#: doc/html/en/Groonga/NoSuchDevice.html:134(div)
-#: doc/html/en/Groonga/InvalidSeek.html:134(div)
-#: doc/html/en/Groonga/SocketIsNotConnected.html:134(div)
-#: doc/html/en/Groonga/Schema/TableRemoveDefinition.html:283(div)
-#: doc/html/en/Groonga/SchemaDumper/CommandSyntax.html:140(div)
-#: doc/html/en/top-level-namespace.html:96(div)
-msgid ""
-"Generated on Mon Jun 27 13:30:57 2011 by <placeholder-1/> 0.7.2 (ruby-1.8.7)."
-msgstr ""
-
 #: doc/html/en/Groonga/TableCursor/KeySupport.html:6(title)
 msgid "Module: Groonga::TableCursor::KeySupport &mdash; rroonga - 1.2.2"
 msgstr ""
@@ -4509,7 +4322,7 @@ msgstr ""
 #: doc/html/en/Groonga/ArrayCursor.html:76(a)
 #: doc/html/en/Groonga/ArrayCursor.html:141(a)
 #: doc/html/en/Groonga/TableCursor.html:39(span)
-#: doc/html/en/Groonga/Object.html:110(a) doc/html/en/_index.html:1200(a)
+#: doc/html/en/Groonga/Object.html:110(a) doc/html/en/_index.html:1197(a)
 #: doc/html/en/Groonga.html:117(a) doc/html/en/class_list.html:42(a)
 msgid "TableCursor"
 msgstr ""
@@ -4517,8 +4330,8 @@ msgstr ""
 #: doc/html/en/Groonga/TableCursor/KeySupport.html:39(span)
 #: doc/html/en/Groonga/Table/KeySupport.html:39(span)
 #: doc/html/en/Groonga/TableCursor.html:121(a)
-#: doc/html/en/Groonga/Table.html:124(a) doc/html/en/_index.html:607(a)
-#: doc/html/en/_index.html:614(a) doc/html/en/class_list.html:42(a)
+#: doc/html/en/Groonga/Table.html:124(a) doc/html/en/_index.html:604(a)
+#: doc/html/en/_index.html:611(a) doc/html/en/class_list.html:42(a)
 msgid "KeySupport"
 msgstr ""
 
@@ -5362,14 +5175,6 @@ msgid ""
 "(context, key, key_size, table, self); }"
 msgstr ""
 
-#: doc/html/en/Groonga/TableCursor/KeySupport.html:197(div)
-#: doc/html/en/Groonga/Operator.html:552(div)
-#: doc/html/en/Groonga/Table/KeySupport.html:1340(div)
-#: doc/html/en/Groonga/OperationNotSupported.html:134(div)
-msgid ""
-"Generated on Mon Jun 27 13:30:56 2011 by <placeholder-1/> 0.7.2 (ruby-1.8.7)."
-msgstr ""
-
 #: doc/html/en/Groonga/DatabaseDumper.html:6(title)
 msgid "Class: Groonga::DatabaseDumper &mdash; rroonga - 1.2.2"
 msgstr ""
@@ -5384,7 +5189,7 @@ msgstr ""
 
 #: doc/html/en/Groonga/DatabaseDumper.html:39(span)
 #: doc/html/en/Groonga/DatabaseDumper.html:175(a)
-#: doc/html/en/_index.html:292(a) doc/html/en/Groonga.html:117(a)
+#: doc/html/en/_index.html:289(a) doc/html/en/Groonga.html:117(a)
 #: doc/html/en/class_list.html:42(a)
 msgid "DatabaseDumper"
 msgstr ""
@@ -6564,7 +6369,6 @@ msgstr ""
 #: doc/html/en/Groonga/SchemaDumper/BaseSyntax.html:237(span)
 #: doc/html/en/Groonga/SchemaDumper/BaseSyntax.html:328(span)
 #: doc/html/en/file.news.html:549(span)
-#: doc/html/en/file.news.ja.html:548(span)
 msgid "="
 msgstr ""
 
@@ -7120,13 +6924,7 @@ msgstr ""
 #: doc/html/en/file.news.html:539(span) doc/html/en/file.news.html:553(span)
 #: doc/html/en/file.news.html:558(span) doc/html/en/Groonga.html:347(span)
 #: doc/html/en/Groonga.html:389(span) doc/html/en/Groonga.html:431(span)
-#: doc/html/en/Groonga.html:473(span) doc/html/en/file.news.ja.html:238(span)
-#: doc/html/en/file.news.ja.html:239(span)
-#: doc/html/en/file.news.ja.html:247(span)
-#: doc/html/en/file.news.ja.html:255(span)
-#: doc/html/en/file.news.ja.html:538(span)
-#: doc/html/en/file.news.ja.html:552(span)
-#: doc/html/en/file.news.ja.html:557(span)
+#: doc/html/en/Groonga.html:473(span)
 msgid "end"
 msgstr ""
 
@@ -7475,23 +7273,7 @@ msgstr ""
 #: doc/html/en/file.news.html:555(span) doc/html/en/file.news.html:556(span)
 #: doc/html/en/file.news.html:557(span) doc/html/en/Groonga.html:346(span)
 #: doc/html/en/Groonga.html:388(span) doc/html/en/Groonga.html:430(span)
-#: doc/html/en/Groonga.html:472(span) doc/html/en/file.news.ja.html:233(span)
-#: doc/html/en/file.news.ja.html:234(span)
-#: doc/html/en/file.news.ja.html:235(span)
-#: doc/html/en/file.news.ja.html:236(span)
-#: doc/html/en/file.news.ja.html:237(span)
-#: doc/html/en/file.news.ja.html:245(span)
-#: doc/html/en/file.news.ja.html:246(span)
-#: doc/html/en/file.news.ja.html:253(span)
-#: doc/html/en/file.news.ja.html:254(span)
-#: doc/html/en/file.news.ja.html:536(span)
-#: doc/html/en/file.news.ja.html:537(span)
-#: doc/html/en/file.news.ja.html:547(span)
-#: doc/html/en/file.news.ja.html:549(span)
-#: doc/html/en/file.news.ja.html:550(span)
-#: doc/html/en/file.news.ja.html:554(span)
-#: doc/html/en/file.news.ja.html:555(span)
-#: doc/html/en/file.news.ja.html:556(span)
+#: doc/html/en/Groonga.html:472(span)
 msgid "."
 msgstr ""
 
@@ -7597,7 +7379,6 @@ msgstr ""
 #: doc/html/en/Groonga/SchemaDumper/BaseSyntax.html:237(span)
 #: doc/html/en/file.news.html:549(span) doc/html/en/Groonga.html:320(span)
 #: doc/html/en/Groonga.html:321(span) doc/html/en/Groonga.html:346(span)
-#: doc/html/en/file.news.ja.html:548(span)
 msgid "["
 msgstr ""
 
@@ -7683,7 +7464,6 @@ msgstr ""
 #: doc/html/en/Groonga/SchemaDumper/BaseSyntax.html:237(span)
 #: doc/html/en/file.news.html:549(span) doc/html/en/Groonga.html:320(span)
 #: doc/html/en/Groonga.html:321(span) doc/html/en/Groonga.html:346(span)
-#: doc/html/en/file.news.ja.html:548(span)
 msgid "]"
 msgstr ""
 
@@ -7953,7 +7733,7 @@ msgstr ""
 #: doc/html/en/Groonga/Schema/TableDefinition.html:1021(span)
 #: doc/html/en/Groonga/Schema/ViewDefinition.html:450(span)
 #: doc/html/en/Groonga/Schema/ViewRemoveDefinition.html:243(span)
-#: doc/html/en/_index.html:270(a) doc/html/en/Groonga.html:117(a)
+#: doc/html/en/_index.html:267(a) doc/html/en/Groonga.html:117(a)
 #: doc/html/en/Groonga.html:346(span) doc/html/en/class_list.html:42(a)
 msgid "Context"
 msgstr ""
@@ -8292,16 +8072,6 @@ msgstr ""
 msgid "string"
 msgstr ""
 
-#: doc/html/en/Groonga/DatabaseDumper.html:290(div)
-#: doc/html/en/Groonga/ViewCursor.html:157(div)
-#: doc/html/en/Groonga/Array.html:515(div)
-#: doc/html/en/Groonga/Procedure.html:160(div)
-#: doc/html/en/Groonga/IllegalByteSequence.html:134(div)
-#: doc/html/en/Groonga/Schema/TableNotExists.html:311(div)
-msgid ""
-"Generated on Mon Jun 27 13:30:49 2011 by <placeholder-1/> 0.7.2 (ruby-1.8.7)."
-msgstr ""
-
 #: doc/html/en/Groonga/UpdateNotAllowed.html:6(title)
 msgid "Exception: Groonga::UpdateNotAllowed &mdash; rroonga - 1.2.2"
 msgstr ""
@@ -8318,7 +8088,7 @@ msgid "Index (U)"
 msgstr ""
 
 #: doc/html/en/Groonga/UpdateNotAllowed.html:39(span)
-#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:1376(a)
+#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:1373(a)
 #: doc/html/en/Groonga.html:117(a) doc/html/en/class_list.html:42(a)
 msgid "UpdateNotAllowed"
 msgstr ""
@@ -8333,19 +8103,6 @@ msgstr ""
 
 #: doc/html/en/Groonga/UpdateNotAllowed.html:101(p)
 msgid "更新操作が許可されていないのに更新操作を行ったときに発生する。"
-msgstr ""
-
-#: doc/html/en/Groonga/UpdateNotAllowed.html:134(div)
-#: doc/html/en/Groonga/SocketIsAlreadyConnected.html:134(div)
-#: doc/html/en/Groonga/NoSuchColumn.html:134(div)
-#: doc/html/en/Groonga/NoSpaceLeftOnDevice.html:134(div)
-#: doc/html/en/Groonga/Hash.html:635(div)
-#: doc/html/en/Groonga/Context/SelectResult/DrillDownResult.html:453(div)
-#: doc/html/en/Groonga/ObjectCorrupt.html:134(div)
-#: doc/html/en/Groonga/ImproperLink.html:134(div)
-#: doc/html/en/Groonga/Schema/Error.html:138(div)
-msgid ""
-"Generated on Mon Jun 27 13:30:41 2011 by <placeholder-1/> 0.7.2 (ruby-1.8.7)."
 msgstr ""
 
 #: doc/html/en/Groonga/NoMemoryAvailable.html:6(title)
@@ -8370,7 +8127,7 @@ msgid "Index (N)"
 msgstr ""
 
 #: doc/html/en/Groonga/NoMemoryAvailable.html:39(span)
-#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:743(a)
+#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:740(a)
 #: doc/html/en/Groonga.html:117(a) doc/html/en/class_list.html:42(a)
 msgid "NoMemoryAvailable"
 msgstr ""
@@ -8385,16 +8142,6 @@ msgstr ""
 
 #: doc/html/en/Groonga/NoMemoryAvailable.html:101(p)
 msgid "メモリが足りないときに発生する。"
-msgstr ""
-
-#: doc/html/en/Groonga/NoMemoryAvailable.html:134(div)
-#: doc/html/en/Groonga/ViewRecord.html:526(div)
-#: doc/html/en/Groonga/NoSuchDeviceOrAddress.html:134(div)
-#: doc/html/en/Groonga/TooSmallPage.html:360(div)
-#: doc/html/en/Groonga/Schema/UnknownOptions.html:461(div)
-#: doc/html/en/Groonga/Schema/ColumnRemoveDefinition.html:428(div)
-msgid ""
-"Generated on Mon Jun 27 13:30:35 2011 by <placeholder-1/> 0.7.2 (ruby-1.8.7)."
 msgstr ""
 
 #: doc/html/en/Groonga/Expression.html:6(title)
@@ -8421,7 +8168,7 @@ msgstr ""
 #: doc/html/en/Groonga/Expression.html:609(a)
 #: doc/html/en/Groonga/Expression.html:632(a)
 #: doc/html/en/Groonga/Expression.html:646(a)
-#: doc/html/en/Groonga/Object.html:110(a) doc/html/en/_index.html:377(a)
+#: doc/html/en/Groonga/Object.html:110(a) doc/html/en/_index.html:374(a)
 #: doc/html/en/Groonga.html:117(a) doc/html/en/class_list.html:42(a)
 msgid "Expression"
 msgstr ""
@@ -8431,7 +8178,7 @@ msgid "Class: Groonga::Expression"
 msgstr ""
 
 #: doc/html/en/Groonga/Expression.html:76(li)
-#: doc/html/en/file.news.html:861(li) doc/html/en/file.news.ja.html:861(li)
+#: doc/html/en/file.news.html:861(li)
 msgid "Groonga::Expression"
 msgstr ""
 
@@ -8756,8 +8503,7 @@ msgstr ""
 #: doc/html/en/Groonga/Schema/ViewRemoveDefinition.html:205(span)
 #: doc/html/en/file.news.html:250(span) doc/html/en/file.news.html:258(span)
 #: doc/html/en/Groonga.html:320(span) doc/html/en/Groonga.html:345(span)
-#: doc/html/en/Groonga.html:346(span) doc/html/en/file.news.ja.html:246(span)
-#: doc/html/en/file.news.ja.html:254(span)
+#: doc/html/en/Groonga.html:346(span)
 msgid "name"
 msgstr ""
 
@@ -8944,8 +8690,6 @@ msgstr ""
 #: doc/html/en/Groonga/Context/SelectResult.html:252(strong)
 #: doc/html/en/Groonga/Context/SelectResult.html:279(span)
 #: doc/html/en/file.news.html:551(span) doc/html/en/file.news.html:557(span)
-#: doc/html/en/file.news.ja.html:550(span)
-#: doc/html/en/file.news.ja.html:556(span)
 msgid "parse"
 msgstr ""
 
@@ -10294,17 +10038,6 @@ msgid ""
 "(rb_tags)); }"
 msgstr ""
 
-#: doc/html/en/Groonga/Expression.html:1292(div)
-#: doc/html/en/Groonga/NoSuchFileOrDirectory.html:134(div)
-#: doc/html/en/Groonga/CASError.html:134(div)
-#: doc/html/en/Groonga/ResultTooLarge.html:134(div)
-#: doc/html/en/Groonga/Type.html:577(div)
-#: doc/html/en/Groonga/ConnectionRefused.html:134(div)
-#: doc/html/en/Groonga/LZOError.html:134(div)
-msgid ""
-"Generated on Mon Jun 27 13:30:37 2011 by <placeholder-1/> 0.7.2 (ruby-1.8.7)."
-msgstr ""
-
 #: doc/html/en/Groonga/View.html:6(title)
 msgid "Class: Groonga::View &mdash; rroonga - 1.2.2"
 msgstr ""
@@ -10323,7 +10056,7 @@ msgstr ""
 #: doc/html/en/Groonga/View.html:39(span)
 #: doc/html/en/Groonga/Table.html:118(a)
 #: doc/html/en/Groonga/Schema/ViewDefinition.html:517(span)
-#: doc/html/en/_index.html:1405(a) doc/html/en/Groonga.html:117(a)
+#: doc/html/en/_index.html:1402(a) doc/html/en/Groonga.html:117(a)
 #: doc/html/en/class_list.html:42(a)
 msgid "View"
 msgstr ""
@@ -10344,7 +10077,7 @@ msgstr ""
 #: doc/html/en/Groonga/Table.html:39(span)
 #: doc/html/en/Groonga/Schema/ViewDefinition.html:521(span)
 #: doc/html/en/Groonga/SchemaDumper/BaseSyntax.html:329(span)
-#: doc/html/en/_index.html:1186(a) doc/html/en/Groonga.html:117(a)
+#: doc/html/en/_index.html:1183(a) doc/html/en/Groonga.html:117(a)
 #: doc/html/en/class_list.html:42(a)
 msgid "Table"
 msgstr ""
@@ -10602,12 +10335,6 @@ msgstr ""
 #: doc/html/en/file.news.html:237(span) doc/html/en/file.news.html:249(span)
 #: doc/html/en/file.news.html:257(span) doc/html/en/file.news.html:537(span)
 #: doc/html/en/file.news.html:548(span) doc/html/en/file.news.html:555(span)
-#: doc/html/en/file.news.ja.html:233(span)
-#: doc/html/en/file.news.ja.html:245(span)
-#: doc/html/en/file.news.ja.html:253(span)
-#: doc/html/en/file.news.ja.html:536(span)
-#: doc/html/en/file.news.ja.html:547(span)
-#: doc/html/en/file.news.ja.html:554(span)
 msgid "table"
 msgstr ""
 
@@ -11492,20 +11219,6 @@ msgstr ""
 #: doc/html/en/file.news.html:548(span) doc/html/en/file.news.html:550(span)
 #: doc/html/en/file.news.html:551(span) doc/html/en/file.news.html:555(span)
 #: doc/html/en/file.news.html:556(span) doc/html/en/file.news.html:557(span)
-#: doc/html/en/file.news.ja.html:233(span)
-#: doc/html/en/file.news.ja.html:234(span)
-#: doc/html/en/file.news.ja.html:245(span)
-#: doc/html/en/file.news.ja.html:246(span)
-#: doc/html/en/file.news.ja.html:253(span)
-#: doc/html/en/file.news.ja.html:254(span)
-#: doc/html/en/file.news.ja.html:536(span)
-#: doc/html/en/file.news.ja.html:537(span)
-#: doc/html/en/file.news.ja.html:547(span)
-#: doc/html/en/file.news.ja.html:549(span)
-#: doc/html/en/file.news.ja.html:550(span)
-#: doc/html/en/file.news.ja.html:554(span)
-#: doc/html/en/file.news.ja.html:555(span)
-#: doc/html/en/file.news.ja.html:556(span)
 msgid "record"
 msgstr ""
 
@@ -11548,15 +11261,6 @@ msgid ""
 "rb_cHash))) { rb_sort_options = rb_sort_keys[i]; }"
 msgstr ""
 
-#: doc/html/en/Groonga/View.html:783(div)
-#: doc/html/en/Groonga/AddressIsInUse.html:134(div)
-#: doc/html/en/Groonga/BrokenPipe.html:134(div)
-#: doc/html/en/Groonga/NotADirectory.html:134(div)
-#: doc/html/en/Groonga/Schema/ColumnDefinition.html:525(div)
-msgid ""
-"Generated on Mon Jun 27 13:30:38 2011 by <placeholder-1/> 0.7.2 (ruby-1.8.7)."
-msgstr ""
-
 #: doc/html/en/Groonga/ExpressionBuildable.html:6(title)
 msgid "Module: Groonga::ExpressionBuildable &mdash; rroonga - 1.2.2"
 msgstr ""
@@ -11595,7 +11299,7 @@ msgstr ""
 #: doc/html/en/Groonga/ExpressionBuildable/ModExpressionBuilder.html:37(a)
 #: doc/html/en/Groonga/ExpressionBuildable/LessExpressionBuilder.html:37(a)
 #: doc/html/en/Groonga/ExpressionBuildable/StarExpressionBuilder.html:37(a)
-#: doc/html/en/_index.html:384(a) doc/html/en/Groonga.html:113(a)
+#: doc/html/en/_index.html:381(a) doc/html/en/Groonga.html:113(a)
 #: doc/html/en/class_list.html:42(a)
 msgid "ExpressionBuildable"
 msgstr ""
@@ -11613,7 +11317,7 @@ msgstr ""
 
 #: doc/html/en/Groonga/ExpressionBuildable.html:74(a)
 #: doc/html/en/Groonga/ColumnExpressionBuilder.html:39(span)
-#: doc/html/en/_index.html:228(a) doc/html/en/Groonga.html:117(a)
+#: doc/html/en/_index.html:225(a) doc/html/en/Groonga.html:117(a)
 #: doc/html/en/class_list.html:42(a)
 msgid "ColumnExpressionBuilder"
 msgstr ""
@@ -11623,7 +11327,7 @@ msgstr ""
 #: doc/html/en/Groonga/MatchTargetRecordExpressionBuilder.html:69(a)
 #: doc/html/en/Groonga/MatchTargetRecordExpressionBuilder.html:74(a)
 #: doc/html/en/Groonga/MatchTargetRecordExpressionBuilder.html:146(a)
-#: doc/html/en/_index.html:1009(a) doc/html/en/Groonga.html:117(a)
+#: doc/html/en/_index.html:1006(a) doc/html/en/Groonga.html:117(a)
 #: doc/html/en/class_list.html:42(a)
 msgid "RecordExpressionBuilder"
 msgstr ""
@@ -11743,7 +11447,7 @@ msgstr ""
 #: doc/html/en/Groonga/ExpressionBuildable.html:101(a)
 #: doc/html/en/Groonga/ExpressionBuildable/AndExpressionBuilder.html:39(span)
 #: doc/html/en/Groonga/ExpressionBuildable/SetExpressionBuilder.html:110(a)
-#: doc/html/en/_index.html:114(a) doc/html/en/class_list.html:42(a)
+#: doc/html/en/_index.html:111(a) doc/html/en/class_list.html:42(a)
 msgid "AndExpressionBuilder"
 msgstr ""
 
@@ -11789,7 +11493,7 @@ msgstr ""
 #: doc/html/en/Groonga/ExpressionBuildable/StarExpressionBuilder.html:69(a)
 #: doc/html/en/Groonga/ExpressionBuildable/StarExpressionBuilder.html:76(a)
 #: doc/html/en/Groonga/ExpressionBuildable/StarExpressionBuilder.html:174(a)
-#: doc/html/en/_index.html:178(a) doc/html/en/class_list.html:42(a)
+#: doc/html/en/_index.html:175(a) doc/html/en/class_list.html:42(a)
 msgid "BinaryExpressionBuilder"
 msgstr ""
 
@@ -11799,14 +11503,14 @@ msgstr ""
 #: doc/html/en/Groonga/ExpressionBuildable/MatchTargetColumnExpressionBuilder.html:69(a)
 #: doc/html/en/Groonga/ExpressionBuildable/MatchTargetColumnExpressionBuilder.html:76(a)
 #: doc/html/en/Groonga/ExpressionBuildable/MatchTargetColumnExpressionBuilder.html:169(a)
-#: doc/html/en/_index.html:249(a) doc/html/en/class_list.html:42(a)
+#: doc/html/en/_index.html:246(a) doc/html/en/class_list.html:42(a)
 msgid "ColumnValueExpressionBuilder"
 msgstr ""
 
 #: doc/html/en/Groonga/ExpressionBuildable.html:101(a)
 #: doc/html/en/Groonga/ExpressionBuildable/BinaryExpressionBuilder.html:110(a)
 #: doc/html/en/Groonga/ExpressionBuildable/EqualExpressionBuilder.html:39(span)
-#: doc/html/en/_index.html:349(a) doc/html/en/class_list.html:42(a)
+#: doc/html/en/_index.html:346(a) doc/html/en/class_list.html:42(a)
 msgid "EqualExpressionBuilder"
 msgstr ""
 
@@ -11859,91 +11563,91 @@ msgstr ""
 #: doc/html/en/Groonga/ExpressionBuildable/LessExpressionBuilder.html:184(a)
 #: doc/html/en/Groonga/ExpressionBuildable/StarExpressionBuilder.html:74(a)
 #: doc/html/en/Groonga/ExpressionBuildable/StarExpressionBuilder.html:184(a)
-#: doc/html/en/_index.html:391(a) doc/html/en/class_list.html:42(a)
+#: doc/html/en/_index.html:388(a) doc/html/en/class_list.html:42(a)
 msgid "ExpressionBuilder"
 msgstr ""
 
 #: doc/html/en/Groonga/ExpressionBuildable.html:101(a)
 #: doc/html/en/Groonga/ExpressionBuildable/GreaterEqualExpressionBuilder.html:39(span)
 #: doc/html/en/Groonga/ExpressionBuildable/BinaryExpressionBuilder.html:110(a)
-#: doc/html/en/_index.html:456(a) doc/html/en/class_list.html:42(a)
+#: doc/html/en/_index.html:453(a) doc/html/en/class_list.html:42(a)
 msgid "GreaterEqualExpressionBuilder"
 msgstr ""
 
 #: doc/html/en/Groonga/ExpressionBuildable.html:101(a)
 #: doc/html/en/Groonga/ExpressionBuildable/BinaryExpressionBuilder.html:110(a)
 #: doc/html/en/Groonga/ExpressionBuildable/GreaterExpressionBuilder.html:39(span)
-#: doc/html/en/_index.html:463(a) doc/html/en/class_list.html:42(a)
+#: doc/html/en/_index.html:460(a) doc/html/en/class_list.html:42(a)
 msgid "GreaterExpressionBuilder"
 msgstr ""
 
 #: doc/html/en/Groonga/ExpressionBuildable.html:101(a)
 #: doc/html/en/Groonga/ExpressionBuildable/LessEqualExpressionBuilder.html:39(span)
 #: doc/html/en/Groonga/ExpressionBuildable/BinaryExpressionBuilder.html:110(a)
-#: doc/html/en/_index.html:636(a) doc/html/en/class_list.html:42(a)
+#: doc/html/en/_index.html:633(a) doc/html/en/class_list.html:42(a)
 msgid "LessEqualExpressionBuilder"
 msgstr ""
 
 #: doc/html/en/Groonga/ExpressionBuildable.html:101(a)
 #: doc/html/en/Groonga/ExpressionBuildable/BinaryExpressionBuilder.html:110(a)
 #: doc/html/en/Groonga/ExpressionBuildable/LessExpressionBuilder.html:39(span)
-#: doc/html/en/_index.html:643(a) doc/html/en/class_list.html:42(a)
+#: doc/html/en/_index.html:640(a) doc/html/en/class_list.html:42(a)
 msgid "LessExpressionBuilder"
 msgstr ""
 
 #: doc/html/en/Groonga/ExpressionBuildable.html:101(a)
 #: doc/html/en/Groonga/ExpressionBuildable/BinaryExpressionBuilder.html:110(a)
 #: doc/html/en/Groonga/ExpressionBuildable/MatchExpressionBuilder.html:39(span)
-#: doc/html/en/_index.html:665(a) doc/html/en/class_list.html:42(a)
+#: doc/html/en/_index.html:662(a) doc/html/en/class_list.html:42(a)
 msgid "MatchExpressionBuilder"
 msgstr ""
 
 #: doc/html/en/Groonga/ExpressionBuildable.html:101(a)
 #: doc/html/en/Groonga/ExpressionBuildable/ColumnValueExpressionBuilder.html:110(a)
 #: doc/html/en/Groonga/ExpressionBuildable/MatchTargetColumnExpressionBuilder.html:39(span)
-#: doc/html/en/_index.html:672(a) doc/html/en/class_list.html:42(a)
+#: doc/html/en/_index.html:669(a) doc/html/en/class_list.html:42(a)
 msgid "MatchTargetColumnExpressionBuilder"
 msgstr ""
 
 #: doc/html/en/Groonga/ExpressionBuildable.html:101(a)
 #: doc/html/en/Groonga/ExpressionBuildable/MatchTargetExpressionBuilder.html:39(span)
 #: doc/html/en/Groonga/ExpressionBuildable/ExpressionBuilder.html:108(a)
-#: doc/html/en/_index.html:679(a) doc/html/en/class_list.html:42(a)
+#: doc/html/en/_index.html:676(a) doc/html/en/class_list.html:42(a)
 msgid "MatchTargetExpressionBuilder"
 msgstr ""
 
 #: doc/html/en/Groonga/ExpressionBuildable.html:101(a)
 #: doc/html/en/Groonga/ExpressionBuildable/MinusExpressionBuilder.html:39(span)
 #: doc/html/en/Groonga/ExpressionBuildable/BinaryExpressionBuilder.html:110(a)
-#: doc/html/en/_index.html:693(a) doc/html/en/class_list.html:42(a)
+#: doc/html/en/_index.html:690(a) doc/html/en/class_list.html:42(a)
 msgid "MinusExpressionBuilder"
 msgstr ""
 
 #: doc/html/en/Groonga/ExpressionBuildable.html:101(a)
 #: doc/html/en/Groonga/ExpressionBuildable/BinaryExpressionBuilder.html:110(a)
 #: doc/html/en/Groonga/ExpressionBuildable/ModExpressionBuilder.html:39(span)
-#: doc/html/en/_index.html:700(a) doc/html/en/class_list.html:42(a)
+#: doc/html/en/_index.html:697(a) doc/html/en/class_list.html:42(a)
 msgid "ModExpressionBuilder"
 msgstr ""
 
 #: doc/html/en/Groonga/ExpressionBuildable.html:101(a)
 #: doc/html/en/Groonga/ExpressionBuildable/OrExpressionBuilder.html:39(span)
 #: doc/html/en/Groonga/ExpressionBuildable/SetExpressionBuilder.html:110(a)
-#: doc/html/en/_index.html:877(a) doc/html/en/class_list.html:42(a)
+#: doc/html/en/_index.html:874(a) doc/html/en/class_list.html:42(a)
 msgid "OrExpressionBuilder"
 msgstr ""
 
 #: doc/html/en/Groonga/ExpressionBuildable.html:101(a)
 #: doc/html/en/Groonga/ExpressionBuildable/BinaryExpressionBuilder.html:110(a)
 #: doc/html/en/Groonga/ExpressionBuildable/PlusExpressionBuilder.html:39(span)
-#: doc/html/en/_index.html:934(a) doc/html/en/class_list.html:42(a)
+#: doc/html/en/_index.html:931(a) doc/html/en/class_list.html:42(a)
 msgid "PlusExpressionBuilder"
 msgstr ""
 
 #: doc/html/en/Groonga/ExpressionBuildable.html:101(a)
 #: doc/html/en/Groonga/ExpressionBuildable/BinaryExpressionBuilder.html:110(a)
 #: doc/html/en/Groonga/ExpressionBuildable/PrefixSearchExpressionBuilder.html:39(span)
-#: doc/html/en/_index.html:948(a) doc/html/en/class_list.html:42(a)
+#: doc/html/en/_index.html:945(a) doc/html/en/class_list.html:42(a)
 msgid "PrefixSearchExpressionBuilder"
 msgstr ""
 
@@ -11956,35 +11660,35 @@ msgstr ""
 #: doc/html/en/Groonga/ExpressionBuildable/OrExpressionBuilder.html:174(a)
 #: doc/html/en/Groonga/ExpressionBuildable/ExpressionBuilder.html:108(a)
 #: doc/html/en/Groonga/ExpressionBuildable/SetExpressionBuilder.html:39(span)
-#: doc/html/en/_index.html:1094(a) doc/html/en/class_list.html:42(a)
+#: doc/html/en/_index.html:1091(a) doc/html/en/class_list.html:42(a)
 msgid "SetExpressionBuilder"
 msgstr ""
 
 #: doc/html/en/Groonga/ExpressionBuildable.html:101(a)
 #: doc/html/en/Groonga/ExpressionBuildable/BinaryExpressionBuilder.html:110(a)
 #: doc/html/en/Groonga/ExpressionBuildable/SlashExpressionBuilder.html:39(span)
-#: doc/html/en/_index.html:1101(a) doc/html/en/class_list.html:42(a)
+#: doc/html/en/_index.html:1098(a) doc/html/en/class_list.html:42(a)
 msgid "SlashExpressionBuilder"
 msgstr ""
 
 #: doc/html/en/Groonga/ExpressionBuildable.html:101(a)
 #: doc/html/en/Groonga/ExpressionBuildable/BinaryExpressionBuilder.html:110(a)
 #: doc/html/en/Groonga/ExpressionBuildable/StarExpressionBuilder.html:39(span)
-#: doc/html/en/_index.html:1150(a) doc/html/en/class_list.html:42(a)
+#: doc/html/en/_index.html:1147(a) doc/html/en/class_list.html:42(a)
 msgid "StarExpressionBuilder"
 msgstr ""
 
 #: doc/html/en/Groonga/ExpressionBuildable.html:101(a)
 #: doc/html/en/Groonga/ExpressionBuildable/SubExpressionBuilder.html:39(span)
 #: doc/html/en/Groonga/ExpressionBuildable/ExpressionBuilder.html:108(a)
-#: doc/html/en/_index.html:1157(a) doc/html/en/class_list.html:42(a)
+#: doc/html/en/_index.html:1154(a) doc/html/en/class_list.html:42(a)
 msgid "SubExpressionBuilder"
 msgstr ""
 
 #: doc/html/en/Groonga/ExpressionBuildable.html:101(a)
 #: doc/html/en/Groonga/ExpressionBuildable/BinaryExpressionBuilder.html:110(a)
 #: doc/html/en/Groonga/ExpressionBuildable/SuffixSearchExpressionBuilder.html:39(span)
-#: doc/html/en/_index.html:1164(a) doc/html/en/class_list.html:42(a)
+#: doc/html/en/_index.html:1161(a) doc/html/en/class_list.html:42(a)
 msgid "SuffixSearchExpressionBuilder"
 msgstr ""
 
@@ -12194,7 +11898,6 @@ msgstr ""
 #: doc/html/en/Groonga/Context.html:1625(span)
 #: doc/html/en/Groonga/ExpressionBuildable/ExpressionBuilder.html:126(strong)
 #: doc/html/en/file.news.html:556(span)
-#: doc/html/en/file.news.ja.html:555(span)
 msgid "&amp;"
 msgstr ""
 
@@ -12326,15 +12029,6 @@ msgstr ""
 #: doc/html/en/file.news.html:257(span) doc/html/en/file.news.html:537(span)
 #: doc/html/en/file.news.html:538(span) doc/html/en/file.news.html:548(span)
 #: doc/html/en/file.news.html:555(span)
-#: doc/html/en/file.news.ja.html:233(span)
-#: doc/html/en/file.news.ja.html:234(span)
-#: doc/html/en/file.news.ja.html:235(span)
-#: doc/html/en/file.news.ja.html:245(span)
-#: doc/html/en/file.news.ja.html:253(span)
-#: doc/html/en/file.news.ja.html:536(span)
-#: doc/html/en/file.news.ja.html:537(span)
-#: doc/html/en/file.news.ja.html:547(span)
-#: doc/html/en/file.news.ja.html:554(span)
 msgid "|"
 msgstr ""
 
@@ -12601,8 +12295,7 @@ msgid ""
 "expression-builder.rb', line 30 def initialize @table = nil @name = nil "
 "@query = nil @syntax = nil @allow_pragma = nil @allow_column = nil "
 "@allow_update = nil @default_column = nil end - (Object) |(other) 51 52 53 # "
-"File 'lib/groonga/expression-builder.rb', line 51 def |(other) other end "
-"Generated on Mon Jun 27 13:30:48 2011 by yard 0.7.2 (ruby-1.8.7)."
+"File 'lib/groonga/expression-builder.rb', line 51 def |(other) other end"
 msgstr ""
 
 #: doc/html/en/Groonga/Query.html:6(title)
@@ -12614,7 +12307,7 @@ msgid "Index (Q)"
 msgstr ""
 
 #: doc/html/en/Groonga/Query.html:39(span)
-#: doc/html/en/Groonga/Object.html:110(a) doc/html/en/_index.html:973(a)
+#: doc/html/en/Groonga/Object.html:110(a) doc/html/en/_index.html:970(a)
 #: doc/html/en/Groonga.html:117(a) doc/html/en/class_list.html:42(a)
 msgid "Query"
 msgstr ""
@@ -12797,20 +12490,6 @@ msgid ""
 "Qtrue; }"
 msgstr ""
 
-#: doc/html/en/Groonga/Query.html:444(div)
-#: doc/html/en/Groonga/BadFileDescriptor.html:134(div)
-#: doc/html/en/Groonga/ArgumentListTooLong.html:134(div)
-#: doc/html/en/Groonga/Error.html:124(div)
-#: doc/html/en/Groonga/EncodingSupport.html:200(div)
-#: doc/html/en/Groonga/Variable.html:295(div)
-#: doc/html/en/Groonga/FunctionNotImplemented.html:134(div)
-#: doc/html/en/Groonga/Schema/ColumnCreationWithDifferentOptions.html:386(div)
-#: doc/html/en/Groonga/Schema/IndexColumnDefinition.html:758(div)
-#: doc/html/en/Groonga/SchemaDumper/RubySyntax.html:140(div)
-msgid ""
-"Generated on Mon Jun 27 13:30:50 2011 by <placeholder-1/> 0.7.2 (ruby-1.8.7)."
-msgstr ""
-
 #: doc/html/en/Groonga/Plugin.html:6(title)
 msgid "Class: Groonga::Plugin &mdash; rroonga - 1.2.2"
 msgstr ""
@@ -12831,7 +12510,7 @@ msgstr ""
 #: doc/html/en/Groonga/Plugin.html:39(span)
 #: doc/html/en/Groonga/Object.html:110(a)
 #: doc/html/en/Groonga/Context.html:1755(span)
-#: doc/html/en/Groonga/Context.html:1757(span) doc/html/en/_index.html:927(a)
+#: doc/html/en/Groonga/Context.html:1757(span) doc/html/en/_index.html:924(a)
 #: doc/html/en/Groonga.html:117(a) doc/html/en/class_list.html:42(a)
 msgid "Plugin"
 msgstr ""
@@ -12969,9 +12648,6 @@ msgstr ""
 #: doc/html/en/Groonga/ExpressionBuildable/ColumnValueExpressionBuilder.html:156(strong)
 #: doc/html/en/file.news.html:239(span) doc/html/en/file.news.html:240(span)
 #: doc/html/en/file.news.html:538(span)
-#: doc/html/en/file.news.ja.html:235(span)
-#: doc/html/en/file.news.ja.html:236(span)
-#: doc/html/en/file.news.ja.html:537(span)
 msgid "*"
 msgstr ""
 
@@ -12999,19 +12675,12 @@ msgid ""
 "klass) { return rb_str_new2(grn_plugin_get_system_plugins_dir()); }"
 msgstr ""
 
-#: doc/html/en/Groonga/Plugin.html:383(div)
-#: doc/html/en/Groonga/NoLocksAvailable.html:134(div)
-#: doc/html/en/Groonga/Pagination.html:1340(div)
-msgid ""
-"Generated on Mon Jun 27 13:30:34 2011 by <placeholder-1/> 0.7.2 (ruby-1.8.7)."
-msgstr ""
-
 #: doc/html/en/Groonga/NoSuchFileOrDirectory.html:6(title)
 msgid "Exception: Groonga::NoSuchFileOrDirectory &mdash; rroonga - 1.2.2"
 msgstr ""
 
 #: doc/html/en/Groonga/NoSuchFileOrDirectory.html:39(span)
-#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:778(a)
+#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:775(a)
 #: doc/html/en/Groonga.html:117(a) doc/html/en/class_list.html:42(a)
 msgid "NoSuchFileOrDirectory"
 msgstr ""
@@ -13041,7 +12710,7 @@ msgid "Index (B)"
 msgstr ""
 
 #: doc/html/en/Groonga/BadFileDescriptor.html:39(span)
-#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:164(a)
+#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:161(a)
 #: doc/html/en/Groonga.html:117(a) doc/html/en/class_list.html:42(a)
 msgid "BadFileDescriptor"
 msgstr ""
@@ -13085,7 +12754,7 @@ msgid "Index (T)"
 msgstr ""
 
 #: doc/html/en/Groonga/TooManySymbolicLinks.html:39(span)
-#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:1277(a)
+#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:1274(a)
 #: doc/html/en/Groonga.html:117(a) doc/html/en/class_list.html:42(a)
 msgid "TooManySymbolicLinks"
 msgstr ""
@@ -13114,7 +12783,7 @@ msgid "Index (L)"
 msgstr ""
 
 #: doc/html/en/Groonga/Logger.html:39(span)
-#: doc/html/en/Groonga/Object.html:110(a) doc/html/en/_index.html:650(a)
+#: doc/html/en/Groonga/Object.html:110(a) doc/html/en/_index.html:647(a)
 #: doc/html/en/Groonga.html:117(a) doc/html/en/class_list.html:42(a)
 msgid "Logger"
 msgstr ""
@@ -13314,9 +12983,6 @@ msgstr ""
 #: doc/html/en/file.tutorial.html:189(code)
 #: doc/html/en/file.news.html:538(span) doc/html/en/file.news.html:550(span)
 #: doc/html/en/file.news.html:556(span)
-#: doc/html/en/file.news.ja.html:537(span)
-#: doc/html/en/file.news.ja.html:549(span)
-#: doc/html/en/file.news.ja.html:555(span)
 msgid "title"
 msgstr ""
 
@@ -13458,16 +13124,6 @@ msgid ""
 "rb_grn_logger_s_reopen_with_related_object(klass, klass); }"
 msgstr ""
 
-#: doc/html/en/Groonga/Logger.html:680(div)
-#: doc/html/en/Groonga/DomainError.html:134(div)
-#: doc/html/en/Groonga/UnsupportedCommandVersion.html:134(div)
-#: doc/html/en/Groonga/NoSuchProcess.html:134(div)
-#: doc/html/en/Groonga/Schema/UnknownIndexTarget.html:383(div)
-#: doc/html/en/Groonga/SchemaDumper/BaseSyntax.html:362(div)
-msgid ""
-"Generated on Mon Jun 27 13:30:52 2011 by <placeholder-1/> 0.7.2 (ruby-1.8.7)."
-msgstr ""
-
 #: doc/html/en/Groonga/Schema.html:6(title)
 msgid "Class: Groonga::Schema &mdash; rroonga - 1.2.2"
 msgstr ""
@@ -13527,7 +13183,7 @@ msgstr ""
 #: doc/html/en/Groonga/Schema/UnknownIndexTarget.html:37(a)
 #: doc/html/en/Groonga/Schema/ColumnRemoveDefinition.html:37(a)
 #: doc/html/en/Groonga/Schema/ViewRemoveDefinition.html:37(a)
-#: doc/html/en/_index.html:1066(a) doc/html/en/Groonga.html:117(a)
+#: doc/html/en/_index.html:1063(a) doc/html/en/Groonga.html:117(a)
 #: doc/html/en/class_list.html:42(a)
 msgid "Schema"
 msgstr ""
@@ -13680,13 +13336,6 @@ msgstr ""
 #: doc/html/en/file.news.html:249(span) doc/html/en/file.news.html:257(span)
 #: doc/html/en/file.news.html:537(span) doc/html/en/file.news.html:548(span)
 #: doc/html/en/file.news.html:555(span)
-#: doc/html/en/file.news.ja.html:233(span)
-#: doc/html/en/file.news.ja.html:234(span)
-#: doc/html/en/file.news.ja.html:245(span)
-#: doc/html/en/file.news.ja.html:253(span)
-#: doc/html/en/file.news.ja.html:536(span)
-#: doc/html/en/file.news.ja.html:547(span)
-#: doc/html/en/file.news.ja.html:554(span)
 msgid "do"
 msgstr ""
 
@@ -14125,7 +13774,7 @@ msgstr ""
 #: doc/html/en/Groonga/Schema/TableRemoveDefinition.html:188(a)
 #: doc/html/en/Groonga/Schema/IndexColumnDefinition.html:87(a)
 #: doc/html/en/Groonga/Schema/IndexColumnDefinition.html:352(a)
-#: doc/html/en/_index.html:899(a) doc/html/en/class_list.html:42(a)
+#: doc/html/en/_index.html:896(a) doc/html/en/class_list.html:42(a)
 msgid "Path"
 msgstr ""
 
@@ -14135,7 +13784,7 @@ msgstr ""
 #: doc/html/en/Groonga/Schema/Error.html:112(a)
 #: doc/html/en/Groonga/Schema/ColumnDefinition.html:508(span)
 #: doc/html/en/Groonga/Schema/IndexColumnDefinition.html:737(span)
-#: doc/html/en/_index.html:214(a) doc/html/en/class_list.html:42(a)
+#: doc/html/en/_index.html:211(a) doc/html/en/class_list.html:42(a)
 msgid "ColumnCreationWithDifferentOptions"
 msgstr ""
 
@@ -14146,7 +13795,7 @@ msgstr ""
 #: doc/html/en/Groonga/Schema/TableDefinition.html:977(span)
 #: doc/html/en/Groonga/Schema/ColumnDefinition.html:39(span)
 #: doc/html/en/Groonga/Schema/ColumnDefinition.html:282(a)
-#: doc/html/en/_index.html:221(a) doc/html/en/class_list.html:42(a)
+#: doc/html/en/_index.html:218(a) doc/html/en/class_list.html:42(a)
 msgid "ColumnDefinition"
 msgstr ""
 
@@ -14155,7 +13804,7 @@ msgstr ""
 #: doc/html/en/Groonga/Schema/ColumnNotExists.html:39(span)
 #: doc/html/en/Groonga/Schema/ColumnNotExists.html:219(a)
 #: doc/html/en/Groonga/Schema/ColumnRemoveDefinition.html:413(span)
-#: doc/html/en/_index.html:235(a) doc/html/en/class_list.html:42(a)
+#: doc/html/en/_index.html:232(a) doc/html/en/class_list.html:42(a)
 msgid "ColumnNotExists"
 msgstr ""
 
@@ -14168,7 +13817,7 @@ msgstr ""
 #: doc/html/en/Groonga/Schema/TableDefinition.html:1604(span)
 #: doc/html/en/Groonga/Schema/ColumnRemoveDefinition.html:39(span)
 #: doc/html/en/Groonga/Schema/ColumnRemoveDefinition.html:234(a)
-#: doc/html/en/_index.html:242(a) doc/html/en/class_list.html:42(a)
+#: doc/html/en/_index.html:239(a) doc/html/en/class_list.html:42(a)
 msgid "ColumnRemoveDefinition"
 msgstr ""
 
@@ -14180,7 +13829,7 @@ msgstr ""
 #: doc/html/en/Groonga/Schema/TableDefinition.html:1597(span)
 #: doc/html/en/Groonga/Schema/IndexColumnDefinition.html:39(span)
 #: doc/html/en/Groonga/Schema/IndexColumnDefinition.html:360(a)
-#: doc/html/en/_index.html:543(a) doc/html/en/class_list.html:42(a)
+#: doc/html/en/_index.html:540(a) doc/html/en/class_list.html:42(a)
 msgid "IndexColumnDefinition"
 msgstr ""
 
@@ -14189,7 +13838,7 @@ msgstr ""
 #: doc/html/en/Groonga/Schema/TableCreationWithDifferentOptions.html:39(span)
 #: doc/html/en/Groonga/Schema/TableCreationWithDifferentOptions.html:247(a)
 #: doc/html/en/Groonga/Schema/Error.html:112(a)
-#: doc/html/en/_index.html:1193(a) doc/html/en/class_list.html:42(a)
+#: doc/html/en/_index.html:1190(a) doc/html/en/class_list.html:42(a)
 msgid "TableCreationWithDifferentOptions"
 msgstr ""
 
@@ -14199,7 +13848,7 @@ msgstr ""
 #: doc/html/en/Groonga/Schema/Path.html:74(a)
 #: doc/html/en/Groonga/Schema/TableDefinition.html:39(span)
 #: doc/html/en/Groonga/Schema/TableDefinition.html:700(a)
-#: doc/html/en/_index.html:1207(a) doc/html/en/class_list.html:42(a)
+#: doc/html/en/_index.html:1204(a) doc/html/en/class_list.html:42(a)
 msgid "TableDefinition"
 msgstr ""
 
@@ -14210,7 +13859,7 @@ msgstr ""
 #: doc/html/en/Groonga/Schema/Error.html:112(a)
 #: doc/html/en/Groonga/Schema/ViewDefinition.html:511(span)
 #: doc/html/en/Groonga/Schema/ViewDefinition.html:524(span)
-#: doc/html/en/_index.html:1221(a) doc/html/en/class_list.html:42(a)
+#: doc/html/en/_index.html:1218(a) doc/html/en/class_list.html:42(a)
 msgid "TableNotExists"
 msgstr ""
 
@@ -14219,7 +13868,7 @@ msgstr ""
 #: doc/html/en/Groonga/Schema/Path.html:74(a)
 #: doc/html/en/Groonga/Schema/TableRemoveDefinition.html:39(span)
 #: doc/html/en/Groonga/Schema/TableRemoveDefinition.html:196(a)
-#: doc/html/en/_index.html:1228(a) doc/html/en/class_list.html:42(a)
+#: doc/html/en/_index.html:1225(a) doc/html/en/class_list.html:42(a)
 msgid "TableRemoveDefinition"
 msgstr ""
 
@@ -14227,7 +13876,7 @@ msgstr ""
 #: doc/html/en/Groonga/Schema/Error.html:112(a)
 #: doc/html/en/Groonga/Schema/UnguessableReferenceTable.html:39(span)
 #: doc/html/en/Groonga/Schema/UnguessableReferenceTable.html:246(a)
-#: doc/html/en/_index.html:1327(a) doc/html/en/class_list.html:42(a)
+#: doc/html/en/_index.html:1324(a) doc/html/en/class_list.html:42(a)
 msgid "UnguessableReferenceTable"
 msgstr ""
 
@@ -14236,7 +13885,7 @@ msgstr ""
 #: doc/html/en/Groonga/Schema/IndexColumnDefinition.html:723(span)
 #: doc/html/en/Groonga/Schema/UnknownIndexTarget.html:39(span)
 #: doc/html/en/Groonga/Schema/UnknownIndexTarget.html:246(a)
-#: doc/html/en/_index.html:1341(a) doc/html/en/class_list.html:42(a)
+#: doc/html/en/_index.html:1338(a) doc/html/en/class_list.html:42(a)
 msgid "UnknownIndexTarget"
 msgstr ""
 
@@ -14245,7 +13894,7 @@ msgstr ""
 #: doc/html/en/Groonga/Schema/UnknownIndexTargetTable.html:219(a)
 #: doc/html/en/Groonga/Schema/Error.html:112(a)
 #: doc/html/en/Groonga/Schema/IndexColumnDefinition.html:719(span)
-#: doc/html/en/_index.html:1348(a) doc/html/en/class_list.html:42(a)
+#: doc/html/en/_index.html:1345(a) doc/html/en/class_list.html:42(a)
 msgid "UnknownIndexTargetTable"
 msgstr ""
 
@@ -14253,7 +13902,7 @@ msgstr ""
 #: doc/html/en/Groonga/Schema/Error.html:112(a)
 #: doc/html/en/Groonga/Schema/UnknownOptions.html:39(span)
 #: doc/html/en/Groonga/Schema/UnknownOptions.html:273(a)
-#: doc/html/en/_index.html:1355(a) doc/html/en/class_list.html:42(a)
+#: doc/html/en/_index.html:1352(a) doc/html/en/class_list.html:42(a)
 msgid "UnknownOptions"
 msgstr ""
 
@@ -14261,7 +13910,7 @@ msgstr ""
 #: doc/html/en/Groonga/Schema/UnknownTableType.html:39(span)
 #: doc/html/en/Groonga/Schema/UnknownTableType.html:246(a)
 #: doc/html/en/Groonga/Schema/Error.html:112(a)
-#: doc/html/en/_index.html:1362(a) doc/html/en/class_list.html:42(a)
+#: doc/html/en/_index.html:1359(a) doc/html/en/class_list.html:42(a)
 msgid "UnknownTableType"
 msgstr ""
 
@@ -14270,7 +13919,7 @@ msgstr ""
 #: doc/html/en/Groonga/Schema.html:2101(span)
 #: doc/html/en/Groonga/Schema/ViewDefinition.html:39(span)
 #: doc/html/en/Groonga/Schema/ViewDefinition.html:274(a)
-#: doc/html/en/_index.html:1426(a) doc/html/en/class_list.html:42(a)
+#: doc/html/en/_index.html:1423(a) doc/html/en/class_list.html:42(a)
 msgid "ViewDefinition"
 msgstr ""
 
@@ -14278,7 +13927,7 @@ msgstr ""
 #: doc/html/en/Groonga/Schema.html:2356(span)
 #: doc/html/en/Groonga/Schema/ViewRemoveDefinition.html:39(span)
 #: doc/html/en/Groonga/Schema/ViewRemoveDefinition.html:175(a)
-#: doc/html/en/_index.html:1440(a) doc/html/en/class_list.html:42(a)
+#: doc/html/en/_index.html:1437(a) doc/html/en/class_list.html:42(a)
 msgid "ViewRemoveDefinition"
 msgstr ""
 
@@ -14434,8 +14083,6 @@ msgstr ""
 #: doc/html/en/Groonga/SchemaDumper/BaseSyntax.html:328(span)
 #: doc/html/en/file.news.html:551(span) doc/html/en/file.news.html:557(span)
 #: doc/html/en/Groonga.html:320(span) doc/html/en/Groonga.html:321(span)
-#: doc/html/en/file.news.ja.html:550(span)
-#: doc/html/en/file.news.ja.html:556(span)
 msgid "&gt;"
 msgstr ""
 
@@ -15634,7 +15281,7 @@ msgstr ""
 #: doc/html/en/Groonga/Context.html:1221(span)
 #: doc/html/en/Groonga/Context.html:1272(span)
 #: doc/html/en/Groonga/Context.html:1594(span)
-#: doc/html/en/Groonga/Context.html:1625(span) doc/html/en/_index.html:285(a)
+#: doc/html/en/Groonga/Context.html:1625(span) doc/html/en/_index.html:282(a)
 #: doc/html/en/Groonga.html:117(a) doc/html/en/class_list.html:42(a)
 msgid "Database"
 msgstr ""
@@ -16128,8 +15775,6 @@ msgstr ""
 #: doc/html/en/Groonga/Schema/UnknownOptions.html:312(span)
 #: doc/html/en/Groonga/Schema/UnknownOptions.html:313(span)
 #: doc/html/en/file.news.html:550(span) doc/html/en/file.news.html:551(span)
-#: doc/html/en/file.news.ja.html:549(span)
-#: doc/html/en/file.news.ja.html:550(span)
 msgid "&lt;&lt;"
 msgstr ""
 
@@ -16252,7 +15897,7 @@ msgstr ""
 #: doc/html/en/Groonga/SchemaDumper/CommandSyntax.html:37(a)
 #: doc/html/en/Groonga/SchemaDumper/BaseSyntax.html:37(a)
 #: doc/html/en/Groonga/SchemaDumper/RubySyntax.html:37(a)
-#: doc/html/en/_index.html:1073(a) doc/html/en/Groonga.html:117(a)
+#: doc/html/en/_index.html:1070(a) doc/html/en/Groonga.html:117(a)
 #: doc/html/en/class_list.html:42(a)
 msgid "SchemaDumper"
 msgstr ""
@@ -16358,12 +16003,6 @@ msgstr ""
 msgid "instance_eval"
 msgstr ""
 
-#: doc/html/en/Groonga/Schema.html:2417(div)
-#: doc/html/en/Groonga/InvalidFormat.html:134(div)
-msgid ""
-"Generated on Mon Jun 27 13:30:29 2011 by <placeholder-1/> 0.7.2 (ruby-1.8.7)."
-msgstr ""
-
 #: doc/html/en/Groonga/ZLibError.html:6(title)
 msgid "Exception: Groonga::ZLibError &mdash; rroonga - 1.2.2"
 msgstr ""
@@ -16373,7 +16012,7 @@ msgid "Index (Z)"
 msgstr ""
 
 #: doc/html/en/Groonga/ZLibError.html:39(span)
-#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:1455(a)
+#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:1452(a)
 #: doc/html/en/Groonga.html:117(a) doc/html/en/class_list.html:42(a)
 msgid "ZLibError"
 msgstr ""
@@ -16390,17 +16029,12 @@ msgstr ""
 msgid "ZLibに問題があるときに発生する。"
 msgstr ""
 
-#: doc/html/en/Groonga/ZLibError.html:134(div)
-msgid ""
-"Generated on Mon Jun 27 13:30:53 2011 by <placeholder-1/> 0.7.2 (ruby-1.8.7)."
-msgstr ""
-
 #: doc/html/en/Groonga/FileCorrupt.html:6(title)
 msgid "Exception: Groonga::FileCorrupt &mdash; rroonga - 1.2.2"
 msgstr ""
 
 #: doc/html/en/Groonga/FileCorrupt.html:39(span)
-#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:406(a)
+#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:403(a)
 #: doc/html/en/Groonga.html:117(a) doc/html/en/class_list.html:42(a)
 msgid "FileCorrupt"
 msgstr ""
@@ -16417,26 +16051,12 @@ msgstr ""
 msgid "ファイルに問題があったときに発生する。"
 msgstr ""
 
-#: doc/html/en/Groonga/FileCorrupt.html:134(div)
-#: doc/html/en/Groonga/RetryMax.html:134(div)
-#: doc/html/en/Groonga/NetworkIsDown.html:134(div)
-#: doc/html/en/Groonga/IndexCursor.html:209(div)
-#: doc/html/en/Groonga/PermissionDenied.html:134(div)
-#: doc/html/en/Groonga/InappropriateIOControlOperation.html:134(div)
-#: doc/html/en/Groonga/Schema/Path.html:277(div)
-#: doc/html/en/Groonga/Schema/TableCreationWithDifferentOptions.html:386(div)
-#: doc/html/en/Groonga/Schema/UnguessableReferenceTable.html:387(div)
-#: doc/html/en/Groonga/Schema/ColumnNotExists.html:311(div)
-msgid ""
-"Generated on Mon Jun 27 13:30:43 2011 by <placeholder-1/> 0.7.2 (ruby-1.8.7)."
-msgstr ""
-
 #: doc/html/en/Groonga/NoBuffer.html:6(title)
 msgid "Exception: Groonga::NoBuffer &mdash; rroonga - 1.2.2"
 msgstr ""
 
 #: doc/html/en/Groonga/NoBuffer.html:39(span)
-#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:722(a)
+#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:719(a)
 #: doc/html/en/Groonga.html:117(a) doc/html/en/class_list.html:42(a)
 msgid "NoBuffer"
 msgstr ""
@@ -16453,21 +16073,12 @@ msgstr ""
 msgid "バッファがないときに発生する。"
 msgstr ""
 
-#: doc/html/en/Groonga/NoBuffer.html:134(div)
-#: doc/html/en/Groonga/ObjectClosed.html:135(div)
-#: doc/html/en/Groonga/IncompatibleFileFormat.html:134(div)
-#: doc/html/en/Groonga/FileTooLarge.html:134(div)
-#: doc/html/en/file.news.html:904(div) doc/html/en/file.news.ja.html:904(div)
-msgid ""
-"Generated on Mon Jun 27 13:30:27 2011 by <placeholder-1/> 0.7.2 (ruby-1.8.7)."
-msgstr ""
-
 #: doc/html/en/Groonga/SocketIsAlreadyConnected.html:6(title)
 msgid "Exception: Groonga::SocketIsAlreadyConnected &mdash; rroonga - 1.2.2"
 msgstr ""
 
 #: doc/html/en/Groonga/SocketIsAlreadyConnected.html:39(span)
-#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:1115(a)
+#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:1112(a)
 #: doc/html/en/Groonga.html:117(a) doc/html/en/class_list.html:42(a)
 msgid "SocketIsAlreadyConnected"
 msgstr ""
@@ -16489,7 +16100,7 @@ msgid "Class: Groonga::ViewRecord &mdash; rroonga - 1.2.2"
 msgstr ""
 
 #: doc/html/en/Groonga/ViewRecord.html:39(span)
-#: doc/html/en/Groonga/ViewRecord.html:250(a) doc/html/en/_index.html:1433(a)
+#: doc/html/en/Groonga/ViewRecord.html:250(a) doc/html/en/_index.html:1430(a)
 #: doc/html/en/Groonga.html:117(a) doc/html/en/class_list.html:42(a)
 msgid "ViewRecord"
 msgstr ""
@@ -16685,9 +16296,6 @@ msgstr ""
 #: doc/html/en/Groonga/ExpressionBuildable/ColumnValueExpressionBuilder.html:303(strong)
 #: doc/html/en/file.news.html:538(span) doc/html/en/file.news.html:550(span)
 #: doc/html/en/file.news.html:556(span)
-#: doc/html/en/file.news.ja.html:537(span)
-#: doc/html/en/file.news.ja.html:549(span)
-#: doc/html/en/file.news.ja.html:555(span)
 msgid "=~"
 msgstr ""
 
@@ -16844,7 +16452,7 @@ msgid "Exception: Groonga::NotEnoughSpace &mdash; rroonga - 1.2.2"
 msgstr ""
 
 #: doc/html/en/Groonga/NotEnoughSpace.html:39(span)
-#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:799(a)
+#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:796(a)
 #: doc/html/en/Groonga.html:117(a) doc/html/en/class_list.html:42(a)
 msgid "NotEnoughSpace"
 msgstr ""
@@ -16859,18 +16467,6 @@ msgstr ""
 
 #: doc/html/en/Groonga/NotEnoughSpace.html:101(p)
 msgid "領域が足りないときに発生する。"
-msgstr ""
-
-#: doc/html/en/Groonga/NotEnoughSpace.html:134(div)
-#: doc/html/en/Groonga/NoChildProcesses.html:134(div)
-#: doc/html/en/Groonga/InvalidArgument.html:134(div)
-#: doc/html/en/Groonga/TableDumper.html:259(div)
-#: doc/html/en/Groonga/ArrayCursor.html:158(div)
-#: doc/html/en/Groonga/Encoding.html:425(div)
-#: doc/html/en/Groonga/SocketNotInitialized.html:134(div)
-#: doc/html/en/Groonga/TooSmallPageSize.html:360(div)
-msgid ""
-"Generated on Mon Jun 27 13:30:31 2011 by <placeholder-1/> 0.7.2 (ruby-1.8.7)."
 msgstr ""
 
 #: doc/html/en/Groonga/Operator.html:6(title)
@@ -16889,7 +16485,7 @@ msgstr ""
 msgid "Index (O)"
 msgstr ""
 
-#: doc/html/en/Groonga/Operator.html:39(span) doc/html/en/_index.html:870(a)
+#: doc/html/en/Groonga/Operator.html:39(span) doc/html/en/_index.html:867(a)
 #: doc/html/en/Groonga.html:113(a) doc/html/en/class_list.html:42(a)
 msgid "Operator"
 msgstr ""
@@ -17594,7 +17190,7 @@ msgid "Exception: Groonga::TooLargeOffset &mdash; rroonga - 1.2.2"
 msgstr ""
 
 #: doc/html/en/Groonga/TooLargeOffset.html:39(span)
-#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:1242(a)
+#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:1239(a)
 #: doc/html/en/Groonga.html:117(a) doc/html/en/class_list.html:42(a)
 msgid "TooLargeOffset"
 msgstr ""
@@ -17609,18 +17205,6 @@ msgstr ""
 
 #: doc/html/en/Groonga/TooLargeOffset.html:101(p)
 msgid "offset値が大きすぎるときに発生する。"
-msgstr ""
-
-#: doc/html/en/Groonga/TooLargeOffset.html:134(div)
-#: doc/html/en/Groonga/NotSocket.html:134(div)
-#: doc/html/en/Groonga/SocketIsAlreadyShutdowned.html:134(div)
-#: doc/html/en/Groonga/SchemaDumper.html:293(div)
-#: doc/html/en/Groonga/Accessor.html:232(div)
-#: doc/html/en/Groonga/ReadOnlyFileSystem.html:134(div)
-#: doc/html/en/Groonga/Schema/TableDefinition.html:1900(div)
-#: doc/html/en/Groonga/Schema/ViewRemoveDefinition.html:256(div)
-msgid ""
-"Generated on Mon Jun 27 13:30:40 2011 by <placeholder-1/> 0.7.2 (ruby-1.8.7)."
 msgstr ""
 
 #: doc/html/en/Groonga/ResourceDeadlockAvoided.html:6(title)
@@ -17641,7 +17225,7 @@ msgid "Index (R)"
 msgstr ""
 
 #: doc/html/en/Groonga/ResourceDeadlockAvoided.html:39(span)
-#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:1023(a)
+#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:1020(a)
 #: doc/html/en/Groonga.html:117(a) doc/html/en/class_list.html:42(a)
 msgid "ResourceDeadlockAvoided"
 msgstr ""
@@ -17658,25 +17242,12 @@ msgstr ""
 msgid "リソースのデッドロックを回避したときに発生する。"
 msgstr ""
 
-#: doc/html/en/Groonga/ResourceDeadlockAvoided.html:134(div)
-#: doc/html/en/Groonga/InputOutputError.html:134(div)
-#: doc/html/en/Groonga/FilenameTooLong.html:134(div)
-#: doc/html/en/Groonga/StackOverFlow.html:134(div)
-#: doc/html/en/Groonga/HashCursor.html:165(div)
-#: doc/html/en/Groonga/ViewAccessor.html:135(div)
-#: doc/html/en/Groonga/Record/AttributeHashBuilder.html:334(div)
-#: doc/html/en/Groonga/VariableSizeColumn.html:153(div)
-#: doc/html/en/Groonga/Schema/ViewDefinition.html:540(div)
-msgid ""
-"Generated on Mon Jun 27 13:30:51 2011 by <placeholder-1/> 0.7.2 (ruby-1.8.7)."
-msgstr ""
-
 #: doc/html/en/Groonga/DomainError.html:6(title)
 msgid "Exception: Groonga::DomainError &mdash; rroonga - 1.2.2"
 msgstr ""
 
 #: doc/html/en/Groonga/DomainError.html:39(span)
-#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:306(a)
+#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:303(a)
 #: doc/html/en/Groonga.html:117(a) doc/html/en/class_list.html:42(a)
 msgid "DomainError"
 msgstr ""
@@ -17716,7 +17287,7 @@ msgid "Class: Groonga::ColumnExpressionBuilder"
 msgstr ""
 
 #: doc/html/en/Groonga/ColumnExpressionBuilder.html:74(li)
-#: doc/html/en/method_list.html:54(small)
+#: doc/html/en/method_list.html:46(small)
 msgid "Groonga::ColumnExpressionBuilder"
 msgstr ""
 
@@ -17830,7 +17401,6 @@ msgstr ""
 #: doc/html/en/Groonga/RecordExpressionBuilder.html:258(strong)
 #: doc/html/en/Groonga/ExpressionBuildable/ColumnValueExpressionBuilder.html:413(strong)
 #: doc/html/en/file.news.html:238(span)
-#: doc/html/en/file.news.ja.html:234(span)
 msgid "match"
 msgstr ""
 
@@ -18146,7 +17716,7 @@ msgid "Exception: Groonga::TokenizerError &mdash; rroonga - 1.2.2"
 msgstr ""
 
 #: doc/html/en/Groonga/TokenizerError.html:39(span)
-#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:1235(a)
+#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:1232(a)
 #: doc/html/en/Groonga.html:117(a) doc/html/en/class_list.html:42(a)
 msgid "TokenizerError"
 msgstr ""
@@ -18163,22 +17733,12 @@ msgstr ""
 msgid "トークナイザーに問題があったときに発生する。"
 msgstr ""
 
-#: doc/html/en/Groonga/TokenizerError.html:134(div)
-#: doc/html/en/Groonga/SyntaxError.html:134(div)
-#: doc/html/en/Groonga/AddressIsNotAvailable.html:134(div)
-#: doc/html/en/Groonga/TooManyOpenFiles.html:134(div)
-#: doc/html/en/Groonga/BadAddress.html:134(div)
-#: doc/html/en/Groonga.html:484(div)
-msgid ""
-"Generated on Mon Jun 27 13:30:30 2011 by <placeholder-1/> 0.7.2 (ruby-1.8.7)."
-msgstr ""
-
 #: doc/html/en/Groonga/ObjectClosed.html:6(title)
 msgid "Exception: Groonga::ObjectClosed &mdash; rroonga - 1.2.2"
 msgstr ""
 
 #: doc/html/en/Groonga/ObjectClosed.html:39(span)
-#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:828(a)
+#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:825(a)
 #: doc/html/en/Groonga.html:117(a) doc/html/en/class_list.html:42(a)
 msgid "ObjectClosed"
 msgstr ""
@@ -18188,7 +17748,7 @@ msgid "Exception: Groonga::ObjectClosed"
 msgstr ""
 
 #: doc/html/en/Groonga/ObjectClosed.html:78(li)
-#: doc/html/en/file.news.html:641(li) doc/html/en/file.news.ja.html:641(li)
+#: doc/html/en/file.news.html:641(li)
 msgid "Groonga::ObjectClosed"
 msgstr ""
 
@@ -18203,7 +17763,7 @@ msgid "Exception: Groonga::NoSuchColumn &mdash; rroonga - 1.2.2"
 msgstr ""
 
 #: doc/html/en/Groonga/NoSuchColumn.html:39(span)
-#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:757(a)
+#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:754(a)
 #: doc/html/en/Groonga.html:117(a) doc/html/en/class_list.html:42(a)
 msgid "NoSuchColumn"
 msgstr ""
@@ -18225,7 +17785,7 @@ msgid "Exception: Groonga::ResourceBusy &mdash; rroonga - 1.2.2"
 msgstr ""
 
 #: doc/html/en/Groonga/ResourceBusy.html:39(span)
-#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:1016(a)
+#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:1013(a)
 #: doc/html/en/Groonga.html:117(a) doc/html/en/class_list.html:42(a)
 msgid "ResourceBusy"
 msgstr ""
@@ -18242,18 +17802,12 @@ msgstr ""
 msgid "リソースが使用中のときに発生する。"
 msgstr ""
 
-#: doc/html/en/Groonga/ResourceBusy.html:134(div)
-#: doc/html/en/Groonga/PatriciaTrie.html:1649(div)
-msgid ""
-"Generated on Mon Jun 27 13:30:42 2011 by <placeholder-1/> 0.7.2 (ruby-1.8.7)."
-msgstr ""
-
 #: doc/html/en/Groonga/CASError.html:6(title)
 msgid "Exception: Groonga::CASError &mdash; rroonga - 1.2.2"
 msgstr ""
 
 #: doc/html/en/Groonga/CASError.html:39(span)
-#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:200(a)
+#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:197(a)
 #: doc/html/en/Groonga.html:117(a) doc/html/en/class_list.html:42(a)
 msgid "CASError"
 msgstr ""
@@ -18291,7 +17845,7 @@ msgid "Index (I)"
 msgstr ""
 
 #: doc/html/en/Groonga/IncompatibleFileFormat.html:39(span)
-#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:529(a)
+#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:526(a)
 #: doc/html/en/Groonga.html:117(a) doc/html/en/class_list.html:42(a)
 msgid "IncompatibleFileFormat"
 msgstr ""
@@ -18313,7 +17867,7 @@ msgid "Class: Groonga::ViewCursor &mdash; rroonga - 1.2.2"
 msgstr ""
 
 #: doc/html/en/Groonga/ViewCursor.html:39(span)
-#: doc/html/en/Groonga/TableCursor.html:115(a) doc/html/en/_index.html:1419(a)
+#: doc/html/en/Groonga/TableCursor.html:115(a) doc/html/en/_index.html:1416(a)
 #: doc/html/en/Groonga.html:117(a) doc/html/en/class_list.html:42(a)
 msgid "ViewCursor"
 msgstr ""
@@ -18378,7 +17932,7 @@ msgid "Exception: Groonga::NoChildProcesses &mdash; rroonga - 1.2.2"
 msgstr ""
 
 #: doc/html/en/Groonga/NoChildProcesses.html:39(span)
-#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:729(a)
+#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:726(a)
 #: doc/html/en/Groonga.html:117(a) doc/html/en/class_list.html:42(a)
 msgid "NoChildProcesses"
 msgstr ""
@@ -18400,7 +17954,7 @@ msgid "Exception: Groonga::NoLocksAvailable &mdash; rroonga - 1.2.2"
 msgstr ""
 
 #: doc/html/en/Groonga/NoLocksAvailable.html:39(span)
-#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:736(a)
+#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:733(a)
 #: doc/html/en/Groonga.html:117(a) doc/html/en/class_list.html:42(a)
 msgid "NoLocksAvailable"
 msgstr ""
@@ -18422,7 +17976,7 @@ msgid "Exception: Groonga::NoSpaceLeftOnDevice &mdash; rroonga - 1.2.2"
 msgstr ""
 
 #: doc/html/en/Groonga/NoSpaceLeftOnDevice.html:39(span)
-#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:750(a)
+#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:747(a)
 #: doc/html/en/Groonga.html:117(a) doc/html/en/class_list.html:42(a)
 msgid "NoSpaceLeftOnDevice"
 msgstr ""
@@ -18444,7 +17998,7 @@ msgid "Exception: Groonga::RetryMax &mdash; rroonga - 1.2.2"
 msgstr ""
 
 #: doc/html/en/Groonga/RetryMax.html:39(span)
-#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:1044(a)
+#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:1041(a)
 #: doc/html/en/Groonga.html:117(a) doc/html/en/class_list.html:42(a)
 msgid "RetryMax"
 msgstr ""
@@ -18484,7 +18038,7 @@ msgstr ""
 #: doc/html/en/Groonga/Table.html:1942(a)
 #: doc/html/en/Groonga/Table.html:1956(a)
 #: doc/html/en/Groonga/Context.html:1636(a)
-#: doc/html/en/Groonga/Context.html:1664(a) doc/html/en/_index.html:128(a)
+#: doc/html/en/Groonga/Context.html:1664(a) doc/html/en/_index.html:125(a)
 #: doc/html/en/Groonga.html:117(a) doc/html/en/class_list.html:42(a)
 msgid "Array"
 msgstr ""
@@ -18799,7 +18353,7 @@ msgid "Exception: Groonga::SyntaxError &mdash; rroonga - 1.2.2"
 msgstr ""
 
 #: doc/html/en/Groonga/SyntaxError.html:39(span)
-#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:1171(a)
+#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:1168(a)
 #: doc/html/en/Groonga.html:117(a) doc/html/en/class_list.html:42(a)
 msgid "SyntaxError"
 msgstr ""
@@ -18821,7 +18375,7 @@ msgid "Exception: Groonga::EndOfData &mdash; rroonga - 1.2.2"
 msgstr ""
 
 #: doc/html/en/Groonga/EndOfData.html:39(span)
-#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:342(a)
+#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:339(a)
 #: doc/html/en/Groonga.html:117(a) doc/html/en/class_list.html:42(a)
 msgid "EndOfData"
 msgstr ""
@@ -18843,7 +18397,7 @@ msgid "Class: Groonga::Procedure &mdash; rroonga - 1.2.2"
 msgstr ""
 
 #: doc/html/en/Groonga/Procedure.html:39(span)
-#: doc/html/en/Groonga/Object.html:110(a) doc/html/en/_index.html:955(a)
+#: doc/html/en/Groonga/Object.html:110(a) doc/html/en/_index.html:952(a)
 #: doc/html/en/Groonga.html:117(a) doc/html/en/class_list.html:42(a)
 msgid "Procedure"
 msgstr ""
@@ -18944,7 +18498,7 @@ msgid "Class: Groonga::IndexColumn &mdash; rroonga - 1.2.2"
 msgstr ""
 
 #: doc/html/en/Groonga/IndexColumn.html:39(span)
-#: doc/html/en/Groonga/Column.html:137(a) doc/html/en/_index.html:536(a)
+#: doc/html/en/Groonga/Column.html:137(a) doc/html/en/_index.html:533(a)
 #: doc/html/en/Groonga.html:117(a) doc/html/en/class_list.html:42(a)
 msgid "IndexColumn"
 msgstr ""
@@ -18965,7 +18519,7 @@ msgstr ""
 #: doc/html/en/Groonga/FixSizeColumn.html:69(a)
 #: doc/html/en/Groonga/FixSizeColumn.html:76(a)
 #: doc/html/en/Groonga/FixSizeColumn.html:246(a)
-#: doc/html/en/_index.html:207(a) doc/html/en/Groonga.html:117(a)
+#: doc/html/en/_index.html:204(a) doc/html/en/Groonga.html:117(a)
 #: doc/html/en/class_list.html:42(a)
 msgid "Column"
 msgstr ""
@@ -19720,20 +19274,12 @@ msgid ""
 "(column-&gt;header.flags &amp; GRN_OBJ_WITH_WEIGHT); }"
 msgstr ""
 
-#: doc/html/en/Groonga/IndexColumn.html:1012(div)
-#: doc/html/en/Groonga/TooLargePage.html:360(div)
-#: doc/html/en/Groonga/OperationTimeout.html:134(div)
-#: doc/html/en/Groonga/TooManyLinks.html:134(div)
-msgid ""
-"Generated on Mon Jun 27 13:30:55 2011 by <placeholder-1/> 0.7.2 (ruby-1.8.7)."
-msgstr ""
-
 #: doc/html/en/Groonga/TooManyOpenFilesInSystem.html:6(title)
 msgid "Exception: Groonga::TooManyOpenFilesInSystem &mdash; rroonga - 1.2.2"
 msgstr ""
 
 #: doc/html/en/Groonga/TooManyOpenFilesInSystem.html:39(span)
-#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:1270(a)
+#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:1267(a)
 #: doc/html/en/Groonga.html:117(a) doc/html/en/class_list.html:42(a)
 msgid "TooManyOpenFilesInSystem"
 msgstr ""
@@ -19750,12 +19296,6 @@ msgstr ""
 msgid "システム全体で開いているファイルが多すぎるときに発生する。"
 msgstr ""
 
-#: doc/html/en/Groonga/TooManyOpenFilesInSystem.html:134(div)
-#: doc/html/en/Groonga/Column.html:1677(div)
-msgid ""
-"Generated on Mon Jun 27 13:30:47 2011 by <placeholder-1/> 0.7.2 (ruby-1.8.7)."
-msgstr ""
-
 #: doc/html/en/Groonga/Table/KeySupport.html:6(title)
 msgid "Module: Groonga::Table::KeySupport &mdash; rroonga - 1.2.2"
 msgstr ""
@@ -19770,7 +19310,7 @@ msgstr ""
 #: doc/html/en/Groonga/Hash.html:240(a)
 #: doc/html/en/Groonga/EncodingSupport.html:39(span)
 #: doc/html/en/Groonga/Database.html:89(a)
-#: doc/html/en/Groonga/Database.html:416(a) doc/html/en/_index.html:335(a)
+#: doc/html/en/Groonga/Database.html:416(a) doc/html/en/_index.html:332(a)
 #: doc/html/en/Groonga.html:113(a) doc/html/en/class_list.html:42(a)
 msgid "EncodingSupport"
 msgstr ""
@@ -19780,7 +19320,7 @@ msgstr ""
 #: doc/html/en/Groonga/Record.html:1406(span)
 #: doc/html/en/Groonga/Record.html:2576(span)
 #: doc/html/en/Groonga/Table.html:118(a)
-#: doc/html/en/Groonga/Posting.html:997(a) doc/html/en/_index.html:486(a)
+#: doc/html/en/Groonga/Posting.html:997(a) doc/html/en/_index.html:483(a)
 #: doc/html/en/Groonga.html:117(a) doc/html/en/class_list.html:42(a)
 msgid "Hash"
 msgstr ""
@@ -19788,7 +19328,7 @@ msgstr ""
 #: doc/html/en/Groonga/Table/KeySupport.html:78(a)
 #: doc/html/en/Groonga/PatriciaTrie.html:39(span)
 #: doc/html/en/Groonga/PatriciaTrie.html:1546(span)
-#: doc/html/en/Groonga/Table.html:118(a) doc/html/en/_index.html:906(a)
+#: doc/html/en/Groonga/Table.html:118(a) doc/html/en/_index.html:903(a)
 #: doc/html/en/Groonga.html:117(a) doc/html/en/class_list.html:42(a)
 msgid "PatriciaTrie"
 msgstr ""
@@ -20321,7 +19861,7 @@ msgid "Exception: Groonga::AddressIsInUse &mdash; rroonga - 1.2.2"
 msgstr ""
 
 #: doc/html/en/Groonga/AddressIsInUse.html:39(span)
-#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:100(a)
+#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:97(a)
 #: doc/html/en/Groonga.html:117(a) doc/html/en/class_list.html:42(a)
 msgid "AddressIsInUse"
 msgstr ""
@@ -20343,7 +19883,7 @@ msgid "Exception: Groonga::DirectoryNotEmpty &mdash; rroonga - 1.2.2"
 msgstr ""
 
 #: doc/html/en/Groonga/DirectoryNotEmpty.html:39(span)
-#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:299(a)
+#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:296(a)
 #: doc/html/en/Groonga.html:117(a) doc/html/en/class_list.html:42(a)
 msgid "DirectoryNotEmpty"
 msgstr ""
@@ -20360,19 +19900,12 @@ msgstr ""
 msgid "ディレクトリが空でないときに発生する。"
 msgstr ""
 
-#: doc/html/en/Groonga/DirectoryNotEmpty.html:134(div)
-#: doc/html/en/Groonga/Context.html:1994(div)
-#: doc/html/en/Groonga/Schema/UnknownTableType.html:385(div)
-msgid ""
-"Generated on Mon Jun 27 13:30:32 2011 by <placeholder-1/> 0.7.2 (ruby-1.8.7)."
-msgstr ""
-
 #: doc/html/en/Groonga/NoSuchDeviceOrAddress.html:6(title)
 msgid "Exception: Groonga::NoSuchDeviceOrAddress &mdash; rroonga - 1.2.2"
 msgstr ""
 
 #: doc/html/en/Groonga/NoSuchDeviceOrAddress.html:39(span)
-#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:771(a)
+#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:768(a)
 #: doc/html/en/Groonga.html:117(a) doc/html/en/class_list.html:42(a)
 msgid "NoSuchDeviceOrAddress"
 msgstr ""
@@ -20394,7 +19927,7 @@ msgid "Exception: Groonga::InputOutputError &mdash; rroonga - 1.2.2"
 msgstr ""
 
 #: doc/html/en/Groonga/InputOutputError.html:39(span)
-#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:557(a)
+#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:554(a)
 #: doc/html/en/Groonga.html:117(a) doc/html/en/class_list.html:42(a)
 msgid "InputOutputError"
 msgstr ""
@@ -20416,7 +19949,7 @@ msgid "Exception: Groonga::IsADirectory &mdash; rroonga - 1.2.2"
 msgstr ""
 
 #: doc/html/en/Groonga/IsADirectory.html:39(span)
-#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:592(a)
+#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:589(a)
 #: doc/html/en/Groonga.html:117(a) doc/html/en/class_list.html:42(a)
 msgid "IsADirectory"
 msgstr ""
@@ -20433,21 +19966,12 @@ msgstr ""
 msgid "ディレクトリのときに発生する。"
 msgstr ""
 
-#: doc/html/en/Groonga/IsADirectory.html:134(div)
-#: doc/html/en/Groonga/OperationNotPermitted.html:134(div)
-#: doc/html/en/Groonga/TooSmallLimit.html:134(div)
-#: doc/html/en/Groonga/Table.html:3652(div)
-#: doc/html/en/Groonga/Schema/UnknownIndexTargetTable.html:311(div)
-msgid ""
-"Generated on Mon Jun 27 13:30:54 2011 by <placeholder-1/> 0.7.2 (ruby-1.8.7)."
-msgstr ""
-
 #: doc/html/en/Groonga/UnsupportedCommandVersion.html:6(title)
 msgid "Exception: Groonga::UnsupportedCommandVersion &mdash; rroonga - 1.2.2"
 msgstr ""
 
 #: doc/html/en/Groonga/UnsupportedCommandVersion.html:39(span)
-#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:1369(a)
+#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:1366(a)
 #: doc/html/en/Groonga.html:117(a) doc/html/en/class_list.html:42(a)
 msgid "UnsupportedCommandVersion"
 msgstr ""
@@ -20565,7 +20089,6 @@ msgstr ""
 #: doc/html/en/Groonga/PatriciaTrie.html:1112(strong)
 #: doc/html/en/Groonga/ExpressionBuildable/ColumnValueExpressionBuilder.html:434(strong)
 #: doc/html/en/file.news.html:250(span)
-#: doc/html/en/file.news.ja.html:246(span)
 msgid "prefix_search"
 msgstr ""
 
@@ -21605,7 +21128,7 @@ msgid "Exception: Groonga::AddressIsNotAvailable &mdash; rroonga - 1.2.2"
 msgstr ""
 
 #: doc/html/en/Groonga/AddressIsNotAvailable.html:39(span)
-#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:107(a)
+#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:104(a)
 #: doc/html/en/Groonga.html:117(a) doc/html/en/class_list.html:42(a)
 msgid "AddressIsNotAvailable"
 msgstr ""
@@ -21627,7 +21150,7 @@ msgid "Exception: Groonga::FilenameTooLong &mdash; rroonga - 1.2.2"
 msgstr ""
 
 #: doc/html/en/Groonga/FilenameTooLong.html:39(span)
-#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:427(a)
+#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:424(a)
 #: doc/html/en/Groonga.html:117(a) doc/html/en/class_list.html:42(a)
 msgid "FilenameTooLong"
 msgstr ""
@@ -21649,7 +21172,7 @@ msgid "Exception: Groonga::TooSmallOffset &mdash; rroonga - 1.2.2"
 msgstr ""
 
 #: doc/html/en/Groonga/TooSmallOffset.html:39(span)
-#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:1291(a)
+#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:1288(a)
 #: doc/html/en/Groonga.html:117(a) doc/html/en/class_list.html:42(a)
 msgid "TooSmallOffset"
 msgstr ""
@@ -21673,7 +21196,7 @@ msgstr ""
 #: doc/html/en/Groonga/TooLargePage.html:39(span)
 #: doc/html/en/Groonga/TooLargePage.html:221(a)
 #: doc/html/en/Groonga/Error.html:110(a)
-#: doc/html/en/Groonga/Table.html:2686(span) doc/html/en/_index.html:1249(a)
+#: doc/html/en/Groonga/Table.html:2686(span) doc/html/en/_index.html:1246(a)
 #: doc/html/en/Groonga.html:117(a) doc/html/en/class_list.html:42(a)
 msgid "TooLargePage"
 msgstr ""
@@ -21817,7 +21340,7 @@ msgid "Exception: Groonga::StackOverFlow &mdash; rroonga - 1.2.2"
 msgstr ""
 
 #: doc/html/en/Groonga/StackOverFlow.html:39(span)
-#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:1143(a)
+#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:1140(a)
 #: doc/html/en/Groonga.html:117(a) doc/html/en/class_list.html:42(a)
 msgid "StackOverFlow"
 msgstr ""
@@ -21966,7 +21489,7 @@ msgid "Exception: Groonga::InvalidArgument &mdash; rroonga - 1.2.2"
 msgstr ""
 
 #: doc/html/en/Groonga/InvalidArgument.html:39(span)
-#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:571(a)
+#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:568(a)
 #: doc/html/en/Groonga.html:117(a) doc/html/en/class_list.html:42(a)
 msgid "InvalidArgument"
 msgstr ""
@@ -21988,7 +21511,7 @@ msgid "Exception: Groonga::NetworkIsDown &mdash; rroonga - 1.2.2"
 msgstr ""
 
 #: doc/html/en/Groonga/NetworkIsDown.html:39(span)
-#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:715(a)
+#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:712(a)
 #: doc/html/en/Groonga.html:117(a) doc/html/en/class_list.html:42(a)
 msgid "NetworkIsDown"
 msgstr ""
@@ -22086,14 +21609,14 @@ msgstr ""
 
 #: doc/html/en/Groonga/Column.html:137(a)
 #: doc/html/en/Groonga/FixSizeColumn.html:39(span)
-#: doc/html/en/_index.html:434(a) doc/html/en/Groonga.html:117(a)
+#: doc/html/en/_index.html:431(a) doc/html/en/Groonga.html:117(a)
 #: doc/html/en/class_list.html:42(a)
 msgid "FixSizeColumn"
 msgstr ""
 
 #: doc/html/en/Groonga/Column.html:137(a)
 #: doc/html/en/Groonga/VariableSizeColumn.html:39(span)
-#: doc/html/en/_index.html:1398(a) doc/html/en/Groonga.html:117(a)
+#: doc/html/en/_index.html:1395(a) doc/html/en/Groonga.html:117(a)
 #: doc/html/en/class_list.html:42(a)
 msgid "VariableSizeColumn"
 msgstr ""
@@ -22261,12 +21784,6 @@ msgstr ""
 #: doc/html/en/file.news.html:237(span) doc/html/en/file.news.html:249(span)
 #: doc/html/en/file.news.html:257(span) doc/html/en/file.news.html:537(span)
 #: doc/html/en/file.news.html:548(span) doc/html/en/file.news.html:555(span)
-#: doc/html/en/file.news.ja.html:233(span)
-#: doc/html/en/file.news.ja.html:245(span)
-#: doc/html/en/file.news.ja.html:253(span)
-#: doc/html/en/file.news.ja.html:536(span)
-#: doc/html/en/file.news.ja.html:547(span)
-#: doc/html/en/file.news.ja.html:554(span)
 msgid "select"
 msgstr ""
 
@@ -22850,7 +22367,7 @@ msgid "Exception: Groonga::ExecFormatError &mdash; rroonga - 1.2.2"
 msgstr ""
 
 #: doc/html/en/Groonga/ExecFormatError.html:39(span)
-#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:370(a)
+#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:367(a)
 #: doc/html/en/Groonga.html:117(a) doc/html/en/class_list.html:42(a)
 msgid "ExecFormatError"
 msgstr ""
@@ -22867,19 +22384,12 @@ msgstr ""
 msgid "実行ファイルのフォーマットに問題があるときに発生する。"
 msgstr ""
 
-#: doc/html/en/Groonga/ExecFormatError.html:134(div)
-#: doc/html/en/Groonga/Database.html:1365(div)
-#: doc/html/en/Groonga/PatriciaTrieCursor.html:165(div)
-msgid ""
-"Generated on Mon Jun 27 13:30:33 2011 by <placeholder-1/> 0.7.2 (ruby-1.8.7)."
-msgstr ""
-
 #: doc/html/en/Groonga/TooManyOpenFiles.html:6(title)
 msgid "Exception: Groonga::TooManyOpenFiles &mdash; rroonga - 1.2.2"
 msgstr ""
 
 #: doc/html/en/Groonga/TooManyOpenFiles.html:39(span)
-#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:1263(a)
+#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:1260(a)
 #: doc/html/en/Groonga.html:117(a) doc/html/en/class_list.html:42(a)
 msgid "TooManyOpenFiles"
 msgstr ""
@@ -22901,7 +22411,7 @@ msgid "Exception: Groonga::NoSuchDevice &mdash; rroonga - 1.2.2"
 msgstr ""
 
 #: doc/html/en/Groonga/NoSuchDevice.html:39(span)
-#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:764(a)
+#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:761(a)
 #: doc/html/en/Groonga.html:117(a) doc/html/en/class_list.html:42(a)
 msgid "NoSuchDevice"
 msgstr ""
@@ -22923,7 +22433,7 @@ msgid "Class: Groonga::TableDumper &mdash; rroonga - 1.2.2"
 msgstr ""
 
 #: doc/html/en/Groonga/TableDumper.html:39(span)
-#: doc/html/en/Groonga/TableDumper.html:164(a) doc/html/en/_index.html:1214(a)
+#: doc/html/en/Groonga/TableDumper.html:164(a) doc/html/en/_index.html:1211(a)
 #: doc/html/en/Groonga.html:117(a) doc/html/en/class_list.html:42(a)
 msgid "TableDumper"
 msgstr ""
@@ -22993,7 +22503,7 @@ msgid "Class: Groonga::Snippet &mdash; rroonga - 1.2.2"
 msgstr ""
 
 #: doc/html/en/Groonga/Snippet.html:39(span)
-#: doc/html/en/Groonga/Object.html:110(a) doc/html/en/_index.html:1108(a)
+#: doc/html/en/Groonga/Object.html:110(a) doc/html/en/_index.html:1105(a)
 #: doc/html/en/Groonga.html:117(a) doc/html/en/class_list.html:42(a)
 msgid "Snippet"
 msgstr ""
@@ -23165,20 +22675,12 @@ msgid ""
 "must be String: &lt;%s&gt;\", rb_grn_inspect(rb_string)); }"
 msgstr ""
 
-#: doc/html/en/Groonga/Snippet.html:475(div)
-#: doc/html/en/Groonga/Context/SelectCommand.html:267(div)
-#: doc/html/en/Groonga/ResourceTemporarilyUnavailable.html:134(div)
-#: doc/html/en/Groonga/RangeError.html:134(div)
-msgid ""
-"Generated on Mon Jun 27 13:30:48 2011 by <placeholder-1/> 0.7.2 (ruby-1.8.7)."
-msgstr ""
-
 #: doc/html/en/Groonga/ArgumentListTooLong.html:6(title)
 msgid "Exception: Groonga::ArgumentListTooLong &mdash; rroonga - 1.2.2"
 msgstr ""
 
 #: doc/html/en/Groonga/ArgumentListTooLong.html:39(span)
-#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:121(a)
+#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:118(a)
 #: doc/html/en/Groonga.html:117(a) doc/html/en/class_list.html:42(a)
 msgid "ArgumentListTooLong"
 msgstr ""
@@ -23202,7 +22704,7 @@ msgstr ""
 #: doc/html/en/Groonga/TooSmallPage.html:39(span)
 #: doc/html/en/Groonga/TooSmallPage.html:221(a)
 #: doc/html/en/Groonga/Error.html:110(a)
-#: doc/html/en/Groonga/Table.html:2684(span) doc/html/en/_index.html:1298(a)
+#: doc/html/en/Groonga/Table.html:2684(span) doc/html/en/_index.html:1295(a)
 #: doc/html/en/Groonga.html:117(a) doc/html/en/class_list.html:42(a)
 msgid "TooSmallPage"
 msgstr ""
@@ -23252,7 +22754,7 @@ msgid "Exception: Groonga::OperationWouldBlock &mdash; rroonga - 1.2.2"
 msgstr ""
 
 #: doc/html/en/Groonga/OperationWouldBlock.html:39(span)
-#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:863(a)
+#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:860(a)
 #: doc/html/en/Groonga.html:117(a) doc/html/en/class_list.html:42(a)
 msgid "OperationWouldBlock"
 msgstr ""
@@ -23269,18 +22771,12 @@ msgstr ""
 msgid "操作がブロックする可能性があるときに発生する。"
 msgstr ""
 
-#: doc/html/en/Groonga/OperationWouldBlock.html:134(div)
-#: doc/html/en/Groonga/Record.html:3053(div)
-msgid ""
-"Generated on Mon Jun 27 13:30:46 2011 by <placeholder-1/> 0.7.2 (ruby-1.8.7)."
-msgstr ""
-
 #: doc/html/en/Groonga/HashCursor.html:6(title)
 msgid "Class: Groonga::HashCursor &mdash; rroonga - 1.2.2"
 msgstr ""
 
 #: doc/html/en/Groonga/HashCursor.html:39(span)
-#: doc/html/en/Groonga/TableCursor.html:115(a) doc/html/en/_index.html:493(a)
+#: doc/html/en/Groonga/TableCursor.html:115(a) doc/html/en/_index.html:490(a)
 #: doc/html/en/Groonga.html:117(a) doc/html/en/class_list.html:42(a)
 msgid "HashCursor"
 msgstr ""
@@ -23314,7 +22810,7 @@ msgid "Exception: Groonga::NotSocket &mdash; rroonga - 1.2.2"
 msgstr ""
 
 #: doc/html/en/Groonga/NotSocket.html:39(span)
-#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:806(a)
+#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:803(a)
 #: doc/html/en/Groonga.html:117(a) doc/html/en/class_list.html:42(a)
 msgid "NotSocket"
 msgstr ""
@@ -23336,7 +22832,7 @@ msgid "Exception: Groonga::BrokenPipe &mdash; rroonga - 1.2.2"
 msgstr ""
 
 #: doc/html/en/Groonga/BrokenPipe.html:39(span)
-#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:185(a)
+#: doc/html/en/Groonga/Error.html:110(a) doc/html/en/_index.html:182(a)
 #: doc/html/en/Groonga.html:117(a) doc/html/en/class_list.html:42(a)
 msgid "BrokenPipe"
 msgstr ""
@@ -23370,152 +22866,152 @@ msgid "rroongaが発生する例外のスーパークラス。"
 msgstr ""
 
 #: doc/html/en/Groonga/Error.html:110(a)
-#: doc/html/en/Groonga/BadAddress.html:39(span) doc/html/en/_index.html:157(a)
+#: doc/html/en/Groonga/BadAddress.html:39(span) doc/html/en/_index.html:154(a)
 #: doc/html/en/Groonga.html:117(a) doc/html/en/class_list.html:42(a)
 msgid "BadAddress"
 msgstr ""
 
 #: doc/html/en/Groonga/Error.html:110(a)
 #: doc/html/en/Groonga/ConnectionRefused.html:39(span)
-#: doc/html/en/_index.html:263(a) doc/html/en/Groonga.html:117(a)
+#: doc/html/en/_index.html:260(a) doc/html/en/Groonga.html:117(a)
 #: doc/html/en/class_list.html:42(a)
 msgid "ConnectionRefused"
 msgstr ""
 
 #: doc/html/en/Groonga/Error.html:110(a)
 #: doc/html/en/Groonga/FileTooLarge.html:39(span)
-#: doc/html/en/_index.html:420(a) doc/html/en/Groonga.html:117(a)
+#: doc/html/en/_index.html:417(a) doc/html/en/Groonga.html:117(a)
 #: doc/html/en/class_list.html:42(a)
 msgid "FileTooLarge"
 msgstr ""
 
 #: doc/html/en/Groonga/Error.html:110(a)
 #: doc/html/en/Groonga/FunctionNotImplemented.html:39(span)
-#: doc/html/en/_index.html:441(a) doc/html/en/Groonga.html:117(a)
+#: doc/html/en/_index.html:438(a) doc/html/en/Groonga.html:117(a)
 #: doc/html/en/class_list.html:42(a)
 msgid "FunctionNotImplemented"
 msgstr ""
 
 #: doc/html/en/Groonga/Error.html:110(a)
 #: doc/html/en/Groonga/IllegalByteSequence.html:39(span)
-#: doc/html/en/_index.html:508(a) doc/html/en/Groonga.html:117(a)
+#: doc/html/en/_index.html:505(a) doc/html/en/Groonga.html:117(a)
 #: doc/html/en/class_list.html:42(a)
 msgid "IllegalByteSequence"
 msgstr ""
 
 #: doc/html/en/Groonga/Error.html:110(a)
 #: doc/html/en/Groonga/ImproperLink.html:39(span)
-#: doc/html/en/_index.html:515(a) doc/html/en/Groonga.html:117(a)
+#: doc/html/en/_index.html:512(a) doc/html/en/Groonga.html:117(a)
 #: doc/html/en/class_list.html:42(a)
 msgid "ImproperLink"
 msgstr ""
 
 #: doc/html/en/Groonga/Error.html:110(a)
 #: doc/html/en/Groonga/InappropriateIOControlOperation.html:39(span)
-#: doc/html/en/_index.html:522(a) doc/html/en/Groonga.html:117(a)
+#: doc/html/en/_index.html:519(a) doc/html/en/Groonga.html:117(a)
 #: doc/html/en/class_list.html:42(a)
 msgid "InappropriateIOControlOperation"
 msgstr ""
 
 #: doc/html/en/Groonga/Error.html:110(a)
 #: doc/html/en/Groonga/InterruptedFunctionCall.html:39(span)
-#: doc/html/en/_index.html:564(a) doc/html/en/Groonga.html:117(a)
+#: doc/html/en/_index.html:561(a) doc/html/en/Groonga.html:117(a)
 #: doc/html/en/class_list.html:42(a)
 msgid "InterruptedFunctionCall"
 msgstr ""
 
 #: doc/html/en/Groonga/Error.html:110(a)
 #: doc/html/en/Groonga/InvalidFormat.html:39(span)
-#: doc/html/en/_index.html:578(a) doc/html/en/Groonga.html:117(a)
+#: doc/html/en/_index.html:575(a) doc/html/en/Groonga.html:117(a)
 #: doc/html/en/class_list.html:42(a)
 msgid "InvalidFormat"
 msgstr ""
 
 #: doc/html/en/Groonga/Error.html:110(a)
 #: doc/html/en/Groonga/InvalidSeek.html:39(span)
-#: doc/html/en/_index.html:585(a) doc/html/en/Groonga.html:117(a)
+#: doc/html/en/_index.html:582(a) doc/html/en/Groonga.html:117(a)
 #: doc/html/en/class_list.html:42(a)
 msgid "InvalidSeek"
 msgstr ""
 
 #: doc/html/en/Groonga/Error.html:110(a)
-#: doc/html/en/Groonga/LZOError.html:39(span) doc/html/en/_index.html:629(a)
+#: doc/html/en/Groonga/LZOError.html:39(span) doc/html/en/_index.html:626(a)
 #: doc/html/en/Groonga.html:117(a) doc/html/en/class_list.html:42(a)
 msgid "LZOError"
 msgstr ""
 
 #: doc/html/en/Groonga/Error.html:110(a)
 #: doc/html/en/Groonga/NoSuchProcess.html:39(span)
-#: doc/html/en/_index.html:785(a) doc/html/en/Groonga.html:117(a)
+#: doc/html/en/_index.html:782(a) doc/html/en/Groonga.html:117(a)
 #: doc/html/en/class_list.html:42(a)
 msgid "NoSuchProcess"
 msgstr ""
 
 #: doc/html/en/Groonga/Error.html:110(a)
 #: doc/html/en/Groonga/NotADirectory.html:39(span)
-#: doc/html/en/_index.html:792(a) doc/html/en/Groonga.html:117(a)
+#: doc/html/en/_index.html:789(a) doc/html/en/Groonga.html:117(a)
 #: doc/html/en/class_list.html:42(a)
 msgid "NotADirectory"
 msgstr ""
 
 #: doc/html/en/Groonga/Error.html:110(a)
 #: doc/html/en/Groonga/ObjectCorrupt.html:39(span)
-#: doc/html/en/_index.html:835(a) doc/html/en/Groonga.html:117(a)
+#: doc/html/en/_index.html:832(a) doc/html/en/Groonga.html:117(a)
 #: doc/html/en/class_list.html:42(a)
 msgid "ObjectCorrupt"
 msgstr ""
 
 #: doc/html/en/Groonga/Error.html:110(a)
 #: doc/html/en/Groonga/OperationNotPermitted.html:39(span)
-#: doc/html/en/_index.html:842(a) doc/html/en/Groonga.html:117(a)
+#: doc/html/en/_index.html:839(a) doc/html/en/Groonga.html:117(a)
 #: doc/html/en/class_list.html:42(a)
 msgid "OperationNotPermitted"
 msgstr ""
 
 #: doc/html/en/Groonga/Error.html:110(a)
 #: doc/html/en/Groonga/OperationNotSupported.html:39(span)
-#: doc/html/en/_index.html:849(a) doc/html/en/Groonga.html:117(a)
+#: doc/html/en/_index.html:846(a) doc/html/en/Groonga.html:117(a)
 #: doc/html/en/class_list.html:42(a)
 msgid "OperationNotSupported"
 msgstr ""
 
 #: doc/html/en/Groonga/Error.html:110(a)
 #: doc/html/en/Groonga/OperationTimeout.html:39(span)
-#: doc/html/en/_index.html:856(a) doc/html/en/Groonga.html:117(a)
+#: doc/html/en/_index.html:853(a) doc/html/en/Groonga.html:117(a)
 #: doc/html/en/class_list.html:42(a)
 msgid "OperationTimeout"
 msgstr ""
 
 #: doc/html/en/Groonga/Error.html:110(a)
 #: doc/html/en/Groonga/PermissionDenied.html:39(span)
-#: doc/html/en/_index.html:920(a) doc/html/en/Groonga.html:117(a)
+#: doc/html/en/_index.html:917(a) doc/html/en/Groonga.html:117(a)
 #: doc/html/en/class_list.html:42(a)
 msgid "PermissionDenied"
 msgstr ""
 
 #: doc/html/en/Groonga/Error.html:110(a)
-#: doc/html/en/Groonga/RangeError.html:39(span) doc/html/en/_index.html:988(a)
+#: doc/html/en/Groonga/RangeError.html:39(span) doc/html/en/_index.html:985(a)
 #: doc/html/en/Groonga.html:117(a) doc/html/en/class_list.html:42(a)
 msgid "RangeError"
 msgstr ""
 
 #: doc/html/en/Groonga/Error.html:110(a)
 #: doc/html/en/Groonga/ReadOnlyFileSystem.html:39(span)
-#: doc/html/en/_index.html:995(a) doc/html/en/Groonga.html:117(a)
+#: doc/html/en/_index.html:992(a) doc/html/en/Groonga.html:117(a)
 #: doc/html/en/class_list.html:42(a)
 msgid "ReadOnlyFileSystem"
 msgstr ""
 
 #: doc/html/en/Groonga/Error.html:110(a)
 #: doc/html/en/Groonga/ResourceTemporarilyUnavailable.html:39(span)
-#: doc/html/en/_index.html:1030(a) doc/html/en/Groonga.html:117(a)
+#: doc/html/en/_index.html:1027(a) doc/html/en/Groonga.html:117(a)
 #: doc/html/en/class_list.html:42(a)
 msgid "ResourceTemporarilyUnavailable"
 msgstr ""
 
 #: doc/html/en/Groonga/Error.html:110(a)
 #: doc/html/en/Groonga/ResultTooLarge.html:39(span)
-#: doc/html/en/_index.html:1037(a) doc/html/en/Groonga.html:117(a)
+#: doc/html/en/_index.html:1034(a) doc/html/en/Groonga.html:117(a)
 #: doc/html/en/class_list.html:42(a)
 msgid "ResultTooLarge"
 msgstr ""
@@ -23526,35 +23022,35 @@ msgstr ""
 
 #: doc/html/en/Groonga/Error.html:110(a)
 #: doc/html/en/Groonga/SocketIsAlreadyShutdowned.html:39(span)
-#: doc/html/en/_index.html:1122(a) doc/html/en/Groonga.html:117(a)
+#: doc/html/en/_index.html:1119(a) doc/html/en/Groonga.html:117(a)
 #: doc/html/en/class_list.html:42(a)
 msgid "SocketIsAlreadyShutdowned"
 msgstr ""
 
 #: doc/html/en/Groonga/Error.html:110(a)
 #: doc/html/en/Groonga/SocketIsNotConnected.html:39(span)
-#: doc/html/en/_index.html:1129(a) doc/html/en/Groonga.html:117(a)
+#: doc/html/en/_index.html:1126(a) doc/html/en/Groonga.html:117(a)
 #: doc/html/en/class_list.html:42(a)
 msgid "SocketIsNotConnected"
 msgstr ""
 
 #: doc/html/en/Groonga/Error.html:110(a)
 #: doc/html/en/Groonga/SocketNotInitialized.html:39(span)
-#: doc/html/en/_index.html:1136(a) doc/html/en/Groonga.html:117(a)
+#: doc/html/en/_index.html:1133(a) doc/html/en/Groonga.html:117(a)
 #: doc/html/en/class_list.html:42(a)
 msgid "SocketNotInitialized"
 msgstr ""
 
 #: doc/html/en/Groonga/Error.html:110(a)
 #: doc/html/en/Groonga/TooManyLinks.html:39(span)
-#: doc/html/en/_index.html:1256(a) doc/html/en/Groonga.html:117(a)
+#: doc/html/en/_index.html:1253(a) doc/html/en/Groonga.html:117(a)
 #: doc/html/en/class_list.html:42(a)
 msgid "TooManyLinks"
 msgstr ""
 
 #: doc/html/en/Groonga/Error.html:110(a)
 #: doc/html/en/Groonga/TooSmallLimit.html:39(span)
-#: doc/html/en/_index.html:1284(a) doc/html/en/Groonga.html:117(a)
+#: doc/html/en/_index.html:1281(a) doc/html/en/Groonga.html:117(a)
 #: doc/html/en/class_list.html:42(a)
 msgid "TooSmallLimit"
 msgstr ""
@@ -23563,14 +23059,14 @@ msgstr ""
 #: doc/html/en/Groonga/Table.html:2678(span)
 #: doc/html/en/Groonga/TooSmallPageSize.html:39(span)
 #: doc/html/en/Groonga/TooSmallPageSize.html:221(a)
-#: doc/html/en/_index.html:1305(a) doc/html/en/Groonga.html:117(a)
+#: doc/html/en/_index.html:1302(a) doc/html/en/Groonga.html:117(a)
 #: doc/html/en/class_list.html:42(a)
 msgid "TooSmallPageSize"
 msgstr ""
 
 #: doc/html/en/Groonga/Error.html:110(a)
 #: doc/html/en/Groonga/UnknownError.html:39(span)
-#: doc/html/en/_index.html:1334(a) doc/html/en/Groonga.html:117(a)
+#: doc/html/en/_index.html:1331(a) doc/html/en/Groonga.html:117(a)
 #: doc/html/en/class_list.html:42(a)
 msgid "UnknownError"
 msgstr ""
@@ -23652,7 +23148,7 @@ msgstr ""
 
 #: doc/html/en/Groonga/RecordExpressionBuilder.html:112(a)
 #: doc/html/en/Groonga/MatchTargetRecordExpressionBuilder.html:39(span)
-#: doc/html/en/_index.html:686(a) doc/html/en/Groonga.html:117(a)
+#: doc/html/en/_index.html:683(a) doc/html/en/Groonga.html:117(a)
 #: doc/html/en/class_list.html:42(a)
 msgid "MatchTargetRecordExpressionBuilder"
 msgstr ""
@@ -23680,8 +23176,6 @@ msgstr ""
 #: doc/html/en/Groonga/Schema/IndexColumnDefinition.html:743(span)
 #: doc/html/en/Groonga/Schema/IndexColumnDefinition.html:746(span)
 #: doc/html/en/file.news.html:239(span) doc/html/en/file.news.html:240(span)
-#: doc/html/en/file.news.ja.html:235(span)
-#: doc/html/en/file.news.ja.html:236(span)
 msgid "index"
 msgstr ""
 
@@ -23757,8 +23251,7 @@ msgid ""
 "(block)) end - (Object) n_sub_records 419 420 421 # File 'lib/groonga/"
 "expression-builder.rb', line 419 def n_sub_records self[_nsubrecs] end - "
 "(Object) score 415 416 417 # File 'lib/groonga/expression-builder.rb', line "
-"415 def score self[_score] end Generated on Mon Jun 27 13:30:52 2011 by yard "
-"0.7.2 (ruby-1.8.7)."
+"415 def score self[_score] end"
 msgstr ""
 
 #: doc/html/en/Groonga/InterruptedFunctionCall.html:6(title)
@@ -23775,14 +23268,6 @@ msgstr ""
 
 #: doc/html/en/Groonga/InterruptedFunctionCall.html:101(p)
 msgid "関数の実行中に中断されたときに発生する。"
-msgstr ""
-
-#: doc/html/en/Groonga/InterruptedFunctionCall.html:134(div)
-#: doc/html/en/Groonga/Context/SelectResult.html:337(div)
-#: doc/html/en/Groonga/TableCursor.html:669(div)
-#: doc/html/en/Groonga/FixSizeColumn.html:468(div)
-msgid ""
-"Generated on Mon Jun 27 13:30:36 2011 by <placeholder-1/> 0.7.2 (ruby-1.8.7)."
 msgstr ""
 
 #: doc/html/en/Groonga/InvalidSeek.html:6(title)
@@ -23824,7 +23309,7 @@ msgstr ""
 #: doc/html/en/Groonga/Context/SelectCommand.html:39(span)
 #: doc/html/en/Groonga/Context/SelectCommand.html:164(a)
 #: doc/html/en/Groonga/Context.html:132(a)
-#: doc/html/en/Groonga/Context.html:1824(span) doc/html/en/_index.html:1080(a)
+#: doc/html/en/Groonga/Context.html:1824(span) doc/html/en/_index.html:1077(a)
 #: doc/html/en/class_list.html:42(a)
 msgid "SelectCommand"
 msgstr ""
@@ -23949,7 +23434,7 @@ msgstr ""
 #: doc/html/en/Groonga/Context/SelectResult/DrillDownResult.html:441(span)
 #: doc/html/en/Groonga/Context/SelectResult.html:39(span)
 #: doc/html/en/Groonga/Context.html:132(a)
-#: doc/html/en/Groonga/Context.html:1779(span) doc/html/en/_index.html:1087(a)
+#: doc/html/en/Groonga/Context.html:1779(span) doc/html/en/_index.html:1084(a)
 #: doc/html/en/class_list.html:42(a)
 msgid "SelectResult"
 msgstr ""
@@ -23970,7 +23455,7 @@ msgstr ""
 
 #: doc/html/en/Groonga/Context/SelectResult/DrillDownResult.html:39(span)
 #: doc/html/en/Groonga/Context/SelectResult.html:103(a)
-#: doc/html/en/_index.html:313(a) doc/html/en/class_list.html:42(a)
+#: doc/html/en/_index.html:310(a) doc/html/en/class_list.html:42(a)
 msgid "DrillDownResult"
 msgstr ""
 
@@ -24241,17 +23726,12 @@ msgstr ""
 msgid "未知のエラーが発生したときに発生する。"
 msgstr ""
 
-#: doc/html/en/Groonga/UnknownError.html:134(div)
-msgid ""
-"Generated on Mon Jun 27 13:30:39 2011 by <placeholder-1/> 0.7.2 (ruby-1.8.7)."
-msgstr ""
-
 #: doc/html/en/Groonga/IndexCursor.html:6(title)
 msgid "Class: Groonga::IndexCursor &mdash; rroonga - 1.2.2"
 msgstr ""
 
 #: doc/html/en/Groonga/IndexCursor.html:39(span)
-#: doc/html/en/Groonga/Object.html:110(a) doc/html/en/_index.html:550(a)
+#: doc/html/en/Groonga/Object.html:110(a) doc/html/en/_index.html:547(a)
 #: doc/html/en/Groonga.html:117(a) doc/html/en/class_list.html:42(a)
 msgid "IndexCursor"
 msgstr ""
@@ -24286,7 +23766,7 @@ msgid "Class: Groonga::ViewAccessor &mdash; rroonga - 1.2.2"
 msgstr ""
 
 #: doc/html/en/Groonga/ViewAccessor.html:39(span)
-#: doc/html/en/Groonga/Object.html:110(a) doc/html/en/_index.html:1412(a)
+#: doc/html/en/Groonga/Object.html:110(a) doc/html/en/_index.html:1409(a)
 #: doc/html/en/Groonga.html:117(a) doc/html/en/class_list.html:42(a)
 msgid "ViewAccessor"
 msgstr ""
@@ -24373,7 +23853,7 @@ msgstr ""
 
 #: doc/html/en/Groonga/Record/AttributeHashBuilder.html:37(a)
 #: doc/html/en/Groonga/Record.html:39(span)
-#: doc/html/en/Groonga/Record.html:1028(a) doc/html/en/_index.html:1002(a)
+#: doc/html/en/Groonga/Record.html:1028(a) doc/html/en/_index.html:999(a)
 #: doc/html/en/Groonga.html:117(a) doc/html/en/class_list.html:42(a)
 msgid "Record"
 msgstr ""
@@ -24381,7 +23861,7 @@ msgstr ""
 #: doc/html/en/Groonga/Record/AttributeHashBuilder.html:39(span)
 #: doc/html/en/Groonga/Record/AttributeHashBuilder.html:207(a)
 #: doc/html/en/Groonga/Record.html:101(a)
-#: doc/html/en/Groonga/Record.html:1437(span) doc/html/en/_index.html:142(a)
+#: doc/html/en/Groonga/Record.html:1437(span) doc/html/en/_index.html:139(a)
 #: doc/html/en/class_list.html:42(a)
 msgid "AttributeHashBuilder"
 msgstr ""
@@ -24908,7 +24388,7 @@ msgid "Class: Groonga::PatriciaTrieCursor &mdash; rroonga - 1.2.2"
 msgstr ""
 
 #: doc/html/en/Groonga/PatriciaTrieCursor.html:39(span)
-#: doc/html/en/Groonga/TableCursor.html:115(a) doc/html/en/_index.html:913(a)
+#: doc/html/en/Groonga/TableCursor.html:115(a) doc/html/en/_index.html:910(a)
 #: doc/html/en/Groonga.html:117(a) doc/html/en/class_list.html:42(a)
 msgid "PatriciaTrieCursor"
 msgstr ""
@@ -24937,7 +24417,7 @@ msgid "Class: Groonga::ArrayCursor &mdash; rroonga - 1.2.2"
 msgstr ""
 
 #: doc/html/en/Groonga/ArrayCursor.html:39(span)
-#: doc/html/en/Groonga/TableCursor.html:115(a) doc/html/en/_index.html:135(a)
+#: doc/html/en/Groonga/TableCursor.html:115(a) doc/html/en/_index.html:132(a)
 #: doc/html/en/Groonga.html:117(a) doc/html/en/class_list.html:42(a)
 msgid "ArrayCursor"
 msgstr ""
@@ -25035,21 +24515,21 @@ msgstr ""
 #: doc/html/en/Groonga/SchemaDumper/RubySyntax.html:69(a)
 #: doc/html/en/Groonga/SchemaDumper/RubySyntax.html:74(a)
 #: doc/html/en/Groonga/SchemaDumper/RubySyntax.html:128(a)
-#: doc/html/en/_index.html:171(a) doc/html/en/class_list.html:42(a)
+#: doc/html/en/_index.html:168(a) doc/html/en/class_list.html:42(a)
 msgid "BaseSyntax"
 msgstr ""
 
 #: doc/html/en/Groonga/SchemaDumper.html:113(a)
 #: doc/html/en/Groonga/SchemaDumper/CommandSyntax.html:39(span)
 #: doc/html/en/Groonga/SchemaDumper/BaseSyntax.html:108(a)
-#: doc/html/en/_index.html:256(a) doc/html/en/class_list.html:42(a)
+#: doc/html/en/_index.html:253(a) doc/html/en/class_list.html:42(a)
 msgid "CommandSyntax"
 msgstr ""
 
 #: doc/html/en/Groonga/SchemaDumper.html:113(a)
 #: doc/html/en/Groonga/SchemaDumper/BaseSyntax.html:108(a)
 #: doc/html/en/Groonga/SchemaDumper/RubySyntax.html:39(span)
-#: doc/html/en/_index.html:1051(a) doc/html/en/class_list.html:42(a)
+#: doc/html/en/_index.html:1048(a) doc/html/en/class_list.html:42(a)
 msgid "RubySyntax"
 msgstr ""
 
@@ -25103,7 +24583,7 @@ msgid "Class: Groonga::Accessor &mdash; rroonga - 1.2.2"
 msgstr ""
 
 #: doc/html/en/Groonga/Accessor.html:39(span)
-#: doc/html/en/Groonga/Object.html:110(a) doc/html/en/_index.html:93(a)
+#: doc/html/en/Groonga/Object.html:110(a) doc/html/en/_index.html:90(a)
 #: doc/html/en/Groonga.html:117(a) doc/html/en/class_list.html:42(a)
 msgid "Accessor"
 msgstr ""
@@ -26405,7 +25885,7 @@ msgid "Class: Groonga::Type &mdash; rroonga - 1.2.2"
 msgstr ""
 
 #: doc/html/en/Groonga/Type.html:39(span)
-#: doc/html/en/Groonga/Object.html:110(a) doc/html/en/_index.html:1312(a)
+#: doc/html/en/Groonga/Object.html:110(a) doc/html/en/_index.html:1309(a)
 #: doc/html/en/Groonga.html:117(a) doc/html/en/class_list.html:42(a)
 msgid "Type"
 msgstr ""
@@ -26756,7 +26236,7 @@ msgid ""
 msgstr ""
 
 #: doc/html/en/Groonga/Object.html:110(a)
-#: doc/html/en/Groonga/Variable.html:39(span) doc/html/en/_index.html:1391(a)
+#: doc/html/en/Groonga/Variable.html:39(span) doc/html/en/_index.html:1388(a)
 #: doc/html/en/Groonga.html:117(a) doc/html/en/class_list.html:42(a)
 msgid "Variable"
 msgstr ""
@@ -27208,16 +26688,11 @@ msgid ""
 "return Qnil; }"
 msgstr ""
 
-#: doc/html/en/Groonga/Object.html:1653(div)
-msgid ""
-"Generated on Mon Jun 27 13:30:44 2011 by <placeholder-1/> 0.7.2 (ruby-1.8.7)."
-msgstr ""
-
 #: doc/html/en/Groonga/Encoding.html:6(title)
 msgid "Module: Groonga::Encoding &mdash; rroonga - 1.2.2"
 msgstr ""
 
-#: doc/html/en/Groonga/Encoding.html:39(span) doc/html/en/_index.html:328(a)
+#: doc/html/en/Groonga/Encoding.html:39(span) doc/html/en/_index.html:325(a)
 #: doc/html/en/Groonga.html:113(a) doc/html/en/class_list.html:42(a)
 msgid "Encoding"
 msgstr ""
@@ -28437,7 +27912,6 @@ msgstr ""
 #: doc/html/en/Groonga/Table.html:2675(span)
 #: doc/html/en/Groonga/Pagination.html:1217(span)
 #: doc/html/en/file.news.html:538(span)
-#: doc/html/en/file.news.ja.html:537(span)
 msgid "10"
 msgstr ""
 
@@ -28577,7 +28051,7 @@ msgid "extend"
 msgstr ""
 
 #: doc/html/en/Groonga/Table.html:2692(span)
-#: doc/html/en/Groonga/Pagination.html:39(span) doc/html/en/_index.html:892(a)
+#: doc/html/en/Groonga/Pagination.html:39(span) doc/html/en/_index.html:889(a)
 #: doc/html/en/Groonga.html:113(a) doc/html/en/class_list.html:42(a)
 msgid "Pagination"
 msgstr ""
@@ -29837,8 +29311,7 @@ msgid ""
 "#, #build, #initialize, #| Constructor Details This class inherits a "
 "constructor from Groonga::RecordExpressionBuilder Dynamic Method Handling "
 "This class handles dynamic methods through the method_missing method in the "
-"class Groonga::RecordExpressionBuilder Generated on Mon Jun 27 13:30:37 2011 "
-"by yard 0.7.2 (ruby-1.8.7)."
+"class Groonga::RecordExpressionBuilder"
 msgstr ""
 
 #: doc/html/en/Groonga/NotADirectory.html:6(title)
@@ -30391,7 +29864,7 @@ msgstr ""
 msgid "Class: Groonga::Posting &mdash; rroonga - 1.2.2"
 msgstr ""
 
-#: doc/html/en/Groonga/Posting.html:39(span) doc/html/en/_index.html:941(a)
+#: doc/html/en/Groonga/Posting.html:39(span) doc/html/en/_index.html:938(a)
 #: doc/html/en/Groonga.html:117(a) doc/html/en/class_list.html:42(a)
 msgid "Posting"
 msgstr ""
@@ -30708,8 +30181,7 @@ msgid ""
 "section_id] || nil @term_id = parameters[:term_id] || nil @position = "
 "parameters[:position] || 0 @term_frequency = parameters[:term_frequency] || "
 "0 @weight = parameters[:weight] || 0 @n_rest_postings = parameters[:"
-"n_rest_postings] || 0 end Generated on Mon Jun 27 13:30:39 2011 by yard "
-"0.7.2 (ruby-1.8.7)."
+"n_rest_postings] || 0 end"
 msgstr ""
 
 #: doc/html/en/Groonga/FunctionNotImplemented.html:6(title)
@@ -33027,8 +32499,7 @@ msgid ""
 "(column_value_builder, value) A new instance of LessEqualExpressionBuilder "
 "316 317 318 # File 'lib/groonga/expression-builder.rb', line 316 def "
 "initialize(column_value_builder, value) super(Groonga::Operation::"
-"LESS_EQUAL, column_value_builder, value) end Generated on Mon Jun 27 "
-"13:30:51 2011 by yard 0.7.2 (ruby-1.8.7)."
+"LESS_EQUAL, column_value_builder, value) end"
 msgstr ""
 
 #: doc/html/en/Groonga/ExpressionBuildable/MatchTargetExpressionBuilder.html:6(title)
@@ -33078,8 +32549,7 @@ msgid ""
 "(expression, variable) 268 269 270 271 272 # File 'lib/groonga/expression-"
 "builder.rb', line 268 def build(expression, variable) expression."
 "append_object(variable) expression.append_object(@target) expression."
-"append_operation(Groonga::Operation::GET_VALUE, 2) end Generated on Mon Jun "
-"27 13:30:42 2011 by yard 0.7.2 (ruby-1.8.7)."
+"append_operation(Groonga::Operation::GET_VALUE, 2) end"
 msgstr ""
 
 #: doc/html/en/Groonga/ExpressionBuildable/MinusExpressionBuilder.html:6(title)
@@ -33111,8 +32581,7 @@ msgid ""
 "(column_value_builder, value) A new instance of MinusExpressionBuilder 340 "
 "341 342 # File 'lib/groonga/expression-builder.rb', line 340 def initialize"
 "(column_value_builder, value) super(Groonga::Operation::MINUS, "
-"column_value_builder, value) end Generated on Mon Jun 27 13:30:48 2011 by "
-"yard 0.7.2 (ruby-1.8.7)."
+"column_value_builder, value) end"
 msgstr ""
 
 #: doc/html/en/Groonga/ExpressionBuildable/GreaterEqualExpressionBuilder.html:6(title)
@@ -33151,8 +32620,7 @@ msgid ""
 "(column_value_builder, value) A new instance of "
 "GreaterEqualExpressionBuilder 328 329 330 # File 'lib/groonga/expression-"
 "builder.rb', line 328 def initialize(column_value_builder, value) super"
-"(Groonga::Operation::GREATER_EQUAL, column_value_builder, value) end "
-"Generated on Mon Jun 27 13:30:33 2011 by yard 0.7.2 (ruby-1.8.7)."
+"(Groonga::Operation::GREATER_EQUAL, column_value_builder, value) end"
 msgstr ""
 
 #: doc/html/en/Groonga/ExpressionBuildable/BinaryExpressionBuilder.html:6(title)
@@ -33204,7 +32672,7 @@ msgid ""
 "293 294 # File 'lib/groonga/expression-builder.rb', line 290 def build"
 "(expression, variable) @column_value_builder.build(expression, variable) "
 "expression.append_constant(@value) expression.append_operation(@operation, "
-"2) end Generated on Mon Jun 27 13:30:50 2011 by yard 0.7.2 (ruby-1.8.7)."
+"2) end"
 msgstr ""
 
 #: doc/html/en/Groonga/ExpressionBuildable/PlusExpressionBuilder.html:6(title)
@@ -33235,8 +32703,7 @@ msgid ""
 "(column_value_builder, value) A new instance of PlusExpressionBuilder 334 "
 "335 336 # File 'lib/groonga/expression-builder.rb', line 334 def initialize"
 "(column_value_builder, value) super(Groonga::Operation::PLUS, "
-"column_value_builder, value) end Generated on Mon Jun 27 13:30:55 2011 by "
-"yard 0.7.2 (ruby-1.8.7)."
+"column_value_builder, value) end"
 msgstr ""
 
 #: doc/html/en/Groonga/ExpressionBuildable/PrefixSearchExpressionBuilder.html:6(title)
@@ -33269,8 +32736,7 @@ msgid ""
 "(column_value_builder, value) A new instance of "
 "PrefixSearchExpressionBuilder 376 377 378 # File 'lib/groonga/expression-"
 "builder.rb', line 376 def initialize(column_value_builder, value) super"
-"(Groonga::Operation::PREFIX, column_value_builder, value) end Generated on "
-"Mon Jun 27 13:30:39 2011 by yard 0.7.2 (ruby-1.8.7)."
+"(Groonga::Operation::PREFIX, column_value_builder, value) end"
 msgstr ""
 
 #: doc/html/en/Groonga/ExpressionBuildable/EqualExpressionBuilder.html:6(title)
@@ -33302,8 +32768,7 @@ msgid ""
 "(column_value_builder, value) A new instance of EqualExpressionBuilder 298 "
 "299 300 # File 'lib/groonga/expression-builder.rb', line 298 def initialize"
 "(column_value_builder, value) super(Groonga::Operation::EQUAL, "
-"column_value_builder, value) end Generated on Mon Jun 27 13:30:49 2011 by "
-"yard 0.7.2 (ruby-1.8.7)."
+"column_value_builder, value) end"
 msgstr ""
 
 #: doc/html/en/Groonga/ExpressionBuildable/AndExpressionBuilder.html:6(title)
@@ -33334,7 +32799,7 @@ msgid ""
 "(*expression_builders) A new instance of AndExpressionBuilder 128 129 130 # "
 "File 'lib/groonga/expression-builder.rb', line 128 def initialize"
 "(*expression_builders) super(Groonga::Operation::AND, *expression_builders) "
-"end Generated on Mon Jun 27 13:30:33 2011 by yard 0.7.2 (ruby-1.8.7)."
+"end"
 msgstr ""
 
 #: doc/html/en/Groonga/ExpressionBuildable/SuffixSearchExpressionBuilder.html:6(title)
@@ -33367,8 +32832,7 @@ msgid ""
 "(column_value_builder, value) A new instance of "
 "SuffixSearchExpressionBuilder 382 383 384 # File 'lib/groonga/expression-"
 "builder.rb', line 382 def initialize(column_value_builder, value) super"
-"(Groonga::Operation::SUFFIX, column_value_builder, value) end Generated on "
-"Mon Jun 27 13:30:31 2011 by yard 0.7.2 (ruby-1.8.7)."
+"(Groonga::Operation::SUFFIX, column_value_builder, value) end"
 msgstr ""
 
 #: doc/html/en/Groonga/ExpressionBuildable/SlashExpressionBuilder.html:6(title)
@@ -33400,8 +32864,7 @@ msgid ""
 "(column_value_builder, value) A new instance of SlashExpressionBuilder 352 "
 "353 354 # File 'lib/groonga/expression-builder.rb', line 352 def initialize"
 "(column_value_builder, value) super(Groonga::Operation::SLASH, "
-"column_value_builder, value) end Generated on Mon Jun 27 13:30:30 2011 by "
-"yard 0.7.2 (ruby-1.8.7)."
+"column_value_builder, value) end"
 msgstr ""
 
 #: doc/html/en/Groonga/ExpressionBuildable/MatchExpressionBuilder.html:6(title)
@@ -33433,8 +32896,7 @@ msgid ""
 "(column_value_builder, value) A new instance of MatchExpressionBuilder 304 "
 "305 306 # File 'lib/groonga/expression-builder.rb', line 304 def initialize"
 "(column_value_builder, value) super(Groonga::Operation::MATCH, "
-"column_value_builder, value) end Generated on Mon Jun 27 13:30:37 2011 by "
-"yard 0.7.2 (ruby-1.8.7)."
+"column_value_builder, value) end"
 msgstr ""
 
 #: doc/html/en/Groonga/ExpressionBuildable/SubExpressionBuilder.html:6(title)
@@ -33467,8 +32929,7 @@ msgid ""
 "super() @query = query @options = options end Instance Method Details - "
 "(Object) build(expression, variable) 370 371 372 # File 'lib/groonga/"
 "expression-builder.rb', line 370 def build(expression, variable) expression."
-"parse(@query, @options) end Generated on Mon Jun 27 13:30:41 2011 by yard "
-"0.7.2 (ruby-1.8.7)."
+"parse(@query, @options) end"
 msgstr ""
 
 #: doc/html/en/Groonga/ExpressionBuildable/OrExpressionBuilder.html:6(title)
@@ -33499,7 +32960,7 @@ msgid ""
 "(*expression_builders) A new instance of OrExpressionBuilder 134 135 136 # "
 "File 'lib/groonga/expression-builder.rb', line 134 def initialize"
 "(*expression_builders) super(Groonga::Operation::OR, *expression_builders) "
-"end Generated on Mon Jun 27 13:30:54 2011 by yard 0.7.2 (ruby-1.8.7)."
+"end"
 msgstr ""
 
 #: doc/html/en/Groonga/ExpressionBuildable/GreaterExpressionBuilder.html:6(title)
@@ -33531,8 +32992,7 @@ msgid ""
 "(column_value_builder, value) A new instance of GreaterExpressionBuilder 322 "
 "323 324 # File 'lib/groonga/expression-builder.rb', line 322 def initialize"
 "(column_value_builder, value) super(Groonga::Operation::GREATER, "
-"column_value_builder, value) end Generated on Mon Jun 27 13:30:41 2011 by "
-"yard 0.7.2 (ruby-1.8.7)."
+"column_value_builder, value) end"
 msgstr ""
 
 #: doc/html/en/Groonga/ExpressionBuildable/ExpressionBuilder.html:6(title)
@@ -33582,8 +33042,7 @@ msgid ""
 "- (Object) (other) 102 103 104 # File 'lib/groonga/expression-builder.rb', "
 "line 102 def (other) AndExpressionBuilder.new(self, other) end - (Object) |"
 "(other) 106 107 108 # File 'lib/groonga/expression-builder.rb', line 106 def "
-"|(other) OrExpressionBuilder.new(self, other) end Generated on Mon Jun 27 "
-"13:30:30 2011 by yard 0.7.2 (ruby-1.8.7)."
+"|(other) OrExpressionBuilder.new(self, other) end"
 msgstr ""
 
 #: doc/html/en/Groonga/ExpressionBuildable/SetExpressionBuilder.html:6(title)
@@ -33620,8 +33079,7 @@ msgid ""
 "groonga/expression-builder.rb', line 118 def build(expression, variable) "
 "return if @expression_builders.empty? @expression_builders.each do |builder| "
 "builder.build(expression, variable) end expression.append_operation"
-"(@operation, @expression_builders.size) end Generated on Mon Jun 27 13:30:34 "
-"2011 by yard 0.7.2 (ruby-1.8.7)."
+"(@operation, @expression_builders.size) end"
 msgstr ""
 
 #: doc/html/en/Groonga/ExpressionBuildable/ColumnValueExpressionBuilder.html:6(title)
@@ -33635,7 +33093,7 @@ msgid "Class: Groonga::ExpressionBuildable::ColumnValueExpressionBuilder"
 msgstr ""
 
 #: doc/html/en/Groonga/ExpressionBuildable/ColumnValueExpressionBuilder.html:76(li)
-#: doc/html/en/method_list.html:46(small)
+#: doc/html/en/method_list.html:54(small)
 msgid "Groonga::ExpressionBuildable::ColumnValueExpressionBuilder"
 msgstr ""
 
@@ -33649,7 +33107,6 @@ msgstr ""
 
 #: doc/html/en/Groonga/ExpressionBuildable/ColumnValueExpressionBuilder.html:455(strong)
 #: doc/html/en/file.news.html:258(span)
-#: doc/html/en/file.news.ja.html:254(span)
 msgid "suffix_search"
 msgstr ""
 
@@ -34146,8 +33603,7 @@ msgid ""
 "(column_value_builder, value) A new instance of ModExpressionBuilder 358 359 "
 "360 # File 'lib/groonga/expression-builder.rb', line 358 def initialize"
 "(column_value_builder, value) super(Groonga::Operation::MOD, "
-"column_value_builder, value) end Generated on Mon Jun 27 13:30:51 2011 by "
-"yard 0.7.2 (ruby-1.8.7)."
+"column_value_builder, value) end"
 msgstr ""
 
 #: doc/html/en/Groonga/ExpressionBuildable/LessExpressionBuilder.html:6(title)
@@ -34178,8 +33634,7 @@ msgid ""
 "(column_value_builder, value) A new instance of LessExpressionBuilder 310 "
 "311 312 # File 'lib/groonga/expression-builder.rb', line 310 def initialize"
 "(column_value_builder, value) super(Groonga::Operation::LESS, "
-"column_value_builder, value) end Generated on Mon Jun 27 13:30:30 2011 by "
-"yard 0.7.2 (ruby-1.8.7)."
+"column_value_builder, value) end"
 msgstr ""
 
 #: doc/html/en/Groonga/ExpressionBuildable/StarExpressionBuilder.html:6(title)
@@ -34210,8 +33665,7 @@ msgid ""
 "(column_value_builder, value) A new instance of StarExpressionBuilder 346 "
 "347 348 # File 'lib/groonga/expression-builder.rb', line 346 def initialize"
 "(column_value_builder, value) super(Groonga::Operation::STAR, "
-"column_value_builder, value) end Generated on Mon Jun 27 13:30:37 2011 by "
-"yard 0.7.2 (ruby-1.8.7)."
+"column_value_builder, value) end"
 msgstr ""
 
 #: doc/html/en/Groonga/SchemaDumper/CommandSyntax.html:6(title)
@@ -34365,16 +33819,13 @@ msgstr ""
 #: doc/html/en/top-level-namespace.html:17(script)
 #: doc/html/en/file.tutorial.html:17(script) doc/html/en/index.html:17(script)
 #: doc/html/en/_index.html:15(script) doc/html/en/file.news.html:17(script)
-#: doc/html/en/Groonga.html:17(script)
-#: doc/html/en/file.news.ja.html:17(script)
-#: doc/html/en/file.README.html:17(script)
+#: doc/html/en/Groonga.html:17(script) doc/html/en/file.README.html:17(script)
 msgid "relpath = ''; if (relpath != '') relpath += '/';"
 msgstr ""
 
 #: doc/html/en/top-level-namespace.html:36(a)
 #: doc/html/en/file.tutorial.html:36(a) doc/html/en/index.html:36(a)
-#: doc/html/en/file.news.html:36(a) doc/html/en/file.news.ja.html:36(a)
-#: doc/html/en/file.README.html:36(a)
+#: doc/html/en/file.news.html:36(a) doc/html/en/file.README.html:36(a)
 msgid "Index"
 msgstr "索引"
 
@@ -34813,7 +34264,6 @@ msgstr ""
 
 #: doc/html/en/file.tutorial.html:234(code)
 #: doc/html/en/file.news.html:241(span)
-#: doc/html/en/file.news.ja.html:237(span)
 msgid "content"
 msgstr ""
 
@@ -35142,12 +34592,6 @@ msgstr ""
 msgid "これで目的の結果が得られました。"
 msgstr ""
 
-#: doc/html/en/file.tutorial.html:424(div) doc/html/en/index.html:120(div)
-#: doc/html/en/_index.html:1472(div) doc/html/en/file.README.html:120(div)
-msgid ""
-"Generated on Mon Jun 27 13:30:26 2011 by <placeholder-1/> 0.7.2 (ruby-1.8.7)."
-msgstr ""
-
 #: doc/html/en/method_list.html:21(script)
 #: doc/html/en/class_list.html:21(script)
 #: doc/html/en/file_list.html:21(script)
@@ -35178,9 +34622,9 @@ msgstr ""
 
 #: doc/html/en/method_list.html:60(span)
 msgid ""
-"# Groonga::ExpressionBuildable::ExpressionBuilder # Groonga::"
-"ExpressionBuildable #* Groonga::ColumnExpressionBuilder #* Groonga::"
-"ExpressionBuildable::ColumnValueExpressionBuilder #+ Groonga::"
+"# Groonga::ExpressionBuildable # Groonga::ExpressionBuildable::"
+"ExpressionBuilder #* Groonga::ExpressionBuildable::"
+"ColumnValueExpressionBuilder #* Groonga::ColumnExpressionBuilder #+ Groonga::"
 "ColumnExpressionBuilder #+ Groonga::ExpressionBuildable::"
 "ColumnValueExpressionBuilder #- Groonga::ColumnExpressionBuilder #- Groonga::"
 "ExpressionBuildable::ColumnValueExpressionBuilder #/ Groonga::"
@@ -35219,14 +34663,14 @@ msgid ""
 "          <placeholder-4/></div>\n"
 "      <placeholder-5/>\n"
 "\n"
-"      <placeholder-6/>= (method)\"&gt;#= Groonga::ColumnExpressionBuilder"
+"      <placeholder-6/>= (method)\"&gt;#= Groonga::ExpressionBuildable::"
+"ColumnValueExpressionBuilder"
 msgstr ""
 
 #: doc/html/en/method_list.html:20(body)
 msgid ""
 "<placeholder-1/>\n"
-"    <placeholder-2/>= (method)\"&gt;#= Groonga::ExpressionBuildable::"
-"ColumnValueExpressionBuilder"
+"    <placeholder-2/>= (method)\"&gt;#= Groonga::ColumnExpressionBuilder"
 msgstr ""
 
 #: doc/html/en/frames.html:7(title) doc/html/en/_index.html:6(title)
@@ -35474,228 +34918,224 @@ msgstr "ongaeshiさん: Windows上でgemをビルドするためのパッチを�
 
 #: doc/html/en/_index.html:57(h1)
 msgid "Alphabetic Index"
-msgstr ""
+msgstr "アルファベット順の索引"
 
 #: doc/html/en/_index.html:59(h2)
 msgid "File Listing"
-msgstr ""
+msgstr "ファイル一覧"
 
 #: doc/html/en/_index.html:66(a) doc/html/en/file_list.html:46(a)
 msgid "tutorial"
-msgstr ""
+msgstr "チュートリアル"
 
 #: doc/html/en/_index.html:69(a) doc/html/en/file_list.html:49(a)
 msgid "news"
 msgstr ""
 
-#: doc/html/en/_index.html:72(a) doc/html/en/file_list.html:52(a)
-msgid "news.ja"
-msgstr ""
-
-#: doc/html/en/_index.html:78(h2)
+#: doc/html/en/_index.html:75(h2)
 msgid "Namespace Listing A-Z"
-msgstr ""
+msgstr "アルファベット順ネームスペース一覧"
 
-#: doc/html/en/_index.html:89(li)
+#: doc/html/en/_index.html:86(li)
 msgid "A"
 msgstr ""
 
-#: doc/html/en/_index.html:95(small) doc/html/en/_index.html:102(small)
-#: doc/html/en/_index.html:109(small) doc/html/en/_index.html:123(small)
-#: doc/html/en/_index.html:130(small) doc/html/en/_index.html:137(small)
-#: doc/html/en/_index.html:159(small) doc/html/en/_index.html:166(small)
-#: doc/html/en/_index.html:187(small) doc/html/en/_index.html:202(small)
-#: doc/html/en/_index.html:209(small) doc/html/en/_index.html:230(small)
-#: doc/html/en/_index.html:265(small) doc/html/en/_index.html:272(small)
-#: doc/html/en/_index.html:287(small) doc/html/en/_index.html:294(small)
-#: doc/html/en/_index.html:301(small) doc/html/en/_index.html:308(small)
-#: doc/html/en/_index.html:330(small) doc/html/en/_index.html:337(small)
-#: doc/html/en/_index.html:344(small) doc/html/en/_index.html:365(small)
-#: doc/html/en/_index.html:372(small) doc/html/en/_index.html:379(small)
-#: doc/html/en/_index.html:386(small) doc/html/en/_index.html:408(small)
-#: doc/html/en/_index.html:415(small) doc/html/en/_index.html:422(small)
-#: doc/html/en/_index.html:429(small) doc/html/en/_index.html:436(small)
-#: doc/html/en/_index.html:443(small) doc/html/en/_index.html:488(small)
-#: doc/html/en/_index.html:495(small) doc/html/en/_index.html:510(small)
-#: doc/html/en/_index.html:517(small) doc/html/en/_index.html:524(small)
-#: doc/html/en/_index.html:531(small) doc/html/en/_index.html:538(small)
-#: doc/html/en/_index.html:552(small) doc/html/en/_index.html:559(small)
-#: doc/html/en/_index.html:566(small) doc/html/en/_index.html:573(small)
-#: doc/html/en/_index.html:580(small) doc/html/en/_index.html:587(small)
-#: doc/html/en/_index.html:594(small) doc/html/en/_index.html:631(small)
-#: doc/html/en/_index.html:652(small) doc/html/en/_index.html:688(small)
-#: doc/html/en/_index.html:717(small) doc/html/en/_index.html:724(small)
-#: doc/html/en/_index.html:731(small) doc/html/en/_index.html:738(small)
-#: doc/html/en/_index.html:745(small) doc/html/en/_index.html:752(small)
-#: doc/html/en/_index.html:759(small) doc/html/en/_index.html:766(small)
-#: doc/html/en/_index.html:773(small) doc/html/en/_index.html:780(small)
-#: doc/html/en/_index.html:787(small) doc/html/en/_index.html:794(small)
-#: doc/html/en/_index.html:801(small) doc/html/en/_index.html:808(small)
-#: doc/html/en/_index.html:823(small) doc/html/en/_index.html:830(small)
-#: doc/html/en/_index.html:837(small) doc/html/en/_index.html:844(small)
-#: doc/html/en/_index.html:851(small) doc/html/en/_index.html:858(small)
-#: doc/html/en/_index.html:865(small) doc/html/en/_index.html:872(small)
-#: doc/html/en/_index.html:894(small) doc/html/en/_index.html:908(small)
-#: doc/html/en/_index.html:915(small) doc/html/en/_index.html:922(small)
-#: doc/html/en/_index.html:929(small) doc/html/en/_index.html:943(small)
-#: doc/html/en/_index.html:957(small) doc/html/en/_index.html:975(small)
-#: doc/html/en/_index.html:990(small) doc/html/en/_index.html:997(small)
-#: doc/html/en/_index.html:1004(small) doc/html/en/_index.html:1011(small)
-#: doc/html/en/_index.html:1018(small) doc/html/en/_index.html:1025(small)
-#: doc/html/en/_index.html:1032(small) doc/html/en/_index.html:1039(small)
-#: doc/html/en/_index.html:1046(small) doc/html/en/_index.html:1068(small)
-#: doc/html/en/_index.html:1075(small) doc/html/en/_index.html:1110(small)
-#: doc/html/en/_index.html:1117(small) doc/html/en/_index.html:1124(small)
-#: doc/html/en/_index.html:1131(small) doc/html/en/_index.html:1138(small)
-#: doc/html/en/_index.html:1145(small) doc/html/en/_index.html:1173(small)
-#: doc/html/en/_index.html:1188(small) doc/html/en/_index.html:1202(small)
-#: doc/html/en/_index.html:1216(small) doc/html/en/_index.html:1237(small)
-#: doc/html/en/_index.html:1244(small) doc/html/en/_index.html:1251(small)
-#: doc/html/en/_index.html:1258(small) doc/html/en/_index.html:1265(small)
-#: doc/html/en/_index.html:1272(small) doc/html/en/_index.html:1279(small)
-#: doc/html/en/_index.html:1286(small) doc/html/en/_index.html:1293(small)
-#: doc/html/en/_index.html:1300(small) doc/html/en/_index.html:1307(small)
-#: doc/html/en/_index.html:1314(small) doc/html/en/_index.html:1336(small)
-#: doc/html/en/_index.html:1371(small) doc/html/en/_index.html:1378(small)
-#: doc/html/en/_index.html:1393(small) doc/html/en/_index.html:1400(small)
-#: doc/html/en/_index.html:1407(small) doc/html/en/_index.html:1414(small)
-#: doc/html/en/_index.html:1421(small) doc/html/en/_index.html:1435(small)
-#: doc/html/en/_index.html:1457(small)
+#: doc/html/en/_index.html:92(small) doc/html/en/_index.html:99(small)
+#: doc/html/en/_index.html:106(small) doc/html/en/_index.html:120(small)
+#: doc/html/en/_index.html:127(small) doc/html/en/_index.html:134(small)
+#: doc/html/en/_index.html:156(small) doc/html/en/_index.html:163(small)
+#: doc/html/en/_index.html:184(small) doc/html/en/_index.html:199(small)
+#: doc/html/en/_index.html:206(small) doc/html/en/_index.html:227(small)
+#: doc/html/en/_index.html:262(small) doc/html/en/_index.html:269(small)
+#: doc/html/en/_index.html:284(small) doc/html/en/_index.html:291(small)
+#: doc/html/en/_index.html:298(small) doc/html/en/_index.html:305(small)
+#: doc/html/en/_index.html:327(small) doc/html/en/_index.html:334(small)
+#: doc/html/en/_index.html:341(small) doc/html/en/_index.html:362(small)
+#: doc/html/en/_index.html:369(small) doc/html/en/_index.html:376(small)
+#: doc/html/en/_index.html:383(small) doc/html/en/_index.html:405(small)
+#: doc/html/en/_index.html:412(small) doc/html/en/_index.html:419(small)
+#: doc/html/en/_index.html:426(small) doc/html/en/_index.html:433(small)
+#: doc/html/en/_index.html:440(small) doc/html/en/_index.html:485(small)
+#: doc/html/en/_index.html:492(small) doc/html/en/_index.html:507(small)
+#: doc/html/en/_index.html:514(small) doc/html/en/_index.html:521(small)
+#: doc/html/en/_index.html:528(small) doc/html/en/_index.html:535(small)
+#: doc/html/en/_index.html:549(small) doc/html/en/_index.html:556(small)
+#: doc/html/en/_index.html:563(small) doc/html/en/_index.html:570(small)
+#: doc/html/en/_index.html:577(small) doc/html/en/_index.html:584(small)
+#: doc/html/en/_index.html:591(small) doc/html/en/_index.html:628(small)
+#: doc/html/en/_index.html:649(small) doc/html/en/_index.html:685(small)
+#: doc/html/en/_index.html:714(small) doc/html/en/_index.html:721(small)
+#: doc/html/en/_index.html:728(small) doc/html/en/_index.html:735(small)
+#: doc/html/en/_index.html:742(small) doc/html/en/_index.html:749(small)
+#: doc/html/en/_index.html:756(small) doc/html/en/_index.html:763(small)
+#: doc/html/en/_index.html:770(small) doc/html/en/_index.html:777(small)
+#: doc/html/en/_index.html:784(small) doc/html/en/_index.html:791(small)
+#: doc/html/en/_index.html:798(small) doc/html/en/_index.html:805(small)
+#: doc/html/en/_index.html:820(small) doc/html/en/_index.html:827(small)
+#: doc/html/en/_index.html:834(small) doc/html/en/_index.html:841(small)
+#: doc/html/en/_index.html:848(small) doc/html/en/_index.html:855(small)
+#: doc/html/en/_index.html:862(small) doc/html/en/_index.html:869(small)
+#: doc/html/en/_index.html:891(small) doc/html/en/_index.html:905(small)
+#: doc/html/en/_index.html:912(small) doc/html/en/_index.html:919(small)
+#: doc/html/en/_index.html:926(small) doc/html/en/_index.html:940(small)
+#: doc/html/en/_index.html:954(small) doc/html/en/_index.html:972(small)
+#: doc/html/en/_index.html:987(small) doc/html/en/_index.html:994(small)
+#: doc/html/en/_index.html:1001(small) doc/html/en/_index.html:1008(small)
+#: doc/html/en/_index.html:1015(small) doc/html/en/_index.html:1022(small)
+#: doc/html/en/_index.html:1029(small) doc/html/en/_index.html:1036(small)
+#: doc/html/en/_index.html:1043(small) doc/html/en/_index.html:1065(small)
+#: doc/html/en/_index.html:1072(small) doc/html/en/_index.html:1107(small)
+#: doc/html/en/_index.html:1114(small) doc/html/en/_index.html:1121(small)
+#: doc/html/en/_index.html:1128(small) doc/html/en/_index.html:1135(small)
+#: doc/html/en/_index.html:1142(small) doc/html/en/_index.html:1170(small)
+#: doc/html/en/_index.html:1185(small) doc/html/en/_index.html:1199(small)
+#: doc/html/en/_index.html:1213(small) doc/html/en/_index.html:1234(small)
+#: doc/html/en/_index.html:1241(small) doc/html/en/_index.html:1248(small)
+#: doc/html/en/_index.html:1255(small) doc/html/en/_index.html:1262(small)
+#: doc/html/en/_index.html:1269(small) doc/html/en/_index.html:1276(small)
+#: doc/html/en/_index.html:1283(small) doc/html/en/_index.html:1290(small)
+#: doc/html/en/_index.html:1297(small) doc/html/en/_index.html:1304(small)
+#: doc/html/en/_index.html:1311(small) doc/html/en/_index.html:1333(small)
+#: doc/html/en/_index.html:1368(small) doc/html/en/_index.html:1375(small)
+#: doc/html/en/_index.html:1390(small) doc/html/en/_index.html:1397(small)
+#: doc/html/en/_index.html:1404(small) doc/html/en/_index.html:1411(small)
+#: doc/html/en/_index.html:1418(small) doc/html/en/_index.html:1432(small)
+#: doc/html/en/_index.html:1454(small)
 msgid "(Groonga)"
 msgstr ""
 
-#: doc/html/en/_index.html:116(small) doc/html/en/_index.html:180(small)
-#: doc/html/en/_index.html:251(small) doc/html/en/_index.html:351(small)
-#: doc/html/en/_index.html:393(small) doc/html/en/_index.html:458(small)
-#: doc/html/en/_index.html:465(small) doc/html/en/_index.html:638(small)
-#: doc/html/en/_index.html:645(small) doc/html/en/_index.html:667(small)
-#: doc/html/en/_index.html:674(small) doc/html/en/_index.html:681(small)
-#: doc/html/en/_index.html:695(small) doc/html/en/_index.html:702(small)
-#: doc/html/en/_index.html:879(small) doc/html/en/_index.html:936(small)
-#: doc/html/en/_index.html:950(small) doc/html/en/_index.html:1096(small)
-#: doc/html/en/_index.html:1103(small) doc/html/en/_index.html:1152(small)
-#: doc/html/en/_index.html:1159(small) doc/html/en/_index.html:1166(small)
+#: doc/html/en/_index.html:113(small) doc/html/en/_index.html:177(small)
+#: doc/html/en/_index.html:248(small) doc/html/en/_index.html:348(small)
+#: doc/html/en/_index.html:390(small) doc/html/en/_index.html:455(small)
+#: doc/html/en/_index.html:462(small) doc/html/en/_index.html:635(small)
+#: doc/html/en/_index.html:642(small) doc/html/en/_index.html:664(small)
+#: doc/html/en/_index.html:671(small) doc/html/en/_index.html:678(small)
+#: doc/html/en/_index.html:692(small) doc/html/en/_index.html:699(small)
+#: doc/html/en/_index.html:876(small) doc/html/en/_index.html:933(small)
+#: doc/html/en/_index.html:947(small) doc/html/en/_index.html:1093(small)
+#: doc/html/en/_index.html:1100(small) doc/html/en/_index.html:1149(small)
+#: doc/html/en/_index.html:1156(small) doc/html/en/_index.html:1163(small)
 msgid "(Groonga::ExpressionBuildable)"
 msgstr ""
 
-#: doc/html/en/_index.html:144(small)
+#: doc/html/en/_index.html:141(small)
 msgid "(Groonga::Record)"
 msgstr ""
 
-#: doc/html/en/_index.html:153(li)
+#: doc/html/en/_index.html:150(li)
 msgid "B"
 msgstr ""
 
-#: doc/html/en/_index.html:173(small) doc/html/en/_index.html:258(small)
-#: doc/html/en/_index.html:1053(small)
+#: doc/html/en/_index.html:170(small) doc/html/en/_index.html:255(small)
+#: doc/html/en/_index.html:1050(small)
 msgid "(Groonga::SchemaDumper)"
 msgstr ""
 
-#: doc/html/en/_index.html:196(li)
+#: doc/html/en/_index.html:193(li)
 msgid "C"
 msgstr ""
 
-#: doc/html/en/_index.html:216(small) doc/html/en/_index.html:223(small)
-#: doc/html/en/_index.html:237(small) doc/html/en/_index.html:244(small)
-#: doc/html/en/_index.html:358(small) doc/html/en/_index.html:545(small)
-#: doc/html/en/_index.html:901(small) doc/html/en/_index.html:1195(small)
-#: doc/html/en/_index.html:1209(small) doc/html/en/_index.html:1223(small)
-#: doc/html/en/_index.html:1230(small) doc/html/en/_index.html:1329(small)
-#: doc/html/en/_index.html:1343(small) doc/html/en/_index.html:1350(small)
-#: doc/html/en/_index.html:1357(small) doc/html/en/_index.html:1364(small)
-#: doc/html/en/_index.html:1428(small) doc/html/en/_index.html:1442(small)
+#: doc/html/en/_index.html:213(small) doc/html/en/_index.html:220(small)
+#: doc/html/en/_index.html:234(small) doc/html/en/_index.html:241(small)
+#: doc/html/en/_index.html:355(small) doc/html/en/_index.html:542(small)
+#: doc/html/en/_index.html:898(small) doc/html/en/_index.html:1192(small)
+#: doc/html/en/_index.html:1206(small) doc/html/en/_index.html:1220(small)
+#: doc/html/en/_index.html:1227(small) doc/html/en/_index.html:1326(small)
+#: doc/html/en/_index.html:1340(small) doc/html/en/_index.html:1347(small)
+#: doc/html/en/_index.html:1354(small) doc/html/en/_index.html:1361(small)
+#: doc/html/en/_index.html:1425(small) doc/html/en/_index.html:1439(small)
 msgid "(Groonga::Schema)"
 msgstr ""
 
-#: doc/html/en/_index.html:281(li)
+#: doc/html/en/_index.html:278(li)
 msgid "D"
 msgstr ""
 
-#: doc/html/en/_index.html:315(small)
+#: doc/html/en/_index.html:312(small)
 msgid "(Groonga::Context::SelectResult)"
 msgstr ""
 
-#: doc/html/en/_index.html:324(li)
+#: doc/html/en/_index.html:321(li)
 msgid "E"
 msgstr ""
 
-#: doc/html/en/_index.html:402(li)
+#: doc/html/en/_index.html:399(li)
 msgid "F"
 msgstr ""
 
-#: doc/html/en/_index.html:452(li)
+#: doc/html/en/_index.html:449(li)
 msgid "G"
 msgstr ""
 
-#: doc/html/en/_index.html:482(li)
+#: doc/html/en/_index.html:479(li)
 msgid "H"
 msgstr ""
 
-#: doc/html/en/_index.html:504(li)
+#: doc/html/en/_index.html:501(li)
 msgid "I"
 msgstr ""
 
-#: doc/html/en/_index.html:603(li)
+#: doc/html/en/_index.html:600(li)
 msgid "K"
 msgstr ""
 
-#: doc/html/en/_index.html:609(small)
-msgid "(Groonga::TableCursor)"
-msgstr ""
-
-#: doc/html/en/_index.html:616(small)
+#: doc/html/en/_index.html:606(small)
 msgid "(Groonga::Table)"
 msgstr ""
 
-#: doc/html/en/_index.html:625(li)
+#: doc/html/en/_index.html:613(small)
+msgid "(Groonga::TableCursor)"
+msgstr ""
+
+#: doc/html/en/_index.html:622(li)
 msgid "L"
 msgstr ""
 
-#: doc/html/en/_index.html:661(li)
+#: doc/html/en/_index.html:658(li)
 msgid "M"
 msgstr ""
 
-#: doc/html/en/_index.html:711(li)
+#: doc/html/en/_index.html:708(li)
 msgid "N"
 msgstr ""
 
-#: doc/html/en/_index.html:817(li)
+#: doc/html/en/_index.html:814(li)
 msgid "O"
 msgstr ""
 
-#: doc/html/en/_index.html:888(li)
+#: doc/html/en/_index.html:885(li)
 msgid "P"
 msgstr ""
 
-#: doc/html/en/_index.html:969(li)
+#: doc/html/en/_index.html:966(li)
 msgid "Q"
 msgstr ""
 
-#: doc/html/en/_index.html:984(li)
+#: doc/html/en/_index.html:981(li)
 msgid "R"
 msgstr ""
 
-#: doc/html/en/_index.html:1062(li)
+#: doc/html/en/_index.html:1059(li)
 msgid "S"
 msgstr ""
 
-#: doc/html/en/_index.html:1082(small) doc/html/en/_index.html:1089(small)
+#: doc/html/en/_index.html:1079(small) doc/html/en/_index.html:1086(small)
 msgid "(Groonga::Context)"
 msgstr ""
 
-#: doc/html/en/_index.html:1182(li)
+#: doc/html/en/_index.html:1179(li)
 msgid "T"
 msgstr ""
 
-#: doc/html/en/_index.html:1323(li)
+#: doc/html/en/_index.html:1320(li)
 msgid "U"
 msgstr ""
 
-#: doc/html/en/_index.html:1387(li)
+#: doc/html/en/_index.html:1384(li)
 msgid "V"
 msgstr ""
 
-#: doc/html/en/_index.html:1451(li)
+#: doc/html/en/_index.html:1448(li)
 msgid "Z"
 msgstr ""
 
@@ -35711,7 +35151,7 @@ msgstr "ファイル: お知らせ"
 msgid "NEWS"
 msgstr "お知らせ"
 
-#: doc/html/en/file.news.html:58(h2) doc/html/en/file.news.ja.html:58(h2)
+#: doc/html/en/file.news.html:58(h2)
 msgid "1.2.2: 2011-06-27"
 msgstr ""
 
@@ -35775,11 +35215,11 @@ msgstr ""
 msgid "follow the groonga downlowd URL change. [mallowlabs]"
 msgstr "新しいgroongaのダウンロードURLに対応。 [mallowlabs]"
 
-#: doc/html/en/file.news.html:99(li) doc/html/en/file.news.ja.html:97(li)
+#: doc/html/en/file.news.html:99(li)
 msgid "mallowlabs"
 msgstr "mallowlabsさん"
 
-#: doc/html/en/file.news.html:103(h2) doc/html/en/file.news.ja.html:101(h2)
+#: doc/html/en/file.news.html:103(h2)
 msgid "1.2.1: 2011-06-07"
 msgstr ""
 
@@ -35855,7 +35295,7 @@ msgstr "moozさん"
 msgid "yoshihara"
 msgstr "yoshiharaさん"
 
-#: doc/html/en/file.news.html:163(h2) doc/html/en/file.news.ja.html:160(h2)
+#: doc/html/en/file.news.html:163(h2)
 msgid "1.2.0: 2011-04-01"
 msgstr ""
 
@@ -35907,9 +35347,11 @@ msgstr "エラーメッセージの改良。"
 msgid ""
 "Supported Rubyish name like :short_text instead of the official type name "
 "like \"ShortText\" in Groonga::Schema."
-msgstr "Groonga::Schemaの型指定で\"ShortText\"など正式型名だけではなく、:short_textなどよりRubyらしい名前を使えるようにした。"
+msgstr ""
+"Groonga::Schemaの型指定で\"ShortText\"など正式型名だけではなく、:short_textな"
+"どよりRubyらしい名前を使えるようにした。"
 
-#: doc/html/en/file.news.html:204(h2) doc/html/en/file.news.ja.html:201(h2)
+#: doc/html/en/file.news.html:204(h2)
 msgid "1.1.0: 2011-02-09"
 msgstr ""
 
@@ -35921,7 +35363,7 @@ msgstr "groonga 1.1.0対応。"
 msgid "Added Groonga::Plugin.register."
 msgstr "Groonga::Plugin.registerを追加。"
 
-#: doc/html/en/file.news.html:214(h2) doc/html/en/file.news.ja.html:211(h2)
+#: doc/html/en/file.news.html:214(h2)
 msgid "1.0.9: 2011-01-29"
 msgstr ""
 
@@ -35951,39 +35393,27 @@ msgstr "Groonga::Column#indexesを追加。"
 
 #: doc/html/en/file.news.html:238(span) doc/html/en/file.news.html:538(span)
 #: doc/html/en/file.news.html:550(span) doc/html/en/file.news.html:556(span)
-#: doc/html/en/file.news.ja.html:234(span)
-#: doc/html/en/file.news.ja.html:537(span)
-#: doc/html/en/file.news.ja.html:549(span)
-#: doc/html/en/file.news.ja.html:555(span)
 msgid "\"query\""
 msgstr ""
 
 #: doc/html/en/file.news.html:238(span) doc/html/en/file.news.html:239(span)
 #: doc/html/en/file.news.html:240(span) doc/html/en/file.news.html:241(span)
-#: doc/html/en/file.news.ja.html:234(span)
-#: doc/html/en/file.news.ja.html:235(span)
-#: doc/html/en/file.news.ja.html:236(span)
-#: doc/html/en/file.news.ja.html:237(span)
 msgid "match_record"
 msgstr ""
 
 #: doc/html/en/file.news.html:239(span)
-#: doc/html/en/file.news.ja.html:235(span)
 msgid "\"Terms.title\""
 msgstr ""
 
 #: doc/html/en/file.news.html:239(span)
-#: doc/html/en/file.news.ja.html:235(span)
 msgid "1000"
 msgstr ""
 
 #: doc/html/en/file.news.html:240(span)
-#: doc/html/en/file.news.ja.html:236(span)
 msgid "\"Terms.description\""
 msgstr ""
 
 #: doc/html/en/file.news.html:240(span)
-#: doc/html/en/file.news.ja.html:236(span)
 msgid "100"
 msgstr ""
 
@@ -36008,7 +35438,6 @@ msgid ""
 msgstr ""
 
 #: doc/html/en/file.news.html:250(span)
-#: doc/html/en/file.news.ja.html:246(span)
 msgid "\"groo\""
 msgstr ""
 
@@ -36023,7 +35452,6 @@ msgid ""
 msgstr ""
 
 #: doc/html/en/file.news.html:258(span)
-#: doc/html/en/file.news.ja.html:254(span)
 msgid "\"nga\""
 msgstr ""
 
@@ -36077,7 +35505,7 @@ msgstr "例外発生時にクラッシュする問題を修正。"
 msgid "ongaeshi"
 msgstr "ongaeshiさん"
 
-#: doc/html/en/file.news.html:298(h2) doc/html/en/file.news.ja.html:294(h2)
+#: doc/html/en/file.news.html:298(h2)
 msgid "1.0.8: 2010-12-25"
 msgstr ""
 
@@ -36091,7 +35519,7 @@ msgstr ""
 "selectでmatch_targetを利用した場合に生きているオブジェクトもGCされる問題を修"
 "正。"
 
-#: doc/html/en/file.news.html:311(h2) doc/html/en/file.news.ja.html:308(h2)
+#: doc/html/en/file.news.html:311(h2)
 msgid "1.0.7: 2010-12-19"
 msgstr ""
 
@@ -36110,7 +35538,7 @@ msgstr "Groonga::Table#columnsのメモリリークを修正。"
 msgid "@kamipo"
 msgstr "@kamipoさん"
 
-#: doc/html/en/file.news.html:328(h2) doc/html/en/file.news.ja.html:326(h2)
+#: doc/html/en/file.news.html:328(h2)
 msgid "1.0.5: 2010-11-29"
 msgstr ""
 
@@ -36126,7 +35554,7 @@ msgstr ""
 msgid "Fixed a crash bug on GC. [Ryo Onodera]"
 msgstr "GC時にクラッシュするバグを修正。 [Ryo Onodera]"
 
-#: doc/html/en/file.news.html:342(h2) doc/html/en/file.news.ja.html:341(h2)
+#: doc/html/en/file.news.html:342(h2)
 msgid "1.0.4: 2010-11-29"
 msgstr ""
 
@@ -36318,7 +35746,7 @@ msgstr "keyにインデックスを張れない問題を修正。"
 msgid "Fixed a crash problem on GC."
 msgstr "GC時にクラッシュする問題を修正。"
 
-#: doc/html/en/file.news.html:480(h2) doc/html/en/file.news.ja.html:478(h2)
+#: doc/html/en/file.news.html:480(h2)
 msgid "1.0.1: 2010-09-12"
 msgstr ""
 
@@ -36331,7 +35759,7 @@ msgstr ""
 msgid "ono matope"
 msgstr "小野マトペさん"
 
-#: doc/html/en/file.news.html:493(h2) doc/html/en/file.news.ja.html:492(h2)
+#: doc/html/en/file.news.html:493(h2)
 msgid "1.0.0: 2010-08-29"
 msgstr ""
 
@@ -36402,7 +35830,6 @@ msgstr ""
 "例:"
 
 #: doc/html/en/file.news.html:538(span)
-#: doc/html/en/file.news.ja.html:537(span)
 msgid "source"
 msgstr ""
 
@@ -36424,28 +35851,18 @@ msgstr "以下は同じ条件になる:"
 
 #: doc/html/en/file.news.html:549(span) doc/html/en/file.news.html:550(span)
 #: doc/html/en/file.news.html:551(span) doc/html/en/file.news.html:552(span)
-#: doc/html/en/file.news.ja.html:548(span)
-#: doc/html/en/file.news.ja.html:549(span)
-#: doc/html/en/file.news.ja.html:550(span)
-#: doc/html/en/file.news.ja.html:551(span)
 msgid "conditions"
 msgstr ""
 
 #: doc/html/en/file.news.html:551(span) doc/html/en/file.news.html:557(span)
-#: doc/html/en/file.news.ja.html:550(span)
-#: doc/html/en/file.news.ja.html:556(span)
 msgid "updated_at"
 msgstr ""
 
 #: doc/html/en/file.news.html:551(span) doc/html/en/file.news.html:557(span)
-#: doc/html/en/file.news.ja.html:550(span)
-#: doc/html/en/file.news.ja.html:556(span)
 msgid "Time"
 msgstr ""
 
 #: doc/html/en/file.news.html:551(span) doc/html/en/file.news.html:557(span)
-#: doc/html/en/file.news.ja.html:550(span)
-#: doc/html/en/file.news.ja.html:556(span)
 msgid "\"2010-07-29T21:14:29+09:00\""
 msgstr ""
 
@@ -36493,7 +35910,7 @@ msgstr "Groonga::Table#support_sub_records?追加"
 msgid "Supported pagination: Groonga::Table#paginate, Groonga::Pagination"
 msgstr "ページネーション対応: Groonga::Table#paginate, Groonga::Pagination"
 
-#: doc/html/en/file.news.html:573(h2) doc/html/en/file.news.ja.html:573(h2)
+#: doc/html/en/file.news.html:573(h2)
 msgid "0.9.4: 2010-04-22"
 msgstr ""
 
@@ -36501,11 +35918,11 @@ msgstr ""
 msgid "Fixed release miss."
 msgstr "リリースミス修正。"
 
-#: doc/html/en/file.news.html:579(h2) doc/html/en/file.news.ja.html:579(h2)
+#: doc/html/en/file.news.html:579(h2)
 msgid "0.9.3: 2010-04-22"
 msgstr ""
 
-#: doc/html/en/file.news.html:585(h2) doc/html/en/file.news.ja.html:585(h2)
+#: doc/html/en/file.news.html:585(h2)
 msgid "0.9.2: 2010-04-22"
 msgstr ""
 
@@ -36517,7 +35934,7 @@ msgstr "groonga 0.1.9対応。"
 msgid "Many."
 msgstr "たくさん。"
 
-#: doc/html/en/file.news.html:594(h2) doc/html/en/file.news.ja.html:594(h2)
+#: doc/html/en/file.news.html:594(h2)
 msgid "0.9.1: 2010-02-09"
 msgstr ""
 
@@ -36525,7 +35942,7 @@ msgstr ""
 msgid "Supported groonga 0.1.6"
 msgstr "groonga 0.1.6対応"
 
-#: doc/html/en/file.news.html:600(h2) doc/html/en/file.news.ja.html:600(h2)
+#: doc/html/en/file.news.html:600(h2)
 msgid "0.9.0: 2010-02-09"
 msgstr ""
 
@@ -36533,59 +35950,59 @@ msgstr ""
 msgid "Supported groonga 0.1.5"
 msgstr "groonga 0.1.5対応"
 
-#: doc/html/en/file.news.html:608(li) doc/html/en/file.news.ja.html:608(li)
+#: doc/html/en/file.news.html:608(li)
 msgid "Groonga::Object#context"
 msgstr ""
 
-#: doc/html/en/file.news.html:611(li) doc/html/en/file.news.ja.html:611(li)
+#: doc/html/en/file.news.html:611(li)
 msgid "Groonga::Record#n_sub_records"
 msgstr ""
 
-#: doc/html/en/file.news.html:614(li) doc/html/en/file.news.ja.html:614(li)
+#: doc/html/en/file.news.html:614(li)
 msgid "Groonga::Context#send"
 msgstr ""
 
-#: doc/html/en/file.news.html:617(li) doc/html/en/file.news.ja.html:617(li)
+#: doc/html/en/file.news.html:617(li)
 msgid "Groonga::Context#receive"
 msgstr ""
 
-#: doc/html/en/file.news.html:620(li) doc/html/en/file.news.ja.html:620(li)
+#: doc/html/en/file.news.html:620(li)
 msgid "Groonga::PatriciaTrie#prefix_search [Tasuku SUENAGA]"
 msgstr ""
 
-#: doc/html/en/file.news.html:623(li) doc/html/en/file.news.ja.html:623(li)
+#: doc/html/en/file.news.html:623(li)
 msgid "Groonga::Object#path [Ryo Onodera]"
 msgstr ""
 
-#: doc/html/en/file.news.html:626(li) doc/html/en/file.news.ja.html:626(li)
+#: doc/html/en/file.news.html:626(li)
 msgid "Groonga::Object#lock [Tasuku SUENAGA]"
 msgstr ""
 
-#: doc/html/en/file.news.html:629(li) doc/html/en/file.news.ja.html:629(li)
+#: doc/html/en/file.news.html:629(li)
 msgid "Groonga::Object#unlock [Tasuku SUENAGA]"
 msgstr ""
 
-#: doc/html/en/file.news.html:632(li) doc/html/en/file.news.ja.html:632(li)
+#: doc/html/en/file.news.html:632(li)
 msgid "Groonga::Object#locked? [Tasuku SUENAGA]"
 msgstr ""
 
-#: doc/html/en/file.news.html:635(li) doc/html/en/file.news.ja.html:635(li)
+#: doc/html/en/file.news.html:635(li)
 msgid "Groonga::Object#temporary?"
 msgstr ""
 
-#: doc/html/en/file.news.html:638(li) doc/html/en/file.news.ja.html:638(li)
+#: doc/html/en/file.news.html:638(li)
 msgid "Groonga::Object#persistent?"
 msgstr ""
 
-#: doc/html/en/file.news.html:644(li) doc/html/en/file.news.ja.html:644(li)
+#: doc/html/en/file.news.html:644(li)
 msgid "Groonga::Context.[]"
 msgstr ""
 
-#: doc/html/en/file.news.html:647(li) doc/html/en/file.news.ja.html:647(li)
+#: doc/html/en/file.news.html:647(li)
 msgid "Groonga::Table#column_value"
 msgstr ""
 
-#: doc/html/en/file.news.html:650(li) doc/html/en/file.news.ja.html:650(li)
+#: doc/html/en/file.news.html:650(li)
 msgid "Groonga::Table#set_column_value"
 msgstr ""
 
@@ -36616,7 +36033,7 @@ msgstr "Groonga::Expressionも受け付けるようになった"
 msgid "Added :syntax option that specifies grn expression syntax"
 msgstr "grn式のシンタックスを指定する:syntaxオプションの追加"
 
-#: doc/html/en/file.news.html:658(li) doc/html/en/file.news.ja.html:658(li)
+#: doc/html/en/file.news.html:658(li)
 msgid ""
 "Groonga::Table#select, Groonga::Column#select <ul><placeholder-1/>\n"
 "<placeholder-2/></ul>"
@@ -36630,13 +36047,13 @@ msgstr "開始位置を指定する:offsetオプションの追加"
 msgid "Added :limit option that specifies max number of records."
 msgstr "最大レコード数を指定する:limitオプションの追加"
 
-#: doc/html/en/file.news.html:669(li) doc/html/en/file.news.ja.html:669(li)
+#: doc/html/en/file.news.html:669(li)
 msgid ""
 "Groonga::Table#open_cursor <ul><placeholder-1/>\n"
 "<placeholder-2/></ul>"
 msgstr ""
 
-#: doc/html/en/file.news.html:683(li) doc/html/en/file.news.ja.html:683(li)
+#: doc/html/en/file.news.html:683(li)
 msgid "(nil (default) -&gt; :column) -&gt; (nil (default) -&gt; :query)"
 msgstr ""
 
@@ -36644,19 +36061,19 @@ msgstr ""
 msgid ":column -&gt; removed"
 msgstr ":column -&gt; 廃止"
 
-#: doc/html/en/file.news.html:689(li) doc/html/en/file.news.ja.html:689(li)
+#: doc/html/en/file.news.html:689(li)
 msgid ":table -&gt; :query"
 msgstr ""
 
-#: doc/html/en/file.news.html:692(li) doc/html/en/file.news.ja.html:692(li)
+#: doc/html/en/file.news.html:692(li)
 msgid ":table_query -&gt; :query"
 msgstr ""
 
-#: doc/html/en/file.news.html:695(li) doc/html/en/file.news.ja.html:695(li)
+#: doc/html/en/file.news.html:695(li)
 msgid ":expression -&gt; :script"
 msgstr ""
 
-#: doc/html/en/file.news.html:698(li) doc/html/en/file.news.ja.html:698(li)
+#: doc/html/en/file.news.html:698(li)
 msgid ":language -&gt; :script"
 msgstr ""
 
@@ -36674,7 +36091,7 @@ msgstr ""
 msgid "Defined column becomes persistent table by default"
 msgstr "永続テーブルをデフォルトにした"
 
-#: doc/html/en/file.news.html:703(li) doc/html/en/file.news.ja.html:703(li)
+#: doc/html/en/file.news.html:703(li)
 msgid ""
 "Groonga::Table#define_column, Groonga::Table#define_index_column "
 "<ul><placeholder-1/></ul>"
@@ -36755,19 +36172,19 @@ msgstr "extconf.rbにデバッグモードでビルドする--with-debugオプ�
 msgid "Fixed a bug that Ruby 1.9.1 may fail extconf.rb."
 msgstr "Ruby 1.9.1でextconf.rbが失敗する問題の修正"
 
-#: doc/html/en/file.news.html:757(li) doc/html/en/file.news.ja.html:757(li)
+#: doc/html/en/file.news.html:757(li)
 msgid "dara"
 msgstr "daraさん"
 
-#: doc/html/en/file.news.html:760(li) doc/html/en/file.news.ja.html:760(li)
+#: doc/html/en/file.news.html:760(li)
 msgid "Ryo Onodera"
 msgstr "Ryo Onoderaさん"
 
-#: doc/html/en/file.news.html:763(li) doc/html/en/file.news.ja.html:763(li)
+#: doc/html/en/file.news.html:763(li)
 msgid "Tasuku SUENAGA"
 msgstr "Tasuku SUENAGAさん"
 
-#: doc/html/en/file.news.html:767(h2) doc/html/en/file.news.ja.html:767(h2)
+#: doc/html/en/file.news.html:767(h2)
 msgid "0.0.7: 2009-10-02"
 msgstr ""
 
@@ -36775,23 +36192,23 @@ msgstr ""
 msgid "Supported groonga 0.1.4"
 msgstr "groonga 0.1.4対応"
 
-#: doc/html/en/file.news.html:775(li) doc/html/en/file.news.ja.html:775(li)
+#: doc/html/en/file.news.html:775(li)
 msgid "Groonga::PatriciaTrie#scan"
 msgstr ""
 
-#: doc/html/en/file.news.html:778(li) doc/html/en/file.news.ja.html:778(li)
+#: doc/html/en/file.news.html:778(li)
 msgid "Groonga::PatriciaTrie#tag_keys"
 msgstr ""
 
-#: doc/html/en/file.news.html:781(li) doc/html/en/file.news.ja.html:781(li)
+#: doc/html/en/file.news.html:781(li)
 msgid "Groonga::Expression#snippet"
 msgstr ""
 
-#: doc/html/en/file.news.html:784(li) doc/html/en/file.news.ja.html:784(li)
+#: doc/html/en/file.news.html:784(li)
 msgid "Groonga::Object#append"
 msgstr ""
 
-#: doc/html/en/file.news.html:787(li) doc/html/en/file.news.ja.html:787(li)
+#: doc/html/en/file.news.html:787(li)
 msgid "Groonga::Object#prepend"
 msgstr ""
 
@@ -36804,7 +36221,7 @@ msgid ""
 "<placeholder-5/></ul>"
 msgstr ""
 
-#: doc/html/en/file.news.html:793(h2) doc/html/en/file.news.ja.html:793(h2)
+#: doc/html/en/file.news.html:793(h2)
 msgid "0.0.6: 2009-07-31"
 msgstr ""
 
@@ -36820,19 +36237,19 @@ msgstr "ドキュメントの修正 [id:mat_aki]"
 msgid "Supported groonga expression for searching."
 msgstr "Groonga::Table#selectでのgrn式対応"
 
-#: doc/html/en/file.news.html:807(li) doc/html/en/file.news.ja.html:807(li)
+#: doc/html/en/file.news.html:807(li)
 msgid "Groonga::Table#union!"
 msgstr ""
 
-#: doc/html/en/file.news.html:810(li) doc/html/en/file.news.ja.html:810(li)
+#: doc/html/en/file.news.html:810(li)
 msgid "Groonga::Table#intersect!"
 msgstr ""
 
-#: doc/html/en/file.news.html:813(li) doc/html/en/file.news.ja.html:813(li)
+#: doc/html/en/file.news.html:813(li)
 msgid "Groonga::Table#differene!"
 msgstr ""
 
-#: doc/html/en/file.news.html:816(li) doc/html/en/file.news.ja.html:816(li)
+#: doc/html/en/file.news.html:816(li)
 msgid "Groonga::Table#merge!"
 msgstr ""
 
@@ -36856,7 +36273,7 @@ msgstr "tar.gzも提供 [id:m_seki]"
 msgid "Fixed memory leaks"
 msgstr "メモリリークの修正"
 
-#: doc/html/en/file.news.html:828(h2) doc/html/en/file.news.ja.html:828(h2)
+#: doc/html/en/file.news.html:828(h2)
 msgid "0.0.3: 2009-07-18"
 msgstr ""
 
@@ -36868,7 +36285,9 @@ msgstr "Groonga::TableKeySupport#has_key?の追加 [#26145] [Tasuku SUENAGA]"
 msgid ""
 "Groonga::Record#[] raises an exception for nonexistent column name. [#26146] "
 "[Tasuku SUENAGA]"
-msgstr "カラム名が存在しない場合はGroonga::Record#[]が例外をあげるように変更。 [#26146] [Tasuku SUENAGA]"
+msgstr ""
+"カラム名が存在しない場合はGroonga::Record#[]が例外をあげるように変更。 "
+"[#26146] [Tasuku SUENAGA]"
 
 #: doc/html/en/file.news.html:837(li)
 msgid "Supported 32bit environment [niku]"
@@ -36878,19 +36297,19 @@ msgstr "32ビット環境をサポート [niku]"
 msgid "Added a test for N-gram index search [dara]"
 msgstr "N-gramインデックスサーチのテストを追加 [dara]"
 
-#: doc/html/en/file.news.html:846(li) doc/html/en/file.news.ja.html:846(li)
+#: doc/html/en/file.news.html:846(li)
 msgid "Groonga::Record#incemrent!"
 msgstr ""
 
-#: doc/html/en/file.news.html:849(li) doc/html/en/file.news.ja.html:849(li)
+#: doc/html/en/file.news.html:849(li)
 msgid "Groonga::Record#decemrent!"
 msgstr ""
 
-#: doc/html/en/file.news.html:852(li) doc/html/en/file.news.ja.html:852(li)
+#: doc/html/en/file.news.html:852(li)
 msgid "Groonga::Record#lock"
 msgstr ""
 
-#: doc/html/en/file.news.html:855(li) doc/html/en/file.news.ja.html:855(li)
+#: doc/html/en/file.news.html:855(li)
 msgid "Groonga::Table#lock"
 msgstr ""
 
@@ -36908,7 +36327,7 @@ msgid ""
 "<placeholder-6/></ul>"
 msgstr ""
 
-#: doc/html/en/file.news.html:867(h2) doc/html/en/file.news.ja.html:867(h2)
+#: doc/html/en/file.news.html:867(h2)
 msgid "0.0.2: 2009-06-04"
 msgstr ""
 
@@ -36944,7 +36363,7 @@ msgstr ""
 "バグ修正: <ul><placeholder-1/>\n"
 "<placeholder-2/></ul>"
 
-#: doc/html/en/file.news.html:896(h2) doc/html/en/file.news.ja.html:896(h2)
+#: doc/html/en/file.news.html:896(h2)
 msgid "0.0.1: 2009-04-30"
 msgstr ""
 
@@ -37355,882 +36774,6 @@ msgstr ""
 msgid ""
 "<span class=\"object_link\"><placeholder-1/></span> &lt; "
 "BaseSyntax<placeholder-2/>"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:6(title)
-msgid "File: news.ja &mdash; rroonga - 1.2.2"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:37(span)
-msgid "File: news.ja"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:57(h1)
-msgid "お知らせ"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:59(h3) doc/html/en/file.news.ja.html:102(h3)
-#: doc/html/en/file.news.ja.html:161(h3) doc/html/en/file.news.ja.html:202(h3)
-#: doc/html/en/file.news.ja.html:212(h3) doc/html/en/file.news.ja.html:295(h3)
-#: doc/html/en/file.news.ja.html:327(h3) doc/html/en/file.news.ja.html:342(h3)
-msgid "改良"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:61(li)
-msgid "英語版の「開発者向け情報」ページを作成。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:64(li)
-msgid "\"html:publish\"タスクと\"publish\"タスクに関しての説明を追加。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:68(h3) doc/html/en/file.news.ja.html:142(h3)
-#: doc/html/en/file.news.ja.html:271(h3) doc/html/en/file.news.ja.html:443(h2)
-msgid "変更"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:70(li)
-msgid ""
-"Groonga::Record#attributesが重複したレコードが現れた際に同じattributesオブ"
-"ジェクトを返すようにした。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:73(li)
-msgid "Groonga::Record#attributesにドキュメントを追加。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:76(li)
-msgid "「開発者向け情報」ページ内にあるドキュメント作成ツールを変更。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:79(li)
-msgid "NEWS*.rdocとtutorial.texttileをディレクトリdoc/text/に移動。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:83(h3) doc/html/en/file.news.ja.html:278(h3)
-#: doc/html/en/file.news.ja.html:301(h3) doc/html/en/file.news.ja.html:309(h3)
-#: doc/html/en/file.news.ja.html:335(h3) doc/html/en/file.news.ja.html:469(h3)
-#: doc/html/en/file.news.ja.html:479(h3)
-msgid "修正"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:85(li)
-msgid "インデックスページにある「チュートリアル」ページへのリンクを修正。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:88(li)
-msgid ""
-"インデックスページにある英語版「チュートリアル」ページへのリンクを修正。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:91(li)
-msgid "新しいgroongaのダウンロードURLに対応。 [mallowlabs]"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:95(h3) doc/html/en/file.news.ja.html:151(h3)
-#: doc/html/en/file.news.ja.html:288(h3) doc/html/en/file.news.ja.html:320(h3)
-#: doc/html/en/file.news.ja.html:486(h3) doc/html/en/file.news.ja.html:755(h3)
-msgid "感謝"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:104(li)
-msgid "Groonga::Table#paginationのドキュメントを追加。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:107(li)
-msgid "grndumpをパッケージに追加。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:110(li)
-msgid ""
-"Groonga::Record#attributesによるレコード内での再帰参照に対応した。[mooz] （補"
-"足：ただし実験的実装）"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:114(li)
-msgid "Groonga::Record#attributesにて_scoreも含めたデータを返すようにした。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:117(li)
-msgid ""
-"Windowsの64bitに対応。（ただし、rubyの64bit版が存在しないため、動作環境がな"
-"い）"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:120(li)
-msgid "Groonga::Postingを追加。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:123(li)
-msgid "TokenDelimitのエイリアスに:delimit, :token_delimiterを追加。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:126(li)
-msgid "Groonga::DatabaseDumper#dumpにてlexiconテーブルのダンプに対応。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:129(li)
-msgid "Groonga::DatabaseDumper#dumpにてプラグインを含んだダンプに対応。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:132(li)
-msgid "Groonga::IndexColumn#open_cursorを追加。[yoshihara]"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:135(li)
-msgid "Groonga::IndexCursorを追加。[yoshihara]"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:138(li)
-msgid "Groonga::Object#builtin?を追加。[yoshihara]"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:144(li)
-msgid "カラムが削除される前に、そのカラムがあるかチェックするようにした。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:147(li)
-msgid "ドキュメントからgrn式のページを削除。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:153(li)
-msgid "moozさん"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:156(li)
-msgid "yoshiharaさん"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:163(li)
-msgid "groonga 1.2.0対応。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:166(li)
-msgid "Groonga::Accessor#local_nameを追加。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:169(li)
-msgid "Groonga::IndexColumn#with_section?を追加。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:172(li)
-msgid "Groonga::IndexColumn#with_weight?を追加。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:175(li)
-msgid "Groonga::IndexColumn#with_position?を追加。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:178(li)
-msgid "Groonga::Schema.dumpがgroongaコマンド形式でのダンプに対応。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:181(li)
-msgid "grndumpを追加。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:184(li)
-msgid "Groonga::Database#eachで繰り返す順序を指定可能にした。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:187(li)
-msgid "Groonga::Context#match_escalation_thresholdを追加。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:190(li)
-msgid "Groonga::Context#match_escalation_threshold=を追加。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:193(li)
-msgid "エラーメッセージの改良。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:196(li)
-msgid ""
-"Groonga::Schemaの型指定で\"ShortText\"など正式型名だけではなく、 :short_text"
-"などよりRubyらしい名前を使えるようにした。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:204(li)
-msgid "groonga 1.1.0対応。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:207(li)
-msgid "Groonga::Plugin.registerを追加。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:214(li)
-msgid "Windows上でのgem作成に対応。 [ongaeshiさんがパッチ提供]"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:217(li)
-msgid ""
-"Groonga::Schemaでテーブル・カラムを削除した時に作成したディレクトリを 削除す"
-"るようにした。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:221(li)
-msgid "Groonga::Context#create_databaseを追加。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:224(li)
-msgid "Groonga::Context#open_databaseを追加。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:227(li)
-msgid "Groonga::Column#indexesを追加。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:230(li)
-msgid ""
-"Groonga::Table#select内でのインデックスカラムにマッチする記法をサポート。 "
-"<pre class=\"code\"><placeholder-1/><placeholder-2/><placeholder-3/> "
-"<placeholder-4/> <placeholder-5/><placeholder-6/><placeholder-7/>\n"
-"    <placeholder-8/><placeholder-9/><placeholder-10/><placeholder-11/"
-"><placeholder-12/><placeholder-13/> <placeholder-14/> <placeholder-15/"
-"><placeholder-16/><placeholder-17/>\n"
-"      <placeholder-18/><placeholder-19/><placeholder-20/><placeholder-21/"
-"><placeholder-22/><placeholder-23/><placeholder-24/> <placeholder-25/> "
-"<placeholder-26/><placeholder-27/> <placeholder-28/>\n"
-"        <placeholder-29/><placeholder-30/><placeholder-31/><placeholder-32/"
-"><placeholder-33/><placeholder-34/><placeholder-35/> <placeholder-36/> "
-"<placeholder-37/><placeholder-38/>\n"
-"        <placeholder-39/><placeholder-40/><placeholder-41/>\n"
-"    <placeholder-42/>\n"
-"  <placeholder-43/></pre>"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:242(li)
-msgid ""
-"Groonga::Table#select内での前方一致検索に対応。 <pre class=\"code"
-"\"><placeholder-1/><placeholder-2/><placeholder-3/> <placeholder-4/> "
-"<placeholder-5/><placeholder-6/><placeholder-7/>\n"
-"    <placeholder-8/><placeholder-9/><placeholder-10/><placeholder-11/"
-"><placeholder-12/><placeholder-13/><placeholder-14/><placeholder-15/>\n"
-"  <placeholder-16/></pre>"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:250(li)
-msgid ""
-"Groonga::Table#select内での後方一致検索に対応。 <pre class=\"code"
-"\"><placeholder-1/><placeholder-2/><placeholder-3/> <placeholder-4/> "
-"<placeholder-5/><placeholder-6/><placeholder-7/>\n"
-"    <placeholder-8/><placeholder-9/><placeholder-10/><placeholder-11/"
-"><placeholder-12/><placeholder-13/><placeholder-14/><placeholder-15/>\n"
-"  <placeholder-16/></pre>"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:258(li)
-msgid ":default_tokenizerのスキーマダンプに対応。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:261(li)
-msgid ":key_normalizeのスキーマダンプに対応。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:264(li)
-msgid "Groonga::Table#have_column?が擬似カラムに対応。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:267(li)
-msgid "Groonga::Record#have_column?が擬似カラムに対応。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:273(li)
-msgid ""
-"Groonga::OperatoionをGroonga::Operatorに変更。 （しばらくはGroonga::Operation"
-"も使えるが、非推奨。）"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:280(li)
-msgid ""
-"複数のGroonga::Contextを利用した場合に Groonga::Table#selectでクラッシュする"
-"問題を修正。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:284(li)
-msgid "例外発生時にクラッシュする問題を修正。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:290(li)
-msgid "ongaeshiさん"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:297(li)
-msgid "Groonga::Schemaのn-gramトークナイザー検出処理を改良。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:303(li)
-msgid ""
-"selectでmatch_targetを利用した場合に生きているオブジェクトもGC される問題を修"
-"正。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:311(li)
-msgid ""
-"Ruby 1.8でRubyGemsでインストールされたpkg-configを使えるようにした。 [@kamipo"
-"さんが報告]"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:316(li)
-msgid "Groonga::Table#columnsのメモリリークを修正。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:322(li)
-msgid "@kamipoさん"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:329(li)
-msgid ""
-"Groonga::Schemaでgroongaの組み込み型をshort_textなどのように 「小文字 + アン"
-"ダースコア」でも指定できるようにした。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:337(li)
-msgid "GC時にクラッシュするバグを修正。 [Ryo Onodera]"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:347(li)
-msgid "Groonga::UnsupportedCommandVersionを追加。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:344(li)
-msgid "groonga 1.0.4対応。 <ul><placeholder-1/></ul>"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:352(li)
-msgid "Groonga::Record#support_sub_records?を追加。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:355(li)
-msgid ""
-"Groonga::Record#eql?とGroonga::Record#hashを追加。 （同じテーブルの同じレコー"
-"ドIDのオブジェクトを同一のHashキーとして扱う。）"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:359(li)
-msgid "pkg-config gemを利用するようにした。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:362(li)
-msgid ""
-"Groonga::Table#select内でrecord_idメソッドを持っているメソッドはレコード とし"
-"て扱うようにした。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:366(li)
-msgid "Groonga::Record#record_idを追加。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:369(li)
-msgid "Groonga::Table#support_key?を追加。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:372(li) doc/html/en/file.news.ja.html:375(li)
-msgid "Groonga::Record#support_key?を追加。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:378(li)
-msgid "Groonga::Column#reference_key?を追加。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:381(li)
-msgid "Groonga::Column#index_column?を追加。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:384(li)
-msgid "Groonga::Schema#dumpを追加。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:387(li)
-msgid "Groonga::Schemaが複数のカラムのインデックス作成に対応。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:390(li)
-msgid ""
-"Groonga::Schemaで定義したオブジェクトに対応するファイル名に わかりやすいファ"
-"イル名を利用するようにした。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:394(li)
-msgid ""
-"Groonga::Schemaで参照カラムを定義時に参照先のテーブル名を省略可能になった。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:397(li)
-msgid "Groonga::Schema.remove_columnを追加。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:400(li)
-msgid ""
-"Groonga::Schemaでcreated_atカラムとupdated_atカラムを作るための timestamps便"
-"利メソッドを追加。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:404(li)
-msgid "Groonga::Context#support_zlib?を追加。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:407(li)
-msgid "Groonga::Context#support_lzo?を追加。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:410(li)
-msgid "Groonga::Database#touchを追加。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:413(li)
-msgid "Groonga::Table#exist?を追加。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:416(li)
-msgid "Groonga::Record#valid?を追加。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:419(li)
-msgid "Groonga::Column#vector?を追加。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:422(li)
-msgid "Groonga::Column#scalar?を追加。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:425(li)
-msgid "Groonga::Record#vector_column?を追加。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:428(li)
-msgid "Groonga::Record#scalar_column?を追加。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:431(li)
-msgid ""
-"レコードIDが必要なところにrecord_raw_idを持つオブジェクトなら Groonga::Record"
-"以外も渡せるようにした。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:435(li)
-msgid "Groonga::Record#record_raw_idを追加。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:438(li)
-msgid ""
-"ベクタの参照カラムの値にArray以外でもto_aryを持つオブジェクトを 設定できるよ"
-"うにした。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:445(li)
-msgid ""
-"Groonga::PatriciaTrie#open_cursorでは:order_byのデフォルト値として:key を使う"
-"ようにした。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:449(li)
-msgid "非推奨扱いのGroonga::TableKeySupport#findを削除。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:452(li)
-msgid ""
-"Groonga::Hash#createとGroonga::PatriciaTrie#createでキーの型を省略した 場合は"
-"ShortTextを使用するようにした。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:456(li)
-msgid "Groonga::Schema#loadをGroonga::Schema#restoreに改名。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:459(li)
-msgid "pkg-config 1.0.7対応。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:462(li)
-msgid "Groonga::Column#index?を追加。Groonga::Column#index_column?は非推奨。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:465(li)
-msgid ""
-"Groonga::Column#reference?を追加。Groonga::Column#reference_column?は非推奨。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:471(li)
-msgid "keyにインデックスを張れない問題を修正。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:474(li)
-msgid "GC時にクラッシュする問題を修正。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:481(li)
-msgid ""
-"テーブル作成時に誤ったフラグを指定していた問題を修正。 [小野マトペさんが報告]"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:488(li)
-msgid "小野マトペさん"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:497(li)
-msgid "Groonga::CASErrorを追加。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:500(li)
-msgid "Groonga::Table#open_cursorに:order_byオプションを追加。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:503(li)
-msgid ""
-"前方一致検索がマッチしたレコードを順に取り出すカーソルを作る Groonga::"
-"PatriciaTrie#open_prefix_cursorを追加。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:507(li)
-msgid ""
-"ローマ字・ひらがなでカタカナのキーを検索するカーソルを作る Groonga::"
-"PatriciaTrie#open_rk_cursorを追加。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:511(li)
-msgid ""
-"値の近い順にレコードを取り出すカーソルを作る Groonga::"
-"PatriciaTrie#open_near_cursorを追加。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:494(li)
-msgid ""
-"groonga 1.0.0対応。 <ul><placeholder-1/>\n"
-"<placeholder-2/>\n"
-"<placeholder-3/>\n"
-"<placeholder-4/>\n"
-"<placeholder-5/></ul>"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:517(li)
-msgid "インデックスのソースに_keyを指定できるようになった。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:521(h2)
-msgid "0.9.5: 2010-07-29"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:523(li)
-msgid "groonga 0.7.4対応。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:531(p)
-msgid ""
-"sourceカラムとtitleカラムにマッチするが、 titleカラムの方がスコアが大きくなる"
-"例:"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:529(li)
-msgid ""
-"重み付きマッチ対応: <placeholder-1/>\n"
-"<pre class=\"code\"><placeholder-2/><placeholder-3/><placeholder-4/> "
-"<placeholder-5/> <placeholder-6/><placeholder-7/><placeholder-8/>\n"
-"    <placeholder-9/><placeholder-10/><placeholder-11/><placeholder-12/> "
-"<placeholder-13/> <placeholder-14/> <placeholder-15/> <placeholder-16/"
-"><placeholder-17/><placeholder-18/><placeholder-19/> <placeholder-20/> "
-"<placeholder-21/>\n"
-"  <placeholder-22/></pre>"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:543(p)
-msgid "以下は同じ条件になる:"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:541(li)
-msgid ""
-"配列で複数条件のand表現に対応: <placeholder-1/>\n"
-"<pre class=\"code\"><placeholder-2/><placeholder-3/><placeholder-4/> "
-"<placeholder-5/> <placeholder-6/><placeholder-7/><placeholder-8/>\n"
-"    <placeholder-9/> <placeholder-10/> <placeholder-11/><placeholder-12/>\n"
-"    <placeholder-13/> <placeholder-14/> <placeholder-15/><placeholder-16/"
-"><placeholder-17/> <placeholder-18/> <placeholder-19/>\n"
-"    <placeholder-20/> <placeholder-21/> <placeholder-22/><placeholder-23/"
-"><placeholder-24/> <placeholder-25/> <placeholder-26/><placeholder-27/"
-"><placeholder-28/><placeholder-29/><placeholder-30/><placeholder-31/>\n"
-"    <placeholder-32/>\n"
-"  <placeholder-33/>\n"
-"\n"
-"  <placeholder-34/><placeholder-35/><placeholder-36/> <placeholder-37/> "
-"<placeholder-38/><placeholder-39/><placeholder-40/>\n"
-"    <placeholder-41/><placeholder-42/><placeholder-43/><placeholder-44/> "
-"<placeholder-45/> <placeholder-46/><placeholder-47/> <placeholder-48/>\n"
-"      <placeholder-49/><placeholder-50/><placeholder-51/><placeholder-52/> "
-"<placeholder-53/> <placeholder-54/><placeholder-55/><placeholder-56/"
-"><placeholder-57/><placeholder-58/><placeholder-59/><placeholder-60/>\n"
-"  <placeholder-61/></pre>"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:526(li)
-msgid ""
-"Groonga::Table#selectの改良: <ul><placeholder-1/>\n"
-"<placeholder-2/></ul>"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:562(li)
-msgid "利用しているgroongaのバージョン取得対応: Groonga::VERSION"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:565(li)
-msgid "Groonga::Table#support_sub_records?追加"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:568(li)
-msgid "ページネーション対応: Groonga::Table#paginate, Groonga::Pagination"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:575(li) doc/html/en/file.news.ja.html:581(li)
-msgid "リリースミス修正。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:587(li)
-msgid "groonga 0.1.9対応。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:590(li)
-msgid "たくさん。"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:596(li)
-msgid "groonga 0.1.6対応"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:602(li)
-msgid "groonga 0.1.5対応"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:605(li)
-msgid ""
-"APIの追加 <ul><placeholder-1/>\n"
-"<placeholder-2/>\n"
-"<placeholder-3/>\n"
-"<placeholder-4/>\n"
-"<placeholder-5/>\n"
-"<placeholder-6/>\n"
-"<placeholder-7/>\n"
-"<placeholder-8/>\n"
-"<placeholder-9/>\n"
-"<placeholder-10/>\n"
-"<placeholder-11/>\n"
-"<placeholder-12/>\n"
-"<placeholder-13/>\n"
-"<placeholder-14/>\n"
-"<placeholder-15/></ul>"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:661(li)
-msgid "Groonga::Expressionも受け付けるようになった"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:664(li)
-msgid "grn式のシンタックスを指定する:syntaxオプションの追加"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:672(li)
-msgid "開始位置を指定する:offsetオプションの追加"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:675(li)
-msgid "最大レコード数を指定する:limitオプションの追加"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:686(li)
-msgid ":column -&gt; 廃止"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:680(li)
-msgid ""
-"Groonga::Expression.parseの引数を変更 <ul><placeholder-1/>\n"
-"<placeholder-2/>\n"
-"<placeholder-3/>\n"
-"<placeholder-4/>\n"
-"<placeholder-5/>\n"
-"<placeholder-6/></ul>"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:706(li)
-msgid "永続テーブルをデフォルトにした"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:711(li)
-msgid "Groonga::Table#[]をGroonga::Table#valueに変更"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:714(li)
-msgid "Groonga::Table#[]=をGroonga::Table#set_valueに変更"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:717(li)
-msgid "Groonga::Table#findをGroonga::Table#[]に変更"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:720(li)
-msgid "Groonga::Table#findは非推奨"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:723(li)
-msgid "Groonga::Table#[]=を削除"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:726(li)
-msgid "Groonga::TableKeySupport#[]=はGroonga::TableKeySupport#addの別名"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:729(li)
-msgid ""
-"Groonga::Recordで存在しないカラムにアクセスしたときの例外を Groonga::"
-"InvalidArgumentからGroonga::NoSuchColumnに変更"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:655(li)
-msgid ""
-"APIの変更 <ul><placeholder-1/>\n"
-"<placeholder-2/>\n"
-"<placeholder-3/>\n"
-"<placeholder-4/>\n"
-"<placeholder-5/>\n"
-"<placeholder-6/>\n"
-"<placeholder-7/>\n"
-"<placeholder-8/>\n"
-"<placeholder-9/>\n"
-"<placeholder-10/>\n"
-"<placeholder-11/></ul>"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:738(li)
-msgid "スキーマにコンテキストが伝搬されない問題の修正 [dara]"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:742(li)
-msgid ""
-"Groonga::PatriciaTrie#tag_keysが最後のテキストを返さない問題の修正 [Ryo "
-"Onodera]"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:735(li)
-msgid ""
-"バグ修正 <ul><placeholder-1/>\n"
-"<placeholder-2/></ul>"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:748(li)
-msgid "extconf.rbにデバッグモードでビルドする--with-debugオプションを追加"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:751(li)
-msgid "Ruby 1.9.1でextconf.rbが失敗する問題の修正"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:769(li)
-msgid "groonga 0.1.4対応"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:772(li)
-msgid ""
-"APIの追加 <ul><placeholder-1/>\n"
-"<placeholder-2/>\n"
-"<placeholder-3/>\n"
-"<placeholder-4/>\n"
-"<placeholder-5/></ul>"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:795(li)
-msgid "groonga 0.1.1対応"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:798(li)
-msgid "ドキュメントの修正 [id:mat_aki]"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:801(li)
-msgid "Groonga::Table#selectでのg式対応"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:804(li)
-msgid ""
-"APIの追加 <ul><placeholder-1/>\n"
-"<placeholder-2/>\n"
-"<placeholder-3/>\n"
-"<placeholder-4/></ul>"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:821(li)
-msgid "tar.gzも提供 [id:m_seki]"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:824(li)
-msgid "メモリリークの修正"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:830(li)
-msgid "[#26145] Groonga::TableKeySupport#has_key?の追加 [Tasuku SUENAGA]"
-msgstr "Groonga::TableKeySupport#has_key?の追加 [#26145] [Tasuku SUENAGA]"
-
-#: doc/html/en/file.news.ja.html:833(li)
-msgid ""
-"[#26146] カラム名が存在しない場合はGroonga::Record#[]が例外 をあげるように変"
-"更 [Tasuku SUENAGA]"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:837(li)
-msgid "32ビット環境をサポート [niku]"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:840(li)
-msgid "N-gramインデックスサーチのテストを追加 [dara]"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:858(li)
-msgid "Groonga::Schema: スキーマ定義用DSL"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:843(li)
-msgid ""
-"APIの追加 <ul><placeholder-1/>\n"
-"<placeholder-2/>\n"
-"<placeholder-3/>\n"
-"<placeholder-4/>\n"
-"<placeholder-5/>\n"
-"<placeholder-6/></ul>"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:869(li)
-msgid "groonga 0.0.8対応 [mori]"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:872(li)
-msgid "性能向上: キー、値、ドメイン、レンジをキャッシュ"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:875(li)
-msgid "API改良"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:878(li)
-msgid "ドキュメントの追加"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:881(li)
-msgid "Ruby 1.9対応"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:887(li)
-msgid "インストール処理の修正 [Tasuku SUENAGA]"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:890(li)
-msgid "メモリリーク修正"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:884(li)
-msgid ""
-"バグ修正: <ul><placeholder-1/>\n"
-"<placeholder-2/></ul>"
-msgstr ""
-
-#: doc/html/en/file.news.ja.html:898(li)
-msgid "最初のリリース！"
 msgstr ""
 
 #. Put one translator per line, in the form of NAME <EMAIL>, YEAR1, YEAR2
