@@ -123,6 +123,7 @@ YARD::Rake::YardocTask.new do |task|
   task.options += ["--readme", "README.textile"]
   task.options += ["--files", "doc/text/**/*"]
   task.options += ["--output-dir", "doc/html/en/"]
+  task.options += ["--charset", "utf-8"]
   task.files += FileList["ext/groonga/**/*.c"]
   task.files += FileList["lib/**/*.rb"]
 end
