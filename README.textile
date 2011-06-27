@@ -70,3 +70,4 @@ h2. Thanks
 * ono matope: sent bug reports.
 * @kamipo: send a bug report.
 * ongaeshi: sent a patch to build gem on Windows.
+* mallowlabs: send a patch.
