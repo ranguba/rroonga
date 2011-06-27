@@ -220,7 +220,7 @@ def rsync_to_rubyforge(spec, source, destination, options={})
   config = YAML.load(File.read(File.expand_path("~/.rubyforge/user-config.yml")))
   host = "#{config["username"]}@rubyforge.org"
 
-  rsync_args = "--dry-run -av --exclude '*.erb' --chmod=ug+w"
+  rsync_args = "-av --exclude '*.erb' --chmod=ug+w"
   rsync_args << " --delete" if options[:delete]
   remote_dir = "/var/www/gforge-projects/#{spec.rubyforge_project}/"
   sh("rsync #{rsync_args} #{source} #{host}:#{remote_dir}#{destination}")
