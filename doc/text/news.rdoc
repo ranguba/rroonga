@@ -1,5 +1,12 @@
 = NEWS
 
+== 1.2.3: 2011-06-27
+
+=== Fixes
+
+* remove object files in gem packages.
+* fix charactor corruption in reference.
+
 == 1.2.2: 2011-06-27
 
 === Improvements
