@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: rroonga 1.2.1\n"
 "POT-Creation-Date: 2011-06-27 14:27+0900\n"
-"PO-Revision-Date: 2011-06-27 14:30+0900\n"
+"PO-Revision-Date: 2011-06-27 14:40+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: \n"
@@ -34918,15 +34918,15 @@ msgstr "ongaeshiさん: Windows上でgemをビルドするためのパッチを�
 
 #: doc/html/en/_index.html:57(h1)
 msgid "Alphabetic Index"
-msgstr ""
+msgstr "アルファベット順の索引"
 
 #: doc/html/en/_index.html:59(h2)
 msgid "File Listing"
-msgstr ""
+msgstr "ファイル一覧"
 
 #: doc/html/en/_index.html:66(a) doc/html/en/file_list.html:46(a)
 msgid "tutorial"
-msgstr ""
+msgstr "チュートリアル"
 
 #: doc/html/en/_index.html:69(a) doc/html/en/file_list.html:49(a)
 msgid "news"
@@ -34934,7 +34934,7 @@ msgstr ""
 
 #: doc/html/en/_index.html:75(h2)
 msgid "Namespace Listing A-Z"
-msgstr ""
+msgstr "アルファベット順ネームスペース一覧"
 
 #: doc/html/en/_index.html:86(li)
 msgid "A"
