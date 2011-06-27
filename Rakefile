@@ -300,9 +300,10 @@ namespace :reference do
           when "_index.html", /\A(?:class|method|file)_list.html\z/
             next
           when /\.html\z/
-            relative_top_path = file.relative_path_from(doc_dir).dirname
-            current_page = file.basename.to_s
-            apply_template(file, "#{relative_top_path}", current_page,
+            relative_dir_path = file.relative_path_from(doc_dir).dirname
+            current_page = relative_dir_path + file.basename
+            top_path = doc_dir.relative_path_from(file.dirname).to_s
+            apply_template(file, top_path, current_page,
                            head, header, footer, language)
           end
         end
