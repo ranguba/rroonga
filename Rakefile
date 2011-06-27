@@ -117,15 +117,29 @@ module YARD
   end
 end
 
+reference_base_dir = Pathname.new("doc/html")
+doc_en_dir = reference_base_dir + "en"
 YARD::Rake::YardocTask.new do |task|
   task.options += ["--title", "#{spec.name} - #{version}"]
   # task.options += ["--charset", "UTF-8"]
   task.options += ["--readme", "README.textile"]
   task.options += ["--files", "doc/text/**/*"]
-  task.options += ["--output-dir", "doc/html/en/"]
+  task.options += ["--output-dir", doc_en_dir.to_s]
   task.options += ["--charset", "utf-8"]
   task.files += FileList["ext/groonga/**/*.c"]
   task.files += FileList["lib/**/*.rb"]
+end
+
+task :yard do
+  doc_en_dir.find do |path|
+    next if path.extname != ".html"
+    html = path.read
+    html = html.gsub(/<div id="footer">.+<\/div>/m,
+                     "<div id=\"footer\"></div>")
+    path.open("w") do |html_file|
+      html_file.print(html)
+    end
+  end
 end
 
 def windows?(platform=nil)
@@ -215,11 +229,10 @@ end
 namespace :reference do
   translate_languages = [:ja]
   supported_languages = [:en, *translate_languages]
-  reference_base_dir = "doc/html"
   html_files = FileList["doc/html/en/**/*.html"].to_a
 
-  directory reference_base_dir
-  CLOBBER.include(reference_base_dir)
+  directory reference_base_dir.to_s
+  CLOBBER.include(reference_base_dir.to_s)
 
   po_dir = "doc/po"
   namespace :pot do
@@ -250,16 +263,13 @@ namespace :reference do
   end
 
   namespace :translate do
-    directory reference_base_dir
-
     translate_languages.each do |language|
       po_file = "#{po_dir}/#{language}.po"
       translate_doc_dir = "#{reference_base_dir}/#{language}"
 
-      doc_dir = Pathname("#{reference_base_dir}/en")
       desc "Translates documents to #{language}."
       task language => [po_file, reference_base_dir, *html_files] do
-        doc_dir.find do |path|
+        doc_en_dir.find do |path|
           base_path = path.relative_path_from(doc_dir)
           translated_path = "#{translate_doc_dir}/#{base_path}"
           if path.directory?
