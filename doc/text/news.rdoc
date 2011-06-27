@@ -82,8 +82,7 @@
 
 === Improvements
 
-* Supported gem creation on Windows.
-  [Patch by ongaeshi]
+* Supported gem creation on Windows. [Patch by ongaeshi]
 * Supported generated directory that is created by Groonga::Schema removal
   when table or column is removed.
 * Added Groonga::Context#create_database.
@@ -140,8 +139,7 @@
 
 === Fixes
 
-* Supported pkg-config installed by RubyGems on Ruby 1.8.
-  [Reported by @kamipo]
+* Supported pkg-config installed by RubyGems on Ruby 1.8. [Reported by @kamipo]
 * Fixed a memory leak in Groonga::Table#columns.
 
 === Thanks
@@ -221,8 +219,7 @@
 
 === Fixes
 
-* Fixed wrong flag used on creating a table.
-  [Reported by ono matope]
+* Fixed wrong flag used on creating a table. [Reported by ono matope]
 
 === Thanks
 
@@ -334,8 +331,7 @@
 * Bug fixes
   * Fixed a bug that context isn't passed to schema [dara]
   * Fixed a bug that Groonga::PatriciaTrie#tag_keys doesn't return
-    that last text.
-    [Ryo Onodera]
+    that last text. [Ryo Onodera]
 * Added --with-debug option to extconf.rb for debug build.
 * Fixed a bug that Ruby 1.9.1 may fail extconf.rb.
 
