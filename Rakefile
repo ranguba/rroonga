@@ -270,7 +270,7 @@ namespace :reference do
       desc "Translates documents to #{language}."
       task language => [po_file, reference_base_dir, *html_files] do
         doc_en_dir.find do |path|
-          base_path = path.relative_path_from(doc_dir)
+          base_path = path.relative_path_from(doc_en_dir)
           translated_path = "#{translate_doc_dir}/#{base_path}"
           if path.directory?
             mkdir_p(translated_path)
