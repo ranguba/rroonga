@@ -18,96 +18,9 @@
 require 'English'
 require 'pathname'
 require 'fileutils'
-
-begin
-  require 'pkg-config'
-rescue LoadError
-  require 'rubygems'
-  require 'pkg-config'
-end
+require 'mkmf'
 
 base_dir = Pathname(__FILE__).dirname.realpath
-$LOAD_PATH.unshift(base_dir.to_s)
-
-require 'rroonga-build'
-
-include RroongaBuild
-
-package_name = "groonga"
-module_name = "groonga"
-major, minor, micro = RequiredGroongaVersion::VERSION
-
-def install_groonga_locally(major, minor, micro)
-  require 'open-uri'
-  require 'shellwords'
-
-  tar_gz = "groonga-#{major}.#{minor}.#{micro}.tar.gz"
-  FileUtils.mkdir_p(local_groonga_base_dir)
-
-  install_dir = local_groonga_install_dir
-  Dir.chdir(local_groonga_base_dir) do
-    url = "http://packages.groonga.org/source/groonga/#{tar_gz}"
-    message("downloading %s...", url)
-    open(url, "rb") do |input|
-      File.open(tar_gz, "wb") do |output|
-        while (buffer = input.read(1024))
-          output.print(buffer)
-        end
-      end
-    end
-    message(" done\n")
-
-    message("extracting...")
-    if xsystem("tar xfz #{tar_gz}")
-      message(" done\n")
-    else
-      message(" failed\n")
-      exit 1
-    end
-
-    groonga_source_dir = "groonga-#{major}.#{minor}.#{micro}"
-    Dir.chdir(groonga_source_dir) do
-      message("configuring...")
-      prefix = Shellwords.escape(install_dir)
-      if xsystem("./configure CFLAGS='-g -O0' --prefix=#{prefix}")
-        message(" done\n")
-      else
-        message(" failed\n")
-        exit 1
-      end
-
-      message("building (maybe long time)...")
-      if xsystem("make")
-        message(" done\n")
-      else
-        message(" failed\n")
-        exit 1
-      end
-
-      message("installing...")
-      if [major, minor, micro] == [0, 1, 6]
-        make_install_args = " MKDIR_P='mkdir -p --'"
-      else
-        make_install_args = ""
-      end
-      if xsystem("make install#{make_install_args}")
-        message(" done\n")
-      else
-        message(" failed\n")
-        exit 1
-      end
-    end
-  end
-
-  prepend_pkg_config_path_for_local_groonga
-end
-
-unless PKGConfig.have_package(package_name, major, minor, micro)
-  unless have_local_groonga?(package_name, major, minor, micro)
-    install_groonga_locally(major, minor, micro)
-    PKGConfig.have_package(package_name, major, minor, micro) or exit 1
-  end
-end
 
 source_ext_dir = Pathname("ext") + "groonga"
 FileUtils.mkdir_p(source_ext_dir.to_s)
