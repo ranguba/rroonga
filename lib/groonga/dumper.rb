@@ -278,7 +278,7 @@ module Groonga
         target_table_name = column.range.name
         sources = column.sources
         source_names = sources.collect do |source|
-          if source.is_a?(table.class)
+          if source.is_a?(Groonga::Table)
             "_key".dump
           else
             source.local_name.dump
@@ -393,7 +393,7 @@ module Groonga
         parameters << "#{flags.join('|')}"
         parameters << "#{column.range.name}"
         source_names = column.sources.collect do |source|
-          if source.is_a?(table.class)
+          if source.is_a?(Groonga::Table)
             "_key"
           else
             source.local_name

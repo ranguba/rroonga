@@ -49,7 +49,7 @@ class SchemaDumperTest < Test::Unit::TestCase
   def define_index_schema
     Groonga::Schema.define do |schema|
       schema.create_table("Items",
-                          :type => :patricia_trie,
+                          :type => :hash,
                           :key_type => "ShortText") do |table|
         table.short_text("title")
       end
@@ -106,7 +106,7 @@ EOS
       define_index_schema
       assert_equal(<<-EOS, dump)
 create_table("Items",
-             :type => :patricia_trie,
+             :type => :hash,
              :key_type => "ShortText",
              :force => true) do |table|
   table.short_text("title")
@@ -163,7 +163,7 @@ EOS
     def test_index
       define_index_schema
       assert_equal(<<-EOS, dump)
-table_create Items TABLE_PAT_KEY --key_type ShortText
+table_create Items TABLE_HASH_KEY --key_type ShortText
 column_create Items title COLUMN_SCALAR ShortText
 
 table_create Terms TABLE_PAT_KEY|KEY_NORMALIZE --key_type ShortText --default_tokenizer TokenBigram
