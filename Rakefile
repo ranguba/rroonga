@@ -22,6 +22,7 @@ require 'fileutils'
 require 'pathname'
 require 'erb'
 require 'rubygems'
+require 'rubygems/package_task'
 require 'yard'
 require 'jeweler'
 require 'rake/extensiontask'
@@ -93,6 +94,10 @@ Jeweler::Tasks.new do |_spec|
 end
 
 Jeweler::RubygemsDotOrgTasks.new do
+end
+
+Gem::PackageTask.new(spec) do |pkg|
+  pkg.need_tar_gz = true
 end
 
 module YARD
