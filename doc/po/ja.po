@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: rroonga 1.2.3\n"
 "POT-Creation-Date: 2011-06-29 10:51+0900\n"
-"PO-Revision-Date: 2011-06-29 10:50+0900\n"
+"PO-Revision-Date: 2011-06-29 13:01+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: \n"
@@ -2276,8 +2276,8 @@ msgid "Improvements"
 msgstr "改良"
 
 #: doc/html/en/file.news.html:64(p)
-msgid "Supported groonga 1.2.2."
-msgstr "groonga 1.2.2対応。"
+msgid "Supported groonga 1.2.3."
+msgstr "groonga 1.2.3対応。"
 
 #: doc/html/en/file.news.html:67(h3) doc/html/en/file.news.html:76(h3)
 #: doc/html/en/file.news.html:104(h3) doc/html/en/file.news.html:258(h3)
