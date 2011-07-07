@@ -122,8 +122,10 @@ module YARD
   end
 end
 
-reference_base_dir = Pathname.new("doc/html")
+reference_base_dir = Pathname.new("doc/reference")
 doc_en_dir = reference_base_dir + "en"
+html_base_dir = Pathname.new("doc/html")
+html_reference_dir = html_base_dir + spec.name
 YARD::Rake::YardocTask.new do |task|
   task.options += ["--title", "#{spec.name} - #{version}"]
   # task.options += ["--charset", "UTF-8"]
@@ -208,13 +210,11 @@ def apply_template(file, top_path, current_page, head, header, footer, language)
     "\n#{footer.result(binding)}\n#{body_end}"
   end
 
-  File.open(file, "w") do |file|
-    file.print(content)
-  end
+  content
 end
 
 def erb_template(name)
-  file = File.join("html", "#{name}.html.erb")
+  file = File.join("doc/templates", "#{name}.html.erb")
   template = File.read(file)
   erb = ERB.new(template, nil, "-")
   erb.filename = file
@@ -319,24 +319,37 @@ namespace :reference do
   namespace :publication do
     task :prepare do
       supported_languages.each do |language|
-        doc_dir = Pathname.new("#{reference_base_dir}/#{language}")
+        raw_reference_dir = reference_base_dir + language.to_s
+        prepared_reference_dir = html_reference_dir + language.to_s
+        rm_rf(prepared_reference_dir.to_s)
         head = erb_template("head.#{language}")
         header = erb_template("header.#{language}")
         footer = erb_template("footer.#{language}")
-        doc_dir.find do |file|
-          case file.basename.to_s
-          when "_index.html", /\A(?:class|method|file)_list.html\z/
-            next
-          when /\.html\z/
-            relative_dir_path = file.relative_path_from(doc_dir).dirname
-            current_page = relative_dir_path + file.basename
-            top_path = doc_dir.relative_path_from(file.dirname).to_s
-            apply_template(file, top_path, current_page,
-                           head, header, footer, language)
+        raw_reference_dir.find do |path|
+          relative_path = path.relative_path_from(raw_reference_dir)
+          prepared_path = prepared_reference_dir + relative_path
+          if path.directory?
+            mkdir_p(prepared_path.to_s)
+          else
+            case path.basename.to_s
+            when "_index.html", /\A(?:class|method|file)_list.html\z/
+              cp(path.to_s, prepared_path.to_s)
+            when /\.html\z/
+              relative_dir_path = relative_path.dirname
+              current_page = relative_dir_path + path.basename
+              top_path = raw_reference_dir.relative_path_from(path.dirname).to_s
+              content = apply_template(path, top_path, current_page,
+                                       head, header, footer, language)
+              File.open(prepared_path.to_s, "w") do |file|
+                file.print(content)
+              end
+            else
+              cp(path.to_s, prepared_path.to_s)
+            end
           end
         end
       end
-      File.open("#{reference_base_dir}/.htaccess", "w") do |file|
+      File.open("#{html_reference_dir}/.htaccess", "w") do |file|
         file.puts("Redirect permanent /rroonga/text/TUTORIAL_ja_rdoc.html " +
                   "http://groonga.rubyforge.org/rroonga/ja/file.tutorial.html")
         file.puts("RedirectMatch permanent ^/rroonga/$ " +
@@ -360,7 +373,7 @@ namespace :html do
 end
 
 desc "Upload document and HTML to rubyforge."
-task :publish => ["reference:publish", "html:publish"]
+task :publish => ["html:publish", "reference:publish"]
 
 desc "Tag the current revision."
 task :tag do
