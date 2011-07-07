@@ -332,6 +332,8 @@ namespace :reference do
             mkdir_p(prepared_path.to_s)
           else
             case path.basename.to_s
+            when /(?:file|method|class)_list\.html\z/
+              cp(path.to_s, prepared_path.to_s)
             when /\.html\z/
               relative_dir_path = relative_path.dirname
               current_path = relative_dir_path + path.basename
