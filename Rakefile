@@ -334,6 +334,9 @@ namespace :reference do
             when /\.html\z/
               relative_dir_path = relative_path.dirname
               current_path = relative_dir_path + path.basename
+              if current_path.basename.to_s == "index.html"
+                current_path = current_path.dirname
+              end
               top_path = html_base_dir.relative_path_from(prepared_path.dirname)
               paths = {
                 :top => top_path,
