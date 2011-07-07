@@ -146,7 +146,7 @@ ul.menu li
 
 ul.menu li a
 {
-  color: #fed08e;
+  color: #f6ede0;
   text-decoration: none;
   padding-left: 20px;
 }
@@ -158,7 +158,7 @@ ul.menu li a:hover
 
 ul.menu li a:visited
 {
-  color: #ffb84f;
+  color: #f6ede0;
 }
 
 ul.menu li#menu-reference
