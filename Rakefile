@@ -93,6 +93,7 @@ Jeweler::Tasks.new do |_spec|
   spec.test_files = FileList["test/**/*.rb"]
 end
 
+Rake::Task["release"].prerequisites.clear
 Jeweler::RubygemsDotOrgTasks.new do
 end
 
