@@ -1,7 +1,8 @@
 /.gdb_history
 /.test-result
 /Makefile
-/doc/html/
+/doc/html/rroonga/
+/doc/reference/
 /email.txt
 /mkmf.log
 /pkg/

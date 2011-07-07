@@ -192,22 +192,21 @@ end
 
 include ERB::Util
 
-def apply_template(file, top_path, current_page, head, header, footer, language)
-  content = File.read(file)
+def apply_template(content, paths, templates, language)
   content = content.sub(/lang="en"/, "lang=\"#{language}\"")
 
   title = nil
   content = content.sub(/<title>(.+?)<\/title>/m) do
     title = $1
-    head.result(binding)
+    templates[:head].result(binding)
   end
 
   content = content.sub(/<body(?:.*?)>/) do |body_start|
-    "#{body_start}\n#{header.result(binding)}\n"
+    "#{body_start}\n#{templates[:header].result(binding)}\n"
   end
 
   content = content.sub(/<\/body/) do |body_end|
-    "\n#{footer.result(binding)}\n#{body_end}"
+    "\n#{templates[:footer].result(binding)}\n#{body_end}"
   end
 
   content
@@ -336,10 +335,21 @@ namespace :reference do
               cp(path.to_s, prepared_path.to_s)
             when /\.html\z/
               relative_dir_path = relative_path.dirname
-              current_page = relative_dir_path + path.basename
-              top_path = raw_reference_dir.relative_path_from(path.dirname).to_s
-              content = apply_template(path, top_path, current_page,
-                                       head, header, footer, language)
+              current_page_path = relative_dir_path + path.basename
+              top_path = html_base_dir.relative_path_from(prepared_path.dirname)
+              paths = {
+                :top => top_path,
+                :current => current_page_path,
+              }
+              templates = {
+                :head => head,
+                :header => header,
+                :footer => footer
+              }
+              content = apply_template(File.read(path.to_s),
+                                       paths,
+                                       templates,
+                                       language)
               File.open(prepared_path.to_s, "w") do |file|
                 file.print(content)
               end
