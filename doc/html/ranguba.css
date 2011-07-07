@@ -1,8 +1,8 @@
 html,
 body
 {
-  margin: 0px;
-  padding: 0px;
+  margin: 0px !important;
+  padding: 0px !important;
   color: black !important;
   background-color: white !important;
 }
