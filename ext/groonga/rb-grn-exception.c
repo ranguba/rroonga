@@ -19,7 +19,7 @@
 #include "rb-grn.h"
 
 VALUE rb_eGrnError;
-VALUE rb_eGrnObjectClosed;
+VALUE rb_eGrnClosed;
 VALUE rb_eGrnNoSuchColumn;
 
 static VALUE eGrnEndOfData;
@@ -590,13 +590,24 @@ rb_grn_init_exception (VALUE mGrn)
         rb_define_class_under(mGrn, "Error", rb_eStandardError);
 
     /*
+     * Document-class: Groonga::Closed
+     *
+     * groongaレベルでは破棄されているが、Rubyレベルでは生き
+     * ているオブジェクトにアクセスすると発生する。
+     *
+     * @since 1.2.3
+     */
+    rb_eGrnClosed = rb_define_class_under(mGrn, "Closed", rb_eGrnError);
+
+    /*
      * Document-class: Groonga::ObjectClosed
      *
      * groongaレベルでは破棄されているが、Rubyレベルでは生き
      * ているオブジェクトにアクセスすると発生する。
+     *
+     * @deprecated since 1.2.3. Use Groonga::Closed instead.
      */
-    rb_eGrnObjectClosed =
-        rb_define_class_under(mGrn, "ObjectClosed", rb_eGrnError);
+    rb_define_const(mGrn, "ObjectClosed", rb_eGrnClosed);
 
     /*
      * Document-class: Groonga::NoSuchColumn

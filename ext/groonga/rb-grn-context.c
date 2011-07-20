@@ -53,6 +53,9 @@ rb_grn_context_from_ruby_object (VALUE object)
     Data_Get_Struct(object, RbGrnContext, rb_grn_context);
     if (!rb_grn_context)
 	rb_raise(rb_eGrnError, "groonga context is NULL");
+    if (!rb_grn_context->context)
+	rb_raise(rb_eGrnClosed,
+		 "can't access already closed groonga context");
     return rb_grn_context->context;
 }
 
@@ -88,7 +91,7 @@ rb_grn_context_free (void *pointer)
 
     context = rb_grn_context->context;
     debug("context-free: %p\n", context);
-    if (!rb_grn_exited)
+    if (context && !rb_grn_exited)
 	rb_grn_context_fin(context);
     debug("context-free: %p: done\n", context);
     xfree(rb_grn_context);
@@ -332,7 +335,8 @@ rb_grn_context_initialize (int argc, VALUE *argv, VALUE self)
     rb_grn_context = ALLOC(RbGrnContext);
     DATA_PTR(self) = rb_grn_context;
     rb_grn_context->self = self;
-    context = rb_grn_context->context = grn_ctx_open(flags);
+    grn_ctx_init(&(rb_grn_context->context_entity), flags);
+    context = rb_grn_context->context = &(rb_grn_context->context_entity);
     rb_grn_context_check(context, self);
 
     GRN_CTX_USER_DATA(context)->ptr = rb_grn_context;
@@ -348,6 +352,45 @@ rb_grn_context_initialize (int argc, VALUE *argv, VALUE self)
     debug("context new: %p\n", context);
 
     return Qnil;
+}
+
+/*
+ * call-seq:
+ *   context.close
+ *
+ * Closes the _context_. Closed _context_ can't be used
+ * anymore.
+ */
+static VALUE
+rb_grn_context_close (VALUE self)
+{
+    int rc;
+    grn_ctx *context;
+    RbGrnContext *rb_grn_context;
+
+    context = SELF(self);
+    rc = grn_ctx_fin(context);
+    Data_Get_Struct(self, RbGrnContext, rb_grn_context);
+    rb_grn_context->context = NULL;
+    rb_grn_rc_check(rc, self);
+
+    return Qnil;
+}
+
+/*
+ * call-seq:
+ *   context.closed?
+ *
+ * Returns whether the _context_ is closed by #close or not.
+ */
+static VALUE
+rb_grn_context_closed_p (VALUE self)
+{
+    RbGrnContext *rb_grn_context;
+
+    Data_Get_Struct(self, RbGrnContext, rb_grn_context);
+
+    return CBOOL2RVAL(rb_grn_context->context == NULL);
 }
 
 /*
@@ -762,6 +805,9 @@ rb_grn_init_context (VALUE mGrn)
 			       rb_grn_context_s_set_default_options, 1);
 
     rb_define_method(cGrnContext, "initialize", rb_grn_context_initialize, -1);
+
+    rb_define_method(cGrnContext, "close", rb_grn_context_close, 0);
+    rb_define_method(cGrnContext, "closed?", rb_grn_context_closed_p, 0);
 
     rb_define_method(cGrnContext, "inspect", rb_grn_context_inspect, 0);
 

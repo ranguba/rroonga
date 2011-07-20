@@ -120,4 +120,11 @@ class ContextTest < Test::Unit::TestCase
     context.match_escalation_threshold = -1
     assert_equal(-1, context.match_escalation_threshold)
   end
+
+  def test_close
+    context = Groonga::Context.new
+    assert_false(context.closed?)
+    context.close
+    assert_true(context.closed?)
+  end
 end

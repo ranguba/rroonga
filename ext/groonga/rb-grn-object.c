@@ -464,7 +464,7 @@ rb_grn_object_deconstruct (RbGrnObject *rb_grn_object,
 	return;
 
     if (!rb_grn_object->object) {
-	rb_raise(rb_eGrnObjectClosed,
+	rb_raise(rb_eGrnClosed,
 		 "can't access already closed groonga object: %s",
 		 rb_grn_inspect(CLASS_OF(rb_grn_object->self)));
     }

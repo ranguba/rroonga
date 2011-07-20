@@ -93,6 +93,7 @@ typedef struct _RbGrnContext RbGrnContext;
 struct _RbGrnContext
 {
     grn_ctx *context;
+    grn_ctx context_entity;
     VALUE self;
 };
 
@@ -192,7 +193,7 @@ struct _RbGrnPlugin
 RB_GRN_VAR grn_bool rb_grn_exited;
 
 RB_GRN_VAR VALUE rb_eGrnError;
-RB_GRN_VAR VALUE rb_eGrnObjectClosed;
+RB_GRN_VAR VALUE rb_eGrnClosed;
 RB_GRN_VAR VALUE rb_eGrnNoSuchColumn;
 RB_GRN_VAR VALUE rb_eGrnInvalidArgument;
 RB_GRN_VAR VALUE rb_cGrnObject;
