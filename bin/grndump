@@ -24,6 +24,7 @@ require 'groonga'
 
 options = OpenStruct.new
 options.tables = []
+options.exclude_tables = []
 options.dump_schema = true
 options.dump_tables = true
 option_parser = OptionParser.new do |parser|
@@ -50,6 +51,18 @@ option_parser = OptionParser.new do |parser|
       options.tables << table
     end
   end
+
+  parser.on("--exclude-table=TABLE",
+            "don't dump TABLE.",
+            "use this option multiple to not dump multiple tables.",
+            "use /.../ as TABLE to match table name with regexp.") do |table|
+    case table
+    when /\A\/(.*)\/(i)?\z/
+      options.exclude_tables << Regexp.new($1, $2 == "i")
+    when
+      options.exclude_tables << table
+    end
+  end
 end
 args = option_parser.parse!(ARGV)
 
@@ -66,6 +79,7 @@ dumper_options = {
   :dump_schema => options.dump_schema,
   :dump_tables => options.dump_tables,
   :tables => options.tables,
+  :exclude_tables => options.exclude_tables,
 }
 database_dumper = Groonga::DatabaseDumper.new(dumper_options)
 database_dumper.dump

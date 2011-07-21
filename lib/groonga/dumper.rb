@@ -72,7 +72,8 @@ module Groonga
       options[:database].each(:order_by => :key) do |object|
         next unless object.is_a?(Groonga::Table)
         next if object.size.zero?
-        next unless target_table?(options[:tables], object)
+        next if target_table?(options[:exclude_tables], object, false)
+        next unless target_table?(options[:tables], object, true)
         options[:output].write("\n") if !first_table or options[:dump_schema]
         first_table = false
         dump_records(object, options)
@@ -93,8 +94,8 @@ module Groonga
       output.write("register #{plugin_name}\n")
     end
 
-    def target_table?(target_tables, table)
-      return true if target_tables.nil? or target_tables.empty?
+    def target_table?(target_tables, table, default_value)
+      return default_value if target_tables.nil? or target_tables.empty?
       target_tables.any? do |name|
         name === table.name
       end

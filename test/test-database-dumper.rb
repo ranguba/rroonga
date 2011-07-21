@@ -157,6 +157,66 @@ load --table Posts
 EOS
     end
 
+    def test_exclude_tables
+      dump_options = {
+        :exclude_tables => ["Posts"],
+      }
+      assert_equal(<<-EOS, dump(dump_options))
+#{dumped_schema.chomp}
+
+load --table Tags
+[
+["_key","name"],
+["search",""],
+["mori",""]
+]
+
+load --table Users
+[
+["_key","name"],
+["mori",""]
+]
+EOS
+    end
+
+    def test_exclude_tables_with_regexp
+      dump_options = {
+        :exclude_tables => [/Posts?/],
+      }
+      assert_equal(<<-EOS, dump(dump_options))
+#{dumped_schema.chomp}
+
+load --table Tags
+[
+["_key","name"],
+["search",""],
+["mori",""]
+]
+
+load --table Users
+[
+["_key","name"],
+["mori",""]
+]
+EOS
+    end
+
+    def test_tables_combination
+      dump_options = {
+        :exclude_tables => ["Posts"],
+        :tables => ["Posts", "Users"],
+      }
+      assert_equal(<<-EOS, dump(dump_options))
+#{dumped_schema.chomp}
+
+load --table Users
+[
+["_key","name"],
+["mori",""]
+]
+EOS
+    end
+
     def test_no_schema
       assert_equal(<<-EOS, dump(:dump_schema => false))
 load --table Posts
