@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2010  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2011  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -95,28 +95,6 @@ module SchemaCreateTableTests
     assert_raise(Groonga::Schema::TableCreationWithDifferentOptions) do
       Groonga::Schema.create_table("Posts",
                                    options(:sub_records => false)) do |table|
-      end
-    end
-  end
-
-  def test_same_path
-    path = (@tmp_dir + "posts.groonga").to_s
-    Groonga::Schema.create_table("Posts", options(:path => path)) do |table|
-    end
-
-    Groonga::Schema.create_table("Posts", options(:path => path)) do |table|
-    end
-    assert_equal(path, context["Posts"].path)
-  end
-
-  def test_different_path
-    path = (@tmp_dir + "posts.groonga").to_s
-    Groonga::Schema.create_table("Posts", options(:path => path)) do |table|
-    end
-
-    assert_raise(Groonga::Schema::TableCreationWithDifferentOptions) do
-      path = (@tmp_dir + "posts.grn").to_s
-      Groonga::Schema.create_table("Posts", options(:path => path)) do |table|
       end
     end
   end

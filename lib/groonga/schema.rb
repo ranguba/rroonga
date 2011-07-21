@@ -1217,10 +1217,6 @@ module Groonga
         sub_records = options[:sub_records]
         sub_records = false if sub_records.nil?
         return false unless table.support_sub_records? == sub_records
-        path = options[:path]
-        if path and File.expand_path(table.path) != File.expand_path(path)
-          return false
-        end
 
         case table
         when Groonga::Array
