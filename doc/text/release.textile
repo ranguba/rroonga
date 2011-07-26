@@ -26,7 +26,7 @@ h2. 日本語訳の作成
 $ rake reference:po:ja:update
 </pre>
 
-その後、ja.poを開いて、各msgidに対応するmsdstrにコミットコメントの和訳を作成する。
+その後、ja.poを開いて、各msgidに対応するmsgstrにコミットコメントの和訳を作成する。
 
 h2. バージョンとリリース日の更新
 
