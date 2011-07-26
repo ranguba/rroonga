@@ -128,7 +128,7 @@ doc_en_dir = reference_base_dir + "en"
 html_base_dir = Pathname.new("doc/html")
 html_reference_dir = html_base_dir + spec.name
 YARD::Rake::YardocTask.new do |task|
-  task.options += ["--title", "#{spec.name} - #{version}"]
+  task.options += ["--title", spec.name]
   # task.options += ["--charset", "UTF-8"]
   task.options += ["--readme", "README.textile"]
   task.options += ["--files", "doc/text/**/*"]
