@@ -1,67 +1,125 @@
-ext/groonga/rb-grn.hにあるRB_GRN_MAJOR_VERSIONなどの数値を見ての最新バージョンを確かめる。
+h1. リリース手順
 
+h2. NEWS.rdocに前回リリースからの変更点のまとめ
 
-NEWS.rdoc, NEWS.ja.rdocに、前回のリリース時から現在までの変更点を、
+NEWS.rdocに前回のリリース時から現在までの変更点を、
+
+<pre>
 $ git log -p --reverse (最新バージョン)..
-としてgitのlogを見ながらまとめる。
+</pre>
 
-プロジェクトページ（html/index.html、html/index.html.ja）のrroongaの項にある最新バージョンとリリース日をそれぞれ確認したバージョン番号と今日の日付に更新する。
+としてgitのlogを見ながら、ユーザにとって知る必要があるもののコミットコメントのみを抜き出しImprovement, Changes, Fixesにまとめる。
+コミットコメントの行末に[人名]がある場合はその人名をThanks以下に書く。
 
+TODO: テンプレ？
+TODO: 「ユーザにとって必要のあるもの」の具体的な基準
 
-  $ rake release:info:update OLD_VERSION=1.2.5 OLD_RELEASE_DATE=2011-07-29 RELEASE_DATE=2011-08-29
+h2. 日本語訳の作成
 
-アップロード用のgemパッケージを下のようにコマンドを打ってビルドする。
-rroongaの場合、ruby1.9.1ではパースできないオブジェクトがあるためruby1.8で作成する。
+下記コマンドを実行してja.poを更新する。
+
+<pre>
+$ rake reference:po:ja:update
+</pre>
+
+その後、ja.poを開いて、各msgidに対応するmsdstrにコミットコメントの和訳を作成する。
+
+h2. バージョンとリリース日の更新
+
+下記コマンドを入力して、プロジェクトページ（html/index.html、html/index.html.ja）のrroongaの項にある最新バージョンとリリース日をそれぞれ次回リリースに合わせたものに更新する。
+
+<pre>
+$ rake release:info:update OLD_VERSION=（現在のバージョン） OLD_RELEASE_DATE=（前回リリース日） RELEASE_DATE=（今回のリリース日）
+</pre>
+
+h2. gemパッケージの作成
+
+下記コマンドを打ってアップロード用のgemパッケージをビルドする。
+
+<pre>
 $ ruby1.8 -S rake build
+</pre>
+
+TODO: いらないとおもう
+rroongaの場合、ruby1.9.1ではパースできないオブジェクトがあるためruby1.8で作成する。
+
+h2. gemパッケージの動作確認
 
 そのgemパッケージの動作を確認するため、下記コマンドを打ってローカル環境にインストールする。
-（これは1.9でよい）
-$ gem1.9.1 install pkg/rroonga-VERSION.gem --user-install
 
-インストールが成功したら、パッケージをインストールしたディレクトリに移動して、テストを実行し動作を確認する。
-makeする必要がないためNO_MAKE=yesをつけて抑止する。
+<pre>
+$ gem1.9.1 install pkg/rroonga-（バージョン番号）.gem --user-install
+</pre>
+
+TODO: 前回リリース時に前バージョンのやつが残ってたりするといちいち自分でバージョン調べて最新のをやったりすることになるので間違えるかもしれない
+
+インストールが成功すると/home/(ユーザ名)/.gem/ruby/1.9.1/gems/rroonga-（バージョン番号）/にインストールされる。
+このディレクトリに移動して、テストを実行し動作を確認する。
+
+<pre>
 $ NO_MAKE=yes ruby1.9.1 test/run-test.rb
+</pre>
 
+TODO: ディレクトリ移動するのがめんどいような
 
-タグを打ってpushする。
+h2. リリースバージョンのタグを作成
 
+下記コマンドを入力して、今回リリースするバージョンのタグを打ってgit pushする。
+
+<pre>
 $ rake tag
 $ git push --tags
+</pre>
 
-とする。
+TODO: 下はいらないなら節ごと削除。というかrake releaseはなんのためにあるのか？いらないならdesc消すとか？
+h3. タグ付けの際に間違ってrake releaseをした場合
 
-うっかり、
-$ rake release
-やった場合は、タグの頭にvがついてしまうので、
+タグの頭にvがついてしまうので、
 
-$ git tag -d vVERSION
-$ git push origin :refs/tags/vVERSION
+<pre>
+$ git tag -d v（バージョン番号）
+$ git push origin :refs/tags/v（バージョン番号）
+</pre>
 
 してタグを一度消してから上記作業をする。
 
-アップロードする。
+h2. rubygems.orgにパッケージをアップロード
 
-rubygems.orgにアップロードするには、
+下記コマンドを実行してパッケージをアップロードする。
 
+<pre>
 $ ruby1.8 -S rake gemcutter:release
+</pre>
 
-をする。
+h2. rubyforgeにパッケージをアップロード
 
-rubyforgeにアップロードするには、
+下記コマンドを実行してアップロードする。
 
+<pre>
 $ ruby1.8 -S rake publish
 $ ruby1.8 -S rake html:publish
+</pre>
 
-をする。
+TODO: ここに書くというより最初の設定での話なのでいらない気がする
+h3. 一度もrubyforgeにアップロードしてない場合
 
-いちどもrubyforgeにアップロードしてない場合、
-
+<pre>
 $ rubyforge --setup
+</pre>
 
 をしてユーザの設定をする。
 
-メーリングリストにリリースしたよメールを流す。
-rubyforgeの最新ニュースを更新する。
+h2. メーリングリストにリリースの周知
 
-ext/groonga/rb-grn.hにある、RB_GRN_MAJOR_VERSIONなどの値を次回アップデート時の
-バージョンの値に変更する。
+メーリングリストにリリースした旨を書いたメールを流す。
+
+TODO: メールテンプレ？
+
+h2. rubyforgeのニュースを更新
+
+rubyforgeの最新ニュースを更新する。
+TODO: やったことがないので具体的なやり方を聞く
+
+h2. 次回リリース時のバージョン番号の決定
+
+ext/groonga/rb-grn.hにある、RB_GRN_MAJOR_VERSION,RB_GRN_MINOR_VERSION,RB_GRN_MICRO_VERSIONの値を次回リリース時のバージョンの値に変更する。
