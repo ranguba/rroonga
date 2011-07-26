@@ -402,17 +402,12 @@ namespace :release do
       new_release_date = ENV["RELEASE_DATE"] || Time.now.strftime("%Y-%m-%d")
       new_version = ENV["VERSION"]
 
-      if old_version.nil?
-        if old_release_date.nil?
-          raise ArgumentError,
-          "Specify each options of OLD_VERSION and OLD_RELEASE_DATE."
-        else
-          raise ArgumentError, "Specify option of OLD_VERSION"
-        end
-      else
-        if old_release_date.nil?
-          raise ArgumentError, "Specify option of OLD_RELEASE_DATE."
-        end
+      empty_options = []
+      empty_options << "OLD_VERSION" if old_version.nil?
+      empty_options << "OLD_RELEASE_DATE" if old_release_date.nil?
+
+      unless empty_options.empty?
+        raise ArgumentError, "Specify option(s) of #{empty_options.join(",")}."
       end
 
       indexes = ["doc/html/index.html", "doc/html/index.html.ja"]
