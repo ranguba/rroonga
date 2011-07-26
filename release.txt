@@ -1,62 +1,28 @@
-1.
-NEWS.rdoc, NEWS.ja.rdocに変更点をまとめる。
-タグの打ち忘れを確認しつつバージョンを確かめる。
+ext/groonga/rb-grn.hにあるRB_GRN_MAJOR_VERSIONなどの数値を見ての最新バージョンを確かめる。
+
+
+NEWS.rdoc, NEWS.ja.rdocに、前回のリリース時から現在までの変更点を、
 $ git log -p --reverse (最新バージョン)..
+としてgitのlogを見ながらまとめる。
 
----NEWS.ja.rdocテンプレ---
+プロジェクトページ（html/index.html、html/index.html.ja）のrroongaの項にある最新バージョンとリリース日をそれぞれ確認したバージョン番号と今日の日付に更新する。
 
-== バージョン: yyyy-mm-dd
 
-=== 改良
+  $ rake release:info:update OLD_VERSION=1.2.5 OLD_RELEASE_DATE=2011-07-29 RELEASE_DATE=2011-08-29
 
-* 
-
-=== 変更
-
-* 
-
-=== 修正
-
-* 
-
-=== 感謝
-
-* 
-
----NEWS.rdocテンプレ---
-== バージョン: yyyy-mm-dd
-
-=== Improvements
-
-* 
-
-=== Changes
-
-* 
-
-=== Fixes
-
-* 
-
-=== Thanks
-
-* 
-
-2.
-プロジェクトページ（html/index.html、html/index.html.ja）のrroongaの項にある最新バージョンとリリース日を更新する。
-
-3.
-gemパッケージを作る。
-パースできないオブジェクトがある関係上、ruby1.8で作成する。
+アップロード用のgemパッケージを下のようにコマンドを打ってビルドする。
+rroongaの場合、ruby1.9.1ではパースできないオブジェクトがあるためruby1.8で作成する。
 $ ruby1.8 -S rake build
 
-その後そのパッケージをインストールする。（これは1.9でよい）
-$ gem1.9 install pkg/rroonga-VERSION.gem --user-install
+そのgemパッケージの動作を確認するため、下記コマンドを打ってローカル環境にインストールする。
+（これは1.9でよい）
+$ gem1.9.1 install pkg/rroonga-VERSION.gem --user-install
 
-インストールできたら、パッケージをインストールしたディレクトリにあるテストを実行して動作を確認する。
+インストールが成功したら、パッケージをインストールしたディレクトリに移動して、テストを実行し動作を確認する。
+makeする必要がないためNO_MAKE=yesをつけて抑止する。
 $ NO_MAKE=yes ruby1.9.1 test/run-test.rb
 
-4.
+
 タグを打ってpushする。
 
 $ rake tag
@@ -73,7 +39,6 @@ $ git push origin :refs/tags/vVERSION
 
 してタグを一度消してから上記作業をする。
 
-5.
 アップロードする。
 
 rubygems.orgにアップロードするには、
@@ -85,6 +50,7 @@ $ ruby1.8 -S rake gemcutter:release
 rubyforgeにアップロードするには、
 
 $ ruby1.8 -S rake publish
+$ ruby1.8 -S rake html:publish
 
 をする。
 
@@ -94,10 +60,8 @@ $ rubyforge --setup
 
 をしてユーザの設定をする。
 
-6.
 メーリングリストにリリースしたよメールを流す。
 rubyforgeの最新ニュースを更新する。
 
-7.
 ext/groonga/rb-grn.hにある、RB_GRN_MAJOR_VERSIONなどの値を次回アップデート時の
 バージョンの値に変更する。
