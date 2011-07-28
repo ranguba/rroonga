@@ -434,3 +434,14 @@ namespace :release do
   end
 end
 
+namespace :test do
+  task :install do
+    gemspec_helper = Rake.application.jeweler.gemspec_helper
+    ruby("-S gem install --user-install #{gemspec_helper.gem_path}")
+
+    gem_spec = Gem.source_index.find_name("rroonga").last
+    installed_path = gem_spec.full_gem_path
+    ENV["NO_MAKE"] = "yes"
+    ruby("-rubygems", "#{installed_path}/test/run-test.rb")
+  end
+end
