@@ -130,10 +130,9 @@ unless PKGConfig.have_package(package_name, major, minor, micro)
   unless have_local_groonga?(package_name, major, minor, micro)
     install_groonga_locally(major, minor, micro)
   end
-end
-
-unless PKGConfig.have_package(package_name, major, minor, micro)
-  have_local_groonga?(package_name, major, minor, micro) or exit 1
+  unless PKGConfig.have_package(package_name, major, minor, micro)
+    exit(false)
+  end
   add_rpath_for_local_groonga
 end
 
