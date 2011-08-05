@@ -60,12 +60,12 @@ def cleanup_white_space(entry)
 end
 
 ENV["VERSION"] ||= guess_version(groonga_ext_dir)
-version = ENV["VERSION"]
+version = ENV["VERSION"].dup
 spec = nil
 Jeweler::Tasks.new do |_spec|
   spec = _spec
   spec.name = "rroonga"
-  spec.version = version.dup
+  spec.version = version
   spec.rubyforge_project = "groonga"
   spec.homepage = "http://groonga.rubyforge.org/"
   authors = File.join(base_dir, "AUTHORS")
@@ -417,7 +417,7 @@ namespace :release do
          [old_release_date, new_release_date]].each do |old, new|
           replaced_content = replaced_content.gsub(/#{Regexp.escape(old)}/, new)
           if /\./ =~ old
-            old_underscore = old.gsub(/\./, '-')
+            old_undnerscore = old.gsub(/\./, '-')
             new_underscore = new.gsub(/\./, '-')
             replaced_content =
               replaced_content.gsub(/#{Regexp.escape(old_underscore)}/,
@@ -432,6 +432,21 @@ namespace :release do
       end
     end
   end
+
+  namespace :rubyforge do
+    desc "Upload tar.gz to RubyForge."
+    task :upload => "package" do
+      ruby("-S", "rubyforge",
+           "add_release",
+           spec.rubyforge_project,
+           spec.name,
+           spec.version.to_s,
+           "pkg/#{spec.name}-#{spec.version}.tar.gz")
+    end
+  end
+
+  desc "Release to RubyForge."
+  task :rubyforge => "release:rubyforge:upload"
 end
 
 namespace :test do
