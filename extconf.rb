@@ -34,6 +34,7 @@ Dir.chdir(source_ext_dir.to_s) do
   end
   ruby = "#{config['bindir']}/#{config['ruby_install_name']}#{config['EXEEXT']}"
   message("checking in #{ext_dir}...\n")
+  ENV["INSTALL_RB"] = "yes"
   system(ruby, (ext_dir + 'extconf.rb').to_s, *ARGV) or exit 1
   message("checking in #{ext_dir}: done.\n")
   File.open("Makefile") do |file|

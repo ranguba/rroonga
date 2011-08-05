@@ -158,7 +158,9 @@ checking_for(checking_message("debug flag")) do
   debug
 end
 
-$INSTALLFILES ||= []
-$INSTALLFILES << ["../../lib/**/*.rb", "$(RUBYLIBDIR)", "../../lib"]
+if ENV["INSTALL_RB"] == "yes"
+  $INSTALLFILES ||= []
+  $INSTALLFILES << ["../../lib/**/*.rb", "$(RUBYLIBDIR)", "../../lib"]
+end
 
 create_makefile(module_name)
