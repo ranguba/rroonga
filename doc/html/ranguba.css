@@ -293,8 +293,7 @@ pre
 }
 
 pre.command,
-pre.code,
-dd
+pre.code
 {
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
