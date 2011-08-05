@@ -23,10 +23,10 @@
         <li id="other-language-english" lang="en" xml:lang="en"><a href="developer.html">English</a></li>
       </ul>
       <ul class="menu">
-	<li id="menu-reference"><a href="rroonga/">リファレンスマニュアル</a></li>
-	<li id="menu-tutorial"><a href="rroonga/text/TUTORIAL_ja_rdoc.html">チュートリアル</a></li>
-	<li id="menu-install"><a href="./#install-rroonga">インストール</a></li>
-	<li id="menu-developer"><a href="developer.html">開発者向け情報</a></li>
+	<li id="menu-reference"><a href="rroonga/ja/">リファレンスマニュアル</a></li>
+	<li id="menu-tutorial"><a href="rroonga/ja/file.tutorial.html">チュートリアル</a></li>
+	<li id="menu-install"><a href="index.html.ja#install-rroonga">インストール</a></li>
+	<li id="menu-developer"><a href="development.html.ja">開発者向け情報</a></li>
       </ul>
     </div>
 
