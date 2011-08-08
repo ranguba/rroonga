@@ -1,6 +1,6 @@
 /* -*- c-file-style: "ruby" -*- */
 /*
-  Copyright (C) 2009-2010  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2011  Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -192,10 +192,11 @@ rb_grn_array_add (int argc, VALUE *argv, VALUE self)
     id = grn_table_add(context, table, NULL, 0, NULL);
     rb_grn_context_check(context, self);
 
-    if (GRN_ID_NIL == id)
+    if (GRN_ID_NIL == id) {
 	return Qnil;
-    else
-	return rb_grn_record_new(self, id, values);
+    } else {
+	return rb_grn_record_new_added(self, id, values);
+    }
 }
 
 void

@@ -32,6 +32,7 @@ module Groonga
     def initialize(table, id, values=nil)
       @table = table
       @id = id
+      @added = false
       if values
         values.each do |name, value|
           self[name] = value
@@ -378,6 +379,15 @@ module Groonga
 
     def respond_to?(name) # :nodoc:
       super or !@table.column(name.to_s.sub(/=\z/, '')).nil?
+    end
+
+    def added?
+      @added
+    end
+
+    # @private
+    def added=(added)
+      @added = added
     end
 
     private

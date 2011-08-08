@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2010  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2011  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -90,5 +90,13 @@ class ArrayTest < Test::Unit::TestCase
     morita_id = users.add.id
     users.set_column_value(morita_id, "name", "morita")
     assert_equal("morita", users.column_value(morita_id, "name"))
+  end
+
+  def test_added?
+    users = Groonga::Array.create(:name => "Users")
+    first_user = users.add
+    assert_predicate(first_user, :added?)
+    second_user = users.add
+    assert_predicate(second_user, :added?)
   end
 end

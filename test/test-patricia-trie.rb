@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2009-2010  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2011  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -378,5 +378,14 @@ class PatriciaTrieTest < Test::Unit::TestCase
     numbers.add(5)
     numbers.add(7)
     assert_equal([1, 2, 5, 7], numbers.collect {|number| number.key})
+  end
+
+  def test_added?
+    users = Groonga::PatriciaTrie.create(:name => "Users",
+                                         :key_type => "ShortText")
+    bob = users.add("bob")
+    assert_predicate(bob, :added?)
+    bob_again = users.add("bob")
+    assert_not_predicate(bob_again, :added?)
   end
 end

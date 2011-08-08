@@ -474,6 +474,9 @@ VALUE          rb_grn_posting_new                   (grn_posting *posting,
 VALUE          rb_grn_record_new                    (VALUE table,
 						     grn_id id,
 						     VALUE values);
+VALUE          rb_grn_record_new_added              (VALUE table,
+						     grn_id id,
+						     VALUE values);
 VALUE          rb_grn_record_new_raw                (VALUE table,
 						     VALUE id,
 						     VALUE values);

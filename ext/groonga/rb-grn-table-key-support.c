@@ -1,6 +1,6 @@
 /* -*- c-file-style: "ruby" -*- */
 /*
-  Copyright (C) 2009-2010  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2011  Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -88,7 +88,7 @@ rb_grn_table_key_support_bind (RbGrnTableKeySupport *rb_grn_table_key_support,
 }
 
 static grn_id
-rb_grn_table_key_support_add_raw (VALUE self, VALUE rb_key)
+rb_grn_table_key_support_add_raw (VALUE self, VALUE rb_key, int *added)
 {
     grn_ctx *context;
     grn_obj *table;
@@ -103,7 +103,7 @@ rb_grn_table_key_support_add_raw (VALUE self, VALUE rb_key)
     GRN_BULK_REWIND(key);
     RVAL2GRNKEY(rb_key, context, key, domain_id, domain, self);
     id = grn_table_add(context, table,
-                       GRN_BULK_HEAD(key), GRN_BULK_VSIZE(key), NULL);
+                       GRN_BULK_HEAD(key), GRN_BULK_VSIZE(key), added);
     rb_grn_context_check(context, self);
 
     return id;
@@ -116,6 +116,11 @@ rb_grn_table_key_support_add_raw (VALUE self, VALUE rb_key)
  * 主キーが_key_のレコード追加し、追加したレコードを返す。レ
  * コードの追加に失敗した場合は+nil+を返す。
  *
+ * すでに同じキーのレコードが存在する場合は追加せずに同じレ
+ * コードを返す。追加されたかどうかは
+ * +Groonga::Record#added?+で調べることができる。+true+を返
+ * したら追加されたということを示す。
+ *
  * _values_にはレコードのカラムに設定する値を指定する。省略
  * した場合または+nil+を指定した場合はカラムは設定しない。カ
  * ラムの値は<tt>{:カラム名1 => 値1, :カラム名2 => 値2,
@@ -126,13 +131,19 @@ rb_grn_table_key_support_add (int argc, VALUE *argv, VALUE self)
 {
     grn_id id;
     VALUE key, values;
+    int added = GRN_FALSE;
 
     rb_scan_args(argc, argv, "11", &key, &values);
-    id = rb_grn_table_key_support_add_raw(self, key);
-    if (GRN_ID_NIL == id)
+    id = rb_grn_table_key_support_add_raw(self, key, &added);
+    if (GRN_ID_NIL == id) {
 	return Qnil;
-    else
-	return rb_grn_record_new(self, id, values);
+    } else {
+	if (added) {
+	    return rb_grn_record_new_added(self, id, values);
+	} else {
+	    return rb_grn_record_new(self, id, values);
+	}
+    }
 }
 
 grn_id
@@ -364,7 +375,7 @@ rb_grn_table_key_support_array_set (VALUE self, VALUE rb_key, VALUE rb_values)
 					 NULL, NULL, NULL,
 					 NULL);
 
-    id = rb_grn_table_key_support_add_raw(self, rb_key);
+    id = rb_grn_table_key_support_add_raw(self, rb_key, NULL);
 
     if (id == GRN_ID_NIL) {
 	rb_raise(rb_eGrnError,
@@ -409,7 +420,7 @@ rb_grn_table_key_support_set_column_value (int argc, VALUE *argv, VALUE self)
     }
 
     rb_key = rb_id_or_key;
-    id = rb_grn_table_key_support_add_raw(self, rb_key);
+    id = rb_grn_table_key_support_add_raw(self, rb_key, NULL);
     if (id == GRN_ID_NIL) {
 	rb_raise(rb_eGrnError,
 		 "failed to add record: %s",
@@ -533,7 +544,7 @@ rb_grn_table_key_support_set_value_by_key (VALUE self,
 					 &value, NULL, NULL,
 					 NULL);
 
-    id = rb_grn_table_key_support_add_raw(self, rb_key);
+    id = rb_grn_table_key_support_add_raw(self, rb_key, NULL);
     if (GRN_ID_NIL == id) {
 	rb_raise(rb_eGrnError,
 		 "failed to add new record with key: <%s>: <%s>",

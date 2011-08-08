@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-# Copyright (C) 2009-2010  Kouhei Sutou <kou@clear-code.com>
+#
+# Copyright (C) 2009-2011  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -74,7 +75,6 @@ class HashTest < Test::Unit::TestCase
     bookmark = bookmarks.add("http://google.com/")
     assert_equal(bookmark, bookmarks["http://google.com/"])
   end
-
 
   def test_inspect_anonymous
     path = @tables_dir + "anoymous.groonga"
@@ -307,5 +307,14 @@ class HashTest < Test::Unit::TestCase
         "nonexistent" => "No!",
       }
     end
+  end
+
+  def test_added?
+    users = Groonga::Hash.create(:name => "Users",
+                                 :key_type => "ShortText")
+    bob = users.add("bob")
+    assert_predicate(bob, :added?)
+    bob_again = users.add("bob")
+    assert_not_predicate(bob_again, :added?)
   end
 end
