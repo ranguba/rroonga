@@ -67,7 +67,7 @@ $ ruby1.8 -S rake build
 </pre>
 
 rroongaの場合、ruby1.9.1ではパースできないオブジェクトがあるためruby1.8で作成する。
-TODO: YARDを直して1.9.1でやりたい
+TODO: YAMLの設定ファイルを直して1.9.1でやる
 
 h2. gemパッケージの動作確認
 
@@ -134,14 +134,7 @@ $ ruby1.8 -S rake publish
 $ ruby1.8 -S rake html:publish
 </pre>
 
-TODO: （いるかどうか相談）ここに書くというより最初の設定での話なのでいらない気がする
-h3. 一度もrubyforgeにアップロードしてない場合
-
-<pre>
-$ rubyforge --setup
-</pre>
-
-をしてユーザの設定をする。
+TODO: rake publishした時にユーザ名を用いて~/.rubyforge/user-config.ymlを書き換える（rubyforge --setup を自動的に行う）
 
 h2. メーリングリストにリリースの周知
 
