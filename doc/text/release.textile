@@ -114,21 +114,8 @@ h2. リリースバージョンのタグを作成
 下記コマンドを入力して、今回リリースするバージョンのタグを打ってgit pushする。
 
 <pre>
-$ rake tag
-$ git push --tags
+$ rake release
 </pre>
-
-TODO: rake releaseについての記述はいるのか相談
-
-h3. タグ付けの際に間違ってrake releaseをした場合
-
-タグの頭にvがついてしまうので、
-<pre>
-$ git tag -d v（バージョン番号）
-$ git push origin :refs/tags/v（バージョン番号）
-</pre>
-
-してタグを一度消してから上記作業をする。
 
 h2. rubygems.orgにパッケージをアップロード
 
