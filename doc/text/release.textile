@@ -159,7 +159,133 @@ h2. メーリングリストにリリースの周知
 
 メーリングリストにリリースした旨を書いたメールを流す。
 日本語の他、英語のメーリングリストにもリリースした旨を英語で書いたメールを流す。
-TODO: （相談）メールテンプレ（定型文として使いまわせるならその部分があった方がわかりやすい）
+
+h3.日本語でのメールの具体例
+
+吉原です。
+
+（最新バージョンをリリースしたことを書く）
+groongaのRubyバインディングrroonga1.2.3をリリースしました。
+（rroongaのインデックスページのURL）
+  http://groonga.rubyforge.org/index.html.ja#about-rroonga
+
+（ソフトウェアの概略）
+rroongaはRubyらしい書き方でgroongaを操作できることを重視しています。
+同時に、groongaの速度をそのまま生かすことも大事にしています。
+
+（前回リリースから今回リリースまでに変更された点のうち、ユーザにとって重要なものを書く）
+1.2.1からの変更された点としては、ドキュメントの一部英訳化、リファ
+レンスのパスの修正などを行いました。また、rroongaをインストールし
+ようとした際、groongaがないと自動でインストールする機能が復活しま
+した。
+
+（コマンドなどのインストール方法）
+インストール:
+  % sudo gem install rroonga
+
+（チュートリアルページのURL）
+irbを使ったrroongaのチュートリアルはこちらにあります。
+
+  http://groonga.rubyforge.org/rroonga/ja/file.tutorial.html
+
+（http://groonga.rubyforge.org/rroonga/ja/file.news.htmlを見て、前回リリース時からの変更点を書く）
+1.2.1からの変更点は以下の通りです。
+
+1.2.3: 2011-06-27
+
+修正
+    gemパッケージに含まれてしまったオブジェクトファイル(*.o)を削除。
+    一部のリファレンスマニュアルの文字化けを修正。
+
+1.2.2: 2011-06-27
+
+改良
+    英語版の「開発者向け情報」ページを作成。
+    "html:publish"タスクと"publish"に関しての説明を追加。
+
+変更
+    Groonga::Record#attributesが重複したレコードが現れた際に
+    同じattributesオブジェクトを返すようにした。
+    Groonga::Record#attributesにドキュメントを追加。
+    「開発者向け情報」ページ内にあるドキュメント作成ツールを変更。
+    NEWS*.rdocとtutorial.texttileをディレクトリdoc/text/に移動。
+
+修正
+    インデックスページにある「チュートリアル」ページへのリンクを修正。
+    インデックスページにある英語版「チュートリアル」ページへのリンクを修正。
+    新しいgroongaのダウンロードURLに対応。 [mallowlabs]
+
+感謝
+    mallowlabsさん
+
+h3. 英語でのメールの具体例
+
+<pre>
+Everyone,
+
+（rroongaの再榛バージョンをリリースしたことを書く）
+We relesed rroonga 1.2.3.
+
+（インデックスページのURLを書く）
+  http://groonga.rubyforge.org/#about-rroonga
+
+（rroongaの説明）
+rroonga is the library which ruby-binding for grronga.
+
+（前回リリース時からの変更点のうち、ユーザにとって大事なものを書く）
+Since ver.1.2.1 was released, we translated some documents
+from Japanese to English, and fixed pathes in reference-manual.
+Thanks to mallowlabs, when installing rroonga without groonga
+installed, grronga is automatically installed.
+
+（インストール方法を書く）
+How to install:
+  % sudo gem install rroonga
+
+（チュートリアルについてのURLなどを書く）
+There is the tutorial of rroonga with irb:
+
+  http://groonga.rubyforge.org/rroonga/en/file.tutorial.html
+
+（news.rdocから今回リリースのために書いた部分をコピーする）
+Please see below changes since ver.1.2.1.
+
+== 1.2.3: 2011-06-27
+
+=== Fixes
+
+* remove object files in gem packages.
+* fix charactor corruption in reference.
+
+== 1.2.2: 2011-06-27
+
+=== Improvements
+
+* created "Developers" page in English.
+* added description for tasks of "html:publish" and "publish".
+
+=== Changes
+
+* Groonga::Record#attributes return same attributes object for duplicate records.
+* added document for Groonga::Record#attributes.
+* changed tool name in document page for creating document.
+* moved NEWS*.rdoc and tutorial.texttile to doc/text/.
+
+=== Fixes
+
+* fixed the tutorial path in index page.
+* fixed the path of tutorial in index page in English.
+* follow the groonga downlowd URL change. [mallowlabs]
+
+=== Thanks
+
+* mallowlabs
+
+--
+（名前とメールアドレス）
+yoshihara
+(yoshihara at clear-code.com)
+</pre>
 
 h2. rubyforgeのニュースを更新
 
