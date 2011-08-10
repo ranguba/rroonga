@@ -289,8 +289,7 @@ yoshihara
 
 h2. rubyforgeのニュースを更新
 
-rubyforgeの最新ニュースを更新する。
-TODO: （聞く）やったことがないので具体的なやり方を聞く
+rubyforgeのpost_newsコマンドを使ってrubyforgeの最新ニュースを更新する。
 
 h2. 次回リリース時のバージョン番号の設定
 
