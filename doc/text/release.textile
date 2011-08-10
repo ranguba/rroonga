@@ -92,11 +92,11 @@ $ rake tag
 $ git push --tags
 </pre>
 
-TODO: （rake releaseについての記述はいるのか相談）下はいらないなら節ごと削除。というかrake releaseはなんのためにあるのか？いらないならdesc消すとか？
+TODO: rake releaseについての記述はいるのか相談
+
 h3. タグ付けの際に間違ってrake releaseをした場合
 
 タグの頭にvがついてしまうので、
-
 <pre>
 $ git tag -d v（バージョン番号）
 $ git push origin :refs/tags/v（バージョン番号）
@@ -134,7 +134,6 @@ h2. メーリングリストにリリースの周知
 
 メーリングリストにリリースした旨を書いたメールを流す。
 
-TODO: （書く）メールアドレス
 TODO: （相談）メールテンプレ（定型文として使いまわせるならその部分があった方がわかりやすい）
 TODO: （どうだったか聞く）英語版？
 
@@ -143,8 +142,6 @@ h2. rubyforgeのニュースを更新
 rubyforgeの最新ニュースを更新する。
 TODO: （聞く）やったことがないので具体的なやり方を聞く
 
-h2. 次回リリース時のバージョン番号の決定
+h2. 次回リリース時のバージョン番号の設定
 
 ext/groonga/rb-grn.hにある、RB_GRN_MAJOR_VERSION,RB_GRN_MINOR_VERSION,RB_GRN_MICRO_VERSIONの値を次回リリース時のバージョンの値に変更する。
-
-TODO: （聞く）具体的にどうバージョン番号を決める？
