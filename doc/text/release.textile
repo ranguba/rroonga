@@ -40,12 +40,14 @@ h3. news.rdocの1リリース分のテンプレート
 
 </pre>
 
+TODO:テンプレをtextileにする
+
 h2. 日本語訳の作成
 
 下記コマンドを実行してja.poを更新する。
 
 <pre>
-$ rake reference:po:ja:update
+$ rake reference:po:update
 </pre>
 
 その後、ja.poを開いて、各msgid（コミットログ）に対応するmsgstrにコミットログの和訳を作成する。
@@ -104,7 +106,7 @@ git log --reverse -p （リリースバージョン）..（残っていたコミ
 その後、下記コマンドを実行してja.poを更新する。
 
 <pre>
-$ rake reference:po:ja:update
+$ rake reference:po:update
 </pre>
 
 その後、ja.poを開いて、各msgid（追加したコミットログ）に対応するmsgstrにコミットログの和訳を作成する。
