@@ -158,6 +158,30 @@
 	  <li><a href="racknga/ja/">rackngaのリファレンスマニュアル</a></li>
 	</ul>
 
+	<h2 id="about-packnga">Packnga</h2>
+	<p>
+	  Packnga（ぱっくんが）は、多言語化に対応したリリースを補助するライブラリです。
+	</p>
+
+	<h3>Packngaの最新リリース</h3>
+	<p>
+	  2011-08-11にリリースされた<a href="packnga/ja/file.news.html">1.0.0</a>が最新です。
+        </p>
+
+	<h3 id="install-packnga">Packngaのインストール</h3>
+	<p>
+	  RubyGemsでインストールできます。
+        </p>
+        <pre class="command">% sudo gem install packnga</pre>
+
+	<h3>Packngaのドキュメント</h3>
+	<p>
+	  リファレンスマニュアルがあります。
+        </p>
+        <ul>
+	  <li><a href="packnga/ja/">Packngaのリファレンスマニュアル</a></li>
+        </ul>
+
 	<h2 id="about-chupatext">ChupaText</h2>
 	<p>
 	  ChupaText（ちゅぱてきすと）はPDFやオフィス文書などの検索対象からテキストを抽出するユーティリティです。ライブラリ、コマンドライン、Webサービスとして利用できます。
