@@ -78,7 +78,7 @@ module Groonga
     #   selected_entries = entries.select do |record|
     #     entry.description =~ query
     #   end
-    #   paged_entries = selected_entries.paginate(["_score", :desc],
+    #   paged_entries = selected_entries.paginate([["_score", :desc]],
     #                                             :page => 1,
     #                                             :size => 10)
     #
