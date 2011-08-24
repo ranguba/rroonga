@@ -131,11 +131,6 @@ module YARD
   end
 end
 
-reference_base_dir = Pathname.new("doc/reference")
-doc_en_dir = reference_base_dir + "en"
-html_base_dir = Pathname.new("doc/html")
-html_reference_dir = html_base_dir + spec.name
-
 def windows?(platform=nil)
   platform ||= RUBY_PLATFORM
   platform =~ /mswin(?!ce)|mingw|cygwin|bccwin/
