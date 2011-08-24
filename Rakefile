@@ -231,39 +231,6 @@ namespace :reference do
   po_dir = "doc/po"
   pot_file = "#{po_dir}/#{spec.name}.pot"
 
-  namespace :po do
-    translate_languages.each do |language|
-      namespace language do
-        po_file = "#{po_dir}/#{language}.po"
-
-        if File.exist?(po_file)
-          file po_file => html_files do |t|
-            sh("xml2po", "--keep-entities", "--update", t.name, *html_files)
-          end
-        else
-          file po_file => pot_file do |t|
-            sh("msginit",
-               "--input=#{pot_file}",
-               "--output=#{t.name}",
-               "--locale=#{language}")
-          end
-        end
-
-        desc "Updates po file for #{language}."
-        task :update => po_file
-      end
-    end
-
-    desc "Updates po files."
-    task :update do
-      ruby($0, "clobber")
-      ruby($0, "yard")
-      translate_languages.each do |language|
-        ruby($0, "reference:po:#{language}:update")
-      end
-    end
-  end
-
   namespace :translate do
     translate_languages.each do |language|
       po_file = "#{po_dir}/#{language}.po"
