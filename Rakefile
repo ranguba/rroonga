@@ -231,33 +231,6 @@ namespace :reference do
   po_dir = "doc/po"
   pot_file = "#{po_dir}/#{spec.name}.pot"
 
-  namespace :translate do
-    translate_languages.each do |language|
-      po_file = "#{po_dir}/#{language}.po"
-      translate_doc_dir = "#{reference_base_dir}/#{language}"
-
-      desc "Translates documents to #{language}."
-      task language => [po_file, reference_base_dir, *html_files] do
-        doc_en_dir.find do |path|
-          base_path = path.relative_path_from(doc_en_dir)
-          translated_path = "#{translate_doc_dir}/#{base_path}"
-          if path.directory?
-            mkdir_p(translated_path)
-            next
-          end
-          case path.extname
-          when ".html"
-            sh("xml2po --keep-entities " +
-               "--po-file #{po_file} --language #{language} " +
-               "#{path} > #{translated_path}")
-          else
-            cp(path.to_s, translated_path, :preserve => true)
-          end
-        end
-      end
-    end
-  end
-
   translate_task_names = translate_languages.collect do |language|
     "reference:translate:#{language}"
   end
