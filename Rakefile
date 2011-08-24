@@ -27,6 +27,8 @@ require 'yard'
 require 'jeweler'
 require 'rake/extensiontask'
 
+require 'packnga'
+
 if YAML.const_defined?(:ENGINE)
   begin
     YAML::ENGINE.yamler = "psych"
