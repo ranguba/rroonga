@@ -189,11 +189,6 @@ def rsync_to_rubyforge(spec, source, destination, options={})
   sh("rsync #{rsync_args} #{source} #{host}:#{remote_dir}#{destination}")
 end
 
-desc "Tag the current revision."
-task :tag do
-  sh("git tag -a #{version} -m 'release #{version}!!!'")
-end
-
 namespace :release do
   namespace :rubyforge do
     desc "Upload tar.gz to RubyForge."
