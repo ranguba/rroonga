@@ -189,19 +189,6 @@ def rsync_to_rubyforge(spec, source, destination, options={})
   sh("rsync #{rsync_args} #{source} #{host}:#{remote_dir}#{destination}")
 end
 
-namespace :reference do
-  translate_languages = [:ja]
-  supported_languages = [:en, *translate_languages]
-  html_files = FileList[(doc_en_dir + "**/*.html").to_s].to_a
-
-  directory reference_base_dir.to_s
-  CLOBBER.include(reference_base_dir.to_s)
-
-  desc "Upload document to rubyforge."
-  task :publish => [:generate, "reference:publication:prepare"] do
-    rsync_to_rubyforge(spec, "#{html_reference_dir}/", spec.name)
-  end
-end
 
 namespace :html do
   desc "Publish HTML to Web site."
