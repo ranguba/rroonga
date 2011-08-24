@@ -228,9 +228,6 @@ namespace :reference do
   directory reference_base_dir.to_s
   CLOBBER.include(reference_base_dir.to_s)
 
-  desc "Generates references."
-  task :generate => [:yard, :translate]
-
   namespace :publication do
     task :prepare do
       supported_languages.each do |language|
