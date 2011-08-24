@@ -131,8 +131,6 @@ module YARD
   end
 end
 
-
-
 reference_base_dir = Pathname.new("doc/reference")
 doc_en_dir = reference_base_dir + "en"
 html_base_dir = Pathname.new("doc/html")
