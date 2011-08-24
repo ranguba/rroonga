@@ -189,9 +189,6 @@ def rsync_to_rubyforge(spec, source, destination, options={})
   sh("rsync #{rsync_args} #{source} #{host}:#{remote_dir}#{destination}")
 end
 
-desc "Upload document and HTML to rubyforge."
-task :publish => ["html:publish", "reference:publish"]
-
 desc "Tag the current revision."
 task :tag do
   sh("git tag -a #{version} -m 'release #{version}!!!'")
