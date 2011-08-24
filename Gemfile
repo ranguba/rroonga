@@ -26,4 +26,5 @@ group :development, :test do
   gem "rake-compiler"
   gem "jeweler"
   gem "yard"
+  gem "packnga"
 end
