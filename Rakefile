@@ -191,10 +191,6 @@ def rsync_to_rubyforge(spec, source, destination, options={})
   sh("rsync #{rsync_args} #{source} #{host}:#{remote_dir}#{destination}")
 end
 
-def rake(*arguments)
-  ruby($0, *arguments)
-end
-
 namespace :reference do
   translate_languages = [:ja]
   supported_languages = [:en, *translate_languages]
