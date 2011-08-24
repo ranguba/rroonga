@@ -106,6 +106,9 @@ end
 Packnga::DocumentTask.new(spec) do |task|
 end
 
+Packnga::ReleaseTask.new(spec) do |task|
+end
+
 module YARD
   module CodeObjects
     class Proxy
