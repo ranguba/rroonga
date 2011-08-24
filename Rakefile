@@ -231,12 +231,6 @@ namespace :reference do
   po_dir = "doc/po"
   pot_file = "#{po_dir}/#{spec.name}.pot"
 
-  translate_task_names = translate_languages.collect do |language|
-    "reference:translate:#{language}"
-  end
-  desc "Translates references."
-  task :translate => translate_task_names
-
   desc "Generates references."
   task :generate => [:yard, :translate]
 
