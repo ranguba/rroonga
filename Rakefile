@@ -26,7 +26,6 @@ require 'rubygems/package_task'
 require 'yard'
 require 'jeweler'
 require 'rake/extensiontask'
-
 require 'packnga'
 
 if YAML.const_defined?(:ENGINE)
