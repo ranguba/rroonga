@@ -189,14 +189,6 @@ def rsync_to_rubyforge(spec, source, destination, options={})
   sh("rsync #{rsync_args} #{source} #{host}:#{remote_dir}#{destination}")
 end
 
-
-namespace :html do
-  desc "Publish HTML to Web site."
-  task :publish do
-    rsync_to_rubyforge(spec, "#{html_base_dir}/", "")
-  end
-end
-
 desc "Upload document and HTML to rubyforge."
 task :publish => ["html:publish", "reference:publish"]
 
