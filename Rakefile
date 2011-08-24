@@ -228,9 +228,6 @@ namespace :reference do
   directory reference_base_dir.to_s
   CLOBBER.include(reference_base_dir.to_s)
 
-  po_dir = "doc/po"
-  pot_file = "#{po_dir}/#{spec.name}.pot"
-
   desc "Generates references."
   task :generate => [:yard, :translate]
 
