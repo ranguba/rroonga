@@ -177,8 +177,6 @@ Rake::ExtensionTask.new("groonga", spec) do |ext|
   end
 end
 
-include ERB::Util
-
 namespace :test do
   task :install do
     gemspec_helper = Rake.application.jeweler.gemspec_helper
