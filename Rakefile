@@ -103,6 +103,9 @@ Gem::PackageTask.new(spec) do |pkg|
   pkg.need_tar_gz = true
 end
 
+Packnga::DocumentTask.new(spec) do |task|
+end
+
 module YARD
   module CodeObjects
     class Proxy
