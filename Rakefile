@@ -230,16 +230,6 @@ namespace :reference do
 
   po_dir = "doc/po"
   pot_file = "#{po_dir}/#{spec.name}.pot"
-  namespace :pot do
-
-    directory po_dir
-    file pot_file => [po_dir, *html_files] do |t|
-      sh("xml2po", "--keep-entities", "--output", t.name, *html_files)
-    end
-
-    desc "Generates pot file."
-    task :generate => pot_file
-  end
 
   namespace :po do
     translate_languages.each do |language|
