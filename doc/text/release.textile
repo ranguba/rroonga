@@ -150,7 +150,7 @@ h2. rubyforgeにパッケージをアップロード
 下記コマンドを実行してアップロードする。
 
 <pre>
-$ ruby1.8 -S rake publish
+$ ruby1.8 -S rake reference:publish
 $ ruby1.8 -S rake html:publish
 </pre>
 
