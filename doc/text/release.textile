@@ -20,6 +20,24 @@ $ git log -p --reverse （リリースバージョン)..
 h3. news.rdocの1リリース分のテンプレート
 
 <pre>
+h2. （リリースするバージョン）: リリース日（yyyy-mm-dd）
+
+h3. Improvements
+
+* 
+
+h3. Changes
+
+* 
+
+h3. Fixes
+
+* 
+
+h3. Thanks
+</pre>
+
+<pre>
 == （リリースするバージョン）: リリース日（yyyy-mm-dd）
 
 === Improvements
