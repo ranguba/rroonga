@@ -1,8 +1,8 @@
-= NEWS
+h1. NEWS
 
-== 1.2.5: 2011-08-05
+h2. 1.2.5: 2011-08-05
 
-=== Improvements
+h3. Improvements
 
 * Re-supported tar.gz distribution.
 * Added Groonga::Context#close.
@@ -11,56 +11,56 @@
 * grndump: Added --exclude-table option that specifies not dumped tables.
 * dump: Removed path equality check.
 
-=== Fixes
+h3. Fixes
 
 * dump: Fixed wrong index table type.
 * Re-supported auto groonga install.
 
-== 1.2.4: 2011-06-29
+h2. 1.2.4: 2011-06-29
 
-=== Improvements
+h3. Improvements
 
 * Supported groonga 1.2.3.
 
-=== Fixes
+h3. Fixes
 
 * Re-supported auto groonga install.
 * Added missing pkg-config gem dependency.
 
-== 1.2.3: 2011-06-27
+h2. 1.2.3: 2011-06-27
 
-=== Fixes
+h3. Fixes
 
 * remove object files in gem packages.
 * fix charactor corruption in reference.
 
-== 1.2.2: 2011-06-27
+h2. 1.2.2: 2011-06-27
 
-=== Improvements
+h3. Improvements
 
 * created "Developers" page in English.
 * added description for tasks of "html:publish" and "publish".
 
-=== Changes
+h3. Changes
 
 * Groonga::Record#attributes return same attributes object for duplicate records.
 * added document for Groonga::Record#attributes.
 * changed tool name in document page for creating document.
 * moved NEWS*.rdoc and tutorial.texttile to doc/text/.
 
-=== Fixes
+h3. Fixes
 
 * fixed the tutorial path in index page.
 * fixed the path of tutorial in index page in English.
 * follow the groonga downlowd URL change. [mallowlabs]
 
-=== Thanks
+h3. Thanks
 
 * mallowlabs
 
-== 1.2.1: 2011-06-07
+h2. 1.2.1: 2011-06-07
 
-=== Improvements
+h3. Improvements
 
 * added document of Groonga::Table#pagination.
 * added grndump in package.
@@ -77,19 +77,19 @@
 * added Groonga::IndexCursor. [yoshihara]
 * added Groonga::Object#builtin?. [yoshihara]
 
-=== Changes
+h3. Changes
 
 * check existence of column before removing it.
 * removed grn expression document.
 
-=== Thanks
+h3. Thanks
 
 * mooz
 * yoshihara
 
-== 1.2.0: 2011-04-01
+h2. 1.2.0: 2011-04-01
 
-=== Improvements
+h3. Improvements
 
 * Supported groonga 1.2.0.
 * Added Groonga::Accessor#local_name.
@@ -105,16 +105,16 @@
 * Supported Rubyish name like :short_text instead of the
   official type name like "ShortText" in Groonga::Schema.
 
-== 1.1.0: 2011-02-09
+h2. 1.1.0: 2011-02-09
 
-=== Improvements
+h3. Improvements
 
 * Supported groonga 1.1.0.
 * Added Groonga::Plugin.register.
 
-== 1.0.9: 2011-01-29
+h2. 1.0.9: 2011-01-29
 
-=== Improvements
+h3. Improvements
 
 * Supported gem creation on Windows. [Patch by ongaeshi]
 * Supported generated directory that is created by Groonga::Schema removal
@@ -144,56 +144,56 @@
 * Supported pseudo columns by Groonga::Table#have_column?.
 * Supported pseudo columns by Groonga::Record#have_column?.
 
-=== Changes
+h3. Changes
 
 * Renamed Groonga::Operatoion to Groonga::Operator.
   (Groonga::Operation is deprecated but still usable.)
 
-=== Fixes
+h3. Fixes
 
 * Fixed a crash bug when not default Groonga::Context is used in
   Groonga::Table#select.
 * Fixed a crash bug when an exception is occurred.
 
-=== Thanks
+h3. Thanks
 
 * ongaeshi
 
-== 1.0.8: 2010-12-25
+h2. 1.0.8: 2010-12-25
 
-=== Improvements
+h3. Improvements
 
 * Improved Groonga::Schema's n-gram tokenizer detect process.
 
-=== Fixes
+h3. Fixes
 
 * Fixed GC problem caused by match_target in select.
 
-== 1.0.7: 2010-12-19
+h2. 1.0.7: 2010-12-19
 
-=== Fixes
+h3. Fixes
 
 * Supported pkg-config installed by RubyGems on Ruby 1.8. [Reported by @kamipo]
 * Fixed a memory leak in Groonga::Table#columns.
 
-=== Thanks
+h3. Thanks
 
 * @kamipo
 
-== 1.0.5: 2010-11-29
+h2. 1.0.5: 2010-11-29
 
-=== Improvements
+h3. Improvements
 
 * Added snail_case type name aliases for built-in groonga types
   to Groonga::Schema.
 
-=== Fixes
+h3. Fixes
 
 * Fixed a crash bug on GC. [Ryo Onodera]
 
-== 1.0.4: 2010-11-29
+h2. 1.0.4: 2010-11-29
 
-=== Improvements
+h3. Improvements
 
 * Supported groonga 1.0.4.
   * Added Groonga::UnsupportedCommandVersion.
@@ -231,7 +231,7 @@
 * Added Groonga::Record#record_raw_id.
 * Accepted any object that as to_ary method for reference vector column value.
 
-== Changes
+h2. Changes
 
 * Used :key as the default value of :order_by of
   Groonga::PatriciaTrie#open_cursor.
@@ -244,22 +244,22 @@
 * Added Groonga::Column#reference? and deprecated
   Groonga::Column#reference_column?.
 
-=== Fixes
+h3. Fixes
 
 * Fixed index for key isn't be able to define.
 * Fixed a crash problem on GC.
 
-== 1.0.1: 2010-09-12
+h2. 1.0.1: 2010-09-12
 
-=== Fixes
+h3. Fixes
 
 * Fixed wrong flag used on creating a table. [Reported by ono matope]
 
-=== Thanks
+h3. Thanks
 
 * ono matope
 
-== 1.0.0: 2010-08-29
+h2. 1.0.0: 2010-08-29
 
 * Supported groonga 1.0.0.
   * Added Groonga::CASError.
@@ -272,7 +272,7 @@
     retrieve records order by distance from key.
 * Supported _key as index source.
 
-== 0.9.5: 2010-07-20
+h2. 0.9.5: 2010-07-20
 
 * Supported groonga 0.7.4.
 * Imporoved Groonga::Table#select:
@@ -301,24 +301,24 @@
 * Added Groonga::Table#support_sub_records?
 * Supported pagination: Groonga::Table#paginate, Groonga::Pagination
 
-== 0.9.4: 2010-04-22
+h2. 0.9.4: 2010-04-22
 
 * Fixed release miss.
 
-== 0.9.3: 2010-04-22
+h2. 0.9.3: 2010-04-22
 
 * Fixed release miss.
 
-== 0.9.2: 2010-04-22
+h2. 0.9.2: 2010-04-22
 
 * Supported groonga 0.1.9.
 * Many.
 
-== 0.9.1: 2010-02-09
+h2. 0.9.1: 2010-02-09
 
 * Supported groonga 0.1.6
 
-== 0.9.0: 2010-02-09
+h2. 0.9.0: 2010-02-09
 
 * Supported groonga 0.1.5
 * Added API
@@ -369,13 +369,13 @@
 * Added --with-debug option to extconf.rb for debug build.
 * Fixed a bug that Ruby 1.9.1 may fail extconf.rb.
 
-=== Thanks
+h3. Thanks
 
 * dara
 * Ryo Onodera
 * Tasuku SUENAGA
 
-== 0.0.7: 2009-10-02
+h2. 0.0.7: 2009-10-02
 
 * Supported groonga 0.1.4
 * Added API
@@ -385,7 +385,7 @@
   * Groonga::Object#append
   * Groonga::Object#prepend
 
-== 0.0.6: 2009-07-31
+h2. 0.0.6: 2009-07-31
 
 * Supported groonga 0.1.1.
 * Fixed documents [id:mat_aki]
@@ -398,7 +398,7 @@
 * Provided tar.gz [id:m_seki]
 * Fixed memory leaks
 
-== 0.0.3: 2009-07-18
+h2. 0.0.3: 2009-07-18
 
 * Added Groonga::TableKeySupport#has_key? [#26145] [Tasuku SUENAGA]
 * Groonga::Record#[] raises an exception for nonexistent
@@ -413,7 +413,7 @@
   * Groonga::Schema: A DSL for schema definition
   * Groonga::Expression
 
-== 0.0.2: 2009-06-04
+h2. 0.0.2: 2009-06-04
 
 * Supported groonga 0.0.8 [mori]
 * Improved preformance: cache key, value, domain and range
@@ -424,6 +424,6 @@
   * Fixed install process [Tasuku SUENAGA]
   * Fixed memory leaks
 
-== 0.0.1: 2009-04-30
+h2. 0.0.1: 2009-04-30
 
 * Initial release!
