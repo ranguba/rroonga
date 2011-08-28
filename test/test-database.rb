@@ -130,4 +130,20 @@ class DatabaseTest < Test::Unit::TestCase
       database.touch
     end
   end
+
+  def test_defrag
+    setup_database
+    Groonga::Schema.define do |schema|
+      schema.create_table("Users") do |table|
+        table.short_text("name")
+        table.short_text("address")
+      end
+    end
+    users = context["Users"]
+    1000.times do |i|
+      users.add(:name => "user #{i}" * 1000,
+                :address => "address #{i}" * 1000)
+    end
+    assert_equal(7, @database.defrag)
+  end
 end

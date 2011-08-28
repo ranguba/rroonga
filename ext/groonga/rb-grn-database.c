@@ -504,6 +504,47 @@ rb_grn_database_touch (VALUE self)
     return Qnil;
 }
 
+/*
+ * Document-method: defrag
+ *
+ * call-seq:
+ *   database.defrag(options={}) -> n_segments
+ *
+ * Defrags all variable size columns in the database.
+ *
+ * @return [Integer] the number of defraged segments
+ * @option options [Integer] :threshold (0) the threshold to
+ *   determine whether a segment is defraged. Available
+ *   values are -4..22. -4 means all segments are defraged.
+ *   22 means no segment is defraged.
+ * @since 1.2.6
+ */
+static VALUE
+rb_grn_database_defrag (int argc, VALUE *argv, VALUE self)
+{
+    RbGrnColumn *rb_grn_column;
+    grn_ctx *context;
+    grn_obj *database;
+    int n_segments;
+    VALUE options, rb_threshold;
+    int threshold = 0;
+
+    rb_scan_args(argc, argv, "01", &options);
+    rb_grn_scan_options(options,
+			"threshold", &rb_threshold,
+			NULL);
+    if (!NIL_P(rb_threshold)) {
+	threshold = NUM2INT(rb_threshold);
+    }
+
+    rb_grn_database_deconstruct(SELF(self), &database, &context,
+				NULL, NULL, NULL, NULL);
+    n_segments = grn_obj_defrag(context, database, threshold);
+    rb_grn_context_check(context, self);
+
+    return INT2NUM(n_segments);
+}
+
 void
 rb_grn_init_database (VALUE mGrn)
 {
@@ -534,4 +575,5 @@ rb_grn_init_database (VALUE mGrn)
     rb_define_method(rb_cGrnDatabase, "locked?", rb_grn_database_is_locked, 0);
 
     rb_define_method(rb_cGrnDatabase, "touch", rb_grn_database_touch, 0);
+    rb_define_method(rb_cGrnDatabase, "defrag", rb_grn_database_defrag, -1);
 }
