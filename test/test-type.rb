@@ -23,12 +23,12 @@ class TypeTest < Test::Unit::TestCase
     assert_equal("user_id", type.name)
   end
 
-  def test_new_with_hyphen_name
+  def test_new_with_space_name
     exception = assert_raise(Groonga::InvalidArgument) do
-      Groonga::Type.new("user-id", :type => :integer)
+      Groonga::Type.new("user id", :type => :integer)
     end
     message =
-      "name can't start with '_' and 0-9, and contains only 0-9, A-Z, a-z, or _"
+      "name can't start with '_' and contains only 0-9, A-Z, a-z, #, - or _"
     assert_match(/#{Regexp.escape(message)}/,
                  exception.message)
   end
