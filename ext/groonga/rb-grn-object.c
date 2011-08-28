@@ -168,7 +168,7 @@ rb_grn_object_free (RbGrnObject *rb_grn_object)
 	if (rb_grn_object->have_finalizer) {
 	    user_data = grn_obj_user_data(context, grn_object);
 	}
-	debug("type: %x; need_close: %d; user_data: %p; ptr: %p\n",
+	debug("type: %#x; need_close: %d; user_data: %p; ptr: %p\n",
 	      grn_object->header.type,
 	      rb_grn_object->need_close,
 	      user_data,
