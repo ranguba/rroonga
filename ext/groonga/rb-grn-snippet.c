@@ -66,7 +66,8 @@ rb_rb_grn_snippet_free (void *object)
 {
     RbGrnSnippet *rb_grn_snippet = object;
 
-    if (rb_grn_snippet->owner &&
+    if (!rb_grn_exited &&
+	rb_grn_snippet->owner &&
 	rb_grn_snippet->context && rb_grn_snippet->snippet)
         grn_snip_close(rb_grn_snippet->context,
                        rb_grn_snippet->snippet);
