@@ -79,19 +79,13 @@ rb_grn_object_from_ruby_object (VALUE object, grn_ctx **context)
     return rb_grn_object->object;
 }
 
-static grn_obj *
-rb_grn_object_finalizer (grn_ctx *context, int n_args, grn_obj **grn_objects,
-			 grn_user_data *user_data)
+static void
+rb_grn_object_run_finalizer (grn_ctx *context, grn_obj *grn_object,
+			     RbGrnObject *rb_grn_object)
 {
-    RbGrnObject *rb_grn_object;
-    grn_obj *grn_object = *grn_objects;
-
     if (rb_grn_exited)
-	return NULL;
+	return;
 
-    rb_grn_object = user_data->ptr;
-
-    grn_obj_user_data(context, grn_object)->ptr = NULL;
     grn_obj_set_finalizer(context, grn_object, NULL);
 
     debug("finalize: %p:%p:%p:%p:%p 0x%x\n",
@@ -148,6 +142,22 @@ rb_grn_object_finalizer (grn_ctx *context, int n_args, grn_obj **grn_objects,
 		 grn_object->header.type);
 	break;
     }
+}
+
+static grn_obj *
+rb_grn_object_finalizer (grn_ctx *context, int n_args, grn_obj **grn_objects,
+			 grn_user_data *user_data)
+{
+    RbGrnObject *rb_grn_object;
+    grn_obj *grn_object = *grn_objects;
+
+    if (rb_grn_exited)
+	return NULL;
+
+    rb_grn_object = user_data->ptr;
+
+    grn_obj_user_data(context, grn_object)->ptr = NULL;
+    rb_grn_object_run_finalizer(context, grn_object, rb_grn_object);
 
     return NULL;
 }
@@ -173,8 +183,12 @@ rb_grn_object_free (RbGrnObject *rb_grn_object)
 	      rb_grn_object->need_close,
 	      user_data,
 	      user_data ? user_data->ptr : NULL);
-	if (user_data && user_data->ptr) {
-	    rb_grn_object_finalizer(context, 1, &grn_object, user_data);
+	if (rb_grn_object->have_finalizer) {
+	    if (user_data && user_data->ptr) {
+		rb_grn_object_finalizer(context, 1, &grn_object, user_data);
+	    } else {
+		rb_grn_object_run_finalizer(context, grn_object, rb_grn_object);
+	    }
 	}
 	if (rb_grn_object->need_close) {
 	    grn_obj_unlink(context, grn_object);
@@ -299,15 +313,21 @@ rb_grn_object_bind_common (VALUE klass, VALUE self, VALUE rb_context,
 
     user_data = grn_obj_user_data(context, object);
     if (user_data) {
-	debug("set-finalizer: %p:%p:%p 0x%x\n",
+	debug("set-finalizer: %p:%p:%p %#x\n",
 	      context, object, rb_grn_object,
 	      object->header.type);
 	user_data->ptr = rb_grn_object;
 	grn_obj_set_finalizer(context, object, rb_grn_object_finalizer);
 	rb_grn_object->have_finalizer = GRN_TRUE;
+    } else if (object->header.type == GRN_ACCESSOR) {
+	debug("set-finalizer(implicit): %p:%p:%p %#x\n",
+	      context, object, rb_grn_object,
+	      object->header.type);
+	rb_grn_object->have_finalizer = GRN_TRUE;
     }
 
     switch (object->header.type) {
+      case GRN_DB:
       case GRN_PROC:
       case GRN_TYPE:
 	rb_grn_object->need_close = GRN_FALSE;
@@ -497,13 +517,17 @@ rb_grn_object_deconstruct (RbGrnObject *rb_grn_object,
 VALUE
 rb_grn_object_close (VALUE self)
 {
+    RbGrnObject *rb_grn_object;
     grn_obj *object;
     grn_ctx *context;
 
-    rb_grn_object_deconstruct(SELF(self), &object, &context,
+    rb_grn_object = SELF(self);
+    rb_grn_object_deconstruct(rb_grn_object, &object, &context,
 			      NULL, NULL, NULL, NULL);
-    if (object && context)
+    if (object && context) {
+	rb_grn_object_run_finalizer(context, object, rb_grn_object);
 	grn_obj_close(context, object);
+    }
 
     return Qnil;
 }
@@ -519,13 +543,19 @@ rb_grn_object_close (VALUE self)
 VALUE
 rb_grn_object_unlink (VALUE self)
 {
+    RbGrnObject *rb_grn_object;
     grn_obj *object;
     grn_ctx *context;
 
-    rb_grn_object_deconstruct(SELF(self), &object, &context,
+    rb_grn_object = SELF(self);
+    rb_grn_object_deconstruct(rb_grn_object, &object, &context,
 			      NULL, NULL, NULL, NULL);
-    if (object && context)
+    if (object && context) {
+	if (!(rb_grn_object->object->header.flags & GRN_OBJ_PERSISTENT)) {
+	    rb_grn_object_run_finalizer(context, object, rb_grn_object);
+	}
 	grn_obj_unlink(context, object);
+    }
 
     return Qnil;
 }
