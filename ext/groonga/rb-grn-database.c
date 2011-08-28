@@ -522,7 +522,6 @@ rb_grn_database_touch (VALUE self)
 static VALUE
 rb_grn_database_defrag (int argc, VALUE *argv, VALUE self)
 {
-    RbGrnColumn *rb_grn_column;
     grn_ctx *context;
     grn_obj *database;
     int n_segments;
