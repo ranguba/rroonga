@@ -243,6 +243,8 @@ rb_grn_bulk_from_ruby_object (VALUE object, grn_ctx *context, grn_obj *bulk)
       case T_NIL:
 	grn_obj_reinit(context, bulk, GRN_DB_VOID, 0);
 	break;
+      case T_SYMBOL:
+	object = rb_sym_to_s(object);
       case T_STRING:
 	grn_obj_reinit(context, bulk, GRN_DB_TEXT, 0);
 	rb_grn_context_text_set(context, bulk, object);
@@ -306,7 +308,7 @@ rb_grn_bulk_from_ruby_object (VALUE object, grn_ctx *context, grn_obj *bulk)
 	} else {
 	    rb_raise(rb_eTypeError,
 		     "bulked object should be one of "
-		     "[nil, true, false, String, Integer, Float, Time, "
+		     "[nil, true, false, String, Symbol, Integer, Float, Time, "
 		     "Groonga::Object, Groonga::Record]: %s",
 		     rb_grn_inspect(object));
 	}

@@ -159,4 +159,11 @@ class TableSelectTest < Test::Unit::TestCase
     end
     assert_equal_select_result([@users["morita"]], result)
   end
+
+  def test_symbol
+    result = @comments.select do |record|
+      record[:content].match("Say Hello World")
+    end
+    assert_equal_select_result([], result)
+  end
 end
