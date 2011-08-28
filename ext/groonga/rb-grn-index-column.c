@@ -276,6 +276,7 @@ resolve_source_id (grn_ctx *context, grn_obj *column, grn_id range_id,
 	source_id = NUM2UINT(rb_source);
     } else {
 	grn_obj *source;
+	grn_bool need_source_unlink = GRN_FALSE;
 
 	if (TYPE(rb_source) == T_STRING) {
 	    grn_obj *table;
@@ -304,6 +305,7 @@ resolve_source_id (grn_ctx *context, grn_obj *column, grn_id range_id,
 		name = dot_point + 1;
 	    }
 	    source = grn_obj_column(context, table, name, length);
+	    need_source_unlink = GRN_TRUE;
 	} else {
 	    source = RVAL2GRNOBJECT(rb_source, &context);
 	}
@@ -320,6 +322,9 @@ resolve_source_id (grn_ctx *context, grn_obj *column, grn_id range_id,
 	    source_id = range_id;
 	} else {
 	    source_id = grn_obj_id(context, source);
+	}
+	if (need_source_unlink) {
+	    grn_obj_unlink(context, source);
 	}
     }
 
