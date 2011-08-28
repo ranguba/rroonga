@@ -1,4 +1,4 @@
-# Copyright (C) 2009  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2011  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -106,5 +106,12 @@ class VariableSizeColumnTest < Test::Unit::TestCase
     assert_equal(["morita"], @morita["nick_names"])
     @morita.prepend("nick_names", "moritapo")
     assert_equal(["moritapo", "morita"], @morita["nick_names"])
+  end
+
+  def test_defrag
+    1000.times do |i|
+      @users.add(:name => "user #{i}" * 1000)
+    end
+    assert_equal(3, @name.defrag)
   end
 end

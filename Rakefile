@@ -103,6 +103,9 @@ Gem::PackageTask.new(spec) do |pkg|
 end
 
 document_task = Packnga::DocumentTask.new(spec) do |t|
+  t.yard do |yard_task|
+    yard_task.files += FileList["ext/**/*-variable-size-column.c"]
+  end
 end
 
 namespace :reference do
