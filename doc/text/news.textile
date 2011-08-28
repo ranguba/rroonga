@@ -4,7 +4,6 @@ h2. 1.2.6: 2011-08-29
 
 h3. Improvements
 
-* Supported install *.rb failure by gem install.
 * Supported groonga 1.2.5.
 * Added Groonga::Record#added? that returns true when the record is just added.
 * Added Groonga::VariableSizeColumn#defrag? that defrags the column.
@@ -12,6 +11,7 @@ h3. Improvements
 
 h3. Fixes
 
+* Fixed install *.rb failure by gem install.
 * Fixed some memory leaks.
 * Fixed crash bug on exit.
 
