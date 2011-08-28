@@ -95,6 +95,7 @@ rb_grn_object_run_finalizer (grn_ctx *context, grn_obj *grn_object,
 
     rb_grn_object->context = NULL;
     rb_grn_object->object = NULL;
+    rb_grn_object->have_finalizer = GRN_FALSE;
 
     switch (grn_object->header.type) {
       case GRN_DB:
@@ -170,9 +171,10 @@ rb_grn_object_free (RbGrnObject *rb_grn_object)
 
     context = rb_grn_object->context;
     grn_object = rb_grn_object->object;
-    debug("rb-free: %p:%p:%p; %d\n", context, grn_object, rb_grn_object,
-	  rb_grn_object->have_finalizer);
-    if (!rb_grn_exited && context && grn_object) {
+    debug("rb-free: %p:%p:%p; %d:%d\n", context, grn_object, rb_grn_object,
+	  rb_grn_object->have_finalizer, rb_grn_object->need_close);
+    if (!rb_grn_exited && context && grn_object &&
+	(rb_grn_object->have_finalizer || rb_grn_object->need_close)) {
 	grn_user_data *user_data = NULL;
 
 	if (rb_grn_object->have_finalizer) {
