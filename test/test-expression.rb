@@ -106,6 +106,7 @@ class ExpressionTest < Test::Unit::TestCase
                                  "提供するプロジェクトです。groongaの機能を" +
                                  "Rubyらしい読み書きしやすい構文で利用できる" +
                                  "ことが利点です。"))
+    snippet.close
   end
 
   def test_snippet_without_tags
@@ -127,5 +128,6 @@ class ExpressionTest < Test::Unit::TestCase
     snippet = expression.snippet([], :width => 30)
     assert_equal(["ラングバプロジェクト"],
                  snippet.execute("ラングバプロジェクトはカラムストア機能も"))
+    snippet.close
   end
 end

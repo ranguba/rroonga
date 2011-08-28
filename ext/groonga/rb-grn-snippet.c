@@ -238,6 +238,12 @@ rb_grn_snippet_add_keyword (int argc, VALUE *argv, VALUE self)
 
     rb_grn_snippet = SELF(self);
 
+    if (!rb_grn_snippet->snippet) {
+	rb_raise(rb_eGrnClosed,
+		 "can't access already closed groonga object: %s",
+		 rb_grn_inspect(CLASS_OF(self)));
+    }
+
     keyword = StringValuePtr(rb_keyword);
     keyword_length = RSTRING_LEN(rb_keyword);
 
@@ -295,6 +301,12 @@ rb_grn_snippet_execute (VALUE self, VALUE rb_string)
     context = rb_grn_snippet->context;
     snippet = rb_grn_snippet->snippet;
 
+    if (!snippet) {
+	rb_raise(rb_eGrnClosed,
+		 "can't access already closed groonga object: %s",
+		 rb_grn_inspect(CLASS_OF(self)));
+    }
+
 #ifdef HAVE_RUBY_ENCODING_H
     rb_string = rb_grn_context_rb_string_encode(context, rb_string);
 #endif
@@ -321,6 +333,34 @@ rb_grn_snippet_execute (VALUE self, VALUE rb_string)
     return rb_results;
 }
 
+/*
+ * Document-method: close
+ *
+ * call-seq:
+ *   snippet.close
+ *
+ * _snippet_が使用しているリソースを開放する。これ以降_snippet_を
+ * 使うことはできない。
+ */
+static VALUE
+rb_grn_snippet_close (VALUE self)
+{
+    RbGrnSnippet *rb_grn_snippet;
+    grn_ctx *context;
+    grn_snip *snippet;
+
+    rb_grn_snippet = SELF(self);
+    context = rb_grn_snippet->context;
+    snippet = rb_grn_snippet->snippet;
+    if (context && snippet) {
+	grn_snip_close(context, snippet);
+	rb_grn_snippet->context = NULL;
+	rb_grn_snippet->snippet = NULL;
+    }
+
+    return Qnil;
+}
+
 void
 rb_grn_init_snippet (VALUE mGrn)
 {
@@ -333,4 +373,6 @@ rb_grn_init_snippet (VALUE mGrn)
                      rb_grn_snippet_add_keyword, -1);
     rb_define_method(rb_cGrnSnippet, "execute",
                      rb_grn_snippet_execute, 1);
+    rb_define_method(rb_cGrnSnippet, "close",
+                     rb_grn_snippet_close, 0);
 }
