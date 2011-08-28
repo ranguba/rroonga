@@ -244,7 +244,7 @@ rb_grn_bulk_from_ruby_object (VALUE object, grn_ctx *context, grn_obj *bulk)
 	grn_obj_reinit(context, bulk, GRN_DB_VOID, 0);
 	break;
       case T_SYMBOL:
-	object = rb_sym_to_s(object);
+	object = rb_funcall(object, rb_intern("to_s"), 0);
       case T_STRING:
 	grn_obj_reinit(context, bulk, GRN_DB_TEXT, 0);
 	rb_grn_context_text_set(context, bulk, object);
