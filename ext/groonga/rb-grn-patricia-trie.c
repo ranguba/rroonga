@@ -862,7 +862,7 @@ rb_grn_patricia_trie_open_near_cursor (int argc, VALUE *argv, VALUE self)
     VALUE rb_cursor;
 
     cursor = rb_grn_patricia_trie_open_grn_near_cursor(argc, argv,
-								self, &context, GRN_CURSOR_RK);
+						       self, &context, GRN_CURSOR_RK);
     rb_cursor = GRNTABLECURSOR2RVAL(Qnil, context, cursor);
     rb_iv_set(rb_cursor, "@table", self); /* FIXME: cursor should mark table */
     if (rb_block_given_p())
