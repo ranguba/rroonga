@@ -8,6 +8,7 @@ h3. Improvements
 * Added Groonga::Record#added? that returns true when the record is just added.
 * Added Groonga::VariableSizeColumn#defrag? that defrags the column.
 * Added Groonga::Database#defrag that defrags the all variable size columns.
+* Supported column name specification by symbol.
 
 h3. Fixes
 
