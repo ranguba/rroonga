@@ -88,9 +88,9 @@ module Groonga
       output = options[:output]
       plugins_dir_re = Regexp.escape(Groonga::Plugin.system_plugins_dir)
       suffix_re = Regexp.escape(Groonga::Plugin.suffix)
-      plugin_name = plugin.path.gsub!(/(?:\A#{plugins_dir_re}\/|
-                                          #{suffix_re}\z)/x,
-                                      '')
+      plugin_name = plugin.path.gsub(/(?:\A#{plugins_dir_re}\/|
+                                         #{suffix_re}\z)/x,
+                                     '')
       output.write("register #{plugin_name}\n")
     end
 
