@@ -162,10 +162,12 @@ rb_grn_object_free (RbGrnObject *rb_grn_object)
     grn_object = rb_grn_object->object;
     debug("rb-free: %p:%p:%p; %d\n", context, grn_object, rb_grn_object,
 	  rb_grn_object->have_finalizer);
-    if (!rb_grn_exited && context && grn_object && rb_grn_object->have_finalizer) {
-	grn_user_data *user_data;
+    if (!rb_grn_exited && context && grn_object) {
+	grn_user_data *user_data = NULL;
 
-	user_data = grn_obj_user_data(context, grn_object);
+	if (rb_grn_object->have_finalizer) {
+	    user_data = grn_obj_user_data(context, grn_object);
+	}
 	debug("type: %x; need_close: %d; user_data: %p; ptr: %p\n",
 	      grn_object->header.type,
 	      rb_grn_object->need_close,

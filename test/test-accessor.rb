@@ -22,6 +22,10 @@ class AccessorTest < Test::Unit::TestCase
     @id = @posts.column("_id")
   end
 
+  def teardown
+    @id = nil
+  end
+
   def test_name
     assert_nil(@id.name)
   end
