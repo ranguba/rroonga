@@ -99,8 +99,6 @@ rb_grn_object_run_finalizer (grn_ctx *context, grn_obj *grn_object,
 
     switch (grn_object->header.type) {
       case GRN_DB:
-	grn_ctx_use(context, NULL);
-	break;
       case GRN_TYPE:
       case GRN_PROC:
       case GRN_CURSOR_TABLE_HASH_KEY:

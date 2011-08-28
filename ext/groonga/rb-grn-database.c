@@ -195,7 +195,7 @@ rb_grn_database_s_create (int argc, VALUE *argv, VALUE klass)
 	grn_obj_unlink(context, old_database);
     database = grn_db_create(context, path, &create_args);
     rb_grn_context_check(context, rb_ary_new4(argc, argv));
-    rb_database = GRNOBJECT2RVAL(klass, context, database, GRN_TRUE);
+    rb_database = GRNOBJECT2RVAL(klass, context, database, GRN_FALSE);
     rb_iv_set(rb_database, "@context", rb_context);
     if (!NIL_P(rb_context))
 	rb_iv_set(rb_context, "database", rb_database);

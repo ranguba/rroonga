@@ -59,27 +59,12 @@ rb_grn_context_from_ruby_object (VALUE object)
     return rb_grn_context->context;
 }
 
-static void
-rb_grn_context_unlink_database (grn_ctx *context)
-{
-    grn_obj *database;
-
-    database = grn_ctx_db(context);
-    debug("context:database: %p:%p\n", context, database);
-    if (database && database->header.type == GRN_DB) {
-	debug("context:database: %p:%p: unlink\n", context, database);
-	grn_obj_unlink(context, database);
-    }
-    debug("context:database: %p:%p: done\n", context, database);
-}
-
 void
 rb_grn_context_fin (grn_ctx *context)
 {
     if (context->stat == GRN_CTX_FIN)
 	return;
 
-    rb_grn_context_unlink_database(context);
     grn_ctx_fin(context);
 }
 
@@ -121,8 +106,6 @@ rb_grn_context_finalizer (grn_ctx *context, int n_args, grn_obj **grn_objects,
 	  context, rb_grn_context, rb_grn_context->context);
 
     rb_grn_context->context = NULL;
-
-    rb_grn_context_unlink_database(context);
 
     debug("context-finalize: %p:%p:%p: done\n",
 	  context, rb_grn_context, rb_grn_context->context);
@@ -315,7 +298,7 @@ rb_grn_context_initialize (int argc, VALUE *argv, VALUE self)
 {
     RbGrnContext *rb_grn_context;
     grn_ctx *context;
-    int flags = 0;
+    int flags = GRN_CTX_PER_DB;
     VALUE options, default_options;
     VALUE rb_encoding;
 
@@ -369,10 +352,12 @@ rb_grn_context_close (VALUE self)
     RbGrnContext *rb_grn_context;
 
     context = SELF(self);
-    rc = grn_ctx_fin(context);
-    Data_Get_Struct(self, RbGrnContext, rb_grn_context);
-    rb_grn_context->context = NULL;
-    rb_grn_rc_check(rc, self);
+    if (context) {
+	rc = grn_ctx_fin(context);
+	Data_Get_Struct(self, RbGrnContext, rb_grn_context);
+	rb_grn_context->context = NULL;
+	rb_grn_rc_check(rc, self);
+    }
 
     return Qnil;
 }
