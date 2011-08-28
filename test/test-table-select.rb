@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2009-2010  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2011  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -53,7 +53,7 @@ class TableSelectTest < Test::Unit::TestCase
                     :user => "darashi")
   end
 
-  def test_select_sub_expression
+  def test_sub_expression
     result = @comments.select do |record|
       record.match("Hello", "content") &
         (record["created_at"] < Time.parse("2009-08-01"))
@@ -61,22 +61,22 @@ class TableSelectTest < Test::Unit::TestCase
     assert_equal_select_result([@comment2], result)
   end
 
-  def test_select_query
+  def test_query
     result = @comments.select("content:@Hello")
     assert_equal_select_result([@comment1, @comment2], result)
   end
 
-  def test_select_query_with_parser
+  def test_query_with_parser
     result = @comments.select("content @ \"Hello\"", :syntax => :script)
     assert_equal_select_result([@comment1, @comment2], result)
   end
 
-  def test_select_query_with_default_column
+  def test_query_with_default_column
     result = @comments.select("Hello", {:default_column => 'content'})
     assert_equal_select_result([@comment1, @comment2], result)
   end
 
-  def test_select_expression
+  def test_expression
     expression = Groonga::Expression.new
     variable = expression.define_variable(:domain => @comments)
     expression.append_object(variable)
@@ -87,73 +87,73 @@ class TableSelectTest < Test::Unit::TestCase
     assert_equal_select_result([@comment1, @comment2], result)
   end
 
-  def test_select_query_with_block
+  def test_query_with_block
     result = @comments.select("content:@Hello") do |record|
       record["created_at"] < Time.parse("2009-08-01")
     end
     assert_equal_select_result([@comment2], result)
   end
 
-  def test_select_query_with_block_match
+  def test_query_with_block_match
     result = @comments.select("content:@Hello") do |record|
       record.match("World", "content")
     end
     assert_equal_select_result([@comment2], result)
   end
 
-  def test_select_without_block
+  def test_without_block
     assert_equal_select_result([@comment1, @comment2,
                                 @comment3, @japanese_comment],
                                @comments.select)
   end
 
-  def test_select_query_japanese
+  def test_query_japanese
     result = @comments.select("content:@ボロTV")
     assert_equal_select_result([@japanese_comment], result)
   end
 
-  def test_select_but_query
+  def test_but_query
     result = @comments.select do |record|
       record["content"].match "Hello -World"
     end
     assert_equal_select_result([@comment1], result)
   end
 
-  def test_select_query_with_three_terms
+  def test_query_with_three_terms
     result = @comments.select do |record|
       record["content"].match "Say Hello World"
     end
     assert_equal_select_result([], result)
   end
 
-  def test_select_query_with_brackets
+  def test_query_with_brackets
     result = @comments.select do |record|
       record["content"].match "Say (Hello World)"
     end
     assert_equal_select_result([], result)
   end
 
-  def test_select_equal_reference_column_by_key
+  def test_equal_reference_column_by_key
     result = @comments.select do |record|
       record["user"] == "darashi"
     end
     assert_equal_select_result([@japanese_comment], result)
   end
 
-  def test_select_not_equal_reference_column_by_key
+  def test_not_equal_reference_column_by_key
     result = @comments.select('user != "darashi"', :syntax => :script)
     assert_equal_select_result([@comment1, @comment2, @comment3],
                                result)
   end
 
-  def test_select_equal_reference_column_by_nonexistent_key
+  def test_equal_reference_column_by_nonexistent_key
     result = @comments.select do |record|
       record["user"] == "nonexistent"
     end
     assert_equal_select_result([], result)
   end
 
-  def test_select_query_key
+  def test_query_key
     result = @users.select do |record|
       record["_key"] =~ "mori"
     end
