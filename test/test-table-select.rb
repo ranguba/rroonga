@@ -146,6 +146,15 @@ class TableSelectTest < Test::Unit::TestCase
                                result)
   end
 
+  def test_not_equal_block
+    only_ruby19
+    result = @comments.select do |record|
+      record.user != "darashi"
+    end
+    assert_equal_select_result([@comment1, @comment2, @comment3],
+                               result)
+  end
+
   def test_equal_reference_column_by_nonexistent_key
     result = @comments.select do |record|
       record["user"] == "nonexistent"

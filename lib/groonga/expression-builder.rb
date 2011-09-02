@@ -564,3 +564,7 @@ module Groonga
     end
   end
 end
+
+if RUBY_VERSION >= "1.9"
+  require "groonga/expression-builder-19"
+end
