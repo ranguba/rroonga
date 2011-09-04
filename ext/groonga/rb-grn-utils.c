@@ -1,7 +1,7 @@
 /* -*- c-file-style: "ruby" -*- */
 /* vim: set sts=4 sw=4 ts=8 noet: */
 /*
-  Copyright (C) 2009-2010  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2011  Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -33,17 +33,18 @@ rb_grn_inspect (VALUE object)
 void
 rb_grn_scan_options (VALUE options, ...)
 {
+    VALUE original_options = options;
     VALUE available_keys;
     const char *key;
     VALUE *value;
     va_list args;
 
-    if (NIL_P(options))
+    options = rb_check_convert_type(options, T_HASH, "Hash", "to_hash");
+    if (NIL_P(options)) {
         options = rb_hash_new();
-    else
+    } else if (options == original_options) {
         options = rb_funcall(options, rb_intern("dup"), 0);
-
-    Check_Type(options, T_HASH);
+    }
 
     available_keys = rb_ary_new();
     va_start(args, options);

@@ -24,6 +24,9 @@
 #ifdef HAVE_RUBY_ENCODING_H
 #  include <ruby/encoding.h>
 #endif
+#ifdef HAVE_RUBY_INTERN_H
+#  include <ruby/intern.h>
+#endif
 
 #include <groonga.h>
 
