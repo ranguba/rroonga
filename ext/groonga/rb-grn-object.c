@@ -323,7 +323,7 @@ rb_grn_object_bind_common (VALUE klass, VALUE self, VALUE rb_context,
 	grn_obj_set_finalizer(context, object, rb_grn_object_finalizer);
 	rb_grn_object->have_finalizer = GRN_TRUE;
     } else if (object->header.type == GRN_ACCESSOR) {
-	debug("set-finalizer(implicit): %p:%p:%p %(%#x)\n",
+	debug("set-finalizer(implicit): %p:%p:%p %s(%#x)\n",
 	      context, object, rb_grn_object,
 	      rb_grn_inspect_type(object->header.type),
 	      object->header.type);
