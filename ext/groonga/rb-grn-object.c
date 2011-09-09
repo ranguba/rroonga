@@ -178,7 +178,8 @@ rb_grn_object_free (RbGrnObject *rb_grn_object)
 	if (rb_grn_object->have_finalizer) {
 	    user_data = grn_obj_user_data(context, grn_object);
 	}
-	debug("type: %#x; need_close: %d; user_data: %p; ptr: %p\n",
+	debug("type: %s(%#x); need_close: %d; user_data: %p; ptr: %p\n",
+	      rb_grn_inspect_type(grn_object->header.type),
 	      grn_object->header.type,
 	      rb_grn_object->need_close,
 	      user_data,
@@ -313,15 +314,17 @@ rb_grn_object_bind_common (VALUE klass, VALUE self, VALUE rb_context,
 
     user_data = grn_obj_user_data(context, object);
     if (user_data) {
-	debug("set-finalizer: %p:%p:%p %#x\n",
+	debug("set-finalizer: %p:%p:%p %s(%#x)\n",
 	      context, object, rb_grn_object,
+	      rb_grn_inspect_type(object->header.type),
 	      object->header.type);
 	user_data->ptr = rb_grn_object;
 	grn_obj_set_finalizer(context, object, rb_grn_object_finalizer);
 	rb_grn_object->have_finalizer = GRN_TRUE;
     } else if (object->header.type == GRN_ACCESSOR) {
-	debug("set-finalizer(implicit): %p:%p:%p %#x\n",
+	debug("set-finalizer(implicit): %p:%p:%p %(%#x)\n",
 	      context, object, rb_grn_object,
+	      rb_grn_inspect_type(object->header.type),
 	      object->header.type);
 	rb_grn_object->have_finalizer = GRN_TRUE;
     }

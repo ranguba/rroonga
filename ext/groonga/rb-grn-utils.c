@@ -30,6 +30,71 @@ rb_grn_inspect (VALUE object)
     return StringValueCStr(inspected);
 }
 
+const char *
+rb_grn_inspect_type (unsigned char type)
+{
+  switch (type) {
+  case GRN_VOID:
+    return "void";
+  case GRN_BULK:
+    return "bulk";
+  case GRN_PTR:
+    return "ptr";
+  case GRN_UVECTOR:
+    return "uvector";
+  case GRN_PVECTOR:
+    return "pvector";
+  case GRN_MSG:
+    return "msg";
+  case GRN_QUERY:
+    return "query";
+  case GRN_ACCESSOR:
+    return "accessor";
+  case GRN_SNIP:
+    return "snip";
+  case GRN_PATSNIP:
+    return "patsnip";
+  case GRN_CURSOR_TABLE_HASH_KEY:
+    return "cursor-table-hash-key";
+  case GRN_CURSOR_TABLE_PAT_KEY:
+    return "cursor-table-pat-key";
+  case GRN_CURSOR_TABLE_DAT_KEY:
+    return "cursor-table-dat-key";
+  case GRN_CURSOR_TABLE_NO_KEY:
+    return "cursor-table-no-key";
+  case GRN_CURSOR_TABLE_VIEW:
+    return "cursor-table-view";
+  case GRN_CURSOR_COLUMN_INDEX:
+    return "cursor-column-index";
+  case GRN_TYPE:
+    return "type";
+  case GRN_PROC:
+    return "proc";
+  case GRN_EXPR:
+    return "expr";
+  case GRN_TABLE_HASH_KEY:
+    return "table-hash-key";
+  case GRN_TABLE_PAT_KEY:
+    return "table-pat-key";
+  case GRN_TABLE_DAT_KEY:
+    return "table-dat-key";
+  case GRN_TABLE_NO_KEY:
+    return "table-no-key";
+  case GRN_TABLE_VIEW:
+    return "table-view";
+  case GRN_DB:
+    return "db";
+  case GRN_COLUMN_FIX_SIZE:
+    return "column-fix-size";
+  case GRN_COLUMN_VAR_SIZE:
+    return "column-var-size";
+  case GRN_COLUMN_INDEX:
+    return "column-index";
+  default:
+    return "unknown";
+  }
+}
+
 void
 rb_grn_scan_options (VALUE options, ...)
 {
