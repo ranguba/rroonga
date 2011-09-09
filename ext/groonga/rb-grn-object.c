@@ -426,14 +426,16 @@ rb_grn_object_assign (VALUE klass, VALUE self, VALUE rb_context,
 			       context, object);
     } else {
 	rb_raise(rb_eTypeError,
-		 "unsupported groonga object type for assignment: 0x%x",
+		 "unsupported groonga object type for assignment: %s(%#x)",
+		 rb_grn_inspect_type(object->header.type),
 		 object->header.type);
     }
 
     rb_iv_set(self, "@context", rb_context);
 
-    debug("assign: %p:%p:%p 0x%x\n", context, object, rb_grn_object,
-	   object->header.type);
+    debug("assign: %p:%p:%p %s(%#x)\n",
+	  context, object, rb_grn_object,
+	  rb_grn_inspect_type(object->header.type), object->header.type);
 }
 
 void
@@ -463,14 +465,17 @@ rb_grn_named_object_set_name (RbGrnNamedObject *rb_grn_named_object,
 	rb_grn_named_object->name = NULL;
     }
     if (name_size > 0) {
+	RbGrnObject *rb_grn_object;
 	rb_grn_named_object->name = ALLOC_N(char, name_size + 1);
 	memcpy(rb_grn_named_object->name, name, name_size);
 	rb_grn_named_object->name[name_size] = '\0';
-	debug("set-name: %p:%p:%p 0x%x: <%.*s>\n",
-	      RB_GRN_OBJECT(rb_grn_named_object)->context,
-	      RB_GRN_OBJECT(rb_grn_named_object)->object,
+	rb_grn_object = RB_GRN_OBJECT(rb_grn_named_object);
+	debug("set-name: %p:%p:%p %s(%#x): <%.*s>\n",
+	      rb_grn_object->context,
+	      rb_grn_object->object,
 	      rb_grn_named_object,
-	      RB_GRN_OBJECT(rb_grn_named_object)->object->header.type,
+	      rb_grn_inspect_type(rb_grn_object->object->header.type),
+	      rb_grn_object->object->header.type,
 	      name_size, name);
     }
     rb_grn_named_object->name_size = name_size;

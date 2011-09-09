@@ -688,8 +688,10 @@ rb_grn_value_to_ruby_object (grn_ctx *context,
 	break;
       default:
 	rb_raise(rb_eGrnError,
-		 "unsupported value type: 0x%0x: %s",
-		 value->header.type, rb_grn_inspect(related_object));
+		 "unsupported value type: %s(%#x): %s",
+		 rb_grn_inspect_type(value->header.type),
+		 value->header.type,
+		 rb_grn_inspect(related_object));
 	break;
     }
 
@@ -841,7 +843,8 @@ rb_grn_obj_to_ruby_object (VALUE klass, grn_ctx *context,
       /* case GRN_COLUMN_INDEX: */
       default:
 	rb_raise(rb_eTypeError,
-		 "unsupported groonga object: 0x%x: <%s>",
+		 "unsupported groonga object: %s(%#x): <%s>",
+		 rb_grn_inspect_type(obj->header.type),
 		 obj->header.type,
 		 rb_grn_inspect(related_object));
 	break;
