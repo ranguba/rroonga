@@ -138,7 +138,8 @@ rb_grn_object_run_finalizer (grn_ctx *context, grn_obj *grn_object,
 	break;
       default:
 	rb_raise(rb_eTypeError,
-		 "unsupported groonga object type for finalizer: 0x%x",
+		 "unsupported groonga object type for finalizer: %s(%#x)",
+		 rb_grn_inspect_type(grn_object->header.type),
 		 grn_object->header.type);
 	break;
     }
