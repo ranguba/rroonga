@@ -266,13 +266,19 @@ module Groonga
       def define_column(table, column)
         type = column_method(column)
         name = column.local_name
-        write("  table.#{type}(#{name.inspect})\n")
+        options = column_options(column)
+        arguments = [dump_object(name), options].compact.join(", ")
+        write("  table.#{type}(#{arguments})\n")
       end
 
       def define_reference_column(table, column)
         name = column.local_name
         reference = column.range
-        write("  table.reference(#{name.dump}, #{reference.name.dump})\n")
+        options = column_options(column)
+        arguments = [dump_object(name),
+                     dump_object(reference.name),
+                     options].compact.join(", ")
+        write("  table.reference(#{arguments})\n")
       end
 
       def define_index_column(table, column)
@@ -280,14 +286,15 @@ module Groonga
         sources = column.sources
         source_names = sources.collect do |source|
           if source.is_a?(Groonga::Table)
-            "_key".dump
+            name = "_key"
           else
-            source.local_name.dump
+            name = source.local_name
           end
+          dump_object(name)
         end.join(", ")
-        arguments = [target_table_name.dump,
+        arguments = [dump_object(target_table_name),
                      sources.size == 1 ? source_names : "[#{source_names}]",
-                     ":name => #{column.local_name.dump}"]
+                     ":name => #{dump_object(column.local_name)}"]
         write("  table.index(#{arguments.join(', ')})\n")
       end
 
@@ -314,6 +321,28 @@ module Groonga
           "long_text"
         else
           raise ArgumentError, "unsupported column: #{column.inspect}"
+        end
+      end
+
+      def column_options(column)
+        options = {}
+        options[:type] = :vector if column.vector?
+        return nil if options.empty?
+
+        dumped_options = ""
+        options.each do |key, value|
+          dumped_key = dump_object(key)
+          dumped_value = dump_object(value)
+          dumped_options << "#{dumped_key} => #{dumped_value}"
+        end
+        dumped_options
+      end
+
+      def dump_object(object)
+        if object.respond_to?(:dump)
+          object.dump
+        else
+          object.inspect
         end
       end
     end

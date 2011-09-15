@@ -23,6 +23,7 @@ class SchemaDumperTest < Test::Unit::TestCase
     Groonga::Schema.define do |schema|
       schema.create_table("Posts") do |table|
         table.short_text :title
+        table.short_text :comments, :type => :vector
       end
     end
   end
@@ -40,6 +41,7 @@ class SchemaDumperTest < Test::Unit::TestCase
       schema.create_table("Comments") do |table|
         table.reference("item", "Items")
         table.reference("author", "Users")
+        table.reference("children", "Items", :type => :vector)
         table.text("content")
         table.time("issued")
       end
@@ -71,6 +73,7 @@ class SchemaDumperTest < Test::Unit::TestCase
       assert_equal(<<-EOS, dump)
 create_table("Posts",
              :force => true) do |table|
+  table.short_text("comments", :type => :vector)
   table.short_text("title")
 end
 EOS
@@ -97,6 +100,7 @@ end
 
 change_table("Comments") do |table|
   table.reference("author", "Users")
+  table.reference("children", "Items", :type => :vector)
   table.reference("item", "Items")
 end
 EOS
@@ -138,6 +142,7 @@ EOS
       define_simple_schema
       assert_equal(<<-EOS, dump)
 table_create Posts TABLE_NO_KEY
+column_create Posts comments COLUMN_VECTOR ShortText
 column_create Posts title COLUMN_SCALAR ShortText
 EOS
     end
@@ -156,6 +161,7 @@ table_create Users TABLE_NO_KEY
 column_create Users name COLUMN_SCALAR ShortText
 
 column_create Comments author COLUMN_SCALAR Users
+column_create Comments children COLUMN_VECTOR Items
 column_create Comments item COLUMN_SCALAR Items
 EOS
     end
