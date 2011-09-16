@@ -1741,6 +1741,22 @@ rb_grn_table_is_locked (int argc, VALUE *argv, VALUE self)
  * ブロックで条件を指定する場合は
  * Groonga::RecordExpressionBuilderを参照。
  *
+ * Ruby1.9以降では、ブロックで条件を指定する際に
+ * Groonga::ColumnExpressionBuilderの他に"!="も使用可能。
+ * 例:
+ *  comments = Groonga::Array.create(:name => "Comments")
+ *  comments.define_column("content", "Text")
+ *
+ *  comments.add(:content => "Hello Good-bye!")
+ *  comments.add(:content => "Hello World")
+ *  comments.add(:content => "test")
+ *
+ *  result = comments.select do |record|
+ *    record.content != "test"
+ *  end
+ *  p result.collect {|record| record.content}
+ *    # => ["Hello Good-bye!", "Hello World"]
+ *
  * _options_に指定可能な値は以下の通り。
  *
  * [+:default_column+]
