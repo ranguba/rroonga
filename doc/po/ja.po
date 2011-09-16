@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: rroonga 1.2.3\n"
-"POT-Creation-Date: 2011-09-16 17:02+0900\n"
-"PO-Revision-Date: 2011-09-16 17:01+0900\n"
+"POT-Creation-Date: 2011-09-16 17:19+0900\n"
+"PO-Revision-Date: 2011-09-16 17:20+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: \n"
@@ -11961,43 +11961,67 @@ msgid "NEWS"
 msgstr "お知らせ"
 
 #: doc/reference/en/file.news.html:58(h2)
-msgid "1.2.8: 2011-09-16"
+msgid "1.2.9: 2011-09-16"
 msgstr ""
 
 #: doc/reference/en/file.news.html:59(h3)
-#: doc/reference/en/file.news.html:68(h3)
 #: doc/reference/en/file.news.html:77(h3)
-#: doc/reference/en/file.news.html:92(h3)
-#: doc/reference/en/file.news.html:107(h3)
-#: doc/reference/en/file.news.html:123(h3)
-#: doc/reference/en/file.news.html:146(h3)
-#: doc/reference/en/file.news.html:174(h3)
-#: doc/reference/en/file.news.html:191(h3)
-#: doc/reference/en/file.news.html:197(h3)
-#: doc/reference/en/file.news.html:243(h3)
-#: doc/reference/en/file.news.html:262(h3)
+#: doc/reference/en/file.news.html:90(h3)
+#: doc/reference/en/file.news.html:106(h3)
+#: doc/reference/en/file.news.html:116(h3)
+#: doc/reference/en/file.news.html:122(h3)
+#: doc/reference/en/file.news.html:140(h3)
+#: doc/reference/en/file.news.html:237(h3)
+#: doc/reference/en/file.news.html:252(h3)
+#: doc/reference/en/file.news.html:257(h3)
 #: doc/reference/en/file.news.html:272(h3)
+#: doc/reference/en/file.news.html:328(h3)
+#: doc/reference/en/file.news.html:334(h3)
+msgid "Fixes"
+msgstr "修正"
+
+#: doc/reference/en/file.news.html:61(li)
+msgid "deleted unneed object files."
+msgstr "不要なオブジェクトファイルが入っていたのを削除。"
+
+#: doc/reference/en/file.news.html:63(h2)
+msgid "1.2.8: 2011-09-16"
+msgstr ""
+
+#: doc/reference/en/file.news.html:64(h3)
+#: doc/reference/en/file.news.html:73(h3)
+#: doc/reference/en/file.news.html:82(h3)
+#: doc/reference/en/file.news.html:97(h3)
+#: doc/reference/en/file.news.html:112(h3)
+#: doc/reference/en/file.news.html:128(h3)
+#: doc/reference/en/file.news.html:151(h3)
+#: doc/reference/en/file.news.html:179(h3)
+#: doc/reference/en/file.news.html:196(h3)
+#: doc/reference/en/file.news.html:202(h3)
+#: doc/reference/en/file.news.html:248(h3)
+#: doc/reference/en/file.news.html:267(h3)
+#: doc/reference/en/file.news.html:277(h3)
 msgid "Improvements"
 msgstr "改良"
 
-#: doc/reference/en/file.news.html:61(li)
+#: doc/reference/en/file.news.html:66(li)
 #, fuzzy
 msgid "supported “!=” expression for column in block of Groonga::Table#select."
 msgstr "Groonga::Table#selectに与えるブロックの中での\"!=\"メソッドに対応。"
 
-#: doc/reference/en/file.news.html:62(li)
+#: doc/reference/en/file.news.html:67(li)
 msgid "accepted Hash like object as options."
 msgstr "ハッシュライクなオプションに対応。"
 
-#: doc/reference/en/file.news.html:63(li)
+#: doc/reference/en/file.news.html:68(li)
 msgid "supported vector in dump in Ruby syntax."
 msgstr "Ruby文法においてのベクター形式のダンプに対応。"
 
-#: doc/reference/en/file.news.html:65(span)
+#: doc/reference/en/file.news.html:70(span)
 msgid "NOTE"
 msgstr ""
 
-#: doc/reference/en/file.news.html:64(li)
+#: doc/reference/en/file.news.html:69(li)
 msgid ""
 "supported GRN_CTX_PER_DB environment variables. (<placeholder-1/>: You "
 "should pay attention to use this variables.)"
@@ -12005,158 +12029,143 @@ msgstr ""
 "環境変数GRN_CTX_PER_DBに対応。（注意：この環境変数を使用する際は注意して使っ"
 "てください）"
 
-#: doc/reference/en/file.news.html:67(h2)
+#: doc/reference/en/file.news.html:72(h2)
 msgid "1.2.7: 2011-08-29"
 msgstr ""
 
-#: doc/reference/en/file.news.html:70(li)
+#: doc/reference/en/file.news.html:75(li)
 msgid "Added Groonga::Snippet#close that frees resource."
 msgstr "リソースを解放するGroonga::Snippet#closeを追加。"
 
-#: doc/reference/en/file.news.html:72(h3)
-#: doc/reference/en/file.news.html:85(h3)
-#: doc/reference/en/file.news.html:101(h3)
-#: doc/reference/en/file.news.html:111(h3)
-#: doc/reference/en/file.news.html:117(h3)
-#: doc/reference/en/file.news.html:135(h3)
-#: doc/reference/en/file.news.html:232(h3)
-#: doc/reference/en/file.news.html:247(h3)
-#: doc/reference/en/file.news.html:252(h3)
-#: doc/reference/en/file.news.html:267(h3)
-#: doc/reference/en/file.news.html:323(h3)
-#: doc/reference/en/file.news.html:329(h3)
-msgid "Fixes"
-msgstr "修正"
-
-#: doc/reference/en/file.news.html:74(li)
+#: doc/reference/en/file.news.html:79(li)
 msgid "Fixed build error on Ruby 1.8.7."
 msgstr "Ruby 1.8.7でビルドできない問題を修正。"
 
-#: doc/reference/en/file.news.html:76(h2)
+#: doc/reference/en/file.news.html:81(h2)
 msgid "1.2.6: 2011-08-29"
 msgstr ""
 
-#: doc/reference/en/file.news.html:79(li)
+#: doc/reference/en/file.news.html:84(li)
 msgid "Supported groonga 1.2.5."
 msgstr "groonga 1.2.5対応。"
 
-#: doc/reference/en/file.news.html:80(li)
+#: doc/reference/en/file.news.html:85(li)
 msgid ""
 "Added Groonga::Record#added? that returns true when the record is just added."
 msgstr "追加直後のレコードかどうかを返す Groonga::Record#added? を追加。"
 
-#: doc/reference/en/file.news.html:81(li)
+#: doc/reference/en/file.news.html:86(li)
 msgid "Added Groonga::VariableSizeColumn#defrag? that defrags the column."
 msgstr "カラムをデフラグする Groonga::VariableSizeColumn#defrag? を追加。"
 
-#: doc/reference/en/file.news.html:82(li)
+#: doc/reference/en/file.news.html:87(li)
 msgid ""
 "Added Groonga::Database#defrag that defrags the all variable size columns."
 msgstr ""
 "データベース中のすべての可変長カラムをデフラグする Groonga::Database#defrag "
 "を追加。"
 
-#: doc/reference/en/file.news.html:83(li)
+#: doc/reference/en/file.news.html:88(li)
 msgid "Supported column name specification by symbol."
 msgstr "シンボルでのカラム名指定に対応。"
 
-#: doc/reference/en/file.news.html:87(li)
+#: doc/reference/en/file.news.html:92(li)
 msgid "Fixed install *.rb failure by gem install."
 msgstr "gem install時に*.rbのインストールに失敗する問題を修正。"
 
-#: doc/reference/en/file.news.html:88(li)
+#: doc/reference/en/file.news.html:93(li)
 msgid "Fixed some memory leaks."
 msgstr "メモリリークを修正。"
 
-#: doc/reference/en/file.news.html:89(li)
+#: doc/reference/en/file.news.html:94(li)
 msgid "Fixed crash bug on exit."
 msgstr "終了時にクラッシュする問題を修正。"
 
-#: doc/reference/en/file.news.html:91(h2)
+#: doc/reference/en/file.news.html:96(h2)
 msgid "1.2.5: 2011-08-05"
 msgstr ""
 
-#: doc/reference/en/file.news.html:94(li)
+#: doc/reference/en/file.news.html:99(li)
 msgid "Re-supported tar.gz distribution."
 msgstr "tar.gzでのパッケージ配布を再サポート。"
 
-#: doc/reference/en/file.news.html:95(li)
+#: doc/reference/en/file.news.html:100(li)
 msgid "Added Groonga::Context#close."
 msgstr "Groonga::Context#closeを追加。"
 
-#: doc/reference/en/file.news.html:96(li)
+#: doc/reference/en/file.news.html:101(li)
 msgid "Added Groonga::Context#closed?."
 msgstr "Groonga::Context#closed?を追加。"
 
-#: doc/reference/en/file.news.html:97(li)
+#: doc/reference/en/file.news.html:102(li)
 msgid "Deprecated Groonga::ObjectClosed. Use Groonga::Closed instead."
 msgstr ""
 "Groonga::ObjectClosedを非推奨にした。代わりにGroonga::Closedを使うこと。"
 
-#: doc/reference/en/file.news.html:98(li)
+#: doc/reference/en/file.news.html:103(li)
 msgid "grndump: Added —exclude-table option that specifies not dumped tables."
 msgstr ""
 "grndump: ダンプしないテーブルを指定する--exclude-tableオプションを追加。"
 
-#: doc/reference/en/file.news.html:99(li)
+#: doc/reference/en/file.news.html:104(li)
 msgid "dump: Removed path equality check."
 msgstr "dump: パスが等しいかどうかのチェックを削除。"
 
-#: doc/reference/en/file.news.html:103(li)
+#: doc/reference/en/file.news.html:108(li)
 msgid "dump: Fixed wrong index table type."
 msgstr "dump: 間違ったインデックス用テーブルを出力する問題を修正。"
 
-#: doc/reference/en/file.news.html:104(li)
-#: doc/reference/en/file.news.html:113(li)
+#: doc/reference/en/file.news.html:109(li)
+#: doc/reference/en/file.news.html:118(li)
 msgid "Re-supported auto groonga install."
 msgstr "groongaの自動インストールを再サポート。"
 
-#: doc/reference/en/file.news.html:106(h2)
+#: doc/reference/en/file.news.html:111(h2)
 msgid "1.2.4: 2011-06-29"
 msgstr ""
 
-#: doc/reference/en/file.news.html:109(li)
+#: doc/reference/en/file.news.html:114(li)
 msgid "Supported groonga 1.2.3."
 msgstr "groonga 1.2.3対応。"
 
-#: doc/reference/en/file.news.html:114(li)
+#: doc/reference/en/file.news.html:119(li)
 msgid "Added missing pkg-config gem dependency."
 msgstr "pkg-config gemへの依存関係を追加。"
 
-#: doc/reference/en/file.news.html:116(h2)
+#: doc/reference/en/file.news.html:121(h2)
 #: doc/reference/en/file.release.html:181(p)
 msgid "1.2.3: 2011-06-27"
 msgstr ""
 
-#: doc/reference/en/file.news.html:119(li)
+#: doc/reference/en/file.news.html:124(li)
 msgid "remove object files in gem packages."
 msgstr "gemパッケージに含まれてしまったオブジェクトファイル(*.o)を削除。"
 
-#: doc/reference/en/file.news.html:120(li)
+#: doc/reference/en/file.news.html:125(li)
 msgid "fix charactor corruption in reference."
 msgstr "一部のリファレンスマニュアルの文字化けを修正。"
 
-#: doc/reference/en/file.news.html:122(h2)
+#: doc/reference/en/file.news.html:127(h2)
 #: doc/reference/en/file.release.html:185(p)
 msgid "1.2.2: 2011-06-27"
 msgstr ""
 
-#: doc/reference/en/file.news.html:125(li)
+#: doc/reference/en/file.news.html:130(li)
 msgid "created “Developers” page in English."
 msgstr "英語版の「開発者向け情報」ページを作成。"
 
-#: doc/reference/en/file.news.html:126(li)
+#: doc/reference/en/file.news.html:131(li)
 msgid "added description for tasks of “html:publish” and “publish”."
 msgstr "\"html:publish\"タスクと\"publish\"に関しての説明を追加。"
 
-#: doc/reference/en/file.news.html:128(h3)
-#: doc/reference/en/file.news.html:163(h3)
-#: doc/reference/en/file.news.html:227(h3)
-#: doc/reference/en/file.news.html:310(h2)
+#: doc/reference/en/file.news.html:133(h3)
+#: doc/reference/en/file.news.html:168(h3)
+#: doc/reference/en/file.news.html:232(h3)
+#: doc/reference/en/file.news.html:315(h2)
 msgid "Changes"
 msgstr "変更"
 
-#: doc/reference/en/file.news.html:130(li)
+#: doc/reference/en/file.news.html:135(li)
 msgid ""
 "Groonga::Record#attributes return same attributes object for duplicate "
 "records."
@@ -12164,64 +12173,64 @@ msgstr ""
 "Groonga::Record#attributesが重複したレコードが現れた際に同じattributesオブ"
 "ジェクトを返すようにした。"
 
-#: doc/reference/en/file.news.html:131(li)
+#: doc/reference/en/file.news.html:136(li)
 msgid "added document for Groonga::Record#attributes."
 msgstr "Groonga::Record#attributesにドキュメントを追加。"
 
-#: doc/reference/en/file.news.html:132(li)
+#: doc/reference/en/file.news.html:137(li)
 msgid "changed tool name in document page for creating document."
 msgstr "「開発者向け情報」ページ内にあるドキュメント作成ツールを変更。"
 
-#: doc/reference/en/file.news.html:133(li)
+#: doc/reference/en/file.news.html:138(li)
 msgid "moved NEWS*.rdoc and tutorial.texttile to doc/text/."
 msgstr "NEWS*.rdocとtutorial.texttileをディレクトリdoc/text/に移動。"
 
-#: doc/reference/en/file.news.html:137(li)
+#: doc/reference/en/file.news.html:142(li)
 msgid "fixed the tutorial path in index page."
 msgstr "インデックスページにある「チュートリアル」ページへのリンクを修正。"
 
-#: doc/reference/en/file.news.html:138(li)
+#: doc/reference/en/file.news.html:143(li)
 msgid "fixed the path of tutorial in index page in English."
 msgstr ""
 "インデックスページにある英語版「チュートリアル」ページへのリンクを修正。"
 
-#: doc/reference/en/file.news.html:139(span)
+#: doc/reference/en/file.news.html:144(span)
 #: doc/reference/en/index.html:67(span)
 #: doc/reference/en/file.README.html:67(span)
 msgid "URL"
 msgstr ""
 
-#: doc/reference/en/file.news.html:139(li)
+#: doc/reference/en/file.news.html:144(li)
 msgid "follow the groonga downlowd <placeholder-1/> change. [mallowlabs]"
 msgstr "新しいgroongaのダウンロードURLに対応。 [mallowlabs]"
 
-#: doc/reference/en/file.news.html:141(h3)
-#: doc/reference/en/file.news.html:168(h3)
-#: doc/reference/en/file.news.html:238(h3)
-#: doc/reference/en/file.news.html:257(h3)
-#: doc/reference/en/file.news.html:333(h3)
-#: doc/reference/en/file.news.html:448(h3) doc/reference/en/index.html:102(h2)
+#: doc/reference/en/file.news.html:146(h3)
+#: doc/reference/en/file.news.html:173(h3)
+#: doc/reference/en/file.news.html:243(h3)
+#: doc/reference/en/file.news.html:262(h3)
+#: doc/reference/en/file.news.html:338(h3)
+#: doc/reference/en/file.news.html:453(h3) doc/reference/en/index.html:102(h2)
 #: doc/reference/en/file.README.html:102(h2)
 msgid "Thanks"
 msgstr "感謝"
 
-#: doc/reference/en/file.news.html:143(li)
+#: doc/reference/en/file.news.html:148(li)
 msgid "mallowlabs"
 msgstr "mallowlabsさん"
 
-#: doc/reference/en/file.news.html:145(h2)
+#: doc/reference/en/file.news.html:150(h2)
 msgid "1.2.1: 2011-06-07"
 msgstr ""
 
-#: doc/reference/en/file.news.html:148(li)
+#: doc/reference/en/file.news.html:153(li)
 msgid "added document of Groonga::Table#pagination."
 msgstr "Groonga::Table#paginationのドキュメントを追加。"
 
-#: doc/reference/en/file.news.html:149(li)
+#: doc/reference/en/file.news.html:154(li)
 msgid "added grndump in package."
 msgstr "grndumpをパッケージに追加。"
 
-#: doc/reference/en/file.news.html:150(li)
+#: doc/reference/en/file.news.html:155(li)
 msgid ""
 "corresponded recursive reference of Records by Groonga::Record#attributes. "
 "(experimental) [mooz]"
@@ -12229,11 +12238,11 @@ msgstr ""
 "Groonga::Record#attributesによるレコード内での再帰参照に対応した。（補足：た"
 "だし実験的実装）[mooz]"
 
-#: doc/reference/en/file.news.html:152(li)
+#: doc/reference/en/file.news.html:157(li)
 msgid "Groonga::Record#attributes supported data including _score."
 msgstr "Groonga::Record#attributesにて_scoreも含めたデータを返すようにした。"
 
-#: doc/reference/en/file.news.html:153(li)
+#: doc/reference/en/file.news.html:158(li)
 msgid ""
 "corresponded Windows for 64-bit. (but there’s not 64-bit ruby, so rroonga "
 "for 64-bit windows cannot run.)"
@@ -12241,99 +12250,99 @@ msgstr ""
 "Windowsの64bitに対応。（ただし、rubyの64bit版が存在しないため、動作環境がな"
 "い）"
 
-#: doc/reference/en/file.news.html:155(li)
+#: doc/reference/en/file.news.html:160(li)
 msgid "added Groonga::Posting."
 msgstr "Groonga::Postingを追加。"
 
-#: doc/reference/en/file.news.html:156(li)
+#: doc/reference/en/file.news.html:161(li)
 msgid "added :delimit, :token_delimiter for alias of TokenDelimit."
 msgstr "TokenDelimitのエイリアスに:delimit, :token_delimiterを追加。"
 
-#: doc/reference/en/file.news.html:157(li)
+#: doc/reference/en/file.news.html:162(li)
 msgid "Groonga::DatabaseDumper#dump corresponded lexicon table."
 msgstr "Groonga::DatabaseDumper#dumpにてlexiconテーブルのダンプに対応。"
 
-#: doc/reference/en/file.news.html:158(li)
+#: doc/reference/en/file.news.html:163(li)
 msgid "Groonga::DatabaseDumper#dump corresponded data including plugin."
 msgstr "Groonga::DatabaseDumper#dumpにてプラグインを含んだダンプに対応。"
 
-#: doc/reference/en/file.news.html:159(li)
+#: doc/reference/en/file.news.html:164(li)
 msgid "added Groonga::IndexColumn#open_cursor. [yoshihara]"
 msgstr "Groonga::IndexColumn#open_cursorを追加。[yoshihara]"
 
-#: doc/reference/en/file.news.html:160(li)
+#: doc/reference/en/file.news.html:165(li)
 msgid "added Groonga::IndexCursor. [yoshihara]"
 msgstr "Groonga::IndexCursorを追加。[yoshihara]"
 
-#: doc/reference/en/file.news.html:161(li)
+#: doc/reference/en/file.news.html:166(li)
 msgid "added Groonga::Object#builtin?. [yoshihara]"
 msgstr "Groonga::Object#builtin?を追加。[yoshihara]"
 
-#: doc/reference/en/file.news.html:165(li)
+#: doc/reference/en/file.news.html:170(li)
 msgid "check existence of column before removing it."
 msgstr "カラムが削除される前に、そのカラムがあるかチェックするようにした。"
 
-#: doc/reference/en/file.news.html:166(li)
+#: doc/reference/en/file.news.html:171(li)
 msgid "removed grn expression document."
 msgstr "ドキュメントからgrn式のページを削除。"
 
-#: doc/reference/en/file.news.html:170(li)
+#: doc/reference/en/file.news.html:175(li)
 msgid "mooz"
 msgstr "moozさん"
 
-#: doc/reference/en/file.news.html:171(li)
+#: doc/reference/en/file.news.html:176(li)
 msgid "yoshihara"
 msgstr "yoshiharaさん"
 
-#: doc/reference/en/file.news.html:173(h2)
+#: doc/reference/en/file.news.html:178(h2)
 msgid "1.2.0: 2011-04-01"
 msgstr ""
 
-#: doc/reference/en/file.news.html:176(li)
+#: doc/reference/en/file.news.html:181(li)
 msgid "Supported groonga 1.2.0."
 msgstr "groonga 1.2.0対応。"
 
-#: doc/reference/en/file.news.html:177(li)
+#: doc/reference/en/file.news.html:182(li)
 msgid "Added Groonga::Accessor#local_name."
 msgstr "Groonga::Accessor#local_nameを追加。"
 
-#: doc/reference/en/file.news.html:178(li)
+#: doc/reference/en/file.news.html:183(li)
 msgid "Added Groonga::IndexColumn#with_section?."
 msgstr "Groonga::IndexColumn#with_section?を追加。"
 
-#: doc/reference/en/file.news.html:179(li)
+#: doc/reference/en/file.news.html:184(li)
 msgid "Added Groonga::IndexColumn#with_weight?."
 msgstr "Groonga::IndexColumn#with_weight?を追加。"
 
-#: doc/reference/en/file.news.html:180(li)
+#: doc/reference/en/file.news.html:185(li)
 msgid "Added Groonga::IndexColumn#with_position?."
 msgstr "Groonga::IndexColumn#with_position?を追加。"
 
-#: doc/reference/en/file.news.html:181(li)
+#: doc/reference/en/file.news.html:186(li)
 msgid "Groonga::Schema.dump supported groonga command format dump."
 msgstr "Groonga::Schema.dumpがgroongaコマンド形式でのダンプに対応。"
 
-#: doc/reference/en/file.news.html:182(li)
+#: doc/reference/en/file.news.html:187(li)
 msgid "Added grndump command."
 msgstr "grndumpを追加。"
 
-#: doc/reference/en/file.news.html:183(li)
+#: doc/reference/en/file.news.html:188(li)
 msgid "Groonga::Database#each supports order customize."
 msgstr "Groonga::Database#eachで繰り返す順序を指定可能にした。"
 
-#: doc/reference/en/file.news.html:184(li)
+#: doc/reference/en/file.news.html:189(li)
 msgid "Added Groonga::Context#match_escalation_threshold."
 msgstr "Groonga::Context#match_escalation_thresholdを追加。"
 
-#: doc/reference/en/file.news.html:185(li)
+#: doc/reference/en/file.news.html:190(li)
 msgid "Added Groonga::Context#match_escalation_threshold=."
 msgstr "Groonga::Context#match_escalation_threshold=を追加。"
 
-#: doc/reference/en/file.news.html:186(li)
+#: doc/reference/en/file.news.html:191(li)
 msgid "Improved error message."
 msgstr "エラーメッセージの改良。"
 
-#: doc/reference/en/file.news.html:187(li)
+#: doc/reference/en/file.news.html:192(li)
 msgid ""
 "Supported Rubyish name like :short_text instead of the official type name "
 "like “ShortText” in Groonga::Schema."
@@ -12341,27 +12350,27 @@ msgstr ""
 "Groonga::Schemaの型指定で\"ShortText\"など正式型名だけではなく、:short_textな"
 "どよりRubyらしい名前を使えるようにした。"
 
-#: doc/reference/en/file.news.html:190(h2)
+#: doc/reference/en/file.news.html:195(h2)
 msgid "1.1.0: 2011-02-09"
 msgstr ""
 
-#: doc/reference/en/file.news.html:193(li)
+#: doc/reference/en/file.news.html:198(li)
 msgid "Supported groonga 1.1.0."
 msgstr "groonga 1.1.0対応。"
 
-#: doc/reference/en/file.news.html:194(li)
+#: doc/reference/en/file.news.html:199(li)
 msgid "Added Groonga::Plugin.register."
 msgstr "Groonga::Plugin.registerを追加。"
 
-#: doc/reference/en/file.news.html:196(h2)
+#: doc/reference/en/file.news.html:201(h2)
 msgid "1.0.9: 2011-01-29"
 msgstr ""
 
-#: doc/reference/en/file.news.html:199(li)
+#: doc/reference/en/file.news.html:204(li)
 msgid "Supported gem creation on Windows. [Patch by ongaeshi]"
 msgstr "Windows上でのgem作成に対応。 [ongaeshiさんがパッチ提供]"
 
-#: doc/reference/en/file.news.html:200(li)
+#: doc/reference/en/file.news.html:205(li)
 msgid ""
 "Supported generated directory that is created by Groonga::Schema removal "
 "when table or column is removed."
@@ -12369,19 +12378,19 @@ msgstr ""
 "Groonga::Schemaでテーブル・カラムを削除した時に作成したディレクトリを削除する"
 "ようにした。"
 
-#: doc/reference/en/file.news.html:202(li)
+#: doc/reference/en/file.news.html:207(li)
 msgid "Added Groonga::Context#create_database."
 msgstr "Groonga::Context#create_databaseを追加。"
 
-#: doc/reference/en/file.news.html:203(li)
+#: doc/reference/en/file.news.html:208(li)
 msgid "Added Groonga::Context#open_database."
 msgstr "Groonga::Context#open_databaseを追加。"
 
-#: doc/reference/en/file.news.html:204(li)
+#: doc/reference/en/file.news.html:209(li)
 msgid "Added Groonga::Column#indexes."
 msgstr "Groonga::Column#indexesを追加。"
 
-#: doc/reference/en/file.news.html:205(li)
+#: doc/reference/en/file.news.html:210(li)
 msgid ""
 "Supported a notation for specifying index column as match target in Groonga::"
 "Table#select: table.select do |record| record.match(“query”) do |"
@@ -12389,35 +12398,35 @@ msgid ""
 "index(“Terms.description”) * 100) match_record.content end end"
 msgstr ""
 
-#: doc/reference/en/file.news.html:214(li)
+#: doc/reference/en/file.news.html:219(li)
 msgid ""
 "Supported prefix search in Groonga::Table#select: table.select do |record| "
 "record.name.prefix_search(“groo”) end"
 msgstr ""
 
-#: doc/reference/en/file.news.html:218(li)
+#: doc/reference/en/file.news.html:223(li)
 msgid ""
 "Supported suffix search in Groonga::Table#select: table.select do |record| "
 "record.name.suffix_search(“nga”) end"
 msgstr ""
 
-#: doc/reference/en/file.news.html:222(li)
+#: doc/reference/en/file.news.html:227(li)
 msgid "Supported :default_tokenizer schema dump."
 msgstr ":default_tokenizerのスキーマダンプに対応。"
 
-#: doc/reference/en/file.news.html:223(li)
+#: doc/reference/en/file.news.html:228(li)
 msgid "Supported :key_normalize schema dump."
 msgstr ":key_normalizeのスキーマダンプに対応。"
 
-#: doc/reference/en/file.news.html:224(li)
+#: doc/reference/en/file.news.html:229(li)
 msgid "Supported pseudo columns by Groonga::Table#have_column?."
 msgstr "Groonga::Table#have_column?が擬似カラムに対応。"
 
-#: doc/reference/en/file.news.html:225(li)
+#: doc/reference/en/file.news.html:230(li)
 msgid "Supported pseudo columns by Groonga::Record#have_column?."
 msgstr "Groonga::Record#have_column?が擬似カラムに対応。"
 
-#: doc/reference/en/file.news.html:229(li)
+#: doc/reference/en/file.news.html:234(li)
 msgid ""
 "Renamed Groonga::Operatoion to Groonga::Operator. (Groonga::Operation is "
 "deprecated but still usable.)"
@@ -12425,7 +12434,7 @@ msgstr ""
 "Groonga::OperatoionをGroonga::Operatorに変更。（しばらくはGroonga::Operation"
 "も使えるが、非推奨。）"
 
-#: doc/reference/en/file.news.html:234(li)
+#: doc/reference/en/file.news.html:239(li)
 msgid ""
 "Fixed a crash bug when not default Groonga::Context is used in Groonga::"
 "Table#select."
@@ -12433,52 +12442,52 @@ msgstr ""
 "複数のGroonga::Contextを利用した場合にGroonga::Table#selectでクラッシュする問"
 "題を修正。"
 
-#: doc/reference/en/file.news.html:236(li)
+#: doc/reference/en/file.news.html:241(li)
 msgid "Fixed a crash bug when an exception is occurred."
 msgstr "例外発生時にクラッシュする問題を修正。"
 
-#: doc/reference/en/file.news.html:240(li)
+#: doc/reference/en/file.news.html:245(li)
 msgid "ongaeshi"
 msgstr "ongaeshiさん"
 
-#: doc/reference/en/file.news.html:242(h2)
+#: doc/reference/en/file.news.html:247(h2)
 msgid "1.0.8: 2010-12-25"
 msgstr ""
 
-#: doc/reference/en/file.news.html:245(li)
+#: doc/reference/en/file.news.html:250(li)
 msgid "Improved Groonga::Schema’s n-gram tokenizer detect process."
 msgstr "Groonga::Schemaのn-gramトークナイザー検出処理を改良。"
 
-#: doc/reference/en/file.news.html:249(li)
+#: doc/reference/en/file.news.html:254(li)
 msgid "Fixed GC problem caused by match_target in select."
 msgstr ""
 "selectでmatch_targetを利用した場合に生きているオブジェクトもGCされる問題を修"
 "正。"
 
-#: doc/reference/en/file.news.html:251(h2)
+#: doc/reference/en/file.news.html:256(h2)
 msgid "1.0.7: 2010-12-19"
 msgstr ""
 
-#: doc/reference/en/file.news.html:254(li)
+#: doc/reference/en/file.news.html:259(li)
 msgid ""
 "Supported pkg-config installed by RubyGems on Ruby 1.8. [Reported by @kamipo]"
 msgstr ""
 "Ruby 1.8でRubyGemsでインストールされたpkg-configを使えるようにした。 [@kamipo"
 "さんが報告]"
 
-#: doc/reference/en/file.news.html:255(li)
+#: doc/reference/en/file.news.html:260(li)
 msgid "Fixed a memory leak in Groonga::Table#columns."
 msgstr "Groonga::Table#columnsのメモリリークを修正。"
 
-#: doc/reference/en/file.news.html:259(li)
+#: doc/reference/en/file.news.html:264(li)
 msgid "@kamipo"
 msgstr "@kamipoさん"
 
-#: doc/reference/en/file.news.html:261(h2)
+#: doc/reference/en/file.news.html:266(h2)
 msgid "1.0.5: 2010-11-29"
 msgstr ""
 
-#: doc/reference/en/file.news.html:264(li)
+#: doc/reference/en/file.news.html:269(li)
 msgid ""
 "Added snail_case type name aliases for built-in groonga types to Groonga::"
 "Schema."
@@ -12486,27 +12495,27 @@ msgstr ""
 "Groonga::Schemaでgroongaの組み込み型をshort_textなどのように「小文字 + アン"
 "ダースコア」でも指定できるようにした。"
 
-#: doc/reference/en/file.news.html:269(li)
+#: doc/reference/en/file.news.html:274(li)
 msgid "Fixed a crash bug on GC. [Ryo Onodera]"
 msgstr "GC時にクラッシュするバグを修正。 [Ryo Onodera]"
 
-#: doc/reference/en/file.news.html:271(h2)
+#: doc/reference/en/file.news.html:276(h2)
 msgid "1.0.4: 2010-11-29"
 msgstr ""
 
-#: doc/reference/en/file.news.html:274(li)
+#: doc/reference/en/file.news.html:279(li)
 msgid "Supported groonga 1.0.4."
 msgstr "groonga 1.0.4対応。"
 
-#: doc/reference/en/file.news.html:275(li)
+#: doc/reference/en/file.news.html:280(li)
 msgid "Added Groonga::UnsupportedCommandVersion."
 msgstr "Groonga::UnsupportedCommandVersionを追加。"
 
-#: doc/reference/en/file.news.html:276(li)
+#: doc/reference/en/file.news.html:281(li)
 msgid "Added Groonga::Record#support_sub_records?."
 msgstr "Groonga::Record#support_sub_records?を追加。"
 
-#: doc/reference/en/file.news.html:277(li)
+#: doc/reference/en/file.news.html:282(li)
 msgid ""
 "Added Groonga::Record#eql?とGroonga::Record#hash. (treat two the same table "
 "and the same record ID object as the same Hash key.)"
@@ -12514,11 +12523,11 @@ msgstr ""
 "Groonga::Record#eql?とGroonga::Record#hashを追加。（同じテーブルの同じレコー"
 "ドIDのオブジェクトを同一のHashキーとして扱う。）"
 
-#: doc/reference/en/file.news.html:279(li)
+#: doc/reference/en/file.news.html:284(li)
 msgid "Supported pkg-config gem."
 msgstr "pkg-config gemを利用するようにした。"
 
-#: doc/reference/en/file.news.html:280(li)
+#: doc/reference/en/file.news.html:285(li)
 msgid ""
 "Supported generic #record_id object handle for custom record object in "
 "Groonga::Table#select."
@@ -12526,53 +12535,53 @@ msgstr ""
 "Groonga::Table#select内でrecord_idメソッドを持っているメソッドはレコードとし"
 "て扱うようにした。"
 
-#: doc/reference/en/file.news.html:282(li)
+#: doc/reference/en/file.news.html:287(li)
 msgid "Added Groonga::Record#record_id."
 msgstr "Groonga::Record#record_idを追加。"
 
-#: doc/reference/en/file.news.html:283(li)
+#: doc/reference/en/file.news.html:288(li)
 msgid "Added Groonga::Table#support_key?."
 msgstr "Groonga::Table#support_key?を追加。"
 
-#: doc/reference/en/file.news.html:284(li)
-#: doc/reference/en/file.news.html:285(li)
+#: doc/reference/en/file.news.html:289(li)
+#: doc/reference/en/file.news.html:290(li)
 msgid "Added Groonga::Record#support_key?."
 msgstr "Groonga::Record#support_key?を追加。"
 
-#: doc/reference/en/file.news.html:286(li)
+#: doc/reference/en/file.news.html:291(li)
 msgid "Added Groonga::Column#reference_key?."
 msgstr "Groonga::Column#reference_key?を追加。"
 
-#: doc/reference/en/file.news.html:287(li)
+#: doc/reference/en/file.news.html:292(li)
 msgid "Added Groonga::Column#index_column?."
 msgstr "Groonga::Column#index_column?を追加。"
 
-#: doc/reference/en/file.news.html:288(li)
+#: doc/reference/en/file.news.html:293(li)
 msgid "Added Groonga::Schema#dump."
 msgstr "Groonga::Schema#dumpを追加。"
 
-#: doc/reference/en/file.news.html:289(li)
+#: doc/reference/en/file.news.html:294(li)
 msgid "Supported multi columns index creation in Groonga::Schema."
 msgstr "Groonga::Schemaが複数のカラムのインデックス作成に対応。"
 
-#: doc/reference/en/file.news.html:290(li)
+#: doc/reference/en/file.news.html:295(li)
 msgid "Supported meaningful path in Groonga::Schema."
 msgstr ""
 "Groonga::Schemaで定義したオブジェクトに対応するファイル名にわかりやすいファイ"
 "ル名を利用するようにした。"
 
-#: doc/reference/en/file.news.html:291(li)
+#: doc/reference/en/file.news.html:296(li)
 msgid ""
 "Made reference table omissible when index column definition in Groonga::"
 "Schema."
 msgstr ""
 "Groonga::Schemaで参照カラムを定義時に参照先のテーブル名を省略可能になった。"
 
-#: doc/reference/en/file.news.html:293(li)
+#: doc/reference/en/file.news.html:298(li)
 msgid "Added Groonga::Schema.remove_column."
 msgstr "Groonga::Schema.remove_columnを追加。"
 
-#: doc/reference/en/file.news.html:294(li)
+#: doc/reference/en/file.news.html:299(li)
 msgid ""
 "Added convenience timestamps methods to define “created_at” and “updated_at” "
 "columns in Groonga::Schema."
@@ -12580,43 +12589,43 @@ msgstr ""
 "Groonga::Schemaでcreated_atカラムとupdated_atカラムを作るためのtimestamps便利"
 "メソッドを追加。"
 
-#: doc/reference/en/file.news.html:296(li)
+#: doc/reference/en/file.news.html:301(li)
 msgid "Added Groonga::Context#support_zlib?."
 msgstr "Groonga::Context#support_zlib?を追加。"
 
-#: doc/reference/en/file.news.html:297(li)
+#: doc/reference/en/file.news.html:302(li)
 msgid "Added Groonga::Context#support_lzo?."
 msgstr "Groonga::Context#support_lzo?を追加。"
 
-#: doc/reference/en/file.news.html:298(li)
+#: doc/reference/en/file.news.html:303(li)
 msgid "Added Groonga::Database#touch."
 msgstr "Groonga::Database#touchを追加。"
 
-#: doc/reference/en/file.news.html:299(li)
+#: doc/reference/en/file.news.html:304(li)
 msgid "Added Groonga::Table#exist?."
 msgstr "Groonga::Table#exist?を追加。"
 
-#: doc/reference/en/file.news.html:300(li)
+#: doc/reference/en/file.news.html:305(li)
 msgid "Added Groonga::Record#valid?."
 msgstr "Groonga::Record#valid?を追加。"
 
-#: doc/reference/en/file.news.html:301(li)
+#: doc/reference/en/file.news.html:306(li)
 msgid "Added Groonga::Column#vector?."
 msgstr "Groonga::Column#vector?を追加。"
 
-#: doc/reference/en/file.news.html:302(li)
+#: doc/reference/en/file.news.html:307(li)
 msgid "Added Groonga::Column#scalar?."
 msgstr "Groonga::Column#scalar?を追加。"
 
-#: doc/reference/en/file.news.html:303(li)
+#: doc/reference/en/file.news.html:308(li)
 msgid "Added Groonga::Record#vector_column?."
 msgstr "Groonga::Record#vector_column?を追加。"
 
-#: doc/reference/en/file.news.html:304(li)
+#: doc/reference/en/file.news.html:309(li)
 msgid "Added Groonga::Record#scalar_column?."
 msgstr "Groonga::Record#scalar_column?を追加。"
 
-#: doc/reference/en/file.news.html:305(li)
+#: doc/reference/en/file.news.html:310(li)
 msgid ""
 "Accepted any object that has record_raw_id method for record ID required "
 "location. Groonga::Record isn’t required."
@@ -12624,18 +12633,18 @@ msgstr ""
 "レコードIDが必要なところにrecord_raw_idを持つオブジェクトならGroonga::Record"
 "以外も渡せるようにした。"
 
-#: doc/reference/en/file.news.html:307(li)
+#: doc/reference/en/file.news.html:312(li)
 msgid "Added Groonga::Record#record_raw_id."
 msgstr "Groonga::Record#record_raw_idを追加。"
 
-#: doc/reference/en/file.news.html:308(li)
+#: doc/reference/en/file.news.html:313(li)
 msgid ""
 "Accepted any object that as to_ary method for reference vector column value."
 msgstr ""
 "ベクタの参照カラムの値にArray以外でもto_aryを持つオブジェクトを設定できるよう"
 "にした。"
 
-#: doc/reference/en/file.news.html:312(li)
+#: doc/reference/en/file.news.html:317(li)
 msgid ""
 "Used :key as the default value of :order_by of Groonga::"
 "PatriciaTrie#open_cursor."
@@ -12643,11 +12652,11 @@ msgstr ""
 "Groonga::PatriciaTrie#open_cursorでは:order_byのデフォルト値として:keyを使う"
 "ようにした。"
 
-#: doc/reference/en/file.news.html:314(li)
+#: doc/reference/en/file.news.html:319(li)
 msgid "Removed a deprecated Groonga::TableKeySupport#find."
 msgstr "非推奨扱いのGroonga::TableKeySupport#findを削除。"
 
-#: doc/reference/en/file.news.html:315(li)
+#: doc/reference/en/file.news.html:320(li)
 msgid ""
 "Used ShortText as the default key type of Groonga::Hash#create and Groonga::"
 "PatriciaTrie#create."
@@ -12655,64 +12664,64 @@ msgstr ""
 "Groonga::Hash#createとGroonga::PatriciaTrie#createでキーの型を省略した場合は"
 "ShortTextを使用するようにした。"
 
-#: doc/reference/en/file.news.html:317(li)
+#: doc/reference/en/file.news.html:322(li)
 msgid "Renamed Groonga::Schema#load to Groonga::Schema#restore."
 msgstr "Groonga::Schema#loadをGroonga::Schema#restoreに改名。"
 
-#: doc/reference/en/file.news.html:318(li)
+#: doc/reference/en/file.news.html:323(li)
 msgid "Supported pkg-confg 1.0.7."
 msgstr "pkg-config 1.0.7対応。"
 
-#: doc/reference/en/file.news.html:319(li)
+#: doc/reference/en/file.news.html:324(li)
 msgid ""
 "Added Groonga::Column#index? and deprecated Groonga::Column#index_column?."
 msgstr "Groonga::Column#index?を追加。Groonga::Column#index_column?は非推奨。"
 
-#: doc/reference/en/file.news.html:320(li)
+#: doc/reference/en/file.news.html:325(li)
 msgid ""
 "Added Groonga::Column#reference? and deprecated Groonga::"
 "Column#reference_column?."
 msgstr ""
 "Groonga::Column#reference?を追加。Groonga::Column#reference_column?は非推奨。"
 
-#: doc/reference/en/file.news.html:325(li)
+#: doc/reference/en/file.news.html:330(li)
 msgid "Fixed index for key isn’t be able to define."
 msgstr "keyにインデックスを張れない問題を修正。"
 
-#: doc/reference/en/file.news.html:326(li)
+#: doc/reference/en/file.news.html:331(li)
 msgid "Fixed a crash problem on GC."
 msgstr "GC時にクラッシュする問題を修正。"
 
-#: doc/reference/en/file.news.html:328(h2)
+#: doc/reference/en/file.news.html:333(h2)
 msgid "1.0.1: 2010-09-12"
 msgstr ""
 
-#: doc/reference/en/file.news.html:331(li)
+#: doc/reference/en/file.news.html:336(li)
 msgid "Fixed wrong flag used on creating a table. [Reported by ono matope]"
 msgstr ""
 "テーブル作成時に誤ったフラグを指定していた問題を修正。 [小野マトペさんが報告]"
 
-#: doc/reference/en/file.news.html:335(li)
+#: doc/reference/en/file.news.html:340(li)
 msgid "ono matope"
 msgstr "小野マトペさん"
 
-#: doc/reference/en/file.news.html:337(h2)
+#: doc/reference/en/file.news.html:342(h2)
 msgid "1.0.0: 2010-08-29"
 msgstr ""
 
-#: doc/reference/en/file.news.html:339(li)
+#: doc/reference/en/file.news.html:344(li)
 msgid "Supported groonga 1.0.0."
 msgstr "groonga 1.0.0対応。"
 
-#: doc/reference/en/file.news.html:340(li)
+#: doc/reference/en/file.news.html:345(li)
 msgid "Added Groonga::CASError."
 msgstr "Groonga::CASErrorを追加。"
 
-#: doc/reference/en/file.news.html:341(li)
+#: doc/reference/en/file.news.html:346(li)
 msgid "Added :order_by option to Groonga::Table#open_cursor."
 msgstr "Groonga::Table#open_cursorに:order_byオプションを追加。"
 
-#: doc/reference/en/file.news.html:342(li)
+#: doc/reference/en/file.news.html:347(li)
 msgid ""
 "Added Groonga::PatriciaTrie#open_prefix_cursor that creates a cursor to "
 "retrieve each records by prefix search."
@@ -12720,7 +12729,7 @@ msgstr ""
 "前方一致検索がマッチしたレコードを順に取り出すカーソルを作るGroonga::"
 "PatriciaTrie#open_prefix_cursorを追加。"
 
-#: doc/reference/en/file.news.html:344(li)
+#: doc/reference/en/file.news.html:349(li)
 msgid ""
 "Added Groonga::PatriciaTrie#open_rk_cursor that creats a cursor to retrieve "
 "katakana keys from roman letters and/or hiragana."
@@ -12728,7 +12737,7 @@ msgstr ""
 "ローマ字・ひらがなでカタカナのキーを検索するカーソルを作るGroonga::"
 "PatriciaTrie#open_rk_cursorを追加。"
 
-#: doc/reference/en/file.news.html:346(li)
+#: doc/reference/en/file.news.html:351(li)
 msgid ""
 "Added Groonga::PatriciaTrie#open_near_cursor that creates a cursor to "
 "retrieve records order by distance from key."
@@ -12736,92 +12745,92 @@ msgstr ""
 "値の近い順にレコードを取り出すカーソルを作るGroonga::"
 "PatriciaTrie#open_near_cursorを追加。"
 
-#: doc/reference/en/file.news.html:348(li)
+#: doc/reference/en/file.news.html:353(li)
 msgid "Supported _key as index source."
 msgstr "インデックスのソースに_keyを指定できるようになった。"
 
-#: doc/reference/en/file.news.html:350(h2)
+#: doc/reference/en/file.news.html:355(h2)
 msgid "0.9.5: 2010-07-20"
 msgstr ""
 
-#: doc/reference/en/file.news.html:352(li)
+#: doc/reference/en/file.news.html:357(li)
 msgid "Supported groonga 0.7.4."
 msgstr "groonga 0.7.4対応。"
 
-#: doc/reference/en/file.news.html:353(li)
+#: doc/reference/en/file.news.html:358(li)
 msgid "Imporoved Groonga::Table#select:"
 msgstr "Groonga::Table#selectを改良:"
 
-#: doc/reference/en/file.news.html:354(li)
+#: doc/reference/en/file.news.html:359(li)
 msgid "Supported weight match:"
 msgstr "重み付きマッチに対応:"
 
-#: doc/reference/en/file.news.html:362(li)
+#: doc/reference/en/file.news.html:367(li)
 msgid "Supported and representation for and conditions:"
 msgstr "配列で複数条件のand表現に対応:"
 
-#: doc/reference/en/file.news.html:376(span)
+#: doc/reference/en/file.news.html:381(span)
 msgid "VERSION"
 msgstr ""
 
-#: doc/reference/en/file.news.html:376(li)
+#: doc/reference/en/file.news.html:381(li)
 msgid "Provided groonga runtime version: Groonga::<placeholder-1/>"
 msgstr "利用しているgroongaのバージョン取得対応: Groonga::VERSION"
 
-#: doc/reference/en/file.news.html:377(li)
+#: doc/reference/en/file.news.html:382(li)
 msgid "Added Groonga::Table#support_sub_records?"
 msgstr "Groonga::Table#support_sub_records?追加"
 
-#: doc/reference/en/file.news.html:378(li)
+#: doc/reference/en/file.news.html:383(li)
 msgid "Supported pagination: Groonga::Table#paginate, Groonga::Pagination"
 msgstr "ページネーション対応: Groonga::Table#paginate, Groonga::Pagination"
 
-#: doc/reference/en/file.news.html:380(h2)
+#: doc/reference/en/file.news.html:385(h2)
 msgid "0.9.4: 2010-04-22"
 msgstr ""
 
-#: doc/reference/en/file.news.html:382(li)
-#: doc/reference/en/file.news.html:386(li)
+#: doc/reference/en/file.news.html:387(li)
+#: doc/reference/en/file.news.html:391(li)
 msgid "Fixed release miss."
 msgstr "リリースミス修正。"
 
-#: doc/reference/en/file.news.html:384(h2)
+#: doc/reference/en/file.news.html:389(h2)
 msgid "0.9.3: 2010-04-22"
 msgstr ""
 
-#: doc/reference/en/file.news.html:388(h2)
+#: doc/reference/en/file.news.html:393(h2)
 msgid "0.9.2: 2010-04-22"
 msgstr ""
 
-#: doc/reference/en/file.news.html:390(li)
+#: doc/reference/en/file.news.html:395(li)
 msgid "Supported groonga 0.1.9."
 msgstr "groonga 0.1.9対応。"
 
-#: doc/reference/en/file.news.html:391(li)
+#: doc/reference/en/file.news.html:396(li)
 msgid "Many."
 msgstr "たくさん。"
 
-#: doc/reference/en/file.news.html:393(h2)
+#: doc/reference/en/file.news.html:398(h2)
 msgid "0.9.1: 2010-02-09"
 msgstr ""
 
-#: doc/reference/en/file.news.html:395(li)
+#: doc/reference/en/file.news.html:400(li)
 msgid "Supported groonga 0.1.6"
 msgstr "groonga 0.1.6対応"
 
-#: doc/reference/en/file.news.html:397(h2)
+#: doc/reference/en/file.news.html:402(h2)
 msgid "0.9.0: 2010-02-09"
 msgstr ""
 
-#: doc/reference/en/file.news.html:399(li)
+#: doc/reference/en/file.news.html:404(li)
 msgid "Supported groonga 0.1.5"
 msgstr "groonga 0.1.5対応"
 
-#: doc/reference/en/file.news.html:400(span)
-#: doc/reference/en/file.news.html:416(span)
-#: doc/reference/en/file.news.html:457(span)
-#: doc/reference/en/file.news.html:469(span)
-#: doc/reference/en/file.news.html:496(span)
+#: doc/reference/en/file.news.html:405(span)
+#: doc/reference/en/file.news.html:421(span)
+#: doc/reference/en/file.news.html:462(span)
+#: doc/reference/en/file.news.html:474(span)
+#: doc/reference/en/file.news.html:501(span)
 #: doc/reference/en/index.html:63(span) doc/reference/en/index.html:64(span)
 #: doc/reference/en/index.html:65(span)
 #: doc/reference/en/file.README.html:63(span)
@@ -12830,175 +12839,175 @@ msgstr "groonga 0.1.5対応"
 msgid "API"
 msgstr ""
 
-#: doc/reference/en/file.news.html:400(li)
-#: doc/reference/en/file.news.html:457(li)
-#: doc/reference/en/file.news.html:469(li)
+#: doc/reference/en/file.news.html:405(li)
+#: doc/reference/en/file.news.html:462(li)
+#: doc/reference/en/file.news.html:474(li)
 msgid "Added <placeholder-1/>"
 msgstr "<placeholder-1/>を追加"
 
-#: doc/reference/en/file.news.html:401(li)
+#: doc/reference/en/file.news.html:406(li)
 msgid "Groonga::Object#context"
 msgstr ""
 
-#: doc/reference/en/file.news.html:402(li)
+#: doc/reference/en/file.news.html:407(li)
 msgid "Groonga::Record#n_sub_records"
 msgstr ""
 
-#: doc/reference/en/file.news.html:403(li)
+#: doc/reference/en/file.news.html:408(li)
 msgid "Groonga::Context#send"
 msgstr ""
 
-#: doc/reference/en/file.news.html:404(li)
+#: doc/reference/en/file.news.html:409(li)
 msgid "Groonga::Context#receive"
 msgstr ""
 
-#: doc/reference/en/file.news.html:405(span)
-#: doc/reference/en/file.news.html:407(span)
-#: doc/reference/en/file.news.html:408(span)
-#: doc/reference/en/file.news.html:409(span)
-#: doc/reference/en/file.news.html:452(span)
-#: doc/reference/en/file.news.html:479(span)
-#: doc/reference/en/file.news.html:481(span)
-#: doc/reference/en/file.news.html:500(span)
+#: doc/reference/en/file.news.html:410(span)
+#: doc/reference/en/file.news.html:412(span)
+#: doc/reference/en/file.news.html:413(span)
+#: doc/reference/en/file.news.html:414(span)
+#: doc/reference/en/file.news.html:457(span)
+#: doc/reference/en/file.news.html:484(span)
+#: doc/reference/en/file.news.html:486(span)
+#: doc/reference/en/file.news.html:505(span)
 #: doc/reference/en/index.html:74(span) doc/reference/en/index.html:105(span)
 #: doc/reference/en/file.README.html:74(span)
 #: doc/reference/en/file.README.html:105(span)
 msgid "SUENAGA"
 msgstr ""
 
-#: doc/reference/en/file.news.html:405(li)
+#: doc/reference/en/file.news.html:410(li)
 msgid "Groonga::PatriciaTrie#prefix_search [Tasuku <placeholder-1/>]"
 msgstr ""
 
-#: doc/reference/en/file.news.html:406(li)
+#: doc/reference/en/file.news.html:411(li)
 msgid "Groonga::Object#path [Ryo Onodera]"
 msgstr ""
 
-#: doc/reference/en/file.news.html:407(li)
+#: doc/reference/en/file.news.html:412(li)
 msgid "Groonga::Object#lock [Tasuku <placeholder-1/>]"
 msgstr ""
 
-#: doc/reference/en/file.news.html:408(li)
+#: doc/reference/en/file.news.html:413(li)
 msgid "Groonga::Object#unlock [Tasuku <placeholder-1/>]"
 msgstr ""
 
-#: doc/reference/en/file.news.html:409(li)
+#: doc/reference/en/file.news.html:414(li)
 msgid "Groonga::Object#locked? [Tasuku <placeholder-1/>]"
 msgstr ""
 
-#: doc/reference/en/file.news.html:410(li)
+#: doc/reference/en/file.news.html:415(li)
 msgid "Groonga::Object#temporary?"
 msgstr ""
 
-#: doc/reference/en/file.news.html:411(li)
+#: doc/reference/en/file.news.html:416(li)
 msgid "Groonga::Object#persistent?"
 msgstr ""
 
-#: doc/reference/en/file.news.html:412(li)
+#: doc/reference/en/file.news.html:417(li)
 msgid "Groonga::ObjectClosed"
 msgstr ""
 
-#: doc/reference/en/file.news.html:413(li)
+#: doc/reference/en/file.news.html:418(li)
 msgid "Groonga::Context.[]"
 msgstr ""
 
-#: doc/reference/en/file.news.html:414(li)
+#: doc/reference/en/file.news.html:419(li)
 msgid "Groonga::Table#column_value"
 msgstr ""
 
-#: doc/reference/en/file.news.html:415(li)
+#: doc/reference/en/file.news.html:420(li)
 msgid "Groonga::Table#set_column_value"
 msgstr ""
 
-#: doc/reference/en/file.news.html:416(li)
+#: doc/reference/en/file.news.html:421(li)
 msgid "Changed <placeholder-1/>"
 msgstr "<placeholder-1/>を変更。"
 
-#: doc/reference/en/file.news.html:417(li)
+#: doc/reference/en/file.news.html:422(li)
 msgid "Groonga::Table#select, Groonga::Column#select"
 msgstr ""
 
-#: doc/reference/en/file.news.html:418(li)
+#: doc/reference/en/file.news.html:423(li)
 msgid "They also accept Groonga::Expression"
 msgstr "Groonga::Expressionも受け付けるようになった"
 
-#: doc/reference/en/file.news.html:419(li)
+#: doc/reference/en/file.news.html:424(li)
 msgid "Added :syntax option that specifies grn expression syntax"
 msgstr "grn式のシンタックスを指定する:syntaxオプションの追加"
 
-#: doc/reference/en/file.news.html:420(li)
+#: doc/reference/en/file.news.html:425(li)
 msgid "Groonga::Table#open_cursor"
 msgstr ""
 
-#: doc/reference/en/file.news.html:421(li)
+#: doc/reference/en/file.news.html:426(li)
 msgid "Added :offset option that specifies offset."
 msgstr "開始位置を指定する:offsetオプションの追加"
 
-#: doc/reference/en/file.news.html:422(li)
+#: doc/reference/en/file.news.html:427(li)
 msgid "Added :limit option that specifies max number of records."
 msgstr "最大レコード数を指定する:limitオプションの追加"
 
-#: doc/reference/en/file.news.html:423(li)
+#: doc/reference/en/file.news.html:428(li)
 msgid "Changed Groonga::Expression.parse options:"
 msgstr "Groonga::Expression.parseオプションの変更:"
 
-#: doc/reference/en/file.news.html:424(li)
+#: doc/reference/en/file.news.html:429(li)
 msgid "(nil (default) → :column) → (nil (default) → :query)"
 msgstr ""
 
-#: doc/reference/en/file.news.html:425(li)
+#: doc/reference/en/file.news.html:430(li)
 msgid ":column → removed"
 msgstr ":column → 削除"
 
-#: doc/reference/en/file.news.html:426(li)
+#: doc/reference/en/file.news.html:431(li)
 msgid ":table → :query"
 msgstr ""
 
-#: doc/reference/en/file.news.html:427(li)
+#: doc/reference/en/file.news.html:432(li)
 msgid ":table_query → :query"
 msgstr ""
 
-#: doc/reference/en/file.news.html:428(li)
+#: doc/reference/en/file.news.html:433(li)
 msgid ":expression → :script"
 msgstr ""
 
-#: doc/reference/en/file.news.html:429(li)
+#: doc/reference/en/file.news.html:434(li)
 msgid ":language → :script"
 msgstr ""
 
-#: doc/reference/en/file.news.html:430(li)
+#: doc/reference/en/file.news.html:435(li)
 msgid "Groonga::Table#define_column, Groonga::Table#define_index_column"
 msgstr ""
 
-#: doc/reference/en/file.news.html:431(li)
+#: doc/reference/en/file.news.html:436(li)
 msgid "Defined column becomes persistent table by default"
 msgstr "永続テーブルをデフォルトにした"
 
-#: doc/reference/en/file.news.html:432(li)
+#: doc/reference/en/file.news.html:437(li)
 msgid "Groonga::Table#[] → Groonga::Table#value"
 msgstr ""
 
-#: doc/reference/en/file.news.html:433(li)
+#: doc/reference/en/file.news.html:438(li)
 msgid "Groonga::Table#[]= → Groonga::Table#set_value"
 msgstr ""
 
-#: doc/reference/en/file.news.html:434(li)
+#: doc/reference/en/file.news.html:439(li)
 msgid "Groonga::Table#find → Groonga::Table#[]"
 msgstr ""
 
-#: doc/reference/en/file.news.html:435(li)
+#: doc/reference/en/file.news.html:440(li)
 msgid "Groonga::Table#find → obsolete"
 msgstr ""
 
-#: doc/reference/en/file.news.html:436(li)
+#: doc/reference/en/file.news.html:441(li)
 msgid "Groonga::Table#[]= → removed"
 msgstr "Groonga::Table#[]= → 削除"
 
-#: doc/reference/en/file.news.html:437(li)
+#: doc/reference/en/file.news.html:442(li)
 msgid "Groonga::TableKeySupport#[]= is alias of Groonga::TableKeySupport#add"
 msgstr "Groonga::TableKeySupport#[]=はGroonga::TableKeySupport#addの別名"
 
-#: doc/reference/en/file.news.html:438(li)
+#: doc/reference/en/file.news.html:443(li)
 msgid ""
 "Changed exception class to Groonga::NoSuchColumn from Groonga::"
 "InvalidArgument when Groonga::Record accesses nonexistent a column."
@@ -13006,15 +13015,15 @@ msgstr ""
 "Groonga::Recordで存在しないカラムにアクセスしたときの例外をGroonga::"
 "InvalidArgumentからGroonga::NoSuchColumnに変更"
 
-#: doc/reference/en/file.news.html:441(li)
+#: doc/reference/en/file.news.html:446(li)
 msgid "Bug fixes"
 msgstr ""
 
-#: doc/reference/en/file.news.html:442(li)
+#: doc/reference/en/file.news.html:447(li)
 msgid "Fixed a bug that context isn’t passed to schema [dara]"
 msgstr "スキーマにコンテキストが伝搬されない問題の修正 [dara]"
 
-#: doc/reference/en/file.news.html:443(li)
+#: doc/reference/en/file.news.html:448(li)
 msgid ""
 "Fixed a bug that Groonga::PatriciaTrie#tag_keys doesn’t return that last "
 "text. [Ryo Onodera]"
@@ -13022,105 +13031,105 @@ msgstr ""
 "Groonga::PatriciaTrie#tag_keysが最後のテキストを返さない問題の修正 [Ryo "
 "Onodera]"
 
-#: doc/reference/en/file.news.html:445(li)
+#: doc/reference/en/file.news.html:450(li)
 msgid "Added —with-debug option to extconf.rb for debug build."
 msgstr "extconf.rbにデバッグモードでビルドする--with-debugオプションを追加"
 
-#: doc/reference/en/file.news.html:446(li)
+#: doc/reference/en/file.news.html:451(li)
 msgid "Fixed a bug that Ruby 1.9.1 may fail extconf.rb."
 msgstr "Ruby 1.9.1でextconf.rbが失敗する問題の修正"
 
-#: doc/reference/en/file.news.html:450(li)
+#: doc/reference/en/file.news.html:455(li)
 msgid "dara"
 msgstr "daraさん"
 
-#: doc/reference/en/file.news.html:451(li)
+#: doc/reference/en/file.news.html:456(li)
 msgid "Ryo Onodera"
 msgstr "Ryo Onoderaさん"
 
-#: doc/reference/en/file.news.html:452(li)
+#: doc/reference/en/file.news.html:457(li)
 msgid "Tasuku <placeholder-1/>"
 msgstr "Tasuku <placeholder-1/>さん"
 
-#: doc/reference/en/file.news.html:454(h2)
+#: doc/reference/en/file.news.html:459(h2)
 msgid "0.0.7: 2009-10-02"
 msgstr ""
 
-#: doc/reference/en/file.news.html:456(li)
+#: doc/reference/en/file.news.html:461(li)
 msgid "Supported groonga 0.1.4"
 msgstr "groonga 0.1.4対応"
 
-#: doc/reference/en/file.news.html:458(li)
+#: doc/reference/en/file.news.html:463(li)
 msgid "Groonga::PatriciaTrie#scan"
 msgstr ""
 
-#: doc/reference/en/file.news.html:459(li)
+#: doc/reference/en/file.news.html:464(li)
 msgid "Groonga::PatriciaTrie#tag_keys"
 msgstr ""
 
-#: doc/reference/en/file.news.html:460(li)
+#: doc/reference/en/file.news.html:465(li)
 msgid "Groonga::Expression#snippet"
 msgstr ""
 
-#: doc/reference/en/file.news.html:461(li)
+#: doc/reference/en/file.news.html:466(li)
 msgid "Groonga::Object#append"
 msgstr ""
 
-#: doc/reference/en/file.news.html:462(li)
+#: doc/reference/en/file.news.html:467(li)
 msgid "Groonga::Object#prepend"
 msgstr ""
 
-#: doc/reference/en/file.news.html:464(h2)
+#: doc/reference/en/file.news.html:469(h2)
 msgid "0.0.6: 2009-07-31"
 msgstr ""
 
-#: doc/reference/en/file.news.html:466(li)
+#: doc/reference/en/file.news.html:471(li)
 msgid "Supported groonga 0.1.1."
 msgstr "groonga 0.1.1対応"
 
-#: doc/reference/en/file.news.html:467(li)
+#: doc/reference/en/file.news.html:472(li)
 msgid "Fixed documents [id:mat_aki]"
 msgstr "ドキュメントの修正 [id:mat_aki]"
 
-#: doc/reference/en/file.news.html:468(li)
+#: doc/reference/en/file.news.html:473(li)
 msgid "Supported groonga expression for searching."
 msgstr "Groonga::Table#selectでのgrn式対応"
 
-#: doc/reference/en/file.news.html:470(li)
+#: doc/reference/en/file.news.html:475(li)
 msgid "Groonga::Table#union!"
 msgstr ""
 
-#: doc/reference/en/file.news.html:471(li)
+#: doc/reference/en/file.news.html:476(li)
 msgid "Groonga::Table#intersect!"
 msgstr ""
 
-#: doc/reference/en/file.news.html:472(li)
+#: doc/reference/en/file.news.html:477(li)
 msgid "Groonga::Table#differene!"
 msgstr ""
 
-#: doc/reference/en/file.news.html:473(li)
+#: doc/reference/en/file.news.html:478(li)
 msgid "Groonga::Table#merge!"
 msgstr ""
 
-#: doc/reference/en/file.news.html:474(li)
+#: doc/reference/en/file.news.html:479(li)
 msgid "Provided tar.gz [id:m_seki]"
 msgstr "tar.gzも提供 [id:m_seki]"
 
-#: doc/reference/en/file.news.html:475(li)
-#: doc/reference/en/file.news.html:501(li)
+#: doc/reference/en/file.news.html:480(li)
+#: doc/reference/en/file.news.html:506(li)
 msgid "Fixed memory leaks"
 msgstr "メモリリークの修正"
 
-#: doc/reference/en/file.news.html:477(h2)
+#: doc/reference/en/file.news.html:482(h2)
 msgid "0.0.3: 2009-07-18"
 msgstr ""
 
-#: doc/reference/en/file.news.html:479(li)
+#: doc/reference/en/file.news.html:484(li)
 msgid ""
 "Added Groonga::TableKeySupport#has_key? [#26145] [Tasuku <placeholder-1/>]"
 msgstr "Groonga::TableKeySupport#has_key?の追加 [#26145] [Tasuku SUENAGA]"
 
-#: doc/reference/en/file.news.html:480(li)
+#: doc/reference/en/file.news.html:485(li)
 msgid ""
 "Groonga::Record#[] raises an exception for nonexistent column name. [#26146] "
 "[Tasuku <placeholder-1/>]"
@@ -13128,84 +13137,84 @@ msgstr ""
 "カラム名が存在しない場合はGroonga::Record#[]が例外をあげるように変更。 "
 "[#26146] [Tasuku SUENAGA]"
 
-#: doc/reference/en/file.news.html:482(li)
+#: doc/reference/en/file.news.html:487(li)
 msgid "Supported 32bit environment [niku]"
 msgstr "32ビット環境をサポート [niku]"
 
-#: doc/reference/en/file.news.html:483(li)
+#: doc/reference/en/file.news.html:488(li)
 msgid "Added a test for N-gram index search [dara]"
 msgstr "N-gramインデックスサーチのテストを追加 [dara]"
 
-#: doc/reference/en/file.news.html:484(li)
+#: doc/reference/en/file.news.html:489(li)
 msgid "Added APIs"
 msgstr ""
 
-#: doc/reference/en/file.news.html:485(li)
+#: doc/reference/en/file.news.html:490(li)
 msgid "Groonga::Record#incemrent!"
 msgstr ""
 
-#: doc/reference/en/file.news.html:486(li)
+#: doc/reference/en/file.news.html:491(li)
 msgid "Groonga::Record#decemrent!"
 msgstr ""
 
-#: doc/reference/en/file.news.html:487(li)
+#: doc/reference/en/file.news.html:492(li)
 msgid "Groonga::Record#lock"
 msgstr ""
 
-#: doc/reference/en/file.news.html:488(li)
+#: doc/reference/en/file.news.html:493(li)
 msgid "Groonga::Table#lock"
 msgstr ""
 
-#: doc/reference/en/file.news.html:489(span)
+#: doc/reference/en/file.news.html:494(span)
 msgid "DSL"
 msgstr ""
 
-#: doc/reference/en/file.news.html:489(li)
+#: doc/reference/en/file.news.html:494(li)
 msgid "Groonga::Schema: A <placeholder-1/> for schema definition"
 msgstr "Groonga::Schema: スキーマ定義用DSL"
 
-#: doc/reference/en/file.news.html:490(li)
+#: doc/reference/en/file.news.html:495(li)
 #: doc/reference/en/Groonga/Expression.html:76(li)
 msgid "Groonga::Expression"
 msgstr ""
 
-#: doc/reference/en/file.news.html:492(h2)
+#: doc/reference/en/file.news.html:497(h2)
 msgid "0.0.2: 2009-06-04"
 msgstr ""
 
-#: doc/reference/en/file.news.html:494(li)
+#: doc/reference/en/file.news.html:499(li)
 msgid "Supported groonga 0.0.8 [mori]"
 msgstr "groonga 0.0.8対応 [mori]"
 
-#: doc/reference/en/file.news.html:495(li)
+#: doc/reference/en/file.news.html:500(li)
 msgid "Improved preformance: cache key, value, domain and range"
 msgstr "性能向上: キー、値、ドメイン、レンジをキャッシュ"
 
-#: doc/reference/en/file.news.html:496(li)
+#: doc/reference/en/file.news.html:501(li)
 msgid "Improved <placeholder-1/>"
 msgstr "<placeholder-1/>を改良"
 
-#: doc/reference/en/file.news.html:497(li)
+#: doc/reference/en/file.news.html:502(li)
 msgid "Added documents"
 msgstr "ドキュメントを追加"
 
-#: doc/reference/en/file.news.html:498(li)
+#: doc/reference/en/file.news.html:503(li)
 msgid "Supported Ruby 1.9"
 msgstr "Ruby 1.9対応"
 
-#: doc/reference/en/file.news.html:499(li)
+#: doc/reference/en/file.news.html:504(li)
 msgid "Bug fixes:"
 msgstr ""
 
-#: doc/reference/en/file.news.html:500(li)
+#: doc/reference/en/file.news.html:505(li)
 msgid "Fixed install process [Tasuku <placeholder-1/>]"
 msgstr ""
 
-#: doc/reference/en/file.news.html:503(h2)
+#: doc/reference/en/file.news.html:508(h2)
 msgid "0.0.1: 2009-04-30"
 msgstr ""
 
-#: doc/reference/en/file.news.html:505(li)
+#: doc/reference/en/file.news.html:510(li)
 msgid "Initial release!"
 msgstr "最初のリリース！"
 
@@ -13214,68 +13223,68 @@ msgid ""
 "<h1><placeholder-1/></h1>\n"
 "<placeholder-2/>\n"
 "<placeholder-3/>\n"
-"<ul><placeholder-4/>\n"
-"\t<placeholder-5/>\n"
-"\t<placeholder-6/>\n"
-"\t<placeholder-7/></ul>\n"
-"<placeholder-8/>\n"
-"<placeholder-9/>\n"
-"<ul><placeholder-10/></ul>\n"
+"<ul><placeholder-4/></ul>\n"
+"<placeholder-5/>\n"
+"<placeholder-6/>\n"
+"<ul><placeholder-7/>\n"
+"\t<placeholder-8/>\n"
+"\t<placeholder-9/>\n"
+"\t<placeholder-10/></ul>\n"
 "<placeholder-11/>\n"
-"<ul><placeholder-12/></ul>\n"
-"<placeholder-13/>\n"
+"<placeholder-12/>\n"
+"<ul><placeholder-13/></ul>\n"
 "<placeholder-14/>\n"
-"<ul><placeholder-15/>\n"
-"\t<placeholder-16/>\n"
-"\t<placeholder-17/>\n"
-"\t<placeholder-18/>\n"
-"\t<placeholder-19/></ul>\n"
-"<placeholder-20/>\n"
-"<ul><placeholder-21/>\n"
-"\t<placeholder-22/>\n"
-"\t<placeholder-23/></ul>\n"
-"<placeholder-24/>\n"
-"<placeholder-25/>\n"
-"<ul><placeholder-26/>\n"
-"\t<placeholder-27/>\n"
-"\t<placeholder-28/>\n"
-"\t<placeholder-29/>\n"
+"<ul><placeholder-15/></ul>\n"
+"<placeholder-16/>\n"
+"<placeholder-17/>\n"
+"<ul><placeholder-18/>\n"
+"\t<placeholder-19/>\n"
+"\t<placeholder-20/>\n"
+"\t<placeholder-21/>\n"
+"\t<placeholder-22/></ul>\n"
+"<placeholder-23/>\n"
+"<ul><placeholder-24/>\n"
+"\t<placeholder-25/>\n"
+"\t<placeholder-26/></ul>\n"
+"<placeholder-27/>\n"
+"<placeholder-28/>\n"
+"<ul><placeholder-29/>\n"
 "\t<placeholder-30/>\n"
-"\t<placeholder-31/></ul>\n"
-"<placeholder-32/>\n"
-"<ul><placeholder-33/>\n"
+"\t<placeholder-31/>\n"
+"\t<placeholder-32/>\n"
+"\t<placeholder-33/>\n"
 "\t<placeholder-34/></ul>\n"
 "<placeholder-35/>\n"
-"<placeholder-36/>\n"
-"<ul><placeholder-37/></ul>\n"
+"<ul><placeholder-36/>\n"
+"\t<placeholder-37/></ul>\n"
 "<placeholder-38/>\n"
-"<ul><placeholder-39/>\n"
-"\t<placeholder-40/></ul>\n"
+"<placeholder-39/>\n"
+"<ul><placeholder-40/></ul>\n"
 "<placeholder-41/>\n"
-"<placeholder-42/>\n"
-"<ul><placeholder-43/>\n"
-"\t<placeholder-44/></ul>\n"
+"<ul><placeholder-42/>\n"
+"\t<placeholder-43/></ul>\n"
+"<placeholder-44/>\n"
 "<placeholder-45/>\n"
-"<placeholder-46/>\n"
-"<ul><placeholder-47/>\n"
-"\t<placeholder-48/></ul>\n"
+"<ul><placeholder-46/>\n"
+"\t<placeholder-47/></ul>\n"
+"<placeholder-48/>\n"
 "<placeholder-49/>\n"
 "<ul><placeholder-50/>\n"
-"\t<placeholder-51/>\n"
-"\t<placeholder-52/>\n"
-"\t<placeholder-53/></ul>\n"
-"<placeholder-54/>\n"
-"<ul><placeholder-55/>\n"
-"\t<placeholder-56/>\n"
-"\t<placeholder-57/></ul>\n"
-"<placeholder-58/>\n"
-"<ul><placeholder-59/></ul>\n"
-"<placeholder-60/>\n"
+"\t<placeholder-51/></ul>\n"
+"<placeholder-52/>\n"
+"<ul><placeholder-53/>\n"
+"\t<placeholder-54/>\n"
+"\t<placeholder-55/>\n"
+"\t<placeholder-56/></ul>\n"
+"<placeholder-57/>\n"
+"<ul><placeholder-58/>\n"
+"\t<placeholder-59/>\n"
+"\t<placeholder-60/></ul>\n"
 "<placeholder-61/>\n"
-"<ul><placeholder-62/>\n"
-"\t<placeholder-63/>\n"
-"\t<placeholder-64/>\n"
-"\t<placeholder-65/>\n"
+"<ul><placeholder-62/></ul>\n"
+"<placeholder-63/>\n"
+"<placeholder-64/>\n"
+"<ul><placeholder-65/>\n"
 "\t<placeholder-66/>\n"
 "\t<placeholder-67/>\n"
 "\t<placeholder-68/>\n"
@@ -13283,19 +13292,19 @@ msgid ""
 "\t<placeholder-70/>\n"
 "\t<placeholder-71/>\n"
 "\t<placeholder-72/>\n"
-"\t<placeholder-73/></ul>\n"
-"<placeholder-74/>\n"
-"<ul><placeholder-75/>\n"
+"\t<placeholder-73/>\n"
+"\t<placeholder-74/>\n"
+"\t<placeholder-75/>\n"
 "\t<placeholder-76/></ul>\n"
 "<placeholder-77/>\n"
 "<ul><placeholder-78/>\n"
 "\t<placeholder-79/></ul>\n"
 "<placeholder-80/>\n"
-"<placeholder-81/>\n"
-"<ul><placeholder-82/>\n"
-"\t<placeholder-83/>\n"
-"\t<placeholder-84/>\n"
-"\t<placeholder-85/>\n"
+"<ul><placeholder-81/>\n"
+"\t<placeholder-82/></ul>\n"
+"<placeholder-83/>\n"
+"<placeholder-84/>\n"
+"<ul><placeholder-85/>\n"
 "\t<placeholder-86/>\n"
 "\t<placeholder-87/>\n"
 "\t<placeholder-88/>\n"
@@ -13303,17 +13312,17 @@ msgid ""
 "\t<placeholder-90/>\n"
 "\t<placeholder-91/>\n"
 "\t<placeholder-92/>\n"
-"\t<placeholder-93/></ul>\n"
-"<placeholder-94/>\n"
-"<placeholder-95/>\n"
-"<ul><placeholder-96/>\n"
-"\t<placeholder-97/></ul>\n"
+"\t<placeholder-93/>\n"
+"\t<placeholder-94/>\n"
+"\t<placeholder-95/>\n"
+"\t<placeholder-96/></ul>\n"
+"<placeholder-97/>\n"
 "<placeholder-98/>\n"
-"<placeholder-99/>\n"
-"<ul><placeholder-100/>\n"
-"\t<placeholder-101/>\n"
-"\t<placeholder-102/>\n"
-"\t<placeholder-103/>\n"
+"<ul><placeholder-99/>\n"
+"\t<placeholder-100/></ul>\n"
+"<placeholder-101/>\n"
+"<placeholder-102/>\n"
+"<ul><placeholder-103/>\n"
 "\t<placeholder-104/>\n"
 "\t<placeholder-105/>\n"
 "\t<placeholder-106/>\n"
@@ -13321,36 +13330,36 @@ msgid ""
 "\t<placeholder-108/>\n"
 "\t<placeholder-109/>\n"
 "\t<placeholder-110/>\n"
-"\t<placeholder-111/></ul>\n"
-"<placeholder-112/>\n"
-"<ul><placeholder-113/></ul>\n"
-"<placeholder-114/>\n"
-"<ul><placeholder-115/>\n"
-"\t<placeholder-116/></ul>\n"
+"\t<placeholder-111/>\n"
+"\t<placeholder-112/>\n"
+"\t<placeholder-113/>\n"
+"\t<placeholder-114/></ul>\n"
+"<placeholder-115/>\n"
+"<ul><placeholder-116/></ul>\n"
 "<placeholder-117/>\n"
-"<ul><placeholder-118/></ul>\n"
-"<placeholder-119/>\n"
+"<ul><placeholder-118/>\n"
+"\t<placeholder-119/></ul>\n"
 "<placeholder-120/>\n"
 "<ul><placeholder-121/></ul>\n"
 "<placeholder-122/>\n"
-"<ul><placeholder-123/></ul>\n"
-"<placeholder-124/>\n"
+"<placeholder-123/>\n"
+"<ul><placeholder-124/></ul>\n"
 "<placeholder-125/>\n"
-"<ul><placeholder-126/>\n"
-"\t<placeholder-127/></ul>\n"
+"<ul><placeholder-126/></ul>\n"
+"<placeholder-127/>\n"
 "<placeholder-128/>\n"
-"<ul><placeholder-129/></ul>\n"
-"<placeholder-130/>\n"
+"<ul><placeholder-129/>\n"
+"\t<placeholder-130/></ul>\n"
 "<placeholder-131/>\n"
 "<ul><placeholder-132/></ul>\n"
 "<placeholder-133/>\n"
-"<ul><placeholder-134/></ul>\n"
-"<placeholder-135/>\n"
+"<placeholder-134/>\n"
+"<ul><placeholder-135/></ul>\n"
 "<placeholder-136/>\n"
-"<ul><placeholder-137/>\n"
-"\t<placeholder-138/>\n"
-"\t<placeholder-139/>\n"
-"\t<placeholder-140/>\n"
+"<ul><placeholder-137/></ul>\n"
+"<placeholder-138/>\n"
+"<placeholder-139/>\n"
+"<ul><placeholder-140/>\n"
 "\t<placeholder-141/>\n"
 "\t<placeholder-142/>\n"
 "\t<placeholder-143/>\n"
@@ -13376,59 +13385,59 @@ msgid ""
 "\t<placeholder-163/>\n"
 "\t<placeholder-164/>\n"
 "\t<placeholder-165/>\n"
-"\t<placeholder-166/></ul>\n"
-"<placeholder-167/>\n"
-"<ul><placeholder-168/>\n"
-"\t<placeholder-169/>\n"
-"\t<placeholder-170/>\n"
-"\t<placeholder-171/>\n"
+"\t<placeholder-166/>\n"
+"\t<placeholder-167/>\n"
+"\t<placeholder-168/>\n"
+"\t<placeholder-169/></ul>\n"
+"<placeholder-170/>\n"
+"<ul><placeholder-171/>\n"
 "\t<placeholder-172/>\n"
 "\t<placeholder-173/>\n"
-"\t<placeholder-174/></ul>\n"
-"<placeholder-175/>\n"
-"<ul><placeholder-176/>\n"
+"\t<placeholder-174/>\n"
+"\t<placeholder-175/>\n"
+"\t<placeholder-176/>\n"
 "\t<placeholder-177/></ul>\n"
 "<placeholder-178/>\n"
-"<placeholder-179/>\n"
-"<ul><placeholder-180/></ul>\n"
+"<ul><placeholder-179/>\n"
+"\t<placeholder-180/></ul>\n"
 "<placeholder-181/>\n"
-"<ul><placeholder-182/></ul>\n"
-"<placeholder-183/>\n"
-"<ul><placeholder-184/>\n"
-"\t<placeholder-185/>\n"
-"\t<placeholder-186/>\n"
-"\t<placeholder-187/>\n"
+"<placeholder-182/>\n"
+"<ul><placeholder-183/></ul>\n"
+"<placeholder-184/>\n"
+"<ul><placeholder-185/></ul>\n"
+"<placeholder-186/>\n"
+"<ul><placeholder-187/>\n"
 "\t<placeholder-188/>\n"
 "\t<placeholder-189/>\n"
-"\t<placeholder-190/></ul>\n"
-"<placeholder-191/>\n"
-"<ul><placeholder-192/>\n"
-"\t<placeholder-193/>\n"
-"\t<placeholder-194/></ul> Here is an example to match source column or title "
+"\t<placeholder-190/>\n"
+"\t<placeholder-191/>\n"
+"\t<placeholder-192/>\n"
+"\t<placeholder-193/></ul>\n"
+"<placeholder-194/>\n"
+"<ul><placeholder-195/>\n"
+"\t<placeholder-196/>\n"
+"\t<placeholder-197/></ul> Here is an example to match source column or title "
 "column and title column has high score: table.select do |record| (record."
-"title * 10 | record.source) =~ “query” end <ul><placeholder-195/></ul> Here "
+"title * 10 | record.source) =~ “query” end <ul><placeholder-198/></ul> Here "
 "are examples that represents the same condition: table.select do |record| "
 "conditions = [] conditions &lt;&lt; record.title =~ “query” conditions &lt;"
 "&lt; record.updated_at &gt; Time.parse(“2010-07-29T21:14:29+09:00”) "
 "conditions end table.select do |record| (record.title =~ “query”) &amp; "
 "(record.updated_at &gt; Time.parse(“2010-07-29T21:14:29+09:00”)) end "
-"<ul><placeholder-196/>\n"
-"\t<placeholder-197/>\n"
-"\t<placeholder-198/></ul>\n"
-"<placeholder-199/>\n"
-"<ul><placeholder-200/></ul>\n"
-"<placeholder-201/>\n"
-"<ul><placeholder-202/></ul>\n"
-"<placeholder-203/>\n"
-"<ul><placeholder-204/>\n"
-"\t<placeholder-205/></ul>\n"
+"<ul><placeholder-199/>\n"
+"\t<placeholder-200/>\n"
+"\t<placeholder-201/></ul>\n"
+"<placeholder-202/>\n"
+"<ul><placeholder-203/></ul>\n"
+"<placeholder-204/>\n"
+"<ul><placeholder-205/></ul>\n"
 "<placeholder-206/>\n"
-"<ul><placeholder-207/></ul>\n"
-"<placeholder-208/>\n"
-"<ul><placeholder-209/>\n"
-"\t<placeholder-210/>\n"
-"\t<placeholder-211/>\n"
-"\t<placeholder-212/>\n"
+"<ul><placeholder-207/>\n"
+"\t<placeholder-208/></ul>\n"
+"<placeholder-209/>\n"
+"<ul><placeholder-210/></ul>\n"
+"<placeholder-211/>\n"
+"<ul><placeholder-212/>\n"
 "\t<placeholder-213/>\n"
 "\t<placeholder-214/>\n"
 "\t<placeholder-215/>\n"
@@ -13469,53 +13478,56 @@ msgid ""
 "\t<placeholder-250/>\n"
 "\t<placeholder-251/>\n"
 "\t<placeholder-252/>\n"
-"\t<placeholder-253/></ul>\n"
-"<placeholder-254/>\n"
-"<ul><placeholder-255/>\n"
-"\t<placeholder-256/>\n"
-"\t<placeholder-257/></ul>\n"
-"<placeholder-258/>\n"
-"<ul><placeholder-259/>\n"
-"\t<placeholder-260/>\n"
-"\t<placeholder-261/>\n"
-"\t<placeholder-262/>\n"
+"\t<placeholder-253/>\n"
+"\t<placeholder-254/>\n"
+"\t<placeholder-255/>\n"
+"\t<placeholder-256/></ul>\n"
+"<placeholder-257/>\n"
+"<ul><placeholder-258/>\n"
+"\t<placeholder-259/>\n"
+"\t<placeholder-260/></ul>\n"
+"<placeholder-261/>\n"
+"<ul><placeholder-262/>\n"
 "\t<placeholder-263/>\n"
 "\t<placeholder-264/>\n"
-"\t<placeholder-265/></ul>\n"
-"<placeholder-266/>\n"
-"<ul><placeholder-267/>\n"
-"\t<placeholder-268/>\n"
-"\t<placeholder-269/>\n"
-"\t<placeholder-270/>\n"
+"\t<placeholder-265/>\n"
+"\t<placeholder-266/>\n"
+"\t<placeholder-267/>\n"
+"\t<placeholder-268/></ul>\n"
+"<placeholder-269/>\n"
+"<ul><placeholder-270/>\n"
 "\t<placeholder-271/>\n"
 "\t<placeholder-272/>\n"
 "\t<placeholder-273/>\n"
 "\t<placeholder-274/>\n"
 "\t<placeholder-275/>\n"
-"\t<placeholder-276/></ul>\n"
-"<placeholder-277/>\n"
-"<ul><placeholder-278/>\n"
-"\t<placeholder-279/>\n"
-"\t<placeholder-280/>\n"
-"\t<placeholder-281/>\n"
+"\t<placeholder-276/>\n"
+"\t<placeholder-277/>\n"
+"\t<placeholder-278/>\n"
+"\t<placeholder-279/></ul>\n"
+"<placeholder-280/>\n"
+"<ul><placeholder-281/>\n"
 "\t<placeholder-282/>\n"
 "\t<placeholder-283/>\n"
 "\t<placeholder-284/>\n"
 "\t<placeholder-285/>\n"
 "\t<placeholder-286/>\n"
 "\t<placeholder-287/>\n"
-"\t<placeholder-288/></ul>\n"
-"<placeholder-289/>\n"
-"<ul><placeholder-290/>\n"
-"\t<placeholder-291/>\n"
-"\t<placeholder-292/>\n"
-"\t<placeholder-293/>\n"
+"\t<placeholder-288/>\n"
+"\t<placeholder-289/>\n"
+"\t<placeholder-290/>\n"
+"\t<placeholder-291/></ul>\n"
+"<placeholder-292/>\n"
+"<ul><placeholder-293/>\n"
 "\t<placeholder-294/>\n"
 "\t<placeholder-295/>\n"
 "\t<placeholder-296/>\n"
-"\t<placeholder-297/></ul>\n"
-"<placeholder-298/>\n"
-"<ul><placeholder-299/></ul>"
+"\t<placeholder-297/>\n"
+"\t<placeholder-298/>\n"
+"\t<placeholder-299/>\n"
+"\t<placeholder-300/></ul>\n"
+"<placeholder-301/>\n"
+"<ul><placeholder-302/></ul>"
 msgstr ""
 
 #: doc/reference/en/Groonga/UnknownError.html:6(title)
