@@ -332,13 +332,15 @@ rb_grn_object_bind_common (VALUE klass, VALUE self, VALUE rb_context,
 	      context, object, rb_grn_object,
 	      rb_grn_inspect_type(object->header.type),
 	      object->header.type);
-	rb_grn_object->have_finalizer = GRN_TRUE;
+	 /* TODO: We want to call finalizer for GRN_ACCESSOR. */
+	rb_grn_object->have_finalizer = GRN_FALSE;
     }
 
     switch (object->header.type) {
       case GRN_DB:
       case GRN_PROC:
       case GRN_TYPE:
+      case GRN_ACCESSOR: /* TODO: We want to close GRN_ACCESSOR. */
 	rb_grn_object->need_close = GRN_FALSE;
 	break;
       default:
