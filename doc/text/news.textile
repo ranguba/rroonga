@@ -1,5 +1,11 @@
 h1. NEWS
 
+h2. 1.2.9: 2011-09-16
+
+h3. Fixes
+
+* deleted unneed object files.
+
 h2. 1.2.8: 2011-09-16
 
 h3. Improvements
