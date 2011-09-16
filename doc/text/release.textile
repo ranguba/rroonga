@@ -129,12 +129,16 @@ $ rake reference:po:update
 
 その後、ja.poを開いて、各msgid（追加したコミットログ）に対応するmsgstrにコミットログの和訳を作成する。
 
+h2. これまでの変更をpush
+
+ここまでに行った変更をcommitしてgit pushする。
 h2. リリースバージョンのタグを作成
 
 下記コマンドを入力して、今回リリースするバージョンのタグを打ってgit pushする。
 
 <pre>
 $ rake release
+$ git push --tag
 </pre>
 
 h2. rubygems.orgにパッケージをアップロード
