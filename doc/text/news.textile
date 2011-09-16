@@ -1,4 +1,15 @@
+0fafe496c106b4cab50e5295cf51eea1e4c26536
 h1. NEWS
+
+h2. 1.2.8: 2011-09-16
+
+h3. Improvements
+
+* supported "!=" expression for column in block of Groonga::Array#select.
+* accepted Hash like object as options.
+* supported vector in dump in Ruby syntax.
+* supported GRN_CTX_PER_DB environment variables.
+(NOTE: You should pay attention to use this variables.)
 
 h2. 1.2.7: 2011-08-29
 
