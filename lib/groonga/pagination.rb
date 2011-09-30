@@ -95,14 +95,11 @@ module Groonga
     # _sort_keys_ には ソートに用いる情報を指定する。
     # 指定の仕方は #sort と同様なので、詳細は #sort を参照。
     #
-    # _options_に指定可能な値は以下の通り。
+    # _options_ に指定可能な値は以下の通り。
     #
-    # [+:size+]
-    #   1ページあたりに表示する最大項目数。デフォルトは10。
-    #
-    # [+:page+]
-    #   ページ番号。ページ番号は0ベースではなく1ベースである
-    #   ことに注意。デフォルトは1ページ目。
+    # @param [Hash] options
+    # @option options [Integer] :size (10) 1ページあたりに表示する最大項目数。
+    # @option options [Integer] :page (1) ページ番号。ページ番号は0ベースではなく1ベースであることに注意。
     def paginate(sort_keys, options={})
       _size = size
       page_size = options[:size] || 10
