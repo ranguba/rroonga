@@ -71,15 +71,14 @@ module Groonga
     # call-seq:
     #   context.select(table, options={}) -> SelectResult
     #
-    # _table_から指定した条件にマッチするレコードの値を取得
-    # する。_table_はテーブル名かテーブルオブジェクトを指定
+    # _table_ から指定した条件にマッチするレコードの値を取得
+    # する。_table_ はテーブル名かテーブルオブジェクトを指定
     # する。
     #
-    # _options_に指定できるキーは以下の通り。
-    #
-    # [_output_columns_] 値を取得するカラムを指定する。
-    # [_XXX_] TODO
-    #
+    # _options_ に指定できるキーは以下の通り。
+    # @param [Hash] options
+    # @option options [Array] output_columns 値を取得するカラムを指定する。
+    # @option options [Array] XXX TODO
     # 例:
     #   TODO
     def select(table, options={})
