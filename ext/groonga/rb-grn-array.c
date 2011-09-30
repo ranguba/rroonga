@@ -38,11 +38,12 @@ VALUE rb_cGrnArray;
  * ロックに生成したテーブルが渡され、ブロックを抜けると自動的
  * にテーブルが破棄される。
  *
- * _options_に指定可能な値は以下の通り。
+ * _options_ に指定可能な値は以下の通り
+ * テーブルが利用するGroonga::Context。省略するとGroonga::Context.default
  *
- * [+:context+]
- *   テーブルが利用するGroonga::Context。省略すると
- *   Groonga::Context.defaultを用いる。
+ * @param [Hash] options Groonga::Array option
+ * @option options [String] :context Groonga::Context (Groonga::Context.default)
+ * @option options [String] :test Groonga::Context (Groonga::Context.default)
  *
  * [+:name+]
  *   テーブルの名前。名前をつけると、Groonga::Context#[]に名
