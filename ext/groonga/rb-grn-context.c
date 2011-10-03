@@ -31,7 +31,7 @@ static VALUE cGrnContext;
  *
  * デフォルトで使用されるコンテキストは
  * Groonga::Context#defaultでアクセスできる。コンテキストを
- * 指定できる箇所でコンテキストの指定を省略したり+nil+を指定
+ * 指定できる箇所でコンテキストの指定を省略したり +nil+ を指定
  * した場合はGroonga::Context.defaultが利用される。
  *
  * また、デフォルトのコンテキストは必要になると暗黙のうちに
@@ -263,8 +263,8 @@ rb_grn_context_get_default (void)
  * call-seq:
  *   Groonga::Context.default=(context)
  *
- * デフォルトのコンテキストを設定する。+nil+を指定すると、デ
- * フォルトのコンテキストをリセットする。リセットすると、次
+ * デフォルトのコンテキストを設定する。 +nil+ を指定すると、
+ * デフォルトのコンテキストをリセットする。リセットすると、次
  * 回Groonga::Context.defaultを呼び出したときに新しくコンテ
  * キストが作成される。
  */
@@ -307,10 +307,11 @@ rb_grn_context_s_set_default_options (VALUE self, VALUE options)
  * call-seq:
  *   Groonga::Context.new(options=nil)
  *
- * コンテキストを作成する。_options_に指定可能な値は以下の通
+ * コンテキストを作成する。 _options_ に指定可能な値は以下の通
  * り。
- *
- * [+:encoding+]
+ * @param [Hash] options The name and value
+ *   pairs. Omitted names are initialized as the default value.
+ * @option options :encoding The encoding
  *   エンコーディングを指定する。エンコーディングの指定方法
  *   はGroonga::Encodingを参照。
  */
@@ -510,8 +511,8 @@ rb_grn_context_set_match_escalation_threshold (VALUE self, VALUE threshold)
  * call-seq:
  *   context.support_zlib?
  *
- * groongaがZlibサポート付きでビルドされていれば+true+、そう
- * でなければ+false+を返す。
+ * groongaがZlibサポート付きでビルドされていれば +true+ 、そう
+ * でなければ +false+ を返す。
  */
 static VALUE
 rb_grn_context_support_zlib_p (VALUE self)
@@ -533,8 +534,8 @@ rb_grn_context_support_zlib_p (VALUE self)
  * call-seq:
  *   context.support_lzo?
  *
- * groongaがLZOサポート付きでビルドされていれば+true+、そう
- * でなければ+false+を返す。
+ * groongaがLZOサポート付きでビルドされていれば +true+ 、そう
+ * でなければ +false+ を返す。
  */
 static VALUE
 rb_grn_context_support_lzo_p (VALUE self)
@@ -571,14 +572,14 @@ rb_grn_context_get_database (VALUE self)
  * call-seq:
  *   context.connect(options=nil)
  *
- * groongaサーバに接続する。_options_に指定可能な値は以下の通
+ * groongaサーバに接続する。 _options_ に指定可能な値は以下の通
  * り。
- *
- * [+:host+]
+ * @param [Hash] options The name and value
+ *   pairs. Omitted names are initialized as the default value.
+ * @option options :host (localhost) The groonga server host name
  *   groongaサーバのホスト名。またはIPアドレス。省略すると
  *   "localhost"に接続する。
- *
- * [+:port+]
+ * @option options :port (10041) The port number
  *   groongaサーバのポート番号。省略すると10041番ポートに接
  *   続する。
  */
@@ -749,10 +750,10 @@ rb_grn_context_get_backward_compatibility (grn_ctx *context,
  *
  * コンテキスト管理下にあるオブジェクトを返す。
  *
- * _name_として文字列を指定した場合はオブジェクト名でオブジェ
+ * _name_ として文字列を指定した場合はオブジェクト名でオブジェ
  * クトを検索する。
  *
- * _id_として数値を指定した場合はオブジェクトIDでオブジェク
+ * _id_ として数値を指定した場合はオブジェクトIDでオブジェク
  * トを検索する。
  */
 static VALUE

@@ -125,7 +125,7 @@ rb_grn_database_deconstruct (RbGrnObject *rb_grn_database,
  * call-seq:
  *   database.close
  *
- * _database_が使用しているリソースを開放する。これ以降_database_を
+ * _database_ が使用しているリソースを開放する。これ以降 _database_ を
  * 使うことはできない。
  */
 static VALUE
@@ -148,12 +148,12 @@ rb_grn_database_close (VALUE self)
  *
  * _options_にはハッシュでオプションを指定する。指定できるオ
  * プションは以下の通り。
- *
- * [+:path+]
+ * @param option [Hash] options The name and value
+ *   pairs. Omitted names are initialized as the default value.
+ * @option options :path The path
  *   データベースを保存するパス。省略すると一時データベース
  *   となる。
- *
- * [+:context+]
+ * @option options :context The context
  *   データベースを結びつけるコンテキスト。省略すると
  *   Groonga::Context.defaultを利用する。
  *
@@ -219,10 +219,11 @@ rb_grn_database_s_create (int argc, VALUE *argv, VALUE klass)
  * クに開いたデータベースを渡し、ブロックを抜けるときに閉じ
  * る。
  *
- * _options_にはハッシュでオプションを指定する。指定できるオ
+ * _options_ にはハッシュでオプションを指定する。指定できるオ
  * プションは以下の通り。
- *
- * [+:context+]
+ * @param options [Hash] The name and value
+ *   pairs. Omitted names are initialized as the default value.
+ * @option options :context (Groonga::Context.default) The context
  *   データベースを結びつけるコンテキスト。省略すると
  *   Groonga::Context.defaultを利用する。
  */
@@ -266,12 +267,12 @@ rb_grn_database_initialize (int argc, VALUE *argv, VALUE self)
  * クに開いたデータベースを渡し、ブロックを抜けるときに閉じ
  * る。
  *
- * _options_にはハッシュでオプションを指定する。指定できるオ
+ * _options_ にはハッシュでオプションを指定する。指定できるオ
  * プションは以下の通り。
- *
- * [+:context+]
- *   データベースを結びつけるコンテキスト。省略すると
- *   Groonga::Context.defaultを利用する。
+ * @param options [Hash] The name and value
+ *   pairs. Omitted names are initialized as the default value.
+ * @option options :context (Groonga::Context.default) The context
+ *   データベースを結びつけるコンテキスト。
  */
 static VALUE
 rb_grn_database_s_open (int argc, VALUE *argv, VALUE klass)
@@ -293,20 +294,20 @@ rb_grn_database_s_open (int argc, VALUE *argv, VALUE klass)
  *
  * データベース内のオブジェクトを順番にブロックに渡す。
  *
- * _options_にはハッシュでオプションを指定する。指定できるオ
+ * _options_ にはハッシュでオプションを指定する。指定できるオ
  * プションは以下の通り。
- *
- * [+:order+]
- *   +:asc+または+:ascending+を指定すると昇順にレコードを取
+ * @param options [Hash]
+ * @option options :order The order
+ *   +:asc+ または +:ascending+ を指定すると昇順にレコードを取
  *   り出す。（デフォルト）
  *
- *   +:desc+または+:descending+を指定すると降順にレコードを
+ *   +:desc+ または +:descending+ を指定すると降順にレコードを
  *   取り出す。
  *
- * [+:order_by+]
- *   +:id+を指定するとID順にレコードを取り出す。
+ * @option options :order_by (:key) The ordef by
+ *   +:id+ を指定するとID順にレコードを取り出す。
  *
- *   +:key+指定するとキー順にレコードを取り出す。（デフォル
+ *   +:key+ 指定するとキー順にレコードを取り出す。（デフォル
  *   ト）
  *
  * すべてのオブジェクトの名前を表示する:
@@ -373,7 +374,7 @@ rb_grn_database_each (int argc, VALUE *argv, VALUE self)
  * call-seq:
  *   database.unlock
  *
- * _database_のロックを解除する。
+ * _database_ のロックを解除する。
  */
 static VALUE
 rb_grn_database_unlock (VALUE self)
@@ -399,7 +400,7 @@ rb_grn_database_unlock (VALUE self)
  *   database.lock(options={})
  *   database.lock(options={}) {...}
  *
- * _database_をロックする。ロックに失敗した場合は
+ * _database_ をロックする。ロックに失敗した場合は
  * Groonga::ResourceDeadlockAvoided例外が発生する。
  *
  * ブロックを指定した場合はブロックを抜けたときにunlockする。
@@ -407,8 +408,8 @@ rb_grn_database_unlock (VALUE self)
  * 利用可能なオプションは以下の通り。
  *
  * [_:timeout_]
- *   ロックを獲得できなかった場合は_:timeout_秒間ロックの獲
- *   得を試みる。_:timeout_秒以内にロックを獲得できなかった
+ *   ロックを獲得できなかった場合は _:timeout_ 秒間ロックの獲
+ *   得を試みる。 _:timeout_ 秒以内にロックを獲得できなかった
  *   場合は例外が発生する。
  */
 static VALUE
@@ -449,7 +450,7 @@ rb_grn_database_lock (int argc, VALUE *argv, VALUE self)
  * call-seq:
  *   database.clear_lock
  *
- * _database_のロックを強制的に解除する。
+ * _database_ のロックを強制的に解除する。
  */
 static VALUE
 rb_grn_database_clear_lock (VALUE self)
@@ -471,7 +472,7 @@ rb_grn_database_clear_lock (VALUE self)
  * call-seq:
  *   database.locked?
  *
- * _database_がロックされていれば+true+を返す。
+ * _database_ がロックされていれば+true+を返す。
  */
 static VALUE
 rb_grn_database_is_locked (VALUE self)
@@ -491,7 +492,7 @@ rb_grn_database_is_locked (VALUE self)
  * call-seq:
  *   database.touch
  *
- * _database_の最終更新時刻を現在時刻にする。
+ * _database_ の最終更新時刻を現在時刻にする。
  */
 static VALUE
 rb_grn_database_touch (VALUE self)

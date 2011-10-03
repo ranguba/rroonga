@@ -39,38 +39,31 @@ VALUE rb_cGrnArray;
  * にテーブルが破棄される。
  *
  * _options_ に指定可能な値は以下の通り
- * テーブルが利用するGroonga::Context。省略するとGroonga::Context.default
- *
- * @param [Hash] options Groonga::Array option
- * @option options [String] :context Groonga::Context (Groonga::Context.default)
- * @option options [String] :test Groonga::Context (Groonga::Context.default)
- *
- * [+:name+]
+ * @param [Hash] options The name and value
+ *   pairs. Omitted names are initialized as the default value.
+ * @option options :context (Groonga::Context.default) The context
+ *   テーブルが利用するGrrnga::Context
+ * @option options :name The name
  *   テーブルの名前。名前をつけると、Groonga::Context#[]に名
  *   前を指定してテーブルを取得することができる。省略すると
  *   無名テーブルになり、テーブルIDでのみ取得できる。
- *
- * [+:path+]
+ * @option options :path The path
  *   テーブルを保存するパス。パスを指定すると永続テーブルとな
  *   り、プロセス終了後もレコードは保持される。次回起動時に
  *   Groonga::Context#[]で保存されたレコードを利用することが
  *   できる。省略すると一時テーブルになり、プロセスが終了する
  *   とレコードは破棄される。
- *
- * [+:persistent+]
- *   +true+を指定すると永続テーブルとなる。+path+を省略した
- *   場合は自動的にパスが付加される。+:context+で指定した
+ * @option options :persistent The persistent
+ *   +true+ を指定すると永続テーブルとなる。 +path+ を省略した
+ *   場合は自動的にパスが付加される。 +:context+ で指定した
  *   Groonga::Contextに結びついているデータベースが一時デー
  *   タベースの場合は例外が発生する。
- *
- * [+:value_type+]
+ * @option options :value_type The value_type
  *   値の型を指定する。省略すると値のための領域を確保しない。
  *   値を保存したい場合は必ず指定すること。
- *
  *   参考: Groonga::Type.new
- *
- * [+:sub_records+]
- *   +true+を指定すると#groupでグループ化したときに、
+ * @option options :sub_records The sub_records
+ *   +true+ を指定すると#groupでグループ化したときに、
  *   Groonga::Record#n_sub_recordsでグループに含まれるレコー
  *   ドの件数を取得できる。
  *
@@ -155,10 +148,10 @@ rb_grn_array_s_create (int argc, VALUE *argv, VALUE klass)
  *   array.add(values=nil) -> Groonga::Recordまたはnil
  *
  * レコード追加し、追加したレコードを返す。レコードの追加に失
- * 敗した場合は+nil+を返す。
+ * 敗した場合は +nil+ を返す。
  *
  * _values_にはレコードのカラムに設定する値を指定する。省略
- * した場合または+nil+を指定した場合はカラムは設定しない。カ
+ * した場合または +nil+ を指定した場合はカラムは設定しない。カ
  * ラムの値は<tt>{:カラム名1 => 値1, :カラム名2 => 値2,
  * ...}</tt>と指定する。
  *

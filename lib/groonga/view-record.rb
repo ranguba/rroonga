@@ -22,7 +22,7 @@ module Groonga
     # レコードのID
     attr_reader :id
 
-    # _table_の_id_に対応するレコードを作成する。
+    # _table_ の _id_ に対応するレコードを作成する。
     def initialize(view, id)
       @view = view
       @id = id
@@ -31,8 +31,8 @@ module Groonga
     # call-seq:
     #   record == other -> true/false
     #
-    # _record_と_other_が同じgroongaのレコードなら+true+を返し、
-    # そうでなければ+false+を返す。
+    # _record_ と _other_ が同じgroongaのレコードなら +true+ を返し、
+    # そうでなければ +false+ を返す。
     def ==(other)
       self.class == other.class and
         [view, id] == [other.view, other.id]
@@ -41,7 +41,7 @@ module Groonga
     # call-seq:
     #   record[column_name] -> 値
     #
-    # このレコードの_column_name_で指定されたカラムの値を返す。
+    # このレコードの _column_name_ で指定されたカラムの値を返す。
     def [](column_name)
       @view.column_value(@id, column_name)
     end

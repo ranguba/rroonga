@@ -20,17 +20,17 @@ module Groonga
     # call-seq:
     #   patricia_trie.tag_keys(text, options={}) {|record, word| ...} -> String
     #
-    # _text_を走査し、レコードのキーとマッチする部分文字列ごとに
-    # そのレコードが_record_として、その部分文字列が_word_として、
+    # _text_ を走査し、レコードのキーとマッチする部分文字列ごとに
+    # そのレコードが _record_ として、その部分文字列が _word_ として、
     # ブロックが呼び出される。ブロックから返された文字列が元の部
     # 分文字列と置換される。全てのヒットに対してのその置換処理が
     # 行われた文字列が返される。
     #
-    # _options_に指定可能な値は以下の通り。
-    #
-    # [+:other_text_handler+]
-    #   マッチした部分文字列の前後の文字列を変換するProcを指
-    #   定する。
+    # _options_ に指定可能な値は以下の通り。
+    # @param options [Hash] The name and value
+    #   pairs. Omitted names are initialized as the default value.
+    # @option options [Proc] :other_text_handler The other_text_handler
+    #  マッチした部分文字列の前後の文字列を変換するProcを指定する。
     #
     # 例:
     #   include ERB::Util

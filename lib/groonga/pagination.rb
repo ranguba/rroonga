@@ -69,8 +69,8 @@ module Groonga
     # ページネーション用便利メソッド。ページネーションをした
     # い場合は #sort よりも #paginate の方が便利。
     #
-    # 説明文（descriptionカラム）を「Ruby」で全文検索し、検
-    # 索結果をスコアの高い順にソートして、10項目ずつ表示する
+    # 説明文（descriptionカラム）を「Ruby」で全文検索し、
+    # 検索結果をスコアの高い順にソートして、10項目ずつ表示する
     # 場合は以下のようになる。
     #
     #   query = "Ruby"
@@ -97,9 +97,12 @@ module Groonga
     #
     # _options_ に指定可能な値は以下の通り。
     #
-    # @param [Hash] options
-    # @option options [Integer] :size (10) 1ページあたりに表示する最大項目数。
-    # @option options [Integer] :page (1) ページ番号。ページ番号は0ベースではなく1ベースであることに注意。
+    # @param [Hash] options The name and value
+    #   pairs. Omitted names are initialized as the default value.
+    # @option options [Integer] :size (10) The size
+    #   1ページあたりに表示する最大項目数。
+    # @option options [Integer] :page (1) The page
+    #   ページ番号。ページ番号は0ベースではなく1ベースであることに注意。
     def paginate(sort_keys, options={})
       _size = size
       page_size = options[:size] || 10
@@ -139,7 +142,7 @@ module Groonga
     # 全レコード数。
     attr_reader :n_records
 
-    # 2ページ以上ある場合は+true+を返す。
+    # 2ページ以上ある場合は +true+ を返す。
     def have_pages?
       @n_pages > 1
     end
@@ -149,7 +152,7 @@ module Groonga
       1
     end
 
-    # 現在のページが最初のページなら+true+を返す。
+    # 現在のページが最初のページなら +true+ を返す。
     def first_page?
       @current_page == first_page
     end
@@ -164,13 +167,13 @@ module Groonga
       @current_page == last_page
     end
 
-    # 次のページがあるなら+true+を返す。
+    # 次のページがあるなら +true+ を返す。
     def have_next_page?
       @current_page < @n_pages
     end
 
-    # 次のページ番号を返す。次のページがない場合は+nil+を返
-    # す。
+    # 次のページ番号を返す。次のページがない場合は +nil+
+    # を返す。
     def next_page
       have_next_page? ? @current_page + 1 : nil
     end
@@ -180,8 +183,8 @@ module Groonga
       @current_page > 1
     end
 
-    # 前のページ番号を返す。前のページがない場合は+nil+を返
-    # す。
+    # 前のページ番号を返す。前のページがない場合は +nil+
+    # を返す。
     def previous_page
       have_previous_page? ? @current_page - 1 : nil
     end

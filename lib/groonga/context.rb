@@ -72,12 +72,14 @@ module Groonga
     #   context.select(table, options={}) -> SelectResult
     #
     # _table_ から指定した条件にマッチするレコードの値を取得
-    # する。_table_ はテーブル名かテーブルオブジェクトを指定
+    # する。 _table_ はテーブル名かテーブルオブジェクトを指定
     # する。
     #
     # _options_ に指定できるキーは以下の通り。
-    # @param [Hash] options
-    # @option options [Array] output_columns 値を取得するカラムを指定する。
+    # @param [Hash] options The name and value
+    #   pairs. Omitted names are initialized as the default value.
+    # @option options [Array] output_columns The output_columns
+    #   値を取得するカラムを指定する。
     # @option options [Array] XXX TODO
     # 例:
     #   TODO

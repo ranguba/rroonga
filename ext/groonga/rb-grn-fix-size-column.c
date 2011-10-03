@@ -59,7 +59,7 @@ rb_grn_fix_size_column_array_reference (VALUE self, VALUE rb_id)
  * call-seq:
  *   column[id] = value
  *
- * _column_の_id_に対応する値を設定する。
+ * _column_ の _id_ に対応する値を設定する。
  */
 static VALUE
 rb_grn_fix_size_column_array_set (VALUE self, VALUE rb_id, VALUE rb_value)
@@ -120,8 +120,8 @@ rb_grn_fix_size_column_integer_set (int argc, VALUE *argv, VALUE self, int flags
  * call-seq:
  *   column.increment!(id, delta=nil)
  *
- * _column_の_id_に対応する値を_delta_だけ増加する。_delta_
- * が+nil+の場合は1増加する。
+ * _column_ の _id_ に対応する値を _delta_ だけ増加する。 _delta_
+ * が +nil+ の場合は1増加する。
  */
 static VALUE
 rb_grn_fix_size_column_increment (int argc, VALUE *argv, VALUE self)
@@ -133,8 +133,8 @@ rb_grn_fix_size_column_increment (int argc, VALUE *argv, VALUE self)
  * call-seq:
  *   column.decrement!(id, delta=nil)
  *
- * _column_の_id_に対応する値を_delta_だけ減少する。_delta_
- * が+nil+の場合は1減少する。
+ * _column_ の _id_ に対応する値を _delta_ だけ減少する。 _delta_
+ * が +nil+ の場合は1減少する。
  */
 static VALUE
 rb_grn_fix_size_column_decrement (int argc, VALUE *argv, VALUE self)

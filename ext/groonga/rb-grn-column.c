@@ -176,7 +176,7 @@ rb_grn_column_get_local_name (VALUE self)
  *
  * カラムが所属するテーブルからブロックまたは文字列で指定し
  * た条件にマッチするレコードを返す。返されたテーブルには
- * +expression+という特異メソッドがあり、指定した条件を表し
+ * +expression+ という特異メソッドがあり、指定した条件を表し
  * ているGroonga::Expressionを取得できる。
  * Groonga::Expression#snippetを使うことにより、指定した条件
  * 用のスニペットを簡単に生成できる。
@@ -200,7 +200,7 @@ rb_grn_column_get_local_name (VALUE self)
  *   Ruby/<em>groonga</em>は<em>groonga</em>のいわゆるDB-APIの層の...
  *   ---
  *
- * _query_には「[カラム名]:[演算子][値]」という書式で条件を
+ * _query_ には「[カラム名]:[演算子][値]」という書式で条件を
  * 指定する。演算子は以下の通り。
  *
  * [なし]
@@ -219,23 +219,24 @@ rb_grn_column_get_local_name (VALUE self)
  *   [カラム値]が[値]を含んでいるかどうか
  *
  * 例:
- *   "groonga" # _column_カラムの値が"groonga"のレコードにマッチ
- *   "name:daijiro" # _column_カラムが属しているテーブルの
+ *   "groonga" # _column_ カラムの値が"groonga"のレコードにマッチ
+ *   "name:daijiro" # _column_ カラムが属しているテーブルの
  *                  # "name"カラムの値が"daijiro"のレコードにマッチ
- *   "description:@groonga" # _column_カラムが属しているテーブルの
+ *   "description:@groonga" # _column_ カラムが属しているテーブルの
  *                          # "description"カラムが
  *                          # "groonga"を含んでいるレコードにマッチ
  *
- * _expression_には既に作成済みのGroonga::Expressionを渡す
+ * _expression_ には既に作成済みのGroonga::Expressionを渡す
  *
  * ブロックで条件を指定する場合は
- * Groonga::ColumnExpressionBuilderを参照。
+ * {Groonga::ColumnExpressionBuilder} を参照。
  *
- * _options_に指定可能な値は以下の通り。
- *
- * [+:operator+]
+ * _options_ に指定可能な値は以下の通り。
+ * @param [Hash] options The name and value
+ *   pairs. Omitted names are initialized as the default value.
+ * @option options :operator (Groonga::Operator::OR) The operator
  *   マッチしたレコードをどのように扱うか。指定可能な値は以
- *   下の通り。省略した場合はGroonga::Operator::OR。
+ *   下の通り。
  *
  *   [Groonga::Operator::OR]
  *     マッチしたレコードを追加。すでにレコードが追加され
@@ -248,31 +249,31 @@ rb_grn_column_get_local_name (VALUE self)
  *   [Groonga::Operator::ADJUST]
  *     マッチしたレコードのスコアを増加。
  *
- * [+:result+]
+ * @option options :result The result
  *   検索結果を格納するテーブル。マッチしたレコードが追加さ
  *   れていく。省略した場合は新しくテーブルを作成して返す。
  *
- * [+:name+]
+ * @option options :name The name
  *   条件の名前。省略した場合は名前を付けない。
  *
- * [+:syntax+]
- *   _query_の構文。省略した場合は+:query+。
+ * @option options :syntax (:query) The syntax
+ *   _query_の構文。
  *
  *   参考: Groonga::Expression#parse.
  *
- * [+:allow_pragma+]
+ * @option options :allow_pragma The allow_pragma
  *   query構文時にプラグマを利用するかどうか。省略した場合は
  *   利用する。
  *
  *   参考: Groonga::Expression#parse.
  *
- * [+:allow_column+]
+ * @option options :allow_column The allow_column
  *   query構文時にカラム指定を利用するかどうか。省略した場合
  *   は利用する。
  *
  *   参考: Groonga::Expression#parse.
  *
- * [+:allow_update+]
+ * @option options :allow_update
  *   script構文時に更新操作を利用するかどうか。省略した場合
  *   は利用する。
  *
@@ -367,13 +368,13 @@ rb_grn_column_select (int argc, VALUE *argv, VALUE self)
  * call-seq:
  *   column.unlock(options={})
  *
- * _column_のロックを解除する。
+ * _column_ のロックを解除する。
  *
  * 利用可能なオプションは以下の通り。
  *
  * [_:id_]
- *   _:id_で指定したレコードのロックを解除する。（注:
- *   groonga側が未実装のため、現在は無視される）
+ *   _:id_ で指定したレコードのロックを解除する。
+ *   （注: groonga側が未実装のため、現在は無視される）
  */
 static VALUE
 rb_grn_column_unlock (int argc, VALUE *argv, VALUE self)
@@ -417,7 +418,7 @@ rb_grn_column_unlock_ensure (VALUE self)
  *   column.lock(options={})
  *   column.lock(options={}) {...}
  *
- * _column_をロックする。ロックに失敗した場合は
+ * _column_ をロックする。ロックに失敗した場合は
  * Groonga::ResourceDeadlockAvoided例外が発生する。
  *
  * ブロックを指定した場合はブロックを抜けたときにunlockする。
@@ -523,7 +524,7 @@ rb_grn_column_clear_lock (int argc, VALUE *argv, VALUE self)
  * 利用可能なオプションは以下の通り。
  *
  * [_:id_]
- *   _:id_で指定したレコードがロックされていれば+true+を返す。
+ *   _:id_で指定したレコードがロックされていれば +true+ を返す。
  *   （注: groonga側が未実装のため、現在は無視される。実装さ
  *   れるのではないかと思っているが、実装されないかもしれな
  *   い。）
@@ -558,8 +559,8 @@ rb_grn_column_is_locked (int argc, VALUE *argv, VALUE self)
  * call-seq:
  *   column.reference? -> true/false
  *
- * _column_の値がテーブルのレコードとなる場合は+true+を返し、
- * そうでない場合は+false+を返す。
+ * _column_ の値がテーブルのレコードとなる場合は +true+ を返し、
+ * そうでない場合は +false+ を返す。
  *
  * @since 1.0.5
  */
@@ -596,8 +597,8 @@ rb_grn_column_reference_p (VALUE self)
  * call-seq:
  *   column.index? -> true/false
  *
- * _column_がGroonga::IndexColumnの場合は+true+を返し、
- * そうでない場合は+false+を返す。
+ * _column_ がGroonga::IndexColumnの場合は +true+ を返し、
+ * そうでない場合は +false+ を返す。
  *
  * @since 1.0.5
  */
@@ -624,8 +625,8 @@ rb_grn_column_index_p (VALUE self)
  * call-seq:
  *   column.vector? -> true/false
  *
- * _column_がベクターカラムの場合は+true+を返し、
- * そうでない場合は+false+を返す。
+ * _column_ がベクターカラムの場合は +true+ を返し、
+ * そうでない場合は +false+ を返す。
  *
  * @since 1.0.5
  */
@@ -654,8 +655,8 @@ rb_grn_column_vector_p (VALUE self)
  * call-seq:
  *   column.scalar? -> true/false
  *
- * _column_がスカラーカラムの場合は+true+を返し、
- * そうでない場合は+false+を返す。
+ * _column_ がスカラーカラムの場合は +true+ を返し、
+ * そうでない場合は +false+ を返す。
  *
  * @since 1.0.5
  */
@@ -690,7 +691,7 @@ rb_grn_column_scalar_p (VALUE self)
  * call-seq:
  *   column.indexes(operator=Groonga::Operator::MATCH) -> [index_column, ...]
  *
- * _operation_を実行できる_column_のインデックスを返す。
+ * _operation_ を実行できる _column_ のインデックスを返す。
  *
  * @since 1.0.9
  */
