@@ -161,8 +161,8 @@ module Groonga
       #
       # @param [Hash] options The name and value
       #   pairs. Omitted names are initialized as the default value.
-      # @option options :context [Groonga::Context.default] The context
-      #   スキーマ定義時に使用するGroonga::Contextを指定する。
+      # @option options [Groonga::Context] [Groonga::Context.default] The context
+      #   スキーマ定義時に使用するを指定する。
       def define(options={})
         schema = new(options)
         yield(schema)
