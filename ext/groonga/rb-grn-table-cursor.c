@@ -270,8 +270,8 @@ rb_grn_table_cursor_each (VALUE self)
  * call-seq:
  *   cursor.closed? -> true/false
  *
- * カーソルが開放済みの場合は+true+を返し、そうでない場合は
- * +false+を返す。
+ * カーソルが開放済みの場合は +true+ を返し、そうでない場合は
+ * +false+ を返す。
  */
 
 void

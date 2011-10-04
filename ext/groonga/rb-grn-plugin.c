@@ -71,16 +71,16 @@ rb_grn_plugin_alloc (VALUE klass)
  *
  * 既存のプラグインをデータベースに登録する。
  *
- * _name_を指定した場合はその名前のプラグインを登録する。
+ * _name_ を指定した場合はその名前のプラグインを登録する。
  *
- * _path_を指定した場合はそのパスのプラグインを登録する。
+ * _path_ を指定した場合はそのパスのプラグインを登録する。
  *
- * _options_にはハッシュでオプションを指定する。指定できるオ
+ * _options_ にはハッシュでオプションを指定する。指定できるオ
  * プションは以下の通り。
- *
- * [+:context+]
- *   データベースを結びつけるコンテキスト。省略すると
- *   Groonga::Context.defaultを利用する。
+ * @param options [Hash] The name and value
+ *   pairs. Omitted names are initialized as the default value.
+ * @option options :context (Groonga::Context.default) The context
+ *   データベースを結びつけるコンテキスト。
  */
 static VALUE
 rb_grn_plugin_s_register (int argc, VALUE *argv, VALUE klass)

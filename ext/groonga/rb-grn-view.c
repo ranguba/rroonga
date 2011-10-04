@@ -47,27 +47,27 @@ VALUE rb_cGrnView;
  * ビューにテーブルを追加するときはGroonga::View#add_tableを
  * 使う。
  *
- * _options_に指定可能な値は以下の通り。
+ * _options_ に指定可能な値は以下の通り。
+ * @param options [Hash] The name and value
+ *   pairs. Omitted names are initialized as the default value
+ * @option options :context (Groonga::Context.default)
+ *   ビューが利用するGroonga::Context。
  *
- * [+:context+]
- *   ビューが利用するGroonga::Context。省略すると
- *   Groonga::Context.defaultを用いる。
- *
- * [+:name+]
+ * @option options :name The view name
  *   ビューの名前。名前をつけると、Groonga::Context#[]に名
  *   前を指定してビューを取得することができる。省略すると
  *   無名ビューになり、ビューIDでのみ取得できる。
  *
- * [+:path+]
+ * @option options :path The path
  *   ビューを保存するパス。パスを指定すると永続ビューとな
  *   り、プロセス終了後もレコードは保持される。次回起動時に
  *   Groonga::View.openで保存されたビューを利用することが
  *   できる。省略すると一時ビューになり、プロセスが終了する
  *   とビューは破棄される。
  *
- * [+:persistent+]
- *   +true+を指定すると永続ビューとなる。+path+を省略した
- *   場合は自動的にパスが付加される。+:context+で指定した
+ * @option options :persistent The persistent
+ *   +true+ を指定すると永続ビューとなる。 +path+ を省略した
+ *   場合は自動的にパスが付加される。 +:context+ で指定した
  *   Groonga::Contextに結びついているデータベースが一時デー
  *   タベースの場合は例外が発生する。
  *
@@ -76,7 +76,7 @@ VALUE rb_cGrnView;
  * 無名一時ビューを生成する。
  *   Groonga::View.create
  *
- * 無名永続ブーを生成する。
+ * 無名永続ビューを生成する。
  *   Groonga::View.create(:path => "/tmp/view.grn")
  *
  * 名前付き永続ビューを生成する。ただし、ファイル名は気に
@@ -84,7 +84,7 @@ VALUE rb_cGrnView;
  *   Groonga::View.create(:name => "Entries",
  *                        :persistent => true)
  *
- * +Users+テーブルと+Dogs+テーブルを横断検索するための
+ * +Users+ テーブルと +Dogs+ テーブルを横断検索するための
  * るビューを生成する。
  *   entries = Groonga::View.create(:name => "Entries")
  *   entries.add_table("Users")
@@ -141,7 +141,7 @@ rb_grn_view_s_create (int argc, VALUE *argv, VALUE klass)
  * call-seq:
  *   view.add_table(table)
  *
- * _table_をビューからアクセスできるようにする。
+ * _table_ をビューからアクセスできるようにする。
  */
 static VALUE
 rb_grn_view_add_table (VALUE self, VALUE rb_table)
@@ -218,7 +218,7 @@ rb_grn_view_each (VALUE self)
  * call-seq:
  *   view.column_value(id, name) -> 値
  *
- * _view_の_id_に対応するカラム_name_の値を返す。
+ * _view_ の _id_ に対応するカラム _name_ の値を返す。
  */
 static VALUE
 rb_grn_view_get_column_value (VALUE self, VALUE rb_id, VALUE rb_name)
@@ -256,7 +256,7 @@ rb_grn_view_get_column_value (VALUE self, VALUE rb_id, VALUE rb_name)
  * call-seq:
  *   view.sort(keys, options={}) -> Groonga::ViewRecordの配列
  *
- * テーブルに登録されているレコードを_keys_で指定されたルー
+ * テーブルに登録されているレコードを _keys_ で指定されたルー
  * ルに従ってソートしたレコードの配列を返す。
  *
  *   [
@@ -267,14 +267,15 @@ rb_grn_view_get_column_value (VALUE self, VALUE rb_id, VALUE rb_name)
  *    ...,
  *   ]
  *
- * _options_に指定可能な値は以下の通り。
- *
- * [+:offset+]
- *   ソートされたレコードのうち、(0ベースで)_:offset_番目
+ * _options_ に指定可能な値は以下の通り。
+ * @param options [Hash] The name and value
+ *   pairs. Omitted names are initialized as the default value
+ * @option options :offset The offset
+ *   ソートされたレコードのうち、(0ベースで) _:offset_ 番目
  *   からレコードを取り出す。
  *
- * [+:limit+]
- *   ソートされたレコードのうち、_:limit_件のみを取り出す。
+ * @option options :limit The limit
+ *   ソートされたレコードのうち、 _:limit_ 件のみを取り出す。
  *   省略された場合または-1が指定された場合は、全件が指定され
  *   たものとみなす。
  */

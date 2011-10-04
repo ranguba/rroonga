@@ -81,7 +81,7 @@ rb_grn_variable_get_value (VALUE self)
  * call-seq:
  *   variable.value=(value)
  *
- * 変数の値を_value_に設定する。
+ * 変数の値を _value_ に設定する。
  */
 static VALUE
 rb_grn_variable_set_value (VALUE self, VALUE value)

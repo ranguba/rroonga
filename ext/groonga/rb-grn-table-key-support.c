@@ -113,16 +113,16 @@ rb_grn_table_key_support_add_raw (VALUE self, VALUE rb_key, int *added)
  * call-seq:
  *   table.add(key, values=nil) -> Groonga::Recordまたはnil
  *
- * 主キーが_key_のレコード追加し、追加したレコードを返す。レ
+ * 主キーが _key_ のレコード追加し、追加したレコードを返す。レ
  * コードの追加に失敗した場合は+nil+を返す。
  *
  * すでに同じキーのレコードが存在する場合は追加せずに同じレ
  * コードを返す。追加されたかどうかは
- * +Groonga::Record#added?+で調べることができる。+true+を返
+ * +Groonga::Record#added?+ で調べることができる。 +true+ を返
  * したら追加されたということを示す。
  *
- * _values_にはレコードのカラムに設定する値を指定する。省略
- * した場合または+nil+を指定した場合はカラムは設定しない。カ
+ * _values_ にはレコードのカラムに設定する値を指定する。省略
+ * した場合または +nil+ を指定した場合はカラムは設定しない。カ
  * ラムの値は<tt>{:カラム名1 => 値1, :カラム名2 => 値2,
  * ...}</tt>と指定する。
  */
@@ -172,9 +172,9 @@ rb_grn_table_key_support_get (VALUE self, VALUE rb_key)
  *   table.id -> テーブルID
  *   table.id(key) -> レコードID
  *
- * _key_を指定しない場合はテーブルのIDを返す。
+ * _key_ を指定しない場合はテーブルのIDを返す。
  *
- * _key_を指定した場合はテーブルの_key_に対応するレコードの
+ * _key_ を指定した場合はテーブルの _key_ に対応するレコードの
  * IDを返す。
  */
 static VALUE
@@ -201,7 +201,7 @@ rb_grn_table_key_support_get_id (int argc, VALUE *argv, VALUE self)
  * call-seq:
  *   table.key(id) -> 主キー
  *
- * テーブルの_id_に対応する主キーを返す。
+ * テーブルの _id_ に対応する主キーを返す。
  */
 static VALUE
 rb_grn_table_key_support_get_key (VALUE self, VALUE rb_id)
@@ -237,7 +237,7 @@ rb_grn_table_key_support_get_key (VALUE self, VALUE rb_id)
  * call-seq:
  *   table.has_key?(key) -> true/false
  *
- * テーブルに主キーが_key_のレコードがあるならtrueを返す。
+ * テーブルに主キーが _key_ のレコードがあるならtrueを返す。
  */
 static VALUE
 rb_grn_table_key_support_has_key (VALUE self, VALUE rb_key)
@@ -287,7 +287,7 @@ rb_grn_table_key_support_delete_by_key (VALUE self, VALUE rb_key)
  *   table.delete(id)
  *   table.delete(key)
  *
- * テーブルの_id_または_key_に対応するレコードを削除する。
+ * テーブルの _id_ または _key_ に対応するレコードを削除する。
  */
 static VALUE
 rb_grn_table_key_support_delete (VALUE self, VALUE rb_id_or_key)
@@ -305,7 +305,7 @@ rb_grn_table_key_support_delete (VALUE self, VALUE rb_id_or_key)
  * call-seq:
  *   table[key] -> Groonga::Record
  *
- * _table_の_key_に対応するGroonga::Recordを返す。
+ * _table_ の _key_ に対応するGroonga::Recordを返す。
  *
  * 0.9.0から値ではなくGroonga::Recordを返すようになった。
  */
@@ -357,8 +357,8 @@ set_value (VALUE args, SetValueData *data)
  * call-seq:
  *   table[key] = {:column_name => value, ...}
  *
- * _table_の_key_に対応するカラム_column_name_の値を設定する。
- * _key_に対応するレコードがない場合は新しく作成される。
+ * _table_ の _key_ に対応するカラム _column_name_ の値を設定する。
+ * _key_ に対応するレコードがない場合は新しく作成される。
  *
  * 0.9.0から値ではなくカラムの値を設定するようになった。
  */
@@ -397,8 +397,8 @@ rb_grn_table_key_support_array_set (VALUE self, VALUE rb_key, VALUE rb_values)
  *   table.set_column_value(key, name, value)
  *   table.set_column_value(id, name, value, :id => true)
  *
- * _table_の_key_に対応するカラム_name_の値を設定する。
- * _key_に対応するレコードがない場合は新しく作成される。
+ * _table_ の _key_ に対応するカラム _name_ の値を設定する。
+ * _key_ に対応するレコードがない場合は新しく作成される。
  */
 static VALUE
 rb_grn_table_key_support_set_column_value (int argc, VALUE *argv, VALUE self)
@@ -437,9 +437,9 @@ rb_grn_table_key_support_set_column_value (int argc, VALUE *argv, VALUE self)
  *   table.column_value(key, name)
  *   table.column_value(id, name, :id => true)
  *
- * _table_の_key_に対応するカラム_name_の値を設定する。
+ * _table_ の _key_ に対応するカラム _name_ の値を設定する。
  *
- * TODO: _key_に対応するレコードがない場合は例外？
+ * TODO: _key_ に対応するレコードがない場合は例外？
  */
 static VALUE
 rb_grn_table_key_support_get_column_value (int argc, VALUE *argv, VALUE self)
@@ -496,7 +496,7 @@ rb_grn_table_key_support_get_value_by_key (VALUE self, VALUE rb_key)
  *   table.value(id, :id => true) -> 値
  *   table.value(key) -> 値
  *
- * _table_の_id_または_key_に対応する値を返す。
+ * _table_ の _id_ または _key_ に対応する値を返す。
  */
 static VALUE
 rb_grn_table_key_support_get_value (int argc, VALUE *argv, VALUE self)
@@ -566,7 +566,7 @@ rb_grn_table_key_support_set_value_by_key (VALUE self,
  *   table.set_value(id, value, :id => true)
  *   table.set_value(key, value)
  *
- * _table_の_id_または_key_に対応する値を_value_に設定する。
+ * _table_ の _id_ または _key_ に対応する値を _value_ に設定する。
  * 既存の値は上書きされる。
  */
 static VALUE
@@ -670,7 +670,7 @@ rb_grn_table_key_support_set_default_tokenizer (VALUE self, VALUE rb_tokenizer)
  * call-seq:
  *   table.normalize_key? -> true/false
  *
- * キーを正規化する場合は+true+、正規化しない場合は+false+を返
+ * キーを正規化する場合は +true+ 、正規化しない場合は +false+ を返
  * す。
  */
 static VALUE
@@ -689,7 +689,7 @@ rb_grn_table_key_normalize_key_p (VALUE self)
  * call-seq:
  *   table.support_key? -> true/false
  *
- * テーブルでキーを使えるなら+true+、使えないなら+false+を返
+ * テーブルでキーを使えるなら +true+ 、使えないなら +false+ を返
  * す。キーを使えないテーブルはGroonga::Arrayだけ。
  */
 static VALUE

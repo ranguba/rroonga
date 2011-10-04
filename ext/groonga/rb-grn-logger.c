@@ -256,37 +256,38 @@ rb_grn_logger_initialize (int argc, VALUE *argv, VALUE self)
  * groongaがログを出力する度に呼び出されるブロックを登録す
  * る。
  *
- * ブロックに渡されてくる引数は_level_, _time_, _title_,
- * _message_, _location_の5つで、_level_はSymbol、それ以外は
- * 全て文字列で渡される。その4つについては_options_で+false+
+ * ブロックに渡されてくる引数は _level_ ,  _time_ ,  _title_ ,
+ * _message_ ,  _location_ の5つで、 _level_ はSymbol、それ以外は
+ * 全て文字列で渡される。その4つについては _options_ で +false+
  * を指定することでブロックに渡さないようにすることができ、
  * その場合は空文字列が実際には渡される。
  *
- * _options_に指定可能な値は以下の通り。
- *
- * [+:level+]
- *   ログのレベルを+:none+, +:emergency+, +:alert+,
- *   +:critical+, +:error+, +:warning+, +:notice+, +:info+,
- *   +:debug+, +:dump+のいずれかで指定する。それより重要度が
+ * _options_ に指定可能な値は以下の通り。
+ * @param options [Hash] The name and value
+ *   pairs. Omitted names are initialized as the default value.
+ * @option options :level (:notice) The log level
+ *   ログのレベルを +:none+ ,  +:emergency+ ,  +:alert+ ,
+ *   +:critical+ , +:error+ , +:warning+ , +:notice+ , +:info+ ,
+ *   +:debug+ ,  +:dump+ のいずれかで指定する。それより重要度が
  *   低いログはブロックに渡されなくなる。デフォルトでは
- *   +:notice+。
+ *   +:notice+ 。
  *
- * [+:time+]
- *   ログが出力された時間をブロックに渡したいなら+true+を指
+ * @option options :time
+ *   ログが出力された時間をブロックに渡したいなら +true+ を指
  *   定する。デフォルトでは渡す。
  *
  * [+:title+]
- *   ログのタイトルをブロックに渡したいなら+true+を指定す
+ *   ログのタイトルをブロックに渡したいなら +true+ を指定す
  *   る。デフォルトでは渡す。(FIXME: groongaで実装されてい
  *   ない?)
  *
  * [+:message+]
- *   ログのメッセージをブロックに渡したいなら+true+を指定す
+ *   ログのメッセージをブロックに渡したいなら +true+ を指定す
  *   る。デフォルトでは渡す。
  *
  * [+:location+]
  *   ログの発生元のプロセスIDとgroongaのソースコードのファイ
- *   ル名、行番号、関数名をブロックに渡したいなら+true+を指
+ *   ル名、行番号、関数名をブロックに渡したいなら +true+ を指
  *   定する。デフォルトでは渡す。
  */
 static VALUE

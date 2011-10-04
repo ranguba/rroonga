@@ -43,38 +43,38 @@ VALUE rb_cGrnPatriciaTrie;
  * ブロックを指定すると、そのブロックに生成したテーブルが渡さ
  * れ、ブロックを抜けると自動的にテーブルが破棄される。
  *
- * _options_に指定可能な値は以下の通り。
+ * _options_ に指定可能な値は以下の通り。
+ * @param options [Hash] The name and value
+ *   pairs. Omitted names are initialized as the default value.
+ * @option options :context (Groonga::Context.default)
+ *   テーブルが利用するGroonga::Context。
  *
- * [+:context+]
- *   テーブルが利用するGroonga::Context。省略すると
- *   Groonga::Context.defaultを用いる。
- *
- * [+:name+]
+ * @option options :name (無名テーブル) The name
  *   テーブルの名前。名前をつけると、Groonga::Context#[]に名
  *   前を指定してテーブルを取得することができる。省略すると
  *   無名テーブルになり、テーブルIDでのみ取得できる。
  *
- * [+:path+]
+ * @option options :path (一時テーブル) The path
  *   テーブルを保存するパス。パスを指定すると永続テーブルとな
  *   り、プロセス終了後もレコードは保持される。次回起動時に
  *   Groonga::Context#[]で保存されたレコードを利用する
  *   ことができる。省略すると一時テーブルになり、プロセスが終
  *   了するとレコードは破棄される。
  *
- * [+:persistent+]
- *   +true+を指定すると永続テーブルとなる。+path+を省略した
- *   場合は自動的にパスが付加される。+:context+で指定した
+ * @option options :persistent The persistent
+ *   +true+ を指定すると永続テーブルとなる。 +path+ を省略した
+ *   場合は自動的にパスが付加される。 +:context+ で指定した
  *   Groonga::Contextに結びついているデータベースが一時デー
  *   タベースの場合は例外が発生する。
  *
- * [+:key_normalize+]
- *   +true+を指定するとキーを正規化する。
+ * @option options :key_normalize The key_normalize
+ *   +true+ を指定するとキーを正規化する。
  *
- * [+:key_with_sis+]
+ * @option options :key_with_sis The key_with_sis
  *   +true+を指定するとキーの文字列の全suffixが自動的に登
  *   録される。
  *
- * [+:key_type+]
+ * @option options :key_type The key_type
  *   キーの種類を示すオブジェクトを指定する。キーの種類には型
  *   名（"Int32"や"ShortText"など）またはGroonga::Typeまたは
  *   テーブル（Groonga::Array、Groonga::Hash、
@@ -93,20 +93,20 @@ VALUE rb_cGrnPatriciaTrie;
  *   省略した場合はShortText型をキーとして使用する。この場合、
  *   4096バイトまで使用可能である。
  *
- * [+:value_type+]
+ * @option options :value_type The value_type
  *   値の型を指定する。省略すると値のための領域を確保しない。
  *   値を保存したい場合は必ず指定すること。
  *
  *   参考: Groonga::Type.new
  *
- * [+:default_tokenizer+]
+ * @option options :default_tokenizer The default_tokenizer
  *   Groonga::IndexColumnで使用するトークナイザを指定する。
  *   デフォルトでは何も設定されていないので、テーブルに
  *   Groonga::IndexColumnを定義する場合は
  *   <tt>"TokenBigram"</tt>などを指定する必要がある。
  *
- * [+:sub_records+]
- *   +true+を指定すると#groupでグループ化したときに、
+ * @option options :sub_records The sub_records
+ *   +true+ を指定すると#groupでグループ化したときに、
  *   Groonga::Record#n_sub_recordsでグループに含まれるレコー
  *   ドの件数を取得できる。
  *
@@ -237,22 +237,22 @@ rb_grn_patricia_trie_s_create (int argc, VALUE *argv, VALUE klass)
  * call-seq:
  *   patricia_trie.search(key, options=nil) -> Groonga::Hash
  *
- * _key_にマッチするレコードのIDがキーに入っている
+ * _key_ にマッチするレコードのIDがキーに入っている
  * Groonga::Hashを返す。マッチするレコードがない場合は空の
  * Groonga::Hashが返る。
  *
- * _options_で+:result+を指定することにより、そのテーブルにマッ
+ * _options_ で +:result+ を指定することにより、そのテーブルにマッ
  * チしたレコードIDがキーのレコードを追加することができる。
- * +:result+にテーブルを指定した場合は、そのテーブルが返る。
+ * +:result+ にテーブルを指定した場合は、そのテーブルが返る。
  *
- * _options_に指定可能な値は以下の通り。
- *
- * [+:result+]
+ * _options_ に指定可能な値は以下の通り。
+ * @param options [Hash] The name and value
+ *   pairs. Omitted names are initialized as the default value.
+ * @option options :result The result
  *   結果を格納するテーブル。
- *
- * [+:operator+]
+ * @option options :operator (Groonga::Operator::OR)
  *   マッチしたレコードをどのように扱うか。指定可能な値は以
- *   下の通り。省略した場合はGroonga::Operator::OR。
+ *   下の通り。
  *
  *   [Groonga::Operator::OR]
  *     マッチしたレコードを追加。すでにレコードが追加され
@@ -332,7 +332,7 @@ rb_grn_patricia_trie_search (int argc, VALUE *argv, VALUE self)
  *   patricia_trie.scan(string) -> Array
  *   patricia_trie.scan(string) {|record, word, start, length| ... }
  *
- * _string_を走査し、_patricia_trie_内に格納されているキーに
+ * _string_ を走査し、 _patricia_trie_ 内に格納されているキーに
  * マッチした部分文字列の情報をブロックに渡す。複数のキーが
  * マッチする場合は最長一致するキーを優先する。
  *
@@ -343,10 +343,10 @@ rb_grn_patricia_trie_search (int argc, VALUE *argv, VALUE self)
  *   マッチした部分文字列。
  *
  * [_start_]
- *   _string_内での_word_の出現位置。（バイト単位）
+ *   _string_ 内での _word_ の出現位置。（バイト単位）
  *
  * [_length_]
- *   _word_の長さ。（バイト単位）
+ *   _word_ の長さ。（バイト単位）
  *
  * ブロックを指定しない場合は、マッチした部分文字列の情報を
  * まとめて配列として返す。
@@ -437,7 +437,7 @@ rb_grn_patricia_trie_scan (VALUE self, VALUE rb_string)
  * call-seq:
  *   patricia_trie.prefix_search(prefix) -> Groonga::Hash
  *
- * キーが_prefix_に前方一致するレコードのIDがキーに入っている
+ * キーが _prefix_ に前方一致するレコードのIDがキーに入っている
  * Groonga::Hashを返す。マッチするレコードがない場合は空の
  * Groonga::Hashが返る。
  *
@@ -476,7 +476,7 @@ rb_grn_patricia_trie_prefix_search (VALUE self, VALUE rb_prefix)
  *   table.register_key_with_sis? -> true/false
  *
  * キーを登録するときに文字列の全suffixも一緒に登録する場合
- * は+true+、登録しない場合は+false+を返す。
+ * は +true+ 、登録しない場合は +false+ を返す。
  */
 static VALUE
 rb_grn_patricia_trie_register_key_with_sis_p (VALUE self)
@@ -591,44 +591,45 @@ rb_grn_patricia_trie_open_grn_prefix_cursor (int argc, VALUE *argv, VALUE self,
  *   table.open_prefix_cursor(prefix, options={}) -> Groonga::PatriciaTrieCursor
  *   table.open_prefix_cursor(prefix, options={}) {|cursor| ... }
  *
- * _prefix_に前方一致検索をするカーソルを生成して返す。ブロッ
+ * _prefix_ に前方一致検索をするカーソルを生成して返す。ブロッ
  * クを指定すると、そのブロックに生成したカーソルが渡され、ブ
  * ロックを抜けると自動的にカーソルが破棄される。
  *
- * _options_に指定可能な値は以下の通り。
+ * _options_ に指定可能な値は以下の通り。
+ * @param options [Hash] The name and value
+ *   pairs. Omitted names are initialized as the default value.
+ * @option options :key_bytes The key_bytes
+ *  _prefix_ のサイズ（byte）
  *
- * [+:key_bytes+]
- *  _prefix_のサイズ（byte）
+ * @option options :key_bits The key_bits
+ *  _prefix_ のサイズ（bit）
  *
- * [+:key_bits+]
- *  _prefix_のサイズ（bit）
- *
- * [+:offset+]
- *   該当する範囲のレコードのうち、(0ベースで)_:offset_番目
+ * @option options :offset The offset
+ *   該当する範囲のレコードのうち、(0ベースで) _:offset_ 番目
  *   からレコードを取り出す。
  *
- * [+:limit+]
- *   該当する範囲のレコードのうち、_:limit_件のみを取り出す。
+ * @option options :limit The limit
+ *   該当する範囲のレコードのうち、 _:limit_ 件のみを取り出す。
  *   省略された場合または-1が指定された場合は、全件が指定され
  *   たものとみなす。
  *
- * [+:order+]
- *   +:asc+または+:ascending+を指定すると昇順にレコードを取
+ * @option options :order The order
+ *   +:asc+ または +:ascending+ を指定すると昇順にレコードを取
  *   り出す。
- *   +:desc+または+:descending+を指定すると降順にレコードを
+ *   +:desc+ または +:descending+ を指定すると降順にレコードを
  *   取り出す。
  *
- * [+:order_by+]
- *   +:id+を指定するとID順にレコードを取り出す。（デフォルト）
+ * @option options :order_by (:id) The order_by
+ *   +:id+ を指定するとID順にレコードを取り出す。（デフォルト）
  *
  *   +:key+指定するとキー順にレコードを取り出す。
  *
- * [+:greater_than+]
- *   +true+を指定すると_prefix_で指定した値に一致した[+key+]を
+ * @option options :greater_than The greater_than
+ *   +true+ を指定すると _prefix_ で指定した値に一致した [ +key+ ] を
  *   範囲に含まない。
  *
- * [+:less_than+]
- *   +true+を指定すると_prefix_で指定した値に一致した[+key+]を
+ * @option options :less_than The less_than
+ *   +true+ を指定すると _prefix_ で指定した値に一致した [ +key+ ] を
  *   範囲に含まない。
  */
 static VALUE
@@ -714,36 +715,37 @@ rb_grn_patricia_trie_open_grn_rk_cursor (int argc, VALUE *argv, VALUE self,
  *   table.open_rk_cursor(key, options={}) -> Groonga::PatriciaTrieCursor
  *   table.open_rk_cursor(key, options={}) {|cursor| ... }
  *
- * _table_のキーはカタカナである必要がある。また、エンコーディ
- * ングはUTF-8である必要がある。ローマ字やひらがなで_key_を指
- * 定しても、_key_に対応するカタカナのキーを検索するカーソル
+ * _table_ のキーはカタカナである必要がある。また、エンコーディ
+ * ングはUTF-8である必要がある。ローマ字やひらがなで _key_ を指
+ * 定しても、 _key_ に対応するカタカナのキーを検索するカーソル
  * を生成して返す。ブロックを指定すると、そのブロックに生成し
  * たカーソルが渡され、ブロックを抜けると自動的にカーソルが破
  * 棄される。
  *
- * _options_に指定可能な値は以下の通り。
- *
- * [+:key_bytes+]
+ * _options_ に指定可能な値は以下の通り。
+ * @param options [Hash] The name and value
+ *   pairs. Omitted names are initialized as the default value.
+ * @option options :key_bytes The key_bytes
  *  _key_のサイズ（byte）
  *
- * [+:key_bits+]
+ * @option options :key_bits The key_bits
  *  _key_のサイズ（bit）（現在は未サポート）
  *
- * [+:offset+]
+ * @option options :offset The offset
  *   該当する範囲のレコードのうち、(0ベースで)_:offset_番目
  *   からレコードを取り出す。
  *
- * [+:limit+]
- *   該当する範囲のレコードのうち、_:limit_件のみを取り出す。
+ * @option options :limit The limit
+ *   該当する範囲のレコードのうち、 _:limit_ 件のみを取り出す。
  *   省略された場合または-1が指定された場合は、全件が指定され
  *   たものとみなす。
  *
- * [+:greater_than+]
- *   +true+を指定すると_key_で指定した値に一致した[+key+]を
+ * @option options :greater_than The greater_than
+ *   +true+ を指定すると _key_ で指定した値に一致した [ +key+ ] を
  *   範囲に含まない。
  *
- * [+:less_than+]
- *   +true+を指定すると_key_で指定した値に一致した[+key+]を
+ * @option options :less_than The less_than
+ *   +true+ を指定すると _key_ で指定した値に一致した [ +key+ ] を
  *   範囲に含まない。
  */
 static VALUE
@@ -829,30 +831,31 @@ rb_grn_patricia_trie_open_grn_near_cursor (int argc, VALUE *argv, VALUE self,
  *   table.open_near_cursor(key, options={}) -> Groonga::PatriciaTrieCursor
  *   table.open_near_cursor(key, options={}) {|cursor| ... }
  *
- * _key_に近い順にレコードを取り出すカーソルを生成して返す。
+ * _key_ に近い順にレコードを取り出すカーソルを生成して返す。
  * ブロックを指定すると、そのブロックに生成したカーソルが渡さ
  * れ、ブロックを抜けると自動的にカーソルが破棄される。
  *
- * _options_に指定可能な値は以下の通り。
- *
- * [+:size+]
+ * _options_ に指定可能な値は以下の通り。
+ * @param options [Hash] The name and value
+ *   pairs. Omitted names are initialized as the default value.
+ * @option options :size The size
  *   _size_バイト以降のデータが同じキーのレコードに限定する。
  *
- * [+:offset+]
+ * @option options :offset The offset
  *   該当する範囲のレコードのうち、(0ベースで)_:offset_番目
  *   からレコードを取り出す。
  *
- * [+:limit+]
+ * @option options :limit The limit
  *   該当する範囲のレコードのうち、_:limit_件のみを取り出す。
  *   省略された場合または-1が指定された場合は、全件が指定され
  *   たものとみなす。
  *
- * [+:greater_than+]
- *   +true+を指定すると_key_で指定した値に一致した[+key+]を
+ * @option options :greater_than The greater_than
+ *   +true+ を指定すると _key_ で指定した値に一致した [ +key+ ] を
  *   範囲に含まない。
  *
- * [+:less_than+]
- *   +true+を指定すると_key_で指定した値に一致した[+key+]を
+ * @option options :less_than
+ *   +true+ を指定すると _key_ で指定した値に一致した [ +key+ ] を
  *   範囲に含まない。
  */
 static VALUE

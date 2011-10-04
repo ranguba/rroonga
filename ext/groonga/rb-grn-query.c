@@ -132,17 +132,17 @@ rb_grn_operator_from_ruby_object (VALUE rb_operator)
  * call-seq:
  *   query.new(string, options={})
  *
- * _string_をパースした上で、クエリを作成する。作成されたオ
+ * _string_ をパースした上で、クエリを作成する。作成されたオ
  * ブジェクトはGroonga::IndexColumn#searchに渡すことで使用す
  * ることができる。
  *
- * _options_に指定可能な値は以下の通り。
+ * _options_ に指定可能な値は以下の通り。
+ * @param options [Hash] The name and value
+ *   pairs. Omitted names are initialized as the default value.
+ * @option options :context (Groonga::Context.default) The context
+ *   クエリが利用するGroonga::Context。
  *
- * [+:context+]
- *   クエリが利用するGroonga::Context。省略すると
- *   Groonga::Context.defaultを用いる。
- *
- * [+:default_operator+]
+ * @option options :default_operator The default_operator
  *   演算子の既定値(演算子を省略した場合にどの演算を行うか)
  *   を指定する。
  *
@@ -153,7 +153,7 @@ rb_grn_operator_from_ruby_object (VALUE rb_operator)
  *     (FIXME: 挙動の違いを検証する必要性あり?
  *            Groonga::Expressionとの関連性は?)
  *
- * [+:max_expressions+]
+ * @option options :max_expressions
  *   検索クエリに指定する式の最大値を指定する。
  */
 static VALUE
@@ -230,8 +230,8 @@ rb_grn_query_close (VALUE self)
  * call-seq:
  *   query.closed? -> true/false
  *
- * _query_が開放済みの場合は+true+を返し、そうでない場合は
- * +false+を返す。
+ * _query_ が開放済みの場合は +true+ を返し、そうでない場合は
+ * +false+ を返す。
  */
 static VALUE
 rb_grn_query_closed_p (VALUE self)

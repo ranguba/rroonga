@@ -228,27 +228,28 @@ rb_grn_table_inspect (VALUE self)
  *   table.define_column(name, value_type, options={}) ->
  *     Groonga::FixSizeColumnかGroonga::VariableSizeColumn
  *
- * テーブルに名前が_name_で型が_value_type_のカラムを定義
+ * テーブルに名前が _name_ で型が _value_type_ のカラムを定義
  * し、新しく定義されたカラムを返す。
  *
- * _options_に指定可能な値は以下の通り。
- *
- * [+:path+]
+ * _options_ に指定可能な値は以下の通り。
+ * @param options [Hash] The name and value
+ *   pairs. Omitted names are initialized as the default value.
+ * @option options :path The path
  *   カラムを保存するパス。
  *
- * [+:persistent+]
- *   +true+を指定すると永続カラムとなる。省略した場合は永
- *   続カラムとなる。+:path+を省略した場合は自動的にパスが
+ * @option options :persistent (永続カラム) The persistent
+ *   +true+ を指定すると永続カラムとなる。省略した場合は永
+ *   続カラムとなる。 +:path+ を省略した場合は自動的にパスが
  *   付加される。
  *
- * [+:type+]
+ * @option options :type (:scalar) The type
  *   カラムの値の格納方法について指定する。省略した場合は、
- *   +:scalar+になる。
+ *   +:scalar+ になる。
  *
  *   [+:scalar+] スカラ値(単独の値)を格納する。
  *   [+:vector+] 値の配列を格納する。
  *
- * [+:compress+]
+ * @param options :compress The compress
  *   値の圧縮方法を指定する。省略した場合は、圧縮しない。
  *
  *   [+:zlib+] 値をzlib圧縮して格納する。
@@ -366,32 +367,33 @@ n_gram_tokenizer_p(grn_ctx *context, grn_obj *tokenizer)
  * call-seq:
  *   table.define_index_column(name, value_type, options={}) -> Groonga::IndexColumn
  *
- * テーブルに名前が_name_で型が_value_type_のインデックスカ
+ * テーブルに名前が _name_ で型が _value_type_ のインデックスカ
  * ラムを定義し、新しく定義されたカラムを返す。
  *
- * _options_に指定可能な値は以下の通り。
- *
- * [+:path+]
+ * _options_ に指定可能な値は以下の通り。
+ * @param options [Hash] The name and value
+ *   pairs. Omitted names are initialized as the default value.
+ * @option options :path The path
  *   カラムを保存するパス。
  *
- * [+:persistent+]
- *   +true+を指定すると永続カラムとなる。省略した場合は永
- *   続カラムとなる。+:path+を省略した場合は自動的にパスが
+ * @option options :persistent (永続カラム) The persistent
+ *   +true+ を指定すると永続カラムとなる。省略した場合は永
+ *   続カラムとなる。 +:path+ を省略した場合は自動的にパスが
  *   付加される。
  *
- * [+:with_section+]
+ * @option options :with_section The with_section
  *   転置索引にsection(段落情報)を合わせて格納する。
  *
- * [+:with_weight+]
+ * @option options :with_weight  The with_weight
  *   転置索引にweight情報を合わせて格納する。
  *
- * [+:with_position+]
+ * @option options :with_position The with_position
  *   転置索引に出現位置情報を合わせて格納する。
  *
- * [+:source+]
+ * @option options :source The source
  *  インデックス対象となるカラムを指定する。+:sources+との併用はできない。
  *
- * [+:sources+]
+ * @option options :sources The sources
  *  インデックス対象となる複数のカラムを指定する。+:source+との併用はできない。
  */
 static VALUE
@@ -521,8 +523,8 @@ ruby_object_to_column_name (VALUE rb_name,
  * call-seq:
  *   table.column(name) -> Groonga::Column or nil
  *
- * テーブルの_name_に対応するカラムを返す。カラムが存在しな
- * い場合は+nil+を返す。
+ * テーブルの _name_ に対応するカラムを返す。カラムが存在しな
+ * い場合は +nil+ を返す。
  */
 VALUE
 rb_grn_table_get_column (VALUE self, VALUE rb_name)
@@ -602,8 +604,8 @@ rb_grn_table_get_column_surely (VALUE self, VALUE rb_name)
  * call-seq:
  *   table.columns(name=nil) -> Groonga::Columnの配列
  *
- * テーブルの全てのカラムを返す。_name_が指定された場合はカ
- * ラム名の先頭が_name_で始まるカラムを返す。
+ * テーブルの全てのカラムを返す。 _name_ が指定された場合はカ
+ * ラム名の先頭が _name_ で始まるカラムを返す。
  */
 static VALUE
 rb_grn_table_get_columns (int argc, VALUE *argv, VALUE self)
@@ -670,7 +672,7 @@ rb_grn_table_get_columns (int argc, VALUE *argv, VALUE self)
  * call-seq:
  *   table.have_column?(name) -> true/false
  *
- * テーブルが_name_カラムを持っている場合は+true+を返す。
+ * テーブルが _name_ カラムを持っている場合は +true+ を返す。
  */
 static VALUE
 rb_grn_table_have_column (VALUE self, VALUE rb_name)
@@ -769,43 +771,44 @@ rb_grn_table_open_grn_cursor (int argc, VALUE *argv, VALUE self,
  * カーソルが破棄される。
  *
  * _options_に指定可能な値は以下の通り。
- *
- * [+:min+]
+ * @param options [Hash] The name and value
+ *   pairs. Omitted names are initialized as the default value.
+ * @option options :min The min
  *  キーの下限
  *
- * [+:max+]
+ * @option  options :max The max
  *  キーの上限
  *
- * [+:offset+]
- *   該当する範囲のレコードのうち、(0ベースで)_:offset_番目
+ * @option options :offset The offset
+ *   該当する範囲のレコードのうち、(0ベースで) _:offset_ 番目
  *   からレコードを取り出す。
  *
- * [+:limit+]
- *   該当する範囲のレコードのうち、_:limit_件のみを取り出す。
+ * @option options :limit The limit
+ *   該当する範囲のレコードのうち、 _:limit_ 件のみを取り出す。
  *   省略された場合または-1が指定された場合は、全件が指定され
  *   たものとみなす。
  *
- * [+:order+]
- *   +:asc+または+:ascending+を指定すると昇順にレコードを取
+ * @option options :order (asc) The order
+ *   +:asc+ または +:ascending+ を指定すると昇順にレコードを取
  *   り出す。（デフォルト）
  *
- *   +:desc+または+:descending+を指定すると降順にレコードを
+ *   +:desc+ または +:descending+ を指定すると降順にレコードを
  *   取り出す。
  *
- * [+:order_by+]
- *   +:id+を指定するとID順にレコードを取り出す。（Arrayと
+ * @option options :order_by The order_by
+ *   +:id+ を指定するとID順にレコードを取り出す。（Arrayと
  *   Hashのデフォルト）
  *
- *   +:key+指定するとキー順にレコードを取り出す。ただし、
+ *   +:key+ 指定するとキー順にレコードを取り出す。ただし、
  *   Groonga::PatriciaTrieにしか使えない。（PatriciaTrieのデ
  *   フォルト）
  *
- * [+:greater_than+]
- *   +true+を指定すると+:min+で指定した値に一致した[+key+]を
+ * @option options :greater_than The greater_than
+ *   +true+ を指定すると +:min+ で指定した値に一致した [ +key+ ] を
  *   範囲に含まない。
  *
- * [+:less_than+]
- *   +true+を指定すると+:max+で指定した値に一致した[+key+]を
+ * @option options :less_than The less_than
+ *   +true+ を指定すると +:max+ で指定した値に一致した [ +key+ ] を
  *   範囲に含まない。
  */
 static VALUE
@@ -874,7 +877,7 @@ rb_grn_table_get_size (VALUE self)
  * call-seq:
  *   table.empty? -> true/false
  *
- * テーブルにレコードが登録されていなければ+true+を返す。
+ * テーブルにレコードが登録されていなければ +true+ を返す。
  */
 static VALUE
 rb_grn_table_empty_p (VALUE self)
@@ -953,7 +956,7 @@ rb_grn_table_each (VALUE self)
  * call-seq:
  *   table.delete(id)
  *
- * テーブルの_id_に対応するレコードを削除する。
+ * テーブルの _id_ に対応するレコードを削除する。
  */
 VALUE
 rb_grn_table_delete (VALUE self, VALUE rb_id)
@@ -982,7 +985,7 @@ rb_grn_table_delete (VALUE self, VALUE rb_id)
  * テーブルに登録されているレコードを_keys_で指定されたルー
  * ルに従ってソートしたレコードの配列を返す。
  *
- * _order_には+:asc+, +:ascending+, +:desc+, +:descending+の
+ * _order_ には +:asc+ ,  +:ascending+ , +:desc+ , +:descending+ の
  * いずれを指定する。
  *
  * [ハッシュの配列で指定する方法]
@@ -1004,19 +1007,20 @@ rb_grn_table_delete (VALUE self, VALUE rb_id)
  *     ]
  *
  * [ソートキーの配列で指定する方法]
- *   _order_は常に昇順（+:ascending+）になるが、最も簡単
+ *   _order_ は常に昇順（+:ascending+）になるが、最も簡単
  *   に指定できる。
  *
  *     ["第1ソートキー", "第2ソートキー", ...]
  *
- * _options_に指定可能な値は以下の通り。
- *
- * [+:offset+]
- *   ソートされたレコードのうち、(0ベースで)_:offset_番目
+ * _options_ に指定可能な値は以下の通り。
+ * @param options [Hash] The name and value
+ *   pairs. Omitted names are initialized as the default value.
+ * @option options :offset The offset
+ *   ソートされたレコードのうち、(0ベースで) _:offset_ 番目
  *   からレコードを取り出す。
  *
- * [+:limit+]
- *   ソートされたレコードのうち、_:limit_件のみを取り出す。
+ * @option options :limit The limit
+ *   ソートされたレコードのうち、 _:limit_ 件のみを取り出す。
  *   省略された場合または-1が指定された場合は、全件が指定され
  *   たものとみなす。
  */
@@ -1143,7 +1147,7 @@ rb_grn_table_sort (int argc, VALUE *argv, VALUE self)
  *   table.group([key1, key2, ...], options={}) -> [Groonga::Hash, ...]
  *   table.group(key, options={}) -> Groonga::Hash
  *
- * _table_のレコードを_key1_, _key2_, _..._で指定したキーの
+ * _table_ のレコードを _key1_ , _key2_ , _..._ で指定したキーの
  * 値でグループ化する。多くの場合、キーにはカラムを指定する。
  * カラムはカラム名（文字列）でも指定可能。
  */
@@ -1244,7 +1248,7 @@ rb_grn_table_group (int argc, VALUE *argv, VALUE self)
  * call-seq:
  *   table[id] -> Groonga::Record
  *
- * _table_の_id_に対応するGroonga::Recordを返す。
+ * _table_ の _id_ に対応するGroonga::Recordを返す。
  *
  * 0.9.0から値ではなくGroonga::Recordを返すようになった。
  */
@@ -1287,7 +1291,7 @@ rb_grn_table_get_value (VALUE self, VALUE rb_id)
  *   table.value(id) -> 値
  *   table.value(id, :id => true) -> 値
  *
- * _table_の_id_に対応する値を返す。
+ * _table_ の _id_ に対応する値を返す。
  *
  * <tt>:id => true</tt>が指定できるのは利便性のため。
  * Groonga::ArrayでもGroonga::HashやGroonga::PatriciaTrieと
@@ -1347,7 +1351,7 @@ rb_grn_table_set_value (VALUE self, VALUE rb_id, VALUE rb_value)
  *   table.set_value(id, value)
  *   table.set_value(id, value, :id => true)
  *
- * _table_の_id_に対応する値として_value_設定する。既存の値は
+ * _table_ の _id_ に対応する値として _value_ 設定する。既存の値は
  * 上書きされる。
  *
  * <tt>:id => true</tt>が指定できるのは利便性のため。
@@ -1400,7 +1404,7 @@ rb_grn_table_get_column_value (VALUE self, VALUE rb_id, VALUE rb_name)
  *   table.column_value(id, name) -> 値
  *   table.column_value(id, name, :id => true) -> 値
  *
- * _table_の_id_に対応するカラム_name_の値を返す。
+ * _table_ の _id_ に対応するカラム _name_ の値を返す。
  *
  * <tt>:id => true</tt>が指定できるのは利便性のため。
  * Groonga::ArrayでもGroonga::HashやGroonga::PatriciaTrieと
@@ -1456,7 +1460,7 @@ rb_grn_table_set_column_value (VALUE self, VALUE rb_id,
  *   table.set_column_value(id, name, value)
  *   table.set_column_value(id, name, value, :id => true)
  *
- * _table_の_id_に対応するカラム_name_の値として_value_設定す
+ * _table_ の _id_ に対応するカラム _name_ の値として _value_ 設定す
  * る。既存の値は上書きされる。
  *
  * <tt>:id => true</tt>が指定できるのは利便性のため。
@@ -1492,12 +1496,12 @@ rb_grn_table_set_column_value_convenience (int argc, VALUE *argv, VALUE self)
  * call-seq:
  *   table.unlock(options={})
  *
- * _table_のロックを解除する。
+ * _table_ のロックを解除する。
  *
  * 利用可能なオプションは以下の通り。
  *
  * [_:id_]
- *   _:id_で指定したレコードのロックを解除する。（注:
+ *   _:id_ で指定したレコードのロックを解除する。（注:
  *   groonga側が未実装のため、現在は無視される）
  */
 static VALUE
@@ -1543,18 +1547,19 @@ rb_grn_table_unlock_ensure (VALUE self)
  *   table.lock(options={})
  *   table.lock(options={}) {}
  *
- * _table_をロックする。ロックに失敗した場合は
+ * _table_ をロックする。ロックに失敗した場合は
  * Groonga::ResourceDeadlockAvoided例外が発生する。
  *
  * ブロックを指定した場合はブロックを抜けたときにunlockする。
  *
  * 利用可能なオプションは以下の通り。
- *
- * [_:timeout_]
+ * @param options [Hash] The name and value
+ *   pairs. Omitted names are initialized as the default value.
+ * @option options :timeout The timeout
  *   ロックを獲得できなかった場合は_:timeout_秒間ロックの獲
  *   得を試みる。_:timeout_秒以内にロックを獲得できなかった
  *   場合は例外が発生する。
- * [_:id_]
+ * @option options :id The id
  *   _:id_で指定したレコードをロックする。（注: groonga側が
  *   未実装のため、現在は無視される）
  */
@@ -1603,12 +1608,13 @@ rb_grn_table_lock (int argc, VALUE *argv, VALUE self)
  * call-seq:
  *   table.clear_lock(options={})
  *
- * _table_のロックを強制的に解除する。
+ * _table_ のロックを強制的に解除する。
  *
  * 利用可能なオプションは以下の通り。
- *
- * [_:id_]
- *   _:id_で指定したレコードのロックを強制的に解除する。
+ * @param options [Hash] The name and value
+ *   pairs. Omitted names are initialized as the default value.
+ * @option options :id The id
+ *   _:id_ で指定したレコードのロックを強制的に解除する。
  *   （注: groonga側が未実装のため、現在は無視される。実装さ
  *   れるのではないかと思っているが、実装されないかもしれな
  *   い。）
@@ -1646,12 +1652,13 @@ rb_grn_table_clear_lock (int argc, VALUE *argv, VALUE self)
  * call-seq:
  *   table.locked?(options={})
  *
- * _table_がロックされていれば+true+を返す。
+ * _table_ がロックされていれば +true+ を返す。
  *
  * 利用可能なオプションは以下の通り。
- *
- * [_:id_]
- *   _:id_で指定したレコードがロックされていれば+true+を返す。
+ * @param options [options] The name and value
+ *   pairs. Omitted names are initialized as the default value.
+ * @option options :id The id
+ *   _:id_ で指定したレコードがロックされていれば +true+ を返す。
  *   （注: groonga側が未実装のため、現在は無視される。実装さ
  *   れるのではないかと思っているが、実装されないかもしれな
  *   い。）
@@ -1687,8 +1694,8 @@ rb_grn_table_is_locked (int argc, VALUE *argv, VALUE self)
  *   table.select(query, options) -> Groonga::Hash
  *   table.select(expression, options) -> Groonga::Hash
  *
- * _table_からブロックまたは文字列で指定した条件にマッチする
- * レコードを返す。返されたテーブルには+expression+という特
+ * _table_ からブロックまたは文字列で指定した条件にマッチする
+ * レコードを返す。返されたテーブルには +expression+ という特
  * 異メソッドがあり、指定した条件を表している
  * Groonga::Expressionを取得できる。
  * Groonga::Expression#snippetを使うことにより、指定した条件
@@ -1713,7 +1720,7 @@ rb_grn_table_is_locked (int argc, VALUE *argv, VALUE self)
  *   Ruby/<em>groonga</em>は<em>groonga</em>のいわゆるDB-APIの層の...
  *   ---
  *
- * _query_には「[カラム名]:[演算子][値]」という書式で条件を
+ * _query_ には「[カラム名]:[演算子][値]」という書式で条件を
  * 指定する。演算子は以下の通り。
  *
  * [なし]
@@ -1736,7 +1743,7 @@ rb_grn_table_is_locked (int argc, VALUE *argv, VALUE self)
  *   "description:@groonga" # "description"カラムが
  *                          # "groonga"を含んでいるレコードにマッチ
  *
- * _expression_には既に作成済みのGroonga::Expressionを渡す
+ * _expression_ には既に作成済みのGroonga::Expressionを渡す
  *
  * ブロックで条件を指定する場合は
  * Groonga::RecordExpressionBuilderを参照。
@@ -1757,13 +1764,14 @@ rb_grn_table_is_locked (int argc, VALUE *argv, VALUE self)
  *  p result.collect {|record| record.content}
  *    # => ["Hello Good-bye!", "Hello World"]
  *
- * _options_に指定可能な値は以下の通り。
- *
- * [+:default_column+]
+ * _options_ に指定可能な値は以下の通り。
+ * @param options [Hash] The name and value
+ *   pairs. Omitted names are initialized as the default value.
+ * @option options :default_column
  *   "column_name:hoge"ではなく"hoge"のようにcolumn_nameが指
  *   定されない条件の検索対象となるカラムを指定する。
  *
- * [+:operator+]
+ * @option options :operator (Groonga::Operator::OR) The operator
  *   マッチしたレコードをどのように扱うか。指定可能な値は以
  *   下の通り。省略した場合はGroonga::Operator::OR。
  *
@@ -1777,31 +1785,31 @@ rb_grn_table_is_locked (int argc, VALUE *argv, VALUE self)
  *   [Groonga::Operator::ADJUST] マッチしたレコードのスコア
  *                               を増加。
  *
- * [+:result+]
+ * @option options :result The result
  *   検索結果を格納するテーブル。マッチしたレコードが追加さ
  *   れていく。省略した場合は新しくテーブルを作成して返す。
  *
- * [+:name+]
+ * @option options :name The name
  *   条件の名前。省略した場合は名前を付けない。
  *
- * [+:syntax+]
- *   _query_の構文。省略した場合は+:query+。
+ * @option options :syntax The syntax
+ *   _query_ の構文。省略した場合は +:query+ 。
  *
  *   参考: Groonga::Expression#parse.
  *
- * [+:allow_pragma+]
+ * @option options :allow_pragma The allow_pragma
  *   query構文時にプラグマを利用するかどうか。省略した場合は
  *   利用する。
  *
  *   参考: Groonga::Expression#parse.
  *
- * [+:allow_column+]
+ * @option options :allow_column The allow_column
  *   query構文時にカラム指定を利用するかどうか。省略した場合
  *   は利用する。
  *
  *   参考: Groonga::Expression#parse.
  *
- * [+:allow_update+]
+ * @option options :allow_update The allow_update
  *   script構文時に更新操作を利用するかどうか。省略した場合
  *   は利用する。
  *
@@ -1918,8 +1926,8 @@ rb_grn_table_set_operation_bang (VALUE self, VALUE rb_other,
  * call-seq:
  *   table.union!(other) -> Groonga::Table
  *
- * キーを比較し、_table_には登録されていない_other_のレコー
- * ドを_table_に作成する。
+ * キーを比較し、 _table_ には登録されていない _other_ のレコー
+ * ドを _table_ に作成する。
  *
  */
 static VALUE
@@ -1933,8 +1941,8 @@ rb_grn_table_union_bang (VALUE self, VALUE rb_other)
  * call-seq:
  *   table.intersection!(other) -> Groonga::Table
  *
- * キーを比較し、_other_には登録されていないレコードを
- * _table_から削除する。
+ * キーを比較し、 _other_ には登録されていないレコードを
+ * _table_ から削除する。
  *
  */
 static VALUE
@@ -1947,7 +1955,7 @@ rb_grn_table_intersection_bang (VALUE self, VALUE rb_other)
  * call-seq:
  *   table.difference!(other) -> Groonga::Table
  *
- * キーを比較し、_other_にも登録されているレコードを_table_
+ * キーを比較し、 _other_ にも登録されているレコードを _table_
  * から削除する。
  *
  */
@@ -1961,8 +1969,8 @@ rb_grn_table_difference_bang (VALUE self, VALUE rb_other)
  * call-seq:
  *   table.merge!(other) -> Groonga::Table
  *
- * キーを比較し、_other_にも登録されている_table_のレコード
- * のスコアを_other_のスコアと同値にする。
+ * キーを比較し、 _other_ にも登録されている _table_ のレコード
+ * のスコアを _other_ のスコアと同値にする。
  *
  */
 static VALUE
@@ -1975,8 +1983,8 @@ rb_grn_table_merge_bang (VALUE self, VALUE rb_other)
  * call-seq:
  *   table.support_key? -> true/false
  *
- * _table_に主キーが設定されていれば+true+、されていなければ
- * +false+を返す。
+ * _table_ に主キーが設定されていれば +true+ 、されていなければ
+ * +false+ を返す。
  */
 static VALUE
 rb_grn_table_support_key_p (VALUE self)
@@ -1989,7 +1997,7 @@ rb_grn_table_support_key_p (VALUE self)
  *   table.support_sub_records? -> true/false
  *
  * グループ化したとき、テーブルにグループに含まれるレコード
- * 数を格納できる場合は+true+、格納できない場合は+false+を返
+ * 数を格納できる場合は +true+ 、格納できない場合は +false+ を返
  * す。
  */
 static VALUE
@@ -2008,8 +2016,8 @@ rb_grn_table_support_sub_records_p (VALUE self)
  * call-seq:
  *   table.exist?(id) -> true/false
  *
- * _table_に_id_で指定したIDのレコードが存在する場合は+true+、
- * 存在しない場合は+false+を返す。
+ * _table_ に _id_ で指定したIDのレコードが存在する場合は +true+ 、
+ * 存在しない場合は +false+ を返す。
  *
  * 注意: 実行には相応のコストがかかるのであまり頻繁に呼ばな
  * いようにして下さい。

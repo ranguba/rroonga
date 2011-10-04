@@ -527,7 +527,7 @@ rb_grn_object_deconstruct (RbGrnObject *rb_grn_object,
  * call-seq:
  *   object.close
  *
- * _object_が使用しているリソースを開放する。これ以降_object_を
+ * _object_ が使用しているリソースを開放する。これ以降 _object_ を
  * 使うことはできない。
  */
 VALUE
@@ -554,7 +554,7 @@ rb_grn_object_close (VALUE self)
  * call-seq:
  *   object.unlink
  *
- * _object_のリファレンスカウンタを1減少する。
+ * _object_ のリファレンスカウンタを1減少する。
  */
 VALUE
 rb_grn_object_unlink (VALUE self)
@@ -582,8 +582,8 @@ rb_grn_object_unlink (VALUE self)
  * call-seq:
  *   object.closed? -> true/false
  *
- * _object_が開放済みの場合は+true+を返し、そうでない場合は
- * +false+を返す。
+ * _object_ が開放済みの場合は+true+を返し、そうでない場合は
+ * +false+ を返す。
  */
 VALUE
 rb_grn_object_closed_p (VALUE self)
@@ -929,7 +929,7 @@ rb_grn_object_inspect_footer (VALUE self, VALUE inspected)
  * call-seq:
  *   object.inspect -> 詳細情報
  *
- * _object_の詳細を示した文字列を返す。デバッグ用。
+ * _object_ の詳細を示した文字列を返す。デバッグ用。
  */
 static VALUE
 rb_grn_object_inspect (VALUE self)
@@ -950,8 +950,8 @@ rb_grn_object_inspect (VALUE self)
  * call-seq:
  *   object.id -> ID/nil
  *
- * _object_のIDを返す。_object_が#closed?なときやIDがない場合
- * は+nil+を返す。
+ * _object_ のIDを返す。 _object_ が#closed?なときやIDがない場合
+ * は +nil+ を返す。
  */
 VALUE
 rb_grn_object_get_id (VALUE self)
@@ -976,8 +976,8 @@ rb_grn_object_get_id (VALUE self)
  * call-seq:
  *   object.path -> ファイルパス/nil
  *
- * _object_に対応するファイルパスを返す。一時_object_
- * なら+nil+を返す。
+ * _object_ に対応するファイルパスを返す。一時 _object_
+ * なら +nil+ を返す。
  */
 static VALUE
 rb_grn_object_get_path (VALUE self)
@@ -1003,8 +1003,8 @@ rb_grn_object_get_path (VALUE self)
  * call-seq:
  *   object.temporary? -> true/false
  *
- * _object_が一時オブジェクトなら+true+、永続オブジェクトな
- * ら+false+を返す。
+ * _object_ が一時オブジェクトなら +true+ 、永続オブジェクトな
+ * ら +false+ を返す。
  */
 static VALUE
 rb_grn_object_temporary_p (VALUE self)
@@ -1024,8 +1024,8 @@ rb_grn_object_temporary_p (VALUE self)
  * call-seq:
  *   object.persistent? -> true/false
  *
- * _object_が永続オブジェクトなら+true+、一時オブジェクトな
- * ら+false+を返す。
+ * _object_ が永続オブジェクトなら +true+ 、一時オブジェクトな
+ * ら +false+ を返す。
  */
 static VALUE
 rb_grn_object_persistent_p (VALUE self)
@@ -1045,9 +1045,9 @@ rb_grn_object_persistent_p (VALUE self)
  * call-seq:
  *   object.domain -> Groonga::Object/nil
  *
- * _object_の属しているGroonga::Objectを返す。例えば、
+ * _object_ の属しているGroonga::Objectを返す。例えば、
  * Groonga::ColumnはGroonga::Tableを返す。属している
- * Groonga::Objectがない場合は+nil+を返す。
+ * Groonga::Objectがない場合は +nil+ を返す。
  */
 static VALUE
 rb_grn_object_get_domain (VALUE self)
@@ -1083,7 +1083,7 @@ rb_grn_object_get_domain (VALUE self)
  * call-seq:
  *   object.name -> 名前/nil
  *
- * _object_の名前を返す。無名オブジェクトの場合は+nil+を返す。
+ * _object_ の名前を返す。無名オブジェクトの場合は +nil+ を返す。
  */
 static VALUE
 rb_grn_object_get_name (VALUE self)
@@ -1117,11 +1117,11 @@ rb_grn_object_get_name (VALUE self)
  * call-seq:
  *   object.range -> Groonga::Object/nil
  *
- * _object_の値がとりうる範囲を示したGroonga::Objectを返す。
+ * _object_ の値がとりうる範囲を示したGroonga::Objectを返す。
  * 例えば、Groonga::Columnの場合は
  * Groonga::Table#define_columnで指定されたGroonga::Typeや
  * Groonga::Tableを返す。
- * 範囲が指定されていないオブジェクトの場合は+nil+を返す。
+ * 範囲が指定されていないオブジェクトの場合は +nil+ を返す。
  */
 static VALUE
 rb_grn_object_get_range (VALUE self)
@@ -1157,8 +1157,8 @@ rb_grn_object_get_range (VALUE self)
  * call-seq:
  *   object == other -> true/false
  *
- * _object_と_other_が同じgroongaのオブジェクトなら+true+を返
- * し、そうでなければ+false+を返す。
+ * _object_ と _other_ が同じgroongaのオブジェクトなら +true+ を返
+ * し、そうでなければ +false+ を返す。
  */
 static VALUE
 rb_grn_object_equal (VALUE self, VALUE other)
@@ -1184,7 +1184,7 @@ rb_grn_object_equal (VALUE self, VALUE other)
  * call-seq:
  *   object[id] -> 値
  *
- * _object_の_id_に対応する値を返す。
+ * _object_ の _id_ に対応する値を返す。
  */
 VALUE
 rb_grn_object_array_reference (VALUE self, VALUE rb_id)
@@ -1345,7 +1345,7 @@ rb_grn_object_set (VALUE self, VALUE rb_id, VALUE rb_value, int flags)
  * call-seq:
  *   object[id] = value
  *
- * _object_の_id_に対応する値を設定する。既存の値は上書きさ
+ * _object_ の _id_ に対応する値を設定する。既存の値は上書きさ
  * れる。
  */
 static VALUE
@@ -1360,7 +1360,7 @@ rb_grn_object_array_set (VALUE self, VALUE rb_id, VALUE rb_value)
  * call-seq:
  *   object.append(id, value)
  *
- * _object_の_id_に対応する値の最後に_value_を追加する。
+ * _object_ の _id_ に対応する値の最後に _value_ を追加する。
  */
 static VALUE
 rb_grn_object_append_value (VALUE self, VALUE rb_id, VALUE rb_value)
@@ -1374,7 +1374,7 @@ rb_grn_object_append_value (VALUE self, VALUE rb_id, VALUE rb_value)
  * call-seq:
  *   object.prepend(id, value)
  *
- * _object_の_id_に対応する値の最初に_value_を追加する。
+ * _object_ の _id_ に対応する値の最初に _value_ を追加する。
  */
 static VALUE
 rb_grn_object_prepend_value (VALUE self, VALUE rb_id, VALUE rb_value)
@@ -1388,7 +1388,7 @@ rb_grn_object_prepend_value (VALUE self, VALUE rb_id, VALUE rb_value)
  * call-seq:
  *   object.remove
  *
- * _object_をメモリから解放し、それが永続オブジェクトであっ
+ * _object_ をメモリから解放し、それが永続オブジェクトであっ
  * た場合は、該当するファイル一式を削除する。
  */
 static VALUE
