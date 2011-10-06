@@ -201,7 +201,7 @@ module Groonga
       #
       #     テーブルを永続テーブルとする。 +:path+ を省略した場合は
       #     パス名は自動的に作成される。デフォルトでは永続テーブルとなる。
-      #   @option options :value_type (false) The value_type
+      #   @option options :value_type (nil) The value_type
       #
       #     値の型を指定する。省略すると値のための領域を確保しない。
       #     値を保存したい場合は必ず指定すること。
@@ -234,7 +234,7 @@ module Groonga
       #
       #     テーブルを永続テーブルとする。 +:path+ を省略した場合は
       #     パス名は自動的に作成される。デフォルトでは永続テーブルとなる。
-      #   @option options :value_type (false) The value_type
+      #   @option options :value_type (nil) The value_type
       #
       #     値の型を指定する。省略すると値のための領域を確保しない。
       #     値を保存したい場合は必ず指定すること。
@@ -290,7 +290,7 @@ module Groonga
       #
       #     テーブルを永続テーブルとする。 +:path+ を省略した場合は
       #     パス名は自動的に作成される。デフォルトでは永続テーブルとなる。
-      #   @option options :value_type (false) The value_type
+      #   @option options :value_type (nil) The value_type
       #
       #     値の型を指定する。省略すると値のための領域を確保しない。
       #     値を保存したい場合は必ず指定すること。
