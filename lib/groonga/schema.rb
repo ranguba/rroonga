@@ -25,8 +25,8 @@ module Groonga
   # 追加・削除することができる。
   #
   # !http://qwik.jp/senna/senna2.files/rect4605.png!
-  # のようなスキーマを定義する場合は以下のようになる。
-  # @example
+  #
+  # @example 上図のようなスキーマを定義する場合は以下のようになる。
   #   Groonga::Schema.define do |schema|
   #     schema.create_table("Items") do |table|
   #       table.short_text("title")
@@ -159,10 +159,11 @@ module Groonga
       #  ...
       #  schema.define
       #
-      # @param [Hash] options The name and value
+      # @param [::Hash] options The name and value
       #   pairs. Omitted names are initialized as the default value.
-      # @option options [Groonga::Context] [Groonga::Context.default] The context
-      #   スキーマ定義時に使用するを指定する。
+      # @option options [Groonga::Context] :content (Groonga::Context.default) The context
+      #
+      #   スキーマ定義時に使用するGroonga::Contextを指定する。
       def define(options={})
         schema = new(options)
         yield(schema)
@@ -183,70 +184,144 @@ module Groonga
       # の詳細を定義する。
       #
       # _options_ に指定可能な値は以下の通り。
+      # @overload create_table(name, options= {:type => :array}, &block)
+      #   @param [::Hash] options The name and value
+      #     pairs. Omitted names are initialized as the default value.
+      #   @option options :force The force
       #
-      # @param [Hash] options The name and value
-      #   pairs. Omitted names are initialized as the default value.
-      # @option options :force The force
-      #   +true+ を指定すると既存の同名のテーブルが
-      #   存在していても、強制的にテーブルを作成する。
-      # @option options :type (:array) The type
-      #   テーブルの型を指定する。
-      #   +:array+ , +:hash+ , +:patricia_trie+ のいずれかを指定する。
-      #   (:key_typeの項も参照)
-      # @option options :context (Groonga::Context.default) The context
-      #   スキーマ定義時に使用するGroonga::Contextを指定する。
-      # @option options :path The path
-      #   テーブルを保存するパスを指定する。
-      #   パスを指定すると永続テーブルになる。
-      # @option options :persistent (永続テーブル) The persistent
-      #   テーブルを永続テーブルとする。 +:path:+ を省略した場合は
-      #   パス名は自動的に作成される。デフォルトでは永続テーブルとなる。
-      # @option options :value_type (nil) The value_type
-      #   値の型を指定する。省略すると値のための領域を確保しない。
-      #   値を保存したい場合は必ず指定すること。
-      # @option options :sub_records The sub_records
-      #   +true+ を指定するとGroonga::Table#groupで
-      #   グループ化したときに、Groonga::Record#n_sub_recordsでグループに
-      #   含まれるレコードの件数を取得できる。
+      #     +true+ を指定すると既存の同名のテーブルが
+      #     存在していても、強制的にテーブルを作成する。
+      #   @option options :type (:array) The type
       #
-      #   <b>以下は:typeに:hashあるいは、:patricia_trieを指定した時に
-      #   指定可能</b>
+      #     テーブルの型を指定する。
+      #     +:array+ , +:hash+ , +:patricia_trie+ のいずれかを指定する。
+      #     (:key_typeの項も参照)
+      #   @option options [Groonga::Context] :context (Groonga::Context.default) The context
       #
-      # @option options :key_type The key_type
-      #   キーの種類を示すオブジェクトを指定する。
-      #   キーの種類には型名（"Int32"や"ShortText"など）またはGroonga::Type
-      #   またはテーブル（Groonga::Array、Groonga::Hash、Groonga::PatriciaTrieの
-      #   どれか）を指定する。Groonga::Typeを指定した場合は、その型が示す範囲の
-      #   値をキーとして使用する。ただし、キーの最大サイズは4096バイトで
-      #   あるため、Groonga::Type::TEXTやGroonga::Type::LONG_TEXTは使用できない
-      #   。テーブルを指定した場合はレコードIDをキーとして使用する。
-      #   指定したテーブルのGroonga::Recordをキーとして使用することもでき、
-      #   その場合は自動的にGroonga::RecordからレコードIDを取得する。
-      #   省略した場合は文字列をキーとして使用する。
-      #   この場合、4096バイトまで使用可能である。
-      # @option options :default_tokenizer The default_tokenizer
-      #   Groonga::IndexColumnで
-      #   使用するトークナイザを指定する。デフォルトでは
-      #   何も設定されていないので、テーブルに
-      #   Groonga::IndexColumnを定義する場合は<tt>"TokenBigram"</tt>
-      #   などを指定する必要がある。
+      #     スキーマ定義時に使用するGroonga::Contextを指定する。
+      #   @option options :path The path
       #
-      #   <b>以下は +:type+ に +:patricia_trie+ を指定した時に指定可能。</b>
+      #     テーブルを保存するパスを指定する。
+      #     パスを指定すると永続テーブルになる。
+      #   @option options :persistent (true) The persistent
       #
-      # @option options :key_normalize The key_normalize
-      #   +true+ を指定するとキーを正規化する。
-      # @option options :key_with_sis The key_with_sis
-      #   +true+ を指定するとキーの文字列の
-      #   全suffixが自動的に登録される。
+      #     テーブルを永続テーブルとする。 +:path+ を省略した場合は
+      #     パス名は自動的に作成される。デフォルトでは永続テーブルとなる。
+      #   @option options :value_type (false) The value_type
+      #
+      #     値の型を指定する。省略すると値のための領域を確保しない。
+      #     値を保存したい場合は必ず指定すること。
+      #   @option options :sub_records The sub_records
+      #
+      #     +true+ を指定するとGroonga::Table#groupで
+      #     グループ化したときに、Groonga::Record#n_sub_recordsでグループに
+      #     含まれるレコードの件数を取得できる。
+      #
+      # @overload create_table(name, options= {:type => :hash}, &block)
+      #   @param [::Hash] options The name and value
+      #     pairs. Omitted names are initialized as the default value.
+      #   @option options :force The force
+      #
+      #     +true+ を指定すると既存の同名のテーブルが
+      #     存在していても、強制的にテーブルを作成する。
+      #   @option options :type (:array) The type
+      #
+      #     テーブルの型を指定する。
+      #     +:array+ , +:hash+ , +:patricia_trie+ のいずれかを指定する。
+      #     (:key_typeの項も参照)
+      #   @option options [Groonga::Context] :context (Groonga::Context.default) The context
+      #
+      #     スキーマ定義時に使用するGroonga::Contextを指定する。
+      #   @option options :path The path
+      #
+      #     テーブルを保存するパスを指定する。
+      #     パスを指定すると永続テーブルになる。
+      #   @option options :persistent (true) The persistent
+      #
+      #     テーブルを永続テーブルとする。 +:path+ を省略した場合は
+      #     パス名は自動的に作成される。デフォルトでは永続テーブルとなる。
+      #   @option options :value_type (false) The value_type
+      #
+      #     値の型を指定する。省略すると値のための領域を確保しない。
+      #     値を保存したい場合は必ず指定すること。
+      #   @option options :sub_records The sub_records
+      #
+      #     +true+ を指定するとGroonga::Table#groupで
+      #     グループ化したときに、Groonga::Record#n_sub_recordsでグループに
+      #     含まれるレコードの件数を取得できる。
+      #   @option options :key_type The key_type
+      #
+      #     キーの種類を示すオブジェクトを指定する。
+      #     キーの種類には型名（"Int32"や"ShortText"など）またはGroonga::Type
+      #     またはテーブル（Groonga::Array、Groonga::Hash、Groonga::PatriciaTrieの
+      #     どれか）を指定する。Groonga::Typeを指定した場合は、その型が示す範囲の
+      #     値をキーとして使用する。ただし、キーの最大サイズは4096バイトで
+      #     あるため、Groonga::Type::TEXTやGroonga::Type::LONG_TEXTは使用できない
+      #     。テーブルを指定した場合はレコードIDをキーとして使用する。
+      #     指定したテーブルのGroonga::Recordをキーとして使用することもでき、
+      #     その場合は自動的にGroonga::RecordからレコードIDを取得する。
+      #     省略した場合は文字列をキーとして使用する。
+      #     この場合、4096バイトまで使用可能である。
+      #   @option options :default_tokenizer The default_tokenizer
+      #
+      #     Groonga::IndexColumnで
+      #     使用するトークナイザを指定する。デフォルトでは
+      #     何も設定されていないので、テーブルに
+      #     Groonga::IndexColumnを定義する場合は<tt>"TokenBigram"</tt>
+      #     などを指定する必要がある。
+      #   @option options :key_normalize The key_normalize
+      #
+      #     +true+ を指定するとキーを正規化する。
+      #
+      # @overload create_table(name, options= {:type => :patricia_trie}, &block)
+      #   @param [::Hash] options The name and value
+      #     pairs. Omitted names are initialized as the default value.
+      #   @option options :force The force
+      #
+      #     +true+ を指定すると既存の同名のテーブルが
+      #     存在していても、強制的にテーブルを作成する。
+      #   @option options :type (:array) The type
+      #
+      #     テーブルの型を指定する。
+      #     +:array+ , +:hash+ , +:patricia_trie+ のいずれかを指定する。
+      #     (:key_typeの項も参照)
+      #   @option options [Groonga::Context] :context (Groonga::Context.default) The context
+      #
+      #     スキーマ定義時に使用するGroonga::Contextを指定する。
+      #   @option options :path The path
+      #
+      #     テーブルを保存するパスを指定する。
+      #     パスを指定すると永続テーブルになる。
+      #   @option options :persistent (true) The persistent
+      #
+      #     テーブルを永続テーブルとする。 +:path+ を省略した場合は
+      #     パス名は自動的に作成される。デフォルトでは永続テーブルとなる。
+      #   @option options :value_type (false) The value_type
+      #
+      #     値の型を指定する。省略すると値のための領域を確保しない。
+      #     値を保存したい場合は必ず指定すること。
+      #   @option options :sub_records The sub_records
+      #
+      #     +true+ を指定するとGroonga::Table#groupで
+      #     グループ化したときに、Groonga::Record#n_sub_recordsでグループに
+      #     含まれるレコードの件数を取得できる。
+      #   @option options :key_normalize The key_normalize
+      #
+      #    +true+ を指定するとキーを正規化する。
+      #   @option options :key_with_sis The key_with_sis
+      #
+      #     +true+ を指定するとキーの文字列の
+      #     全suffixが自動的に登録される。
       def create_table(name, options={}, &block)
         define do |schema|
           schema.create_table(name, options, &block)
         end
       end
       # 名前が _name_ のテーブルを削除する。
-      # @param options [Hash] The name and value
+      # @param options [::Hash] The name and value
       #   pairs. Omitted names are initialized as the default value.
       # @option options :context (Groonga::Context.default)
+      #
       #   スキーマ定義時に使用するGroonga::Contextを指定する。
       def remove_table(name, options={})
         define do |schema|
@@ -269,9 +344,10 @@ module Groonga
       # クトがわたるので、そのオブジェクトを利用してテーブル
       # の詳細を定義する。
       #
-      # @param options [Hash] The name and value
+      # @param options [::Hash] The name and value
       #   pairs. Omitted names are initialized as the default value.
       # @option options :context (Groonga::Context.default) The context
+      #
       #   スキーマ定義時に使用するGroonga::Contextを指定する。
       def change_table(name, options={}, &block)
         define do |schema|
@@ -293,18 +369,22 @@ module Groonga
       # クトがわたるので、そのオブジェクトを利用してビュー
       # の詳細を定義する。
       #
-      # @param options [Hash] The name and value
+      # @param options [::Hash] The name and value
       #   pairs. Omitted names are initialized as the default value.
       # @option options :force The force
+      #
       #   +true+ を指定すると既存の同名のビューが
       #   存在していても、強制的にビューを作成する。
       # @option options :context (Groonga::Context.default) The context
+      #
       #   スキーマ定義時に使用するGroonga::Contextを指定する。
       # @option options :path The path
-      #  ビューを保存するパスを指定する。
-      #  パスを指定すると永続ビューになる。
-      # @option options :persistent (永続ビュー) The persistent
-      #   ビューを永続ビューとする。+:path:+を省略した場
+      #
+      #   ビューを保存するパスを指定する。
+      #   パスを指定すると永続ビューになる。
+      # @option options :persistent (true) The persistent
+      #
+      #   ビューを永続ビューとする。 +:path:+ を省略した場
       #   合はパス名は自動的に作成される。デフォルトでは永続
       #   ビューとなる。
       def create_view(name, options={}, &block)
@@ -315,7 +395,7 @@ module Groonga
 
       # 名前が _name_ のテーブルを削除する。
       #
-      # @param options [Hash] The name and value
+      # @param options [::Hash] The name and value
       #   pairs. Omitted names are initialized as the default value.
       # @option options :context (Groonga::context.default) The context
       #   スキーマ定義時に使用するGroonga::Contextを指定する。
@@ -339,9 +419,10 @@ module Groonga
       # クトがわたるので、そのオブジェクトを利用してテーブル
       # の詳細を定義する。
       #
-      # @param options [Hash] The name and value
+      # @param options [::Hash] The name and value
       #   pairs. Omitted names are initialized as the default value.
       # @option options :context (Groonga::Context.default) The context
+      #
       #   スキーマ定義時に使用するGroonga::Contextを指定する。
       def change_view(name, options={}, &block)
         define do |schema|
@@ -389,11 +470,13 @@ module Groonga
       #
       #   % groonga db/path < /tmp/groonga-schema.grn
       #
-      # @param options [Hash] The name and value
+      # @param options [::Hash] The name and value
       #   pairs. Omitted names are initialized as the default value.
       # @option options :context (Groonga::Context.default) The context
+      #
       #   スキーマ定義時に使用するGroonga::Contextを指定する。
       # @option options :syntax The syntax
+      #
       #   スキーマの文字列の形式を指定する。指定可能な値は以下の通り。
       #   +:ruby+ Rubyスクリプト形式。省略した場合、+nil+ の場合も
       #   Rubyスクリプト形式になる。
@@ -480,8 +563,8 @@ module Groonga
 
     # スキーマ定義を開始する。
     #
-    # @param options [Hash] The name and value
-      #   pairs. Omitted names are initialized as the default value.
+    # @param options [::Hash] The name and value
+    #   pairs. Omitted names are initialized as the default value.
     # @option options :context (Groonga::Context.default) The context
     #   スキーマ定義時に使用するGroonga::Contextを指定する。
     def initialize(options={})
@@ -516,79 +599,181 @@ module Groonga
       dumper.dump
     end
 
-    # call-seq:
-    #   schema.create_table(name, options={}) {|table| ...}
-    #
     # 名前が _name_ のテーブルを作成する。
     #
     # テーブルの作成は#defineを呼び出すまでは実行されないこ
     # とに注意すること。
+    # @overload create_table(name, options= {:type => :array})
+    #   :typeにデフォルトの:arrayを使用した場合
+    #   @param options [::Hash] The name and value
+    #     pairs. Omitted names are initialized as the default value.
+    #   @option options :force The force.
     #
-    # @param options [Hash] The name and value
-      #   pairs. Omitted names are initialized as the default value.
-    # @option options :force The context
-    #   +true+ を指定すると既存の同名のテーブルが
-    #   存在していても、強制的にテーブルを作成する。
-    # @option options :type (:array) The type
-    #   テーブルの型を指定する。
-    #   +:array+ , +:hash+ , +:patricia_trie+ のいずれかを指定する。
-    # @option options :context The context
-    #   スキーマ定義時に使用するGroonga::Contextを指定する。
-    #   省略した場合はGroonga::Schema.newで指定した
-    #   Groonga::Contextを使用する。Groonga::Schema.newで指
-    #   定していない場合はGroonga::Context.defaultを使用する。
-    # @option options :path The path
-    #   テーブルを保存するパスを指定する。パスを指定すると
-    #   永続テーブルになる。
-    # @option options :persistent (永続テーブル) The persistent
-    #   テーブルを永続テーブルとする。 +:path:+ を省略した場
-    #   合はパス名は自動的に作成される。デフォルトでは永続
-    #   テーブルとなる。
-    # @option options :value_type The value_type
-    #   値の型を指定する。省略すると値のための領域を確保しない。
-    #   値を保存したい場合は必ず指定すること。
-    #   参考: Groonga::Type.new
+    #     +true+ を指定すると既存の同名のテーブルが
+    #     存在していても、強制的にテーブルを作成する。
+    #   @option options :type (:array) The type
     #
-    # @option options :sub_records The sub_records
-    #   +true+ を指定するとGroonga::Table#groupでグループ化
-    #   したときに、Groonga::Record#n_sub_recordsでグループに
-    #   含まれるレコードの件数を取得できる。
+    #     テーブルの型を指定する。
+    #     +:array+ , +:hash+ , +:patricia_trie+ のいずれかを指定する。
+    #   @option options [Groonga::Context] :context The context.
     #
-    #   <b> 以下は +:type+ に +:hash+ あるいは +:patricia_trie+ を指定
-    #   した時に指定可能。 </b>
+    #     スキーマ定義時に使用するGroonga::Contextを指定する。
+    #     省略した場合はGroonga::Schema.newで指定した
+    #     Groonga::Contextを使用する。Groonga::Schema.newで指
+    #     定していない場合はGroonga::Context.defaultを使用する。
+    #   @option options :path The path
     #
-    # @option options :key_type The key_type
-    #   キーの種類を示すオブジェクトを指定する。
-    #   キーの種類には型名（"Int32"や"ShortText"など）または
-    #   Groonga::Typeまたはテーブル（Groonga::Array、
-    #   Groonga::Hash、Groonga::PatriciaTrieのどれか）を指定する。
+    #     テーブルを保存するパスを指定する。パスを指定すると
+    #     永続テーブルになる。
+    #   @option options :persistent (true) The persistent
     #
-    #   Groonga::Typeを指定した場合は、その型が示す範囲の
-    #   値をキーとして使用する。ただし、キーの最大サイズは
-    #   4096バイトであるため、Groonga::Type::TEXTや
-    #   Groonga::Type::LONG_TEXTは使用できない。
+    #     テーブルを永続テーブルとする。 +:path:+ を省略した場
+    #     合はパス名は自動的に作成される。デフォルトでは永続
+    #     テーブルとなる。
+    #   @option options :value_type The value_type
     #
-    #   テーブルを指定した場合はレコードIDをキーとして使用
-    #   する。指定したテーブルのGroonga::Recordをキーとし
-    #   て使用することもでき、その場合は自動的に
-    #   Groonga::RecordからレコードIDを取得する。
+    #     値の型を指定する。省略すると値のための領域を確保しない。
+    #     値を保存したい場合は必ず指定すること。
+    #     参考: Groonga::Type.new
+    #   @option options :sub_records The sub_records
     #
-    #   省略した場合は文字列をキーとして使用する。この場合、
-    #   4096バイトまで使用可能である。
+    #     +true+ を指定するとGroonga::Table#groupでグループ化
+    #     したときに、Groonga::Record#n_sub_recordsでグループに
+    #     含まれるレコードの件数を取得できる。
     #
-    # @option options :default_tokenizer The default_tokenizer
-    #   Groonga::IndexColumnで使用するトークナイザを指定する。
-    #   デフォルトでは何も設定されていないので、テーブルに
-    #   Groonga::IndexColumnを定義する場合は
-    #   <tt>"TokenBigram"</tt>などを指定する必要がある。
+    # @overload create_table(name, options= {:type => :hash})
+    #   :typeに:hashを使用した場合
+    #   @param options [::Hash] The name and value
+    #     pairs. Omitted names are initialized as the default value.
+    #   @option options :force The force
     #
-    #   <b> 以下は +:type+ に +:patricia_trie+ を指定した時に指定可能 </b>
+    #     +true+ を指定すると既存の同名のテーブルが
+    #     存在していても、強制的にテーブルを作成する。
+    #   @option options :type (:array) The type
     #
-    # @option options :key_normalize The key_normalize
-    #   +true+ を指定するとキーを正規化する。
-    # @option options :key_with_sis
-    #   +true+ を指定するとキーの文字列の全suffixが自動的に
-    #   登録される。
+    #     テーブルの型を指定する。
+    #     +:array+ , +:hash+ , +:patricia_trie+ のいずれかを指定する。
+    #   @option options [Groonga::Context] :context The context
+    #
+    #    スキーマ定義時に使用するGroonga::Contextを指定する。
+    #     省略した場合はGroonga::Schema.newで指定した
+    #     Groonga::Contextを使用する。Groonga::Schema.newで指
+    #     定していない場合はGroonga::Context.defaultを使用する。
+    #   @option options :path The path
+    #
+    #     テーブルを保存するパスを指定する。パスを指定すると
+    #     永続テーブルになる。
+    #   @option options :persistent (true) The persistent
+    #
+    #     テーブルを永続テーブルとする。 +:path:+ を省略した場
+    #     合はパス名は自動的に作成される。デフォルトでは永続
+    #     テーブルとなる。
+    #   @option options :value_type The value_type
+    #
+    #     値の型を指定する。省略すると値のための領域を確保しない。
+    #     値を保存したい場合は必ず指定すること。
+    #     参考: Groonga::Type.new
+    #   @option options :sub_records The sub_records
+    #
+    #     +true+ を指定するとGroonga::Table#groupでグループ化
+    #     したときに、Groonga::Record#n_sub_recordsでグループに
+    #     含まれるレコードの件数を取得できる。
+    #   @option options :key_type The key_type
+    #
+    #     キーの種類を示すオブジェクトを指定する。
+    #     キーの種類には型名（"Int32"や"ShortText"など）または
+    #     Groonga::Typeまたはテーブル（Groonga::Array、
+    #     Groonga::Hash、Groonga::PatriciaTrieのどれか）を指定する。
+    #
+    #     Groonga::Typeを指定した場合は、その型が示す範囲の
+    #     値をキーとして使用する。ただし、キーの最大サイズは
+    #     4096バイトであるため、Groonga::Type::TEXTや
+    #     Groonga::Type::LONG_TEXTは使用できない。
+    #
+    #     テーブルを指定した場合はレコードIDをキーとして使用
+    #     する。指定したテーブルのGroonga::Recordをキーとし
+    #     て使用することもでき、その場合は自動的に
+    #     Groonga::RecordからレコードIDを取得する。
+    #
+    #     省略した場合は文字列をキーとして使用する。この場合、
+    #     4096バイトまで使用可能である。
+    #
+    #   @option options :default_tokenizer The default_tokenizer
+    #
+    #     Groonga::IndexColumnで使用するトークナイザを指定する。
+    #     デフォルトでは何も設定されていないので、テーブルに
+    #     Groonga::IndexColumnを定義する場合は
+    #     <tt>"TokenBigram"</tt>などを指定する必要がある。
+    #
+    # @overload create_table(name, options= {:type => :patricia_trie})
+    #   :typeに:patricia_trieを使用した場合
+    #   @param options [::Hash] The name and value
+    #     pairs. Omitted names are initialized as the default value.
+    #   @option options :force The force
+    #
+    #     +true+ を指定すると既存の同名のテーブルが
+    #     存在していても、強制的にテーブルを作成する。
+    #   @option options :type (:array) The type
+    #
+    #     テーブルの型を指定する。
+    #     +:array+ , +:hash+ , +:patricia_trie+ のいずれかを指定する。
+    #   @option options [Groonga::Context] :context The context
+    #
+    #     スキーマ定義時に使用するGroonga::Contextを指定する。
+    #     省略した場合はGroonga::Schema.newで指定した
+    #     Groonga::Contextを使用する。Groonga::Schema.newで指
+    #     定していない場合はGroonga::Context.defaultを使用する。
+    #   @option options :path The path
+    #
+    #     テーブルを保存するパスを指定する。パスを指定すると
+    #     永続テーブルになる。
+    #   @option options :persistent (true) The persistent
+    #
+    #     テーブルを永続テーブルとする。 +:path:+ を省略した場
+    #     合はパス名は自動的に作成される。デフォルトでは永続
+    #     テーブルとなる。
+    #   @option options :value_type The value_type
+    #
+    #     値の型を指定する。省略すると値のための領域を確保しない。
+    #     値を保存したい場合は必ず指定すること。
+    #     参考: Groonga::Type.new
+    #   @option options :sub_records The sub_records
+    #
+    #     +true+ を指定するとGroonga::Table#groupでグループ化
+    #     したときに、Groonga::Record#n_sub_recordsでグループに
+    #     含まれるレコードの件数を取得できる。
+    #   @option options :key_normalize The key_normalize
+    #
+    #     +true+ を指定するとキーを正規化する。
+    #   @option options :key_with_sis
+    #
+    #     +true+ を指定するとキーの文字列の全suffixが自動的に
+    #     登録される。
+    #   @option options :key_type The key_type
+    #
+    #     キーの種類を示すオブジェクトを指定する。
+    #     キーの種類には型名（"Int32"や"ShortText"など）または
+    #     Groonga::Typeまたはテーブル（Groonga::Array、
+    #     Groonga::Hash、Groonga::PatriciaTrieのどれか）を指定する。
+    #
+    #     Groonga::Typeを指定した場合は、その型が示す範囲の
+    #     値をキーとして使用する。ただし、キーの最大サイズは
+    #     4096バイトであるため、Groonga::Type::TEXTや
+    #     Groonga::Type::LONG_TEXTは使用できない。
+    #
+    #     テーブルを指定した場合はレコードIDをキーとして使用
+    #     する。指定したテーブルのGroonga::Recordをキーとし
+    #     て使用することもでき、その場合は自動的に
+    #     Groonga::RecordからレコードIDを取得する。
+    #
+    #     省略した場合は文字列をキーとして使用する。この場合、
+    #     4096バイトまで使用可能である。
+    #   @option options :default_tokenizer The default_tokenizer
+    #
+    #     Groonga::IndexColumnで使用するトークナイザを指定する。
+    #     デフォルトでは何も設定されていないので、テーブルに
+    #     Groonga::IndexColumnを定義する場合は
+    #     <tt>"TokenBigram"</tt>などを指定する必要がある。
     def create_table(name, options={})
       definition = TableDefinition.new(name, @options.merge(options || {}))
       yield(definition) if block_given?
@@ -597,12 +782,13 @@ module Groonga
 
     # 名前が _name_ のテーブルを削除する。
     #
-    # テーブルの削除は #define を呼び出すまでは実行されないこ
+    # テーブルの削除は#defineを呼び出すまでは実行されないこ
     # とに注意すること。
     #
-    # @param options [Hash] The name and value
-      #   pairs. Omitted names are initialized as the default value.
+    # @param options [::Hash] The name and value
+    #   pairs. Omitted names are initialized as the default value.
     # @option options :context (Groonga::Context.default) The context
+    #
     #   スキーマ定義時に使用するGroonga::Contextを指定する。
     def remove_table(name, options={})
       definition = TableRemoveDefinition.new(name, @options.merge(options || {}))
@@ -617,9 +803,10 @@ module Groonga
     # テーブルの変更は #define を呼び出すまでは実行されないこ
     # とに注意すること。
     #
-    # @param options [Hash] The name and value
-      #   pairs. Omitted names are initialized as the default value.
+    # @param options [::Hash] The name and value
+    #   pairs. Omitted names are initialized as the default value.
     # @option options :context (Groonga::Context.default) The context
+    #
     #   スキーマ定義時に使用するGroonga::Contextを指定する。
     def change_table(name, options={})
       options = @options.merge(options || {}).merge(:change => true)
@@ -636,19 +823,23 @@ module Groonga
     # ビューの作成は #define を呼び出すまでは実行されないこ
     # とに注意すること。
     #
-    # @param options [Hash] The name and value
-      #   pairs. Omitted names are initialized as the default value.
+    # @param options [::Hash] The name and value
+    #   pairs. Omitted names are initialized as the default value.
     # @option options :force The force
+    #
     #   +true+ を指定すると既存の同名の
     #   ビューが存在していても、強制的にビューを作成する。
-    # @option options :context (Groonga::Schema.new) The context
+    # @option options [Groonga::Context] :context (Groonga::Schema.new) The context
+    #
     #   スキーマ定義時に使用するGroonga::Contextを指定する。
     #   Groonga::Schema.newで指定していない場合は
     #   Groonga::Context.defaultを使用する。
     # @option options :path The path
+    #
     #   テーブルを保存するパスを指定する。パスを指定すると
     #   永続テーブルになる。
-    # @option options :persistent (永続テーブル) The persistent
+    # @option options :persistent (true) The persistent
+    #
     #   テーブルを永続テーブルとする。 +:path:+ を省略した場合は
     #   パス名は自動的に作成される。デフォルトでは永続テーブルとなる。
     def create_view(name, options={})
@@ -662,9 +853,11 @@ module Groonga
     # ビューの削除は #define を呼び出すまでは実行されないことに
     # 注意すること。
     #
-    # @param options [Hash] The name and value
-      #   pairs. Omitted names are initialized as the default value.
-    # @option options :context (Groonga::Context.default) The context
+    # @param options [::Hash] The name and value
+    #   pairs. Omitted names are initialized as the default value.
+    # @option options [Groonga::Context] :context (Groonga::Context.default)
+    #   The context
+    #
     #   スキーマ定義時に使用するGroonga::Contextを指定する。
     def remove_view(name, options={})
       definition = ViewRemoveDefinition.new(name, @options.merge(options || {}))
@@ -679,9 +872,10 @@ module Groonga
     # ビューの変更は #define を呼び出すまでは実行されないこ
     # とに注意すること。
     #
-    # @param options [Hash] The name and value
-      #   pairs. Omitted names are initialized as the default value.
+    # @param options [::Hash] The name and value
+    #   pairs. Omitted names are initialized as the default value.
     # @option options :context (Groonga::Context.default) The context
+    #
     #   スキーマ定義時に使用するGroonga::Contextを指定する。
     def change_view(name, options={})
       options = @options.merge(options || {}).merge(:change => true)
@@ -694,7 +888,6 @@ module Groonga
     #   schema.remove_column(table_name, column_name)
     #
     # 以下と同様:
-    #
     #   schema.change_table(table_name) do |table|
     #     table.remove_column(column_name)
     #   end
@@ -769,23 +962,28 @@ module Groonga
 
       # 名前が _name_ で型が _type_ のカラムを作成する。
       #
-      # @param options [Hash] The name and value
+      # @param options [::Hash] The name and value
       #   pairs. Omitted names are initialized as the default value.
       # @option options :force The force
+      #
       #   +true+ を指定すると既存の同名のカラムが
       #   存在していても、強制的に新しいカラムを作成する。
       # @option options :path The path
+      #
       #   カラムを保存するパス。
       # @option options :persistent The persistent
+      #
       #   +true+ を指定すると永続カラムとなる。+:path+ を省略
       #   した場合は自動的にパスが付加される。
       # @option options :type (:scalar) The type
+      #
       #   カラムの値の格納方法について指定する。
       #   <b>:scalar</b>
       #     スカラ値(単独の値)を格納する。
       #   <b>:vector</b>
       #     値の配列を格納する。
       # @option options :compress The compress
+      #
       #   値の圧縮方法を指定する。省略した場合は、圧縮しない。
       #   <b>:zlib</b>
       #     値をzlib圧縮して格納する。
@@ -802,9 +1000,9 @@ module Groonga
         self
       end
 
-      # 名前が_name_のカラムを削除します。
+      # 名前が _name_ のカラムを削除します。
       #
-      # _options_に指定可能な値はありません(TODO _options_は不要?)。
+      # _options_ に指定可能な値はありません(TODO _options_ は不要?)。
       #
       def remove_column(name, options={})
         definition = self[name, ColumnRemoveDefinition]
@@ -832,26 +1030,33 @@ module Groonga
       #
       #   table.index("Users.name")
       #
-      # @param options [Hash] The name and value
+      # @param options [::Hash] The name and value
       #   pairs. Omitted names are initialized as the default value.
       # @option options :name The name
+      #
       #   インデックスカラムのカラム名を任意に指定する。
       # @option options :force The force
+      #
       #   +true+ を指定すると既存の同名のカラムが
       #   存在していても、強制的に新しいカラムを作成する。
       # @option options :path The path
+      #
       #   カラムを保存するパス。
       # @option options :persistent The persistent
+      #
       #   +true+ を指定すると永続カラムとなる。
       #   +:path+ を省略した場合は自動的にパスが付加される。
       # @option options :with_section The with_section
+      #
       #   +true+ を指定すると転置索引にsection(段落情報)を
       #   合わせて格納する。未指定または +nil+ を指定した場合、
       #   複数のカラムを指定すると自動的に有効になる。
       # @option options :with_weight The with_weight
+      #
       #   +true+ を指定すると転置索引にweight情報を合わせて
       #   格納する。
       # @option options :with_position
+      #
       #   +true+ を指定すると転置索引に出現位置情報を合わせて
       #   格納する。未指定または +nil+ を指定した場合、テーブル
       #   がN-gram系のトークナイザーを利用している場合は
@@ -887,7 +1092,7 @@ module Groonga
       #
       #   table.remove_index("Users.name")
       #
-      # @param options [Hash] The name and value
+      # @param options [::Hash] The name and value
       #   pairs. Omitted names are initialized as the default value.
       # @option options :name The name
       #   インデックスカラムのカラム名を任意に指定する。
@@ -984,29 +1189,29 @@ module Groonga
       end
       alias_method :string, :short_text
 
-      # 名前が_name_の64Kbyte以下の文字列を格納できるカラムを
+      # 名前が _name_ の64Kbyte以下の文字列を格納できるカラムを
       # 作成する。
       #
-      # _options_に指定可能な値は
+      # _options_ に指定可能な値は
       # {Groonga::Schema::TableDefinition#column} を参照。
       def text(name, options={})
         column(name, "Text", options)
       end
 
-      # 名前が_name_の2Gbyte以下の文字列を格納できるカラムを
+      # 名前が _name_ の2Gbyte以下の文字列を格納できるカラムを
       # 作成する。
       #
-      # _options_に指定可能な値は
+      # _options_ に指定可能な値は
       # {Groonga::Schema::TableDefinition#column} を参照。
       def long_text(name, options={})
         column(name, "LongText", options)
       end
 
-      # 名前が_name_で_table_のレコードIDを格納する参照カラ
+      # 名前が _name_ で _table_ のレコードIDを格納する参照カラ
       # ムを作成する。
       #
-      # _table_が省略された場合は_name_の複数形が使われる。
-      # 例えば、_name_が"user"な場合は_table_は"users"になる。
+      # _table_ が省略された場合は _name_ の複数形が使われる。
+      # 例えば、 _name_ が"user"な場合は _table_ は"users"になる。
       #
       # _options_ に指定可能な値は
       # {Groonga::Schema::TableDefinition#column} を参照。
@@ -1015,7 +1220,7 @@ module Groonga
         column(name, table, options)
       end
 
-      # 名前が_name_の真偽値を格納できるカラムを作成する。
+      # 名前が _name_ の真偽値を格納できるカラムを作成する。
       #
       # _options_ に指定可能な値は
       # {Groonga::Schema::TableDefinition#column} を参照。

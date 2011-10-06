@@ -97,11 +97,13 @@ module Groonga
     #
     # _options_ に指定可能な値は以下の通り。
     #
-    # @param [Hash] options The name and value
+    # @param [::Hash] options The name and value
     #   pairs. Omitted names are initialized as the default value.
     # @option options [Integer] :size (10) The size
+    #
     #   1ページあたりに表示する最大項目数。
     # @option options [Integer] :page (1) The page
+    #
     #   ページ番号。ページ番号は0ベースではなく1ベースであることに注意。
     def paginate(sort_keys, options={})
       _size = size
@@ -162,7 +164,7 @@ module Groonga
       @n_pages
     end
 
-    # 現在のページが最後のページなら+true+を返す。
+    # 現在のページが最後のページなら +true+ を返す。
     def last_page?
       @current_page == last_page
     end
@@ -178,7 +180,7 @@ module Groonga
       have_next_page? ? @current_page + 1 : nil
     end
 
-    # 前のページがあるなら+true+を返す。
+    # 前のページがあるなら +true+ を返す。
     def have_previous_page?
       @current_page > 1
     end
@@ -199,7 +201,7 @@ module Groonga
     # あることに注意。つまり、最初のレコードは0番目のレコー
     # ドではなく、1番目のレコードになる。
     #
-    # レコードが1つもない場合は+nil+を返す。
+    # レコードが1つもない場合は +nil+ を返す。
     def start_offset
       return nil if @n_records.zero?
       1 + (@current_page - 1) * @page_size
@@ -210,7 +212,7 @@ module Groonga
     # あることに注意。つまり、最初のレコードは0番目のレコー
     # ドではなく、1番目のレコードになる。
     #
-    # レコードが1つもない場合は+nil+を返す。
+    # レコードが1つもない場合は +nil+ を返す。
     def end_offset
       return nil if @n_records.zero?
       [start_offset + @page_size - 1, @n_records].min

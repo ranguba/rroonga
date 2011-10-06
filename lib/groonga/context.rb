@@ -20,7 +20,7 @@ module Groonga
     # call-seq:
     #   context.open_database(path) -> Groonga::Database
     #
-    # _path_にある既存のデータベースを開く。ブロックを指定した場
+    # _path_ にある既存のデータベースを開く。ブロックを指定した場
     # 合はブロックに開いたデータベースを渡し、ブロックを抜けると
     # きに閉じる。
     def open_database(path, &block)
@@ -32,7 +32,7 @@ module Groonga
     # call-seq:
     #   context.create_database(path=nil) -> Groonga::Database
     #
-    # _path_に新しくデータベースを作成する。_path_を省略すると
+    # _path_ に新しくデータベースを作成する。 _path_ を省略すると
     # 一時データベースとなる。
     #
     # 使用例は以下の通り。
@@ -55,8 +55,8 @@ module Groonga
     #   context.register_plugin(name)
     #   context.register_plugin({:path => path})
     #
-    # groongaのプラグインディレクトリにあるプラグイン_name_
-    # を登録する。_path_を指定するとプラグインディレクトリ以
+    # groongaのプラグインディレクトリにあるプラグイン _name_
+    # を登録する。 _path_ を指定するとプラグインディレクトリ以
     # 外にあるプラグインを登録することができる。
     def register_plugin(name_or_options)
       options = {:context => self}
@@ -76,9 +76,10 @@ module Groonga
     # する。
     #
     # _options_ に指定できるキーは以下の通り。
-    # @param [Hash] options The name and value
+    # @param [::Hash] options The name and value
     #   pairs. Omitted names are initialized as the default value.
     # @option options [Array] output_columns The output_columns
+    #
     #   値を取得するカラムを指定する。
     # @option options [Array] XXX TODO
     # 例:

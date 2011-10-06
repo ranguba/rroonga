@@ -52,7 +52,7 @@ module Groonga
 
     # Updates all values.
     #
-    # @param [Hash] parameters The name and value
+    # @param [::Hash] parameters The name and value
     #   pairs. Omitted names are initialized as the default value.
     # @option parameters [Integer] :record_id The record_id.
     # @option parameters [Integer] :section_id The section_id.

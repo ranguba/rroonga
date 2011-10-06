@@ -26,13 +26,13 @@ module Groonga
     # 分文字列と置換される。全てのヒットに対してのその置換処理が
     # 行われた文字列が返される。
     #
-    # _options_ に指定可能な値は以下の通り。
-    # @param options [Hash] The name and value
+    # @param options [::Hash] The name and value
     #   pairs. Omitted names are initialized as the default value.
     # @option options [Proc] :other_text_handler The other_text_handler
+    #
     #  マッチした部分文字列の前後の文字列を変換するProcを指定する。
     #
-    # 例:
+    # @example
     #   include ERB::Util
     #   Groonga::Context.default_options = {:encoding => "utf-8"}
     #   words = Groonga::PatriciaTrie.create(:key_type => "ShortText",
