@@ -137,7 +137,7 @@ rb_grn_operator_from_ruby_object (VALUE rb_operator)
  * ることができる。
  *
  * _options_ に指定可能な値は以下の通り。
- * @param options [Hash] The name and value
+ * @param options [::Hash] The name and value
  *   pairs. Omitted names are initialized as the default value.
  * @option options :context (Groonga::Context.default) The context
  *   クエリが利用するGroonga::Context。

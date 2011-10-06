@@ -110,7 +110,7 @@ rb_grn_index_column_deconstruct (RbGrnIndexColumn *rb_grn_index_column,
  *
  * _options_ を指定することにより、より索引の作成を制御できる。
  * _options_ に指定可能な値は以下の通り。
- * @param [Hash] options  The name and value
+ * @param [::Hash] options  The name and value
  *   pairs. Omitted names are initialized as the default value
  * @option options :section The section
  *
@@ -406,7 +406,7 @@ rb_grn_index_column_set_source (VALUE self, VALUE rb_source)
  * たオブジェクトのIDがキーになっているGroonga::Hashを返す。
  *
  * 利用可能なオプションは以下の通り。
- * @param [Hash] options The name and value
+ * @param [::Hash] options The name and value
  *   pairs. Omitted names are initialized as the default value
  * @option options [Groonga::Hash] :result The result
  *   結果を格納するGroonga::Hash。指定しない場合は新しく

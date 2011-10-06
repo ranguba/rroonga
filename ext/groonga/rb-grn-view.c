@@ -48,7 +48,7 @@ VALUE rb_cGrnView;
  * 使う。
  *
  * _options_ に指定可能な値は以下の通り。
- * @param options [Hash] The name and value
+ * @param options [::Hash] The name and value
  *   pairs. Omitted names are initialized as the default value
  * @option options :context (Groonga::Context.default)
  *
@@ -272,7 +272,7 @@ rb_grn_view_get_column_value (VALUE self, VALUE rb_id, VALUE rb_name)
  *   ]
  *
  * _options_ に指定可能な値は以下の通り。
- * @param options [Hash] The name and value
+ * @param options [::Hash] The name and value
  *   pairs. Omitted names are initialized as the default value
  * @option options :offset The offset
  *

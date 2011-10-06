@@ -105,7 +105,7 @@ rb_grn_snippet_alloc (VALUE klass)
  *
  * スニペットを作成する。 _options_ に指定可能な値は以下の通
  * り。
- * @param options [Hash] The name and value
+ * @param options [::Hash] The name and value
  *   pairs. Omitted names are initialized as the default value.
  * @option options :context (Groonga::Context.default) The context
  *
@@ -219,7 +219,7 @@ rb_grn_snippet_initialize (int argc, VALUE *argv, VALUE self)
  *
  * _keyword_ を追加する。 _options_ に指定可能な値は
  * 以下の通り。
- * @param options [Hash] The name and value
+ * @param options [::Hash] The name and value
  *   pairs. Omitted names are initialized as the default value.
  * @option options :open_tag (default_open_tag) The open_tag
  *

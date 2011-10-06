@@ -148,7 +148,7 @@ rb_grn_database_close (VALUE self)
  *
  * _options_ にはハッシュでオプションを指定する。指定できるオ
  * プションは以下の通り。
- * @param option [Hash] options The name and value
+ * @param option [::Hash] options The name and value
  *   pairs. Omitted names are initialized as the default value.
  * @option options :path The path
  *
@@ -223,7 +223,7 @@ rb_grn_database_s_create (int argc, VALUE *argv, VALUE klass)
  *
  * _options_ にはハッシュでオプションを指定する。指定できるオ
  * プションは以下の通り。
- * @param options [Hash] The name and value
+ * @param options [::Hash] The name and value
  *   pairs. Omitted names are initialized as the default value.
  * @option options :context (Groonga::Context.default) The context
  *
@@ -272,7 +272,7 @@ rb_grn_database_initialize (int argc, VALUE *argv, VALUE self)
  *
  * _options_ にはハッシュでオプションを指定する。指定できるオ
  * プションは以下の通り。
- * @param options [Hash] The name and value
+ * @param options [::Hash] The name and value
  *   pairs. Omitted names are initialized as the default value.
  * @option options :context (Groonga::Context.default) The context
  *
@@ -300,7 +300,7 @@ rb_grn_database_s_open (int argc, VALUE *argv, VALUE klass)
  *
  * _options_ にはハッシュでオプションを指定する。指定できるオ
  * プションは以下の通り。
- * @param options [Hash]
+ * @param options [::Hash]
  * @option options :order The order
  *   +:asc+ または +:ascending+ を指定すると昇順にレコードを取
  *   り出す。（デフォルト）
@@ -410,7 +410,7 @@ rb_grn_database_unlock (VALUE self)
  * ブロックを指定した場合はブロックを抜けたときにunlockする。
  *
  * 利用可能なオプションは以下の通り。
- * @param [Hash] options The name and value
+ * @param [::Hash] options The name and value
  *   pairs. Omitted names are initialized as the default value
  * @option options :timeout The timeout
  *

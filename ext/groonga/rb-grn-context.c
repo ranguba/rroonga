@@ -309,7 +309,7 @@ rb_grn_context_s_set_default_options (VALUE self, VALUE options)
  *
  * コンテキストを作成する。 _options_ に指定可能な値は以下の通
  * り。
- * @param [Hash] options The name and value
+ * @param [::Hash] options The name and value
  *   pairs. Omitted names are initialized as the default value.
  * @option options :encoding The encoding
  *
@@ -575,7 +575,7 @@ rb_grn_context_get_database (VALUE self)
  *
  * groongaサーバに接続する。 _options_ に指定可能な値は以下の通
  * り。
- * @param [Hash] options The name and value
+ * @param [::Hash] options The name and value
  *   pairs. Omitted names are initialized as the default value.
  * @option options :host (localhost) The groonga server host name
  *

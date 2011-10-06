@@ -263,7 +263,7 @@ rb_grn_logger_initialize (int argc, VALUE *argv, VALUE self)
  * その場合は空文字列が実際には渡される。
  *
  * _options_ に指定可能な値は以下の通り。
- * @param options [Hash] The name and value
+ * @param options [::Hash] The name and value
  *   pairs. Omitted names are initialized as the default value.
  * @option options :level (:notice) The log level
  *

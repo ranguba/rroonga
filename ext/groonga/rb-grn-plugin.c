@@ -77,7 +77,7 @@ rb_grn_plugin_alloc (VALUE klass)
  *
  * _options_ にはハッシュでオプションを指定する。指定できるオ
  * プションは以下の通り。
- * @param options [Hash] The name and value
+ * @param options [::Hash] The name and value
  *   pairs. Omitted names are initialized as the default value.
  * @option options :context (Groonga::Context.default) The context
  *

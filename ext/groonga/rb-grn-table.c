@@ -232,7 +232,7 @@ rb_grn_table_inspect (VALUE self)
  * し、新しく定義されたカラムを返す。
  *
  * _options_ に指定可能な値は以下の通り。
- * @param options [Hash] The name and value
+ * @param options [::Hash] The name and value
  *   pairs. Omitted names are initialized as the default value.
  * @option options :path The path
  *   カラムを保存するパス。
@@ -371,7 +371,7 @@ n_gram_tokenizer_p(grn_ctx *context, grn_obj *tokenizer)
  * ラムを定義し、新しく定義されたカラムを返す。
  *
  * _options_ に指定可能な値は以下の通り。
- * @param options [Hash] The name and value
+ * @param options [::Hash] The name and value
  *   pairs. Omitted names are initialized as the default value.
  * @option options :path The path
  *   カラムを保存するパス。
@@ -771,7 +771,7 @@ rb_grn_table_open_grn_cursor (int argc, VALUE *argv, VALUE self,
  * カーソルが破棄される。
  *
  * _options_に指定可能な値は以下の通り。
- * @param options [Hash] The name and value
+ * @param options [::Hash] The name and value
  *   pairs. Omitted names are initialized as the default value.
  * @option options :min The min
  *  キーの下限
@@ -1013,7 +1013,7 @@ rb_grn_table_delete (VALUE self, VALUE rb_id)
  *     ["第1ソートキー", "第2ソートキー", ...]
  *
  * _options_ に指定可能な値は以下の通り。
- * @param options [Hash] The name and value
+ * @param options [::Hash] The name and value
  *   pairs. Omitted names are initialized as the default value.
  * @option options :offset The offset
  *   ソートされたレコードのうち、(0ベースで) _:offset_ 番目
@@ -1553,7 +1553,7 @@ rb_grn_table_unlock_ensure (VALUE self)
  * ブロックを指定した場合はブロックを抜けたときにunlockする。
  *
  * 利用可能なオプションは以下の通り。
- * @param options [Hash] The name and value
+ * @param options [::Hash] The name and value
  *   pairs. Omitted names are initialized as the default value.
  * @option options :timeout The timeout
  *
@@ -1614,7 +1614,7 @@ rb_grn_table_lock (int argc, VALUE *argv, VALUE self)
  * _table_ のロックを強制的に解除する。
  *
  * 利用可能なオプションは以下の通り。
- * @param options [Hash] The name and value
+ * @param options [::Hash] The name and value
  *   pairs. Omitted names are initialized as the default value.
  * @option options :id The id
  *
@@ -1770,7 +1770,7 @@ rb_grn_table_is_locked (int argc, VALUE *argv, VALUE self)
  *    # => ["Hello Good-bye!", "Hello World"]
  *
  * _options_ に指定可能な値は以下の通り。
- * @param options [Hash] The name and value
+ * @param options [::Hash] The name and value
  *   pairs. Omitted names are initialized as the default value.
  * @option options :default_column
  *

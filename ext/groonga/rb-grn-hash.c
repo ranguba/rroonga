@@ -39,7 +39,7 @@ VALUE rb_cGrnHash;
  * を抜けると自動的にテーブルが破棄される。
  *
  * _options_ に指定可能な値は以下の通り。
- * @param [Hash] options The name and value
+ * @param [::Hash] options The name and value
  *   pairs. Omitted names are initialized as the default value
  * @option options [Groonga::Context] :context (Groonga::Context.default) The context
  *
@@ -236,7 +236,7 @@ rb_grn_hash_s_create (int argc, VALUE *argv, VALUE klass)
  * +:result+にテーブルを指定した場合は、そのテーブルが返る。
  *
  * _options_に指定可能な値は以下の通り。
- * @param [Hash] options The name and value
+ * @param [::Hash] options The name and value
  *   pairs. Omitted names are initialized as the default value
  * @option options :result The result
  *

@@ -44,7 +44,7 @@ VALUE rb_cGrnPatriciaTrie;
  * れ、ブロックを抜けると自動的にテーブルが破棄される。
  *
  * _options_ に指定可能な値は以下の通り。
- * @param options [Hash] The name and value
+ * @param options [::Hash] The name and value
  *   pairs. Omitted names are initialized as the default value.
  * @option options [Groonga::Context] :context (Groonga::Context.default)
  *
@@ -256,7 +256,7 @@ rb_grn_patricia_trie_s_create (int argc, VALUE *argv, VALUE klass)
  * +:result+ にテーブルを指定した場合は、そのテーブルが返る。
  *
  * _options_ に指定可能な値は以下の通り。
- * @param options [Hash] The name and value
+ * @param options [::Hash] The name and value
  *   pairs. Omitted names are initialized as the default value.
  * @option options :result The result
  *
@@ -608,7 +608,7 @@ rb_grn_patricia_trie_open_grn_prefix_cursor (int argc, VALUE *argv, VALUE self,
  * ロックを抜けると自動的にカーソルが破棄される。
  *
  * _options_ に指定可能な値は以下の通り。
- * @param options [Hash] The name and value
+ * @param options [::Hash] The name and value
  *   pairs. Omitted names are initialized as the default value.
  * @option options :key_bytes The key_bytes
  *
@@ -742,7 +742,7 @@ rb_grn_patricia_trie_open_grn_rk_cursor (int argc, VALUE *argv, VALUE self,
  * 棄される。
  *
  * _options_ に指定可能な値は以下の通り。
- * @param options [Hash] The name and value
+ * @param options [::Hash] The name and value
  *   pairs. Omitted names are initialized as the default value.
  * @option options :key_bytes The key_bytes
  *
@@ -861,7 +861,7 @@ rb_grn_patricia_trie_open_grn_near_cursor (int argc, VALUE *argv, VALUE self,
  * れ、ブロックを抜けると自動的にカーソルが破棄される。
  *
  * _options_ に指定可能な値は以下の通り。
- * @param options [Hash] The name and value
+ * @param options [::Hash] The name and value
  *   pairs. Omitted names are initialized as the default value.
  * @option options :size The size
  *

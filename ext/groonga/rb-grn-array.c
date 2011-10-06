@@ -58,7 +58,7 @@ VALUE rb_cGrnArray;
  *   場合は自動的にパスが付加される。 +:context+ で指定した
  *   Groonga::Contextに結びついているデータベースが一時デー
  *   タベースの場合は例外が発生する。
- * @option options :value_type (false) The value_type
+ * @option options :value_type (nil) The value_type
  *   値の型を指定する。省略すると値のための領域を確保しない。
  *   値を保存したい場合は必ず指定すること。
  *   参考: Groonga::Type.new

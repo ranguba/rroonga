@@ -232,7 +232,7 @@ rb_grn_column_get_local_name (VALUE self)
  * {Groonga::ColumnExpressionBuilder} を参照。
  *
  * _options_ に指定可能な値は以下の通り。
- * @param [Hash] options The name and value
+ * @param [::Hash] options The name and value
  *   pairs. Omitted names are initialized as the default value.
  * @option options :operator (Groonga::Operator::OR) The operator
  *   マッチしたレコードをどのように扱うか。指定可能な値は以

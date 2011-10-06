@@ -110,7 +110,7 @@ rb_grn_expression_initialize (int argc, VALUE *argv, VALUE self)
  * _expression_ で使用可能な変数を作成する。
  *
  * _options_ に指定可能な値は以下の通り。
- * @param options [Hash] The name and value
+ * @param options [::Hash] The name and value
  *   pairs. Omitted names are initialized as the default value.
  * @option options :name (false)
  *
@@ -264,7 +264,7 @@ rb_grn_expression_append_operation (VALUE self, VALUE rb_operation,
  * 文字列 _query_ をパースする。
  *
  * _options_ に指定可能な値は以下の通り。
- * @param options [Hash] The name and value
+ * @param options [::Hash] The name and value
  *   pairs. Omitted names are initialized as the default value.
  * @option options :default_column The default_column
  *
@@ -600,7 +600,7 @@ rb_grn_expression_inspect (VALUE self)
  *     #     "使って全文<tag1>検索</tag1>、高速<tag2>検索</tag2>。"]
  *
  * _options_ に指定可能な値は以下の通り。
- * @param options [Hash] The name and value
+ * @param options [::Hash] The name and value
  *   pairs. Omitted names are initialized as the default value.
  * @option options :normalize (false) The normalize
  *
