@@ -17,10 +17,6 @@
 
 module Groonga
   class Context
-    # call-seq:
-    #
-    # @context.open_database(path) -> Groonga::Database@
-    #
     # _path_ にある既存のデータベースを開く。ブロックを指定した場
     # 合はブロックに開いたデータベースを渡し、ブロックを抜けると
     # きに閉じる。
