@@ -80,6 +80,7 @@ rb_grn_plugin_alloc (VALUE klass)
  * @param options [Hash] The name and value
  *   pairs. Omitted names are initialized as the default value.
  * @option options :context (Groonga::Context.default) The context
+ *
  *   データベースを結びつけるコンテキスト。
  */
 static VALUE

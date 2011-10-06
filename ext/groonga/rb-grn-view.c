@@ -51,14 +51,17 @@ VALUE rb_cGrnView;
  * @param options [Hash] The name and value
  *   pairs. Omitted names are initialized as the default value
  * @option options :context (Groonga::Context.default)
+ *
  *   ビューが利用するGroonga::Context。
  *
  * @option options :name The view name
+ *
  *   ビューの名前。名前をつけると、Groonga::Context#[]に名
  *   前を指定してビューを取得することができる。省略すると
  *   無名ビューになり、ビューIDでのみ取得できる。
  *
  * @option options :path The path
+ *
  *   ビューを保存するパス。パスを指定すると永続ビューとな
  *   り、プロセス終了後もレコードは保持される。次回起動時に
  *   Groonga::View.openで保存されたビューを利用することが
@@ -66,6 +69,7 @@ VALUE rb_cGrnView;
  *   とビューは破棄される。
  *
  * @option options :persistent The persistent
+ *
  *   +true+ を指定すると永続ビューとなる。 +path+ を省略した
  *   場合は自動的にパスが付加される。 +:context+ で指定した
  *   Groonga::Contextに結びついているデータベースが一時デー
@@ -271,10 +275,12 @@ rb_grn_view_get_column_value (VALUE self, VALUE rb_id, VALUE rb_name)
  * @param options [Hash] The name and value
  *   pairs. Omitted names are initialized as the default value
  * @option options :offset The offset
+ *
  *   ソートされたレコードのうち、(0ベースで) _:offset_ 番目
  *   からレコードを取り出す。
  *
  * @option options :limit The limit
+ *
  *   ソートされたレコードのうち、 _:limit_ 件のみを取り出す。
  *   省略された場合または-1が指定された場合は、全件が指定され
  *   たものとみなす。

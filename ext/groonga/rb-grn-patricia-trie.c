@@ -46,15 +46,18 @@ VALUE rb_cGrnPatriciaTrie;
  * _options_ に指定可能な値は以下の通り。
  * @param options [Hash] The name and value
  *   pairs. Omitted names are initialized as the default value.
- * @option options :context (Groonga::Context.default)
+ * @option options [Groonga::Context] :context (Groonga::Context.default)
+ *
  *   テーブルが利用するGroonga::Context。
  *
- * @option options :name (無名テーブル) The name
+ * @option options :name The table name
+ *
  *   テーブルの名前。名前をつけると、Groonga::Context#[]に名
  *   前を指定してテーブルを取得することができる。省略すると
  *   無名テーブルになり、テーブルIDでのみ取得できる。
  *
- * @option options :path (一時テーブル) The path
+ * @option options :path The path
+ *
  *   テーブルを保存するパス。パスを指定すると永続テーブルとな
  *   り、プロセス終了後もレコードは保持される。次回起動時に
  *   Groonga::Context#[]で保存されたレコードを利用する
@@ -62,19 +65,23 @@ VALUE rb_cGrnPatriciaTrie;
  *   了するとレコードは破棄される。
  *
  * @option options :persistent The persistent
+ *
  *   +true+ を指定すると永続テーブルとなる。 +path+ を省略した
  *   場合は自動的にパスが付加される。 +:context+ で指定した
  *   Groonga::Contextに結びついているデータベースが一時デー
  *   タベースの場合は例外が発生する。
  *
  * @option options :key_normalize The key_normalize
+ *
  *   +true+ を指定するとキーを正規化する。
  *
  * @option options :key_with_sis The key_with_sis
- *   +true+を指定するとキーの文字列の全suffixが自動的に登
+ *
+ *   +true+ を指定するとキーの文字列の全suffixが自動的に登
  *   録される。
  *
  * @option options :key_type The key_type
+ *
  *   キーの種類を示すオブジェクトを指定する。キーの種類には型
  *   名（"Int32"や"ShortText"など）またはGroonga::Typeまたは
  *   テーブル（Groonga::Array、Groonga::Hash、
@@ -94,18 +101,21 @@ VALUE rb_cGrnPatriciaTrie;
  *   4096バイトまで使用可能である。
  *
  * @option options :value_type The value_type
+ *
  *   値の型を指定する。省略すると値のための領域を確保しない。
  *   値を保存したい場合は必ず指定すること。
  *
  *   参考: Groonga::Type.new
  *
  * @option options :default_tokenizer The default_tokenizer
+ *
  *   Groonga::IndexColumnで使用するトークナイザを指定する。
  *   デフォルトでは何も設定されていないので、テーブルに
  *   Groonga::IndexColumnを定義する場合は
  *   <tt>"TokenBigram"</tt>などを指定する必要がある。
  *
  * @option options :sub_records The sub_records
+ *
  *   +true+ を指定すると#groupでグループ化したときに、
  *   Groonga::Record#n_sub_recordsでグループに含まれるレコー
  *   ドの件数を取得できる。
@@ -249,8 +259,10 @@ rb_grn_patricia_trie_s_create (int argc, VALUE *argv, VALUE klass)
  * @param options [Hash] The name and value
  *   pairs. Omitted names are initialized as the default value.
  * @option options :result The result
+ *
  *   結果を格納するテーブル。
  * @option options :operator (Groonga::Operator::OR)
+ *
  *   マッチしたレコードをどのように扱うか。指定可能な値は以
  *   下の通り。
  *
@@ -599,36 +611,43 @@ rb_grn_patricia_trie_open_grn_prefix_cursor (int argc, VALUE *argv, VALUE self,
  * @param options [Hash] The name and value
  *   pairs. Omitted names are initialized as the default value.
  * @option options :key_bytes The key_bytes
+ *
  *  _prefix_ のサイズ（byte）
  *
  * @option options :key_bits The key_bits
+ *
  *  _prefix_ のサイズ（bit）
  *
  * @option options :offset The offset
+ *
  *   該当する範囲のレコードのうち、(0ベースで) _:offset_ 番目
  *   からレコードを取り出す。
  *
  * @option options :limit The limit
+ *
  *   該当する範囲のレコードのうち、 _:limit_ 件のみを取り出す。
  *   省略された場合または-1が指定された場合は、全件が指定され
  *   たものとみなす。
  *
  * @option options :order The order
+ *
  *   +:asc+ または +:ascending+ を指定すると昇順にレコードを取
  *   り出す。
  *   +:desc+ または +:descending+ を指定すると降順にレコードを
  *   取り出す。
  *
  * @option options :order_by (:id) The order_by
- *   +:id+ を指定するとID順にレコードを取り出す。（デフォルト）
  *
+ *   +:id+ を指定するとID順にレコードを取り出す。（デフォルト）
  *   +:key+指定するとキー順にレコードを取り出す。
  *
  * @option options :greater_than The greater_than
+ *
  *   +true+ を指定すると _prefix_ で指定した値に一致した [ +key+ ] を
  *   範囲に含まない。
  *
  * @option options :less_than The less_than
+ *
  *   +true+ を指定すると _prefix_ で指定した値に一致した [ +key+ ] を
  *   範囲に含まない。
  */
@@ -726,25 +745,31 @@ rb_grn_patricia_trie_open_grn_rk_cursor (int argc, VALUE *argv, VALUE self,
  * @param options [Hash] The name and value
  *   pairs. Omitted names are initialized as the default value.
  * @option options :key_bytes The key_bytes
+ *
  *  _key_のサイズ（byte）
  *
  * @option options :key_bits The key_bits
+ *
  *  _key_のサイズ（bit）（現在は未サポート）
  *
  * @option options :offset The offset
+ *
  *   該当する範囲のレコードのうち、(0ベースで)_:offset_番目
  *   からレコードを取り出す。
  *
  * @option options :limit The limit
+ *
  *   該当する範囲のレコードのうち、 _:limit_ 件のみを取り出す。
  *   省略された場合または-1が指定された場合は、全件が指定され
  *   たものとみなす。
  *
  * @option options :greater_than The greater_than
+ *
  *   +true+ を指定すると _key_ で指定した値に一致した [ +key+ ] を
  *   範囲に含まない。
  *
  * @option options :less_than The less_than
+ *
  *   +true+ を指定すると _key_ で指定した値に一致した [ +key+ ] を
  *   範囲に含まない。
  */
@@ -839,22 +864,27 @@ rb_grn_patricia_trie_open_grn_near_cursor (int argc, VALUE *argv, VALUE self,
  * @param options [Hash] The name and value
  *   pairs. Omitted names are initialized as the default value.
  * @option options :size The size
+ *
  *   _size_バイト以降のデータが同じキーのレコードに限定する。
  *
  * @option options :offset The offset
+ *
  *   該当する範囲のレコードのうち、(0ベースで)_:offset_番目
  *   からレコードを取り出す。
  *
  * @option options :limit The limit
+ *
  *   該当する範囲のレコードのうち、_:limit_件のみを取り出す。
  *   省略された場合または-1が指定された場合は、全件が指定され
  *   たものとみなす。
  *
  * @option options :greater_than The greater_than
+ *
  *   +true+ を指定すると _key_ で指定した値に一致した [ +key+ ] を
  *   範囲に含まない。
  *
  * @option options :less_than
+ *
  *   +true+ を指定すると _key_ で指定した値に一致した [ +key+ ] を
  *   範囲に含まない。
  */

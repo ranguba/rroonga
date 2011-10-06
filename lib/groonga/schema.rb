@@ -170,9 +170,6 @@ module Groonga
         schema.define
       end
 
-      # call-seq:
-      #   Groonga::Schema.create_table(name, options={}) {|table| ...}
-      #
       # @example 名前が _name_ のテーブルを作成する。以下の省略形。
       #  Groonga::Schema.define do |schema|
       #    schema.create_table(name, options) do |table|

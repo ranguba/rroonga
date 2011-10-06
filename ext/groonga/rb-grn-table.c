@@ -391,10 +391,10 @@ n_gram_tokenizer_p(grn_ctx *context, grn_obj *tokenizer)
  *   転置索引に出現位置情報を合わせて格納する。
  *
  * @option options :source The source
- *  インデックス対象となるカラムを指定する。+:sources+との併用はできない。
+ *  インデックス対象となるカラムを指定する。 +:sources+ との併用はできない。
  *
  * @option options :sources The sources
- *  インデックス対象となる複数のカラムを指定する。+:source+との併用はできない。
+ *  インデックス対象となる複数のカラムを指定する。 +:source+ との併用はできない。
  */
 static VALUE
 rb_grn_table_define_index_column (int argc, VALUE *argv, VALUE self)
@@ -1556,10 +1556,13 @@ rb_grn_table_unlock_ensure (VALUE self)
  * @param options [Hash] The name and value
  *   pairs. Omitted names are initialized as the default value.
  * @option options :timeout The timeout
+ *
  *   ロックを獲得できなかった場合は_:timeout_秒間ロックの獲
  *   得を試みる。_:timeout_秒以内にロックを獲得できなかった
  *   場合は例外が発生する。
+ *
  * @option options :id The id
+ *
  *   _:id_で指定したレコードをロックする。（注: groonga側が
  *   未実装のため、現在は無視される）
  */
@@ -1614,6 +1617,7 @@ rb_grn_table_lock (int argc, VALUE *argv, VALUE self)
  * @param options [Hash] The name and value
  *   pairs. Omitted names are initialized as the default value.
  * @option options :id The id
+ *
  *   _:id_ で指定したレコードのロックを強制的に解除する。
  *   （注: groonga側が未実装のため、現在は無視される。実装さ
  *   れるのではないかと思っているが、実装されないかもしれな
@@ -1658,6 +1662,7 @@ rb_grn_table_clear_lock (int argc, VALUE *argv, VALUE self)
  * @param options [options] The name and value
  *   pairs. Omitted names are initialized as the default value.
  * @option options :id The id
+ *
  *   _:id_ で指定したレコードがロックされていれば +true+ を返す。
  *   （注: groonga側が未実装のため、現在は無視される。実装さ
  *   れるのではないかと思っているが、実装されないかもしれな
@@ -1768,10 +1773,12 @@ rb_grn_table_is_locked (int argc, VALUE *argv, VALUE self)
  * @param options [Hash] The name and value
  *   pairs. Omitted names are initialized as the default value.
  * @option options :default_column
+ *
  *   "column_name:hoge"ではなく"hoge"のようにcolumn_nameが指
  *   定されない条件の検索対象となるカラムを指定する。
  *
  * @option options :operator (Groonga::Operator::OR) The operator
+ *
  *   マッチしたレコードをどのように扱うか。指定可能な値は以
  *   下の通り。省略した場合はGroonga::Operator::OR。
  *
@@ -1786,30 +1793,36 @@ rb_grn_table_is_locked (int argc, VALUE *argv, VALUE self)
  *                               を増加。
  *
  * @option options :result The result
+ *
  *   検索結果を格納するテーブル。マッチしたレコードが追加さ
  *   れていく。省略した場合は新しくテーブルを作成して返す。
  *
  * @option options :name The name
+ *
  *   条件の名前。省略した場合は名前を付けない。
  *
  * @option options :syntax The syntax
+ *
  *   _query_ の構文。省略した場合は +:query+ 。
  *
  *   参考: Groonga::Expression#parse.
  *
  * @option options :allow_pragma The allow_pragma
+ *
  *   query構文時にプラグマを利用するかどうか。省略した場合は
  *   利用する。
  *
  *   参考: Groonga::Expression#parse.
  *
  * @option options :allow_column The allow_column
+ *
  *   query構文時にカラム指定を利用するかどうか。省略した場合
  *   は利用する。
  *
  *   参考: Groonga::Expression#parse.
  *
  * @option options :allow_update The allow_update
+ *
  *   script構文時に更新操作を利用するかどうか。省略した場合
  *   は利用する。
  *

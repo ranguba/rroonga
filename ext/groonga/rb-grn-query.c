@@ -206,7 +206,7 @@ rb_grn_query_initialize (int argc, VALUE *argv, VALUE self)
  * call-seq:
  *   query.close
  *
- * _query_が使用しているリソースを開放する。これ以降_query_を
+ * _query_ が使用しているリソースを開放する。これ以降 _query_ を
  * 使うことはできない。
  */
 static VALUE

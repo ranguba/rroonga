@@ -100,31 +100,33 @@ rb_grn_index_column_deconstruct (RbGrnIndexColumn *rb_grn_index_column,
  *   column[id] = value
  *   column[id] = options
  *
- * IDが_id_であるレコードを高速に全文検索するため転置索引を作
+ * IDが _id_ であるレコードを高速に全文検索するため転置索引を作
  * 成する。多くの場合、Groonga::Table#define_index_columnで
- * +:source+オプションを指定することにより、自動的に全文検索
+ * +:source+ オプションを指定することにより、自動的に全文検索
  * 用の索引は更新されるので、明示的にこのメソッドを使うこと
  * は少ない。
  *
- * _value_には文字列を指定する。
+ * _value_ には文字列を指定する。
  *
- * _options_を指定することにより、より索引の作成を制御できる。
- * _options_に指定可能な値は以下の通り。
+ * _options_ を指定することにより、より索引の作成を制御できる。
+ * _options_ に指定可能な値は以下の通り。
+ * @param [Hash] options  The name and value
+ *   pairs. Omitted names are initialized as the default value
+ * @option options :section The section
  *
- * [+:section+]
  *   段落番号を指定する。省略した場合は1を指定したとみなされ
  *   る。
- *
  *   Groonga::Table#define_index_columnで
  *   <tt>{:with_section => true}</tt>を指定していなければい
  *   けない。
  *
- * [+:old_value+]
+ * @option options :old_value The old_value
+ *
  *   以前の値を指定する。省略した場合は現在の値が用いられる。
  *   通常は指定する必要はない。
  *
- * [+:value+]
- *   新しい値を指定する。_value_を指定した場合と_options_で
+ * @option options :value The value
+ *   新しい値を指定する。 _value_ を指定した場合と _options_ で
  *   <tt>{:value => value}</tt>を指定した場合は同じ動作とな
  *   る。
  *
@@ -400,32 +402,35 @@ rb_grn_index_column_set_source (VALUE self, VALUE rb_source)
  * call-seq:
  *   column.search(query, options={}) -> Groonga::Hash
  *
- * _object_から_query_に対応するオブジェクトを検索し、見つかっ
+ * _object_ から _query_ に対応するオブジェクトを検索し、見つかっ
  * たオブジェクトのIDがキーになっているGroonga::Hashを返す。
  *
  * 利用可能なオプションは以下の通り。
- *
- * [+:result+]
+ * @param [Hash] options The name and value
+ *   pairs. Omitted names are initialized as the default value
+ * @option options [Groonga::Hash] :result The result
  *   結果を格納するGroonga::Hash。指定しない場合は新しく
  *   Groonga::Hashを生成し、それに結果を格納して返す。
- * [+:operator+]
- *   以下のどれかの値を指定する。+nil+, <tt>"or"</tt>, <tt>"||"</tt>,
+ * @option options :operator The operator
+ *
+ *   以下のどれかの値を指定する。 +nil+ , <tt>"or"</tt>, <tt>"||"</tt>,
  *   <tt>"and"</tt>, <tt>"+"</tt>, <tt>"&&"</tt>, <tt>"but"</tt>,
  *   <tt>"not"</tt>, <tt>"-"</tt>, <tt>"adjust"</tt>, <tt>">"</tt>。
  *   それぞれ以下のようになる。（FIXME: 「以下」）
- * [+:exact+]
- *   +true+を指定すると完全一致で検索する
- * [+:longest_common_prefix+]
- *   +true+を指定すると_query_と同じ接頭辞をもつエントリのう
+ * @option options :exact The exact
+ *
+ *   +true+ を指定すると完全一致で検索する
+ * @option options :longest_common_prefix The longest_common_prefix
+ *   +true+ を指定すると _query_ と同じ接頭辞をもつエントリのう
  *   ち、もっとも長いエントリを検索する
- * [+:suffix+]
- *   +true+を指定すると_query_が後方一致するエントリを検索す
+ * @option options :suffix The suffix
+ *   +true+ を指定すると _query_ が後方一致するエントリを検索す
  *   る
- * [+:prefix+]
- *   +true+を指定すると_query_が前方一致するレコードを検索す
+ * @option options :prefix The prefix
+ *   +true+ を指定すると _query_ が前方一致するレコードを検索す
  *   る
- * [+:near+]
- *   +true+を指定すると_query_に指定した複数の語が近傍に含ま
+ * @option options :near The near
+ *   +true+ を指定すると _query_ に指定した複数の語が近傍に含ま
  *   れるレコードを検索する
  * [...]
  *   ...
@@ -494,7 +499,7 @@ rb_grn_index_column_search (int argc, VALUE *argv, VALUE self)
  * call-seq:
  *   column.with_section? -> true/false
  *
- * _column_が段落情報も格納する場合は+true+を返します。
+ * _column_ が段落情報も格納する場合は +true+ を返します。
  */
 static VALUE
 rb_grn_index_column_with_section_p (VALUE self)
@@ -515,7 +520,7 @@ rb_grn_index_column_with_section_p (VALUE self)
  * call-seq:
  *   column.with_weight? -> true/false
  *
- * _column_がウェイト情報も格納する場合は+true+を返します。
+ * _column_ がウェイト情報も格納する場合は +true+ を返します。
  */
 static VALUE
 rb_grn_index_column_with_weight_p (VALUE self)
@@ -536,7 +541,7 @@ rb_grn_index_column_with_weight_p (VALUE self)
  * call-seq:
  *   column.with_position? -> true/false
  *
- * _column_が位置情報も格納する場合は+true+を返します。
+ * _column_ が位置情報も格納する場合は +true+ を返します。
  */
 static VALUE
 rb_grn_index_column_with_position_p (VALUE self)

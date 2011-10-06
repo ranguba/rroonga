@@ -146,14 +146,16 @@ rb_grn_database_close (VALUE self)
  *
  * 新しくデータベースを作成する。
  *
- * _options_にはハッシュでオプションを指定する。指定できるオ
+ * _options_ にはハッシュでオプションを指定する。指定できるオ
  * プションは以下の通り。
  * @param option [Hash] options The name and value
  *   pairs. Omitted names are initialized as the default value.
  * @option options :path The path
+ *
  *   データベースを保存するパス。省略すると一時データベース
  *   となる。
- * @option options :context The context
+ * @option options :context (Groonga::Context.default) The context
+ *
  *   データベースを結びつけるコンテキスト。省略すると
  *   Groonga::Context.defaultを利用する。
  *
@@ -224,6 +226,7 @@ rb_grn_database_s_create (int argc, VALUE *argv, VALUE klass)
  * @param options [Hash] The name and value
  *   pairs. Omitted names are initialized as the default value.
  * @option options :context (Groonga::Context.default) The context
+ *
  *   データベースを結びつけるコンテキスト。省略すると
  *   Groonga::Context.defaultを利用する。
  */
@@ -272,6 +275,7 @@ rb_grn_database_initialize (int argc, VALUE *argv, VALUE self)
  * @param options [Hash] The name and value
  *   pairs. Omitted names are initialized as the default value.
  * @option options :context (Groonga::Context.default) The context
+ *
  *   データベースを結びつけるコンテキスト。
  */
 static VALUE
@@ -406,8 +410,10 @@ rb_grn_database_unlock (VALUE self)
  * ブロックを指定した場合はブロックを抜けたときにunlockする。
  *
  * 利用可能なオプションは以下の通り。
+ * @param [Hash] options The name and value
+ *   pairs. Omitted names are initialized as the default value
+ * @option options :timeout The timeout
  *
- * [_:timeout_]
  *   ロックを獲得できなかった場合は _:timeout_ 秒間ロックの獲
  *   得を試みる。 _:timeout_ 秒以内にロックを獲得できなかった
  *   場合は例外が発生する。
@@ -472,7 +478,7 @@ rb_grn_database_clear_lock (VALUE self)
  * call-seq:
  *   database.locked?
  *
- * _database_ がロックされていれば+true+を返す。
+ * _database_ がロックされていれば +true+ を返す。
  */
 static VALUE
 rb_grn_database_is_locked (VALUE self)

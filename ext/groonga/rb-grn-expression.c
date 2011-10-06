@@ -112,9 +112,11 @@ rb_grn_expression_initialize (int argc, VALUE *argv, VALUE self)
  * _options_ に指定可能な値は以下の通り。
  * @param options [Hash] The name and value
  *   pairs. Omitted names are initialized as the default value.
- * @option options :name
+ * @option options :name (false)
+ *
  *   変数の名前。省略した場合は名前を付けない。
  * @option options :domain
+ *
  *   テーブルを指定すると、そのテーブル用のレコードとして初期化する。
  */
 static VALUE
@@ -265,14 +267,15 @@ rb_grn_expression_append_operation (VALUE self, VALUE rb_operation,
  * @param options [Hash] The name and value
  *   pairs. Omitted names are initialized as the default value.
  * @option options :default_column The default_column
+ *
  *   "column_name:hoge"ではなく"hoge"のようにcolumn_nameが指
  *   定されない条件の検索対象となるカラムを指定する。
  * @option options :default_operator (Groonga::Operator::AND)
+ *
  *   The default_operator
  *   "+"や"OR"で繋がれず、ただ列挙された複数の条件があった時、
  *   _expression_ 全体として各レコードをヒットとみなすかの論理
  *   条件を指定する。省略した場合はGroonga::Operator::AND。
- *
  *   [Groonga::Operator::OR]
  *     レコードはいずれかの条件にマッチすればいい。
  *   [Groonga::Operator::AND]
@@ -281,11 +284,13 @@ rb_grn_expression_append_operation (VALUE self, VALUE rb_operation,
  *     最初の条件にレコードはマッチし、残りの条件にレコードは
  *     マッチしてはならない。
  * @option options :default_mode (Groonga::Operator::MATCH) The default_mode
+ *
  *   検索時のモードを指定する。省略した場合は
  *   Groonga::Operator::MATCH。（FIXME: モードによってどう
  *   いう動作になるかを書く。）
  *
  * @option options :syntax (:query) The syntax
+ *
  *   _query_ の構文を指定する。指定可能な値は以下の通り。省略
  *   した場合は +:query+ 。
  *
@@ -314,6 +319,7 @@ rb_grn_expression_append_operation (VALUE self, VALUE rb_operation,
  *   参考: grn式のquery形式（link:text/expression_rdoc.html）
  *
  * @option options :allow_column The allow_column
+ *
  *   _query_ の構文にqueryを用いているとき（+:syntax+オプショ
  *   ン参照）、「カラム名:値」というようにカラム名を指定した
  *   条件式を利用できるようにする。script構文を用いていると
@@ -324,7 +330,8 @@ rb_grn_expression_append_operation (VALUE self, VALUE rb_operation,
  *   参考: grn式のquery形式（link:text/expression_rdoc.html）
  *
  * @option options :allow_update The allow_update
- *   _query_の構文にscriptを用いているとき（+:syntax+オプショ
+ *
+ *   _query_の構文にscriptを用いているとき（ +:syntax+ オプショ
  *   ン参照）、「カラム名 = 値」というように更新操作を利用で
  *   きるようにする。query構文を用いているときはこのオプショ
  *   ンを利用できない。
@@ -596,22 +603,25 @@ rb_grn_expression_inspect (VALUE self)
  * @param options [Hash] The name and value
  *   pairs. Omitted names are initialized as the default value.
  * @option options :normalize (false) The normalize
+ *
  *   キーワード文字列・スニペット元の文字列を正規化するかど
  *   うか。省略した場合は +false+ で正規化しない。
  *
  * @option options :skip_leading_spaces (false) The skip_leading_spaces
+ *
  *   先頭の空白を無視するかどうか。省略した場合は +false+ で無
  *   視しない。
  *
  * @option options :width (100) The width
+ *
  *   スニペット文字列の長さ。省略した場合は100文字。
- *
  * @option options :max_results (3) The max_results
- *   生成するスニペットの最大数。省略した場合は3。
  *
+ *   生成するスニペットの最大数。省略した場合は3。
  * @option options :html_escape (false) The html_escape
- *   スニペット内の+<+, +>+, +&+, +"+をHTMLエスケープするか
- *   どうか。省略した場合は+false+で、HTMLエスケープしない。
+ *
+ *   スニペット内の +<+, +>+, +&+, +"+ をHTMLエスケープするか
+ *   どうか。省略した場合は +false+ で、HTMLエスケープしない。
  */
 static VALUE
 rb_grn_expression_snippet (int argc, VALUE *argv, VALUE self)

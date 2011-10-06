@@ -108,17 +108,21 @@ rb_grn_snippet_alloc (VALUE klass)
  * @param options [Hash] The name and value
  *   pairs. Omitted names are initialized as the default value.
  * @option options :context (Groonga::Context.default) The context
+ *
  *   スキーマ作成時に使用するGroonga::Contextを指定する。
  *
  * @option options :normalize The normalize
+ *
  *   キーワード文字列・スニペット元の文字列を正規化するかど
  *   うか。省略した場合は +false+ で正規化しない。
  *
  * @option options :skip_leading_spaces (false) The skip_leading_spaces
+ *
  *   先頭の空白を無視するかどうか。省略した場合は で無
  *   視しない。
  *
  * @option options :width (100) The width
+ *
  *   スニペット文字列の長さ。省略した場合は100文字。
  *
  * @option options :max_results (3) The max_results
@@ -218,10 +222,12 @@ rb_grn_snippet_initialize (int argc, VALUE *argv, VALUE self)
  * @param options [Hash] The name and value
  *   pairs. Omitted names are initialized as the default value.
  * @option options :open_tag (default_open_tag) The open_tag
+ *
  *   開始タグ。省略した場合はGroonga::Snippet.newで指定し
  *   た+:default_open_tag+。
  *
  * @option options :close_tag (:default_close_tag) The close_tag
+ *
  *   終了タグ。省略した場合はGroonga::Snippet.newで指定し
  *   た+:default_close_tag+。
  */

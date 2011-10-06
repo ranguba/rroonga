@@ -39,9 +39,9 @@ VALUE rb_cGrnArray;
  * にテーブルが破棄される。
  *
  * _options_ に指定可能な値は以下の通り
- * @param [Hash] options The name and value
+ * @param [::Hash] options The name and value
  *   pairs. Omitted names are initialized as the default value.
- * @option options :context (Groonga::Context.default) The context
+ * @option options [Grrnga::Context] :context (Groonga::Context.default) The context
  *   テーブルが利用するGrrnga::Context
  * @option options :name The name
  *   テーブルの名前。名前をつけると、Groonga::Context#[]に名
@@ -58,11 +58,11 @@ VALUE rb_cGrnArray;
  *   場合は自動的にパスが付加される。 +:context+ で指定した
  *   Groonga::Contextに結びついているデータベースが一時デー
  *   タベースの場合は例外が発生する。
- * @option options :value_type The value_type
+ * @option options :value_type (false) The value_type
  *   値の型を指定する。省略すると値のための領域を確保しない。
  *   値を保存したい場合は必ず指定すること。
  *   参考: Groonga::Type.new
- * @option options :sub_records The sub_records
+ * @option options [Groonga::Record#n_sub_records] :sub_records The sub_records
  *   +true+ を指定すると#groupでグループ化したときに、
  *   Groonga::Record#n_sub_recordsでグループに含まれるレコー
  *   ドの件数を取得できる。
@@ -150,7 +150,7 @@ rb_grn_array_s_create (int argc, VALUE *argv, VALUE klass)
  * レコード追加し、追加したレコードを返す。レコードの追加に失
  * 敗した場合は +nil+ を返す。
  *
- * _values_にはレコードのカラムに設定する値を指定する。省略
+ * _values_ にはレコードのカラムに設定する値を指定する。省略
  * した場合または +nil+ を指定した場合はカラムは設定しない。カ
  * ラムの値は<tt>{:カラム名1 => 値1, :カラム名2 => 値2,
  * ...}</tt>と指定する。

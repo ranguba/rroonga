@@ -266,6 +266,7 @@ rb_grn_logger_initialize (int argc, VALUE *argv, VALUE self)
  * @param options [Hash] The name and value
  *   pairs. Omitted names are initialized as the default value.
  * @option options :level (:notice) The log level
+ *
  *   ログのレベルを +:none+ ,  +:emergency+ ,  +:alert+ ,
  *   +:critical+ , +:error+ , +:warning+ , +:notice+ , +:info+ ,
  *   +:debug+ ,  +:dump+ のいずれかで指定する。それより重要度が
@@ -273,19 +274,22 @@ rb_grn_logger_initialize (int argc, VALUE *argv, VALUE self)
  *   +:notice+ 。
  *
  * @option options :time
+ *
  *   ログが出力された時間をブロックに渡したいなら +true+ を指
  *   定する。デフォルトでは渡す。
  *
- * [+:title+]
+ * @option options :title The title
+ *
  *   ログのタイトルをブロックに渡したいなら +true+ を指定す
  *   る。デフォルトでは渡す。(FIXME: groongaで実装されてい
  *   ない?)
  *
- * [+:message+]
+ * @option options :message The message
  *   ログのメッセージをブロックに渡したいなら +true+ を指定す
  *   る。デフォルトでは渡す。
  *
- * [+:location+]
+ * @option options :location The location
+ *
  *   ログの発生元のプロセスIDとgroongaのソースコードのファイ
  *   ル名、行番号、関数名をブロックに渡したいなら +true+ を指
  *   定する。デフォルトでは渡す。

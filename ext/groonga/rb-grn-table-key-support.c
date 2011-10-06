@@ -114,7 +114,7 @@ rb_grn_table_key_support_add_raw (VALUE self, VALUE rb_key, int *added)
  *   table.add(key, values=nil) -> Groonga::Recordまたはnil
  *
  * 主キーが _key_ のレコード追加し、追加したレコードを返す。レ
- * コードの追加に失敗した場合は+nil+を返す。
+ * コードの追加に失敗した場合は +nil+ を返す。
  *
  * すでに同じキーのレコードが存在する場合は追加せずに同じレ
  * コードを返す。追加されたかどうかは
