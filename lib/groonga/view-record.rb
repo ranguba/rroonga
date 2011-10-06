@@ -28,9 +28,6 @@ module Groonga
       @id = id
     end
 
-    # call-seq:
-    #   record == other -> true/false
-    #
     # _record_ と _other_ が同じgroongaのレコードなら +true+ を返し、
     # そうでなければ +false+ を返す。
     def ==(other)
@@ -38,9 +35,6 @@ module Groonga
         [view, id] == [other.view, other.id]
     end
 
-    # call-seq:
-    #   record[column_name] -> 値
-    #
     # このレコードの _column_name_ で指定されたカラムの値を返す。
     def [](column_name)
       @view.column_value(@id, column_name)

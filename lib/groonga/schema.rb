@@ -148,9 +148,6 @@ module Groonga
 
     class << self
 
-      # call-seq:
-      #   Groonga::Schema.define(options={}) {|schema| ...}
-      #
       # スキーマを定義する。ブロックにはGroonga::Schemaオブ
       # ジェクトがわたるので、そのオブジェクトを利用してスキー
       # マを定義する。以下の省略形。
@@ -326,9 +323,6 @@ module Groonga
         end
       end
 
-      # call-seq:
-      #   Groonga::Schema.change_table(name, options={}) {|table| ...}
-      #
       # 名前が _name_ のテーブルを変更する。以下の省略形。
       # @example
       #   Groonga::Schema.define do |schema|
@@ -352,9 +346,6 @@ module Groonga
         end
       end
 
-      # call-seq:
-      #   Groonga::Schema.create_view(name, options={}) {|view| ...}
-      #
       # @example 名前が_name_のビューを作成する。以下の省略形。
       #   Groonga::Schema.define do |schema|
       #     schema.create_view(name, options) do |view|
@@ -402,9 +393,6 @@ module Groonga
         end
       end
 
-      # call-seq:
-      #   Groonga::Schema.change_view(name, options={}) {|view| ...}
-      #
       # @example 名前が_name_のビューを変更する。以下の省略形。
       #   Groonga::Schema.define do |schema|
       #     schema.change_view(name, options) do |view|
@@ -427,9 +415,6 @@ module Groonga
         end
       end
 
-      # call-seq:
-      #   Groonga::Schema.remove_column(table_name, column_name)
-      #
       # 以下と同様:
       #
       #   Groonga::Schema.change_table(table_name) do |table|
@@ -792,9 +777,6 @@ module Groonga
       @definitions << definition
     end
 
-    # call-seq:
-    #   schema.change_table(name, options={}) {|table| ...}
-    #
     # 名前が _name_ のテーブルを変更する。
     #
     # テーブルの変更は #define を呼び出すまでは実行されないこ
@@ -812,9 +794,6 @@ module Groonga
       @definitions << definition
     end
 
-    # call-seq:
-    #   schema.create_view(name, options={}) {|view| ...}
-    #
     # 名前が _name_ のビューを作成する。
     #
     # ビューの作成は #define を呼び出すまでは実行されないこ
@@ -861,9 +840,6 @@ module Groonga
       @definitions << definition
     end
 
-    # call-seq:
-    #   schema.change_view(name, options={}) {|table| ...}
-    #
     # 名前が _name_ のビューを変更する。
     #
     # ビューの変更は #define を呼び出すまでは実行されないこ
@@ -881,9 +857,6 @@ module Groonga
       @definitions << definition
     end
 
-    # call-seq:
-    #   schema.remove_column(table_name, column_name)
-    #
     # 以下と同様:
     #   schema.change_table(table_name) do |table|
     #     table.remove_column(column_name)
@@ -1011,11 +984,6 @@ module Groonga
         self
       end
 
-      # call-seq:
-      #   table.index(target_column_full_name, options={})
-      #   table.index(target_table, target_column, options={})
-      #   table.index(target_table, target_column1, target_column2, ..., options={})
-      #
       # _target_table_ の _target_column_ を対象とするインデック
       # スカラムを作成します。複数のカラムを指定することもで
       # きます。
@@ -1074,11 +1042,6 @@ module Groonga
         self
       end
 
-      # call-seq:
-      #   table.remove_index(target_column_full_name, options={})
-      #   table.remove_index(target_table, target_column, options={})
-      #   table.remove_index(target_table, target_column1, target_column2, ..., options={})
-      #
       # _target_table_ の _target_column_ を対象とするインデッ
       # クスカラムを削除します。
       #

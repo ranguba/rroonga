@@ -18,7 +18,8 @@
 module Groonga
   class Context
     # call-seq:
-    #   context.open_database(path) -> Groonga::Database
+    #
+    # @context.open_database(path) -> Groonga::Database@
     #
     # _path_ にある既存のデータベースを開く。ブロックを指定した場
     # 合はブロックに開いたデータベースを渡し、ブロックを抜けると
@@ -29,9 +30,6 @@ module Groonga
       Database.open(path, options, &block)
     end
 
-    # call-seq:
-    #   context.create_database(path=nil) -> Groonga::Database
-    #
     # _path_ に新しくデータベースを作成する。 _path_ を省略すると
     # 一時データベースとなる。
     #
@@ -51,10 +49,6 @@ module Groonga
       Database.create(options)
     end
 
-    # call-seq:
-    #   context.register_plugin(name)
-    #   context.register_plugin({:path => path})
-    #
     # groongaのプラグインディレクトリにあるプラグイン _name_
     # を登録する。 _path_ を指定するとプラグインディレクトリ以
     # 外にあるプラグインを登録することができる。
@@ -68,9 +62,6 @@ module Groonga
       end
     end
 
-    # call-seq:
-    #   context.select(table, options={}) -> SelectResult
-    #
     # _table_ から指定した条件にマッチするレコードの値を取得
     # する。 _table_ はテーブル名かテーブルオブジェクトを指定
     # する。

@@ -40,9 +40,6 @@ module Groonga
       end
     end
 
-    # call-seq:
-    #   record == other -> true/false
-    #
     # _record_ と _other_ が同じテーブルに属していて、さらに、
     # 同じレコードIDを持つなら +true+ を返し、そうでなければ
     # +false+ を返す。
@@ -51,96 +48,63 @@ module Groonga
         [table, id] == [other.table, other.id]
     end
 
-    # call-seq:
-    #   record.eql?(other) -> true/false
-    #
     # Groonga::Record#==と同じ。
     def eql?(other)
       self == other
     end
 
-    # call-seq:
-    #   record.hash -> ハッシュ値
-    #
     # 同じテーブルの同じIDのレコードに対しては常に同じハッシュ
     # 値を返す。
     def hash
       @table.hash ^ @id.hash
     end
 
-    # call-seq:
-    #   record[column_name] -> 値
-    #
     # このレコードの _column_name_ で指定されたカラムの値を返す。
     def [](column_name)
       @table.column_value(@id, column_name, :id => true)
     end
 
-    # call-seq:
-    #   record[column_name] = 値
-    #
     # このレコードの _column_name_ で指定されたカラムの値を設定す
     # る。
     def []=(column_name, value)
       @table.set_column_value(@id, column_name, value, :id => true)
     end
 
-    # call-seq:
-    #   record.append(column_name, value)
-    #
     # このレコードの _column_name_ で指定されたカラムの値の最後に
     # _value_ を追加する。
     def append(column_name, value)
       column(column_name).append(@id, value)
     end
 
-    # call-seq:
-    #   record.prepend(column_name, value)
-    #
     # このレコードの _column_name_ で指定されたカラムの値の最初に
     # _value_ を追加する。
     def prepend(column_name, value)
       column(column_name).prepend(@id, value)
     end
 
-    # call-seq:
-    #   record.support_key? -> true/false
-    #
     # _record_ が所属するテーブルで主キーを使える場合は +true+
     # を返し、使えない場合は +false+ を返す。
     def support_key?
       @table.support_key?
     end
 
-    # call-seq:
-    #   record.have_column?(name) -> true/false
-    #
     # 名前が _name_ のカラムがレコードの所属するテーブルで定義され
     # ているなら +true+ を返す。
     def have_column?(name)
       not @table.column(normalize_column_name(name)).nil?
     end
 
-    # call-seq:
-    #   record.reference_column?(name) -> true/false
-    #
     # 名前が _name_ のカラムが参照カラムであるなら +true+ を返す。
     def reference_column?(name)
       column(name).reference?
     end
 
-    # call-seq:
-    #   record.index_column?(name) -> true/false
-    #
     # 名前が _name_ のカラムが索引カラム
     # （Groonga::IndexColumn）であるなら +true+ を返す。
     def index_column?(name)
       column(name).index?
     end
 
-    # call-seq:
-    #   record.vector_column?(name) -> true/false
-    #
     # 名前が _name_ のカラムの値がベクターであるなら +true+ を返す。
     #
     # @since: 1.0.5
@@ -148,9 +112,6 @@ module Groonga
       column(name).vector?
     end
 
-    # call-seq:
-    #   record.scalar_column?(name) -> true/false
-    #
     # 名前が _name_ のカラムの値がスカラーであるなら +true+ を返す。
     #
     # @since: 1.0.5
@@ -158,9 +119,6 @@ module Groonga
       column(name).scalar?
     end
 
-    # call-seq:
-    #   record.search(name, query, options={}) -> Groonga::Hash
-    #
     # 名前が _name_ のGroonga::IndexColumnの search メソッドを呼ぶ。
     # _query_ と _options_ はそのメソッドにそのまま渡される。詳しく
     # はGroonga::IndexColumn#searchを参照。
@@ -168,9 +126,6 @@ module Groonga
       column(name).search(query, options)
     end
 
-    # call-seq:
-    #   record.key -> 主キー
-    #
     # レコードの主キーを返す。
     #
     # _record_ が所属するテーブルがGroonga:::Arrayの場合は常
@@ -182,10 +137,6 @@ module Groonga
         nil
       end
     end
-
-    # call-seq:
-    #   record.record_id -> IDまたは主キー
-    #
     # レコードを一意に識別するための情報を返す。
     #
     # _record_ が所属するテーブルがGroonga:::Arrayの場合はID
@@ -198,36 +149,24 @@ module Groonga
       end
     end
 
-    # call-seq:
-    #   record.record_raw_id -> ID
-    #
     # レコードのIDを返す。
     def record_raw_id
       @id
     end
     alias_method :id, :record_raw_id
 
-    # call-seq:
-    #   record.score -> スコア値
-    #
     # レコードのスコア値を返す。検索結果として生成されたテーブル
     # のみに定義される。
     def score
       self["_score"]
     end
 
-    # call-seq:
-    #   record.support_score? -> true/false
-    #
     # Groonga::Record#scoreが利用できる場合は +true+ を
     # 返す。
     def support_score?
       @table.have_column?("_score") # TODO delegate to Table
     end
 
-    # call-seq:
-    #   record.n_sub_records -> 件数
-    #
     # 主キーの値が同一であったレコードの件数を返す。検索結果とし
     # て生成されたテーブルのみに定義される。
     #
@@ -237,60 +176,39 @@ module Groonga
       self["_nsubrecs"]
     end
 
-    # call-seq:
-    #   record.support_sub_records? -> true/false
-    #
     # Groonga::Record#n_sub_recordsが利用できる場合は +true+ を
     # 返す。
     def support_sub_records?
       @table.support_sub_records?
     end
 
-    # call-seq:
-    #   record.value -> 値
-    #
     # レコードの値を返す。
     def value
       @table.value(@id, :id => true)
     end
 
-    # call-seq:
-    #   record.value = 値
-    #
     # レコードの値を設定する。既存の値は上書きされる。
     def value=(value)
       @table.set_value(@id, value, :id => true)
     end
 
-    # call-seq:
-    #   record.increment!(name, delta=nil)
-    #
     # このレコードの _name_ で指定されたカラムの値を _delta_ だけ増
     # 加する。 _delta_ が +nil+ の場合は1増加する。
     def increment!(name, delta=nil)
       column(name).increment!(@id, delta)
     end
 
-    # call-seq:
-    #   record.decrement!(name, delta=nil)
-    #
     # このレコードの _name_ で指定されたカラムの値を _delta_ だけ減
     # 少する。 _delta_ が +nil+ の場合は1減少する。
     def decrement!(name, delta=nil)
       column(name).decrement!(@id, delta)
     end
 
-    # call-seq:
-    #   record.columns -> Groonga::Columnの配列
-    #
     # レコードが所属するテーブルの全てのカラムを返す。
     def columns
       @table.columns
     end
 
-    # call-seq:
-    #   attributes -> Hash
-    #
     # レコードが所属しているテーブルで定義されているインデックス
     # 型のカラムでない全カラムを対象とし、カラムの名前をキーとし
     # たこのレコードのカラムの値のハッシュを返す。
@@ -301,18 +219,11 @@ module Groonga
       accessor.build
     end
 
-    # call-seq:
-    #   record.delete
-    #
     # レコードを削除する。
     def delete
       @table.delete(@id)
     end
 
-    # call-seq:
-    #   record.lock(options={})
-    #   record.lock(options={}) {...}
-    #
     # レコードが所属するテーブルをロックする。ロックに失敗した場
     # 合はGroonga::ResourceDeadlockAvoided例外が発生する。
     #
@@ -328,9 +239,6 @@ module Groonga
       @table.lock(options.merge(:id => @id), &block)
     end
 
-    # call-seq:
-    #   record.unlock(options={})
-    #
     # レコードが所属するテーブルのロックを解除する。
     #
     # 利用可能なオプションは現在は無い。
@@ -338,9 +246,6 @@ module Groonga
       @table.unlock(options.merge(:id => @id))
     end
 
-    # call-seq:
-    #   record.clear_lock(options={})
-    #
     # レコードが所属するテーブルのロックを強制的に解除する。
     #
     # 利用可能なオプションは現在は無い。
@@ -348,9 +253,6 @@ module Groonga
       @table.clear_lock(options.merge(:id => @id))
     end
 
-    # call-seq:
-    #   record.locked?(options={}) -> true/false
-    #
     # レコードが所属するテーブルがロックされていれば +true+ を返す。
     #
     # 利用可能なオプションは現在は無い。
@@ -358,9 +260,6 @@ module Groonga
       @table.locked?(options.merge(:id => @id))
     end
 
-    # call-seq:
-    #   record.valid_id? -> true/false
-    #
     # レコードが持つIDが有効なIDであれば +true+ を返す。
     def valid_id?
       @table.exist?(@id)
