@@ -138,7 +138,8 @@ module Groonga
       end
     end
 
-    class BaseSyntax # :nodoc:
+    # @private
+    class BaseSyntax
       def initialize(database, output)
         @database = database
         @output = output
@@ -223,7 +224,8 @@ module Groonga
       end
     end
 
-    class RubySyntax < BaseSyntax # :nodoc:
+    # @private
+    class RubySyntax < BaseSyntax
       private
       def create_table_header(table)
         parameters = []
@@ -347,7 +349,8 @@ module Groonga
       end
     end
 
-    class CommandSyntax < BaseSyntax # :nodoc:
+    # @private
+    class CommandSyntax < BaseSyntax
       private
       def create_table_header(table)
         parameters = []

@@ -534,7 +534,8 @@ module Groonga
         "mecab" => "TokenMecab",
         "token_mecab"=> "TokenMecab",
       }
-      def normalize_type(type, options={}) # :nodoc:
+      # @private
+      def normalize_type(type, options={})
         return type if type.nil?
         return type if type.is_a?(Groonga::Object)
         type = type.to_s if type.is_a?(Symbol)
@@ -867,11 +868,13 @@ module Groonga
       end
     end
 
-    def context # :nodoc:
+    # @private
+    def context
       @options[:context] || Groonga::Context.default
     end
 
-    module Path # :nodoc:
+    # @private
+    module Path
       def tables_directory_path(database)
         "#{database.path}.tables"
       end
@@ -897,7 +900,8 @@ module Groonga
       # テーブルの名前
       attr_reader :name
 
-      def initialize(name, options) # :nodoc:
+      # @private
+      def initialize(name, options)
         @name = name
         @name = @name.to_s if @name.is_a?(Symbol)
         @definitions = []
@@ -906,7 +910,8 @@ module Groonga
         @table_type = table_type
       end
 
-      def define # :nodoc:
+      # @private
+      def define
         table = context[@name]
         if @options[:change]
           raise TableNotExists.new(@name) if table.nil?
@@ -1189,19 +1194,22 @@ module Groonga
       end
       alias_method :bool, :boolean
 
-      def [](name, definition_class=nil) # :nodoc:
+      # @private
+      def [](name, definition_class=nil)
         @definitions.find do |definition|
           definition.name.to_s == name.to_s and
             (definition_class.nil? or definition.is_a?(definition_class))
         end
       end
 
-      def context # :nodoc:
+      # @private
+      def context
         @options[:context] || Groonga::Context.default
       end
 
       private
-      def update_definition(key, definition_class, definition) # :nodoc:
+      # @private
+      def update_definition(key, definition_class, definition)
         old_definition = self[key, definition_class]
         if old_definition
           index = @definitions.index(old_definition)
@@ -1211,12 +1219,14 @@ module Groonga
         end
       end
 
+      # @private
       AVAILABLE_OPTION_KEYS = [:context, :change, :force,
                                :type, :path, :persistent,
                                :key_type, :value_type, :sub_records,
                                :default_tokenizer,
-                               :key_normalize, :key_with_sis] # :nodoc:
-      def validate_options(options) # :nodoc:
+                               :key_normalize, :key_with_sis]
+      # @private
+      def validate_options(options)
         return if options.nil?
         unknown_keys = options.keys - AVAILABLE_OPTION_KEYS
         unless unknown_keys.empty?
@@ -1224,7 +1234,8 @@ module Groonga
         end
       end
 
-      def table_type # :nodoc:
+      # @private
+      def table_type
         type = @options[:type]
         case type
         when :array, nil
@@ -1238,7 +1249,8 @@ module Groonga
         end
       end
 
-      def create_options # :nodoc:
+      # @private
+      def create_options
         common = {
           :name => @name,
           :path => path,
@@ -1273,11 +1285,13 @@ module Groonga
         File.join(tables_dir, @name)
       end
 
-      def column_options # :nodoc:
+      # @private
+      def column_options
         {:persistent => persistent?}
       end
 
-      def persistent? # :nodoc:
+      # @private
+      def persistent?
         @options[:persistent].nil? ? true : @options[:persistent]
       end
 
@@ -1373,7 +1387,8 @@ module Groonga
       end
     end
 
-    class TableRemoveDefinition # :nodoc:
+    # @private
+    class TableRemoveDefinition
       include Path
 
       def initialize(name, options={})
@@ -1405,7 +1420,8 @@ module Groonga
       # ビューの名前
       attr_reader :name
 
-      def initialize(name, options) # :nodoc:
+      # @private
+      def initialize(name, options)
         @name = name
         @name = @name.to_s if @name.is_a?(Symbol)
         @tables = []
@@ -1413,7 +1429,8 @@ module Groonga
         @options = options
       end
 
-      def define # :nodoc:
+      # @private
+      def define
         view = context[@name]
         if @options[:change]
           raise TableNotExists.new(@name) if view.nil?
@@ -1443,14 +1460,17 @@ module Groonga
         self
       end
 
-      def context # :nodoc:
+      # @private
+      def context
         @options[:context] || Groonga::Context.default
       end
 
       private
+      # @private
       AVAILABLE_OPTION_KEYS = [:context, :change, :force,
-                               :path, :persistent] # :nodoc:
-      def validate_options(options) # :nodoc:
+                               :path, :persistent]
+      # @private
+      def validate_options(options)
         return if options.nil?
         unknown_keys = options.keys - AVAILABLE_OPTION_KEYS
         unless unknown_keys.empty?
@@ -1458,7 +1478,8 @@ module Groonga
         end
       end
 
-      def create_options # :nodoc:
+      # @private
+      def create_options
         {
           :name => @name,
           :path => @options[:path],
@@ -1467,12 +1488,14 @@ module Groonga
         }
       end
 
-      def persistent? # :nodoc:
+      # @private
+      def persistent?
         @options[:persistent].nil? ? true : @options[:persistent]
       end
     end
 
-    class ViewRemoveDefinition # :nodoc:
+    # @private
+    class ViewRemoveDefinition
       def initialize(name, options={})
         @name = name
         @options = options
@@ -1484,7 +1507,8 @@ module Groonga
       end
     end
 
-    class ColumnDefinition # :nodoc:
+    # @private
+    class ColumnDefinition
       include Path
 
       attr_accessor :name, :type
@@ -1546,7 +1570,8 @@ module Groonga
       end
     end
 
-    class ColumnRemoveDefinition # :nodoc:
+    # @private
+    class ColumnRemoveDefinition
       attr_accessor :name
       attr_reader :options
 
@@ -1572,7 +1597,8 @@ module Groonga
       end
     end
 
-    class IndexColumnDefinition # :nodoc:
+    # @private
+    class IndexColumnDefinition
       include Path
 
       class << self

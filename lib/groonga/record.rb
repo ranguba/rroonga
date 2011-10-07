@@ -265,7 +265,8 @@ module Groonga
       @table.exist?(@id)
     end
 
-    def methods(include_inherited=true) # :nodoc:
+    # @private
+    def methods(include_inherited=true)
       _methods = super
       return _methods unless include_inherited
       columns.each do |column|
@@ -276,7 +277,8 @@ module Groonga
       _methods
     end
 
-    def respond_to?(name) # :nodoc:
+    # @private
+    def respond_to?(name)
       super or !@table.column(name.to_s.sub(/=\z/, '')).nil?
     end
 
@@ -294,7 +296,8 @@ module Groonga
       name.to_s
     end
 
-    def column(name) # :nodoc:
+    # @private
+    def column(name)
       _column = @table.column(normalize_column_name(name))
       raise NoSuchColumn, "column(#{name.inspect}) is nil" if _column.nil?
       _column
@@ -320,7 +323,8 @@ module Groonga
       end
     end
 
-    class AttributeHashBuilder # :nodoc:
+    # @private
+    class AttributeHashBuilder
       attr_reader :attributes
 
       def initialize(root_record)
