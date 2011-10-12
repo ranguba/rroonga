@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2010  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2011  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -68,8 +68,7 @@ class DatabaseTest < Test::Unit::TestCase
       Groonga::Database.new(db_path.to_s)
     end
 
-    database = Groonga::Database.create(:path => db_path.to_s)
-
+    Groonga::Database.create(:path => db_path.to_s)
     assert_not_predicate(Groonga::Database.new(db_path.to_s), :closed?)
   end
 
