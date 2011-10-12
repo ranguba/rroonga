@@ -49,7 +49,6 @@ module Groonga
 
     private
     def dump_plugins(options)
-      first_table = true
       plugin_paths = {}
       options[:database].each(:order_by => :id) do |object|
         next unless object.is_a?(Groonga::Procedure)
