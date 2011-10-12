@@ -340,8 +340,6 @@ class SchemaTest < Test::Unit::TestCase
                   :with_position => true)
     end
 
-    posts = context["Posts"]
-    terms = context["Terms"]
     full_index_column_name = "Terms.#{index_column_name}"
     index_column = context[full_index_column_name]
     assert_equal("#<Groonga::IndexColumn " +
