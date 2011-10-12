@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-# Copyright (C) 2009  Kouhei Sutou <kou@clear-code.com>
+#
+# Copyright (C) 2009-2011  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -81,10 +82,10 @@ class ExpressionTest < Test::Unit::TestCase
 
   def test_snippet
     users = Groonga::Array.create(:name => "Users")
-    name = users.define_column("name", "ShortText")
-    terms = Groonga::Hash.create(:name => "Terms",
-                                 :key_type => "ShortText",
-                                 :default_tokenizer => "TokenBigram")
+    users.define_column("name", "ShortText")
+    Groonga::Hash.create(:name => "Terms",
+                         :key_type => "ShortText",
+                         :default_tokenizer => "TokenBigram")
     users.define_index_column("user_name", users,
                               :source => "Users.name",
                               :with_position => true)
@@ -111,10 +112,10 @@ class ExpressionTest < Test::Unit::TestCase
 
   def test_snippet_without_tags
     users = Groonga::Array.create(:name => "Users")
-    name = users.define_column("name", "ShortText")
-    terms = Groonga::Hash.create(:name => "Terms",
-                                 :key_type => "ShortText",
-                                 :default_tokenizer => "TokenBigram")
+    users.define_column("name", "ShortText")
+    Groonga::Hash.create(:name => "Terms",
+                         :key_type => "ShortText",
+                         :default_tokenizer => "TokenBigram")
     users.define_index_column("user_name", users,
                               :source => "Users.name",
                               :with_position => true)
