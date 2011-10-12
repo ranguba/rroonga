@@ -512,7 +512,7 @@ class SchemaTest < Test::Unit::TestCase
   end
 
   class TableRemoveTest < self
-    def test_tables_directory_removed
+    def test_tables_directory_removed_on_last_table_remove
       table_name = "Posts"
       Groonga::Schema.create_table(table_name)
       table = Groonga[table_name]
@@ -523,7 +523,7 @@ class SchemaTest < Test::Unit::TestCase
       assert_directory_removed(tables_directory)
     end
 
-    def test_tables_directory_not_removed
+    def test_tables_directory_not_removed_on_not_last_table_remove
       table_name = "Posts"
       Groonga::Schema.define do |schema|
         schema.create_table(table_name)
@@ -547,15 +547,38 @@ class SchemaTest < Test::Unit::TestCase
       assert_table_removed(table)
       assert_directory_removed(dir)
     end
+  end
 
-    def test_columns_directory_not_removed
-      table = "Posts"
-      dir = create_table_with_column(table)
+  class ColumnRemoveTest < self
+    def test_columns_directory_removed_on_last_column_remove
+      Groonga::Schema.define do |schema|
+        schema.create_table("Posts") do |table|
+          table.short_text("title")
+        end
+      end
 
-      Groonga::Context.default[table].remove
+      columns_directory = columns_directory_path(Groonga["Posts"])
+      assert_directory_not_removed(columns_directory)
+      Groonga::Schema.change_table("Posts") do |table|
+        table.remove_column("title")
+      end
+      assert_directory_removed(columns_directory)
+    end
 
-      assert_table_removed(table)
-      assert_directory_not_removed(dir)
+    def test_columns_directory_not_removed_on_not_last_column_remove
+      Groonga::Schema.define do |schema|
+        schema.create_table("Posts") do |table|
+          table.short_text("title")
+          table.short_text("body")
+        end
+      end
+
+      columns_directory = columns_directory_path(Groonga["Posts"])
+      assert_directory_not_removed(columns_directory)
+      Groonga::Schema.change_table("Posts") do |table|
+        table.remove_column("title")
+      end
+      assert_directory_not_removed(columns_directory)
     end
   end
 

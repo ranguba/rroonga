@@ -1577,6 +1577,8 @@ module Groonga
 
     # @private
     class ColumnRemoveDefinition
+      include Path
+
       attr_accessor :name
       attr_reader :options
 
@@ -1598,7 +1600,10 @@ module Groonga
           raise ColumnNotExists.new(name)
         end
 
-        column.remove
+        result = column.remove
+        columns_dir = columns_directory_path(table)
+        rmdir_if_available(columns_dir)
+        result
       end
     end
 
