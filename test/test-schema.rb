@@ -486,26 +486,6 @@ class SchemaTest < Test::Unit::TestCase
     assert_nil(Groonga::Context.default["TermsText.Items_text"])
   end
 
-  def test_columns_directory_removed
-    table = "Posts"
-    dir = create_table_with_column(table)
-
-    Groonga::Schema.remove_table(table)
-
-    assert_table_removed(table)
-    assert_directory_removed(dir)
-  end
-
-  def test_columns_directory_not_removed
-    table = "Posts"
-    dir = create_table_with_column(table)
-
-    Groonga::Context.default[table].remove
-
-    assert_table_removed(table)
-    assert_directory_not_removed(dir)
-  end
-
   def test_default_tokenizer_name_shortcut
     Groonga::Schema.define do |schema|
       schema.create_table("Terms",
@@ -556,6 +536,26 @@ class SchemaTest < Test::Unit::TestCase
       assert_directory_not_removed(tables_directory)
       Groonga::Schema.remove_table(table_name)
       assert_directory_not_removed(tables_directory)
+    end
+
+    def test_columns_directory_removed
+      table = "Posts"
+      dir = create_table_with_column(table)
+
+      Groonga::Schema.remove_table(table)
+
+      assert_table_removed(table)
+      assert_directory_removed(dir)
+    end
+
+    def test_columns_directory_not_removed
+      table = "Posts"
+      dir = create_table_with_column(table)
+
+      Groonga::Context.default[table].remove
+
+      assert_table_removed(table)
+      assert_directory_not_removed(dir)
     end
   end
 
