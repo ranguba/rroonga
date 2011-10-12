@@ -168,12 +168,13 @@ class RecordTest < Test::Unit::TestCase
   end
 
   def test_delete
-    bookmark1 = @bookmarks.add
-    bookmark2 = @bookmarks.add
-    bookmark3 = @bookmarks.add
+    bookmark_records = []
+    bookmark_records << @bookmarks.add
+    bookmark_records << @bookmarks.add
+    bookmark_records << @bookmarks.add
 
     assert_equal(3, @bookmarks.size)
-    bookmark2.delete
+    bookmark_records[1].delete
     assert_equal(2, @bookmarks.size)
   end
 
@@ -375,7 +376,7 @@ class RecordTest < Test::Unit::TestCase
   end
 
   def test_select_result_attributes
-    top_page_record = @bookmarks.add(top_page)
+    @bookmarks.add(top_page)
     select_result = @bookmarks.select
     select_result_result = select_result.first
 
