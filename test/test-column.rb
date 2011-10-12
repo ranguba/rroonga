@@ -254,7 +254,7 @@ class ColumnTest < Test::Unit::TestCase
 
   def test_set_time
     posts = Groonga::Hash.create(:name => "Posts", :key_type => "ShortText")
-    body = posts.define_column("issued", "Time")
+    posts.define_column("issued", "Time")
 
     post = posts.add("hello", :issued => 123456)
     assert_equal(Time.at(123456), post[".issued"])
@@ -266,7 +266,7 @@ class ColumnTest < Test::Unit::TestCase
 
   def test_set_nil_to_time
     posts = Groonga::Hash.create(:name => "Posts", :key_type => "ShortText")
-    body = posts.define_column("issued", "Time")
+    posts.define_column("issued", "Time")
 
     post = posts.add("hello", :issued => nil)
     assert_equal(Time.at(0), post["issued"])
@@ -274,7 +274,7 @@ class ColumnTest < Test::Unit::TestCase
 
   def test_bool
     posts = Groonga::Hash.create(:name => "Posts", :key_type => "ShortText")
-    hidden = posts.define_column("hidden", "Bool")
+    posts.define_column("hidden", "Bool")
 
     post = posts.add("hello")
     assert_false(post["hidden"])
@@ -340,11 +340,11 @@ class ColumnTest < Test::Unit::TestCase
                                          :key_type => "ShortText",
                                          :key_normalize => true)
     index.default_tokenizer = "TokenBigram"
-    body_index = index.define_index_column("body_index", @posts,
-                                           :with_position => true,
-                                           :source => @body)
+    index.define_index_column("body_index", @posts,
+                              :with_position => true,
+                              :source => @body)
 
-    first_post = @posts.add("Hello!", :body => "World")
-    hobby = @posts.add("My Hobby", :body => "Drive and Eat")
+    @posts.add("Hello!", :body => "World")
+    @posts.add("My Hobby", :body => "Drive and Eat")
   end
 end
