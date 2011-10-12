@@ -538,9 +538,9 @@ class SchemaTest < Test::Unit::TestCase
       table = Groonga[table_name]
       tables_directory = Pathname.new(table.path).dirname
 
-      assert_predicate(tables_directory, :exist?)
+      assert_directory_not_removed(tables_directory)
       Groonga::Schema.remove_table(table_name)
-      assert_not_predicate(tables_directory, :exist?)
+      assert_directory_removed(tables_directory)
     end
 
     def test_tables_directory_not_removed
@@ -553,9 +553,9 @@ class SchemaTest < Test::Unit::TestCase
       table = Groonga[table_name]
       tables_directory = Pathname.new(table.path).dirname
 
-      assert_predicate(tables_directory, :exist?)
+      assert_directory_not_removed(tables_directory)
       Groonga::Schema.remove_table(table_name)
-      assert_predicate(tables_directory, :exist?)
+      assert_directory_not_removed(tables_directory)
     end
   end
 
@@ -573,11 +573,11 @@ class SchemaTest < Test::Unit::TestCase
   end
 
   def assert_directory_removed(dir)
-    assert_false(File.exist?(dir))
+    assert_not_predicate(Pathname.new(dir), :exist?)
   end
 
   def assert_directory_not_removed(dir)
-    assert_true(File.exist?(dir))
+    assert_predicate(Pathname.new(dir), :exist?)
   end
 
   def assert_table_removed(name)
