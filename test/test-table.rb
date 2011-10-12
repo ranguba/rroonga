@@ -78,9 +78,9 @@ class TableTest < Test::Unit::TestCase
     bookmarks = Groonga::Hash.create(:name => "Bookmarks")
     message = "should not pass :path if :persistent is false: <#{column_path}>"
     assert_raise(ArgumentError.new(message)) do
-      real_name = bookmarks.define_column("real_name", "ShortText",
-                                          :path => column_path.to_s,
-                                          :persistent => false)
+      bookmarks.define_column("real_name", "ShortText",
+                              :path => column_path.to_s,
+                              :persistent => false)
     end
   end
 
@@ -106,9 +106,9 @@ class TableTest < Test::Unit::TestCase
     terms = Groonga::Hash.create(:name => "Terms")
     message = "should not pass :path if :persistent is false: <#{column_path}>"
     assert_raise(ArgumentError.new(message)) do
-      real_name = terms.define_index_column("real_name", bookmarks,
-                                            :path => column_path.to_s,
-                                            :persistent => false)
+      terms.define_index_column("real_name", bookmarks,
+                                :path => column_path.to_s,
+                                :persistent => false)
     end
   end
 
@@ -244,7 +244,7 @@ class TableTest < Test::Unit::TestCase
     bookmarks_path = @tables_dir + "bookmarks"
     bookmarks = Groonga::Array.create(:name => "Bookmarks",
                                       :path => bookmarks_path.to_s)
-    column = bookmarks.define_column("created_at", "Time")
+    bookmarks.define_column("created_at", "Time")
 
     bookmark = bookmarks.add
     now = Time.now
@@ -258,12 +258,13 @@ class TableTest < Test::Unit::TestCase
     bookmarks = Groonga::Array.create(:name => "Bookmarks",
                                       :path => bookmarks_path.to_s)
 
-    bookmark1 = bookmarks.add
-    bookmark2 = bookmarks.add
-    bookmark3 = bookmarks.add
+    bookmark_records = []
+    bookmark_records << bookmarks.add
+    bookmark_records << bookmarks.add
+    bookmark_records << bookmarks.add
 
     assert_equal(3, bookmarks.size)
-    bookmarks.delete(bookmark2.id)
+    bookmarks.delete(bookmark_records[1].id)
     assert_equal(2, bookmarks.size)
   end
 
@@ -285,7 +286,7 @@ class TableTest < Test::Unit::TestCase
 
   def test_each
     users = Groonga::Array.create(:name => "Users")
-    user_name = users.define_column("name", "ShortText")
+    users.define_column("name", "ShortText")
 
     names = ["daijiro", "gunyarakun", "yu"]
     names.each do |name|
@@ -454,8 +455,8 @@ class TableTest < Test::Unit::TestCase
     bookmarks = Groonga::Hash.create(:name => "Bookmarks")
     bookmarks.define_column("title", "ShortText")
 
-    groonga = bookmarks.add("http://groonga.org/", :title => "groonga")
-    ruby = bookmarks.add("http://ruby-lang.org/", :title => "Ruby")
+    bookmarks.add("http://groonga.org/", :title => "groonga")
+    bookmarks.add("http://ruby-lang.org/", :title => "Ruby")
 
     ruby_bookmarks = bookmarks.select {|record| record["title"] == "Ruby"}
     groonga_bookmarks = bookmarks.select {|record| record["title"] == "groonga"}
@@ -513,8 +514,6 @@ class TableTest < Test::Unit::TestCase
 
   def test_lock
     bookmarks = Groonga::Array.create(:name => "Bookmarks")
-    bookmark = bookmarks.add
-
     assert_not_predicate(bookmarks, :locked?)
     bookmarks.lock
     assert_predicate(bookmarks, :locked?)
@@ -524,8 +523,6 @@ class TableTest < Test::Unit::TestCase
 
   def test_lock_failed
     bookmarks = Groonga::Array.create(:name => "Bookmarks")
-    bookmark = bookmarks.add
-
     bookmarks.lock
     assert_raise(Groonga::ResourceDeadlockAvoided) do
       bookmarks.lock
@@ -534,8 +531,6 @@ class TableTest < Test::Unit::TestCase
 
   def test_lock_block
     bookmarks = Groonga::Array.create(:name => "Bookmarks")
-    bookmark = bookmarks.add
-
     assert_not_predicate(bookmarks, :locked?)
     bookmarks.lock do
       assert_predicate(bookmarks, :locked?)
@@ -545,8 +540,6 @@ class TableTest < Test::Unit::TestCase
 
   def test_clear_lock
     bookmarks = Groonga::Array.create(:name => "Bookmarks")
-    bookmark = bookmarks.add
-
     assert_not_predicate(bookmarks, :locked?)
     bookmarks.lock
     assert_predicate(bookmarks, :locked?)
@@ -569,7 +562,7 @@ class TableTest < Test::Unit::TestCase
 
   def test_get_common_prefix_column
     users = Groonga::Array.create(:name => "Users")
-    name_kana = users.define_column("name_kana", "ShortText")
+    users.define_column("name_kana", "ShortText")
     name = users.define_column("name", "ShortText")
 
     assert_equal(name, users.column("name"))
@@ -580,7 +573,7 @@ class TableTest < Test::Unit::TestCase
                                  :key_type => "ShortText")
     books = Groonga::Hash.create(:name => "Books",
                                  :key_type => "ShortText")
-    book = users.define_column("book", books)
+    users.define_column("book", books)
     users.add("morita", :book => "")
     assert_equal({"_id" => 1, "_key" => "morita", "book" => nil},
                  users["morita"].attributes)
