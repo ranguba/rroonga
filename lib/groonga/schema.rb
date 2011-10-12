@@ -1446,7 +1446,6 @@ module Groonga
           end
           view ||= Groonga::View.create(create_options)
         end
-        _context = context
         @tables.each do |table|
           unless table.is_a?(Groonga::Table)
             table_name = table
