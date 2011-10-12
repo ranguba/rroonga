@@ -638,7 +638,7 @@ module Groonga
     #     +:array+ , +:hash+ , +:patricia_trie+ のいずれかを指定する。
     #   @option options [Groonga::Context] :context The context
     #
-    #    スキーマ定義時に使用するGroonga::Contextを指定する。
+    #     スキーマ定義時に使用するGroonga::Contextを指定する。
     #     省略した場合はGroonga::Schema.newで指定した
     #     Groonga::Contextを使用する。Groonga::Schema.newで指
     #     定していない場合はGroonga::Context.defaultを使用する。
