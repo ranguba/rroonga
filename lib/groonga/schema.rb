@@ -883,10 +883,10 @@ module Groonga
         "#{table.path}.columns"
       end
 
-      def rmdir_if_dir_exists(dir)
+      def rmdir_if_available(dir)
         begin
           Dir.rmdir(dir)
-        rescue Errno::ENOENT
+        rescue SystemCallError
         end
       end
     end
@@ -1398,15 +1398,20 @@ module Groonga
 
       def define
         table = removed_table
-        dir = columns_directory_path(table)
+        tables_dir = tables_directory_path(context.database)
+        columns_dir = columns_directory_path(table)
         result = table.remove
-        rmdir_if_dir_exists(dir)
+        rmdir_if_available(columns_dir)
+        rmdir_if_available(tables_dir)
         result
       end
 
       private
+      def context
+        @options[:context]
+      end
+
       def removed_table
-        context = @options[:context]
         table = context[@name]
         raise TableNotExists.new(@name) if table.nil?
         table

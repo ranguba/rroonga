@@ -531,6 +531,34 @@ class SchemaTest < Test::Unit::TestCase
     assert_equal(short_text, Groonga["Users"].domain)
   end
 
+  class TableRemoveTest < self
+    def test_tables_directory_removed
+      table_name = "Posts"
+      Groonga::Schema.create_table(table_name)
+      table = Groonga[table_name]
+      tables_directory = Pathname.new(table.path).dirname
+
+      assert_predicate(tables_directory, :exist?)
+      Groonga::Schema.remove_table(table_name)
+      assert_not_predicate(tables_directory, :exist?)
+    end
+
+    def test_tables_directory_not_removed
+      table_name = "Posts"
+      Groonga::Schema.define do |schema|
+        schema.create_table(table_name)
+        schema.create_table("Users")
+      end
+
+      table = Groonga[table_name]
+      tables_directory = Pathname.new(table.path).dirname
+
+      assert_predicate(tables_directory, :exist?)
+      Groonga::Schema.remove_table(table_name)
+      assert_predicate(tables_directory, :exist?)
+    end
+  end
+
   private
   def columns_directory_path(table)
     "#{table.path}.columns"
