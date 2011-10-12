@@ -62,9 +62,9 @@ class ArrayTest < Test::Unit::TestCase
                                       :source => "Bookmarks.user")
     morita = users.add(:name => "morita")
     gunyara_kun = users.add(:name => "gunyara-kun")
-    groonga = bookmarks.add(:title => "groonga", :user => morita)
-    google = bookmarks.add(:title => "google", :user => morita)
-    python = bookmarks.add(:title => "Python", :user => gunyara_kun)
+    bookmarks.add(:title => "groonga", :user => morita)
+    bookmarks.add(:title => "google", :user => morita)
+    bookmarks.add(:title => "Python", :user => gunyara_kun)
 
     assert_equal(["groonga", "google"],
                  index.search(morita.id).collect {|record| record.key["title"]})
@@ -86,7 +86,7 @@ class ArrayTest < Test::Unit::TestCase
 
   def test_column_value
     users = Groonga::Array.create(:name => "Users")
-    name = users.define_column("name", "ShortText")
+    users.define_column("name", "ShortText")
     morita_id = users.add.id
     users.set_column_value(morita_id, "name", "morita")
     assert_equal("morita", users.column_value(morita_id, "name"))
