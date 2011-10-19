@@ -105,43 +105,39 @@ VALUE rb_cGrnHash;
  *   Groonga::Record#n_sub_recordsでグループに含まれるレコー
  *   ドの件数を取得できる。
  *
- * 使用例:
- *
- * 無名一時テーブルを生成する。
+ * @example
+ *   #無名一時テーブルを生成する。
  *   Groonga::Hash.create
  *
- * 無名永続テーブルを生成する。
+ *   #無名永続テーブルを生成する。
  *   Groonga::Hash.create(:path => "/tmp/hash.grn")
  *
- * 名前付き永続テーブルを生成する。ただし、ファイル名は気に
- * しない。
+ *   #名前付き永続テーブルを生成する。ただし、ファイル名は気にしない。
  *   Groonga::Hash.create(:name => "Bookmarks",
  *                        :persistent => true)
  *
- * それぞれのレコードに512バイトの値を格納できる無名一時テー
- * ブルを生成する。
+ *   #それぞれのレコードに512バイトの値を格納できる無名一時テーブルを生成する。
  *   Groonga::Hash.create(:value => 512)
  *
- * キーとして文字列を使用する無名一時テーブルを生成する。
+ *   #キーとして文字列を使用する無名一時テーブルを生成する。
  *   Groonga::Hash.create(:key_type => Groonga::Type::SHORT_TEXT)
  *
- * キーとして文字列を使用する無名一時テーブルを生成する。
- * （キーの種類を表すオブジェクトは文字列で指定。）
+ *   #キーとして文字列を使用する無名一時テーブルを生成する。
+ *   （キーの種類を表すオブジェクトは文字列で指定。）
  *   Groonga::Hash.create(:key_type => "ShortText")
  *
- * キーとして<tt>Bookmarks</tt>テーブルのレコードを使用す
- * る無名一時テーブルを生成する。
+ *   #キーとして<tt>Bookmarks</tt>テーブルのレコードを使用す
+ *   る無名一時テーブルを生成する。
  *   bookmarks = Groonga::Hash.create(:name => "Bookmarks")
  *   Groonga::Hash.create(:key_type => bookmarks)
  *
- * キーとして<tt>Bookmarks</tt>テーブルのレコードを使用す
- * る無名一時テーブルを生成する。
- * （テーブルは文字列で指定。）
+ *   #キーとして<tt>Bookmarks</tt>テーブルのレコードを使用す
+ *   #る無名一時テーブルを生成する。（テーブルは文字列で指定。）
  *   Groonga::Hash.create(:name => "Bookmarks")
  *   Groonga::Hash.create(:key_type => "Bookmarks")
  *
- * 全文検索用のトークンをバイグラムで切り出す無名一時テーブ
- * ルを生成する。
+ *   #全文検索用のトークンをバイグラムで切り出す無名一時テーブ
+ *   #ルを生成する。
  *   bookmarks = Groonga::Hash.create(:name => "Bookmarks")
  *   bookmarks.define_column("comment", "Text")
  *   terms = Groonga::Hash.create(:name => "Terms",
@@ -227,22 +223,23 @@ rb_grn_hash_s_create (int argc, VALUE *argv, VALUE klass)
  * call-seq:
  *   hash.search(key, options=nil) -> Groonga::Hash
  *
- * _key_にマッチするレコードのIDがキーに入っている
+ * _key_ にマッチするレコードのIDがキーに入っている
  * Groonga::Hashを返す。マッチするレコードがない場合は空の
  * Groonga::Hashが返る。
  *
- * _options_で+:result+を指定することにより、そのテーブルにマッ
+ * _options_ で +:result+ を指定することにより、そのテーブルにマッ
  * チしたレコードIDがキーのレコードを追加することができる。
- * +:result+にテーブルを指定した場合は、そのテーブルが返る。
+ * +:result+ にテーブルを指定した場合は、そのテーブルが返る。
  *
- * _options_に指定可能な値は以下の通り。
+ * _options_ に指定可能な値は以下の通り。
  * @param [::Hash] options The name and value
  *   pairs. Omitted names are initialized as the default value
+ *
  * @option options :result The result
  *
  *   結果を格納するテーブル。
  *
- * 複数のキーで検索し、結果を1つのテーブルに集める。
+ * @example 複数のキーで検索し、結果を1つのテーブルに集める。
  *   result = nil
  *   keys = ["morita", "gunyara-kun", "yu"]
  *   keys.each do |key|

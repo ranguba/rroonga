@@ -75,21 +75,23 @@ VALUE rb_cGrnView;
  *   Groonga::Contextに結びついているデータベースが一時デー
  *   タベースの場合は例外が発生する。
  *
- * 使用例:
+ * @example
+ *   無名一時ビューを生成する。
+ *     Groonga::View.create
  *
- * 無名一時ビューを生成する。
- *   Groonga::View.create
+ * @example
+ *   無名永続ビューを生成する。
+ *     Groonga::View.create(:path => "/tmp/view.grn")
  *
- * 無名永続ビューを生成する。
- *   Groonga::View.create(:path => "/tmp/view.grn")
+ * @example
+ *   名前付き永続ビューを生成する。ただし、ファイル名は気に
+ *   しない。
+ *     Groonga::View.create(:name => "Entries",
+ *                          :persistent => true)
  *
- * 名前付き永続ビューを生成する。ただし、ファイル名は気に
- * しない。
- *   Groonga::View.create(:name => "Entries",
- *                        :persistent => true)
- *
- * +Users+ テーブルと +Dogs+ テーブルを横断検索するための
- * るビューを生成する。
+ * @example
+ *   +Users+ テーブルと +Dogs+ テーブルを横断検索するための
+ *   るビューを生成する。
  *   entries = Groonga::View.create(:name => "Entries")
  *   entries.add_table("Users")
  *   entries.add_table("Dogs")
@@ -262,15 +264,15 @@ rb_grn_view_get_column_value (VALUE self, VALUE rb_id, VALUE rb_name)
  *
  * テーブルに登録されているレコードを _keys_ で指定されたルー
  * ルに従ってソートしたレコードの配列を返す。
- *
- *   [
+ * <pre>
+ *   ==[
  *    {:key => "カラム名", :order => :asc, :ascending,
  *                                   :desc, :descendingのいずれか},
  *    {:key => "カラム名", :order => :asc, :ascending,
  *                                   :desc, :descendingのいずれか},
  *    ...,
- *   ]
- *
+ *   ]==
+ * </pre>
  * _options_ に指定可能な値は以下の通り。
  * @param options [::Hash] The name and value
  *   pairs. Omitted names are initialized as the default value

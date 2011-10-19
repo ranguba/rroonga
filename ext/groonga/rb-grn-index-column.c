@@ -31,7 +31,7 @@ VALUE rb_cGrnIndexColumn;
  * とにより高速な全文検索を実現できる。
  *
  * テーブルにGroonga::IndexColumnを定義する方法は
- * Groonga::Table#define_index_columnを参照。
+ * {Groonga::Table#define_index_column} を参照。
  */
 
 void
@@ -109,7 +109,6 @@ rb_grn_index_column_deconstruct (RbGrnIndexColumn *rb_grn_index_column,
  * _value_ には文字列を指定する。
  *
  * _options_ を指定することにより、より索引の作成を制御できる。
- * _options_ に指定可能な値は以下の通り。
  * @param [::Hash] options  The name and value
  *   pairs. Omitted names are initialized as the default value
  * @option options :section The section
@@ -130,7 +129,7 @@ rb_grn_index_column_deconstruct (RbGrnIndexColumn *rb_grn_index_column,
  *   <tt>{:value => value}</tt>を指定した場合は同じ動作とな
  *   る。
  *
- * 記事の段落毎に索引を作成する。
+ * @example 記事の段落毎に索引を作成する。
  *   articles = Groonga::Array.create(:name => "<articles>")
  *   articles.define_column("title", "ShortText")
  *   articles.define_column("content", "Text")

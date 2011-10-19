@@ -120,43 +120,42 @@ VALUE rb_cGrnPatriciaTrie;
  *   Groonga::Record#n_sub_recordsでグループに含まれるレコー
  *   ドの件数を取得できる。
  *
- * 使用例:
- *
- * 無名一時テーブルを生成する。
+ * @example
+ *   #無名一時テーブルを生成する。
  *   Groonga::PatriciaTrie.create
  *
- * 無名永続テーブルを生成する。
+ *   #無名永続テーブルを生成する。
  *   Groonga::PatriciaTrie.create(:path => "/tmp/hash.grn")
  *
- * 名前付き永続テーブルを生成する。ただし、ファイル名は気に
- * しない。
+ *   #名前付き永続テーブルを生成する。ただし、ファイル名は気に
+ *   #しない。
  *   Groonga::PatriciaTrie.create(:name => "Bookmarks",
  *                                :persistent => true)
  *
- * それぞれのレコードに512バイトの値を格納できる無名一時テー
- * ブルを生成する。
+ *   #それぞれのレコードに512バイトの値を格納できる無名一時テー
+ *   #ブルを生成する。
  *   Groonga::PatriciaTrie.create(:value => 512)
  *
- * キーとして文字列を使用する無名一時テーブルを生成する。
+ *   #キーとして文字列を使用する無名一時テーブルを生成する。
  *   Groonga::PatriciaTrie.create(:key_type => Groonga::Type::SHORT_TEXT)
  *
- * キーとして文字列を使用する無名一時テーブルを生成する。
- * （キーの種類を表すオブジェクトは文字列で指定。）
+ *   #キーとして文字列を使用する無名一時テーブルを生成する。
+ *   #（キーの種類を表すオブジェクトは文字列で指定。）
  *   Groonga::PatriciaTrie.create(:key_type => "ShortText")
  *
- * キーとして<tt>Bookmarks</tt>テーブルのレコードを使用す
- * る無名一時テーブルを生成する。
+ *   #キーとして<tt>Bookmarks</tt>テーブルのレコードを使用す
+ *   #る無名一時テーブルを生成する。
  *   bookmarks = Groonga::PatriciaTrie.create(:name => "Bookmarks")
  *   Groonga::PatriciaTrie.create(:key_type => bookmarks)
  *
- * キーとして<tt>Bookmarks</tt>テーブルのレコードを使用す
- * る無名一時テーブルを生成する。
- * （テーブルは文字列で指定。）
+ *   #キーとして<tt>Bookmarks</tt>テーブルのレコードを使用す
+ *   #る無名一時テーブルを生成する。
+ *   #（テーブルは文字列で指定。）
  *   Groonga::PatriciaTrie.create(:name => "Bookmarks")
  *   Groonga::PatriciaTrie.create(:key_type => "Bookmarks")
  *
- * 全文検索用のトークンをバイグラムで切り出す無名一時テーブ
- * ルを生成する。
+ *   #全文検索用のトークンをバイグラムで切り出す無名一時テーブ
+ *   #ルを生成する。
  *   bookmarks = Groonga::PatriciaTrie.create(:name => "Bookmarks")
  *   bookmarks.define_column("comment", "Text")
  *   terms = Groonga::PatriciaTrie.create(:name => "Terms",

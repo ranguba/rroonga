@@ -1007,7 +1007,7 @@ rb_grn_table_delete (VALUE self, VALUE rb_id)
  *     ]
  *
  * [ソートキーの配列で指定する方法]
- *   _order_ は常に昇順（+:ascending+）になるが、最も簡単
+ *   _order_ は常に昇順（ +:ascending+ ）になるが、最も簡単
  *   に指定できる。
  *
  *     ["第1ソートキー", "第2ソートキー", ...]
@@ -1500,7 +1500,7 @@ rb_grn_table_set_column_value_convenience (int argc, VALUE *argv, VALUE self)
  *
  * 利用可能なオプションは以下の通り。
  *
- * [_:id_]
+ * [ _:id_ ]
  *   _:id_ で指定したレコードのロックを解除する。（注:
  *   groonga側が未実装のため、現在は無視される）
  */
@@ -1557,13 +1557,13 @@ rb_grn_table_unlock_ensure (VALUE self)
  *   pairs. Omitted names are initialized as the default value.
  * @option options :timeout The timeout
  *
- *   ロックを獲得できなかった場合は_:timeout_秒間ロックの獲
- *   得を試みる。_:timeout_秒以内にロックを獲得できなかった
+ *   ロックを獲得できなかった場合は _:timeout_ 秒間ロックの獲
+ *   得を試みる。 _:timeout_ 秒以内にロックを獲得できなかった
  *   場合は例外が発生する。
  *
  * @option options :id The id
  *
- *   _:id_で指定したレコードをロックする。（注: groonga側が
+ *   _:id_ で指定したレコードをロックする。（注: groonga側が
  *   未実装のため、現在は無視される）
  */
 static VALUE
@@ -1705,8 +1705,8 @@ rb_grn_table_is_locked (int argc, VALUE *argv, VALUE self)
  * Groonga::Expressionを取得できる。
  * Groonga::Expression#snippetを使うことにより、指定した条件
  * 用のスニペットを簡単に生成できる。
- *
- *   results = table.select do |record|
+ * <pre>
+ *   ==results = table.select do |record|
  *     record["description"] =~ "groonga"
  *   end
  *   snippet = results.expression.snippet([["<em>", "</em>"]])
@@ -1717,8 +1717,8 @@ rb_grn_table_is_locked (int argc, VALUE *argv, VALUE self)
  *       puts "#{snippet}..."
  *       puts "---"
  *     end
- *   end
- *
+ *   end==
+ * </pre>
  * 出力例
  *   Ruby/groongaの説明文の中で「groonga」が含まれる部分
  *   ---
@@ -1727,26 +1727,29 @@ rb_grn_table_is_locked (int argc, VALUE *argv, VALUE self)
  *
  * _query_ には「[カラム名]:[演算子][値]」という書式で条件を
  * 指定する。演算子は以下の通り。
- *
- * [なし]
- *   \[カラム値] == [値]
- * [<tt>!</tt>]
- *   \[カラム値] != [値]
- * [<tt><</tt>]
- *   \[カラム値] < [値]
- * [<tt>></tt>]
- *   \[カラム値] > [値]
- * [<tt><=</tt>]
- *   \[カラム値] <= [値]
- * [<tt>>=</tt>]
- *   \[カラム値] >= [値]
- * [<tt>@</tt>]
- *   \[カラム値]が[値]を含んでいるかどうか
+ * <pre>
+ *   [なし]
+ *     \[カラム値] == [値]
+ *   [<tt>!</tt>]
+ *     \[カラム値] != [値]
+ *   [<tt><</tt>]
+ *     \[カラム値] < [値]
+ *   [<tt>></tt>]
+ *     \[カラム値] > [値]
+ *   [<tt><=</tt>]
+ *     \[カラム値] <= [値]
+ *   [<tt>>=</tt>]
+ *     \[カラム値] >= [値]
+ *   [<tt>@</tt>]
+ *     \[カラム値]が[値]を含んでいるかどうか
+ * </pre>
  *
  * 例:
- *   "name:daijiro" # "name"カラムの値が"daijiro"のレコードにマッチ
+ * <pre>
+ *   =="name:daijiro" # "name"カラムの値が"daijiro"のレコードにマッチ
  *   "description:@groonga" # "description"カラムが
- *                          # "groonga"を含んでいるレコードにマッチ
+ *                          # "groonga"を含んでいるレコードにマッチ==
+ * </pre>
  *
  * _expression_ には既に作成済みのGroonga::Expressionを渡す
  *
@@ -1755,19 +1758,20 @@ rb_grn_table_is_locked (int argc, VALUE *argv, VALUE self)
  *
  * Ruby1.9以降では、ブロックで条件を指定する際に
  * Groonga::ColumnExpressionBuilderの他に"!="も使用可能。
- * 例:
- *  comments = Groonga::Array.create(:name => "Comments")
- *  comments.define_column("content", "Text")
  *
+ * 例:
+ * <pre>
+ *  ==comments = Groonga::Array.create(:name => "Comments")
+ *  comments.define_column("content", "Text")
  *  comments.add(:content => "Hello Good-bye!")
  *  comments.add(:content => "Hello World")
  *  comments.add(:content => "test")
- *
  *  result = comments.select do |record|
  *    record.content != "test"
  *  end
  *  p result.collect {|record| record.content}
- *    # => ["Hello Good-bye!", "Hello World"]
+ *    # => ["Hello Good-bye!", "Hello World"]==
+ * </pre>
  *
  * _options_ に指定可能な値は以下の通り。
  * @param options [::Hash] The name and value

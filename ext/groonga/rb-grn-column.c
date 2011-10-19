@@ -135,8 +135,7 @@ rb_grn_column_get_table (VALUE self)
  * call-seq:
  *   column.local_name
  *
- * テーブル名を除いたカラム名を返す。
- *
+ * @example テーブル名を除いたカラム名を返す。
  *   items = Groonga::Array.create(:name => "Items")
  *   title = items.define_column("title", "ShortText")
  *   title.name # => "Items.title"
@@ -180,7 +179,7 @@ rb_grn_column_get_local_name (VALUE self)
  * ているGroonga::Expressionを取得できる。
  * Groonga::Expression#snippetを使うことにより、指定した条件
  * 用のスニペットを簡単に生成できる。
- *
+ * <pre>
  *   results = description_column.select do |column|
  *     column =~ "groonga"
  *   end
@@ -193,12 +192,12 @@ rb_grn_column_get_local_name (VALUE self)
  *       puts "---"
  *     end
  *   end
- *
  * 出力例
  *   Ruby/groongaの説明文の中で「groonga」が含まれる部分
  *   ---
  *   Ruby/<em>groonga</em>は<em>groonga</em>のいわゆるDB-APIの層の...
  *   ---
+ * </pre>
  *
  * _query_ には「[カラム名]:[演算子][値]」という書式で条件を
  * 指定する。演算子は以下の通り。
@@ -519,7 +518,7 @@ rb_grn_column_clear_lock (int argc, VALUE *argv, VALUE self)
  * call-seq:
  *   column.locked?(options={})
  *
- * _column_がロックされていれば+true+を返す。
+ * _column_ がロックされていれば +true+ を返す。
  *
  * 利用可能なオプションは以下の通り。
  *

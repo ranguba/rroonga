@@ -628,7 +628,7 @@ rb_grn_table_key_support_get_default_tokenizer (VALUE self)
  *
  * Groonga::IndexColumnで使用するトークナイザを設定する。
  *
- * 例:
+ * @example
  *   # 2-gramを使用。
  *   table.default_tokenizer = "TokenBigram"
  *   # オブジェクトで指定

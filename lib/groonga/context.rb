@@ -29,12 +29,11 @@ module Groonga
     # _path_ に新しくデータベースを作成する。 _path_ を省略すると
     # 一時データベースとなる。
     #
-    # 使用例は以下の通り。
-    #
-    # 一時データベースを作成:
+    # @example
+    #   #一時データベースを作成:
     #   context.create_database
     #
-    # 永続データベースを作成:
+    #   #永続データベースを作成:
     #   context.create_database("/tmp/db.groonga")
     def create_database(path=nil)
       options = {:context => self}
@@ -69,7 +68,6 @@ module Groonga
     #
     #   値を取得するカラムを指定する。
     # @option options [Array] XXX TODO
-    # 例:
     #   TODO
     def select(table, options={})
       select = SelectCommand.new(self, table, options)
