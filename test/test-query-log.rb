@@ -47,14 +47,14 @@ module QueryLogTest
 
   module HTTPCommandParseTestUtils
     private
-    def parse(command, parameters)
+    def parse(command, parameters={})
       parse_http_path(command, parameters)
     end
   end
 
   module CommandLineCommandParseTestUtils
     private
-    def parse(command, parameters)
+    def parse(command, parameters={})
       parse_command_line(command, parameters)
     end
   end
@@ -108,12 +108,32 @@ module QueryLogTest
     include SelectCommandParseTests
     include SelectCommandParseFilterTests
     include HTTPCommandParseTestUtils
+
+    def test_uri_format?
+      command = parse("status")
+      assert_predicate(command, :uri_format?)
+    end
+
+    def test_command_format?
+      command = parse("status")
+      assert_not_predicate(command, :command_format?)
+    end
   end
 
   class CommandLineSelecCommandParseTest < Test::Unit::TestCase
     include SelectCommandParseTests
     include SelectCommandParseFilterTests
     include CommandLineCommandParseTestUtils
+
+    def test_uri_format?
+      command = parse("status")
+      assert_not_predicate(command, :uri_format?)
+    end
+
+    def test_command_format?
+      command = parse("status")
+      assert_predicate(command, :command_format?)
+    end
   end
 
   class StatisticOperationParseTest < Test::Unit::TestCase

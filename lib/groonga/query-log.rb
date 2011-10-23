@@ -17,6 +17,7 @@
 
 require "English"
 require "shellwords"
+require "cgi"
 
 module Groonga
   module QueryLog
@@ -47,7 +48,9 @@ module Groonga
           name, output_type = name.split(/\./, 2)
           parameters["output_type"] = output_type if output_type
           command_class = @@registered_commands[name] || self
-          command_class.new(name, parameters)
+          command = command_class.new(name, parameters)
+          command.original_format = :uri
+          command
         end
 
         def parse_command_line(command_line)
@@ -57,20 +60,32 @@ module Groonga
             parameters[key.gsub(/\A--/, '')] = value
           end
           command_class = @@registered_commands[name] || self
-          command_class.new(name, parameters)
+          command = command_class.new(name, parameters)
+          command.original_format = :command
+          command
         end
       end
 
       attr_reader :name, :parameters
+      attr_accessor :original_format
       def initialize(name, parameters)
         @name = name
         @parameters = parameters
+        @original_format = nil
       end
 
       def ==(other)
         other.is_a?(self.class) and
           @name == other.name and
           @parameters == other.parameters
+      end
+
+      def uri_format?
+        @original_format == :uri
+      end
+
+      def command_format?
+        @original_format == :command
       end
     end
 
