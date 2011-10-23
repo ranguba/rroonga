@@ -87,6 +87,45 @@ module Groonga
       def command_format?
         @original_format == :command
       end
+
+      def to_uri_format
+        path = "/d/#{@name}"
+        parameters = @parameters.dup
+        output_type = parameters.delete("output_type")
+        path << ".#{output_type}" if output_type
+        unless parameters.empty?
+          sorted_parameters = parameters.sort_by do |name, _|
+            name.to_s
+          end
+          uri_parameters = sorted_parameters.collect do |name, value|
+            "#{CGI.escape(name)}=#{CGI.escape(value)}"
+          end
+          path << "?"
+          path << uri_parameters.join("&")
+        end
+        path
+      end
+
+      def to_command_format
+        command_line = [@name]
+        sorted_parameters = @parameters.sort_by do |name, _|
+          name.to_s
+        end
+        sorted_parameters.each do |name, value|
+          escaped_value = value.gsub(/[\n"\\]/) do
+            special_character = $MATCH
+            case special_character
+            when "\n"
+              "\\n"
+            else
+              "\\#{special_character}"
+            end
+          end
+          command_line << "--#{name}"
+          command_line << "\"#{escaped_value}\""
+        end
+        command_line.join(" ")
+      end
     end
 
     class SelectCommand < Command

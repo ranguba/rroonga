@@ -80,6 +80,23 @@ module QueryLogTest
                      :scorer => "_score = random()")
       assert_equal("_score = random()", select.scorer)
     end
+
+    def test_to_uri_format
+      select = parse("select",
+                     :table => "Users",
+                     :filter => "age<=30")
+      assert_equal("/d/select.json?filter=age%3C%3D30&table=Users",
+                   select.to_uri_format)
+    end
+
+    def test_to_command_format
+      select = parse("select",
+                     :table => "Users",
+                     :filter => "age<=30")
+      assert_equal("select --filter \"age<=30\" " +
+                   "--output_type \"json\" --table \"Users\"",
+                   select.to_command_format)
+    end
   end
 
   module SelectCommandParseFilterTests
@@ -101,6 +118,47 @@ module QueryLogTest
                      'keyword @ "白"',
                      'keyword @ "養殖"'],
                    select.conditions)
+    end
+
+    def test_to_uri_format
+      filter = 'geo_in_rectangle(location,' +
+                                '"35.73360x139.7394","62614x139.7714") && ' +
+               '((type == "たいやき" || type == "和菓子")) && ' +
+               'keyword @ "たいやき" &! keyword @ "白" &! keyword @ "養殖"'
+      select = parse("select",
+                     :table => "Users",
+                     :filter => filter)
+      assert_equal("/d/select.json?filter=geo_in_rectangle%28location%2C" +
+                   "%2235.73360x139.7394%22%2C%2262614x139.7714%22%29+" +
+                   "%26%26+%28%28type+" +
+                   "%3D%3D+%22%E3%81%9F%E3%81%84%E3%82%84%E3%81%8D%22+" +
+                   "%7C%7C+type+%3D%3D+" +
+                   "%22%E5%92%8C%E8%8F%93%E5%AD%90%22%29%29+" +
+                   "%26%26+keyword+%40+" +
+                   "%22%E3%81%9F%E3%81%84%E3%82%84%E3%81%8D%22+%26%21+" +
+                   "keyword+%40+%22%E7%99%BD%22+%26%21+" +
+                   "keyword+%40+%22%E9%A4%8A%E6%AE%96%22&table=Users",
+                   select.to_uri_format)
+    end
+
+    def test_to_command_format
+      filter = 'geo_in_rectangle(location,' +
+                                '"35.73360x139.7394","62614x139.7714") && ' +
+               '((type == "たいやき" || type == "和菓子")) && ' +
+               'keyword @ "たいやき" &! keyword @ "白" &! keyword @ "養殖"'
+      select = parse("select",
+                     :table => "Users",
+                     :filter => filter)
+      assert_equal("select " +
+                   "--filter " +
+                     "\"geo_in_rectangle(location," +
+                     "\\\"35.73360x139.7394\\\",\\\"62614x139.7714\\\") && " +
+                     "((type == \\\"たいやき\\\" || " +
+                       "type == \\\"和菓子\\\")) && " +
+                     "keyword @ \\\"たいやき\\\" &! keyword @ \\\"白\\\" &! " +
+                     "keyword @ \\\"養殖\\\"\" " +
+                   "--output_type \"json\" --table \"Users\"",
+                   select.to_command_format)
     end
   end
 
