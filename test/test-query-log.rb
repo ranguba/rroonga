@@ -24,10 +24,14 @@ module QueryLogTest
     end
 
     def parse_http_path(command, parameters)
-      path = "/d/#{command}.json?"
-      path << parameters.collect do |key, value|
-        [CGI.escape(key.to_s), CGI.escape(value.to_s)].join("=")
-      end.join("&")
+      path = "/d/#{command}.json"
+      unless parameters.empty?
+        uri_parameters = parameters.collect do |key, value|
+          [CGI.escape(key.to_s), CGI.escape(value.to_s)].join("=")
+        end
+        path << "?"
+        path << uri_parameters.join("&")
+      end
       Groonga::QueryLog::Command.parse(path)
     end
 

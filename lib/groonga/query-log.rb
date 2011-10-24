@@ -40,9 +40,11 @@ module Groonga
         def parse_uri_path(path)
           name, parameters_string = path.split(/\?/, 2)
           parameters = {}
-          parameters_string.split(/&/).each do |parameter_string|
-            key, value = parameter_string.split(/\=/, 2)
-            parameters[key] = CGI.unescape(value)
+          if parameters_string
+            parameters_string.split(/&/).each do |parameter_string|
+              key, value = parameter_string.split(/\=/, 2)
+              parameters[key] = CGI.unescape(value)
+            end
           end
           name = name.gsub(/\A\/d\//, '')
           name, output_type = name.split(/\./, 2)
