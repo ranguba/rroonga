@@ -1,5 +1,14 @@
 h1. NEWS
 
+h2. 1.3.0: 2011-10-29
+
+h3. Improvements
+
+* [schema] Remove also needless db.tables/ directory if it is empty.
+* [schema] Remove also needless db.tables/table.columns/ directory if it is empty.
+* Added query log parser.
+* Added groonga-query-log-extract command.
+
 h2. 1.2.9: 2011-09-16
 
 h3. Fixes
