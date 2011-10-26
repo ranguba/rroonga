@@ -988,31 +988,39 @@ rb_grn_table_delete (VALUE self, VALUE rb_id)
  * _order_ には +:asc+ ,  +:ascending+ , +:desc+ , +:descending+ の
  * いずれを指定する。
  *
- * [ハッシュの配列で指定する方法]
- *   オーソドックスな指定方法。
+ * - ハッシュの配列で指定する方法 :=
+ * オーソドックスな指定方法。
  *
- *     [
- *      {:key => "第1ソートキー", :order => order},
- *      {:key => "第2ソートキー", :order => order},
- *      ...,
- *     ]
+ * <pre lang="ruby">
+ * [
+ *  {:key => "第1ソートキー", :order => order},
+ *  {:key => "第2ソートキー", :order => order},
+ *  ...,
+ * ]
+ * </pre>
+ * =:
  *
- * [配列の配列で指定する方法]
- *   少し簡単化した指定方法。
+ * - 配列の配列で指定する方法 :=
+ * 少し簡単化した指定方法。
  *
- *     [
- *      ["第1ソートキー", order],
- *      ["第2ソートキー", order],
- *      ...,
- *     ]
+ * <pre lang="ruby">
+ * [
+ *  ["第1ソートキー", order],
+ *  ["第2ソートキー", order],
+ *  ...,
+ * ]
+ * </pre>
+ * =:
  *
- * [ソートキーの配列で指定する方法]
- *   _order_ は常に昇順（ +:ascending+ ）になるが、最も簡単
- *   に指定できる。
+ * - ソートキーの配列で指定する方法 :=
+ * _order_ は常に昇順（ +:ascending+ ）になるが、最も簡単
+ * に指定できる。
  *
- *     ["第1ソートキー", "第2ソートキー", ...]
+ * <pre lang="ruby">
+ * ["第1ソートキー", "第2ソートキー", ...]
+ * </pre>
+ * =:
  *
- * _options_ に指定可能な値は以下の通り。
  * @param options [::Hash] The name and value
  *   pairs. Omitted names are initialized as the default value.
  * @option options :offset The offset
