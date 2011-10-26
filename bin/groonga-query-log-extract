@@ -26,7 +26,7 @@ options = OpenStruct.new
 options.unify_format = nil
 options.commands = []
 options.exclude_commands = []
-options.output = nil
+options.output_path = nil
 option_parser = OptionParser.new do |parser|
   parser.banner += " QUERY_LOG1 ..."
 
@@ -70,7 +70,7 @@ option_parser = OptionParser.new do |parser|
   parser.on("--output=PATH",
             "Output to PATH.",
             "[standard output]") do |path|
-    options.output = path
+    options.output_path = path
   end
 end
 args = option_parser.parse!(ARGV)
@@ -108,8 +108,8 @@ def extract(output, options)
   end
 end
 
-if options.path
-  File.open(options.path, "w") do |output|
+if options.output_path
+  File.open(options.output_path, "w") do |output|
     extract(output, options)
   end
 else
