@@ -15,6 +15,8 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+require "groonga/json"
+
 module Groonga
   class Context
     # _path_ にある既存のデータベースを開く。ブロックを指定した場
@@ -78,7 +80,7 @@ module Groonga
                                     :drill_down)
       class << self
         def parse(json, drill_down_keys)
-          select_result, *drill_down_results = parse_json(json)
+          select_result, *drill_down_results = JSON.parse(json)
           result = new
           n_hits, columns, values = extract_result(select_result)
           result.n_hits = n_hits
@@ -129,18 +131,6 @@ module Groonga
             Time.at(value)
           else
             value
-          end
-        end
-
-        begin
-          require 'json'
-          def parse_json(json)
-            JSON.parse(json)
-          end
-        rescue LoadError
-          require 'yaml'
-          def parse_json(json)
-            YAML.load(json)
           end
         end
       end
