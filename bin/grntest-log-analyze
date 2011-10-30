@@ -93,7 +93,7 @@ def analyze(output, options)
   if n_queries > 0
     last_resolution = current_second % options.resolution
     if last_resolution.zero?
-      qps = n_queries
+      qps = n_queries / options.resolution.to_f
     else
       qps = n_queries / last_resolution.to_f
     end
