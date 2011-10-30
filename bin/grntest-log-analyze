@@ -1,0 +1,110 @@
+#!/usr/bin/env ruby
+# -*- coding: utf-8 -*-
+#
+# Copyright (C) 2011  Kouhei Sutou <kou@clear-code.com>
+#
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public
+# License version 2.1 as published by the Free Software Foundation.
+#
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public
+# License along with this library; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+require 'ostruct'
+require 'optparse'
+require 'pathname'
+
+require 'groonga/grntest-log'
+
+options = OpenStruct.new
+options.format = "tsv"
+options.resolution = 1
+options.output_items = ["qps"]
+options.output_path = nil
+option_parser = OptionParser.new do |parser|
+  parser.banner += " LOG1 ..."
+
+  available_formats = ["tsv", "csv"]
+  parser.on("--format=FORMAT",
+            available_formats,
+            "Output as FORMAT format.",
+            "(#{available_formats.join(', ')})",
+            "[#{options.format}]") do |format|
+    options.format = format
+  end
+
+  parser.on("--resolution=RESOLUTION",
+            Integer,
+            "Data resolution in seconds.",
+            "[#{options.resolution}]") do |resolution|
+    options.resolution = resolution
+  end
+
+  available_items = ["qps"]
+  parser.on("--output-item=ITEM",
+            available_items,
+            "Output ITEM.",
+            "To output multiple items, specify this option n times.",
+            "(#{available_items.join(', ')})",
+            "[#{options.output_items.join(', ')}]") do |item|
+    options.output_items << item
+  end
+
+  parser.on("--output=PATH",
+            "Output to PATH.",
+            "[standard output]") do |path|
+    options.output_path = path
+  end
+end
+args = option_parser.parse!(ARGV)
+
+if args.empty?
+  puts(option_parser)
+  exit(false)
+end
+
+def analyze(output, options)
+  parser = Groonga::GrntestLog::Parser.new
+  current_second = 0
+  n_queries = 0
+  parser.parse(ARGF) do |event|
+    next unless event.is_a?(Groonga::GrntestLog::TaskEvent)
+    case options.format
+    when "tsv"
+      new_second = event.relative_end_time / 1_000_000
+      if current_second < new_second
+        if (current_second % options.resolution).zero?
+          qps = n_queries / options.resolution.to_f
+          output.puts([current_second, qps].join("\t"))
+          n_queries = 1
+        end
+        current_second = new_second
+      else
+        n_queries += 1
+      end
+    end
+  end
+  if n_queries > 0
+    last_resolution = current_second % options.resolution
+    if last_resolution.zero?
+      qps = n_queries
+    else
+      qps = n_queries / last_resolution.to_f
+    end
+    output.puts([current_second, qps].join("\t"))
+  end
+end
+
+if options.output_path
+  File.open(options.output_path, "w") do |output|
+    analyze(output, options)
+  end
+else
+  analyze($stdout, options)
+end
