@@ -71,6 +71,7 @@ end
 
 def analyze(output, options)
   parser = Groonga::GrntestLog::Parser.new
+  previous_second = 0
   current_second = 0
   n_queries = 0
   min_elapsed = nil
@@ -81,13 +82,15 @@ def analyze(output, options)
     when "tsv"
       new_second = event.relative_end_time / 1_000_000
       if current_second < new_second
-        if (current_second % options.resolution).zero?
+        if (current_second % options.resolution).zero? or
+            ((current_second - previous_second) >= options.resolution)
           qps = n_queries / options.resolution.to_f
           data = [current_second, qps, min_elapsed || 0, max_elapsed || 0]
           output.puts(data.join("\t"))
           n_queries = 0
           min_elapsed = nil
           max_elapsed = nil
+          previous_second = current_second
         end
         current_second = new_second
       end
