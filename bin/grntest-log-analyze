@@ -73,6 +73,8 @@ def analyze(output, options)
   parser = Groonga::GrntestLog::Parser.new
   current_second = 0
   n_queries = 0
+  min_elapsed = nil
+  max_elapsed = nil
   parser.parse(ARGF) do |event|
     next unless event.is_a?(Groonga::GrntestLog::TaskEvent)
     case options.format
@@ -81,13 +83,20 @@ def analyze(output, options)
       if current_second < new_second
         if (current_second % options.resolution).zero?
           qps = n_queries / options.resolution.to_f
-          output.puts([current_second, qps].join("\t"))
-          n_queries = 1
+          data = [current_second, qps, min_elapsed || 0, max_elapsed || 0]
+          output.puts(data.join("\t"))
+          n_queries = 0
+          min_elapsed = nil
+          max_elapsed = nil
         end
         current_second = new_second
-      else
-        n_queries += 1
       end
+      n_queries += 1
+      elapsed_time_in_millisecond = event.elapsed_time / 1_000.0
+      min_elapsed ||= elapsed_time_in_millisecond
+      max_elapsed ||= elapsed_time_in_millisecond
+      min_elapsed = [min_elapsed, elapsed_time_in_millisecond].min
+      max_elapsed = [max_elapsed, elapsed_time_in_millisecond].max
     end
   end
   if n_queries > 0
@@ -97,7 +106,8 @@ def analyze(output, options)
     else
       qps = n_queries / last_resolution.to_f
     end
-    output.puts([current_second, qps].join("\t"))
+    data = [current_second, qps, min_elapsed || 0, max_elapsed || 0]
+    output.puts(data.join("\t"))
   end
 end
 
