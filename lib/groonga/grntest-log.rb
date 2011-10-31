@@ -177,17 +177,17 @@ module Groonga
             end
           else
             case line
-            when /\A\[{"script":/
+            when /\A\[\{"script":/
               buffer << line[1..-1]
               in_environment = true
-            when /\A{"jobs":/
+            when /\A\{"jobs":/
               yield(JobsStartEvent.new(parse_json(line.sub(/,$/, "}"))))
             when /\A"detail": \[$/
               # ignore
             when /\A\[\d+,/
               yield(TaskEvent.new(*parse_json(line.sub(/\]+,$/, "]"))))
             when /\A"summary": /
-              summaries = parse_json(line.gsub(/(?:\A"summary": |},$)/, ''))
+              summaries = parse_json(line.gsub(/(?:\A"summary": |\},$)/, ''))
               summaries = summaries.collect do |summary|
                 JobSummaryEvent.new(summary)
               end
