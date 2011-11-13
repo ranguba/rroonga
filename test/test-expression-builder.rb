@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2010  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2011  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -75,7 +75,7 @@ class ExpressionBuilderTest < Test::Unit::TestCase
   end
 
   def test_not_equal
-    omit("not supported yet!!!")
+    only_ruby19
     result = @users.select do |record|
       record["name"] != "mori daijiro"
     end
