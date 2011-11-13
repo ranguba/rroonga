@@ -891,6 +891,12 @@ module Groonga
         rescue SystemCallError
         end
       end
+
+      private
+      # @private
+      def use_named_path?
+        @options[:named_path]
+      end
     end
 
     # スキーマ定義時にGroonga::Schema.create_tableや
@@ -1226,7 +1232,8 @@ module Groonga
                                :type, :path, :persistent,
                                :key_type, :value_type, :sub_records,
                                :default_tokenizer,
-                               :key_normalize, :key_with_sis]
+                               :key_normalize, :key_with_sis,
+                               :named_path]
       # @private
       def validate_options(options)
         return if options.nil?
@@ -1282,6 +1289,7 @@ module Groonga
       def path
         user_path = @options[:path]
         return user_path if user_path
+        return nil unless use_named_path?
         tables_dir = tables_directory_path(context.database)
         FileUtils.mkdir_p(tables_dir)
         File.join(tables_dir, @name)
@@ -1289,7 +1297,7 @@ module Groonga
 
       # @private
       def column_options
-        {:persistent => persistent?}
+        {:persistent => persistent?, :named_path => use_named_path?}
       end
 
       # @private
@@ -1474,7 +1482,7 @@ module Groonga
       private
       # @private
       AVAILABLE_OPTION_KEYS = [:context, :change, :force,
-                               :path, :persistent]
+                               :path, :persistent, :named_path]
       # @private
       def validate_options(options)
         return if options.nil?
@@ -1570,6 +1578,7 @@ module Groonga
       def path(context, table)
         user_path = @options[:path]
         return user_path if user_path
+        return nil unless use_named_path?
         columns_dir = columns_directory_path(table)
         FileUtils.mkdir_p(columns_dir)
         File.join(columns_dir, @name)
@@ -1710,6 +1719,7 @@ module Groonga
       def path(context, table, name)
         user_path = @options[:path]
         return user_path if user_path
+        return nil unless use_named_path?
         columns_dir = "#{table.path}.columns"
         FileUtils.mkdir_p(columns_dir)
         File.join(columns_dir, name)

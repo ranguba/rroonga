@@ -102,6 +102,14 @@ module SchemaCreateTableTests
   def test_default_path
     Groonga::Schema.create_table("Posts", options) do |table|
     end
+    assert_equal("#{@database_path}.0000100",
+                 context["Posts"].path)
+  end
+
+  def test_default_named_path
+    options_with_named_path = options.merge(:named_path => true)
+    Groonga::Schema.create_table("Posts", options_with_named_path) do |table|
+    end
     assert_equal("#{@database_path}.tables/Posts",
                  context["Posts"].path)
   end
