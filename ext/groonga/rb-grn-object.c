@@ -337,7 +337,6 @@ rb_grn_object_bind_common (VALUE klass, VALUE self, VALUE rb_context,
     }
 
     switch (object->header.type) {
-      case GRN_DB:
       case GRN_PROC:
       case GRN_TYPE:
       case GRN_ACCESSOR: /* TODO: We want to close GRN_ACCESSOR. */
