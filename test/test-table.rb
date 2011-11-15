@@ -228,9 +228,9 @@ class TableTest < Test::Unit::TestCase
     bookmarks = Groonga::Array.create(:name => "Bookmarks",
                                       :path => bookmarks_path.to_s)
 
-    assert_predicate(bookmarks, :empty?)
+    assert_true(bookmarks.empty?)
     bookmarks.add
-    assert_not_predicate(bookmarks, :empty?)
+    assert_false(bookmarks.empty?)
   end
 
   def test_path
