@@ -891,11 +891,7 @@ rb_grn_table_empty_p (VALUE self)
 			     NULL, NULL, NULL,
 			     NULL);
     size = grn_table_size(context, table);
-    if (size == 0) {
-	return Qtrue;
-    } else {
-	return Qfalse;
-    }
+    return CBOOL2RVAL(size == 0);
 }
 
 /*
