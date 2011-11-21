@@ -2060,6 +2060,48 @@ rb_grn_table_exist_p (VALUE self, VALUE id)
     return CBOOL2RVAL(grn_table_at(context, table, NUM2UINT(id)));
 }
 
+/*
+ * Document-method: defrag
+ *
+ * call-seq:
+ *   table.defrag(options={}) -> n_segments
+ *
+ * Defrags all variable size columns in the table.
+ *
+ * @return [Integer] the number of defraged segments
+ * @option options [Integer] :threshold (0) the threshold to
+ *   determine whether a segment is defraged. Available
+ *   values are -4..22. -4 means all segments are defraged.
+ *   22 means no segment is defraged.
+ * @since 1.3.0
+ */
+static VALUE
+rb_grn_table_defrag (int argc, VALUE *argv, VALUE self)
+{
+    grn_ctx *context;
+    grn_obj *table;
+    int n_segments;
+    VALUE options, rb_threshold;
+    int threshold = 0;
+
+    rb_scan_args(argc, argv, "01", &options);
+    rb_grn_scan_options(options,
+			"threshold", &rb_threshold,
+			NULL);
+    if (!NIL_P(rb_threshold)) {
+	threshold = NUM2INT(rb_threshold);
+    }
+
+    rb_grn_table_deconstruct(SELF(self), &table, &context,
+			     NULL, NULL, NULL,
+			     NULL, NULL,
+			     NULL);
+    n_segments = grn_obj_defrag(context, table, threshold);
+    rb_grn_context_check(context, self);
+
+    return INT2NUM(n_segments);
+}
+
 void
 rb_grn_init_table (VALUE mGrn)
 {
@@ -2133,6 +2175,8 @@ rb_grn_init_table (VALUE mGrn)
 		     rb_grn_table_support_sub_records_p, 0);
 
     rb_define_method(rb_cGrnTable, "exist?", rb_grn_table_exist_p, 1);
+
+    rb_define_method(rb_cGrnTable, "defrag", rb_grn_table_defrag, -1);
 
     rb_grn_init_table_key_support(mGrn);
     rb_grn_init_array(mGrn);

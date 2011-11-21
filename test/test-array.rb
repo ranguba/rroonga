@@ -99,4 +99,15 @@ class ArrayTest < Test::Unit::TestCase
     second_user = users.add
     assert_predicate(second_user, :added?)
   end
+
+  def test_defrag
+    users = Groonga::Array.create(:name => "Users")
+    users.define_column("name", "ShortText")
+    users.define_column("address", "ShortText")
+    1000.times do |i|
+      users.add(:name => "user #{i}" * 1000,
+                :address => "address #{i}" * 1000)
+    end
+    assert_equal(7, users.defrag)
+  end
 end

@@ -388,4 +388,17 @@ class PatriciaTrieTest < Test::Unit::TestCase
     bob_again = users.add("bob")
     assert_not_predicate(bob_again, :added?)
   end
+
+  def test_defrag
+    users = Groonga::PatriciaTrie.create(:name => "Users",
+                                         :key_type => "ShortText")
+    users.define_column("name", "ShortText")
+    users.define_column("address", "ShortText")
+    1000.times do |i|
+      users.add("user #{i}",
+                :name => "user #{i}" * 1000,
+                :address => "address #{i}" * 1000)
+    end
+    assert_equal(7, users.defrag)
+  end
 end
