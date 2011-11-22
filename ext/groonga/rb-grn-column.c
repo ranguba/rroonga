@@ -733,6 +733,40 @@ rb_grn_column_get_indexes (int argc, VALUE *argv, VALUE self)
     return rb_indexes;
 }
 
+/*
+ * Document-method: rename
+ *
+ * call-seq:
+ *   table.rename(name)
+ *
+ * Renames the table to name.
+ *
+ * @param name [String] the new name
+ * @since 1.3.0
+ */
+static VALUE
+rb_grn_column_rename (VALUE self, VALUE rb_name)
+{
+    int rc;
+    grn_ctx *context;
+    grn_obj *column;
+    char *name;
+    int name_size;
+
+    rb_grn_column_deconstruct(SELF(self), &column, &context,
+			      NULL, NULL,
+			      NULL, NULL, NULL);
+
+    name = StringValueCStr(rb_name);
+    name_size = RSTRING_LEN(rb_name);
+
+    rc = grn_column_rename(context, column, name, name_size);
+    rb_grn_context_check(context, self);
+    rb_grn_rc_check(rc, self);
+
+    return self;
+}
+
 void
 rb_grn_init_column (VALUE mGrn)
 {
@@ -757,6 +791,8 @@ rb_grn_init_column (VALUE mGrn)
     rb_define_method(rb_cGrnColumn, "scalar?", rb_grn_column_scalar_p, 0);
 
     rb_define_method(rb_cGrnColumn, "indexes", rb_grn_column_get_indexes, -1);
+
+    rb_define_method(rb_cGrnColumn, "rename", rb_grn_column_rename, 1);
 
     rb_grn_init_fix_size_column(mGrn);
     rb_grn_init_variable_size_column(mGrn);

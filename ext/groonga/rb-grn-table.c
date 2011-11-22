@@ -2102,6 +2102,41 @@ rb_grn_table_defrag (int argc, VALUE *argv, VALUE self)
     return INT2NUM(n_segments);
 }
 
+/*
+ * Document-method: rename
+ *
+ * call-seq:
+ *   table.rename(name)
+ *
+ * Renames the table to name.
+ *
+ * @param name [String] the new name
+ * @since 1.3.0
+ */
+static VALUE
+rb_grn_table_rename (VALUE self, VALUE rb_name)
+{
+    int rc;
+    grn_ctx *context;
+    grn_obj *table;
+    char *name;
+    int name_size;
+
+    rb_grn_table_deconstruct(SELF(self), &table, &context,
+			     NULL, NULL, NULL,
+			     NULL, NULL,
+			     NULL);
+
+    name = StringValueCStr(rb_name);
+    name_size = RSTRING_LEN(rb_name);
+
+    rc = grn_table_rename(context, table, name, name_size);
+    rb_grn_context_check(context, self);
+    rb_grn_rc_check(rc, self);
+
+    return self;
+}
+
 void
 rb_grn_init_table (VALUE mGrn)
 {
@@ -2177,6 +2212,8 @@ rb_grn_init_table (VALUE mGrn)
     rb_define_method(rb_cGrnTable, "exist?", rb_grn_table_exist_p, 1);
 
     rb_define_method(rb_cGrnTable, "defrag", rb_grn_table_defrag, -1);
+
+    rb_define_method(rb_cGrnTable, "rename", rb_grn_table_rename, 1);
 
     rb_grn_init_table_key_support(mGrn);
     rb_grn_init_array(mGrn);

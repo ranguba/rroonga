@@ -110,4 +110,14 @@ class ArrayTest < Test::Unit::TestCase
     end
     assert_equal(7, users.defrag)
   end
+
+  def test_rename
+    users = Groonga::Array.create(:name => "Users")
+    name = users.define_column("name", "ShortText")
+    address = users.define_column("address", "ShortText")
+
+    users.rename("People")
+    assert_equal(["People", "People.name", "People.address"],
+                 [users.name, name.name, address.name])
+  end
 end
