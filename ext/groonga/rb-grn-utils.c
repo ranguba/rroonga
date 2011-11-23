@@ -222,6 +222,7 @@ rb_grn_bulk_to_ruby_object_by_range_type (grn_ctx *context, grn_obj *bulk,
     switch (range->header.type) {
       case GRN_TABLE_HASH_KEY:
       case GRN_TABLE_PAT_KEY:
+      case GRN_TABLE_DAT_KEY:
       case GRN_TABLE_NO_KEY:
 	{
 	    grn_id id;
@@ -765,6 +766,7 @@ rb_grn_key_from_ruby_object (VALUE rb_key, grn_ctx *context,
 	break;
       case GRN_TABLE_HASH_KEY:
       case GRN_TABLE_PAT_KEY:
+      case GRN_TABLE_DAT_KEY:
       case GRN_TABLE_NO_KEY:
 	id = RVAL2GRNID(rb_key, context, domain, related_object);
 	break;
@@ -836,6 +838,7 @@ rb_grn_obj_to_ruby_object (VALUE klass, grn_ctx *context,
       /* case GRN_EXPR: */
       /* case GRN_TABLE_HASH_KEY: */
       /* case GRN_TABLE_PAT_KEY: */
+      /* case GRN_TABLE_DAT_KEY: */
       /* case GRN_TABLE_NO_KEY: */
       /* case GRN_DB: */
       /* case GRN_COLUMN_FIX_SIZE: */

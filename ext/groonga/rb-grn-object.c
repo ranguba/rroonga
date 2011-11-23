@@ -108,11 +108,13 @@ rb_grn_object_run_finalizer (grn_ctx *context, grn_obj *grn_object,
       case GRN_PROC:
       case GRN_CURSOR_TABLE_HASH_KEY:
       case GRN_CURSOR_TABLE_PAT_KEY:
+      case GRN_CURSOR_TABLE_DAT_KEY:
       case GRN_CURSOR_TABLE_NO_KEY:
       case GRN_CURSOR_TABLE_VIEW:
 	break;
       case GRN_TABLE_HASH_KEY:
       case GRN_TABLE_PAT_KEY:
+      case GRN_TABLE_DAT_KEY:
 	rb_grn_table_key_support_finalizer(context, grn_object,
 					   RB_GRN_TABLE_KEY_SUPPORT(rb_grn_object));
 	break;
@@ -219,6 +221,9 @@ rb_grn_object_to_ruby_class (grn_obj *object)
       case GRN_TABLE_PAT_KEY:
 	klass = rb_cGrnPatriciaTrie;
 	break;
+      case GRN_TABLE_DAT_KEY:
+	klass = rb_cGrnDoubleArrayTrie;
+	break;
       case GRN_TABLE_NO_KEY:
 	klass = rb_cGrnArray;
 	break;
@@ -254,6 +259,9 @@ rb_grn_object_to_ruby_class (grn_obj *object)
 	break;
       case GRN_CURSOR_TABLE_PAT_KEY:
 	klass = rb_cGrnPatriciaTrieCursor;
+	break;
+      case GRN_CURSOR_TABLE_DAT_KEY:
+	klass = rb_cGrnDoubleArrayTrieCursor;
 	break;
       case GRN_CURSOR_TABLE_NO_KEY:
 	klass = rb_cGrnArrayCursor;
@@ -383,6 +391,7 @@ rb_grn_object_assign (VALUE klass, VALUE self, VALUE rb_context,
 	(RVAL2CBOOL(rb_obj_is_kind_of(self, rb_cGrnType))) ||
 	klass == rb_cGrnHashCursor ||
 	klass == rb_cGrnPatriciaTrieCursor ||
+	klass == rb_cGrnDoubleArrayTrieCursor ||
 	klass == rb_cGrnArrayCursor ||
 	klass == rb_cGrnViewCursor ||
 	klass == rb_cGrnIndexCursor ||
@@ -780,6 +789,8 @@ rb_grn_object_inspect_content_flags_with_label (VALUE inspected,
 	    rb_ary_push(inspected_flags, rb_str_new2("TABLE_HASH_KEY"));
 	if (flags & GRN_OBJ_TABLE_PAT_KEY)
 	    rb_ary_push(inspected_flags, rb_str_new2("TABLE_PAT_KEY"));
+	if (flags & GRN_OBJ_TABLE_DAT_KEY)
+	    rb_ary_push(inspected_flags, rb_str_new2("TABLE_DAT_KEY"));
 	if (flags & GRN_OBJ_TABLE_NO_KEY)
 	    rb_ary_push(inspected_flags, rb_str_new2("TABLE_NO_KEY"));
 	if (flags & GRN_OBJ_TABLE_VIEW)
@@ -804,6 +815,7 @@ rb_grn_object_inspect_content_flags_with_label (VALUE inspected,
     switch (object->header.type) {
       case GRN_TABLE_HASH_KEY:
       case GRN_TABLE_PAT_KEY:
+      case GRN_TABLE_DAT_KEY:
 	if (flags & GRN_OBJ_KEY_WITH_SIS)
 	    rb_ary_push(inspected_flags, rb_str_new2("KEY_WITH_SIS"));
 	if (flags & GRN_OBJ_KEY_NORMALIZE)
@@ -1211,6 +1223,7 @@ rb_grn_object_array_reference (VALUE self, VALUE rb_id)
     switch (object->header.type) {
       case GRN_TABLE_HASH_KEY:
       case GRN_TABLE_PAT_KEY:
+      case GRN_TABLE_DAT_KEY:
       case GRN_TABLE_NO_KEY:
 	GRN_OBJ_INIT(&value, GRN_BULK, 0, GRN_ID_NIL);
 	break;
@@ -1270,6 +1283,7 @@ rb_uvector_value_p (RbGrnObject *rb_grn_object, VALUE rb_value)
 	break;
       case GRN_TABLE_HASH_KEY:
       case GRN_TABLE_PAT_KEY:
+      case GRN_TABLE_DAT_KEY:
       case GRN_TABLE_NO_KEY:
       case GRN_TABLE_VIEW:
 	first_element = rb_ary_entry(rb_value, 0);

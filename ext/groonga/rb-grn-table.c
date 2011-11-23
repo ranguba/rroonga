@@ -2219,5 +2219,6 @@ rb_grn_init_table (VALUE mGrn)
     rb_grn_init_array(mGrn);
     rb_grn_init_hash(mGrn);
     rb_grn_init_patricia_trie(mGrn);
+    rb_grn_init_double_array_trie(mGrn);
     rb_grn_init_view(mGrn);
 }
