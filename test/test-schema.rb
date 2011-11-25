@@ -185,6 +185,64 @@ class SchemaTest < Test::Unit::TestCase
     end
   end
 
+  class DefineDoubleArrayTrieTest < self
+    def test_default
+      Groonga::Schema.create_table("Posts",
+                                   :type => :double_array_trie) do |table|
+      end
+      posts = context["Posts"]
+      assert_kind_of(Groonga::DoubleArrayTrie, posts)
+      assert_equal("#{@database_path}.0000100", posts.path)
+    end
+
+    def test_named_path
+      Groonga::Schema.create_table("Posts",
+                                   :type => :double_array_trie,
+                                   :named_path => true) do |table|
+      end
+      posts = context["Posts"]
+      assert_kind_of(Groonga::DoubleArrayTrie, posts)
+      assert_equal("#{@database_path}.tables/Posts", posts.path)
+    end
+
+    def test_full_option
+      path = @tmp_dir + "patricia-trie.groonga"
+      Groonga::Schema.create_table("Posts",
+                                   :type => :double_array_trie,
+                                   :key_type => "integer",
+                                   :path => path.to_s,
+                                   :value_type => "Float",
+                                   :default_tokenizer => "TokenBigram",
+                                   :key_normalize => true,
+                                   :named_path => true) do |table|
+      end
+      table = context["Posts"]
+      assert_equal("#<Groonga::DoubleArrayTrie " +
+                   "id: <#{table.id}>, " +
+                   "name: <Posts>, " +
+                   "path: <#{path}>, " +
+                   "domain: <Int32>, " +
+                   "range: <Float>, " +
+                   "flags: <KEY_NORMALIZE|WITH_SECTION>, " +
+                   "encoding: <#{Groonga::Encoding.default.inspect}>, " +
+                   "size: <0>>",
+                   table.inspect)
+      assert_equal(context["TokenBigram"], table.default_tokenizer)
+    end
+
+    def test_rename
+      Groonga::Schema.create_table("Posts", :type => :double_array_trie) do |table|
+      end
+      posts = context["Posts"]
+      assert_kind_of(Groonga::DoubleArrayTrie, posts)
+      Groonga::Schema.rename_table("Posts", "Entries") do |table|
+      end
+      entries = context["Entries"]
+      assert_kind_of(Groonga::DoubleArrayTrie, entries)
+      assert_equal("Entries", posts.name)
+    end
+  end
+
   class DefineArrayTest < self
     def test_default
       Groonga::Schema.create_table("Posts", :type => :array) do |table|

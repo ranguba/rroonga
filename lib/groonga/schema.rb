@@ -188,7 +188,8 @@ module Groonga
       #   @option options :type (:array) The type
       #
       #     テーブルの型を指定する。
-      #     +:array+ , +:hash+ , +:patricia_trie+ のいずれかを指定する。
+      #     +:array+ , +:hash+ , +:patricia_trie+ ,
+      #     +:double_array_trie+ のいずれかを指定する。
       #     (:key_typeの項も参照)
       #   @option options [Groonga::Context] :context (Groonga::Context.default) The context
       #
@@ -221,7 +222,8 @@ module Groonga
       #   @option options :type (:array) The type
       #
       #     テーブルの型を指定する。
-      #     +:array+ , +:hash+ , +:patricia_trie+ のいずれかを指定する。
+      #     +:array+ , +:hash+ , +:patricia_trie+ ,
+      #     +:double_array_trie+ のいずれかを指定する。
       #     (:key_typeの項も参照)
       #   @option options [Groonga::Context] :context (Groonga::Context.default) The context
       #
@@ -247,7 +249,8 @@ module Groonga
       #
       #     キーの種類を示すオブジェクトを指定する。
       #     キーの種類には型名（"Int32"や"ShortText"など）またはGroonga::Type
-      #     またはテーブル（Groonga::Array、Groonga::Hash、Groonga::PatriciaTrieの
+      #     またはテーブル（Groonga::Array、Groonga::Hash、
+      #     Groonga::PatriciaTrie、Groonga::DoubleArrayTrieの
       #     どれか）を指定する。Groonga::Typeを指定した場合は、その型が示す範囲の
       #     値をキーとして使用する。ただし、キーの最大サイズは4096バイトで
       #     あるため、Groonga::Type::TEXTやGroonga::Type::LONG_TEXTは使用できない
@@ -277,7 +280,8 @@ module Groonga
       #   @option options :type (:array) The type
       #
       #     テーブルの型を指定する。
-      #     +:array+ , +:hash+ , +:patricia_trie+ のいずれかを指定する。
+      #     +:array+ , +:hash+ , +:patricia_trie+ ,
+      #     +:double_array_trie+ のいずれかを指定する。
       #     (:key_typeの項も参照)
       #   @option options [Groonga::Context] :context (Groonga::Context.default) The context
       #
@@ -614,7 +618,8 @@ module Groonga
     #   @option options :type (:array) The type
     #
     #     テーブルの型を指定する。
-    #     +:array+ , +:hash+ , +:patricia_trie+ のいずれかを指定する。
+    #     +:array+ , +:hash+ , +:patricia_trie+ ,
+    #     +:double_array_trie+ のいずれかを指定する。
     #   @option options [Groonga::Context] :context The context.
     #
     #     スキーマ定義時に使用するGroonga::Contextを指定する。
@@ -652,7 +657,8 @@ module Groonga
     #   @option options :type (:array) The type
     #
     #     テーブルの型を指定する。
-    #     +:array+ , +:hash+ , +:patricia_trie+ のいずれかを指定する。
+    #     +:array+ , +:hash+ , +:patricia_trie+ ,
+    #     +:double_array_trie+ のいずれかを指定する。
     #   @option options [Groonga::Context] :context The context
     #
     #     スキーマ定義時に使用するGroonga::Contextを指定する。
@@ -683,7 +689,8 @@ module Groonga
     #     キーの種類を示すオブジェクトを指定する。
     #     キーの種類には型名（"Int32"や"ShortText"など）または
     #     Groonga::Typeまたはテーブル（Groonga::Array、
-    #     Groonga::Hash、Groonga::PatriciaTrieのどれか）を指定する。
+    #     Groonga::Hash、Groonga::PatriciaTrie、
+    #     Groonga::DoubleArrayTrieのどれか）を指定する。
     #
     #     Groonga::Typeを指定した場合は、その型が示す範囲の
     #     値をキーとして使用する。ただし、キーの最大サイズは
@@ -705,18 +712,14 @@ module Groonga
     #     Groonga::IndexColumnを定義する場合は
     #     <tt>"TokenBigram"</tt>などを指定する必要がある。
     #
-    # @overload create_table(name, options= {:type => :patricia_trie})
-    #   :typeに:patricia_trieを使用した場合
+    # @overload create_table(name, options= {:type => :double_array_trie})
+    #   :typeに:double_array_trieを使用した場合
     #   @param options [::Hash] The name and value
     #     pairs. Omitted names are initialized as the default value.
     #   @option options :force The force
     #
     #     +true+ を指定すると既存の同名のテーブルが
     #     存在していても、強制的にテーブルを作成する。
-    #   @option options :type (:array) The type
-    #
-    #     テーブルの型を指定する。
-    #     +:array+ , +:hash+ , +:patricia_trie+ のいずれかを指定する。
     #   @option options [Groonga::Context] :context The context
     #
     #     スキーマ定義時に使用するGroonga::Contextを指定する。
@@ -745,16 +748,13 @@ module Groonga
     #   @option options :key_normalize The key_normalize
     #
     #     +true+ を指定するとキーを正規化する。
-    #   @option options :key_with_sis
-    #
-    #     +true+ を指定するとキーの文字列の全suffixが自動的に
-    #     登録される。
     #   @option options :key_type The key_type
     #
     #     キーの種類を示すオブジェクトを指定する。
     #     キーの種類には型名（"Int32"や"ShortText"など）または
     #     Groonga::Typeまたはテーブル（Groonga::Array、
-    #     Groonga::Hash、Groonga::PatriciaTrieのどれか）を指定する。
+    #     Groonga::Hash、Groonga::PatriciaTrie、
+    #     Groonga::DoubleArrayTrieのどれか）を指定する。
     #
     #     Groonga::Typeを指定した場合は、その型が示す範囲の
     #     値をキーとして使用する。ただし、キーの最大サイズは
@@ -1283,8 +1283,12 @@ module Groonga
           Groonga::Hash
         when :patricia_trie
           Groonga::PatriciaTrie
+        when :double_array_trie
+          Groonga::DoubleArrayTrie
         else
-          raise UnknownTableType.new(type, [nil, :array, :hash, :patricia_trie])
+          supported_types = [nil, :array, :hash, :patricia_trie,
+                             :double_array_trie]
+          raise UnknownTableType.new(type, supported_types)
         end
       end
 
@@ -1313,6 +1317,8 @@ module Groonga
             :key_with_sis => @options[:key_with_sis],
           }
           common.merge(key_support_table_common).merge(options)
+        elsif @table_type == Groonga::DoubleArrayTrie
+          common.merge(key_support_table_common)
         end
       end
 
@@ -1367,7 +1373,7 @@ module Groonga
         case table
         when Groonga::Array
           true
-        when Groonga::Hash, Groonga::PatriciaTrie
+        when Groonga::Hash, Groonga::PatriciaTrie, Groonga::DoubleArrayTrie
           key_type = normalize_key_type(options[:key_type])
           return false unless table.domain == resolve_name(key_type)
           default_tokenizer = normalize_type(options[:default_tokenizer])
