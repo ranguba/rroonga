@@ -443,6 +443,19 @@ class SchemaTest < Test::Unit::TestCase
     assert_nil(context["Posts.content"])
   end
 
+  def test_rename_column
+    Groonga::Schema.create_table("Posts") do |table|
+      table.long_text :content
+    end
+    content = context["Posts.content"]
+    assert_equal("Posts.content", content.name)
+
+    Groonga::Schema.rename_column("Posts", "content", "body")
+    body = context["Posts.body"]
+    assert_equal("Posts.body", body.name)
+    assert_equal("Posts.body", content.name)
+  end
+
   def test_column_again
     Groonga::Schema.create_table("Posts") do |table|
       table.text :content

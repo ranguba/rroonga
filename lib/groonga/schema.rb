@@ -449,6 +449,18 @@ module Groonga
         end
       end
 
+      # This is a syntax sugar of the following:
+      #
+      #   Groonga::Schema.define do |schema|
+      #     schema.rename_column(table_name,
+      #                          current_column_name, new_column_name)
+      #   end
+      def rename_column(table_name, current_column_name, new_column_name)
+        define do |schema|
+          schema.rename_column(table_name, current_column_name, new_column_name)
+        end
+      end
+
       # スキーマの内容を文字列をRubyスクリプト形式またはgrn式
       # 形式で返す。デフォルトはRubyスクリプト形式である。
       # Rubyスクリプト形式で返された値は
@@ -900,6 +912,16 @@ module Groonga
       end
     end
 
+    # It is a syntax sugar of the following:
+    #   schema.change_table(table_name) do |table|
+    #     table.rename_column(current_column_name, new_column_name)
+    #   end
+    def rename_column(table_name, current_column_name, new_column_name)
+      change_table(table_name) do |table|
+        table.rename_column(current_column_name, new_column_name)
+      end
+    end
+
     # @private
     def context
       @options[:context] || Groonga::Context.default
@@ -1022,6 +1044,24 @@ module Groonga
         if definition.nil?
           definition = ColumnRemoveDefinition.new(name, options)
           update_definition(name, ColumnRemoveDefinition, definition)
+        end
+        definition.options.merge!(options)
+        self
+      end
+
+      # Renames _current_name_ column to _new_name_ column.
+      #
+      # @param [::Hash] options The name and value
+      #   pairs. Omitted names are initialized as the default
+      #   value.
+      # @option options [Groonga:Context] :context (Groonga::Context.default)
+      #   The context to be used in renaming.
+      def rename_column(current_name, new_name, options={})
+        definition = self[name, ColumnRenameDefinition]
+        if definition.nil?
+          definition = ColumnRenameDefinition.new(current_name, new_name,
+                                                  options)
+          update_definition(name, ColumnRenameDefinition, definition)
         end
         definition.options.merge!(options)
         self
@@ -1677,6 +1717,37 @@ module Groonga
         columns_dir = columns_directory_path(table)
         rmdir_if_available(columns_dir)
         result
+      end
+    end
+
+    # @private
+    class ColumnRenameDefinition
+      include Path
+
+      attr_accessor :current_name, :new_name
+      attr_reader :options
+
+      def initialize(current_name, new_name, options={})
+        @current_name = current_name
+        @current_name = @current_name.to_s if @current_name.is_a?(Symbol)
+        @new_name = new_name
+        @new_name = @new_name.to_s if @new_name.is_a?(Symbol)
+        @options = (options || {}).dup
+      end
+
+      def define(table_definition, table)
+        if @current_name.respond_to?(:call)
+          current_name = @current_name.call(table_definition.context)
+        else
+          current_name = @current_name
+        end
+        column = table.column(current_name)
+
+        if column.nil?
+          raise ColumnNotExists.new(name)
+        end
+
+        column.rename(@new_name)
       end
     end
 
