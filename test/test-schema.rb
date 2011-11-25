@@ -623,6 +623,24 @@ class SchemaTest < Test::Unit::TestCase
       end
       assert_nil(context["Terms.Posts_content"])
     end
+
+    def test_rename
+      Groonga::Schema.create_table("Posts") do |table|
+        table.long_text :content
+      end
+      Groonga::Schema.create_table("Terms") do |table|
+        table.index "Posts.content"
+      end
+      index = context["Terms.Posts_content"]
+      assert_equal([context["Posts.content"]], index.sources)
+      Groonga::Schema.change_table("Terms") do |table|
+        table.rename_column("Posts_content", "posts_content_index")
+      end
+      renamed_index = context["Terms.posts_content_index"]
+      assert_equal("Terms.posts_content_index", renamed_index.name)
+      assert_equal("Terms.posts_content_index", index.name)
+      assert_equal([context["Posts.content"]], renamed_index.sources)
+    end
   end
 
   def test_reference_guess
