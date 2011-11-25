@@ -347,6 +347,21 @@ module Groonga
         end
       end
 
+      # (See Groonga::Schema#rename_table)
+      #
+      # This is a syntax sugar the following code:
+      #
+      # <pre>
+      #   Groonga::Schema.define do |schema|
+      #     schema.rename_table(current_name, new_name, options)
+      #   end
+      # </pre>
+      def rename_table(current_name, new_name, options={})
+        define do |schema|
+          schema.rename_table(current_name, new_name, options)
+        end
+      end
+
       # 名前が_name_のビューを作成する。以下の省略形。
       # <pre>
       #   Groonga::Schema.define do |schema|
@@ -794,6 +809,21 @@ module Groonga
       options = @options.merge(options || {}).merge(:change => true)
       definition = TableDefinition.new(name, options)
       yield(definition)
+      @definitions << definition
+    end
+
+    # Renames _current_name_ table to _new_name.
+    #
+    # Note that table renaming will will not be performed
+    # until {#define} is called.
+    #
+    # @param options [::Hash] The name and value
+    #   pairs. Omitted names are initialized as the default value.
+    # @option options :context (Groonga::Context.default)
+    #   The Groonga::Context to be used in renaming.
+    def rename_table(current_name, new_name, options={})
+      options = @options.merge(options || {})
+      definition = TableRenameDefinition.new(current_name, new_name, options)
       @definitions << definition
     end
 
@@ -1424,6 +1454,33 @@ module Groonga
       def removed_table
         table = context[@name]
         raise TableNotExists.new(@name) if table.nil?
+        table
+      end
+    end
+
+    # @private
+    class TableRenameDefinition
+      include Path
+
+      def initialize(current_name, new_name, options={})
+        @current_name = current_name
+        @new_name = new_name
+        @options = options
+      end
+
+      def define
+        table = current_table
+        table.rename(@new_name)
+      end
+
+      private
+      def context
+        @options[:context]
+      end
+
+      def current_table
+        table = context[@current_name]
+        raise TableNotExists.new(@current_name) if table.nil?
         table
       end
     end

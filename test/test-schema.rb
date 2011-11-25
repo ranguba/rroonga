@@ -113,6 +113,18 @@ class SchemaTest < Test::Unit::TestCase
                    table.inspect)
       assert_equal(tokenizer, table.default_tokenizer)
     end
+
+    def test_rename
+      Groonga::Schema.create_table("Posts", :type => :hash) do |table|
+      end
+      posts = context["Posts"]
+      assert_kind_of(Groonga::Hash, posts)
+      Groonga::Schema.rename_table("Posts", "Entries") do |table|
+      end
+      entries = context["Entries"]
+      assert_kind_of(Groonga::Hash, entries)
+      assert_equal("Entries", posts.name)
+    end
   end
 
   class DefinePatriciaTrieTest < self
@@ -159,6 +171,18 @@ class SchemaTest < Test::Unit::TestCase
                    table.inspect)
       assert_equal(context["TokenBigram"], table.default_tokenizer)
     end
+
+    def test_rename
+      Groonga::Schema.create_table("Posts", :type => :patricia_trie) do |table|
+      end
+      posts = context["Posts"]
+      assert_kind_of(Groonga::PatriciaTrie, posts)
+      Groonga::Schema.rename_table("Posts", "Entries") do |table|
+      end
+      entries = context["Entries"]
+      assert_kind_of(Groonga::PatriciaTrie, entries)
+      assert_equal("Entries", posts.name)
+    end
   end
 
   class DefineArrayTest < self
@@ -198,6 +222,18 @@ class SchemaTest < Test::Unit::TestCase
                    "flags: <>, " +
                    "size: <0>>",
                    table.inspect)
+    end
+
+    def test_rename
+      Groonga::Schema.create_table("Posts", :type => :array) do |table|
+      end
+      posts = context["Posts"]
+      assert_kind_of(Groonga::Array, posts)
+      Groonga::Schema.rename_table("Posts", "Entries") do |table|
+      end
+      entries = context["Entries"]
+      assert_kind_of(Groonga::Array, entries)
+      assert_equal("Entries", posts.name)
     end
   end
 
