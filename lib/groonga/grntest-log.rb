@@ -18,7 +18,7 @@
 require "English"
 require "time"
 
-require "groonga/json"
+require "json"
 
 module Groonga
   module GrntestLog
@@ -199,7 +199,7 @@ module Groonga
 
       private
       def parse_json(string)
-        Groonga::JSON.parse(string)
+        JSON.parse(string)
       end
     end
   end
