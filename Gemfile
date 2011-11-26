@@ -18,6 +18,7 @@
 source "http://rubygems.org/"
 
 gem 'pkg-config'
+gem 'json'
 
 group :development, :test do
   gem "test-unit"
