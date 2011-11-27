@@ -1,4 +1,4 @@
-/* -*- c-file-style: "ruby" -*- */
+/* -*- coding: utf-8; c-file-style: "ruby" -*- */
 /* vim: set sts=4 sw=4 ts=8 noet: */
 /*
   Copyright (C) 2009-2011  Kouhei Sutou <kou@clear-code.com>

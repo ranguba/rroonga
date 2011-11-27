@@ -1,4 +1,4 @@
-/* -*- c-file-style: "ruby" -*- */
+/* -*- coding: utf-8; c-file-style: "ruby" -*- */
 /*
   Copyright (C) 2011  Haruka Yoshihara <yoshihara@clear-code.com>
 
