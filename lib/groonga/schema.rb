@@ -543,6 +543,8 @@ module Groonga
         "time" => "Time",
         "date" => "Time",
         "boolean" => "Bool",
+        "tokyo_geo_point" => "TokyoGeoPoint",
+        "wgs84_geo_point" => "WGS84GeoPoint",
         "delimit" => "TokenDelimit",
         "token_delimit" => "TokenDelimit",
         "unigram" => "TokenUnigram",

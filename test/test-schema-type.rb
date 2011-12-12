@@ -103,6 +103,16 @@ class SchemaTypeTest < Test::Unit::TestCase
     assert_normalize_type("Bool", "Bool")
   end
 
+  def test_normalize_tokyo_geo_point
+    assert_normalize_type("TokyoGeoPoint", "tokyo_geo_point")
+    assert_normalize_type("TokyoGeoPoint", "TokyoGeoPoint")
+  end
+
+  def test_normalize_wgs84_geo_point
+    assert_normalize_type("WGS84GeoPoint", "wgs84_geo_point")
+    assert_normalize_type("WGS84GeoPoint", "WGS84GeoPoint")
+  end
+
   def test_normalize_delimit
     assert_normalize_type("TokenDelimit", "delimit")
     assert_normalize_type("TokenDelimit", "token_delimit")
