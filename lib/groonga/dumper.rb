@@ -302,14 +302,12 @@ module Groonga
       def column_method(column)
         range = column.range
         case range.name
-        when "Int32"
-          "integer32"
-        when "Int64"
-          "integer64"
-        when "UInt32"
-          "unsigned_integer32"
-        when "UInt64"
-          "unsigned_integer64"
+        when "Bool"
+          "boolean"
+        when /\AInt(8|16|32|64)\z/
+          "integer#{$1}"
+        when /\AUInt(8|16|32|64)\z/
+          "unsigned_integer#{$1}"
         when "Float"
           "float"
         when "Time"
@@ -320,6 +318,10 @@ module Groonga
           "text"
         when "LongText"
           "long_text"
+        when "TokyoGeoPoint"
+          "tokyo_geo_point"
+        when "WGS84GeoPoint"
+          "wgs84_geo_point"
         else
           raise ArgumentError, "unsupported column: #{column.inspect}"
         end

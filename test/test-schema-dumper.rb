@@ -28,6 +28,29 @@ class SchemaDumperTest < Test::Unit::TestCase
     end
   end
 
+  def define_built_in_types_schema
+    Groonga::Schema.define do |schema|
+      schema.create_table("Posts") do |table|
+        table.boolean :public
+        table.int8 :int8
+        table.uint8 :uint8
+        table.int16 :int16
+        table.uint16 :uint16
+        table.int32 :int32
+        table.uint32 :uint32
+        table.int64 :int64
+        table.uint64 :uint64
+        table.float :vote_average
+        table.time :published_at
+        table.short_text :title
+        table.text :content
+        table.long_text :attachment
+        table.tokyo_geo_point :location_tokyo
+        table.wgs84_geo_point :location_wgs84
+      end
+    end
+  end
+
   def define_reference_schema
     Groonga::Schema.define do |schema|
       schema.create_table("Items") do |table|
@@ -75,6 +98,31 @@ create_table("Posts",
              :force => true) do |table|
   table.short_text("comments", :type => :vector)
   table.short_text("title")
+end
+EOS
+    end
+
+    def test_built_in_types
+      define_built_in_types_schema
+      assert_equal(<<-EOS, dump)
+create_table("Posts",
+             :force => true) do |table|
+  table.long_text("attachment")
+  table.text("content")
+  table.integer16("int16")
+  table.integer32("int32")
+  table.integer64("int64")
+  table.integer8("int8")
+  table.tokyo_geo_point("location_tokyo")
+  table.wgs84_geo_point("location_wgs84")
+  table.boolean("public")
+  table.time("published_at")
+  table.short_text("title")
+  table.unsigned_integer16("uint16")
+  table.unsigned_integer32("uint32")
+  table.unsigned_integer64("uint64")
+  table.unsigned_integer8("uint8")
+  table.float("vote_average")
 end
 EOS
     end
