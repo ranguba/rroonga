@@ -33,6 +33,18 @@ class SchemaTypeTest < Test::Unit::TestCase
     assert_normalize_type("LongText", "LongText")
   end
 
+  def test_normalize_integer8
+    assert_normalize_type("Int8", "int8")
+    assert_normalize_type("Int8", "integer8")
+    assert_normalize_type("Int8", "Int8")
+  end
+
+  def test_normalize_integer16
+    assert_normalize_type("Int16", "int16")
+    assert_normalize_type("Int16", "integer16")
+    assert_normalize_type("Int16", "Int16")
+  end
+
   def test_normalize_integer32
     assert_normalize_type("Int32", "int")
     assert_normalize_type("Int32", "integer")
@@ -45,6 +57,18 @@ class SchemaTypeTest < Test::Unit::TestCase
     assert_normalize_type("Int64", "int64")
     assert_normalize_type("Int64", "integer64")
     assert_normalize_type("Int64", "Int64")
+  end
+
+  def test_normalize_unsigned_integer8
+    assert_normalize_type("UInt8", "uint8")
+    assert_normalize_type("UInt8", "unsigned_integer8")
+    assert_normalize_type("UInt8", "UInt8")
+  end
+
+  def test_normalize_unsigned_integer16
+    assert_normalize_type("UInt16", "uint16")
+    assert_normalize_type("UInt16", "unsigned_integer16")
+    assert_normalize_type("UInt16", "UInt16")
   end
 
   def test_normalize_unsigned_integer32
