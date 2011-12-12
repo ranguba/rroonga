@@ -1158,6 +1158,28 @@ module Groonga
         self
       end
 
+      # Defines a 8 bit signed integer column named @name@.
+      #
+      # @param [String or Symbol] name the column name
+      # @param [Hash] options ({}) the options
+      # @see Groonga::Schema::TableDefinition#column for
+      #    available @options@.
+      def integer8(name, options={})
+        column(name, "Int8", options)
+      end
+      alias_method :int8, :integer8
+
+      # Defines a 16 bit signed integer column named @name@.
+      #
+      # @param [String or Symbol] name the column name
+      # @param [Hash] options ({}) the options
+      # @see Groonga::Schema::TableDefinition#column for
+      #    available @options@.
+      def integer16(name, options={})
+        column(name, "Int16", options)
+      end
+      alias_method :int16, :integer16
+
       # 名前が _name_ の32bit符号付き整数のカラムを作成する。
       #
       # _options_ に指定可能な値は
@@ -1176,6 +1198,28 @@ module Groonga
         column(name, "Int64", options)
       end
       alias_method :int64, :integer64
+
+      # Defines a 8 bit unsigned integer column named @name@.
+      #
+      # @param [String or Symbol] name the column name
+      # @param [Hash] options ({}) the options
+      # @see Groonga::Schema::TableDefinition#column for
+      #    available @options@.
+      def unsigned_integer8(name, options={})
+        column(name, "UInt8", options)
+      end
+      alias_method :uint8, :unsigned_integer8
+
+      # Defines a 16 bit unsigned integer column named @name@.
+      #
+      # @param [String or Symbol] name the column name
+      # @param [Hash] options ({}) the options
+      # @see Groonga::Schema::TableDefinition#column for
+      #    available @options@.
+      def unsigned_integer16(name, options={})
+        column(name, "UInt16", options)
+      end
+      alias_method :uint16, :unsigned_integer16
 
       # 名前が _name_ の32bit符号なし整数のカラムを作成する。
       #

@@ -343,6 +343,22 @@ class SchemaTest < Test::Unit::TestCase
     end
   end
 
+  def test_integer8_column
+    assert_nil(context["Posts.rate"])
+    Groonga::Schema.create_table("Posts") do |table|
+      table.integer8 :rate
+    end
+    assert_equal(context["Int8"], context["Posts.rate"].range)
+  end
+
+  def test_integer16_column
+    assert_nil(context["Posts.rate"])
+    Groonga::Schema.create_table("Posts") do |table|
+      table.integer16 :rate
+    end
+    assert_equal(context["Int16"], context["Posts.rate"].range)
+  end
+
   def test_integer32_column
     assert_nil(context["Posts.rate"])
     Groonga::Schema.create_table("Posts") do |table|
@@ -357,6 +373,22 @@ class SchemaTest < Test::Unit::TestCase
       table.integer64 :rate
     end
     assert_equal(context["Int64"], context["Posts.rate"].range)
+  end
+
+  def test_unsigned_integer8_column
+    assert_nil(context["Posts.n_viewed"])
+    Groonga::Schema.create_table("Posts") do |table|
+      table.unsigned_integer8 :n_viewed
+    end
+    assert_equal(context["UInt8"], context["Posts.n_viewed"].range)
+  end
+
+  def test_unsigned_integer16_column
+    assert_nil(context["Posts.n_viewed"])
+    Groonga::Schema.create_table("Posts") do |table|
+      table.unsigned_integer16 :n_viewed
+    end
+    assert_equal(context["UInt16"], context["Posts.n_viewed"].range)
   end
 
   def test_unsigned_integer32_column
