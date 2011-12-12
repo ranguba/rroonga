@@ -481,6 +481,14 @@ class SchemaTest < Test::Unit::TestCase
     assert_equal(context["WGS84GeoPoint"], context["Posts.location"].range)
   end
 
+  def test_geo_point_column
+    assert_nil(context["Posts.location"])
+    Groonga::Schema.create_table("Posts") do |table|
+      table.geo_point :location
+    end
+    assert_equal(context["WGS84GeoPoint"], context["Posts.location"].range)
+  end
+
   def test_remove_column
     Groonga::Schema.create_table("Posts") do |table|
       table.long_text :content

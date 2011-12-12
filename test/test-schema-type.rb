@@ -109,6 +109,7 @@ class SchemaTypeTest < Test::Unit::TestCase
   end
 
   def test_normalize_wgs84_geo_point
+    assert_normalize_type("WGS84GeoPoint", "geo_point")
     assert_normalize_type("WGS84GeoPoint", "wgs84_geo_point")
     assert_normalize_type("WGS84GeoPoint", "WGS84GeoPoint")
   end

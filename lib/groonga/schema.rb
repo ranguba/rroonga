@@ -544,6 +544,7 @@ module Groonga
         "date" => "Time",
         "boolean" => "Bool",
         "tokyo_geo_point" => "TokyoGeoPoint",
+        "geo_point" => "WGS84GeoPoint",
         "wgs84_geo_point" => "WGS84GeoPoint",
         "delimit" => "TokenDelimit",
         "token_delimit" => "TokenDelimit",
@@ -1358,6 +1359,7 @@ module Groonga
       def wgs84_geo_point(name, options={})
         column(name, "WGS84GeoPoint", options)
       end
+      alias_method :geo_point, :wgs84_geo_point
 
       # @private
       def [](name, definition_class=nil)
