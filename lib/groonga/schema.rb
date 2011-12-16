@@ -1740,23 +1740,25 @@ module Groonga
           end
         end
         table.define_column(@name,
-                            normalize_type(context),
+                            resolved_type(context),
                             options)
       end
 
       private
-      def normalize_type(context)
+      def resolved_type(context)
+        return @type if @type.is_a?(Groonga::Object)
         if @type.respond_to?(:call)
-          resolved_type = @type.call(context)
+          resolved_type_name = @type.call(context)
         else
-          resolved_type = @type
+          resolved_type_name = @type
         end
-        Schema.normalize_type(resolved_type, :context => context)
+        normalized_type_name = Schema.normalize_type(resolved_type_name,
+                                                     :context => context)
+        context[normalized_type_name]
       end
 
       def same_column?(context, column)
-        # TODO: should check column type and other options.
-        column.range == context[normalize_type(context)]
+        column.range == resolved_type(context)
       end
 
       def define_options(context, table)

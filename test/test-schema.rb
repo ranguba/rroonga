@@ -512,26 +512,40 @@ class SchemaTest < Test::Unit::TestCase
     assert_equal("Posts.body", content.name)
   end
 
-  def test_column_again
-    Groonga::Schema.create_table("Posts") do |table|
-      table.text :content
-    end
-
-    assert_nothing_raised do
+  class DefineColumnAgainTest < self
+    def test_same_option
       Groonga::Schema.create_table("Posts") do |table|
         table.text :content
       end
-    end
-  end
 
-  def test_column_again_with_difference_type
-    Groonga::Schema.create_table("Posts") do |table|
-      table.text :content
+      assert_nothing_raised do
+        Groonga::Schema.create_table("Posts") do |table|
+          table.text :content
+        end
+      end
     end
 
-    assert_raise(Groonga::Schema::ColumnCreationWithDifferentOptions) do
+    def test_difference_type
       Groonga::Schema.create_table("Posts") do |table|
-        table.integer :content
+        table.text :content
+      end
+
+      assert_raise(Groonga::Schema::ColumnCreationWithDifferentOptions) do
+        Groonga::Schema.create_table("Posts") do |table|
+          table.integer :content
+        end
+      end
+    end
+
+    def test_same_option_by_groonga_object
+      Groonga::Schema.create_table("Posts") do |table|
+        table.text :content
+      end
+
+      assert_nothing_raised do
+        Groonga::Schema.create_table("Posts") do |table|
+          table.column(:content, Groonga["Text"])
+        end
       end
     end
   end
