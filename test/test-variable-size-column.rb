@@ -62,6 +62,36 @@ class VariableSizeColumnTest < Test::Unit::TestCase
     assert_not_predicate(@nick_names, :scalar?)
   end
 
+  def test_compressed?
+    description = @users.define_column("description", "ShortText",
+                                       :compress => :zlib)
+    if context.support_zlib?
+      assert_predicate(description, :compressed?)
+    else
+      assert_not_predicate(description, :compressed?)
+    end
+  end
+
+  def test_compressed_zlib?
+    description = @users.define_column("description", "ShortText",
+                                       :compress => :zlib)
+    if context.support_zlib?
+      assert_send([description, :compressed?, :zlib])
+    else
+      assert_not_send([description, :compressed?, :zlib])
+    end
+  end
+
+  def test_compressed_lzo?
+    description = @users.define_column("description", "ShortText",
+                                       :compress => :lzo)
+    if context.support_lzo?
+      assert_send([description, :compressed?, :lzo])
+    else
+      assert_not_send([description, :compressed?, :lzo])
+    end
+  end
+
   def test_inspect
     assert_equal("#<Groonga::VariableSizeColumn " +
                  "id: <#{@name.id}>, " +
