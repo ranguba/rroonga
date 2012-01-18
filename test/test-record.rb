@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2011  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2012  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -228,6 +228,23 @@ class RecordTest < Test::Unit::TestCase
 
     results = @bookmarks_content_index.search("search")
     assert_equal([[groonga.id, 3], [google.id, 1]],
+                 results.collect do |record|
+                   [record.id, record.score]
+                 end)
+  end
+
+  def test_score=
+    groonga = @bookmarks.add
+    groonga["content"] = "full text search search search engine."
+
+    google = @bookmarks.add
+    google["content"] = "Web search engine."
+
+    results = @bookmarks_content_index.search("search")
+    results.each do |record|
+      record.score *= 10
+    end
+    assert_equal([[groonga.id, 30], [google.id, 10]],
                  results.collect do |record|
                    [record.id, record.score]
                  end)

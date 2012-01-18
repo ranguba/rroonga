@@ -161,6 +161,13 @@ module Groonga
       self["_score"]
     end
 
+    # Sets score. Score column exists only search result table.
+    #
+    # @param [Integer] new_score The new score.
+    def score=(new_score)
+      self["_score"] = new_score
+    end
+
     # Groonga::Record#scoreが利用できる場合は +true+ を
     # 返す。
     def support_score?
