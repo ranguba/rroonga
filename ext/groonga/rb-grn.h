@@ -1,6 +1,6 @@
 /* -*- c-file-style: "ruby" -*- */
 /*
-  Copyright (C) 2009-2011  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2012  Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -227,7 +227,6 @@ RB_GRN_VAR VALUE rb_cGrnAccessor;
 RB_GRN_VAR VALUE rb_cGrnViewAccessor;
 RB_GRN_VAR VALUE rb_cGrnRecord;
 RB_GRN_VAR VALUE rb_cGrnViewRecord;
-RB_GRN_VAR VALUE rb_cGrnQuery;
 RB_GRN_VAR VALUE rb_cGrnLogger;
 RB_GRN_VAR VALUE rb_cGrnSnippet;
 RB_GRN_VAR VALUE rb_cGrnVariable;
@@ -270,7 +269,6 @@ void           rb_grn_init_accessor                 (VALUE mGrn);
 void           rb_grn_init_view_accessor            (VALUE mGrn);
 void           rb_grn_init_record                   (VALUE mGrn);
 void           rb_grn_init_view_record              (VALUE mGrn);
-void           rb_grn_init_query                    (VALUE mGrn);
 void           rb_grn_init_variable                 (VALUE mGrn);
 void           rb_grn_init_operator                 (VALUE mGrn);
 void           rb_grn_init_expression               (VALUE mGrn);
@@ -555,9 +553,6 @@ VALUE          rb_grn_column_expression_builder_build
 #define GRNACCESSOR2RVAL(context, accessor, owner) \
     (rb_grn_accessor_to_ruby_object(context, accessor, owner))
 
-#define RVAL2GRNQUERY(object)         (rb_grn_query_from_ruby_object(object))
-#define GRNQUERY2RVAL(context, column)(rb_grn_query_to_ruby_object(context, column))
-
 #define RVAL2GRNOPERATOR(object)      (rb_grn_operator_from_ruby_object(object))
 
 #define RVAL2GRNLOGGER(object)        (rb_grn_logger_from_ruby_object(object))
@@ -664,10 +659,6 @@ VALUE          rb_grn_column_to_ruby_object         (VALUE klass,
 VALUE          rb_grn_index_cursor_to_ruby_object   (grn_ctx *context,
 						     grn_obj *cursor,
 						     grn_bool owner);
-
-grn_query     *rb_grn_query_from_ruby_object        (VALUE object);
-VALUE          rb_grn_query_to_ruby_object          (grn_ctx *context,
-						     grn_query *query);
 
 grn_operator   rb_grn_operator_from_ruby_object     (VALUE object);
 

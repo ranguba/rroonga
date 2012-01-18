@@ -1,6 +1,6 @@
 /* -*- coding: utf-8; c-file-style: "ruby" -*- */
 /*
-  Copyright (C) 2009-2011  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2012  Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -19,6 +19,36 @@
 #include "rb-grn.h"
 
 VALUE rb_mGrnOperator;
+
+grn_operator
+rb_grn_operator_from_ruby_object (VALUE rb_operator)
+{
+    grn_operator operator = GRN_OP_OR;
+
+    if (NIL_P(rb_operator) ||
+        rb_grn_equal_option(rb_operator, "or") ||
+        rb_grn_equal_option(rb_operator, "||")) {
+        operator = GRN_OP_OR;
+    } else if (rb_grn_equal_option(rb_operator, "and") ||
+               rb_grn_equal_option(rb_operator, "+") ||
+               rb_grn_equal_option(rb_operator, "&&")) {
+        operator = GRN_OP_AND;
+    } else if (rb_grn_equal_option(rb_operator, "but") ||
+               rb_grn_equal_option(rb_operator, "not") ||
+               rb_grn_equal_option(rb_operator, "-")) {
+        operator = GRN_OP_BUT;
+    } else if (rb_grn_equal_option(rb_operator, "adjust") ||
+               rb_grn_equal_option(rb_operator, ">")) {
+        operator = GRN_OP_ADJUST;
+    } else {
+        rb_raise(rb_eArgError,
+                 "operator should be one of "
+                 "[:or, :||, :and, :+, :&&, :but, :not, :-, :adjust, :>]: <%s>",
+                 rb_grn_inspect(rb_operator));
+    }
+
+    return operator;
+}
 
 void
 rb_grn_init_operator (VALUE mGrn)

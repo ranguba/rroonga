@@ -1,6 +1,6 @@
 /* -*- coding: utf-8; c-file-style: "ruby" -*- */
 /*
-  Copyright (C) 2009  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2012  Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -453,11 +453,7 @@ rb_grn_index_column_search (int argc, VALUE *argv, VALUE self)
 
     rb_scan_args(argc, argv, "11", &rb_query, &options);
 
-    if (CBOOL2RVAL(rb_obj_is_kind_of(rb_query, rb_cGrnQuery))) {
-	grn_query *_query;
-	_query = RVAL2GRNQUERY(rb_query);
-	query = (grn_obj *)_query;
-    } else if (CBOOL2RVAL(rb_obj_is_kind_of(rb_query, rb_cInteger))) {
+    if (CBOOL2RVAL(rb_obj_is_kind_of(rb_query, rb_cInteger))) {
 	grn_id id;
 	id = NUM2UINT(rb_query);
 	GRN_TEXT_SET(context, id_query, &id, sizeof(grn_id));

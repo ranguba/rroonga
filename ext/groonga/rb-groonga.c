@@ -1,6 +1,6 @@
 /* -*- coding: utf-8; c-file-style: "ruby" -*- */
 /*
-  Copyright (C) 2009-2011  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2012  Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -138,7 +138,6 @@ Init_groonga (void)
     rb_grn_init_view_accessor(mGrn);
     rb_grn_init_record(mGrn);
     rb_grn_init_view_record(mGrn);
-    rb_grn_init_query(mGrn);
     rb_grn_init_variable(mGrn);
     rb_grn_init_operator(mGrn);
     rb_grn_init_expression(mGrn);
