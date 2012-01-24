@@ -50,7 +50,7 @@ end
 
 begin
   base_dir = File.expand_path(File.join(File.dirname(__FILE__), ".."))
-  $LOAD_PATH.unshift(File.join(base_dir, "ext"))
+  $LOAD_PATH.unshift(File.join(base_dir, "ext", "groonga"))
   $LOAD_PATH.unshift(File.join(base_dir, "lib"))
 
   require 'groonga'
