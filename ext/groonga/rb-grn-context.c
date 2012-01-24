@@ -211,13 +211,24 @@ VALUE
 rb_grn_context_rb_string_encode (grn_ctx *context, VALUE rb_string)
 {
 #ifdef HAVE_RUBY_ENCODING_H
-    rb_encoding *encoding, *to_encode;
+    int index, to_index;
+    rb_encoding *encoding, *to_encoding;
+
+    if (RSTRING_LEN(rb_string) < 0)
+	return rb_string;
 
     encoding = rb_enc_get(rb_string);
-    to_encode = rb_grn_encoding_to_ruby_encoding(context->encoding);
-    if (rb_enc_to_index(encoding) != rb_enc_to_index(to_encode))
-	rb_string = rb_str_encode(rb_string, rb_enc_from_encoding(to_encode),
-				  0, Qnil);
+    to_encoding = rb_grn_encoding_to_ruby_encoding(context->encoding);
+    index = rb_enc_to_index(encoding);
+    to_index = rb_enc_to_index(to_encoding);
+    if (index == to_index)
+	return rb_string;
+
+    if (rb_enc_asciicompat(to_encoding) && rb_enc_str_asciionly_p(rb_string))
+	return rb_string;
+
+    rb_string = rb_str_encode(rb_string, rb_enc_from_encoding(to_encoding),
+			      0, Qnil);
 #endif
     return rb_string;
 }
