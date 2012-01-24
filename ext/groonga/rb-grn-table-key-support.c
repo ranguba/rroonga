@@ -84,7 +84,8 @@ rb_grn_table_key_support_bind (RbGrnTableKeySupport *rb_grn_table_key_support,
     rb_grn_table_bind(rb_grn_table, context, table_key_support);
 
     rb_grn_table_key_support->key =
-	grn_obj_open(context, GRN_BULK, 0, rb_grn_object->domain_id);
+	grn_obj_open(context, GRN_BULK,
+		     GRN_OBJ_DO_SHALLOW_COPY, rb_grn_object->domain_id);
 }
 
 static grn_id
