@@ -56,6 +56,7 @@ begin
   tmp_dir = "/tmp/groonga"
   FileUtils.rm_rf(tmp_dir)
   FileUtils.mkdir(tmp_dir)
+  Groonga::Context.default.encoding = :none
   @database = Groonga::Database.create(:path => "#{tmp_dir}/db")
 
   item("groonga: Hash") do
