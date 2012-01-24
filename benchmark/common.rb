@@ -35,7 +35,7 @@ def report(index=0)
   end
 
   if index.zero?
-    puts(" " * (width - 1) + Benchmark::Tms::CAPTION.rstrip + "memory".rjust(14))
+    puts(" " * (width - 1) + Benchmark::Tms::CAPTION.rstrip + "memory".rjust(11))
   end
   # GC.disable
   before = memory_usage
@@ -44,6 +44,6 @@ def report(index=0)
   GC.start
   size = memory_usage - before
 
-  formatted_size = "%10.3f" % size
+  formatted_size = "%7.3f" % size
   puts "#{label.ljust(width)} #{result.to_s.strip} #{formatted_size}MB"
 end
