@@ -40,11 +40,11 @@ n.times do |i|
   values << "%08d" % i
 end
 
+ruby_hash = {}
 item("Hash") do
-  @hash = {}
   values.each do |value|
-    @hash[value] = value
-    @hash[value]
+    ruby_hash[value] = value
+    ruby_hash[value]
   end
 end
 
@@ -59,37 +59,35 @@ begin
   FileUtils.mkdir(tmp_dir)
   Groonga::Context.default.encoding = :none
   @database = Groonga::Database.create(:path => "#{tmp_dir}/db")
+  column_name = "value"
 
+  groonga_hash = Groonga::Hash.create(:name => "Hash",
+                                      :key_type => "ShortText")
+  groonga_hash.define_column(column_name, "ShortText")
   item("groonga: Hash") do
-    @hash = Groonga::Hash.create(:name => "Hash",
-                                 :key_type => "ShortText")
-    column_name = "value"
-    @column = @hash.define_column(column_name, "ShortText")
     values.each do |value|
-      @hash.set_column_value(value, column_name, value)
-      @hash.column_value(value, column_name)
+      groonga_hash.set_column_value(value, column_name, value)
+      groonga_hash.column_value(value, column_name)
     end
   end
 
+  patricia_trie = Groonga::PatriciaTrie.create(:name => "PatriciaTrie",
+                                               :key_type => "ShortText")
+  patricia_trie.define_column(column_name, "ShortText")
   item("groonga: PatriciaTrie") do
-    @trie = Groonga::PatriciaTrie.create(:name => "PatriciaTrie",
-                                         :key_type => "ShortText")
-    column_name = "value"
-    @column = @trie.define_column(column_name, "ShortText")
     values.each do |value|
-      @trie.set_column_value(value, column_name, value)
-      @trie.column_value(value, column_name)
+      patricia_trie.set_column_value(value, column_name, value)
+      patricia_trie.column_value(value, column_name)
     end
   end
 
+  double_array_trie = Groonga::DoubleArrayTrie.create(:name => "DoubleArrayTrie",
+                                                      :key_type => "ShortText")
+  double_array_trie.define_column(column_name, "ShortText")
   item("groonga: DoubleArrayTrie") do
-    @trie = Groonga::DoubleArrayTrie.create(:name => "DoubleArrayTrie",
-                                            :key_type => "ShortText")
-    column_name = "value"
-    @column = @trie.define_column(column_name, "ShortText")
     values.each do |value|
-      @trie.set_column_value(value, column_name, value)
-      @trie.column_value(value, column_name)
+      patricia_trie.set_column_value(value, column_name, value)
+      patricia_trie.column_value(value, column_name)
     end
   end
 rescue LoadError
@@ -98,13 +96,13 @@ end
 begin
   require 'localmemcache'
 
+  LocalMemCache.drop(:namespace => "read-write-many-small-items",
+                     :force => true)
+  mem_cache = LocalMemCache.new(:namespace => "read-write-many-small-items")
   item("Localmemcache: file") do
-    LocalMemCache.drop(:namespace => "read-write-many-small-items",
-                       :force => true)
-    @db = LocalMemCache.new(:namespace => "read-write-many-small-items")
     values.each do |value|
-      @db[value] = value
-      @db[value]
+      mem_cache[value] = value
+      mem_cache[value]
     end
   end
 rescue LoadError
@@ -113,41 +111,41 @@ end
 begin
   require 'tokyocabinet'
 
+  tc_hash_memory = TokyoCabinet::ADB::new
+  tc_hash_memory.open("*#bnum=#{n}#mode=wct#xmsiz=0")
   item("TC: Hash: memory") do
-    @db = TokyoCabinet::ADB::new
-    @db.open("*#bnum=#{n}#mode=wct#xmsiz=0")
     values.each do |value|
-      @db.put(value, value)
-      @db.get(value)
+      tc_hash_memory.put(value, value)
+      tc_hash_memory.get(value)
     end
   end
 
+  tc_tree_memory = TokyoCabinet::ADB::new
+  tc_tree_memory.open("+#bnum=#{n}#mode=wct#xmsiz=0")
   item("TC: Tree: memory") do
-    @db = TokyoCabinet::ADB::new
-    @db.open("+#bnum=#{n}#mode=wct#xmsiz=0")
     values.each do |value|
-      @db.put(value, value)
-      @db.get(value)
+      tc_tree_memory.put(value, value)
+      tc_tree_memory.get(value)
     end
   end
 
   hash_file = Tempfile.new(["tc-hash", ".tch"])
+  tc_hash_file = TokyoCabinet::ADB::new
+  tc_hash_file.open("#{hash_file.path}#bnum=#{n}#mode=wct#xmsiz=0")
   item("TC: Hash: file") do
-    @db = TokyoCabinet::ADB::new
-    @db.open("#{hash_file.path}#bnum=#{n}#mode=wct#xmsiz=0")
     values.each do |value|
-      @db.put(value, value)
-      @db.get(value)
+      tc_hash_file.put(value, value)
+      tc_hash_file.get(value)
     end
   end
 
   tree_file = Tempfile.new(["tc-tree", ".tcb"])
+  tc_tree_file = TokyoCabinet::ADB::new
+  tc_tree_file.open("#{tree_file.path}#bnum=#{n}#mode=wct#xmsiz=0")
   item("TC: Tree: file") do
-    @db = TokyoCabinet::ADB::new
-    @db.open("#{tree_file.path}#bnum=#{n}#mode=wct#xmsiz=0")
     values.each do |value|
-      @db.put(value, value)
-      @db.get(value)
+      tc_tree_file.put(value, value)
+      tc_tree_file.get(value)
     end
   end
 rescue LoadError
