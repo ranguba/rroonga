@@ -213,12 +213,19 @@ rb_grn_context_rb_string_encode (grn_ctx *context, VALUE rb_string)
 #ifdef HAVE_RUBY_ENCODING_H
     int index, to_index;
     rb_encoding *encoding, *to_encoding;
+    grn_encoding context_encoding;
+
+    context_encoding = context->encoding;
+    if (context->encoding == GRN_ENC_DEFAULT)
+	context->encoding = grn_get_default_encoding();
+    if (context->encoding == GRN_ENC_NONE)
+	return rb_string;
 
     if (RSTRING_LEN(rb_string) < 0)
 	return rb_string;
 
     encoding = rb_enc_get(rb_string);
-    to_encoding = rb_grn_encoding_to_ruby_encoding(context->encoding);
+    to_encoding = rb_grn_encoding_to_ruby_encoding(context_encoding);
     index = rb_enc_to_index(encoding);
     to_index = rb_enc_to_index(to_encoding);
     if (index == to_index)
