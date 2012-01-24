@@ -58,7 +58,7 @@ begin
   FileUtils.mkdir(tmp_dir)
   @database = Groonga::Database.create(:path => "#{tmp_dir}/db")
 
-  item("groonga: Hash: file") do
+  item("groonga: Hash") do
     @hash = Groonga::Hash.create(:name => "Hash",
                                  :key_type => "ShortText")
     column_name = "value"
@@ -68,9 +68,19 @@ begin
     end
   end
 
-  item("groonga: Trie: file") do
+  item("groonga: PatriciaTrie") do
     @trie = Groonga::PatriciaTrie.create(:name => "PatriciaTrie",
                                          :key_type => "ShortText")
+    column_name = "value"
+    @column = @trie.define_column(column_name, "ShortText")
+    values.each do |value|
+      @trie.set_column_value(value, column_name, value)
+    end
+  end
+
+  item("groonga: DoubleArrayTrie") do
+    @trie = Groonga::DoubleArrayTrie.create(:name => "DoubleArrayTrie",
+                                            :key_type => "ShortText")
     column_name = "value"
     @column = @trie.define_column(column_name, "ShortText")
     values.each do |value|
