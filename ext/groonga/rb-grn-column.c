@@ -73,8 +73,7 @@ rb_grn_column_bind (RbGrnColumn *rb_column,
 
     rb_grn_object = RB_GRN_OBJECT(rb_column);
     rb_grn_named_object_bind(RB_GRN_NAMED_OBJECT(rb_column), context, column);
-    rb_column->value = grn_obj_open(context, GRN_BULK,
-				    GRN_OBJ_DO_SHALLOW_COPY,
+    rb_column->value = grn_obj_open(context, GRN_BULK, 0,
                                     rb_grn_object->range_id);
 }
 
