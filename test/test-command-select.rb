@@ -1,4 +1,4 @@
-# Copyright (C) 2010  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2010-2012  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -13,7 +13,7 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-class ContextSelectTest < Test::Unit::TestCase
+class CommandSelectTest < Test::Unit::TestCase
   include GroongaTestUtils
 
   setup :setup_database
@@ -100,7 +100,7 @@ class ContextSelectTest < Test::Unit::TestCase
 
   def test_drill_down_with_no_hit
     result = context.select(@users,
-                            :filter => "_key == \"no hit\"",
+                            :filter => "_key == \"no\\ hit\"",
                             :output_columns => ["_key"],
                             :drill_down => ["_key", "book"],
                             :drill_down_output_columns => "_key",
