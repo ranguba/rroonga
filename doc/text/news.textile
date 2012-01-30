@@ -1,5 +1,24 @@
 h1. NEWS
 
+h2(#1-3-1). 1.3.1: 2012-01-29
+
+h3. Improvements
+
+* Supported groonga 1.3.0.
+* [schema] Supported Int8, Int16, UInt8 and UInt16.
+* [schema] Supported TokyoGeoPoint and WGS84GeoPoint.
+* [schema][dumper] Supported Boolean and more built-in types.
+  [Reported by @mashiro]
+* [schema] Supported type object as column type. [#1002]
+* Added Groonga::VariableSizeColumn#compressed?. [#1004]
+* Added Groonga::Record#score=.
+* Improve performance for encoded string.
+* Added Groonga::Command::Builder.escape_value.
+
+h3. Thanks
+
+* @mashiro
+
 h2(#1-3-0). 1.3.0: 2011-11-29
 
 h3. Improvements
