@@ -1,6 +1,6 @@
 # -*- coding: utf-8; mode: ruby -*-
 #
-# Copyright (C) 2009-2011  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2012  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -168,7 +168,38 @@ relative_binary_dir = File.join("vendor", "local")
 vendor_dir = File.join(base_dir, relative_vendor_dir)
 binary_dir = File.join(base_dir, relative_binary_dir)
 
-groonga_win32_i386_p = ENV["GROONGA32"] == "yes"
+groonga_win32_i386_p = ENV["GROONGA64"] != "yes"
+
+namespace :win32 do
+  namespace :groonga do
+    task :download do
+      require "open-uri"
+      require "rroonga-build"
+      groonga_version = RroongaBuild::RequiredGroongaVersion::VERSION.join(".")
+      base_name = "groonga-#{groonga_version}-"
+      if groonga_win32_i386_p
+        base_name << "x86"
+      else
+        base_name << "x64"
+      end
+      base_name << ".zip"
+      base_url = "http://packages.groonga.org/windows/groonga/"
+      Dir.chdir(base_dir) do
+        unless File.exist?(base_name)
+          open("#{base_url}#{base_name}", "rb") do |zip|
+            File.open(base_name, "wb") do |output|
+              output.print(zip.read)
+            end
+          end
+        end
+        sh("unzip", base_name)
+        rm_rf(relative_binary_dir)
+        mkdir_p(File.dirname(relative_binary_dir))
+        mv(File.basename(base_name, ".*"), relative_binary_dir)
+      end
+    end
+  end
+end
 
 Rake::ExtensionTask.new("groonga", spec) do |ext|
   if groonga_win32_i386_p
