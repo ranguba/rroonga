@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2009-2011  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2012  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -58,12 +58,15 @@ module Groonga
       BUILD_VERSION.join(".")
     end
 
-    ##
-    # VERSIONを"."で結合して<tt>"メジャーバージョン.マイナー
-    # バージョン.マイクロバージョン"</tt>という形式の文字列に
-    # したもの。
+    # Format version.
+    #
+    # @return [String] If Groonga::VERSION has tag,
+    #   @MAJOR.MINOR.MICRO-TAG@. Otherwise, @MAJOR.MINOR.MICRO@.
     def version
-      VERSION.compact.join(".")
+      major, minor, micro, tag = VERSION
+      version_string = [major, minor, micro].join(".")
+      version_string << "-#{tag}" if tag
+      version_string
     end
 
     ##
