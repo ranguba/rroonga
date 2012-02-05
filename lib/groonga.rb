@@ -63,7 +63,7 @@ module Groonga
     # バージョン.マイクロバージョン"</tt>という形式の文字列に
     # したもの。
     def version
-      VERSION.join(".")
+      VERSION.compact.join(".")
     end
 
     ##
