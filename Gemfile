@@ -21,7 +21,7 @@ gem 'pkg-config'
 gem 'json'
 
 group :development, :test do
-  gem "test-unit"
+  gem "test-unit", ">= 2.4.6"
   gem "test-unit-notify"
   gem "rake"
   gem "rake-compiler"

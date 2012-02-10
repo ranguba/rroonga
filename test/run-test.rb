@@ -36,8 +36,7 @@ if make
   system("cd #{base_dir.dump} && #{make} > /dev/null") or exit(false)
 end
 
-require "rubygems"
-gem "test-unit-notify"
+require "test-unit"
 require "test/unit/notify"
 
 Test::Unit::Priority.enable
