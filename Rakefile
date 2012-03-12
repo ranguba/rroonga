@@ -203,10 +203,9 @@ end
 
 Rake::ExtensionTask.new("groonga", spec) do |ext|
   if groonga_win32_i386_p
-    ext.cross_platform = ["x86-mingw32", "i386-mswin32"]
+    ext.cross_platform = ["x86-mingw32"]
   else
     ext.cross_platform = ["x64-mingw32"]
-    # ext.cross_platform << "x64-mswin64" # We need to build with VC++ 2010. :<
   end
   if windows?
     ext.gem_spec.files += collect_binary_files(relative_binary_dir)
