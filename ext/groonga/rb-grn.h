@@ -114,6 +114,7 @@ struct _RbGrnObject
     grn_id range_id;
     grn_bool need_close;
     grn_bool have_finalizer;
+    grn_bool floating;
 };
 
 typedef struct _RbGrnNamedObject RbGrnNamedObject;

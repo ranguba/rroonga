@@ -326,6 +326,7 @@ rb_grn_object_bind_common (VALUE klass, VALUE self, VALUE rb_context,
     rb_grn_object->self = self;
     rb_grn_object->need_close = GRN_TRUE;
     rb_grn_object->have_finalizer = GRN_FALSE;
+    rb_grn_object->floating = GRN_FALSE;
 
     user_data = grn_obj_user_data(context, object);
     if (user_data) {
