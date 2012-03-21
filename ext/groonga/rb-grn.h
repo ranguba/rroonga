@@ -104,6 +104,7 @@ typedef struct _RbGrnObject RbGrnObject;
 struct _RbGrnObject
 {
     VALUE self;
+    VALUE rb_context;
     grn_ctx *context;
     grn_obj *object;
     grn_obj *domain;

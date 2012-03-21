@@ -320,6 +320,7 @@ rb_grn_object_bind_common (VALUE klass, VALUE self, VALUE rb_context,
 {
     grn_user_data *user_data;
 
+    rb_grn_object->rb_context = rb_context;
     rb_grn_object->context = context;
     rb_grn_object->object = object;
     rb_grn_object->self = self;
