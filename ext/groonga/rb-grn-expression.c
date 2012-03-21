@@ -95,8 +95,8 @@ rb_grn_expression_initialize (int argc, VALUE *argv, VALUE self)
     }
 
     expression = grn_expr_create(context, name, name_size);
-    rb_grn_object_assign(Qnil, self, rb_context, context, expression);
     rb_grn_context_check(context, self);
+    rb_grn_object_assign(Qnil, self, rb_context, context, expression);
 
     rb_iv_set(self, "@objects", rb_ary_new());
 
