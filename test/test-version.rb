@@ -23,7 +23,11 @@ class VersionTest < Test::Unit::TestCase
   end
 
   def test_version_format
-    assert_equal("X.X.X-XXX", normalize(Groonga.version))
+    if /-/ =~ Groonga.version
+      assert_equal("X.X.X-XXX", normalize(Groonga.version))
+    else
+      assert_equal("X.X.X", normalize(Groonga.version))
+    end
   end
 
   def test_version_value
