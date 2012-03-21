@@ -1,5 +1,21 @@
 h1. NEWS
 
+h2(#2-0-0). 2.0.0: 2012-03-22
+
+h3. Improvements
+
+* Supported groonga 2.0.0.
+* [gem][windows] Removed mswin packages.
+
+h3. Fixes
+
+* [test] Fixed version test failure. [GitHub#4] [Reported by @takkanm]
+* Fixed a Groonga::Expression related crach bug caused by GC.
+
+h3. Thanks
+
+* @takkanm
+
 h2(#1-3-1). 1.3.1: 2012-01-29
 
 h3. Improvements
