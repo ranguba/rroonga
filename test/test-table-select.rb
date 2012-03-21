@@ -58,11 +58,6 @@ class TableSelectTest < Test::Unit::TestCase
     @result = nil
   end
 
-  teardown
-  def teardown_expression_close
-    @result.expression.close if @result # TODO: We want to remove it.
-  end
-
   def test_sub_expression
     @result = @comments.select do |record|
       record.match("Hello", "content") &

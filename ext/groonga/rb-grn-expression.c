@@ -36,6 +36,8 @@ rb_grn_expression_finalizer (grn_ctx *context, grn_obj *object,
     if (context && rb_grn_expression->value)
 	grn_obj_unlink(context, rb_grn_expression->value);
 
+    rb_grn_context_unregister_floating_object(RB_GRN_OBJECT(rb_grn_expression));
+
     rb_grn_expression->value = NULL;
 }
 
@@ -97,6 +99,7 @@ rb_grn_expression_initialize (int argc, VALUE *argv, VALUE self)
     expression = grn_expr_create(context, name, name_size);
     rb_grn_context_check(context, self);
     rb_grn_object_assign(Qnil, self, rb_context, context, expression);
+    rb_grn_context_register_floating_object(DATA_PTR(self));
 
     rb_iv_set(self, "@objects", rb_ary_new());
 
