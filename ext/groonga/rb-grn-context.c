@@ -1,6 +1,6 @@
 /* -*- coding: utf-8; c-file-style: "ruby" -*- */
 /*
-  Copyright (C) 2010-2011  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2010-2012  Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -73,7 +73,7 @@ rb_grn_context_unlink_database (grn_ctx *context)
     debug("context:database: %p:%p: done\n", context, database);
 }
 
-void
+static void
 rb_grn_context_fin (grn_ctx *context)
 {
     if (context->stat == GRN_CTX_FIN)
