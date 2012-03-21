@@ -97,6 +97,7 @@ struct _RbGrnContext
 {
     grn_ctx *context;
     grn_ctx context_entity;
+    grn_hash *floating_objects;
     VALUE self;
 };
 

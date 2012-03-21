@@ -60,6 +60,26 @@ rb_grn_context_from_ruby_object (VALUE object)
 }
 
 static void
+rb_grn_context_close_floating_objects (RbGrnContext *rb_grn_context)
+{
+    grn_ctx *context;
+    grn_hash *floating_objects;
+    RbGrnObject **floating_object = NULL;
+
+    context = rb_grn_context->context;
+    floating_objects = rb_grn_context->floating_objects;
+    if (!floating_objects)
+	return;
+
+    rb_grn_context->floating_objects = NULL;
+    GRN_HASH_EACH(context, floating_objects, id, &floating_object, NULL, NULL, {
+	    (*floating_object)->floating = GRN_FALSE;
+	    grn_obj_close(context, RB_GRN_OBJECT(*floating_object)->object);
+	});
+    grn_hash_close(context, floating_objects);
+}
+
+static void
 rb_grn_context_unlink_database (grn_ctx *context)
 {
     grn_obj *database;
@@ -93,6 +113,7 @@ rb_grn_context_free (void *pointer)
 
     context = rb_grn_context->context;
     debug("context-free: %p\n", context);
+    rb_grn_context_close_floating_objects(rb_grn_context);
     if (context && !rb_grn_exited)
 	rb_grn_context_fin(context);
     debug("context-free: %p: done\n", context);
@@ -116,6 +137,7 @@ rb_grn_context_finalizer (grn_ctx *context, int n_args, grn_obj **grn_objects,
 
     rb_grn_context = user_data->ptr;
 
+    rb_grn_context_close_floating_objects(rb_grn_context);
     if (!(context->flags & GRN_CTX_PER_DB)) {
 	rb_grn_context_unlink_database(context);
     }
@@ -364,6 +386,10 @@ rb_grn_context_initialize (int argc, VALUE *argv, VALUE self)
     rb_grn_context_check(context, self);
 
     GRN_CTX_USER_DATA(context)->ptr = rb_grn_context;
+    rb_grn_context->floating_objects = grn_hash_create(context, NULL,
+						       sizeof(RbGrnObject *),
+						       0,
+						       GRN_OBJ_TABLE_HASH_KEY);
     grn_ctx_set_finalizer(context, rb_grn_context_finalizer);
 
     if (!NIL_P(rb_encoding)) {
