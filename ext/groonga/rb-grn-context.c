@@ -59,6 +59,41 @@ rb_grn_context_from_ruby_object (VALUE object)
     return rb_grn_context->context;
 }
 
+void
+rb_grn_context_register_floating_object (RbGrnObject *rb_grn_object)
+{
+    RbGrnContext *rb_grn_context;
+    grn_ctx *context;
+    grn_hash *floating_objects;
+
+    Data_Get_Struct(rb_grn_object->rb_context, RbGrnContext, rb_grn_context);
+    context = rb_grn_context->context;
+    floating_objects = rb_grn_context->floating_objects;
+    grn_hash_add(context, floating_objects,
+		 (const void *)(&rb_grn_object), sizeof(RbGrnObject *),
+		 NULL, NULL);
+    rb_grn_object->floating = GRN_TRUE;
+}
+
+void
+rb_grn_context_unregister_floating_object (RbGrnObject *rb_grn_object)
+{
+    RbGrnContext *rb_grn_context;
+    grn_ctx *context;
+    grn_hash *floating_objects;
+
+    if (!rb_grn_object->floating)
+	return;
+
+    Data_Get_Struct(rb_grn_object->rb_context, RbGrnContext, rb_grn_context);
+    context = rb_grn_context->context;
+    floating_objects = rb_grn_context->floating_objects;
+    grn_hash_delete(context, floating_objects,
+		    (const void *)&rb_grn_object, sizeof(RbGrnObject *),
+		    NULL);
+    rb_grn_object->floating = GRN_FALSE;
+}
+
 static void
 rb_grn_context_close_floating_objects (RbGrnContext *rb_grn_context)
 {

@@ -285,6 +285,10 @@ const char    *rb_grn_rc_to_message                 (grn_rc rc);
 void           rb_grn_rc_check                      (grn_rc rc,
 						     VALUE related_object);
 
+void           rb_grn_context_register_floating_object
+                                                    (RbGrnObject *rb_grn_object);
+void           rb_grn_context_unregister_floating_object
+                                                    (RbGrnObject *rb_grn_object);
 grn_ctx       *rb_grn_context_ensure                (VALUE *context);
 VALUE          rb_grn_context_get_default           (void);
 VALUE          rb_grn_context_to_exception          (grn_ctx *context,
