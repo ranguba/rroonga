@@ -1,4 +1,4 @@
-# Copyright (C) 2009  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2012  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -28,7 +28,7 @@ class TypeTest < Test::Unit::TestCase
       Groonga::Type.new("user id", :type => :integer)
     end
     message =
-      "name can't start with '_' and contains only 0-9, A-Z, a-z, #, - or _"
+      "name can't start with '_' and contains only 0-9, A-Z, a-z, #, @, - or _"
     assert_match(/#{Regexp.escape(message)}/,
                  exception.message)
   end
