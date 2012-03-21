@@ -1713,6 +1713,7 @@ rb_grn_table_is_locked (int argc, VALUE *argv, VALUE self)
  * Groonga::Expressionを取得できる。
  * Groonga::Expression#snippetを使うことにより、指定した条件
  * 用のスニペットを簡単に生成できる。
+ *
  * <pre>
  *   ==results = table.select do |record|
  *     record["description"] =~ "groonga"
@@ -1727,6 +1728,7 @@ rb_grn_table_is_locked (int argc, VALUE *argv, VALUE self)
  *     end
  *   end==
  * </pre>
+ *
  * 出力例
  *   Ruby/groongaの説明文の中で「groonga」が含まれる部分
  *   ---
