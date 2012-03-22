@@ -486,10 +486,10 @@ module Groonga
       #
       # restore.rb:
       #
-      # </pre>
       #   dumped_text = Groonga::Schema.dump
       #   Groonga::Database.create(:path => "/tmp/new-db.grn")
       #   Groonga::Schema.restore(dumped_text)
+      # <pre>
       # </pre>
       #
       # grn式形式で返された値はgroongaコマンドで読み込むこと
