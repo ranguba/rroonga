@@ -181,6 +181,7 @@ rb_grn_column_get_local_name (VALUE self)
  * 用のスニペットを簡単に生成できる。
  *
  * <pre>
+ * !!!ruby
  * results = description_column.select do |column|
  *   column =~ "groonga"
  * end
@@ -198,6 +199,7 @@ rb_grn_column_get_local_name (VALUE self)
  * 出力例
  *
  * <pre>
+ * !!!text
  * rroongaの説明文の中で「groonga」が含まれる部分
  * ---
  * rroongaは<em>groonga</em>のいわゆるDB-APIの層の...
