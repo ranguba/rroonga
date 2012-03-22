@@ -479,17 +479,17 @@ module Groonga
       # dump.rb:
       #
       # <pre>
-      #   File.open("/tmp/groonga-schema.rb", "w") do |schema|
-      #     dumped_text = Groonga::Schema.dump
-      #   end
+      # File.open("/tmp/groonga-schema.rb", "w") do |schema|
+      #   dumped_text = Groonga::Schema.dump
+      # end
       # </pre>
       #
       # restore.rb:
       #
-      #   dumped_text = Groonga::Schema.dump
-      #   Groonga::Database.create(:path => "/tmp/new-db.grn")
-      #   Groonga::Schema.restore(dumped_text)
       # <pre>
+      # dumped_text = Groonga::Schema.dump
+      # Groonga::Database.create(:path => "/tmp/new-db.grn")
+      # Groonga::Schema.restore(dumped_text)
       # </pre>
       #
       # grn式形式で返された値はgroongaコマンドで読み込むこと
@@ -498,9 +498,9 @@ module Groonga
       # dump.rb:
       #
       # <pre>
-      #   File.open("/tmp/groonga-schema.grn", "w") do |schema|
-      #     dumped_text = Groonga::Schema.dump(:syntax => :command)
-      #   end
+      # File.open("/tmp/groonga-schema.grn", "w") do |schema|
+      #   dumped_text = Groonga::Schema.dump(:syntax => :command)
+      # end
       # </pre>
       #
       # <pre>
