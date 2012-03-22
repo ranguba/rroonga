@@ -1733,9 +1733,9 @@ rb_grn_table_is_locked (int argc, VALUE *argv, VALUE self)
  * 出力例
  *
  * <pre>
- * Ruby/groongaの説明文の中で「groonga」が含まれる部分
+ * rroongaの説明文の中で「groonga」が含まれる部分
  * ---
- * Ruby/<em>groonga</em>は<em>groonga</em>のいわゆるDB-APIの層の...
+ * rroongaは<em>groonga</em>のいわゆるDB-APIの層の...
  * ---
  * </pre>
  *
