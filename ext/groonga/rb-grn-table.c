@@ -1721,7 +1721,7 @@ rb_grn_table_is_locked (int argc, VALUE *argv, VALUE self)
  * snippet = results.expression.snippet([["<em>", "</em>"]])
  * results.each do |record|
  *   puts "#{record['name']}の説明文の中で「groonga」が含まれる部分"
- *   snippet.execute(record["description"].each do |snippet|
+ *   snippet.execute(record["description"]).each do |snippet|
  *     puts "---"
  *     puts "#{snippet}..."
  *     puts "---"
