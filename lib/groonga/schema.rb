@@ -927,9 +927,12 @@ module Groonga
     end
 
     # 以下と同様:
+    #
+    # <pre>
     #   schema.change_table(table_name) do |table|
     #     table.remove_column(column_name)
     #   end
+    # </pre>
     def remove_column(table_name, column_name)
       change_table(table_name) do |table|
         table.remove_column(column_name)
@@ -937,9 +940,12 @@ module Groonga
     end
 
     # It is a syntax sugar of the following:
+    #
+    # <pre>
     #   schema.change_table(table_name) do |table|
     #     table.rename_column(current_column_name, new_column_name)
     #   end
+    # </pre>
     def rename_column(table_name, current_column_name, new_column_name)
       change_table(table_name) do |table|
         table.rename_column(current_column_name, new_column_name)
