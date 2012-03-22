@@ -1755,6 +1755,7 @@ rb_grn_table_is_locked (int argc, VALUE *argv, VALUE self)
  * </pre>
  *
  * 例:
+ *
  * <pre>
  *   =="name:daijiro" # "name"カラムの値が"daijiro"のレコードにマッチ
  *   "description:@groonga" # "description"カラムが
@@ -1770,6 +1771,7 @@ rb_grn_table_is_locked (int argc, VALUE *argv, VALUE self)
  * Groonga::ColumnExpressionBuilderの他に"!="も使用可能。
  *
  * 例:
+ *
  * <pre>
  *  ==comments = Groonga::Array.create(:name => "Comments")
  *  comments.define_column("content", "Text")
