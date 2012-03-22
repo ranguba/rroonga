@@ -218,12 +218,15 @@ rb_grn_column_get_local_name (VALUE self)
  * - @@@ := [カラム値]が[値]を含んでいるかどうか
  *
  * 例:
+ *
+ * <pre>
  *   "groonga" # _column_ カラムの値が"groonga"のレコードにマッチ
  *   "name:daijiro" # _column_ カラムが属しているテーブルの
  *                  # "name"カラムの値が"daijiro"のレコードにマッチ
  *   "description:@groonga" # _column_ カラムが属しているテーブルの
  *                          # "description"カラムが
  *                          # "groonga"を含んでいるレコードにマッチ
+ * </pre>
  *
  * _expression_ には既に作成済みのGroonga::Expressionを渡す
  *
