@@ -356,7 +356,7 @@ module Groonga
 
       # (See Groonga::Schema#rename_table)
       #
-      # This is a syntax sugar the following code:
+      # This is a syntax sugar of the following code:
       #
       # <pre>
       # Groonga::Schema.define do |schema|
