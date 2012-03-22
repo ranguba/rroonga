@@ -1715,6 +1715,7 @@ rb_grn_table_is_locked (int argc, VALUE *argv, VALUE self)
  * 用のスニペットを簡単に生成できる。
  *
  * <pre>
+ * !!!ruby
  * results = table.select do |record|
  *   record["description"] =~ "groonga"
  * end
@@ -1758,6 +1759,7 @@ rb_grn_table_is_locked (int argc, VALUE *argv, VALUE self)
  * 例:
  *
  * <pre>
+ * !!!ruby
  * "name:daijiro" # "name"カラムの値が"daijiro"のレコードにマッチ
  * "description:@groonga" # "description"カラムが
  *                        # "groonga"を含んでいるレコードにマッチ
@@ -1774,6 +1776,7 @@ rb_grn_table_is_locked (int argc, VALUE *argv, VALUE self)
  * 例:
  *
  * <pre>
+ * !!!ruby
  * comments = Groonga::Array.create(:name => "Comments")
  * comments.define_column("content", "Text")
  * comments.add(:content => "Hello Good-bye!")
