@@ -153,9 +153,9 @@ module Groonga
       # マを定義する。以下の省略形。
       #
       # <pre>
-      #  schema = Groonga::Scheme.new(options)
-      #  ==...==
-      #  schema.define
+      # schema = Groonga::Scheme.new(options)
+      # ==...==
+      # schema.define
       # </pre>
       #
       # @param [::Hash] options The name and value
@@ -332,11 +332,11 @@ module Groonga
       # 名前が _name_ のテーブルを変更する。以下の省略形。
       #
       # <pre>
-      #   Groonga::Schema.define do |schema|
-      #     schema.change_table(name, options) do |table|
-      #      ==...==
-      #     end
+      # Groonga::Schema.define do |schema|
+      #   schema.change_table(name, options) do |table|
+      #    ==...==
       #   end
+      # end
       # </pre>
       #
       # ブロックにはGroonga::Schema::TableDefinitionオブジェ
@@ -359,9 +359,9 @@ module Groonga
       # This is a syntax sugar the following code:
       #
       # <pre>
-      #   Groonga::Schema.define do |schema|
-      #     schema.rename_table(current_name, new_name, options)
-      #   end
+      # Groonga::Schema.define do |schema|
+      #   schema.rename_table(current_name, new_name, options)
+      # end
       # </pre>
       def rename_table(current_name, new_name, options={})
         define do |schema|
@@ -372,11 +372,11 @@ module Groonga
       # 名前が_name_のビューを作成する。以下の省略形。
       #
       # <pre>
-      #   Groonga::Schema.define do |schema|
-      #     schema.create_view(name, options) do |view|
-      #       ==...==
-      #     end
+      # Groonga::Schema.define do |schema|
+      #   schema.create_view(name, options) do |view|
+      #     ==...==
       #   end
+      # end
       # </pre>
       # ブロックにはGroonga::Schema::ViewDefinitionオブジェ
       # クトがわたるので、そのオブジェクトを利用してビュー
@@ -421,11 +421,11 @@ module Groonga
       # 名前が_name_のビューを変更する。以下の省略形。
       #
       # <pre>
-      #   Groonga::Schema.define do |schema|
-      #     schema.change_view(name, options) do |view|
-      #      ==...==
-      #     end
+      # Groonga::Schema.define do |schema|
+      #   schema.change_view(name, options) do |view|
+      #    ==...==
       #   end
+      # end
       # </pre>
       #
       # ブロックにはGroonga::Schema::ViewDefinitionオブジェ
@@ -473,25 +473,25 @@ module Groonga
       # 込むことができる。
       #
       # <pre>
-      #   ==dump.rb:
-      #     File.open("/tmp/groonga-schema.rb", "w") do |schema|
-      #       dumped_text = Groonga::Schema.dump
-      #     end
-      #   restore.rb:
+      # ==dump.rb:
+      #   File.open("/tmp/groonga-schema.rb", "w") do |schema|
       #     dumped_text = Groonga::Schema.dump
-      #     Groonga::Database.create(:path => "/tmp/new-db.grn")
-      #     Groonga::Schema.restore(dumped_text)==
+      #   end
+      # restore.rb:
+      #   dumped_text = Groonga::Schema.dump
+      #   Groonga::Database.create(:path => "/tmp/new-db.grn")
+      #   Groonga::Schema.restore(dumped_text)==
       # </pre>
       #
       # grn式形式で返された値はgroongaコマンドで読み込むこと
       # ができる。
       #
       # <pre>
-      #   ==dump.rb:
-      #     File.open("/tmp/groonga-schema.grn", "w") do |schema|
-      #       dumped_text = Groonga::Schema.dump(:syntax => :command)
-      #     end
-      #   % groonga db/path < /tmp/groonga-schema.grn==
+      # ==dump.rb:
+      #   File.open("/tmp/groonga-schema.grn", "w") do |schema|
+      #     dumped_text = Groonga::Schema.dump(:syntax => :command)
+      #   end
+      # % groonga db/path < /tmp/groonga-schema.grn==
       # </pre>
       #
       # @param options [::Hash] The name and value
