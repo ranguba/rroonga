@@ -1,0 +1,4 @@
+--output-dir doc/reference/en
+--markup textile
+lib/**/*.rb
+ext/**/*.c

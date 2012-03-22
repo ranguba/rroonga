@@ -104,10 +104,6 @@ Gem::PackageTask.new(spec) do |pkg|
 end
 
 document_task = Packnga::DocumentTask.new(spec) do |t|
-  t.yard do |yard_task|
-    yard_task.files += FileList["ext/**/*.c"]
-    yard_task.options += ["--markup", "textile"]
-  end
 end
 
 namespace :reference do
