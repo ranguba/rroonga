@@ -501,6 +501,9 @@ module Groonga
       #   File.open("/tmp/groonga-schema.grn", "w") do |schema|
       #     dumped_text = Groonga::Schema.dump(:syntax => :command)
       #   end
+      # </pre>
+      #
+      # <pre>
       # % groonga db/path < /tmp/groonga-schema.grn
       # </pre>
       #
