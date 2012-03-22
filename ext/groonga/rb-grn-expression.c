@@ -586,6 +586,7 @@ rb_grn_expression_inspect (VALUE self)
  * する。
  *
  * <pre>
+ * !!!ruby
  * [
  *  ["キーワード前に挿入する文字列1", "キーワード後に挿入する文字列1"],
  *  ["キーワード前に挿入する文字列2", "キーワード後に挿入する文字列2"],
@@ -598,6 +599,7 @@ rb_grn_expression_inspect (VALUE self)
  * のタグから順番に使われる。
  *
  * <pre>
+ * !!!ruby
  * expression.parse("Ruby groonga 検索")
  * tags = [["<tag1>", "</tag1>"], ["<tag2>", "</tag2>"]]
  * snippet = expression.snippet(tags)
