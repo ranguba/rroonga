@@ -180,8 +180,7 @@ rb_grn_column_get_local_name (VALUE self)
  * Groonga::Expression#snippetを使うことにより、指定した条件
  * 用のスニペットを簡単に生成できる。
  *
- * <pre>
- * !!!ruby
+ * bc. !!!ruby
  * results = description_column.select do |column|
  *   column =~ "groonga"
  * end
@@ -194,17 +193,13 @@ rb_grn_column_get_local_name (VALUE self)
  *     puts "---"
  *   end
  * end
- * </pre>
  *
  * 出力例
  *
- * <pre>
- * !!!text
- * rroongaの説明文の中で「groonga」が含まれる部分
+ * pre. rroongaの説明文の中で「groonga」が含まれる部分
  * ---
  * rroongaは<em>groonga</em>のいわゆるDB-APIの層の...
  * ---
- * </pre>
  *
  * _query_ には「[カラム名]:[演算子][値]」という書式で条件を
  * 指定する。演算子は以下の通り。
