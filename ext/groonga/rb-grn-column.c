@@ -193,7 +193,11 @@ rb_grn_column_get_local_name (VALUE self)
  *       puts "---"
  *     end
  *   end
+ * </pre>
+ *
  * 出力例
+ *
+ * <pre>
  *   Ruby/groongaの説明文の中で「groonga」が含まれる部分
  *   ---
  *   Ruby/<em>groonga</em>は<em>groonga</em>のいわゆるDB-APIの層の...
