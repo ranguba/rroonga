@@ -1733,6 +1733,7 @@ rb_grn_table_is_locked (int argc, VALUE *argv, VALUE self)
  * 出力例
  *
  * <pre>
+ * !!!text
  * rroongaの説明文の中で「groonga」が含まれる部分
  * ---
  * rroongaは<em>groonga</em>のいわゆるDB-APIの層の...
