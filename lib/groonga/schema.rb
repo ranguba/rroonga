@@ -446,9 +446,9 @@ module Groonga
       # 以下と同様:
       #
       # <pre>
-      #   Groonga::Schema.change_table(table_name) do |table|
-      #     table.remove_column(column_name)
-      #   end
+      # Groonga::Schema.change_table(table_name) do |table|
+      #   table.remove_column(column_name)
+      # end
       # </pre>
       def remove_column(table_name, column_name)
         change_table(table_name) do |table|
@@ -459,10 +459,10 @@ module Groonga
       # This is a syntax sugar of the following:
       #
       # <pre>
-      #   Groonga::Schema.define do |schema|
-      #     schema.rename_column(table_name,
-      #                          current_column_name, new_column_name)
-      #   end
+      # Groonga::Schema.define do |schema|
+      #   schema.rename_column(table_name,
+      #                        current_column_name, new_column_name)
+      # end
       # </pre>
       def rename_column(table_name, current_column_name, new_column_name)
         define do |schema|
@@ -929,9 +929,9 @@ module Groonga
     # 以下と同様:
     #
     # <pre>
-    #   schema.change_table(table_name) do |table|
-    #     table.remove_column(column_name)
-    #   end
+    # schema.change_table(table_name) do |table|
+    #   table.remove_column(column_name)
+    # end
     # </pre>
     def remove_column(table_name, column_name)
       change_table(table_name) do |table|
@@ -942,9 +942,9 @@ module Groonga
     # It is a syntax sugar of the following:
     #
     # <pre>
-    #   schema.change_table(table_name) do |table|
-    #     table.rename_column(current_column_name, new_column_name)
-    #   end
+    # schema.change_table(table_name) do |table|
+    #   table.rename_column(current_column_name, new_column_name)
+    # end
     # </pre>
     def rename_column(table_name, current_column_name, new_column_name)
       change_table(table_name) do |table|
