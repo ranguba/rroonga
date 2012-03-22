@@ -1,6 +1,6 @@
 /* -*- coding: utf-8; c-file-style: "ruby" -*- */
 /*
-  Copyright (C) 2009-2010  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2012  Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -584,6 +584,7 @@ rb_grn_expression_inspect (VALUE self)
  * _expression_ からGroonga::Snippetを生成する。 _tags_ には
  * キーワードの前後に挿入するタグの配列を以下のような形式で指定
  * する。
+ *
  * <pre>
  *   ==[
  *    ["キーワード前に挿入する文字列1", "キーワード後に挿入する文字列1"],
@@ -591,9 +592,11 @@ rb_grn_expression_inspect (VALUE self)
  *    ...,
  *   ]==
  * </pre>
+ *
  * もし、1つのスニペットの中に _tags_ で指定したタグより多くの
  * キーワードが含まれている場合は、以下のように、また、先頭
  * のタグから順番に使われる。
+ *
  * <pre>
  *   ==expression.parse("Ruby groonga 検索")
  *   tags = [["<tag1>", "</tag1>"], ["<tag2>", "</tag2>"]]
