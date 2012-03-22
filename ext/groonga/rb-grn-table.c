@@ -1715,7 +1715,7 @@ rb_grn_table_is_locked (int argc, VALUE *argv, VALUE self)
  * 用のスニペットを簡単に生成できる。
  *
  * <pre>
- *   ==results = table.select do |record|
+ *   results = table.select do |record|
  *     record["description"] =~ "groonga"
  *   end
  *   snippet = results.expression.snippet([["<em>", "</em>"]])
@@ -1726,7 +1726,7 @@ rb_grn_table_is_locked (int argc, VALUE *argv, VALUE self)
  *       puts "#{snippet}..."
  *       puts "---"
  *     end
- *   end==
+ *   end
  * </pre>
  *
  * 出力例
@@ -1758,9 +1758,9 @@ rb_grn_table_is_locked (int argc, VALUE *argv, VALUE self)
  * 例:
  *
  * <pre>
- *   =="name:daijiro" # "name"カラムの値が"daijiro"のレコードにマッチ
+ *   "name:daijiro" # "name"カラムの値が"daijiro"のレコードにマッチ
  *   "description:@groonga" # "description"カラムが
- *                          # "groonga"を含んでいるレコードにマッチ==
+ *                          # "groonga"を含んでいるレコードにマッチ
  * </pre>
  *
  * _expression_ には既に作成済みのGroonga::Expressionを渡す
@@ -1774,7 +1774,7 @@ rb_grn_table_is_locked (int argc, VALUE *argv, VALUE self)
  * 例:
  *
  * <pre>
- *  ==comments = Groonga::Array.create(:name => "Comments")
+ *  comments = Groonga::Array.create(:name => "Comments")
  *  comments.define_column("content", "Text")
  *  comments.add(:content => "Hello Good-bye!")
  *  comments.add(:content => "Hello World")
@@ -1783,7 +1783,7 @@ rb_grn_table_is_locked (int argc, VALUE *argv, VALUE self)
  *    record.content != "test"
  *  end
  *  p result.collect {|record| record.content}
- *    # => ["Hello Good-bye!", "Hello World"]==
+ *    # => ["Hello Good-bye!", "Hello World"]
  * </pre>
  *
  * _options_ に指定可能な値は以下の通り。
