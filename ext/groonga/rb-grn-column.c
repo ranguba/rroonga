@@ -179,6 +179,7 @@ rb_grn_column_get_local_name (VALUE self)
  * ているGroonga::Expressionを取得できる。
  * Groonga::Expression#snippetを使うことにより、指定した条件
  * 用のスニペットを簡単に生成できる。
+ *
  * <pre>
  *   results = description_column.select do |column|
  *     column =~ "groonga"
