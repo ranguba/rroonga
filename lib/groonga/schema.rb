@@ -151,11 +151,13 @@ module Groonga
       # スキーマを定義する。ブロックにはGroonga::Schemaオブ
       # ジェクトがわたるので、そのオブジェクトを利用してスキー
       # マを定義する。以下の省略形。
+      #
       # <pre>
       #  schema = Groonga::Scheme.new(options)
       #  ==...==
       #  schema.define
       # </pre>
+      #
       # @param [::Hash] options The name and value
       #   pairs. Omitted names are initialized as the default value.
       # @option options [Groonga::Context] :content (Groonga::Context.default) The context
@@ -328,6 +330,7 @@ module Groonga
       end
 
       # 名前が _name_ のテーブルを変更する。以下の省略形。
+      #
       # <pre>
       #   Groonga::Schema.define do |schema|
       #     schema.change_table(name, options) do |table|
@@ -367,6 +370,7 @@ module Groonga
       end
 
       # 名前が_name_のビューを作成する。以下の省略形。
+      #
       # <pre>
       #   Groonga::Schema.define do |schema|
       #     schema.create_view(name, options) do |view|
@@ -415,6 +419,7 @@ module Groonga
       end
 
       # 名前が_name_のビューを変更する。以下の省略形。
+      #
       # <pre>
       #   Groonga::Schema.define do |schema|
       #     schema.change_view(name, options) do |view|
@@ -466,6 +471,7 @@ module Groonga
       # Rubyスクリプト形式で返された値は
       # Groonga::Schema.restoreすることによりスキーマ内に組み
       # 込むことができる。
+      #
       # <pre>
       #   ==dump.rb:
       #     File.open("/tmp/groonga-schema.rb", "w") do |schema|
@@ -476,8 +482,10 @@ module Groonga
       #     Groonga::Database.create(:path => "/tmp/new-db.grn")
       #     Groonga::Schema.restore(dumped_text)==
       # </pre>
+      #
       # grn式形式で返された値はgroongaコマンドで読み込むこと
       # ができる。
+      #
       # <pre>
       #   ==dump.rb:
       #     File.open("/tmp/groonga-schema.grn", "w") do |schema|
@@ -485,6 +493,7 @@ module Groonga
       #     end
       #   % groonga db/path < /tmp/groonga-schema.grn==
       # </pre>
+      #
       # @param options [::Hash] The name and value
       #   pairs. Omitted names are initialized as the default value.
       # @option options :context (Groonga::Context.default) The context
