@@ -1731,10 +1731,13 @@ rb_grn_table_is_locked (int argc, VALUE *argv, VALUE self)
  * </pre>
  *
  * 出力例
- *   Ruby/groongaの説明文の中で「groonga」が含まれる部分
- *   ---
- *   Ruby/<em>groonga</em>は<em>groonga</em>のいわゆるDB-APIの層の...
- *   ---
+ *
+ * <pre>
+ * Ruby/groongaの説明文の中で「groonga」が含まれる部分
+ * ---
+ * Ruby/<em>groonga</em>は<em>groonga</em>のいわゆるDB-APIの層の...
+ * ---
+ * </pre>
  *
  * _query_ には「[カラム名]:[演算子][値]」という書式で条件を
  * 指定する。演算子は以下の通り。
