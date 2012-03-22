@@ -504,6 +504,7 @@ module Groonga
       # </pre>
       #
       # <pre>
+      # !!!text
       # % groonga db/path < /tmp/groonga-schema.grn
       # </pre>
       #
