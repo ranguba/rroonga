@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: rroonga 1.2.3\n"
 "POT-Creation-Date: 2012-03-22 14:34+0900\n"
-"PO-Revision-Date: 2012-01-30 17:07+0900\n"
+"PO-Revision-Date: 2012-03-22 14:45+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: \n"
@@ -2221,13 +2221,12 @@ msgid "Improvements"
 msgstr "改良"
 
 #: doc/reference/en/file.news.html:61(li)
-#, fuzzy
 msgid "Supported groonga 2.0.0."
-msgstr "groonga 1.0.0対応。"
+msgstr "groonga 2.0.0対応。"
 
 #: doc/reference/en/file.news.html:62(li)
 msgid "[gem][windows] Removed mswin packages."
-msgstr ""
+msgstr "[gem][windows] mswin用のパッケージを削除した。"
 
 #: doc/reference/en/file.news.html:64(h3)
 #: doc/reference/en/file.news.html:117(h3)
@@ -2249,11 +2248,11 @@ msgstr "修正"
 
 #: doc/reference/en/file.news.html:66(li)
 msgid "[test] Fixed version test failure. [GitHub#4] [Reported by @takkanm]"
-msgstr ""
+msgstr "[test] バージョンのテストの失敗を修正した。 [GitHub#4] [@takkanmさんが報告]"
 
 #: doc/reference/en/file.news.html:67(li)
 msgid "Fixed a Groonga::Expression related crach bug caused by GC."
-msgstr ""
+msgstr "Groonga::Expressionに関連したGCでクラッシュするバグを修正した。"
 
 #: doc/reference/en/file.news.html:68(span)
 msgid "HTML"
@@ -2263,7 +2262,7 @@ msgstr ""
 msgid ""
 "[doc] Fixed broken <placeholder-1/> output. [groonga-dev,00699] [Reported by "
 "Hirano]"
-msgstr ""
+msgstr "[doc] 壊れた<placeholder-1/>出力を修正した。 [groonga-dev,00699] [平野さんが報告]"
 
 #: doc/reference/en/file.news.html:71(h3)
 #: doc/reference/en/file.news.html:90(h3)
@@ -2280,11 +2279,11 @@ msgstr "感謝"
 
 #: doc/reference/en/file.news.html:73(li)
 msgid "@takkanm"
-msgstr ""
+msgstr "@takkanmさん"
 
 #: doc/reference/en/file.news.html:74(li)
 msgid "Hirano"
-msgstr ""
+msgstr "平野さん"
 
 #: doc/reference/en/file.news.html:76(h2)
 msgid "1.3.1: 2012-01-29"
@@ -6999,31 +6998,26 @@ msgid "backward compatibility."
 msgstr ""
 
 #: doc/reference/en/Groonga.html:164(dt)
-#, fuzzy
 msgid ""
 "Operation = <div class=\"docstring\"><div class=\"discussion"
 "\"><placeholder-1/></div></div>\n"
 "<placeholder-2/>"
 msgstr ""
-"<placeholder-1/> 2.1です。詳しくはlicense/<placeholder-2/>を見てください。"
 
 #: doc/reference/en/Groonga.html:176(span)
 msgid "deprecated"
 msgstr ""
 
 #: doc/reference/en/Groonga.html:178(dt)
-#, fuzzy
 msgid ""
 "ObjectClosed = <div class=\"docstring\"><div class=\"discussion"
 "\"><placeholder-1/></div></div>\n"
 "<placeholder-2/>"
 msgstr ""
-"<placeholder-1/> 2.1です。詳しくはlicense/<placeholder-2/>を見てください。"
 
 #: doc/reference/en/Groonga.html:190(pre)
-#, fuzzy
 msgid "Document-class"
-msgstr "ドキュメント"
+msgstr ""
 
 #: doc/reference/en/Groonga.html:204(a)
 #: doc/reference/en/Groonga/Logger.html:114(a)
@@ -7523,9 +7517,8 @@ msgid "version"
 msgstr ""
 
 #: doc/reference/en/Groonga.html:279(a)
-#, fuzzy
 msgid "+ (String) <placeholder-1/>"
-msgstr "<placeholder-1/>を変更。"
+msgstr ""
 
 #: doc/reference/en/Groonga.html:292(p) doc/reference/en/Groonga.html:433(p)
 msgid "Format version."
@@ -9499,11 +9492,8 @@ msgid "String"
 msgstr ""
 
 #: doc/reference/en/Groonga.html:425(p)
-#, fuzzy
 msgid "+ (<placeholder-1/>) <placeholder-2/>"
 msgstr ""
-"daraさん: <ul><placeholder-1/>\n"
-"\t\t<placeholder-2/></ul>"
 
 #: doc/reference/en/Groonga.html:439(h3)
 #: doc/reference/en/Groonga/Context.html:788(h3)
@@ -9639,13 +9629,10 @@ msgid "MAJOR.MINOR.MICRO"
 msgstr ""
 
 #: doc/reference/en/Groonga.html:450(p)
-#, fuzzy
 msgid ""
 "If Groonga::<placeholder-1/> has tag, <placeholder-2/>. Otherwise, "
 "<placeholder-3/>."
 msgstr ""
-"daraさん: <ul><placeholder-1/>\n"
-"\t\t<placeholder-2/></ul>"
 
 #: doc/reference/en/Groonga.html:460(pre)
 msgid "65 66 67 68 69 70"
@@ -15082,9 +15069,8 @@ msgstr ""
 #: doc/reference/en/Groonga/Record.html:1802(em)
 #: doc/reference/en/Groonga/PatriciaTrie.html:1542(em)
 #: doc/reference/en/Groonga/Table.html:2823(em)
-#, fuzzy
 msgid "(defaults to: <placeholder-1/>)"
-msgstr "<placeholder-1/>を追加"
+msgstr ""
 
 #: doc/reference/en/Groonga/Schema/TableDefinition.html:818(h3)
 #: doc/reference/en/Groonga/Schema/TableDefinition.html:1582(h3)
@@ -15554,9 +15540,8 @@ msgstr ""
 #: doc/reference/en/Groonga/Schema.html:3624(span)
 #: doc/reference/en/Groonga/Table.html:2845(span)
 #: doc/reference/en/Groonga/Table.html:2858(span)
-#, fuzzy
 msgid "&mdash; default: <placeholder-1/>"
-msgstr "<placeholder-1/>を追加"
+msgstr ""
 
 #: doc/reference/en/Groonga/Schema/TableDefinition.html:862(p)
 #: doc/reference/en/Groonga/Schema.html:1171(p)
@@ -15826,13 +15811,10 @@ msgid ""
 msgstr ""
 
 #: doc/reference/en/Groonga/Schema/TableDefinition.html:971(div)
-#, fuzzy
 msgid ""
 "<placeholder-1/>\n"
 "<placeholder-2/> table.index(“Users.name”)"
 msgstr ""
-"daraさん: <ul><placeholder-1/>\n"
-"\t\t<placeholder-2/></ul>"
 
 #: doc/reference/en/Groonga/Schema/TableDefinition.html:1014(pre)
 msgid ""
@@ -16097,9 +16079,8 @@ msgid "Also known as: <placeholder-1/>"
 msgstr ""
 
 #: doc/reference/en/Groonga/Schema/TableDefinition.html:1151(p)
-#, fuzzy
 msgid "名前が <placeholder-1/> の32bit符号付き整数のカラムを作成する。"
-msgstr "<placeholder-1/>を追加"
+msgstr ""
 
 #: doc/reference/en/Groonga/Schema/TableDefinition.html:1163(pre)
 msgid "1227 1228 1229"
@@ -16123,9 +16104,8 @@ msgid "int64"
 msgstr ""
 
 #: doc/reference/en/Groonga/Schema/TableDefinition.html:1194(p)
-#, fuzzy
 msgid "名前が <placeholder-1/> の64bit符号付き整数のカラムを作成する。"
-msgstr "<placeholder-1/>を追加"
+msgstr ""
 
 #: doc/reference/en/Groonga/Schema/TableDefinition.html:1206(pre)
 msgid "1237 1238 1239"
@@ -16194,14 +16174,11 @@ msgid ""
 msgstr ""
 
 #: doc/reference/en/Groonga/Schema/TableDefinition.html:1357(p)
-#, fuzzy
 msgid ""
 "<placeholder-1/> が省略された場合は <placeholder-2/> の複数形が使われる。 例"
 "えば、 <placeholder-3/> が\"user\"な場合は <placeholder-4/> は\"users\"にな"
 "る。"
 msgstr ""
-"daraさん: <ul><placeholder-1/>\n"
-"\t\t<placeholder-2/></ul>"
 
 #: doc/reference/en/Groonga/Schema/TableDefinition.html:1370(pre)
 msgid "1345 1346 1347 1348"
@@ -16405,9 +16382,8 @@ msgid "guess_table_name"
 msgstr ""
 
 #: doc/reference/en/Groonga/Schema/TableDefinition.html:1399(p)
-#, fuzzy
 msgid "名前が <placeholder-1/> のカラムを削除します。"
-msgstr "<placeholder-1/>を追加"
+msgstr ""
 
 #: doc/reference/en/Groonga/Schema/TableDefinition.html:1400(span)
 #: doc/reference/en/Groonga/Context.html:1934(span)
@@ -16417,13 +16393,10 @@ msgid "TODO"
 msgstr ""
 
 #: doc/reference/en/Groonga/Schema/TableDefinition.html:1400(p)
-#, fuzzy
 msgid ""
 "<placeholder-1/> に指定可能な値はありません(<placeholder-2/> <placeholder-3/"
 "> は不要?)。"
 msgstr ""
-"daraさん: <ul><placeholder-1/>\n"
-"\t\t<placeholder-2/></ul>"
 
 #: doc/reference/en/Groonga/Schema/TableDefinition.html:1410(pre)
 msgid "1082 1083 1084 1085 1086 1087 1088 1089 1090"
@@ -16443,13 +16416,10 @@ msgid "ColumnRemoveDefinition"
 msgstr ""
 
 #: doc/reference/en/Groonga/Schema/TableDefinition.html:1449(p)
-#, fuzzy
 msgid ""
 "<placeholder-1/> の <placeholder-2/> を対象とするインデッ クスカラムを削除し"
 "ます。"
 msgstr ""
-"daraさん: <ul><placeholder-1/>\n"
-"\t\t<placeholder-2/></ul>"
 
 #: doc/reference/en/Groonga/Schema/TableDefinition.html:1451(p)
 msgid ""
@@ -16459,13 +16429,10 @@ msgid ""
 msgstr ""
 
 #: doc/reference/en/Groonga/Schema/TableDefinition.html:1448(div)
-#, fuzzy
 msgid ""
 "<placeholder-1/>\n"
 "<placeholder-2/> table.remove_index(“Users.name”)"
 msgstr ""
-"daraさん: <ul><placeholder-1/>\n"
-"\t\t<placeholder-2/></ul>"
 
 #: doc/reference/en/Groonga/Schema/TableDefinition.html:1490(pre)
 msgid ""
@@ -16582,12 +16549,10 @@ msgstr ""
 
 #: doc/reference/en/Groonga/Schema/TableDefinition.html:1539(p)
 #: doc/reference/en/Groonga/Schema.html:3574(p)
-#, fuzzy
 msgid ""
 "- (<tt><span class=\"object_link\"><placeholder-1/></span></tt>) "
 "<placeholder-2/>(current_name, new_name, options = {})"
 msgstr ""
-"<placeholder-1/> 2.1です。詳しくはlicense/<placeholder-2/>を見てください。"
 
 #: doc/reference/en/Groonga/Schema/TableDefinition.html:1586(span)
 #: doc/reference/en/Groonga/Context.html:1335(span)
@@ -16623,9 +16588,8 @@ msgid ":context"
 msgstr ""
 
 #: doc/reference/en/Groonga/Schema/TableDefinition.html:1587(tt)
-#, fuzzy
 msgid "Groonga:Context"
-msgstr "Groonga::Context#closeを追加。"
+msgstr ""
 
 #: doc/reference/en/Groonga/Schema/TableDefinition.html:1591(tt)
 #: doc/reference/en/Groonga/Context.html:134(strong)
@@ -16842,9 +16806,8 @@ msgid "uint32"
 msgstr ""
 
 #: doc/reference/en/Groonga/Schema/TableDefinition.html:1975(p)
-#, fuzzy
 msgid "名前が <placeholder-1/> の32bit符号なし整数のカラムを作成する。"
-msgstr "<placeholder-1/>を追加"
+msgstr ""
 
 #: doc/reference/en/Groonga/Schema/TableDefinition.html:1987(pre)
 msgid "1268 1269 1270"
@@ -16868,9 +16831,8 @@ msgid "uint64"
 msgstr ""
 
 #: doc/reference/en/Groonga/Schema/TableDefinition.html:2018(p)
-#, fuzzy
 msgid "名前が <placeholder-1/> の64bit符号なし整数のカラムを作成する。"
-msgstr "<placeholder-1/>を追加"
+msgstr ""
 
 #: doc/reference/en/Groonga/Schema/TableDefinition.html:2030(pre)
 msgid "1278 1279 1280"
@@ -17352,9 +17314,8 @@ msgid ": available keys:"
 msgstr ""
 
 #: doc/reference/en/Groonga/Schema/UnknownOptions.html:283(span)
-#, fuzzy
 msgid ": options:"
-msgstr "Groonga::Context#match_escalation_thresholdを追加。"
+msgstr ""
 
 #: doc/reference/en/Groonga/Schema/UnknownOptions.html:308(p)
 msgid "Returns the value of attribute available_keys"
@@ -17927,9 +17888,8 @@ msgid ""
 msgstr ""
 
 #: doc/reference/en/Groonga/Context.html:134(a)
-#, fuzzy
 msgid "+ (Groonga::Context) <placeholder-1/>"
-msgstr "<placeholder-1/>を変更。"
+msgstr ""
 
 #: doc/reference/en/Groonga/Context.html:147(p)
 msgid ""
@@ -17977,11 +17937,8 @@ msgid "Groonga::Context.default_options"
 msgstr ""
 
 #: doc/reference/en/Groonga/Context.html:180(a)
-#, fuzzy
 msgid "+ (Hash<placeholder-1/>) <placeholder-2/>"
 msgstr ""
-"daraさん: <ul><placeholder-1/>\n"
-"\t\t<placeholder-2/></ul>"
 
 #: doc/reference/en/Groonga/Context.html:193(p)
 msgid "コンテキストを作成する時に利用するデフォルトのオプション を返す。."
@@ -18048,12 +18005,9 @@ msgid "- (Object) <placeholder-1/>(options = nil)"
 msgstr ""
 
 #: doc/reference/en/Groonga/Context.html:310(p)
-#, fuzzy
 msgid ""
 "groongaサーバに接続する。 <placeholder-1/> に指定可能な値は以下の通 り。."
 msgstr ""
-"daraさん: <ul><placeholder-1/>\n"
-"\t\t<placeholder-2/></ul>"
 
 #: doc/reference/en/Groonga/Context.html:319(strong)
 #: doc/reference/en/Groonga/Context.html:1290(strong)
@@ -18124,18 +18078,16 @@ msgid "database"
 msgstr ""
 
 #: doc/reference/en/Groonga/Context.html:341(a)
-#, fuzzy
 msgid "- (Groonga::Database) <placeholder-1/>"
-msgstr "<placeholder-1/>を変更。"
+msgstr ""
 
 #: doc/reference/en/Groonga/Context.html:354(p)
 msgid "コンテキストが使うデータベースを返す。."
 msgstr ""
 
 #: doc/reference/en/Groonga/Context.html:362(a)
-#, fuzzy
 msgid "- (Groonga::Encoding) <placeholder-1/>"
-msgstr "<placeholder-1/>を変更。"
+msgstr ""
 
 #: doc/reference/en/Groonga/Context.html:375(p)
 msgid "コンテキストが使うエンコーディングを返す。."
@@ -18162,25 +18114,20 @@ msgid "Groonga::Context.new"
 msgstr ""
 
 #: doc/reference/en/Groonga/Context.html:420(p)
-#, fuzzy
 msgid ""
 "コンテキストを作成する。 <placeholder-1/> に指定可能な値は以下の通 り。."
 msgstr ""
-"daraさん: <ul><placeholder-1/>\n"
-"\t\t<placeholder-2/></ul>"
 
 #: doc/reference/en/Groonga/Context.html:429(a)
 #: doc/reference/en/Groonga/Expression.html:296(a)
 #: doc/reference/en/Groonga/Table.html:492(a)
 #: doc/reference/en/Grn/Table.html:465(a)
-#, fuzzy
 msgid "- (String) <placeholder-1/>"
-msgstr "<placeholder-1/>を変更。"
+msgstr ""
 
 #: doc/reference/en/Groonga/Context.html:442(p)
-#, fuzzy
 msgid "コンテキストの中身を人に見やすい文字列で返す。."
-msgstr "<placeholder-1/>を追加"
+msgstr ""
 
 #: doc/reference/en/Groonga/Context.html:450(strong)
 #: doc/reference/en/Groonga/Context.html:1595(strong)
@@ -18237,9 +18184,8 @@ msgid "receive"
 msgstr ""
 
 #: doc/reference/en/Groonga/Context.html:521(a)
-#, fuzzy
 msgid "- (Array, String) <placeholder-1/>"
-msgstr "<placeholder-1/>を変更。"
+msgstr ""
 
 #: doc/reference/en/Groonga/Context.html:534(p)
 msgid "groongaサーバからクエリ実行結果文字列を受信する。."
@@ -18331,13 +18277,10 @@ msgid "support_lzo?"
 msgstr ""
 
 #: doc/reference/en/Groonga/Context.html:622(p)
-#, fuzzy
 msgid ""
 "groongaがLZOサポート付きでビルドされていれば <placeholder-1/> 、そう でなけれ"
 "ば <placeholder-2/> を返す。."
 msgstr ""
-"daraさん: <ul><placeholder-1/>\n"
-"\t\t<placeholder-2/></ul>"
 
 #: doc/reference/en/Groonga/Context.html:631(strong)
 #: doc/reference/en/Groonga/Context.html:2069(strong)
@@ -18345,13 +18288,10 @@ msgid "support_zlib?"
 msgstr ""
 
 #: doc/reference/en/Groonga/Context.html:644(p)
-#, fuzzy
 msgid ""
 "groongaがZlibサポート付きでビルドされていれば <placeholder-1/> 、そう でなけ"
 "れば <placeholder-2/> を返す。."
 msgstr ""
-"daraさん: <ul><placeholder-1/>\n"
-"\t\t<placeholder-2/></ul>"
 
 #: doc/reference/en/Groonga/Context.html:657(p)
 #: doc/reference/en/Groonga/Context.html:1211(p)
@@ -18361,11 +18301,8 @@ msgid ""
 msgstr ""
 
 #: doc/reference/en/Groonga/Context.html:665(p)
-#, fuzzy
 msgid "コンテキストを作成する。 <placeholder-1/> に指定可能な値は以下の通 り。"
 msgstr ""
-"daraさん: <ul><placeholder-1/>\n"
-"\t\t<placeholder-2/></ul>"
 
 #: doc/reference/en/Groonga/Context.html:705(span)
 #: doc/reference/en/Groonga/Context.html:814(span)
@@ -18451,12 +18388,10 @@ msgid ""
 msgstr ""
 
 #: doc/reference/en/Groonga/Context.html:875(p)
-#, fuzzy
 msgid ""
 "+ (<tt><span class=\"object_link\"><placeholder-1/></span></"
 "tt><placeholder-2/>) <placeholder-3/>"
 msgstr ""
-"<placeholder-1/> 2.1です。詳しくはlicense/<placeholder-2/>を見てください。"
 
 #: doc/reference/en/Groonga/Context.html:883(p)
 msgid "コンテキストを作成する時に利用するデフォルトのオプション を返す。"
@@ -18467,12 +18402,10 @@ msgstr ""
 #: doc/reference/en/Groonga/Context.html:1055(span)
 #: doc/reference/en/Groonga/Context.html:1775(span)
 #: doc/reference/en/Groonga/Table.html:1165(span)
-#, fuzzy
 msgid ""
 "(<tt><span class=\"object_link\"><placeholder-1/></span></tt>, "
 "<placeholder-2/>)"
 msgstr ""
-"<placeholder-1/> 2.1です。詳しくはlicense/<placeholder-2/>を見てください。"
 
 #: doc/reference/en/Groonga/Context.html:924(pre)
 msgid ""
@@ -18536,34 +18469,27 @@ msgstr ""
 #: doc/reference/en/Groonga/Context.html:988(span)
 #: doc/reference/en/Groonga/Context.html:1012(span)
 #: doc/reference/en/Groonga/Table.html:1136(p)
-#, fuzzy
 msgid ""
 "- (<tt><span class=\"object_link\"><placeholder-1/></span></"
 "tt><placeholder-2/>) <placeholder-3/>(name)"
 msgstr ""
-"<placeholder-1/> 2.1です。詳しくはlicense/<placeholder-2/>を見てください。"
 
 #: doc/reference/en/Groonga/Context.html:990(span)
 #: doc/reference/en/Groonga/Context.html:1040(span)
-#, fuzzy
 msgid ""
 "- (<tt><span class=\"object_link\"><placeholder-1/></span></"
 "tt><placeholder-2/>) <placeholder-3/>(id)"
 msgstr ""
-"<placeholder-1/> 2.1です。詳しくはlicense/<placeholder-2/>を見てください。"
 
 #: doc/reference/en/Groonga/Context.html:997(p)
 msgid "コンテキスト管理下にあるオブジェクトを返す。"
 msgstr ""
 
 #: doc/reference/en/Groonga/Context.html:998(p)
-#, fuzzy
 msgid ""
 "<placeholder-1/> として文字列を指定した場合はオブジェクト名でオブジェ クトを"
 "検索する。"
 msgstr ""
-"daraさん: <ul><placeholder-1/>\n"
-"\t\t<placeholder-2/></ul>"
 
 #: doc/reference/en/Groonga/Context.html:1000(em)
 #: doc/reference/en/Groonga/FixSizeColumn.html:139(em)
