@@ -586,11 +586,11 @@ rb_grn_expression_inspect (VALUE self)
  * する。
  *
  * <pre>
- *   ==[
+ *   [
  *    ["キーワード前に挿入する文字列1", "キーワード後に挿入する文字列1"],
  *    ["キーワード前に挿入する文字列2", "キーワード後に挿入する文字列2"],
  *    ...,
- *   ]==
+ *   ]
  * </pre>
  *
  * もし、1つのスニペットの中に _tags_ で指定したタグより多くの
@@ -598,12 +598,12 @@ rb_grn_expression_inspect (VALUE self)
  * のタグから順番に使われる。
  *
  * <pre>
- *   ==expression.parse("Ruby groonga 検索")
+ *   expression.parse("Ruby groonga 検索")
  *   tags = [["<tag1>", "</tag1>"], ["<tag2>", "</tag2>"]]
  *   snippet = expression.snippet(tags)
  *   p snippet.execute("Rubyでgroonga使って全文検索、高速検索。")
  *      => ["<tag1>Ruby</tag1>で<tag2>groonga</tag2>"
- *      => "使って全文<tag1>検索</tag1>、高速<tag2>検索</tag2>。"]==
+ *      => "使って全文<tag1>検索</tag1>、高速<tag2>検索</tag2>。"]
  * </pre>
  *
  * _options_ に指定可能な値は以下の通り。
