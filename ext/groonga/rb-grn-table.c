@@ -1,6 +1,6 @@
 /* -*- coding: utf-8; c-file-style: "ruby" -*- */
 /*
-  Copyright (C) 2009-2011  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2012  Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -991,11 +991,12 @@ rb_grn_table_delete (VALUE self, VALUE rb_id)
  * - ハッシュの配列で指定する方法 :=
  * オーソドックスな指定方法。
  *
- * <pre lang="ruby">
+ * <pre>
+ * !!!ruby
  * [
  *  {:key => "第1ソートキー", :order => order},
  *  {:key => "第2ソートキー", :order => order},
- *  ...,
+ *  # ...,
  * ]
  * </pre>
  * =:
@@ -1003,11 +1004,12 @@ rb_grn_table_delete (VALUE self, VALUE rb_id)
  * - 配列の配列で指定する方法 :=
  * 少し簡単化した指定方法。
  *
- * <pre lang="ruby">
+ * <pre>
+ * !!!ruby
  * [
  *  ["第1ソートキー", order],
  *  ["第2ソートキー", order],
- *  ...,
+ *  # ...,
  * ]
  * </pre>
  * =:
@@ -1016,8 +1018,9 @@ rb_grn_table_delete (VALUE self, VALUE rb_id)
  * _order_ は常に昇順（ +:ascending+ ）になるが、最も簡単
  * に指定できる。
  *
- * <pre lang="ruby">
- * ["第1ソートキー", "第2ソートキー", ...]
+ * <pre>
+ * !!!ruby
+ * ["第1ソートキー", "第2ソートキー", "..."]
  * </pre>
  * =:
  *
