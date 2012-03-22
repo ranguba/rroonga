@@ -477,25 +477,25 @@ module Groonga
       # 込むことができる。
       #
       # <pre>
-      # ==dump.rb:
+      # dump.rb:
       #   File.open("/tmp/groonga-schema.rb", "w") do |schema|
       #     dumped_text = Groonga::Schema.dump
       #   end
       # restore.rb:
       #   dumped_text = Groonga::Schema.dump
       #   Groonga::Database.create(:path => "/tmp/new-db.grn")
-      #   Groonga::Schema.restore(dumped_text)==
+      #   Groonga::Schema.restore(dumped_text)
       # </pre>
       #
       # grn式形式で返された値はgroongaコマンドで読み込むこと
       # ができる。
       #
       # <pre>
-      # ==dump.rb:
+      # dump.rb:
       #   File.open("/tmp/groonga-schema.grn", "w") do |schema|
       #     dumped_text = Groonga::Schema.dump(:syntax => :command)
       #   end
-      # % groonga db/path < /tmp/groonga-schema.grn==
+      # % groonga db/path < /tmp/groonga-schema.grn
       # </pre>
       #
       # @param options [::Hash] The name and value
