@@ -154,7 +154,7 @@ module Groonga
       #
       # <pre>
       # schema = Groonga::Scheme.new(options)
-      # ==...==
+      # # ...
       # schema.define
       # </pre>
       #
@@ -334,7 +334,7 @@ module Groonga
       # <pre>
       # Groonga::Schema.define do |schema|
       #   schema.change_table(name, options) do |table|
-      #    ==...==
+      #     # ...
       #   end
       # end
       # </pre>
@@ -374,7 +374,7 @@ module Groonga
       # <pre>
       # Groonga::Schema.define do |schema|
       #   schema.create_view(name, options) do |view|
-      #     ==...==
+      #     # ...
       #   end
       # end
       # </pre>
@@ -423,7 +423,7 @@ module Groonga
       # <pre>
       # Groonga::Schema.define do |schema|
       #   schema.change_view(name, options) do |view|
-      #    ==...==
+      #     # ...
       #   end
       # end
       # </pre>
