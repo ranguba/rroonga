@@ -181,27 +181,27 @@ rb_grn_column_get_local_name (VALUE self)
  * 用のスニペットを簡単に生成できる。
  *
  * <pre>
- *   results = description_column.select do |column|
- *     column =~ "groonga"
+ * results = description_column.select do |column|
+ *   column =~ "groonga"
+ * end
+ * snippet = results.expression.snippet([["<em>", "</em>"]])
+ * results.each do |record|
+ *   puts "#{record['name']}の説明文の中で「groonga」が含まれる部分"
+ *   snippet.execute(record["description"].each do |snippet|
+ *     puts "---"
+ *     puts "#{snippet}..."
+ *     puts "---"
  *   end
- *   snippet = results.expression.snippet([["<em>", "</em>"]])
- *   results.each do |record|
- *     puts "#{record['name']}の説明文の中で「groonga」が含まれる部分"
- *     snippet.execute(record["description"].each do |snippet|
- *       puts "---"
- *       puts "#{snippet}..."
- *       puts "---"
- *     end
- *   end
+ * end
  * </pre>
  *
  * 出力例
  *
  * <pre>
- *   Ruby/groongaの説明文の中で「groonga」が含まれる部分
- *   ---
- *   Ruby/<em>groonga</em>は<em>groonga</em>のいわゆるDB-APIの層の...
- *   ---
+ * Ruby/groongaの説明文の中で「groonga」が含まれる部分
+ * ---
+ * Ruby/<em>groonga</em>は<em>groonga</em>のいわゆるDB-APIの層の...
+ * ---
  * </pre>
  *
  * _query_ には「[カラム名]:[演算子][値]」という書式で条件を
