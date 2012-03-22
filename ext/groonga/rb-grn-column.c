@@ -187,7 +187,7 @@ rb_grn_column_get_local_name (VALUE self)
  * snippet = results.expression.snippet([["<em>", "</em>"]])
  * results.each do |record|
  *   puts "#{record['name']}の説明文の中で「groonga」が含まれる部分"
- *   snippet.execute(record["description"].each do |snippet|
+ *   snippet.execute(record["description"]).each do |snippet|
  *     puts "---"
  *     puts "#{snippet}..."
  *     puts "---"
