@@ -1715,18 +1715,18 @@ rb_grn_table_is_locked (int argc, VALUE *argv, VALUE self)
  * 用のスニペットを簡単に生成できる。
  *
  * <pre>
- *   results = table.select do |record|
- *     record["description"] =~ "groonga"
+ * results = table.select do |record|
+ *   record["description"] =~ "groonga"
+ * end
+ * snippet = results.expression.snippet([["<em>", "</em>"]])
+ * results.each do |record|
+ *   puts "#{record['name']}の説明文の中で「groonga」が含まれる部分"
+ *   snippet.execute(record["description"].each do |snippet|
+ *     puts "---"
+ *     puts "#{snippet}..."
+ *     puts "---"
  *   end
- *   snippet = results.expression.snippet([["<em>", "</em>"]])
- *   results.each do |record|
- *     puts "#{record['name']}の説明文の中で「groonga」が含まれる部分"
- *     snippet.execute(record["description"].each do |snippet|
- *       puts "---"
- *       puts "#{snippet}..."
- *       puts "---"
- *     end
- *   end
+ * end
  * </pre>
  *
  * 出力例
@@ -1739,28 +1739,28 @@ rb_grn_table_is_locked (int argc, VALUE *argv, VALUE self)
  * 指定する。演算子は以下の通り。
  *
  * <pre>
- *   [なし]
- *     \[カラム値] == [値]
- *   [<tt>!</tt>]
- *     \[カラム値] != [値]
- *   [<tt><</tt>]
- *     \[カラム値] < [値]
- *   [<tt>></tt>]
- *     \[カラム値] > [値]
- *   [<tt><=</tt>]
- *     \[カラム値] <= [値]
- *   [<tt>>=</tt>]
- *     \[カラム値] >= [値]
- *   [<tt>@</tt>]
- *     \[カラム値]が[値]を含んでいるかどうか
+ * [なし]
+ *   \[カラム値] == [値]
+ * [<tt>!</tt>]
+ *   \[カラム値] != [値]
+ * [<tt><</tt>]
+ *   \[カラム値] < [値]
+ * [<tt>></tt>]
+ *   \[カラム値] > [値]
+ * [<tt><=</tt>]
+ *   \[カラム値] <= [値]
+ * [<tt>>=</tt>]
+ *   \[カラム値] >= [値]
+ * [<tt>@</tt>]
+ *   \[カラム値]が[値]を含んでいるかどうか
  * </pre>
  *
  * 例:
  *
  * <pre>
- *   "name:daijiro" # "name"カラムの値が"daijiro"のレコードにマッチ
- *   "description:@groonga" # "description"カラムが
- *                          # "groonga"を含んでいるレコードにマッチ
+ * "name:daijiro" # "name"カラムの値が"daijiro"のレコードにマッチ
+ * "description:@groonga" # "description"カラムが
+ *                        # "groonga"を含んでいるレコードにマッチ
  * </pre>
  *
  * _expression_ には既に作成済みのGroonga::Expressionを渡す
@@ -1774,16 +1774,16 @@ rb_grn_table_is_locked (int argc, VALUE *argv, VALUE self)
  * 例:
  *
  * <pre>
- *  comments = Groonga::Array.create(:name => "Comments")
- *  comments.define_column("content", "Text")
- *  comments.add(:content => "Hello Good-bye!")
- *  comments.add(:content => "Hello World")
- *  comments.add(:content => "test")
- *  result = comments.select do |record|
- *    record.content != "test"
- *  end
- *  p result.collect {|record| record.content}
- *    # => ["Hello Good-bye!", "Hello World"]
+ * comments = Groonga::Array.create(:name => "Comments")
+ * comments.define_column("content", "Text")
+ * comments.add(:content => "Hello Good-bye!")
+ * comments.add(:content => "Hello World")
+ * comments.add(:content => "test")
+ * result = comments.select do |record|
+ *   record.content != "test"
+ * end
+ * p result.collect {|record| record.content}
+ *   # => ["Hello Good-bye!", "Hello World"]
  * </pre>
  *
  * _options_ に指定可能な値は以下の通り。
