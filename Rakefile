@@ -92,7 +92,7 @@ Jeweler::Tasks.new do |_spec|
                         "example/*.rb",
                         "Rakefile",
                         "Gemfile",
-                        "ext/**/*"]
+                        "ext/**/*.{c,h,rb,def}"]
   spec.test_files = FileList["test/**/*.rb"]
 end
 
