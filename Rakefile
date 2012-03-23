@@ -87,7 +87,8 @@ Jeweler::Tasks.new do |_spec|
   spec.license = "LGPLv2"
   spec.files = FileList["{lib,benchmark,misc}/**/*.rb",
                         "bin/*",
-                        "*.rb",
+                        "extconf.rb",
+                        "rroonga-build.rb",
                         "example/*.rb",
                         "Rakefile",
                         "Gemfile",
