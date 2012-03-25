@@ -1,6 +1,6 @@
 /* -*- coding: utf-8; c-file-style: "ruby" -*- */
 /*
-  Copyright (C) 2009-2010  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2012  Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -18,15 +18,7 @@
 
 #include "rb-grn.h"
 
-#define SELF(object) (rb_rb_grn_snippet_from_ruby_object(object))
-
-typedef struct _RbGrnSnippet RbGrnSnippet;
-struct _RbGrnSnippet
-{
-    grn_ctx *context;
-    grn_snip *snippet;
-    grn_bool owner;
-};
+#define SELF(object) ((RbGrnSnippet *)DATA_PTR(object))
 
 VALUE rb_cGrnSnippet;
 
@@ -36,67 +28,30 @@ VALUE rb_cGrnSnippet;
  * スニペット（検索語周辺のテキスト）を生成するためのオブジェクト。
  */
 
-static RbGrnSnippet *
-rb_rb_grn_snippet_from_ruby_object (VALUE object)
+void
+rb_grn_snippet_finalizer (grn_ctx *context, grn_obj *object,
+			  RbGrnSnippet *rb_grn_snippet)
 {
-    RbGrnSnippet *rb_grn_snippet;
-
-    if (!RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cGrnSnippet))) {
-	rb_raise(rb_eTypeError, "not a groonga snippet");
-    }
-
-    Data_Get_Struct(object, RbGrnSnippet, rb_grn_snippet);
-    if (!rb_grn_snippet)
-	rb_raise(rb_eGrnError, "groonga snippet is NULL");
-
-    return rb_grn_snippet;
+    rb_grn_context_unregister_floating_object(RB_GRN_OBJECT(rb_grn_snippet));
 }
 
-grn_snip *
-rb_grn_snippet_from_ruby_object (VALUE object)
+void
+rb_grn_snippet_bind (RbGrnSnippet *rb_grn_snippet,
+		     grn_ctx *context, grn_obj *snippet)
 {
-    if (NIL_P(object))
-        return NULL;
-
-    return SELF(object)->snippet;
 }
 
-static void
-rb_rb_grn_snippet_free (void *object)
+void
+rb_grn_snippet_deconstruct (RbGrnSnippet *rb_grn_snippet,
+			    grn_obj **snippet,
+			    grn_ctx **context)
 {
-    RbGrnSnippet *rb_grn_snippet = object;
+    RbGrnObject *rb_grn_object;
 
-    if (!rb_grn_exited &&
-	rb_grn_snippet->owner &&
-	rb_grn_snippet->context && rb_grn_snippet->snippet)
-        grn_snip_close(rb_grn_snippet->context,
-                       rb_grn_snippet->snippet);
-
-    xfree(object);
-}
-
-VALUE
-rb_grn_snippet_to_ruby_object (grn_ctx *context, grn_snip *snippet,
-			       grn_bool owner)
-{
-    RbGrnSnippet *rb_grn_snippet;
-
-    if (!snippet)
-        return Qnil;
-
-    rb_grn_snippet = ALLOC(RbGrnSnippet);
-    rb_grn_snippet->context = context;
-    rb_grn_snippet->snippet = snippet;
-    rb_grn_snippet->owner = owner;
-
-    return Data_Wrap_Struct(rb_cGrnSnippet, NULL,
-                            rb_rb_grn_snippet_free, rb_grn_snippet);
-}
-
-static VALUE
-rb_grn_snippet_alloc (VALUE klass)
-{
-    return Data_Wrap_Struct(klass, NULL, rb_rb_grn_snippet_free, NULL);
+    rb_grn_object = RB_GRN_OBJECT(rb_grn_snippet);
+    rb_grn_object_deconstruct(rb_grn_object, snippet, context,
+			      NULL, NULL,
+			      NULL, NULL);
 }
 
 /*
@@ -141,7 +96,6 @@ rb_grn_snippet_alloc (VALUE klass)
 static VALUE
 rb_grn_snippet_initialize (int argc, VALUE *argv, VALUE self)
 {
-    RbGrnSnippet *rb_grn_snippet;
     grn_ctx *context = NULL;
     grn_snip *snippet = NULL;
     VALUE options;
@@ -202,11 +156,8 @@ rb_grn_snippet_initialize (int argc, VALUE *argv, VALUE self)
                             mapping);
     rb_grn_context_check(context, rb_ary_new4(argc, argv));
 
-    rb_grn_snippet = ALLOC(RbGrnSnippet);
-    DATA_PTR(self) = rb_grn_snippet;
-    rb_grn_snippet->context = context;
-    rb_grn_snippet->snippet = snippet;
-    rb_grn_snippet->owner = GRN_TRUE;
+    rb_grn_object_assign(Qnil, self, rb_context, context, (grn_obj *)snippet);
+    rb_grn_context_register_floating_object(DATA_PTR(self));
 
     rb_iv_set(self, "@context", rb_context);
 
@@ -234,22 +185,17 @@ rb_grn_snippet_initialize (int argc, VALUE *argv, VALUE self)
 static VALUE
 rb_grn_snippet_add_keyword (int argc, VALUE *argv, VALUE self)
 {
-    RbGrnSnippet *rb_grn_snippet;
+    grn_ctx *context;
+    grn_obj *snippet;
     grn_rc rc;
     VALUE rb_keyword, options;
     VALUE rb_open_tag, rb_close_tag;
     char *keyword, *open_tag = NULL, *close_tag = NULL;
     unsigned int keyword_length, open_tag_length = 0, close_tag_length = 0;
 
+    rb_grn_snippet_deconstruct(SELF(self), &snippet, &context);
+
     rb_scan_args(argc, argv, "11", &rb_keyword, &options);
-
-    rb_grn_snippet = SELF(self);
-
-    if (!rb_grn_snippet->snippet) {
-	rb_raise(rb_eGrnClosed,
-		 "can't access already closed groonga object: %s",
-		 rb_grn_inspect(CLASS_OF(self)));
-    }
 
     keyword = StringValuePtr(rb_keyword);
     keyword_length = RSTRING_LEN(rb_keyword);
@@ -269,8 +215,7 @@ rb_grn_snippet_add_keyword (int argc, VALUE *argv, VALUE self)
         close_tag_length = RSTRING_LEN(rb_close_tag);
     }
 
-    rc = grn_snip_add_cond(rb_grn_snippet->context,
-                           rb_grn_snippet->snippet,
+    rc = grn_snip_add_cond(context, (grn_snip *)snippet,
                            keyword, keyword_length,
                            open_tag, open_tag_length,
                            close_tag, close_tag_length);
@@ -288,30 +233,21 @@ rb_grn_snippet_add_keyword (int argc, VALUE *argv, VALUE self)
 static VALUE
 rb_grn_snippet_execute (VALUE self, VALUE rb_string)
 {
-    RbGrnSnippet *rb_grn_snippet;
     grn_rc rc;
     grn_ctx *context;
-    grn_snip *snippet;
+    grn_obj *snippet;
     char *string;
     unsigned int string_length;
     unsigned int i, n_results, max_tagged_length;
     VALUE rb_results;
     char *result;
 
+    rb_grn_snippet_deconstruct(SELF(self), &snippet, &context);
+
     if (TYPE(rb_string) != T_STRING) {
 	rb_raise(rb_eGrnInvalidArgument,
 		 "snippet text must be String: <%s>",
 		 rb_grn_inspect(rb_string));
-    }
-
-    rb_grn_snippet = SELF(self);
-    context = rb_grn_snippet->context;
-    snippet = rb_grn_snippet->snippet;
-
-    if (!snippet) {
-	rb_raise(rb_eGrnClosed,
-		 "can't access already closed groonga object: %s",
-		 rb_grn_inspect(CLASS_OF(self)));
     }
 
 #ifdef HAVE_RUBY_ENCODING_H
@@ -320,7 +256,7 @@ rb_grn_snippet_execute (VALUE self, VALUE rb_string)
     string = StringValuePtr(rb_string);
     string_length = RSTRING_LEN(rb_string);
 
-    rc = grn_snip_exec(context, snippet, string, string_length,
+    rc = grn_snip_exec(context, (grn_snip *)snippet, string, string_length,
                        &n_results, &max_tagged_length);
     rb_grn_context_check(context, self);
     rb_grn_rc_check(rc, self);
@@ -331,7 +267,8 @@ rb_grn_snippet_execute (VALUE self, VALUE rb_string)
         VALUE rb_result;
         unsigned result_length;
 
-        rc = grn_snip_get_result(context, snippet, i, result, &result_length);
+        rc = grn_snip_get_result(context, (grn_snip *)snippet,
+				 i, result, &result_length);
         rb_grn_rc_check(rc, self);
         rb_result = rb_grn_context_rb_string_new(context, result, result_length);
         rb_ary_push(rb_results, rb_result);
@@ -340,39 +277,10 @@ rb_grn_snippet_execute (VALUE self, VALUE rb_string)
     return rb_results;
 }
 
-/*
- * Document-method: close
- *
- * call-seq:
- *   snippet.close
- *
- * _snippet_ が使用しているリソースを開放する。これ以降 _snippet_ を
- * 使うことはできない。
- */
-static VALUE
-rb_grn_snippet_close (VALUE self)
-{
-    RbGrnSnippet *rb_grn_snippet;
-    grn_ctx *context;
-    grn_snip *snippet;
-
-    rb_grn_snippet = SELF(self);
-    context = rb_grn_snippet->context;
-    snippet = rb_grn_snippet->snippet;
-    if (context && snippet) {
-	grn_snip_close(context, snippet);
-	rb_grn_snippet->context = NULL;
-	rb_grn_snippet->snippet = NULL;
-    }
-
-    return Qnil;
-}
-
 void
 rb_grn_init_snippet (VALUE mGrn)
 {
-    rb_cGrnSnippet = rb_define_class_under(mGrn, "Snippet", rb_cObject);
-    rb_define_alloc_func(rb_cGrnSnippet, rb_grn_snippet_alloc);
+    rb_cGrnSnippet = rb_define_class_under(mGrn, "Snippet", rb_cGrnObject);
 
     rb_define_method(rb_cGrnSnippet, "initialize",
                      rb_grn_snippet_initialize, -1);
@@ -380,6 +288,4 @@ rb_grn_init_snippet (VALUE mGrn)
                      rb_grn_snippet_add_keyword, -1);
     rb_define_method(rb_cGrnSnippet, "execute",
                      rb_grn_snippet_execute, 1);
-    rb_define_method(rb_cGrnSnippet, "close",
-                     rb_grn_snippet_close, 0);
 }

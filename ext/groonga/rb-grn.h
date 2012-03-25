@@ -88,6 +88,7 @@ RB_GRN_BEGIN_DECLS
 #define RB_GRN_ACCESSOR(object) ((RbGrnAccessor *)(object))
 #define RB_GRN_ACCESSOR_VIEW(object) ((RbGrnAccessor *)(object))
 #define RB_GRN_EXPRESSION(object) ((RbGrnExpression *)(object))
+#define RB_GRN_SNIPPET(object) ((RbGrnSnippet *)(object))
 #define RB_GRN_UNBIND_FUNCTION(function) ((RbGrnUnbindFunction)(function))
 
 typedef void (*RbGrnUnbindFunction) (void *object);
@@ -186,6 +187,12 @@ struct _RbGrnExpression
 {
     RbGrnObject parent;
     grn_obj *value;
+};
+
+typedef struct _RbGrnSnippet RbGrnSnippet;
+struct _RbGrnSnippet
+{
+    RbGrnObject parent;
 };
 
 typedef struct _RbGrnPlugin RbGrnPlugin;
@@ -597,11 +604,6 @@ VALUE          rb_grn_column_expression_builder_build
 #define RVAL2GRNVARIABLE(object, context) \
     (rb_grn_variable_from_ruby_object(object, context))
 
-#define GRNSNIPPET2RVAL(context, snippet, owner)		\
-    (rb_grn_snippet_to_ruby_object(context, snippet, owner))
-#define RVAL2GRNSNIPPET(snippet) \
-    (rb_grn_snippet_from_ruby_object(snippet))
-
 
 grn_encoding   rb_grn_encoding_from_ruby_object     (VALUE object,
 						     grn_ctx *context);
@@ -731,11 +733,12 @@ VALUE          rb_grn_obj_to_ruby_object            (VALUE klass,
 						     grn_obj *obj,
 						     VALUE related_object);
 
-grn_snip      *rb_grn_snippet_from_ruby_object      (VALUE rb_snippet);
-VALUE          rb_grn_snippet_to_ruby_object        (grn_ctx *context,
-						     grn_snip *snippet,
-						     grn_bool owner);
-
+void           rb_grn_snippet_bind                  (RbGrnSnippet *rb_grn_snippet,
+						     grn_ctx *context,
+						     grn_obj *snippet);
+void           rb_grn_snippet_finalizer             (grn_ctx *context,
+						     grn_obj *grn_object,
+						     RbGrnSnippet *rb_grn_snippet);
 RB_GRN_END_DECLS
 
 #endif

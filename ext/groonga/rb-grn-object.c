@@ -142,6 +142,10 @@ rb_grn_object_run_finalizer (grn_ctx *context, grn_obj *grn_object,
 	rb_grn_expression_finalizer(context, grn_object,
 				    RB_GRN_EXPRESSION(rb_grn_object));
 	break;
+      case GRN_SNIP:
+	rb_grn_snippet_finalizer(context, grn_object,
+				 RB_GRN_SNIPPET(rb_grn_object));
+	break;
       default:
 	rb_raise(rb_eTypeError,
 		 "unsupported groonga object type for finalizer: %s(%#x)",
@@ -238,6 +242,9 @@ rb_grn_object_to_ruby_class (grn_obj *object)
 	break;
       case GRN_ACCESSOR_VIEW:
 	klass = rb_cGrnViewAccessor;
+	break;
+      case GRN_SNIP:
+	klass = rb_cGrnSnippet;
 	break;
       case GRN_PROC:
 	klass = rb_cGrnProcedure;
@@ -441,6 +448,12 @@ rb_grn_object_assign (VALUE klass, VALUE self, VALUE rb_context,
 				  context, object);
 	rb_grn_expression_bind(RB_GRN_EXPRESSION(rb_grn_object),
 			       context, object);
+    } else if (klass == rb_cGrnSnippet) {
+	rb_grn_object = ALLOC(RbGrnSnippet);
+	rb_grn_object_bind_common(klass, self, rb_context, rb_grn_object,
+				  context, object);
+	rb_grn_snippet_bind(RB_GRN_SNIPPET(rb_grn_object),
+			    context, object);
     } else {
 	rb_raise(rb_eTypeError,
 		 "unsupported groonga object type for assignment: %s(%#x)",

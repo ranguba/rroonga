@@ -643,6 +643,7 @@ rb_grn_expression_snippet (int argc, VALUE *argv, VALUE self)
     VALUE rb_width, rb_max_results, rb_tags;
     VALUE rb_html_escape;
     VALUE *rb_tag_values;
+    VALUE related_object;
     unsigned int i;
     int flags = GRN_SNIP_COPY_TAG;
     unsigned int width = 100;
@@ -723,10 +724,10 @@ rb_grn_expression_snippet (int argc, VALUE *argv, VALUE self)
                             (const char **)open_tags, open_tag_lengths,
                             (const char **)close_tags, close_tag_lengths,
                             mapping);
-    rb_grn_context_check(context,
-			 rb_ary_new3(2, self, rb_ary_new4(argc, argv)));
+    related_object = rb_ary_new3(2, self, rb_ary_new4(argc, argv));
+    rb_grn_context_check(context, related_object);
 
-    return GRNSNIPPET2RVAL(context, snippet, GRN_TRUE);
+    return GRNOBJECT2RVAL(Qnil, context, (grn_obj *)snippet, GRN_TRUE);
 }
 
 void
