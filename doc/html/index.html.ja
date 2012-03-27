@@ -259,6 +259,54 @@
           みなさんのプロジェクトでrroongaを使っている場合は、どうぞこのロゴを使ってrroongaを広めてください！
         </p>
 
+        <h3 id="rroonga-logo">rroongaロゴ</h3>
+        <p>
+          <a href="logos/rroonga-logo.png">
+            <img src="logos/rroonga-logo.png"
+                 alt="rroongaロゴ" />
+          </a>
+        </p>
+        <p>
+          (232x73)
+          (<a href="logos/rroonga-logo.svg">SVGバージョン</a>)
+        </p>
+
+        <h3 id="rroonga-logo-foreground-white">白文字のrroongaロゴ</h3>
+        <p>
+          <a href="logos/rroonga-logo-foreground-white.png">
+            <img src="logos/rroonga-logo-foreground-white.png"
+                 alt="白文字のrroongaロゴ" />
+          </a>
+        </p>
+        <p>
+          (232x73)
+          (<a href="logos/rroonga-logo-foreground-white.svg">SVGバージョン</a>)
+        </p>
+
+        <h3 id="rroonga-icon">rroongaアイコン</h3>
+        <p>
+          <a href="logos/rroonga-icon.png">
+            <img src="logos/rroonga-icon.png"
+                 alt="rroongaアイコン" />
+          </a>
+        </p>
+        <p>
+          (60x60)
+          (<a href="logos/rroonga-icon.svg">SVGバージョン</a>)
+        </p>
+
+        <h3 id="rroonga-icon-foreground-white">白文字のrroongaアイコン</h3>
+        <p>
+          <a href="logos/rroonga-icon-foreground-white.png">
+            <img src="logos/rroonga-icon-foreground-white.png"
+                 alt="白文字のrroongaアイコン" />
+          </a>
+        </p>
+        <p>
+          (60x60)
+          (<a href="logos/rroonga-icon-foreground-white.svg">SVGバージョン</a>)
+        </p>
+
         <h2 id="license">ライセンス</h2>
         <p>
           rroonga、ActiveGroonga、racknga、ChupaTextはフリーソフトウェアです。あなたは、Free Software Foundationが公表した<a href="http://www.gnu.org/licenses/lgpl-2.1.txt">GNU Lesser General Public License 2.1</a>に定める条項に従って本プログラムを再頒布または変更することができます。
