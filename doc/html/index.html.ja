@@ -14,28 +14,28 @@
     <div class="header">
       <div class="title">
         <a href="index.html.ja">
-	  <span class="title">Rubyでgroonga使って全文検索</span>
-	  <span class="title-separator">-</span>
-	  <span class="title-project">ラングバ</span>
+          <span class="title">Rubyでgroonga使って全文検索</span>
+          <span class="title-separator">-</span>
+          <span class="title-project">ラングバ</span>
         </a>
       </div>
       <ul class="other-languages">
         <li id="other-language-english" lang="en" xml:lang="en"><a href="./">English</a></li>
       </ul>
       <ul class="menu">
-	<li id="menu-reference"><a href="rroonga/ja/">リファレンスマニュアル</a></li>
-	<li id="menu-tutorial"><a href="rroonga/ja/file.tutorial.html">チュートリアル</a></li>
-	<li id="menu-install"><a href="#install-rroonga">インストール</a></li>
-	<li id="menu-developer"><a href="developer.html.ja">開発者向け情報</a></li>
+        <li id="menu-reference"><a href="rroonga/ja/">リファレンスマニュアル</a></li>
+        <li id="menu-tutorial"><a href="rroonga/ja/file.tutorial.html">チュートリアル</a></li>
+        <li id="menu-install"><a href="#install-rroonga">インストール</a></li>
+        <li id="menu-developer"><a href="developer.html.ja">開発者向け情報</a></li>
       </ul>
     </div>
 
     <div class="content">
       <div class="main">
-	<h1>ラングバプロジェクト</h1>
-	<p>
-	  ラングバプロジェクトは<a href="http://groonga.org/">カラムストア機能も備える高速・高機能な全文検索エンジンgroonga</a>を用いた全文検索システムを提供するプロジェクトです。groongaの機能をRubyから利用するためのライブラリ、様々な文書から検索対象のテキストを抽出するユーティリティ、検索用Webインターフェイスなどを提供します。提供する機能の一覧は以下の通りです。
-	</p>
+        <h1>ラングバプロジェクト</h1>
+        <p>
+          ラングバプロジェクトは<a href="http://groonga.org/">カラムストア機能も備える高速・高機能な全文検索エンジンgroonga</a>を用いた全文検索システムを提供するプロジェクトです。groongaの機能をRubyから利用するためのライブラリ、様々な文書から検索対象のテキストを抽出するユーティリティ、検索用Webインターフェイスなどを提供します。提供する機能の一覧は以下の通りです。
+        </p>
         <ul>
           <li><a href="#about-rroonga">rroonga</a>: groongaの機能をRubyから利用するためのライブラリ</li>
           <li><a href="#about-active-groonga">ActiveGroonga</a>: rroongaをWebアプリケーションから使いやすくするためのライブラリ</li>
@@ -45,7 +45,7 @@
           <li><a href="#about-chupatext">ChupaText</a>: テキスト抽出ユーティリティ</li>
           <li><a href="#about-chuparuby">ChupaRuby</a>: ChupaTextの機能をRubyから利用するためのライブラリ</li>
           <li><a href="#about-ranguba">文書検索ラングバ</a>: 全文検索システム</li>
-	</ul>
+        </ul>
         <p>
           このプロジェクトに関する情報は以下の通りです。
         </p>
@@ -54,204 +54,204 @@
           <li><a href="#license">ライセンス</a></li>
         </ul>
 
-	<h2 id="about-rroonga">rroonga</h2>
-	<p>
-	  rroonga（るるんが）はgroonga（ぐるんが）のいわゆるDB-APIの層の機能をRubyレベルに提供します。rroongaの機能を特にWebアプリケーションから使いやすくするための機能は<a href="#about-active-groonga">ActiveGroonga</a>で提供します。検索用Webアプリケーションを構築・運用するときに便利な機能は<a href="#about-racknga">racknga</a>で提供します。どのライブラリもgroongaの機能をRubyらしい読み書きしやすい構文で利用できることが利点です。
-	</p>
-
-	<h3>rroongaの最新リリース</h3>
-	<p>
-	  2012-03-22にリリースされた<a href="rroonga/ja/file.news.html#2-0-0">2.0.0</a>が最新です。
+        <h2 id="about-rroonga">rroonga</h2>
+        <p>
+          rroonga（るるんが）はgroonga（ぐるんが）のいわゆるDB-APIの層の機能をRubyレベルに提供します。rroongaの機能を特にWebアプリケーションから使いやすくするための機能は<a href="#about-active-groonga">ActiveGroonga</a>で提供します。検索用Webアプリケーションを構築・運用するときに便利な機能は<a href="#about-racknga">racknga</a>で提供します。どのライブラリもgroongaの機能をRubyらしい読み書きしやすい構文で利用できることが利点です。
         </p>
 
-	<h3 id="install-rroonga">rroongaのインストール</h3>
-	<p>
-	  RubyGemsでインストールできます。groongaがインストールされていない場合は自動でダウンロード・ビルドし利用します。
+        <h3>rroongaの最新リリース</h3>
+        <p>
+          2012-03-22にリリースされた<a href="rroonga/ja/file.news.html#2-0-0">2.0.0</a>が最新です。
+        </p>
+
+        <h3 id="install-rroonga">rroongaのインストール</h3>
+        <p>
+          RubyGemsでインストールできます。groongaがインストールされていない場合は自動でダウンロード・ビルドし利用します。
         </p>
         <pre class="command">% sudo gem install rroonga</pre>
 
-	<h3>rroongaのドキュメント</h3>
-	<p>
-	  リファレンスマニュアルとチュートリアルがあります。
-	  どちらもまだ未完成で、半分位できています。
+        <h3>rroongaのドキュメント</h3>
+        <p>
+          リファレンスマニュアルとチュートリアルがあります。
+          どちらもまだ未完成で、半分位できています。
         </p>
         <ul>
-	  <li><a href="rroonga/ja/">rroongaのリファレンスマニュアル</a></li>
-	  <li><a href="rroonga/ja/file.tutorial.html">rroongaのチュートリアル</a></li>
+          <li><a href="rroonga/ja/">rroongaのリファレンスマニュアル</a></li>
+          <li><a href="rroonga/ja/file.tutorial.html">rroongaのチュートリアル</a></li>
         </ul>
 
-	<h2 id="about-active-groonga">ActiveGroonga</h2>
-	<p>
-	  ActiveGroongaはrroongaの機能を使ってより利用しやすい全文検索機能・データストア機能を提供するライブラリです。
+        <h2 id="about-active-groonga">ActiveGroonga</h2>
+        <p>
+          ActiveGroongaはrroongaの機能を使ってより利用しやすい全文検索機能・データストア機能を提供するライブラリです。
           ActiveRecordのようなAPIでgroongaで管理しているデータを通常のオブジェクトのように扱えます。
-	</p>
-	<p>
-	  ActiveGroongaはRuby on Railsに対応しています。データストアにRDBではなくgroongaを利用し、全文検索機能を強化したRailsアプリケーションを開発できます。
+        </p>
+        <p>
+          ActiveGroongaはRuby on Railsに対応しています。データストアにRDBではなくgroongaを利用し、全文検索機能を強化したRailsアプリケーションを開発できます。
           ActiveGroongaは以下のようにActiveRecordのような機能を持っているため、これまでのRailsアプリケーションの知識を利用することができます。
           <ul>
             <li>マイグレーション</li>
             <li>バリデーション</li>
             <li>リレーション</li>
           </ul>
-	</p>
-
-	<h3>ActiveGroongaの最新リリース</h3>
-	<p>
-	  2011-11-29にリリースされた<a href="activegroonga/ja/file.news.html#1-0-7">1.0.7</a>が最新です。
         </p>
 
-	<h3 id="install-active-groonga">ActiveGroongaのインストール</h3>
-	<p>
-	  ActiveGroonagaもRubyGemsでインストールできます。
+        <h3>ActiveGroongaの最新リリース</h3>
+        <p>
+          2011-11-29にリリースされた<a href="activegroonga/ja/file.news.html#1-0-7">1.0.7</a>が最新です。
+        </p>
+
+        <h3 id="install-active-groonga">ActiveGroongaのインストール</h3>
+        <p>
+          ActiveGroonagaもRubyGemsでインストールできます。
         </p>
         <pre class="command">% sudo gem install activegroonga</pre>
 
-	<h3>ActiveGroongaのドキュメント</h3>
-	<p>
-	  ActiveGroonagaのドキュメントはそれほどありません。
+        <h3>ActiveGroongaのドキュメント</h3>
+        <p>
+          ActiveGroonagaのドキュメントはそれほどありません。
           これから徐々に追加されていく予定です。
         </p>
-	<ul>
-	  <li><a href="activegroonga/ja/">ActiveGroongaのリファレンスマニュアル</a></li>
-	</ul>
+        <ul>
+          <li><a href="activegroonga/ja/">ActiveGroongaのリファレンスマニュアル</a></li>
+        </ul>
 
-	<h2 id="about-active-groonga-fabrication">ActiveGroonga Fabrication</h2>
-	<p>
-	  ActiveGroonga Fabricationはオブジェクト生成ライブラリ<a href="https://github.com/paulelliott/fabrication">Fabrication</a>にActiveGroongaオブジェクト生成機能を提供するライブラリです。
-	</p>
-
-	<h3>ActiveGroonga Fabricationの最新リリース</h3>
-	<p>
-	  2011-04-01にリリースされた1.0.0が最新です。
+        <h2 id="about-active-groonga-fabrication">ActiveGroonga Fabrication</h2>
+        <p>
+          ActiveGroonga Fabricationはオブジェクト生成ライブラリ<a href="https://github.com/paulelliott/fabrication">Fabrication</a>にActiveGroongaオブジェクト生成機能を提供するライブラリです。
         </p>
 
-	<h3 id="install-active-groonga-fabrication">ActiveGroonga Fabricationのインストール</h3>
-	<p>
-	  ActiveGroonaga FabricationもRubyGemsでインストールできます。
+        <h3>ActiveGroonga Fabricationの最新リリース</h3>
+        <p>
+          2011-04-01にリリースされた1.0.0が最新です。
+        </p>
+
+        <h3 id="install-active-groonga-fabrication">ActiveGroonga Fabricationのインストール</h3>
+        <p>
+          ActiveGroonaga FabricationもRubyGemsでインストールできます。
         </p>
         <pre class="command">% sudo gem install activegroonga-fabrication</pre>
 
-	<h3>ActiveGroonga Fabricationのドキュメント</h3>
-	<p>
-	  RDocはありますが、あまり情報はありません。
+        <h3>ActiveGroonga Fabricationのドキュメント</h3>
+        <p>
+          RDocはありますが、あまり情報はありません。
           以下のようにrequireすればActiveRecordの場合と同じようにFabricationを使えます。
         </p>
         <pre class="code">require "active_groonga_fabrication"</pre>
 
-	<ul>
-	  <li><a href="activegroonga-fabrication/">ActiveGroonga Fabricationのリファレンスマニュアル</a></li>
-	</ul>
+        <ul>
+          <li><a href="activegroonga-fabrication/">ActiveGroonga Fabricationのリファレンスマニュアル</a></li>
+        </ul>
 
-	<h2 id="about-racknga">racknga</h2>
-	<p>
-	  racknga（らくんが）はRackベースのWebアプリケーションでrroongaを便利に使うための機能（ミドルウェアなど）を提供するライブラリです。
-	</p>
-
-	<h3>rackngaの最新リリース</h3>
-	<p>
-	  2011-11-12にリリースされた<a href="racknga/ja/file.news.html">0.9.3</a>が最新です。
+        <h2 id="about-racknga">racknga</h2>
+        <p>
+          racknga（らくんが）はRackベースのWebアプリケーションでrroongaを便利に使うための機能（ミドルウェアなど）を提供するライブラリです。
         </p>
 
-	<h3 id="install-racknga">rackngaのインストール</h3>
-	<p>
-	  rackngaもRubyGemsでインストールできます。
+        <h3>rackngaの最新リリース</h3>
+        <p>
+          2011-11-12にリリースされた<a href="racknga/ja/file.news.html">0.9.3</a>が最新です。
+        </p>
+
+        <h3 id="install-racknga">rackngaのインストール</h3>
+        <p>
+          rackngaもRubyGemsでインストールできます。
         </p>
         <pre class="command">% sudo gem install racknga</pre>
 
-	<h3>rackngaのドキュメント</h3>
-	<p>
-	  リファレンスマニュアルがあります。
+        <h3>rackngaのドキュメント</h3>
+        <p>
+          リファレンスマニュアルがあります。
         </p>
-	<ul>
-	  <li><a href="racknga/ja/">rackngaのリファレンスマニュアル</a></li>
-	</ul>
+        <ul>
+          <li><a href="racknga/ja/">rackngaのリファレンスマニュアル</a></li>
+        </ul>
 
-	<h2 id="about-packnga">Packnga</h2>
-	<p>
-	  Packnga（ぱっくんが）は、多言語化に対応したリリースを補助するライブラリです。
-	</p>
-
-	<h3>Packngaの最新リリース</h3>
-	<p>
-	  2011-09-27にリリースされた<a href="packnga/ja/file.news.html">0.9.4</a>が最新です。
+        <h2 id="about-packnga">Packnga</h2>
+        <p>
+          Packnga（ぱっくんが）は、多言語化に対応したリリースを補助するライブラリです。
         </p>
 
-	<h3 id="install-packnga">Packngaのインストール</h3>
-	<p>
-	  RubyGemsでインストールできます。
+        <h3>Packngaの最新リリース</h3>
+        <p>
+          2011-09-27にリリースされた<a href="packnga/ja/file.news.html">0.9.4</a>が最新です。
+        </p>
+
+        <h3 id="install-packnga">Packngaのインストール</h3>
+        <p>
+          RubyGemsでインストールできます。
         </p>
         <pre class="command">% sudo gem install packnga</pre>
 
-	<h3>Packngaのドキュメント</h3>
-	<p>
-	  リファレンスマニュアルがあります。
+        <h3>Packngaのドキュメント</h3>
+        <p>
+          リファレンスマニュアルがあります。
         </p>
         <ul>
-	  <li><a href="packnga/ja/">Packngaのリファレンスマニュアル</a></li>
+          <li><a href="packnga/ja/">Packngaのリファレンスマニュアル</a></li>
         </ul>
 
-	<h2 id="about-chupatext">ChupaText</h2>
-	<p>
-	  ChupaText（ちゅぱてきすと）はPDFやオフィス文書などの検索対象からテキストを抽出するユーティリティです。ライブラリ、コマンドライン、Webサービスとして利用できます。
-	</p>
-
-	<h3>ChupaTextの最新リリース</h3>
-	<p>
-	  2011-02-09にリリースされた0.9.0が最新です。
+        <h2 id="about-chupatext">ChupaText</h2>
+        <p>
+          ChupaText（ちゅぱてきすと）はPDFやオフィス文書などの検索対象からテキストを抽出するユーティリティです。ライブラリ、コマンドライン、Webサービスとして利用できます。
         </p>
-	<p>
-	[<a href="http://rubyforge.org/frs/download.php/74190/chupatext-0.9.0.tar.gz">ダウンロード</a>]
+
+        <h3>ChupaTextの最新リリース</h3>
+        <p>
+          2011-02-09にリリースされた0.9.0が最新です。
+        </p>
+        <p>
+        [<a href="http://rubyforge.org/frs/download.php/74190/chupatext-0.9.0.tar.gz">ダウンロード</a>]
           [<a href="chupatext/ja/news.html#news.release-0-9-0">変更点</a>]
-	</p>
-
-	<h3 id="install-chupatext">ChupaTextのインストール</h3>
-	<p>
-	  <a href="chupatext/ja/install.html">ChupaTextのインストール方法</a>で説明します。
         </p>
 
-	<h3>ChupaTextのドキュメント</h3>
-	<p>
-	  <a href="chupatext/ja/">ChupaTextのリファレンスマニュアル</a>が用意されています。
-	</p>
-
-	<h2 id="about-chuparuby">ChupaRuby</h2>
-	<p>
-	  ChupaRuby（ちゅぱるびー）はChupaTextの機能をRubyから利用するためのライブラリです。
-	</p>
-
-	<h3>ChupaRubyの最新リリース</h3>
-	<p>
-	  2010-11-08にリリースされた0.5.0が最新です。
+        <h3 id="install-chupatext">ChupaTextのインストール</h3>
+        <p>
+          <a href="chupatext/ja/install.html">ChupaTextのインストール方法</a>で説明します。
         </p>
 
-	<h3 id="install-chuparuby">ChupaRubyのインストール</h3>
-	<p>
-	  ChupaRubyもRubyGemsでインストールできます。ただし、事前にChupaTextをインストールしておく必要があります。
+        <h3>ChupaTextのドキュメント</h3>
+        <p>
+          <a href="chupatext/ja/">ChupaTextのリファレンスマニュアル</a>が用意されています。
+        </p>
+
+        <h2 id="about-chuparuby">ChupaRuby</h2>
+        <p>
+          ChupaRuby（ちゅぱるびー）はChupaTextの機能をRubyから利用するためのライブラリです。
+        </p>
+
+        <h3>ChupaRubyの最新リリース</h3>
+        <p>
+          2010-11-08にリリースされた0.5.0が最新です。
+        </p>
+
+        <h3 id="install-chuparuby">ChupaRubyのインストール</h3>
+        <p>
+          ChupaRubyもRubyGemsでインストールできます。ただし、事前にChupaTextをインストールしておく必要があります。
         </p>
         <pre class="command">% sudo gem install chuparuby</pre>
 
-	<h3>ChupaRubyのドキュメント</h3>
-	<p>
-	  ChupaRubyのドキュメントはありません。
+        <h3>ChupaRubyのドキュメント</h3>
+        <p>
+          ChupaRubyのドキュメントはありません。
           これから徐々に追加されていく予定です。
         </p>
-	<ul>
-	  <!--li><a href="chuparuby/">ChupaRubyのリファレンスマニュアル</a></li-->
-	  <li><del>ChupaRubyのリファレンスマニュアル</del></li>
-	</ul>
+        <ul>
+          <!--li><a href="chuparuby/">ChupaRubyのリファレンスマニュアル</a></li-->
+          <li><del>ChupaRubyのリファレンスマニュアル</del></li>
+        </ul>
 
-	<h2 id="about-ranguba">文書検索ラングバ</h2>
-	<p>
-	  文書検索ラングバはgroongaを利用した全文検索システムです。クローラー、インデクサー、検索インターフェイスなどすべてを含んだ全文検索システムです。
-	</p>
-
-	<h3>文書検索ラングバ</h3>
-	<p>
-	  未リリース。
+        <h2 id="about-ranguba">文書検索ラングバ</h2>
+        <p>
+          文書検索ラングバはgroongaを利用した全文検索システムです。クローラー、インデクサー、検索インターフェイスなどすべてを含んだ全文検索システムです。
         </p>
 
-	<h2 id="logo">ロゴ</h2>
-	<p>
+        <h3>文書検索ラングバ</h3>
+        <p>
+          未リリース。
+        </p>
+
+        <h2 id="logo">ロゴ</h2>
+        <p>
           ラングバプロジェクトはrroonga用のロゴを提供しています。これらはCC-BY 3.0ライセンスで利用できます。原著作者表記には「The Ranguba project」、「ラングバプロジェクト」、「The groonga project」、「groongaプロジェクト」のどれかを使ってください。
         </p>
 
@@ -259,9 +259,9 @@
           みなさんのプロジェクトでrroongaを使っている場合は、どうぞこのロゴを使ってrroongaを広めてください！
         </p>
 
-	<h2 id="license">ライセンス</h2>
-	<p>
-	  rroonga、ActiveGroonga、racknga、ChupaTextはフリーソフトウェアです。あなたは、Free Software Foundationが公表した<a href="http://www.gnu.org/licenses/lgpl-2.1.txt">GNU Lesser General Public License 2.1</a>に定める条項に従って本プログラムを再頒布または変更することができます。
+        <h2 id="license">ライセンス</h2>
+        <p>
+          rroonga、ActiveGroonga、racknga、ChupaTextはフリーソフトウェアです。あなたは、Free Software Foundationが公表した<a href="http://www.gnu.org/licenses/lgpl-2.1.txt">GNU Lesser General Public License 2.1</a>に定める条項に従って本プログラムを再頒布または変更することができます。
         </p>
 
         <p>
@@ -270,8 +270,8 @@
       </div>
 
       <div class="sidebar">
-	<ul>
-	  <li><a href="http://rubyforge.org/projects/groonga/">プロジェクトページ</a></li>
+        <ul>
+          <li><a href="http://rubyforge.org/projects/groonga/">プロジェクトページ</a></li>
           <li><a href="#about-rroonga">rroonga</a></li>
           <li><a href="#about-active-groonga">ActiveGroonga</a></li>
           <li><a href="#about-active-groonga-fabrication"></li>
@@ -282,11 +282,11 @@
           <li><a href="#about-ranguba">文書検索ラングバ</a></li>
           <li><a href="#logo">ロゴ</a></li>
           <li><a href="#license">ライセンス</a></li>
-	  <li>
-	    <a href="http://lists.sourceforge.jp/mailman/listinfo/groonga-dev">メーリングリスト</a>
+          <li>
+            <a href="http://lists.sourceforge.jp/mailman/listinfo/groonga-dev">メーリングリスト</a>
             （groongaのメーリングリストにお願いします）
-	  </li>
-	</ul>
+          </li>
+        </ul>
       </div>
     </div>
 
@@ -302,12 +302,12 @@
         </a>
       </p>
       <p id="sponsor-tango">
-	<a href="http://tango.freedesktop.org/">
+        <a href="http://tango.freedesktop.org/">
           <img width="120" height="53" border="0" alt="Tango Desktop Projectのアイコンを利用しています。" src="tango-logo.png" />
         </a>
       </p>
       <p id="sponsor-famfamfam">
-	<a href="http://www.famfamfam.com/">
+        <a href="http://www.famfamfam.com/">
           <img width="120" height="18" border="0" alt="famfamfam.comの国旗を利用しています。" src="famfamfam-logo.png" />
         </a>
       </p>
