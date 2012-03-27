@@ -46,6 +46,13 @@
           <li><a href="#about-chuparuby">ChupaRuby</a>: ChupaTextの機能をRubyから利用するためのライブラリ</li>
           <li><a href="#about-ranguba">文書検索ラングバ</a>: 全文検索システム</li>
 	</ul>
+        <p>
+          このプロジェクトに関する情報は以下の通りです。
+        </p>
+        <ul>
+          <li><a href="#logo">ロゴ</a></li>
+          <li><a href="#license">ライセンス</a></li>
+        </ul>
 
 	<h2 id="about-rroonga">rroonga</h2>
 	<p>
@@ -252,7 +259,7 @@
           みなさんのプロジェクトでrroongaを使っている場合は、どうぞこのロゴを使ってrroongaを広めてください！
         </p>
 
-	<h2>ライセンス</h2>
+	<h2 id="license">ライセンス</h2>
 	<p>
 	  rroonga、ActiveGroonga、racknga、ChupaTextはフリーソフトウェアです。あなたは、Free Software Foundationが公表した<a href="http://www.gnu.org/licenses/lgpl-2.1.txt">GNU Lesser General Public License 2.1</a>に定める条項に従って本プログラムを再頒布または変更することができます。
         </p>
