@@ -27,7 +27,7 @@ div.header
 div.header div.title,
 div.header h1.title
 {
-  background: url(logo.png) no-repeat;
+  background: url(logos/rroonga-logo.png) no-repeat;
   font-family: sans-serif;
   font-size: 12px;
   font-weight: bold;
