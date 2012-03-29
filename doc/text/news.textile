@@ -1,5 +1,16 @@
 h1. NEWS
 
+h2(#2-0-1). 2.0.1: 2012-03-29
+
+h3. Improvements
+
+* Supported groonga 2.0.1.
+* Added "logos":http://groonga.rubyforge.org/#logo .
+
+h3. Fixes
+
+* Fixed a Groonga::Snipet related crach bug caused by GC.
+
 h2(#2-0-0). 2.0.0: 2012-03-22
 
 h3. Improvements
