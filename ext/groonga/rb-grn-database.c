@@ -155,6 +155,14 @@ rb_grn_database_close (VALUE self)
     return rb_grn_object_close(self);
 }
 
+static void
+reset_floating_objects (VALUE rb_context)
+{
+    RbGrnContext *rb_grn_context;
+    Data_Get_Struct(rb_context, RbGrnContext, rb_grn_context);
+    rb_grn_context_reset_floating_objects(rb_grn_context);
+}
+
 /*
  * call-seq:
  *   Groonga::Database.create(options=nil) -> Groonga::Database
@@ -210,6 +218,7 @@ rb_grn_database_s_create (int argc, VALUE *argv, VALUE klass)
     old_database = grn_ctx_db(context);
     if (old_database)
 	grn_obj_unlink(context, old_database);
+    reset_floating_objects(rb_context);
     database = grn_db_create(context, path, &create_args);
     rb_grn_context_check(context, rb_ary_new4(argc, argv));
     owner = (context->flags & GRN_CTX_PER_DB) ? GRN_FALSE : GRN_TRUE;
@@ -264,6 +273,7 @@ rb_grn_database_initialize (int argc, VALUE *argv, VALUE self)
     old_database = grn_ctx_db(context);
     if (old_database)
 	grn_obj_unlink(context, old_database);
+    reset_floating_objects(rb_context);
     database = grn_db_open(context, path);
     rb_grn_object_assign(Qnil, self, rb_context, context, database);
     rb_grn_context_check(context, self);

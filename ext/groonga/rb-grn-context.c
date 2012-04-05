@@ -117,6 +117,19 @@ rb_grn_context_close_floating_objects (RbGrnContext *rb_grn_context)
     grn_hash_close(context, floating_objects);
 }
 
+void
+rb_grn_context_reset_floating_objects (RbGrnContext *rb_grn_context)
+{
+    grn_ctx *context;
+
+    rb_grn_context_close_floating_objects(rb_grn_context);
+    context = rb_grn_context->context;
+    rb_grn_context->floating_objects = grn_hash_create(context, NULL,
+						       sizeof(RbGrnObject *),
+						       0,
+						       GRN_OBJ_TABLE_HASH_KEY);
+}
+
 static void
 rb_grn_context_unlink_database (grn_ctx *context)
 {
@@ -424,10 +437,8 @@ rb_grn_context_initialize (int argc, VALUE *argv, VALUE self)
     rb_grn_context_check(context, self);
 
     GRN_CTX_USER_DATA(context)->ptr = rb_grn_context;
-    rb_grn_context->floating_objects = grn_hash_create(context, NULL,
-						       sizeof(RbGrnObject *),
-						       0,
-						       GRN_OBJ_TABLE_HASH_KEY);
+    rb_grn_context->floating_objects = NULL;
+    rb_grn_context_reset_floating_objects(rb_grn_context);
     grn_ctx_set_finalizer(context, rb_grn_context_finalizer);
 
     if (!NIL_P(rb_encoding)) {
