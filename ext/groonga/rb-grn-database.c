@@ -119,6 +119,21 @@ rb_grn_database_deconstruct (RbGrnObject *rb_grn_database,
 			      range_id, range);
 }
 
+void
+rb_grn_database_finalizer (grn_ctx *context,
+			   RbGrnContext *rb_grn_context,
+			   grn_obj *column,
+			   RbGrnObject *rb_grn_database)
+{
+    if (rb_grn_context) {
+	rb_grn_context_close_floating_objects(rb_grn_context);
+    }
+
+    if (!(context->flags & GRN_CTX_PER_DB)) {
+	grn_ctx_use(context, NULL);
+    }
+}
+
 /*
  * Document-method: close
  *

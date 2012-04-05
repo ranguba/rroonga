@@ -106,7 +106,7 @@ typedef struct _RbGrnObject RbGrnObject;
 struct _RbGrnObject
 {
     VALUE self;
-    VALUE rb_context;
+    RbGrnContext *rb_grn_context;
     grn_ctx *context;
     grn_obj *object;
     grn_obj *domain;
@@ -296,6 +296,7 @@ void           rb_grn_context_register_floating_object
                                                     (RbGrnObject *rb_grn_object);
 void           rb_grn_context_unregister_floating_object
                                                     (RbGrnObject *rb_grn_object);
+void           rb_grn_context_close_floating_objects(RbGrnContext *rb_grn_context);
 grn_ctx       *rb_grn_context_ensure                (VALUE *context);
 VALUE          rb_grn_context_get_default           (void);
 VALUE          rb_grn_context_to_exception          (grn_ctx *context,
@@ -356,6 +357,11 @@ VALUE          rb_grn_object_inspect_content        (VALUE object,
 						     VALUE inspected);
 VALUE          rb_grn_object_inspect_footer         (VALUE object,
 						     VALUE inspected);
+
+void           rb_grn_database_finalizer            (grn_ctx *context,
+						     RbGrnContext *rb_grn_context,
+						     grn_obj *column,
+						     RbGrnObject *rb_grn_database);
 
 void           rb_grn_named_object_bind             (RbGrnNamedObject *rb_grn_named_object,
 						     grn_ctx *context,

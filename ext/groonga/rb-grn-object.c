@@ -83,26 +83,27 @@ static void
 rb_grn_object_run_finalizer (grn_ctx *context, grn_obj *grn_object,
 			     RbGrnObject *rb_grn_object)
 {
+    RbGrnContext *rb_grn_context = NULL;
+
     if (rb_grn_exited)
 	return;
 
     grn_obj_set_finalizer(context, grn_object, NULL);
 
-    debug("finalize: %p:%p:%p:%p:%p %s(%#x)\n",
+    debug("finalize: %p:%p:%p:%p:%p:%p %s(%#x)\n",
 	  context, grn_object, rb_grn_object,
 	  rb_grn_object->context, rb_grn_object->object,
+	  rb_grn_object->rb_grn_context,
 	  rb_grn_inspect_type(grn_object->header.type),
 	  grn_object->header.type);
 
-    rb_grn_object->context = NULL;
-    rb_grn_object->object = NULL;
+    rb_grn_context = rb_grn_object->rb_grn_context;
     rb_grn_object->have_finalizer = GRN_FALSE;
 
     switch (grn_object->header.type) {
       case GRN_DB:
-	if (!(context->flags & GRN_CTX_PER_DB)) {
-	    grn_ctx_use(context, NULL);
-	}
+	rb_grn_database_finalizer(context, rb_grn_context,
+				  grn_object, rb_grn_object);
 	break;
       case GRN_TYPE:
       case GRN_PROC:
@@ -153,6 +154,10 @@ rb_grn_object_run_finalizer (grn_ctx *context, grn_obj *grn_object,
 		 grn_object->header.type);
 	break;
     }
+
+    rb_grn_object->rb_grn_context = NULL;
+    rb_grn_object->context = NULL;
+    rb_grn_object->object = NULL;
 }
 
 static grn_obj *
@@ -326,8 +331,15 @@ rb_grn_object_bind_common (VALUE klass, VALUE self, VALUE rb_context,
 			   grn_ctx *context, grn_obj *object)
 {
     grn_user_data *user_data;
+    RbGrnContext *rb_grn_context;
 
-    rb_grn_object->rb_context = rb_context;
+    debug("bind: %p:%p:%p %s(%#x)\n",
+	  context, object, rb_grn_object,
+	  rb_grn_inspect_type(object->header.type),
+	  object->header.type);
+
+    Data_Get_Struct(rb_context, RbGrnContext, rb_grn_context);
+    rb_grn_object->rb_grn_context = rb_grn_context;
     rb_grn_object->context = context;
     rb_grn_object->object = object;
     rb_grn_object->self = self;
