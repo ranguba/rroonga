@@ -69,6 +69,10 @@ rb_grn_context_register_floating_object (RbGrnObject *rb_grn_object)
     rb_grn_context = rb_grn_object->rb_grn_context;
     context = rb_grn_context->context;
     floating_objects = rb_grn_context->floating_objects;
+    if (!floating_objects) {
+	rb_grn_context_reset_floating_objects(rb_grn_context);
+	floating_objects = rb_grn_context->floating_objects;
+    }
     grn_hash_add(context, floating_objects,
 		 (const void *)(&rb_grn_object), sizeof(RbGrnObject *),
 		 NULL, NULL);
