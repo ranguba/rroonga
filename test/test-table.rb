@@ -657,6 +657,38 @@ class TableTest < Test::Unit::TestCase
     assert_not_predicate(bookmarks, :builtin?)
   end
 
+  def test_create_by_other_process
+    by_other_process do
+      Groonga::PatriciaTrie.create(:name => "Bookmarks")
+    end
+    assert_not_nil(Groonga["Bookmarks"])
+  end
+
+  def test_define_column_by_other_process
+    bookmarks = Groonga::Hash.create(:name => "Bookmarks")
+    by_other_process do
+      bookmarks.define_column("name", "Text")
+    end
+    assert_not_nil(bookmarks.column("name"))
+  end
+
+  def test_remove_by_other_process
+    bookmarks = Groonga::Array.create(:name => "Bookmarks")
+    by_other_process do
+      bookmarks.remove
+    end
+    assert_predicate(bookmarks, :closed?)
+  end
+
+  def test_remove_column_by_other_process
+    bookmarks = Groonga::Hash.create(:name => "Bookmarks")
+    real_name = bookmarks.define_column("name", "Text")
+    by_other_process do
+      real_name.remove
+    end
+    assert_predicate(real_name, :closed?)
+  end
+
   private
   def create_bookmarks
     bookmarks = Groonga::Array.create(:name => "Bookmarks")
@@ -671,5 +703,12 @@ class TableTest < Test::Unit::TestCase
       bookmark["id"] = i + 100
     end
     bookmarks
+  end
+
+  def by_other_process
+    pid = Process.fork do
+      yield
+    end
+    Process.waitpid pid
   end
 end
