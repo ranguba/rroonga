@@ -695,7 +695,7 @@ class TableTest < Test::Unit::TestCase
       pid = Process.fork do
         yield
       end
-      Process.waitpid pid
+      Process.waitpid(pid)
     end
   end
 
