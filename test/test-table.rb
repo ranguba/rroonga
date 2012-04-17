@@ -658,14 +658,14 @@ class TableTest < Test::Unit::TestCase
   end
 
   class OtherProcessTest < self
-    def test_create_by_other_process
+    def test_create
       by_other_process do
         Groonga::PatriciaTrie.create(:name => "Bookmarks")
       end
       assert_not_nil(Groonga["Bookmarks"])
     end
 
-    def test_define_column_by_other_process
+    def test_define_column
       bookmarks = Groonga::Hash.create(:name => "Bookmarks")
       by_other_process do
         bookmarks.define_column("name", "Text")
@@ -673,7 +673,7 @@ class TableTest < Test::Unit::TestCase
       assert_not_nil(bookmarks.column("name"))
     end
 
-    def test_remove_by_other_process
+    def test_remove
       bookmarks = Groonga::Array.create(:name => "Bookmarks")
       by_other_process do
         bookmarks.remove
@@ -681,7 +681,7 @@ class TableTest < Test::Unit::TestCase
       assert_predicate(bookmarks, :closed?)
     end
 
-    def test_remove_column_by_other_process
+    def test_remove_column
       bookmarks = Groonga::Hash.create(:name => "Bookmarks")
       real_name = bookmarks.define_column("name", "Text")
       by_other_process do
