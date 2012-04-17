@@ -657,6 +657,7 @@ class TableTest < Test::Unit::TestCase
     assert_not_predicate(bookmarks, :builtin?)
   end
 
+  class OtherProcessTest < self
   def test_create_by_other_process
     by_other_process do
       Groonga::PatriciaTrie.create(:name => "Bookmarks")
@@ -690,6 +691,15 @@ class TableTest < Test::Unit::TestCase
   end
 
   private
+  def by_other_process
+    pid = Process.fork do
+      yield
+    end
+    Process.waitpid pid
+  end
+  end
+
+  private
   def create_bookmarks
     bookmarks = Groonga::Array.create(:name => "Bookmarks")
     bookmarks.define_column("id", "Int32")
@@ -703,12 +713,5 @@ class TableTest < Test::Unit::TestCase
       bookmark["id"] = i + 100
     end
     bookmarks
-  end
-
-  def by_other_process
-    pid = Process.fork do
-      yield
-    end
-    Process.waitpid pid
   end
 end
