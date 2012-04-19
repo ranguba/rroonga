@@ -13,7 +13,7 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-class TableCursorTest < Test::Unit::TestCase
+class TableTraverseTest < Test::Unit::TestCase
   include GroongaTestUtils
 
   def setup
@@ -27,6 +27,7 @@ class TableCursorTest < Test::Unit::TestCase
     @ruby_bookmark = @bookmarks.add("Ruby")
   end
 
+  class CursorTest < self
   def test_open
     keys = []
     @bookmarks.open_cursor do |cursor|
@@ -168,6 +169,7 @@ class TableCursorTest < Test::Unit::TestCase
                   "http://qwik.jp/senna/",
                   "http://www.ruby-lang.org/"],
                  keys)
+  end
   end
 
   private
