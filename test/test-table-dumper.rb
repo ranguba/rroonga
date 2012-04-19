@@ -1,4 +1,4 @@
-# Copyright (C) 2011  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2011-2012  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -25,7 +25,7 @@ class TableDumperTest < Test::Unit::TestCase
   def setup_tables
     Groonga::Schema.define do |schema|
       schema.create_table("Users",
-                          :type => :hash,
+                          :type => :patricia_trie,
                           :key_type => "ShortText") do |table|
         table.text("name")
       end
@@ -72,9 +72,39 @@ load --table Posts
 EOS
   end
 
+  def test_patricia_trie_order_by_default
+    users.add("s-yata", :name => "Susumu Yata")
+    users.add("mori", :name => "mori daijiro")
+    assert_equal(<<-EOS, dump("Users"))
+load --table Users
+[
+[\"_key\",\"name\"],
+[\"mori\",\"mori daijiro\"],
+[\"s-yata\",\"Susumu Yata\"]
+]
+EOS
+  end
+
+  def test_patricia_trie_order_by_id
+    users.add("s-yata", :name => "Susumu Yata")
+    users.add("mori", :name => "mori daijiro")
+    assert_equal(<<-EOS, dump("Users", :order_by => "id"))
+load --table Users
+[
+[\"_key\",\"name\"],
+[\"s-yata\",\"Susumu Yata\"],
+[\"mori\",\"mori daijiro\"]
+]
+EOS
+  end
+
   private
-  def dump(table_name)
-    Groonga::TableDumper.new(context[table_name]).dump
+  def dump(table_name, options={})
+    Groonga::TableDumper.new(context[table_name], options).dump
+  end
+
+  def users
+    context["Users"]
   end
 
   def posts

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2011  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2011-2012  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -479,7 +479,7 @@ module Groonga
     end
 
     def dump_records(columns)
-      @table.each do |record|
+      @table.each(:order_by => @options[:order_by]) do |record|
         write(",\n")
         values = columns.collect do |column|
           resolve_value(column[record.id])

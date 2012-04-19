@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2011  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2011-2012  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -27,6 +27,7 @@ options.tables = []
 options.exclude_tables = []
 options.dump_schema = true
 options.dump_tables = true
+options.order_by = "id"
 option_parser = OptionParser.new do |parser|
   parser.banner += " DB_PATH"
 
@@ -63,6 +64,14 @@ option_parser = OptionParser.new do |parser|
       options.exclude_tables << table
     end
   end
+
+  types = ["id", "key"]
+  parser.on("--order-by=TYPE", types,
+            "sort output recoreds by TYPE.",
+            "available TYPEs: #{types.join(', ')}",
+            "(#{options.type})") do |type|
+    options.order_by = type
+  end
 end
 args = option_parser.parse!(ARGV)
 
@@ -80,6 +89,7 @@ dumper_options = {
   :dump_tables => options.dump_tables,
   :tables => options.tables,
   :exclude_tables => options.exclude_tables,
+  :order_by => options.order_by,
 }
 database_dumper = Groonga::DatabaseDumper.new(dumper_options)
 database_dumper.dump
