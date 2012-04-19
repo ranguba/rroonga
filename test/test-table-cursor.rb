@@ -28,148 +28,148 @@ class TableTraverseTest < Test::Unit::TestCase
   end
 
   class CursorTest < self
-  def test_open
-    keys = []
-    @bookmarks.open_cursor do |cursor|
-      while cursor.next
-        keys << cursor.key
+    def test_open
+      keys = []
+      @bookmarks.open_cursor do |cursor|
+        while cursor.next
+          keys << cursor.key
+        end
       end
+      assert_equal(["Cutter", "Ruby", "groonga"],
+                   keys)
     end
-    assert_equal(["Cutter", "Ruby", "groonga"],
-                 keys)
-  end
 
-  def test_open_ascendent
-    record_and_key_list = []
-    @bookmarks.open_cursor(:order => :ascending) do |cursor|
-      record_and_key_list = cursor.collect {|record| [record, cursor.key]}
-    end
-    assert_equal([[@cutter_bookmark, "Cutter"],
-                  [@ruby_bookmark, "Ruby"],
-                  [@groonga_bookmark, "groonga"]],
-                 record_and_key_list)
-  end
-
-  def test_without_limit_and_offset
-    users = create_users
-    add_users(users)
-    results = []
-    users.open_cursor do |cursor|
-      cursor.each do |record|
-        results << record["name"]
+    def test_open_ascendent
+      record_and_key_list = []
+      @bookmarks.open_cursor(:order => :ascending) do |cursor|
+        record_and_key_list = cursor.collect {|record| [record, cursor.key]}
       end
+      assert_equal([[@cutter_bookmark, "Cutter"],
+                    [@ruby_bookmark, "Ruby"],
+                    [@groonga_bookmark, "groonga"]],
+                   record_and_key_list)
     end
 
-    assert_equal((100..199).collect {|i| "user#{i}"},
-                 results)
-  end
-
-  def test_with_limit
-    users = create_users
-    add_users(users)
-    results = []
-    users.open_cursor(:limit => 20) do |cursor|
-      cursor.each do |record|
-        results << record["name"]
+    def test_without_limit_and_offset
+      users = create_users
+      add_users(users)
+      results = []
+      users.open_cursor do |cursor|
+        cursor.each do |record|
+          results << record["name"]
+        end
       end
+
+      assert_equal((100..199).collect {|i| "user#{i}"},
+                   results)
     end
 
-    assert_equal((100...120).collect {|i| "user#{i}"},
-                 results)
-  end
-
-  def test_with_offset
-    users = create_users
-    add_users(users)
-    results = []
-    users.open_cursor(:offset => 20) do |cursor|
-      cursor.each do |record|
-        results << record["name"]
+    def test_with_limit
+      users = create_users
+      add_users(users)
+      results = []
+      users.open_cursor(:limit => 20) do |cursor|
+        cursor.each do |record|
+          results << record["name"]
+        end
       end
+
+      assert_equal((100...120).collect {|i| "user#{i}"},
+                   results)
     end
 
-    assert_equal((120...200).collect {|i| "user#{i}"},
-                 results)
-  end
-
-  def test_with_limit_and_offset
-    users = create_users
-    add_users(users)
-    results = []
-    users.open_cursor(:limit => 20, :offset => 20) do |cursor|
-      cursor.each do |record|
-        results << record["name"]
+    def test_with_offset
+      users = create_users
+      add_users(users)
+      results = []
+      users.open_cursor(:offset => 20) do |cursor|
+        cursor.each do |record|
+          results << record["name"]
+        end
       end
+
+      assert_equal((120...200).collect {|i| "user#{i}"},
+                   results)
     end
 
-    assert_equal((120...140).collect {|i| "user#{i}"},
-                 results)
-  end
+    def test_with_limit_and_offset
+      users = create_users
+      add_users(users)
+      results = []
+      users.open_cursor(:limit => 20, :offset => 20) do |cursor|
+        cursor.each do |record|
+          results << record["name"]
+        end
+      end
 
-  def test_delete
-    users = create_users
-    add_users(users)
+      assert_equal((120...140).collect {|i| "user#{i}"},
+                   results)
+    end
 
-    users.open_cursor(:limit => 20) do |cursor|
-      20.times do
+    def test_delete
+      users = create_users
+      add_users(users)
+
+      users.open_cursor(:limit => 20) do |cursor|
+        20.times do
+          cursor.next
+          cursor.delete
+        end
+      end
+
+      results = []
+      users.open_cursor do |cursor|
+        cursor.each do |record|
+          results << record["name"]
+        end
+      end
+
+      assert_equal((120...200).collect {|i| "user#{i}"},
+                   results)
+    end
+
+    def test_patricia_trie_cursor_key
+      sites = Groonga::PatriciaTrie.create(:name => "Sites")
+      sites.add("http://groonga.org/")
+      sites.open_cursor do |cursor|
         cursor.next
-        cursor.delete
+        assert_equal("http://groonga.org/", cursor.key)
       end
     end
 
-    results = []
-    users.open_cursor do |cursor|
-      cursor.each do |record|
-        results << record["name"]
+    def test_order_by_id
+      sites = Groonga::PatriciaTrie.create(:name => "Sites")
+      sites.add("http://qwik.jp/senna/")
+      sites.add("http://www.ruby-lang.org/")
+      sites.add("http://groonga.org/")
+      keys = []
+      sites.open_cursor(:order_by => :id) do |cursor|
+        while cursor.next
+          keys << cursor.key
+        end
       end
+      assert_equal(["http://qwik.jp/senna/",
+                    "http://www.ruby-lang.org/",
+                    "http://groonga.org/"],
+                   keys)
     end
 
-    assert_equal((120...200).collect {|i| "user#{i}"},
-                 results)
-  end
-
-  def test_patricia_trie_cursor_key
-    sites = Groonga::PatriciaTrie.create(:name => "Sites")
-    sites.add("http://groonga.org/")
-    sites.open_cursor do |cursor|
-      cursor.next
-      assert_equal("http://groonga.org/", cursor.key)
-    end
-  end
-
-  def test_order_by_id
-    sites = Groonga::PatriciaTrie.create(:name => "Sites")
-    sites.add("http://qwik.jp/senna/")
-    sites.add("http://www.ruby-lang.org/")
-    sites.add("http://groonga.org/")
-    keys = []
-    sites.open_cursor(:order_by => :id) do |cursor|
-      while cursor.next
-        keys << cursor.key
+    def test_order_by_key
+      sites = Groonga::PatriciaTrie.create(:name => "Sites")
+      sites.add("http://www.ruby-lang.org/")
+      sites.add("http://qwik.jp/senna/")
+      sites.add("http://groonga.org/")
+      keys = []
+      sites.open_cursor(:order_by => :key) do |cursor|
+        while cursor.next
+          keys << cursor.key
+        end
       end
+      assert_equal(["http://groonga.org/",
+                    "http://qwik.jp/senna/",
+                    "http://www.ruby-lang.org/"],
+                   keys)
     end
-    assert_equal(["http://qwik.jp/senna/",
-                  "http://www.ruby-lang.org/",
-                  "http://groonga.org/"],
-                 keys)
-  end
-
-  def test_order_by_key
-    sites = Groonga::PatriciaTrie.create(:name => "Sites")
-    sites.add("http://www.ruby-lang.org/")
-    sites.add("http://qwik.jp/senna/")
-    sites.add("http://groonga.org/")
-    keys = []
-    sites.open_cursor(:order_by => :key) do |cursor|
-      while cursor.next
-        keys << cursor.key
-      end
-    end
-    assert_equal(["http://groonga.org/",
-                  "http://qwik.jp/senna/",
-                  "http://www.ruby-lang.org/"],
-                 keys)
-  end
   end
 
   private
