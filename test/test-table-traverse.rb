@@ -28,7 +28,7 @@ class TableTraverseTest < Test::Unit::TestCase
   end
 
   class CursorTest < self
-    def test_open
+    def test_default
       keys = []
       @bookmarks.open_cursor do |cursor|
         while cursor.next
