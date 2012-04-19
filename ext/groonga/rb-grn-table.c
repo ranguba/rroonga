@@ -919,12 +919,15 @@ rb_grn_table_truncate (VALUE self)
 
 /*
  * call-seq:
- *   table.each {|record| } -> nil
+ *   table.each             {|record| } -> nil
+ *   table.each(options={}) {|record| } -> nil
  *
  * テーブルに登録されているレコードを順番にブロックに渡す。
+ *
+ * _options_ is the same as #open_cursor's one.
  */
 static VALUE
-rb_grn_table_each (VALUE self)
+rb_grn_table_each (int argc, VALUE *argv, VALUE self)
 {
     RbGrnTable *rb_table;
     RbGrnObject *rb_grn_object;
@@ -934,14 +937,9 @@ rb_grn_table_each (VALUE self)
     VALUE rb_cursor;
     grn_id id;
 
-    rb_table = SELF(self);
-    rb_grn_table_deconstruct(rb_table, &table, &context,
-			     NULL, NULL,
-			     NULL, NULL, NULL,
-			     NULL);
-    cursor = grn_table_cursor_open(context, table, NULL, 0, NULL, 0,
-				   0, -1, GRN_CURSOR_ASCENDING);
+    cursor = rb_grn_table_open_grn_cursor(argc, argv, self, &context);
     rb_cursor = GRNTABLECURSOR2RVAL(Qnil, context, cursor);
+    rb_table = SELF(self);
     rb_grn_object = RB_GRN_OBJECT(rb_table);
     while (rb_grn_object->object &&
 	   (id = grn_table_cursor_next(context, cursor)) != GRN_ID_NIL) {
@@ -2176,7 +2174,7 @@ rb_grn_init_table (VALUE mGrn)
     rb_define_method(rb_cGrnTable, "empty?", rb_grn_table_empty_p, 0);
     rb_define_method(rb_cGrnTable, "truncate", rb_grn_table_truncate, 0);
 
-    rb_define_method(rb_cGrnTable, "each", rb_grn_table_each, 0);
+    rb_define_method(rb_cGrnTable, "each", rb_grn_table_each, -1);
 
     rb_define_method(rb_cGrnTable, "delete", rb_grn_table_delete, 1);
 

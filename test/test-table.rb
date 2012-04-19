@@ -284,19 +284,6 @@ class TableTest < Test::Unit::TestCase
     assert_equal(1, table.size)
   end
 
-  def test_each
-    users = Groonga::Array.create(:name => "Users")
-    users.define_column("name", "ShortText")
-
-    names = ["daijiro", "gunyarakun", "yu"]
-    names.each do |name|
-      user = users.add
-      user["name"] = name
-    end
-
-    assert_equal(names.sort, users.collect {|user| user["name"]}.sort)
-  end
-
   def test_truncate
     users = Groonga::Array.create(:name => "Users")
     users.add

@@ -172,6 +172,114 @@ class TableTraverseTest < Test::Unit::TestCase
     end
   end
 
+  class EachTest < self
+    def test_default
+      keys = []
+      @bookmarks.each do |record|
+        keys << record.key
+      end
+      assert_equal(["Cutter", "Ruby", "groonga"],
+                   keys)
+    end
+
+    def test_order_ascending
+      record_and_key_list = []
+      @bookmarks.each(:order => :ascending) do |record|
+        record_and_key_list << [record, record.key]
+      end
+      assert_equal([[@cutter_bookmark, "Cutter"],
+                    [@ruby_bookmark, "Ruby"],
+                    [@groonga_bookmark, "groonga"]],
+                   record_and_key_list)
+    end
+
+    def test_without_limit_and_offset
+      users = create_users
+      add_users(users)
+      results = []
+      users.each do |record|
+        results << record["name"]
+      end
+
+      assert_equal((100..199).collect {|i| "user#{i}"},
+                   results)
+    end
+
+    def test_with_limit
+      users = create_users
+      add_users(users)
+      results = []
+      users.each(:limit => 20) do |record|
+        results << record["name"]
+      end
+
+      assert_equal((100...120).collect {|i| "user#{i}"},
+                   results)
+    end
+
+    def test_with_offset
+      users = create_users
+      add_users(users)
+      results = []
+      users.each(:offset => 20) do |record|
+        results << record["name"]
+      end
+
+      assert_equal((120...200).collect {|i| "user#{i}"},
+                   results)
+    end
+
+    def test_with_limit_and_offset
+      users = create_users
+      add_users(users)
+      results = []
+      users.each(:limit => 20, :offset => 20) do |record|
+        results << record["name"]
+      end
+
+      assert_equal((120...140).collect {|i| "user#{i}"},
+                   results)
+    end
+
+    def test_patricia_trie_cursor_key
+      sites = Groonga::PatriciaTrie.create(:name => "Sites")
+      sites.add("http://groonga.org/")
+      sites.each do |record|
+        assert_equal("http://groonga.org/", record.key)
+      end
+    end
+
+    def test_order_by_id
+      sites = Groonga::PatriciaTrie.create(:name => "Sites")
+      sites.add("http://qwik.jp/senna/")
+      sites.add("http://www.ruby-lang.org/")
+      sites.add("http://groonga.org/")
+      keys = []
+      sites.each(:order_by => :id) do |record|
+        keys << record.key
+      end
+      assert_equal(["http://qwik.jp/senna/",
+                    "http://www.ruby-lang.org/",
+                    "http://groonga.org/"],
+                   keys)
+    end
+
+    def test_order_by_key
+      sites = Groonga::PatriciaTrie.create(:name => "Sites")
+      sites.add("http://www.ruby-lang.org/")
+      sites.add("http://qwik.jp/senna/")
+      sites.add("http://groonga.org/")
+      keys = []
+      sites.each(:order_by => :key) do |record|
+        keys << record.key
+      end
+      assert_equal(["http://groonga.org/",
+                    "http://qwik.jp/senna/",
+                    "http://www.ruby-lang.org/"],
+                   keys)
+    end
+  end
+
   private
   def create_users
     users = Groonga::Array.create(:name => "Users")
