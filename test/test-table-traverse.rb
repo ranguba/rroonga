@@ -39,7 +39,7 @@ class TableTraverseTest < Test::Unit::TestCase
                    keys)
     end
 
-    def test_open_ascendent
+    def test_order_ascending
       record_and_key_list = []
       @bookmarks.open_cursor(:order => :ascending) do |cursor|
         record_and_key_list = cursor.collect {|record| [record, cursor.key]}
