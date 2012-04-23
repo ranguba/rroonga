@@ -19,6 +19,7 @@ source "http://rubygems.org/"
 
 gem 'pkg-config'
 gem 'json'
+gem 'archive-zip'
 
 group :development, :test do
   gem "test-unit", ">= 2.4.6"
