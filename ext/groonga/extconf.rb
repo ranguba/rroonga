@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 #
-# Copyright (C) 2009-2010  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2012  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -82,15 +82,15 @@ def install_groonga_locally(major, minor, micro)
   prepend_pkg_config_path_for_local_groonga
 end
 
-begin
-  require 'archive/zip'
-rescue LoadError
-  require 'rubygems'
-  require 'archive/zip'
-end
-
 def zip_extract(filename, dst_dir)
   return nil unless File.exist?(filename)
+
+  begin
+    require 'archive/zip'
+  rescue LoadError
+    require 'rubygems'
+    require 'archive/zip'
+  end
 
   root_list = root_entrylist(filename)
 
