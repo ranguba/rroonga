@@ -66,7 +66,6 @@ checking_for(checking_message("Win32 OS")) do
 end
 
 def install_groonga_locally(major, minor, micro)
-  require 'open-uri'
   require 'shellwords'
 
   FileUtils.mkdir_p(local_groonga_base_dir)
@@ -80,6 +79,25 @@ def install_groonga_locally(major, minor, micro)
   end
 
   prepend_pkg_config_path_for_local_groonga
+end
+
+def download(url)
+  require 'open-uri'
+
+  message("downloading %s...", url)
+  base_name = File.basename(url)
+  if File.exist?(base_name)
+    message(" skip (use downloaded file)\n")
+  else
+    open(url, "rb") do |input|
+      File.open(base_name, "wb") do |output|
+        while (buffer = input.read(1024))
+          output.print(buffer)
+        end
+      end
+    end
+    message(" done\n")
+  end
 end
 
 def zip_extract(filename, dst_dir)
@@ -127,15 +145,7 @@ def extract_groonga_win32_binary(major, minor, micro)
   url = "http://packages.groonga.org/windows/groonga/#{file_name}"
   install_dir = local_groonga_install_dir
 
-  message("downloading %s...", url)
-  open(url, "rb") do |input|
-    File.open(file_name, "wb") do |output|
-      while (buffer = input.read(1024))
-        output.print(buffer)
-      end
-    end
-  end
-  message(" done\n")
+  download(url)
 
   message("extracting...")
   zip_extract(file_name, '.')
@@ -170,15 +180,7 @@ def build_groonga(major, minor, micro)
   url = "http://packages.groonga.org/source/groonga/#{tar_gz}"
   install_dir = local_groonga_install_dir
 
-  message("downloading %s...", url)
-  open(url, "rb") do |input|
-    File.open(tar_gz, "wb") do |output|
-      while (buffer = input.read(1024))
-        output.print(buffer)
-      end
-    end
-  end
-  message(" done\n")
+  download(url)
 
   message("extracting...")
   if xsystem("tar xfz #{tar_gz}")
