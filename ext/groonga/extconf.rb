@@ -107,29 +107,7 @@ def extract_zip(filename, destrination_dir)
     require 'archive/zip'
   end
 
-  root_list = root_entrylist(filename)
-
-  if (root_list.size == 1)
-    Archive::Zip.extract(filename, destrination_dir)
-    return root_list[0].gsub("/", "")
-  else
-    dir = File.basename(filename).sub(/#{File.extname(filename)}$/, "")
-    FileUtils.mkdir_p(File.join(destrination_dir, dir))
-    Archive::Zip.extract(filename, File.join(destrination_dir, dir))
-    return dir
-  end
-end
-
-def root_entrylist(filename)
-  list = []
-
-  Archive::Zip.open(filename) do |archive|
-    archive.each do |entry|
-      list << entry.zip_path if entry.zip_path.split('/').size == 1
-    end
-  end
-
-  list
+  Archive::Zip.extract(filename, destrination_dir)
 end
 
 def extract_groonga_win32_binary(major, minor, micro)
