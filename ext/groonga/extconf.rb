@@ -15,24 +15,24 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-require 'English'
-require 'pathname'
-require 'mkmf'
-require 'fileutils'
-require 'shellwords'
-require 'open-uri'
+require "English"
+require "pathname"
+require "mkmf"
+require "fileutils"
+require "shellwords"
+require "open-uri"
 
 begin
-  require 'pkg-config'
+  require "pkg-config"
 rescue LoadError
-  require 'rubygems'
-  require 'pkg-config'
+  require "rubygems"
+  require "pkg-config"
 end
 
 base_dir = Pathname(__FILE__).dirname.parent.parent
 $LOAD_PATH.unshift(base_dir.to_s)
 
-require 'rroonga-build'
+require "rroonga-build"
 
 include RroongaBuild
 
@@ -42,7 +42,7 @@ major, minor, micro = RequiredGroongaVersion::VERSION
 
 checking_for(checking_message("GCC")) do
   if macro_defined?("__GNUC__", "")
-    $CFLAGS += ' -Wall'
+    $CFLAGS += " -Wall"
     true
   else
     false
@@ -101,10 +101,10 @@ end
 
 def extract_zip(filename, destrination_dir)
   begin
-    require 'archive/zip'
+    require "archive/zip"
   rescue LoadError
-    require 'rubygems'
-    require 'archive/zip'
+    require "rubygems"
+    require "archive/zip"
   end
 
   Archive::Zip.extract(filename, destrination_dir)
@@ -123,7 +123,7 @@ def extract_groonga_win32_binary(major, minor, micro)
   download(url)
 
   message("extracting...")
-  extract_zip(zip, '.')
+  extract_zip(zip, ".")
   message(" done\n")
 
   if File.exist?(install_dir)
