@@ -73,9 +73,9 @@ def install_groonga_locally(major, minor, micro)
 
   Dir.chdir(local_groonga_base_dir) do
     if win32?
-      install_groonga_locally_win32(major, minor, micro)
+      extract_groonga_win32_binary(major, minor, micro)
     else
-      install_groonga_locally_with_compile(major, minor, micro)
+      build_groonga(major, minor, micro)
     end
   end
 
@@ -117,7 +117,7 @@ def root_entrylist(filename)
   list
 end
 
-def install_groonga_locally_win32(major, minor, micro)
+def extract_groonga_win32_binary(major, minor, micro)
   file_name = "groonga-#{major}.#{minor}.#{micro}-x86.zip"
   # file_name = "groonga-#{major}.#{minor}.#{micro}-x64.zip"
   url = "http://packages.groonga.org/windows/groonga/#{file_name}"
@@ -158,7 +158,7 @@ def configure_command_line(prefix)
   escaped_command_line.join(" ")
 end
 
-def install_groonga_locally_with_compile(major, minor, micro)
+def build_groonga(major, minor, micro)
   tar_gz = "groonga-#{major}.#{minor}.#{micro}.tar.gz"
   url = "http://packages.groonga.org/source/groonga/#{tar_gz}"
   install_dir = local_groonga_install_dir
