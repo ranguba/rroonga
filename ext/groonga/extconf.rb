@@ -100,8 +100,6 @@ def download(url)
 end
 
 def zip_extract(filename, destrination_dir)
-  return nil unless File.exist?(filename)
-
   begin
     require 'archive/zip'
   rescue LoadError
