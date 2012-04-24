@@ -99,7 +99,7 @@ def download(url)
   end
 end
 
-def zip_extract(filename, destrination_dir)
+def extract_zip(filename, destrination_dir)
   begin
     require 'archive/zip'
   rescue LoadError
@@ -145,7 +145,7 @@ def extract_groonga_win32_binary(major, minor, micro)
   download(url)
 
   message("extracting...")
-  zip_extract(file_name, '.')
+  extract_zip(file_name, '.')
   message(" done\n")
 
   if File.exist?(install_dir)
