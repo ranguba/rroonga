@@ -91,9 +91,9 @@ end
 
 def zip_extract(filename, dst_dir)
   return nil unless File.exist?(filename)
-  
+
   root_list = root_entrylist(filename)
-  
+
   if (root_list.size == 1)
     Archive::Zip.extract filename, dst_dir
     return root_list[0].gsub("/", "")
@@ -107,7 +107,7 @@ end
 
 def root_entrylist(filename)
   list = []
-  
+
   Archive::Zip.open(filename) do |archive|
     archive.each do |entry|
       list << entry.zip_path if entry.zip_path.split('/').size == 1
@@ -162,7 +162,7 @@ def install_groonga_locally_with_compile(major, minor, micro)
   tar_gz = "groonga-#{major}.#{minor}.#{micro}.tar.gz"
   url = "http://packages.groonga.org/source/groonga/#{tar_gz}"
   install_dir = local_groonga_install_dir
-  
+
   message("downloading %s...", url)
   open(url, "rb") do |input|
     File.open(tar_gz, "wb") do |output|
