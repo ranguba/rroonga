@@ -95,12 +95,12 @@ def zip_extract(filename, dst_dir)
   root_list = root_entrylist(filename)
 
   if (root_list.size == 1)
-    Archive::Zip.extract filename, dst_dir
+    Archive::Zip.extract(filename, dst_dir)
     return root_list[0].gsub("/", "")
   else
     dir = File.basename(filename).sub(/#{File.extname(filename)}$/, "")
-    FileUtils.mkdir_p File.join(dst_dir, dir)
-    Archive::Zip.extract filename, File.join(dst_dir, dir)
+    FileUtils.mkdir_p(File.join(dst_dir, dir))
+    Archive::Zip.extract(filename, File.join(dst_dir, dir))
     return dir
   end
 end
