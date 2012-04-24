@@ -138,14 +138,14 @@ def extract_groonga_win32_binary(major, minor, micro)
   else
     architecture = "x86"
   end
-  file_name = "groonga-#{major}.#{minor}.#{micro}-#{architecture}.zip"
-  url = "http://packages.groonga.org/windows/groonga/#{file_name}"
+  zip = "groonga-#{major}.#{minor}.#{micro}-#{architecture}.zip"
+  url = "http://packages.groonga.org/windows/groonga/#{zip}"
   install_dir = local_groonga_install_dir
 
   download(url)
 
   message("extracting...")
-  extract_zip(file_name, '.')
+  extract_zip(zip, '.')
   message(" done\n")
 
   if File.exist?(install_dir)
@@ -155,7 +155,7 @@ def extract_groonga_win32_binary(major, minor, micro)
   end
 
   message("install...")
-  FileUtils.mv(File.basename(file_name, ".zip"), File.basename(install_dir))
+  FileUtils.mv(File.basename(zip, ".zip"), File.basename(install_dir))
   message(" done\n")
 end
 
