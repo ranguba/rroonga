@@ -17,16 +17,4 @@
 
 source "http://rubygems.org/"
 
-gem 'pkg-config'
-gem 'json'
-gem 'archive-zip'
-
-group :development, :test do
-  gem "test-unit", ">= 2.4.6"
-  gem "test-unit-notify"
-  gem "rake"
-  gem "rake-compiler"
-  gem "jeweler"
-  gem "yard"
-  gem "packnga"
-end
+gemspec

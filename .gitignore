@@ -14,7 +14,7 @@
 /tmp
 /vendor
 *.so
-/*.gemspec
+/Gemfile.lock
 /doc/po/rroonga.pot
 /.yardoc/
 /references/
