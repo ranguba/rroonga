@@ -155,7 +155,7 @@ def extract_groonga_win32_binary(major, minor, micro)
   end
 
   message("install...")
-  FileUtils.mv(File.basename(zip, ".zip"), File.basename(install_dir))
+  FileUtils.mv(File.basename(zip, ".zip"), install_dir)
   message(" done\n")
 end
 
