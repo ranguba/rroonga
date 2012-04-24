@@ -146,6 +146,18 @@ def install_groonga_locally_win32(major, minor, micro)
   FileUtils.mv(File.basename(file_name, ".zip"), File.basename(install_dir))
 end
 
+def configure_command_line(prefix)
+  command_line = ["./configure"]
+  debug_build_p = ENV["DEBUG_BUILD"] == "yes"
+  debug_flags = ["CFLAGS=-ggdb3 -O0", "CXXFLAGS=-ggdb3 -O0"]
+  command_line.concat(debug_flags) if debug_build_p
+  command_line << "--prefix=#{prefix}"
+  escaped_command_line = command_line.collect do |command|
+    Shellwords.escape(command)
+  end
+  escaped_command_line.join(" ")
+end
+
 def install_groonga_locally_with_compile(major, minor, micro)
   tar_gz = "groonga-#{major}.#{minor}.#{micro}.tar.gz"
   url = "http://packages.groonga.org/source/groonga/#{tar_gz}"
@@ -172,8 +184,7 @@ def install_groonga_locally_with_compile(major, minor, micro)
   groonga_source_dir = "groonga-#{major}.#{minor}.#{micro}"
   Dir.chdir(groonga_source_dir) do
     message("configuring...")
-    prefix = Shellwords.escape(install_dir)
-    if xsystem("./configure CFLAGS='-g -O0' --prefix=#{prefix}")
+    if xsystem(configure_command_line(install_dir))
       message(" done\n")
     else
       message(" failed\n")
