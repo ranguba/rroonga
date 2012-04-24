@@ -178,7 +178,7 @@ def install_groonga_locally_with_compile(major, minor, micro)
     message(" done\n")
   else
     message(" failed\n")
-    exit 1
+    exit(false)
   end
 
   groonga_source_dir = "groonga-#{major}.#{minor}.#{micro}"
@@ -188,7 +188,7 @@ def install_groonga_locally_with_compile(major, minor, micro)
       message(" done\n")
     else
       message(" failed\n")
-      exit 1
+      exit(false)
     end
 
     message("building (maybe long time)...")
@@ -196,7 +196,7 @@ def install_groonga_locally_with_compile(major, minor, micro)
       message(" done\n")
     else
       message(" failed\n")
-      exit 1
+      exit(false)
     end
 
     message("installing...")
@@ -209,7 +209,7 @@ def install_groonga_locally_with_compile(major, minor, micro)
       message(" done\n")
     else
       message(" failed\n")
-      exit 1
+      exit(false)
     end
   end
 end
