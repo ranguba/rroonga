@@ -118,8 +118,12 @@ def root_entrylist(filename)
 end
 
 def extract_groonga_win32_binary(major, minor, micro)
-  file_name = "groonga-#{major}.#{minor}.#{micro}-x86.zip"
-  # file_name = "groonga-#{major}.#{minor}.#{micro}-x64.zip"
+  if ENV["RROONGA_USE_GROONGA_X64"]
+    architecture = "x64"
+  else
+    architecture = "x86"
+  end
+  file_name = "groonga-#{major}.#{minor}.#{micro}-#{architecture}.zip"
   url = "http://packages.groonga.org/windows/groonga/#{file_name}"
   install_dir = local_groonga_install_dir
 
