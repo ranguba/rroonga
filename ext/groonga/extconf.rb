@@ -72,10 +72,10 @@ def install_groonga_locally(major, minor, micro)
   FileUtils.mkdir_p(local_groonga_base_dir)
 
   Dir.chdir(local_groonga_base_dir) do
-    unless win32?
-      install_groonga_locally_with_compile(major, minor, micro)
-    else
+    if win32?
       install_groonga_locally_win32(major, minor, micro)
+    else
+      install_groonga_locally_with_compile(major, minor, micro)
     end
   end
 
