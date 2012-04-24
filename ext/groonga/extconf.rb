@@ -137,17 +137,20 @@ def extract_groonga_win32_binary(major, minor, micro)
   end
   message(" done\n")
 
-  message("extracting...\n")
+  message("extracting...")
   zip_extract(file_name, '.')
+  message(" done\n")
 
   require 'fileutils'
   if File.exist?(install_dir)
-    message("remove old install...\n")
+    message("remove old install...")
     FileUtils.rm_r(install_dir)
+    message(" done\n")
   end
 
-  message("install...\n")
+  message("install...")
   FileUtils.mv(File.basename(file_name, ".zip"), File.basename(install_dir))
+  message(" done\n")
 end
 
 def configure_command_line(prefix)
