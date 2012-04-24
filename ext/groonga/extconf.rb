@@ -18,6 +18,9 @@
 require 'English'
 require 'pathname'
 require 'mkmf'
+require 'fileutils'
+require 'shellwords'
+require 'open-uri'
 
 begin
   require 'pkg-config'
@@ -66,8 +69,6 @@ checking_for(checking_message("Win32 OS")) do
 end
 
 def install_groonga_locally(major, minor, micro)
-  require 'shellwords'
-
   FileUtils.mkdir_p(local_groonga_base_dir)
 
   Dir.chdir(local_groonga_base_dir) do
@@ -82,8 +83,6 @@ def install_groonga_locally(major, minor, micro)
 end
 
 def download(url)
-  require 'open-uri'
-
   message("downloading %s...", url)
   base_name = File.basename(url)
   if File.exist?(base_name)
@@ -151,7 +150,6 @@ def extract_groonga_win32_binary(major, minor, micro)
   zip_extract(file_name, '.')
   message(" done\n")
 
-  require 'fileutils'
   if File.exist?(install_dir)
     message("remove old install...")
     FileUtils.rm_r(install_dir)
