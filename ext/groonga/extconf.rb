@@ -150,7 +150,7 @@ def extract_groonga_win32_binary(major, minor, micro)
 
   if File.exist?(install_dir)
     message("remove old install... #{install_dir}")
-    FileUtils.rm_r(install_dir)
+    FileUtils.rm_rf(install_dir)
     message(" done\n")
   end
 
