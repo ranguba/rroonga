@@ -315,7 +315,7 @@ class RecordTest < Test::Unit::TestCase
     values = {
       "uri" => "http://groonga.org/",
       "rate" => 5,
-      "comment" => "Grate!"
+      "comment" => "Great!"
     }
     groonga = @bookmarks.add(values)
     assert_equal(values.merge("_id" => groonga.id,
