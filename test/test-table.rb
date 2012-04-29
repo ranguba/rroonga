@@ -660,23 +660,6 @@ class TableTest < Test::Unit::TestCase
       assert_not_nil(bookmarks.column("name"))
     end
 
-    def test_remove
-      bookmarks = Groonga::Array.create(:name => "Bookmarks")
-      by_other_process do
-        bookmarks.remove
-      end
-      assert_predicate(bookmarks, :closed?)
-    end
-
-    def test_remove_column
-      bookmarks = Groonga::Hash.create(:name => "Bookmarks")
-      real_name = bookmarks.define_column("name", "Text")
-      by_other_process do
-        real_name.remove
-      end
-      assert_predicate(real_name, :closed?)
-    end
-
     private
     def by_other_process
       pid = Process.fork do
