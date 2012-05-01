@@ -404,6 +404,24 @@ class ExpressionBuilderTest < Test::Unit::TestCase
   end
 
   class PseudoColumnTest < self
+    def setup_tables
+      Groonga::Schema.define do |schema|
+        schema.create_table("Users",
+                            :type => :hash,
+                            :key_type => "ShortText") do |table|
+          table.short_text("name")
+        end
+      end
+
+      @users = Groonga["Users"]
+    end
+
+    def setup_data
+      @users.add("morita",      :name => "mori daijiro")
+      @users.add("gunyara-kun", :name => "Tasuku SUENAGA")
+      @users.add("yu",          :name => "Yutaro Shimamura")
+    end
+
     def test_id
       result = @users.select do |record|
         record.id == 1
@@ -422,18 +440,20 @@ class ExpressionBuilderTest < Test::Unit::TestCase
 
     def test_score
       result = @users.select do |record|
-        (record.name =~ "o") | (record.hp >= 150)
+        (record.name =~ "mori") |
+          (record.name =~ "daijiro") |
+          (record.name =~ "Tasuku")
       end
       result = result.select do |record|
-        record.score > 1
+        record.score == 2
       end
-      assert_equal(["yu"],
-                   result.collect {|record| record["_key"]})
+      assert_equal([["morita", 2]],
+                   result.collect {|record| [record["_key"], record.key.score]})
     end
 
     def test_n_sub_records
       result = @users.select do |record|
-        (record.name =~ "o") | (record.hp >= 150)
+        (record.key =~ "o") | (record.key == "yu")
       end
       result = result.select do |record|
         record.n_sub_records > 1
