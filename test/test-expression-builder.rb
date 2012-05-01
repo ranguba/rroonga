@@ -337,7 +337,34 @@ class ExpressionBuilderTest < Test::Unit::TestCase
   end
 
   class RecordTest < self
-    def test_record
+    def setup_tables
+      Groonga::Schema.define do |schema|
+        schema.create_table("Users",
+                            :type => :hash,
+                            :key_type => "ShortText") do |table|
+        end
+
+        schema.create_table("Bookmarks") do |table|
+          table.reference("user", "Users")
+          table.short_text("uri")
+        end
+      end
+
+      @users     = Groonga["Users"]
+      @bookmarks = Groonga["Bookmarks"]
+    end
+
+    def setup_data
+      @morita      = @users.add("morita")
+      @gunyara_kun = @users.add("gunyara-kun")
+
+      @bookmarks.add(:user => @morita, :uri => "http://groonga.org/")
+      @bookmarks.add(:user => @morita, :uri => "http://ruby-lang.org/")
+      @bookmarks.add(:user => @gunyara_kun,
+                     :uri => "http://dic.nicovideo.jp/")
+    end
+
+    def test_object
       result = @bookmarks.select do |record|
         record["user"] == @morita
       end
@@ -345,7 +372,7 @@ class ExpressionBuilderTest < Test::Unit::TestCase
                    result.collect {|record| record.key["uri"]})
     end
 
-    def test_record_id
+    def test_id
       result = @bookmarks.select do |record|
         record["user"] == @morita.id
       end
@@ -353,7 +380,7 @@ class ExpressionBuilderTest < Test::Unit::TestCase
                    result.collect {|record| record.key["uri"]})
     end
 
-    def test_record_id_object
+    def test_record_like_object
       morita = Object.new
       morita_singleton_class = (class << morita; self; end)
       morita_id = @morita.id
