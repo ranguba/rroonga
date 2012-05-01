@@ -90,7 +90,7 @@ class ExpressionBuilderTest < Test::Unit::TestCase
                                 :uri => "http://dic.nicovideo.jp/")
   end
 
-  module UserNameFixture
+  class EqualityTest < self
     def setup_tables
       Groonga::Schema.define do |schema|
         schema.create_table("Users",
@@ -108,12 +108,9 @@ class ExpressionBuilderTest < Test::Unit::TestCase
       @users.add("gunyara-kun", :name => "Tasuku SUENAGA")
       @users.add("yu",          :name => "Yutaro Shimamura")
     end
-  end
 
   class EqualTest < self
-    include UserNameFixture
-
-    def test_without_index
+    def test_equal_without_index
       result = @users.select do |record|
         record["name"] == "mori daijiro"
       end
@@ -121,7 +118,7 @@ class ExpressionBuilderTest < Test::Unit::TestCase
                    result.collect {|record| record.key.key})
     end
 
-    def test_with_index
+    def test_equal_with_index
       define_users_name_index
       result = @users.select do |record|
         record["name"] == "mori daijiro"
@@ -132,8 +129,6 @@ class ExpressionBuilderTest < Test::Unit::TestCase
   end
 
   class NotEqualTest < self
-    include UserNameFixture
-
     setup :only_ruby19
 
     def test_without_index
@@ -152,6 +147,7 @@ class ExpressionBuilderTest < Test::Unit::TestCase
       assert_equal(["gunyara-kun", "yu"],
                    result.collect {|record| record.key.key})
     end
+  end
   end
 
   def test_less
