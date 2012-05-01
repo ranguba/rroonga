@@ -445,7 +445,20 @@ class ExpressionBuilderTest < Test::Unit::TestCase
     end
 
     def test_deep_method_chain
-      @pets.add("bob", :name => "morita Bob")
+      Groonga::Schema.define do |schema|
+        schema.create_table("Pets",
+                            :type => :hash,
+                            :key_type => "ShortText") do |table|
+          table.short_text("name")
+        end
+
+        schema.change_table("Users") do |table|
+          table.reference("pet", "Pets")
+        end
+      end
+
+      pets = Groonga["Pets"]
+      pets.add("bob", :name => "morita Bob")
       @morita["pet"] = "bob"
 
       result = @bookmarks.select do |record|
