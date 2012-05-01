@@ -236,34 +236,36 @@ class ExpressionBuilderTest < Test::Unit::TestCase
     end
   end
 
-  def test_match
-    result = @users.select do |record|
-      record["name"] =~ "ro"
+  class FullTextSearchTest < self
+    def test_match
+      result = @users.select do |record|
+        record["name"] =~ "ro"
+      end
+      assert_equal(["morita", "yu"],
+                   result.collect {|record| record.key.key})
     end
-    assert_equal(["morita", "yu"],
-                 result.collect {|record| record.key.key})
-  end
 
-  def test_prefix_saerch
-    result = @users.select do |record|
-      record.section.prefix_search("search")
+    def test_prefix_saerch
+      result = @users.select do |record|
+        record.section.prefix_search("search")
+      end
+      assert_equal(["morita", "yu"].sort,
+                   result.collect {|record| record.key.key}.sort)
     end
-    assert_equal(["morita", "yu"].sort,
-                 result.collect {|record| record.key.key}.sort)
-  end
 
-  def test_suffix_search
-    result = @users.select do |record|
-      record.name.suffix_search("jiro")
+    def test_suffix_search
+      result = @users.select do |record|
+        record.name.suffix_search("jiro")
+      end
+      assert_equal(["morita"].sort,
+                   result.collect {|record| record.key.key}.sort)
     end
-    assert_equal(["morita"].sort,
-                 result.collect {|record| record.key.key}.sort)
-  end
 
-  def test_query_string
-    result = @users.select("name:@ro")
-    assert_equal(["morita", "yu"],
-                 result.collect {|record| record.key.key})
+    def test_query_string
+      result = @users.select("name:@ro")
+      assert_equal(["morita", "yu"],
+                   result.collect {|record| record.key.key})
+    end
   end
 
   def test_record
