@@ -57,7 +57,7 @@ class ExpressionBuilderTest < Test::Unit::TestCase
     end
 
     class EqualTest < self
-      def test_equal_without_index
+      def test_without_index
         result = @users.select do |record|
           record["name"] == "mori daijiro"
         end
@@ -65,7 +65,7 @@ class ExpressionBuilderTest < Test::Unit::TestCase
                      result.collect {|record| record.key.key})
       end
 
-      def test_equal_with_index
+      def test_with_index
         define_users_name_index
         result = @users.select do |record|
           record["name"] == "mori daijiro"
