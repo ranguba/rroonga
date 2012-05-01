@@ -150,7 +150,7 @@ class ExpressionBuilderTest < Test::Unit::TestCase
     end
   end
 
-  class RelationalTest < self
+  class RelationTest < self
     def test_less
       result = @users.select do |record|
         record["hp"] < 150
