@@ -245,6 +245,14 @@ class ExpressionBuilderTest < Test::Unit::TestCase
                    result.collect {|record| record.key.key})
     end
 
+    def test_query_string
+      result = @users.select("name:@ro")
+      assert_equal(["morita", "yu"],
+                   result.collect {|record| record.key.key})
+    end
+  end
+
+  class XfixSearchTest < self
     def test_prefix_saerch
       result = @users.select do |record|
         record.section.prefix_search("search")
@@ -259,12 +267,6 @@ class ExpressionBuilderTest < Test::Unit::TestCase
       end
       assert_equal(["morita"].sort,
                    result.collect {|record| record.key.key}.sort)
-    end
-
-    def test_query_string
-      result = @users.select("name:@ro")
-      assert_equal(["morita", "yu"],
-                   result.collect {|record| record.key.key})
     end
   end
 
