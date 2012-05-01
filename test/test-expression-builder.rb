@@ -237,6 +237,31 @@ class ExpressionBuilderTest < Test::Unit::TestCase
   end
 
   class FullTextSearchTest < self
+    def setup_tables
+      Groonga::Schema.define do |schema|
+        schema.create_table("Users",
+                            :type => :hash,
+                            :key_type => "ShortText") do |table|
+          table.short_text("name")
+        end
+
+        schema.create_table("Terms",
+                            :type => :patricia_trie,
+                            :default_tokenizer => "TokenBigram",
+                            :key_type => "ShortText") do |table|
+          table.index("Users.name")
+        end
+      end
+
+      @users = Groonga["Users"]
+    end
+
+    def setup_data
+      @users.add("morita",      :name => "mori daijiro")
+      @users.add("gunyara-kun", :name => "Tasuku SUENAGA")
+      @users.add("yu",          :name => "Yutaro Shimamura")
+    end
+
     def test_match
       result = @users.select do |record|
         record["name"] =~ "ro"
