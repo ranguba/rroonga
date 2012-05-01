@@ -396,9 +396,41 @@ class ExpressionBuilderTest < Test::Unit::TestCase
   end
 
   class AccessorTest < self
+    def setup_tables
+      Groonga::Schema.define do |schema|
+        schema.create_table("Sections",
+                            :type => :patricia_trie,
+                            :key_type => "ShortText") do |table|
+        end
+
+        schema.create_table("Users",
+                            :type => :hash,
+                            :key_type => "ShortText") do |table|
+          table.short_text("name")
+        end
+
+        schema.create_table("Bookmarks") do |table|
+          table.reference("user", "Users")
+          table.short_text("uri")
+        end
+      end
+
+      @users = Groonga["Users"]
+      @bookmarks = Groonga["Bookmarks"]
+    end
+
+    def setup_data
+      @morita      = @users.add("morita",      :name => "mori daijiro")
+      @gunyara_kun = @users.add("gunyara-kun", :name => "Tasuku SUENAGA")
+
+      @bookmarks.add(:user => @morita,       :uri => "http://groonga.org/")
+      @bookmarks.add(:user => @morita,       :uri => "http://ruby-lang.org/")
+      @bookmarks.add(:user => @gunyara_kun , :uri => "http://dic.nicovideo.jp/")
+    end
+
     def test_nested_column
       result = @bookmarks.select do |record|
-        record[".user.name"] == @morita["name"]
+        record["user.name"] == @morita["name"]
       end
       assert_equal(["http://groonga.org/", "http://ruby-lang.org/"],
                    result.collect {|record| record["uri"]})
