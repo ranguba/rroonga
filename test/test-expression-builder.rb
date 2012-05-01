@@ -201,13 +201,13 @@ class ExpressionBuilderTest < Test::Unit::TestCase
   end
 
   class LogicalTest < self
-  def test_and
-    result = @users.select do |record|
-      (record["hp"] > 100) & (record["hp"] <= 200)
+    def test_and
+      result = @users.select do |record|
+        (record["hp"] > 100) & (record["hp"] <= 200)
+      end
+      assert_equal(["gunyara-kun", "yu"],
+                   result.collect {|record| record.key.key})
     end
-    assert_equal(["gunyara-kun", "yu"],
-                 result.collect {|record| record.key.key})
-  end
   end
 
   def test_match
