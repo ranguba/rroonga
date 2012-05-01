@@ -403,6 +403,7 @@ class ExpressionBuilderTest < Test::Unit::TestCase
     end
   end
 
+  class PseudoColumnTest < self
   def test_id
     result = @users.select do |record|
       record.id == 1
@@ -439,5 +440,6 @@ class ExpressionBuilderTest < Test::Unit::TestCase
     end
     assert_equal(["yu"],
                  result.collect {|record| record["_key"]})
+  end
   end
 end
