@@ -337,35 +337,35 @@ class ExpressionBuilderTest < Test::Unit::TestCase
   end
 
   class RecordTest < self
-  def test_record
-    result = @bookmarks.select do |record|
-      record["user"] == @morita
+    def test_record
+      result = @bookmarks.select do |record|
+        record["user"] == @morita
+      end
+      assert_equal(["http://groonga.org/", "http://ruby-lang.org/"],
+                   result.collect {|record| record.key["uri"]})
     end
-    assert_equal(["http://groonga.org/", "http://ruby-lang.org/"],
-                 result.collect {|record| record.key["uri"]})
-  end
 
-  def test_record_id
-    result = @bookmarks.select do |record|
-      record["user"] == @morita.id
+    def test_record_id
+      result = @bookmarks.select do |record|
+        record["user"] == @morita.id
+      end
+      assert_equal(["http://groonga.org/", "http://ruby-lang.org/"],
+                   result.collect {|record| record.key["uri"]})
     end
-    assert_equal(["http://groonga.org/", "http://ruby-lang.org/"],
-                 result.collect {|record| record.key["uri"]})
-  end
 
-  def test_record_id_object
-    morita = Object.new
-    morita_singleton_class = (class << morita; self; end)
-    morita_id = @morita.id
-    morita_singleton_class.send(:define_method, :record_id) do
-      morita_id
+    def test_record_id_object
+      morita = Object.new
+      morita_singleton_class = (class << morita; self; end)
+      morita_id = @morita.id
+      morita_singleton_class.send(:define_method, :record_id) do
+        morita_id
+      end
+      result = @bookmarks.select do |record|
+        record["user"] == morita
+      end
+      assert_equal(["http://groonga.org/", "http://ruby-lang.org/"],
+                   result.collect {|record| record.key["uri"]})
     end
-    result = @bookmarks.select do |record|
-      record["user"] == morita
-    end
-    assert_equal(["http://groonga.org/", "http://ruby-lang.org/"],
-                 result.collect {|record| record.key["uri"]})
-  end
   end
 
   def test_nested_column
