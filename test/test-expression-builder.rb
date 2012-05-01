@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2011  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2012  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -42,13 +42,6 @@ class ExpressionBuilderTest < Test::Unit::TestCase
         table.reference("section", "Sections")
       end
 
-      schema.create_table("Terms",
-                          :type => :patricia_trie,
-                          :default_tokenizer => "TokenBigram",
-                          :key_type => "ShortText") do |table|
-        table.index("Users.name")
-      end
-
       schema.create_table("Bookmarks") do |table|
         table.reference("user", "Users")
         table.short_text("uri")
@@ -59,9 +52,22 @@ class ExpressionBuilderTest < Test::Unit::TestCase
       end
     end
 
+    define_users_name_index
+
     @pets = Groonga["Pets"]
     @users = Groonga["Users"]
     @bookmarks = Groonga["Bookmarks"]
+  end
+
+  def define_users_name_index
+    Groonga::Schema.define do |schema|
+      schema.create_table("Terms",
+                          :type => :patricia_trie,
+                          :default_tokenizer => "TokenBigram",
+                          :key_type => "ShortText") do |table|
+        table.index("Users.name")
+      end
+    end
   end
 
   def setup_data
@@ -84,12 +90,41 @@ class ExpressionBuilderTest < Test::Unit::TestCase
                                 :uri => "http://dic.nicovideo.jp/")
   end
 
-  def test_equal
-    result = @users.select do |record|
-      record["name"] == "mori daijiro"
+  class EqualTest < self
+    def setup_tables
+      Groonga::Schema.define do |schema|
+        schema.create_table("Users",
+                            :type => :hash,
+                            :key_type => "ShortText") do |table|
+          table.short_text("name")
+        end
+      end
+
+      @users = Groonga["Users"]
     end
-    assert_equal(["morita"],
-                 result.collect {|record| record.key.key})
+
+    def setup_data
+      @users.add("morita",       :name => "mori daijiro")
+      @users.add("gunyara-kun", :name => "Tasuku SUENAGA")
+      @users.add("yu",          :name => "Yutaro Shimamura")
+    end
+
+    def test_without_index
+      result = @users.select do |record|
+        record["name"] == "mori daijiro"
+      end
+      assert_equal(["morita"],
+                   result.collect {|record| record.key.key})
+    end
+
+    def test_with_index
+      define_users_name_index
+      result = @users.select do |record|
+        record["name"] == "mori daijiro"
+      end
+      assert_equal(["morita"],
+                   result.collect {|record| record.key.key})
+    end
   end
 
   def test_not_equal
