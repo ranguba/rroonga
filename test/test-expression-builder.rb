@@ -395,6 +395,7 @@ class ExpressionBuilderTest < Test::Unit::TestCase
     end
   end
 
+  class AccessorTest < self
   def test_nested_column
     result = @bookmarks.select do |record|
       record[".user.name"] == @morita["name"]
@@ -420,6 +421,7 @@ class ExpressionBuilderTest < Test::Unit::TestCase
     end
     assert_equal(["http://groonga.org/", "http://ruby-lang.org/"],
                  result.collect {|record| record["uri"]})
+  end
   end
 
   def test_nil_match
