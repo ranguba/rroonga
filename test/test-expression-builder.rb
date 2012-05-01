@@ -104,7 +104,7 @@ class ExpressionBuilderTest < Test::Unit::TestCase
     end
 
     def setup_data
-      @users.add("morita",       :name => "mori daijiro")
+      @users.add("morita",      :name => "mori daijiro")
       @users.add("gunyara-kun", :name => "Tasuku SUENAGA")
       @users.add("yu",          :name => "Yutaro Shimamura")
     end
