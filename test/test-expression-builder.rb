@@ -21,29 +21,47 @@ class ExpressionBuilderTest < Test::Unit::TestCase
   setup :setup_data
 
   def setup_tables
-    @pets = Groonga::Hash.create(:name => "Pets", :key_type => "ShortText")
-    @pets.define_column("name", "ShortText")
+    Groonga::Schema.define do |schema|
+      schema.create_table("Pets",
+                          :type => :hash,
+                          :key_type => "ShortText") do |table|
+        table.short_text("name")
+      end
 
-    @sections = Groonga::PatriciaTrie.create(:name => "Sections",
-                                             :key_type => "ShortText")
+      schema.create_table("Sections",
+                          :type => :patricia_trie,
+                          :key_type => "ShortText") do |table|
+      end
 
-    @users = Groonga::Hash.create(:name => "Users", :key_type => "ShortText")
-    @name = @users.define_column("name", "ShortText")
-    @hp = @users.define_column("hp", "UInt32")
-    @user_pet = @users.define_column("pet", @pets)
-    @user_section = @users.define_column("section", @sections)
+      schema.create_table("Users",
+                          :type => :hash,
+                          :key_type => "ShortText") do |table|
+        table.short_text("name")
+        table.uint32("hp")
+        table.reference("pet", "Pets")
+        table.reference("section", "Sections")
+      end
 
-    @terms = Groonga::PatriciaTrie.create(:name => "Terms",
-                                          :default_tokenizer => "TokenBigram",
-                                          :key_type => "ShortText")
-    @terms.define_index_column("user_name", @users, :source => @name)
+      schema.create_table("Terms",
+                          :type => :patricia_trie,
+                          :default_tokenizer => "TokenBigram",
+                          :key_type => "ShortText") do |table|
+        table.index("Users.name")
+      end
 
-    @bookmarks = Groonga::Array.create(:name => "Bookmarks")
-    @bookmarks.define_column("user", @users)
-    @bookmarks.define_column("uri", "ShortText")
+      schema.create_table("Bookmarks") do |table|
+        table.reference("user", "Users")
+        table.short_text("uri")
+      end
 
-    @sections.define_index_column("user_section", @users,
-                                  :source => @user_section)
+      schema.change_table("Sections") do |table|
+        table.index("Users.section")
+      end
+    end
+
+    @pets = Groonga["Pets"]
+    @users = Groonga["Users"]
+    @bookmarks = Groonga["Bookmarks"]
   end
 
   def setup_data
