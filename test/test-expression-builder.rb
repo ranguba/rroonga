@@ -396,32 +396,32 @@ class ExpressionBuilderTest < Test::Unit::TestCase
   end
 
   class AccessorTest < self
-  def test_nested_column
-    result = @bookmarks.select do |record|
-      record[".user.name"] == @morita["name"]
+    def test_nested_column
+      result = @bookmarks.select do |record|
+        record[".user.name"] == @morita["name"]
+      end
+      assert_equal(["http://groonga.org/", "http://ruby-lang.org/"],
+                   result.collect {|record| record["uri"]})
     end
-    assert_equal(["http://groonga.org/", "http://ruby-lang.org/"],
-                 result.collect {|record| record["uri"]})
-  end
 
-  def test_method_chain
-    result = @bookmarks.select do |record|
-      record.user.name == @morita["name"]
+    def test_method_chain
+      result = @bookmarks.select do |record|
+        record.user.name == @morita["name"]
+      end
+      assert_equal(["http://groonga.org/", "http://ruby-lang.org/"],
+                   result.collect {|record| record["uri"]})
     end
-    assert_equal(["http://groonga.org/", "http://ruby-lang.org/"],
-                 result.collect {|record| record["uri"]})
-  end
 
-  def test_deep_method_chain
-    @pets.add("bob", :name => "morita Bob")
-    @morita["pet"] = "bob"
+    def test_deep_method_chain
+      @pets.add("bob", :name => "morita Bob")
+      @morita["pet"] = "bob"
 
-    result = @bookmarks.select do |record|
-      record.user.pet.name == "morita Bob"
+      result = @bookmarks.select do |record|
+        record.user.pet.name == "morita Bob"
+      end
+      assert_equal(["http://groonga.org/", "http://ruby-lang.org/"],
+                   result.collect {|record| record["uri"]})
     end
-    assert_equal(["http://groonga.org/", "http://ruby-lang.org/"],
-                 result.collect {|record| record["uri"]})
-  end
   end
 
   def test_nil_match
