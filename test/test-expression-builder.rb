@@ -21,73 +21,9 @@ class ExpressionBuilderTest < Test::Unit::TestCase
   setup :setup_data
 
   def setup_tables
-    Groonga::Schema.define do |schema|
-      schema.create_table("Pets",
-                          :type => :hash,
-                          :key_type => "ShortText") do |table|
-        table.short_text("name")
-      end
-
-      schema.create_table("Sections",
-                          :type => :patricia_trie,
-                          :key_type => "ShortText") do |table|
-      end
-
-      schema.create_table("Users",
-                          :type => :hash,
-                          :key_type => "ShortText") do |table|
-        table.short_text("name")
-        table.uint32("hp")
-        table.reference("pet", "Pets")
-        table.reference("section", "Sections")
-      end
-
-      schema.create_table("Bookmarks") do |table|
-        table.reference("user", "Users")
-        table.short_text("uri")
-      end
-
-      schema.change_table("Sections") do |table|
-        table.index("Users.section")
-      end
-    end
-
-    define_users_name_index
-
-    @pets = Groonga["Pets"]
-    @users = Groonga["Users"]
-    @bookmarks = Groonga["Bookmarks"]
-  end
-
-  def define_users_name_index
-    Groonga::Schema.define do |schema|
-      schema.create_table("Terms",
-                          :type => :patricia_trie,
-                          :default_tokenizer => "TokenBigram",
-                          :key_type => "ShortText") do |table|
-        table.index("Users.name")
-      end
-    end
   end
 
   def setup_data
-    @morita = @users.add("morita",
-                         :name => "mori daijiro",
-                         :hp => 100,
-                         :section => "search/core")
-    @gunyara_kun = @users.add("gunyara-kun",
-                              :name => "Tasuku SUENAGA",
-                              :hp => 150,
-                              :section => "suggest/all")
-    @yu = @users.add("yu",
-                     :name => "Yutaro Shimamura",
-                     :hp => 200,
-                     :section => "search/all")
-
-    @groonga = @bookmarks.add(:user => @morita, :uri => "http://groonga.org/")
-    @ruby = @bookmarks.add(:user => @morita, :uri => "http://ruby-lang.org/")
-    @nico_dict = @bookmarks.add(:user => @gunyara_kun,
-                                :uri => "http://dic.nicovideo.jp/")
   end
 
   class EqualityTest < self
@@ -101,6 +37,17 @@ class ExpressionBuilderTest < Test::Unit::TestCase
       end
 
       @users = Groonga["Users"]
+    end
+
+    def define_users_name_index
+      Groonga::Schema.define do |schema|
+        schema.create_table("Terms",
+                            :type => :patricia_trie,
+                            :default_tokenizer => "TokenBigram",
+                            :key_type => "ShortText") do |table|
+          table.index("Users.name")
+        end
+      end
     end
 
     def setup_data
@@ -299,12 +246,6 @@ class ExpressionBuilderTest < Test::Unit::TestCase
   end
 
   class XfixSearchTest < self
-    def setup_tables
-    end
-
-    def setup_data
-    end
-
     def test_prefix_saerch
       Groonga::Schema.define do |schema|
         schema.create_table("Sections",
