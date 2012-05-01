@@ -151,35 +151,35 @@ class ExpressionBuilderTest < Test::Unit::TestCase
   end
 
   class RelationalTest < self
-  def test_less
-    result = @users.select do |record|
-      record["hp"] < 150
+    def test_less
+      result = @users.select do |record|
+        record["hp"] < 150
+      end
+      assert_equal(["morita"], result.collect {|record| record.key.key})
     end
-    assert_equal(["morita"], result.collect {|record| record.key.key})
-  end
 
-  def test_less_equal
-    result = @users.select do |record|
-      record["hp"] <= 150
+    def test_less_equal
+      result = @users.select do |record|
+        record["hp"] <= 150
+      end
+      assert_equal(["morita", "gunyara-kun"],
+                   result.collect {|record| record.key.key})
     end
-    assert_equal(["morita", "gunyara-kun"],
-                 result.collect {|record| record.key.key})
-  end
 
-  def test_greater
-    result = @users.select do |record|
-      record["hp"] > 150
+    def test_greater
+      result = @users.select do |record|
+        record["hp"] > 150
+      end
+      assert_equal(["yu"], result.collect {|record| record.key.key})
     end
-    assert_equal(["yu"], result.collect {|record| record.key.key})
-  end
 
-  def test_greater_equal
-    result = @users.select do |record|
-      record["hp"] >= 150
+    def test_greater_equal
+      result = @users.select do |record|
+        record["hp"] >= 150
+      end
+      assert_equal(["gunyara-kun", "yu"],
+                   result.collect {|record| record.key.key})
     end
-    assert_equal(["gunyara-kun", "yu"],
-                 result.collect {|record| record.key.key})
-  end
   end
 
   def test_and
