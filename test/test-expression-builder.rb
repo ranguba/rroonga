@@ -404,42 +404,42 @@ class ExpressionBuilderTest < Test::Unit::TestCase
   end
 
   class PseudoColumnTest < self
-  def test_id
-    result = @users.select do |record|
-      record.id == 1
+    def test_id
+      result = @users.select do |record|
+        record.id == 1
+      end
+      assert_equal(["morita"],
+                   result.collect {|record| record.key.key})
     end
-    assert_equal(["morita"],
-                 result.collect {|record| record.key.key})
-  end
 
-  def test_key
-    result = @users.select do |record|
-      record.key == "morita"
+    def test_key
+      result = @users.select do |record|
+        record.key == "morita"
+      end
+      assert_equal(["morita"],
+                   result.collect {|record| record.key.key})
     end
-    assert_equal(["morita"],
-                 result.collect {|record| record.key.key})
-  end
 
-  def test_score
-    result = @users.select do |record|
-      (record.name =~ "o") | (record.hp >= 150)
+    def test_score
+      result = @users.select do |record|
+        (record.name =~ "o") | (record.hp >= 150)
+      end
+      result = result.select do |record|
+        record.score > 1
+      end
+      assert_equal(["yu"],
+                   result.collect {|record| record["_key"]})
     end
-    result = result.select do |record|
-      record.score > 1
-    end
-    assert_equal(["yu"],
-                 result.collect {|record| record["_key"]})
-  end
 
-  def test_n_sub_records
-    result = @users.select do |record|
-      (record.name =~ "o") | (record.hp >= 150)
+    def test_n_sub_records
+      result = @users.select do |record|
+        (record.name =~ "o") | (record.hp >= 150)
+      end
+      result = result.select do |record|
+        record.n_sub_records > 1
+      end
+      assert_equal(["yu"],
+                   result.collect {|record| record["_key"]})
     end
-    result = result.select do |record|
-      record.n_sub_records > 1
-    end
-    assert_equal(["yu"],
-                 result.collect {|record| record["_key"]})
-  end
   end
 end
