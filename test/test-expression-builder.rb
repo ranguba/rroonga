@@ -479,16 +479,6 @@ class ExpressionBuilderTest < Test::Unit::TestCase
     end
   end
 
-  def test_nil_match
-    @users.select do |record|
-      exception = ArgumentError.new("match word should not be nil: Users.name")
-      assert_raise(exception) do
-        record["name"] =~ nil
-      end
-      record["name"] == "dummy"
-    end
-  end
-
   class PseudoColumnTest < self
     def setup_tables
       Groonga::Schema.define do |schema|
