@@ -253,19 +253,49 @@ class ExpressionBuilderTest < Test::Unit::TestCase
   end
 
   class XfixSearchTest < self
+    def setup_tables
+    end
+
+    def setup_data
+    end
+
     def test_prefix_saerch
-      result = @users.select do |record|
-        record.section.prefix_search("search")
+      Groonga::Schema.define do |schema|
+        schema.create_table("Sections",
+                            :type => :patricia_trie,
+                            :key_type => "ShortText") do |table|
+        end
       end
-      assert_equal(["morita", "yu"].sort,
+
+      sections = Groonga["Sections"]
+      sections.add("search/core")
+      sections.add("suggest/all")
+      sections.add("search/all")
+      result = sections.select do |record|
+        record.key.prefix_search("search")
+      end
+      assert_equal(["search/all", "search/core"].sort,
                    result.collect {|record| record.key.key}.sort)
     end
 
     def test_suffix_search
-      result = @users.select do |record|
-        record.name.suffix_search("jiro")
+      Groonga::Schema.define do |schema|
+        schema.create_table("Sections",
+                            :type => :patricia_trie,
+                            :key_with_sis => true,
+                            :key_type => "ShortText") do |table|
+        end
       end
-      assert_equal(["morita"].sort,
+
+      sections = Groonga["Sections"]
+      sections.add("search/core")
+      sections.add("suggest/all")
+      sections.add("search/all")
+
+      result = sections.select do |record|
+        record.key.suffix_search("all")
+      end
+      assert_equal(["suggest/all", "search/all"].sort,
                    result.collect {|record| record.key.key}.sort)
     end
   end
