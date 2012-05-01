@@ -150,6 +150,7 @@ class ExpressionBuilderTest < Test::Unit::TestCase
     end
   end
 
+  class RelationalTest < self
   def test_less
     result = @users.select do |record|
       record["hp"] < 150
@@ -178,6 +179,7 @@ class ExpressionBuilderTest < Test::Unit::TestCase
     end
     assert_equal(["gunyara-kun", "yu"],
                  result.collect {|record| record.key.key})
+  end
   end
 
   def test_and
