@@ -201,6 +201,24 @@ class ExpressionBuilderTest < Test::Unit::TestCase
   end
 
   class LogicalTest < self
+    def setup_tables
+      Groonga::Schema.define do |schema|
+        schema.create_table("Users",
+                            :type => :hash,
+                            :key_type => "ShortText") do |table|
+          table.uint32("hp")
+        end
+      end
+
+      @users = Groonga["Users"]
+    end
+
+    def setup_data
+      @users.add("morita",      :hp => 100)
+      @users.add("gunyara-kun", :hp => 150)
+      @users.add("yu",          :hp => 200)
+    end
+
     def test_and
       result = @users.select do |record|
         (record["hp"] > 100) & (record["hp"] <= 200)
