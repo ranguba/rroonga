@@ -413,6 +413,13 @@ class ExpressionBuilderTest < Test::Unit::TestCase
                             :key_type => "ShortText") do |table|
           table.short_text("name")
         end
+
+        schema.create_table("Terms",
+                            :type => :patricia_trie,
+                            :default_tokenizer => "TokenBigram",
+                            :key_type => "ShortText") do |table|
+          table.index("Users.name")
+        end
       end
 
       @users = Groonga["Users"]
@@ -455,13 +462,15 @@ class ExpressionBuilderTest < Test::Unit::TestCase
 
     def test_n_sub_records
       result = @users.select do |record|
-        (record.key =~ "o") | (record.key == "yu")
+        (record.name =~ "o") | (record.key == "yu")
       end
       result = result.select do |record|
         record.n_sub_records > 1
       end
-      assert_equal(["yu"],
-                   result.collect {|record| record["_key"]})
+      matched_records = result.collect do |record|
+        [record["_key"], record.key.n_sub_records]
+      end
+      assert_equal([["yu", 2]], matched_records)
     end
   end
 end
