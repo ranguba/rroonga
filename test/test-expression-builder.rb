@@ -109,45 +109,45 @@ class ExpressionBuilderTest < Test::Unit::TestCase
       @users.add("yu",          :name => "Yutaro Shimamura")
     end
 
-  class EqualTest < self
-    def test_equal_without_index
-      result = @users.select do |record|
-        record["name"] == "mori daijiro"
+    class EqualTest < self
+      def test_equal_without_index
+        result = @users.select do |record|
+          record["name"] == "mori daijiro"
+        end
+        assert_equal(["morita"],
+                     result.collect {|record| record.key.key})
       end
-      assert_equal(["morita"],
-                   result.collect {|record| record.key.key})
+
+      def test_equal_with_index
+        define_users_name_index
+        result = @users.select do |record|
+          record["name"] == "mori daijiro"
+        end
+        assert_equal(["morita"],
+                     result.collect {|record| record.key.key})
+      end
     end
 
-    def test_equal_with_index
-      define_users_name_index
-      result = @users.select do |record|
-        record["name"] == "mori daijiro"
-      end
-      assert_equal(["morita"],
-                   result.collect {|record| record.key.key})
-    end
-  end
+    class NotEqualTest < self
+      setup :only_ruby19
 
-  class NotEqualTest < self
-    setup :only_ruby19
-
-    def test_without_index
-      result = @users.select do |record|
-        record["name"] != "mori daijiro"
+      def test_without_index
+        result = @users.select do |record|
+          record["name"] != "mori daijiro"
+        end
+        assert_equal(["gunyara-kun", "yu"],
+                     result.collect {|record| record.key.key})
       end
-      assert_equal(["gunyara-kun", "yu"],
-                   result.collect {|record| record.key.key})
-    end
 
-    def test_with_index
-      define_users_name_index
-      result = @users.select do |record|
-        record["name"] != "mori daijiro"
+      def test_with_index
+        define_users_name_index
+        result = @users.select do |record|
+          record["name"] != "mori daijiro"
+        end
+        assert_equal(["gunyara-kun", "yu"],
+                     result.collect {|record| record.key.key})
       end
-      assert_equal(["gunyara-kun", "yu"],
-                   result.collect {|record| record.key.key})
     end
-  end
   end
 
   def test_less
