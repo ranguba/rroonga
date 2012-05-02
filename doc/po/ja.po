@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: rroonga 1.2.3\n"
 "POT-Creation-Date: 2012-05-02 13:47+0900\n"
-"PO-Revision-Date: 2012-05-02 12:55+0900\n"
+"PO-Revision-Date: 2012-05-02 13:49+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: \n"
@@ -1910,7 +1910,7 @@ msgstr "修正"
 
 #: doc/reference/en/file.news.html:68(li)
 msgid "Fixed a bug that weight of match target is ignored."
-msgstr ""
+msgstr "マッチカラムの重みが無視される問題を修正。"
 
 #: doc/reference/en/file.news.html:70(h2)
 msgid "2.0.3: 2012-05-02"
