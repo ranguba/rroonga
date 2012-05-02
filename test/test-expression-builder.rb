@@ -246,7 +246,7 @@ class ExpressionBuilderTest < Test::Unit::TestCase
   end
 
   class PrefixSearchTest < self
-    def test_match
+    def setup_tables
       Groonga::Schema.define do |schema|
         schema.create_table("Sections",
                             :type => :patricia_trie,
@@ -254,11 +254,17 @@ class ExpressionBuilderTest < Test::Unit::TestCase
         end
       end
 
-      sections = Groonga["Sections"]
-      sections.add("search/core")
-      sections.add("suggest/all")
-      sections.add("search/all")
-      result = sections.select do |record|
+      @sections = Groonga["Sections"]
+    end
+
+    def setup_data
+      @sections.add("search/core")
+      @sections.add("suggest/all")
+      @sections.add("search/all")
+    end
+
+    def test_match
+      result = @sections.select do |record|
         record.key.prefix_search("search")
       end
       assert_equal(["search/all", "search/core"].sort,
@@ -267,7 +273,7 @@ class ExpressionBuilderTest < Test::Unit::TestCase
   end
 
   class SuffixSearchTest < self
-    def test_match
+    def setup_tables
       Groonga::Schema.define do |schema|
         schema.create_table("Sections",
                             :type => :patricia_trie,
@@ -276,12 +282,17 @@ class ExpressionBuilderTest < Test::Unit::TestCase
         end
       end
 
-      sections = Groonga["Sections"]
-      sections.add("search/core")
-      sections.add("suggest/all")
-      sections.add("search/all")
+      @sections = Groonga["Sections"]
+    end
 
-      result = sections.select do |record|
+    def setup_data
+      @sections.add("search/core")
+      @sections.add("suggest/all")
+      @sections.add("search/all")
+    end
+
+    def test_match
+      result = @sections.select do |record|
         record.key.suffix_search("all")
       end
       assert_equal(["suggest/all", "search/all"].sort,
