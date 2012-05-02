@@ -245,8 +245,8 @@ class ExpressionBuilderTest < Test::Unit::TestCase
     end
   end
 
-  class XfixSearchTest < self
-    def test_prefix_saerch
+  class PrefixSearchTest < self
+    def test_match
       Groonga::Schema.define do |schema|
         schema.create_table("Sections",
                             :type => :patricia_trie,
@@ -264,8 +264,10 @@ class ExpressionBuilderTest < Test::Unit::TestCase
       assert_equal(["search/all", "search/core"].sort,
                    result.collect {|record| record.key.key}.sort)
     end
+  end
 
-    def test_suffix_search
+  class SuffixSearchTest < self
+    def test_match
       Groonga::Schema.define do |schema|
         schema.create_table("Sections",
                             :type => :patricia_trie,
