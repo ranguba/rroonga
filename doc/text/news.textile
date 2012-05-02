@@ -10,7 +10,7 @@ h3. Improvements
 * [grndump] added @--order-by=id@ option. With this option, dumped
   records are sorted by ID instead of key. You can restore records
   without ID change if you don't delete any records. [#1341]
-* Supported building on Windows with RubyInstaller for Windows with DevKit
+* Supported building on Windows with RubyInstaller for Windows with DevKit.
   [GitHub#6] [Patch by @ongaeshi]
 * Supported similar search by @table.select {|record|
   record.column.similar_search(text)}@ syntax.
