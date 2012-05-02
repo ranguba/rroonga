@@ -1,5 +1,11 @@
 h1. NEWS
 
+h2(#2-0-4). 2.0.4: 2012-05-02
+
+h3. Fixes
+
+* Fixed a bug that weight of match target is ignored.
+
 h2(#2-0-3). 2.0.3: 2012-05-02
 
 h3. Improvements
