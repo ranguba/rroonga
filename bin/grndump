@@ -69,7 +69,7 @@ option_parser = OptionParser.new do |parser|
   parser.on("--order-by=TYPE", types,
             "sort output recoreds by TYPE.",
             "available TYPEs: #{types.join(', ')}",
-            "(#{options.type})") do |type|
+            "(#{options.order_by})") do |type|
     options.order_by = type
   end
 end
