@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2009-2011  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2012  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -226,6 +226,10 @@ module Groonga
         SuffixSearchExpressionBuilder.new(self, normalize(other))
       end
 
+      def similar_search(other)
+        SimilarSearchExpressionBuilder.new(self, normalize(other))
+      end
+
       private
       def normalize(other)
         if @range.is_a?(Groonga::Table)
@@ -404,6 +408,13 @@ module Groonga
     class SuffixSearchExpressionBuilder < BinaryExpressionBuilder
       def initialize(column_value_builder, value)
         super(Groonga::Operation::SUFFIX, column_value_builder, value)
+      end
+    end
+
+    # @private
+    class SimilarSearchExpressionBuilder < BinaryExpressionBuilder
+      def initialize(column_value_builder, value)
+        super(Groonga::Operation::SIMILAR, column_value_builder, value)
       end
     end
   end
