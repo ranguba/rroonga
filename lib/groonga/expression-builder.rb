@@ -582,6 +582,10 @@ module Groonga
       column_value_expression_builder.match(query, options, &block)
     end
 
+    def similar_search(text)
+      column_value_expression_builder.similar_search(text)
+    end
+
     private
     def column_value_expression_builder
       ColumnValueExpressionBuilder.new(@default_column,

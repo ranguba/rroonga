@@ -346,9 +346,17 @@ this kind of tasks.
 EOC
     end
 
-    def test_column
+    def test_table
       result = @documents.select do |record|
         record.content.similar_search("fast full text search real time")
+      end
+      assert_equal(["Groonga overview", "Column store and aggregate query"].sort,
+                   result.collect {|record| record.key.key}.sort)
+    end
+
+    def test_column
+      result = @documents.column("content").select do |content|
+        content.similar_search("fast full text search real time")
       end
       assert_equal(["Groonga overview", "Column store and aggregate query"].sort,
                    result.collect {|record| record.key.key}.sort)
