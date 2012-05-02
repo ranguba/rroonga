@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: rroonga 1.2.3\n"
-"POT-Creation-Date: 2012-05-02 12:19+0900\n"
-"PO-Revision-Date: 2012-03-29 16:57+0900\n"
+"POT-Creation-Date: 2012-05-02 12:25+0900\n"
+"PO-Revision-Date: 2012-05-02 12:25+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: \n"
@@ -1909,16 +1909,16 @@ msgid "Improvements"
 msgstr "改良"
 
 #: doc/reference/en/file.news.html:68(li)
-#, fuzzy
 msgid "Supported groonga 2.0.2."
-msgstr "groonga 2.0.1対応。"
+msgstr "groonga 2.0.2対応。"
 
 #: doc/reference/en/file.news.html:69(li)
-#, fuzzy
 msgid ""
 "Groonga::Table#each supports options that are same as Groonga::"
 "Table#open_cursor’s one."
-msgstr "Groonga::Database#eachで繰り返す順序を指定可能にした。"
+msgstr ""
+"Groonga::Table#eachでGroonga::Table#open_cursorと同じオプションを受け付けるよ"
+"うにした。"
 
 #: doc/reference/en/file.news.html:71(code)
 msgid "--order-by=id"
@@ -1930,12 +1930,18 @@ msgid ""
 "are sorted by ID instead of key. You can restore records without ID change "
 "if you don’t delete any records. [#1341]"
 msgstr ""
+"[grndump] <placeholder-1/>オプションを追加。このオプションを使うと、キーでは"
+"なくIDでレコードをソートしてダンプします。もし、レコードを削除していない場合"
+"はこのオプションを使うことでレコードIDを変更せずにレコードをリストアできま"
+"す。 [#1341]"
 
 #: doc/reference/en/file.news.html:74(li)
 msgid ""
-"Supported building on Windows with RubyInstaller for Windows with DevKit "
+"Supported building on Windows with RubyInstaller for Windows with DevKit. "
 "[GitHub#6] [Patch by @ongaeshi]"
 msgstr ""
+"RubyInstall for WIndowsのDevKitを使ったWindows上でのビルドをサポート。 "
+"[GitHub#6] [@ongaeshiさんがパッチ提供]"
 
 #: doc/reference/en/file.news.html:76(code)
 msgid "table.select {|record| record.column.similar_search(text)}"
@@ -1943,7 +1949,7 @@ msgstr ""
 
 #: doc/reference/en/file.news.html:76(li)
 msgid "Supported similar search by <placeholder-1/> syntax."
-msgstr ""
+msgstr "類似文書検索をサポート。構文は<placeholder-1/>。"
 
 #: doc/reference/en/file.news.html:79(h3)
 #: doc/reference/en/file.news.html:93(h3)
@@ -1966,9 +1972,8 @@ msgid "Fixes"
 msgstr "修正"
 
 #: doc/reference/en/file.news.html:81(li)
-#, fuzzy
 msgid "Fixed a GC related crach bug."
-msgstr "Groonga::Snippetに関連したGCでクラッシュするバグを修正した。"
+msgstr "GC関連ででクラッシュするバグを修正。"
 
 #: doc/reference/en/file.news.html:83(h3)
 #: doc/reference/en/file.news.html:110(h3)
@@ -1985,7 +1990,6 @@ msgid "Thanks"
 msgstr "感謝"
 
 #: doc/reference/en/file.news.html:85(li)
-#, fuzzy
 msgid "@ongaeshi"
 msgstr "ongaeshiさん"
 
