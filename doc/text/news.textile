@@ -1,5 +1,28 @@
 h1. NEWS
 
+h2(#2-0-3). 2.0.3: 2012-05-02
+
+h3. Improvements
+
+* Supported groonga 2.0.2.
+* Groonga::Table#each supports options that are same as
+  Groonga::Table#open_cursor's one.
+* [grndump] added @--order-by=id@ option. With this option, dumped
+  records are sorted by ID instead of key. You can restore records
+  without ID change if you don't delete any records. [#1341]
+* Supported building on Windows with RubyInstaller for Windows with DevKit
+  [GitHub#6] [Patch by @ongaeshi]
+* Supported similar search by @table.select {|record|
+  record.column.similar_search(text)}@ syntax.
+
+h3. Fixes
+
+* Fixed a GC related crach bug.
+
+h3. Thanks
+
+* @ongaeshi
+
 h2(#2-0-2). 2.0.2: 2012-03-29
 
 h3. Improvements
