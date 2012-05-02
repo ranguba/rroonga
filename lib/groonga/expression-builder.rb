@@ -513,7 +513,7 @@ module Groonga
   # @private
   class MatchTargetRecordExpressionBuilder < RecordExpressionBuilder
     private
-    def column_variable_expression_builder(column, name)
+    def column_expression_builder(column, name)
       MatchTargetColumnExpressionBuilder.new(column,
                                              :table => @table,
                                              :column_name => name)
