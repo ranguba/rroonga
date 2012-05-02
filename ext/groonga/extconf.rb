@@ -29,7 +29,7 @@ rescue LoadError
   require "pkg-config"
 end
 
-base_dir = Pathname(__FILE__).dirname.parent.parent
+base_dir = Pathname(__FILE__).dirname.parent.parent.expand_path
 $LOAD_PATH.unshift(base_dir.to_s)
 
 require "rroonga-build"
