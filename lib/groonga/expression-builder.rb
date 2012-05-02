@@ -436,7 +436,7 @@ module Groonga
           "for table <#{@table.inspect}>"
         raise ArgumentError, message
       end
-      column_value_expression_builder(column, name)
+      column_expression_builder(column, name)
     end
 
     def id
@@ -482,7 +482,7 @@ module Groonga
         raise ArgumentError,
               "different index column: <#{name}>: #{object.inspect}"
       end
-      column_value_expression_builder(object, name)
+      column_expression_builder(object, name)
     end
 
     private
@@ -493,7 +493,7 @@ module Groonga
       end
     end
 
-    def column_value_expression_builder(column, name)
+    def column_expression_builder(column, name)
       ColumnValueExpressionBuilder.new(column,
                                        :table => @table,
                                        :column_name => name)
@@ -513,7 +513,7 @@ module Groonga
   # @private
   class MatchTargetRecordExpressionBuilder < RecordExpressionBuilder
     private
-    def column_expression_builder(column, name)
+    def column_variable_expression_builder(column, name)
       MatchTargetColumnExpressionBuilder.new(column,
                                              :table => @table,
                                              :column_name => name)
@@ -535,59 +535,59 @@ module Groonga
     end
 
     def ==(other)
-      column_value_expression_builder == other
+      column_expression_builder == other
     end
 
     def =~(other)
-      column_value_expression_builder =~ other
+      column_expression_builder =~ other
     end
 
     def <(other)
-      column_value_expression_builder < other
+      column_expression_builder < other
     end
 
     def <=(other)
-      column_value_expression_builder <= other
+      column_expression_builder <= other
     end
 
     def >(other)
-      column_value_expression_builder > other
+      column_expression_builder > other
     end
 
     def >=(other)
-      column_value_expression_builder >= other
+      column_expression_builder >= other
     end
 
     def +(other)
-      column_value_expression_builder + other
+      column_expression_builder + other
     end
 
     def -(other)
-      column_value_expression_builder - other
+      column_expression_builder - other
     end
 
     def *(other)
-      column_value_expression_builder * other
+      column_expression_builder * other
     end
 
     def /(other)
-      column_value_expression_builder / other
+      column_expression_builder / other
     end
 
     def %(other)
-      column_value_expression_builder % other
+      column_expression_builder % other
     end
 
     def match(query, options={}, &block)
-      column_value_expression_builder.match(query, options, &block)
+      column_expression_builder.match(query, options, &block)
     end
 
     def similar_search(text)
-      column_value_expression_builder.similar_search(text)
+      column_expression_builder.similar_search(text)
     end
 
     private
-    def column_value_expression_builder
+    def column_expression_builder
       ColumnValueExpressionBuilder.new(@default_column,
                                        :table => @table,
                                        :column_name => @column_name,
@@ -598,7 +598,7 @@ module Groonga
       return super if block
       return super unless args.empty?
       if VALID_COLUMN_NAME_RE =~ name.to_s
-        column_value_expression_builder.send(name)
+        column_expression_builder.send(name)
       else
         super
       end
