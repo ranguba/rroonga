@@ -189,6 +189,30 @@ class TableTest < Test::Unit::TestCase
     assert_equal(29, groonga.value)
   end
 
+  def test_add_vector_column_referencing_to_normalized_table_indexed_via_column_value
+    people = Groonga::Hash.create(:name => "People", :key_normalize => true)
+    movies = Groonga::Hash.create(:name => "Movies")
+    casts = movies.define_column("casts", people, :type => :vector)
+    people.define_index_column("index", movies, casts)
+
+    movies.add("DOCUMENTARY of AKB48", :casts => ["AKB48"])
+
+    people_records = people.records.collect(&:key)
+    assert_equal(["akb48"], people_records)
+  end
+
+  def test_add_vector_column_referencing_to_normalized_table_indexed_via_source
+    people = Groonga::Hash.create(:name => "People", :key_normalize => true)
+    movies = Groonga::Hash.create(:name => "Movies")
+    movies.define_column("casts", people, :type => :vector)
+    people.define_index_column("index", movies, :source => "casts")
+
+    movies.add("DOCUMENTARY of AKB48", :casts => ["AKB48"])
+
+    people_records = people.records.collect(&:key)
+    assert_equal(["akb48"], people_records)
+  end
+
   def test_columns
     bookmarks_path = @tables_dir + "bookmarks"
     bookmarks = Groonga::Array.create(:name => "Bookmarks",
