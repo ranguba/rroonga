@@ -193,7 +193,7 @@ class TableTest < Test::Unit::TestCase
     people = Groonga::Hash.create(:name => "People", :key_normalize => true)
     movies = Groonga::Hash.create(:name => "Movies")
     movies.define_column("casts", people, :type => :vector)
-    people.define_index_column("index", movies, "casts")
+    people.define_index_column("index", movies)
 
     movies.add("DOCUMENTARY of AKB48", :casts => ["AKB48"])
 
