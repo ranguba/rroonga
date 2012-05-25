@@ -106,7 +106,13 @@ rb_grn_scan_options (VALUE options, ...)
 
     options = rb_check_convert_type(options, T_HASH, "Hash", "to_hash");
     if (NIL_P(options)) {
-        options = rb_hash_new();
+	if (NIL_P(original_options)) {
+	    options = rb_hash_new();
+	} else {
+	    rb_raise(rb_eArgError,
+		     "options must be Hash: %s",
+		     rb_grn_inspect(original_options));
+	}
     } else if (options == original_options) {
         options = rb_funcall(options, rb_intern("dup"), 0);
     }
