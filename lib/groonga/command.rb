@@ -20,7 +20,8 @@ module Groonga
     class Builder
       class << self
         def escape_value(value)
-          escaped_value = value.to_s.gsub(/"/, '\\"')
+          escaped_value =
+            value.to_s.gsub(/\\/, '\\\\\\\\\\\\\\\\').gsub(/"/, '\\"')
           "\"#{escaped_value}\""
         end
       end
