@@ -144,4 +144,23 @@ class CommandSelectTest < Test::Unit::TestCase
     end
     normalized_drill_down
   end
+
+  class EscapeTest < self
+    setup :setup_database
+
+    def test_backslash
+      key = "the \\ book"
+      @books.add(key, :published => Time.parse("2011/04/01"))
+
+      result = context.select(@books,
+                              :filter => "_key == \"#{key}\"",
+                              :output_columns => ["_key", "published"])
+
+      assert_equal([{
+                     "_key" => key,
+                     "published" => Time.parse("2011/04/01"),
+                   }],
+                   result.records)
+    end
+  end
 end
