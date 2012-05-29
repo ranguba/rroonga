@@ -619,6 +619,7 @@ rb_grn_table_get_columns (int argc, VALUE *argv, VALUE self)
     VALUE rb_name, rb_columns;
     char *name = NULL;
     unsigned name_size = 0;
+    VALUE exception;
 
     rb_grn_table_deconstruct(SELF(self), &table, &context,
 			     NULL, NULL,
@@ -655,6 +656,13 @@ rb_grn_table_get_columns (int argc, VALUE *argv, VALUE self)
 	grn_table_cursor_get_key(context, cursor, &key);
 	column_id = key;
 	column = grn_ctx_at(context, *column_id);
+	exception = rb_grn_context_to_exception(context, self);
+	if (!NIL_P(exception)) {
+	    grn_table_cursor_close(context, cursor);
+	    grn_obj_unlink(context, columns);
+	    rb_exc_raise(exception);
+	}
+
 	rb_column = GRNOBJECT2RVAL(Qnil, context, column, GRN_FALSE);
 	rb_ary_push(rb_columns, rb_column);
     }
