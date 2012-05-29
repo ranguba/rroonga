@@ -387,7 +387,6 @@ rb_grn_database_each (int argc, VALUE *argv, VALUE self)
 	grn_obj *object;
 
 	object = grn_ctx_at(context, id);
-	rb_grn_context_check(context, self);
 	exception = rb_grn_context_to_exception(context, self);
 	if (!NIL_P(exception)) {
 	    rb_grn_object_close(rb_cursor);
