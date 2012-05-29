@@ -100,10 +100,7 @@ class TooManyOpenFilesTest < Test::Unit::TestCase
 
   def test_database_each
     setup_database
-    setup_schema do |schema|
-      schema.create_table("Users") do |table|
-      end
-    end
+    setup_users
 
     context = create_sub_context
     assert_error do
@@ -116,10 +113,7 @@ class TooManyOpenFilesTest < Test::Unit::TestCase
 
   def test_context_array_reference
     setup_database
-    setup_schema do |schema|
-      schema.create_table("Users") do |table|
-      end
-    end
+    setup_users
 
     context = create_sub_context
     assert_error do
@@ -171,10 +165,7 @@ class TooManyOpenFilesTest < Test::Unit::TestCase
 
   def test_string_key_type
     setup_database
-    setup_schema do |schema|
-      schema.create_table("Users") do |table|
-      end
-    end
+    setup_users
 
     context = create_sub_context
     assert_error do
@@ -188,10 +179,7 @@ class TooManyOpenFilesTest < Test::Unit::TestCase
 
   def test_id_key_type
     setup_database
-    setup_schema do |schema|
-      schema.create_table("Users") do |table|
-      end
-    end
+    setup_users
     id = Groonga["Users"].id
 
     context = create_sub_context
@@ -208,6 +196,12 @@ class TooManyOpenFilesTest < Test::Unit::TestCase
   def setup_schema
     Groonga::Schema.define do |schema|
       yield(schema)
+    end
+  end
+
+  def setup_users
+    setup_schema do |schema|
+      schema.create_table("Users")
     end
   end
 
