@@ -169,6 +169,23 @@ class TooManyOpenFilesTest < Test::Unit::TestCase
     end
   end
 
+  def test_string_key_type
+    setup_database
+    setup_schema do |schema|
+      schema.create_table("Users") do |table|
+      end
+    end
+
+    context = create_sub_context
+    assert_error do
+      over_limit do
+        Groonga::Hash.create(:name => "Bookmarks",
+                             :key_type => "Users",
+                             :context => context)
+      end
+    end
+  end
+
   private
   def setup_schema
     Groonga::Schema.define do |schema|

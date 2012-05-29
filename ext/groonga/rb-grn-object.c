@@ -49,6 +49,7 @@ rb_grn_object_from_ruby_object (VALUE object, grn_ctx **context)
 	    grn_object = rb_grn_context_get_backward_compatibility(*context,
 								   name,
 								   name_size);
+	    rb_grn_context_check(*context, object);
 	    if (!grn_object)
 		rb_raise(rb_eArgError,
 			 "unregistered groonga object: name: <%s>",
