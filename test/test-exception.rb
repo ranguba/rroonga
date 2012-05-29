@@ -100,7 +100,7 @@ class TooManyOpenFilesTest < Test::Unit::TestCase
 
   def test_database_each
     setup_database
-    Groonga::Schema.define do |schema|
+    setup_schema do |schema|
       schema.create_table("Users") do |table|
       end
     end
@@ -116,7 +116,7 @@ class TooManyOpenFilesTest < Test::Unit::TestCase
 
   def test_context_array_reference
     setup_database
-    Groonga::Schema.define do |schema|
+    setup_schema do |schema|
       schema.create_table("Users") do |table|
       end
     end
@@ -131,7 +131,7 @@ class TooManyOpenFilesTest < Test::Unit::TestCase
 
   def test_table_columns
     setup_database
-    Groonga::Schema.define do |schema|
+    setup_schema do |schema|
       schema.create_table("Users") do |table|
       end
 
@@ -150,6 +150,12 @@ class TooManyOpenFilesTest < Test::Unit::TestCase
   end
 
   private
+  def setup_schema
+    Groonga::Schema.define do |schema|
+      yield(schema)
+    end
+  end
+
   def create_sub_context
     context = Groonga::Context.new
     context.open_database(Groonga::Context.default.database.path)
