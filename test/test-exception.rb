@@ -94,3 +94,52 @@ class ExceptionTest < Test::Unit::TestCase
     assert_const_defined(Groonga, :TooSmallLimit)
   end
 end
+
+class TooManyOpenFilesTest < Test::Unit::TestCase
+  include GroongaTestUtils
+
+  def test_database_each
+    setup_database
+    Groonga::Schema.define do |schema|
+      schema.create_table("Users") do |table|
+      end
+    end
+
+    context = create_sub_context
+    assert_error do
+      over_limit do
+        context.database.each do
+        end
+      end
+    end
+  end
+
+  private
+  def create_sub_context
+    context = Groonga::Context.new
+    context.open_database(Groonga::Context.default.database.path)
+    context
+  end
+
+  def over_limit
+    unavailable = 0
+    original, max = Process.getrlimit(open_files)
+
+    Process.setrlimit(open_files, unavailable, max)
+    begin
+      yield
+    ensure
+      Process.setrlimit(open_files, original, max)
+    end
+  end
+
+  def open_files
+    Process::RLIMIT_NOFILE
+  end
+
+  def assert_error
+    assert_raise(Groonga::TooManyOpenFiles) do
+      yield
+    end
+  end
+end

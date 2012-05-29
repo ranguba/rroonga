@@ -361,6 +361,7 @@ rb_grn_database_each (int argc, VALUE *argv, VALUE self)
     VALUE rb_cursor, rb_options, rb_order, rb_order_by;
     int flags = 0;
     grn_id id;
+    VALUE exception;
 
     rb_grn_database_deconstruct(SELF(self), &database, &context,
 				NULL, NULL, NULL, NULL);
@@ -386,6 +387,14 @@ rb_grn_database_each (int argc, VALUE *argv, VALUE self)
 	grn_obj *object;
 
 	object = grn_ctx_at(context, id);
+	rb_grn_context_check(context, self);
+	exception = rb_grn_context_to_exception(context, self);
+	if (!NIL_P(exception)) {
+	    rb_grn_object_close(rb_cursor);
+	    rb_iv_set(self, "cursor", Qnil);
+	    rb_exc_raise(exception);
+	}
+
 	if (object)
 	    rb_yield(GRNOBJECT2RVAL(Qnil, context, object, GRN_FALSE));
     }
