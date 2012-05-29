@@ -57,6 +57,7 @@ rb_grn_object_from_ruby_object (VALUE object, grn_ctx **context)
 	    return grn_object;
 	} else if (RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cInteger))) {
 	    grn_object = grn_ctx_at(*context, NUM2UINT(object));
+	    rb_grn_context_check(*context, object);
 	    if (!grn_object)
 		rb_raise(rb_eArgError,
 			 "unregistered groonga object: ID: <%s>",
