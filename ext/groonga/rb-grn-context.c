@@ -889,6 +889,7 @@ rb_grn_context_array_reference (VALUE self, VALUE name_or_id)
 		 rb_grn_inspect(name_or_id));
 	break;
     }
+    rb_grn_context_check(context, name_or_id);
 
     return GRNOBJECT2RVAL(Qnil, context, object, GRN_FALSE);
 }
