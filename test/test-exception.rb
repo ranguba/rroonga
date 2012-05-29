@@ -100,15 +100,15 @@ class TooManyOpenFilesTest < Test::Unit::TestCase
 
   def setup
     setup_database
+    @context = create_sub_context
   end
 
   def test_database_each
     setup_users
 
-    context = create_sub_context
     assert_error do
       over_limit do
-        context.database.each do
+        @context.database.each do
         end
       end
     end
@@ -117,10 +117,9 @@ class TooManyOpenFilesTest < Test::Unit::TestCase
   def test_context_array_reference
     setup_users
 
-    context = create_sub_context
     assert_error do
       over_limit do
-        context["Users"]
+        @context["Users"]
       end
     end
   end
@@ -132,8 +131,7 @@ class TooManyOpenFilesTest < Test::Unit::TestCase
       end
     end
 
-    context = create_sub_context
-    table = context["Users"]
+    table = @context["Users"]
     assert_error do
       over_limit do
         table.columns
@@ -154,8 +152,7 @@ class TooManyOpenFilesTest < Test::Unit::TestCase
       end
     end
 
-    context = create_sub_context
-    column = context["Users"].column("Bookmarks_user")
+    column = @context["Users"].column("Bookmarks_user")
     assert_error do
       over_limit do
         column.sources
@@ -166,12 +163,11 @@ class TooManyOpenFilesTest < Test::Unit::TestCase
   def test_string_key_type
     setup_users
 
-    context = create_sub_context
     assert_error do
       over_limit do
         Groonga::Hash.create(:name => "Bookmarks",
                              :key_type => "Users",
-                             :context => context)
+                             :context => @context)
       end
     end
   end
@@ -180,12 +176,11 @@ class TooManyOpenFilesTest < Test::Unit::TestCase
     setup_users
     id = Groonga["Users"].id
 
-    context = create_sub_context
     assert_error do
       over_limit do
         Groonga::Hash.create(:name => "Bookmarks",
                              :key_type => id,
-                             :context => context)
+                             :context => @context)
       end
     end
   end
