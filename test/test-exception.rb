@@ -146,6 +146,29 @@ class TooManyOpenFilesTest < Test::Unit::TestCase
     end
   end
 
+  def test_column_sources
+    setup_database
+    setup_schema do |schema|
+      schema.create_table("Users") do |table|
+        table.short_text("name")
+      end
+      schema.create_table("Bookmarks") do |table|
+        table.reference("user", "Users")
+      end
+      schema.create_table("Users") do |table|
+        table.index("Bookmarks.user")
+      end
+    end
+
+    context = create_sub_context
+    column = context["Users"].column("Bookmarks_user")
+    assert_error do
+      over_limit do
+        column.sources
+      end
+    end
+  end
+
   private
   def setup_schema
     Groonga::Schema.define do |schema|

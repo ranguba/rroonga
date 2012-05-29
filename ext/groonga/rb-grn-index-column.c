@@ -240,6 +240,7 @@ rb_grn_index_column_get_sources (VALUE self)
     grn_id *source_ids;
     VALUE rb_sources;
     int i, n;
+    VALUE exception;
 
     rb_grn_index_column_deconstruct(SELF(self), &column, &context,
 				    NULL, NULL,
@@ -258,6 +259,12 @@ rb_grn_index_column_get_sources (VALUE self)
 	VALUE rb_source;
 
 	source = grn_ctx_at(context, *source_ids);
+	exception = rb_grn_context_to_exception(context, self);
+	if (!NIL_P(exception)) {
+	    grn_obj_unlink(context, &sources);
+	    rb_exc_raise(exception);
+	}
+
 	rb_source = GRNOBJECT2RVAL(Qnil, context, source, GRN_FALSE);
 	rb_ary_push(rb_sources, rb_source);
 	source_ids++;
