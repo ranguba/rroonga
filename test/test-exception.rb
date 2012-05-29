@@ -98,8 +98,11 @@ end
 class TooManyOpenFilesTest < Test::Unit::TestCase
   include GroongaTestUtils
 
-  def test_database_each
+  def setup
     setup_database
+  end
+
+  def test_database_each
     setup_users
 
     context = create_sub_context
@@ -112,7 +115,6 @@ class TooManyOpenFilesTest < Test::Unit::TestCase
   end
 
   def test_context_array_reference
-    setup_database
     setup_users
 
     context = create_sub_context
@@ -124,7 +126,6 @@ class TooManyOpenFilesTest < Test::Unit::TestCase
   end
 
   def test_table_columns
-    setup_database
     setup_schema do |schema|
       schema.create_table("Users") do |table|
         table.short_text("name")
@@ -141,7 +142,6 @@ class TooManyOpenFilesTest < Test::Unit::TestCase
   end
 
   def test_column_sources
-    setup_database
     setup_schema do |schema|
       schema.create_table("Users") do |table|
         table.short_text("name")
@@ -164,7 +164,6 @@ class TooManyOpenFilesTest < Test::Unit::TestCase
   end
 
   def test_string_key_type
-    setup_database
     setup_users
 
     context = create_sub_context
@@ -178,7 +177,6 @@ class TooManyOpenFilesTest < Test::Unit::TestCase
   end
 
   def test_id_key_type
-    setup_database
     setup_users
     id = Groonga["Users"].id
 
