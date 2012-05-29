@@ -165,22 +165,18 @@ class TooManyOpenFilesTest < Test::Unit::TestCase
 
     assert_error do
       over_limit do
-        Groonga::Hash.create(:name => "Bookmarks",
-                             :key_type => "Users",
-                             :context => @context)
+        create_reference_table("Users")
       end
     end
   end
 
   def test_id_key_type
     setup_users
-    id = Groonga["Users"].id
+    users_id = Groonga["Users"].id
 
     assert_error do
       over_limit do
-        Groonga::Hash.create(:name => "Bookmarks",
-                             :key_type => id,
-                             :context => @context)
+        create_reference_table(users_id)
       end
     end
   end
@@ -224,5 +220,11 @@ class TooManyOpenFilesTest < Test::Unit::TestCase
     assert_raise(Groonga::TooManyOpenFiles) do
       yield
     end
+  end
+
+  def create_reference_table(key)
+    Groonga::Hash.create(:context => @context,
+                         :name => "Bookmarks",
+                         :key_type => key)
   end
 end
