@@ -133,15 +133,12 @@ class TooManyOpenFilesTest < Test::Unit::TestCase
     setup_database
     setup_schema do |schema|
       schema.create_table("Users") do |table|
-      end
-
-      schema.create_table("Bookmarks") do |table|
-        table.reference("user", "Users")
+        table.short_text("name")
       end
     end
 
     context = create_sub_context
-    table = context["Bookmarks"]
+    table = context["Users"]
     assert_error do
       over_limit do
         table.columns
