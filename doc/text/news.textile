@@ -1,5 +1,13 @@
 h1. NEWS
 
+h2(#2-0-5). 2.0.5: 2012-05-30
+
+h3. Improvements
+
+* Supported groonga 2.0.3.
+* Added more error checks.
+* Added missing backslash escape for groonga command.
+
 h2(#2-0-4). 2.0.4: 2012-05-02
 
 h3. Fixes
