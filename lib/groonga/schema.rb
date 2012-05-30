@@ -533,6 +533,7 @@ module Groonga
 	end
       end
 
+      # @private
       NORMALIZE_TYPE_TABLE = {
         "short_text" => "ShortText",
         "string" => "ShortText",
