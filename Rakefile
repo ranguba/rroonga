@@ -163,6 +163,23 @@ Rake::ExtensionTask.new("groonga", spec) do |ext|
   end
 end
 
+file "Makefile" => ["extconf.rb", "ext/groonga/extconf.rb"] do
+  ruby("extconf.rb")
+end
+
+desc "Configure"
+task :configure => "Makefile"
+
+desc "Build"
+task :build => :configure do
+  sh("make")
+end
+
+desc "Run test"
+task :test => :configure do
+  ruby("-rubygems", "test/run-test.rb")
+end
+
 namespace :test do
   task :install do
     gemspec_helper = Rake.application.jeweler.gemspec_helper
@@ -174,3 +191,5 @@ namespace :test do
     ruby("-rubygems", "#{installed_path}/test/run-test.rb")
   end
 end
+
+task :default => :test
