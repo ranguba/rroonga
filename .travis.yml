@@ -4,10 +4,9 @@ notifications:
 rvm:
   - 1.8.7
   - 1.9.3
-install:
+before_install:
   - echo "deb http://packages.groonga.org/ubuntu/ $(lsb_release --short --codename) universe" | sudo tee /etc/apt/sources.list.d/groonga.list
   - sudo apt-get update
   - sudo apt-get -y --allow-unauthenticated install groonga-keyring
   - sudo apt-get update
   - sudo apt-get -y install libgroonga-dev
-  - bundle install
