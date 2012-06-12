@@ -153,7 +153,22 @@ class CommandSelectTest < Test::Unit::TestCase
       @books.add(key, :published => Time.parse("2011/04/01"))
 
       result = context.select(@books,
-                              :filter => "_key == \"#{key}\"",
+                              :filter => "_key == \"the \\\\ book\"",
+                              :output_columns => ["_key", "published"])
+
+      assert_equal([{
+                     "_key" => key,
+                     "published" => Time.parse("2011/04/01"),
+                   }],
+                   result.records)
+    end
+
+    def test_double_quote
+      key = "the \"best\" book"
+      @books.add(key, :published => Time.parse("2011/04/01"))
+
+      result = context.select(@books,
+                              :filter => "_key == \"the \\\"best\\\" book\"",
                               :output_columns => ["_key", "published"])
 
       assert_equal([{
