@@ -90,6 +90,7 @@ module Groonga
 end
 
 require 'groonga/context'
+require 'groonga/database'
 require 'groonga/patricia-trie'
 require 'groonga/dumper'
 require 'groonga/schema'

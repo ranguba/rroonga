@@ -145,4 +145,23 @@ class DatabaseTest < Test::Unit::TestCase
     end
     assert_equal(7, @database.defrag)
   end
+
+  def test_tables
+    setup_database
+    Groonga::Schema.define do |schema|
+      schema.create_table("HashTable") do |table|
+      end
+
+      schema.create_table("PatriciaTrie",
+                          :type => :patricia_trie) do |table|
+      end
+
+      schema.create_table("DoubleArrayTrie",
+                          :type => :double_array_trie) do |table|
+      end
+    end
+
+    assert_equal(["HashTable", "PatriciaTrie", "DoubleArrayTrie"].sort,
+                 @database.tables.collect(&:name).sort)
+  end
 end
