@@ -1,6 +1,7 @@
 /* -*- coding: utf-8; c-file-style: "ruby" -*- */
 /*
   Copyright (C) 2011  Haruka Yoshihara <yoshihara@clear-code.com>
+  Copyright (C) 2012  Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -77,6 +78,8 @@ rb_grn_index_cursor_each (VALUE self)
 {
     grn_obj *cursor;
     grn_ctx *context;
+
+    RETURN_ENUMERATOR(self, 0, NULL);
 
     rb_grn_index_cursor_deconstruct(SELF(self), &cursor, &context,
 				    NULL, NULL, NULL, NULL);

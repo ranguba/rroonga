@@ -1,3 +1,18 @@
+# Copyright (C) 2012  Kouhei Sutou <kou@clear-code.com>
+#
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public
+# License version 2.1 as published by the Free Software Foundation.
+#
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public
+# License along with this library; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
 class IndexCursorTest < Test::Unit::TestCase
   include GroongaTestUtils
 
@@ -34,6 +49,25 @@ class IndexCursorTest < Test::Unit::TestCase
     end
 
     assert_equal(expected_postings, postings)
+  end
+
+  def test_each_without_block
+    opened = false
+    @terms.open_cursor do |table_cursor|
+      @content_index.open_cursor(table_cursor) do |cursor|
+        if defined?(::Enumerator)
+          postings = cursor.each.collect(&:to_hash)
+          assert_equal(expected_postings, postings)
+        else
+          assert_raise(LocalJumpError) do
+            cursor.each
+          end
+        end
+        opened = true
+      end
+    end
+
+    assert_true(opened)
   end
 
   private
