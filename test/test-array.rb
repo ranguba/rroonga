@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2011  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2012  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -119,5 +119,34 @@ class ArrayTest < Test::Unit::TestCase
     users.rename("People")
     assert_equal(["People", "People.name", "People.address"],
                  [users.name, name.name, address.name])
+  end
+
+  def test_each
+    users = Groonga::Array.create(:name => "Users")
+    users.add
+    users.add
+    users.add
+
+    user_ids = []
+    users.each do |user|
+      user_ids << user.id
+    end
+    assert_equal([1, 2, 3], user_ids)
+  end
+
+  def test_each_without_block
+    users = Groonga::Array.create(:name => "Users")
+    users.add
+    users.add
+    users.add
+
+    if defined?(::Enumerator)
+      user_ids = users.each.collect(&:id)
+      assert_equal([1, 2, 3], user_ids)
+    else
+      assert_raise(LocalJumpError) do
+        users.each
+      end
+    end
   end
 end

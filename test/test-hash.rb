@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2009-2011  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2012  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -340,5 +340,34 @@ class HashTest < Test::Unit::TestCase
     users.rename("People")
     assert_equal(["People", "People.name", "People.address"],
                  [users.name, name.name, address.name])
+  end
+
+  def test_each
+    users = Groonga::Hash.create(:name => "Users", :key_type => "ShortText")
+    users.add("Alice")
+    users.add("Bob")
+    users.add("Carl")
+
+    user_names = []
+    users.each do |user|
+      user_names << user.key
+    end
+    assert_equal(["Alice", "Bob", "Carl"], user_names)
+  end
+
+  def test_each_without_block
+    users = Groonga::Hash.create(:name => "Users", :key_type => "ShortText")
+    users.add("Alice")
+    users.add("Bob")
+    users.add("Carl")
+
+    if defined?(::Enumerator)
+      user_names = users.each.collect(&:key)
+      assert_equal(["Alice", "Bob", "Carl"], user_names)
+    else
+      assert_raise(LocalJumpError) do
+        users.each
+      end
+    end
   end
 end

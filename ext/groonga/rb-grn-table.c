@@ -945,6 +945,8 @@ rb_grn_table_each (int argc, VALUE *argv, VALUE self)
     VALUE rb_cursor;
     grn_id id;
 
+    RETURN_ENUMERATOR(self, argc, argv);
+
     cursor = rb_grn_table_open_grn_cursor(argc, argv, self, &context);
     rb_cursor = GRNTABLECURSOR2RVAL(Qnil, context, cursor);
     rb_table = SELF(self);
