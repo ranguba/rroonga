@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Copyright (C) 2009-2012  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
@@ -273,30 +274,64 @@ class ExpressionBuilderTest < Test::Unit::TestCase
   end
 
   class SuffixSearchTest < self
-    def setup_tables
+    def test_patricia_trie_use_index
       Groonga::Schema.define do |schema|
-        schema.create_table("Sections",
+        schema.create_table("Users",
                             :type => :patricia_trie,
                             :key_with_sis => true,
                             :key_type => "ShortText") do |table|
         end
       end
 
-      @sections = Groonga["Sections"]
-    end
+      users = Groonga["Users"]
+      users.add("ひろゆき")
+      users.add("まさゆき")
+      users.add("ゆきひろ")
 
-    def setup_data
-      @sections.add("search/core")
-      @sections.add("suggest/all")
-      @sections.add("search/all")
-    end
-
-    def test_match
-      result = @sections.select do |record|
-        record.key.suffix_search("all")
+      result = users.select do |record|
+        record.key.suffix_search("ゆき")
       end
-      assert_equal(["suggest/all", "search/all"].sort,
+      assert_equal(["ひろゆき", "まさゆき", "ろゆき", "さゆき", "ゆき"].sort,
                    result.collect {|record| record.key.key}.sort)
+    end
+
+    def test_patricia_trie_not_use_index
+      Groonga::Schema.define do |schema|
+        schema.create_table("Users",
+                            :type => :patricia_trie,
+                            :key_type => "ShortText") do |table|
+        end
+      end
+
+      users = Groonga["Users"]
+      users.add("ひろゆき")
+      users.add("まさゆき")
+      users.add("ゆきひろ")
+
+      result = users.select do |record|
+        record.key.suffix_search("ゆき")
+      end
+      assert_equal(["ひろゆき", "まさゆき"].sort,
+                   result.collect {|record| record.key.key}.sort)
+    end
+
+    def test_column
+      Groonga::Schema.define do |schema|
+        schema.create_table("Users") do |table|
+          table.short_text(:name)
+        end
+      end
+
+      users = Groonga["Users"]
+      users.add(:name => "ひろゆき")
+      users.add(:name => "まさゆき")
+      users.add(:name => "ゆきひろ")
+
+      result = users.select do |record|
+        record.name.suffix_search("ゆき")
+      end
+      assert_equal(["ひろゆき", "まさゆき"].sort,
+                   result.collect {|record| record.key.name}.sort)
     end
   end
 
