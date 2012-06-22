@@ -241,6 +241,8 @@ rb_grn_table_cursor_each (VALUE self)
     grn_ctx *context;
     grn_table_cursor *cursor;
 
+    RETURN_ENUMERATOR(self, 0, NULL);
+
     rb_grn_table_cursor_deconstruct(SELF(self), &cursor, &context,
 				    NULL, NULL, NULL, NULL);
 
