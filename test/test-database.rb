@@ -79,6 +79,18 @@ class DatabaseTest < Test::Unit::TestCase
     assert_send([default_object_names, :include?, "Bool"])
   end
 
+  def test_each_without_block
+    setup_database
+    if defined?(::Enumerator)
+      default_object_names = @database.each.collect {|object| object.name}.sort
+      assert_send([default_object_names, :include?, "Bool"])
+    else
+      assert_raise(LocalJumpError) do
+        @database.each
+      end
+    end
+  end
+
   def test_encoding
     assert_equal(Groonga::Encoding.default,
                  Groonga::Database.create.encoding)

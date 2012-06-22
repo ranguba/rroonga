@@ -28,6 +28,10 @@
 #  include <ruby/intern.h>
 #endif
 
+#ifndef RETURN_ENUMERATOR
+#  define RETURN_ENUMERATOR(obj, argc, argv)
+#endif
+
 #include <groonga.h>
 
 #if defined(__cplusplus)

@@ -363,6 +363,8 @@ rb_grn_database_each (int argc, VALUE *argv, VALUE self)
     grn_id id;
     VALUE exception;
 
+    RETURN_ENUMERATOR(self, argc, argv);
+
     rb_grn_database_deconstruct(SELF(self), &database, &context,
 				NULL, NULL, NULL, NULL);
 
