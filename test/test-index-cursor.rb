@@ -39,16 +39,18 @@ class IndexCursorTest < Test::Unit::TestCase
   end
 
   def test_enumerable
-    postings = nil
+    opened = false
     @terms.open_cursor do |table_cursor|
       @content_index.open_cursor(table_cursor) do |cursor|
         postings = cursor.collect do |posting|
           posting.to_hash
         end
+        assert_equal(expected_postings, postings)
+        opened = true
       end
     end
 
-    assert_equal(expected_postings, postings)
+    assert_true(opened)
   end
 
   def test_each_without_block
