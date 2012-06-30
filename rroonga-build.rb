@@ -19,7 +19,7 @@ module RroongaBuild
   module RequiredGroongaVersion
     MAJOR = 2
     MINOR = 0
-    MICRO = 3
+    MICRO = 4
     VERSION = [MAJOR, MINOR, MICRO]
   end
 
