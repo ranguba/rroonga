@@ -435,7 +435,7 @@ rb_grn_database_unlock (VALUE self)
  *
  * call-seq:
  *   database.lock(options={})
- *   database.lock(options={}) {...}
+ *   database.lock(options={}) { ... }
  *
  * _database_ をロックする。ロックに失敗した場合は
  * Groonga::ResourceDeadlockAvoided例外が発生する。

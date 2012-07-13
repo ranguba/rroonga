@@ -355,7 +355,7 @@ set_value (VALUE args, SetValueData *data)
  * Document-method: []=
  *
  * call-seq:
- *   table[key] = {:column_name => value, ...}
+ *   table[key] = { :column_name => value, ... }
  *
  * _table_ の _key_ に対応するカラム _column_name_ の値を設定する。
  * _key_ に対応するレコードがない場合は新しく作成される。

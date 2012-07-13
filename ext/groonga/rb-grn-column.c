@@ -413,7 +413,7 @@ rb_grn_column_unlock_ensure (VALUE self)
  *
  * call-seq:
  *   column.lock(options={})
- *   column.lock(options={}) {...}
+ *   column.lock(options={}) { ... }
  *
  * _column_ をロックする。ロックに失敗した場合は
  * Groonga::ResourceDeadlockAvoided例外が発生する。
