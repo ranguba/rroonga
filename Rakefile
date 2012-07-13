@@ -74,7 +74,7 @@ module YARD
   module CodeObjects
     class Proxy
       alias_method :initialize_original, :initialize
-      def initialize(namespace, name, type = nil)
+      def initialize(namespace, name, type=nil)
         name = name.to_s.gsub(/\AGrn(.*)\z/) do
           suffix = $1
           case suffix
