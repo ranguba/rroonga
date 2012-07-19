@@ -62,7 +62,7 @@ Gem::Specification.new do |s|
     s.files += Dir.glob("ext/**/*.{c,h,rb,def}")
     s.extensions = ["ext/groonga/extconf.rb"]
     s.extra_rdoc_files = ["README.textile"]
-    s.test_files = Dir.glob("text/**/*.rb")
+    s.test_files = Dir.glob("test/**/*.rb")
     Dir.chdir("bin") do
       s.executables = Dir.glob("*")
     end
