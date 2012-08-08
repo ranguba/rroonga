@@ -56,6 +56,7 @@ Gem::Specification.new do |s|
   s.summary, s.description, = description.split(/\n\n+/, 3)
 
   s.files = ["README.textile", "AUTHORS", "Rakefile", "Gemfile"]
+  s.files += ["#{s.name}.gemspec"]
   s.files += ["rroonga-build.rb", "extconf.rb"]
   Dir.chdir(base_dir) do
     s.files += Dir.glob("{lib,benchmark,misc,example}/**/*.rb")
