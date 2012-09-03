@@ -47,32 +47,64 @@ class TableDumperTest < Test::Unit::TestCase
   end
 
   class TextTest < self
-    def setup
-      Groonga::Schema.define do |schema|
-        schema.create_table("Users") do |table|
-          table.text("name")
+    class ScalarTest < self
+      def setup
+        Groonga::Schema.define do |schema|
+          schema.create_table("Users") do |table|
+            table.text("name")
+          end
         end
       end
-    end
 
-    def test_empty
-      assert_equal(<<-EOS, dump("Users"))
+      def test_empty
+        assert_equal(<<-EOS, dump("Users"))
 load --table Users
 [
 ["_id","name"]
 ]
 EOS
-    end
+      end
 
-    def test_with_records
-      users.add(:name => "mori")
-      assert_equal(<<-EOS, dump("Users"))
+      def test_with_records
+        users.add(:name => "mori")
+        assert_equal(<<-EOS, dump("Users"))
 load --table Users
 [
 ["_id","name"],
 [1,"mori"]
 ]
 EOS
+      end
+    end
+
+    class VectorTest < self
+      def setup
+        Groonga::Schema.define do |schema|
+          schema.create_table("Posts") do |table|
+            table.text("tags", :type => :vector)
+          end
+        end
+      end
+
+      def test_empty
+        assert_equal(<<-EOS, dump("Posts"))
+load --table Posts
+[
+["_id","tags"]
+]
+EOS
+      end
+
+      def test_with_records
+        posts.add(:tags => ["search", "mori"])
+        assert_equal(<<-EOS, dump("Posts"))
+load --table Posts
+[
+["_id","tags"],
+[1,["search","mori"]]
+]
+EOS
+      end
     end
   end
 
