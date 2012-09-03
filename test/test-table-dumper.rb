@@ -107,6 +107,7 @@ EOS
   end
 
   class ReferenceTest < self
+    class ScalarTest < self
     def setup
       Groonga::Schema.define do |schema|
         schema.create_table("Users",
@@ -154,6 +155,7 @@ load --table Posts
 [1,"森"]
 ]
 EOS
+    end
     end
   end
 
