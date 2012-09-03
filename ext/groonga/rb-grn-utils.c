@@ -203,6 +203,22 @@ rb_grn_bulk_to_ruby_object_by_range_id (grn_ctx *context, grn_obj *bulk,
 						 GRN_TEXT_VALUE(bulk),
 						 GRN_TEXT_LEN(bulk));
 	break;
+      case GRN_DB_TOKYO_GEO_POINT:
+	{
+	    int latitude, longitude;
+
+	    GRN_GEO_POINT_VALUE(bulk, latitude, longitude);
+	    *rb_value = rb_grn_tokyo_geo_point_new(latitude, longitude);
+	}
+	break;
+      case GRN_DB_WGS84_GEO_POINT:
+	{
+	    int latitude, longitude;
+
+	    GRN_GEO_POINT_VALUE(bulk, latitude, longitude);
+	    *rb_value = rb_grn_wgs84_geo_point_new(latitude, longitude);
+	}
+	break;
       default:
 	success = GRN_FALSE;
 	break;

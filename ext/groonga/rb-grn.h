@@ -239,6 +239,7 @@ RB_GRN_VAR VALUE rb_cGrnIndexColumn;
 RB_GRN_VAR VALUE rb_cGrnIndexCursor;
 RB_GRN_VAR VALUE rb_cGrnAccessor;
 RB_GRN_VAR VALUE rb_cGrnViewAccessor;
+RB_GRN_VAR VALUE rb_cGrnGeoPoint;
 RB_GRN_VAR VALUE rb_cGrnRecord;
 RB_GRN_VAR VALUE rb_cGrnViewRecord;
 RB_GRN_VAR VALUE rb_cGrnLogger;
@@ -281,6 +282,7 @@ void           rb_grn_init_index_cursor             (VALUE mGrn);
 void           rb_grn_init_posting                  (VALUE mGrn);
 void           rb_grn_init_accessor                 (VALUE mGrn);
 void           rb_grn_init_view_accessor            (VALUE mGrn);
+void           rb_grn_init_geo_point                (VALUE mGrn);
 void           rb_grn_init_record                   (VALUE mGrn);
 void           rb_grn_init_view_record              (VALUE mGrn);
 void           rb_grn_init_variable                 (VALUE mGrn);
@@ -500,6 +502,15 @@ void           rb_grn_expression_finalizer          (grn_ctx *context,
 
 VALUE          rb_grn_posting_new                   (grn_posting *posting,
 						     grn_id term_id);
+
+VALUE          rb_grn_tokyo_geo_point_new           (int   latitude,
+						     int   longitude);
+VALUE          rb_grn_wgs84_geo_point_new           (int   latitude,
+						     int   longitude);
+VALUE          rb_grn_tokyo_geo_point_new_raw       (VALUE latitude,
+						     VALUE longitude);
+VALUE          rb_grn_wgs84_geo_point_new_raw       (VALUE latitude,
+						     VALUE longitude);
 
 VALUE          rb_grn_record_new                    (VALUE table,
 						     grn_id id,

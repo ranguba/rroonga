@@ -223,6 +223,36 @@ EOS
     end
   end
 
+  class WGS84GeoPointTest < self
+    def setup
+      Groonga::Schema.define do |schema|
+        schema.create_table("Posts") do |table|
+          table.wgs84_geo_point("location")
+        end
+      end
+    end
+
+    def test_empty
+      assert_equal(<<-EOS, dump("Posts"))
+load --table Posts
+[
+["_id","location"]
+]
+EOS
+    end
+
+    def test_with_records
+      posts.add(:location => "40.689167x-74.044444")
+      assert_equal(<<-EOS, dump("Posts"))
+load --table Posts
+[
+["_id","location"],
+[1,"146481001x-266559998"]
+]
+EOS
+    end
+  end
+
   class PatriciaTrieTest < self
     def setup
       Groonga::Schema.define do |schema|

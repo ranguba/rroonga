@@ -136,6 +136,7 @@ Init_groonga (void)
     rb_grn_init_column(mGrn);
     rb_grn_init_accessor(mGrn);
     rb_grn_init_view_accessor(mGrn);
+    rb_grn_init_geo_point(mGrn);
     rb_grn_init_record(mGrn);
     rb_grn_init_view_record(mGrn);
     rb_grn_init_variable(mGrn);
