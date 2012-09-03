@@ -134,13 +134,24 @@ load --table Posts
 EOS
     end
 
-    def test_with_records
+    def test_ascii
       posts.add(:author => "mori")
       assert_equal(<<-EOS, dump("Posts"))
 load --table Posts
 [
 ["_id","author"],
 [1,"mori"]
+]
+EOS
+    end
+
+    def test_non_ascii
+      posts.add(:author => "森")
+      assert_equal(<<-EOS, dump("Posts"))
+load --table Posts
+[
+["_id","author"],
+[1,"森"]
 ]
 EOS
     end
