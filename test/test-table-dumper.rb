@@ -259,32 +259,6 @@ EOS
     end
   end
 
-  def test_empty
-    assert_equal(<<-EOS, dump("Posts"))
-load --table Posts
-[
-["_id","author","created_at","n_goods","published","rank","tags","title"]
-]
-EOS
-  end
-
-  def test_with_records
-    posts.add(:author => "mori",
-              :created_at => Time.parse("2010-03-08 16:52 +0900"),
-              :n_goods => 4,
-              :published => true,
-              :rank => 10,
-              :tags => ["search", "mori"],
-              :title => "Why search engine find?")
-    assert_equal(<<-EOS, dump("Posts"))
-load --table Posts
-[
-["_id","author","created_at","n_goods","published","rank","tags","title"],
-[1,"mori",1268034720.0,4,true,10,["search","mori"],"Why search engine find?"]
-]
-EOS
-  end
-
   private
   def dump(table_name, options={})
     Groonga::TableDumper.new(context[table_name], options).dump
