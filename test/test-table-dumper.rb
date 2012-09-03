@@ -112,6 +112,36 @@ EOS
     end
   end
 
+  class TimeTest < self
+    def setup
+      Groonga::Schema.define do |schema|
+        schema.create_table("Posts") do |table|
+          table.time("created_at")
+        end
+      end
+    end
+
+    def test_empty
+      assert_equal(<<-EOS, dump("Posts"))
+load --table Posts
+[
+["_id","created_at"]
+]
+EOS
+    end
+
+    def test_with_records
+      posts.add(:created_at => Time.parse("2010-03-08 16:52 +0900"))
+      assert_equal(<<-EOS, dump("Posts"))
+load --table Posts
+[
+["_id","created_at"],
+[1,1268034720.0]
+]
+EOS
+    end
+  end
+
   def test_empty
     assert_equal(<<-EOS, dump("Posts"))
 load --table Posts
