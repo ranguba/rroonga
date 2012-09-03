@@ -18,34 +18,6 @@ class TableDumperTest < Test::Unit::TestCase
 
   setup :setup_database, :before => :append
 
-  def setup
-    setup_tables
-  end
-
-  def setup_tables
-    Groonga::Schema.define do |schema|
-      schema.create_table("Users",
-                          :type => :patricia_trie,
-                          :key_type => "ShortText") do |table|
-        table.text("name")
-      end
-
-      schema.create_table("Posts") do |table|
-        table.text("title")
-        table.reference("author", "Users")
-        table.integer("rank")
-        table.unsigned_integer("n_goods")
-        table.text("tags", :type => :vector)
-        table.boolean("published")
-        table.time("created_at")
-      end
-
-      schema.change_table("Users") do |table|
-        table.index("Posts.author")
-      end
-    end
-  end
-
   private
   def dump(table_name, options={})
     Groonga::TableDumper.new(context[table_name], options).dump
