@@ -142,6 +142,36 @@ EOS
     end
   end
 
+  class IntegerTest < self
+    def setup
+      Groonga::Schema.define do |schema|
+        schema.create_table("Posts") do |table|
+          table.integer("rank")
+        end
+      end
+    end
+
+    def test_empty
+      assert_equal(<<-EOS, dump("Posts"))
+load --table Posts
+[
+["_id","rank"]
+]
+EOS
+    end
+
+    def test_with_records
+      posts.add(:rank => 10)
+      assert_equal(<<-EOS, dump("Posts"))
+load --table Posts
+[
+["_id","rank"],
+[1,10]
+]
+EOS
+    end
+  end
+
   def test_empty
     assert_equal(<<-EOS, dump("Posts"))
 load --table Posts
