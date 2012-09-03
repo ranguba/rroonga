@@ -46,6 +46,19 @@ class TableDumperTest < Test::Unit::TestCase
     end
   end
 
+  private
+  def dump(table_name, options={})
+    Groonga::TableDumper.new(context[table_name], options).dump
+  end
+
+  def users
+    context["Users"]
+  end
+
+  def posts
+    context["Posts"]
+  end
+
   class TextTest < self
     class ScalarTest < self
       def setup
@@ -257,18 +270,5 @@ load --table Users
 ]
 EOS
     end
-  end
-
-  private
-  def dump(table_name, options={})
-    Groonga::TableDumper.new(context[table_name], options).dump
-  end
-
-  def users
-    context["Users"]
-  end
-
-  def posts
-    context["Posts"]
   end
 end
