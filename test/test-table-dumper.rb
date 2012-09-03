@@ -234,6 +234,31 @@ EOS
     end
   end
 
+  class PatriciaTrieTest < self
+    def setup
+      Groonga::Schema.define do |schema|
+        schema.create_table("Users",
+                            :type => :patricia_trie,
+                            :key_type => "ShortText") do |table|
+          table.text("name")
+        end
+      end
+    end
+
+    def test_order_by_default
+      users.add("s-yata", :name => "Susumu Yata")
+      users.add("mori", :name => "mori daijiro")
+      assert_equal(<<-EOS, dump("Users"))
+load --table Users
+[
+[\"_key\",\"name\"],
+[\"mori\",\"mori daijiro\"],
+[\"s-yata\",\"Susumu Yata\"]
+]
+EOS
+    end
+  end
+
   def test_empty
     assert_equal(<<-EOS, dump("Posts"))
 load --table Posts
@@ -256,19 +281,6 @@ load --table Posts
 [
 ["_id","author","created_at","n_goods","published","rank","tags","title"],
 [1,"mori",1268034720.0,4,true,10,["search","mori"],"Why search engine find?"]
-]
-EOS
-  end
-
-  def test_patricia_trie_order_by_default
-    users.add("s-yata", :name => "Susumu Yata")
-    users.add("mori", :name => "mori daijiro")
-    assert_equal(<<-EOS, dump("Users"))
-load --table Users
-[
-[\"_key\",\"name\"],
-[\"mori\",\"mori daijiro\"],
-[\"s-yata\",\"Susumu Yata\"]
 ]
 EOS
   end
