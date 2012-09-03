@@ -34,6 +34,7 @@ if local_groonga_bin_dir.exist?
   prepend_path.call("PATH", File::PATH_SEPARATOR)
 end
 
+require 'groonga/geo-point'
 require 'groonga/view-record'
 require 'groonga/record'
 require 'groonga/expression-builder'
