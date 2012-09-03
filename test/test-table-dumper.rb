@@ -46,6 +46,36 @@ class TableDumperTest < Test::Unit::TestCase
     end
   end
 
+  class TextTest < self
+    def setup
+      Groonga::Schema.define do |schema|
+        schema.create_table("Users") do |table|
+          table.text("name")
+        end
+      end
+    end
+
+    def test_empty
+      assert_equal(<<-EOS, dump("Users"))
+load --table Users
+[
+["_id","name"]
+]
+EOS
+    end
+
+    def test_with_records
+      users.add(:name => "mori")
+      assert_equal(<<-EOS, dump("Users"))
+load --table Users
+[
+["_id","name"],
+[1,"mori"]
+]
+EOS
+    end
+  end
+
   def test_empty
     assert_equal(<<-EOS, dump("Posts"))
 load --table Posts
@@ -81,19 +111,6 @@ load --table Users
 [\"_key\",\"name\"],
 [\"mori\",\"mori daijiro\"],
 [\"s-yata\",\"Susumu Yata\"]
-]
-EOS
-  end
-
-  def test_patricia_trie_order_by_id
-    users.add("s-yata", :name => "Susumu Yata")
-    users.add("mori", :name => "mori daijiro")
-    assert_equal(<<-EOS, dump("Users", :order_by => "id"))
-load --table Users
-[
-[\"_key\",\"name\"],
-[\"s-yata\",\"Susumu Yata\"],
-[\"mori\",\"mori daijiro\"]
 ]
 EOS
   end
