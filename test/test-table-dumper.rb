@@ -108,54 +108,54 @@ EOS
 
   class ReferenceTest < self
     class ScalarTest < self
-    def setup
-      Groonga::Schema.define do |schema|
-        schema.create_table("Users",
-                            :type => :patricia_trie,
-                            :key_type => "ShortText") do |table|
-          table.text("name")
-        end
+      def setup
+        Groonga::Schema.define do |schema|
+          schema.create_table("Users",
+                              :type => :patricia_trie,
+                              :key_type => "ShortText") do |table|
+            table.text("name")
+          end
 
-        schema.create_table("Posts") do |table|
-          table.reference("author", "Users")
-        end
+          schema.create_table("Posts") do |table|
+            table.reference("author", "Users")
+          end
 
-        schema.change_table("Users") do |table|
-          table.index("Posts.author")
+          schema.change_table("Users") do |table|
+            table.index("Posts.author")
+          end
         end
       end
-    end
 
-    def test_empty
-      assert_equal(<<-EOS, dump("Posts"))
+      def test_empty
+        assert_equal(<<-EOS, dump("Posts"))
 load --table Posts
 [
 ["_id","author"]
 ]
 EOS
-    end
+      end
 
-    def test_ascii
-      posts.add(:author => "mori")
-      assert_equal(<<-EOS, dump("Posts"))
+      def test_ascii
+        posts.add(:author => "mori")
+        assert_equal(<<-EOS, dump("Posts"))
 load --table Posts
 [
 ["_id","author"],
 [1,"mori"]
 ]
 EOS
-    end
+      end
 
-    def test_non_ascii
-      posts.add(:author => "森")
-      assert_equal(<<-EOS, dump("Posts"))
+      def test_non_ascii
+        posts.add(:author => "森")
+        assert_equal(<<-EOS, dump("Posts"))
 load --table Posts
 [
 ["_id","author"],
 [1,"森"]
 ]
 EOS
-    end
+      end
     end
   end
 
