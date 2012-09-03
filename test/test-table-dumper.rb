@@ -133,6 +133,10 @@ EOS
         schema.create_table("Posts") do |table|
           table.reference("author", "Users")
         end
+
+        schema.change_table("Users") do |table|
+          table.index("Posts.author")
+        end
       end
     end
 
