@@ -172,6 +172,36 @@ EOS
     end
   end
 
+  class UnsignedIntegerTest < self
+    def setup
+      Groonga::Schema.define do |schema|
+        schema.create_table("Posts") do |table|
+          table.unsigned_integer("n_goods")
+        end
+      end
+    end
+
+    def test_empty
+      assert_equal(<<-EOS, dump("Posts"))
+load --table Posts
+[
+["_id","n_goods"]
+]
+EOS
+    end
+
+    def test_with_records
+      posts.add(:n_goods => 4)
+      assert_equal(<<-EOS, dump("Posts"))
+load --table Posts
+[
+["_id","n_goods"],
+[1,4]
+]
+EOS
+    end
+  end
+
   def test_empty
     assert_equal(<<-EOS, dump("Posts"))
 load --table Posts
