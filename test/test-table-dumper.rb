@@ -153,7 +153,7 @@ EOS
 
   def test_with_records
     posts.add(:author => "mori",
-              :created_at => Time.parse("2010-03-08 16:52 JST"),
+              :created_at => Time.parse("2010-03-08 16:52 +0900"),
               :n_goods => 4,
               :published => true,
               :rank => 10,
