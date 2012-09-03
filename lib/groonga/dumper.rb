@@ -18,6 +18,17 @@
 require 'stringio'
 
 module Groonga
+  module Dumper
+    module_function
+    def default_output
+      StringIO.new(utf8_string)
+    end
+
+    def utf8_string
+      ""
+    end
+  end
+
   # データベースの内容をgrn式形式の文字列として出力するクラス。
   class DatabaseDumper
     def initialize(options={})
@@ -27,7 +38,7 @@ module Groonga
     def dump
       options = @options.dup
       have_output = !@options[:output].nil?
-      options[:output] ||= StringIO.new
+      options[:output] ||= Dumper.default_output
       if options[:database].nil?
         options[:context] ||= Groonga::Context.default
         options[:database] = options[:context].database
@@ -118,7 +129,7 @@ module Groonga
 
       output = @options[:output]
       have_output = !output.nil?
-      output ||= StringIO.new
+      output ||= Dumper.default_output
       result = syntax(database, output).dump
       if have_output
         result
@@ -445,7 +456,7 @@ module Groonga
       @options = options
       @output = @options[:output]
       @have_output = !@output.nil?
-      @output ||= StringIO.new
+      @output ||= Dumper.default_output
     end
 
     def dump

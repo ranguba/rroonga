@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+#
 # Copyright (C) 2011-2012  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
@@ -80,13 +82,24 @@ load --table Posts
 EOS
       end
 
-      def test_with_records
+      def test_ascii
         posts.add(:tags => ["search", "mori"])
         assert_equal(<<-EOS, dump("Posts"))
 load --table Posts
 [
 ["_id","tags"],
 [1,["search","mori"]]
+]
+EOS
+      end
+
+      def test_non_ascii
+        posts.add(:tags => ["検索", "森"])
+        assert_equal(<<-EOS, dump("Posts"))
+load --table Posts
+[
+["_id","tags"],
+[1,["検索","森"]]
 ]
 EOS
       end
