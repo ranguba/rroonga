@@ -49,4 +49,32 @@ module Groonga
       degree_to_msec(value)
     end
   end
+
+  class GeoPoint
+    attr_accessor :latitude, :longitude
+    def initialize(latitude, longitude)
+      @latitude = latitude
+      @longitude = longitude
+    end
+
+    def to_degree
+      self.class.new(GeoPointValueConverter.to_msec(latitude),
+                     GeoPointValueConverter.to_msec(longitude))
+    end
+
+    def to_msec
+      self.class.new(GeoPointValueConverter.to_msec(latitude),
+                     GeoPointValueConverter.to_msec(longitude))
+    end
+
+    def to_s
+      "#{latitude}x#{longitude}"
+    end
+  end
+
+  class TokyoGeoPoint < GeoPoint
+  end
+
+  class WGS84GeoPoint < GeoPoint
+  end
 end

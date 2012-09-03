@@ -34,4 +34,20 @@ class GeoPointTest < Test::Unit::TestCase
       Groonga::GeoPointValueConverter.degree_to_msec(msec)
     end
   end
+
+  class BaseTest < self
+    class MsecTest < self
+      def test_to_s
+        geo_point = Groonga::GeoPoint.new(128452975, 503157902)
+        assert_equal("128452975x503157902", geo_point.to_s)
+      end
+    end
+
+    class DegreeTest < self
+      def test_to_s
+        geo_point = Groonga::GeoPoint.new(35.6813819, 139.7660839)
+        assert_equal("35.6813819x139.7660839", geo_point.to_s)
+      end
+    end
+  end
 end
