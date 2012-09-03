@@ -76,6 +76,42 @@ EOS
     end
   end
 
+  class ReferenceTest < self
+    def setup
+      Groonga::Schema.define do |schema|
+        schema.create_table("Users",
+                            :type => :patricia_trie,
+                            :key_type => "ShortText") do |table|
+          table.text("name")
+        end
+
+        schema.create_table("Posts") do |table|
+          table.reference("author", "Users")
+        end
+      end
+    end
+
+    def test_empty
+      assert_equal(<<-EOS, dump("Posts"))
+load --table Posts
+[
+["_id","author"]
+]
+EOS
+    end
+
+    def test_with_records
+      posts.add(:author => "mori")
+      assert_equal(<<-EOS, dump("Posts"))
+load --table Posts
+[
+["_id","author"],
+[1,"mori"]
+]
+EOS
+    end
+  end
+
   def test_empty
     assert_equal(<<-EOS, dump("Posts"))
 load --table Posts
