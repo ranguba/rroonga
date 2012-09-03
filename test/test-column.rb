@@ -259,7 +259,7 @@ class ColumnTest < Test::Unit::TestCase
     post = posts.add("hello", :issued => 123456)
     assert_equal(Time.at(123456), post[".issued"])
     post = posts.add("groonga", :issued => 1251380635)
-    assert_equal(Time.parse("2009-08-27 22:43:55"), post[".issued"])
+    assert_equal(Time.parse("2009-08-27 22:43:55 +0900"), post[".issued"])
     post = posts.add("mroonga", :issued => 1251380635.1234567)
     assert_in_delta(Time.at(1251380635.1234567).usec, post[".issued"].usec, 10)
   end
