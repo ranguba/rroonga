@@ -58,8 +58,8 @@ module Groonga
     end
 
     def to_degree
-      self.class.new(GeoPointValueConverter.to_msec(latitude),
-                     GeoPointValueConverter.to_msec(longitude))
+      self.class.new(GeoPointValueConverter.to_degree(latitude),
+                     GeoPointValueConverter.to_degree(longitude))
     end
 
     def to_msec
