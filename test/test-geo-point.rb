@@ -42,9 +42,24 @@ class GeoPointTest < Test::Unit::TestCase
         assert_equal("128452975x503157902", geo_point.to_s)
       end
 
+      def test_to_msec
+        geo_point = Groonga::GeoPoint.new(128452975, 503157902)
+        assert_equal("128452975x503157902", geo_point.to_msec.to_s)
+      end
+
       def test_to_degree
         geo_point = Groonga::GeoPoint.new(128452975, 503157902)
         assert_equal("35.6813819x139.7660839", geo_point.to_degree.to_s)
+      end
+
+      def test_msec?
+        geo_point = Groonga::GeoPoint.new(128452975, 503157902)
+        assert_true(geo_point.msec?)
+      end
+
+      def test_degree?
+        geo_point = Groonga::GeoPoint.new(128452975, 503157902)
+        assert_false(geo_point.degree?)
       end
     end
 
@@ -58,6 +73,50 @@ class GeoPointTest < Test::Unit::TestCase
         geo_point = Groonga::GeoPoint.new(35.6813819, 139.7660839)
         assert_equal("128452975x503157902", geo_point.to_msec.to_s)
       end
+
+      def test_to_degree
+        geo_point = Groonga::GeoPoint.new(35.6813819, 139.7660839)
+        assert_equal("35.6813819x139.7660839", geo_point.to_degree.to_s)
+      end
+
+      def test_msec?
+        geo_point = Groonga::GeoPoint.new(35.6813819, 139.7660839)
+        assert_false(geo_point.msec?)
+      end
+
+      def test_degree?
+        geo_point = Groonga::GeoPoint.new(35.6813819, 139.7660839)
+        assert_true(geo_point.degree?)
+      end
+    end
+
+    class MixTest < self
+      def test_to_s
+        geo_point = Groonga::GeoPoint.new(128452975, 139.7660839)
+        assert_equal("128452975x139.7660839", geo_point.to_s)
+      end
+
+      def test_to_msec
+        geo_point = Groonga::GeoPoint.new(128452975, 139.7660839)
+        assert_equal("128452975x503157902", geo_point.to_msec.to_s)
+      end
+
+      def test_to_degree
+        geo_point = Groonga::GeoPoint.new(128452975, 139.7660839)
+        assert_equal("35.6813819x139.7660839", geo_point.to_degree.to_s)
+      end
+
+      def test_msec?
+        geo_point = Groonga::GeoPoint.new(128452975, 139.7660839)
+        assert_false(geo_point.msec?)
+      end
+
+      def test_degree?
+        geo_point = Groonga::GeoPoint.new(128452975, 139.7660839)
+        assert_false(geo_point.degree?)
+      end
+    end
+  end
     end
   end
 end

@@ -55,14 +55,25 @@ module Groonga
     def initialize(latitude, longitude)
       @latitude = latitude
       @longitude = longitude
+
+    def degree?
+      GeoPointValueConverter.degree?(latitude) and
+        GeoPointValueConverter.degree?(longitude)
+    end
+
+    def msec?
+      GeoPointValueConverter.msec?(latitude) and
+        GeoPointValueConverter.msec?(longitude)
     end
 
     def to_degree
+      return self if degree?
       self.class.new(GeoPointValueConverter.to_degree(latitude),
                      GeoPointValueConverter.to_degree(longitude))
     end
 
     def to_msec
+      return self if msec?
       self.class.new(GeoPointValueConverter.to_msec(latitude),
                      GeoPointValueConverter.to_msec(longitude))
     end
