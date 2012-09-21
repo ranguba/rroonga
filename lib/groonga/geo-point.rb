@@ -70,6 +70,10 @@ module Groonga
     def to_s
       "#{latitude}x#{longitude}"
     end
+
+    def inspect
+      "#<#{self.class} #{to_s}>"
+    end
   end
 
   class TokyoGeoPoint < GeoPoint
