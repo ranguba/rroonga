@@ -48,13 +48,45 @@ module Groonga
       return value if msec?(value)
       degree_to_msec(value)
     end
+
+    def parse(value)
+      if /\A[-+]?\d+\z/ =~ value
+        value.to_i
+      else
+        value.to_f
+      end
+    end
   end
 
   class GeoPoint
+    class << self
+      def parse(string)
+        # TODO: validation
+        latitude, longitude = string.split(/[x,]/, 2)
+        new(GeoPointValueConverter.parse(latitude),
+            GeoPointValueConverter.parse(longitude))
+      end
+    end
+
     attr_accessor :latitude, :longitude
-    def initialize(latitude, longitude)
-      @latitude = latitude
-      @longitude = longitude
+    # TODO: write document
+    # @override initialize(geo_point_in_string)
+    # @override initialize(latitude, longitude)
+    def initialize(*arguments)
+      if arguments.size == 1
+        if arguments.first.is_a?(String)
+          geo_point = self.class.parse(arguments.first)
+        else
+          geo_point = arguments.first
+          geo_point = coerce(geo_point)
+        end
+        @latitude = geo_point.latitude
+        @longitude = geo_point.longitude
+      else
+        # TODO: check # of arguments
+        @latitude, @longitude, = arguments
+      end
+    end
 
     def degree?
       GeoPointValueConverter.degree?(latitude) and
