@@ -1357,17 +1357,6 @@ module Groonga
       end
       alias_method :bool, :boolean
 
-      # Defines a 8 bit signed integer column named @name@.
-      #
-      # @param [String or Symbol] name the column name
-      # @param [Hash] options ({}) the options
-      # @see Groonga::Schema::TableDefinition#column for
-      #    available @options@.
-      def integer8(name, options={})
-        column(name, "Int8", options)
-      end
-      alias_method :int8, :integer8
-
       # Defines a geo point in Tokyo geodetic system column
       # named @name@.
       #
