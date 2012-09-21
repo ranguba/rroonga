@@ -345,16 +345,16 @@ class PatriciaTrieTest < Test::Unit::TestCase
       points.add(point)
     end
 
-    assert_near_cursor(["129680021x504441006",
-                        "129690039x504418033",
-                        "129721099x504685024",
-                        "129786048x504792049",
-                        "129809022x504597055",
-                        "129845056x504853081",
-                        "129855010x504452003",
+    assert_near_cursor(["129885039x503653023",
                         "129866001x504328017",
-                        "129885039x503653023",
-                        "129903045x504648034"],
+                        "130015001x504266057",
+                        "129690039x504418033",
+                        "129680021x504441006",
+                        "129721099x504685024",
+                        "129855010x504452003",
+                        "129809022x504597055",
+                        "129786048x504792049",
+                        "129845056x504853081"],
                        points,
                        "129786048x504792049",
                        {:limit => 10})
@@ -364,7 +364,7 @@ class PatriciaTrieTest < Test::Unit::TestCase
     actual = []
     tables.open_near_cursor(prefix, options) do |cursor|
       cursor.each do |record|
-        actual << record.key
+        actual << record.key.to_s
       end
     end
     assert_equal(expected, actual)

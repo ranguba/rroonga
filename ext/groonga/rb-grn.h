@@ -240,6 +240,8 @@ RB_GRN_VAR VALUE rb_cGrnIndexCursor;
 RB_GRN_VAR VALUE rb_cGrnAccessor;
 RB_GRN_VAR VALUE rb_cGrnViewAccessor;
 RB_GRN_VAR VALUE rb_cGrnGeoPoint;
+RB_GRN_VAR VALUE rb_cGrnTokyoGeoPoint;
+RB_GRN_VAR VALUE rb_cGrnWGS84GeoPoint;
 RB_GRN_VAR VALUE rb_cGrnRecord;
 RB_GRN_VAR VALUE rb_cGrnViewRecord;
 RB_GRN_VAR VALUE rb_cGrnLogger;

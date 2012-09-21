@@ -420,6 +420,7 @@ rb_grn_bulk_from_ruby_object_with_type (VALUE object, grn_ctx *context,
     uint64_t uint64_value;
     int64_t time_value;
     double double_value;
+    grn_geo_point geo_point_value;
     grn_id record_id, range;
     VALUE rb_type_object;
     grn_obj_flags flags = 0;
@@ -501,6 +502,27 @@ rb_grn_bulk_from_ruby_object_with_type (VALUE object, grn_ctx *context,
 		     "string is too large: expected: %u <= %u",
 		     size, range);
 	flags |= GRN_OBJ_DO_SHALLOW_COPY;
+	break;
+      case GRN_DB_TOKYO_GEO_POINT:
+      case GRN_DB_WGS84_GEO_POINT:
+	{
+	    VALUE rb_geo_point;
+	    VALUE rb_latitude, rb_longitude;
+	    if (type_id == GRN_DB_TOKYO_GEO_POINT) {
+		rb_geo_point = rb_funcall(rb_cGrnTokyoGeoPoint,
+					  rb_intern("new"), 1, object);
+	    } else {
+		rb_geo_point = rb_funcall(rb_cGrnWGS84GeoPoint,
+					  rb_intern("new"), 1, object);
+	    }
+	    rb_geo_point = rb_funcall(rb_geo_point, rb_intern("to_msec"), 0);
+	    rb_latitude  = rb_funcall(rb_geo_point, rb_intern("latitude"), 0);
+	    rb_longitude = rb_funcall(rb_geo_point, rb_intern("longitude"), 0);
+	    geo_point_value.latitude = NUM2INT(rb_latitude);
+	    geo_point_value.longitude = NUM2INT(rb_longitude);
+	    string = (const char *)&geo_point_value;
+	    size = sizeof(geo_point_value);
+	}
 	break;
       case GRN_DB_VOID:
       case GRN_DB_DELIMIT:
