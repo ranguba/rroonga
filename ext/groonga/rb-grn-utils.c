@@ -319,9 +319,9 @@ grn_obj *
 rb_grn_bulk_from_ruby_object (VALUE object, grn_ctx *context, grn_obj *bulk)
 {
     if (bulk && bulk->header.domain == GRN_DB_TIME)
-        return rb_grn_bulk_from_ruby_object_with_type(
-            object, context, bulk, bulk->header.domain,
-            grn_ctx_at(context, bulk->header.domain));
+        return RVAL2GRNBULK_WITH_TYPE(object, context, bulk,
+				      bulk->header.domain,
+				      grn_ctx_at(context, bulk->header.domain));
 
     if (!bulk) {
 	bulk = grn_obj_open(context, GRN_BULK, 0, GRN_ID_NIL);
