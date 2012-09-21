@@ -116,7 +116,35 @@ class GeoPointTest < Test::Unit::TestCase
         assert_false(geo_point.degree?)
       end
     end
-  end
+
+    class EqualTest < self
+      class SameGeodeticSystemTest < self
+        def test_same_unit
+          geo_point1 = Groonga::TokyoGeoPoint.new(35.6813819, 139.7660839)
+          geo_point2 = Groonga::TokyoGeoPoint.new(35.6813819, 139.7660839)
+          assert_equal(geo_point1, geo_point2)
+        end
+
+        def test_different_unit
+          geo_point1 = Groonga::TokyoGeoPoint.new(35.6813819, 139.7660839)
+          geo_point2 = Groonga::TokyoGeoPoint.new(128452975, 503157902)
+          assert_equal(geo_point1, geo_point2)
+        end
+      end
+
+      class DifferentGeodeticSystemTest < self
+        def test_same_unit
+          geo_point1 = Groonga::TokyoGeoPoint.new(35.6813819, 139.7660839)
+          geo_point2 = Groonga::WGS84GeoPoint.new(35.6846084, 139.7628746)
+          assert_equal(geo_point1, geo_point2)
+        end
+
+        def test_different_unit
+          geo_point1 = Groonga::TokyoGeoPoint.new(35.6813819, 139.7660839)
+          geo_point2 = Groonga::WGS84GeoPoint.new(128464590, 503146349)
+          assert_equal(geo_point1, geo_point2)
+        end
+      end
     end
   end
 end

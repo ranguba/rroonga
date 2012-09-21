@@ -85,11 +85,85 @@ module Groonga
     def inspect
       "#<#{self.class} #{to_s}>"
     end
+
+    def ==(other)
+      case other
+      when String
+        to_s == otehr
+      when GeoPoint
+        normalized_self = to_msec
+        normalized_other = coerce(other).to_msec
+        [normalized_self.latitude, normalized_self.longitude] ==
+          [normalized_other.latitude, normalized_other.longitude]
+      else
+        false
+      end
+    end
   end
 
   class TokyoGeoPoint < GeoPoint
+    def to_tokyo
+      self
+    end
+
+    # TODO: write document
+    #
+    # TokyoGeoPoint <-> WGS84GeoPoint is based on
+    # http://www.jalan.net/jw/jwp0200/jww0203.do
+    #
+    #   jx: longitude in degree in Tokyo Geodetic System.
+    #   jy: latitude in degree in Tokyo Geodetic System.
+    #   wx: longitude in degree in WGS 84.
+    #   wy: latitude in degree in WGS 84.
+    #
+    #   jy = wy * 1.000106961 - wx * 0.000017467 - 0.004602017
+    #   jx = wx * 1.000083049 + wy * 0.000046047 - 0.010041046
+    #
+    #   wy = jy - jy * 0.00010695 + jx * 0.000017464 + 0.0046017
+    #   wx = jx - jy * 0.000046038 - jx * 0.000083043 + 0.010040
+    def to_wgs84
+      in_degree = to_degree
+      wgs84_latitude_in_degree =
+        in_degree.latitude -
+        in_degree.latitude * 0.00010695 +
+        in_degree.longitude * 0.000017464 +
+        0.0046017
+      wgs84_longitude_in_degree =
+        in_degree.longitude -
+        in_degree.latitude * 0.000046038 -
+        in_degree.longitude * 0.000083043 +
+        0.010040
+      WGS84GeoPoint.new(wgs84_latitude_in_degree, wgs84_longitude_in_degree)
+    end
+
+    private
+    def coerce(other_geo_point)
+      other_geo_point.to_tokyo
+    end
   end
 
   class WGS84GeoPoint < GeoPoint
+    # @see TokyoGeoPoint#to_wgs84
+    def to_tokyo
+      in_degree = to_degree
+      tokyo_latitude_in_degree =
+        in_degree.latitude * 1.000106961 -
+        in_degree.longitude * 0.000017467 -
+        0.004602017
+      tokyo_longitude_in_degree =
+        in_degree.longitude * 1.000083049 +
+        in_degree.latitude  * 0.000046047 -
+        0.010041046
+      TokyoGeoPoint.new(tokyo_latitude_in_degree, tokyo_longitude_in_degree)
+    end
+
+    def to_wgs84
+      self
+    end
+
+    private
+    def coerce(other_geo_point)
+      other_geo_point.to_wgs84
+    end
   end
 end
