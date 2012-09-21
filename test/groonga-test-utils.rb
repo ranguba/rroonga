@@ -43,7 +43,17 @@ module GroongaTestUtils
   end
 
   def setup_tmp_directory
-    @tmp_dir = Pathname(File.dirname(__FILE__)) + "tmp"
+    @base_tmp_dir = Pathname(File.dirname(__FILE__)) + "tmp"
+    memory_file_system = "/dev/shm"
+    if File.exist?(memory_file_system)
+      FileUtils.mkdir_p(@base_tmp_dir.parent.to_s)
+      FileUtils.rm_f(@base_tmp_dir.to_s)
+      FileUtils.ln_s(memory_file_system, @base_tmp_dir.to_s)
+    else
+      FileUtils.mkdir_p(@base_tmp_dir.to_s)
+    end
+
+    @tmp_dir = @base_tmp_dir + "rroonga"
     FileUtils.rm_rf(@tmp_dir.to_s)
     FileUtils.mkdir_p(@tmp_dir.to_s)
   end
@@ -119,6 +129,7 @@ module GroongaTestUtils
 
   def teardown_tmp_directory
     FileUtils.rm_rf(@tmp_dir.to_s)
+    FileUtils.rm_rf(@base_tmp_dir.to_s)
   end
 
   private
