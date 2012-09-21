@@ -621,6 +621,9 @@ VALUE          rb_grn_column_expression_builder_build
     (rb_grn_key_from_ruby_object(object, context, key, domain_id,	\
 				 domain, related_object))
 
+#define RVAL2GRNVALUE(object, context, key, domain_id, domain) \
+    (rb_grn_value_from_ruby_object(object, context, key, domain_id, domain))
+
 #define GRNVARIABLE2RVAL(context, variable) \
     (rb_grn_variable_to_ruby_object(context, variable))
 #define RVAL2GRNVARIABLE(object, context) \
@@ -741,6 +744,11 @@ grn_obj       *rb_grn_key_from_ruby_object          (VALUE rb_key,
 						     grn_id domain_id,
 						     grn_obj *domain,
 						     VALUE related_object);
+grn_obj       *rb_grn_value_from_ruby_object        (VALUE rb_key,
+						     grn_ctx *context,
+						     grn_obj *value,
+						     grn_id domain_id,
+						     grn_obj *domain);
 
 VALUE          rb_grn_variable_to_ruby_object       (grn_ctx *context,
 						     grn_obj *variable);

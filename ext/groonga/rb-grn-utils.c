@@ -428,9 +428,6 @@ rb_grn_bulk_from_ruby_object_with_type (VALUE object, grn_ctx *context,
     string_p = rb_type(object) == T_STRING;
     table_type_p = (GRN_TABLE_HASH_KEY <= type->header.type &&
 		    type->header.type <= GRN_TABLE_VIEW);
-    if (string_p && !table_type_p) {
-	return RVAL2GRNBULK(object, context, bulk);
-    }
 
     switch (type_id) {
       case GRN_DB_INT32:
@@ -805,6 +802,35 @@ rb_grn_key_from_ruby_object (VALUE rb_key, grn_ctx *context,
 
     GRN_TEXT_SET(context, key, &id, sizeof(id));
     return key;
+}
+
+grn_obj *
+rb_grn_value_from_ruby_object (VALUE object, grn_ctx *context,
+			       grn_obj *value, grn_id type_id, grn_obj *type)
+{
+    grn_bool string_p, table_type_p;
+
+    string_p = rb_type(object) == T_STRING;
+    table_type_p = (GRN_TABLE_HASH_KEY <= type->header.type &&
+		    type->header.type <= GRN_TABLE_VIEW);
+    if (!string_p) {
+	return RVAL2GRNBULK_WITH_TYPE(object, context, value, type_id, type);
+    }
+
+    if (table_type_p && RSTRING_LEN(object) == 0) {
+	if (value) {
+	    if (value->header.domain != type_id) {
+		grn_obj_reinit(context, value, type_id, 0);
+	    }
+	} else {
+	    value = grn_obj_open(context, GRN_BULK, 0, type_id);
+	    rb_grn_context_check(context, object);
+	}
+	GRN_RECORD_SET(context, value, GRN_ID_NIL);
+	return value;
+    }
+
+    return RVAL2GRNBULK(object, context, value);
 }
 
 grn_obj *

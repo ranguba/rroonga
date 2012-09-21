@@ -77,7 +77,7 @@ rb_grn_fix_size_column_array_set (VALUE self, VALUE rb_id, VALUE rb_value)
 			      &value, &range_id, &range);
 
     id = NUM2UINT(rb_id);
-    RVAL2GRNBULK_WITH_TYPE(rb_value, context, value, range_id, range);
+    RVAL2GRNVALUE(rb_value, context, value, range_id, range);
 
     rc = grn_obj_set_value(context, column, id, value, GRN_OBJ_SET);
     rb_grn_context_check(context, self);
