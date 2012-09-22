@@ -24,11 +24,11 @@ module Groonga
     def msec_to_degree(msec)
       degree_integer_part, degree_fraction_part = msec.divmod(3600 * 1000)
       degree = degree_integer_part + (degree_fraction_part.to_f / (3600 * 1000))
-      degree.round(N_SIGNIFICANT_DIGITS)
+      round(degree, N_SIGNIFICANT_DIGITS)
     end
 
     def degree_to_msec(degree)
-      (degree * 3600 * 1000).round
+      round(degree * 3600 * 1000)
     end
 
     def msec?(value)
@@ -54,6 +54,21 @@ module Groonga
         value.to_i
       else
         value.to_f
+      end
+    end
+
+    if Numeric.instance_method(:round).arity.zero?
+      def round(number, n_digits=0)
+        if n_digits.zero?
+          number.round
+        else
+          base = 10 ** n_digits
+          (number * base).round / base.to_f
+        end
+      end
+    else
+      def round(number, n_digits=0)
+        number.round(n_digits)
       end
     end
   end
