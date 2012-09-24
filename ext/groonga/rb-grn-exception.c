@@ -605,7 +605,7 @@ rb_grn_init_exception (VALUE mGrn)
      * groongaレベルでは破棄されているが、Rubyレベルでは生き
      * ているオブジェクトにアクセスすると発生する。
      *
-     * @deprecated since 1.2.3. Use Groonga::Closed instead.
+     * @deprecated Use {Closed} instead since 1.2.3.
      */
     rb_define_const(mGrn, "ObjectClosed", rb_eGrnClosed);
 
