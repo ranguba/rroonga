@@ -54,7 +54,7 @@ void
 rb_grn_init_operator (VALUE mGrn)
 {
     rb_mGrnOperator = rb_define_module_under(mGrn, "Operator");
-    /* deprecated: backward compatibility. */
+    /* @deprecated backward compatibility. */
     rb_define_const(mGrn, "Operation", rb_mGrnOperator);
 
     rb_define_const(rb_mGrnOperator, "PUSH",
