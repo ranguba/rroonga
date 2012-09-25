@@ -165,23 +165,29 @@ module Groonga
       end
 
       def dump_schema
+        dump_tables
+        dump_reference_columns
+        dump_index_columns
+      end
+
+      def dump_tables
         @database.each(:order_by => :key) do |object|
           create_table(object) if object.is_a?(Groonga::Table)
         end
+      end
 
-        @reference_columns.group_by do |column|
-          column.table
-        end.each do |table, columns|
+      def dump_reference_columns
+        group_columns(@reference_columns).each do |table, columns|
           change_table(table) do
             columns.each do |column|
               define_reference_column(table, column)
             end
           end
         end
+      end
 
-        @index_columns.group_by do |column|
-          column.table
-        end.each do |table, columns|
+      def dump_index_columns
+        group_columns(@index_columns).each do |table, columns|
           change_table(table) do
             columns.each do |column|
               define_index_column(table, column)
@@ -201,6 +207,26 @@ module Groonga
 
       def footer
         write("")
+      end
+
+      def group_columns(columns)
+        grouped_columns = columns.group_by do |column|
+          column.table
+        end
+        sort_grouped_columns(grouped_columns)
+      end
+
+      def sort_grouped_columns(grouped_columns)
+        grouped_columns = grouped_columns.collect do |table, columns|
+          sorted_columns = columns.sort_by do |column|
+            column.local_name
+          end
+          [table, sorted_columns]
+        end
+        grouped_columns.sort_by do |table, columns|
+          _ = columns
+          table.name
+        end
       end
 
       def table_separator
