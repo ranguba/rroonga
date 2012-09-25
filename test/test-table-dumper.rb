@@ -64,6 +64,8 @@ EOS
       end
 
       def test_invalid_utf8
+        need_encoding
+
         users.add(:name => "森\xff大二郎")
         assert_equal(<<-EOS, dump("Users"))
 load --table Users

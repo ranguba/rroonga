@@ -161,4 +161,8 @@ module GroongaTestUtils
   def need_self_recursive_equal
     omit("self recursive equal is needed.") unless support_self_recursive_equal?
   end
+
+  def need_encoding
+    omit("Encoding is needed.") unless defined?(::Encoding)
+  end
 end
