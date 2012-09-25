@@ -147,4 +147,16 @@ module GroongaTestUtils
   def only_ruby19
     omit("Ruby 1.9 is needed.") unless ruby19?
   end
+
+  def support_self_recursive_equal?
+    self_recursive_hash1 = {}
+    self_recursive_hash1["next"] = self_recursive_hash1
+    self_recursive_hash2 = {}
+    self_recursive_hash2["next"] = self_recursive_hash2
+    self_recursive_hash1 == self_recursive_hash2
+  end
+
+  def only_self_recursive_equal
+    omit("self recursive equal is needed.") unless support_self_recursive_equal?
+  end
 end
