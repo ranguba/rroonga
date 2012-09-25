@@ -547,7 +547,12 @@ module Groonga
         # doesn't accept null.
         ""
       else
-        value
+        return value unless value.respond_to?(:valid_encoding?)
+        sanitized_value = ""
+        value.each_char do |char|
+          sanitized_value << char if char.valid_encoding?
+        end
+        sanitized_value
       end
     end
 

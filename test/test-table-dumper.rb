@@ -62,6 +62,17 @@ load --table Users
 ]
 EOS
       end
+
+      def test_invalid_utf8
+        users.add(:name => "森\xff大二郎")
+        assert_equal(<<-EOS, dump("Users"))
+load --table Users
+[
+["_id","name"],
+[1,"森大二郎"]
+]
+EOS
+      end
     end
 
     class VectorTest < self
