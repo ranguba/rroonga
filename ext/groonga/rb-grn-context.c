@@ -721,10 +721,10 @@ rb_grn_context_connect (int argc, VALUE *argv, VALUE self)
 }
 
 /*
- * call-seq:
- *   context.send(string) -> ID
- *
  * groongaサーバにクエリ文字列を送信する。
+ * @return [Integer] ID
+ * @overload send(string)
+ *   @param [String] string クエリ文字列
  */
 static VALUE
 rb_grn_context_send (VALUE self, VALUE rb_string)
