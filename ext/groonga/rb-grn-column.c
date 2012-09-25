@@ -764,14 +764,11 @@ rb_grn_column_scalar_p (VALUE self)
 }
 
 /*
- * Document-method: indexes
- *
- * call-seq:
- *   column.indexes(operator=Groonga::Operator::MATCH) -> [index_column, ...]
- *
- * _operation_ を実行できる _column_ のインデックスを返す。
- *
+ * _operator_ を実行できる _column_ のインデックスを返す。
  * @since 1.0.9
+ * @return [Array<index_column>] _operator_ を実行できる _column_ のインデックス
+ * @overload indexes(operator=Groonga::Operator::MATCH)
+ *   @param [Groonga::Operator::XXX] operator
  */
 static VALUE
 rb_grn_column_get_indexes (int argc, VALUE *argv, VALUE self)
