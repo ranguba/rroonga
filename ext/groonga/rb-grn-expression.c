@@ -107,20 +107,17 @@ rb_grn_expression_initialize (int argc, VALUE *argv, VALUE self)
 }
 
 /*
- * call-seq:
- *   expression.define_variable(options={}) -> Groonga::Variable
- *
  * _expression_ で使用可能な変数を作成する。
  *
- * _options_ に指定可能な値は以下の通り。
- * @param options [::Hash] The name and value
- *   pairs. Omitted names are initialized as the default value.
- * @option options :name (false)
+ * @overload define_variable(options={})
+ *   @param [::Hash] options The name and value
+ *     pairs. Omitted names are initialized as the default value.
+ *   @option options :name (false)
+ *     変数の名前。省略した場合は名前を付けない。
+ *   @option options :domain
+ *     テーブルを指定すると、そのテーブル用のレコードとして初期化する。
+ * @return [Groonga::Variable]
  *
- *   変数の名前。省略した場合は名前を付けない。
- * @option options :domain
- *
- *   テーブルを指定すると、そのテーブル用のレコードとして初期化する。
  */
 static VALUE
 rb_grn_expression_define_variable (int argc, VALUE *argv, VALUE self)
