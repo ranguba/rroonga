@@ -562,20 +562,14 @@ rb_grn_column_lock (int argc, VALUE *argv, VALUE self)
 }
 
 /*
- * Document-method: clear_lock
- *
- * call-seq:
- *   column.clear_lock(options={})
- *
- * _column_のロックを強制的に解除する。
- *
- * 利用可能なオプションは以下の通り。
- *
- * [_:id_]
- *   _:id_で指定したレコードのロックを強制的に解除する。
- *   （注: groonga側が未実装のため、現在は無視される。実装さ
- *   れるのではないかと思っているが、実装されないかもしれな
- *   い。）
+ * _column_ のロックを強制的に解除する。
+ * @overload clear_lock(options={})
+ *   @param [::Hash] options 利用可能なオプションは以下の通り。
+ *   @option options :id
+ *     _:id_で指定したレコードのロックを強制的に解除する。
+ *     （注: groonga側が未実装のため、現在は無視される。実装さ
+ *     れるのではないかと思っているが、実装されないかもしれな
+ *     い。）
  */
 static VALUE
 rb_grn_column_clear_lock (int argc, VALUE *argv, VALUE self)
