@@ -667,21 +667,15 @@ rb_grn_context_get_database (VALUE self)
 }
 
 /*
- * call-seq:
- *   context.connect(options=nil)
- *
- * groongaサーバに接続する。 _options_ に指定可能な値は以下の通
- * り。
- * @param [::Hash] options The name and value
- *   pairs. Omitted names are initialized as the default value.
- * @option options :host (localhost) The groonga server host name
- *
- *   groongaサーバのホスト名。またはIPアドレス。省略すると
- *   "localhost"に接続する。
- * @option options :port (10041) The port number
- *
- *   groongaサーバのポート番号。省略すると10041番ポートに接
- *   続する。
+ * groongaサーバに接続する。
+ * @overload connect(options=nil)
+ *   @param [::Hash] options 利用可能なオプションは次の通り。
+ *   @option options :host (localhost)
+ *     groongaサーバのホスト名。またはIPアドレス。省略すると
+ *     "localhost"に接続する。
+ *   @option options :port (10041)
+ *     groongaサーバのポート番号。省略すると10041番ポートに接
+ *     続する。
  */
 static VALUE
 rb_grn_context_connect (int argc, VALUE *argv, VALUE self)
