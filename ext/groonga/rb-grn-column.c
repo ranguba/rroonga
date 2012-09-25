@@ -457,18 +457,12 @@ rb_grn_column_select (int argc, VALUE *argv, VALUE self)
 }
 
 /*
- * Document-method: unlock
- *
- * call-seq:
- *   column.unlock(options={})
- *
  * _column_ のロックを解除する。
- *
- * 利用可能なオプションは以下の通り。
- *
- * [_:id_]
- *   _:id_ で指定したレコードのロックを解除する。
- *   （注: groonga側が未実装のため、現在は無視される）
+ * @overload unlock(options={})
+ *   @param [::Hash] options 利用可能なオプションは以下の通り。
+ *   @option options :id
+ *     _:id_ で指定したレコードのロックを解除する。
+ *     （注: groonga側が未実装のため、現在は無視される）
  */
 static VALUE
 rb_grn_column_unlock (int argc, VALUE *argv, VALUE self)
