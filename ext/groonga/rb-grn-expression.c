@@ -157,12 +157,14 @@ rb_grn_expression_define_variable (int argc, VALUE *argv, VALUE self)
 }
 
 /*
- * call-seq:
- *   expression.append_object(object,
- *                            operation=Groonga::Operator::PUSH,
- *                            n_arguments=1) -> self
- *
  * _object_ を追加し、 _n_arguments_ 個の引数を取る _operation_ を追加する。
+ *
+ * @overload append_object(object, operation=Groonga::Operator::PUSH, n_arguments=1)
+ *   @param [Object] object 追加するオブジェクト
+ *   @param [Groonga::Operator::XXX] operation 追加する _operation_
+ *   @param [Integer] n_arguments _operation_ の取る引数
+ * @return [Self] self
+ *
  */
 static VALUE
 rb_grn_expression_append_object (int argc, VALUE *argv, VALUE self)
