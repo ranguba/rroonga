@@ -186,10 +186,9 @@ rb_grn_encoding_to_ruby_encoding (grn_encoding encoding)
 #endif
 
 /*
- * call-seq:
- *   Groonga::Encoding.default -> エンコーディング
- *
  * デフォルトのエンコーディングを返す。
+ * @overload default
+ * @return [Groonga::Encoding] デフォルトのエンコーディング
  */
 static VALUE
 rb_grn_encoding_s_get_default (VALUE self)
