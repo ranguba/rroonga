@@ -282,21 +282,22 @@ rb_grn_database_initialize (int argc, VALUE *argv, VALUE self)
 }
 
 /*
- * call-seq:
- *   Groonga::Database.open(path, options=nil) -> Groonga::Database
- *   Groonga::Database.open(path, options=nil) {|database| ...}
- *
  * 既存のデータベースを開く。ブロックを指定した場合はブロッ
  * クに開いたデータベースを渡し、ブロックを抜けるときに閉じ
- * る。
- *
- * _options_ にはハッシュでオプションを指定する。指定できるオ
- * プションは以下の通り。
- * @param options [::Hash] The name and value
- *   pairs. Omitted names are initialized as the default value.
- * @option options :context (Groonga::Context.default) The context
- *
- *   データベースを結びつけるコンテキスト。
+ * る。 _options_ にはハッシュでオプションを指定する。
+ * @overload open(path, options=nil)
+ *   @return [Groonga::Database]
+ *   @param options [::Hash] The name and value
+ *     pairs. Omitted names are initialized as the default value.
+ *   @option options :context (Groonga::Context.default) The context
+ *     データベースを結びつけるコンテキスト。
+ * @overload open(path, options=nil)
+ *   @param options [::Hash] The name and value
+ *     pairs. Omitted names are initialized as the default value.
+ *   @option options :context (Groonga::Context.default) The context
+ *     データベースを結びつけるコンテキスト。
+ *   @yield [database]
+ *   @yieldparam [Groonga::Database] database 開いたデータベース
  */
 static VALUE
 rb_grn_database_s_open (int argc, VALUE *argv, VALUE klass)
