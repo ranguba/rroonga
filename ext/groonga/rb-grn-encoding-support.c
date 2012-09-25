@@ -30,10 +30,9 @@ VALUE rb_mGrnEncodingSupport;
  */
 
 /*
- * call-seq:
- *   object.encoding -> エンコーディング
- *
  * オブジェクトのエンコーディングを返す。
+ * @overload encoding
+ * @return [Groonga::Encoding] オブジェクトのエンコーディング
  */
 static VALUE
 rb_grn_encoding_support_get_encoding (VALUE self)
