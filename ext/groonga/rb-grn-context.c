@@ -399,17 +399,13 @@ rb_grn_context_s_set_default_options (VALUE self, VALUE options)
 }
 
 /*
- * call-seq:
- *   Groonga::Context.new(options=nil)
- *
- * コンテキストを作成する。 _options_ に指定可能な値は以下の通
- * り。
- * @param [::Hash] options The name and value
- *   pairs. Omitted names are initialized as the default value.
- * @option options :encoding The encoding
- *
- *   エンコーディングを指定する。エンコーディングの指定方法
- *   はGroonga::Encodingを参照。
+ * コンテキストを作成する。
+ * @overload new(options=nil)
+ *   @param [::Hash] options The name and value
+ *     pairs. Omitted names are initialized as the default value.
+ *   @option options [Groonga::Encoding] :encoding The encoding
+ *     エンコーディングを指定する。エンコーディングの指定方法
+ *     はGroonga::Encodingを参照。
  */
 static VALUE
 rb_grn_context_initialize (int argc, VALUE *argv, VALUE self)
