@@ -471,59 +471,71 @@ rb_grn_double_array_trie_open_grn_prefix_cursor (int argc, VALUE *argv,
     return cursor;
 }
 
-
 /*
- * call-seq:
- *   table.open_prefix_cursor(prefix, options={}) -> Groonga::DoubleArrayTrieCursor
- *   table.open_prefix_cursor(prefix, options={}) {|cursor| ... }
- *
  * _prefix_ に前方一致検索をするカーソルを生成して返す。ブロッ
  * クを指定すると、そのブロックに生成したカーソルが渡され、ブ
  * ロックを抜けると自動的にカーソルが破棄される。
  *
- * _options_ に指定可能な値は以下の通り。
- * @param options [::Hash] The name and value
- *   pairs. Omitted names are initialized as the default value.
- * @option options :key_bytes The key_bytes
- *
- *  _prefix_ のサイズ（byte）
- *
- * @option options :key_bits The key_bits
- *
- *  _prefix_ のサイズ（bit）
- *
- * @option options :offset The offset
- *
- *   該当する範囲のレコードのうち、(0ベースで) _:offset_ 番目
- *   からレコードを取り出す。
- *
- * @option options :limit The limit
- *
- *   該当する範囲のレコードのうち、 _:limit_ 件のみを取り出す。
- *   省略された場合または-1が指定された場合は、全件が指定され
- *   たものとみなす。
- *
- * @option options :order The order
- *
- *   +:asc+ または +:ascending+ を指定すると昇順にレコードを取
- *   り出す。
- *   +:desc+ または +:descending+ を指定すると降順にレコードを
- *   取り出す。
- *
- * @option options :order_by (:id) The order_by
- *
- *   +:id+ を指定するとID順にレコードを取り出す。（デフォルト）
- *   +:key+指定するとキー順にレコードを取り出す。
- *
- * @option options :greater_than The greater_than
- *
- *   +true+ を指定すると _prefix_ で指定した値に一致した [ +key+ ] を
- *   範囲に含まない。
- *
- * @option options :less_than The less_than
- *
- *   +true+ を指定すると _prefix_ で指定した値に一致した [ +key+ ] を
- *   範囲に含まない。
+ * @overload open_prefix_cursor(prefix, options={})
+ *   @return [Groonga::DoubleArrayTrieCursor]
+ *   @param [String] prefix 前方一致させる値
+ *   @param options [::Hash] The name and value
+ *     pairs. Omitted names are initialized as the default value.
+ *   @option options :key_bytes
+ *    _prefix_ のサイズ（byte）
+ *   @option options :key_bits
+ *    _prefix_ のサイズ（bit）
+ *   @option options :offset
+ *     該当する範囲のレコードのうち、(0ベースで) _:offset_ 番目
+ *     からレコードを取り出す。
+ *   @option options :limit
+ *     該当する範囲のレコードのうち、 _:limit_ 件のみを取り出す。
+ *     省略された場合または-1が指定された場合は、全件が指定され
+ *     たものとみなす。
+ *   @option options :order
+ *     +:asc+ または +:ascending+ を指定すると昇順にレコードを取
+ *     り出す。
+ *     +:desc+ または +:descending+ を指定すると降順にレコードを
+ *     取り出す。
+ *   @option options :order_by (:id)
+ *     +:id+ を指定するとID順にレコードを取り出す。（デフォルト）
+ *     +:key+指定するとキー順にレコードを取り出す。
+ *   @option options :greater_than
+ *     +true+ を指定すると _prefix_ で指定した値に一致した [ +key+ ] を
+ *     範囲に含まない。
+ *   @option options :less_than
+ *     +true+ を指定すると _prefix_ で指定した値に一致した [ +key+ ] を
+ *     範囲に含まない。
+ * @overload open_prefix_cursor(prefix, options={})
+ *   @yield [cursor]
+ *   @param [String] prefix 前方一致させる値
+ *   @param options [::Hash] The name and value
+ *     pairs. Omitted names are initialized as the default value.
+ *   @option options :key_bytes
+ *    _prefix_ のサイズ（byte）
+ *   @option options :key_bits
+ *    _prefix_ のサイズ（bit）
+ *   @option options :offset
+ *     該当する範囲のレコードのうち、(0ベースで) _:offset_ 番目
+ *     からレコードを取り出す。
+ *   @option options :limit
+ *     該当する範囲のレコードのうち、 _:limit_ 件のみを取り出す。
+ *     省略された場合または-1が指定された場合は、全件が指定され
+ *     たものとみなす。
+ *   @option options :order
+ *     +:asc+ または +:ascending+ を指定すると昇順にレコードを取
+ *     り出す。
+ *     +:desc+ または +:descending+ を指定すると降順にレコードを
+ *     取り出す。
+ *   @option options :order_by (:id)
+ *     +:id+ を指定するとID順にレコードを取り出す。（デフォルト）
+ *     +:key+指定するとキー順にレコードを取り出す。
+ *   @option options :greater_than
+ *     +true+ を指定すると _prefix_ で指定した値に一致した [ +key+ ] を
+ *     範囲に含まない。
+ *   @option options :less_than
+ *     +true+ を指定すると _prefix_ で指定した値に一致した [ +key+ ] を
+ *     範囲に含まない。
  */
 static VALUE
 rb_grn_double_array_trie_open_prefix_cursor (int argc, VALUE *argv, VALUE self)
