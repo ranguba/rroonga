@@ -314,12 +314,7 @@ rb_grn_database_s_open (int argc, VALUE *argv, VALUE klass)
 }
 
 /*
- * call-seq:
- *   database.each {|object| ...}
- *   database.each(options=nil) {|object| ...}
- *
  * データベース内のオブジェクトを順番にブロックに渡す。
- *
  * @example すべてのオブジェクトの名前を表示する:
  *   database.each do |object|
  *     p object.name
@@ -335,20 +330,18 @@ rb_grn_database_s_open (int argc, VALUE *argv, VALUE klass)
  *     p object.name
  *   end
  *
- * @param options [::Hash]
- * @option options :order The order
- *   +:asc+ または +:ascending+ を指定すると昇順にレコードを取
- *   り出す。（デフォルト）
- *
- *   +:desc+ または +:descending+ を指定すると降順にレコードを
- *   取り出す。
- *
- * @option options :order_by (:key) The ordef by
- *   +:id+ を指定するとID順にレコードを取り出す。
- *
- *   +:key+ 指定するとキー順にレコードを取り出す。（デフォル
- *   ト）
- *
+ * @overload each(options=nil)
+ *   @yield [object]
+ *   @param options [::Hash]
+ *   @option options :order
+ *     +:asc+ または +:ascending+ を指定すると昇順にレコードを取
+ *     り出す。（デフォルト）
+ *     +:desc+ または +:descending+ を指定すると降順にレコードを
+ *     取り出す。
+ *   @option options :order_by (:key)
+ *     +:id+ を指定するとID順にレコードを取り出す。
+ *     +:key+ 指定するとキー順にレコードを取り出す。（デフォル
+ *     ト）
  */
 static VALUE
 rb_grn_database_each (int argc, VALUE *argv, VALUE self)
