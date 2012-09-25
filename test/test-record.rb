@@ -325,7 +325,7 @@ class RecordTest < Test::Unit::TestCase
   end
 
   def test_recursive_attributes
-    only_self_recursive_equal
+    need_self_recursive_equal
 
     @bookmarks.define_column("next", @bookmarks)
 
@@ -357,7 +357,7 @@ class RecordTest < Test::Unit::TestCase
   end
 
   def test_duplicate_records_attributes
-    only_self_recursive_equal
+    need_self_recursive_equal
 
     @bookmarks.define_column("next1", @bookmarks)
     @bookmarks.define_column("next2", @bookmarks)
@@ -419,7 +419,7 @@ class RecordTest < Test::Unit::TestCase
   end
 
   def test_self_referencing_attributes
-    only_self_recursive_equal
+    need_self_recursive_equal
 
     @bookmarks.define_column("next", @bookmarks)
 
@@ -470,7 +470,7 @@ class RecordTest < Test::Unit::TestCase
   end
 
   def test_self_referencing_vector_attributes
-    only_self_recursive_equal
+    need_self_recursive_equal
 
     @bookmarks.define_column("related_bookmarks", @bookmarks, :type => :vector)
 

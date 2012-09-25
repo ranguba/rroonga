@@ -158,7 +158,7 @@ module GroongaTestUtils
     self_recursive_hash1 == self_recursive_hash2
   end
 
-  def only_self_recursive_equal
+  def need_self_recursive_equal
     omit("self recursive equal is needed.") unless support_self_recursive_equal?
   end
 end
