@@ -810,15 +810,10 @@ rb_grn_column_get_indexes (int argc, VALUE *argv, VALUE self)
 }
 
 /*
- * Document-method: rename
- *
- * call-seq:
- *   table.rename(name)
- *
  * Renames the table to name.
- *
- * @param name [String] the new name
  * @since 1.3.0
+ * @overload rename(name)
+ *   @param name [String] the new name
  */
 static VALUE
 rb_grn_column_rename (VALUE self, VALUE rb_name)
