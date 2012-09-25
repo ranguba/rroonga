@@ -197,11 +197,10 @@ rb_grn_encoding_s_get_default (VALUE self)
 }
 
 /*
- * call-seq:
- *   Groonga::Encoding.default(encoding)
- *
- * デフォルトのエンコーディングを設定する。エンコーディング
- * の指定方法はGroonga::Encodingを参照。
+ * デフォルトのエンコーディングを設定する。
+ * @overload default=(encoding)
+ *   @param [Groonga::Encoding] encoding 指定するエンコーディング。
+ *     エンコーディングの指定方法はGroonga::Encodingを参照。
  */
 static VALUE
 rb_grn_encoding_s_set_default (VALUE self, VALUE rb_encoding)
