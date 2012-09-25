@@ -598,20 +598,14 @@ rb_grn_column_clear_lock (int argc, VALUE *argv, VALUE self)
 }
 
 /*
- * Document-method: locked?
- *
- * call-seq:
- *   column.locked?(options={})
- *
  * _column_ がロックされていれば +true+ を返す。
- *
- * 利用可能なオプションは以下の通り。
- *
- * [_:id_]
- *   _:id_で指定したレコードがロックされていれば +true+ を返す。
- *   （注: groonga側が未実装のため、現在は無視される。実装さ
- *   れるのではないかと思っているが、実装されないかもしれな
- *   い。）
+ * @overload locked?(options={})
+ *   @param [::Hash] options 利用可能なオプションは以下の通り。
+ *   @option options :id
+ *     _:id_で指定したレコードがロックされていれば +true+ を返す。
+ *     （注: groonga側が未実装のため、現在は無視される。実装さ
+ *     れるのではないかと思っているが、実装されないかもしれな
+ *     い。）
  */
 static VALUE
 rb_grn_column_is_locked (int argc, VALUE *argv, VALUE self)
