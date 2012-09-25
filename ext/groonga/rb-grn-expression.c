@@ -261,87 +261,71 @@ rb_grn_expression_append_operation (VALUE self, VALUE rb_operation,
 }
 
 /*
- * call-seq:
- *   expression.parse(query, options={})
- *
  * 文字列 _query_ をパースする。
+ * @overload parse(query, options={})
+ *   @param [String] query パースする文字列
+ *   @param [::Hash] options The name and value
+ *     pairs. Omitted names are initialized as the default value.
+ *   @option options :default_column
+ *     "column_name:hoge"ではなく"hoge"のようにcolumn_nameが指
+ *     定されない条件の検索対象となるカラムを指定する。
+ *   @option options :default_operator (Groonga::Operator::AND)
+ *     "+"や"OR"で繋がれず、ただ列挙された複数の条件があった時、
+ *     _expression_ 全体として各レコードをヒットとみなすかの論理
+ *     条件を指定する。省略した場合はGroonga::Operator::AND。
  *
- * _options_ に指定可能な値は以下の通り。
- * @param options [::Hash] The name and value
- *   pairs. Omitted names are initialized as the default value.
- * @option options :default_column The default_column
+ *     - Groonga::Operator::OR :=
+ *       レコードはいずれかの条件にマッチすればいい。 =:
+ *     - Groonga::Operator::AND :=
+ *       レコードは全ての条件にマッチしなければならない。 =:
+ *     - Groonga::Operator::BUT :=
+ *       最初の条件にレコードはマッチし、残りの条件にレコードは
+ *       マッチしてはならない。 =:
  *
- *   "column_name:hoge"ではなく"hoge"のようにcolumn_nameが指
- *   定されない条件の検索対象となるカラムを指定する。
- * @option options :default_operator (Groonga::Operator::AND)
+ *   @option options :default_mode (Groonga::Operator::MATCH)
+ *     検索時のモードを指定する。省略した場合はGroonga::Operator::MATCH。
+ *     （FIXME: モードによってどういう動作になるかを書く。）
+ *   @option options :syntax (:query)
+ *     _query_ の構文を指定する。指定可能な値は以下の通り。省略
+ *     した場合は +:query+ 。
  *
- *   The default_operator
- *   "+"や"OR"で繋がれず、ただ列挙された複数の条件があった時、
- *   _expression_ 全体として各レコードをヒットとみなすかの論理
- *   条件を指定する。省略した場合はGroonga::Operator::AND。
- *   [Groonga::Operator::OR]
- *     レコードはいずれかの条件にマッチすればいい。
- *   [Groonga::Operator::AND]
- *     レコードは全ての条件にマッチしなければならない。
- *   [Groonga::Operator::BUT]
- *     最初の条件にレコードはマッチし、残りの条件にレコードは
- *     マッチしてはならない。
- * @option options :default_mode (Groonga::Operator::MATCH) The default_mode
+ *     - +:query+ :=
+ *       「文字列1 OR 文字列2」で「"文字列1"あるいは"文字列2"
+ *       にマッチという検索エンジンで利用できるような構文を使
+ *       う。
+ *       参考: grn式のquery形式（link:text/expression_rdoc.html） =:
+ *     - +nil+ :=
+ *       +:query+と同様 =:
+ *     - +:script+ :=
+ *       「[カラム名] == [値]」というようにECMAScript風の構文を使う。
+ *       参考: grn式のscript形式（link:text/expression_rdoc.html） =:
+ *   @option options :allow_pragma
+ *     _query_ の構文に query を用いているとき（ +:syntax+
+ *     オプション参照）、「*E-1」というようにクエリの先頭で
+ *     pragmaを利用できるようにする。script構文を用いている
+ *     ときはこのオプションを利用できない。
  *
- *   検索時のモードを指定する。省略した場合は
- *   Groonga::Operator::MATCH。（FIXME: モードによってどう
- *   いう動作になるかを書く。）
- *
- * @option options :syntax (:query) The syntax
- *
- *   _query_ の構文を指定する。指定可能な値は以下の通り。省略
- *   した場合は +:query+ 。
- *
- *   [+nil+]
- *     +:query+と同様。
- *   [+:query+]
- *     「文字列1 OR 文字列2」で「"文字列1"あるいは"文字列2"
- *     にマッチという検索エンジンで利用できるような構文を使
- *     う。
+ *     デフォルトではプラグマを利用できる。
  *
  *     参考: grn式のquery形式（link:text/expression_rdoc.html）
- *   [+:script+]
- *     「[カラム名] == [値]」というようにECMAScript風の構文
- *     を使う。
+ *   @option options :allow_column
+ *     _query_ の構文にqueryを用いているとき（ +:syntax+ オプショ
+ *     ン参照）、「カラム名:値」というようにカラム名を指定した
+ *     条件式を利用できるようにする。script構文を用いていると
+ *     きはこのオプションを利用できない。
+ *
+ *     デフォルトではカラム名を指定した条件式を利用できる。
+ *
+ *     参考: grn式のquery形式（link:text/expression_rdoc.html）
+ *   @option options :allow_update
+ *     _query_ の構文にscriptを用いているとき（ +:syntax+ オプショ
+ *     ン参照）、「カラム名 = 値」というように更新操作を利用で
+ *     きるようにする。query構文を用いているときはこのオプショ
+ *     ンを利用できない。
+ *
+ *     デフォルトでは更新操作を利用できる。
  *
  *     参考: grn式のscript形式（link:text/expression_rdoc.html）
- *
- * @option options :allow_pragma The allow_pragma
- *   _query_ の構文に query を用いているとき（ +:syntax+
- *   オプション参照）、「*E-1」というようにクエリの先頭で
- *   pragmaを利用できるようにする。script構文を用いている
- *   ときはこのオプションを利用できない。
- *
- *   デフォルトではプラグマを利用できる。
- *
- *   参考: grn式のquery形式（link:text/expression_rdoc.html）
- *
- * @option options :allow_column The allow_column
- *
- *   _query_ の構文にqueryを用いているとき（+:syntax+オプショ
- *   ン参照）、「カラム名:値」というようにカラム名を指定した
- *   条件式を利用できるようにする。script構文を用いていると
- *   きはこのオプションを利用できない。
- *
- *   デフォルトではカラム名を指定した条件式を利用できる。
- *
- *   参考: grn式のquery形式（link:text/expression_rdoc.html）
- *
- * @option options :allow_update The allow_update
- *
- *   _query_の構文にscriptを用いているとき（ +:syntax+ オプショ
- *   ン参照）、「カラム名 = 値」というように更新操作を利用で
- *   きるようにする。query構文を用いているときはこのオプショ
- *   ンを利用できない。
- *
- *   デフォルトでは更新操作を利用できる。
- *
- *   参考: grn式のscript形式（link:text/expression_rdoc.html）
  */
 static VALUE
 rb_grn_expression_parse (int argc, VALUE *argv, VALUE self)
