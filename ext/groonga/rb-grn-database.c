@@ -535,18 +535,14 @@ rb_grn_database_touch (VALUE self)
 }
 
 /*
- * Document-method: defrag
- *
- * call-seq:
- *   database.defrag(options={}) -> n_segments
- *
  * Defrags all variable size columns in the database.
- *
  * @return [Integer] the number of defraged segments
- * @option options [Integer] :threshold (0) the threshold to
- *   determine whether a segment is defraged. Available
- *   values are -4..22. -4 means all segments are defraged.
- *   22 means no segment is defraged.
+ * @overload defrag(options={})
+ *   @param [::Hash] options option for defrag
+ *   @option options [Integer] :threshold (0) the threshold to
+ *     determine whether a segment is defraged. Available
+ *     values are -4..22. -4 means all segments are defraged.
+ *     22 means no segment is defraged.
  * @since 1.2.6
  */
 static VALUE
