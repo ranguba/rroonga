@@ -196,9 +196,9 @@ rb_grn_column_get_local_name (VALUE self)
  *   rroongaは<em>groonga</em>のいわゆるDB-APIの層の...
  *   ---
  *
+ * @return [Groonga::Hash] 検索結果
  * @overload select(options)
  *   @yieldparam [Groonga::Record] record
- *   @return [Groonga::Hash] 検索結果
  *   @param [::Hash] options The name and value
  *     pairs. Omitted names are initialized as the default value.
  *   @option options :operator (Groonga::Operator::OR)
@@ -247,7 +247,6 @@ rb_grn_column_get_local_name (VALUE self)
  *     参考: Groonga::Expression#parse.
  *
  * @overload select(query, options)
- *   @return [Groonga::Hash] 検索結果
  *   @param [String] query 条件の指定
  *     _query_ には「[カラム名]:[演算子][値]」という書式で条件を
  *     指定する。演算子は以下の通り。
@@ -318,7 +317,6 @@ rb_grn_column_get_local_name (VALUE self)
  *     参考: Groonga::Expression#parse.
  *
  * @overload select(expression, options)
- *   @return [Groonga::Hash] 検索結果
  *   @param [Groonga::Expression] expression 条件を表すオブジェクト
  *     _expression_ には既に作成済みのGroonga::Expressionを渡す
  *
