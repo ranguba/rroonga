@@ -164,29 +164,24 @@ reset_floating_objects (VALUE rb_context)
 }
 
 /*
- * call-seq:
- *   Groonga::Database.create(options=nil) -> Groonga::Database
- *
  * 新しくデータベースを作成する。
- *
- * _options_ にはハッシュでオプションを指定する。指定できるオ
- * プションは以下の通り。
- * @param option [::Hash] options The name and value
- *   pairs. Omitted names are initialized as the default value.
- * @option options :path The path
- *
- *   データベースを保存するパス。省略すると一時データベース
- *   となる。
- * @option options :context (Groonga::Context.default) The context
- *
- *   データベースを結びつけるコンテキスト。省略すると
- *   Groonga::Context.defaultを利用する。
+ * _options_ にはハッシュでオプションを指定する。
+ * @return [Groonga::Database] 作成されたデータベース
+ * @overload create(options=nil)
+ *   @param option [::Hash] options The name and value
+ *     pairs. Omitted names are initialized as the default value.
+ *   @option options :path
+ *     データベースを保存するパス。省略すると一時データベース
+ *     となる。
+ *   @option options :context (Groonga::Context.default)
+ *     データベースを結びつけるコンテキスト。省略すると
+ *     Groonga::Context.defaultを利用する。
  *
  * @example
- *   一時データベースを作成:
+ *   # 一時データベースを作成:
  *   Groonga::Database.create
  *
- *   永続データベースを作成:
+ *   # 永続データベースを作成:
  *   Groonga::Database.create(:path => "/tmp/db.groonga")
  */
 static VALUE
