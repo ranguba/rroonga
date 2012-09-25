@@ -745,10 +745,9 @@ rb_grn_context_send (VALUE self, VALUE rb_string)
 }
 
 /*
- * call-seq:
- *   context.receive -> [ID, String]
- *
  * groongaサーバからクエリ実行結果文字列を受信する。
+ * @overload receive
+ * @return [[ID, String]] クエリ実行結果
  */
 static VALUE
 rb_grn_context_receive (VALUE self)
