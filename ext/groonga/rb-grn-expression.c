@@ -562,20 +562,17 @@ rb_grn_expression_inspect (VALUE self)
 }
 
 /*
- * call-seq:
- *   expression.snippet(tags, options) -> Groonga::Snippet
- *
- * _expression_ からGroonga::Snippetを生成する。 _tags_ には
+ * _expression_ から {Groonga::Snippet} を生成する。 _tags_ には
  * キーワードの前後に挿入するタグの配列を以下のような形式で指定
  * する。
  *
  * <pre>
  * !!!ruby
- * [
- *  ["キーワード前に挿入する文字列1", "キーワード後に挿入する文字列1"],
- *  ["キーワード前に挿入する文字列2", "キーワード後に挿入する文字列2"],
- *  # ...,
- * ]
+ *   [
+ *    ["キーワード前に挿入する文字列1", "キーワード後に挿入する文字列1"],
+ *    ["キーワード前に挿入する文字列2", "キーワード後に挿入する文字列2"],
+ *    # ...,
+ *   ]
  * </pre>
  *
  * もし、1つのスニペットの中に _tags_ で指定したタグより多くの
@@ -584,37 +581,33 @@ rb_grn_expression_inspect (VALUE self)
  *
  * <pre>
  * !!!ruby
- * expression.parse("Ruby groonga 検索")
- * tags = [["<tag1>", "</tag1>"], ["<tag2>", "</tag2>"]]
- * snippet = expression.snippet(tags)
- * p snippet.execute("Rubyでgroonga使って全文検索、高速検索。")
- *    # => ["<tag1>Ruby</tag1>で<tag2>groonga</tag2>"
- *    # =>  "使って全文<tag1>検索</tag1>、高速<tag2>検索</tag2>。"]
+ *   expression.parse("Ruby groonga 検索")
+ *   tags = [["<tag1>", "</tag1>"], ["<tag2>", "</tag2>"]]
+ *   snippet = expression.snippet(tags)
+ *   p snippet.execute("Rubyでgroonga使って全文検索、高速検索。")
+ *      # => ["<tag1>Ruby</tag1>で<tag2>groonga</tag2>"
+ *      # =>  "使って全文<tag1>検索</tag1>、高速<tag2>検索</tag2>。"]
  * </pre>
  *
- * _options_ に指定可能な値は以下の通り。
- * @param options [::Hash] The name and value
- *   pairs. Omitted names are initialized as the default value.
- * @option options :normalize (false) The normalize
- *
- *   キーワード文字列・スニペット元の文字列を正規化するかど
- *   うか。省略した場合は +false+ で正規化しない。
- *
- * @option options :skip_leading_spaces (false) The skip_leading_spaces
- *
- *   先頭の空白を無視するかどうか。省略した場合は +false+ で無
- *   視しない。
- *
- * @option options :width (100) The width
- *
- *   スニペット文字列の長さ。省略した場合は100文字。
- * @option options :max_results (3) The max_results
- *
- *   生成するスニペットの最大数。省略した場合は3。
- * @option options :html_escape (false) The html_escape
- *
- *   スニペット内の +<+, +>+, +&+, +"+ をHTMLエスケープするか
- *   どうか。省略した場合は +false+ で、HTMLエスケープしない。
+ * @overload snippet(tags, options)
+ *   @param tags [Array<string>] キーワードの前後に挿入するタグの配列
+ *     （詳細は上記を参照）
+ *   @param options [::Hash] The name and value
+ *     pairs. Omitted names are initialized as the default value.
+ *   @option options :normalize (false)
+ *     キーワード文字列・スニペット元の文字列を正規化するかど
+ *     うか。省略した場合は +false+ で正規化しない。
+ *   @option options :skip_leading_spaces (false)
+ *     先頭の空白を無視するかどうか。省略した場合は +false+ で無
+ *     視しない。
+ *   @option options :width (100)
+ *     スニペット文字列の長さ。省略した場合は100文字。
+ *   @option options :max_results (3)
+ *     生成するスニペットの最大数。省略した場合は3。
+ *   @option options :html_escape (false)
+ *     スニペット内の +<+, +>+, +&+, +"+ をHTMLエスケープするか
+ *     どうか。省略した場合は +false+ で、HTMLエスケープしない。
+ * @return [Groonga::Snippet]
  */
 static VALUE
 rb_grn_expression_snippet (int argc, VALUE *argv, VALUE self)
