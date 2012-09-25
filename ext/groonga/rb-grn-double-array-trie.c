@@ -287,43 +287,13 @@ rb_grn_double_array_trie_s_create (int argc, VALUE *argv, VALUE klass)
 }
 
 /*
- * call-seq:
- *   double_array_trie.search(key, options=nil) -> Groonga::Hash
- *
  * _key_ にマッチするレコードのIDがキーに入っている
  * Groonga::Hashを返す。マッチするレコードがない場合は空の
  * Groonga::Hashが返る。
- *
  * _options_ で +:result+ を指定することにより、そのテーブルにマッ
  * チしたレコードIDがキーのレコードを追加することができる。
  * +:result+ にテーブルを指定した場合は、そのテーブルが返る。
- *
- * _options_ に指定可能な値は以下の通り。
- * @param options [::Hash] The name and value
- *   pairs. Omitted names are initialized as the default value.
- * @option options :result The result
- *
- *   結果を格納するテーブル。
- * @option options :operator (Groonga::Operator::OR)
- *
- *   マッチしたレコードをどのように扱うか。指定可能な値は以
- *   下の通り。
- *
- *   [Groonga::Operator::OR]
- *     マッチしたレコードを追加。すでにレコードが追加され
- *     ている場合は何もしない。
- *   [Groonga::Operator::AND]
- *     マッチしたレコードのスコアを増加。マッチしなかった
- *     レコードを削除。
- *   [Groonga::Operator::BUT]
- *     マッチしたレコードを削除。
- *   [Groonga::Operator::ADJUST]
- *     マッチしたレコードのスコアを増加。
- *
- * [+:type+]
- *   ?????
- *
- * 複数のキーで検索し、結果を1つのテーブルに集める。
+ * @example 複数のキーで検索し、結果を1つのテーブルに集める。
  *   result = nil
  *   keys = ["morita", "gunyara-kun", "yu"]
  *   keys.each do |key|
@@ -333,6 +303,30 @@ rb_grn_double_array_trie_s_create (int argc, VALUE *argv, VALUE klass)
  *     user = record.key
  *     p user.key # -> "morita"または"gunyara-kun"または"yu"
  *   end
+ *
+ * @overload search(key, options=nil)
+ *   @return [Groonga::Hash]
+ *   @param key [String] レコードにマッチさせる値
+ *   @param options [::Hash] The name and value
+ *     pairs. Omitted names are initialized as the default value.
+ *   @option options :result The result
+ *     結果を格納するテーブル。
+ *   @option options :operator (Groonga::Operator::OR)
+ *     マッチしたレコードをどのように扱うか。指定可能な値は以
+ *     下の通り。
+ *     [Groonga::Operator::OR]
+ *       マッチしたレコードを追加。すでにレコードが追加され
+ *       ている場合は何もしない。
+ *     [Groonga::Operator::AND]
+ *       マッチしたレコードのスコアを増加。マッチしなかった
+ *       レコードを削除。
+ *     [Groonga::Operator::BUT]
+ *       マッチしたレコードを削除。
+ *     [Groonga::Operator::ADJUST]
+ *       マッチしたレコードのスコアを増加。
+ *     [+:type+]
+ *       ?????
+ *
  */
 static VALUE
 rb_grn_double_array_trie_search (int argc, VALUE *argv, VALUE self)
