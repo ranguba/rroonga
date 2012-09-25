@@ -104,6 +104,8 @@ module GroongaTestUtils
 
   def teardown_sandbox
     @database = nil
+    Groonga::Context.default.close
+    Groonga::Context.default = nil
     GC.start
     teardown_log_path
     teardown_tmp_directory
