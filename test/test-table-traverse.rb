@@ -173,14 +173,8 @@ class TableTraverseTest < Test::Unit::TestCase
 
     def test_each_without_block
       @bookmarks.open_cursor do |cursor|
-        if defined?(::Enumerator)
-          keys = cursor.each.collect(&:key)
-          assert_equal(["Cutter", "Ruby", "groonga"], keys)
-         else
-          assert_raise(LocalJumpError) do
-            cursor.each
-          end
-        end
+        keys = cursor.each.collect(&:key)
+        assert_equal(["Cutter", "Ruby", "groonga"], keys)
       end
     end
   end

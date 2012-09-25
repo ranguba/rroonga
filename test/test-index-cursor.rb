@@ -57,14 +57,8 @@ class IndexCursorTest < Test::Unit::TestCase
     opened = false
     @terms.open_cursor do |table_cursor|
       @content_index.open_cursor(table_cursor) do |cursor|
-        if defined?(::Enumerator)
-          postings = cursor.each.collect(&:to_hash)
-          assert_equal(expected_postings, postings)
-        else
-          assert_raise(LocalJumpError) do
-            cursor.each
-          end
-        end
+        postings = cursor.each.collect(&:to_hash)
+        assert_equal(expected_postings, postings)
         opened = true
       end
     end

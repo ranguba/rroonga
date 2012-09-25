@@ -434,13 +434,7 @@ class PatriciaTrieTest < Test::Unit::TestCase
     users.add("Bob")
     users.add("Carl")
 
-    if defined?(::Enumerator)
-      user_names = users.each.collect(&:key)
-      assert_equal(["Alice", "Bob", "Carl"], user_names)
-    else
-      assert_raise(LocalJumpError) do
-        users.each
-      end
-    end
+    user_names = users.each.collect(&:key)
+    assert_equal(["Alice", "Bob", "Carl"], user_names)
   end
 end

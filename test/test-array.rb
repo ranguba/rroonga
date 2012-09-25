@@ -140,13 +140,7 @@ class ArrayTest < Test::Unit::TestCase
     users.add
     users.add
 
-    if defined?(::Enumerator)
-      user_ids = users.each.collect(&:id)
-      assert_equal([1, 2, 3], user_ids)
-    else
-      assert_raise(LocalJumpError) do
-        users.each
-      end
-    end
+    user_ids = users.each.collect(&:id)
+    assert_equal([1, 2, 3], user_ids)
   end
 end

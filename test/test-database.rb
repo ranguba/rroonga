@@ -81,14 +81,8 @@ class DatabaseTest < Test::Unit::TestCase
 
   def test_each_without_block
     setup_database
-    if defined?(::Enumerator)
-      default_object_names = @database.each.collect {|object| object.name}.sort
-      assert_send([default_object_names, :include?, "Bool"])
-    else
-      assert_raise(LocalJumpError) do
-        @database.each
-      end
-    end
+    default_object_names = @database.each.collect {|object| object.name}.sort
+    assert_send([default_object_names, :include?, "Bool"])
   end
 
   def test_encoding
