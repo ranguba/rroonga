@@ -248,6 +248,7 @@ rb_grn_database_s_create (int argc, VALUE *argv, VALUE klass)
  *     データベースを結びつけるコンテキスト。省略すると
  *     Groonga::Context.defaultを利用する。
  *   @yield [database]
+ *   @yieldparam [Groonga::Database] database 開いたデータベース
  */
 static VALUE
 rb_grn_database_initialize (int argc, VALUE *argv, VALUE self)
