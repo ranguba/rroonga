@@ -422,25 +422,22 @@ rb_grn_database_unlock (VALUE self)
 }
 
 /*
- * Document-method: lock
- *
- * call-seq:
- *   database.lock(options={})
- *   database.lock(options={}) { ... }
- *
  * _database_ をロックする。ロックに失敗した場合は
  * Groonga::ResourceDeadlockAvoided例外が発生する。
  *
- * ブロックを指定した場合はブロックを抜けたときにunlockする。
- *
- * 利用可能なオプションは以下の通り。
- * @param [::Hash] options The name and value
- *   pairs. Omitted names are initialized as the default value
- * @option options :timeout The timeout
- *
- *   ロックを獲得できなかった場合は _:timeout_ 秒間ロックの獲
- *   得を試みる。 _:timeout_ 秒以内にロックを獲得できなかった
- *   場合は例外が発生する。
+ * @overload lock(options={})
+ *   @param [::Hash] options 利用可能なオプションは以下の通り。
+ *   @option options :timeout
+ *     ロックを獲得できなかった場合は _:timeout_ 秒間ロックの獲
+ *     得を試みる。 _:timeout_ 秒以内にロックを獲得できなかった
+ *     場合は例外が発生する。
+ * @overload lock(options={})
+ *   @yield ブロックを指定した場合はブロックを抜けたときにunlockする。
+ *   @param [::Hash] options 利用可能なオプションは以下の通り。
+ *   @option options :timeout
+ *     ロックを獲得できなかった場合は _:timeout_秒間ロックの獲
+ *     得を試みる。 _:timeout_秒以内にロックを獲得できなかった
+ *     場合は例外が発生する。
  */
 static VALUE
 rb_grn_database_lock (int argc, VALUE *argv, VALUE self)
