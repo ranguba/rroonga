@@ -220,10 +220,11 @@ rb_grn_index_column_array_set (VALUE self, VALUE rb_id, VALUE rb_value)
 }
 
 /*
- * call-seq:
- *   column.sources -> Groonga::Columnの配列
- *
  * インデックス対象となっているカラムの配列を返す。
+ *
+ * @overload sources
+ * @return [::Array<Groonga::Column>] インデックス対象となっている
+ *   {Groonga::Column}の配列
  */
 static VALUE
 rb_grn_index_column_get_sources (VALUE self)
