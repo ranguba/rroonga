@@ -300,14 +300,12 @@ rb_grn_table_key_support_delete (VALUE self, VALUE rb_id_or_key)
 }
 
 /*
- * Document-method: []
- *
- * call-seq:
- *   table[key] -> Groonga::Record
- *
  * _table_ の _key_ に対応するGroonga::Recordを返す。
  *
  * 0.9.0から値ではなくGroonga::Recordを返すようになった。
+ *
+ * @overload [](key)
+ * @return [Groonga::Record]
  */
 static VALUE
 rb_grn_table_key_support_array_reference (VALUE self, VALUE rb_key)
