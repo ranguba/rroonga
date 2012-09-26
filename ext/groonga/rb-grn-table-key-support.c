@@ -557,12 +557,11 @@ rb_grn_table_key_support_set_value_by_key (VALUE self,
 }
 
 /*
- * call-seq:
- *   table.set_value(id, value, :id => true)
- *   table.set_value(key, value)
- *
  * _table_ の _id_ または _key_ に対応する値を _value_ に設定する。
  * 既存の値は上書きされる。
+ *
+ * @overload set_value(id, value, :id=>true)
+ * @overload set_value(key, value)
  */
 static VALUE
 rb_grn_table_key_support_set_value (int argc, VALUE *argv, VALUE self)
