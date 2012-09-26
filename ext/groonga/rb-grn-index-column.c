@@ -383,10 +383,10 @@ rb_grn_index_column_set_sources (VALUE self, VALUE rb_sources)
 }
 
 /*
- * call-seq:
- *   column.source = Groonga::Column
- *
  * インデックス対象となるカラムを設定する。
+ *
+ * @overload source=(column)
+ *   @param [Groonga::Column] column インデックス対象とするカラム
  */
 static VALUE
 rb_grn_index_column_set_source (VALUE self, VALUE rb_source)
