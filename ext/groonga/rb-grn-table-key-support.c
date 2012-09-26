@@ -429,13 +429,12 @@ rb_grn_table_key_support_set_column_value (int argc, VALUE *argv, VALUE self)
 }
 
 /*
- * call-seq:
- *   table.column_value(key, name)
- *   table.column_value(id, name, :id => true)
- *
  * _table_ の _key_ に対応するカラム _name_ の値を設定する。
  *
  * TODO: _key_ に対応するレコードがない場合は例外？
+ *
+ * @overload column_value(key, name)
+ * @overload column_value(id, name, :id=>true)
  */
 static VALUE
 rb_grn_table_key_support_get_column_value (int argc, VALUE *argv, VALUE self)
