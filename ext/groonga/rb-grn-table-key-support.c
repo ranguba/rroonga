@@ -487,11 +487,11 @@ rb_grn_table_key_support_get_value_by_key (VALUE self, VALUE rb_key)
 }
 
 /*
- * call-seq:
- *   table.value(id, :id => true) -> 値
- *   table.value(key) -> 値
- *
  * _table_ の _id_ または _key_ に対応する値を返す。
+ *
+ * @overload value(id, :id=>true)
+ * @overload value(key)
+ * @return _id_ もしくは _key_ に対応する値
  */
 static VALUE
 rb_grn_table_key_support_get_value (int argc, VALUE *argv, VALUE self)
