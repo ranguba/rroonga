@@ -398,43 +398,37 @@ rb_grn_index_column_set_source (VALUE self, VALUE rb_source)
 }
 
 /*
- * Document-method: search
- *
- * call-seq:
- *   column.search(query, options={}) -> Groonga::Hash
- *
  * _object_ から _query_ に対応するオブジェクトを検索し、見つかっ
  * たオブジェクトのIDがキーになっているGroonga::Hashを返す。
  *
- * 利用可能なオプションは以下の通り。
- * @param [::Hash] options The name and value
- *   pairs. Omitted names are initialized as the default value
- * @option options [Groonga::Hash] :result The result
- *   結果を格納するGroonga::Hash。指定しない場合は新しく
- *   Groonga::Hashを生成し、それに結果を格納して返す。
- * @option options :operator The operator
- *
- *   以下のどれかの値を指定する。 +nil+ , <tt>"or"</tt>, <tt>"||"</tt>,
- *   <tt>"and"</tt>, <tt>"+"</tt>, <tt>"&&"</tt>, <tt>"but"</tt>,
- *   <tt>"not"</tt>, <tt>"-"</tt>, <tt>"adjust"</tt>, <tt>">"</tt>。
- *   それぞれ以下のようになる。（FIXME: 「以下」）
- * @option options :exact The exact
- *
- *   +true+ を指定すると完全一致で検索する
- * @option options :longest_common_prefix The longest_common_prefix
- *   +true+ を指定すると _query_ と同じ接頭辞をもつエントリのう
- *   ち、もっとも長いエントリを検索する
- * @option options :suffix The suffix
- *   +true+ を指定すると _query_ が後方一致するエントリを検索す
- *   る
- * @option options :prefix The prefix
- *   +true+ を指定すると _query_ が前方一致するレコードを検索す
- *   る
- * @option options :near The near
- *   +true+ を指定すると _query_ に指定した複数の語が近傍に含ま
- *   れるレコードを検索する
- * [...]
- *   ...
+ * @overload search(query, options={})
+ *   @param [::Hash] options The name and value
+ *     pairs. Omitted names are initialized as the default value
+ *   @option options [Groonga::Hash] :result
+ *     結果を格納するGroonga::Hash。指定しない場合は新しく
+ *     Groonga::Hashを生成し、それに結果を格納して返す。
+ *   @option options :operator
+ *     以下のどれかの値を指定する。 +nil+ , <tt>"or"</tt>, <tt>"||"</tt>,
+ *     <tt>"and"</tt>, <tt>"+"</tt>, <tt>"&&"</tt>, <tt>"but"</tt>,
+ *     <tt>"not"</tt>, <tt>"-"</tt>, <tt>"adjust"</tt>, <tt>">"</tt>。
+ *     それぞれ以下のようになる。（FIXME: 「以下」）
+ *   @option options :exact
+ *     +true+ を指定すると完全一致で検索する
+ *   @option options :longest_common_prefix
+ *     +true+ を指定すると _query_ と同じ接頭辞をもつエントリのう
+ *     ち、もっとも長いエントリを検索する
+ *   @option options :suffix
+ *     +true+ を指定すると _query_ が後方一致するエントリを検索す
+ *     る
+ *   @option options :prefix
+ *     +true+ を指定すると _query_ が前方一致するレコードを検索す
+ *     る
+ *   @option options :near
+ *     +true+ を指定すると _query_ に指定した複数の語が近傍に含ま
+ *     れるレコードを検索する
+ *   [...]
+ *     ...
+ * @return [Groonga::Hash]
  */
 static VALUE
 rb_grn_index_column_search (int argc, VALUE *argv, VALUE self)
