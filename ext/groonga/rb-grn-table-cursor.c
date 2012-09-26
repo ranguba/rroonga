@@ -151,10 +151,10 @@ rb_grn_table_cursor_get_value (VALUE self)
 }
 
 /*
- * call-seq:
- *   cursor.value = 値
- *
  * カレントレコードの値を設定する。既存の値は上書きされる。
+ *
+ * @overload value=(value)
+ *   @param [String] value カレントレコードに設定する値
  */
 static VALUE
 rb_grn_table_cursor_set_value (VALUE self, VALUE value)
