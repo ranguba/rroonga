@@ -96,38 +96,11 @@ rb_grn_index_column_deconstruct (RbGrnIndexColumn *rb_grn_index_column,
 }
 
 /*
- * call-seq:
- *   column[id] = value
- *   column[id] = options
- *
  * IDが _id_ であるレコードを高速に全文検索するため転置索引を作
  * 成する。多くの場合、Groonga::Table#define_index_columnで
  * +:source+ オプションを指定することにより、自動的に全文検索
  * 用の索引は更新されるので、明示的にこのメソッドを使うこと
  * は少ない。
- *
- * _value_ には文字列を指定する。
- *
- * _options_ を指定することにより、より索引の作成を制御できる。
- * @param [::Hash] options  The name and value
- *   pairs. Omitted names are initialized as the default value
- * @option options :section The section
- *
- *   段落番号を指定する。省略した場合は1を指定したとみなされ
- *   る。
- *   Groonga::Table#define_index_columnで
- *   <tt>{:with_section => true}</tt>を指定していなければい
- *   けない。
- *
- * @option options :old_value The old_value
- *
- *   以前の値を指定する。省略した場合は現在の値が用いられる。
- *   通常は指定する必要はない。
- *
- * @option options :value The value
- *   新しい値を指定する。 _value_ を指定した場合と _options_ で
- *   <tt>{:value => value}</tt>を指定した場合は同じ動作とな
- *   る。
  *
  * @example 記事の段落毎に索引を作成する。
  *   articles = Groonga::Array.create(:name => "<articles>")
@@ -163,6 +136,27 @@ rb_grn_index_column_deconstruct (RbGrnIndexColumn *rb_grn_index_column,
  *   content_index.search("エンジン").collect do |record|
  *     p record.key["title"] # -> "groonga"
  *   end
+ *
+ * @overload []=(id, value)
+ *   @param [String] value 新しい値
+ * @overload []=(id, options)
+ *   _options_ を指定することにより、 _value_ を指定したときよりも索引の作
+ *   成を制御できる。
+ *   @param [::Hash] options The name and value
+ *     pairs. Omitted names are initialized as the default value
+ *   @option options :section
+ *     段落番号を指定する。省略した場合は1を指定したとみなされ
+ *     る。
+ *     Groonga::Table#define_index_columnで
+ *     <tt>{:with_section => true}</tt>を指定していなければい
+ *     けない。
+ *   @option options :old_value
+ *     以前の値を指定する。省略した場合は現在の値が用いられる。
+ *     通常は指定する必要はない。
+ *   @option options :value
+ *     新しい値を指定する。 _value_ を指定した場合と _options_ で
+ *     <tt>{:value => value}</tt>を指定した場合は同じ動作とな
+ *     る。
  */
 static VALUE
 rb_grn_index_column_array_set (VALUE self, VALUE rb_id, VALUE rb_value)
