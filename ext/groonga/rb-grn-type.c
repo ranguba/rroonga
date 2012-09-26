@@ -52,6 +52,7 @@ rb_grn_type_to_ruby_object (grn_ctx *context, grn_obj *type,
  * 名前が _name_ の型を作成する。
  *
  * @overload new(name, options={})
+ *   @param name [String] 作成する型の名前
  *   @param options [::Hash] The name and value
  *     pairs. Omitted names are initialized as the default value
  *   @option options [Symbol] :type (:variable)
