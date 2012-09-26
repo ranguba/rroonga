@@ -49,32 +49,24 @@ rb_grn_type_to_ruby_object (grn_ctx *context, grn_obj *type,
 }
 
 /*
- * call-seq:
- *   Groonga::Type.new(name, options={})
+ * 名前が _name_ の型を作成する。
  *
- * 名前が _name_ の型を作成する。 _options_ に指定可能な値は以下の通
- * り。
- * @param options [::Hash] The name and value
- *   pairs. Omitted names are initialized as the default value
- * @option options :type (variable) The type
- *
- *   :integer（符号付き整数）、:int（:integerの省略
- *   形）、:unsigned_integer（符号なし整
- *   数）、:uint（:unsigned_integerの省略形）、:float（浮動小
- *   数点数）、:variable（可変長文字列）のいずれかを指定する。
- *   省略した場合は:variableを指定したものと扱う。
- *
- *   :variableを指定した場合は必ず +:size+ を指定しなければいけない。
- *
- * @option options :context The context
- *
- *   型の作成時に利用するGroonga::Contextを指定する。省略すると
- *   Groonga::Context.defaultを用いる。
- *
- * @option options :size The size
- *
- *   +:option+ が:variableの場合は最大長、それ以外の場合は長さを
- *   指定する(単位:byte)。
+ * @overload new(name, options={})
+ *   @param options [::Hash] The name and value
+ *     pairs. Omitted names are initialized as the default value
+ *   @option options [Symbol] :type (:variable)
+ *     :integer（符号付き整数）、:int（:integerの省略
+ *     形）、:unsigned_integer（符号なし整
+ *     数）、:uint（:unsigned_integerの省略形）、:float（浮動小数点
+ *     数）、:variable（可変長文字列）のいずれかを指定する。省略した場
+ *     合は:variableを指定したものと扱う。
+ *     :variableを指定した場合は必ず +:size+ を指定しなければいけない。
+ *   @option options [Context] :context
+ *     型の作成時に利用するGroonga::Contextを指定する。省略すると
+ *     Groonga::Context.defaultを用いる。
+ *   @option options [Integer] :size
+ *     +:option+ が:variableの場合は最大長、それ以外の場合は長さを
+ *     指定する(単位:byte)。
  */
 static VALUE
 rb_grn_type_initialize (int argc, VALUE *argv, VALUE self)
