@@ -390,12 +390,11 @@ rb_grn_table_key_support_array_set (VALUE self, VALUE rb_key, VALUE rb_values)
 }
 
 /*
- * call-seq:
- *   table.set_column_value(key, name, value)
- *   table.set_column_value(id, name, value, :id => true)
- *
  * _table_ の _key_ に対応するカラム _name_ の値を設定する。
  * _key_ に対応するレコードがない場合は新しく作成される。
+ *
+ * @overload set_column_value(key, name, value)
+ * @overload set_column_value(id, name, value, {:id=>true})
  */
 static VALUE
 rb_grn_table_key_support_set_column_value (int argc, VALUE *argv, VALUE self)
