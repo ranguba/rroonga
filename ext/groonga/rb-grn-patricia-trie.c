@@ -771,10 +771,6 @@ rb_grn_patricia_trie_open_grn_rk_cursor (int argc, VALUE *argv, VALUE self,
 }
 
 /*
- * call-seq:
- *   table.open_rk_cursor(key, options={}) -> Groonga::PatriciaTrieCursor
- *   table.open_rk_cursor(key, options={}) {|cursor| ... }
- *
  * _table_ のキーはカタカナである必要がある。また、エンコーディ
  * ングはUTF-8である必要がある。ローマ字やひらがなで _key_ を指
  * 定しても、 _key_ に対応するカタカナのキーを検索するカーソル
@@ -782,37 +778,46 @@ rb_grn_patricia_trie_open_grn_rk_cursor (int argc, VALUE *argv, VALUE self,
  * たカーソルが渡され、ブロックを抜けると自動的にカーソルが破
  * 棄される。
  *
- * _options_ に指定可能な値は以下の通り。
- * @param options [::Hash] The name and value
- *   pairs. Omitted names are initialized as the default value.
- * @option options :key_bytes The key_bytes
- *
- *  _key_のサイズ（byte）
- *
- * @option options :key_bits The key_bits
- *
- *  _key_のサイズ（bit）（現在は未サポート）
- *
- * @option options :offset The offset
- *
- *   該当する範囲のレコードのうち、(0ベースで)_:offset_番目
- *   からレコードを取り出す。
- *
- * @option options :limit The limit
- *
- *   該当する範囲のレコードのうち、 _:limit_ 件のみを取り出す。
- *   省略された場合または-1が指定された場合は、全件が指定され
- *   たものとみなす。
- *
- * @option options :greater_than The greater_than
- *
- *   +true+ を指定すると _key_ で指定した値に一致した [ +key+ ] を
- *   範囲に含まない。
- *
- * @option options :less_than The less_than
- *
- *   +true+ を指定すると _key_ で指定した値に一致した [ +key+ ] を
- *   範囲に含まない。
+ * @overload open_rk_cursor(key, options={})
+ *   @return [Groonga::PatriciaTrieCursor]
+ *   @param options [::Hash]
+ *     pairs. Omitted names are initialized as the default value.
+ *   @option options :key_bytes
+ *    _key_のサイズ（byte）
+ *   @option options :key_bits
+ *    _key_のサイズ（bit）（現在は未サポート）
+ *   @option options :offset
+ *     該当する範囲のレコードのうち、(0ベースで)_:offset_番目から
+ *     レコードを取り出す。
+ *   @option options :limit
+ *     該当する範囲のレコードのうち、 _:limit_ 件のみを取り出す。
+ *     省略された場合または-1が指定された場合は、全件が指定されたものとみなす。
+ *   @option options :greater_than
+ *     +true+ を指定すると _key_ で指定した値に一致した [ +key+ ] を
+ *     範囲に含まない。
+ *   @option options :less_than
+ *     +true+ を指定すると _key_ で指定した値に一致した [ +key+ ] を
+ *     範囲に含まない。
+ * @overload open_rk_cursor(key, options={})
+ *   @yield [cursor]
+ *   @param options [::Hash]
+ *     pairs. Omitted names are initialized as the default value.
+ *   @option options :key_bytes
+ *    _key_のサイズ（byte）
+ *   @option options :key_bits
+ *    _key_のサイズ（bit）（現在は未サポート）
+ *   @option options :offset
+ *     該当する範囲のレコードのうち、(0ベースで)_:offset_番目から
+ *     レコードを取り出す。
+ *   @option options :limit
+ *     該当する範囲のレコードのうち、 _:limit_ 件のみを取り出す。
+ *     省略された場合または-1が指定された場合は、全件が指定されたものとみなす。
+ *   @option options :greater_than
+ *     +true+ を指定すると _key_ で指定した値に一致した [ +key+ ] を
+ *     範囲に含まない。
+ *   @option options :less_than
+ *     +true+ を指定すると _key_ で指定した値に一致した [ +key+ ] を
+ *     範囲に含まない。
  */
 static VALUE
 rb_grn_patricia_trie_open_rk_cursor (int argc, VALUE *argv, VALUE self)
