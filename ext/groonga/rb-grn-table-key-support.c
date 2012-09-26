@@ -617,9 +617,6 @@ rb_grn_table_key_support_get_default_tokenizer (VALUE self)
 }
 
 /*
- * call-seq:
- *   table.default_tokenizer = トークナイザ
- *
  * Groonga::IndexColumnで使用するトークナイザを設定する。
  *
  * @example
@@ -637,6 +634,8 @@ rb_grn_table_key_support_get_default_tokenizer (VALUE self)
  *
  *   # MeCabを使用
  *   table.default_tokenizer = "TokenMecab"
+ *
+ * @overload default_tokenizer=(tokenizer)
  */
 static VALUE
 rb_grn_table_key_support_set_default_tokenizer (VALUE self, VALUE rb_tokenizer)
