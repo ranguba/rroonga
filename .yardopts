@@ -1,4 +1,5 @@
 --output-dir doc/reference/en
 --markup textile
+--use-cache .yardoc
 lib/**/*.rb
 ext/**/*.c
