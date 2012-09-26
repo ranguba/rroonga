@@ -56,10 +56,11 @@ rb_grn_fix_size_column_array_reference (VALUE self, VALUE rb_id)
 }
 
 /*
- * call-seq:
- *   column[id] = value
- *
  * _column_ の _id_ に対応する値を設定する。
+ *
+ * @overload []=(id, value)
+ *   @param [Integer] id 設定する値に対応する _column_ の _id_
+ *   @param [Groonga::Object] value 設定する値
  */
 static VALUE
 rb_grn_fix_size_column_array_set (VALUE self, VALUE rb_id, VALUE rb_value)
