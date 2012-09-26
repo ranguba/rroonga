@@ -262,9 +262,6 @@ rb_grn_hash_s_create (int argc, VALUE *argv, VALUE klass)
 }
 
 /*
- * call-seq:
- *   hash.search(key, options=nil) -> Groonga::Hash
- *
  * _key_ にマッチするレコードのIDがキーに入っている
  * Groonga::Hashを返す。マッチするレコードがない場合は空の
  * Groonga::Hashが返る。
@@ -272,14 +269,6 @@ rb_grn_hash_s_create (int argc, VALUE *argv, VALUE klass)
  * _options_ で +:result+ を指定することにより、そのテーブルにマッ
  * チしたレコードIDがキーのレコードを追加することができる。
  * +:result+ にテーブルを指定した場合は、そのテーブルが返る。
- *
- * _options_ に指定可能な値は以下の通り。
- * @param [::Hash] options The name and value
- *   pairs. Omitted names are initialized as the default value
- *
- * @option options :result The result
- *
- *   結果を格納するテーブル。
  *
  * @example 複数のキーで検索し、結果を1つのテーブルに集める。
  *   result = nil
@@ -291,6 +280,13 @@ rb_grn_hash_s_create (int argc, VALUE *argv, VALUE klass)
  *     user = record.key
  *     p user.key # -> "morita"または"gunyara-kun"または"yu"
  *   end
+ *
+ * @overload search(key, options=nil)
+ *   @param [::Hash] options The name and value
+ *     pairs. Omitted names are initialized as the default value
+ *   @option options :result
+ *     結果を格納するテーブル。
+ * @return [Groonga::Hash]
  */
 static VALUE
 rb_grn_hash_search (int argc, VALUE *argv, VALUE self)
