@@ -350,15 +350,14 @@ set_value (VALUE args, SetValueData *data)
 }
 
 /*
- * Document-method: []=
- *
- * call-seq:
- *   table[key] = { :column_name => value, ... }
- *
  * _table_ の _key_ に対応するカラム _column_name_ の値を設定する。
  * _key_ に対応するレコードがない場合は新しく作成される。
  *
  * 0.9.0から値ではなくカラムの値を設定するようになった。
+ *
+ * @overload []=(key, values)
+ *   @param [::Hash] values
+ *     keyに対応させるカラムの値。{ :column_name => value, ... }の形で設定する。
  */
 static VALUE
 rb_grn_table_key_support_array_set (VALUE self, VALUE rb_key, VALUE rb_values)
