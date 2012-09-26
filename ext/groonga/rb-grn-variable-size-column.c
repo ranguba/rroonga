@@ -97,18 +97,16 @@ rb_grn_variable_size_column_compressed_p (int argc, VALUE *argv, VALUE self)
 }
 
 /*
- * Document-method: defrag
- *
- * call-seq:
- *   column.defrag(options={}) -> n_segments
- *
  * Defrags the column.
  *
+ * @overload defrag(options={})
+ *   @param options [::Hash] The name and value
+ *     pairs. Omitted names are initialized as the default value.
+ *   @option options [Integer] :threshold (0) the threshold to
+ *     determine whether a segment is defraged. Available
+ *     values are -4..22. -4 means all segments are defraged.
+ *     22 means no segment is defraged.
  * @return [Integer] the number of defraged segments
- * @option options [Integer] :threshold (0) the threshold to
- *   determine whether a segment is defraged. Available
- *   values are -4..22. -4 means all segments are defraged.
- *   22 means no segment is defraged.
  * @since 1.2.6
  */
 static VALUE
