@@ -335,10 +335,10 @@ resolve_source_id (grn_ctx *context, grn_obj *column, grn_id range_id,
 }
 
 /*
- * call-seq:
- *   column.sources = Groonga::Columnの配列
- *
  * インデックス対象となる複数のカラムを配列で設定する。
+ *
+ * @overload sources=(columns)
+ *   @param [::Array<Groonga::Column>] columns インデックス対象となるカラムの配列
  */
 static VALUE
 rb_grn_index_column_set_sources (VALUE self, VALUE rb_sources)
