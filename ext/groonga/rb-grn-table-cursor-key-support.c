@@ -31,10 +31,10 @@ VALUE rb_mGrnTableCursorKeySupport;
  */
 
 /*
- * call-seq:
- *   cursor.key -> 主キー
- *
  * カレントレコードの主キーを返す。
+ *
+ * @overload key
+ * @return [::Object] カレントレコードの主キー
  */
 static VALUE
 rb_grn_table_cursor_get_key (VALUE self)
