@@ -207,10 +207,11 @@ rb_grn_snippet_add_keyword (int argc, VALUE *argv, VALUE self)
 }
 
 /*
- * call-seq:
- *   snippet.execute(string) -> スニペットの配列
- *
  * _string_ を走査し、スニペットを作成する。
+ *
+ * @overload execute(string)
+ *   @param [String] string 走査する文字列
+ * @return [::Array] 作成されたスニペットの配列
  */
 static VALUE
 rb_grn_snippet_execute (VALUE self, VALUE rb_string)
