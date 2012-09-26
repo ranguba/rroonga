@@ -29,20 +29,14 @@ VALUE rb_cGrnVariableSizeColumn;
  */
 
 /*
- * Document-method: compressed?
- *
- * call-seq:
- *   column.compressed?        -> boolean
- *   column.compressed?(type)  -> boolean
- *
  * Returns whether the column is compressed or not. If
  * @type@ is specified, it returns whether the column is
  * compressed by @type@ or not.
- *
- * @return [Boolean] whether the column is compressed or not.
- * @param [:zlib, :lzo] type (nil) If @type@ isn't @nil@,
- *   it checks whether specified compressed type is used or
- *   not.
+ * @overload compressed?
+ *   @return [Boolean] whether the column is compressed or not.
+ * @overload compressed?(type)
+ *   @param [:zlib, :lzo] type (nil)
+ *   @return [Boolean] whether specified compressed type is used or not.
  * @since 1.3.1
  */
 static VALUE
