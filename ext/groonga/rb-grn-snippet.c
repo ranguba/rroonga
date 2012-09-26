@@ -151,22 +151,18 @@ rb_grn_snippet_initialize (int argc, VALUE *argv, VALUE self)
 }
 
 /*
- * call-seq:
- *   snippet.add_keyword(keyword, options={})
+ * _keyword_ を追加する。
  *
- * _keyword_ を追加する。 _options_ に指定可能な値は
- * 以下の通り。
- * @param options [::Hash] The name and value
- *   pairs. Omitted names are initialized as the default value.
- * @option options :open_tag (default_open_tag) The open_tag
- *
- *   開始タグ。省略した場合はGroonga::Snippet.newで指定し
- *   た+:default_open_tag+。
- *
- * @option options :close_tag (:default_close_tag) The close_tag
- *
- *   終了タグ。省略した場合はGroonga::Snippet.newで指定し
- *   た+:default_close_tag+。
+ * @overload add_keyword(keyword, options={})
+ *   @param [String] keyword 追加するキーワード
+ *   @param options [::Hash] The name and value
+ *     pairs. Omitted names are initialized as the default value.
+ *   @option options :open_tag (default_open_tag)
+ *     開始タグ。省略した場合はGroonga::Snippet.newで指定した
+ *     +:default_open_tag+ 。
+ *   @option options :close_tag (:default_close_tag)
+ *     終了タグ。省略した場合はGroonga::Snippet.newで指定した
+ *     +:default_close_tag+ 。
  */
 static VALUE
 rb_grn_snippet_add_keyword (int argc, VALUE *argv, VALUE self)
