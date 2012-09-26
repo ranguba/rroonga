@@ -224,12 +224,12 @@ rb_grn_view_each (VALUE self)
 }
 
 /*
- * Document-method: column_value
+ * _view_ の _id_ に対応するカラム _name_ のもつ値を返す。
  *
- * call-seq:
- *   view.column_value(id, name) -> 値
- *
- * _view_ の _id_ に対応するカラム _name_ の値を返す。
+ * @overload column_value(id, name)
+ *   @param [String] id _view_ のもつ _id_
+ *   @param [String] name _id_ に対応するカラム名
+ * @return カラム _name_ のもつ値
  */
 static VALUE
 rb_grn_view_get_column_value (VALUE self, VALUE rb_id, VALUE rb_name)
