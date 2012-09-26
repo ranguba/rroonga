@@ -65,23 +65,20 @@ rb_grn_plugin_alloc (VALUE klass)
 }
 
 /*
- * call-seq:
- *   Groonga::Plugin.register(name, options=nil)
- *   Groonga::Plugin.register({:path => path, :context => nil})
- *
  * 既存のプラグインをデータベースに登録する。
  *
- * _name_ を指定した場合はその名前のプラグインを登録する。
+ * @overload register(name, options=nil)
+ *   _name_ で指定した名前のプラグインを登録する。
+ *   @param [String] name 登録するプラグインの名前
+ *   @param options [::Hash] The name and value
+ *     pairs. Omitted names are initialized as the default value.
+ *   @option options :context (Groonga::Context.default)
+ *     データベースを結びつけるコンテキスト。
+ * @overload register({:path => path, :context => nil})
+ *   @param hash [::Hash] _:path_ と _:context_ を指定したハッシュを指定する。
+ *   _:path_ で指定したパスのプラグインを登録する。
  *
- * _path_ を指定した場合はそのパスのプラグインを登録する。
- *
- * _options_ にはハッシュでオプションを指定する。指定できるオ
- * プションは以下の通り。
- * @param options [::Hash] The name and value
- *   pairs. Omitted names are initialized as the default value.
- * @option options :context (Groonga::Context.default) The context
- *
- *   データベースを結びつけるコンテキスト。
+ *   _:context_ については _name_ を設定した時と同様。
  */
 static VALUE
 rb_grn_plugin_s_register (int argc, VALUE *argv, VALUE klass)
