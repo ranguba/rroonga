@@ -1566,30 +1566,32 @@ rb_grn_table_unlock_ensure (VALUE self)
 }
 
 /*
- * Document-method: lock
- *
- * call-seq:
- *   table.lock(options={})
- *   table.lock(options={}) {}
- *
  * _table_ をロックする。ロックに失敗した場合は
  * Groonga::ResourceDeadlockAvoided例外が発生する。
  *
  * ブロックを指定した場合はブロックを抜けたときにunlockする。
  *
- * 利用可能なオプションは以下の通り。
- * @param options [::Hash] The name and value
- *   pairs. Omitted names are initialized as the default value.
- * @option options :timeout The timeout
- *
- *   ロックを獲得できなかった場合は _:timeout_ 秒間ロックの獲
- *   得を試みる。 _:timeout_ 秒以内にロックを獲得できなかった
- *   場合は例外が発生する。
- *
- * @option options :id The id
- *
- *   _:id_ で指定したレコードをロックする。（注: groonga側が
- *   未実装のため、現在は無視される）
+ * @overload lock(options={})
+ *   @param options [::Hash] The name and value
+ *     pairs. Omitted names are initialized as the default value.
+ *   @option options :timeout
+ *     ロックを獲得できなかった場合は _:timeout_ 秒間ロックの獲
+ *     得を試みる。 _:timeout_ 秒以内にロックを獲得できなかった
+ *     場合は例外が発生する。
+ *   @option options :id
+ *     _:id_ で指定したレコードをロックする。（注: groonga側が
+ *     未実装のため、現在は無視される）
+ * @overload lock(options={})
+ *   @yield ブロックを抜けたときにunlockする。
+ *   @param options [::Hash] The name and value
+ *     pairs. Omitted names are initialized as the default value.
+ *   @option options :timeout
+ *     ロックを獲得できなかった場合は _:timeout_ 秒間ロックの獲
+ *     得を試みる。 _:timeout_ 秒以内にロックを獲得できなかった
+ *     場合は例外が発生する。
+ *   @option options :id
+ *     _:id_ で指定したレコードをロックする。（注: groonga側が
+ *     未実装のため、現在は無視される）
  */
 static VALUE
 rb_grn_table_lock (int argc, VALUE *argv, VALUE self)
