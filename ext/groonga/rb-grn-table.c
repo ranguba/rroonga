@@ -869,10 +869,10 @@ rb_grn_table_get_records (int argc, VALUE *argv, VALUE self)
 }
 
 /*
- * call-seq:
- *   table.size -> レコード数
- *
  * テーブルに登録されているレコード数を返す。
+ *
+ * @overload size
+ * @return [Integer] レコード数
  */
 static VALUE
 rb_grn_table_get_size (VALUE self)
