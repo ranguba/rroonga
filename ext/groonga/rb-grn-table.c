@@ -1709,11 +1709,6 @@ rb_grn_table_is_locked (int argc, VALUE *argv, VALUE self)
 }
 
 /*
- * call-seq:
- *   table.select(options) {|record| ...} -> Groonga::Hash
- *   table.select(query, options) -> Groonga::Hash
- *   table.select(expression, options) -> Groonga::Hash
- *
  * _table_ からブロックまたは文字列で指定した条件にマッチする
  * レコードを返す。返されたテーブルには +expression+ という特
  * 異メソッドがあり、指定した条件を表している
@@ -1747,108 +1742,185 @@ rb_grn_table_is_locked (int argc, VALUE *argv, VALUE self)
  * ---
  * </pre>
  *
- * _query_ には「[カラム名]:[演算子][値]」という書式で条件を
- * 指定する。演算子は以下の通り。
+ * @overload select(options)
+ *   @yield [record] ブロックで条件を指定する場合は
+ *     Groonga::RecordExpressionBuilderを参照。
  *
- * - なし := [カラム値] == [値]
- * - @!@ := [カラム値] != [値]
- * - @<@ := [カラム値] < [値]
- * - @>@ := [カラム値] > [値]
- * - @<=@ := [カラム値] <= [値]
- * - @>=@ := [カラム値] >= [値]
- * - @@@ := [カラム値]が[値]を含んでいるかどうか
+ *     Ruby1.9以降では、ブロックで条件を指定する際に
+ *     Groonga::ColumnExpressionBuilderの他に"!="も使用可能。
  *
- * 例:
+ *     例:
  *
- * <pre>
- * !!!ruby
- * "name:daijiro" # "name"カラムの値が"daijiro"のレコードにマッチ
- * "description:@groonga" # "description"カラムが
- *                        # "groonga"を含んでいるレコードにマッチ
- * </pre>
+ *     <pre>
+ *     !!!ruby
+ *     comments = Groonga::Array.create(:name => "Comments")
+ *     comments.define_column("content", "Text")
+ *     comments.add(:content => "Hello Good-bye!")
+ *     comments.add(:content => "Hello World")
+ *     comments.add(:content => "test")
+ *     result = comments.select do |record|
+ *       record.content != "test"
+ *     end
+ *     p result.collect {|record| record.content}
+ *       # => ["Hello Good-bye!", "Hello World"]
+ *     </pre>
  *
- * _expression_ には既に作成済みのGroonga::Expressionを渡す
+ *   @param options [::Hash] The name and value
+ *     pairs. Omitted names are initialized as the default value.
+ *   @option options :default_column
+ *     "column_name:hoge"ではなく"hoge"のようにcolumn_nameが指
+ *     定されない条件の検索対象となるカラムを指定する。
+ *   @option options :operator (Groonga::Operator::OR)
+ *     マッチしたレコードをどのように扱うか。指定可能な値は以
+ *     下の通り。省略した場合はGroonga::Operator::OR。
  *
- * ブロックで条件を指定する場合は
- * Groonga::RecordExpressionBuilderを参照。
+ *     [Groonga::Operator::OR] マッチしたレコードを追加。すで
+ *                             にレコードが追加されている場合
+ *                             は何もしない。
+ *     [Groonga::Operator::AND] マッチしたレコードのスコアを増
+ *                              加。マッチしなかったレコード
+ *                              を削除。
+ *     [Groonga::Operator::BUT] マッチしたレコードを削除。
+ *     [Groonga::Operator::ADJUST] マッチしたレコードのスコア
+ *                                 を増加。
  *
- * Ruby1.9以降では、ブロックで条件を指定する際に
- * Groonga::ColumnExpressionBuilderの他に"!="も使用可能。
+ *   @option options :result
+ *     検索結果を格納するテーブル。マッチしたレコードが追加さ
+ *     れていく。省略した場合は新しくテーブルを作成して返す。
+ *   @option options :name
+ *     条件の名前。省略した場合は名前を付けない。
+ *   @option options :syntax
+ *     _query_ の構文。省略した場合は +:query+ 。
  *
- * 例:
+ *     参考: Groonga::Expression#parse.
+ *   @option options :allow_pragma
+ *     query構文時にプラグマを利用するかどうか。省略した場合は
+ *     利用する。
  *
- * <pre>
- * !!!ruby
- * comments = Groonga::Array.create(:name => "Comments")
- * comments.define_column("content", "Text")
- * comments.add(:content => "Hello Good-bye!")
- * comments.add(:content => "Hello World")
- * comments.add(:content => "test")
- * result = comments.select do |record|
- *   record.content != "test"
- * end
- * p result.collect {|record| record.content}
- *   # => ["Hello Good-bye!", "Hello World"]
- * </pre>
+ *     参考: Groonga::Expression#parse.
+ *   @option options :allow_column
+ *     query構文時にカラム指定を利用するかどうか。省略した場合
+ *     は利用する。
  *
- * _options_ に指定可能な値は以下の通り。
- * @param options [::Hash] The name and value
- *   pairs. Omitted names are initialized as the default value.
- * @option options :default_column
+ *     参考: Groonga::Expression#parse.
+ *   @option options :allow_update
+ *     script構文時に更新操作を利用するかどうか。省略した場合
+ *     は利用する。
  *
- *   "column_name:hoge"ではなく"hoge"のようにcolumn_nameが指
- *   定されない条件の検索対象となるカラムを指定する。
+ *     参考: Groonga::Expression#parse.
  *
- * @option options :operator (Groonga::Operator::OR) The operator
+ * @overload select(query, options)
+ *   _query_ には「[カラム名]:[演算子][値]」という書式で条件を
+ *   指定する。演算子は以下の通り。
  *
- *   マッチしたレコードをどのように扱うか。指定可能な値は以
- *   下の通り。省略した場合はGroonga::Operator::OR。
+ *   - なし := [カラム値] == [値]
+ *   - @!@ := [カラム値] != [値]
+ *   - @<@ := [カラム値] < [値]
+ *   - @>@ := [カラム値] > [値]
+ *   - @<=@ := [カラム値] <= [値]
+ *   - @>=@ := [カラム値] >= [値]
+ *   - @@@ := [カラム値]が[値]を含んでいるかどうか
  *
- *   [Groonga::Operator::OR] マッチしたレコードを追加。すで
- *                           にレコードが追加されている場合
- *                           は何もしない。
- *   [Groonga::Operator::AND] マッチしたレコードのスコアを増
- *                            加。マッチしなかったレコード
- *                            を削除。
- *   [Groonga::Operator::BUT] マッチしたレコードを削除。
- *   [Groonga::Operator::ADJUST] マッチしたレコードのスコア
- *                               を増加。
+ *   例:
  *
- * @option options :result The result
+ *   <pre>
+ *   !!!ruby
+ *   "name:daijiro" # "name"カラムの値が"daijiro"のレコードにマッチ
+ *   "description:@groonga" # "description"カラムが
+ *                          # "groonga"を含んでいるレコードにマッチ
+ *   </pre>
  *
- *   検索結果を格納するテーブル。マッチしたレコードが追加さ
- *   れていく。省略した場合は新しくテーブルを作成して返す。
+ *   @param options [::Hash] The name and value
+ *     pairs. Omitted names are initialized as the default value.
+ *   @option options :default_column
+ *     "column_name:hoge"ではなく"hoge"のようにcolumn_nameが指
+ *     定されない条件の検索対象となるカラムを指定する。
+ *   @option options :operator (Groonga::Operator::OR)
+ *     マッチしたレコードをどのように扱うか。指定可能な値は以
+ *     下の通り。省略した場合はGroonga::Operator::OR。
  *
- * @option options :name The name
+ *     [Groonga::Operator::OR] マッチしたレコードを追加。すで
+ *                             にレコードが追加されている場合
+ *                             は何もしない。
+ *     [Groonga::Operator::AND] マッチしたレコードのスコアを増
+ *                              加。マッチしなかったレコード
+ *                              を削除。
+ *     [Groonga::Operator::BUT] マッチしたレコードを削除。
+ *     [Groonga::Operator::ADJUST] マッチしたレコードのスコア
+ *                                 を増加。
  *
- *   条件の名前。省略した場合は名前を付けない。
+ *   @option options :result
+ *     検索結果を格納するテーブル。マッチしたレコードが追加さ
+ *     れていく。省略した場合は新しくテーブルを作成して返す。
+ *   @option options :name
+ *     条件の名前。省略した場合は名前を付けない。
+ *   @option options :syntax
+ *     _query_ の構文。省略した場合は +:query+ 。
  *
- * @option options :syntax The syntax
+ *     参考: Groonga::Expression#parse.
+ *   @option options :allow_pragma
+ *     query構文時にプラグマを利用するかどうか。省略した場合は
+ *     利用する。
  *
- *   _query_ の構文。省略した場合は +:query+ 。
+ *     参考: Groonga::Expression#parse.
+ *   @option options :allow_column
+ *     query構文時にカラム指定を利用するかどうか。省略した場合
+ *     は利用する。
  *
- *   参考: Groonga::Expression#parse.
+ *     参考: Groonga::Expression#parse.
+ *   @option options :allow_update
+ *     script構文時に更新操作を利用するかどうか。省略した場合
+ *     は利用する。
  *
- * @option options :allow_pragma The allow_pragma
+ *     参考: Groonga::Expression#parse.
  *
- *   query構文時にプラグマを利用するかどうか。省略した場合は
- *   利用する。
+ * @overload select(expression, options)
+ *   _expression_ には既に作成済みのGroonga::Expressionを渡す
  *
- *   参考: Groonga::Expression#parse.
+ *   @param options [::Hash] The name and value
+ *     pairs. Omitted names are initialized as the default value.
+ *   @option options :default_column
+ *     "column_name:hoge"ではなく"hoge"のようにcolumn_nameが指
+ *     定されない条件の検索対象となるカラムを指定する。
+ *   @option options :operator (Groonga::Operator::OR)
+ *     マッチしたレコードをどのように扱うか。指定可能な値は以
+ *     下の通り。省略した場合はGroonga::Operator::OR。
  *
- * @option options :allow_column The allow_column
+ *     [Groonga::Operator::OR] マッチしたレコードを追加。すで
+ *                             にレコードが追加されている場合
+ *                             は何もしない。
+ *     [Groonga::Operator::AND] マッチしたレコードのスコアを増
+ *                              加。マッチしなかったレコード
+ *                              を削除。
+ *     [Groonga::Operator::BUT] マッチしたレコードを削除。
+ *     [Groonga::Operator::ADJUST] マッチしたレコードのスコア
+ *                                 を増加。
  *
- *   query構文時にカラム指定を利用するかどうか。省略した場合
- *   は利用する。
+ *   @option options :result
+ *     検索結果を格納するテーブル。マッチしたレコードが追加さ
+ *     れていく。省略した場合は新しくテーブルを作成して返す。
+ *   @option options :name
+ *     条件の名前。省略した場合は名前を付けない。
+ *   @option options :syntax
+ *     _query_ の構文。省略した場合は +:query+ 。
  *
- *   参考: Groonga::Expression#parse.
+ *     参考: Groonga::Expression#parse.
+ *   @option options :allow_pragma
+ *     query構文時にプラグマを利用するかどうか。省略した場合は
+ *     利用する。
  *
- * @option options :allow_update The allow_update
+ *     参考: Groonga::Expression#parse.
+ *   @option options :allow_column
+ *     query構文時にカラム指定を利用するかどうか。省略した場合
+ *     は利用する。
  *
- *   script構文時に更新操作を利用するかどうか。省略した場合
- *   は利用する。
+ *     参考: Groonga::Expression#parse.
+ *   @option options :allow_update
+ *     script構文時に更新操作を利用するかどうか。省略した場合
+ *     は利用する。
  *
- *   参考: Groonga::Expression#parse.
+ *     参考: Groonga::Expression#parse.
+ * @return [Groonga::Hash]
  */
 static VALUE
 rb_grn_table_select (int argc, VALUE *argv, VALUE self)
