@@ -561,6 +561,7 @@ module Groonga
       else
         return value unless value.respond_to?(:valid_encoding?)
         sanitized_value = ""
+        value = fix_encoding(value)
         value.each_char do |char|
           if char.valid_encoding?
             sanitized_value << char
@@ -576,6 +577,13 @@ module Groonga
         end
         sanitized_value
       end
+    end
+
+    def fix_encoding(value)
+      if value.encoding == ::Encoding::ASCII_8BIT
+        value.force_encoding(@table.context.ruby_encoding)
+      end
+      value
     end
 
     def inspect_invalid_char(char)
