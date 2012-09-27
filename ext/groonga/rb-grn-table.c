@@ -359,37 +359,30 @@ n_gram_tokenizer_p(grn_ctx *context, grn_obj *tokenizer)
 }
 
 /*
- * call-seq:
- *   table.define_index_column(name, value_type, options={}) -> Groonga::IndexColumn
- *
  * テーブルに名前が _name_ で型が _value_type_ のインデックスカ
  * ラムを定義し、新しく定義されたカラムを返す。
  *
- * _options_ に指定可能な値は以下の通り。
- * @param options [::Hash] The name and value
- *   pairs. Omitted names are initialized as the default value.
- * @option options :path The path
- *   カラムを保存するパス。
+ * @overload define_index_column(name, value_type, options={})
+ *   @param options [::Hash] The name and value
+ *     pairs. Omitted names are initialized as the default value.
+ *   @option options :path
+ *     カラムを保存するパス。
+ *   @option options :persistent (永続カラム)
+ *     +true+ を指定すると永続カラムとなる。省略した場合は永
+ *     続カラムとなる。 +:path+ を省略した場合は自動的にパスが
+ *     付加される。
+ *   @option options :with_section
+ *     転置索引にsection(段落情報)を合わせて格納する。
+ *   @option options :with_weight
+ *     転置索引にweight情報を合わせて格納する。
+ *   @option options :with_position
+ *     転置索引に出現位置情報を合わせて格納する。
+ *   @option options :source
+ *    インデックス対象となるカラムを指定する。 +:sources+ との併用はできない。
+ *   @option options :sources
+ *    インデックス対象となる複数のカラムを指定する。 +:source+ との併用はできない。
  *
- * @option options :persistent (永続カラム) The persistent
- *   +true+ を指定すると永続カラムとなる。省略した場合は永
- *   続カラムとなる。 +:path+ を省略した場合は自動的にパスが
- *   付加される。
- *
- * @option options :with_section The with_section
- *   転置索引にsection(段落情報)を合わせて格納する。
- *
- * @option options :with_weight  The with_weight
- *   転置索引にweight情報を合わせて格納する。
- *
- * @option options :with_position The with_position
- *   転置索引に出現位置情報を合わせて格納する。
- *
- * @option options :source The source
- *  インデックス対象となるカラムを指定する。 +:sources+ との併用はできない。
- *
- * @option options :sources The sources
- *  インデックス対象となる複数のカラムを指定する。 +:source+ との併用はできない。
+ * @return [Groonga::IndexColumn]
  */
 static VALUE
 rb_grn_table_define_index_column (int argc, VALUE *argv, VALUE self)
