@@ -1119,37 +1119,32 @@ module Groonga
       #
       #   table.index("Users.name")
       #
-      # @param options [::Hash] The name and value
-      #   pairs. Omitted names are initialized as the default value.
-      # @option options :name The name
+      # @param [Array] args
+      #   インデックスカラム作成時に指定できるオプション。
+      #   ハッシュを使って次の要素を指定することができる。
       #
-      #   インデックスカラムのカラム名を任意に指定する。
-      # @option options :force The force
-      #
-      #   +true+ を指定すると既存の同名のカラムが
-      #   存在していても、強制的に新しいカラムを作成する。
-      # @option options :path The path
-      #
-      #   カラムを保存するパス。
-      # @option options :persistent The persistent
-      #
-      #   +true+ を指定すると永続カラムとなる。
-      #   +:path+ を省略した場合は自動的にパスが付加される。
-      # @option options :with_section The with_section
-      #
-      #   +true+ を指定すると転置索引にsection(段落情報)を
-      #   合わせて格納する。未指定または +nil+ を指定した場合、
-      #   複数のカラムを指定すると自動的に有効になる。
-      # @option options :with_weight The with_weight
-      #
-      #   +true+ を指定すると転置索引にweight情報を合わせて
-      #   格納する。
-      # @option options :with_position
-      #
-      #   +true+ を指定すると転置索引に出現位置情報を合わせて
-      #   格納する。未指定または +nil+ を指定した場合、テーブル
-      #   がN-gram系のトークナイザーを利用している場合は
-      #   自動的に有効になる。
+      #   - :name :=
+      #     インデックスカラムのカラム名を任意に指定する。 =:
+      #   - :force :=
+      #     +true+ を指定すると既存の同名のカラムが
+      #     存在していても、強制的に新しいカラムを作成する。 =:
+      #   - :path :=
+      #     カラムを保存するパス。 =:
+      #   - :persistent :=
+      #     +true+ を指定すると永続カラムとなる。
+      #     +:path+ を省略した場合は自動的にパスが付加される。 =:
+      #   - :with_section :=
+      #     +true+ を指定すると転置索引にsection(段落情報)を
+      #     合わせて格納する。未指定または +nil+ を指定した場合、
+      #     複数のカラムを指定すると自動的に有効になる。 =:
+      #   - :with_weight :=
+      #     +true+ を指定すると転置索引にweight情報を合わせて
+      #     格納する。 =:
+      #   - :with_position :=
+      #     +true+ を指定すると転置索引に出現位置情報を合わせて
+      #     格納する。未指定または +nil+ を指定した場合、テーブル
+      #     がN-gram系のトークナイザーを利用している場合は
+      #     自動的に有効になる。 =:
       def index(target_table_or_target_column_full_name, *args)
         key, target_table, target_columns, options =
           parse_index_argument(target_table_or_target_column_full_name, *args)
