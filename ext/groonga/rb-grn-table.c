@@ -224,36 +224,31 @@ rb_grn_table_inspect (VALUE self)
 }
 
 /*
- * call-seq:
- *   table.define_column(name, value_type, options={}) ->
- *     Groonga::FixSizeColumnかGroonga::VariableSizeColumn
- *
  * テーブルに名前が _name_ で型が _value_type_ のカラムを定義
  * し、新しく定義されたカラムを返す。
  *
- * _options_ に指定可能な値は以下の通り。
- * @param options [::Hash] The name and value
- *   pairs. Omitted names are initialized as the default value.
- * @option options :path The path
- *   カラムを保存するパス。
+ * @overload define_column(name, value_type, options={})
+ *   @param options [::Hash] The name and value
+ *     pairs. Omitted names are initialized as the default value.
+ *   @option options :path
+ *     カラムを保存するパス。
+ *   @option options :persistent (永続カラム)
+ *     +true+ を指定すると永続カラムとなる。省略した場合は永
+ *     続カラムとなる。 +:path+ を省略した場合は自動的にパスが
+ *     付加される。
+ *   @option options :type (:scalar)
+ *     カラムの値の格納方法について指定する。省略した場合は、
+ *     +:scalar+ になる。
  *
- * @option options :persistent (永続カラム) The persistent
- *   +true+ を指定すると永続カラムとなる。省略した場合は永
- *   続カラムとなる。 +:path+ を省略した場合は自動的にパスが
- *   付加される。
+ *     [+:scalar+] スカラ値(単独の値)を格納する。
+ *     [+:vector+] 値の配列を格納する。
+ *   @option options :compress
+ *     値の圧縮方法を指定する。省略した場合は、圧縮しない。
  *
- * @option options :type (:scalar) The type
- *   カラムの値の格納方法について指定する。省略した場合は、
- *   +:scalar+ になる。
+ *     [+:zlib+] 値をzlib圧縮して格納する。
+ *     [+:lzo+] 値をlzo圧縮して格納する。
  *
- *   [+:scalar+] スカラ値(単独の値)を格納する。
- *   [+:vector+] 値の配列を格納する。
- *
- * @param options :compress The compress
- *   値の圧縮方法を指定する。省略した場合は、圧縮しない。
- *
- *   [+:zlib+] 値をzlib圧縮して格納する。
- *   [+:lzo+] 値をlzo圧縮して格納する。
+ * @return [Groonga::FixSizeColumn or Groonga::VariableSizeColumn]
  */
 static VALUE
 rb_grn_table_define_column (int argc, VALUE *argv, VALUE self)
