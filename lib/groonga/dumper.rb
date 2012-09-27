@@ -176,7 +176,8 @@ module Groonga
       end
 
       def dump_tables
-        @database.each(:order_by => :key) do |object|
+        each_options = {:order_by => :key, :ignore_missing_object => true}
+        @database.each(each_options) do |object|
           create_table(object) if object.is_a?(Groonga::Table)
         end
       end
