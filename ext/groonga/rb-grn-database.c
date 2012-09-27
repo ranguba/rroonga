@@ -342,6 +342,11 @@ rb_grn_database_s_open (int argc, VALUE *argv, VALUE klass)
  *     +:id+ を指定するとID順にレコードを取り出す。
  *     +:key+ 指定するとキー順にレコードを取り出す。（デフォル
  *     ト）
+ *   @option options :ignore_missing_object (false)
+ *     Specify +true+ to ignore missing object. Otherwise, an exception is
+ *     raised for missing object.
+ *
+ *     @since 2.0.5
  */
 static VALUE
 rb_grn_database_each (int argc, VALUE *argv, VALUE self)
@@ -350,6 +355,7 @@ rb_grn_database_each (int argc, VALUE *argv, VALUE self)
     grn_obj *database;
     grn_table_cursor *cursor;
     VALUE rb_cursor, rb_options, rb_order, rb_order_by;
+    VALUE rb_ignore_missing_object;
     int flags = 0;
     grn_id id;
     VALUE exception;
@@ -364,6 +370,7 @@ rb_grn_database_each (int argc, VALUE *argv, VALUE self)
     rb_grn_scan_options(rb_options,
 			"order", &rb_order,
 			"order_by", &rb_order_by,
+			"ignore_missing_object", &rb_ignore_missing_object,
 			NULL);
 
     flags |= rb_grn_table_cursor_order_to_flag(rb_order);
@@ -380,6 +387,11 @@ rb_grn_database_each (int argc, VALUE *argv, VALUE self)
 	grn_obj *object;
 
 	object = grn_ctx_at(context, id);
+	if (!object && RTEST(rb_ignore_missing_object)) {
+	    context->rc = GRN_SUCCESS;
+	    continue;
+	}
+
 	exception = rb_grn_context_to_exception(context, self);
 	if (!NIL_P(exception)) {
 	    rb_grn_object_close(rb_cursor);
@@ -387,8 +399,9 @@ rb_grn_database_each (int argc, VALUE *argv, VALUE self)
 	    rb_exc_raise(exception);
 	}
 
-	if (object)
+	if (object) {
 	    rb_yield(GRNOBJECT2RVAL(Qnil, context, object, GRN_FALSE));
+	}
     }
     rb_grn_object_close(rb_cursor);
     rb_iv_set(self, "cursor", Qnil);

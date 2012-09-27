@@ -62,7 +62,7 @@ module Groonga
     private
     def dump_plugins(options)
       plugin_paths = {}
-      options[:database].each(:order_by => :id) do |object|
+      options[:database].each(each_options(:order_by => :id)) do |object|
         next unless object.is_a?(Groonga::Procedure)
         next if object.builtin?
         path = object.path
@@ -80,7 +80,7 @@ module Groonga
 
     def dump_tables(options)
       first_table = true
-      options[:database].each(:order_by => :key) do |object|
+      options[:database].each(each_options(:order_by => :key)) do |object|
         next unless object.is_a?(Groonga::Table)
         next if object.size.zero?
         next if target_table?(options[:exclude_tables], object, false)
@@ -110,6 +110,10 @@ module Groonga
       target_tables.any? do |name|
         name === table.name
       end
+    end
+
+    def each_options(options)
+      {:ignore_missing_object => true}.merge(options)
     end
   end
 
