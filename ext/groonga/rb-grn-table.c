@@ -1672,22 +1672,16 @@ rb_grn_table_clear_lock (int argc, VALUE *argv, VALUE self)
 }
 
 /*
- * Document-method: locked?
- *
- * call-seq:
- *   table.locked?(options={})
- *
  * _table_ がロックされていれば +true+ を返す。
  *
- * 利用可能なオプションは以下の通り。
- * @param options [options] The name and value
- *   pairs. Omitted names are initialized as the default value.
- * @option options :id The id
- *
- *   _:id_ で指定したレコードがロックされていれば +true+ を返す。
- *   （注: groonga側が未実装のため、現在は無視される。実装さ
- *   れるのではないかと思っているが、実装されないかもしれな
- *   い。）
+ * @overload locked?(options={})
+ *   @param [options] options The name and value
+ *     pairs. Omitted names are initialized as the default value.
+ *   @option options :id
+ *     _:id_ で指定したレコードがロックされていれば +true+ を返す。
+ *     （注: groonga側が未実装のため、現在は無視される。実装さ
+ *     れるのではないかと思っているが、実装されないかもしれな
+ *     い。）
  */
 static VALUE
 rb_grn_table_is_locked (int argc, VALUE *argv, VALUE self)
