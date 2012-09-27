@@ -2143,18 +2143,16 @@ rb_grn_table_exist_p (VALUE self, VALUE id)
 }
 
 /*
- * Document-method: defrag
- *
- * call-seq:
- *   table.defrag(options={}) -> n_segments
- *
  * Defrags all variable size columns in the table.
  *
+ * @overload defrag(options={})
+ *   @param options [::Hash] The name and value
+ *     pairs. Omitted names are initialized as the default value.
+ *   @option options [Integer] :threshold (0) the threshold to
+ *     determine whether a segment is defraged. Available
+ *     values are -4..22. -4 means all segments are defraged.
+ *     22 means no segment is defraged.
  * @return [Integer] the number of defraged segments
- * @option options [Integer] :threshold (0) the threshold to
- *   determine whether a segment is defraged. Available
- *   values are -4..22. -4 means all segments are defraged.
- *   22 means no segment is defraged.
  * @since 1.3.0
  */
 static VALUE
