@@ -487,9 +487,9 @@ module Groonga
       @table = table
       @options = options
       @output = @options[:output]
-      @error_output = @options[:error_output]
       @have_output = !@output.nil?
       @output ||= Dumper.default_output
+      @error_output = @options[:error_output]
     end
 
     def dump
