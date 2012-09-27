@@ -1633,22 +1633,16 @@ rb_grn_table_lock (int argc, VALUE *argv, VALUE self)
 }
 
 /*
- * Document-method: clear_lock
- *
- * call-seq:
- *   table.clear_lock(options={})
- *
  * _table_ のロックを強制的に解除する。
  *
- * 利用可能なオプションは以下の通り。
- * @param options [::Hash] The name and value
- *   pairs. Omitted names are initialized as the default value.
- * @option options :id The id
- *
- *   _:id_ で指定したレコードのロックを強制的に解除する。
- *   （注: groonga側が未実装のため、現在は無視される。実装さ
- *   れるのではないかと思っているが、実装されないかもしれな
- *   い。）
+ * @overload clear_lock(options={})
+ *   @param [::Hash] options The name and value
+ *     pairs. Omitted names are initialized as the default value.
+ *   @option options :id
+ *     _:id_ で指定したレコードのロックを強制的に解除する。
+ *     （注: groonga側が未実装のため、現在は無視される。実装さ
+ *     れるのではないかと思っているが、実装されないかもしれな
+ *     い。）
  */
 static VALUE
 rb_grn_table_clear_lock (int argc, VALUE *argv, VALUE self)
