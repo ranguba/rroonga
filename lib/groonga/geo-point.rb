@@ -85,8 +85,8 @@ module Groonga
 
     attr_accessor :latitude, :longitude
     # TODO: write document
-    # @override initialize(geo_point_in_string)
-    # @override initialize(latitude, longitude)
+    # @overload initialize(geo_point_in_string)
+    # @overload initialize(latitude, longitude)
     def initialize(*arguments)
       if arguments.size == 1
         if arguments.first.is_a?(String)
