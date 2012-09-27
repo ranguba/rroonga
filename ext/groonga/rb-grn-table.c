@@ -758,54 +758,74 @@ rb_grn_table_open_grn_cursor (int argc, VALUE *argv, VALUE self,
 }
 
 /*
- * call-seq:
- *   table.open_cursor(options={}) -> Groonga::TableCursor
- *   table.open_cursor(options={}) {|cursor| }
- *
  * カーソルを生成して返す。ブロックを指定すると、そのブロッ
  * クに生成したカーソルが渡され、ブロックを抜けると自動的に
  * カーソルが破棄される。
  *
- * _options_に指定可能な値は以下の通り。
- * @param options [::Hash] The name and value
- *   pairs. Omitted names are initialized as the default value.
- * @option options :min The min
- *  キーの下限
- *
- * @option  options :max The max
- *  キーの上限
- *
- * @option options :offset The offset
- *   該当する範囲のレコードのうち、(0ベースで) _:offset_ 番目
- *   からレコードを取り出す。
- *
- * @option options :limit The limit
- *   該当する範囲のレコードのうち、 _:limit_ 件のみを取り出す。
- *   省略された場合または-1が指定された場合は、全件が指定され
- *   たものとみなす。
- *
- * @option options :order (asc) The order
- *   +:asc+ または +:ascending+ を指定すると昇順にレコードを取
- *   り出す。（デフォルト）
- *
- *   +:desc+ または +:descending+ を指定すると降順にレコードを
- *   取り出す。
- *
- * @option options :order_by The order_by
- *   +:id+ を指定するとID順にレコードを取り出す。（Arrayと
- *   Hashのデフォルト）
- *
- *   +:key+ 指定するとキー順にレコードを取り出す。ただし、
- *   Groonga::PatriciaTrieにしか使えない。（PatriciaTrieのデ
- *   フォルト）
- *
- * @option options :greater_than The greater_than
- *   +true+ を指定すると +:min+ で指定した値に一致した [ +key+ ] を
- *   範囲に含まない。
- *
- * @option options :less_than The less_than
- *   +true+ を指定すると +:max+ で指定した値に一致した [ +key+ ] を
- *   範囲に含まない。
+ * @overload open_cursor(options={})
+ *   @return [Groonga::TableCursor]
+ *   @param options [::Hash] The name and value
+ *     pairs. Omitted names are initialized as the default value.
+ *   @option options :min
+ *    キーの下限
+ *   @option options :max
+ *    キーの上限
+ *   @option options :offset
+ *     該当する範囲のレコードのうち、(0ベースで) _:offset_ 番目
+ *     からレコードを取り出す。
+ *   @option options :limit
+ *     該当する範囲のレコードのうち、 _:limit_ 件のみを取り出す。
+ *     省略された場合または-1が指定された場合は、全件が指定され
+ *     たものとみなす。
+ *   @option options :order (asc)
+ *     +:asc+ または +:ascending+ を指定すると昇順にレコードを取
+ *     り出す。（デフォルト）
+ *     +:desc+ または +:descending+ を指定すると降順にレコードを
+ *     取り出す。
+ *   @option options :order_by
+ *     +:id+ を指定するとID順にレコードを取り出す。（Arrayと
+ *     Hashのデフォルト）
+ *     +:key+ 指定するとキー順にレコードを取り出す。ただし、
+ *     Groonga::PatriciaTrieにしか使えない。（PatriciaTrieのデ
+ *     フォルト）
+ *   @option options :greater_than The greater_than
+ *     +true+ を指定すると +:min+ で指定した値に一致した [ +key+ ] を
+ *     範囲に含まない。
+ *   @option options :less_than
+ *     +true+ を指定すると +:max+ で指定した値に一致した [ +key+ ] を
+ *     範囲に含まない。
+ * @overload open_cursor(options={})
+ *   @yield [cursor]
+ *   @param options [::Hash] The name and value
+ *     pairs. Omitted names are initialized as the default value.
+ *   @option options :min
+ *    キーの下限
+ *   @option options :max
+ *    キーの上限
+ *   @option options :offset
+ *     該当する範囲のレコードのうち、(0ベースで) _:offset_ 番目
+ *     からレコードを取り出す。
+ *   @option options :limit
+ *     該当する範囲のレコードのうち、 _:limit_ 件のみを取り出す。
+ *     省略された場合または-1が指定された場合は、全件が指定され
+ *     たものとみなす。
+ *   @option options :order (asc)
+ *     +:asc+ または +:ascending+ を指定すると昇順にレコードを取
+ *     り出す。（デフォルト）
+ *     +:desc+ または +:descending+ を指定すると降順にレコードを
+ *     取り出す。
+ *   @option options :order_by
+ *     +:id+ を指定するとID順にレコードを取り出す。（Arrayと
+ *     Hashのデフォルト）
+ *     +:key+ 指定するとキー順にレコードを取り出す。ただし、
+ *     Groonga::PatriciaTrieにしか使えない。（PatriciaTrieのデ
+ *     フォルト）
+ *   @option options :greater_than The greater_than
+ *     +true+ を指定すると +:min+ で指定した値に一致した [ +key+ ] を
+ *     範囲に含まない。
+ *   @option options :less_than
+ *     +true+ を指定すると +:max+ で指定した値に一致した [ +key+ ] を
+ *     範囲に含まない。
  */
 static VALUE
 rb_grn_table_open_cursor (int argc, VALUE *argv, VALUE self)
