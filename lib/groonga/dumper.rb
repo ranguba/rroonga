@@ -39,6 +39,7 @@ module Groonga
       options = @options.dup
       have_output = !@options[:output].nil?
       options[:output] ||= Dumper.default_output
+      options[:error_output] ||= Dumper.default_output
       if options[:database].nil?
         options[:context] ||= Groonga::Context.default
         options[:database] = options[:context].database
@@ -481,6 +482,7 @@ module Groonga
       @table = table
       @options = options
       @output = @options[:output]
+      @error_output = @options[:error_output]
       @have_output = !@output.nil?
       @output ||= Dumper.default_output
     end
@@ -497,6 +499,11 @@ module Groonga
     private
     def write(content)
       @output.write(content)
+    end
+
+    def error_write(content)
+      return if @error_output.nil?
+      @error_output.write(content)
     end
 
     def dump_load_command
@@ -519,17 +526,17 @@ module Groonga
       @table.each(:order_by => @options[:order_by]) do |record|
         write(",\n")
         values = columns.collect do |column|
-          resolve_value(column[record.id])
+          resolve_value(record, column, column[record.id])
         end
         write(values.to_json)
       end
     end
 
-    def resolve_value(value)
+    def resolve_value(record, column, value)
       case value
       when ::Array
         value.collect do |v|
-          resolve_value(v)
+          resolve_value(record, column, v)
         end
       when Groonga::Record
         if value.support_key?
@@ -537,7 +544,7 @@ module Groonga
         else
           value = value.id
         end
-        resolve_value(value)
+        resolve_value(record, column, value)
       when Time
         # TODO: groonga should support UTC format literal
         # value.utc.strftime("%Y-%m-%d %H:%M:%S.%6N")
@@ -550,10 +557,27 @@ module Groonga
         return value unless value.respond_to?(:valid_encoding?)
         sanitized_value = ""
         value.each_char do |char|
-          sanitized_value << char if char.valid_encoding?
+          if char.valid_encoding?
+            sanitized_value << char
+          else
+            table_name = record.table.name
+            record_id = record.record_id
+            column_name = column.local_name
+            error_write("warning: ignore invalid encoding character: " +
+                          "<#{table_name}[#{record_id}].#{column_name}>: " +
+                          "<#{inspect_invalid_char(char)}>: " +
+                          "before: <#{sanitized_value}>\n")
+          end
         end
         sanitized_value
       end
+    end
+
+    def inspect_invalid_char(char)
+      bytes_in_hex = char.bytes.collect do |byte|
+        "%#0x" % byte
+      end
+      bytes_in_hex.join(" ")
     end
 
     def available_columns

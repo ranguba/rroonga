@@ -67,13 +67,17 @@ EOS
         need_encoding
 
         users.add(:name => "森\xff大二郎")
-        assert_equal(<<-EOS, dump("Users"))
+        error_output = StringIO.new
+        assert_equal(<<-EOS, dump("Users", :error_output => error_output))
 load --table Users
 [
 ["_id","name"],
 [1,"森大二郎"]
 ]
 EOS
+        assert_equal("warning: ignore invalid encoding character: " +
+                       "<Users[1].name>: <0xff>: before: <森>\n",
+                     error_output.string)
       end
     end
 

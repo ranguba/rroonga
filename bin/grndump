@@ -85,6 +85,7 @@ database = Groonga::Database.open(db_path)
 dumper_options = {
   :database => database,
   :output => $stdout,
+  :error_output => $stderr,
   :dump_schema => options.dump_schema,
   :dump_tables => options.dump_tables,
   :tables => options.tables,
