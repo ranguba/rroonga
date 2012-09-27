@@ -637,6 +637,8 @@ grn_encoding   rb_grn_encoding_from_ruby_object     (VALUE object,
 VALUE          rb_grn_encoding_to_ruby_object       (grn_encoding encoding);
 #ifdef HAVE_RUBY_ENCODING_H
 rb_encoding   *rb_grn_encoding_to_ruby_encoding     (grn_encoding encoding);
+VALUE          rb_grn_encoding_to_ruby_encoding_object
+                                                    (grn_encoding encoding);
 #endif
 
 grn_ctx       *rb_grn_context_from_ruby_object      (VALUE object);

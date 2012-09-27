@@ -567,6 +567,28 @@ rb_grn_context_set_encoding (VALUE self, VALUE rb_encoding)
 }
 
 /*
+ * Gets the encoding used by the context as Ruby's encoding object.
+ *
+ * @overload ruby_encoding
+ *
+ * @return [::Encoding] the encoding used by the context
+ *
+ * @since 2.0.5
+ */
+static VALUE
+rb_grn_context_get_ruby_encoding (VALUE self)
+{
+#ifdef HAVE_RUBY_ENCODING_H
+    grn_encoding encoding;
+
+    encoding = GRN_CTX_GET_ENCODING(SELF(self));
+    return rb_grn_encoding_to_ruby_encoding_object(encoding);
+#else
+    return Qnil;
+#endif
+}
+
+/*
  * call-seq:
  *   context.match_escalation_threshold -> Integer
  *
@@ -910,6 +932,8 @@ rb_grn_init_context (VALUE mGrn)
 
     rb_define_method(cGrnContext, "encoding", rb_grn_context_get_encoding, 0);
     rb_define_method(cGrnContext, "encoding=", rb_grn_context_set_encoding, 1);
+    rb_define_method(cGrnContext, "ruby_encoding",
+		     rb_grn_context_get_ruby_encoding, 0);
     rb_define_method(cGrnContext, "match_escalation_threshold",
 		     rb_grn_context_get_match_escalation_threshold, 0);
     rb_define_method(cGrnContext, "match_escalation_threshold=",

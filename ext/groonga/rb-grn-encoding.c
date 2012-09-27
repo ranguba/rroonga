@@ -183,6 +183,13 @@ rb_grn_encoding_to_ruby_encoding (grn_encoding encoding)
 
     return rb_encoding;
 }
+
+VALUE
+rb_grn_encoding_to_ruby_encoding_object (grn_encoding encoding)
+{
+    rb_encoding *rb_encoding = rb_grn_encoding_to_ruby_encoding(encoding);
+    return rb_enc_from_encoding(rb_encoding);
+}
 #endif
 
 /*
