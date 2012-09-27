@@ -1176,10 +1176,8 @@ module Groonga
       #
       #   table.remove_index("Users.name")
       #
-      # @param options [::Hash] The name and value
-      #   pairs. Omitted names are initialized as the default value.
-      # @option options :name The name
-      #   インデックスカラムのカラム名を任意に指定する。
+      # @param [::Hash] args { :name => target_column }と指定す
+      #   ることでインデックスカラムの任意のカラム名を指定することができる。
       def remove_index(target_table_or_target_column_full_name, *args)
         key, target_table, target_columns, options =
           parse_index_argument(target_table_or_target_column_full_name, *args)
