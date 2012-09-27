@@ -995,10 +995,7 @@ rb_grn_table_delete (VALUE self, VALUE rb_id)
 }
 
 /*
- * call-seq:
- *   table.sort(keys, options={}) -> Groonga::Recordの配列
- *
- * テーブルに登録されているレコードを_keys_で指定されたルー
+ * テーブルに登録されているレコードを _keys_ で指定されたルー
  * ルに従ってソートしたレコードの配列を返す。
  *
  * _order_ には +:asc+ ,  +:ascending+ , +:desc+ , +:descending+ の
@@ -1040,16 +1037,17 @@ rb_grn_table_delete (VALUE self, VALUE rb_id)
  * </pre>
  * =:
  *
- * @param options [::Hash] The name and value
- *   pairs. Omitted names are initialized as the default value.
- * @option options :offset The offset
- *   ソートされたレコードのうち、(0ベースで) _:offset_ 番目
- *   からレコードを取り出す。
- *
- * @option options :limit The limit
- *   ソートされたレコードのうち、 _:limit_ 件のみを取り出す。
- *   省略された場合または-1が指定された場合は、全件が指定され
- *   たものとみなす。
+ * @overload sort(keys, options={})
+ *   @param options [::Hash] The name and value
+ *     pairs. Omitted names are initialized as the default value.
+ *   @option options :offset
+ *     ソートされたレコードのうち、(0ベースで) _:offset_ 番目
+ *     からレコードを取り出す。
+ *   @option options :limit
+ *     ソートされたレコードのうち、 _:limit_ 件のみを取り出す。
+ *     省略された場合または-1が指定された場合は、全件が指定され
+ *     たものとみなす。
+ * @return [::Array<Groonga::Record>]
  */
 static VALUE
 rb_grn_table_sort (int argc, VALUE *argv, VALUE self)
