@@ -183,12 +183,7 @@ def build_groonga(major, minor, micro)
     end
 
     message("installing...")
-    if [major, minor, micro] == [0, 1, 6]
-      make_install_args = " MKDIR_P='mkdir -p --'"
-    else
-      make_install_args = ""
-    end
-    if xsystem("make install#{make_install_args}")
+    if xsystem("make install")
       message(" done\n")
     else
       message(" failed\n")
