@@ -18,6 +18,7 @@ h3. Improvements
 * [grndump] showed the warning for invalid character.
 * [grndump] supported database that is created by old groonga.
 * Added Groonga::Context#ruby_encoding.
+* Added many documents in codes but showed no references.
 
 h3. Fixes
 
