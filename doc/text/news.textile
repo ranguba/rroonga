@@ -1,12 +1,31 @@
 h1. NEWS
 
-h2(#2-0-5). 2.0.5: 2012-05-30
+h2(#2-0-5). 2.0.5: 2012-09-28
 
 h3. Improvements
 
-* Supported groonga 2.0.3.
+* Supported groonga 2.0.7.
+* Removed the workaround to install rroonga with old groonga.
 * Added more error checks.
+* Added Database#tables. [Suggested by @temitan]
+* Supported Enumerator for #each on Database, Table, TableCursor and
+  IndexCursor.
+* Added WGS84GeoPoint and TokyoGeoPoint.
+* [dumper] supported dumping of WGS84GeoPoint and TokyoGeoPoint.
+* [dumper] worked on non UTF-8 extenal output encoding environment.
+* [dumper] sorted table and column names.
+* [dumper] ignored invalid byte.
+* [grndump] showed the warning for invalid character.
+* [grndump] supported database that is created by old groonga.
+* Added Groonga::Context#ruby_encoding.
+
+h3. Fixes
+
 * Added missing backslash escape for groonga command.
+
+h3. Thanks
+
+* @temitan
 
 h2(#2-0-4). 2.0.4: 2012-05-02
 
