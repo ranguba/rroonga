@@ -331,7 +331,7 @@ rb_grn_database_s_open (int argc, VALUE *argv, VALUE klass)
  *   end
  *
  * @overload each(options=nil)
- *   @macro [new] database.each_options
+ *   @macro [new] database.each.options
  *     @param options [::Hash]
  *     @yield [object]
  *     @option options :order
@@ -343,10 +343,10 @@ rb_grn_database_s_open (int argc, VALUE *argv, VALUE klass)
  *       +:id+ を指定するとID順にレコードを取り出す。
  *       +:key+ 指定するとキー順にレコードを取り出す。（デフォル
  *       ト）
- *   @macro database.each_options
+ *   @macro database.each.options
  *
  * @overload each(options=nil)
- *   @macro database.each_options
+ *   @macro database.each.options
  *   @option options :ignore_missing_object (false)
  *     Specify +true+ to ignore missing object. Otherwise, an exception is
  *     raised for missing object.
