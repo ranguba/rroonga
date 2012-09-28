@@ -331,22 +331,27 @@ rb_grn_database_s_open (int argc, VALUE *argv, VALUE klass)
  *   end
  *
  * @overload each(options=nil)
- *   @yield [object]
- *   @param options [::Hash]
- *   @option options :order
- *     +:asc+ または +:ascending+ を指定すると昇順にレコードを取
- *     り出す。（デフォルト）
- *     +:desc+ または +:descending+ を指定すると降順にレコードを
- *     取り出す。
- *   @option options :order_by (:key)
- *     +:id+ を指定するとID順にレコードを取り出す。
- *     +:key+ 指定するとキー順にレコードを取り出す。（デフォル
- *     ト）
+ *   @macro [new] each_options
+ *     @param options [::Hash]
+ *     @yield [object]
+ *     @option options :order
+ *       +:asc+ または +:ascending+ を指定すると昇順にレコードを取
+ *       り出す。（デフォルト）
+ *       +:desc+ または +:descending+ を指定すると降順にレコードを
+ *       取り出す。
+ *     @option options :order_by (:key)
+ *       +:id+ を指定するとID順にレコードを取り出す。
+ *       +:key+ 指定するとキー順にレコードを取り出す。（デフォル
+ *       ト）
+ *   @macro each_options
+ *
+ * @overload each(options=nil)
+ *   @macro each_options
  *   @option options :ignore_missing_object (false)
  *     Specify +true+ to ignore missing object. Otherwise, an exception is
  *     raised for missing object.
  *
- *     @since 2.0.5
+ *   @since 2.0.5
  */
 static VALUE
 rb_grn_database_each (int argc, VALUE *argv, VALUE self)
