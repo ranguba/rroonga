@@ -48,9 +48,20 @@ module Groonga
       options[:dump_schema] = true if options[:dump_schema].nil?
       options[:dump_tables] = true if options[:dump_tables].nil?
 
+      if options[:dump_schema]
+        schema_dumper = SchemaDumper.new(options.merge(:syntax => :command))
+      end
       dump_plugins(options) if options[:dump_plugins]
-      dump_schema(options) if options[:dump_schema]
+      if options[:dump_schema]
+        schema_dumper.dump_tables
+        options[:output].write("\n")
+        schema_dumper.dump_reference_columns
+      end
       dump_tables(options) if options[:dump_tables]
+      if options[:dump_schema]
+        options[:output].write("\n")
+        schema_dumper.dump_index_columns
+      end
 
       if have_output
         nil
@@ -72,10 +83,6 @@ module Groonga
         dump_plugin(object, options)
       end
       options[:output].write("\n") unless plugin_paths.empty?
-    end
-
-    def dump_schema(options)
-      SchemaDumper.new(options.merge(:syntax => :command)).dump
     end
 
     def dump_tables(options)
@@ -125,6 +132,40 @@ module Groonga
     end
 
     def dump
+      run do |syntax|
+        syntax.dump
+      end
+    end
+
+    def dump_tables
+      run do |syntax|
+        syntax.dump_tables
+      end
+    end
+
+    def dump_reference_columns
+      run do |syntax|
+        syntax.dump_reference_columns
+      end
+    end
+
+    def dump_index_columns
+      run do |syntax|
+        syntax.dump_index_columns
+      end
+    end
+
+    private
+    def create_syntax(database, output)
+      case @options[:syntax]
+      when :command
+        CommandSyntax.new(database, output)
+      else
+        RubySyntax.new(database, output)
+      end
+    end
+
+    def run
       database = @options[:database]
       if database.nil?
         context = @options[:context] || Groonga::Context.default
@@ -135,21 +176,11 @@ module Groonga
       output = @options[:output]
       have_output = !output.nil?
       output ||= Dumper.default_output
-      result = syntax(database, output).dump
+      result = yield(create_syntax(database, output))
       if have_output
         result
       else
         output.string
-      end
-    end
-
-    private
-    def syntax(database, output)
-      case @options[:syntax]
-      when :command
-        CommandSyntax.new(database, output)
-      else
-        RubySyntax.new(database, output)
       end
     end
 
@@ -159,8 +190,6 @@ module Groonga
         @database = database
         @output = output
         @table_defined = false
-        @index_columns = []
-        @reference_columns = []
       end
 
       def dump
@@ -176,14 +205,13 @@ module Groonga
       end
 
       def dump_tables
-        each_options = {:order_by => :key, :ignore_missing_object => true}
-        @database.each(each_options) do |object|
-          create_table(object) if object.is_a?(Groonga::Table)
+        each_table do |table|
+          create_table(table)
         end
       end
 
       def dump_reference_columns
-        group_columns(@reference_columns).each do |table, columns|
+        group_columns(reference_columns).each do |table, columns|
           change_table(table) do
             columns.each do |column|
               define_reference_column(table, column)
@@ -193,7 +221,7 @@ module Groonga
       end
 
       def dump_index_columns
-        group_columns(@index_columns).each do |table, columns|
+        group_columns(index_columns).each do |table, columns|
           change_table(table) do
             columns.each do |column|
               define_index_column(table, column)
@@ -213,6 +241,40 @@ module Groonga
 
       def footer
         write("")
+      end
+
+      def each_table
+        each_options = {:order_by => :key, :ignore_missing_object => true}
+        @database.each(each_options) do |object|
+          yield(object) if object.is_a?(Groonga::Table)
+        end
+      end
+
+      def each_column(table, &block)
+        sorted_columns = table.columns.sort_by {|column| column.local_name}
+        sorted_columns.each(&block)
+      end
+
+      def collect_columns
+        columns = []
+        each_table do |table|
+          each_column(table) do |column|
+            columns << column if yield(column)
+          end
+        end
+        columns
+      end
+
+      def reference_columns
+        @reference_columns ||= collect_columns do |column|
+          reference_column?(column)
+        end
+      end
+
+      def index_columns
+        @index_columns ||= collect_columns do |column|
+          index_column?(column)
+        end
       end
 
       def group_columns(columns)
@@ -239,19 +301,33 @@ module Groonga
         write("\n")
       end
 
+      def column_type(column)
+        if column.is_a?(Groonga::IndexColumn)
+          :index
+        elsif column.range.is_a?(Groonga::Table)
+          :reference
+        else
+          :normal
+        end
+      end
+
+      def index_column?(column)
+        column_type(column) == :index
+      end
+
+      def reference_column?(column)
+        column_type(column) == :reference
+      end
+
+      def normal_column?(column)
+        column_type(column) == :normal
+      end
+
       def create_table(table)
         table_separator if @table_defined
         create_table_header(table)
-        table.columns.sort_by {|column| column.local_name}.each do |column|
-          if column.is_a?(Groonga::IndexColumn)
-            @index_columns << column
-          else
-            if column.range.is_a?(Groonga::Table)
-              @reference_columns << column
-            else
-              define_column(table, column)
-            end
-          end
+        each_column(table) do |column|
+          define_column(table, column) if normal_column?(column)
         end
         create_table_footer(table)
         @table_defined = true
