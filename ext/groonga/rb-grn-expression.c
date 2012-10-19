@@ -341,7 +341,7 @@ rb_grn_expression_parse (int argc, VALUE *argv, VALUE self)
     grn_expr_flags flags = 0;
     VALUE options, rb_query, rb_default_column, rb_default_operator;
     VALUE rb_default_mode, rb_syntax;
-    VALUE rb_allow_pragma, rb_allow_column, rb_allow_update;
+    VALUE rb_allow_pragma, rb_allow_column, rb_allow_update, rb_allow_leading_not;
     VALUE exception = Qnil;
 
     rb_scan_args(argc, argv, "11", &rb_query, &options);
@@ -353,6 +353,7 @@ rb_grn_expression_parse (int argc, VALUE *argv, VALUE self)
 			"allow_pragma", &rb_allow_pragma,
 			"allow_column", &rb_allow_column,
 			"allow_update", &rb_allow_update,
+			"allow_leading_not", &rb_allow_leading_not,
                         NULL);
 
     query = StringValuePtr(rb_query);
@@ -415,6 +416,13 @@ rb_grn_expression_parse (int argc, VALUE *argv, VALUE self)
     } else {
 	if (RVAL2CBOOL(rb_allow_update))
 	    flags |= GRN_EXPR_ALLOW_UPDATE;
+    }
+
+    if (NIL_P(rb_allow_leading_not)) {
+	flags |= GRN_EXPR_ALLOW_LEADING_NOT;
+    } else {
+	if (RVAL2CBOOL(rb_allow_leading_not))
+	    flags |= GRN_EXPR_ALLOW_LEADING_NOT;
     }
 
     rc = grn_expr_parse(context, expression, query, query_size,

@@ -380,7 +380,7 @@ rb_grn_column_select (int argc, VALUE *argv, VALUE self)
     VALUE options;
     VALUE rb_query, condition_or_options;
     VALUE rb_name, rb_operator, rb_result, rb_syntax;
-    VALUE rb_allow_pragma, rb_allow_column, rb_allow_update;
+    VALUE rb_allow_pragma, rb_allow_column, rb_allow_update, rb_allow_leading_not;
     VALUE builder;
     VALUE rb_expression = Qnil;
 
@@ -416,6 +416,7 @@ rb_grn_column_select (int argc, VALUE *argv, VALUE self)
 			"allow_pragma", &rb_allow_pragma,
 			"allow_column", &rb_allow_column,
 			"allow_update", &rb_allow_update,
+			"allow_leading_not", &rb_allow_leading_not,
 			NULL);
 
     if (!NIL_P(rb_operator))
@@ -437,6 +438,7 @@ rb_grn_column_select (int argc, VALUE *argv, VALUE self)
       rb_funcall(builder, rb_intern("allow_pragma="), 1, rb_allow_pragma);
       rb_funcall(builder, rb_intern("allow_column="), 1, rb_allow_column);
       rb_funcall(builder, rb_intern("allow_update="), 1, rb_allow_update);
+      rb_funcall(builder, rb_intern("allow_leading_not="), 1, rb_allow_leading_not);
       rb_expression = rb_grn_column_expression_builder_build(builder);
     }
     rb_grn_object_deconstruct(RB_GRN_OBJECT(DATA_PTR(rb_expression)),

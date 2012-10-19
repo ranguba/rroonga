@@ -24,6 +24,7 @@ module Groonga
     attr_accessor :allow_pragma
     attr_accessor :allow_column
     attr_accessor :allow_update
+    attr_accessor :allow_leading_not
     attr_accessor :default_column
 
     VALID_COLUMN_NAME_RE = /\A[a-zA-Z\d_]+\z/
@@ -36,6 +37,7 @@ module Groonga
       @allow_pragma = nil
       @allow_column = nil
       @allow_update = nil
+      @allow_leading_not = nil
       @default_column = nil
     end
 
@@ -60,6 +62,7 @@ module Groonga
         :allow_pragma => @allow_pragma,
         :allow_column => @allow_column,
         :allow_update => @allow_update,
+        :allow_leading_not => @allow_leading_not,
         :default_column => @default_column,
       }
     end

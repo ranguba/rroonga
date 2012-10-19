@@ -1930,7 +1930,7 @@ rb_grn_table_select (int argc, VALUE *argv, VALUE self)
     grn_operator operator = GRN_OP_OR;
     VALUE rb_query = Qnil, condition_or_options, options;
     VALUE rb_name, rb_operator, rb_result, rb_syntax;
-    VALUE rb_allow_pragma, rb_allow_column, rb_allow_update;
+    VALUE rb_allow_pragma, rb_allow_column, rb_allow_update, rb_allow_leading_not;
     VALUE rb_default_column;
     VALUE rb_expression = Qnil, builder;
 
@@ -1964,6 +1964,7 @@ rb_grn_table_select (int argc, VALUE *argv, VALUE self)
 			"allow_pragma", &rb_allow_pragma,
 			"allow_column", &rb_allow_column,
 			"allow_update", &rb_allow_update,
+			"allow_leading_not", &rb_allow_leading_not,
 			"default_column", &rb_default_column,
 			NULL);
 
@@ -1987,6 +1988,7 @@ rb_grn_table_select (int argc, VALUE *argv, VALUE self)
       rb_funcall(builder, rb_intern("allow_pragma="), 1, rb_allow_pragma);
       rb_funcall(builder, rb_intern("allow_column="), 1, rb_allow_column);
       rb_funcall(builder, rb_intern("allow_update="), 1, rb_allow_update);
+      rb_funcall(builder, rb_intern("allow_leading_not="), 1, rb_allow_leading_not);
       rb_funcall(builder, rb_intern("default_column="), 1, rb_default_column);
       rb_expression = rb_grn_record_expression_builder_build(builder);
     }
