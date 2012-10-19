@@ -17,7 +17,9 @@ class CommandSelectTest < Test::Unit::TestCase
   include GroongaTestUtils
 
   setup :setup_database
-  setup
+  setup :setup_tables
+  setup :setup_data
+
   def setup_data
     Groonga::Schema.define do |schema|
       schema.create_table("Books",
@@ -136,6 +138,68 @@ class CommandSelectTest < Test::Unit::TestCase
     end
   end
 
+  class QueryFlagsTest < self
+    def setup_tables
+      Groonga::Schema.define do |schema|
+        schema.create_table("Entries",
+                            :type => :hash,
+                            :key_type => "ShortText") do |table|
+          table.text("content")
+          table.uint32("n_likes")
+        end
+
+        schema.create_table("Terms",
+                            :type => :patricia_trie,
+                            :default_tokenizer => "TokenBigram",
+                            :key_type => "ShortText",
+                            :key_normalize => true) do |table|
+          table.index("Entries._key")
+          table.index("Entries.content")
+        end
+      end
+
+      @entries = Groonga["Entries"]
+    end
+
+    def setup_data
+      @entries.add("The first post!",
+                   "content" => "Welcome! This is my first post!",
+                   "n_likes" => 5)
+      @entries.add("Groonga",
+                   "content" => "I started to use groonga. It's very fast!",
+                   "n_likes" => 10)
+      @entries.add("Mroonga",
+                   "content" => "I also started to use mroonga. " +
+                   "It's also very fast! Really fast!",
+                   "n_likes" => 15)
+      @entries.add("Good-bye Senna",
+                   "content" => "I migrated all Senna system!",
+                   "n_likes" => 3)
+      @entries.add("Good-bye Tritonn",
+                   "content" => "I also migrated all Tritonn system!",
+                   "n_likes" => 3)
+    end
+
+    def test_allow_leading_not
+      result = @entries.select("content:'-mroonga'",
+                               :allow_leading_not => true)
+      # assert_equal([
+      #               {"_id" => 1, "_key" => "The first post!",
+      #                "content" => "Welcome! This is my first post!",
+      #                "n_likes" => 5},
+      #               {"_id" => 2, "_key" => "Groonga",
+      #                "content" => "I started to use groonga. It's very fast!",
+      #                "n_likes" => 10},
+      #               {"_id" => 4, "_key" => "Good-bye Senna",
+      #                "content" => "I migrated all Senna system!",
+      #                "n_likes" => 3},
+      #               {"_id" => 5, "_key" => "Good-bye Tritonn",
+      #                "content" => "I also migrated all Tritonn system!",
+      #                "n_likes" => 3}
+      #              ], result.records)
+    end
+  end
+
   private
   def normalize_drill_down(drill_down)
     normalized_drill_down = {}
@@ -178,4 +242,5 @@ class CommandSelectTest < Test::Unit::TestCase
                    result.records)
     end
   end
+
 end
