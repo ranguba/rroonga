@@ -234,7 +234,8 @@ module Groonga
         if @column_name == "_key"
           TermExtractExpressionBuilder.new(self, normalize(other))
         else
-          message = "should not apply to non _key column: <#{@column_name}>"
+          message = "term extraction supports _key column only: " +
+            "<#{@column_name}>"
           raise ArgumentError, message
         end
       end
