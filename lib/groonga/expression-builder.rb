@@ -597,6 +597,10 @@ module Groonga
       column_expression_builder.similar_search(text)
     end
 
+    def term_extract(text)
+      column_expression_builder.term_extract(text)
+    end
+
     private
     def column_expression_builder
       ColumnValueExpressionBuilder.new(@default_column,
