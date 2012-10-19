@@ -406,6 +406,7 @@ EOC
                             :key_type => "ShortText",
                             :default_tokenizer => "TokenBigram",
                             :key_normalize => true) do |table|
+          table.text("content")
         end
       end
 
@@ -425,6 +426,15 @@ EOC
       end
       assert_equal(["groonga", "senna"].sort,
                    result.collect {|record| record.key.key}.sort)
+    end
+
+    def test_not_key_column
+      exception = ArgumentError.new("method must be applied to _key column")
+      assert_raise(exception) do
+        @words.select do |record|
+          record.content.term_extract("Groonga is the successor project to Senna.")
+        end
+      end
     end
   end
 

@@ -231,7 +231,11 @@ module Groonga
       end
 
       def term_extract(other)
-        TermExtractExpressionBuilder.new(self, normalize(other))
+        if @column_name == "_key"
+          TermExtractExpressionBuilder.new(self, normalize(other))
+        else
+          raise ArgumentError, "method must be applied to _key column"
+        end
       end
 
       private
