@@ -164,41 +164,29 @@ class CommandSelectTest < Test::Unit::TestCase
     end
 
     def setup_data
-      @entries.add("The first post!",
-                   "content" => "Welcome! This is my first post!",
-                   "n_likes" => 5)
-      @entries.add("Groonga",
-                   "content" => "I started to use groonga. It's very fast!",
-                   "n_likes" => 10)
-      @entries.add("Mroonga",
-                   "content" => "I also started to use mroonga. " +
-                   "It's also very fast! Really fast!",
-                   "n_likes" => 15)
-      @entries.add("Good-bye Senna",
-                   "content" => "I migrated all Senna system!",
-                   "n_likes" => 3)
-      @entries.add("Good-bye Tritonn",
-                   "content" => "I also migrated all Tritonn system!",
-                   "n_likes" => 3)
+      @entry1 = @entries.add("The first post!",
+                             "content" => "Welcome! This is my first post!",
+                             "n_likes" => 5)
+      @entry2 = @entries.add("Groonga",
+                             "content" => "I started to use groonga. It's very fast!",
+                             "n_likes" => 10)
+      @entry3 = @entries.add("Mroonga",
+                             "content" => "I also started to use mroonga. " +
+                             "It's also very fast! Really fast!",
+                             "n_likes" => 15)
+      @entry4 = @entries.add("Good-bye Senna",
+                             "content" => "I migrated all Senna system!",
+                             "n_likes" => 3)
+      @entry5 = @entries.add("Good-bye Tritonn",
+                             "content" => "I also migrated all Tritonn system!",
+                             "n_likes" => 3)
     end
 
     def test_allow_leading_not
-      result = @entries.select("content:'-mroonga'",
-                               :allow_leading_not => true)
-      # assert_equal([
-      #               {"_id" => 1, "_key" => "The first post!",
-      #                "content" => "Welcome! This is my first post!",
-      #                "n_likes" => 5},
-      #               {"_id" => 2, "_key" => "Groonga",
-      #                "content" => "I started to use groonga. It's very fast!",
-      #                "n_likes" => 10},
-      #               {"_id" => 4, "_key" => "Good-bye Senna",
-      #                "content" => "I migrated all Senna system!",
-      #                "n_likes" => 3},
-      #               {"_id" => 5, "_key" => "Good-bye Tritonn",
-      #                "content" => "I also migrated all Tritonn system!",
-      #                "n_likes" => 3}
-      #              ], result.records)
+      result = @entries.select do |record|
+        record[:content].match("-mroonga", :allow_leading_not => true)
+      end
+      assert_equal_select_result([@entry1, @entry2, @entry4, @entry5], result)
     end
   end
 
