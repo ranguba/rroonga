@@ -398,6 +398,68 @@ EOC
     end
   end
 
+  class TermExtractTest < self
+    def setup_tables
+      Groonga::Schema.define do |schema|
+        schema.create_table("Documents",
+                            :type => :hash,
+                            :key_type => "ShortText") do |table|
+          table.text("content")
+        end
+
+        schema.create_table("Terms",
+                            :type => :patricia_trie,
+                            :key_type => "ShortText",
+                            :default_tokenizer => "TokenBigram",
+                            :key_normalize => true) do |table|
+          table.index("Documents.content")
+        end
+      end
+
+      @documents = Groonga["Documents"]
+      @terms = Groonga["Terms"]
+    end
+
+    def setup_data
+      @documents.add("Groonga overview", :content => <<-EOC)
+Groonga is a fast and accurate full text search engine based on
+inverted index. One of the characteristics of groonga is that a newly
+registered document instantly appears in search results. Also, groonga
+allows updates without read locks. These characteristics result in
+superior performance on real-time applications.
+EOC
+      @documents.add("Full text search and Instant update", :content => <<-EOC)
+In widely used DBMSs, updates are immediately processed, for example,
+a newly registered record appears in the result of the next query. In
+contrast, some full text search engines do not support instant
+updates, because it is difficult to dynamically update inverted
+indexes, the underlying data structure.
+EOC
+      @documents.add("Column store and aggregate query", :content => <<-EOC)
+People can collect more than enough data in the Internet era. However,
+it is difficult to extract informative knowledge from a large
+database, and such a task requires a many-sided analysis through trial
+and error. For example, search refinement by date, time and location
+may reveal hidden patterns. Aggregate queries are useful to perform
+this kind of tasks.
+EOC
+    end
+
+    def test_table
+      # TODO: add proper assert here
+      # result = @documents.select do |record|
+      #   record.content.term_extract("fast full text search real time")
+      # end
+    end
+
+    def test_column
+      # TODO: add proper assert here
+      # result = @documents.column("content").select do |content|
+      #   content.term_extract("fast full text search real time")
+      # end
+    end
+  end
+
   class RecordTest < self
     def setup_tables
       Groonga::Schema.define do |schema|
