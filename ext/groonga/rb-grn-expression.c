@@ -418,9 +418,7 @@ rb_grn_expression_parse (int argc, VALUE *argv, VALUE self)
 	    flags |= GRN_EXPR_ALLOW_UPDATE;
     }
 
-    if (NIL_P(rb_allow_leading_not)) {
-	flags |= GRN_EXPR_ALLOW_LEADING_NOT;
-    } else {
+    if (!NIL_P(rb_allow_leading_not)) {
 	if (RVAL2CBOOL(rb_allow_leading_not))
 	    flags |= GRN_EXPR_ALLOW_LEADING_NOT;
     }
