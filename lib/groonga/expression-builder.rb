@@ -230,6 +230,10 @@ module Groonga
         SimilarSearchExpressionBuilder.new(self, normalize(other))
       end
 
+      def term_extract(other)
+        TermExtractExpressionBuilder.new(self, normalize(other))
+      end
+
       private
       def normalize(other)
         if @range.is_a?(Groonga::Table)
@@ -415,6 +419,13 @@ module Groonga
     class SimilarSearchExpressionBuilder < BinaryExpressionBuilder
       def initialize(column_value_builder, value)
         super(Groonga::Operation::SIMILAR, column_value_builder, value)
+      end
+    end
+
+    # @private
+    class TermExtractExpressionBuilder < BinaryExpressionBuilder
+      def initialize(column_value_builder, value)
+        super(Groonga::Operation::TERM_EXTRACT, column_value_builder, value)
       end
     end
   end
