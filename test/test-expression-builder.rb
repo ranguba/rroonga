@@ -421,7 +421,7 @@ EOC
 
     def test_table
       result = @words.select do |record|
-        record.term_extract("Groonga is the successor project to Senna.")
+        record.key.term_extract("Groonga is the successor project to Senna.")
       end
       assert_equal(["groonga", "senna"].sort,
                    result.collect {|record| record.key.key}.sort)
