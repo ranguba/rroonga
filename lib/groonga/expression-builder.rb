@@ -234,7 +234,8 @@ module Groonga
         if @column_name == "_key"
           TermExtractExpressionBuilder.new(self, normalize(other))
         else
-          raise ArgumentError, "method must be applied to _key column"
+          message = "should not apply to non _key column: <#{@column_name}>"
+          raise ArgumentError, message
         end
       end
 

@@ -429,7 +429,7 @@ EOC
     end
 
     def test_not_key_column
-      exception = ArgumentError.new("method must be applied to _key column")
+      exception = ArgumentError.new("should not apply to non _key column: <content>")
       assert_raise(exception) do
         @words.select do |record|
           record.content.term_extract("Groonga is the successor project to Senna.")
