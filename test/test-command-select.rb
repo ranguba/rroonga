@@ -145,7 +145,6 @@ class CommandSelectTest < Test::Unit::TestCase
                             :type => :hash,
                             :key_type => "ShortText") do |table|
           table.text("content")
-          table.uint32("n_likes")
         end
 
         schema.create_table("Terms",
@@ -165,21 +164,16 @@ class CommandSelectTest < Test::Unit::TestCase
 
     def setup_data
       @entry1 = @entries.add("The first post!",
-                             "content" => "Welcome! This is my first post!",
-                             "n_likes" => 5)
+                             "content" => "Welcome! This is my first post!")
       @entry2 = @entries.add("Groonga",
-                             "content" => "I started to use groonga. It's very fast!",
-                             "n_likes" => 10)
+                             "content" => "I started to use groonga. It's very fast!")
       @entry3 = @entries.add("Mroonga",
                              "content" => "I also started to use mroonga. " +
-                             "It's also very fast! Really fast!",
-                             "n_likes" => 15)
+                             "It's also very fast! Really fast!")
       @entry4 = @entries.add("Good-bye Senna",
-                             "content" => "I migrated all Senna system!",
-                             "n_likes" => 3)
+                             "content" => "I migrated all Senna system!")
       @entry5 = @entries.add("Good-bye Tritonn",
-                             "content" => "I also migrated all Tritonn system!",
-                             "n_likes" => 3)
+                             "content" => "I also migrated all Tritonn system!")
     end
 
     def test_allow_leading_not
