@@ -173,19 +173,13 @@ class CommandSelectTest < Test::Unit::TestCase
         @entries.add("Mroonga",
                      "content" => "I also started to use mroonga. " +
                                     "It's also very fast! Really fast!")
-      @senna =
-        @entries.add("Good-bye Senna",
-                     "content" => "I migrated all Senna system!")
-      @tritonn =
-        @entries.add("Good-bye Tritonn",
-                     "content" => "I also migrated all Tritonn system!")
     end
 
     def test_allow_leading_not
       result = @entries.select do |record|
         record[:content].match("-mroonga", :allow_leading_not => true)
       end
-      assert_equal_select_result([@first_post, @groonga, @senna, @tritonn],
+      assert_equal_select_result([@first_post, @groonga],
                                  result)
     end
   end
