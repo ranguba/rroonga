@@ -163,24 +163,30 @@ class CommandSelectTest < Test::Unit::TestCase
     end
 
     def setup_data
-      @entry1 = @entries.add("The first post!",
-                             "content" => "Welcome! This is my first post!")
-      @entry2 = @entries.add("Groonga",
-                             "content" => "I started to use groonga. It's very fast!")
-      @entry3 = @entries.add("Mroonga",
-                             "content" => "I also started to use mroonga. " +
-                             "It's also very fast! Really fast!")
-      @entry4 = @entries.add("Good-bye Senna",
-                             "content" => "I migrated all Senna system!")
-      @entry5 = @entries.add("Good-bye Tritonn",
-                             "content" => "I also migrated all Tritonn system!")
+      @first_post =
+        @entries.add("The first post!",
+                     "content" => "Welcome! This is my first post!")
+      @groonga =
+        @entries.add("Groonga",
+                     "content" => "I started to use groonga. It's very fast!")
+      @mroonga =
+        @entries.add("Mroonga",
+                     "content" => "I also started to use mroonga. " +
+                                    "It's also very fast! Really fast!")
+      @senna =
+        @entries.add("Good-bye Senna",
+                     "content" => "I migrated all Senna system!")
+      @tritonn =
+        @entries.add("Good-bye Tritonn",
+                     "content" => "I also migrated all Tritonn system!")
     end
 
     def test_allow_leading_not
       result = @entries.select do |record|
         record[:content].match("-mroonga", :allow_leading_not => true)
       end
-      assert_equal_select_result([@entry1, @entry2, @entry4, @entry5], result)
+      assert_equal_select_result([@first_post, @groonga, @senna, @tritonn],
+                                 result)
     end
   end
 
