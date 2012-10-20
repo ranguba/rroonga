@@ -163,27 +163,27 @@ class CommandSelectTest < Test::Unit::TestCase
     end
 
     class TestAllowLeadingNot < self
-    def setup_data
-      @first_post =
-        @entries.add("The first post!",
-                     "content" => "Welcome! This is my first post!")
-      @groonga =
-        @entries.add("Groonga",
-                     "content" => "I started to use groonga. It's very fast!")
-      @mroonga =
-        @entries.add("Mroonga",
-                     "content" => "I also started to use mroonga. " +
-                                    "It's also very fast! Really fast!")
-    end
-
-    def test_allow_leading_not
-      result = @entries.select do |record|
-        record[:content].match("-mroonga", :allow_leading_not => true)
+      def setup_data
+        @first_post =
+          @entries.add("The first post!",
+                       "content" => "Welcome! This is my first post!")
+        @groonga =
+          @entries.add("Groonga",
+                       "content" => "I started to use groonga. It's very fast!")
+        @mroonga =
+          @entries.add("Mroonga",
+                       "content" => "I also started to use mroonga. " +
+                                      "It's also very fast! Really fast!")
       end
-      assert_equal_select_result([@first_post, @groonga],
-                                 result)
+
+      def test_allow_leading_not
+        result = @entries.select do |record|
+          record[:content].match("-mroonga", :allow_leading_not => true)
+        end
+        assert_equal_select_result([@first_post, @groonga],
+                                   result)
+      end
     end
-  end
   end
 
   private
