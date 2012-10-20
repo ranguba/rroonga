@@ -162,6 +162,7 @@ class CommandSelectTest < Test::Unit::TestCase
       @entries = Groonga["Entries"]
     end
 
+    class TestAllowLeadingNot < self
     def setup_data
       @first_post =
         @entries.add("The first post!",
@@ -182,6 +183,7 @@ class CommandSelectTest < Test::Unit::TestCase
       assert_equal_select_result([@first_post, @groonga],
                                  result)
     end
+  end
   end
 
   private
