@@ -176,12 +176,28 @@ class CommandSelectTest < Test::Unit::TestCase
                                       "It's also very fast! Really fast!")
       end
 
-      def test_allow_leading_not
+      def test_true
         result = @entries.select do |record|
           record[:content].match("-mroonga", :allow_leading_not => true)
         end
         assert_equal_select_result([@first_post, @groonga],
                                    result)
+      end
+
+      def test_false
+        assert_raise(Groonga::SyntaxError) do
+          @entries.select do |record|
+            record[:content].match("-mroonga", :allow_leading_not => false)
+          end
+        end
+      end
+
+      def test_default
+        assert_raise(Groonga::SyntaxError) do
+          @entries.select do |record|
+            record[:content].match("-mroonga")
+          end
+        end
       end
     end
   end
