@@ -152,8 +152,6 @@ class CommandSelectTest < Test::Unit::TestCase
                             :default_tokenizer => "TokenBigram",
                             :key_type => "ShortText",
                             :key_normalize => true) do |table|
-          table.index("Entries._key",
-                      :name => "entries_key_index", :with_position => true)
           table.index("Entries.content",
                       :name => "entries_content_index", :with_position => true)
         end
