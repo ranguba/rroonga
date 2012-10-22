@@ -111,10 +111,10 @@ rb_grn_column_deconstruct (RbGrnColumn *rb_column,
 }
 
 /*
- * call-seq:
- *   column.table -> Groonga::Table
- *
  * カラムが所属するテーブルを返す。
+ *
+ * @overload table
+ *   @return [Groonga::Table]
  */
 static VALUE
 rb_grn_column_get_table (VALUE self)
