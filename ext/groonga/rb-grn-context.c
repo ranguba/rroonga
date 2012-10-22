@@ -475,10 +475,9 @@ rb_grn_context_close (VALUE self)
 }
 
 /*
- * call-seq:
- *   context.closed?
- *
  * Returns whether the _context_ is closed by #close or not.
+ *
+ * @overload closed?
  */
 static VALUE
 rb_grn_context_closed_p (VALUE self)
