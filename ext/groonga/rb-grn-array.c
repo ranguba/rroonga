@@ -143,9 +143,6 @@ rb_grn_array_s_create (int argc, VALUE *argv, VALUE klass)
 }
 
 /*
- * call-seq:
- *   array.add(values=nil) -> Groonga::Recordまたはnil
- *
  * レコード追加し、追加したレコードを返す。レコードの追加に失
  * 敗した場合は +nil+ を返す。
  *
@@ -169,6 +166,9 @@ rb_grn_array_s_create (int argc, VALUE *argv, VALUE klass)
  *   #gunyara-kunユーザを追加する。
  *   gunyara_kun = users.add(:name => "gunyara-kun",
  *                           :uri => "http://d.hatena.ne.jp/tasukuchan/")
+ * @overload add(values=nil)
+ *   @return [Groonga::Recordまたはnil]
+ *
  */
 static VALUE
 rb_grn_array_add (int argc, VALUE *argv, VALUE self)
