@@ -207,16 +207,16 @@ rb_grn_column_get_local_name (VALUE self)
  *       マッチしたレコードをどのように扱うか。指定可能な値は以
  *       下の通り。
  *
- *       [Groonga::Operator::OR]
- *       マッチしたレコードを追加。すでにレコードが追加され
- *       ている場合は何もしない。
- *       [Groonga::Operator::AND]
- *       マッチしたレコードのスコアを増加。マッチしなかった
- *       レコードを削除。
- *       [Groonga::Operator::BUT]
- *       マッチしたレコードを削除。
- *       [Groonga::Operator::ADJUST]
- *       マッチしたレコードのスコアを増加。
+ *       - Groonga::Operator::OR :=
+   *       マッチしたレコードを追加。すでにレコードが追加され
+ *         ている場合は何もしない。 =:
+ *       - Groonga::Operator::AND :=
+ *         マッチしたレコードのスコアを増加。マッチしなかった
+ *         レコードを削除。 =:
+ *       - Groonga::Operator::BUT :=
+ *         マッチしたレコードを削除。 =:
+ *       - Groonga::Operator::ADJUST :=
+ *         マッチしたレコードのスコアを増加。 =:
  *
  *     @option options :result
  *       検索結果を格納するテーブル。マッチしたレコードが追加さ
