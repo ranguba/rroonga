@@ -542,11 +542,10 @@ rb_grn_context_get_encoding (VALUE self)
 }
 
 /*
- * call-seq:
- *   context.encoding=(encoding)
- *
  * コンテキストが使うエンコーディングを設定する。エンコーディ
  * ングの指定のしかたはGroonga::Encodingを参照。
+ *
+ * @overload encoding=(encoding)
  */
 static VALUE
 rb_grn_context_set_encoding (VALUE self, VALUE rb_encoding)
