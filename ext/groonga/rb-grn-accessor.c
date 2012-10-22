@@ -74,17 +74,15 @@ rb_grn_accessor_finalizer (grn_ctx *context, grn_obj *grn_object,
 }
 
 /*
- * call-seq:
- *   accessor.local_name
- *
  * アクセサ名を返す。
  *
- * <pre>
- * items = Groonga::Array.create(:name => "Items")
- * id = items.column("_id")
- * id.name # => nil
- * id.local_name # => "_id"
- * </pre>
+ * @overload local_name
+ *
+ * @example
+ *   items = Groonga::Array.create(:name => "Items")
+ *   id = items.column("_id")
+ *   id.name # => nil
+ *   id.local_name # => "_id"
  */
 static VALUE
 rb_grn_accessor_get_local_name (VALUE self)
