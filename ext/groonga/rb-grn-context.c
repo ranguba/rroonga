@@ -370,9 +370,8 @@ rb_grn_context_s_set_default (VALUE self, VALUE context)
 }
 
 /*
- * call-seq:
- *   Groonga::Context.default_options -> Hash or nil
- *
+ * @overload default_options
+ *   @return [::Hash or nil]
  * コンテキストを作成する時に利用するデフォルトのオプション
  * を返す。
  */
