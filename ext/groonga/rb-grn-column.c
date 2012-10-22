@@ -31,13 +31,14 @@ VALUE rb_cGrnColumn;
  * 加することができる。
  *
  * カラムには大きく分けて3種類ある。
- * [Groonga::FixSizeColumn]
- *   固定長のデータを格納するカラム。
- * [Groonga::VariableSizeColumn]
- *   可変長のデータを格納するカラム。
- * [Groonga::IndexColumn]
+ *
+ * - Groonga::FixSizeColumn :=
+ *   固定長のデータを格納するカラム。 =:
+ * - Groonga::VariableSizeColumn :=
+ *   可変長のデータを格納するカラム。 =:
+ * - Groonga::IndexColumn :=
  *   転置インデックスを格納するカラム。全文検索や参照元レコー
- *   ドの検索を行う場合はこのカラムを使用する。
+ *   ドの検索を行う場合はこのカラムを使用する。 =:
  *
  * 固定長データ用カラム・可変長データ用カラムは1つのデータだ
  * けを格納するか複数のデータを格納するかを選ぶことができる。
