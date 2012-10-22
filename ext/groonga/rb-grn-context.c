@@ -598,13 +598,12 @@ rb_grn_context_get_match_escalation_threshold (VALUE self)
 }
 
 /*
- * call-seq:
- *   context.match_escalation_threshold=(match_escalation_threshold)
- *
  * このコンテキストを使って検索したときに検索の挙動をエスカレー
  * ションする閾値を設定します。エスカレーションの詳細はgroonga
  * の検索の仕様に関するドキュメントを参照してください。
  * http://groonga.org/docs/spec/search.html#spec-search
+ *
+ * @overload match_escalation_threshold=(match_escalation_threshold)
  */
 static VALUE
 rb_grn_context_set_match_escalation_threshold (VALUE self, VALUE threshold)
