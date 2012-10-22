@@ -530,10 +530,10 @@ rb_grn_context_inspect (VALUE self)
 }
 
 /*
- * call-seq:
- *   context.encoding -> Groonga::Encoding
- *
  * コンテキストが使うエンコーディングを返す。
+ *
+ * @overload encoding
+ *   @return [Groonga::Encoding]
  */
 static VALUE
 rb_grn_context_get_encoding (VALUE self)
