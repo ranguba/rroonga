@@ -640,11 +640,10 @@ rb_grn_context_support_zlib_p (VALUE self)
 }
 
 /*
- * call-seq:
- *   context.support_lzo?
- *
  * groongaがLZOサポート付きでビルドされていれば +true+ 、そう
  * でなければ +false+ を返す。
+ *
+ * @overload support_lzo?
  */
 static VALUE
 rb_grn_context_support_lzo_p (VALUE self)
