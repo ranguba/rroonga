@@ -415,24 +415,19 @@ rb_grn_column_unlock_ensure (VALUE self)
  * Groonga::ResourceDeadlockAvoided例外が発生する。
  *
  * @overload lock(options={})
- *   @param [::Hash] options 利用可能なオプションは以下の通り。
- *   @option options :timeout
- *     ロックを獲得できなかった場合は _:timeout_ 秒間ロックの獲
- *     得を試みる。 _:timeout_ 秒以内にロックを獲得できなかった
- *     場合は例外が発生する。
- *   @option options :id
- *     _:id_で指定したレコードをロックする。（注: groonga側が
- *     未実装のため、現在は無視される）
+ *   @!macro [new] column.lock.options
+ *     @param [::Hash] options 利用可能なオプションは以下の通り。
+ *     @option options :timeout
+ *       ロックを獲得できなかった場合は _:timeout_ 秒間ロックの獲
+ *       得を試みる。 _:timeout_ 秒以内にロックを獲得できなかった
+ *       場合は例外が発生する。
+ *     @option options :id
+ *       _:id_で指定したレコードをロックする。（注: groonga側が
+ *       未実装のため、現在は無視される）
+ *   @!macro column.lock.options
  * @overload lock(options={})
  *   @yield ブロックを指定した場合はブロックを抜けたときにunlockする。
- *   @param [::Hash] options 利用可能なオプションは以下の通り。
- *   @option options :timeout
- *     ロックを獲得できなかった場合は _:timeout_秒間ロックの獲
- *     得を試みる。 _:timeout_秒以内にロックを獲得できなかった
- *     場合は例外が発生する。
- *   @option options :id
- *     _:id_で指定したレコードをロックする。（注: groonga側が
- *     未実装のため、現在は無視される）
+ *   @!macro column.lock.options
  */
 static VALUE
 rb_grn_column_lock (int argc, VALUE *argv, VALUE self)
