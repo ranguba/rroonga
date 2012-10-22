@@ -600,15 +600,13 @@ rb_grn_column_index_p (VALUE self)
 }
 
 /*
- * Document-method: vector?
- *
- * call-seq:
- *   column.vector? -> true/false
- *
  * _column_ がベクターカラムの場合は +true+ を返し、
  * そうでない場合は +false+ を返す。
  *
  * @since 1.0.5
+ *
+ * @overload vector?
+ *   @return [true/false]
  */
 static VALUE
 rb_grn_column_vector_p (VALUE self)
