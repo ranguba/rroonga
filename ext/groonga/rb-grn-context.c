@@ -370,10 +370,11 @@ rb_grn_context_s_set_default (VALUE self, VALUE context)
 }
 
 /*
- * @overload default_options
- *   @return [::Hash or nil]
  * コンテキストを作成する時に利用するデフォルトのオプション
  * を返す。
+ *
+ * @overload default_options
+ *   @return [::Hash or nil]
  */
 static VALUE
 rb_grn_context_s_get_default_options (VALUE self)
