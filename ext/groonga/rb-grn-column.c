@@ -32,11 +32,11 @@ VALUE rb_cGrnColumn;
  *
  * カラムには大きく分けて3種類ある。
  *
- * - Groonga::FixSizeColumn :=
+ * - {Groonga::FixSizeColumn} :=
  *   固定長のデータを格納するカラム。 =:
- * - Groonga::VariableSizeColumn :=
+ * - {Groonga::VariableSizeColumn} :=
  *   可変長のデータを格納するカラム。 =:
- * - Groonga::IndexColumn :=
+ * - {Groonga::IndexColumn} :=
  *   転置インデックスを格納するカラム。全文検索や参照元レコー
  *   ドの検索を行う場合はこのカラムを使用する。 =:
  *
@@ -172,8 +172,8 @@ rb_grn_column_get_local_name (VALUE self)
  * カラムが所属するテーブルからブロックまたは文字列で指定し
  * た条件にマッチするレコードを返す。返されたテーブルには
  * +expression+ という特異メソッドがあり、指定した条件を表し
- * ているGroonga::Expressionを取得できる。
- * Groonga::Expression#snippetを使うことにより、指定した条件
+ * ている {Groonga::Expression} を取得できる。
+ * {Groonga::Expression#snippet} を使うことにより、指定した条件
  * 用のスニペットを簡単に生成できる。
  *
  * bc. !!!ruby
@@ -228,25 +228,25 @@ rb_grn_column_get_local_name (VALUE self)
  *     @option options :syntax (:query)
  *       _query_ の構文。
  *
- *       参考: Groonga::Expression#parse.
+ *       参考: {Groonga::Expression#parse} .
  *
  *     @option options :allow_pragma
  *       query構文時にプラグマを利用するかどうか。省略した場合は
  *       利用する。
  *
- *       参考: Groonga::Expression#parse.
+ *       参考: {Groonga::Expression#parse} .
  *
  *     @option options :allow_column The allow_column
  *       query構文時にカラム指定を利用するかどうか。省略した場合
  *       は利用する。
  *
- *       参考: Groonga::Expression#parse.
+ *       参考: {Groonga::Expression#parse} .
  *
  *     @option options :allow_update
  *       script構文時に更新操作を利用するかどうか。省略した場合
  *       は利用する。
  *
- *       参考: Groonga::Expression#parse.
+ *       参考: {Groonga::Expression#parse} .
  *
  *   @!macro column.select.options
  * @overload select(query, options)
@@ -275,7 +275,7 @@ rb_grn_column_get_local_name (VALUE self)
  *   @!macro column.select.options
  * @overload select(expression, options)
  *   @param [Groonga::Expression] expression 条件を表すオブジェクト
- *     _expression_ には既に作成済みのGroonga::Expressionを渡す
+ *     _expression_ には既に作成済みの {Groonga::Expression} を渡す
  *
  *     ブロックで条件を指定する場合は
  *     {Groonga::ColumnExpressionBuilder} を参照。
@@ -573,7 +573,7 @@ rb_grn_column_reference_p (VALUE self)
 }
 
 /*
- * _column_ がGroonga::IndexColumnの場合は +true+ を返し、
+ * _column_ が {Groonga::IndexColumn} の場合は +true+ を返し、
  * そうでない場合は +false+ を返す。
  *
  * @since 1.0.5
