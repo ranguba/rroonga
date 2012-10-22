@@ -133,14 +133,14 @@ rb_grn_column_get_table (VALUE self)
 }
 
 /*
- * call-seq:
- *   column.local_name
- *
- * @example テーブル名を除いたカラム名を返す。
+ * テーブル名を除いたカラム名を返す。
+ * @example
  *   items = Groonga::Array.create(:name => "Items")
  *   title = items.define_column("title", "ShortText")
  *   title.name # => "Items.title"
  *   title.local_name # => "title"
+ *
+ * @overload local_name
  */
 static VALUE
 rb_grn_column_get_local_name (VALUE self)
