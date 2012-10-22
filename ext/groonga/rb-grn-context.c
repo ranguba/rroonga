@@ -30,15 +30,17 @@ static VALUE cGrnContext;
  * 複数のコンテキストを利用する必要はない。
  *
  * デフォルトで使用されるコンテキストは
- * Groonga::Context#defaultでアクセスできる。コンテキストを
- * 指定できる箇所でコンテキストの指定を省略したり +nil+ を指定
- * した場合はGroonga::Context.defaultが利用される。
+ * {Groonga::Context.default} でアクセスできる。コンテキ
+ * ストを指定できる箇所でコンテキストの指定を省略したり +nil+
+ * を指定した場合は {Groonga::Context.default} が利用さ
+ * れる。
  *
  * また、デフォルトのコンテキストは必要になると暗黙のうちに
  * 作成される。そのため、コンテキストを意識することは少ない。
  *
  * 暗黙のうちに作成されるコンテキストにオプションを指定する
- * 場合はGroonga::Context.default_options=を使用する。
+ * 場合は {Groonga::Context.default_options=} を使用
+ * する。
  */
 
 grn_ctx *
@@ -329,8 +331,8 @@ rb_grn_context_text_set (grn_ctx *context, grn_obj *bulk, VALUE rb_string)
  * が作成されていない場合は暗黙のうちに作成し、それを返す。
  *
  * 暗黙のうちにコンテキストを作成する場合は、
- * Groonga::Context.default_optionsに設定されているオプショ
- * ンを利用する。
+ * {Groonga::Context.default_options} に設定されているオプ
+ * ションを利用する。
  *
  * @overload default
  *   @return [Groonga::Context]
@@ -357,8 +359,8 @@ rb_grn_context_get_default (void)
 /*
  * デフォルトのコンテキストを設定する。 +nil+ を指定すると、
  * デフォルトのコンテキストをリセットする。リセットすると、次
- * 回Groonga::Context.defaultを呼び出したときに新しくコンテ
- * キストが作成される。
+ * 回 {Groonga::Context.default} を呼び出したときに新しくコ
+ * ンテキストが作成される。
  *
  * @overload default=(context)
  */
@@ -385,7 +387,7 @@ rb_grn_context_s_get_default_options (VALUE self)
 /*
  * コンテキストを作成する時に利用するデフォルトのオプション
  * を設定する。利用可能なオプションは
- * Groonga::Context.newを参照。
+ * {Groonga::Context.new} を参照。
  *
  * @overload default_options=(options)
  */
@@ -403,7 +405,7 @@ rb_grn_context_s_set_default_options (VALUE self, VALUE options)
  *     pairs. Omitted names are initialized as the default value.
  *   @option options [Groonga::Encoding] :encoding The encoding
  *     エンコーディングを指定する。エンコーディングの指定方法
- *     はGroonga::Encodingを参照。
+ *     は {Groonga::Encoding} を参照。
  */
 static VALUE
 rb_grn_context_initialize (int argc, VALUE *argv, VALUE self)
@@ -544,7 +546,7 @@ rb_grn_context_get_encoding (VALUE self)
 
 /*
  * コンテキストが使うエンコーディングを設定する。エンコーディ
- * ングの指定のしかたはGroonga::Encodingを参照。
+ * ングの指定のしかたは {Groonga::Encoding} を参照。
  *
  * @overload encoding=(encoding)
  */
