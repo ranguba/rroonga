@@ -574,15 +574,13 @@ rb_grn_column_reference_p (VALUE self)
 }
 
 /*
- * Document-method: index?
- *
- * call-seq:
- *   column.index? -> true/false
- *
  * _column_ がGroonga::IndexColumnの場合は +true+ を返し、
  * そうでない場合は +false+ を返す。
  *
  * @since 1.0.5
+ *
+ * @overload index?
+ *   @return [true/false]
  */
 static VALUE
 rb_grn_column_index_p (VALUE self)
