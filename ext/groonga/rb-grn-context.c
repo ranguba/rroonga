@@ -490,10 +490,10 @@ rb_grn_context_closed_p (VALUE self)
 }
 
 /*
- * call-seq:
- *   context.inspect -> String
- *
  * コンテキストの中身を人に見やすい文字列で返す。
+ *
+ * @overload inspect
+ *   @return [String]
  */
 static VALUE
 rb_grn_context_inspect (VALUE self)
