@@ -382,12 +382,11 @@ rb_grn_context_s_get_default_options (VALUE self)
 }
 
 /*
- * call-seq:
- *   Groonga::Context.default_options=(options)
- *
  * コンテキストを作成する時に利用するデフォルトのオプション
  * を設定する。利用可能なオプションは
  * Groonga::Context.newを参照。
+ *
+ * @overload default_options=(options)
  */
 static VALUE
 rb_grn_context_s_set_default_options (VALUE self, VALUE options)
