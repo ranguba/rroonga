@@ -54,7 +54,7 @@ VALUE rb_cGrnArray;
  *     @param [::Hash] options The name and value
  *       pairs. Omitted names are initialized as the default value.
  *     @option options [Groonga::Context] :context (Groonga::Context.default)
- *       テーブルが利用する {Groonga::Context}
+ *       テーブルが利用する {Groonga::Context} 。
  *     @option options :name The name
  *       テーブルの名前。名前をつけると、 {Groonga::Context#[]} に名
  *       前を指定してテーブルを取得することができる。省略すると
