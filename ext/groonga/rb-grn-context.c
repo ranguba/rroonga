@@ -451,11 +451,10 @@ rb_grn_context_initialize (int argc, VALUE *argv, VALUE self)
 }
 
 /*
- * call-seq:
- *   context.close
- *
  * Closes the _context_. Closed _context_ can't be used
  * anymore.
+ *
+ * @overload close
  */
 static VALUE
 rb_grn_context_close (VALUE self)
