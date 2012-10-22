@@ -54,29 +54,29 @@ VALUE rb_cGrnArray;
  *     @param [::Hash] options The name and value
  *       pairs. Omitted names are initialized as the default value.
  *     @option options [Groonga::Context] :context (Groonga::Context.default)
- *       テーブルが利用するGroonga::Context
+ *       テーブルが利用する {Groonga::Context}
  *     @option options :name The name
- *       テーブルの名前。名前をつけると、Groonga::Context#[]に名
+ *       テーブルの名前。名前をつけると、 {Groonga::Context#[]} に名
  *       前を指定してテーブルを取得することができる。省略すると
  *       無名テーブルになり、テーブルIDでのみ取得できる。
  *     @option options :path
  *       テーブルを保存するパス。パスを指定すると永続テーブルとな
  *       り、プロセス終了後もレコードは保持される。次回起動時に
- *       Groonga::Context#[]で保存されたレコードを利用することが
+ *       {Groonga::Context#[]} で保存されたレコードを利用することが
  *       できる。省略すると一時テーブルになり、プロセスが終了する
  *       とレコードは破棄される。
  *     @option options :persistent
  *       +true+ を指定すると永続テーブルとなる。 +path+ を省略した
  *       場合は自動的にパスが付加される。 +:context+ で指定した
- *       Groonga::Contextに結びついているデータベースが一時デー
+ *       {Groonga::Context} に結びついているデータベースが一時デー
  *       タベースの場合は例外が発生する。
  *     @option options :value_type (nil)
  *       値の型を指定する。省略すると値のための領域を確保しない。
  *       値を保存したい場合は必ず指定すること。
- *       参考: Groonga::Type.new
+ *       参考: {Groonga::Type.new}
  *     @option options [Groonga::Record#n_sub_records] :sub_records
- *       +true+ を指定すると#groupでグループ化したときに、
- *       Groonga::Record#n_sub_recordsでグループに含まれるレコー
+ *       +true+ を指定すると {#group} でグループ化したときに、
+ *       {Groonga::Record#n_sub_records} でグループに含まれるレコー
  *       ドの件数を取得できる。
  *   @!macro array.create.options
  * @overload create(options={})
