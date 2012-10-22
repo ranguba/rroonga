@@ -544,7 +544,6 @@ rb_grn_column_is_locked (int argc, VALUE *argv, VALUE self)
  * @since 1.0.5
  *
  * @overload reference?
- *   @return [true/false]
  */
 static VALUE
 rb_grn_column_reference_p (VALUE self)
@@ -580,7 +579,6 @@ rb_grn_column_reference_p (VALUE self)
  * @since 1.0.5
  *
  * @overload index?
- *   @return [true/false]
  */
 static VALUE
 rb_grn_column_index_p (VALUE self)
@@ -606,7 +604,6 @@ rb_grn_column_index_p (VALUE self)
  * @since 1.0.5
  *
  * @overload vector?
- *   @return [true/false]
  */
 static VALUE
 rb_grn_column_vector_p (VALUE self)
