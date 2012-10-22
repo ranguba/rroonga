@@ -325,15 +325,15 @@ rb_grn_context_text_set (grn_ctx *context, grn_obj *bulk, VALUE rb_string)
 }
 
 /*
- * call-seq:
- *   Groonga::Context.default -> Groonga::Context
- *
  * デフォルトのコンテキストを返す。デフォルトのコンテキスト
  * が作成されていない場合は暗黙のうちに作成し、それを返す。
  *
  * 暗黙のうちにコンテキストを作成する場合は、
  * Groonga::Context.default_optionsに設定されているオプショ
  * ンを利用する。
+ *
+ * @overload default
+ *   @return [Groonga::Context]
  */
 static VALUE
 rb_grn_context_s_get_default (VALUE self)
