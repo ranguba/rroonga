@@ -355,13 +355,12 @@ rb_grn_context_get_default (void)
 }
 
 /*
- * call-seq:
- *   Groonga::Context.default=(context)
- *
  * デフォルトのコンテキストを設定する。 +nil+ を指定すると、
  * デフォルトのコンテキストをリセットする。リセットすると、次
  * 回Groonga::Context.defaultを呼び出したときに新しくコンテ
  * キストが作成される。
+ *
+ * @overload default=(context)
  */
 static VALUE
 rb_grn_context_s_set_default (VALUE self, VALUE context)
