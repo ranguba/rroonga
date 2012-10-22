@@ -103,7 +103,7 @@ rb_grn_accessor_get_local_name (VALUE self)
  * Document-class: Groonga::Accessor < Groonga::Object
  *
  * キー、値、スコアなど種々の値へのアクセスをカプセル化した
- * オブジェクト。Groonga::Table#columnで取得できる。
+ * オブジェクト。 {Groonga::Table#column} で取得できる。
  */
 void
 rb_grn_init_accessor (VALUE mGrn)
