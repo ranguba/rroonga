@@ -275,7 +275,7 @@ rb_grn_column_get_local_name (VALUE self)
  *   @!macro column.select.options
  * @overload select(expression, options)
  *   @param [Groonga::Expression] expression 条件を表すオブジェクト
- *     _expression_ には既に作成済みの {Groonga::Expression} を渡す
+ *     _expression_ には既に作成済みの {Groonga::Expression} を渡す。
  *
  *     ブロックで条件を指定する場合は
  *     {Groonga::ColumnExpressionBuilder} を参照。
