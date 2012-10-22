@@ -538,15 +538,13 @@ rb_grn_column_is_locked (int argc, VALUE *argv, VALUE self)
 }
 
 /*
- * Document-method: reference?
- *
- * call-seq:
- *   column.reference? -> true/false
- *
  * _column_ の値がテーブルのレコードとなる場合は +true+ を返し、
  * そうでない場合は +false+ を返す。
  *
  * @since 1.0.5
+ *
+ * @overload reference?
+ *   @return [true/false]
  */
 static VALUE
 rb_grn_column_reference_p (VALUE self)
