@@ -846,10 +846,6 @@ rb_grn_context_get_backward_compatibility (grn_ctx *context,
 
 
 /*
- * call-seq:
- *   context[name] -> Groonga::Object or nil
- *   context[id]   -> Groonga::Object or nil
- *
  * コンテキスト管理下にあるオブジェクトを返す。
  *
  * _name_ として文字列を指定した場合はオブジェクト名でオブジェ
@@ -857,6 +853,11 @@ rb_grn_context_get_backward_compatibility (grn_ctx *context,
  *
  * _id_ として数値を指定した場合はオブジェクトIDでオブジェク
  * トを検索する。
+ *
+ * @overload [](name)
+ *   @return [Groonga::Object or nil]
+ * @overload [](id)
+ *   @return [Groonga::Object or nil]
  */
 static VALUE
 rb_grn_context_array_reference (VALUE self, VALUE name_or_id)
