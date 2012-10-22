@@ -254,7 +254,7 @@ h2. マルチユーザ向けのブックマークアプリケーション
 まず、ユーザ情報とコメント情報を格納するテーブルを追加して、
 下図のようなテーブル構成にします。
 
-http://qwik.jp/senna/senna2.files/rect4605.png
+!http://qwik.jp/senna/senna2.files/rect4605.png!
 
 まず、 @Users@ テーブルを追加します。
 
