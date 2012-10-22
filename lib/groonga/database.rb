@@ -17,7 +17,7 @@
 
 module Groonga
   class Database
-    # @return [Array<Groonga::Table] tables defined in the database
+    # @return [Array<Groonga::Table>] tables defined in the database.
     def tables
       find_all do |object|
         object.is_a?(Groonga::Table)
