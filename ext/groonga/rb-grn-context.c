@@ -617,11 +617,10 @@ rb_grn_context_set_match_escalation_threshold (VALUE self, VALUE threshold)
 }
 
 /*
- * call-seq:
- *   context.support_zlib?
- *
  * groongaがZlibサポート付きでビルドされていれば +true+ 、そう
  * でなければ +false+ を返す。
+ *
+ * @overload support_zlib?
  */
 static VALUE
 rb_grn_context_support_zlib_p (VALUE self)
