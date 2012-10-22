@@ -583,13 +583,13 @@ rb_grn_context_get_ruby_encoding (VALUE self)
 }
 
 /*
- * call-seq:
- *   context.match_escalation_threshold -> Integer
- *
  * このコンテキストを使って検索したときに検索の挙動をエスカレー
  * ションする閾値を返します。エスカレーションの詳細はgroonga
  * の検索の仕様に関するドキュメントを参照してください。
  * http://groonga.org/docs/spec/search.html#spec-search
+ *
+ * @overload match_escalation_threshold
+ *   @return [Integer]
  */
 static VALUE
 rb_grn_context_get_match_escalation_threshold (VALUE self)
