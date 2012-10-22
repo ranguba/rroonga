@@ -208,7 +208,7 @@ rb_grn_column_get_local_name (VALUE self)
  *       下の通り。
  *
  *       - Groonga::Operator::OR :=
-   *       マッチしたレコードを追加。すでにレコードが追加され
+ *         マッチしたレコードを追加。すでにレコードが追加され
  *         ている場合は何もしない。 =:
  *       - Groonga::Operator::AND :=
  *         マッチしたレコードのスコアを増加。マッチしなかった
