@@ -587,9 +587,10 @@ rb_grn_context_get_ruby_encoding (VALUE self)
 
 /*
  * このコンテキストを使って検索したときに検索の挙動をエスカレー
- * ションする閾値を返します。エスカレーションの詳細はgroonga
- * の検索の仕様に関するドキュメントを参照してください。
- * http://groonga.org/docs/spec/search.html#spec-search
+ * ションする閾値を返します。
+ * エスカレーションの詳細は
+ * "groongaの検索の仕様に関するドキュメント":http://groonga.org/docs/spec/search.html#match-escalation-threshold
+ * を参照してください。
  *
  * @overload match_escalation_threshold
  *   @return [Integer]
@@ -602,9 +603,10 @@ rb_grn_context_get_match_escalation_threshold (VALUE self)
 
 /*
  * このコンテキストを使って検索したときに検索の挙動をエスカレー
- * ションする閾値を設定します。エスカレーションの詳細はgroonga
- * の検索の仕様に関するドキュメントを参照してください。
- * http://groonga.org/docs/spec/search.html#spec-search
+ * ションする閾値を設定します。
+ * エスカレーションの詳細は
+ * "groongaの検索の仕様に関するドキュメント":http://groonga.org/docs/spec/search.html#match-escalation-threshold
+ * を参照してください。
  *
  * @overload match_escalation_threshold=(match_escalation_threshold)
  */
