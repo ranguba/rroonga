@@ -625,15 +625,12 @@ rb_grn_column_vector_p (VALUE self)
 }
 
 /*
- * Document-method: scalar?
- *
- * call-seq:
- *   column.scalar? -> true/false
- *
  * _column_ がスカラーカラムの場合は +true+ を返し、
  * そうでない場合は +false+ を返す。
  *
  * @since 1.0.5
+ *
+ * @overload scalar?
  */
 static VALUE
 rb_grn_column_scalar_p (VALUE self)
