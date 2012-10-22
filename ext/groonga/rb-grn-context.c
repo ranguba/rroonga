@@ -661,10 +661,10 @@ rb_grn_context_support_lzo_p (VALUE self)
 }
 
 /*
- * call-seq:
- *   context.database -> Groonga::Database
- *
  * コンテキストが使うデータベースを返す。
+ *
+ * @overload database
+ *   @return [Groonga::Database]
  */
 static VALUE
 rb_grn_context_get_database (VALUE self)
