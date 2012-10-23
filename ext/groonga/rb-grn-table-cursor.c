@@ -267,13 +267,10 @@ rb_grn_table_cursor_each (VALUE self)
  */
 
 /*
- * Document-method: closed?
- *
- * call-seq:
- *   cursor.closed? -> true/false
- *
  * カーソルが開放済みの場合は +true+ を返し、そうでない場合は
  * +false+ を返す。
+ *
+ * @overload closed?
  */
 
 void
