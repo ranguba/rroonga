@@ -110,9 +110,6 @@ rb_grn_table_key_support_add_raw (VALUE self, VALUE rb_key, int *added)
 }
 
 /*
- * call-seq:
- *   table.add(key, values=nil) -> Groonga::Recordまたはnil
- *
  * 主キーが _key_ のレコード追加し、追加したレコードを返す。レ
  * コードの追加に失敗した場合は +nil+ を返す。
  *
@@ -125,6 +122,9 @@ rb_grn_table_key_support_add_raw (VALUE self, VALUE rb_key, int *added)
  * した場合または +nil+ を指定した場合はカラムは設定しない。カ
  * ラムの値は<tt>{:カラム名1 => 値1, :カラム名2 => 値2,
  * ...}</tt>と指定する。
+ *
+ * @overload add(key, values=nil)
+ *   @return [Groonga::Recordまたはnil]
  */
 static VALUE
 rb_grn_table_key_support_add (int argc, VALUE *argv, VALUE self)
