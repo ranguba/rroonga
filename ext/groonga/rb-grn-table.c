@@ -1991,11 +1991,10 @@ rb_grn_table_merge_bang (VALUE self, VALUE rb_other)
 }
 
 /*
- * call-seq:
- *   table.support_key? -> true/false
- *
  * _table_ に主キーが設定されていれば +true+ 、されていなければ
  * +false+ を返す。
+ *
+ * @overload support_key?
  */
 static VALUE
 rb_grn_table_support_key_p (VALUE self)
