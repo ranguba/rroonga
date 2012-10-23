@@ -25,7 +25,7 @@ VALUE rb_cGrnVariable;
 /*
  * Document-class: Groonga::Variable < Groonga::Object
  *
- * Groonga::Expressionで使われる変数。
+ * {Groonga::Expression} で使われる変数。
  */
 
 grn_obj *
