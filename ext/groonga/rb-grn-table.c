@@ -1474,18 +1474,15 @@ rb_grn_table_set_column_value (VALUE self, VALUE rb_id,
 }
 
 /*
- * Document-method: set_column_value
- *
- * call-seq:
- *   table.set_column_value(id, name, value)
- *   table.set_column_value(id, name, value, :id => true)
- *
  * _table_ の _id_ に対応するカラム _name_ の値として _value_ 設定す
  * る。既存の値は上書きされる。
  *
  * <tt>:id => true</tt>が指定できるのは利便性のため。
  * Groonga::ArrayでもGroonga::HashやGroonga::PatriciaTrieと
  * 同じ引数で動くようになる。
+ *
+ * @overload set_column_value(id, name, value)
+ * @overload set_column_value(id, name, valuf, :id => true)
  */
 static VALUE
 rb_grn_table_set_column_value_convenience (int argc, VALUE *argv, VALUE self)
