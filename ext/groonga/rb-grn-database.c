@@ -171,8 +171,8 @@ reset_floating_objects (VALUE rb_context)
  *   # 永続データベースを作成:
  *   Groonga::Database.create(:path => "/tmp/db.groonga")
  *
- * @return [Groonga::Database] 作成されたデータベース
  * @overload create(options=nil)
+ *   @return [Groonga::Database] 作成されたデータベースを返す。
  *   @param option [::Hash] options The name and value
  *     pairs. Omitted names are initialized as the default value.
  *   @option options :path
