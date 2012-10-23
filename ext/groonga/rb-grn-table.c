@@ -1511,9 +1511,9 @@ rb_grn_table_set_column_value_convenience (int argc, VALUE *argv, VALUE self)
  *
  * 利用可能なオプションは以下の通り。
  *
- * [ _:id_ ]
+ * - _:id_ :=
  *   _:id_ で指定したレコードのロックを解除する。（注:
- *   groonga側が未実装のため、現在は無視される）
+ *   groonga側が未実装のため、現在は無視される） =:
  *
  * @overload unlock(options={})
  */
@@ -1762,15 +1762,15 @@ rb_grn_table_is_locked (int argc, VALUE *argv, VALUE self)
  *       マッチしたレコードをどのように扱うか。指定可能な値は以
  *       下の通り。省略した場合はGroonga::Operator::OR。
  *
- *       [Groonga::Operator::OR] マッチしたレコードを追加。すで
- *                               にレコードが追加されている場合
- *                               は何もしない。
- *       [Groonga::Operator::AND] マッチしたレコードのスコアを増
- *                                加。マッチしなかったレコード
- *                                を削除。
- *       [Groonga::Operator::BUT] マッチしたレコードを削除。
- *       [Groonga::Operator::ADJUST] マッチしたレコードのスコア
- *                                   を増加。
+ *       - Groonga::Operator::OR :=
+ *         マッチしたレコードを追加。すでにレコードが追加されている場合
+ *         は何もしない。 =:
+ *       - Groonga::Operator::AND :=
+ *         マッチしたレコードのスコアを増加。マッチしなかったレコードを削除。 =:
+ *       - Groonga::Operator::BUT :=
+ *         マッチしたレコードを削除。 =:
+ *       - Groonga::Operator::ADJUST :=
+ *         マッチしたレコードのスコアを増加。 =:
  *
  *     @option options :result
  *       検索結果を格納するテーブル。マッチしたレコードが追加さ
