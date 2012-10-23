@@ -1507,11 +1507,6 @@ rb_grn_table_set_column_value_convenience (int argc, VALUE *argv, VALUE self)
 }
 
 /*
- * Document-method: unlock
- *
- * call-seq:
- *   table.unlock(options={})
- *
  * _table_ のロックを解除する。
  *
  * 利用可能なオプションは以下の通り。
@@ -1519,6 +1514,8 @@ rb_grn_table_set_column_value_convenience (int argc, VALUE *argv, VALUE self)
  * [ _:id_ ]
  *   _:id_ で指定したレコードのロックを解除する。（注:
  *   groonga側が未実装のため、現在は無視される）
+ *
+ * @overload unlock(options={})
  */
 static VALUE
 rb_grn_table_unlock (int argc, VALUE *argv, VALUE self)
