@@ -25,8 +25,8 @@ VALUE rb_mGrnTableKeySupport;
 /*
  * Document-module: Groonga::Table::KeySupport
  *
- * 主キーを持つテーブルであるGroonga::Hashと
- * Groonga::PatriciaTrieに主キーの機能を提供するモジュール。
+ * 主キーを持つテーブルである {Groonga::Hash} と
+ * {Groonga::PatriciaTrie} に主キーの機能を提供するモジュール。
  */
 
 void
@@ -115,7 +115,7 @@ rb_grn_table_key_support_add_raw (VALUE self, VALUE rb_key, int *added)
  *
  * すでに同じキーのレコードが存在する場合は追加せずに同じレ
  * コードを返す。追加されたかどうかは
- * +Groonga::Record#added?+ で調べることができる。 +true+ を返
+ * {Groonga::Record#added?} で調べることができる。 +true+ を返
  * したら追加されたということを示す。
  *
  * _values_ にはレコードのカラムに設定する値を指定する。省略
@@ -299,9 +299,9 @@ rb_grn_table_key_support_delete (VALUE self, VALUE rb_id_or_key)
 }
 
 /*
- * _table_ の _key_ に対応するGroonga::Recordを返す。
+ * _table_ の _key_ に対応する {Groonga::Record} を返す。
  *
- * 0.9.0から値ではなくGroonga::Recordを返すようになった。
+ * 0.9.0から値ではなく {Groonga::Record} を返すようになった。
  *
  * @overload [](key)
  * @return [Groonga::Record]
@@ -591,7 +591,7 @@ rb_grn_table_key_support_set_value (int argc, VALUE *argv, VALUE self)
 }
 
 /*
- * Groonga::IndexColumnで使用するトークナイザを返す。
+ * {Groonga::IndexColumn} で使用するトークナイザを返す。
  *
  * @overload default_tokenizer
  *   @return [nilまたはGroonga::Procedure]
@@ -616,7 +616,7 @@ rb_grn_table_key_support_get_default_tokenizer (VALUE self)
 }
 
 /*
- * Groonga::IndexColumnで使用するトークナイザを設定する。
+ * {Groonga::IndexColumn} で使用するトークナイザを設定する。
  *
  * @example
  *   # 2-gramを使用。
