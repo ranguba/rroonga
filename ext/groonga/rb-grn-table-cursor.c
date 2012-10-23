@@ -178,10 +178,9 @@ rb_grn_table_cursor_set_value (VALUE self, VALUE value)
 }
 
 /*
- * call-seq:
- *   table_cursor.delete
- *
  * カレントレコードを削除する。
+ *
+ * @overload delete
  */
 static VALUE
 rb_grn_table_cursor_delete (VALUE self)
