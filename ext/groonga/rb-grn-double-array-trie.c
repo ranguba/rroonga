@@ -30,16 +30,16 @@ VALUE rb_cGrnDoubleArrayTrie;
  * trie. It can change key without ID change. This feature
  * is supported by only Groonga::DoubleArrayTrie. But it
  * requires large spaces rather than other tables. It is
- * used by Groonga::Database for key management
+ * used by {Groonga::Database} for key management
  * internally. It's reasonable choice because number of
- * tables and columns in Groonga::Database (number of their
+ * tables and columns in {Groonga::Database} (number of their
  * names equals to number of keys to be managed by
  * Groonga::DoubleArrayTrie) will be less than number of
  * records of user defined tables.
  *
  * Groonga::DoubleArrayTrie supports exact match search,
  * predictive search and common prefix search like
- * Groonga::PatriciaTrie. It also supports cursor API.
+ * {Groonga::PatriciaTrie} . It also supports cursor API.
  */
 
 /*
@@ -289,8 +289,8 @@ rb_grn_double_array_trie_s_create (int argc, VALUE *argv, VALUE klass)
 
 /*
  * _key_ にマッチするレコードのIDがキーに入っている
- * Groonga::Hashを返す。マッチするレコードがない場合は空の
- * Groonga::Hashが返る。
+ * {Groonga::Hash} を返す。マッチするレコードがない場合は空の
+ * {fGroonga::Hash} が返る。
  * _options_ で +:result+ を指定することにより、そのテーブルにマッ
  * チしたレコードIDがキーのレコードを追加することができる。
  * +:result+ にテーブルを指定した場合は、そのテーブルが返る。
