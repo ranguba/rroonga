@@ -257,13 +257,10 @@ rb_grn_table_cursor_each (VALUE self)
 }
 
 /*
- * Document-method: close
- *
- * call-seq:
- *   cursor.close
- *
  * カーソルが使用しているリソースを開放する。これ以降カーソルを
  * 使うことはできない。
+ *
+ * @overload close
  */
 
 /*
