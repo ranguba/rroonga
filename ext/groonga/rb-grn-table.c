@@ -1311,7 +1311,7 @@ rb_grn_table_get_value (VALUE self, VALUE rb_id)
 /*
  * _table_ の _id_ に対応する値を返す。
  *
- * <tt>:id => true</tt>が指定できるのは利便性のため。
+ * @:id => true@ が指定できるのは利便性のため。
  * Groonga::ArrayでもGroonga::HashやGroonga::PatriciaTrieと
  * 同じ引数で動くようになる。
  *
@@ -1371,7 +1371,7 @@ rb_grn_table_set_value (VALUE self, VALUE rb_id, VALUE rb_value)
  * _table_ の _id_ に対応する値として _value_ 設定する。既存の値は
  * 上書きされる。
  *
- * <tt>:id => true</tt>が指定できるのは利便性のため。
+ * @:id => true@ が指定できるのは利便性のため。
  * Groonga::ArrayでもGroonga::HashやGroonga::PatriciaTrieと
  * 同じ引数で動くようになる。
  *
@@ -1420,7 +1420,7 @@ rb_grn_table_get_column_value (VALUE self, VALUE rb_id, VALUE rb_name)
 /*
  * _table_ の _id_ に対応するカラム _name_ の値を返す。
  *
- * <tt>:id => true</tt>が指定できるのは利便性のため。
+ * @:id => true@ が指定できるのは利便性のため。
  * Groonga::ArrayでもGroonga::HashやGroonga::PatriciaTrieと
  * 同じ引数で動くようになる。
  *
@@ -1476,7 +1476,7 @@ rb_grn_table_set_column_value (VALUE self, VALUE rb_id,
  * _table_ の _id_ に対応するカラム _name_ の値として _value_ 設定す
  * る。既存の値は上書きされる。
  *
- * <tt>:id => true</tt>が指定できるのは利便性のため。
+ * @:id => true@ が指定できるのは利便性のため。
  * Groonga::ArrayでもGroonga::HashやGroonga::PatriciaTrieと
  * 同じ引数で動くようになる。
  *
