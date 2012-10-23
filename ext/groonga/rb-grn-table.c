@@ -1780,25 +1780,25 @@ rb_grn_table_is_locked (int argc, VALUE *argv, VALUE self)
  *     @option options :syntax
  *       _query_ の構文。省略した場合は +:query+ 。
  *
- *       参考: Groonga::Expression#parse.
+ *       参考: {Groonga::Expression#parse} .
  *
  *     @option options :allow_pragma
  *       query構文時にプラグマを利用するかどうか。省略した場合は
  *       利用する。
  *
- *       参考: Groonga::Expression#parse.
+ *       参考: {Groonga::Expression#parse} .
  *
  *     @option options :allow_column
  *       query構文時にカラム指定を利用するかどうか。省略した場合
  *       は利用する。
  *
- *       参考: Groonga::Expression#parse.
+ *       参考: {Groonga::Expression#parse} .
  *
  *     @option options :allow_update
  *       script構文時に更新操作を利用するかどうか。省略した場合
  *       は利用する。
  *
- *     参考: Groonga::Expression#parse.
+ *     参考: {Groonga::Expression#parse} .
  *
  * @overload select(query, options)
  *   _query_ には「[カラム名]:[演算子][値]」という書式で条件を
