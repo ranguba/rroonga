@@ -1824,7 +1824,7 @@ rb_grn_table_is_locked (int argc, VALUE *argv, VALUE self)
  *
  *   @!macro table.select.options
  * @overload select(expression, options)
- *   _expression_ には既に作成済みのGroonga::Expressionを渡す
+ *   _expression_ には既に作成済みの {Groonga::Expression} を渡す。
  *
  *   @!macro table.select.options
  * @return [Groonga::Hash]
