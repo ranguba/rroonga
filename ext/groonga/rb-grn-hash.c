@@ -263,8 +263,8 @@ rb_grn_hash_s_create (int argc, VALUE *argv, VALUE klass)
 
 /*
  * _key_ にマッチするレコードのIDがキーに入っている
- * Groonga::Hashを返す。マッチするレコードがない場合は空の
- * Groonga::Hashが返る。
+ * {Groonga::Hash} を返す。マッチするレコードがない場合は空の
+ * {Groonga::Hash} が返る。
  *
  * _options_ で +:result+ を指定することにより、そのテーブルにマッ
  * チしたレコードIDがキーのレコードを追加することができる。
