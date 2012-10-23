@@ -204,10 +204,10 @@ rb_grn_table_inspect_content (VALUE self, VALUE inspected)
 }
 
 /*
- * call-seq:
- *   table.inspect -> String
- *
  * テーブルの中身を人に見やすい文字列で返す。
+ *
+ * @overload inspect
+ *   @return [String]
  */
 static VALUE
 rb_grn_table_inspect (VALUE self)
