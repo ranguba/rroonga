@@ -67,7 +67,7 @@ module Groonga
   class Table
 
     # ページネーション用便利メソッド。ページネーションをした
-    # い場合は #sort よりも #paginate の方が便利。
+    # い場合は {#sort} よりも #paginate の方が便利。
     #
     # 説明文（descriptionカラム）を「Ruby」で全文検索し、
     # 検索結果をスコアの高い順にソートして、10項目ずつ表示する
@@ -85,9 +85,9 @@ module Groonga
     #                                           :size => 10)
     # </pre>
     #
-    # #sort と違い、返されるTableオブジェクトにはPagination
-    # モジュールがextendされており、以下のようにページネーショ
-    # ン情報を取得できる。
+    # {#sort} と違い、返される {Table} オブジェクトには
+    # {Pagination} モジュールがextendされており、
+    # 以下のようにページネーション情報を取得できる。
     #
     # <pre>
     # !!!ruby
@@ -99,7 +99,7 @@ module Groonga
     # </pre>
     #
     # _sort_keys_ には ソートに用いる情報を指定する。
-    # 指定の仕方は #sort と同様なので、詳細は #sort を参照。
+    # 指定の仕方は {#sort} と同様なので、詳細は {#sort} を参照。
     #
     # _options_ に指定可能な値は以下の通り。
     #
