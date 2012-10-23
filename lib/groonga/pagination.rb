@@ -73,24 +73,30 @@ module Groonga
     # 検索結果をスコアの高い順にソートして、10項目ずつ表示する
     # 場合は以下のようになる。
     #
-    #   query = "Ruby"
-    #   entries = Groonga["entries"]
-    #   selected_entries = entries.select do |record|
-    #     entry.description =~ query
-    #   end
-    #   paged_entries = selected_entries.paginate([["_score", :desc]],
-    #                                             :page => 1,
-    #                                             :size => 10)
+    # <pre>
+    # !!!ruby
+    # query = "Ruby"
+    # entries = Groonga["entries"]
+    # selected_entries = entries.select do |record|
+    #   entry.description =~ query
+    # end
+    # paged_entries = selected_entries.paginate([["_score", :desc]],
+    #                                           :page => 1,
+    #                                           :size => 10)
+    # </pre>
     #
     # #sort と違い、返されるTableオブジェクトにはPagination
     # モジュールがextendされており、以下のようにページネーショ
     # ン情報を取得できる。
     #
-    #   puts "#{paged_entries.n_records}件ヒット"
-    #   puts "#{paged_entries.start_offset}-#{paged_entries.end_offset}件を表示"
-    #   paged_entries.each do |entry|
-    #     puts entry.description
-    #   end
+    # <pre>
+    # !!!ruby
+    # puts "#{paged_entries.n_records}件ヒット"
+    # puts "#{paged_entries.start_offset}-#{paged_entries.end_offset}件を表示"
+    # paged_entries.each do |entry|
+    #   puts entry.description
+    # end
+    # </pre>
     #
     # _sort_keys_ には ソートに用いる情報を指定する。
     # 指定の仕方は #sort と同様なので、詳細は #sort を参照。
