@@ -149,10 +149,9 @@ rb_grn_view_s_create (int argc, VALUE *argv, VALUE klass)
 }
 
 /*
- * call-seq:
- *   view.add_table(table)
- *
  * _table_ をビューからアクセスできるようにする。
+ *
+ * @overload add_table(table)
  */
 static VALUE
 rb_grn_view_add_table (VALUE self, VALUE rb_table)
