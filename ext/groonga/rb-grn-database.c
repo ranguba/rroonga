@@ -521,12 +521,9 @@ rb_grn_database_is_locked (VALUE self)
 }
 
 /*
- * Document-method: touch
- *
- * call-seq:
- *   database.touch
- *
  * _database_ の最終更新時刻を現在時刻にする。
+ *
+ * @overload touch
  */
 static VALUE
 rb_grn_database_touch (VALUE self)
