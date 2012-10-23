@@ -970,10 +970,9 @@ rb_grn_table_each (int argc, VALUE *argv, VALUE self)
 }
 
 /*
- * call-seq:
- *   table.delete(id)
- *
  * テーブルの _id_ に対応するレコードを削除する。
+ *
+ * @overload delete(id)
  */
 VALUE
 rb_grn_table_delete (VALUE self, VALUE rb_id)
