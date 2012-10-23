@@ -1752,6 +1752,7 @@ rb_grn_table_is_locked (int argc, VALUE *argv, VALUE self)
  *     p result.collect {|record| record.content}
  *       # => ["Hello Good-bye!", "Hello World"]
  *     </pre>
+ *
  *   @!macro [new] table.select.options
  *     @param options [::Hash] The name and value
  *       pairs. Omitted names are initialized as the default value.
