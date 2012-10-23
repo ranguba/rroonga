@@ -2003,12 +2003,11 @@ rb_grn_table_support_key_p (VALUE self)
 }
 
 /*
- * call-seq:
- *   table.support_sub_records? -> true/false
- *
  * グループ化したとき、テーブルにグループに含まれるレコード
  * 数を格納できる場合は +true+ 、格納できない場合は +false+ を返
  * す。
+ *
+ * @overload support_sub_records?
  */
 static VALUE
 rb_grn_table_support_sub_records_p (VALUE self)
