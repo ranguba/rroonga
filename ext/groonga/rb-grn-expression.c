@@ -298,7 +298,7 @@ rb_grn_expression_append_operation (VALUE self, VALUE rb_operation,
  *       +:query+と同様 =:
  *     - +:script+ :=
  *       「[カラム名] == [値]」というようにECMAScript風の構文を使う。
- *       参考: grn式のscript形式（link:text/expression_rdoc.html） =:
+ *       参考: "Groongaのscript構文のドキュメント":http://groonga.org/ja/docs/reference/grn_expr/script_syntax.html =:
  *   @option options :allow_pragma
  *     _query_ の構文に query を用いているとき（ +:syntax+
  *     オプション参照）、「*E-1」というようにクエリの先頭で
