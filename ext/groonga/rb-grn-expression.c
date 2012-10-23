@@ -293,7 +293,7 @@ rb_grn_expression_append_operation (VALUE self, VALUE rb_operation,
  *       「文字列1 OR 文字列2」で「"文字列1"あるいは"文字列2"
  *       にマッチという検索エンジンで利用できるような構文を使
  *       う。
- *       参考: grn式のquery形式（link:text/expression_rdoc.html） =:
+ *       参考: "Groongaのクエリ構文のドキュメント":http://groonga.org/ja/docs/reference/grn_expr/query_syntax.html =:
  *     - +nil+ :=
  *       +:query+と同様 =:
  *     - +:script+ :=
@@ -307,7 +307,7 @@ rb_grn_expression_append_operation (VALUE self, VALUE rb_operation,
  *
  *     デフォルトではプラグマを利用できる。
  *
- *     参考: grn式のquery形式（link:text/expression_rdoc.html）
+ *     参考: "Groongaのクエリ構文のドキュメント":http://groonga.org/ja/docs/reference/grn_expr/query_syntax.html
  *   @option options :allow_column
  *     _query_ の構文にqueryを用いているとき（ +:syntax+ オプショ
  *     ン参照）、「カラム名:値」というようにカラム名を指定した
@@ -316,7 +316,7 @@ rb_grn_expression_append_operation (VALUE self, VALUE rb_operation,
  *
  *     デフォルトではカラム名を指定した条件式を利用できる。
  *
- *     参考: grn式のquery形式（link:text/expression_rdoc.html）
+ *     参考: "Groongaのクエリ構文のドキュメント":http://groonga.org/ja/docs/reference/grn_expr/query_syntax.html
  *   @option options :allow_update
  *     _query_ の構文にscriptを用いているとき（ +:syntax+ オプショ
  *     ン参照）、「カラム名 = 値」というように更新操作を利用で
@@ -325,7 +325,7 @@ rb_grn_expression_append_operation (VALUE self, VALUE rb_operation,
  *
  *     デフォルトでは更新操作を利用できる。
  *
- *     参考: grn式のscript形式（link:text/expression_rdoc.html）
+ *     参考: "Groongaのクエリ構文のドキュメント":http://groonga.org/ja/docs/reference/grn_expr/query_syntax.html
  */
 static VALUE
 rb_grn_expression_parse (int argc, VALUE *argv, VALUE self)
