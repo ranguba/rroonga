@@ -70,12 +70,12 @@ VALUE rb_cGrnDoubleArrayTrie;
  *   #（キーの種類を表すオブジェクトは文字列で指定。）
  *   Groonga::DoubleArrayTrie.create(:key_type => "ShortText")
  *
- *   #キーとして<tt>Bookmarks</tt>テーブルのレコードを使用す
+ *   #キーとしてBookmarksテーブルのレコードを使用す
  *   #る無名一時テーブルを生成する。
  *   bookmarks = Groonga::DoubleArrayTrie.create(:name => "Bookmarks")
  *   Groonga::DoubleArrayTrie.create(:key_type => bookmarks)
  *
- *   #キーとして<tt>Bookmarks</tt>テーブルのレコードを使用す
+ *   #キーとしてBookmarksテーブルのレコードを使用す
  *   #る無名一時テーブルを生成する。
  *   #（テーブルは文字列で指定。）
  *   Groonga::DoubleArrayTrie.create(:name => "Bookmarks")

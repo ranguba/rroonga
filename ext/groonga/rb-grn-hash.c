@@ -55,12 +55,12 @@ VALUE rb_cGrnHash;
  *   （キーの種類を表すオブジェクトは文字列で指定。）
  *   Groonga::Hash.create(:key_type => "ShortText")
  *
- *   #キーとして<tt>Bookmarks</tt>テーブルのレコードを使用す
+ *   #キーとしてBookmarksテーブルのレコードを使用す
  *   る無名一時テーブルを生成する。
  *   bookmarks = Groonga::Hash.create(:name => "Bookmarks")
  *   Groonga::Hash.create(:key_type => bookmarks)
  *
- *   #キーとして<tt>Bookmarks</tt>テーブルのレコードを使用す
+ *   #キーとしてBookmarksテーブルのレコードを使用す
  *   #る無名一時テーブルを生成する。（テーブルは文字列で指定。）
  *   Groonga::Hash.create(:name => "Bookmarks")
  *   Groonga::Hash.create(:key_type => "Bookmarks")
