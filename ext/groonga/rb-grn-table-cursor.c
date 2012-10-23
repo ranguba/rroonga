@@ -229,10 +229,10 @@ rb_grn_table_cursor_next (VALUE self)
 }
 
 /*
- * call-seq:
- *   table_cursor.each {|record| ...}
- *
  * カーソルの範囲内にあるレコードを順番にブロックに渡す。
+ *
+ * @overload each
+ *   @yield [record]
  */
 static VALUE
 rb_grn_table_cursor_each (VALUE self)
