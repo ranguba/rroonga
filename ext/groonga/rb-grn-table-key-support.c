@@ -593,10 +593,10 @@ rb_grn_table_key_support_set_value (int argc, VALUE *argv, VALUE self)
 }
 
 /*
- * call-seq:
- *   table.default_tokenizer -> nilまたはGroonga::Procedure
- *
  * Groonga::IndexColumnで使用するトークナイザを返す。
+ *
+ * @overload default_tokenizer
+ *   @return [nilまたはGroonga::Procedure]
  */
 static VALUE
 rb_grn_table_key_support_get_default_tokenizer (VALUE self)
