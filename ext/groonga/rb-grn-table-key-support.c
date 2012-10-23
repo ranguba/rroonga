@@ -661,11 +661,10 @@ rb_grn_table_key_support_set_default_tokenizer (VALUE self, VALUE rb_tokenizer)
 }
 
 /*
- * call-seq:
- *   table.normalize_key? -> true/false
- *
  * キーを正規化する場合は +true+ 、正規化しない場合は +false+ を返
  * す。
+ *
+ * @overload normalize_key?
  */
 static VALUE
 rb_grn_table_key_normalize_key_p (VALUE self)
