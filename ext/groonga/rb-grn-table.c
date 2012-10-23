@@ -1978,12 +1978,11 @@ rb_grn_table_difference_bang (VALUE self, VALUE rb_other)
 }
 
 /*
- * call-seq:
- *   table.merge!(other) -> Groonga::Table
- *
  * キーを比較し、 _other_ にも登録されている _table_ のレコード
  * のスコアを _other_ のスコアと同値にする。
  *
+ * @overload merge!(other)
+ *   @return [Groonga::Table]
  */
 static VALUE
 rb_grn_table_merge_bang (VALUE self, VALUE rb_other)
