@@ -60,7 +60,7 @@ VALUE rb_cGrnView;
  *
  * @overload create(options={})
  *   @return [Groonga::View]
- *   @!macro [new] view.create_options
+ *   @!macro [new] view.create.options
  *     @param options [::Hash] The name and value
  *       pairs. Omitted names are initialized as the default value
  *     @option options :context (Groonga::Context.default)
@@ -80,10 +80,10 @@ VALUE rb_cGrnView;
  *       場合は自動的にパスが付加される。 +:context+ で指定した
  *       {Groonga::Context} に結びついているデータベースが一時デー
  *       タベースの場合は例外が発生する。
- *   @!macro view.create_options
+ *   @!macro view.create.options
  * @overload create(options={})
  *   @yield [table]
- *   @!macro view.create_options
+ *   @!macro view.create.options
  */
 static VALUE
 rb_grn_view_s_create (int argc, VALUE *argv, VALUE klass)
