@@ -787,7 +787,7 @@ rb_grn_table_open_grn_cursor (int argc, VALUE *argv, VALUE self,
  *     +:key+ 指定するとキー順にレコードを取り出す。ただし、
  *     Groonga::PatriciaTrieにしか使えない。（PatriciaTrieのデ
  *     フォルト）
- *   @option options :greater_than The greater_than
+ *   @option options :greater_than
  *     +true+ を指定すると +:min+ で指定した値に一致した [ +key+ ] を
  *     範囲に含まない。
  *   @option options :less_than
@@ -819,7 +819,7 @@ rb_grn_table_open_grn_cursor (int argc, VALUE *argv, VALUE self,
  *     +:key+ 指定するとキー順にレコードを取り出す。ただし、
  *     Groonga::PatriciaTrieにしか使えない。（PatriciaTrieのデ
  *     フォルト）
- *   @option options :greater_than The greater_than
+ *   @option options :greater_than
  *     +true+ を指定すると +:min+ で指定した値に一致した [ +key+ ] を
  *     範囲に含まない。
  *   @option options :less_than
@@ -871,7 +871,7 @@ rb_grn_table_get_records (int argc, VALUE *argv, VALUE self)
  * テーブルに登録されているレコード数を返す。
  *
  * @overload size
- *   @return [Integer] レコード数
+ *   @return [Integer]
  */
 static VALUE
 rb_grn_table_get_size (VALUE self)
