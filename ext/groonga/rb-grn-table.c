@@ -665,10 +665,9 @@ rb_grn_table_get_columns (int argc, VALUE *argv, VALUE self)
 }
 
 /*
- * call-seq:
- *   table.have_column?(name) -> true/false
- *
  * テーブルが _name_ カラムを持っている場合は +true+ を返す。
+ *
+ * @overload have_column?(name)
  */
 static VALUE
 rb_grn_table_have_column (VALUE self, VALUE rb_name)
