@@ -413,12 +413,9 @@ rb_grn_database_each (int argc, VALUE *argv, VALUE self)
 }
 
 /*
- * Document-method: unlock
- *
- * call-seq:
- *   database.unlock
- *
  * _database_ のロックを解除する。
+ *
+ * @overload unlock
  */
 static VALUE
 rb_grn_database_unlock (VALUE self)
