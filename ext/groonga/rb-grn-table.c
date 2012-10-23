@@ -1269,14 +1269,12 @@ rb_grn_table_group (int argc, VALUE *argv, VALUE self)
 }
 
 /*
- * Document-method: []
- *
- * call-seq:
- *   table[id] -> Groonga::Record
- *
  * _table_ の _id_ に対応するGroonga::Recordを返す。
  *
  * 0.9.0から値ではなくGroonga::Recordを返すようになった。
+ *
+ * @overload [](id)
+ *   @return [Groonga::Record]
  */
 VALUE
 rb_grn_table_array_reference (VALUE self, VALUE rb_id)
