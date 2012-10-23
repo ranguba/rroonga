@@ -1168,13 +1168,14 @@ rb_grn_table_sort (int argc, VALUE *argv, VALUE self)
 }
 
 /*
- * call-seq:
- *   table.group([key1, key2, ...], options={}) -> [Groonga::Hash, ...]
- *   table.group(key, options={}) -> Groonga::Hash
- *
  * _table_ のレコードを _key1_ , _key2_ , _..._ で指定したキーの
  * 値でグループ化する。多くの場合、キーにはカラムを指定する。
  * カラムはカラム名（文字列）でも指定可能。
+ *
+ * @overload group([key1, key2, ...], options={})
+ *   @return [[Groonga::Hash, ...]]
+ * @overload group(key, options={})
+ *   @return [Groonga::Hash]
  */
 static VALUE
 rb_grn_table_group (int argc, VALUE *argv, VALUE self)
