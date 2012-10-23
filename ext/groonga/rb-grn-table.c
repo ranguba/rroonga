@@ -1938,12 +1938,11 @@ rb_grn_table_set_operation_bang (VALUE self, VALUE rb_other,
 }
 
 /*
- * call-seq:
- *   table.union!(other) -> Groonga::Table
- *
  * キーを比較し、 _table_ には登録されていない _other_ のレコー
  * ドを _table_ に作成する。
  *
+ * @overload union!(other)
+ *   @return [Groonga::Table]
  */
 static VALUE
 rb_grn_table_union_bang (VALUE self, VALUE rb_other)
