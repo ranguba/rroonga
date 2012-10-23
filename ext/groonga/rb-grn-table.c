@@ -2022,14 +2022,13 @@ rb_grn_table_support_sub_records_p (VALUE self)
 }
 
 /*
- * call-seq:
- *   table.exist?(id) -> true/false
- *
  * _table_ に _id_ で指定したIDのレコードが存在する場合は +true+ 、
  * 存在しない場合は +false+ を返す。
  *
  * 注意: 実行には相応のコストがかかるのであまり頻繁に呼ばな
  * いようにして下さい。
+ *
+ * @overload exist?(id)
  */
 static VALUE
 rb_grn_table_exist_p (VALUE self, VALUE id)
