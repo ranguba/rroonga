@@ -46,6 +46,7 @@ VALUE rb_cGrnDoubleArrayTrie;
  * It creates a table that manages records by double array trie.
  * ブロックを指定すると、そのブロックに生成したテーブルが渡さ
  * れ、ブロックを抜けると自動的にテーブルが破棄される。
+ *
  * @example
  *   #無名一時テーブルを生成する。
  *   Groonga::DoubleArrayTrie.create
@@ -293,6 +294,7 @@ rb_grn_double_array_trie_s_create (int argc, VALUE *argv, VALUE klass)
  * _options_ で +:result+ を指定することにより、そのテーブルにマッ
  * チしたレコードIDがキーのレコードを追加することができる。
  * +:result+ にテーブルを指定した場合は、そのテーブルが返る。
+ *
  * @example 複数のキーで検索し、結果を1つのテーブルに集める。
  *   result = nil
  *   keys = ["morita", "gunyara-kun", "yu"]
