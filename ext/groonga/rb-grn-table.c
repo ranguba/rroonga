@@ -240,13 +240,13 @@ rb_grn_table_inspect (VALUE self)
  *     カラムの値の格納方法について指定する。省略した場合は、
  *     +:scalar+ になる。
  *
- *     [+:scalar+] スカラ値(単独の値)を格納する。
- *     [+:vector+] 値の配列を格納する。
+ *     - +:scalar+ := スカラ値(単独の値)を格納する。
+ *     - +:vector+ := 値の配列を格納する。
  *   @option options :compress
  *     値の圧縮方法を指定する。省略した場合は、圧縮しない。
  *
- *     [+:zlib+] 値をzlib圧縮して格納する。
- *     [+:lzo+] 値をlzo圧縮して格納する。
+ *     - +:zlib+ := 値をzlib圧縮して格納する。
+ *     - +:lzo+ := 値をlzo圧縮して格納する。
  *
  * @return [Groonga::FixSizeColumn or Groonga::VariableSizeColumn]
  */
