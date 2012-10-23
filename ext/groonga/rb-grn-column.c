@@ -248,6 +248,12 @@ rb_grn_column_get_local_name (VALUE self)
  *
  *       参考: {Groonga::Expression#parse} .
  *
+ *     @option options :allow_leading_not
+ *       指定語句の先頭に-を付けることで指定した語句を含まないレコードの
+ *       検索を有効にするかどうかを指定する。省略した場合は無効にする。
+ *
+ *       参考: {Groonga::Expression#parse} .
+ *
  *   @!macro column.select.options
  * @overload select(query, options)
  *   @param [String] query 条件の指定
