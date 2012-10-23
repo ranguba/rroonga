@@ -485,12 +485,9 @@ rb_grn_database_lock (int argc, VALUE *argv, VALUE self)
 }
 
 /*
- * Document-method: clear_lock
- *
- * call-seq:
- *   database.clear_lock
- *
  * _database_ のロックを強制的に解除する。
+ *
+ * @overload clear_lock
  */
 static VALUE
 rb_grn_database_clear_lock (VALUE self)
