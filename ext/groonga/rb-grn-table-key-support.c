@@ -680,11 +680,10 @@ rb_grn_table_key_normalize_key_p (VALUE self)
 }
 
 /*
- * call-seq:
- *   table.support_key? -> true/false
- *
  * テーブルでキーを使えるなら +true+ 、使えないなら +false+ を返
- * す。キーを使えないテーブルはGroonga::Arrayだけ。
+ * す。キーを使えないテーブルは {Groonga::Array} だけ。
+ *
+ * @overload support_key?
  */
 static VALUE
 rb_grn_table_key_support_support_key_p (VALUE self)
