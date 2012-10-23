@@ -504,12 +504,9 @@ rb_grn_database_clear_lock (VALUE self)
 }
 
 /*
- * Document-method: locked?
- *
- * call-seq:
- *   database.locked?
- *
  * _database_ がロックされていれば +true+ を返す。
+ *
+ * @overload locked?
  */
 static VALUE
 rb_grn_database_is_locked (VALUE self)
