@@ -1671,7 +1671,7 @@ module Groonga
         view
       end
 
-      # 名前が_table_のテーブルをビューに追加する。
+      # 名前が _table_ のテーブルをビューに追加する。
       def add(table)
         table = table.to_s if table.is_a?(Symbol)
         @tables << table
