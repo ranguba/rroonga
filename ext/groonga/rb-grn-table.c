@@ -1418,17 +1418,16 @@ rb_grn_table_get_column_value (VALUE self, VALUE rb_id, VALUE rb_name)
 }
 
 /*
- * Document-method: column_value
- *
- * call-seq:
- *   table.column_value(id, name) -> 値
- *   table.column_value(id, name, :id => true) -> 値
- *
  * _table_ の _id_ に対応するカラム _name_ の値を返す。
  *
  * <tt>:id => true</tt>が指定できるのは利便性のため。
  * Groonga::ArrayでもGroonga::HashやGroonga::PatriciaTrieと
  * 同じ引数で動くようになる。
+ *
+ * @overload column_value(id, name)
+ *   @return [値]
+ * @overload column_value(id, name, :id => true)
+ *   @return [値]
  */
 static VALUE
 rb_grn_table_get_column_value_convenience (int argc, VALUE *argv, VALUE self)
