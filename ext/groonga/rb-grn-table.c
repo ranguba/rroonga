@@ -1368,18 +1368,15 @@ rb_grn_table_set_value (VALUE self, VALUE rb_id, VALUE rb_value)
 }
 
 /*
- * Document-method: set_value
- *
- * call-seq:
- *   table.set_value(id, value)
- *   table.set_value(id, value, :id => true)
- *
  * _table_ の _id_ に対応する値として _value_ 設定する。既存の値は
  * 上書きされる。
  *
  * <tt>:id => true</tt>が指定できるのは利便性のため。
  * Groonga::ArrayでもGroonga::HashやGroonga::PatriciaTrieと
  * 同じ引数で動くようになる。
+ *
+ * @overload set_value(id, value)
+ * @overload set_value(id, value, :id => true)
  */
 static VALUE
 rb_grn_table_set_value_convenience (int argc, VALUE *argv, VALUE self)
