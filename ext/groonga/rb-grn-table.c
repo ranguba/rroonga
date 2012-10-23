@@ -889,10 +889,9 @@ rb_grn_table_get_size (VALUE self)
 }
 
 /*
- * call-seq:
- *   table.empty? -> true/false
- *
  * テーブルにレコードが登録されていなければ +true+ を返す。
+ *
+ * @overload empty?
  */
 static VALUE
 rb_grn_table_empty_p (VALUE self)
