@@ -232,6 +232,7 @@ rb_grn_database_s_create (int argc, VALUE *argv, VALUE klass)
  * 既存のデータベースを開く。ブロックを指定した場合はブロッ
  * クに開いたデータベースを渡し、ブロックを抜けるときに閉じ
  * る。
+ *
  * @overload new(path, options=nil)
  *   @param options [::Hash] The name and value
  *     pairs. Omitted names are initialized as the default value.
@@ -284,6 +285,7 @@ rb_grn_database_initialize (int argc, VALUE *argv, VALUE self)
  * 既存のデータベースを開く。ブロックを指定した場合はブロッ
  * クに開いたデータベースを渡し、ブロックを抜けるときに閉じ
  * る。 _options_ にはハッシュでオプションを指定する。
+ *
  * @overload open(path, options=nil)
  *   @return [Groonga::Database]
  *   @param options [::Hash] The name and value
@@ -313,6 +315,7 @@ rb_grn_database_s_open (int argc, VALUE *argv, VALUE klass)
 
 /*
  * データベース内のオブジェクトを順番にブロックに渡す。
+ *
  * @example すべてのオブジェクトの名前を表示する:
  *   database.each do |object|
  *     p object.name
@@ -540,6 +543,7 @@ rb_grn_database_touch (VALUE self)
 
 /*
  * Defrags all variable size columns in the database.
+ *
  * @return [Integer] the number of defraged segments
  * @overload defrag(options={})
  *   @param [::Hash] options option for defrag
