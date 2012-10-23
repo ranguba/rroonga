@@ -59,10 +59,10 @@ rb_grn_variable_deconstruct (RbGrnVariable *rb_grn_variable,
 }
 
 /*
- * call-seq:
- *   variable.value -> Groonga::Object
- *
  * 変数の値を返す。
+ *
+ * @overload value
+ *   @return [Groonga::Object]
  */
 static VALUE
 rb_grn_variable_get_value (VALUE self)
