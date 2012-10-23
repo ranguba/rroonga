@@ -235,10 +235,9 @@ rb_grn_table_key_support_get_key (VALUE self, VALUE rb_id)
 }
 
 /*
- * call-seq:
- *   table.has_key?(key) -> true/false
- *
  * テーブルに主キーが _key_ のレコードがあるならtrueを返す。
+ *
+ * @overload has_key?(key)
  */
 static VALUE
 rb_grn_table_key_support_has_key (VALUE self, VALUE rb_key)
