@@ -180,7 +180,7 @@ reset_floating_objects (VALUE rb_context)
  *     となる。
  *   @option options :context (Groonga::Context.default)
  *     データベースを結びつけるコンテキスト。省略すると
- *     Groonga::Context.defaultを利用する。
+ *     {Groonga::Context.default} を利用する。
  */
 static VALUE
 rb_grn_database_s_create (int argc, VALUE *argv, VALUE klass)
@@ -238,14 +238,14 @@ rb_grn_database_s_create (int argc, VALUE *argv, VALUE klass)
  *     pairs. Omitted names are initialized as the default value.
  *   @option options :context (Groonga::Context.default)
  *     データベースを結びつけるコンテキスト。省略すると
- *     Groonga::Context.defaultを利用する。
+ *     {Groonga::Context.default} を利用する。
  *   @return [Groonga::Database]
  * @overload new(path, options=nil)
  *   @param options [::Hash] The name and value
  *     pairs. Omitted names are initialized as the default value.
  *   @option options :context (Groonga::Context.default)
  *     データベースを結びつけるコンテキスト。省略すると
- *     Groonga::Context.defaultを利用する。
+ *     {Groonga::Context.default} を利用する。
  *   @yield [database]
  *   @yieldparam [Groonga::Database] database 開いたデータベース
  */
@@ -439,7 +439,7 @@ rb_grn_database_unlock (VALUE self)
 
 /*
  * _database_ をロックする。ロックに失敗した場合は
- * Groonga::ResourceDeadlockAvoided例外が発生する。
+ * {Groonga::ResourceDeadlockAvoided} 例外が発生する。
  *
  * @overload lock(options={})
  *   @param [::Hash] options 利用可能なオプションは以下の通り。
