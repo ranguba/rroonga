@@ -1309,17 +1309,16 @@ rb_grn_table_get_value (VALUE self, VALUE rb_id)
 }
 
 /*
- * Document-method: value
- *
- * call-seq:
- *   table.value(id) -> 値
- *   table.value(id, :id => true) -> 値
- *
  * _table_ の _id_ に対応する値を返す。
  *
  * <tt>:id => true</tt>が指定できるのは利便性のため。
  * Groonga::ArrayでもGroonga::HashやGroonga::PatriciaTrieと
  * 同じ引数で動くようになる。
+ *
+ * @overload value(id)
+ *   @return [値]
+ * @overload value(id, :id => true)
+ *   @return [値]
  */
 static VALUE
 rb_grn_table_get_value_convenience (int argc, VALUE *argv, VALUE self)
