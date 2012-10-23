@@ -21,7 +21,7 @@ module Groonga
 
   # groongaのスキーマ（データ構造）を管理するクラス。
   #
-  # Groonga::Schemaを使うことにより簡単にテーブルやカラムを
+  # {Groonga::Schema} を使うことにより簡単にテーブルやカラムを
   # 追加・削除することができる。
   #
   # !http://qwik.jp/senna/senna2.files/rect4605.png!
@@ -1632,8 +1632,8 @@ module Groonga
       end
     end
 
-    # スキーマ定義時にGroonga::Schema.create_viewや
-    # Groonga::Schema#create_viewからブロックに渡されてくる
+    # スキーマ定義時に {Groonga::Schema.create_view} や
+    # {Groonga::Schema#create_view} からブロックに渡されてくる
     # オブジェクト
     class ViewDefinition
       # ビューの名前
