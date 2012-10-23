@@ -202,10 +202,10 @@ rb_grn_table_cursor_delete (VALUE self)
 }
 
 /*
- * call-seq:
- *   table_cursor.next -> Groonga::Record
- *
  * カレントレコードを一件進めてそのレコードを返す。
+ *
+ * @overload next
+ *   @return [Groonga::Record]
  */
 static VALUE
 rb_grn_table_cursor_next (VALUE self)
