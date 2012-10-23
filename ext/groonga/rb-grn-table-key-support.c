@@ -168,14 +168,15 @@ rb_grn_table_key_support_get (VALUE self, VALUE rb_key)
 }
 
 /*
- * call-seq:
- *   table.id -> テーブルID
- *   table.id(key) -> レコードID
- *
  * _key_ を指定しない場合はテーブルのIDを返す。
  *
  * _key_ を指定した場合はテーブルの _key_ に対応するレコードの
  * IDを返す。
+ *
+ * @overload id
+ *   @return [テーブルID]
+ * @overload id(key)
+ *   @return [レコードID]
  */
 static VALUE
 rb_grn_table_key_support_get_id (int argc, VALUE *argv, VALUE self)
