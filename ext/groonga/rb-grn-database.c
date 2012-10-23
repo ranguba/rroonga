@@ -135,13 +135,10 @@ rb_grn_database_finalizer (grn_ctx *context,
 }
 
 /*
- * Document-method: close
- *
- * call-seq:
- *   database.close
- *
  * _database_ が使用しているリソースを開放する。これ以降 _database_ を
  * 使うことはできない。
+ *
+ * @overload close
  */
 static VALUE
 rb_grn_database_close (VALUE self)
