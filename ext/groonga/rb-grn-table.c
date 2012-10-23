@@ -931,13 +931,17 @@ rb_grn_table_truncate (VALUE self)
 }
 
 /*
- * call-seq:
- *   table.each             {|record| } -> nil
- *   table.each(options={}) {|record| } -> nil
- *
  * テーブルに登録されているレコードを順番にブロックに渡す。
  *
- * _options_ is the same as #open_cursor's one.
+ * _options_ is the same as {#open_cursor} 's one.
+ *
+ * @overload each
+ *   @!macro [new] table.each.metadata
+ *     @yield [record]
+ *     @return [nil]
+ *   @!macro table.each.metadata
+ * @overload each(options={})
+ *   @!macro table.each.metadata
  */
 static VALUE
 rb_grn_table_each (int argc, VALUE *argv, VALUE self)
