@@ -508,11 +508,11 @@ ruby_object_to_column_name (VALUE rb_name,
 }
 
 /*
- * call-seq:
- *   table.column(name) -> Groonga::Column or nil
- *
  * テーブルの _name_ に対応するカラムを返す。カラムが存在しな
  * い場合は +nil+ を返す。
+ *
+ * @overload column(name)
+ *   @return [Groonga::Column or nil]
  */
 VALUE
 rb_grn_table_get_column (VALUE self, VALUE rb_name)
