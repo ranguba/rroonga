@@ -60,46 +60,30 @@ VALUE rb_cGrnView;
  *
  * @overload create(options={})
  *   @return [Groonga::View]
- *   @param options [::Hash] The name and value
- *     pairs. Omitted names are initialized as the default value
- *   @option options :context (Groonga::Context.default)
- *     ビューが利用するGroonga::Context。
- *   @option options :name
- *     ビューの名前。名前をつけると、Groonga::Context#[]に名
- *     前を指定してビューを取得することができる。省略すると
- *     無名ビューになり、ビューIDでのみ取得できる。
- *   @option options :path
- *     ビューを保存するパス。パスを指定すると永続ビューとな
- *     り、プロセス終了後もレコードは保持される。次回起動時に
- *     Groonga::View.openで保存されたビューを利用することが
- *     できる。省略すると一時ビューになり、プロセスが終了する
- *     とビューは破棄される。
- *   @option options :persistent
- *     +true+ を指定すると永続ビューとなる。 +path+ を省略した
- *     場合は自動的にパスが付加される。 +:context+ で指定した
- *     Groonga::Contextに結びついているデータベースが一時デー
- *     タベースの場合は例外が発生する。
+ *   @!macro [new] view.create_options
+ *     @param options [::Hash] The name and value
+ *       pairs. Omitted names are initialized as the default value
+ *     @option options :context (Groonga::Context.default)
+ *       ビューが利用するGroonga::Context。
+ *     @option options :name
+ *       ビューの名前。名前をつけると、Groonga::Context#[]に名
+ *       前を指定してビューを取得することができる。省略すると
+ *       無名ビューになり、ビューIDでのみ取得できる。
+ *     @option options :path
+ *       ビューを保存するパス。パスを指定すると永続ビューとな
+ *       り、プロセス終了後もレコードは保持される。次回起動時に
+ *       Groonga::View.openで保存されたビューを利用することが
+ *       できる。省略すると一時ビューになり、プロセスが終了する
+ *       とビューは破棄される。
+ *     @option options :persistent
+ *       +true+ を指定すると永続ビューとなる。 +path+ を省略した
+ *       場合は自動的にパスが付加される。 +:context+ で指定した
+ *       Groonga::Contextに結びついているデータベースが一時デー
+ *       タベースの場合は例外が発生する。
+ *   @!macro view.create_options
  * @overload create(options={})
  *   @yield [table]
- *   @param options [::Hash] The name and value
- *     pairs. Omitted names are initialized as the default value
- *   @option options :context (Groonga::Context.default)
- *     ビューが利用するGroonga::Context。
- *   @option options :name
- *     ビューの名前。名前をつけると、Groonga::Context#[]に名
- *     前を指定してビューを取得することができる。省略すると
- *     無名ビューになり、ビューIDでのみ取得できる。
- *   @option options :path
- *     ビューを保存するパス。パスを指定すると永続ビューとな
- *     り、プロセス終了後もレコードは保持される。次回起動時に
- *     Groonga::View.openで保存されたビューを利用することが
- *     できる。省略すると一時ビューになり、プロセスが終了する
- *     とビューは破棄される。
- *   @option options :persistent
- *     +true+ を指定すると永続ビューとなる。 +path+ を省略した
- *     場合は自動的にパスが付加される。 +:context+ で指定した
- *     Groonga::Contextに結びついているデータベースが一時デー
- *     タベースの場合は例外が発生する。
+ *   @!macro view.create_options
  */
 static VALUE
 rb_grn_view_s_create (int argc, VALUE *argv, VALUE klass)
