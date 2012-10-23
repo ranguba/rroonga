@@ -175,11 +175,11 @@ rb_grn_view_add_table (VALUE self, VALUE rb_table)
 }
 
 /*
- * call-seq:
- *   view.each {|record| ...}
- *
  * ビューに登録されているテーブルのレコードを順番にブロック
  * に渡す。
+ *
+ * @overload each
+ *   @yield [record]
  */
 static VALUE
 rb_grn_view_each (VALUE self)
