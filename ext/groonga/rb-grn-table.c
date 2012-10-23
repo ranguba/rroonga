@@ -1965,12 +1965,11 @@ rb_grn_table_intersection_bang (VALUE self, VALUE rb_other)
 }
 
 /*
- * call-seq:
- *   table.difference!(other) -> Groonga::Table
- *
  * キーを比較し、 _other_ にも登録されているレコードを _table_
  * から削除する。
  *
+ * @overload difference!(other)
+ *   @return [Groonga::Table]
  */
 static VALUE
 rb_grn_table_difference_bang (VALUE self, VALUE rb_other)
