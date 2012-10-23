@@ -589,11 +589,11 @@ rb_grn_table_get_column_surely (VALUE self, VALUE rb_name)
 }
 
 /*
- * call-seq:
- *   table.columns(name=nil) -> Groonga::Columnの配列
- *
  * テーブルの全てのカラムを返す。 _name_ が指定された場合はカ
  * ラム名の先頭が _name_ で始まるカラムを返す。
+ *
+ * @overload columns(name=nil)
+ *   @return [Groonga::Columnの配列]
  */
 static VALUE
 rb_grn_table_get_columns (int argc, VALUE *argv, VALUE self)
