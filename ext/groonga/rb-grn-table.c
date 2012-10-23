@@ -909,10 +909,9 @@ rb_grn_table_empty_p (VALUE self)
 }
 
 /*
- * call-seq:
- *   table.truncate
- *
  * テーブルの全レコードを一括して削除する。
+ *
+ * @overload truncate
  */
 static VALUE
 rb_grn_table_truncate (VALUE self)
