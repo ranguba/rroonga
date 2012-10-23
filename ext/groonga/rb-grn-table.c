@@ -1312,7 +1312,7 @@ rb_grn_table_get_value (VALUE self, VALUE rb_id)
  * _table_ の _id_ に対応する値を返す。
  *
  * @:id => true@ が指定できるのは利便性のため。
- * Groonga::ArrayでもGroonga::HashやGroonga::PatriciaTrieと
+ * {Groonga::Array} でも {Groonga::Hash} や {Groonga::PatriciaTrie} と
  * 同じ引数で動くようになる。
  *
  * @overload value(id)
@@ -1372,7 +1372,7 @@ rb_grn_table_set_value (VALUE self, VALUE rb_id, VALUE rb_value)
  * 上書きされる。
  *
  * @:id => true@ が指定できるのは利便性のため。
- * Groonga::ArrayでもGroonga::HashやGroonga::PatriciaTrieと
+ * {Groonga::Array} でも {Groonga::Hash} や {Groonga::PatriciaTrie} と
  * 同じ引数で動くようになる。
  *
  * @overload set_value(id, value)
@@ -1421,7 +1421,7 @@ rb_grn_table_get_column_value (VALUE self, VALUE rb_id, VALUE rb_name)
  * _table_ の _id_ に対応するカラム _name_ の値を返す。
  *
  * @:id => true@ が指定できるのは利便性のため。
- * Groonga::ArrayでもGroonga::HashやGroonga::PatriciaTrieと
+ * {Groonga::Array} でも {Groonga::Hash} や {Groonga::PatriciaTrie} と
  * 同じ引数で動くようになる。
  *
  * @overload column_value(id, name)
@@ -1477,7 +1477,7 @@ rb_grn_table_set_column_value (VALUE self, VALUE rb_id,
  * る。既存の値は上書きされる。
  *
  * @:id => true@ が指定できるのは利便性のため。
- * Groonga::ArrayでもGroonga::HashやGroonga::PatriciaTrieと
+ * {Groonga::Array} でも {Groonga::Hash} や {Groonga::PatriciaTrie} と
  * 同じ引数で動くようになる。
  *
  * @overload set_column_value(id, name, value)
@@ -1700,8 +1700,8 @@ rb_grn_table_is_locked (int argc, VALUE *argv, VALUE self)
  * _table_ からブロックまたは文字列で指定した条件にマッチする
  * レコードを返す。返されたテーブルには +expression+ という特
  * 異メソッドがあり、指定した条件を表している
- * Groonga::Expressionを取得できる。
- * Groonga::Expression#snippetを使うことにより、指定した条件
+ * {Groonga::Expression} を取得できる。
+ * {Groonga::Expression#snippet} を使うことにより、指定した条件
  * 用のスニペットを簡単に生成できる。
  *
  * <pre>
