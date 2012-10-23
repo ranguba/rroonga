@@ -1269,9 +1269,9 @@ rb_grn_table_group (int argc, VALUE *argv, VALUE self)
 }
 
 /*
- * _table_ の _id_ に対応するGroonga::Recordを返す。
+ * _table_ の _id_ に対応する {Groonga::Record} を返す。
  *
- * 0.9.0から値ではなくGroonga::Recordを返すようになった。
+ * 0.9.0から値ではなく {Groonga::Record} を返すようになった。
  *
  * @overload [](id)
  *   @return [Groonga::Record]
