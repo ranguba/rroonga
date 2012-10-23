@@ -120,8 +120,8 @@ rb_grn_table_key_support_add_raw (VALUE self, VALUE rb_key, int *added)
  *
  * _values_ にはレコードのカラムに設定する値を指定する。省略
  * した場合または +nil+ を指定した場合はカラムは設定しない。カ
- * ラムの値は<tt>{:カラム名1 => 値1, :カラム名2 => 値2,
- * ...}</tt>と指定する。
+ * ラムの値は @{:カラム名1 => 値1, :カラム名2 => 値2,
+ * ...}@ と指定する。
  *
  * @overload add(key, values=nil)
  *   @return [Groonga::Recordまたはnil]
