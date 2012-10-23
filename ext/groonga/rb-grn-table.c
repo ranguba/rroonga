@@ -1509,13 +1509,12 @@ rb_grn_table_set_column_value_convenience (int argc, VALUE *argv, VALUE self)
 /*
  * _table_ のロックを解除する。
  *
- * 利用可能なオプションは以下の通り。
- *
- * - _:id_ :=
- *   _:id_ で指定したレコードのロックを解除する。（注:
- *   groonga側が未実装のため、現在は無視される） =:
- *
  * @overload unlock(options={})
+ *   @param options [::Hash] The name and value
+ *     pairs. Omitted names are initialized as the default value.
+ *   @option options :id
+ *     _:id_ で指定したレコードのロックを解除する。（注:
+ *     groonga側が未実装のため、現在は無視される）
  */
 static VALUE
 rb_grn_table_unlock (int argc, VALUE *argv, VALUE self)
