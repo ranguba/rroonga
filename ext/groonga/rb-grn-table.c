@@ -1555,7 +1555,7 @@ rb_grn_table_unlock_ensure (VALUE self)
 
 /*
  * _table_ をロックする。ロックに失敗した場合は
- * Groonga::ResourceDeadlockAvoided例外が発生する。
+ * {Groonga::ResourceDeadlockAvoided} 例外が発生する。
  *
  * ブロックを指定した場合はブロックを抜けたときにunlockする。
  *
