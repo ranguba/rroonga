@@ -128,7 +128,7 @@ rb_grn_table_cursor_order_by_to_flag (unsigned char table_type,
  * カレントレコードの値を返す。
  *
  * @overload value
- * @return [String] カレントレコードの値
+ *   @return [String] カレントレコードの値
  */
 static VALUE
 rb_grn_table_cursor_get_value (VALUE self)
