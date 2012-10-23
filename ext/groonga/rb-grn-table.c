@@ -1952,12 +1952,11 @@ rb_grn_table_union_bang (VALUE self, VALUE rb_other)
 
 
 /*
- * call-seq:
- *   table.intersection!(other) -> Groonga::Table
- *
  * キーを比較し、 _other_ には登録されていないレコードを
  * _table_ から削除する。
  *
+ * @overload intersection!(other)
+ *   @return [Groonga::Table]
  */
 static VALUE
 rb_grn_table_intersection_bang (VALUE self, VALUE rb_other)
