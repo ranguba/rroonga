@@ -1127,16 +1127,14 @@ rb_grn_object_get_name (VALUE self)
 }
 
 /*
- * Document-method: range
- *
- * call-seq:
- *   object.range -> Groonga::Object/nil
- *
  * _object_ の値がとりうる範囲を示したGroonga::Objectを返す。
  * 例えば、Groonga::Columnの場合は
  * Groonga::Table#define_columnで指定されたGroonga::Typeや
  * Groonga::Tableを返す。
  * 範囲が指定されていないオブジェクトの場合は +nil+ を返す。
+ *
+ * @overload range
+ *   @return [Groonga::Object or nil]
  */
 static VALUE
 rb_grn_object_get_range (VALUE self)
