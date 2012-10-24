@@ -148,7 +148,7 @@ module Groonga
 
     class << self
 
-      # スキーマを定義する。ブロックにはGroonga::Schemaオブ
+      # スキーマを定義する。ブロックには {Groonga::Schema} オブ
       # ジェクトがわたるので、そのオブジェクトを利用してスキー
       # マを定義する。以下の省略形。
       #
@@ -162,7 +162,7 @@ module Groonga
       #   pairs. Omitted names are initialized as the default value.
       # @option options [Groonga::Context] :content (Groonga::Context.default) The context
       #
-      #   スキーマ定義時に使用するGroonga::Contextを指定する。
+      #   スキーマ定義時に使用する {Groonga::Context} を指定する。
       def define(options={})
         schema = new(options)
         yield(schema)
@@ -175,7 +175,8 @@ module Groonga
       #      # ...
       #    end
       #  end
-      # ブロックにはGroonga::Schema::TableDefinitionオブジェ
+      #
+      # ブロックには {Groonga::Schema::TableDefinition} オブジェ
       # クトがわたるので、そのオブジェクトを利用してテーブル
       # の詳細を定義する。
       #
@@ -322,7 +323,7 @@ module Groonga
       #   pairs. Omitted names are initialized as the default value.
       # @option options :context (Groonga::Context.default)
       #
-      #   スキーマ定義時に使用するGroonga::Contextを指定する。
+      #   スキーマ定義時に使用する {Groonga::Context} を指定する。
       def remove_table(name, options={})
         define do |schema|
           schema.remove_table(name, options)
@@ -339,7 +340,7 @@ module Groonga
       # end
       # </pre>
       #
-      # ブロックにはGroonga::Schema::TableDefinitionオブジェ
+      # ブロックには {Groonga::Schema::TableDefinition} オブジェ
       # クトがわたるので、そのオブジェクトを利用してテーブル
       # の詳細を定義する。
       #
@@ -347,7 +348,7 @@ module Groonga
       #   pairs. Omitted names are initialized as the default value.
       # @option options :context (Groonga::Context.default) The context
       #
-      #   スキーマ定義時に使用するGroonga::Contextを指定する。
+      #   スキーマ定義時に使用する {Groonga::Context} を指定する。
       def change_table(name, options={}, &block)
         define do |schema|
           schema.change_table(name, options, &block)
@@ -378,7 +379,7 @@ module Groonga
       #   end
       # end
       # </pre>
-      # ブロックにはGroonga::Schema::ViewDefinitionオブジェ
+      # ブロックには {Groonga::Schema::ViewDefinition} オブジェ
       # クトがわたるので、そのオブジェクトを利用してビュー
       # の詳細を定義する。
       #
@@ -390,7 +391,7 @@ module Groonga
       #   存在していても、強制的にビューを作成する。
       # @option options :context (Groonga::Context.default) The context
       #
-      #   スキーマ定義時に使用するGroonga::Contextを指定する。
+      #   スキーマ定義時に使用する {Groonga::Context} を指定する。
       # @option options :path The path
       #
       #   ビューを保存するパスを指定する。
@@ -411,14 +412,14 @@ module Groonga
       # @param options [::Hash] The name and value
       #   pairs. Omitted names are initialized as the default value.
       # @option options :context (Groonga::context.default) The context
-      #   スキーマ定義時に使用するGroonga::Contextを指定する。
+      #   スキーマ定義時に使用する {Groonga::Context} を指定する。
       def remove_view(name, options={})
         define do |schema|
           schema.remove_view(name, options)
         end
       end
 
-      # 名前が_name_のビューを変更する。以下の省略形。
+      # 名前が _name_ のビューを変更する。以下の省略形。
       #
       # <pre>
       # Groonga::Schema.define do |schema|
@@ -428,7 +429,7 @@ module Groonga
       # end
       # </pre>
       #
-      # ブロックにはGroonga::Schema::ViewDefinitionオブジェ
+      # ブロックには {Groonga::Schema::ViewDefinition} オブジェ
       # クトがわたるので、そのオブジェクトを利用してテーブル
       # の詳細を定義する。
       #
@@ -436,7 +437,7 @@ module Groonga
       #   pairs. Omitted names are initialized as the default value.
       # @option options :context (Groonga::Context.default) The context
       #
-      #   スキーマ定義時に使用するGroonga::Contextを指定する。
+      #   スキーマ定義時に使用する {Groonga::Context} を指定する。
       def change_view(name, options={}, &block)
         define do |schema|
           schema.change_view(name, options, &block)
@@ -473,7 +474,7 @@ module Groonga
       # スキーマの内容を文字列をRubyスクリプト形式またはgrn式
       # 形式で返す。デフォルトはRubyスクリプト形式である。
       # Rubyスクリプト形式で返された値は
-      # Groonga::Schema.restoreすることによりスキーマ内に組み
+      # {Groonga::Schema.restore} することによりスキーマ内に組み
       # 込むことができる。
       #
       # dump.rb:
@@ -512,7 +513,7 @@ module Groonga
       #   pairs. Omitted names are initialized as the default value.
       # @option options :context (Groonga::Context.default) The context
       #
-      #   スキーマ定義時に使用するGroonga::Contextを指定する。
+      #   スキーマ定義時に使用する {Groonga::Context} を指定する。
       # @option options :syntax The syntax
       #
       #   スキーマの文字列の形式を指定する。指定可能な値は以下の通り。
@@ -526,7 +527,7 @@ module Groonga
         schema.dump
       end
 
-      # Groonga::Schema.dumpで文字列化したスキーマを組み込む。
+      # {Groonga::Schema.dump} で文字列化したスキーマを組み込む。
       def restore(dumped_text, options={})
         define(options) do |schema|
           schema.restore(dumped_text)
@@ -631,9 +632,9 @@ module Groonga
       end
     end
 
-    # Groonga::Schema#dumpで返されたスキーマの内容を読み込む。
+    # {Groonga::Schema#dump} で返されたスキーマの内容を読み込む。
     #
-    # 読み込まれた内容は#defineを呼び出すまでは実行されない
+    # 読み込まれた内容は {#define} を呼び出すまでは実行されない
     # ことに注意すること。
     def restore(dumped_text)
       instance_eval(dumped_text)
@@ -643,7 +644,7 @@ module Groonga
     alias_method :load, :restore
 
     # スキーマの内容を文字列で返す。返された値は
-    # Groonga::Schema#restoreすることによりスキーマ内に組み込むことができる。
+    # {Groonga::Schema#restore} することによりスキーマ内に組み込むことができる。
     def dump
       dumper = SchemaDumper.new(:context => @options[:context],
                                 :syntax => @options[:syntax] || :ruby)
@@ -829,14 +830,14 @@ module Groonga
 
     # 名前が _name_ のテーブルを削除する。
     #
-    # テーブルの削除は#defineを呼び出すまでは実行されないこ
+    # テーブルの削除は# {define} を呼び出すまでは実行されないこ
     # とに注意すること。
     #
     # @param options [::Hash] The name and value
     #   pairs. Omitted names are initialized as the default value.
     # @option options :context (Groonga::Context.default) The context
     #
-    #   スキーマ定義時に使用するGroonga::Contextを指定する。
+    #   スキーマ定義時に使用する {Groonga::Context} を指定する。
     def remove_table(name, options={})
       definition = TableRemoveDefinition.new(name, @options.merge(options || {}))
       @definitions << definition
@@ -844,14 +845,14 @@ module Groonga
 
     # 名前が _name_ のテーブルを変更する。
     #
-    # テーブルの変更は #define を呼び出すまでは実行されないこ
+    # テーブルの変更は {#define} を呼び出すまでは実行されないこ
     # とに注意すること。
     #
     # @param options [::Hash] The name and value
     #   pairs. Omitted names are initialized as the default value.
     # @option options :context (Groonga::Context.default) The context
     #
-    #   スキーマ定義時に使用するGroonga::Contextを指定する。
+    #   スキーマ定義時に使用する {Groonga::Context} を指定する。
     def change_table(name, options={})
       options = @options.merge(options || {}).merge(:change => true)
       definition = TableDefinition.new(name, options)
@@ -876,7 +877,7 @@ module Groonga
 
     # 名前が _name_ のビューを作成する。
     #
-    # ビューの作成は #define を呼び出すまでは実行されないこ
+    # ビューの作成は {#define} を呼び出すまでは実行されないこ
     # とに注意すること。
     #
     # @param options [::Hash] The name and value
@@ -906,7 +907,7 @@ module Groonga
 
     # 名前が _name_ のビューを削除する。
     #
-    # ビューの削除は #define を呼び出すまでは実行されないことに
+    # ビューの削除は {#define} を呼び出すまでは実行されないことに
     # 注意すること。
     #
     # @param options [::Hash] The name and value
@@ -914,7 +915,7 @@ module Groonga
     # @option options [Groonga::Context] :context (Groonga::Context.default)
     #   The context
     #
-    #   スキーマ定義時に使用するGroonga::Contextを指定する。
+    #   スキーマ定義時に使用する {Groonga::Context} を指定する。
     def remove_view(name, options={})
       definition = ViewRemoveDefinition.new(name, @options.merge(options || {}))
       @definitions << definition
@@ -922,14 +923,14 @@ module Groonga
 
     # 名前が _name_ のビューを変更する。
     #
-    # ビューの変更は #define を呼び出すまでは実行されないこ
+    # ビューの変更は {#define} を呼び出すまでは実行されないこ
     # とに注意すること。
     #
     # @param options [::Hash] The name and value
     #   pairs. Omitted names are initialized as the default value.
     # @option options :context (Groonga::Context.default) The context
     #
-    #   スキーマ定義時に使用するGroonga::Contextを指定する。
+    #   スキーマ定義時に使用する {Groonga::Context} を指定する。
     def change_view(name, options={})
       options = @options.merge(options || {}).merge(:change => true)
       definition = ViewDefinition.new(name, options)
