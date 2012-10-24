@@ -1194,8 +1194,7 @@ module Groonga
       #
       # @param [String or Symbol] name the column name
       # @param [Hash] options ({}) the options
-      # @see Groonga::Schema::TableDefinition#column for
-      #    available @options@.
+      # @see #column #column for available options.
       def integer8(name, options={})
         column(name, "Int8", options)
       end
@@ -1205,8 +1204,7 @@ module Groonga
       #
       # @param [String or Symbol] name the column name
       # @param [Hash] options ({}) the options
-      # @see Groonga::Schema::TableDefinition#column for
-      #    available @options@.
+      # @see #column #column for available options.
       def integer16(name, options={})
         column(name, "Int16", options)
       end
@@ -1235,8 +1233,7 @@ module Groonga
       #
       # @param [String or Symbol] name the column name
       # @param [Hash] options ({}) the options
-      # @see Groonga::Schema::TableDefinition#column for
-      #    available @options@.
+      # @see #column #column for available options.
       def unsigned_integer8(name, options={})
         column(name, "UInt8", options)
       end
@@ -1246,8 +1243,7 @@ module Groonga
       #
       # @param [String or Symbol] name the column name
       # @param [Hash] options ({}) the options
-      # @see Groonga::Schema::TableDefinition#column for
-      #    available @options@.
+      # @see #column #column for available options.
       def unsigned_integer16(name, options={})
         column(name, "UInt16", options)
       end
@@ -1353,8 +1349,7 @@ module Groonga
       #
       # @param [String or Symbol] name the column name
       # @param [Hash] options ({}) the options
-      # @see Groonga::Schema::TableDefinition#column for
-      #    available @options@.
+      # @see #column #column for available options.
       def tokyo_geo_point(name, options={})
         column(name, "TokyoGeoPoint", options)
       end
@@ -1364,8 +1359,7 @@ module Groonga
       #
       # @param [String or Symbol] name the column name
       # @param [Hash] options ({}) the options
-      # @see Groonga::Schema::TableDefinition#column for
-      #    available @options@.
+      # @see #column #column for available options.
       def wgs84_geo_point(name, options={})
         column(name, "WGS84GeoPoint", options)
       end
