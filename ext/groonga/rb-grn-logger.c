@@ -382,7 +382,7 @@ rb_grn_logger_s_set_path (VALUE klass, VALUE rb_path,
  * groongaのデフォルトロガーがログを出力するファイルのパスを返す。
  *
  * @overload log_path
- *   @return [String] path ログを出力するファイルのパス
+ *   @return [String]
  */
 static VALUE
 rb_grn_logger_s_get_log_path (VALUE klass)
@@ -423,7 +423,7 @@ rb_grn_logger_s_set_log_path (VALUE klass, VALUE path)
  * groongaのデフォルトロガーがクエリログを出力するファイルのパスを返す。
  *
  * @overload query_log_path
- *   @return [String] path ログを出力するファイルのパス
+ *   @return [String]
  */
 static VALUE
 rb_grn_logger_s_get_query_log_path (VALUE klass)
