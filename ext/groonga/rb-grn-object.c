@@ -20,7 +20,7 @@
  * Document-class: Groonga::Object
  *
  * rroongaが提供するクラスのベースとなるクラス。
- * Groonga::ContextとGroonga::Logger以外はGroonga::Objectを継
+ * {Groonga::Context} と {Groonga::Logger} 以外はGroonga::Objectを継
  * 承している。
  */
 
@@ -608,7 +608,7 @@ rb_grn_object_unlink (VALUE self)
 }
 
 /*
- * _object_ が開放済みの場合は+true+を返し、そうでない場合は
+ * _object_ が開放済みの場合は +true+ を返し、そうでない場合は
  * +false+ を返す。
  *
  * @overload closed?
@@ -974,8 +974,8 @@ rb_grn_object_inspect (VALUE self)
 }
 
 /*
- * _object_ のIDを返す。 _object_ が#closed?なときやIDがない場合
- * は +nil+ を返す。
+ * _object_ のIDを返す。
+ * _object_ が {#closed?} なときやIDがない場合は +nil+ を返す。
  *
  * @overload id
  *   @return [ID or nil]
@@ -1059,9 +1059,9 @@ rb_grn_object_persistent_p (VALUE self)
 }
 
 /*
- * _object_ の属しているGroonga::Objectを返す。例えば、
- * Groonga::ColumnはGroonga::Tableを返す。属している
- * Groonga::Objectがない場合は +nil+ を返す。
+ * _object_ の属している {Groonga::Object} を返す。例えば、
+ * {Groonga::Column} は {Groonga::Table} を返す。属している
+ * {Groonga::Object} がない場合は +nil+ を返す。
  *
  * @overload domain
  *   @return [Groonga::Object or nil]
@@ -1127,10 +1127,10 @@ rb_grn_object_get_name (VALUE self)
 }
 
 /*
- * _object_ の値がとりうる範囲を示したGroonga::Objectを返す。
- * 例えば、Groonga::Columnの場合は
- * Groonga::Table#define_columnで指定されたGroonga::Typeや
- * Groonga::Tableを返す。
+ * _object_ の値がとりうる範囲を示した {Groonga::Object} を返す。
+ * 例えば、 {Groonga::Column} の場合は
+ * {Groonga::Table#define_column} で指定された {Groonga::Type} や
+ * {Groonga::Table} を返す。
  * 範囲が指定されていないオブジェクトの場合は +nil+ を返す。
  *
  * @overload range
