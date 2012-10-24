@@ -23,9 +23,9 @@ VALUE rb_cGrnDoubleArrayTrieCursor;
 /*
  * Document-class: Groonga::DoubleArrayCursor < Groonga::TableCursor
  *
- * Groonga::DoubleArrayに登録されているレコードを順番に取り
+ * {Groonga::DoubleArrayTrie} に登録されているレコードを順番に取り
  * 出すためのオブジェクト。利用できるメソッドは
- * Groonga::TableCursorとGroonga::TableCursor::KeySupportを
+ * {Groonga::TableCursor} と {Groonga::TableCursor::KeySupport} を
  * 参照。
  */
 
