@@ -1351,13 +1351,10 @@ rb_grn_object_set (VALUE self, VALUE rb_id, VALUE rb_value, int flags)
 }
 
 /*
- * Document-method: []=
- *
- * call-seq:
- *   object[id] = value
- *
  * _object_ の _id_ に対応する値を設定する。既存の値は上書きさ
  * れる。
+ *
+ * @overload []=(id, value)
  */
 static VALUE
 rb_grn_object_array_set (VALUE self, VALUE rb_id, VALUE rb_value)
