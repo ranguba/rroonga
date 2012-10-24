@@ -441,14 +441,13 @@ rb_grn_logger_s_get_query_log_path (VALUE klass)
 }
 
 /*
- * call-seq:
- *   Groonga::Logger.query_log_path= path
- *
  * groongaのデフォルトロガーがクエリログを出力するファイルの
  * パスを指定する。
  *
  * Groonga::Logger.registerで独自のロガーを設定している場合、
  * 設定している独自ロガーは無効になる。
+ *
+ * @overload query_log_path=(path)
  */
 static VALUE
 rb_grn_logger_s_set_query_log_path (VALUE klass, VALUE path)
