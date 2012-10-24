@@ -485,12 +485,9 @@ rb_grn_index_column_search (int argc, VALUE *argv, VALUE self)
 }
 
 /*
- * Document-method: with_section?
- *
- * call-seq:
- *   column.with_section? -> true/false
- *
  * _column_ が段落情報も格納する場合は +true+ を返します。
+ *
+ * @overload with_section?
  */
 static VALUE
 rb_grn_index_column_with_section_p (VALUE self)
