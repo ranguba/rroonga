@@ -503,12 +503,9 @@ rb_grn_index_column_with_section_p (VALUE self)
 }
 
 /*
- * Document-method: with_weight?
- *
- * call-seq:
- *   column.with_weight? -> true/false
- *
  * _column_ がウェイト情報も格納する場合は +true+ を返します。
+ *
+ * @overload with_weight?
  */
 static VALUE
 rb_grn_index_column_with_weight_p (VALUE self)
