@@ -487,13 +487,14 @@ rb_grn_expression_compile (VALUE self)
 }
 
 /*
- * call-seq:
- *   expression[name] -> 変数の値
- *   expression[offset] -> 変数の値
- *
  * _expression_ で使用可能な変数のうち、名前が _name_ または
  * _offset_ 番目にExpression#append_objectされた変数の値を返
  * す。
+ *
+ * @overload [](name)
+ *   @return [変数の値]
+ * @overload [](offset)
+ *   @return [変数の値]
  */
 static VALUE
 rb_grn_expression_array_reference (VALUE self, VALUE rb_name_or_offset)
