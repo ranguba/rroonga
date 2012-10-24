@@ -223,8 +223,8 @@ rb_grn_index_column_array_set (VALUE self, VALUE rb_id, VALUE rb_value)
  * インデックス対象となっているカラムの配列を返す。
  *
  * @overload sources
- * @return [::Array<Groonga::Column>] インデックス対象となっている
- *   {Groonga::Column}の配列
+ *   @return [::Array<Groonga::Column>] インデックス対象となっている
+ *     {Groonga::Column}の配列
  */
 static VALUE
 rb_grn_index_column_get_sources (VALUE self)
@@ -426,7 +426,7 @@ rb_grn_index_column_set_source (VALUE self, VALUE rb_source)
  *   @option options :near
  *     +true+ を指定すると _query_ に指定した複数の語が近傍に含ま
  *     れるレコードを検索する
- * @return [Groonga::Hash]
+ *   @return [Groonga::Hash]
  */
 static VALUE
 rb_grn_index_column_search (int argc, VALUE *argv, VALUE self)
