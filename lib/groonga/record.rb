@@ -51,7 +51,7 @@ module Groonga
         [table, id] == [other.table, other.id]
     end
 
-    # Groonga::Record#==と同じ。
+    # {Groonga::Record#==} と同じ。
     def eql?(other)
       self == other
     end
@@ -103,7 +103,7 @@ module Groonga
     end
 
     # 名前が _name_ のカラムが索引カラム
-    # （Groonga::IndexColumn）であるなら +true+ を返す。
+    # （ {Groonga::IndexColumn} ）であるなら +true+ を返す。
     def index_column?(name)
       column(name).index?
     end
@@ -122,16 +122,16 @@ module Groonga
       column(name).scalar?
     end
 
-    # 名前が _name_ のGroonga::IndexColumnの search メソッドを呼ぶ。
+    # 名前が _name_ の {Groonga::IndexColumn} の search メソッドを呼ぶ。
     # _query_ と _options_ はそのメソッドにそのまま渡される。詳しく
-    # はGroonga::IndexColumn#searchを参照。
+    # は {Groonga::IndexColumn#search} を参照。
     def search(name, query, options={})
       column(name).search(query, options)
     end
 
     # レコードの主キーを返す。
     #
-    # _record_ が所属するテーブルがGroonga:::Arrayの場合は常
+    # _record_ が所属するテーブルが {Groonga::Array} の場合は常
     # に +nil+ を返す。
     def key
       if support_key?
@@ -142,7 +142,7 @@ module Groonga
     end
     # レコードを一意に識別するための情報を返す。
     #
-    # _record_ が所属するテーブルがGroonga:::Arrayの場合はID
+    # _record_ が所属するテーブルが {Groonga::Array} の場合はID
     # を返し、それ以外の場合は主キーを返す。
     def record_id
       if support_key?
@@ -171,7 +171,7 @@ module Groonga
       self["_score"] = new_score
     end
 
-    # Groonga::Record#scoreが利用できる場合は +true+ を
+    # {Groonga::Record#score} が利用できる場合は +true+ を
     # 返す。
     def support_score?
       @table.have_column?("_score") # TODO delegate to Table
@@ -180,13 +180,13 @@ module Groonga
     # 主キーの値が同一であったレコードの件数を返す。検索結果とし
     # て生成されたテーブルのみに定義される。
     #
-    # Groonga::Record#support_sub_records?でこの値を利用でき
+    # {Groonga::Record#support_sub_records?} でこの値を利用でき
     # るかがわかる。
     def n_sub_records
       self["_nsubrecs"]
     end
 
-    # Groonga::Record#n_sub_recordsが利用できる場合は +true+ を
+    # {Groonga::Record#n_sub_records} が利用できる場合は +true+ を
     # 返す。
     def support_sub_records?
       @table.support_sub_records?
@@ -235,7 +235,7 @@ module Groonga
     end
 
     # レコードが所属するテーブルをロックする。ロックに失敗した場
-    # 合はGroonga::ResourceDeadlockAvoided例外が発生する。
+    # 合は {Groonga::ResourceDeadlockAvoided} 例外が発生する。
     #
     # ブロックを指定した場合はブロックを抜けたときにunlockする。
     #
