@@ -464,10 +464,9 @@ rb_grn_expression_execute (VALUE self)
 }
 
 /*
- * call-seq:
- *   expression.compile
- *
  * _expression_をコンパイルする。
+ *
+ * @overload compile
  */
 static VALUE
 rb_grn_expression_compile (VALUE self)
