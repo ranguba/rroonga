@@ -373,18 +373,6 @@ rb_grn_patricia_trie_search (int argc, VALUE *argv, VALUE self)
  * マッチした部分文字列の情報をブロックに渡す。複数のキーが
  * マッチする場合は最長一致するキーを優先する。
  *
- * [_record_]
- *   マッチしたキーのGroonga::Record。
- *
- * [_word_]
- *   マッチした部分文字列。
- *
- * [_start_]
- *   _string_ 内での _word_ の出現位置。（バイト単位）
- *
- * [_length_]
- *   _word_ の長さ。（バイト単位）
- *
  * ブロックを指定しない場合は、マッチした部分文字列の情報を
  * まとめて配列として返す。
  *
@@ -413,6 +401,10 @@ rb_grn_patricia_trie_search (int argc, VALUE *argv, VALUE self)
  *   @return [Array]
  * @overload scan(string)
  *   @yield [record, word, start, length]
+ *   @yieldparam record マッチしたキーのGroonga::Record。
+ *   @yieldparam word マッチした部分文字列。
+ *   @yieldparam start _string_ 内での _word_ の出現位置。（バイト単位）
+ *   @yieldparam length _word_ の長さ。（バイト単位）
  */
 static VALUE
 rb_grn_patricia_trie_scan (VALUE self, VALUE rb_string)
