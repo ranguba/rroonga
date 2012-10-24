@@ -110,14 +110,14 @@ module Groonga
 
     # 名前が _name_ のカラムの値がベクターであるなら +true+ を返す。
     #
-    # @since: 1.0.5
+    # @since 1.0.5
     def vector_column?(name)
       column(name).vector?
     end
 
     # 名前が _name_ のカラムの値がスカラーであるなら +true+ を返す。
     #
-    # @since: 1.0.5
+    # @since 1.0.5
     def scalar_column?(name)
       column(name).scalar?
     end
