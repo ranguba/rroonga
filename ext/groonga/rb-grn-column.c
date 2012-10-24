@@ -414,7 +414,7 @@ rb_grn_column_unlock_ensure (VALUE self)
 
 /*
  * _column_ をロックする。ロックに失敗した場合は
- * Groonga::ResourceDeadlockAvoided例外が発生する。
+ * {Groonga::ResourceDeadlockAvoided} 例外が発生する。
  *
  * @overload lock(options={})
  *   @!macro [new] column.lock.options
