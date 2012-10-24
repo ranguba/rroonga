@@ -235,10 +235,9 @@ rb_grn_expression_append_constant (int argc, VALUE *argv, VALUE self)
 }
 
 /*
- * call-seq:
- *   expression.append_operation(operation, n_arguments)
- *
  * _n_arguments_ 個の引数を取る _operation_ を追加する。
+ *
+ * @overload append_operation(operation, n_arguments)
  */
 static VALUE
 rb_grn_expression_append_operation (VALUE self, VALUE rb_operation,
