@@ -464,7 +464,7 @@ rb_grn_expression_execute (VALUE self)
 }
 
 /*
- * _expression_をコンパイルする。
+ * _expression_ をコンパイルする。
  *
  * @overload compile
  */
