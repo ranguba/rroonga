@@ -23,9 +23,9 @@ VALUE rb_cGrnHashCursor;
 /*
  * Document-class: Groonga::HashCursor < Groonga::TableCursor
  *
- * Groonga::Hashに登録されているレコードを順番に取り出すため
- * のオブジェクト。利用できるメソッドはGroonga::TableCursor
- * とGroonga::TableCursorKeySupportを参照。
+ * {Groonga::Hash} に登録されているレコードを順番に取り出すため
+ * のオブジェクト。利用できるメソッドは {Groonga::TableCursor}
+ * と {Groonga::TableCursorKeySupport} を参照。
  */
 
 void
