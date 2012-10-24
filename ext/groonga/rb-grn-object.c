@@ -1059,14 +1059,12 @@ rb_grn_object_persistent_p (VALUE self)
 }
 
 /*
- * Document-method: domain
- *
- * call-seq:
- *   object.domain -> Groonga::Object/nil
- *
  * _object_ の属しているGroonga::Objectを返す。例えば、
  * Groonga::ColumnはGroonga::Tableを返す。属している
  * Groonga::Objectがない場合は +nil+ を返す。
+ *
+ * @overload domain
+ *   @return [Groonga::Object or nil]
  */
 static VALUE
 rb_grn_object_get_domain (VALUE self)
