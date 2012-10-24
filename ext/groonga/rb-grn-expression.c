@@ -487,9 +487,9 @@ rb_grn_expression_compile (VALUE self)
 }
 
 /*
- * _expression_ で使用可能な変数のうち、名前が _name_ または
- * _offset_ 番目にExpression#append_objectされた変数の値を返
- * す。
+ * _expression_ で使用可能な変数のうち、名前が _name_
+ * または _offset_ 番目に {Expression#append_object}
+ * された変数の値を返す。
  *
  * @overload [](name)
  *   @return [変数の値]
