@@ -583,12 +583,9 @@ rb_grn_object_close (VALUE self)
 }
 
 /*
- * Document-method: unlink
- *
- * call-seq:
- *   object.unlink
- *
  * _object_ のリファレンスカウンタを1減少する。
+ *
+ * @overload unlink
  */
 VALUE
 rb_grn_object_unlink (VALUE self)
