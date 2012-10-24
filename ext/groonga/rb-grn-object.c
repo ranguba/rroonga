@@ -1023,13 +1023,10 @@ rb_grn_object_get_path (VALUE self)
 }
 
 /*
- * Document-method: temporary?
- *
- * call-seq:
- *   object.temporary? -> true/false
- *
  * _object_ が一時オブジェクトなら +true+ 、永続オブジェクトな
  * ら +false+ を返す。
+ *
+ * @overload temporary?
  */
 static VALUE
 rb_grn_object_temporary_p (VALUE self)
