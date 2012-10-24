@@ -469,13 +469,12 @@ rb_grn_patricia_trie_scan (VALUE self, VALUE rb_string)
 }
 
 /*
- * call-seq:
- *   patricia_trie.prefix_search(prefix) -> Groonga::Hash
- *
  * キーが _prefix_ に前方一致するレコードのIDがキーに入っている
  * Groonga::Hashを返す。マッチするレコードがない場合は空の
  * Groonga::Hashが返る。
  *
+ * @overload prefix_search(prefix)
+ *   @return [Groonga::Hash]
  */
 static VALUE
 rb_grn_patricia_trie_prefix_search (VALUE self, VALUE rb_prefix)
