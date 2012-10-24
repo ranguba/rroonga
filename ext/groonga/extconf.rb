@@ -215,13 +215,14 @@ have_header("ruby/st.h") unless have_macro("HAVE_RUBY_ST_H", "ruby.h")
 have_func("rb_errinfo", "ruby.h")
 have_type("enum ruby_value_type", "ruby.h")
 
-checking_for(checking_message("debug flag")) do
-  debug = with_config("debug")
-  if debug
+checking_for(checking_message("--enable-debug-log option")) do
+  enable_debug_log = enable_config("debug-log", false)
+  if enable_debug_log
     debug_flag = "-DRB_GRN_DEBUG"
     $defs << debug_flag unless $defs.include?(debug_flag)
   end
-  debug
+  enable_debug_log
+end
 end
 
 if ENV["INSTALL_RB"] == "yes"
