@@ -130,11 +130,10 @@ rb_grn_fix_size_column_increment (int argc, VALUE *argv, VALUE self)
 }
 
 /*
- * call-seq:
- *   column.decrement!(id, delta=nil)
- *
  * _column_ の _id_ に対応する値を _delta_ だけ減少する。 _delta_
  * が +nil+ の場合は1減少する。
+ *
+ * @overload decrement!(id, delta=nil)
  */
 static VALUE
 rb_grn_fix_size_column_decrement (int argc, VALUE *argv, VALUE self)
