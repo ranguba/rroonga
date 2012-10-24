@@ -148,14 +148,14 @@ rb_grn_index_column_deconstruct (RbGrnIndexColumn *rb_grn_index_column,
  *     段落番号を指定する。省略した場合は1を指定したとみなされ
  *     る。
  *     {Groonga::Table#define_index_column} で
- *     <tt>{:with_section => true}</tt>を指定していなければい
+ *     @{:with_section => true}@ を指定していなければい
  *     けない。
  *   @option options :old_value
  *     以前の値を指定する。省略した場合は現在の値が用いられる。
  *     通常は指定する必要はない。
  *   @option options :value
  *     新しい値を指定する。 _value_ を指定した場合と _options_ で
- *     <tt>{:value => value}</tt>を指定した場合は同じ動作とな
+ *     @{:value => value}@ を指定した場合は同じ動作とな
  *     る。
  */
 static VALUE
@@ -407,9 +407,9 @@ rb_grn_index_column_set_source (VALUE self, VALUE rb_source)
  *     結果を格納するGroonga::Hash。指定しない場合は新しく
  *     Groonga::Hashを生成し、それに結果を格納して返す。
  *   @option options :operator
- *     以下のどれかの値を指定する。 +nil+ , <tt>"or"</tt>, <tt>"||"</tt>,
- *     <tt>"and"</tt>, <tt>"+"</tt>, <tt>"&&"</tt>, <tt>"but"</tt>,
- *     <tt>"not"</tt>, <tt>"-"</tt>, <tt>"adjust"</tt>, <tt>">"</tt>。
+ *     以下のどれかの値を指定する。 +nil+ , @"or"@ , @"||"@ ,
+ *     @"and"@ , @"+"@ , @"&&"@ , @"but"@ ,
+ *     @"not"@ , @"-"@ , @"adjust"@ , @">"@ 。
  *     それぞれ以下のようになる。（FIXME: 「以下」）
  *   @option options :exact
  *     +true+ を指定すると完全一致で検索する
