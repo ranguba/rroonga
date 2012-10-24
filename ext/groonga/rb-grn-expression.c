@@ -533,10 +533,10 @@ rb_grn_expression_array_reference (VALUE self, VALUE rb_name_or_offset)
 grn_rc grn_expr_inspect(grn_ctx *ctx, grn_obj *buf, grn_obj *expr);
 
 /*
- * call-seq:
- *   _expression_.inspect -> String
- *
  * _expression_ の中身を人に見やすい文字列で返す。
+ *
+ * @overload inspect
+ *   @return [String]
  */
 static VALUE
 rb_grn_expression_inspect (VALUE self)
