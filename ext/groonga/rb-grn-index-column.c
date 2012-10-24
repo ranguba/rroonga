@@ -97,7 +97,7 @@ rb_grn_index_column_deconstruct (RbGrnIndexColumn *rb_grn_index_column,
 
 /*
  * IDが _id_ であるレコードを高速に全文検索するため転置索引を作
- * 成する。多くの場合、Groonga::Table#define_index_columnで
+ * 成する。多くの場合、 {Groonga::Table#define_index_column} で
  * +:source+ オプションを指定することにより、自動的に全文検索
  * 用の索引は更新されるので、明示的にこのメソッドを使うこと
  * は少ない。
@@ -147,7 +147,7 @@ rb_grn_index_column_deconstruct (RbGrnIndexColumn *rb_grn_index_column,
  *   @option options :section
  *     段落番号を指定する。省略した場合は1を指定したとみなされ
  *     る。
- *     Groonga::Table#define_index_columnで
+ *     {Groonga::Table#define_index_column} で
  *     <tt>{:with_section => true}</tt>を指定していなければい
  *     けない。
  *   @option options :old_value
@@ -399,7 +399,7 @@ rb_grn_index_column_set_source (VALUE self, VALUE rb_source)
 
 /*
  * _object_ から _query_ に対応するオブジェクトを検索し、見つかっ
- * たオブジェクトのIDがキーになっているGroonga::Hashを返す。
+ * たオブジェクトのIDがキーになっている {Groonga::Hash} を返す。
  *
  * @overload search(query, options={})
  *   @param [::Hash] options The name and value
