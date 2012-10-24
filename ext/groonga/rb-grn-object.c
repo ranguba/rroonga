@@ -608,13 +608,10 @@ rb_grn_object_unlink (VALUE self)
 }
 
 /*
- * Document-method: closed?
- *
- * call-seq:
- *   object.closed? -> true/false
- *
  * _object_ が開放済みの場合は+true+を返し、そうでない場合は
  * +false+ を返す。
+ *
+ * @overload closed?
  */
 VALUE
 rb_grn_object_closed_p (VALUE self)
