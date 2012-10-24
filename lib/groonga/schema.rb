@@ -1049,7 +1049,7 @@ module Groonga
       #   カラムを保存するパス。
       # @option options :persistent The persistent
       #
-      #   +true+ を指定すると永続カラムとなる。+:path+ を省略
+      #   +true+ を指定すると永続カラムとなる。 +:path+ を省略
       #   した場合は自動的にパスが付加される。
       # @option options :type (:scalar) The type
       #
