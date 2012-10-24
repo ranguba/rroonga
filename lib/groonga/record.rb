@@ -21,7 +21,7 @@ module Groonga
   class Record
     # レコードが所属するテーブル
     attr_reader :table
-    # _table_ の _id_ に対応するレコードを作成する。_values_ には各
+    # _table_ の _id_ に対応するレコードを作成する。 _values_ には各
     # カラムに設定する値を以下のような形式で指定する。
     #
     # <pre>
