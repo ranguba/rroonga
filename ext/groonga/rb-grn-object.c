@@ -1165,13 +1165,11 @@ rb_grn_object_get_range (VALUE self)
 }
 
 /*
- * Document-method: ==
- *
- * call-seq:
- *   object == other -> true/false
- *
  * _object_ と _other_ が同じgroongaのオブジェクトなら +true+ を返
  * し、そうでなければ +false+ を返す。
+ *
+ * @overload ==(other)
+ *   @return [Boolean]
  */
 static VALUE
 rb_grn_object_equal (VALUE self, VALUE other)
