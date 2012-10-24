@@ -974,13 +974,11 @@ rb_grn_object_inspect (VALUE self)
 }
 
 /*
- * Document-method: id
- *
- * call-seq:
- *   object.id -> ID/nil
- *
  * _object_ のIDを返す。 _object_ が#closed?なときやIDがない場合
  * は +nil+ を返す。
+ *
+ * @overload id
+ *   @return [ID or nil]
  */
 VALUE
 rb_grn_object_get_id (VALUE self)
