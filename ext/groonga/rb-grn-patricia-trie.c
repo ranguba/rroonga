@@ -279,8 +279,8 @@ rb_grn_patricia_trie_s_create (int argc, VALUE *argv, VALUE klass)
 }
 
 /*
- * _key_ にマッチするレコードのIDがキーに入っているGroonga::Hashを返す。
- * マッチするレコードがない場合は空のGroonga::Hashが返る。
+ * _key_ にマッチするレコードのIDがキーに入っている {Groonga::Hash} を返す。
+ * マッチするレコードがない場合は空の {Groonga::Hash} が返る。
  *
  * _options_ で +:result+ を指定することにより、そのテーブルにマッチした
  * レコードIDがキーのレコードを追加することができる。
@@ -402,7 +402,7 @@ rb_grn_patricia_trie_search (int argc, VALUE *argv, VALUE self)
  *   @return [Array]
  * @overload scan(string)
  *   @yield [record, word, start, length]
- *   @yieldparam record マッチしたキーのGroonga::Record。
+ *   @yieldparam record マッチしたキーの {Groonga::Record} 。
  *   @yieldparam word マッチした部分文字列。
  *   @yieldparam start _string_ 内での _word_ の出現位置。（バイト単位）
  *   @yieldparam length _word_ の長さ。（バイト単位）
@@ -470,8 +470,8 @@ rb_grn_patricia_trie_scan (VALUE self, VALUE rb_string)
 
 /*
  * キーが _prefix_ に前方一致するレコードのIDがキーに入っている
- * Groonga::Hashを返す。マッチするレコードがない場合は空の
- * Groonga::Hashが返る。
+ * {Groonga::Hash} を返す。マッチするレコードがない場合は空の
+ * {Groonga::Hash} が返る。
  *
  * @overload prefix_search(prefix)
  *   @return [Groonga::Hash]
