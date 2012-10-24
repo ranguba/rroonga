@@ -1041,13 +1041,10 @@ rb_grn_object_temporary_p (VALUE self)
 }
 
 /*
- * Document-method: persistent?
- *
- * call-seq:
- *   object.persistent? -> true/false
- *
  * _object_ が永続オブジェクトなら +true+ 、一時オブジェクトな
  * ら +false+ を返す。
+ *
+ * @overload persistent?
  */
 static VALUE
 rb_grn_object_persistent_p (VALUE self)
