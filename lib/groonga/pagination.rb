@@ -105,10 +105,10 @@ module Groonga
     #
     # @param [::Hash] options The name and value
     #   pairs. Omitted names are initialized as the default value.
-    # @option options [Integer] :size (10) The size
+    # @option options [Integer] :size (10)
     #
     #   1ページあたりに表示する最大項目数。
-    # @option options [Integer] :page (1) The page
+    # @option options [Integer] :page (1)
     #
     #   ページ番号。ページ番号は0ベースではなく1ベースであることに注意。
     def paginate(sort_keys, options={})
