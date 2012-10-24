@@ -23,9 +23,9 @@ VALUE rb_cGrnPatriciaTrieCursor;
 /*
  * Document-class: Groonga::PatriciaTrieCursor < Groonga::TableCursor
  *
- * Groonga::PatriciaTrieに登録されているレコードを順番に取り
+ * {Groonga::PatriciaTrie} に登録されているレコードを順番に取り
  * 出すためのオブジェクト。利用できるメソッドは
- * Groonga::TableCursorとGroonga::TableCursor::KeySupportを
+ * {Groonga::TableCursor} と {Groonga::TableCursor::KeySupport} を
  * 参照。
  */
 
