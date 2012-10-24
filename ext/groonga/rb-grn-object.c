@@ -1095,12 +1095,10 @@ rb_grn_object_get_domain (VALUE self)
 }
 
 /*
- * Document-method: name
- *
- * call-seq:
- *   object.name -> 名前/nil
- *
  * _object_ の名前を返す。無名オブジェクトの場合は +nil+ を返す。
+ *
+ * @overload name
+ *   @return [名前 or nil]
  */
 static VALUE
 rb_grn_object_get_name (VALUE self)
