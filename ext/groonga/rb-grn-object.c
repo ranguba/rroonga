@@ -1190,12 +1190,10 @@ rb_grn_object_equal (VALUE self, VALUE other)
 }
 
 /*
- * Document-method: []
- *
- * call-seq:
- *   object[id] -> 値
- *
  * _object_ の _id_ に対応する値を返す。
+ *
+ * @overload [](id)
+ *   @return [値]
  */
 VALUE
 rb_grn_object_array_reference (VALUE self, VALUE rb_id)
