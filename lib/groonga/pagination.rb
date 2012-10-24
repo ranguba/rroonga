@@ -226,7 +226,7 @@ module Groonga
 
     # 最初のページから最後のページまでを含んだRangeを返す。
     #
-    # 例えば、10ページある場合は以下を返す。
+    # @example 10ページある場合は以下を返す。
     #   1..10
     def pages
       first_page..last_page
