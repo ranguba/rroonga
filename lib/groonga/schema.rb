@@ -1291,8 +1291,11 @@ module Groonga
       end
 
       # 以下と同様:
-      #   table.time("updated_at")
-      #   table.time("created_at")
+      # <pre>
+      # !!!ruby
+      # table.time("updated_at")
+      # table.time("created_at")
+      # </pre>
       def timestamps(options={})
         time("created_at", options)
         time("updated_at", options)
