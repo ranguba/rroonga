@@ -857,42 +857,28 @@ rb_grn_patricia_trie_open_grn_near_cursor (int argc, VALUE *argv, VALUE self,
  *
  * @overload open_near_cursor(key, options={})
  *   @return [Groonga::PatriciaTrieCursor]
- *   @param options [::Hash] The name and value
- *     pairs. Omitted names are initialized as the default value.
- *   @option options :size
- *     _size_ バイト以降のデータが同じキーのレコードに限定する。
- *   @option options :offset
- *     該当する範囲のレコードのうち、(0ベースで)_:offset_番目
- *     からレコードを取り出す。
- *   @option options :limit
- *     該当する範囲のレコードのうち、_:limit_件のみを取り出す。
- *     省略された場合または-1が指定された場合は、全件が指定され
- *     たものとみなす。
- *   @option options :greater_than
- *     +true+ を指定すると _key_ で指定した値に一致した [ +key+ ] を
- *     範囲に含まない。
- *   @option options :less_than
- *     +true+ を指定すると _key_ で指定した値に一致した [ +key+ ] を
- *     範囲に含まない。
+ *   @!macro [new] patricia-trie.open_near_cursor.options
+ *     @param options [::Hash] The name and value
+ *       pairs. Omitted names are initialized as the default value.
+ *     @option options :size
+ *       _size_ バイト以降のデータが同じキーのレコードに限定する。
+ *     @option options :offset
+ *       該当する範囲のレコードのうち、(0ベースで) _:offset_ 番目
+ *       からレコードを取り出す。
+ *     @option options :limit
+ *       該当する範囲のレコードのうち、 _:limit_ 件のみを取り出す。
+ *       省略された場合または-1が指定された場合は、全件が指定され
+ *       たものとみなす。
+ *     @option options :greater_than
+ *       +true+ を指定すると _key_ で指定した値に一致した [ +key+ ] を
+ *       範囲に含まない。
+ *     @option options :less_than
+ *       +true+ を指定すると _key_ で指定した値に一致した [ +key+ ] を
+ *       範囲に含まない。
+ *   @!macro patricia-trie.open_near_cursor.options
  * @overload open_near_cursor(key, options={})
  *   @yield [cursor]
- *   @param options [::Hash] The name and value
- *     pairs. Omitted names are initialized as the default value.
- *   @option options :size
- *     _size_ バイト以降のデータが同じキーのレコードに限定する。
- *   @option options :offset
- *     該当する範囲のレコードのうち、(0ベースで)_:offset_番目
- *     からレコードを取り出す。
- *   @option options :limit
- *     該当する範囲のレコードのうち、_:limit_件のみを取り出す。
- *     省略された場合または-1が指定された場合は、全件が指定され
- *     たものとみなす。
- *   @option options :greater_than
- *     +true+ を指定すると _key_ で指定した値に一致した [ +key+ ] を
- *     範囲に含まない。
- *   @option options :less_than
- *     +true+ を指定すると _key_ で指定した値に一致した [ +key+ ] を
- *     範囲に含まない。
+ *   @!macro patricia-trie.open_near_cursor.options
  */
 static VALUE
 rb_grn_patricia_trie_open_near_cursor (int argc, VALUE *argv, VALUE self)
