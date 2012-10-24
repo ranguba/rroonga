@@ -506,11 +506,10 @@ rb_grn_patricia_trie_prefix_search (VALUE self, VALUE rb_prefix)
 }
 
 /*
- * call-seq:
- *   table.register_key_with_sis? -> true/false
- *
  * キーを登録するときに文字列の全suffixも一緒に登録する場合
  * は +true+ 、登録しない場合は +false+ を返す。
+ *
+ * @overload register_key_with_sis?
  */
 static VALUE
 rb_grn_patricia_trie_register_key_with_sis_p (VALUE self)
