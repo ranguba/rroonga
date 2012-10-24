@@ -23,8 +23,8 @@ VALUE rb_cGrnArrayCursor;
 /*
  * Document-class: Groonga::ArrayCursor < Groonga::TableCursor
  *
- * Groonga::Arrayに登録されているレコードを順番に取り出すため
- * のオブジェクト。利用できるメソッドはGroonga::TableCursorを
+ * {Groonga::Array} に登録されているレコードを順番に取り出すため
+ * のオブジェクト。利用できるメソッドは {Groonga::TableCursor} を
  * 参照。
  */
 
