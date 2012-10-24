@@ -169,12 +169,16 @@ module Groonga
         schema.define
       end
 
-      # @example 名前が _name_ のテーブルを作成する。以下の省略形。
-      #  Groonga::Schema.define do |schema|
-      #    schema.create_table(name, options) do |table|
-      #      # ...
-      #    end
-      #  end
+      # 名前が _name_ のテーブルを作成する。以下の省略形。
+      #
+      # <pre>
+      # !!!ruby
+      # Groonga::Schema.define do |schema|
+      #   schema.create_table(name, options) do |table|
+      #     # ...
+      #   end
+      # end
+      # </pre>
       #
       # ブロックには {Groonga::Schema::TableDefinition} オブジェ
       # クトがわたるので、そのオブジェクトを利用してテーブル
