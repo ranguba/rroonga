@@ -1374,12 +1374,9 @@ rb_grn_object_append_value (VALUE self, VALUE rb_id, VALUE rb_value)
 }
 
 /*
- * Document-method: prepend
- *
- * call-seq:
- *   object.prepend(id, value)
- *
  * _object_ の _id_ に対応する値の最初に _value_ を追加する。
+ *
+ * @overload prepend(id, value)
  */
 static VALUE
 rb_grn_object_prepend_value (VALUE self, VALUE rb_id, VALUE rb_value)
