@@ -118,11 +118,10 @@ rb_grn_fix_size_column_integer_set (int argc, VALUE *argv, VALUE self, int flags
 }
 
 /*
- * call-seq:
- *   column.increment!(id, delta=nil)
- *
  * _column_ の _id_ に対応する値を _delta_ だけ増加する。 _delta_
  * が +nil+ の場合は1増加する。
+ *
+ * @overload increment!(id, delta=nil)
  */
 static VALUE
 rb_grn_fix_size_column_increment (int argc, VALUE *argv, VALUE self)
