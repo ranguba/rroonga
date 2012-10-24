@@ -400,14 +400,13 @@ rb_grn_logger_s_get_log_path (VALUE klass)
 }
 
 /*
- * call-seq:
- *   Groonga::Logger.log_path= path
- *
  * groongaのデフォルトロガーがログを出力するファイルのパスを
  * 指定する。
  *
  * Groonga::Logger.registerで独自のロガーを設定している場合、
  * 設定している独自ロガーは無効になる。
+ *
+ * @overload log_path=(path)
  */
 static VALUE
 rb_grn_logger_s_set_log_path (VALUE klass, VALUE path)
