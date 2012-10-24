@@ -223,6 +223,37 @@ checking_for(checking_message("--enable-debug-log option")) do
   end
   enable_debug_log
 end
+
+def gcc?
+  CONFIG["GCC"] == "yes"
+end
+
+def disable_optimization_build_flag(flags)
+  if gcc?
+    flags.gsub(/(^|\s)?-O\d(\s|$)?/, '\\1-O0\\2')
+  else
+    flags
+  end
+end
+
+def enable_debug_build_flag(flags)
+  if gcc?
+    flags.gsub(/(^|\s)?-g\d?(\s|$)?/, '\\1-ggdb3\\2')
+  else
+    flags
+  end
+end
+
+checking_for(checking_message("--enable-debug-build option")) do
+  enable_debug_build = enable_config("debug-build", false)
+  if enable_debug_build
+    $CFLAGS = disable_optimization_build_flag($CFLAGS)
+    $CFLAGS = enable_debug_build_flag($CFLAGS)
+
+    CONFIG["CXXFLAGS"] = disable_optimization_build_flag(CONFIG["CXXFLAGS"])
+    CONFIG["CXXFLAGS"] = enable_debug_build_flag(CONFIG["CXXFLAGS"])
+  end
+  enable_debug_build
 end
 
 if ENV["INSTALL_RB"] == "yes"
