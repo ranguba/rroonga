@@ -441,10 +441,10 @@ rb_grn_expression_parse (int argc, VALUE *argv, VALUE self)
 }
 
 /*
- * call-seq:
- *   expression.execute -> 値
- *
  * _expression_を実行し、実行した結果を返す。
+ *
+ * @overload execute
+ *   @return [値]
  */
 static VALUE
 rb_grn_expression_execute (VALUE self)
