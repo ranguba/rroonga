@@ -1040,25 +1040,25 @@ module Groonga
       #
       # @param options [::Hash] The name and value
       #   pairs. Omitted names are initialized as the default value.
-      # @option options :force The force
+      # @option options :force
       #
       #   +true+ を指定すると既存の同名のカラムが
       #   存在していても、強制的に新しいカラムを作成する。
-      # @option options :path The path
+      # @option options :path
       #
       #   カラムを保存するパス。
-      # @option options :persistent The persistent
+      # @option options :persistent
       #
       #   +true+ を指定すると永続カラムとなる。 +:path+ を省略
       #   した場合は自動的にパスが付加される。
-      # @option options :type (:scalar) The type
+      # @option options :type (:scalar)
       #
       #   カラムの値の格納方法について指定する。
       #   <b>:scalar</b>
       #     スカラ値(単独の値)を格納する。
       #   <b>:vector</b>
       #     値の配列を格納する。
-      # @option options :compress The compress
+      # @option options :compress
       #
       #   値の圧縮方法を指定する。省略した場合は、圧縮しない。
       #   <b>:zlib</b>
