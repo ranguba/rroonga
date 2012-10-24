@@ -337,14 +337,13 @@ rb_grn_logger_s_reopen_with_related_object (VALUE klass, VALUE related_object)
 }
 
 /*
- * call-seq:
- *   Groonga::Logger.reopen
- *
  * groongaのデフォルトロガーがログを出力するファイルを再オー
  * プンする。ログファイルのバックアップ時などに使用する。
  *
  * Groonga::Logger.registerで独自のロガーを設定している場合
  * は例外が発生する。
+ *
+ * @overload reopen
  */
 static VALUE
 rb_grn_logger_s_reopen (VALUE klass)
