@@ -559,13 +559,10 @@ rb_grn_object_deconstruct (RbGrnObject *rb_grn_object,
 }
 
 /*
- * Document-method: close
- *
- * call-seq:
- *   object.close
- *
  * _object_ が使用しているリソースを開放する。これ以降 _object_ を
  * 使うことはできない。
+ *
+ * @overload close
  */
 VALUE
 rb_grn_object_close (VALUE self)
