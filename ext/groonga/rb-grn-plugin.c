@@ -133,13 +133,11 @@ rb_grn_plugin_s_system_plugins_dir (VALUE klass)
     return rb_str_new2(grn_plugin_get_system_plugins_dir());
 }
 
-/**
- * call-seq:
- *   Groonga::Plugin.suffix
- *
+/*
  * Returns the plugin file suffix. (e.g. ".so", ".dll" and so on.)
  *
- * @return The plugin file suffix.
+ * @overload suffix
+ *   @return The plugin file suffix.
  */
 static VALUE
 rb_grn_plugin_s_suffix (VALUE klass)
