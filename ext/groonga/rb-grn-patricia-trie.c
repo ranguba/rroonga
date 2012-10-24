@@ -747,44 +747,29 @@ rb_grn_patricia_trie_open_grn_rk_cursor (int argc, VALUE *argv, VALUE self,
  *
  * @overload open_rk_cursor(key, options={})
  *   @return [Groonga::PatriciaTrieCursor]
- *   @param options [::Hash]
- *     pairs. Omitted names are initialized as the default value.
- *   @option options :key_bytes
- *    _key_のサイズ（byte）
- *   @option options :key_bits
- *    _key_のサイズ（bit）（現在は未サポート）
- *   @option options :offset
- *     該当する範囲のレコードのうち、(0ベースで)_:offset_番目から
- *     レコードを取り出す。
- *   @option options :limit
- *     該当する範囲のレコードのうち、 _:limit_ 件のみを取り出す。
- *     省略された場合または-1が指定された場合は、全件が指定されたものとみなす。
- *   @option options :greater_than
- *     +true+ を指定すると _key_ で指定した値に一致した [ +key+ ] を
- *     範囲に含まない。
- *   @option options :less_than
- *     +true+ を指定すると _key_ で指定した値に一致した [ +key+ ] を
- *     範囲に含まない。
+ *   @!macro [new] patricia-trie.open_rk_cursor.options
+ *     @param options [::Hash]
+ *       pairs. Omitted names are initialized as the default value.
+ *     @option options :key_bytes
+ *      _key_のサイズ（byte）
+ *     @option options :key_bits
+ *      _key_のサイズ（bit）（現在は未サポート）
+ *     @option options :offset
+ *       該当する範囲のレコードのうち、(0ベースで) _:offset_ 番目から
+ *       レコードを取り出す。
+ *     @option options :limit
+ *       該当する範囲のレコードのうち、 _:limit_ 件のみを取り出す。
+ *       省略された場合または-1が指定された場合は、全件が指定されたものとみなす。
+ *     @option options :greater_than
+ *       +true+ を指定すると _key_ で指定した値に一致した [ +key+ ] を
+ *       範囲に含まない。
+ *     @option options :less_than
+ *       +true+ を指定すると _key_ で指定した値に一致した [ +key+ ] を
+ *       範囲に含まない。
+ *   @!macro patricia-trie.open_rk_cursor.options
  * @overload open_rk_cursor(key, options={})
  *   @yield [cursor]
- *   @param options [::Hash]
- *     pairs. Omitted names are initialized as the default value.
- *   @option options :key_bytes
- *    _key_のサイズ（byte）
- *   @option options :key_bits
- *    _key_のサイズ（bit）（現在は未サポート）
- *   @option options :offset
- *     該当する範囲のレコードのうち、(0ベースで)_:offset_番目から
- *     レコードを取り出す。
- *   @option options :limit
- *     該当する範囲のレコードのうち、 _:limit_ 件のみを取り出す。
- *     省略された場合または-1が指定された場合は、全件が指定されたものとみなす。
- *   @option options :greater_than
- *     +true+ を指定すると _key_ で指定した値に一致した [ +key+ ] を
- *     範囲に含まない。
- *   @option options :less_than
- *     +true+ を指定すると _key_ で指定した値に一致した [ +key+ ] を
- *     範囲に含まない。
+ *   @!macro patricia-trie.open_rk_cursor.options
  */
 static VALUE
 rb_grn_patricia_trie_open_rk_cursor (int argc, VALUE *argv, VALUE self)
