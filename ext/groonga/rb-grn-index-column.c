@@ -426,8 +426,6 @@ rb_grn_index_column_set_source (VALUE self, VALUE rb_source)
  *   @option options :near
  *     +true+ を指定すると _query_ に指定した複数の語が近傍に含ま
  *     れるレコードを検索する
- *   [...]
- *     ...
  * @return [Groonga::Hash]
  */
 static VALUE
