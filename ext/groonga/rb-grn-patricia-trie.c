@@ -369,10 +369,6 @@ rb_grn_patricia_trie_search (int argc, VALUE *argv, VALUE self)
 }
 
 /*
- * call-seq:
- *   patricia_trie.scan(string) -> Array
- *   patricia_trie.scan(string) {|record, word, start, length| ... }
- *
  * _string_ を走査し、 _patricia_trie_ 内に格納されているキーに
  * マッチした部分文字列の情報をブロックに渡す。複数のキーが
  * マッチする場合は最長一致するキーを優先する。
@@ -412,6 +408,11 @@ rb_grn_patricia_trie_search (int argc, VALUE *argv, VALUE self)
  *     # -> [[muteki, "muTEki", 0, 6],
  *     #     [adventure_of_link, "リンクの冒険", 7, 18],
  *     #     [gaxtu, "ガッ", 42, 6]]
+ *
+ * @overload scan(string)
+ *   @return [Array]
+ * @overload scan(string)
+ *   @yield [record, word, start, length]
  */
 static VALUE
 rb_grn_patricia_trie_scan (VALUE self, VALUE rb_string)
