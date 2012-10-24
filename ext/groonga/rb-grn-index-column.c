@@ -521,12 +521,9 @@ rb_grn_index_column_with_weight_p (VALUE self)
 }
 
 /*
- * Document-method: with_position?
- *
- * call-seq:
- *   column.with_position? -> true/false
- *
  * _column_ が位置情報も格納する場合は +true+ を返します。
+ *
+ * @overload with_position?
  */
 static VALUE
 rb_grn_index_column_with_position_p (VALUE self)
