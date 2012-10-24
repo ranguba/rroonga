@@ -24,11 +24,14 @@ module Groonga
     # _table_ の _id_ に対応するレコードを作成する。_values_ には各
     # カラムに設定する値を以下のような形式で指定する。
     #
-    #   [
-    #    ["カラム名", 値],
-    #    ["カラム名", 値],
-    #    ...,
-    #   ]
+    # <pre>
+    # !!!ruby
+    # [
+    #  ["カラム名", 値],
+    #  ["カラム名", 値],
+    #  ...,
+    # ]
+    # </pre>
     def initialize(table, id, values=nil)
       @table = table
       @id = id
