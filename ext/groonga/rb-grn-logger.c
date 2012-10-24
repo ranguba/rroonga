@@ -340,7 +340,7 @@ rb_grn_logger_s_reopen_with_related_object (VALUE klass, VALUE related_object)
  * groongaのデフォルトロガーがログを出力するファイルを再オー
  * プンする。ログファイルのバックアップ時などに使用する。
  *
- * Groonga::Logger.registerで独自のロガーを設定している場合
+ * {Groonga::Logger.register} で独自のロガーを設定している場合
  * は例外が発生する。
  *
  * @overload reopen
@@ -403,7 +403,7 @@ rb_grn_logger_s_get_log_path (VALUE klass)
  * groongaのデフォルトロガーがログを出力するファイルのパスを
  * 指定する。
  *
- * Groonga::Logger.registerで独自のロガーを設定している場合、
+ * {Groonga::Logger.register} で独自のロガーを設定している場合、
  * 設定している独自ロガーは無効になる。
  *
  * @overload log_path=(path)
@@ -444,7 +444,7 @@ rb_grn_logger_s_get_query_log_path (VALUE klass)
  * groongaのデフォルトロガーがクエリログを出力するファイルの
  * パスを指定する。
  *
- * Groonga::Logger.registerで独自のロガーを設定している場合、
+ * {Groonga::Logger.register} で独自のロガーを設定している場合、
  * 設定している独自ロガーは無効になる。
  *
  * @overload query_log_path=(path)
