@@ -992,8 +992,8 @@ module Groonga
       end
     end
 
-    # スキーマ定義時にGroonga::Schema.create_tableや
-    # Groonga::Schema#create_tableからブロックに渡されてくる
+    # スキーマ定義時に {Groonga::Schema.create_table} や
+    # {Groonga::Schema#create_table} からブロックに渡されてくる
     # オブジェクト
     class TableDefinition
       include Path
