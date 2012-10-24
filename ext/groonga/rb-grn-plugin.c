@@ -125,7 +125,7 @@ rb_grn_plugin_s_register (int argc, VALUE *argv, VALUE klass)
  * Returns the system plugins directory.
  *
  * @overload system_plugins_dir
- *   @return The system plugins directory.
+ *   @return [String]
  */
 static VALUE
 rb_grn_plugin_s_system_plugins_dir (VALUE klass)
@@ -137,7 +137,7 @@ rb_grn_plugin_s_system_plugins_dir (VALUE klass)
  * Returns the plugin file suffix. (e.g. ".so", ".dll" and so on.)
  *
  * @overload suffix
- *   @return The plugin file suffix.
+ *   @return [String]
  */
 static VALUE
 rb_grn_plugin_s_suffix (VALUE klass)
