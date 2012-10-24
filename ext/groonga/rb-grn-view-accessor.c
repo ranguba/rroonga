@@ -43,7 +43,7 @@ rb_grn_view_accessor_to_ruby_object (grn_ctx *context, grn_obj *table,
  * Document-class: Groonga::ViewAccessor < Groonga::Object
  *
  * キー、値、スコアなど種々の値へのアクセスをカプセル化した
- * オブジェクト。Groonga::Table#columnで取得できる。
+ * オブジェクト。 {Groonga::Table#column} で取得できる。
  */
 void
 rb_grn_init_view_accessor (VALUE mGrn)
