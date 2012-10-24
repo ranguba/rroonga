@@ -17,7 +17,7 @@
 
 module Groonga
   class TooSmallPage < Error
-    # Table#paginate で小さすぎるページ番号を指定した場合に
+    # {Table#paginate} で小さすぎるページ番号を指定した場合に
     # 発生する。
 
     # 指定したページ番号。
@@ -33,7 +33,7 @@ module Groonga
   end
 
   class TooLargePage < Error
-    # Table#paginate で大きすぎるページ番号を指定した場合に
+    # {Table#paginate} で大きすぎるページ番号を指定した場合に
     # 発生する。
 
     # 指定したページ番号。
@@ -49,7 +49,7 @@ module Groonga
   end
 
   class TooSmallPageSize < Error
-    # Table#paginate で小さすぎるページサイズを指定した場合
+    # {Table#paginate} で小さすぎるページサイズを指定した場合
     # に発生する。
 
     # 指定したページサイズ。
