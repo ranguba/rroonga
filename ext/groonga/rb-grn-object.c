@@ -1363,12 +1363,9 @@ rb_grn_object_array_set (VALUE self, VALUE rb_id, VALUE rb_value)
 }
 
 /*
- * Document-method: append
- *
- * call-seq:
- *   object.append(id, value)
- *
  * _object_ の _id_ に対応する値の最後に _value_ を追加する。
+ *
+ * @overload append(id, value)
  */
 static VALUE
 rb_grn_object_append_value (VALUE self, VALUE rb_id, VALUE rb_value)
