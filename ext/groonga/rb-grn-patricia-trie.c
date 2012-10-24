@@ -318,7 +318,7 @@ rb_grn_patricia_trie_s_create (int argc, VALUE *argv, VALUE klass)
  *       マッチしたレコードのスコアを増加。 =:
  *     - +:type+ :=
  *       ????? =:
- * @return [Groonga::Hash]
+ *   @return [Groonga::Hash]
  */
 static VALUE
 rb_grn_patricia_trie_search (int argc, VALUE *argv, VALUE self)
