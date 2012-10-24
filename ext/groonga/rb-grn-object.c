@@ -955,12 +955,10 @@ rb_grn_object_inspect_footer (VALUE self, VALUE inspected)
 }
 
 /*
- * Document-method: inspect
- *
- * call-seq:
- *   object.inspect -> 詳細情報
- *
  * _object_ の詳細を示した文字列を返す。デバッグ用。
+ *
+ * @overload inspect
+ *   @return [詳細情報]
  */
 static VALUE
 rb_grn_object_inspect (VALUE self)
