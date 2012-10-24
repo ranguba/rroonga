@@ -23,8 +23,8 @@ VALUE rb_cGrnViewCursor;
 /*
  * Document-class: Groonga::ViewCursor < Groonga::TableCursor
  *
- * Groonga::Viewからレコードを順番に取り出すためのオブジェク
- * ト。利用できるメソッドはGroonga::TableCursorを参照。
+ * {Groonga::View} からレコードを順番に取り出すためのオブジェク
+ * ト。利用できるメソッドは {Groonga::TableCursor} を参照。
  */
 
 void
