@@ -121,13 +121,11 @@ rb_grn_plugin_s_register (int argc, VALUE *argv, VALUE klass)
     return Qnil;
 }
 
-/**
- * call-seq:
- *   Groonga::Plugin.system_plugins_dir
- *
+/*
  * Returns the system plugins directory.
  *
- * @return The system plugins directory.
+ * @overload system_plugins_dir
+ *   @return The system plugins directory.
  */
 static VALUE
 rb_grn_plugin_s_system_plugins_dir (VALUE klass)
