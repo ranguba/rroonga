@@ -998,13 +998,11 @@ rb_grn_object_get_id (VALUE self)
 }
 
 /*
- * Document-method: path
- *
- * call-seq:
- *   object.path -> ファイルパス/nil
- *
  * _object_ に対応するファイルパスを返す。一時 _object_
  * なら +nil+ を返す。
+ *
+ * @overload path
+ *   @return [ファイルパス or nil]
  */
 static VALUE
 rb_grn_object_get_path (VALUE self)
