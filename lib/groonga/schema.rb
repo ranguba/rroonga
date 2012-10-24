@@ -1111,10 +1111,12 @@ module Groonga
       # きます。
       #
       # _target_column_full_name_ で指定するときはテーブル名
-      # とカラム名を"."でつなげます。例えば、「Users」テーブ
-      # ルの「name」カラムのインデックスカラムを指定する場合
-      # はこうなります。
+      # とカラム名を"."でつなげます。
       #
+      # 例えば、「Users」テーブルの「name」カラムのインデックスカラムを
+      # 指定する場合はこうなります。
+      #
+      # @example
       #   table.index("Users.name")
       #
       # @param [Array] args
@@ -1163,10 +1165,12 @@ module Groonga
       # クスカラムを削除します。
       #
       # _target_column_full_name_ で指定するときはテーブル名
-      # とカラム名を"."でつなげます。例えば、「Users」テーブ
-      # ルの「name」カラムのインデックスカラムを削除する場合
-      # はこうなります。
+      # とカラム名を"."でつなげます。
       #
+      # 例えば、「Users」テーブルの「name」カラムのインデックスカラムを
+      # 削除する場合はこうなります。
+      #
+      # @example
       #   table.remove_index("Users.name")
       #
       # @param [::Hash] args { :name => target_column }と指定す
