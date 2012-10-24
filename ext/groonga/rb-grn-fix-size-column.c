@@ -29,10 +29,10 @@ VALUE rb_cGrnFixSizeColumn;
  */
 
 /*
- * call-seq:
- *   column[id] -> 値
- *
  * _column_ の _id_ に対応する値を返す。
+ *
+ * @overload column[id]
+ *   @return [値]
  */
 VALUE
 rb_grn_fix_size_column_array_reference (VALUE self, VALUE rb_id)
