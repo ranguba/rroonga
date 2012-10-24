@@ -164,7 +164,11 @@ Rake::ExtensionTask.new("groonga", spec) do |ext|
 end
 
 file "Makefile" => ["extconf.rb", "ext/groonga/extconf.rb"] do
-  ruby("extconf.rb")
+  extconf_args = []
+  if ENV["TRAVIS"]
+    extconf_args << "--enable-debug-build"
+  end
+  ruby("extconf.rb", *extconf_args)
 end
 
 desc "Configure"
