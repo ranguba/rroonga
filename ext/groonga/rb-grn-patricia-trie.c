@@ -376,6 +376,7 @@ rb_grn_patricia_trie_search (int argc, VALUE *argv, VALUE self)
  * ブロックを指定しない場合は、マッチした部分文字列の情報を
  * まとめて配列として返す。
  *
+ * @example
  *   words = Groonga::PatriciaTrie.create(:key_type => "ShortText",
  *                                        :key_normalize => true)
  *   words.add("リンク")
