@@ -62,12 +62,12 @@ VALUE rb_cGrnPatriciaTrie;
  *   #（キーの種類を表すオブジェクトは文字列で指定。）
  *   Groonga::PatriciaTrie.create(:key_type => "ShortText")
  *
- *   #キーとして<tt>Bookmarks</tt>テーブルのレコードを使用す
+ *   #キーとしてBookmarksテーブルのレコードを使用す
  *   #る無名一時テーブルを生成する。
  *   bookmarks = Groonga::PatriciaTrie.create(:name => "Bookmarks")
  *   Groonga::PatriciaTrie.create(:key_type => bookmarks)
  *
- *   #キーとして<tt>Bookmarks</tt>テーブルのレコードを使用す
+ *   #キーとしてBookmarksテーブルのレコードを使用す
  *   #る無名一時テーブルを生成する。
  *   #（テーブルは文字列で指定。）
  *   Groonga::PatriciaTrie.create(:name => "Bookmarks")
