@@ -191,6 +191,7 @@ rb_grn_column_get_local_name (VALUE self)
  *   end
  *
  * 出力例
+ *
  * <pre>
  * !!!text
  * rroongaの説明文の中で「groonga」が含まれる部分
