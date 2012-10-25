@@ -76,116 +76,65 @@ VALUE rb_cGrnHash;
  *
  * @overload create(options={})
  *   @return [Groonga::Hash]
- *   @param [::Hash] options The name and value
- *     pairs. Omitted names are initialized as the default value
- *   @option options [Groonga::Context] :context (Groonga::Context.default)
- *     テーブルが利用するGroonga::Context。省略すると
- *     Groonga::Context.defaultを用いる。
- *   @option options [Groonga::Context#[]] :name
- *     テーブルの名前。名前をつけると、Groonga::Context#[]に名
- *     前を指定してテーブルを取得することができる。省略すると
- *     無名テーブルになり、テーブルIDでのみ取得できる。
- *   @option options [Groonga::Context#[]] :path
- *     テーブルを保存するパス。パスを指定すると永続テーブルとな
- *     り、プロセス終了後もレコードは保持される。次回起動時に
- *     Groonga::Context#[]で保存されたレコードを利用することが
- *     できる。省略すると一時テーブルになり、プロセスが終了する
- *     とレコードは破棄される。
- *   @option options :persistent
- *     +true+ を指定すると永続テーブルとなる。 +path+ を省略した
- *     場合は自動的にパスが付加される。 +:context+ で指定した
- *     Groonga::Contextに結びついているデータベースが一時デー
- *     タベースの場合は例外が発生する。
- *   @option options :key_normalize
- *     +true+ を指定するとキーを正規化する。
- *   @option options :key_type
- *     キーの種類を示すオブジェクトを指定する。キーの種類には型
- *     名（"Int32"や"ShortText"など）またはGroonga::Typeまたは
- *     テーブル（Groonga::Array、Groonga::Hash、
- *     Groonga::PatriciaTrieのどれか）を指定する。
+ *   @!macro hash.create.options
+ *     @param [::Hash] options The name and value
+ *       pairs. Omitted names are initialized as the default value
+ *     @option options [Groonga::Context] :context (Groonga::Context.default)
+ *       テーブルが利用するGroonga::Context。省略すると
+ *       Groonga::Context.defaultを用いる。
+ *     @option options [Groonga::Context#[]] :name
+ *       テーブルの名前。名前をつけると、Groonga::Context#[]に名
+ *       前を指定してテーブルを取得することができる。省略すると
+ *       無名テーブルになり、テーブルIDでのみ取得できる。
+ *     @option options [Groonga::Context#[]] :path
+ *       テーブルを保存するパス。パスを指定すると永続テーブルとな
+ *       り、プロセス終了後もレコードは保持される。次回起動時に
+ *       Groonga::Context#[]で保存されたレコードを利用することが
+ *       できる。省略すると一時テーブルになり、プロセスが終了する
+ *       とレコードは破棄される。
+ *     @option options :persistent
+ *       +true+ を指定すると永続テーブルとなる。 +path+ を省略した
+ *       場合は自動的にパスが付加される。 +:context+ で指定した
+ *       Groonga::Contextに結びついているデータベースが一時デー
+ *       タベースの場合は例外が発生する。
+ *     @option options :key_normalize
+ *       +true+ を指定するとキーを正規化する。
+ *     @option options :key_type
+ *       キーの種類を示すオブジェクトを指定する。キーの種類には型
+ *       名（"Int32"や"ShortText"など）またはGroonga::Typeまたは
+ *       テーブル（Groonga::Array、Groonga::Hash、
+ *       Groonga::PatriciaTrieのどれか）を指定する。
  *
- *     Groonga::Typeを指定した場合は、その型が示す範囲の値をキー
- *     として使用する。ただし、キーの最大サイズは4096バイトで
- *     あるため、Groonga::Type::TEXTやGroonga::Type::LONG_TEXT
- *     は使用できない。
+ *       Groonga::Typeを指定した場合は、その型が示す範囲の値をキー
+ *       として使用する。ただし、キーの最大サイズは4096バイトで
+ *       あるため、Groonga::Type::TEXTやGroonga::Type::LONG_TEXT
+ *       は使用できない。
  *
- *     テーブルを指定した場合はレコードIDをキーとして使用する。
- *     指定したテーブルのGroonga::Recordをキーとして使用するこ
- *     ともでき、その場合は自動的にGroonga::Recordからレコード
- *     IDを取得する。
+ *       テーブルを指定した場合はレコードIDをキーとして使用する。
+ *       指定したテーブルのGroonga::Recordをキーとして使用するこ
+ *       ともでき、その場合は自動的にGroonga::Recordからレコード
+ *       IDを取得する。
  *
- *     省略した場合はShortText型をキーとして使用する。この場合、
- *     4096バイトまで使用可能である。
- *   @option options :value_type
- *     値の型を指定する。省略すると値のための領域を確保しない。
- *     値を保存したい場合は必ず指定すること。
+ *       省略した場合はShortText型をキーとして使用する。この場合、
+ *       4096バイトまで使用可能である。
+ *     @option options :value_type
+ *       値の型を指定する。省略すると値のための領域を確保しない。
+ *       値を保存したい場合は必ず指定すること。
  *
- *     参考: Groonga::Type.new
- *   @option options [Groonga::IndexColumn] :default_tokenizer
- *     Groonga::IndexColumnで使用するトークナイザを指定する。
- *     デフォルトでは何も設定されていないので、テーブルに
- *     Groonga::IndexColumnを定義する場合は
- *     <tt>"TokenBigram"</tt>などを指定する必要がある。
- *   @option options [Groonga::Record#n_sub_records] :sub_records
- *     +true+ を指定すると#groupでグループ化したときに、
- *     Groonga::Record#n_sub_recordsでグループに含まれるレコー
- *     ドの件数を取得できる。
+ *       参考: Groonga::Type.new
+ *     @option options [Groonga::IndexColumn] :default_tokenizer
+ *       Groonga::IndexColumnで使用するトークナイザを指定する。
+ *       デフォルトでは何も設定されていないので、テーブルに
+ *       Groonga::IndexColumnを定義する場合は
+ *       <tt>"TokenBigram"</tt>などを指定する必要がある。
+ *     @option options [Groonga::Record#n_sub_records] :sub_records
+ *       +true+ を指定すると#groupでグループ化したときに、
+ *       Groonga::Record#n_sub_recordsでグループに含まれるレコー
+ *       ドの件数を取得できる。
+ *   @!macro hash.create.options
  * @overload create(options={})
  *   @yield [table]
- *   @param [::Hash] options The name and value
- *     pairs. Omitted names are initialized as the default value
- *   @option options [Groonga::Context] :context (Groonga::Context.default)
- *     テーブルが利用するGroonga::Context。省略すると
- *     Groonga::Context.defaultを用いる。
- *   @option options [Groonga::Context#[]] :name
- *     テーブルの名前。名前をつけると、Groonga::Context#[]に名
- *     前を指定してテーブルを取得することができる。省略すると
- *     無名テーブルになり、テーブルIDでのみ取得できる。
- *   @option options [Groonga::Context#[]] :path
- *     テーブルを保存するパス。パスを指定すると永続テーブルとな
- *     り、プロセス終了後もレコードは保持される。次回起動時に
- *     Groonga::Context#[]で保存されたレコードを利用することが
- *     できる。省略すると一時テーブルになり、プロセスが終了する
- *     とレコードは破棄される。
- *   @option options :persistent
- *     +true+ を指定すると永続テーブルとなる。 +path+ を省略した
- *     場合は自動的にパスが付加される。 +:context+ で指定した
- *     Groonga::Contextに結びついているデータベースが一時デー
- *     タベースの場合は例外が発生する。
- *   @option options :key_normalize
- *     +true+ を指定するとキーを正規化する。
- *   @option options :key_type
- *     キーの種類を示すオブジェクトを指定する。キーの種類には型
- *     名（"Int32"や"ShortText"など）またはGroonga::Typeまたは
- *     テーブル（Groonga::Array、Groonga::Hash、
- *     Groonga::PatriciaTrieのどれか）を指定する。
- *
- *     Groonga::Typeを指定した場合は、その型が示す範囲の値をキー
- *     として使用する。ただし、キーの最大サイズは4096バイトで
- *     あるため、Groonga::Type::TEXTやGroonga::Type::LONG_TEXT
- *     は使用できない。
- *
- *     テーブルを指定した場合はレコードIDをキーとして使用する。
- *     指定したテーブルのGroonga::Recordをキーとして使用するこ
- *     ともでき、その場合は自動的にGroonga::Recordからレコード
- *     IDを取得する。
- *
- *     省略した場合はShortText型をキーとして使用する。この場合、
- *     4096バイトまで使用可能である。
- *   @option options :value_type
- *     値の型を指定する。省略すると値のための領域を確保しない。
- *     値を保存したい場合は必ず指定すること。
- *
- *     参考: Groonga::Type.new
- *   @option options [Groonga::IndexColumn] :default_tokenizer
- *     Groonga::IndexColumnで使用するトークナイザを指定する。
- *     デフォルトでは何も設定されていないので、テーブルに
- *     Groonga::IndexColumnを定義する場合は
- *     <tt>"TokenBigram"</tt>などを指定する必要がある。
- *   @option options [Groonga::Record#n_sub_records] :sub_records
- *     +true+ を指定すると#groupでグループ化したときに、
- *     Groonga::Record#n_sub_recordsでグループに含まれるレコー
- *     ドの件数を取得できる。
+ *   @!macro hash.create.options
  */
 static VALUE
 rb_grn_hash_s_create (int argc, VALUE *argv, VALUE klass)
