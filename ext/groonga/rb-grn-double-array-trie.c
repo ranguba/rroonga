@@ -96,21 +96,21 @@ VALUE rb_cGrnDoubleArrayTrie;
  *     @param [::Hash] options The name and value
  *       pairs. Omitted names are initialized as the default value.
  *     @option options [Groonga::Context] :context (Groonga::Context.default)
- *       テーブルが利用するGroonga::Context。
+ *       テーブルが利用する {Groonga::Context} 。
  *     @option options :name
- *       テーブルの名前。名前をつけると、Groonga::Context#[]に名
+ *       テーブルの名前。名前をつけると、 {Groonga::Context#[]} に名
  *       前を指定してテーブルを取得することができる。省略すると
  *       無名テーブルになり、テーブルIDでのみ取得できる。
  *     @option options :path
  *       テーブルを保存するパス。パスを指定すると永続テーブルとな
  *       り、プロセス終了後もレコードは保持される。次回起動時に
- *       Groonga::Context#[]で保存されたレコードを利用する
+ *       {Groonga::Context#[]} で保存されたレコードを利用する
  *       ことができる。省略すると一時テーブルになり、プロセスが終
  *       了するとレコードは破棄される。
  *     @option options :persistent
  *       +true+ を指定すると永続テーブルとなる。 +path+ を省略した
  *       場合は自動的にパスが付加される。 +:context+ で指定した
- *       Groonga::Contextに結びついているデータベースが一時デー
+ *       {Groonga::Context} に結びついているデータベースが一時デー
  *       タベースの場合は例外が発生する。
  *     @option options :key_normalize
  *       +true+ を指定するとキーを正規化する。
@@ -119,17 +119,17 @@ VALUE rb_cGrnDoubleArrayTrie;
  *       録される。
  *     @option options :key_type
  *       キーの種類を示すオブジェクトを指定する。キーの種類には型
- *       名（"Int32"や"ShortText"など）またはGroonga::Typeまたは
- *       テーブル（Groonga::Array、Groonga::Hash、
- *       Groonga::DoubleArrayTrieのどれか）を指定する。
- *       Groonga::Typeを指定した場合は、その型が示す範囲の値をキー
+ *       名（"Int32"や"ShortText"など）または {Groonga::Type} または
+ *       テーブル（ {Groonga::Array} 、{Groonga::Hash} 、
+ *       {Groonga::DoubleArrayTrie} のどれか）を指定する。
+ *       {Groonga::Type} を指定した場合は、その型が示す範囲の値をキー
  *       として使用する。ただし、キーの最大サイズは4096バイトで
- *       あるため、Groonga::Type::TEXTやGroonga::Type::LONG_TEXT
+ *       あるため、 {Groonga::Type::TEXT} や {Groonga::Type::LONG_TEXT}
  *       は使用できない。
  *
  *       テーブルを指定した場合はレコードIDをキーとして使用する。
- *       指定したテーブルのGroonga::Recordをキーとして使用するこ
- *       ともでき、その場合は自動的にGroonga::Recordからレコード
+ *       指定したテーブルの {Groonga::Record} をキーとして使用するこ
+ *       ともでき、その場合は自動的に {Groonga::Record} からレコード
  *       IDを取得する。
  *
  *       省略した場合はShortText型をキーとして使用する。この場合、
@@ -138,16 +138,16 @@ VALUE rb_cGrnDoubleArrayTrie;
  *       値の型を指定する。省略すると値のための領域を確保しない。
  *       値を保存したい場合は必ず指定すること。
  *
- *       参考: Groonga::Type.new
+ *       参考: {Groonga::Type.new}
  *
  *     @option options :default_tokenizer
- *       Groonga::IndexColumnで使用するトークナイザを指定する。
+ *       {Groonga::IndexColumn} で使用するトークナイザを指定する。
  *       デフォルトでは何も設定されていないので、テーブルに
- *       Groonga::IndexColumnを定義する場合は
+ *       {Groonga::IndexColumn} を定義する場合は
  *       <tt>"TokenBigram"</tt>などを指定する必要がある。
  *     @option options :sub_records
- *       +true+ を指定すると#groupでグループ化したときに、
- *       Groonga::Record#n_sub_recordsでグループに含まれるレコー
+ *       +true+ を指定すると {#group} でグループ化したときに、
+ *       {Groonga::Record#n_sub_records} でグループに含まれるレコー
  *       ドの件数を取得できる。
  *   @!macro double-array-trie.create.options
  * @overload create(options={})
