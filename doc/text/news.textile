@@ -8,8 +8,11 @@ h3. Improvements
   It is for using offline index construction.
 * Added term_extract in Table#select by @table.select {|record|
   record.key.term_extract(text)}@ syntax.
-* Supported allow_leading_not as a option of #select. You should use
-  this option carefully because searching with it takes a long time.
+* Supported :allow_leading_not as a option of #select.
+  You should use this option carefully. It takes a long time to search
+  all records which doesn't include a word. In addition, when the
+  number of records is large, to search them with this option is
+  slowly.
 
 h3. Fixes
 
