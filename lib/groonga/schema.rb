@@ -153,6 +153,7 @@ module Groonga
       # マを定義する。以下の省略形。
       #
       # <pre>
+      # !!!ruby
       # schema = Groonga::Scheme.new(options)
       # # ...
       # schema.define
@@ -337,6 +338,7 @@ module Groonga
       # 名前が _name_ のテーブルを変更する。以下の省略形。
       #
       # <pre>
+      # !!!ruby
       # Groonga::Schema.define do |schema|
       #   schema.change_table(name, options) do |table|
       #     # ...
@@ -378,6 +380,7 @@ module Groonga
       # 名前が_name_のビューを作成する。以下の省略形。
       #
       # <pre>
+      # !!!ruby
       # Groonga::Schema.define do |schema|
       #   schema.create_view(name, options) do |view|
       #     # ...
@@ -427,6 +430,7 @@ module Groonga
       # 名前が _name_ のビューを変更する。以下の省略形。
       #
       # <pre>
+      # !!!ruby
       # Groonga::Schema.define do |schema|
       #   schema.change_view(name, options) do |view|
       #     # ...
@@ -452,6 +456,7 @@ module Groonga
       # 以下と同様:
       #
       # <pre>
+      # !!!ruby
       # Groonga::Schema.change_table(table_name) do |table|
       #   table.remove_column(column_name)
       # end
@@ -465,6 +470,7 @@ module Groonga
       # This is a syntax sugar of the following:
       #
       # <pre>
+      # !!!ruby
       # Groonga::Schema.define do |schema|
       #   schema.rename_column(table_name,
       #                        current_column_name, new_column_name)
@@ -485,6 +491,7 @@ module Groonga
       # dump.rb:
       #
       # <pre>
+      # !!!ruby
       # File.open("/tmp/groonga-schema.rb", "w") do |schema|
       #   dumped_text = Groonga::Schema.dump
       # end
@@ -493,6 +500,7 @@ module Groonga
       # restore.rb:
       #
       # <pre>
+      # !!!ruby
       # dumped_text = Groonga::Schema.dump
       # Groonga::Database.create(:path => "/tmp/new-db.grn")
       # Groonga::Schema.restore(dumped_text)
@@ -504,6 +512,7 @@ module Groonga
       # dump.rb:
       #
       # <pre>
+      # !!!ruby
       # File.open("/tmp/groonga-schema.grn", "w") do |schema|
       #   dumped_text = Groonga::Schema.dump(:syntax => :command)
       # end
@@ -946,6 +955,7 @@ module Groonga
     # 以下と同様:
     #
     # <pre>
+    # !!!ruby
     # schema.change_table(table_name) do |table|
     #   table.remove_column(column_name)
     # end
@@ -959,6 +969,7 @@ module Groonga
     # It is a syntax sugar of the following:
     #
     # <pre>
+    # !!!ruby
     # schema.change_table(table_name) do |table|
     #   table.rename_column(current_column_name, new_column_name)
     # end
