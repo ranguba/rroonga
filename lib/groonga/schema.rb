@@ -200,7 +200,7 @@ module Groonga
       #     (:key_typeの項も参照)
       #   @option options [Groonga::Context] :context (Groonga::Context.default) The context
       #
-      #     スキーマ定義時に使用するGroonga::Contextを指定する。
+      #     スキーマ定義時に使用する {Groonga::Context} を指定する。
       #   @option options :path The path
       #
       #     テーブルを保存するパスを指定する。
@@ -215,8 +215,8 @@ module Groonga
       #     値を保存したい場合は必ず指定すること。
       #   @option options :sub_records The sub_records
       #
-      #     +true+ を指定するとGroonga::Table#groupで
-      #     グループ化したときに、Groonga::Record#n_sub_recordsでグループに
+      #     +true+ を指定すると {Groonga::Table#group} で
+      #     グループ化したときに、 {Groonga::Record#n_sub_records} でグループに
       #     含まれるレコードの件数を取得できる。
       #
       # @overload create_table(name, options= {:type => :hash}, &block)
@@ -234,7 +234,7 @@ module Groonga
       #     (:key_typeの項も参照)
       #   @option options [Groonga::Context] :context (Groonga::Context.default) The context
       #
-      #     スキーマ定義時に使用するGroonga::Contextを指定する。
+      #     スキーマ定義時に使用する {Groonga::Context} を指定する。
       #   @option options :path The path
       #
       #     テーブルを保存するパスを指定する。
@@ -249,29 +249,29 @@ module Groonga
       #     値を保存したい場合は必ず指定すること。
       #   @option options :sub_records The sub_records
       #
-      #     +true+ を指定するとGroonga::Table#groupで
-      #     グループ化したときに、Groonga::Record#n_sub_recordsでグループに
+      #     +true+ を指定すると {Groonga::Table#group} で
+      #     グループ化したときに、 {Groonga::Record#n_sub_records} でグループに
       #     含まれるレコードの件数を取得できる。
       #   @option options :key_type The key_type
       #
       #     キーの種類を示すオブジェクトを指定する。
-      #     キーの種類には型名（"Int32"や"ShortText"など）またはGroonga::Type
-      #     またはテーブル（Groonga::Array、Groonga::Hash、
-      #     Groonga::PatriciaTrie、Groonga::DoubleArrayTrieの
-      #     どれか）を指定する。Groonga::Typeを指定した場合は、その型が示す範囲の
+      #     キーの種類には型名（"Int32"や"ShortText"など）または {Groonga::Type}
+      #     またはテーブル（ {Groonga::Array} 、 {Groonga::Hash} 、
+      #     {Groonga::PatriciaTrie} 、 {Groonga::DoubleArrayTrie} の
+      #     どれか）を指定する。 {Groonga::Type} を指定した場合は、その型が示す範囲の
       #     値をキーとして使用する。ただし、キーの最大サイズは4096バイトで
-      #     あるため、Groonga::Type::TEXTやGroonga::Type::LONG_TEXTは使用できない
+      #     あるため、 {Groonga::Type::TEXT} や {Groonga::Type::LONG_TEXT} は使用できない
       #     。テーブルを指定した場合はレコードIDをキーとして使用する。
-      #     指定したテーブルのGroonga::Recordをキーとして使用することもでき、
-      #     その場合は自動的にGroonga::RecordからレコードIDを取得する。
+      #     指定したテーブルの {Groonga::Record} をキーとして使用することもでき、
+      #     その場合は自動的に {Groonga::Record} からレコードIDを取得する。
       #     省略した場合は文字列をキーとして使用する。
       #     この場合、4096バイトまで使用可能である。
       #   @option options :default_tokenizer The default_tokenizer
       #
-      #     Groonga::IndexColumnで
+      #     {Groonga::IndexColumn} で
       #     使用するトークナイザを指定する。デフォルトでは
       #     何も設定されていないので、テーブルに
-      #     Groonga::IndexColumnを定義する場合は<tt>"TokenBigram"</tt>
+      #     {Groonga::IndexColumn} を定義する場合は<tt>"TokenBigram"</tt>
       #     などを指定する必要がある。
       #   @option options :key_normalize The key_normalize
       #
@@ -292,7 +292,7 @@ module Groonga
       #     (:key_typeの項も参照)
       #   @option options [Groonga::Context] :context (Groonga::Context.default) The context
       #
-      #     スキーマ定義時に使用するGroonga::Contextを指定する。
+      #     スキーマ定義時に使用する {Groonga::Context} を指定する。
       #   @option options :path The path
       #
       #     テーブルを保存するパスを指定する。
@@ -307,8 +307,8 @@ module Groonga
       #     値を保存したい場合は必ず指定すること。
       #   @option options :sub_records The sub_records
       #
-      #     +true+ を指定するとGroonga::Table#groupで
-      #     グループ化したときに、Groonga::Record#n_sub_recordsでグループに
+      #     +true+ を指定すると {Groonga::Table#group} で
+      #     グループ化したときに、 {Groonga::Record#n_sub_records} でグループに
       #     含まれるレコードの件数を取得できる。
       #   @option options :key_normalize The key_normalize
       #
@@ -623,7 +623,7 @@ module Groonga
     # @param options [::Hash] The name and value
     #   pairs. Omitted names are initialized as the default value.
     # @option options :context (Groonga::Context.default) The context
-    #   スキーマ定義時に使用するGroonga::Contextを指定する。
+    #   スキーマ定義時に使用する {Groonga::Context} を指定する。
     def initialize(options={})
       @options = (options || {}).dup
       @options[:context] ||= Groonga::Context.default
@@ -658,7 +658,7 @@ module Groonga
 
     # 名前が _name_ のテーブルを作成する。
     #
-    # テーブルの作成は#defineを呼び出すまでは実行されないこ
+    # テーブルの作成は {#define} を呼び出すまでは実行されないこ
     # とに注意すること。
     # @overload create_table(name, options= {:type => :array})
     #   :typeにデフォルトの:arrayを使用した場合
@@ -675,10 +675,10 @@ module Groonga
     #     +:double_array_trie+ のいずれかを指定する。
     #   @option options [Groonga::Context] :context The context.
     #
-    #     スキーマ定義時に使用するGroonga::Contextを指定する。
-    #     省略した場合はGroonga::Schema.newで指定した
-    #     Groonga::Contextを使用する。Groonga::Schema.newで指
-    #     定していない場合はGroonga::Context.defaultを使用する。
+    #     スキーマ定義時に使用する {Groonga::Context} を指定する。
+    #     省略した場合は {Groonga::Schema.new} で指定した
+    #     {Groonga::Context} を使用する。 {Groonga::Schema.new} で指
+    #     定していない場合は {Groonga::Context.default} を使用する。
     #   @option options :path The path
     #
     #     テーブルを保存するパスを指定する。パスを指定すると
@@ -692,11 +692,11 @@ module Groonga
     #
     #     値の型を指定する。省略すると値のための領域を確保しない。
     #     値を保存したい場合は必ず指定すること。
-    #     参考: Groonga::Type.new
+    #     参考: {Groonga::Type.new}
     #   @option options :sub_records The sub_records
     #
-    #     +true+ を指定するとGroonga::Table#groupでグループ化
-    #     したときに、Groonga::Record#n_sub_recordsでグループに
+    #     +true+ を指定すると {Groonga::Table#group} でグループ化
+    #     したときに、 {Groonga::Record#n_sub_records} でグループに
     #     含まれるレコードの件数を取得できる。
     #
     # @overload create_table(name, options= {:type => :hash})
@@ -714,10 +714,10 @@ module Groonga
     #     +:double_array_trie+ のいずれかを指定する。
     #   @option options [Groonga::Context] :context The context
     #
-    #     スキーマ定義時に使用するGroonga::Contextを指定する。
-    #     省略した場合はGroonga::Schema.newで指定した
-    #     Groonga::Contextを使用する。Groonga::Schema.newで指
-    #     定していない場合はGroonga::Context.defaultを使用する。
+    #     スキーマ定義時に使用する {Groonga::Context} を指定する。
+    #     省略した場合は {Groonga::Schema.new} で指定した
+    #     {Groonga::Context} を使用する。 {Groonga::Schema.new} で指
+    #     定していない場合は {Groonga::Context.default} を使用する。
     #   @option options :path The path
     #
     #     テーブルを保存するパスを指定する。パスを指定すると
@@ -731,38 +731,38 @@ module Groonga
     #
     #     値の型を指定する。省略すると値のための領域を確保しない。
     #     値を保存したい場合は必ず指定すること。
-    #     参考: Groonga::Type.new
+    #     参考: {Groonga::Type.new}
     #   @option options :sub_records The sub_records
     #
-    #     +true+ を指定するとGroonga::Table#groupでグループ化
-    #     したときに、Groonga::Record#n_sub_recordsでグループに
+    #     +true+ を指定すると {Groonga::Table#group} でグループ化
+    #     したときに、 {Groonga::Record#n_sub_records} でグループに
     #     含まれるレコードの件数を取得できる。
     #   @option options :key_type The key_type
     #
     #     キーの種類を示すオブジェクトを指定する。
     #     キーの種類には型名（"Int32"や"ShortText"など）または
-    #     Groonga::Typeまたはテーブル（Groonga::Array、
-    #     Groonga::Hash、Groonga::PatriciaTrie、
-    #     Groonga::DoubleArrayTrieのどれか）を指定する。
+    #     {Groonga::Type} またはテーブル（ {Groonga::Array} 、
+    #     {Groonga::Hash} 、 {Groonga::PatriciaTrie} 、
+    #     {Groonga::DoubleArrayTrie} のどれか）を指定する。
     #
-    #     Groonga::Typeを指定した場合は、その型が示す範囲の
+    #     {Groonga::Type} を指定した場合は、その型が示す範囲の
     #     値をキーとして使用する。ただし、キーの最大サイズは
-    #     4096バイトであるため、Groonga::Type::TEXTや
-    #     Groonga::Type::LONG_TEXTは使用できない。
+    #     4096バイトであるため、 {Groonga::Type::TEXT} や
+    #     {Groonga::Type::LONG_TEXT} は使用できない。
     #
     #     テーブルを指定した場合はレコードIDをキーとして使用
-    #     する。指定したテーブルのGroonga::Recordをキーとし
+    #     する。指定したテーブルの {Groonga::Record} をキーとし
     #     て使用することもでき、その場合は自動的に
-    #     Groonga::RecordからレコードIDを取得する。
+    #     {Groonga::Record} からレコードIDを取得する。
     #
     #     省略した場合は文字列をキーとして使用する。この場合、
     #     4096バイトまで使用可能である。
     #
     #   @option options :default_tokenizer The default_tokenizer
     #
-    #     Groonga::IndexColumnで使用するトークナイザを指定する。
+    #     {Groonga::IndexColumn} で使用するトークナイザを指定する。
     #     デフォルトでは何も設定されていないので、テーブルに
-    #     Groonga::IndexColumnを定義する場合は
+    #     {Groonga::IndexColumn} を定義する場合は
     #     <tt>"TokenBigram"</tt>などを指定する必要がある。
     #
     # @overload create_table(name, options= {:type => :double_array_trie})
@@ -775,10 +775,10 @@ module Groonga
     #     存在していても、強制的にテーブルを作成する。
     #   @option options [Groonga::Context] :context The context
     #
-    #     スキーマ定義時に使用するGroonga::Contextを指定する。
-    #     省略した場合はGroonga::Schema.newで指定した
-    #     Groonga::Contextを使用する。Groonga::Schema.newで指
-    #     定していない場合はGroonga::Context.defaultを使用する。
+    #     スキーマ定義時に使用する {Groonga::Context} を指定する。
+    #     省略した場合は {Groonga::Schema.new} で指定した
+    #     {Groonga::Context} を使用する。 {Groonga::Schema.new} で指
+    #     定していない場合は {Groonga::Context.default} を使用する。
     #   @option options :path The path
     #
     #     テーブルを保存するパスを指定する。パスを指定すると
@@ -792,11 +792,11 @@ module Groonga
     #
     #     値の型を指定する。省略すると値のための領域を確保しない。
     #     値を保存したい場合は必ず指定すること。
-    #     参考: Groonga::Type.new
+    #     参考: {Groonga::Type.new}
     #   @option options :sub_records The sub_records
     #
-    #     +true+ を指定するとGroonga::Table#groupでグループ化
-    #     したときに、Groonga::Record#n_sub_recordsでグループに
+    #     +true+ を指定すると {Groonga::Table#group} でグループ化
+    #     したときに、 {Groonga::Record#n_sub_records} でグループに
     #     含まれるレコードの件数を取得できる。
     #   @option options :key_normalize The key_normalize
     #
@@ -805,27 +805,27 @@ module Groonga
     #
     #     キーの種類を示すオブジェクトを指定する。
     #     キーの種類には型名（"Int32"や"ShortText"など）または
-    #     Groonga::Typeまたはテーブル（Groonga::Array、
-    #     Groonga::Hash、Groonga::PatriciaTrie、
-    #     Groonga::DoubleArrayTrieのどれか）を指定する。
+    #     {Groonga::Type} またはテーブル（ {Groonga::Array} 、
+    #     {Groonga::Hash} 、 {Groonga::PatriciaTrie} 、
+    #     {Groonga::DoubleArrayTrie} のどれか）を指定する。
     #
-    #     Groonga::Typeを指定した場合は、その型が示す範囲の
+    #     {Groonga::Type} を指定した場合は、その型が示す範囲の
     #     値をキーとして使用する。ただし、キーの最大サイズは
-    #     4096バイトであるため、Groonga::Type::TEXTや
-    #     Groonga::Type::LONG_TEXTは使用できない。
+    #     4096バイトであるため、 {Groonga::Type::TEXT} や
+    #     {Groonga::Type::LONG_TEXT} は使用できない。
     #
     #     テーブルを指定した場合はレコードIDをキーとして使用
-    #     する。指定したテーブルのGroonga::Recordをキーとし
+    #     する。指定したテーブルの {Groonga::Record} をキーとし
     #     て使用することもでき、その場合は自動的に
-    #     Groonga::RecordからレコードIDを取得する。
+    #     {Groonga::Record} からレコードIDを取得する。
     #
     #     省略した場合は文字列をキーとして使用する。この場合、
     #     4096バイトまで使用可能である。
     #   @option options :default_tokenizer The default_tokenizer
     #
-    #     Groonga::IndexColumnで使用するトークナイザを指定する。
+    #     {Groonga::IndexColumn} で使用するトークナイザを指定する。
     #     デフォルトでは何も設定されていないので、テーブルに
-    #     Groonga::IndexColumnを定義する場合は
+    #     {Groonga::IndexColumn} を定義する場合は
     #     <tt>"TokenBigram"</tt>などを指定する必要がある。
     def create_table(name, options={})
       definition = TableDefinition.new(name, @options.merge(options || {}))
@@ -873,7 +873,7 @@ module Groonga
     # @param options [::Hash] The name and value
     #   pairs. Omitted names are initialized as the default value.
     # @option options :context (Groonga::Context.default)
-    #   The Groonga::Context to be used in renaming.
+    #   The {Groonga::Context} to be used in renaming.
     def rename_table(current_name, new_name, options={})
       options = @options.merge(options || {})
       definition = TableRenameDefinition.new(current_name, new_name, options)
@@ -893,9 +893,9 @@ module Groonga
     #   ビューが存在していても、強制的にビューを作成する。
     # @option options [Groonga::Context] :context (Groonga::Schema.new) The context
     #
-    #   スキーマ定義時に使用するGroonga::Contextを指定する。
-    #   Groonga::Schema.newで指定していない場合は
-    #   Groonga::Context.defaultを使用する。
+    #   スキーマ定義時に使用する {Groonga::Context} を指定する。
+    #   {Groonga::Schema.new} で指定していない場合は
+    #   {Groonga::Context.default} を使用する。
     # @option options :path The path
     #
     #   テーブルを保存するパスを指定する。パスを指定すると
