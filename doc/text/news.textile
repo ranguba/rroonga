@@ -1,5 +1,20 @@
 h1. NEWS
 
+h2(#2-0-6). 2.0.6: 2012-10-25
+
+h3. Improvements
+
+* [dump] Put index columns at the bottom (after loads).
+  It is for using offline index construction.
+* Added term_extract in Table#select by @table.select {|record|
+  record.key.term_extract(text)}@ syntax.
+* Supported allow_leading_not as a option of #select. You should use
+  this option carefully because searching with it takes a long time.
+
+h3. Fixes
+
+* Fixed display collapse in the references.
+
 h2(#2-0-5). 2.0.5: 2012-09-28
 
 h3. Improvements
