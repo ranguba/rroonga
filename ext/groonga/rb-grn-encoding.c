@@ -32,29 +32,29 @@
  *
  *   それ以外のオブジェクトの場合（コンテキスト自身など）は
  *   groongaのビルド時に指定したエンコーディング
- *   （Groonga::Encoding::DEFAULT）を使用 =:
+ *   （ {Groonga::Encoding::DEFAULT} ）を使用 =:
  *
  * - +:default+ :=
  *     groongaのビルド時に指定したエンコーディングを使用。
- *   Groonga::Encoding::DEFAULT =:
+ *   {Groonga::Encoding::DEFAULT} =:
  *
  * - +:none+ :=
- *     エンコーディングを指定しない。Groonga::Encoding::NONE =:
+ *     エンコーディングを指定しない。{Groonga::Encoding::NONE} =:
  *
  * - +:euc_jp+ :=
- *     EUC-JPを使用。Groonga::Encoding::EUC_JP =:
+ *     EUC-JPを使用。{Groonga::Encoding::EUC_JP} =:
  *
  * - @"euc-jp"@ :=
  *     +:euc_jp+と同じ。 =:
  *
  * - +:utf8+ :=
- *     UTF-8を使用。Groonga::Encoding::UTF8 =:
+ *     UTF-8を使用。{Groonga::Encoding::UTF8} =:
  *
  * - @"utf-8"@ :=
  *     +:utf8+と同じ。 =:
  *
  * - +:sjis+ :=
- *     Shift_JISを使用。Groonga::Encoding::SJIS =:
+ *     Shift_JISを使用。{Groonga::Encoding::SJIS} =:
  *
  * - +:shift_jis+ :=
  *     +:sjis+と同じ。 =:
@@ -63,10 +63,10 @@
  *     +:sjis+と同じ。 =:
  *
  * - +:latin1+ :=
- *     Latin-1を使用。Groonga::Encoding::LATIN1 =:
+ *     Latin-1を使用。{Groonga::Encoding::LATIN1} =:
  *
  * - +:koi8r+ :=
- *     KOI8-Rを使用。Groonga::Encoding::KOI8R =:
+ *     KOI8-Rを使用。{Groonga::Encoding::KOI8R} =:
  */
 
 static VALUE mGrnEncoding;
