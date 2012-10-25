@@ -192,10 +192,12 @@ rb_grn_column_get_local_name (VALUE self)
  *
  * 出力例
  * <pre>
- *   rroongaの説明文の中で「groonga」が含まれる部分
- *   ---
- *   rroongaは<em>groonga</em>のいわゆるDB-APIの層の...
- *   ---
+ * !!!text
+ * rroongaの説明文の中で「groonga」が含まれる部分
+ * ---
+ * rroongaは<em>groonga</em>のいわゆるDB-APIの層の...
+ * ---
+ * </pre>
  *
  * @return [Groonga::Hash] 検索結果
  * @overload select(options)
