@@ -203,6 +203,18 @@ rb_grn_column_get_local_name (VALUE self)
  * @return [Groonga::Hash] 検索結果
  * @overload select(options)
  *   @yieldparam [Groonga::Record] record
+ *     検索条件を指定するのに、 _record_ に対して次のメソッドを使って検索条
+ *     件を指定できます。
+ *
+ *     @==@ 、 @=~@ 、 @<@ 、 @<=@ 、 @>@ 、 @>=@ 、 @+@ 、 @-@ 、
+ *     @*@ 、 @/@ 、 @%@ 、
+ *     @match(query, :syntax => :query/:script, &block)@
+ *     （ _query_ に指定した
+ *     "grn_expr":http://groonga.org/ja/docs/reference/grn_expr.html
+ *     とのマッチ）、
+ *     @similar_search(text)@ （ _text_ との類似文書探索）、
+ *     @term_extract(text)@ （ _text_ 内から _record_ の単語を抽出）
+ *
  *   @!macro [new] column.select.options
  *     @param [::Hash] options The name and value
  *       pairs. Omitted names are initialized as the default value.
