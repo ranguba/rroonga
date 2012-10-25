@@ -364,6 +364,7 @@ module Groonga
       # This is a syntax sugar of the following code:
       #
       # <pre>
+      # !!!ruby
       # Groonga::Schema.define do |schema|
       #   schema.rename_table(current_name, new_name, options)
       # end
