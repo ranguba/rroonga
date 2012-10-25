@@ -272,7 +272,7 @@ module Groonga
       #     {Groonga::IndexColumn} で
       #     使用するトークナイザを指定する。デフォルトでは
       #     何も設定されていないので、テーブルに
-      #     {Groonga::IndexColumn} を定義する場合は<tt>"TokenBigram"</tt>
+      #     {Groonga::IndexColumn} を定義する場合は @"TokenBigram"@
       #     などを指定する必要がある。
       #   @option options :key_normalize The key_normalize
       #
@@ -772,7 +772,7 @@ module Groonga
     #     {Groonga::IndexColumn} で使用するトークナイザを指定する。
     #     デフォルトでは何も設定されていないので、テーブルに
     #     {Groonga::IndexColumn} を定義する場合は
-    #     <tt>"TokenBigram"</tt>などを指定する必要がある。
+    #     @"TokenBigram"@ などを指定する必要がある。
     #
     # @overload create_table(name, options= {:type => :double_array_trie})
     #   :typeに:double_array_trieを使用した場合
@@ -835,7 +835,7 @@ module Groonga
     #     {Groonga::IndexColumn} で使用するトークナイザを指定する。
     #     デフォルトでは何も設定されていないので、テーブルに
     #     {Groonga::IndexColumn} を定義する場合は
-    #     <tt>"TokenBigram"</tt>などを指定する必要がある。
+    #     @"TokenBigram"@ などを指定する必要がある。
     def create_table(name, options={})
       definition = TableDefinition.new(name, @options.merge(options || {}))
       yield(definition) if block_given?

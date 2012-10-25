@@ -136,7 +136,7 @@ VALUE rb_cGrnPatriciaTrie;
  *       {Groonga::IndexColumn} で使用するトークナイザを指定する。
  *       デフォルトでは何も設定されていないので、テーブルに
  *       {Groonga::IndexColumn} を定義する場合は
- *       <tt>"TokenBigram"</tt>などを指定する必要がある。
+ *       @"TokenBigram"@ などを指定する必要がある。
  *     @option options :sub_records
  *       +true+ を指定すると {#group} でグループ化したときに、
  *       {Groonga::Record#n_sub_records} でグループに含まれるレコー

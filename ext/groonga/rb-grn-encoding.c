@@ -59,7 +59,7 @@
  * - +:shift_jis+ :=
  *     +:sjis+と同じ。 =:
  *
- * - <tt>"shift-jis"</tt> :=
+ * - @"shift-jis"@ :=
  *     +:sjis+と同じ。 =:
  *
  * - +:latin1+ :=

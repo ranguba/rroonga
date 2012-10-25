@@ -70,8 +70,8 @@ rb_grn_init_runtime_version (VALUE mGrn)
 
     rb_obj_freeze(runtime_version);
     /*
-     * 利用しているgroongaのバージョン。<tt>[メジャーバージョ
-     * ン, マイナーバージョン, マイクロバージョン, タグ]</tt>の
+     * 利用しているgroongaのバージョン。 @[メジャーバージョ
+     * ン, マイナーバージョン, マイクロバージョン, タグ]@ の
      * 配列。
      */
     rb_define_const(mGrn, "VERSION", runtime_version);
@@ -90,8 +90,8 @@ rb_grn_init_version (VALUE mGrn)
 				INT2NUM(GRN_MICRO_VERSION));
     rb_obj_freeze(build_version);
     /*
-     * ビルドしたgroongaのバージョン。<tt>[メジャーバージョン,
-     * マイナーバージョン, マイクロバージョン]</tt>の配列。
+     * ビルドしたgroongaのバージョン。 @[メジャーバージョン,
+     * マイナーバージョン, マイクロバージョン]@ の配列。
      */
     rb_define_const(mGrn, "BUILD_VERSION", build_version);
 
@@ -101,8 +101,8 @@ rb_grn_init_version (VALUE mGrn)
 				   INT2NUM(RB_GRN_MICRO_VERSION));
     rb_obj_freeze(bindings_version);
     /*
-     * rroongaのバージョン。<tt>[メジャーバージョン, マ
-     * イナーバージョン, マイクロバージョン]</tt>の配列。
+     * rroongaのバージョン。 @[メジャーバージョン, マ
+     * イナーバージョン, マイクロバージョン]@ の配列。
      */
     rb_define_const(mGrn, "BINDINGS_VERSION", bindings_version);
 }
