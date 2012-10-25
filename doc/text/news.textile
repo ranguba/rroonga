@@ -14,6 +14,11 @@ h3. Improvements
   number of records is large, to search them with this option is
   slowly.
 
+h3. Changes
+
+* Changed option name for debug build in extconf.rb from --with-debug
+  to --enable-debug-log.
+
 h3. Fixes
 
 * Fixed display collapse in the references.
