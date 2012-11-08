@@ -26,9 +26,15 @@ VALUE rb_cGrnIndexCursor;
 VALUE
 rb_grn_index_cursor_to_ruby_object (grn_ctx *context,
 				    grn_obj *cursor,
+				    VALUE rb_table,
 				    grn_bool owner)
 {
-    return GRNOBJECT2RVAL(rb_cGrnIndexCursor, context, cursor, owner);
+    VALUE rb_cursor;
+
+    rb_cursor = GRNOBJECT2RVAL(rb_cGrnIndexCursor, context, cursor, owner);
+    rb_iv_set(rb_cursor, "@table", rb_table);
+
+    return rb_cursor;
 }
 
 void
@@ -49,24 +55,32 @@ rb_grn_index_cursor_deconstruct (RbGrnIndexCursor *rb_grn_index_cursor,
 }
 
 static VALUE
+next_value (grn_ctx *context, grn_obj *cursor, VALUE rb_table)
+{
+    grn_posting *posting;
+    grn_id term_id;
+
+    posting = grn_index_cursor_next(context, cursor, &term_id);
+    if (!posting) {
+	return Qnil;
+    }
+
+    return rb_grn_posting_new(posting, term_id, rb_table);
+}
+
+static VALUE
 rb_grn_index_cursor_next (VALUE self)
 {
     VALUE rb_posting = Qnil;
+    VALUE rb_table;
     grn_obj *cursor;
     grn_ctx *context;
 
     rb_grn_index_cursor_deconstruct(SELF(self), &cursor, &context,
 				    NULL, NULL, NULL, NULL);
-
     if (context && cursor) {
-	grn_posting *posting;
-	grn_id tid;
-
-	posting = grn_index_cursor_next(context, cursor, &tid);
-
-	if (posting) {
-	    rb_posting = rb_grn_posting_new(posting, tid);
-	}
+	rb_table = rb_iv_get(self, "@table");
+	rb_posting = next_value(context, cursor, rb_table);
     }
 
     return rb_posting;
@@ -78,19 +92,29 @@ rb_grn_index_cursor_each (VALUE self)
 {
     grn_obj *cursor;
     grn_ctx *context;
+    VALUE rb_table;
 
     RETURN_ENUMERATOR(self, 0, NULL);
 
     rb_grn_index_cursor_deconstruct(SELF(self), &cursor, &context,
 				    NULL, NULL, NULL, NULL);
 
-    if (context && cursor) {
-	grn_posting *posting;
-	grn_id tid;
+    if (!context) {
+	return Qnil;
+    }
 
-	while ((posting = grn_index_cursor_next(context, cursor, &tid))) {
-	    rb_yield(rb_grn_posting_new(posting, tid));
+    if (!cursor) {
+	return Qnil;
+    }
+
+    rb_table = rb_iv_get(self, "@table");
+    while (GRN_TRUE) {
+	VALUE rb_posting;
+	rb_posting = next_value(context, cursor, rb_table);
+	if (NIL_P(rb_posting)) {
+	    break;
 	}
+	rb_yield(rb_posting);
     }
 
     return Qnil;

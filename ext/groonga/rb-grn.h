@@ -503,7 +503,8 @@ void           rb_grn_expression_finalizer          (grn_ctx *context,
 						     RbGrnExpression *rb_grn_expression);
 
 VALUE          rb_grn_posting_new                   (grn_posting *posting,
-						     grn_id term_id);
+						     grn_id term_id,
+						     VALUE rb_table);
 
 VALUE          rb_grn_tokyo_geo_point_new           (int   latitude,
 						     int   longitude);
@@ -582,8 +583,8 @@ VALUE          rb_grn_column_expression_builder_build
 #define GRNCOLUMN2RVAL(klass, context, column, owner) \
     (rb_grn_column_to_ruby_object(klass, context, column, owner))
 
-#define GRNINDEXCURSOR2RVAL(context, cursor) \
-    (rb_grn_index_cursor_to_ruby_object(context, cursor, GRN_TRUE))
+#define GRNINDEXCURSOR2RVAL(context, cursor, rb_table) \
+    (rb_grn_index_cursor_to_ruby_object(context, cursor, rb_table, GRN_TRUE))
 
 #define RVAL2GRNACCESSOR(object) \
     (rb_grn_accessor_from_ruby_object(object))
@@ -695,6 +696,7 @@ VALUE          rb_grn_column_to_ruby_object         (VALUE klass,
 						     grn_bool owner);
 VALUE          rb_grn_index_cursor_to_ruby_object   (grn_ctx *context,
 						     grn_obj *cursor,
+						     VALUE rb_table,
 						     grn_bool owner);
 
 grn_operator   rb_grn_operator_from_ruby_object     (VALUE object);

@@ -545,6 +545,7 @@ rb_grn_index_column_open_cursor (VALUE self, VALUE rb_table_cursor)
     grn_id rid_max = GRN_ID_MAX;
     int flags = 0;
     grn_obj *index_cursor;
+    VALUE rb_table;
     VALUE rb_cursor;
 
     rb_grn_index_column_deconstruct(SELF(self), &column, &context,
@@ -552,11 +553,12 @@ rb_grn_index_column_open_cursor (VALUE self, VALUE rb_table_cursor)
 				    NULL, NULL, NULL, NULL,
 				    NULL, NULL);
     table_cursor = RVAL2GRNTABLECURSOR(rb_table_cursor, NULL);
+    rb_table = rb_iv_get(rb_table_cursor, "@table");
 
     index_cursor = grn_index_cursor_open(context, table_cursor,
 					 column, rid_min, rid_max, flags);
 
-    rb_cursor = GRNINDEXCURSOR2RVAL(context, index_cursor);
+    rb_cursor = GRNINDEXCURSOR2RVAL(context, index_cursor, rb_table);
 
     if (rb_block_given_p())
 	return rb_ensure(rb_yield, rb_cursor, rb_grn_object_close, rb_cursor);

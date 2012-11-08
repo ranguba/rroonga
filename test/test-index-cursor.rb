@@ -66,6 +66,18 @@ class IndexCursorTest < Test::Unit::TestCase
     assert_true(opened)
   end
 
+  def test_record
+    record = nil
+    @terms.open_cursor do |table_cursor|
+      @content_index.open_cursor(table_cursor) do |cursor|
+        posting = cursor.next
+        record = posting.record
+      end
+    end
+
+    assert_equal("l", record.key)
+  end
+
   private
   def create_hashes(keys, values)
     hashes = []

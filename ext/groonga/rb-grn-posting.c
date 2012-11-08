@@ -1,6 +1,7 @@
 /* -*- coding: utf-8; c-file-style: "ruby" -*- */
 /*
   Copyright (C) 2011  Haruka Yoshihara <yoshihara@clear-code.com>
+  Copyright (C) 2012  Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -21,7 +22,7 @@
 VALUE rb_cGrnPosting;
 
 VALUE
-rb_grn_posting_new (grn_posting *posting, grn_id term_id)
+rb_grn_posting_new (grn_posting *posting, grn_id term_id, VALUE rb_table)
 {
     VALUE parameters;
 
@@ -39,6 +40,8 @@ rb_grn_posting_new (grn_posting *posting, grn_id term_id)
     SET_PARAMETER("n_rest_postings", posting->rest);
 
 #undef SET_PARAMETER
+
+    rb_hash_aset(parameters, ID2SYM(rb_intern("table")), rb_table);
 
     return rb_funcall(rb_cGrnPosting, rb_intern("new"), 1,
 		      parameters);

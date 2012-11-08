@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2011  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2011-2012  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -43,6 +43,9 @@ module Groonga
     # The number of rest posting information for the term ID.
     attr_accessor :n_rest_postings
 
+    # @return [Groonga::Table] The table of the term ID.
+    attr_reader :table
+
     # Creates a new Posting.
     #
     # @return The new Posting.
@@ -61,6 +64,7 @@ module Groonga
     # @option parameters [Integer] :term_frequency The term_frequency.
     # @option parameters [Integer] :weight The weight.
     # @option parameters [Integer] :n_rest_postings The n_rest_postings.
+    # @option parameters [Groonga::Table] :table The table of the term ID.
     def update(parameters)
       @record_id = parameters[:record_id] || nil
       @section_id = parameters[:section_id] || nil
@@ -69,6 +73,7 @@ module Groonga
       @term_frequency = parameters[:term_frequency] || 0
       @weight = parameters[:weight] || 0
       @n_rest_postings = parameters[:n_rest_postings] || 0
+      @table = parameters[:table]
     end
 
     # Returns Hash created from attributes.
@@ -82,6 +87,15 @@ module Groonga
         :weight => @weight,
         :n_rest_postings => @n_rest_postings
       }
+    end
+
+    # @return [Groonga::Record, nil] The record for the term ID.
+    #   If table isn't assosiated, nil is returned.
+    #
+    # @since 2.0.6
+    def record
+      return nil unless @table
+      Record.new(@table, @term_id)
     end
   end
 end
