@@ -75,7 +75,19 @@ class IndexCursorTest < Test::Unit::TestCase
       end
     end
 
-    assert_equal("l", record.key)
+    assert_equal("1", record.key)
+  end
+
+  def test_term
+    term = nil
+    @terms.open_cursor do |table_cursor|
+      @content_index.open_cursor(table_cursor) do |cursor|
+        posting = cursor.next
+        term = posting.term
+      end
+    end
+
+    assert_equal("l", term.key)
   end
 
   private
@@ -93,7 +105,9 @@ class IndexCursorTest < Test::Unit::TestCase
 
   def setup_schema
     Groonga::Schema.define do |schema|
-      schema.create_table("Articles") do |table|
+      schema.create_table("Articles",
+                          :type => :hash,
+                          :key_type => :short_text) do |table|
         table.text("content")
       end
 
@@ -110,9 +124,9 @@ class IndexCursorTest < Test::Unit::TestCase
   end
 
   def setup_records
-    @articles.add(:content => "l")
-    @articles.add(:content => "ll")
-    @articles.add(:content => "hello")
+    @articles.add("1", :content => "l")
+    @articles.add("2", :content => "ll")
+    @articles.add("3", :content => "hello")
   end
 
   def expected_postings

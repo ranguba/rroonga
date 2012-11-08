@@ -43,8 +43,11 @@ module Groonga
     # The number of rest posting information for the term ID.
     attr_accessor :n_rest_postings
 
-    # @return [Groonga::Table] The table of the term ID.
+    # @return [Groonga::Table] The table of the record ID.
     attr_reader :table
+
+    # @return [Groonga::Table] The table of the term ID.
+    attr_reader :lexicon
 
     # Creates a new Posting.
     #
@@ -64,7 +67,8 @@ module Groonga
     # @option parameters [Integer] :term_frequency The term_frequency.
     # @option parameters [Integer] :weight The weight.
     # @option parameters [Integer] :n_rest_postings The n_rest_postings.
-    # @option parameters [Groonga::Table] :table The table of the term ID.
+    # @option parameters [Groonga::Table] :table The table of the record ID.
+    # @option parameters [Groonga::Table] :lexicon The table of the term ID.
     def update(parameters)
       @record_id = parameters[:record_id] || nil
       @section_id = parameters[:section_id] || nil
@@ -74,6 +78,7 @@ module Groonga
       @weight = parameters[:weight] || 0
       @n_rest_postings = parameters[:n_rest_postings] || 0
       @table = parameters[:table]
+      @lexicon = parameters[:lexicon]
     end
 
     # Returns Hash created from attributes.
@@ -89,13 +94,22 @@ module Groonga
       }
     end
 
-    # @return [Groonga::Record, nil] The record for the term ID.
+    # @return [Groonga::Record, nil] The record for the record ID.
     #   If table isn't assosiated, nil is returned.
     #
     # @since 2.0.6
     def record
       return nil unless @table
-      Record.new(@table, @term_id)
+      Record.new(@table, @record_id)
+    end
+
+    # @return [Groonga::Record, nil] The record for the term ID.
+    #   If lexicon isn't assosiated, nil is returned.
+    #
+    # @since 2.0.6
+    def term
+      return nil unless @lexicon
+      Record.new(@lexicon, @term_id)
     end
   end
 end

@@ -27,12 +27,14 @@ VALUE
 rb_grn_index_cursor_to_ruby_object (grn_ctx *context,
 				    grn_obj *cursor,
 				    VALUE rb_table,
+				    VALUE rb_lexicon,
 				    grn_bool owner)
 {
     VALUE rb_cursor;
 
     rb_cursor = GRNOBJECT2RVAL(rb_cGrnIndexCursor, context, cursor, owner);
     rb_iv_set(rb_cursor, "@table", rb_table);
+    rb_iv_set(rb_cursor, "@lexicon", rb_lexicon);
 
     return rb_cursor;
 }
@@ -55,7 +57,7 @@ rb_grn_index_cursor_deconstruct (RbGrnIndexCursor *rb_grn_index_cursor,
 }
 
 static VALUE
-next_value (grn_ctx *context, grn_obj *cursor, VALUE rb_table)
+next_value (grn_ctx *context, grn_obj *cursor, VALUE rb_table, VALUE rb_lexicon)
 {
     grn_posting *posting;
     grn_id term_id;
@@ -65,22 +67,24 @@ next_value (grn_ctx *context, grn_obj *cursor, VALUE rb_table)
 	return Qnil;
     }
 
-    return rb_grn_posting_new(posting, term_id, rb_table);
+    return rb_grn_posting_new(posting, term_id, rb_table, rb_lexicon);
 }
 
 static VALUE
 rb_grn_index_cursor_next (VALUE self)
 {
     VALUE rb_posting = Qnil;
-    VALUE rb_table;
     grn_obj *cursor;
     grn_ctx *context;
 
     rb_grn_index_cursor_deconstruct(SELF(self), &cursor, &context,
 				    NULL, NULL, NULL, NULL);
     if (context && cursor) {
+	VALUE rb_table;
+	VALUE rb_lexicon;
 	rb_table = rb_iv_get(self, "@table");
-	rb_posting = next_value(context, cursor, rb_table);
+	rb_lexicon = rb_iv_get(self, "@lexicon");
+	rb_posting = next_value(context, cursor, rb_table, rb_lexicon);
     }
 
     return rb_posting;
@@ -93,6 +97,7 @@ rb_grn_index_cursor_each (VALUE self)
     grn_obj *cursor;
     grn_ctx *context;
     VALUE rb_table;
+    VALUE rb_lexicon;
 
     RETURN_ENUMERATOR(self, 0, NULL);
 
@@ -108,9 +113,10 @@ rb_grn_index_cursor_each (VALUE self)
     }
 
     rb_table = rb_iv_get(self, "@table");
+    rb_lexicon = rb_iv_get(self, "@lexicon");
     while (GRN_TRUE) {
 	VALUE rb_posting;
-	rb_posting = next_value(context, cursor, rb_table);
+	rb_posting = next_value(context, cursor, rb_table, rb_lexicon);
 	if (NIL_P(rb_posting)) {
 	    break;
 	}
