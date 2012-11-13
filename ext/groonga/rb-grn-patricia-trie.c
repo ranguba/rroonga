@@ -19,7 +19,7 @@
 
 #include "rb-grn.h"
 
-grn_rc grn_obj_cast(grn_ctx *ctx, grn_obj *src, grn_obj *dest, int addp);
+grn_rc grn_obj_cast(grn_ctx *ctx, grn_obj *src, grn_obj *dest, grn_bool addp);
 
 #define SELF(object) ((RbGrnTableKeySupport *)DATA_PTR(object))
 
@@ -770,7 +770,7 @@ rb_grn_patricia_trie_open_grn_near_cursor (int argc, VALUE *argv, VALUE self,
 				   grn_ctx_at(*context, table->header.domain));
     GRN_OBJ_INIT(&casted_key, GRN_BULK, 0, table->header.domain);
     if (key_p->header.domain != table->header.domain) {
-	grn_obj_cast(*context, key_p, &casted_key, 0);
+	grn_obj_cast(*context, key_p, &casted_key, GRN_FALSE);
 	grn_obj_unlink(*context, key_p);
 	key_p = &casted_key;
     }
