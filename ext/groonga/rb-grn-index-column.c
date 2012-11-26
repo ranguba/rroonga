@@ -64,7 +64,7 @@ rb_grn_index_column_bind (RbGrnIndexColumn *rb_grn_index_column,
 						 rb_grn_object->domain_id);
     rb_grn_index_column->string_query = grn_obj_open(context, GRN_BULK,
 						     GRN_OBJ_DO_SHALLOW_COPY,
-						     GRN_ID_NIL);
+						     GRN_DB_SHORT_TEXT);
 }
 
 void
