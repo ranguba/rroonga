@@ -33,6 +33,31 @@ class TypeTest < Test::Unit::TestCase
                  exception.message)
   end
 
+  def test_size
+    assert_equal(4, Groonga["Int32"].size)
+  end
+
+  def test_flags
+    key_int = 0x01 << 3
+    assert_equal(key_int, Groonga["Int32"].flags)
+  end
+
+  def test_fixed_size?
+    assert_true(Groonga["Int32"].fixed_size?)
+  end
+
+  def test_not_fixed_size?
+    assert_false(Groonga["ShortText"].fixed_size?)
+  end
+
+  def test_variable_size?
+    assert_true(Groonga["ShortText"].variable_size?)
+  end
+
+  def test_not_variable_size?
+    assert_false(Groonga["Int32"].variable_size?)
+  end
+
   def test_builtins
     assert_equal_type("Object", Groonga::Type::OBJECT) # FIXME!!!
     assert_equal_type("Bool", Groonga::Type::BOOLEAN)

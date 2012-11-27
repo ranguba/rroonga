@@ -1,6 +1,6 @@
 /* -*- coding: utf-8; c-file-style: "ruby" -*- */
 /*
-  Copyright (C) 2009  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2012  Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -129,12 +129,61 @@ rb_grn_type_initialize (int argc, VALUE *argv, VALUE self)
     return Qnil;
 }
 
+static VALUE
+rb_grn_type_size (VALUE self)
+{
+    grn_ctx *context;
+    grn_obj *type;
+
+    type = RVAL2GRNOBJECT(self, &context);
+
+    return UINT2NUM(grn_obj_get_range(context, type));
+}
+
+static VALUE
+rb_grn_type_flags (VALUE self)
+{
+    grn_ctx *context;
+    grn_obj *type;
+
+    type = RVAL2GRNOBJECT(self, &context);
+
+    return UINT2NUM(type->header.flags);
+}
+
+static VALUE
+rb_grn_type_fixed_size_p (VALUE self)
+{
+    grn_ctx *context;
+    grn_obj *type;
+
+    type = RVAL2GRNOBJECT(self, &context);
+
+    return CBOOL2RVAL(!(type->header.flags & GRN_OBJ_KEY_VAR_SIZE));
+}
+
+static VALUE
+rb_grn_type_variable_size_p (VALUE self)
+{
+    grn_ctx *context;
+    grn_obj *type;
+
+    type = RVAL2GRNOBJECT(self, &context);
+
+    return CBOOL2RVAL(type->header.flags & GRN_OBJ_KEY_VAR_SIZE);
+}
+
 void
 rb_grn_init_type (VALUE mGrn)
 {
     rb_cGrnType = rb_define_class_under(mGrn, "Type", rb_cGrnObject);
 
     rb_define_method(rb_cGrnType, "initialize", rb_grn_type_initialize, -1);
+    rb_define_method(rb_cGrnType, "size", rb_grn_type_size, 0);
+    rb_define_method(rb_cGrnType, "flags", rb_grn_type_flags, 0);
+    rb_define_method(rb_cGrnType, "fixed_size?", rb_grn_type_fixed_size_p, 0);
+    rb_define_method(rb_cGrnType, "variable_size?",
+		     rb_grn_type_variable_size_p, 0);
 
     /* 任意のテーブルに属する全てのレコード(Object型はv1.2で
        サポートされます)。 */
