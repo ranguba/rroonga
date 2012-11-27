@@ -821,12 +821,22 @@ rb_grn_object_inspect_content_flags_with_label (VALUE inspected,
       case GRN_COLUMN_FIX_SIZE:
       case GRN_COLUMN_VAR_SIZE:
       case GRN_TYPE:
-	if (flags & GRN_OBJ_KEY_UINT)
+	switch (flags & GRN_OBJ_KEY_MASK) {
+	  case GRN_OBJ_KEY_UINT:
 	    rb_ary_push(inspected_flags, rb_str_new2("KEY_UINT"));
-	if (flags & GRN_OBJ_KEY_INT)
+	    break;
+	  case GRN_OBJ_KEY_INT:
 	    rb_ary_push(inspected_flags, rb_str_new2("KEY_INT"));
-	if (flags & GRN_OBJ_KEY_FLOAT)
+	    break;
+	  case GRN_OBJ_KEY_FLOAT:
 	    rb_ary_push(inspected_flags, rb_str_new2("KEY_FLOAT"));
+	    break;
+	  case GRN_OBJ_KEY_GEO_POINT:
+	    rb_ary_push(inspected_flags, rb_str_new2("KEY_GEO_POINT"));
+	    break;
+	  default:
+	    break;
+	}
 	if (flags & GRN_OBJ_KEY_VAR_SIZE)
 	    rb_ary_push(inspected_flags, rb_str_new2("KEY_VAR_SIZE"));
 	break;
