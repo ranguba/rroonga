@@ -99,7 +99,7 @@ class VariableSizeColumnTest < Test::Unit::TestCase
                  "path: <#{@users_name_column_path}>, " +
                  "domain: <Users>, " +
                  "range: <ShortText>, " +
-                 "flags: <>" +
+                 "flags: <KEY_VAR_SIZE>" +
                  ">",
                  @name.inspect)
   end
