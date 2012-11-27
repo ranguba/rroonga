@@ -827,6 +827,8 @@ rb_grn_object_inspect_content_flags_with_label (VALUE inspected,
 	    rb_ary_push(inspected_flags, rb_str_new2("KEY_INT"));
 	if (flags & GRN_OBJ_KEY_FLOAT)
 	    rb_ary_push(inspected_flags, rb_str_new2("KEY_FLOAT"));
+	if (flags & GRN_OBJ_KEY_VAR_SIZE)
+	    rb_ary_push(inspected_flags, rb_str_new2("KEY_VAR_SIZE"));
 	break;
       default:
 	break;
