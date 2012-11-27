@@ -58,6 +58,38 @@ class TypeTest < Test::Unit::TestCase
     assert_false(Groonga["Int32"].variable_size?)
   end
 
+  def test_unsigned_integer?
+    assert_true(Groonga["UInt32"].unsigned_integer?)
+  end
+
+  def test_not_unsigned_integer?
+    assert_false(Groonga["Int32"].unsigned_integer?)
+  end
+
+  def test_integer?
+    assert_true(Groonga["Int32"].integer?)
+  end
+
+  def test_not_integer?
+    assert_false(Groonga["UInt32"].integer?)
+  end
+
+  def test_float?
+    assert_true(Groonga["Float"].float?)
+  end
+
+  def test_not_float?
+    assert_false(Groonga["UInt32"].float?)
+  end
+
+  def test_geo_point?
+    assert_true(Groonga["WGS84GeoPoint"].geo_point?)
+  end
+
+  def test_not_geo_point?
+    assert_false(Groonga["UInt32"].geo_point?)
+  end
+
   def test_builtins
     assert_equal_type("Object", Groonga::Type::OBJECT) # FIXME!!!
     assert_equal_type("Bool", Groonga::Type::BOOLEAN)

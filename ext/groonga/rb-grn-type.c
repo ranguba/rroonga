@@ -173,6 +173,50 @@ rb_grn_type_variable_size_p (VALUE self)
     return CBOOL2RVAL(type->header.flags & GRN_OBJ_KEY_VAR_SIZE);
 }
 
+static VALUE
+rb_grn_type_unsigned_integer_p (VALUE self)
+{
+    grn_obj *type;
+    grn_obj_flags key_type;
+
+    type = RVAL2GRNOBJECT(self, NULL);
+    key_type = type->header.flags & GRN_OBJ_KEY_MASK;
+    return CBOOL2RVAL(key_type == GRN_OBJ_KEY_UINT);
+}
+
+static VALUE
+rb_grn_type_integer_p (VALUE self)
+{
+    grn_obj *type;
+    grn_obj_flags key_type;
+
+    type = RVAL2GRNOBJECT(self, NULL);
+    key_type = type->header.flags & GRN_OBJ_KEY_MASK;
+    return CBOOL2RVAL(key_type == GRN_OBJ_KEY_INT);
+}
+
+static VALUE
+rb_grn_type_float_p (VALUE self)
+{
+    grn_obj *type;
+    grn_obj_flags key_type;
+
+    type = RVAL2GRNOBJECT(self, NULL);
+    key_type = type->header.flags & GRN_OBJ_KEY_MASK;
+    return CBOOL2RVAL(key_type == GRN_OBJ_KEY_FLOAT);
+}
+
+static VALUE
+rb_grn_type_geo_point_p (VALUE self)
+{
+    grn_obj *type;
+    grn_obj_flags key_type;
+
+    type = RVAL2GRNOBJECT(self, NULL);
+    key_type = type->header.flags & GRN_OBJ_KEY_MASK;
+    return CBOOL2RVAL(key_type == GRN_OBJ_KEY_GEO_POINT);
+}
+
 void
 rb_grn_init_type (VALUE mGrn)
 {
@@ -184,6 +228,16 @@ rb_grn_init_type (VALUE mGrn)
     rb_define_method(rb_cGrnType, "fixed_size?", rb_grn_type_fixed_size_p, 0);
     rb_define_method(rb_cGrnType, "variable_size?",
 		     rb_grn_type_variable_size_p, 0);
+
+    rb_define_method(rb_cGrnType, "unsigned_integer?",
+		     rb_grn_type_unsigned_integer_p, 0);
+    rb_define_alias(rb_cGrnType, "uint?", "unsigned_integer?");
+
+    rb_define_method(rb_cGrnType, "integer?", rb_grn_type_integer_p, 0);
+    rb_define_alias(rb_cGrnType, "int?", "integer?");
+
+    rb_define_method(rb_cGrnType, "float?", rb_grn_type_float_p, 0);
+    rb_define_method(rb_cGrnType, "geo_point?", rb_grn_type_geo_point_p, 0);
 
     /* 任意のテーブルに属する全てのレコード(Object型はv1.2で
        サポートされます)。 */
