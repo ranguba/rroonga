@@ -58,7 +58,7 @@ class TypeTest < Test::Unit::TestCase
                  "path: (temporary), " +
                  "domain: (nil), " +
                  "range: <2147483648>, " +
-                 "flags: <>>",
+                 "flags: <KEY_VAR_SIZE>>",
                  context["<longtext>"].inspect)
   end
 
