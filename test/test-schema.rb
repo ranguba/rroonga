@@ -338,7 +338,7 @@ class SchemaTest < Test::Unit::TestCase
                    "path: <#{path}>, " +
                    "domain: <Posts>, " +
                    "range: <Niku>, " +
-                   "flags: <COMPRESS_LZO>>",
+                   "flags: <KEY_VAR_SIZE|COMPRESS_LZO>>",
                    column.inspect)
     end
   end
