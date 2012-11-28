@@ -13,7 +13,7 @@ h3. Improvements
 * [Type] Added reader methods to Groonga::Type (#size and #flags).
 * [Type] Added predicate methods to Groonga::Type.
   Added methods are #fixed_size?, #variable_size?, #unsigned_integer?,
-  #integer?, float? and geo_point?.
+  #integer?, #float? and #geo_point?.
 
 h3. Changes
 
