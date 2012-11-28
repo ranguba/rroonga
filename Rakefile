@@ -44,6 +44,10 @@ $LOAD_PATH.unshift(groonga_lib_dir)
 ENV["RUBYLIB"] = "#{groonga_lib_dir}:#{groonga_ext_dir}:#{ENV['RUBYLIB']}"
 
 helper = Bundler::GemHelper.new(base_dir)
+def helper.version_tag
+  version
+end
+
 helper.install
 spec = helper.gemspec
 
