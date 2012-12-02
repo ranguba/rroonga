@@ -1,5 +1,11 @@
 h1. NEWS
 
+h2(#2-0-8). 2.0.8: 2012-12-02
+
+h3. Improvements
+
+* Required groonga 2.0.9.
+
 h2(#2-0-7). 2.0.7: 2012-11-29
 
 h3. Improvements
