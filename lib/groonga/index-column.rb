@@ -74,22 +74,27 @@ module Groonga
 
     def dump_posting(posting)
       term = posting.term
-      source = @sources[posting.section_id - 1]
-      if source.is_a?(Groonga::Table)
-        source_column_name = "_key"
-      else
-        source_column_name = source.local_name
-      end
       found_record = "#{posting.table.name}[#{posting.record.record_id}]"
       posting_info_items = [
         "<#{term.key}>",
         "#{posting.weight}",
         "#{posting.position}",
         "#{posting.term_frequency}",
-        "#{found_record}.#{source_column_name}",
+        "#{found_record}.#{source_column_name(posting)}",
       ]
       posting_info = posting_info_items.join("\t")
       @output.write("  #{posting_info}\n")
+    end
+
+    def source_column_name(posting)
+      source = @sources[posting.section_id - 1]
+      if source.nil?
+        "<invalid section: #{posting.section_id}>"
+      elsif source.is_a?(Groonga::Table)
+        "_key"
+      else
+        source.local_name
+      end
     end
   end
 end
