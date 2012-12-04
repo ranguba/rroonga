@@ -252,6 +252,7 @@ RB_GRN_VAR VALUE rb_cGrnExpression;
 RB_GRN_VAR VALUE rb_cGrnRecordExpressionBuilder;
 RB_GRN_VAR VALUE rb_cGrnColumnExpressionBuilder;
 RB_GRN_VAR VALUE rb_cGrnPlugin;
+RB_GRN_VAR VALUE rb_cGrnNormalizer;
 
 void           rb_grn_init_utils                    (VALUE mGrn);
 void           rb_grn_init_exception                (VALUE mGrn);
@@ -294,6 +295,7 @@ void           rb_grn_init_expression_builder       (VALUE mGrn);
 void           rb_grn_init_logger                   (VALUE mGrn);
 void           rb_grn_init_snippet                  (VALUE mGrn);
 void           rb_grn_init_plugin                   (VALUE mGrn);
+void           rb_grn_init_normalizer               (VALUE mGrn);
 
 VALUE          rb_grn_rc_to_exception               (grn_rc rc);
 const char    *rb_grn_rc_to_message                 (grn_rc rc);
