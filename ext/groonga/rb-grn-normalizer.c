@@ -48,7 +48,8 @@ rb_grn_normalizer_s_normalize (VALUE klass, VALUE rb_string)
     grn_ctx *context = NULL;
     grn_obj *grn_string;
     grn_obj *normalizer = GRN_NORMALIZER_AUTO;
-    int flags = 0;
+    /* TODO: make customizable */
+    int flags = GRN_STRING_REMOVE_BLANK;
     const char *normalized_string;
     unsigned int normalized_string_length;
 
