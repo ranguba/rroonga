@@ -876,16 +876,18 @@ rb_grn_object_inspect_content_flags_with_label (VALUE inspected,
 	if (flags & GRN_OBJ_COMPRESS_LZO)
 	    rb_ary_push(inspected_flags, rb_str_new2("COMPRESS_LZO"));
 	break;
+      case GRN_COLUMN_INDEX:
+	if (flags & GRN_OBJ_WITH_SECTION)
+	    rb_ary_push(inspected_flags, rb_str_new2("WITH_SECTION"));
+	if (flags & GRN_OBJ_WITH_WEIGHT)
+	    rb_ary_push(inspected_flags, rb_str_new2("WITH_WEIGHT"));
+	if (flags & GRN_OBJ_WITH_POSITION)
+	    rb_ary_push(inspected_flags, rb_str_new2("WITH_POSITION"));
+	break;
       default:
 	break;
     }
 
-    if (flags & GRN_OBJ_WITH_SECTION)
-	rb_ary_push(inspected_flags, rb_str_new2("WITH_SECTION"));
-    if (flags & GRN_OBJ_WITH_WEIGHT)
-	rb_ary_push(inspected_flags, rb_str_new2("WITH_WEIGHT"));
-    if (flags & GRN_OBJ_WITH_POSITION)
-	rb_ary_push(inspected_flags, rb_str_new2("WITH_POSITION"));
     if (flags & GRN_OBJ_RING_BUFFER)
 	rb_ary_push(inspected_flags, rb_str_new2("RING_BUFFER"));
 

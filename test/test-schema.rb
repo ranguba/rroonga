@@ -165,7 +165,7 @@ class SchemaTest < Test::Unit::TestCase
                    "path: <#{path}>, " +
                    "domain: <Int32>, " +
                    "range: <Float>, " +
-                   "flags: <KEY_WITH_SIS|KEY_NORMALIZE|WITH_SECTION>, " +
+                   "flags: <KEY_WITH_SIS|KEY_NORMALIZE>, " +
                    "encoding: <#{Groonga::Encoding.default.inspect}>, " +
                    "size: <0>>",
                    table.inspect)
@@ -223,7 +223,7 @@ class SchemaTest < Test::Unit::TestCase
                    "path: <#{path}>, " +
                    "domain: <Int32>, " +
                    "range: <Float>, " +
-                   "flags: <KEY_NORMALIZE|WITH_SECTION>, " +
+                   "flags: <KEY_NORMALIZE>, " +
                    "encoding: <#{Groonga::Encoding.default.inspect}>, " +
                    "size: <0>>",
                    table.inspect)
