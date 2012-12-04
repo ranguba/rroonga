@@ -535,8 +535,27 @@ rb_grn_index_column_with_position_p (VALUE self)
     return CBOOL2RVAL(column->header.flags & GRN_OBJ_WITH_POSITION);
 }
 
+/*
+ * Opens cursor to iterate posting in the index column.
+ *
+ * @example
+ *   # TODO
+ *
+ * @overload open_cursor(table_cursor, options={})
+ *   @param [TableCursor] The table cursor for table of the index column.
+ *   @param [::Hash] options
+ *   @option options [Boolean] :with_section (nil)
+ *      Includes section info the posting. It is enabled by default if
+ *      the index column is created with @:with_section@ flag.
+ *   @option options [Boolean] :with_weight (nil)
+ *      Includes weight info the posting. It is enabled by default if
+ *      the index column is created with @:with_weight@ flag.
+ *   @option options [Boolean] :with_position (nil)
+ *      Includes position info the posting. It is enabled by default if
+ *      the index column is created with @:with_position@ flag.
+ */
 static VALUE
-rb_grn_index_column_open_cursor (VALUE self, VALUE rb_table_cursor)
+rb_grn_index_column_open_cursor (int argc, VALUE *argv, VALUE self)
 {
     grn_ctx *context;
     grn_obj *column;
@@ -546,6 +565,9 @@ rb_grn_index_column_open_cursor (VALUE self, VALUE rb_table_cursor)
     grn_id rid_max = GRN_ID_MAX;
     int flags = 0;
     grn_obj *index_cursor;
+    VALUE rb_table_cursor;
+    VALUE options;
+    VALUE rb_with_section, rb_with_weight, rb_with_position;
     VALUE rb_table;
     VALUE rb_lexicon;
     VALUE rb_cursor;
@@ -555,9 +577,35 @@ rb_grn_index_column_open_cursor (VALUE self, VALUE rb_table_cursor)
 				    NULL, NULL,
 				    NULL, &range_object,
 				    NULL, NULL);
+
+    rb_scan_args(argc, argv, "11", &rb_table_cursor, &options);
+    rb_grn_scan_options(options,
+			"with_section", &rb_with_section,
+			"with_weight", &rb_with_weight,
+			"with_position", &rb_with_position,
+			NULL);
+
     table_cursor = RVAL2GRNTABLECURSOR(rb_table_cursor, NULL);
     rb_table = GRNOBJECT2RVAL(Qnil, context, range_object, GRN_FALSE);
     rb_lexicon = rb_iv_get(rb_table_cursor, "@table");
+
+    if (NIL_P(rb_with_section)) {
+	flags |= column->header.flags & GRN_OBJ_WITH_SECTION;
+    } else if (RVAL2CBOOL(rb_with_section)) {
+	flags |= GRN_OBJ_WITH_SECTION;
+    }
+
+    if (NIL_P(rb_with_weight)) {
+	flags |= column->header.flags & GRN_OBJ_WITH_WEIGHT;
+    } else if (RVAL2CBOOL(rb_with_weight)) {
+	flags |= GRN_OBJ_WITH_WEIGHT;
+    }
+
+    if (NIL_P(rb_with_position)) {
+	flags |= column->header.flags & GRN_OBJ_WITH_POSITION;
+    } else if (RVAL2CBOOL(rb_with_position)) {
+	flags |= GRN_OBJ_WITH_POSITION;
+    }
 
     index_cursor = grn_index_cursor_open(context, table_cursor,
 					 column, rid_min, rid_max, flags);
@@ -596,5 +644,5 @@ rb_grn_init_index_column (VALUE mGrn)
     rb_define_method(rb_cGrnIndexColumn, "with_position?",
 		     rb_grn_index_column_with_position_p, 0);
     rb_define_method(rb_cGrnIndexColumn, "open_cursor",
-		     rb_grn_index_column_open_cursor, 1);
+		     rb_grn_index_column_open_cursor, -1);
 }
