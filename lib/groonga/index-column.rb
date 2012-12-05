@@ -53,11 +53,29 @@ module Groonga
       dump_posting_header
       @column.table.open_cursor do |table_cursor|
         @column.open_cursor(table_cursor) do |cursor|
+          postings = []
           cursor.each do |posting|
-            dump_posting(posting)
+            if postings.empty?
+              postings << posting
+              next
+            end
+
+            current_document_posting = postings.first
+            unless same_document_posting?(current_document_posting, posting)
+              dump_postings(postings)
+              postings.clear
+            end
+
+            postings << posting
           end
+          dump_postings(postings)
         end
       end
+    end
+
+    def same_document_posting?(posting1, posting2)
+      posting1.term_id == posting2.term_id and
+        posting1.record_id == posting2.record_id
     end
 
     def dump_posting_header
@@ -70,6 +88,15 @@ module Groonga
       ]
       header = header_items.join("\t")
       @output.write("  #{header}\n")
+    end
+
+    def dump_postings(postings)
+      sorted_postings = postings.sort_by do |posting|
+        posting.position
+      end
+      sorted_postings.each do |posting|
+        dump_posting(posting)
+      end
     end
 
     def dump_posting(posting)
