@@ -99,10 +99,9 @@ module Groonga
     end
 
     def dump_posting(posting)
-      term = posting.term
       found_record = "#{posting.table.name}[#{posting.record.record_id}]"
       posting_info_items = [
-        "<#{term.key}>",
+        "<#{term(posting)}>",
         "#{posting.weight}",
         "#{posting.position}",
         "#{posting.term_frequency}",
@@ -110,6 +109,10 @@ module Groonga
       ]
       posting_info = posting_info_items.join("\t")
       @output.write("  #{posting_info}\n")
+    end
+
+    def term(posting)
+      posting.term.key
     end
 
     def record_key(posting)
