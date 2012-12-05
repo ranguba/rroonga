@@ -91,7 +91,7 @@ module Groonga
 
     def dump_postings(postings)
       sorted_postings = postings.sort_by do |posting|
-        [posting.record.key, source_column_name(posting), posting.position]
+        [source_column_name(posting), record_key(posting), posting.position]
       end
       sorted_postings.each do |posting|
         dump_posting(posting)
