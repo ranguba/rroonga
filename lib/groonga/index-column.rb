@@ -60,8 +60,8 @@ module Groonga
               next
             end
 
-            current_document_posting = postings.first
-            unless same_document_posting?(current_document_posting, posting)
+            current_term_posting = postings.first
+            unless same_term_posting?(current_term_posting, posting)
               dump_postings(postings)
               postings.clear
             end
@@ -73,9 +73,8 @@ module Groonga
       end
     end
 
-    def same_document_posting?(posting1, posting2)
-      posting1.term_id == posting2.term_id and
-        posting1.record_id == posting2.record_id
+    def same_term_posting?(posting1, posting2)
+      posting1.term_id == posting2.term_id
     end
 
     def dump_posting_header
@@ -92,7 +91,7 @@ module Groonga
 
     def dump_postings(postings)
       sorted_postings = postings.sort_by do |posting|
-        posting.position
+        [posting.record.key, source_column_name(posting), posting.position]
       end
       sorted_postings.each do |posting|
         dump_posting(posting)
