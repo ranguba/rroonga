@@ -112,6 +112,30 @@ module Groonga
       @output.write("  #{posting_info}\n")
     end
 
+    def record_key(posting)
+      posting.record.key || default_key(posting)
+    end
+
+    def default_key(posting)
+      type = posting.table.domain
+      return 0 if type.is_a?(Groonga::Table)
+
+      case type.name
+      when "ShortText", "Text", "LongText"
+        ""
+      when "TokyoGeoPoint"
+        Groonga::TokyoGeoPoint.new(0, 0)
+      when "WGS84GeoPoint"
+        Groonga::WGS84GeoPoint.new(0, 0)
+      when "Bool"
+        true
+      when "Time"
+        Time.at(0)
+      else
+        0
+      end
+    end
+
     def source_column_name(posting)
       source = @sources[posting.section_id - 1]
       if source.nil?
