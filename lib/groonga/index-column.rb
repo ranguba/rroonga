@@ -38,20 +38,6 @@ module Groonga
     end
 
     private
-    def dump_file_info(posting)
-      items = [
-        "index: #{@column.name}",
-        "term: <#{posting.term.key}>",
-        "domain: #{@column.domain.name}",
-        "range: #{@column.range.name}",
-        "have_section: #{@column.with_section?}",
-        "have_weight: #{@column.with_weight?}",
-        "have_position: #{@column.with_position?}",
-      ]
-      info = items.join("\t")
-      @output.write("#{info}\n")
-    end
-
     def dump_indexes
       @column.table.open_cursor do |table_cursor|
         @column.open_cursor(table_cursor) do |cursor|
@@ -77,6 +63,20 @@ module Groonga
 
     def same_term_posting?(posting1, posting2)
       posting1.term_id == posting2.term_id
+    end
+
+    def dump_file_info(posting)
+      items = [
+        "index: #{@column.name}",
+        "term: <#{posting.term.key}>",
+        "domain: #{@column.domain.name}",
+        "range: #{@column.range.name}",
+        "have_section: #{@column.with_section?}",
+        "have_weight: #{@column.with_weight?}",
+        "have_position: #{@column.with_position?}",
+      ]
+      info = items.join("\t")
+      @output.write("#{info}\n")
     end
 
     def dump_posting_header
