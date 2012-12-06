@@ -90,12 +90,16 @@ module Groonga
       @output.write("  #{header}\n")
     end
 
+    def encode_term(term)
+      CGI.escape(term.to_s)
+    end
+
     def dump_postings(postings)
       return if postings.empty?
 
       distinctive_posting = postings.first
       term = distinctive_posting.term.key
-      encoded_term = CGI.escape(term.to_s)
+      encoded_term = encode_term(term)
       output_dir = File.join(@output_directory, @column.name)
       output_path = File.join(output_dir, "#{encoded_term}.dump")
       FileUtils.mkdir_p(output_dir)
