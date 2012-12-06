@@ -95,7 +95,7 @@ module Groonga
 
       distinctive_posting = postings.first
       term = distinctive_posting.term.key
-      encoded_term = CGI.escape(term)
+      encoded_term = CGI.escape(term.to_s)
       output_dir = File.join(@output_directory, @column.name)
       output_path = File.join(output_dir, "#{encoded_term}.dump")
       FileUtils.mkdir_p(output_dir)
