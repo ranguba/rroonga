@@ -24,9 +24,10 @@ module Groonga
       end
     end
 
-    def dump_index(output)
+    def dump_index(output_directory)
       each do |object|
-        object.dump(output) if object.is_a?(Groonga::IndexColumn)
+        next unless object.is_a?(Groonga::IndexColumn)
+        object.dump(output_directory)
       end
     end
   end

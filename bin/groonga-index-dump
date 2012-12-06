@@ -23,8 +23,16 @@ require 'pathname'
 require 'groonga'
 
 options = OpenStruct.new
+options.output_directory = "index-dump"
+
 option_parser = OptionParser.new do |parser|
   parser.banner += " DB_PATH"
+
+  parser.on("--output-directory=DIRECTORY",
+            "Dump index to under DIRECTORY",
+            "(#{options.ouitput_directory})") do |directory|
+    options.output_directory = directory
+  end
 end
 args = option_parser.parse!(ARGV)
 
@@ -35,5 +43,5 @@ end
 db_path = args[0]
 
 Groonga::Database.open(db_path) do |database|
-  database.dump_index($stdout)
+  database.dump_index(options.output_directory)
 end

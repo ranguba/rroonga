@@ -15,42 +15,44 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+require "fileutils"
+require "cgi"
+
 module Groonga
   class IndexColumn
-    def dump(output)
-      dumper = IndexColumnDumper.new(self, output)
+    def dump(output_directory)
+      dumper = IndexColumnDumper.new(self, output_directory)
       dumper.dump
     end
   end
 
   class IndexColumnDumper
-    def initialize(column, output)
+    def initialize(column, output_directory)
       @column = column
-      @output = output
+      @output_directory = output_directory
       @sources = @column.sources
     end
 
     def dump
-      dump_column_info
       dump_indexes
     end
 
     private
-    def dump_column_info
-      column_info_items = [
-        "name: #{@column.name}",
+    def dump_file_info(posting)
+      items = [
+        "index: #{@column.name}",
+        "term: <#{posting.term.key}>",
         "domain: #{@column.domain.name}",
         "range: #{@column.range.name}",
         "have_section: #{@column.with_section?}",
         "have_weight: #{@column.with_weight?}",
         "have_position: #{@column.with_position?}",
       ]
-      column_info = column_info_items.join("\t")
-      @output.write("#{column_info}\n")
+      info = items.join("\t")
+      @output.write("#{info}\n")
     end
 
     def dump_indexes
-      dump_posting_header
       @column.table.open_cursor do |table_cursor|
         @column.open_cursor(table_cursor) do |cursor|
           postings = []
@@ -79,7 +81,6 @@ module Groonga
 
     def dump_posting_header
       header_items = [
-        "term",
         "weight",
         "position",
         "term_frequency",
@@ -90,18 +91,30 @@ module Groonga
     end
 
     def dump_postings(postings)
-      sorted_postings = postings.sort_by do |posting|
-        [source_column_name(posting), record_key(posting), posting.position]
-      end
-      sorted_postings.each do |posting|
-        dump_posting(posting)
+      return if postings.empty?
+
+      distinctive_posting = postings.first
+      term = distinctive_posting.term.key
+      encoded_term = CGI.escape(term)
+      output_dir = File.join(@output_directory, @column.name)
+      output_path = File.join(output_dir, "#{encoded_term}.dump")
+      FileUtils.mkdir_p(output_dir)
+      File.open(output_path, "w") do |output|
+        @output = output
+        dump_file_info(distinctive_posting)
+        dump_posting_header
+        sorted_postings = postings.sort_by do |posting|
+          [source_column_name(posting), record_key(posting), posting.position]
+        end
+        sorted_postings.each do |posting|
+          dump_posting(posting)
+        end
       end
     end
 
     def dump_posting(posting)
       found_record = "#{posting.table.name}[#{posting.record.record_id}]"
       posting_info_items = [
-        "<#{term(posting)}>",
         "#{posting.weight}",
         "#{posting.position}",
         "#{posting.term_frequency}",
