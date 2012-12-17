@@ -143,6 +143,21 @@ rb_grn_table_key_support_inspect_content (VALUE self, VALUE inspected)
 	}
     }
 
+    {
+	grn_obj *normalizer;
+
+	rb_str_cat2(inspected, ", ");
+	rb_str_cat2(inspected, "normalizer: ");
+	normalizer = grn_obj_get_info(context, table, GRN_INFO_NORMALIZER,
+				      NULL);
+	if (normalizer) {
+	    rb_grn_object_inspect_object_content_name(inspected, context,
+						      normalizer);
+	} else {
+	    rb_str_cat2(inspected, "(nil)");
+	}
+    }
+
     return inspected;
 }
 

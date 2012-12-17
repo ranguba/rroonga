@@ -110,7 +110,8 @@ class SchemaTest < Test::Unit::TestCase
                    "flags: <>, " +
                    "size: <0>, " +
                    "encoding: <#{Groonga::Encoding.default.inspect}>, " +
-                   "default_tokenizer: <#{tokenizer.name}>>",
+                   "default_tokenizer: <#{tokenizer.name}>, " +
+                   "normalizer: (nil)>",
                    table.inspect)
     end
 
@@ -168,7 +169,8 @@ class SchemaTest < Test::Unit::TestCase
                    "flags: <KEY_WITH_SIS>, " +
                    "size: <0>, " +
                    "encoding: <#{Groonga::Encoding.default.inspect}>, " +
-                   "default_tokenizer: <TokenBigram>>",
+                   "default_tokenizer: <TokenBigram>, " +
+                   "normalizer: <NormalizerAuto>>",
                    table.inspect)
     end
 
@@ -226,7 +228,8 @@ class SchemaTest < Test::Unit::TestCase
                    "flags: <>, " +
                    "size: <0>, " +
                    "encoding: <#{Groonga::Encoding.default.inspect}>, " +
-                   "default_tokenizer: <TokenBigram>>",
+                   "default_tokenizer: <TokenBigram>, " +
+                   "normalizer: <NormalizerAuto>>",
                    table.inspect)
     end
 
