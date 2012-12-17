@@ -147,6 +147,14 @@ class HashTest < Test::Unit::TestCase
                  hash.default_tokenizer)
   end
 
+  def test_normalizer
+    hash = Groonga::Hash.create
+    assert_nil(hash.normalizer)
+    hash.normalizer = "NormalizerAuto"
+    assert_equal(Groonga["NormalizerAuto"],
+                 hash.normalizer)
+  end
+
   def test_search
     users = Groonga::Array.create(:name => "Users")
     users.define_column("name", "ShortText")

@@ -40,6 +40,14 @@ class PatriciaTrieTest < Test::Unit::TestCase
                  trie.default_tokenizer)
   end
 
+  def test_normalizer
+    trie = Groonga::PatriciaTrie.create
+    assert_nil(trie.normalizer)
+    trie.normalizer = "NormalizerAuto"
+    assert_equal(Groonga["NormalizerAuto"],
+                 trie.normalizer)
+  end
+
   def test_search
     users = Groonga::Array.create(:name => "Users")
     users.define_column("name", "ShortText")

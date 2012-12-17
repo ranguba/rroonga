@@ -1,6 +1,6 @@
 /* -*- coding: utf-8; c-file-style: "ruby" -*- */
 /*
-  Copyright (C) 2009-2011  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2012  Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -659,6 +659,71 @@ rb_grn_table_key_support_set_default_tokenizer (VALUE self, VALUE rb_tokenizer)
 }
 
 /*
+ * Returns the normalizer that is used by {Groonga::IndexColumn}.
+ *
+ * @overload normalizer
+ *   @return [nil, Groonga::Procedure]
+ */
+static VALUE
+rb_grn_table_key_support_get_normalizer (VALUE self)
+{
+    grn_ctx *context = NULL;
+    grn_obj *table;
+    grn_obj *normalizer = NULL;
+
+    rb_grn_table_key_support_deconstruct(SELF(self), &table, &context,
+					 NULL, NULL, NULL,
+					 NULL, NULL, NULL,
+					 NULL);
+
+    normalizer = grn_obj_get_info(context, table, GRN_INFO_NORMALIZER, NULL);
+    rb_grn_context_check(context, self);
+
+    return GRNOBJECT2RVAL(Qnil, context, normalizer, GRN_FALSE);
+}
+
+/*
+ * Specifies the normalizer used by {Groonga::IndexColumn}.
+ *
+ * @example
+ *   # Uses NFKC normalizer.
+ *   table.normalizer = "NormalizerNFKC51"
+ *   # Specifies normalizer object.
+ *   table.normalizer = Groonga::Context["NormalizerNFKC51"]
+ *   # Uses auto normalizer that is a normalizer for backward compatibility.
+ *   table.normalizer = "TNormalizerAuto"
+ *
+ * @overload normalizer=(name)
+ *    @param [String] name Set a nomalizer named @name@.
+ *
+ * @overload normalizer=(normalizer)
+ *    @param [Groonga::Procedure] normalizer Set the normalizer object.
+ *
+ * @overload normalizer=(normalizer)
+ *    @param [nil] normalizer Unset normalizer.
+ */
+static VALUE
+rb_grn_table_key_support_set_normalizer (VALUE self, VALUE rb_normalizer)
+{
+    grn_ctx *context;
+    grn_obj *table;
+    grn_obj *normalizer;
+    grn_rc rc;
+
+    rb_grn_table_key_support_deconstruct(SELF(self), &table, &context,
+					 NULL, NULL, NULL,
+					 NULL, NULL, NULL,
+					 NULL);
+
+    normalizer = RVAL2GRNOBJECT(rb_normalizer, &context);
+    rc = grn_obj_set_info(context, table, GRN_INFO_NORMALIZER, normalizer);
+    rb_grn_context_check(context, self);
+    rb_grn_rc_check(rc, self);
+
+    return Qnil;
+}
+
+/*
  * キーを正規化する場合は +true+ 、正規化しない場合は +false+ を返
  * す。
  *
@@ -731,6 +796,11 @@ rb_grn_init_table_key_support (VALUE mGrn)
 		     rb_grn_table_key_support_get_default_tokenizer, 0);
     rb_define_method(rb_mGrnTableKeySupport, "default_tokenizer=",
 		     rb_grn_table_key_support_set_default_tokenizer, 1);
+
+    rb_define_method(rb_mGrnTableKeySupport, "normalizer",
+		     rb_grn_table_key_support_get_normalizer, 0);
+    rb_define_method(rb_mGrnTableKeySupport, "normalizer=",
+		     rb_grn_table_key_support_set_normalizer, 1);
 
     rb_define_method(rb_mGrnTableKeySupport, "normalize_key?",
 		     rb_grn_table_key_normalize_key_p, 0);
