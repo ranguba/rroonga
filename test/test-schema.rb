@@ -108,10 +108,10 @@ class SchemaTest < Test::Unit::TestCase
                    "domain: <Int32>, " +
                    "range: <UInt32>, " +
                    "flags: <>, " +
+                   "size: <0>, " +
                    "encoding: <#{Groonga::Encoding.default.inspect}>, " +
-                   "size: <0>>",
+                   "default_tokenizer: <#{tokenizer.name}>>",
                    table.inspect)
-      assert_equal(tokenizer, table.default_tokenizer)
     end
 
     def test_rename
@@ -165,11 +165,11 @@ class SchemaTest < Test::Unit::TestCase
                    "path: <#{path}>, " +
                    "domain: <Int32>, " +
                    "range: <Float>, " +
-                   "flags: <KEY_WITH_SIS|KEY_NORMALIZE>, " +
+                   "flags: <KEY_WITH_SIS>, " +
+                   "size: <0>, " +
                    "encoding: <#{Groonga::Encoding.default.inspect}>, " +
-                   "size: <0>>",
+                   "default_tokenizer: <TokenBigram>>",
                    table.inspect)
-      assert_equal(context["TokenBigram"], table.default_tokenizer)
     end
 
     def test_rename
@@ -223,11 +223,11 @@ class SchemaTest < Test::Unit::TestCase
                    "path: <#{path}>, " +
                    "domain: <Int32>, " +
                    "range: <Float>, " +
-                   "flags: <KEY_NORMALIZE>, " +
+                   "flags: <>, " +
+                   "size: <0>, " +
                    "encoding: <#{Groonga::Encoding.default.inspect}>, " +
-                   "size: <0>>",
+                   "default_tokenizer: <TokenBigram>>",
                    table.inspect)
-      assert_equal(context["TokenBigram"], table.default_tokenizer)
     end
 
     def test_rename

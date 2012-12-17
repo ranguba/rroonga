@@ -86,8 +86,9 @@ class HashTest < Test::Unit::TestCase
                  "domain: <ShortText>, " +
                  "range: (nil), " +
                  "flags: <>, " +
+                 "size: <0>, " +
                  "encoding: <#{encoding.inspect}>, " +
-                 "size: <0>>",
+                 "default_tokenizer: (nil)>",
                  anonymous_table.inspect)
   end
 
@@ -100,8 +101,9 @@ class HashTest < Test::Unit::TestCase
                  "domain: <ShortText>, " +
                  "range: (nil), " +
                  "flags: <>, " +
+                 "size: <0>, " +
                  "encoding: <#{encoding.inspect}>, " +
-                 "size: <0>>",
+                 "default_tokenizer: (nil)>",
                  anonymous_table.inspect)
   end
 
@@ -115,8 +117,9 @@ class HashTest < Test::Unit::TestCase
                  "domain: <ShortText>, " +
                  "range: (nil), " +
                  "flags: <>, " +
+                 "size: <0>, " +
                  "encoding: <#{encoding.inspect}>, " +
-                 "size: <0>>",
+                 "default_tokenizer: (nil)>",
                  named_table.inspect)
   end
 
@@ -129,8 +132,9 @@ class HashTest < Test::Unit::TestCase
                  "domain: <ShortText>, " +
                  "range: (nil), " +
                  "flags: <>, " +
+                 "size: <0>, " +
                  "encoding: <#{encoding.inspect}>, " +
-                 "size: <0>>",
+                 "default_tokenizer: (nil)>",
                  named_table.inspect)
   end
 

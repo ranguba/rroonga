@@ -362,6 +362,10 @@ VALUE          rb_grn_object_inspect_object         (VALUE inspected,
 VALUE          rb_grn_object_inspect_object_content (VALUE inspected,
 						     grn_ctx *context,
 						     grn_obj *object);
+VALUE          rb_grn_object_inspect_object_content_name
+                                                    (VALUE inspected,
+						     grn_ctx *context,
+						     grn_obj *object);
 VALUE          rb_grn_object_inspect_header         (VALUE object,
 						     VALUE inspected);
 VALUE          rb_grn_object_inspect_content        (VALUE object,
@@ -430,6 +434,8 @@ VALUE          rb_grn_table_set_column_value        (VALUE self,
 						     VALUE rb_id,
 						     VALUE rb_name,
 						     VALUE rb_value);
+VALUE          rb_grn_table_inspect_content         (VALUE object,
+						     VALUE inspected);
 
 grn_ctx       *rb_grn_table_cursor_ensure_context   (VALUE cursor,
 						     VALUE *rb_context);

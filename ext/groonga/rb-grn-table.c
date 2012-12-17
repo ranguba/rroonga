@@ -143,7 +143,7 @@ rb_grn_table_initialize (VALUE self)
     return Qnil;
 }
 
-static VALUE
+VALUE
 rb_grn_table_inspect_content (VALUE self, VALUE inspected)
 {
     RbGrnTable *rb_grn_table;
@@ -164,25 +164,6 @@ rb_grn_table_inspect_content (VALUE self, VALUE inspected)
 	return inspected;
     if (!context)
 	return inspected;
-
-    if (table->header.type != GRN_TABLE_NO_KEY) {
-	grn_obj value;
-	grn_encoding encoding;
-
-	rb_str_cat2(inspected, ", ");
-	rb_str_cat2(inspected, "encoding: <");
-	GRN_OBJ_INIT(&value, GRN_BULK, 0, GRN_ID_NIL);
-	grn_obj_get_info(context, table, GRN_INFO_ENCODING, &value);
-	encoding = *((grn_encoding *)GRN_BULK_HEAD(&value));
-	grn_obj_unlink(context, &value);
-
-	if (context->rc == GRN_SUCCESS)
-	    rb_str_concat(inspected, rb_inspect(GRNENCODING2RVAL(encoding)));
-	else
-	    rb_str_cat2(inspected, "invalid");
-
-	rb_str_cat2(inspected, ">");
-    }
 
     rb_str_cat2(inspected, ", ");
     rb_str_cat2(inspected, "size: <");

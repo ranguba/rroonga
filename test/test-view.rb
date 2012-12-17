@@ -28,7 +28,6 @@ class ViewTest < Test::Unit::TestCase
                  "domain: (nil), " +
                  "range: (nil), " +
                  "flags: <>, " +
-                 "encoding: <:default>, " +
                  "size: <0>>",
                  view.inspect)
   end

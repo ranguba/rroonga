@@ -663,9 +663,9 @@ rb_grn_object_inspect_content_id_with_label (VALUE inspected,
     return inspected;
 }
 
-static VALUE
-rb_grn_object_inspect_content_name (VALUE inspected,
-				    grn_ctx *context, grn_obj *object)
+VALUE
+rb_grn_object_inspect_object_content_name (VALUE inspected,
+					   grn_ctx *context, grn_obj *object)
 {
     int name_size;
 
@@ -694,7 +694,7 @@ rb_grn_object_inspect_content_name_with_label (VALUE inspected,
 {
 
     rb_str_cat2(inspected, "name: ");
-    rb_grn_object_inspect_content_name(inspected, context, object);
+    rb_grn_object_inspect_object_content_name(inspected, context, object);
     return inspected;
 }
 
@@ -736,8 +736,9 @@ rb_grn_object_inspect_content_domain_with_label (VALUE inspected,
 	    if (domain_object == object) {
 		rb_str_cat2(inspected, "(self)");
 	    } else {
-		rb_grn_object_inspect_content_name(inspected,
-						   context, domain_object);
+		rb_grn_object_inspect_object_content_name(inspected,
+							  context,
+							  domain_object);
 	    }
 	} else {
 	    rb_str_cat2(inspected, "(");
@@ -776,8 +777,9 @@ rb_grn_object_inspect_content_range_with_label (VALUE inspected,
 		if (range_object == object) {
 		    rb_str_cat2(inspected, "(self)");
 		} else {
-		    rb_grn_object_inspect_content_name(inspected,
-						       context, range_object);
+		    rb_grn_object_inspect_object_content_name(inspected,
+							      context,
+							      range_object);
 		}
 	    } else {
 		rb_str_cat2(inspected, "(");

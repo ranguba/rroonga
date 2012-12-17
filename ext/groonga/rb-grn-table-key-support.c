@@ -87,6 +87,86 @@ rb_grn_table_key_support_bind (RbGrnTableKeySupport *rb_grn_table_key_support,
 	grn_obj_open(context, GRN_BULK, 0, rb_grn_object->domain_id);
 }
 
+static VALUE
+rb_grn_table_key_support_inspect_content (VALUE self, VALUE inspected)
+{
+    RbGrnTableKeySupport *rb_grn_table;
+    grn_ctx *context = NULL;
+    grn_obj *table;
+
+    rb_grn_table = SELF(self);
+    if (!rb_grn_table)
+	return inspected;
+
+    rb_grn_table_key_support_deconstruct(SELF(self), &table, &context,
+					 NULL, NULL, NULL,
+					 NULL, NULL, NULL,
+					 NULL);
+    if (!table)
+	return inspected;
+    if (!context)
+	return inspected;
+
+    {
+	grn_obj value;
+	grn_encoding encoding;
+
+	rb_str_cat2(inspected, ", ");
+	rb_str_cat2(inspected, "encoding: <");
+	GRN_OBJ_INIT(&value, GRN_BULK, 0, GRN_ID_NIL);
+	grn_obj_get_info(context, table, GRN_INFO_ENCODING, &value);
+	encoding = *((grn_encoding *)GRN_BULK_HEAD(&value));
+	grn_obj_unlink(context, &value);
+
+	if (context->rc == GRN_SUCCESS) {
+	    rb_str_concat(inspected, rb_inspect(GRNENCODING2RVAL(encoding)));
+	} else {
+	    rb_str_cat2(inspected, "invalid");
+	}
+
+	rb_str_cat2(inspected, ">");
+    }
+
+    {
+	grn_obj *default_tokenizer;
+
+	rb_str_cat2(inspected, ", ");
+	rb_str_cat2(inspected, "default_tokenizer: ");
+	default_tokenizer = grn_obj_get_info(context, table,
+					     GRN_INFO_DEFAULT_TOKENIZER,
+					     NULL);
+	if (default_tokenizer) {
+	    rb_grn_object_inspect_object_content_name(inspected, context,
+						      default_tokenizer);
+	} else {
+	    rb_str_cat2(inspected, "(nil)");
+	}
+    }
+
+    return inspected;
+}
+
+/*
+ * Inspects the table.
+ *
+ * @overload inspect
+ *   @return [String] the inspected string.
+ */
+static VALUE
+rb_grn_table_key_support_inspect (VALUE self)
+{
+    VALUE inspected;
+
+    inspected = rb_str_new2("");
+    rb_grn_object_inspect_header(self, inspected);
+    rb_grn_object_inspect_content(self, inspected);
+    rb_grn_table_inspect_content(self, inspected);
+    rb_grn_table_key_support_inspect_content(self, inspected);
+    rb_grn_object_inspect_footer(self, inspected);
+
+    return inspected;
+}
+
 static grn_id
 rb_grn_table_key_support_add_raw (VALUE self, VALUE rb_key, int *added)
 {
@@ -761,6 +841,9 @@ rb_grn_init_table_key_support (VALUE mGrn)
 {
     rb_mGrnTableKeySupport = rb_define_module_under(rb_cGrnTable, "KeySupport");
     rb_include_module(rb_mGrnTableKeySupport, rb_mGrnEncodingSupport);
+
+    rb_define_method(rb_mGrnTableKeySupport, "inspect",
+		     rb_grn_table_key_support_inspect, 0);
 
     rb_define_method(rb_mGrnTableKeySupport, "add",
 		     rb_grn_table_key_support_add, -1);
