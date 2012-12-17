@@ -206,7 +206,7 @@ class SchemaTest < Test::Unit::TestCase
     end
 
     def test_full_option
-      path = @tmp_dir + "patricia-trie.groonga"
+      path = @tmp_dir + "double-array-trie.groonga"
       Groonga::Schema.create_table("Posts",
                                    :type => :double_array_trie,
                                    :key_type => "integer",
