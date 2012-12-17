@@ -113,7 +113,7 @@ rb_grn_snippet_initialize (int argc, VALUE *argv, VALUE self)
     context = rb_grn_context_ensure(&rb_context);
     if (!grn_ctx_db(context)) {
 	rb_raise(rb_eArgError,
-		 "Groonga::Context should be asswociated with a database by "
+		 "Groonga::Context should be associated with a database by "
 		 "Groonga::Database#open or #create: %s",
 		 rb_grn_inspect(rb_context));
     }
