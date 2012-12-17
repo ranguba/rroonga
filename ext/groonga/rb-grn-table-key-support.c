@@ -732,13 +732,10 @@ rb_grn_table_key_support_set_normalizer (VALUE self, VALUE rb_normalizer)
 static VALUE
 rb_grn_table_key_normalize_key_p (VALUE self)
 {
-    grn_obj *table;
+    VALUE normalizer;
 
-    rb_grn_table_key_support_deconstruct(SELF(self), &table, NULL,
-					 NULL, NULL, NULL,
-					 NULL, NULL, NULL,
-					 NULL);
-    return CBOOL2RVAL(table->header.flags & GRN_OBJ_KEY_NORMALIZE);
+    normalizer = rb_grn_table_key_support_get_normalizer(self);
+    return CBOOL2RVAL(!NIL_P(normalizer));
 }
 
 /*
