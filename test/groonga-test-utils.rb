@@ -40,6 +40,8 @@ module GroongaTestUtils
 
     setup_encoding
     setup_context
+
+    @database = nil
   end
 
   def setup_tmp_directory
@@ -102,8 +104,15 @@ module GroongaTestUtils
     @database = Groonga::Database.create(:path => @database_path.to_s)
   end
 
-  def teardown_sandbox
+  def teardown_database
+    return if @database.nil?
+
+    @database.close
     @database = nil
+  end
+
+  def teardown_sandbox
+    teardown_database
     Groonga::Context.default.close
     Groonga::Context.default = nil
     GC.start

@@ -18,6 +18,11 @@
 class SnippetTest < Test::Unit::TestCase
   include GroongaTestUtils
 
+  setup
+  def setup_database
+    @database = Groonga::Database.create
+  end
+
   def setup_encoding
     Groonga::Encoding.default = :utf8
   end
