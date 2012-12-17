@@ -730,7 +730,7 @@ rb_grn_table_key_support_set_normalizer (VALUE self, VALUE rb_normalizer)
  * @overload normalize_key?
  */
 static VALUE
-rb_grn_table_key_normalize_key_p (VALUE self)
+rb_grn_table_key_support_normalize_key_p (VALUE self)
 {
     VALUE normalizer;
 
@@ -800,7 +800,7 @@ rb_grn_init_table_key_support (VALUE mGrn)
 		     rb_grn_table_key_support_set_normalizer, 1);
 
     rb_define_method(rb_mGrnTableKeySupport, "normalize_key?",
-		     rb_grn_table_key_normalize_key_p, 0);
+		     rb_grn_table_key_support_normalize_key_p, 0);
 
     rb_define_method(rb_mGrnTableKeySupport, "support_key?",
 		     rb_grn_table_key_support_support_key_p, 0);
