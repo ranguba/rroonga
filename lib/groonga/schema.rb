@@ -185,6 +185,9 @@ module Groonga
       # クトがわたるので、そのオブジェクトを利用してテーブル
       # の詳細を定義する。
       #
+      # TODO: Share option descriptions with
+      # Groonga::Schema#create_table.
+      #
       # _options_ に指定可能な値は以下の通り。
       # @overload create_table(name, options= {:type => :array}, &block)
       #   @param [::Hash] options The name and value
@@ -274,9 +277,16 @@ module Groonga
       #     何も設定されていないので、テーブルに
       #     {Groonga::IndexColumn} を定義する場合は @"TokenBigram"@
       #     などを指定する必要がある。
-      #   @option options :key_normalize The key_normalize
       #
-      #     +true+ を指定するとキーを正規化する。
+      #   @option options :key_normalize (false) Keys are normalized
+      #     if this value is @true@.
+      #
+      #     @deprecated Use @:normalizer => "NormalizerAuto"@ instead.
+      #
+      #   @option options [String, Groonga::Procedure, nil] :normalizer
+      #     The normalizer that is used by {Groonga::IndexColumn}. You
+      #     can specify this by normalizer name as String such as
+      #     @"NormalizerAuto"@ or normalizer object.
       #
       # @overload create_table(name, options= {:type => :patricia_trie}, &block)
       #   @param [::Hash] options The name and value
@@ -311,9 +321,18 @@ module Groonga
       #     +true+ を指定すると {Groonga::Table#group} で
       #     グループ化したときに、 {Groonga::Record#n_sub_records} でグループに
       #     含まれるレコードの件数を取得できる。
-      #   @option options :key_normalize The key_normalize
       #
-      #    +true+ を指定するとキーを正規化する。
+      #   @option options :key_normalize (false) Keys are normalized
+      #     if this value is @true@.
+      #
+      #     @deprecated Use @:normalizer => "NormalizerAuto"@ instead.
+      #
+      #   @option options [String, Groonga::Procedure, nil] :normalizer
+      #     The normalizer that is used by {Groonga::IndexColumn}. You
+      #     can specify this by normalizer name as String such as
+      #     @"NormalizerAuto"@ or normalizer object.
+      #
+      #
       #   @option options :key_with_sis The key_with_sis
       #
       #     +true+ を指定するとキーの文字列の
@@ -667,6 +686,8 @@ module Groonga
 
     # 名前が _name_ のテーブルを作成する。
     #
+    # TODO: Use @macro.
+    #
     # テーブルの作成は {#define} を呼び出すまでは実行されないこ
     # とに注意すること。
     # @overload create_table(name, options= {:type => :array})
@@ -767,12 +788,22 @@ module Groonga
     #     省略した場合は文字列をキーとして使用する。この場合、
     #     4096バイトまで使用可能である。
     #
+    #   @option options :key_normalize (false) Keys are normalized
+    #     if this value is @true@.
+    #
+    #     @deprecated Use @:normalizer => "NormalizerAuto"@ instead.
+    #
     #   @option options :default_tokenizer The default_tokenizer
     #
     #     {Groonga::IndexColumn} で使用するトークナイザを指定する。
     #     デフォルトでは何も設定されていないので、テーブルに
     #     {Groonga::IndexColumn} を定義する場合は
     #     @"TokenBigram"@ などを指定する必要がある。
+    #
+    #   @option options [String, Groonga::Procedure, nil] :normalizer
+    #     The normalizer that is used by {Groonga::IndexColumn}. You
+    #     can specify this by normalizer name as String such as
+    #     @"NormalizerAuto"@ or normalizer object.
     #
     # @overload create_table(name, options= {:type => :double_array_trie})
     #   :typeに:double_array_trieを使用した場合
@@ -807,9 +838,12 @@ module Groonga
     #     +true+ を指定すると {Groonga::Table#group} でグループ化
     #     したときに、 {Groonga::Record#n_sub_records} でグループに
     #     含まれるレコードの件数を取得できる。
-    #   @option options :key_normalize The key_normalize
     #
-    #     +true+ を指定するとキーを正規化する。
+    #   @option options :key_normalize (false) Keys are normalized
+    #     if this value is @true@.
+    #
+    #     @deprecated Use @:normalizer => "NormalizerAuto"@ instead.
+    #
     #   @option options :key_type The key_type
     #
     #     キーの種類を示すオブジェクトを指定する。
@@ -836,6 +870,11 @@ module Groonga
     #     デフォルトでは何も設定されていないので、テーブルに
     #     {Groonga::IndexColumn} を定義する場合は
     #     @"TokenBigram"@ などを指定する必要がある。
+    #
+    #   @option options [String, Groonga::Procedure, nil] :normalizer
+    #     The normalizer that is used by {Groonga::IndexColumn}. You
+    #     can specify this by normalizer name as String such as
+    #     @"NormalizerAuto"@ or normalizer object.
     def create_table(name, options={})
       definition = TableDefinition.new(name, @options.merge(options || {}))
       yield(definition) if block_given?
@@ -1420,7 +1459,8 @@ module Groonga
                                :key_type, :value_type, :sub_records,
                                :default_tokenizer,
                                :key_normalize, :key_with_sis,
-                               :named_path]
+                               :named_path,
+                               :normalizer]
       # @private
       def validate_options(options)
         return if options.nil?
@@ -1463,6 +1503,7 @@ module Groonga
           :key_type => normalize_key_type(@options[:key_type] || "ShortText"),
           :key_normalize => @options[:key_normalize],
           :default_tokenizer => normalize_type(@options[:default_tokenizer]),
+          :normalizer => normalize_type(@options[:normalizer]),
         }
 
         if @table_type == Groonga::Array
@@ -1536,9 +1577,10 @@ module Groonga
           default_tokenizer = normalize_type(options[:default_tokenizer])
           default_tokenizer = resolve_name(default_tokenizer)
           return false unless table.default_tokenizer == default_tokenizer
-          key_normalize = options[:key_normalize]
-          key_normalize = false if key_normalize.nil?
-          return false unless table.normalize_key? == key_normalize
+          normalizer = normalize_type(options[:normalizer])
+          normalizer ||= default_normalizer_name if options[:key_normalize]
+          normalizer = resolve_name(normalizer)
+          return false unless table.normalizer == normalizer
           if table.is_a?(Groonga::PatriciaTrie)
             key_with_sis = options[:key_with_sis]
             key_with_sis = false if key_with_sis.nil?
@@ -1548,6 +1590,10 @@ module Groonga
         else
           false
         end
+      end
+
+      def default_normalizer_name
+        "NormalizerAuto"
       end
 
       def normalize_key_type(key_type)

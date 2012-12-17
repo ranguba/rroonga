@@ -112,8 +112,12 @@ VALUE rb_cGrnDoubleArrayTrie;
  *       場合は自動的にパスが付加される。 +:context+ で指定した
  *       {Groonga::Context} に結びついているデータベースが一時デー
  *       タベースの場合は例外が発生する。
- *     @option options :key_normalize
- *       +true+ を指定するとキーを正規化する。
+ *
+ *     @option options :key_normalize (false) Keys are normalized
+ *       if this value is @true@.
+ *
+ *       @deprecated Use @:normalizer => "NormalizerAuto"@ instead.
+ *
  *     @option options :key_with_sis
  *       +true+ を指定するとキーの文字列の全suffixが自動的に登
  *       録される。
@@ -145,10 +149,17 @@ VALUE rb_cGrnDoubleArrayTrie;
  *       デフォルトでは何も設定されていないので、テーブルに
  *       {Groonga::IndexColumn} を定義する場合は
  *       @"TokenBigram"@ などを指定する必要がある。
+ *
  *     @option options :sub_records
  *       +true+ を指定すると {#group} でグループ化したときに、
  *       {Groonga::Record#n_sub_records} でグループに含まれるレコー
  *       ドの件数を取得できる。
+ *
+ *     @option options [String, Groonga::Procedure, nil] :normalizer
+ *       The normalizer that is used by {Groonga::IndexColumn}. You
+ *       can specify this by normalizer name as String such as
+ *       @"NormalizerAuto"@ or normalizer object.
+ *
  *   @!macro double-array-trie.create.options
  * @overload create(options={})
  *   @yield [table]
@@ -167,6 +178,7 @@ rb_grn_double_array_trie_s_create (int argc, VALUE *argv, VALUE klass)
     VALUE rb_key_normalize, rb_key_with_sis, rb_key_type;
     VALUE rb_value_type;
     VALUE rb_default_tokenizer, rb_sub_records;
+    VALUE rb_normalizer;
 
     rb_scan_args(argc, argv, "01", &options);
 
@@ -181,6 +193,7 @@ rb_grn_double_array_trie_s_create (int argc, VALUE *argv, VALUE klass)
 			"value_type", &rb_value_type,
 			"default_tokenizer", &rb_default_tokenizer,
 			"sub_records", &rb_sub_records,
+			"normalizer", &rb_normalizer,
 			NULL);
 
     context = rb_grn_context_ensure(&rb_context);
@@ -226,6 +239,10 @@ rb_grn_double_array_trie_s_create (int argc, VALUE *argv, VALUE klass)
     if (!NIL_P(rb_default_tokenizer))
 	rb_funcall(rb_table, rb_intern("default_tokenizer="), 1,
 		   rb_default_tokenizer);
+
+    if (!NIL_P(rb_normalizer))
+	rb_funcall(rb_table, rb_intern("normalizer="), 1,
+		   rb_normalizer);
 
     if (rb_block_given_p())
         return rb_ensure(rb_yield, rb_table, rb_grn_object_close, rb_table);

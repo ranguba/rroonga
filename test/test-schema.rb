@@ -155,9 +155,9 @@ class SchemaTest < Test::Unit::TestCase
                                    :path => path.to_s,
                                    :value_type => "Float",
                                    :default_tokenizer => "TokenBigram",
-                                   :key_normalize => true,
                                    :key_with_sis => true,
-                                   :named_path => true) do |table|
+                                   :named_path => true,
+                                   :normalizer => "NormalizerAuto") do |table|
       end
       table = context["Posts"]
       assert_equal("#<Groonga::PatriciaTrie " +
@@ -215,8 +215,8 @@ class SchemaTest < Test::Unit::TestCase
                                    :path => path.to_s,
                                    :value_type => "Float",
                                    :default_tokenizer => "TokenBigram",
-                                   :key_normalize => true,
-                                   :named_path => true) do |table|
+                                   :named_path => true,
+                                   :normalizer => "NormalizerAuto") do |table|
       end
       table = context["Posts"]
       assert_equal("#<Groonga::DoubleArrayTrie " +

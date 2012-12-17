@@ -340,6 +340,17 @@ module Groonga
         change_table_footer(table)
         @table_defined = true
       end
+
+      def normalizer_name(table)
+        return nil unless table.domain
+        normalizer = table.normalizer
+        return nil if normalizer.nil?
+        normalizer.name
+      end
+
+      def default_normalizer?(normalizer_name)
+        normalizer_name == "NormalizerAuto"
+      end
     end
 
     # @private
@@ -347,6 +358,7 @@ module Groonga
       private
       def create_table_header(table)
         parameters = []
+        _normalizer_name = normalizer_name(table)
         unless table.is_a?(Groonga::Array)
           case table
           when Groonga::Hash
@@ -356,13 +368,16 @@ module Groonga
           end
           if table.domain
             parameters << ":key_type => #{table.domain.name.dump}"
-            if table.normalize_key?
+            if default_normalizer?(_normalizer_name)
               parameters << ":key_normalize => true"
             end
           end
           default_tokenizer = table.default_tokenizer
           if default_tokenizer
             parameters << ":default_tokenizer => #{default_tokenizer.name.dump}"
+          end
+          if _normalizer_name and not default_normalizer?(_normalizer_name)
+            parameters << ":normalizer => #{_normalizer_name.dump}"
           end
         end
         parameters << ":force => true"
@@ -475,6 +490,7 @@ module Groonga
       def create_table_header(table)
         parameters = []
         flags = []
+        _normalizer_name = normalizer_name(table)
         case table
         when Groonga::Array
           flags << "TABLE_NO_KEY"
@@ -484,7 +500,7 @@ module Groonga
           flags << "TABLE_PAT_KEY"
         end
         if table.domain
-          flags << "KEY_NORMALIZE" if table.normalize_key?
+          flags << "KEY_NORMALIZE" if default_normalizer?(_normalizer_name)
           if table.is_a?(Groonga::PatriciaTrie) and table.register_key_with_sis?
             flags << "KEY_WITH_SIS"
           end
@@ -501,6 +517,9 @@ module Groonga
           if default_tokenizer
             parameters << "--default_tokenizer #{default_tokenizer.name}"
           end
+        end
+        if _normalizer_name and not default_normalizer?(_normalizer_name)
+          parameters << "--normalizer #{_normalizer_name}"
         end
         write("table_create #{table.name} #{parameters.join(' ')}\n")
       end
