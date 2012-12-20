@@ -277,7 +277,8 @@ class TableTest < Test::Unit::TestCase
                  bookmark["created_at"].to_a)
   end
 
-  def test_delete
+  class DeleteTest < self
+  def test_id
     bookmarks_path = @tables_dir + "bookmarks"
     bookmarks = Groonga::Array.create(:name => "Bookmarks",
                                       :path => bookmarks_path.to_s)
