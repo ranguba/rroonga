@@ -291,13 +291,11 @@ class TableTest < Test::Unit::TestCase
     end
 
     def test_id
-      assert_equal(3, @bookmarks.size)
       @bookmarks.delete(@bookmark_records[1].id)
       assert_equal(2, @bookmarks.size)
     end
 
     def test_expression
-      assert_equal(3, @bookmarks.size)
       @bookmarks.delete do |record|
         record.id < 3
       end
