@@ -291,6 +291,7 @@ class TableTest < Test::Unit::TestCase
     bookmarks.delete(bookmark_records[1].id)
     assert_equal(2, bookmarks.size)
   end
+  end
 
   def test_remove
     bookmarks_path = @tables_dir + "bookmarks"
