@@ -291,8 +291,8 @@ class TableTest < Test::Unit::TestCase
     end
 
     def test_id
-      @bookmarks.delete(@bookmark_records[1].id)
-      assert_equal(2, @bookmarks.size)
+      @bookmarks.delete(@bookmark_records.last.id)
+      assert_equal([1, 2], @bookmarks.collect(&:id))
     end
 
     def test_expression
