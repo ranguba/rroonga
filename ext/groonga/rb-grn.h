@@ -405,8 +405,9 @@ void           rb_grn_table_deconstruct             (RbGrnTable *rb_grn_table,
 						     grn_obj **range,
 						     VALUE *columns);
 
-VALUE          rb_grn_table_delete                  (VALUE self,
+VALUE          rb_grn_table_delete_by_id            (VALUE self,
 						     VALUE rb_id);
+VALUE          rb_grn_table_delete_by_expression    (VALUE self);
 VALUE          rb_grn_table_array_reference         (VALUE self,
 						     VALUE rb_id);
 VALUE          rb_grn_table_array_set               (VALUE self,

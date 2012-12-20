@@ -378,16 +378,37 @@ rb_grn_table_key_support_delete_by_key (VALUE self, VALUE rb_key)
 }
 
 /*
- * テーブルの _id_ または _key_ に対応するレコードを削除する。
- *
  * @overload delete(id)
+ *   Delete a record that has ID @id@.
+ *
+ *   @param id [Integer] The ID of delete target record.
+ *
+ *   @return void
+ *
  * @overload delete(key)
+ *   Delete a record that has key @key@.
+ *
+ *   @param key [Object] The key of delete target record.
+ *
+ *   @return void
+ *
+ * @overload delete
+ *   @yield [record]
+ *     TODO: See #select.
+ *   @yieldparam [Groonga::RecodExpressionBuilder] record
+ *     TODO: See #select.
+ *   @yieldreturn [Groonga::ExpressionBuilder]
+ *     TODO: See #select.
+ *
+ *   @return void
  */
 static VALUE
 rb_grn_table_key_support_delete (VALUE self, VALUE rb_id_or_key)
 {
-    if (FIXNUM_P(rb_id_or_key)) {
-	return rb_grn_table_delete(self, rb_id_or_key);
+    if (rb_block_given_p()) {
+	return rb_grn_table_delete_by_expression(self);
+    } else if (FIXNUM_P(rb_id_or_key)) {
+	return rb_grn_table_delete_by_id(self, rb_id_or_key);
     } else {
 	return rb_grn_table_key_support_delete_by_key(self, rb_id_or_key);
     }

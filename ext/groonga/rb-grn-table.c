@@ -950,13 +950,8 @@ rb_grn_table_each (int argc, VALUE *argv, VALUE self)
     return Qnil;
 }
 
-/*
- * テーブルの _id_ に対応するレコードを削除する。
- *
- * @overload delete(id)
- */
 VALUE
-rb_grn_table_delete (VALUE self, VALUE rb_id)
+rb_grn_table_delete_by_id (VALUE self, VALUE rb_id)
 {
     grn_ctx *context = NULL;
     grn_obj *table;
@@ -971,6 +966,94 @@ rb_grn_table_delete (VALUE self, VALUE rb_id)
     id = NUM2UINT(rb_id);
     rc = grn_table_delete_by_id(context, table, id);
     rb_grn_rc_check(rc, self);
+
+    return Qnil;
+}
+
+VALUE
+rb_grn_table_delete_by_expression (VALUE self)
+{
+    grn_ctx *context = NULL;
+    grn_obj *table;
+    VALUE rb_builder, rb_expression;
+    grn_obj *needless_records, *expression;
+    grn_operator operator = GRN_OP_OR;
+    grn_table_cursor *cursor;
+    grn_rc rc;
+
+    rb_grn_table_deconstruct(SELF(self), &table, &context,
+			     NULL, NULL,
+			     NULL, NULL, NULL,
+			     NULL);
+
+    rb_builder = rb_grn_record_expression_builder_new(self, Qnil);
+    rb_expression = rb_grn_record_expression_builder_build(rb_builder);
+    rb_grn_object_deconstruct(RB_GRN_OBJECT(DATA_PTR(rb_expression)),
+                              &expression, NULL,
+			      NULL, NULL, NULL, NULL);
+
+    needless_records =
+	grn_table_create(context, NULL, 0, NULL,
+			 GRN_TABLE_HASH_KEY | GRN_OBJ_WITH_SUBREC,
+			 table,
+			 NULL);
+    /* TODO: check needless_records */
+    grn_table_select(context, table, expression, needless_records, operator);
+    cursor = grn_table_cursor_open(context, needless_records,
+				   NULL, 0,
+				   NULL, 0,
+				   0, -1, 0);
+    if (cursor) {
+	while (grn_table_cursor_next(context, cursor)) {
+	    grn_id *id;
+	    grn_table_cursor_get_key(context, cursor, (void **)&id);
+	    grn_table_delete_by_id(context, table, *id);
+	}
+	grn_table_cursor_close(context, cursor);
+    }
+    grn_obj_unlink(context, needless_records);
+
+    return Qnil;
+}
+
+/*
+ * @overload delete(id)
+ *   Delete a record that has ID @id@.
+ *
+ *   @param id [Integer] The ID of delete target record.
+ *
+ *   @return void
+ *
+ * @overload delete
+ *   Delete records that are matched with the given condition
+ *   specified block.
+ *
+ *   @example Delete users that are younger than 20.
+ *     users.delete do |recod|
+ *       record.age < 20
+ *     end
+ *
+ *   @yield [record]
+ *     TODO: See #select.
+ *   @yieldparam [Groonga::RecodExpressionBuilder] record
+ *     TODO: See #select.
+ *   @yieldreturn [Groonga::ExpressionBuilder]
+ *     TODO: See #select.
+ *
+ *   @return void
+ */
+static VALUE
+rb_grn_table_delete (int argc, VALUE *argv, VALUE self)
+{
+    VALUE rb_id;
+
+    rb_scan_args(argc, argv, "01", &rb_id);
+
+    if (rb_block_given_p()) {
+	rb_grn_table_delete_by_expression(self);
+    } else {
+	rb_grn_table_delete_by_id(self, rb_id);
+    }
 
     return Qnil;
 }
@@ -2130,7 +2213,7 @@ rb_grn_init_table (VALUE mGrn)
 
     rb_define_method(rb_cGrnTable, "each", rb_grn_table_each, -1);
 
-    rb_define_method(rb_cGrnTable, "delete", rb_grn_table_delete, 1);
+    rb_define_method(rb_cGrnTable, "delete", rb_grn_table_delete, -1);
 
     rb_define_method(rb_cGrnTable, "sort", rb_grn_table_sort, -1);
     rb_define_method(rb_cGrnTable, "group", rb_grn_table_group, -1);
