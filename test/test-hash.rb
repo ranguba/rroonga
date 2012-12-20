@@ -26,6 +26,7 @@ class HashTest < Test::Unit::TestCase
                      :support_key?)
   end
 
+  class DeleteTest < self
   def test_delete
     bookmarks_path = @tables_dir + "bookmarks"
     bookmarks = Groonga::Hash.create(:name => "Bookmarks",
@@ -45,6 +46,7 @@ class HashTest < Test::Unit::TestCase
     bookmarks.delete(cutter.key)
     assert_equal(["groonga"],
                  bookmarks.collect {|bookmark| bookmark.key})
+  end
   end
 
   def test_value
