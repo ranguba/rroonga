@@ -27,26 +27,26 @@ class HashTest < Test::Unit::TestCase
   end
 
   class DeleteTest < self
-  def test_delete
-    bookmarks_path = @tables_dir + "bookmarks"
-    bookmarks = Groonga::Hash.create(:name => "Bookmarks",
-                                     :path => bookmarks_path.to_s)
+    def test_delete
+      bookmarks_path = @tables_dir + "bookmarks"
+      bookmarks = Groonga::Hash.create(:name => "Bookmarks",
+                                       :path => bookmarks_path.to_s)
 
-    bookmarks.add("groonga")
-    google = bookmarks.add("Google")
-    cutter = bookmarks.add("Cutter")
+      bookmarks.add("groonga")
+      google = bookmarks.add("Google")
+      cutter = bookmarks.add("Cutter")
 
-    assert_equal(["groonga", "Google", "Cutter"],
-                 bookmarks.collect {|bookmark| bookmark.key})
+      assert_equal(["groonga", "Google", "Cutter"],
+                   bookmarks.collect {|bookmark| bookmark.key})
 
-    bookmarks.delete(google.id)
-    assert_equal(["groonga", "Cutter"],
-                 bookmarks.collect {|bookmark| bookmark.key})
+      bookmarks.delete(google.id)
+      assert_equal(["groonga", "Cutter"],
+                   bookmarks.collect {|bookmark| bookmark.key})
 
-    bookmarks.delete(cutter.key)
-    assert_equal(["groonga"],
-                 bookmarks.collect {|bookmark| bookmark.key})
-  end
+      bookmarks.delete(cutter.key)
+      assert_equal(["groonga"],
+                   bookmarks.collect {|bookmark| bookmark.key})
+    end
   end
 
   def test_value
