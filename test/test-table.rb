@@ -278,36 +278,30 @@ class TableTest < Test::Unit::TestCase
   end
 
   class DeleteTest < self
-    def test_id
+    setup
+    def setup_data
       bookmarks_path = @tables_dir + "bookmarks"
-      bookmarks = Groonga::Array.create(:name => "Bookmarks",
-                                        :path => bookmarks_path.to_s)
+      @bookmarks = Groonga::Array.create(:name => "Bookmarks",
+                                         :path => bookmarks_path.to_s)
 
-      bookmark_records = []
-      bookmark_records << bookmarks.add
-      bookmark_records << bookmarks.add
-      bookmark_records << bookmarks.add
+      @bookmark_records = []
+      @bookmark_records << @bookmarks.add
+      @bookmark_records << @bookmarks.add
+      @bookmark_records << @bookmarks.add
+    end
 
-      assert_equal(3, bookmarks.size)
-      bookmarks.delete(bookmark_records[1].id)
-      assert_equal(2, bookmarks.size)
+    def test_id
+      assert_equal(3, @bookmarks.size)
+      @bookmarks.delete(@bookmark_records[1].id)
+      assert_equal(2, @bookmarks.size)
     end
 
     def test_expression
-      bookmarks_path = @tables_dir + "bookmarks"
-      bookmarks = Groonga::Array.create(:name => "Bookmarks",
-                                        :path => bookmarks_path.to_s)
-
-      bookmark_records = []
-      bookmark_records << bookmarks.add
-      bookmark_records << bookmarks.add
-      bookmark_records << bookmarks.add
-
-      assert_equal(3, bookmarks.size)
-      bookmarks.delete do |record|
+      assert_equal(3, @bookmarks.size)
+      @bookmarks.delete do |record|
         record.id < 3
       end
-      assert_equal([3], bookmarks.collect(&:id))
+      assert_equal([3], @bookmarks.collect(&:id))
     end
   end
 
