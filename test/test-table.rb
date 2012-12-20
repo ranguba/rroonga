@@ -278,20 +278,20 @@ class TableTest < Test::Unit::TestCase
   end
 
   class DeleteTest < self
-  def test_id
-    bookmarks_path = @tables_dir + "bookmarks"
-    bookmarks = Groonga::Array.create(:name => "Bookmarks",
-                                      :path => bookmarks_path.to_s)
+    def test_id
+      bookmarks_path = @tables_dir + "bookmarks"
+      bookmarks = Groonga::Array.create(:name => "Bookmarks",
+                                        :path => bookmarks_path.to_s)
 
-    bookmark_records = []
-    bookmark_records << bookmarks.add
-    bookmark_records << bookmarks.add
-    bookmark_records << bookmarks.add
+      bookmark_records = []
+      bookmark_records << bookmarks.add
+      bookmark_records << bookmarks.add
+      bookmark_records << bookmarks.add
 
-    assert_equal(3, bookmarks.size)
-    bookmarks.delete(bookmark_records[1].id)
-    assert_equal(2, bookmarks.size)
-  end
+      assert_equal(3, bookmarks.size)
+      bookmarks.delete(bookmark_records[1].id)
+      assert_equal(2, bookmarks.size)
+    end
   end
 
   def test_remove
