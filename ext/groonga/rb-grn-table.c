@@ -997,7 +997,11 @@ rb_grn_table_delete_by_expression (VALUE self)
 			 GRN_TABLE_HASH_KEY | GRN_OBJ_WITH_SUBREC,
 			 table,
 			 NULL);
-    /* TODO: check needless_records */
+    if (!needless_records) {
+	rb_grn_context_check(context, self);
+	rb_grn_rc_check(GRN_NO_MEMORY_AVAILABLE, self);
+    }
+
     grn_table_select(context, table, expression, needless_records, operator);
     cursor = grn_table_cursor_open(context, needless_records,
 				   NULL, 0,
