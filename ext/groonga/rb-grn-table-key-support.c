@@ -403,11 +403,16 @@ rb_grn_table_key_support_delete_by_key (VALUE self, VALUE rb_key)
  *   @return void
  */
 static VALUE
-rb_grn_table_key_support_delete (VALUE self, VALUE rb_id_or_key)
+rb_grn_table_key_support_delete (int argc, VALUE *argv, VALUE self)
 {
+    VALUE rb_id_or_key;
+
     if (rb_block_given_p()) {
 	return rb_grn_table_delete_by_expression(self);
-    } else if (FIXNUM_P(rb_id_or_key)) {
+    }
+
+    rb_scan_args(argc, argv, "1", &rb_id_or_key);
+    if (FIXNUM_P(rb_id_or_key)) {
 	return rb_grn_table_delete_by_id(self, rb_id_or_key);
     } else {
 	return rb_grn_table_key_support_delete_by_key(self, rb_id_or_key);
@@ -891,7 +896,7 @@ rb_grn_init_table_key_support (VALUE mGrn)
 		     rb_grn_table_key_support_has_key, 1);
 
     rb_define_method(rb_mGrnTableKeySupport, "delete",
-		     rb_grn_table_key_support_delete, 1);
+		     rb_grn_table_key_support_delete, -1);
 
     rb_define_method(rb_mGrnTableKeySupport, "[]",
 		     rb_grn_table_key_support_array_reference, 1);

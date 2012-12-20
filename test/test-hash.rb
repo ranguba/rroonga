@@ -31,6 +31,7 @@ class HashTest < Test::Unit::TestCase
     def setup_data
       bookmarks_path = @tables_dir + "bookmarks"
       @bookmarks = Groonga::Hash.create(:name => "Bookmarks",
+                                        :key_type => "ShortText",
                                         :path => bookmarks_path.to_s)
 
       @groonga = @bookmarks.add("groonga")
@@ -47,6 +48,14 @@ class HashTest < Test::Unit::TestCase
     def test_key
       @bookmarks.delete(@cutter.key)
       assert_equal(["groonga", "Google"],
+                   @bookmarks.collect {|bookmark| bookmark.key})
+    end
+
+    def test_expression
+      @bookmarks.delete do |record|
+        record.key == @groonga.key
+      end
+      assert_equal(["Google", "Cutter"],
                    @bookmarks.collect {|bookmark| bookmark.key})
     end
   end
