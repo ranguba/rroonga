@@ -293,6 +293,7 @@ void           rb_grn_init_operator                 (VALUE mGrn);
 void           rb_grn_init_expression               (VALUE mGrn);
 void           rb_grn_init_expression_builder       (VALUE mGrn);
 void           rb_grn_init_logger                   (VALUE mGrn);
+void           rb_grn_init_query_logger             (VALUE mGrn);
 void           rb_grn_init_snippet                  (VALUE mGrn);
 void           rb_grn_init_plugin                   (VALUE mGrn);
 void           rb_grn_init_normalizer               (VALUE mGrn);
@@ -604,6 +605,7 @@ VALUE          rb_grn_column_expression_builder_build
 #define RVAL2GRNOPERATOR(object)      (rb_grn_operator_from_ruby_object(object))
 
 #define RVAL2GRNLOGGER(object)        (rb_grn_logger_from_ruby_object(object))
+#define RVAL2GRNQUERYLOGGER(object)   (rb_grn_query_logger_from_ruby_object(object))
 
 #define RVAL2GRNBULK(object, context, bulk) \
     (rb_grn_bulk_from_ruby_object(object, context, bulk))
