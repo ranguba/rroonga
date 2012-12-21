@@ -1,6 +1,6 @@
 /* -*- coding: utf-8; c-file-style: "ruby" -*- */
 /*
-  Copyright (C) 2009-2010  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2012  Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -94,6 +94,7 @@ static VALUE eGrnTooLargeOffset;
 static VALUE eGrnTooSmallLimit;
 static VALUE eGrnCASError;
 static VALUE eGrnUnsupportedCommandVersion;
+static VALUE eGrnNormalizerError;
 
 VALUE
 rb_grn_rc_to_exception (grn_rc rc)
@@ -319,6 +320,9 @@ rb_grn_rc_to_exception (grn_rc rc)
         break;
       case GRN_UNSUPPORTED_COMMAND_VERSION:
         exception = eGrnUnsupportedCommandVersion;
+        break;
+      case GRN_NORMALIZER_ERROR:
+        exception = eGrnNormalizerError;
         break;
     }
 
@@ -552,6 +556,9 @@ rb_grn_rc_to_message (grn_rc rc)
         break;
       case GRN_UNSUPPORTED_COMMAND_VERSION:
         message = "unsupported command version";
+        break;
+      case GRN_NORMALIZER_ERROR:
+        message = "normalizer error";
         break;
     }
 
@@ -1192,4 +1199,14 @@ rb_grn_init_exception (VALUE mGrn)
      */
     eGrnUnsupportedCommandVersion =
 	rb_define_class_under(mGrn, "UnsupportedCommandVersion", rb_eGrnError);
+
+    /*
+     * Document-class: Groonga::NormalizerError
+     *
+     * It is used when a normalizer causes an error.
+     *
+     * @since 2.1.0
+     */
+    eGrnNormalizerError =
+	rb_define_class_under(mGrn, "NormalizerError", rb_eGrnError);
 }
