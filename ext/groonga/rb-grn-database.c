@@ -290,13 +290,14 @@ rb_grn_database_initialize (int argc, VALUE *argv, VALUE self)
  *   @return [Groonga::Database]
  *   @param options [::Hash] The name and value
  *     pairs. Omitted names are initialized as the default value.
- *   @option options :context (Groonga::Context.default) The context
- *     データベースを結びつけるコンテキスト。
+ *   @!macro [new] database.open.context
+ *     @option options :context (Groonga::Context.default) The context
+ *       データベースを結びつけるコンテキスト。
+ *   @!macro database.open.context
  * @overload open(path, options=nil)
  *   @param options [::Hash] The name and value
  *     pairs. Omitted names are initialized as the default value.
- *   @option options :context (Groonga::Context.default) The context
- *     データベースを結びつけるコンテキスト。
+ *   @!macro database.open.context
  *   @yield [database]
  *   @yieldparam [Groonga::Database] database 開いたデータベース
  */
