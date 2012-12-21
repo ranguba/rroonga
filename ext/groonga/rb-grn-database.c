@@ -441,18 +441,16 @@ rb_grn_database_unlock (VALUE self)
  * {Groonga::ResourceDeadlockAvoided} 例外が発生する。
  *
  * @overload lock(options={})
- *   @param [::Hash] options 利用可能なオプションは以下の通り。
- *   @option options :timeout
- *     ロックを獲得できなかった場合は _:timeout_ 秒間ロックの獲
- *     得を試みる。 _:timeout_ 秒以内にロックを獲得できなかった
- *     場合は例外が発生する。
+ *   @!macro [new] database.lock.arguments
+ *     @param [::Hash] options 利用可能なオプションは以下の通り。
+ *     @option options :timeout
+ *       ロックを獲得できなかった場合は _:timeout_ 秒間ロックの獲
+ *       得を試みる。 _:timeout_ 秒以内にロックを獲得できなかった
+ *       場合は例外が発生する。
+ *   @!macro database.lock.arguments
  * @overload lock(options={})
  *   @yield ブロックを指定した場合はブロックを抜けたときにunlockする。
- *   @param [::Hash] options 利用可能なオプションは以下の通り。
- *   @option options :timeout
- *     ロックを獲得できなかった場合は _:timeout_秒間ロックの獲
- *     得を試みる。 _:timeout_秒以内にロックを獲得できなかった
- *     場合は例外が発生する。
+ *   @!macro database.lock.arguments
  */
 static VALUE
 rb_grn_database_lock (int argc, VALUE *argv, VALUE self)
