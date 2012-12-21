@@ -234,18 +234,16 @@ rb_grn_database_s_create (int argc, VALUE *argv, VALUE klass)
  * る。
  *
  * @overload new(path, options=nil)
- *   @param options [::Hash] The name and value
- *     pairs. Omitted names are initialized as the default value.
- *   @option options :context (Groonga::Context.default)
- *     データベースを結びつけるコンテキスト。省略すると
- *     {Groonga::Context.default} を利用する。
+ *   @!macro [new] database.new.arguments
+ *     @param options [::Hash] The name and value
+ *       pairs. Omitted names are initialized as the default value.
+ *     @option options :context (Groonga::Context.default)
+ *       データベースを結びつけるコンテキスト。省略すると
+ *       {Groonga::Context.default} を利用する。
+ *   @!macro database.new.arguments
  *   @return [Groonga::Database]
  * @overload new(path, options=nil)
- *   @param options [::Hash] The name and value
- *     pairs. Omitted names are initialized as the default value.
- *   @option options :context (Groonga::Context.default)
- *     データベースを結びつけるコンテキスト。省略すると
- *     {Groonga::Context.default} を利用する。
+ *   @!macro database.new.arguments
  *   @yield [database]
  *   @yieldparam [Groonga::Database] database 開いたデータベース
  */
