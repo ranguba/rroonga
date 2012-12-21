@@ -930,7 +930,6 @@ rb_grn_table_each (int argc, VALUE *argv, VALUE self)
     RbGrnTable *rb_table;
     RbGrnObject *rb_grn_object;
     grn_ctx *context = NULL;
-    grn_obj *table;
     grn_table_cursor *cursor;
     VALUE rb_cursor;
     grn_id id;
@@ -979,7 +978,6 @@ rb_grn_table_delete_by_expression (VALUE self)
     grn_obj *needless_records, *expression;
     grn_operator operator = GRN_OP_OR;
     grn_table_cursor *cursor;
-    grn_rc rc;
 
     rb_grn_table_deconstruct(SELF(self), &table, &context,
 			     NULL, NULL,
