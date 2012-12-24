@@ -1270,6 +1270,7 @@ rb_grn_table_sort_cursor (int argc, VALUE *argv, VALUE self)
 
     cursor = grn_table_cursor_open(context, result, NULL, 0, NULL, 0,
 				   0, -1, GRN_CURSOR_ASCENDING);
+    rb_grn_context_check(context, self);
     rb_cursor = GRNTABLECURSOR2RVAL(Qnil, context, cursor);
     rb_iv_set(rb_cursor, "@table", self); /* FIXME: cursor should mark table */
     if (rb_block_given_p())
