@@ -1167,6 +1167,117 @@ rb_grn_table_sort (int argc, VALUE *argv, VALUE self)
     return rb_result;
 }
 
+static VALUE
+rb_grn_table_sort_cursor (int argc, VALUE *argv, VALUE self)
+{
+    grn_ctx *context = NULL;
+    grn_obj *table;
+    grn_obj *result;
+    grn_table_sort_key *keys;
+    int i, n_keys;
+    int offset = 0, limit = -1;
+    VALUE rb_keys, options;
+    VALUE rb_offset, rb_limit;
+    VALUE *rb_sort_keys;
+    grn_table_cursor *cursor;
+    VALUE rb_cursor;
+    VALUE exception;
+
+    rb_grn_table_deconstruct(SELF(self), &table, &context,
+			     NULL, NULL,
+			     NULL, NULL, NULL,
+			     NULL);
+
+    rb_scan_args(argc, argv, "11", &rb_keys, &options);
+
+    if (!RVAL2CBOOL(rb_obj_is_kind_of(rb_keys, rb_cArray)))
+	rb_raise(rb_eArgError, "keys should be an array of key: <%s>",
+		 rb_grn_inspect(rb_keys));
+
+    n_keys = RARRAY_LEN(rb_keys);
+    rb_sort_keys = RARRAY_PTR(rb_keys);
+    keys = ALLOCA_N(grn_table_sort_key, n_keys);
+    for (i = 0; i < n_keys; i++) {
+	VALUE rb_sort_options, rb_key, rb_resolved_key, rb_order;
+
+	if (RVAL2CBOOL(rb_obj_is_kind_of(rb_sort_keys[i], rb_cHash))) {
+	    rb_sort_options = rb_sort_keys[i];
+	} else if (RVAL2CBOOL(rb_obj_is_kind_of(rb_sort_keys[i], rb_cArray))) {
+	    rb_sort_options = rb_hash_new();
+	    rb_hash_aset(rb_sort_options,
+			 RB_GRN_INTERN("key"),
+			 rb_ary_entry(rb_sort_keys[i], 0));
+	    rb_hash_aset(rb_sort_options,
+			 RB_GRN_INTERN("order"),
+			 rb_ary_entry(rb_sort_keys[i], 1));
+	} else {
+	    rb_sort_options = rb_hash_new();
+	    rb_hash_aset(rb_sort_options,
+			 RB_GRN_INTERN("key"),
+			 rb_sort_keys[i]);
+	}
+	rb_grn_scan_options(rb_sort_options,
+			    "key", &rb_key,
+			    "order", &rb_order,
+			    NULL);
+	if (RVAL2CBOOL(rb_obj_is_kind_of(rb_key, rb_cString))) {
+	    rb_resolved_key = rb_grn_table_get_column(self, rb_key);
+	} else {
+	    rb_resolved_key = rb_key;
+	}
+	keys[i].key = RVAL2GRNOBJECT(rb_resolved_key, &context);
+	if (!keys[i].key) {
+	    rb_raise(rb_eGrnNoSuchColumn,
+		     "no such column: <%s>: <%s>",
+		     rb_grn_inspect(rb_key), rb_grn_inspect(self));
+	}
+	if (NIL_P(rb_order) ||
+	    rb_grn_equal_option(rb_order, "asc") ||
+	    rb_grn_equal_option(rb_order, "ascending")) {
+	    keys[i].flags = GRN_TABLE_SORT_ASC;
+	} else if (rb_grn_equal_option(rb_order, "desc") ||
+		   rb_grn_equal_option(rb_order, "descending")) {
+	    keys[i].flags = GRN_TABLE_SORT_DESC;
+	} else {
+	    rb_raise(rb_eArgError,
+		     "order should be one of "
+		     "[nil, :desc, :descending, :asc, :ascending]: %s",
+		     rb_grn_inspect(rb_order));
+	}
+    }
+
+    rb_grn_scan_options(options,
+			"offset", &rb_offset,
+			"limit", &rb_limit,
+			NULL);
+
+    if (!NIL_P(rb_offset))
+	offset = NUM2INT(rb_offset);
+    if (!NIL_P(rb_limit))
+	limit = NUM2INT(rb_limit);
+
+    result = grn_table_create(context, NULL, 0, NULL, GRN_TABLE_NO_KEY,
+			      NULL, table);
+    /* use n_records that is return value from
+       grn_table_sort() when rroonga user become specifying
+       output table. */
+    grn_table_sort(context, table, offset, limit, result, keys, n_keys);
+    exception = rb_grn_context_to_exception(context, self);
+    if (!NIL_P(exception)) {
+        grn_obj_unlink(context, result);
+        rb_exc_raise(exception);
+    }
+
+    cursor = grn_table_cursor_open(context, result, NULL, 0, NULL, 0,
+				   0, -1, GRN_CURSOR_ASCENDING);
+    rb_cursor = GRNTABLECURSOR2RVAL(Qnil, context, cursor);
+    rb_iv_set(rb_cursor, "@table", self); /* FIXME: cursor should mark table */
+    if (rb_block_given_p())
+	return rb_ensure(rb_yield, rb_cursor, rb_grn_object_close, rb_cursor);
+    else
+	return rb_cursor;
+}
+
 /*
  * _table_ のレコードを _key1_ , _key2_ , _..._ で指定したキーの
  * 値でグループ化する。多くの場合、キーにはカラムを指定する。
@@ -2152,6 +2263,7 @@ rb_grn_init_table (VALUE mGrn)
     rb_define_method(rb_cGrnTable, "delete", rb_grn_table_delete, 1);
 
     rb_define_method(rb_cGrnTable, "sort", rb_grn_table_sort, -1);
+    rb_define_method(rb_cGrnTable, "sort_cursor", rb_grn_table_sort_cursor, -1);
     rb_define_method(rb_cGrnTable, "group", rb_grn_table_group, -1);
 
     rb_define_method(rb_cGrnTable, "[]", rb_grn_table_array_reference, 1);
