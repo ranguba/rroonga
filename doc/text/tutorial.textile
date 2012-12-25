@@ -404,7 +404,7 @@ h2. 全文検索その2
 >>   end
 => #<Groonga::Hash ...>
 >> records.each do |record|
-?>     comment = record.key
+?>     comment = record.value
 >>   p [comment.id,
 ?>       comment.issued,
 ?>       comment.item.title,

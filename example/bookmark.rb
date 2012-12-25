@@ -135,7 +135,7 @@ end
 p records
 
 records.sort([{:key => "issued", :order => "descending"}]).each do |record|
-  comment = record.key
+  comment = record.value
   p [comment.id,
      comment.issued,
      comment.item.title,
