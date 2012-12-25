@@ -277,14 +277,23 @@ module Groonga
 
     # @private
     def methods(include_inherited=true)
-      _methods = super
-      return _methods unless include_inherited
+      original_methods = super
+      return original_methods unless include_inherited
+
+      dynamic_methods = []
       columns.each do |column|
         name = column.local_name
-        _methods << name
-        _methods << "#{name}="
+        dynamic_methods << name
+        dynamic_methods << "#{name}="
       end
-      _methods
+
+      if original_methods.first.is_a?(Symbol)
+        dynamic_methods = dynamic_methods.collect do |method_name|
+          method_name.to_sym
+        end
+      end
+
+      original_methods + dynamic_methods
     end
 
     # @private
