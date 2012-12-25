@@ -279,21 +279,7 @@ module Groonga
     def methods(include_inherited=true)
       original_methods = super
       return original_methods unless include_inherited
-
-      dynamic_methods = []
-      columns.each do |column|
-        name = column.local_name
-        dynamic_methods << name
-        dynamic_methods << "#{name}="
-      end
-
-      if original_methods.first.is_a?(Symbol)
-        dynamic_methods = dynamic_methods.collect do |method_name|
-          method_name.to_sym
-        end
-      end
-
-      original_methods + dynamic_methods
+      (original_methods + dynamic_methods).uniq
     end
 
     # @private
@@ -320,6 +306,33 @@ module Groonga
       _column = @table.column(normalize_column_name(name))
       raise NoSuchColumn, "column(#{name.inspect}) is nil" if _column.nil?
       _column
+    end
+
+    # @private
+    def dynamic_methods
+      @dynamic_methods ||= compute_dynamic_methods
+    end
+
+    def compute_dynamic_methods
+      methods = []
+
+      table = @table
+      while table
+        table.columns.each do |column|
+          name = column.local_name
+          methods << name.to_sym
+          methods << "#{name}=".to_sym
+        end
+        table = table.domain
+      end
+
+      if private_methods.first.is_a?(String)
+        methods = methods.collect do |name|
+          name.to_s
+        end
+      end
+
+      methods
     end
 
     def method_missing(name, *args, &block)
