@@ -140,6 +140,7 @@ module Groonga
         nil
       end
     end
+
     # レコードを一意に識別するための情報を返す。
     #
     # _record_ が所属するテーブルが {Groonga::Array} の場合はID
