@@ -324,6 +324,7 @@ module Groonga
           methods << "#{name}=".to_sym
         end
         table = table.domain
+        break unless table.is_a?(Groonga::Table)
       end
 
       if private_methods.first.is_a?(String)
