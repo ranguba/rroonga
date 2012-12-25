@@ -418,8 +418,9 @@ class TableTest < Test::Unit::TestCase
     empty1 = bookmarks.add
     groonga = bookmarks.add(:uri => "http://groonga.org/")
     empty2 = bookmarks.add
+    sorted_bookmarks = bookmarks.sort([{:key => "uri", :order => :descending}])
     assert_equal([groonga, empty1, empty2],
-                 bookmarks.sort([{:key => "uri", :order => :descending}]))
+                 sorted_bookmarks.collect(&:value))
   end
 
   def test_group

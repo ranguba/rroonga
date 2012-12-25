@@ -1113,7 +1113,35 @@ rb_grn_table_delete (int argc, VALUE *argv, VALUE self)
  *     ソートされたレコードのうち、 _:limit_ 件のみを取り出す。
  *     省略された場合または-1が指定された場合は、全件が指定され
  *     たものとみなす。
- * @return [::Array<Groonga::Record>]
+ *
+ * @return [Groonga::Array] The sorted result. You can get the
+ *   original record by {#value} method of a record in the sorted
+ *   result. Normally, you doesn't need to get the original record
+ *   because you can access via column name method:
+ *
+ *   <pre>
+ *   !!!ruby
+ *   names_recommended_access = sorted_users.collect do |sorted_user|
+ *     sorted_user.name
+ *   end
+ *   names_manually_access = sorted_users.collect do |sorted_user|
+ *     sorted_user.value.name
+ *   end
+ *   names_recommended_access == names_manually_access # => true
+ *   </pre>
+ *
+ *   If you want to access the key of the original record, you need to
+ *   get the original record.
+ *
+ * @note The return value is changed to {Groonga::Array} from
+ *   {::Array} since 2.1.0. If you want to get before 2.1.0 style
+ *   result, use the following code:
+ *
+ *   @example Describe incompatible API change
+ *     result_since_2_1_0 = table.sort(["sort_key"])
+ *     result_before_2_1_0 = result_since_2_1_0.collect do |record|
+ *       record.value
+ *     end
  */
 static VALUE
 rb_grn_table_sort (int argc, VALUE *argv, VALUE self)
@@ -1127,8 +1155,6 @@ rb_grn_table_sort (int argc, VALUE *argv, VALUE self)
     VALUE rb_keys, options;
     VALUE rb_offset, rb_limit;
     VALUE *rb_sort_keys;
-    grn_table_cursor *cursor;
-    VALUE rb_result;
     VALUE exception;
 
     rb_grn_table_deconstruct(SELF(self), &table, &context,
@@ -1216,21 +1242,7 @@ rb_grn_table_sort (int argc, VALUE *argv, VALUE self)
         rb_exc_raise(exception);
     }
 
-    rb_result = rb_ary_new();
-    cursor = grn_table_cursor_open(context, result, NULL, 0, NULL, 0,
-				   0, -1, GRN_CURSOR_ASCENDING);
-    while (grn_table_cursor_next(context, cursor) != GRN_ID_NIL) {
-	void *value;
-	grn_id *id;
-
-	grn_table_cursor_get_value(context, cursor, &value);
-	id = value;
-	rb_ary_push(rb_result, rb_grn_record_new(self, *id, Qnil));
-    }
-    grn_table_cursor_close(context, cursor);
-    grn_obj_unlink(context, result);
-
-    return rb_result;
+    return GRNOBJECT2RVAL(Qnil, context, result, GRN_TRUE);
 }
 
 /*

@@ -244,6 +244,6 @@ class PaginationTest < Test::Unit::TestCase
                  :first_page? => users.first_page?,
                  :last_page? => users.last_page?,
                  :have_pages? => users.have_pages?,
-                 :keys => users.collect(&:key))
+                 :keys => users.collect {|record| record.value.key})
   end
 end
