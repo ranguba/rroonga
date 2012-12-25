@@ -1128,7 +1128,7 @@ rb_grn_table_sort (int argc, VALUE *argv, VALUE self)
     VALUE rb_offset, rb_limit;
     VALUE *rb_sort_keys;
     grn_table_cursor *cursor;
-    VALUE rb_result;
+    VALUE rb_result = Qnil;
     VALUE exception;
 
     rb_grn_table_deconstruct(SELF(self), &table, &context,
@@ -1216,16 +1216,24 @@ rb_grn_table_sort (int argc, VALUE *argv, VALUE self)
         rb_exc_raise(exception);
     }
 
-    rb_result = rb_ary_new();
+    if(!rb_block_given_p()){
+        rb_result = rb_ary_new();
+    }
     cursor = grn_table_cursor_open(context, result, NULL, 0, NULL, 0,
 				   0, -1, GRN_CURSOR_ASCENDING);
     while (grn_table_cursor_next(context, cursor) != GRN_ID_NIL) {
-	void *value;
-	grn_id *id;
+        void *value;
+        grn_id *id;
+        VALUE record;
 
-	grn_table_cursor_get_value(context, cursor, &value);
-	id = value;
-	rb_ary_push(rb_result, rb_grn_record_new(self, *id, Qnil));
+        grn_table_cursor_get_value(context, cursor, &value);
+        id = value;
+        record = rb_grn_record_new(self, *id, Qnil);
+        if(rb_block_given_p()){
+            rb_yield(record);
+        }else{
+            rb_ary_push(rb_result, record);
+        }
     }
     grn_table_cursor_close(context, cursor);
     grn_obj_unlink(context, result);
