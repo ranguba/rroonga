@@ -444,64 +444,39 @@ rb_grn_double_array_trie_open_grn_prefix_cursor (int argc, VALUE *argv,
  *
  * @overload open_prefix_cursor(prefix, options={})
  *   @return [Groonga::DoubleArrayTrieCursor]
- *   @param [String] prefix 前方一致させる値
- *   @param options [::Hash] The name and value
- *     pairs. Omitted names are initialized as the default value.
- *   @option options :key_bytes
- *    _prefix_ のサイズ（byte）
- *   @option options :key_bits
- *    _prefix_ のサイズ（bit）
- *   @option options :offset
- *     該当する範囲のレコードのうち、(0ベースで) _:offset_ 番目
- *     からレコードを取り出す。
- *   @option options :limit
- *     該当する範囲のレコードのうち、 _:limit_ 件のみを取り出す。
- *     省略された場合または-1が指定された場合は、全件が指定され
- *     たものとみなす。
- *   @option options :order
- *     +:asc+ または +:ascending+ を指定すると昇順にレコードを取
- *     り出す。
- *     +:desc+ または +:descending+ を指定すると降順にレコードを
- *     取り出す。
- *   @option options :order_by (:id)
- *     +:id+ を指定するとID順にレコードを取り出す。（デフォルト）
- *     +:key+指定するとキー順にレコードを取り出す。
- *   @option options :greater_than
- *     +true+ を指定すると _prefix_ で指定した値に一致した [ +key+ ] を
- *     範囲に含まない。
- *   @option options :less_than
- *     +true+ を指定すると _prefix_ で指定した値に一致した [ +key+ ] を
- *     範囲に含まない。
+ *   @!macro [new] double_array_trie.open_prefix_cursor.arguments
+ *     @param [String] prefix 前方一致させる値
+ *     @param options [::Hash] The name and value
+ *       pairs. Omitted names are initialized as the default value.
+ *     @option options :key_bytes
+ *      _prefix_ のサイズ（byte）
+ *     @option options :key_bits
+ *      _prefix_ のサイズ（bit）
+ *     @option options :offset
+ *       該当する範囲のレコードのうち、(0ベースで) _:offset_ 番目
+ *       からレコードを取り出す。
+ *     @option options :limit
+ *       該当する範囲のレコードのうち、 _:limit_ 件のみを取り出す。
+ *       省略された場合または-1が指定された場合は、全件が指定され
+ *       たものとみなす。
+ *     @option options :order
+ *       +:asc+ または +:ascending+ を指定すると昇順にレコードを取
+ *       り出す。
+ *       +:desc+ または +:descending+ を指定すると降順にレコードを
+ *       取り出す。
+ *     @option options :order_by (:id)
+ *       +:id+ を指定するとID順にレコードを取り出す。（デフォルト）
+ *       +:key+指定するとキー順にレコードを取り出す。
+ *     @option options :greater_than
+ *       +true+ を指定すると _prefix_ で指定した値に一致した [ +key+ ] を
+ *       範囲に含まない。
+ *     @option options :less_than
+ *       +true+ を指定すると _prefix_ で指定した値に一致した [ +key+ ] を
+ *       範囲に含まない。
+ *   @!macro double_array_trie.open_prefix_cursor.arguments
  * @overload open_prefix_cursor(prefix, options={})
  *   @yield [cursor]
- *   @param [String] prefix 前方一致させる値
- *   @param options [::Hash] The name and value
- *     pairs. Omitted names are initialized as the default value.
- *   @option options :key_bytes
- *    _prefix_ のサイズ（byte）
- *   @option options :key_bits
- *    _prefix_ のサイズ（bit）
- *   @option options :offset
- *     該当する範囲のレコードのうち、(0ベースで) _:offset_ 番目
- *     からレコードを取り出す。
- *   @option options :limit
- *     該当する範囲のレコードのうち、 _:limit_ 件のみを取り出す。
- *     省略された場合または-1が指定された場合は、全件が指定され
- *     たものとみなす。
- *   @option options :order
- *     +:asc+ または +:ascending+ を指定すると昇順にレコードを取
- *     り出す。
- *     +:desc+ または +:descending+ を指定すると降順にレコードを
- *     取り出す。
- *   @option options :order_by (:id)
- *     +:id+ を指定するとID順にレコードを取り出す。（デフォルト）
- *     +:key+指定するとキー順にレコードを取り出す。
- *   @option options :greater_than
- *     +true+ を指定すると _prefix_ で指定した値に一致した [ +key+ ] を
- *     範囲に含まない。
- *   @option options :less_than
- *     +true+ を指定すると _prefix_ で指定した値に一致した [ +key+ ] を
- *     範囲に含まない。
+ *   @!macro double_array_trie.open_prefix_cursor.arguments
  */
 static VALUE
 rb_grn_double_array_trie_open_prefix_cursor (int argc, VALUE *argv, VALUE self)
