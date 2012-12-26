@@ -83,8 +83,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency("rake-compiler")
   s.add_development_dependency("bundler")
   s.add_development_dependency("yard")
-  # Use packnga 0.9.4 to release 2.0.5 only.
-  s.add_development_dependency("packnga", ["= 0.9.4"])
+  s.add_development_dependency("packnga")
   s.add_development_dependency("RedCloth")
 end
 

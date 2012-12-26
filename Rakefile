@@ -56,6 +56,8 @@ Gem::PackageTask.new(spec) do |pkg|
 end
 
 document_task = Packnga::DocumentTask.new(spec) do |t|
+  t.original_language = :en
+  t.translate_language = :ja
 end
 
 namespace :reference do
