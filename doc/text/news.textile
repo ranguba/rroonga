@@ -1,5 +1,81 @@
 h1. NEWS
 
+h2(#2-1-0). 2.1.0: 2012-12-27
+
+h3. Improvements
+
+* Required groonga 2.1.0.
+* Supported mass record deletion with block.
+  [groonga-dev,01138][Suggested by ongaeshi]
+* Added Groonga::Normalizer.normalize (experimental). It normalize string.
+  e.g.)
+    Groonga::Normalizer.normalize("AbC") # => "abc"
+  Now, it removes any spaces by default, but it will be customized soon.
+* Supported :normalizer option in DoubleArrayTrie, PatriciaTrie, Hash,
+  Schema when creating tables.
+* [table] Added using normalizer accessor.
+* [table] Used normalizer for checking key normalization is enabled or not.
+* Added groonga-index-dump tool (experimental).
+  This tool dumps infomations for each index from DB.
+  Dumped informations are contained at "#{INDEX_NAME}.dump" files in
+  "#{TARGET_TABLE_NAME}.index_#{INDEX_COLUMN_NAME}".
+
+  e.g.)
+    $ cat index-dump.sdf
+      table_create --name Video --flags TABLE_HASH_KEY --key_type UInt32
+      table_create --name Tag --flags TABLE_HASH_KEY --key_type ShortText
+      column_create --table Video --name title --flags COLUMN_SCALAR --type ShortText
+      column_create --table Video --name tags --flags COLUMN_VECTOR --type Tag
+      column_create --table Tag --name index_tags --flags COLUMN_INDEX --type Video --source tags
+      load --table Video
+      [
+      {"_key":1,"title":"groonga Demo","tags":["IT","Server","groonga"]},
+      {"_key":2,"title":"Ultra Baseball","tags":["Sports","Baseball"]},
+      ]
+   $ groonga --file index-dump.sdf -n index-dump.db
+   $ groonga-index-dump --output-directory=path/to/index/ index-dump.db
+   $ cd path/to/index/
+   $ ls Tag.index_tags
+     Baseball.dump  IT.dump       Server.dump  Sports.dump  groonga.dump
+   $ cat path/to/index/Tag.index_tags/groonga.dump
+     index: Tag.index_tags	term: <groonga>	domain: Tag	range: Video	have_section: false	have_weight: false	have_position: false
+      weight	position        term_frequency	record
+      0           2             1               Video[1].tags
+
+* Added flag options to Groonga::IndexColumn#open_cursor.
+  The flag options are :with_section, :with_weight, :with_position.
+  They are enabled by default if each option is specified in creating
+  a index column.
+* [Snippet] Ensured creating database.
+* [inspect] Supported to display index column related flags for index
+  column only.
+  "index column related flags" are WITH_SECTION, WITH_WEIGHT and
+  WITH_POSITION.
+* [inspect] Added default tokenizer and normalizer infomation.
+* Supported Groonga::QueryLogger. This class is used to log query log.
+  Please see its reference for detail.
+
+h3. Changes
+
+* Move groonga-query-log-extract to groonga-query-log.
+  Please install groogna-query-log gem to use this tool.
+  how to install:
+      gem install groonga-query-log
+* Returned Groonga::Array instead of Array by Table#sort.
+  [GitHub: #8][Suggested by Genki Takiuchi]
+  CAUTION: This is backward incompatible change. You need to use
+  record.value to get the original record.
+  The following code shows how to use old style:
+    result_since_2_1_0 = table.sort(["sort_key"])
+    result_before_2_1_0 = result_since_2_1_0.collect do |record|
+      record.value
+    end
+
+h3. Thanks
+
+* ongaeshi
+* Genki Takiuchi
+
 h2(#2-0-8). 2.0.8: 2012-12-02
 
 h3. Improvements
