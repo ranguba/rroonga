@@ -55,9 +55,9 @@ Gem::PackageTask.new(spec) do |pkg|
   pkg.need_tar_gz = true
 end
 
-document_task = Packnga::DocumentTask.new(spec) do |t|
-  t.original_language = "en"
-  t.translate_language = "ja"
+document_task = Packnga::DocumentTask.new(spec) do |task|
+  task.original_language = "en"
+  task.translate_language = "ja"
 end
 
 namespace :reference do
