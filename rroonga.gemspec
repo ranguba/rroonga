@@ -15,6 +15,8 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+require "English"
+
 base_dir = File.dirname(__FILE__)
 ext_dir = File.join(base_dir, "ext", "groonga")
 
