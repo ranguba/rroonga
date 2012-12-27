@@ -42,13 +42,15 @@ Gem::Specification.new do |s|
   s.version = guess_version.call(ext_dir)
 
   authors_path = File.join(base_dir, "AUTHORS")
-  authors, emails = File.readlines(authors_path).collect do |line|
+  authors = []
+  emails = []
+  File.readlines(authors_path).each do |line|
     if /\s*<([^<>]*)>$/ =~ line
-      [$PREMATCH, $1]
-    else
-      nil
+      authors << $PREMATCH
+      emails << $1
     end
-  end.compact
+  end
+
   s.authors = authors
   s.email = emails
 
