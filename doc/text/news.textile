@@ -17,30 +17,32 @@ h3. Improvements
 * [table] Used normalizer for checking key normalization is enabled or not.
 * Added groonga-index-dump tool (experimental).
   This tool dumps infomations for each index from DB.
-  Dumped informations are contained at "#{INDEX_NAME}.dump" files in
-  "#{TARGET_TABLE_NAME}.index_#{INDEX_COLUMN_NAME}".
-
+  Dumped informations are contained at "INDEX_NAME.dump" files in
+  "TARGET_TABLE_NAME.index_INDEX_COLUMN_NAME".
   e.g.)
-    $ cat index-dump.sdf
-      table_create --name Video --flags TABLE_HASH_KEY --key_type UInt32
-      table_create --name Tag --flags TABLE_HASH_KEY --key_type ShortText
-      column_create --table Video --name title --flags COLUMN_SCALAR --type ShortText
-      column_create --table Video --name tags --flags COLUMN_VECTOR --type Tag
-      column_create --table Tag --name index_tags --flags COLUMN_INDEX --type Video --source tags
-      load --table Video
-      [
-      {"_key":1,"title":"groonga Demo","tags":["IT","Server","groonga"]},
-      {"_key":2,"title":"Ultra Baseball","tags":["Sports","Baseball"]},
-      ]
-   $ groonga --file index-dump.sdf -n index-dump.db
-   $ groonga-index-dump --output-directory=path/to/index/ index-dump.db
-   $ cd path/to/index/
-   $ ls Tag.index_tags
-     Baseball.dump  IT.dump       Server.dump  Sports.dump  groonga.dump
-   $ cat path/to/index/Tag.index_tags/groonga.dump
-     index: Tag.index_tags	term: <groonga>	domain: Tag	range: Video	have_section: false	have_weight: false	have_position: false
-      weight	position        term_frequency	record
-      0           2             1               Video[1].tags
+
+  <pre>
+   $ cat index-dump.sdf
+     table_create --name Video --flags TABLE_HASH_KEY --key_type UInt32
+     table_create --name Tag --flags TABLE_HASH_KEY --key_type ShortText
+     column_create --table Video --name title --flags COLUMN_SCALAR --type ShortText
+     column_create --table Video --name tags --flags COLUMN_VECTOR --type Tag
+     column_create --table Tag --name index_tags --flags COLUMN_INDEX --type Video --source tags
+     load --table Video
+     [
+     {"_key":1,"title":"groonga Demo","tags":["IT","Server","groonga"]},
+     {"_key":2,"title":"Ultra Baseball","tags":["Sports","Baseball"]},
+     ]
+  $ groonga --file index-dump.sdf -n index-dump.db
+  $ groonga-index-dump --output-directory=path/to/index/ index-dump.db
+  $ cd path/to/index/
+  $ ls Tag.index_tags
+    Baseball.dump  IT.dump       Server.dump  Sports.dump  groonga.dump
+  $ cat path/to/index/Tag.index_tags/groonga.dump
+    index: Tag.index_tags	term: <groonga>	domain: Tag	range: Video	have_section: false	have_weight: false	have_position: false
+     weight	position        term_frequency	record
+     0    2     1   Video[ 1 ].tags
+  </pre>
 
 * Added flag options to Groonga::IndexColumn#open_cursor.
   The flag options are :with_section, :with_weight, :with_position.
