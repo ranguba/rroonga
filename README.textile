@@ -49,7 +49,7 @@ h2. Install
 h2. Documents
 
 * "Reference manual in English":http://ranguba.org/rroonga/en/
-* "Reference manual in Japanese":http://ranguba.rubyforge.org/rroonga/ja/
+* "Reference manual in Japanese":http://ranguba.org/rroonga/ja/
 
 h2. Mailing list
 
