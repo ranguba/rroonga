@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: rroonga 1.2.3\n"
 "POT-Creation-Date: 2011-11-20 22:17+0900\n"
-"PO-Revision-Date: 2012-12-27 16:57+0900\n"
+"PO-Revision-Date: 2012-12-28 10:10+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: \n"
@@ -96,10 +96,10 @@ msgid "h2. Documents"
 msgstr "h2. ドキュメント"
 
 #: ./README.textile:51
-msgid "* \"Reference manual in English\":http://groonga.rubyforge.org/rroonga/en/\n* \"Reference manual in Japanese\":http://groonga.rubyforge.org/rroonga/ja/"
+msgid "* \"Reference manual in English\":http://ranguba.org/rroonga/en/\n* \"Reference manual in Japanese\":http://ranguba.rubyforge.org/rroonga/ja/"
 msgstr ""
-"* \"リファレンスマニュアル（英語）\":http://groonga.rubyforge.org/rroonga/en/\n"
-"* \"リファレンスマニュアル（日本語）\":http://groonga.rubyforge.org/rroonga/ja/"
+"* \"リファレンスマニュアル（英語）\":http://ranguba.org/rroonga/en/\n"
+"* \"リファレンスマニュアル（日本語）\":http://ranbuga.org/rroonga/ja/"
 
 #: ./README.textile:54
 msgid "h2. Mailing list"
@@ -3635,8 +3635,8 @@ msgid "tag|overload|sort"
 msgstr ""
 
 # @note
-#: ./ext/groonga/rb-grn-table.c:1148
-msgid "The return value is changed to {Groonga::Array} from\n{::Array} since 2.1.0. If you want to get before 2.1.0 style\nresult, use the following code:\n\n<pre>\n!!!ruby\nresult_since_2_1_0 = table.sort([\"sort_key\"])\nresult_before_2_1_0 = result_since_2_1_0.collect do |record|\n  record.value\nend\n</pre>"
+#: ./ext/groonga/rb-grn-table.c:1146
+msgid "The return value is changed to {Groonga::Array} from\n{::Array} since 2.1.0. If you want to get before 2.1.0 style\nresult, use the following code:\n\n@example Describe incompatible API change\n  result_since_2_1_0 = table.sort([\"sort_key\"])\n  result_before_2_1_0 = result_since_2_1_0.collect do |record|\n    record.value\n  end"
 msgstr ""
 
 #: ./ext/groonga/rb-grn-table.c:1249
