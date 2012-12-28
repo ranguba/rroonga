@@ -48,7 +48,8 @@ h3. Improvements
   The flag options are :with_section, :with_weight, :with_position.
   They are enabled by default if each option is specified in creating
   a index column.
-* [Snippet] Ensured creating database.
+* [Snippet] Showed the error message when specified context wasn't
+  associated with a database by Groonga::Database#open or #create.
 * [inspect] Supported to display index column related flags for index
   column only.
   "index column related flags" are WITH_SECTION, WITH_WEIGHT and

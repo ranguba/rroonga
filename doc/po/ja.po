@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: rroonga 2.1.0\n"
 "POT-Creation-Date: 2011-11-20 22:17+0900\n"
-"PO-Revision-Date: 2012-12-28 11:30+0900\n"
+"PO-Revision-Date: 2012-12-28 12:33+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: \n"
@@ -140,18 +140,18 @@ msgstr "h1. お知らせ"
 msgid "h2(#2-1-0). 2.1.0: 2012-12-29"
 msgstr ""
 
-#: ./doc/text/news.textile:5 ./doc/text/news.textile:83
-#: ./doc/text/news.textile:89 ./doc/text/news.textile:109
-#: ./doc/text/news.textile:132 ./doc/text/news.textile:166
-#: ./doc/text/news.textile:189 ./doc/text/news.textile:200
-#: ./doc/text/news.textile:219 ./doc/text/news.textile:238
-#: ./doc/text/news.textile:272 ./doc/text/news.textile:282
-#: ./doc/text/news.textile:292 ./doc/text/news.textile:308
-#: ./doc/text/news.textile:324 ./doc/text/news.textile:342
-#: ./doc/text/news.textile:366 ./doc/text/news.textile:395
-#: ./doc/text/news.textile:413 ./doc/text/news.textile:420
-#: ./doc/text/news.textile:467 ./doc/text/news.textile:488
-#: ./doc/text/news.textile:499
+#: ./doc/text/news.textile:5 ./doc/text/news.textile:84
+#: ./doc/text/news.textile:90 ./doc/text/news.textile:110
+#: ./doc/text/news.textile:133 ./doc/text/news.textile:167
+#: ./doc/text/news.textile:190 ./doc/text/news.textile:201
+#: ./doc/text/news.textile:220 ./doc/text/news.textile:239
+#: ./doc/text/news.textile:273 ./doc/text/news.textile:283
+#: ./doc/text/news.textile:293 ./doc/text/news.textile:309
+#: ./doc/text/news.textile:325 ./doc/text/news.textile:343
+#: ./doc/text/news.textile:367 ./doc/text/news.textile:396
+#: ./doc/text/news.textile:414 ./doc/text/news.textile:421
+#: ./doc/text/news.textile:468 ./doc/text/news.textile:489
+#: ./doc/text/news.textile:500
 msgid "h3. Improvements"
 msgstr "h3. 改善"
 
@@ -178,23 +178,23 @@ msgid "  <pre>\n   $ cat index-dump.sdf\n     table_create --name Video --flags 
 msgstr ""
 
 #: ./doc/text/news.textile:47
-msgid "* Added flag options to Groonga::IndexColumn#open_cursor.\n  The flag options are :with_section, :with_weight, :with_position.\n  They are enabled by default if each option is specified in creating\n  a index column.\n* [Snippet] Ensured creating database.\n* [inspect] Supported to display index column related flags for index\n  column only.\n  \"index column related flags\" are WITH_SECTION, WITH_WEIGHT and\n  WITH_POSITION.\n* [inspect] Added default tokenizer and normalizer infomation.\n* Supported Groonga::QueryLogger. This class is used to log query log.\n  Please see its reference for detail."
+msgid "* Added flag options to Groonga::IndexColumn#open_cursor.\n  The flag options are :with_section, :with_weight, :with_position.\n  They are enabled by default if each option is specified in creating\n  a index column.\n* [Snippet] Showed the error message when specified context wasn't\n  associated with a database by Groonga::Database#open or #create.\n* [inspect] Supported to display index column related flags for index\n  column only.\n  \"index column related flags\" are WITH_SECTION, WITH_WEIGHT and\n  WITH_POSITION.\n* [inspect] Added default tokenizer and normalizer infomation.\n* Supported Groonga::QueryLogger. This class is used to log query log.\n  Please see its reference for detail."
 msgstr ""
 "* Groonga::IndexColumn#open_cursorにフラグに関するオプション（:with_section, :with_weight, :with_position）を追加。\n"
 "  インデックスカラムを作るときにこれらオプションを指定していると、指定したオプションをデフォルトで使用可能になります。\n"
-"* [Snippet] データベースがないときは作成するようにした。\n"
+"* [Snippet] 指定されたGroonga::Contextがデータベースと結びついていないときにエラーメッセージを表示するようにした。\n"
 "* [inspect] インデックスカラム関連のフラグ（WITH_SECTION, WITH_WEIGHT, WITH_POSITION）はインデックスカラムを表示するときにのみ表示するようにした。\n"
 "* [inspect] デフォルトのトークナイザーとノーマライザーの情報を表示するようにした。\n"
 "* Groonga::QueryLoggerをサポートした。このクラスはクエリログのロガーです。詳しくはリファレンスマニュアルをご覧ください。"
 
-#: ./doc/text/news.textile:60 ./doc/text/news.textile:102
-#: ./doc/text/news.textile:121 ./doc/text/news.textile:256
-#: ./doc/text/news.textile:347 ./doc/text/news.textile:383
-#: ./doc/text/news.textile:450
+#: ./doc/text/news.textile:61 ./doc/text/news.textile:103
+#: ./doc/text/news.textile:122 ./doc/text/news.textile:257
+#: ./doc/text/news.textile:348 ./doc/text/news.textile:384
+#: ./doc/text/news.textile:451
 msgid "h3. Changes"
 msgstr "h3. 変更"
 
-#: ./doc/text/news.textile:62
+#: ./doc/text/news.textile:63
 msgid "* Move groonga-query-log-extract to groonga-query-log.\n  Please install groogna-query-log gem to use this tool.\n  how to install:\n      gem install groonga-query-log\n* Returned Groonga::Array instead of Array by Table#sort.\n  [GitHub: #8][Suggested by Genki Takiuchi]\n  CAUTION: This is backward incompatible change. You need to use\n  record.value to get the original record.\n  The following code shows how to use old style:\n    result_since_2_1_0 = table.sort([\"sort_key\"])\n    result_before_2_1_0 = result_since_2_1_0.collect do |record|\n      record.value\n    end"
 msgstr ""
 "* groonga-query-log-extractコマンドをgroonga-query-logというgemに移動しました。\n"
@@ -209,34 +209,34 @@ msgstr ""
 "      record.value\n"
 "    end"
 
-#: ./doc/text/news.textile:76 ./doc/text/news.textile:154
-#: ./doc/text/news.textile:183 ./doc/text/news.textile:212
-#: ./doc/text/news.textile:232 ./doc/text/news.textile:360
-#: ./doc/text/news.textile:388 ./doc/text/news.textile:461
-#: ./doc/text/news.textile:482 ./doc/text/news.textile:561
-#: ./doc/text/news.textile:675
+#: ./doc/text/news.textile:77 ./doc/text/news.textile:155
+#: ./doc/text/news.textile:184 ./doc/text/news.textile:213
+#: ./doc/text/news.textile:233 ./doc/text/news.textile:361
+#: ./doc/text/news.textile:389 ./doc/text/news.textile:462
+#: ./doc/text/news.textile:483 ./doc/text/news.textile:562
+#: ./doc/text/news.textile:676
 msgid "h3. Thanks"
 msgstr "h3. 感謝"
 
-#: ./doc/text/news.textile:78
+#: ./doc/text/news.textile:79
 msgid "* ongaeshi\n* Genki Takiuchi"
 msgstr ""
 "* ongaeshiさん\n"
 "* Genki Takiuchiさん"
 
-#: ./doc/text/news.textile:81
+#: ./doc/text/news.textile:82
 msgid "h2(#2-0-8). 2.0.8: 2012-12-02"
 msgstr ""
 
-#: ./doc/text/news.textile:85
+#: ./doc/text/news.textile:86
 msgid "* Required groonga 2.0.9."
 msgstr "* groonga 2.0.9対応。"
 
-#: ./doc/text/news.textile:87
+#: ./doc/text/news.textile:88
 msgid "h2(#2-0-7). 2.0.7: 2012-11-29"
 msgstr ""
 
-#: ./doc/text/news.textile:91
+#: ./doc/text/news.textile:92
 msgid "* Added Groonga::Posting#record. This method returns the record for\n  the record ID in table.\n* Added Groonga::Posting#term. This method returns the record for the\n  term ID in table.\n* Supported GRN_OBJ_KEY_VAR_SIZE for Groonga::Type#inspect.\n  GRN_OBJ_KEY_CAR_SIZE specifies its column is variable size.\n* [Type] Added reader methods to Groonga::Type (#size and #flags).\n* [Type] Added predicate methods to Groonga::Type.\n  Added methods are #fixed_size?, #variable_size?, #unsigned_integer?,\n  #integer?, #float? and #geo_point?."
 msgstr ""
 "* レコードIDに対応するレコードを返すGroonga::Posting#recordを追加。\n"
@@ -245,47 +245,47 @@ msgstr ""
 "* [Type] Groonga::Typeに読み取り用アクセサの#sizeメソッドと#flagsメソッドを追加。\n"
 "* [Type] Groonga::Typeに次のメソッドを追加：#fixed_size?, #variable_size?, #unsigned_integer?, #integer?, #float?, #geo_point?"
 
-#: ./doc/text/news.textile:104
+#: ./doc/text/news.textile:105
 msgid "* Removed query log related codes.\n  This feature moved to groonga-query-log gem and it is relased soon."
 msgstr "* クエリログ関連の機能を削除した。クエリログ関連の機能はgroonga-query-logというgemに移動しました。このgemは近日中にリリースする予定です。"
 
-#: ./doc/text/news.textile:107
+#: ./doc/text/news.textile:108
 msgid "h2(#2-0-6). 2.0.6: 2012-10-25"
 msgstr ""
 
-#: ./doc/text/news.textile:111
+#: ./doc/text/news.textile:112
 msgid "* [dump] Put index columns at the bottom (after loads).\n  It is for using offline index construction.\n* Added term_extract in Table#select by @table.select {|record|\n  record.key.term_extract(text)}@ syntax.\n* Supported :allow_leading_not as a option of #select.\n  You should use this option carefully. It takes a long time to search\n  all records which doesn't include a word. In addition, when the\n  number of records is large, to search them with this option is\n  slowly."
 msgstr ""
 "* [dump] インデックスカラム作成のコマンドを最後（loadコマンドの後ろ）に出力するようにした。これは静的インデックス作成にするためのものです。\n"
 "* 単語抽出機能をサポート。構文は @table.select {|record| record.key.term_extract(text)}@ 。\n"
 "* selectメソッドを使うときに:allow_leading_notオプションを使用できるようにした。このオプションで「ある単語が含まれない全てのレコード」を検索すると検索が遅くなります。またレコードが多い時にも時間がかかるので注意して使ってください。"
 
-#: ./doc/text/news.textile:123
+#: ./doc/text/news.textile:124
 msgid "* Changed option name for debug build in extconf.rb from --with-debug\n  to --enable-debug-log."
 msgstr "* extconf.rbでデバッグ用ビルドに使うオプションを--with-debugから--enable-debug-logに変更。"
 
-#: ./doc/text/news.textile:126 ./doc/text/news.textile:150
-#: ./doc/text/news.textile:160 ./doc/text/news.textile:179
-#: ./doc/text/news.textile:194 ./doc/text/news.textile:205
-#: ./doc/text/news.textile:260 ./doc/text/news.textile:266
-#: ./doc/text/news.textile:286 ./doc/text/news.textile:300
-#: ./doc/text/news.textile:317 ./doc/text/news.textile:328
-#: ./doc/text/news.textile:335 ./doc/text/news.textile:354
-#: ./doc/text/news.textile:455 ./doc/text/news.textile:471
-#: ./doc/text/news.textile:477 ./doc/text/news.textile:493
-#: ./doc/text/news.textile:550 ./doc/text/news.textile:557
+#: ./doc/text/news.textile:127 ./doc/text/news.textile:151
+#: ./doc/text/news.textile:161 ./doc/text/news.textile:180
+#: ./doc/text/news.textile:195 ./doc/text/news.textile:206
+#: ./doc/text/news.textile:261 ./doc/text/news.textile:267
+#: ./doc/text/news.textile:287 ./doc/text/news.textile:301
+#: ./doc/text/news.textile:318 ./doc/text/news.textile:329
+#: ./doc/text/news.textile:336 ./doc/text/news.textile:355
+#: ./doc/text/news.textile:456 ./doc/text/news.textile:472
+#: ./doc/text/news.textile:478 ./doc/text/news.textile:494
+#: ./doc/text/news.textile:551 ./doc/text/news.textile:558
 msgid "h3. Fixes"
 msgstr "h3. 修正"
 
-#: ./doc/text/news.textile:128
+#: ./doc/text/news.textile:129
 msgid "* Fixed display collapse in the references."
 msgstr "* リファレンスの表示崩れを修正。"
 
-#: ./doc/text/news.textile:130
+#: ./doc/text/news.textile:131
 msgid "h2(#2-0-5). 2.0.5: 2012-09-28"
 msgstr ""
 
-#: ./doc/text/news.textile:134
+#: ./doc/text/news.textile:135
 msgid "* Supported groonga 2.0.7.\n* Removed the workaround to install rroonga with old groonga.\n* Added more error checks.\n* Added Database#tables. [Suggested by @temitan]\n* Supported Enumerator for #each on Database, Table, TableCursor and\n  IndexCursor.\n* Added WGS84GeoPoint and TokyoGeoPoint.\n* [dumper] supported dumping of WGS84GeoPoint and TokyoGeoPoint.\n* [dumper] worked on non UTF-8 extenal output encoding environment.\n* [dumper] sorted table and column names.\n* [dumper] ignored invalid byte.\n* [grndump] showed the warning for invalid character.\n* [grndump] supported database that is created by old groonga.\n* Added Groonga::Context#ruby_encoding.\n* Added many documents in codes but showed no references."
 msgstr ""
 "* groonga 2.0.7対応。\n"
@@ -303,27 +303,27 @@ msgstr ""
 "* Groonga::Context#ruby_encodingを追加。\n"
 "* コード内に書かれていてリファレンスに表示されていなかったドキュメントをリファレンスに追加。"
 
-#: ./doc/text/news.textile:152
+#: ./doc/text/news.textile:153
 msgid "* Added missing backslash escape for groonga command."
 msgstr "* groongaコマンドにバックスラッシュがあったときにエスケープするように修正した。"
 
-#: ./doc/text/news.textile:156
+#: ./doc/text/news.textile:157
 msgid "* @temitan"
 msgstr "* @temtanさん"
 
-#: ./doc/text/news.textile:158
+#: ./doc/text/news.textile:159
 msgid "h2(#2-0-4). 2.0.4: 2012-05-02"
 msgstr ""
 
-#: ./doc/text/news.textile:162
+#: ./doc/text/news.textile:163
 msgid "* Fixed a bug that weight of match target is ignored."
 msgstr "* マッチカラムの重みが無視される問題を修正。"
 
-#: ./doc/text/news.textile:164
+#: ./doc/text/news.textile:165
 msgid "h2(#2-0-3). 2.0.3: 2012-05-02"
 msgstr ""
 
-#: ./doc/text/news.textile:168
+#: ./doc/text/news.textile:169
 msgid "* Supported groonga 2.0.2.\n* Groonga::Table#each supports options that are same as\n  Groonga::Table#open_cursor's one.\n* [grndump] added @--order-by=id@ option. With this option, dumped\n  records are sorted by ID instead of key. You can restore records\n  without ID change if you don't delete any records. [#1341]\n* Supported building on Windows with RubyInstaller for Windows with DevKit.\n  [GitHub#6] [Patch by @ongaeshi]\n* Supported similar search by @table.select {|record|\n  record.column.similar_search(text)}@ syntax."
 msgstr ""
 "* groonga 2.0.2対応。\n"
@@ -333,39 +333,39 @@ msgstr ""
 "  [GitHub#6] [@ongaeshiさんがパッチ提供]\n"
 "* 類似文書検索をサポート。構文は @table.select {|record| record.column.similar_search(text)}@ 。"
 
-#: ./doc/text/news.textile:181
+#: ./doc/text/news.textile:182
 msgid "* Fixed a GC related crach bug."
 msgstr "* GC関連ででクラッシュするバグを修正。"
 
-#: ./doc/text/news.textile:185
+#: ./doc/text/news.textile:186
 msgid "* @ongaeshi"
 msgstr "* ongaeshiさん"
 
-#: ./doc/text/news.textile:187
+#: ./doc/text/news.textile:188
 msgid "h2(#2-0-2). 2.0.2: 2012-03-29"
 msgstr ""
 
-#: ./doc/text/news.textile:191
+#: ./doc/text/news.textile:192
 msgid "* Supported groonga 2.0.1.\n* Added \"logos\":http://groonga.rubyforge.org/#logo ."
 msgstr ""
 "* groonga 2.0.1対応。\n"
 "* \"ロゴ\":http://groonga.rubyforge.org/#logo を追加。"
 
-#: ./doc/text/news.textile:196
+#: ./doc/text/news.textile:197
 msgid "* Fixed a Groonga::Snipet related crach bug caused by GC."
 msgstr "* Groonga::Snippetに関連したGCでクラッシュするバグを修正した。"
 
-#: ./doc/text/news.textile:198
+#: ./doc/text/news.textile:199
 msgid "h2(#2-0-0). 2.0.0: 2012-03-22"
 msgstr ""
 
-#: ./doc/text/news.textile:202
+#: ./doc/text/news.textile:203
 msgid "* Supported groonga 2.0.0.\n* [gem][windows] Removed mswin packages."
 msgstr ""
 "* groonga 2.0.0対応。\n"
 "* [gem][windows] mswin用のパッケージを削除した。"
 
-#: ./doc/text/news.textile:207
+#: ./doc/text/news.textile:208
 msgid "* [test] Fixed version test failure. [GitHub#4] [Reported by @takkanm]\n* Fixed a Groonga::Expression related crach bug caused by GC.\n* [doc] Fixed broken HTML output. [groonga-dev,00699]\n  [Reported by Hirano]"
 msgstr ""
 "* [test] バージョンのテストの失敗を修正した。 [GitHub#4] [@takkanmさんが報告]\n"
@@ -373,17 +373,17 @@ msgstr ""
 "* [doc] 壊れたHTML出力を修正した。 [groonga-dev,00699] \n"
 "  [平野さんが報告]"
 
-#: ./doc/text/news.textile:214
+#: ./doc/text/news.textile:215
 msgid "* @takkanm\n* Hirano"
 msgstr ""
 "* @takkanmさん\n"
 "* 平野さん"
 
-#: ./doc/text/news.textile:217
+#: ./doc/text/news.textile:218
 msgid "h2(#1-3-1). 1.3.1: 2012-01-29"
 msgstr ""
 
-#: ./doc/text/news.textile:221
+#: ./doc/text/news.textile:222
 msgid "* Supported groonga 1.3.0.\n* [schema] Supported Int8, Int16, UInt8 and UInt16.\n* [schema] Supported TokyoGeoPoint and WGS84GeoPoint.\n* [schema][dumper] Supported Boolean and more built-in types.\n  [Reported by @mashiro]\n* [schema] Supported type object as column type. [#1002]\n* Added Groonga::VariableSizeColumn#compressed?. [#1004]\n* Added Groonga::Record#score=.\n* Improve performance for encoded string.\n* Added Groonga::Command::Builder.escape_value."
 msgstr ""
 "* groonga 1.3.0対応。\n"
@@ -397,15 +397,15 @@ msgstr ""
 "* エンコードされた文字列の扱ったときのパフォーマンスを改良。\n"
 "* Groonga::Command::Builder.escape_valueを追加。"
 
-#: ./doc/text/news.textile:234
+#: ./doc/text/news.textile:235
 msgid "* @mashiro"
 msgstr "* @mashiroさん"
 
-#: ./doc/text/news.textile:236
+#: ./doc/text/news.textile:237
 msgid "h2(#1-3-0). 1.3.0: 2011-11-29"
 msgstr ""
 
-#: ./doc/text/news.textile:240
+#: ./doc/text/news.textile:241
 msgid "* [schema] Remove also needless db.tables/ directory if it is empty.\n* [schema] Remove also needless db.tables/table.columns/ directory if it is empty.\n* Added query log parser.\n* Added groonga-query-log-extract command.\n* Added grntest log analyzer.\n* Added JSON gem dependency.\n* Supported groonga 1.2.8.\n* Dropped groonga 1.2.7 or former support.\n* Added Groonga::Table#defrag.\n* Added Groonga::Table#rename.\n* Added Groonga::Column#rename.\n* Added Groonga::DoubleArrayTrie.\n* [schema] Supported table rename.\n* [schema] Supported column rename.\n* [schema] Supported double array trie."
 msgstr ""
 "* [schema] db.tables/ディレクトリが空の場合は削除時に一緒に削除するようにした。\n"
@@ -424,27 +424,27 @@ msgstr ""
 "* [schema] カラムのリネームに対応。\n"
 "* [schema] ダブル配列トライに対応。"
 
-#: ./doc/text/news.textile:258
+#: ./doc/text/news.textile:259
 msgid "* [schema] Don't use named path by default for location aware DB."
 msgstr "* [schema] DBを移動してもそのまま使えるようにするために、デフォルトではパスに意味のある名前をつけないようにした。"
 
-#: ./doc/text/news.textile:262
+#: ./doc/text/news.textile:263
 msgid "* Fixed a crash problem on GC."
 msgstr "* GC時にクラッシュする問題を修正。"
 
-#: ./doc/text/news.textile:264
+#: ./doc/text/news.textile:265
 msgid "h2. 1.2.9: 2011-09-16"
 msgstr ""
 
-#: ./doc/text/news.textile:268
+#: ./doc/text/news.textile:269
 msgid "* deleted unneed object files."
 msgstr "* 不要なオブジェクトファイルが入っていたのを削除。"
 
-#: ./doc/text/news.textile:270
+#: ./doc/text/news.textile:271
 msgid "h2. 1.2.8: 2011-09-16"
 msgstr ""
 
-#: ./doc/text/news.textile:274
+#: ./doc/text/news.textile:275
 msgid "* supported \"!=\" expression for column in block of Groonga::Table#select.\n* accepted Hash like object as options.\n* supported vector in dump in Ruby syntax.\n* supported GRN_CTX_PER_DB environment variables.\n(NOTE: You should pay attention to use this variables.)"
 msgstr ""
 "* Groonga::Table#selectに与えるブロックの中での\"!=\"メソッドに対応。詳しくはGroonga::Table#selectのリファレンスを参照。\n"
@@ -452,23 +452,23 @@ msgstr ""
 "* Ruby文法においてのベクター形式のダンプに対応。\n"
 "* 環境変数GRN_CTX_PER_DBに対応。（注意：この環境変数を使用する際は注意して使ってください）"
 
-#: ./doc/text/news.textile:280
+#: ./doc/text/news.textile:281
 msgid "h2. 1.2.7: 2011-08-29"
 msgstr ""
 
-#: ./doc/text/news.textile:284
+#: ./doc/text/news.textile:285
 msgid "* Added Groonga::Snippet#close that frees resource."
 msgstr "* リソースを解放するGroonga::Snippet#closeを追加。"
 
-#: ./doc/text/news.textile:288
+#: ./doc/text/news.textile:289
 msgid "* Fixed build error on Ruby 1.8.7."
 msgstr "* Ruby 1.8.7でビルドできない問題を修正。"
 
-#: ./doc/text/news.textile:290
+#: ./doc/text/news.textile:291
 msgid "h2. 1.2.6: 2011-08-29"
 msgstr ""
 
-#: ./doc/text/news.textile:294
+#: ./doc/text/news.textile:295
 msgid "* Supported groonga 1.2.5.\n* Added Groonga::Record#added? that returns true when the record is just added.\n* Added Groonga::VariableSizeColumn#defrag? that defrags the column.\n* Added Groonga::Database#defrag that defrags the all variable size columns.\n* Supported column name specification by symbol."
 msgstr ""
 "* groonga 1.2.5対応。\n"
@@ -477,18 +477,18 @@ msgstr ""
 "* データベース中のすべての可変長カラムをデフラグする Groonga::Database#defrag を追加。\n"
 "* シンボルでのカラム名指定に対応。"
 
-#: ./doc/text/news.textile:302
+#: ./doc/text/news.textile:303
 msgid "* Fixed install *.rb failure by gem install.\n* Fixed some memory leaks.\n* Fixed crash bug on exit."
 msgstr ""
 "* gem install時に*.rbのインストールに失敗する問題を修正。\n"
 "* メモリリークを修正。\n"
 "* 終了時にクラッシュする問題を修正。"
 
-#: ./doc/text/news.textile:306
+#: ./doc/text/news.textile:307
 msgid "h2. 1.2.5: 2011-08-05"
 msgstr ""
 
-#: ./doc/text/news.textile:310
+#: ./doc/text/news.textile:311
 msgid "* Re-supported tar.gz distribution.\n* Added Groonga::Context#close.\n* Added Groonga::Context#closed?.\n* Deprecated Groonga::ObjectClosed. Use Groonga::Closed instead.\n* grndump: Added --exclude-table option that specifies not dumped tables.\n* dump: Removed path equality check."
 msgstr ""
 "* tar.gzでのパッケージ配布を再サポート。\n"
@@ -498,47 +498,47 @@ msgstr ""
 "* grndump: ダンプしないテーブルを指定する--exclude-tableオプションを追加。\n"
 "* dump: パスが等しいかどうかのチェックを削除。"
 
-#: ./doc/text/news.textile:319
+#: ./doc/text/news.textile:320
 msgid "* dump: Fixed wrong index table type.\n* Re-supported auto groonga install."
 msgstr ""
 "* [dump] 間違ったインデックス用テーブルを出力する問題を修正。\n"
 "* groongaの自動インストールを再サポート。"
 
-#: ./doc/text/news.textile:322
+#: ./doc/text/news.textile:323
 msgid "h2. 1.2.4: 2011-06-29"
 msgstr ""
 
-#: ./doc/text/news.textile:326
+#: ./doc/text/news.textile:327
 msgid "* Supported groonga 1.2.3."
 msgstr "* groonga 1.2.3対応。"
 
-#: ./doc/text/news.textile:330
+#: ./doc/text/news.textile:331
 msgid "* Re-supported auto groonga install.\n* Added missing pkg-config gem dependency."
 msgstr ""
 "* groongaの自動インストールを再サポート。\n"
 "* pkg-config gemへの依存関係を追加。"
 
-#: ./doc/text/news.textile:333
+#: ./doc/text/news.textile:334
 msgid "h2. 1.2.3: 2011-06-27"
 msgstr ""
 
-#: ./doc/text/news.textile:337
+#: ./doc/text/news.textile:338
 msgid "* remove object files in gem packages.\n* fix charactor corruption in reference."
 msgstr ""
 "* gemパッケージに含まれてしまったオブジェクトファイル(*.o)を削除。\n"
 "* 一部のリファレンスマニュアルの文字化けを修正。"
 
-#: ./doc/text/news.textile:340
+#: ./doc/text/news.textile:341
 msgid "h2. 1.2.2: 2011-06-27"
 msgstr ""
 
-#: ./doc/text/news.textile:344
+#: ./doc/text/news.textile:345
 msgid "* created \"Developers\" page in English.\n* added description for tasks of \"html:publish\" and \"publish\"."
 msgstr ""
 "* 英語版の「開発者向け情報」ページを作成。\n"
 "* \"html:publish\"タスクと\"publish\"に関しての説明を追加。"
 
-#: ./doc/text/news.textile:349
+#: ./doc/text/news.textile:350
 msgid "* Groonga::Record#attributes return same attributes object for duplicate records.\n* added document for Groonga::Record#attributes.\n* changed tool name in document page for creating document.\n* moved NEWS*.rdoc and tutorial.texttile to doc/text/."
 msgstr ""
 "* Groonga::Record#attributesが重複したレコードが現れた際に同じattributesオブジェクトを返すようにした。\n"
@@ -546,22 +546,22 @@ msgstr ""
 "* 「開発者向け情報」ページ内にあるドキュメント作成ツールを変更。\n"
 "* NEWS*.rdocとtutorial.texttileをディレクトリdoc/text/に移動。"
 
-#: ./doc/text/news.textile:356
+#: ./doc/text/news.textile:357
 msgid "* fixed the tutorial path in index page.\n* fixed the path of tutorial in index page in English.\n* follow the groonga downlowd URL change. [mallowlabs]"
 msgstr ""
 "* インデックスページにある「チュートリアル」ページへのリンクを修正。\n"
 "* インデックスページにある英語版「チュートリアル」ページへのリンクを修正。\n"
 "* 新しいgroongaのダウンロードURLに対応。 [mallowlabs]"
 
-#: ./doc/text/news.textile:362
+#: ./doc/text/news.textile:363
 msgid "* mallowlabs"
 msgstr "* mallowlabsさん"
 
-#: ./doc/text/news.textile:364
+#: ./doc/text/news.textile:365
 msgid "h2. 1.2.1: 2011-06-07"
 msgstr ""
 
-#: ./doc/text/news.textile:368
+#: ./doc/text/news.textile:369
 msgid "* added document of Groonga::Table#pagination.\n* added grndump in package.\n* corresponded recursive reference of Records by Groonga::Record#attributes.\n  (experimental) [mooz]\n* Groonga::Record#attributes supported data including _score.\n* corresponded Windows for 64-bit.\n  (but there's not 64-bit ruby, so rroonga for 64-bit windows cannot run.)\n* added Groonga::Posting.\n* added :delimit, :token_delimiter for alias of TokenDelimit.\n* Groonga::DatabaseDumper#dump corresponded lexicon table.\n* Groonga::DatabaseDumper#dump corresponded data including plugin.\n* added Groonga::IndexColumn#open_cursor. [yoshihara]\n* added Groonga::IndexCursor. [yoshihara]\n* added Groonga::Object#builtin?. [yoshihara]"
 msgstr ""
 "* Groonga::Table#paginationのドキュメントを追加。\n"
@@ -577,23 +577,23 @@ msgstr ""
 "* Groonga::IndexCursorを追加。[yoshihara]\n"
 "* Groonga::Object#builtin?を追加。[yoshihara]"
 
-#: ./doc/text/news.textile:385
+#: ./doc/text/news.textile:386
 msgid "* check existence of column before removing it.\n* removed grn expression document."
 msgstr ""
 "* カラムが削除される前に、そのカラムがあるかチェックするようにした。\n"
 "* ドキュメントからgrn式のページを削除。"
 
-#: ./doc/text/news.textile:390
+#: ./doc/text/news.textile:391
 msgid "* mooz\n* yoshihara"
 msgstr ""
 "* moozさん\n"
 "* yoshiharaさん"
 
-#: ./doc/text/news.textile:393
+#: ./doc/text/news.textile:394
 msgid "h2. 1.2.0: 2011-04-01"
 msgstr ""
 
-#: ./doc/text/news.textile:397
+#: ./doc/text/news.textile:398
 msgid "* Supported groonga 1.2.0.\n* Added Groonga::Accessor#local_name.\n* Added Groonga::IndexColumn#with_section?.\n* Added Groonga::IndexColumn#with_weight?.\n* Added Groonga::IndexColumn#with_position?.\n* Groonga::Schema.dump supported groonga command format dump.\n* Added grndump command.\n* Groonga::Database#each supports order customize.\n* Added Groonga::Context#match_escalation_threshold.\n* Added Groonga::Context#match_escalation_threshold=.\n* Improved error message.\n* Supported Rubyish name like :short_text instead of the\n  official type name like \"ShortText\" in Groonga::Schema."
 msgstr ""
 "* groonga 1.2.0対応。\n"
@@ -609,21 +609,21 @@ msgstr ""
 "* エラーメッセージの改良。\n"
 "* Groonga::Schemaの型指定で\"ShortText\"など正式型名だけではなく、:short_textなどよりRubyらしい名前を使えるようにした。"
 
-#: ./doc/text/news.textile:411
+#: ./doc/text/news.textile:412
 msgid "h2. 1.1.0: 2011-02-09"
 msgstr ""
 
-#: ./doc/text/news.textile:415
+#: ./doc/text/news.textile:416
 msgid "* Supported groonga 1.1.0.\n* Added Groonga::Plugin.register."
 msgstr ""
 "* groonga 1.1.0対応。\n"
 "* Groonga::Plugin.registerを追加。"
 
-#: ./doc/text/news.textile:418
+#: ./doc/text/news.textile:419
 msgid "h2. 1.0.9: 2011-01-29"
 msgstr ""
 
-#: ./doc/text/news.textile:422
+#: ./doc/text/news.textile:423
 msgid "* Supported gem creation on Windows. [Patch by ongaeshi]\n* Supported generated directory that is created by Groonga::Schema removal\n  when table or column is removed.\n* Added Groonga::Context#create_database.\n* Added Groonga::Context#open_database.\n* Added Groonga::Column#indexes.\n* Supported a notation for specifying index column as match target in\n  Groonga::Table#select:\n    table.select do |record|\n      record.match(\"query\") do |match_record|\n        (match_record.index(\"Terms.title\") * 1000) |\n          (match_record.index(\"Terms.description\") * 100)\n          match_record.content\n      end\n    end\n* Supported prefix search in Groonga::Table#select:\n    table.select do |record|\n      record.name.prefix_search(\"groo\")\n    end\n* Supported suffix search in Groonga::Table#select:\n    table.select do |record|\n      record.name.suffix_search(\"nga\")\n    end\n* Supported :default_tokenizer schema dump.\n* Supported :key_normalize schema dump.\n* Supported pseudo columns by Groonga::Table#have_column?.\n* Supported pseudo columns by Groonga::Record#have_column?."
 msgstr ""
 "* Windows上でのgem作成に対応。 [ongaeshiさんがパッチ提供]\n"
@@ -651,63 +651,63 @@ msgstr ""
 "* Groonga::Table#have_column?が擬似カラムに対応。\n"
 "* Groonga::Record#have_column?が擬似カラムに対応。"
 
-#: ./doc/text/news.textile:452
+#: ./doc/text/news.textile:453
 msgid "* Renamed Groonga::Operatoion to Groonga::Operator.\n  (Groonga::Operation is deprecated but still usable.)"
 msgstr "* Groonga::OperatoionをGroonga::Operatorに変更。（しばらくはGroonga::Operationも使えるが、非推奨。）"
 
-#: ./doc/text/news.textile:457
+#: ./doc/text/news.textile:458
 msgid "* Fixed a crash bug when not default Groonga::Context is used in\n  Groonga::Table#select.\n* Fixed a crash bug when an exception is occurred."
 msgstr ""
 "* 複数のGroonga::Contextを利用した場合にGroonga::Table#selectでクラッシュする問題を修正。\n"
 "* 例外発生時にクラッシュする問題を修正。"
 
-#: ./doc/text/news.textile:463
+#: ./doc/text/news.textile:464
 msgid "* ongaeshi"
 msgstr "* ongaeshiさん"
 
-#: ./doc/text/news.textile:465
+#: ./doc/text/news.textile:466
 msgid "h2. 1.0.8: 2010-12-25"
 msgstr ""
 
-#: ./doc/text/news.textile:469
+#: ./doc/text/news.textile:470
 msgid "* Improved Groonga::Schema's n-gram tokenizer detect process."
 msgstr "* Groonga::Schemaのn-gramトークナイザー検出処理を改良。"
 
-#: ./doc/text/news.textile:473
+#: ./doc/text/news.textile:474
 msgid "* Fixed GC problem caused by match_target in select."
 msgstr "* selectでmatch_targetを利用した場合に生きているオブジェクトもGCされる問題を修正。<"
 
-#: ./doc/text/news.textile:475
+#: ./doc/text/news.textile:476
 msgid "h2. 1.0.7: 2010-12-19"
 msgstr ""
 
-#: ./doc/text/news.textile:479
+#: ./doc/text/news.textile:480
 msgid "* Supported pkg-config installed by RubyGems on Ruby 1.8. [Reported by @kamipo]\n* Fixed a memory leak in Groonga::Table#columns."
 msgstr ""
 "* Ruby 1.8でRubyGemsでインストールされたpkg-configを使えるようにした。 [@kamipoさんが報告]\n"
 "* Groonga::Table#columnsのメモリリークを修正。"
 
-#: ./doc/text/news.textile:484
+#: ./doc/text/news.textile:485
 msgid "* @kamipo"
 msgstr ""
 
-#: ./doc/text/news.textile:486
+#: ./doc/text/news.textile:487
 msgid "h2. 1.0.5: 2010-11-29"
 msgstr "* @kamipoさん"
 
-#: ./doc/text/news.textile:490
+#: ./doc/text/news.textile:491
 msgid "* Added snail_case type name aliases for built-in groonga types\n  to Groonga::Schema."
 msgstr "* Groonga::Schemaでgroongaの組み込み型をshort_textなどのように「小文字 + アンダースコア」でも指定できるようにした。"
 
-#: ./doc/text/news.textile:495
+#: ./doc/text/news.textile:496
 msgid "* Fixed a crash bug on GC. [Ryo Onodera]"
 msgstr "* GC時にクラッシュするバグを修正。 [Ryo Onodera]"
 
-#: ./doc/text/news.textile:497
+#: ./doc/text/news.textile:498
 msgid "h2. 1.0.4: 2010-11-29"
 msgstr ""
 
-#: ./doc/text/news.textile:501
+#: ./doc/text/news.textile:502
 msgid "* Supported groonga 1.0.4.\n  * Added Groonga::UnsupportedCommandVersion.\n* Added Groonga::Record#support_sub_records?.\n* Added Groonga::Record#eql?とGroonga::Record#hash.\n  (treat two the same table and the same record ID object as the same Hash key.)\n* Supported pkg-config gem.\n* Supported generic #record_id object handle for custom record object\n  in Groonga::Table#select.\n* Added Groonga::Record#record_id.\n* Added Groonga::Table#support_key?.\n* Added Groonga::Record#support_key?.\n* Added Groonga::Record#support_key?.\n* Added Groonga::Column#reference_key?.\n* Added Groonga::Column#index_column?.\n* Added Groonga::Schema#dump.\n* Supported multi columns index creation in Groonga::Schema.\n* Supported meaningful path in Groonga::Schema.\n* Made reference table omissible when index column definition\n  in Groonga::Schema.\n* Added Groonga::Schema.remove_column.\n* Added convenience timestamps methods to define \"created_at\" and\n  \"updated_at\" columns in Groonga::Schema.\n* Added Groonga::Context#support_zlib?.\n* Added Groonga::Context#support_lzo?.\n* Added Groonga::Database#touch.\n* Added Groonga::Table#exist?.\n* Added Groonga::Record#valid?.\n* Added Groonga::Column#vector?.\n* Added Groonga::Column#scalar?.\n* Added Groonga::Record#vector_column?.\n* Added Groonga::Record#scalar_column?.\n* Accepted any object that has record_raw_id method for record ID required\n  location. Groonga::Record isn't required.\n* Added Groonga::Record#record_raw_id.\n* Accepted any object that as to_ary method for reference vector column value."
 msgstr ""
 "* groonga 1.0.4対応。\n"
@@ -741,11 +741,11 @@ msgstr ""
 "* Groonga::Record#record_raw_idを追加。\n"
 "* ベクタの参照カラムの値にArray以外でもto_aryを持つオブジェクトを設定できるようにした。"
 
-#: ./doc/text/news.textile:537
+#: ./doc/text/news.textile:538
 msgid "h2. Changes"
 msgstr "h2. 変更"
 
-#: ./doc/text/news.textile:539
+#: ./doc/text/news.textile:540
 msgid "* Used :key as the default value of :order_by of\n  Groonga::PatriciaTrie#open_cursor.\n* Removed a deprecated Groonga::TableKeySupport#find.\n* Used ShortText as the default key type of\n  Groonga::Hash#create and Groonga::PatriciaTrie#create.\n* Renamed Groonga::Schema#load to Groonga::Schema#restore.\n* Supported pkg-confg 1.0.7.\n* Added Groonga::Column#index? and deprecated Groonga::Column#index_column?.\n* Added Groonga::Column#reference? and deprecated\n  Groonga::Column#reference_column?."
 msgstr ""
 "* Groonga::PatriciaTrie#open_cursorでは:order_byのデフォルト値として:keyを使うようにした。\n"
@@ -756,29 +756,29 @@ msgstr ""
 "* Groonga::Column#index?を追加。Groonga::Column#index_column?は非推奨。\n"
 "* Groonga::Column#reference?を追加。Groonga::Column#reference_column?は非推奨。"
 
-#: ./doc/text/news.textile:552
+#: ./doc/text/news.textile:553
 msgid "* Fixed index for key isn't be able to define.\n* Fixed a crash problem on GC."
 msgstr ""
 "* keyにインデックスを張れない問題を修正。\n"
 "* GC時にクラッシュする問題を修正。"
 
-#: ./doc/text/news.textile:555
+#: ./doc/text/news.textile:556
 msgid "h2. 1.0.1: 2010-09-12"
 msgstr ""
 
-#: ./doc/text/news.textile:559
+#: ./doc/text/news.textile:560
 msgid "* Fixed wrong flag used on creating a table. [Reported by ono matope]"
 msgstr "* テーブル作成時に誤ったフラグを指定していた問題を修正。 [小野マトペさんが報告]"
 
-#: ./doc/text/news.textile:563
+#: ./doc/text/news.textile:564
 msgid "* ono matope"
 msgstr "* 小野マトペさん"
 
-#: ./doc/text/news.textile:565
+#: ./doc/text/news.textile:566
 msgid "h2. 1.0.0: 2010-08-29"
 msgstr ""
 
-#: ./doc/text/news.textile:567
+#: ./doc/text/news.textile:568
 msgid "* Supported groonga 1.0.0.\n  * Added Groonga::CASError.\n  * Added :order_by option to Groonga::Table#open_cursor.\n  * Added Groonga::PatriciaTrie#open_prefix_cursor that creates a cursor\n    to retrieve each records by prefix search.\n  * Added Groonga::PatriciaTrie#open_rk_cursor that creats a cursor to\n    retrieve katakana keys from roman letters and/or hiragana.\n  * Added Groonga::PatriciaTrie#open_near_cursor that creates a cursor to\n    retrieve records order by distance from key.\n* Supported _key as index source."
 msgstr ""
 "* groonga 1.0.0対応。\n"
@@ -789,18 +789,18 @@ msgstr ""
 "* 値の近い順にレコードを取り出すカーソルを作るGroonga::PatriciaTrie#open_near_cursorを追加。\n"
 "* インデックスのソースに_keyを指定できるようになった。"
 
-#: ./doc/text/news.textile:578
+#: ./doc/text/news.textile:579
 msgid "h2. 0.9.5: 2010-07-20"
 msgstr ""
 
-#: ./doc/text/news.textile:580
+#: ./doc/text/news.textile:581
 msgid "* Supported groonga 0.7.4.\n* Imporoved Groonga::Table#select:\n  * Supported weight match:"
 msgstr ""
 "* groonga 0.7.4対応。\n"
 "* Groonga::Table#selectを改良:\n"
 "* 重み付きマッチに対応:"
 
-#: ./doc/text/news.textile:584
+#: ./doc/text/news.textile:585
 msgid "    Here is an example to match source column or title column and\n    title column has high score:\n      table.select do |record|\n        (record.title * 10 | record.source) =~ \"query\"\n      end\n  * Supported and representation for and conditions:"
 msgstr ""
 "    Here is an example to match source column or title column and\n"
@@ -810,7 +810,7 @@ msgstr ""
 "      end\n"
 "* 配列で複数条件のand表現に対応:"
 
-#: ./doc/text/news.textile:591
+#: ./doc/text/news.textile:592
 msgid "    Here are examples that represents the same condition:\n      table.select do |record|\n        conditions = []\n        conditions << record.title =~ \"query\"\n        conditions << record.updated_at > Time.parse(\"2010-07-29T21:14:29+09:00\")\n        conditions\n      end"
 msgstr ""
 "    Here are examples that represents the same condition:\n"
@@ -821,7 +821,7 @@ msgstr ""
 "        conditions\n"
 "      end"
 
-#: ./doc/text/news.textile:599
+#: ./doc/text/news.textile:600
 msgid "      table.select do |record|\n        (record.title =~ \"query\") &\n          (record.updated_at > Time.parse(\"2010-07-29T21:14:29+09:00\"))\n      end\n* Provided groonga runtime version: Groonga::VERSION\n* Added Groonga::Table#support_sub_records?\n* Supported pagination: Groonga::Table#paginate, Groonga::Pagination"
 msgstr ""
 "      table.select do |record|\n"
@@ -832,41 +832,41 @@ msgstr ""
 "* Groonga::Table#support_sub_records?追加\n"
 "* ページネーション対応: Groonga::Table#paginate, Groonga::Pagination"
 
-#: ./doc/text/news.textile:607
+#: ./doc/text/news.textile:608
 msgid "h2. 0.9.4: 2010-04-22"
 msgstr ""
 
-#: ./doc/text/news.textile:609 ./doc/text/news.textile:613
+#: ./doc/text/news.textile:610 ./doc/text/news.textile:614
 msgid "* Fixed release miss."
 msgstr "* リリースミス修正。"
 
-#: ./doc/text/news.textile:611
+#: ./doc/text/news.textile:612
 msgid "h2. 0.9.3: 2010-04-22"
 msgstr ""
 
-#: ./doc/text/news.textile:615
+#: ./doc/text/news.textile:616
 msgid "h2. 0.9.2: 2010-04-22"
 msgstr ""
 
-#: ./doc/text/news.textile:617
+#: ./doc/text/news.textile:618
 msgid "* Supported groonga 0.1.9.\n* Many."
 msgstr ""
 "* groonga 0.1.9対応。\n"
 "* たくさん。"
 
-#: ./doc/text/news.textile:620
+#: ./doc/text/news.textile:621
 msgid "h2. 0.9.1: 2010-02-09"
 msgstr ""
 
-#: ./doc/text/news.textile:622
+#: ./doc/text/news.textile:623
 msgid "* Supported groonga 0.1.6"
 msgstr ""
 
-#: ./doc/text/news.textile:624
+#: ./doc/text/news.textile:625
 msgid "h2. 0.9.0: 2010-02-09"
 msgstr "* groonga 0.1.6対応"
 
-#: ./doc/text/news.textile:626
+#: ./doc/text/news.textile:627
 msgid "* Supported groonga 0.1.5\n* Added API\n  * Groonga::Object#context\n  * Groonga::Record#n_sub_records\n  * Groonga::Context#send\n  * Groonga::Context#receive\n  * Groonga::PatriciaTrie#prefix_search [Tasuku SUENAGA]\n  * Groonga::Object#path [Ryo Onodera]\n  * Groonga::Object#lock [Tasuku SUENAGA]\n  * Groonga::Object#unlock [Tasuku SUENAGA]\n  * Groonga::Object#locked? [Tasuku SUENAGA]\n  * Groonga::Object#temporary?\n  * Groonga::Object#persistent?\n  * Groonga::ObjectClosed\n  * Groonga::Context.[]\n  * Groonga::Table#column_value\n  * Groonga::Table#set_column_value\n* Changed API\n  * Groonga::Table#select, Groonga::Column#select\n    * They also accept Groonga::Expression\n    * Added :syntax option that specifies grn expression syntax\n  * Groonga::Table#open_cursor\n    * Added :offset option that specifies offset.\n    * Added :limit option that specifies max number of records.\n  * Changed Groonga::Expression.parse options:\n    * (nil (default) -> :column) -> (nil (default) -> :query)\n    * :column -> removed\n    * :table -> :query\n    * :table_query -> :query\n    * :expression -> :script\n    * :language -> :script\n  * Groonga::Table#define_column, Groonga::Table#define_index_column\n    * Defined column becomes persistent table by default\n  * Groonga::Table#[] -> Groonga::Table#value\n  * Groonga::Table#[]= -> Groonga::Table#set_value\n  * Groonga::Table#find -> Groonga::Table#[]\n  * Groonga::Table#find -> obsolete\n  * Groonga::Table#[]= -> removed\n  * Groonga::TableKeySupport#[]= is alias of Groonga::TableKeySupport#add\n  * Changed exception class to Groonga::NoSuchColumn from\n    Groonga::InvalidArgument when Groonga::Record accesses nonexistent\n    a column.\n* Bug fixes\n  * Fixed a bug that context isn't passed to schema [dara]\n  * Fixed a bug that Groonga::PatriciaTrie#tag_keys doesn't return\n    that last text. [Ryo Onodera]\n* Added --with-debug option to extconf.rb for debug build.\n* Fixed a bug that Ruby 1.9.1 may fail extconf.rb."
 msgstr ""
 "* groonga 0.1.5対応\n"
@@ -915,18 +915,18 @@ msgstr ""
 "* extconf.rbにデバッグモードでビルドする--with-debugオプションを追加\n"
 "* Ruby 1.9.1でextconf.rbが失敗する問題の修正"
 
-#: ./doc/text/news.textile:677
+#: ./doc/text/news.textile:678
 msgid "* dara\n* Ryo Onodera\n* Tasuku SUENAGA"
 msgstr ""
 "* daraさん\n"
 "* Ryo Onoderaさん\n"
 "* Tasuku SUENAGAさん"
 
-#: ./doc/text/news.textile:681
+#: ./doc/text/news.textile:682
 msgid "h2. 0.0.7: 2009-10-02"
 msgstr ""
 
-#: ./doc/text/news.textile:683
+#: ./doc/text/news.textile:684
 msgid "* Supported groonga 0.1.4\n* Added API\n  * Groonga::PatriciaTrie#scan\n  * Groonga::PatriciaTrie#tag_keys\n  * Groonga::Expression#snippet\n  * Groonga::Object#append\n  * Groonga::Object#prepend"
 msgstr ""
 "* groonga 0.1.4対応\n"
@@ -937,11 +937,11 @@ msgstr ""
 "  * Groonga::Object#append\n"
 "  * Groonga::Object#prepend"
 
-#: ./doc/text/news.textile:691
+#: ./doc/text/news.textile:692
 msgid "h2. 0.0.6: 2009-07-31"
 msgstr ""
 
-#: ./doc/text/news.textile:693
+#: ./doc/text/news.textile:694
 msgid "* Supported groonga 0.1.1.\n* Fixed documents [id:mat_aki]\n* Supported groonga expression for searching.\n* Added API\n  * Groonga::Table#union!\n  * Groonga::Table#intersect!\n  * Groonga::Table#differene!\n  * Groonga::Table#merge!\n* Provided tar.gz [id:m_seki]\n* Fixed memory leaks"
 msgstr ""
 "* groonga 0.1.1対応\n"
@@ -955,11 +955,11 @@ msgstr ""
 "  * tar.gzも提供 [id:m_seki]\n"
 "* メモリリークの修正"
 
-#: ./doc/text/news.textile:704
+#: ./doc/text/news.textile:705
 msgid "h2. 0.0.3: 2009-07-18"
 msgstr ""
 
-#: ./doc/text/news.textile:706
+#: ./doc/text/news.textile:707
 msgid "* Added Groonga::TableKeySupport#has_key? [#26145] [Tasuku SUENAGA]\n* Groonga::Record#[] raises an exception for nonexistent\n  column name. [#26146] [Tasuku SUENAGA]\n* Supported 32bit environment [niku]\n* Added a test for N-gram index search [dara]\n* Added APIs\n  * Groonga::Record#incemrent!\n  * Groonga::Record#decemrent!\n  * Groonga::Record#lock\n  * Groonga::Table#lock\n  * Groonga::Schema: A DSL for schema definition\n  * Groonga::Expression"
 msgstr ""
 "* Groonga::TableKeySupport#has_key?の追加 [#26145] [Tasuku SUENAGA]\n"
@@ -974,11 +974,11 @@ msgstr ""
 "  * Groonga::Schema: スキーマ定義用DSL\n"
 "  * Groonga::Expression"
 
-#: ./doc/text/news.textile:719
+#: ./doc/text/news.textile:720
 msgid "h2. 0.0.2: 2009-06-04"
 msgstr ""
 
-#: ./doc/text/news.textile:721
+#: ./doc/text/news.textile:722
 msgid "* Supported groonga 0.0.8 [mori]\n* Improved preformance: cache key, value, domain and range\n* Improved API\n* Added documents\n* Supported Ruby 1.9\n* Bug fixes:\n  * Fixed install process [Tasuku SUENAGA]\n  * Fixed memory leaks"
 msgstr ""
 "* groonga 0.0.8対応 [mori]\n"
@@ -990,11 +990,11 @@ msgstr ""
 "* Fixed install process [Tasuku SUENAGA]\n"
 "* メモリリークの修正"
 
-#: ./doc/text/news.textile:730
+#: ./doc/text/news.textile:731
 msgid "h2. 0.0.1: 2009-04-30"
 msgstr ""
 
-#: ./doc/text/news.textile:732
+#: ./doc/text/news.textile:733
 msgid "* Initial release!"
 msgstr "* 最初のリリース！"
 
