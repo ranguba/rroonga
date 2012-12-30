@@ -123,6 +123,9 @@ rb_grn_table_mark (void *data)
     if (!context || !table)
 	return;
 
+    rb_grn_context_mark_grn_id(context, table->header.domain);
+    rb_grn_context_mark_grn_id(context, grn_obj_get_range(context, table));
+
     if (!grn_obj_path(context, table))
 	return;
 

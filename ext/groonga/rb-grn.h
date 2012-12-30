@@ -309,6 +309,8 @@ void           rb_grn_context_unregister_floating_object
                                                     (RbGrnObject *rb_grn_object);
 void           rb_grn_context_close_floating_objects(RbGrnContext *rb_grn_context);
 void           rb_grn_context_reset_floating_objects(RbGrnContext *rb_grn_context);
+void           rb_grn_context_mark_grn_id           (grn_ctx *context,
+						     grn_id   id);
 grn_ctx       *rb_grn_context_ensure                (VALUE *context);
 VALUE          rb_grn_context_get_default           (void);
 VALUE          rb_grn_context_to_exception          (grn_ctx *context,

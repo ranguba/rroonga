@@ -136,6 +136,28 @@ rb_grn_context_reset_floating_objects (RbGrnContext *rb_grn_context)
 						       GRN_OBJ_TABLE_HASH_KEY);
 }
 
+void
+rb_grn_context_mark_grn_id (grn_ctx *context, grn_id id)
+{
+    grn_obj *object;
+    grn_user_data *user_data;
+    RbGrnObject *rb_grn_object;
+
+    object = grn_ctx_at(context, id);
+    if (!object)
+	return;
+
+    user_data = grn_obj_user_data(context, object);
+    if (!user_data)
+	return;
+
+    rb_grn_object = RB_GRN_OBJECT(user_data->ptr);
+    if (!rb_grn_object)
+	return;
+
+    rb_gc_mark(rb_grn_object->self);
+}
+
 static void
 rb_grn_context_unlink_database (grn_ctx *context)
 {

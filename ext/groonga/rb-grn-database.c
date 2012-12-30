@@ -62,20 +62,7 @@ rb_grn_database_mark_existing_ruby_object (grn_ctx *context, grn_obj *database)
 	return;
 
     while ((id = grn_table_cursor_next(context, cursor)) != GRN_ID_NIL) {
-	grn_obj *object;
-	grn_user_data *user_data;
-	RbGrnObject *rb_grn_object;
-
-	object = grn_ctx_at(context, id);
-	if (!object)
-	    continue;
-	user_data = grn_obj_user_data(context, object);
-	if (!user_data)
-	    continue;
-	rb_grn_object = RB_GRN_OBJECT(user_data->ptr);
-	if (!rb_grn_object)
-	    continue;
-	rb_gc_mark(rb_grn_object->self);
+	rb_grn_context_mark_grn_id(context, id);
     }
     grn_table_cursor_close(context, cursor);
 }
