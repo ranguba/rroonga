@@ -1,5 +1,11 @@
 h1. NEWS
 
+h2(#2-1-2). 2.1.2: 2013-01-04
+
+h3. Fixes
+
+* Fixed GC related crash. Table's domain and range are also marked.
+
 h2(#2-1-1). 2.1.1: 2012-12-29
 
 h3. Improvements
