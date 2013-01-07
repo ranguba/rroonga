@@ -147,6 +147,7 @@ def configure_command_line(prefix)
   debug_flags = ["CFLAGS=-ggdb3 -O0", "CXXFLAGS=-ggdb3 -O0"]
   command_line.concat(debug_flags) if debug_build_p
   command_line << "--prefix=#{prefix}"
+  command_line << "--disable-static"
   escaped_command_line = command_line.collect do |command|
     Shellwords.escape(command)
   end
