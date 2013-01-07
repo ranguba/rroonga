@@ -148,6 +148,7 @@ def configure_command_line(prefix)
   command_line.concat(debug_flags) if debug_build_p
   command_line << "--prefix=#{prefix}"
   command_line << "--disable-static"
+  command_line << "--disable-document"
   escaped_command_line = command_line.collect do |command|
     Shellwords.escape(command)
   end
