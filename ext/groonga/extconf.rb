@@ -135,6 +135,10 @@ def extract_groonga_win32_binary(major, minor, micro)
   message("install...")
   FileUtils.mv(File.basename(zip, ".zip"), install_dir)
   message(" done\n")
+
+  message("removing binary archive...")
+  FileUtils.rm_rf(zip)
+  message(" done\n")
 end
 
 def configure_command_line(prefix)
@@ -190,6 +194,14 @@ def build_groonga(major, minor, micro)
       exit(false)
     end
   end
+
+  message("removing source...")
+  FileUtils.rm_rf(groonga_source_dir)
+  message(" done\n")
+
+  message("removing source archive...")
+  FileUtils.rm_rf(tar_gz)
+  message(" done\n")
 end
 
 unless PKGConfig.have_package(package_name, major, minor, micro)
