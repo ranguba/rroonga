@@ -1,22 +1,20 @@
-h1. チュートリアル
+h1. Tutorial
 
-このページでは簡単なアプリケーションの作成を通して
-rroongaの操作方法を紹介します。
+This page introduce how to use rroonga via a simple application making.
 
-h2. インストール
+h2. Install
 
-rroongaはRubyGemsでインストールできます。
+You can install rroonga in your compter with RubyGems.
 
 <pre>
 !!!command_line
 % sudo gem install rroonga
 </pre>
 
-h2. データベースの作成
+h2. Create Database
 
-簡単なブックマークアプリケーション用のデータベースを作ってみ
-ます。以下のようにgroongaライブラリを読み込んでirbを起動しま
-す。
+Let's create database for simple bookmark application.
+Please execute irb with loading rroonga with this command:
 
 <pre>
 !!!irb
@@ -24,7 +22,7 @@ h2. データベースの作成
 >>
 </pre>
 
-まず、エンコーディングを設定します。ここではUTF-8を利用します。
+Now we use UTF-8 as the encoding of database.
 
 <pre>
 !!!irb
@@ -34,7 +32,7 @@ h2. データベースの作成
 => {:encoding=>:utf8}
 </pre>
 
-それでは、ファイルを指定してデータベースを作成します。
+Then, try to create database in a file.
 
 <pre>
 !!!irb
@@ -42,40 +40,38 @@ h2. データベースの作成
 => #<Groonga::Database ...>
 </pre>
 
-ここで作成したデータベースは、これ以降、暗黙のうちに利用され
-ます。最初にデータベースを作成したら特に意識する必要はありま
-せん。
+From now, the created database is used implicitly.
+You don't have to be aware of it after you created a database first.
 
-h2. テーブルの定義
+h2. Define table
 
-groongaには以下の3種類のテーブルがあります。
+Groonga supports 4 types of tables.
 
 - Groonga::Hash :=
-  ハッシュテーブル。主キーでレコードを管理します。キーと完全
-  一致するレコードを非常に高速に検索することができます。
+  Hash table. It manages records via each primary key. It supports
+  very quickly exact match search.
   =:
 
 - Groonga::PatriciaTrie :=
-  パトリシアトライ。ハッシュテーブルに比べて完全一致検索の速
-  度がやや遅いですが、前方一致検索・共通接頭辞探索などの検索
-  が行えます。またカーソルを用いてキーの昇降順にレコードを取
-  り出すことができます。
+  Patricia Trie. It supports some search such as predictive search and
+  common prefix search, but it provides a little slowly exact match search
+  than Groonga::Hash. It provides cursor to take records in ascending
+  or descending order.
   =:
 
 - Groonga::DoubleArrayTrie :=
-  ダブル配列トライ。他のテーブルに比べてサイズが大きくなるものの、IDを
-  変更せずにキーを変更できます。パトリシアトライと同様に完全一致検索・
-  前方一致検索・共通接頭辞探索などの検索が行え、またカーソルを用いるこ
-  とができます。
+  Double Array Trie. It requires large spaces rather than other
+  tables, but it can update key without ID change. It provides exract
+  match search, predictive search and common prefix search and cursor
+  like Groonga::PatriciaTrie.
   =:
 
 - Groonga::Array :=
-  配列。主キーの存在しないテーブルです。レコードはIDによって
-  識別します。
+  Array. It doesn't have primary keys. It manages records by ID.
   =:
 
-ここではハッシュテーブルを利用して、 @Items@ という名前のテー
-ブルを作成します。キーは文字列とします。
+Now, we use Groonga::Hash and create the table named @Items@. The type
+of its primary key is String.
 
 <pre>
 !!!irb
@@ -83,9 +79,8 @@ groongaには以下の3種類のテーブルがあります。
 => [...]
 </pre>
 
-これで @Items@ という名前のテーブルが作成できました。
-
-定義したテーブルはGroonga.[]で参照できます。
+We have @Items@ table by this code.
+We can refer the defined table with Groonga.[] like below:
 
 <pre>
 !!!irb
@@ -93,10 +88,9 @@ groongaには以下の3種類のテーブルがあります。
 => #<Groonga::Hash ...>
 </pre>
 
-テーブルはRubyのHashのように扱えます。
-
-例えば、以下のように @size@ でテーブルに登録されているレコード
-の件数を取得できます。
+We can treat it like Hash.
+For example, let's type @items.size@ to get the number of records in
+the table.
 
 <pre>
 !!!irb
@@ -104,9 +98,9 @@ groongaには以下の3種類のテーブルがあります。
 => 0
 </pre>
 
-h2. レコードを追加する
+h2. Add records
 
-@Items@ テーブルにレコードを追加します。
+Let's add records to @Items@ table.
 
 <pre>
 !!!irb
@@ -116,7 +110,7 @@ h2. レコードを追加する
 => #<Groonga::Record ...>
 </pre>
 
-件数を確認すると確かに2件増えています。
+Please check the number of records. It increases from 0 to 2.
 
 <pre>
 !!!irb
@@ -124,7 +118,7 @@ h2. レコードを追加する
 => 2
 </pre>
 
-主キーを指定してレコードを取り出す時には以下のようにします。
+If we can get record by primary key, type like below:
 
 <pre>
 !!!irb
@@ -132,14 +126,11 @@ h2. レコードを追加する
 => #<Groonga::Record ...>
 </pre>
 
-h2. 全文検索を行う
+h2. Full text search
 
-各itemのタイトル文字列を登録して、全文検索できるようにしてみ
-ましょう。
+Let's add item's title to full text search.
 
-まず @Items@ テーブルに @title@ という名前のカラムを追加し
-ます。ここでは、 @Text@ 型のデータを持つカラムとして定義
-します。
+first, we add the @Text@ type column "@title@" to @Items@ table.
 
 <pre>
 !!!irb
@@ -149,8 +140,8 @@ h2. 全文検索を行う
 => [...]
 </pre>
 
-定義したカラムは @#{テーブル名}.#{カラム名}@ という名前になります。
-テーブルと同じように {Groonga.[]} で参照できます。
+Defined columns is named as @#{TABLE_NAME}.#{COLUMN_NAME}@.
+We can refer them with {Groonga.[]} as same as tables.
 
 <pre>
 !!!irb
@@ -158,35 +149,33 @@ h2. 全文検索を行う
 => #<Groonga::VariableSizeColumn ...>
 </pre>
 
-全文検索するために、文字列を分解して得られる各単語を格納する
-ためのテーブルを別途用意します。ここではTermsという名前でテー
-ブルを定義します。
+
+Secondly, let's add the table containing terms from splited from texts.
+Then we define the @Terms@ for it.
 
 <pre>
 !!!irb
 >> Groonga::Schema.create_table("Terms",
 ?>                              :type => :patricia_trie,
-?>                              :key_normalize => true,
+?>                              :normalizer => NormalizerAuto,
 ?>                              :default_tokenizer => "TokenBigram")
 </pre>
 
-ここでは、トークナイザとして<tt>:default_tokenzier =>
-"TokenBigram"</tt> を指定しています。トークナイザとは文字列を
-単語に分解するオブジェクトのことです。デフォルトではトークナ
-イザは指定されていません。全文検索を利用するためにはトークナ
-イザを指定する必要があるので、ここではN-gramの一種であるバイ
-グラムを指定しています。
+We specify @:default_tokenzier => "TokenBigram"@ for "Tokenizer" in
+the above code.
+"Tokenizer" is the object to split terms from texts. The default value
+for it is none.
+Full text search requires a tokenizer, so we specify "Bigram", a type
+of N-gram.
+Full text search with N-gram uses splited N characters and their
+position in texts. "N" in N-gram specifies the number of each terms.
+Groonga supports Unigram (N=1), Bigram (N=2) and Trigram (N=3).
 
-N-gramを利用した全文検索では、分解したN文字とその出現位置を利
-用して全文検索を行います。N-gramのNは文字列を何文字毎に分解す
-るかの文字数になります。groongaは1文字で分解するユニグラム、
-2文字のバイグラム、3文字のトリグラムをサポートしています。
+We also specify @:normalizer => NormalizerAuto@ to search texts with
+ignoring the case.
 
-また、大文字小文字の区別なく検索するために
-@:key_normalize => true@ も指定しています。
-
-単語格納用テーブルの準備ができたので、 @Items@ テーブ
-ルの @title@ カラムに対するインデックスを定義します。
+Now, we ready table for terms, so we define the index of
+@Items.tiltle@ column.
 
 <pre>
 !!!irb
@@ -196,23 +185,19 @@ N-gramを利用した全文検索では、分解したN文字とその出現位�
 => [...]
 </pre>
 
-少し違和感を感じるかも知れませんが、 @Items@ テーブル
-のカラムに対するインデックスは、 @Terms@ テーブルのカ
-ラムとして定義します。
+You may feel a few unreasonable code. The index of @Items@ table's
+column is defined as the column in @Terms@.
 
-@Items@ にレコードが登録されると、その中に含まれる単
-語に該当するレコードが @Terms@ に自動的に追加されるよ
-うになります。
+When a record is added to @Items@, groonga adds records associated
+each terms in it to @Terms@ automatically.
 
-@Terms@ は、文書に含まれる語彙に相当する、やや特殊な
-テーブルだと言えます。しかし、他のテーブルと同様に語彙テーブ
-ルには自由にカラムを追加し、単語毎の様々な属性を管理すること
-ができます。これはある種の検索処理を行う際には非常に便利に機
-能します。
 
-これでテーブルの定義は完了です。
+@Terms@ is a few particular table, but we can add some columns to term
+table such as @Terms@ and manage many attributes of each terms. It is
+very useful to process particular search.
 
-先ほど登録した各レコードの @title@ カラムに値をセットします。
+Now, we finished table definition.
+Let's put some values to @title@ of each record we added before.
 
 <pre>
 !!!irb
@@ -222,7 +207,7 @@ N-gramを利用した全文検索では、分解したN文字とその出現位�
 "オブジェクトスクリプト言語Ruby"
 </pre>
 
-以下のようにして検索することができます。
+Now, we can do full text search like above:
 
 <pre>
 !!!irb
@@ -230,8 +215,8 @@ N-gramを利用した全文検索では、分解したN文字とその出現位�
 => #<Groonga::Hash ..., size: <2>>
 </pre>
 
-検索結果はGroonga::Hashで返されます。ハッシュのキーに見つかっ
-た @Items@ のレコードが入っています。
+Groonga returns the search result as Groonga::Hash.
+Keys in this hash table is records of hitted @Items@.
 
 <pre>
 !!!irb
@@ -239,12 +224,10 @@ N-gramを利用した全文検索では、分解したN文字とその出現位�
 => ["http://ja.wikipedia.org/wiki/Ruby", "http://www.ruby-lang.org/ja/"]
 </pre>
 
-上の例では @record.key@ で @Items@ のレコードを取得して、
-さらにそのキーを指定して（ @record.key.key@ ）で @Items@ 
-のキーを返しています。
+In above example, we get records in @Items@ with @record.key@, and
+keys of them with @record.key.key@.
 
-@record["_key"]@ でアクセスすると自動的に参照しているレコード
-を辿っていき、参照先のキーにアクセスできます。
+We can access a refered key in records briefly with @record["_key"]@.
 
 <pre>
 !!!irb
@@ -252,18 +235,17 @@ N-gramを利用した全文検索では、分解したN文字とその出現位�
 => ["http://ja.wikipedia.org/wiki/Ruby", "http://www.ruby-lang.org/ja/"]
 </pre>
 
-h2. マルチユーザ向けのブックマークアプリケーション
+h2. Improve the simple bookmark application
 
-ここまでで作った単機能のアプリケーションをもう少し拡張して、
-複数のユーザが、それぞれにコメントを記入できるブックマークア
-プリケーションにしてみましょう。
+Let's try to improve this simple application a little. We can create
+bookmark application for multi users and they can comment to each
+bookmarks.
 
-まず、ユーザ情報とコメント情報を格納するテーブルを追加して、
-下図のようなテーブル構成にします。
+First, we add tables for users and for comments like below:
 
 !http://qwik.jp/senna/senna2.files/rect4605.png!
 
-まず、 @Users@ テーブルを追加します。
+Let's add the table for users, @Users@.
 
 <pre>
 !!!irb
@@ -273,7 +255,8 @@ h2. マルチユーザ向けのブックマークアプリケーション
 => [...]
 </pre>
 
-次に、 @Comments@ テーブルを追加します。
+
+Next, let's add the table for comments as @Comments@.
 
 <pre>
 !!!irb
@@ -286,8 +269,8 @@ h2. マルチユーザ向けのブックマークアプリケーション
 => [...]
 </pre>
 
-@Comments@ テーブルの @content@ カラムを全文検索できる
-ようにインデックスを定義します。
+Then we define the index of @content@ column in @Comments@ for full
+text search.
 
 <pre>
 !!!irb
@@ -297,9 +280,9 @@ h2. マルチユーザ向けのブックマークアプリケーション
 => [...]
 </pre>
 
-これでテーブルが定義できました。
+We finish table definition by above code.
 
-続いてユーザを何人か追加します。
+Secondly, we add some users to @Users@.
 
 <pre>
 !!!irb
@@ -311,14 +294,11 @@ h2. マルチユーザ向けのブックマークアプリケーション
 => #<Groonga::Record ...>
 </pre>
 
-次に、実際にユーザがブックマークを貼る時の処理を実行してみま
-しょう。
+Now, let's write the process to bookmark by a user.
+We assume that the user, @moritan@, bookmark a page including
+infomation related Ruby.
 
-ユーザ @moritan@ が、Ruby関連のとあるページをブックマークしたと
-想定します。
-
-まず対象のページが @Items@ テーブルに登録済かどうか調
-べます。
+First, we check if the page has been added @Items@ already.
 
 <pre>
 !!!irb
@@ -326,7 +306,7 @@ h2. マルチユーザ向けのブックマークアプリケーション
 => false
 </pre>
 
-未登録なのでまず当該ページを @Items@ に登録します。
+The page hasn't been added, so we add it to @Items@.
 
 <pre>
 !!!irb
@@ -335,8 +315,8 @@ h2. マルチユーザ向けのブックマークアプリケーション
 => #<Groonga::Record ...>
 </pre>
 
-次に、登録したitemを @item@ カラムの値に指定して
-@Comments@ にレコードを登録します。
+Next, we add the record to @Comments@. This record contains this page
+as its @item@ column.
 
 <pre>
 !!!irb
@@ -351,9 +331,9 @@ h2. マルチユーザ向けのブックマークアプリケーション
 => #<Groonga::Record ...>
 </pre>
 
-h2. メソッド化
+h2. Define methods for this process
 
-上記の一連の手続きをメソッドにまとめてみます。
+For usefull, we define methods for above processes.
 
 <pre>
 !!!irb
@@ -371,17 +351,16 @@ h2. メソッド化
 => nil
 </pre>
 
-@items@ と @comments@ をインスタンス変数に代入しているのはメ
-ソッド内からでも見えるようにするためです。
+We assigns @items@ and @comments@ to each instance variable, so we can
+use them in @add_bookmark@ method.
 
-@add_bookmark@ は以下のような手順を実行しています。
+@add_bookmark@ executes processes like below:
 
-*  @Items@ テーブルに該当ページのレコードがあるかどうか調べる。
-* レコードがなければ追加する。
-*  @Comments@ テーブルにレコードを登録する。
+* Check if the record associated the page exists in @Items@ table.
+* If not, add the record to it.
+* Add the record to @Comments@ table.
 
-作成したメソッドを呼び出していくつかブックマークを登録してみ
-ましょう。
+With this method, lets bookmark some pages.
 
 <pre>
 !!!irb
@@ -400,9 +379,9 @@ h2. メソッド化
 => #<Groonga::Record ...>
 </pre>
 
-h2. 全文検索その2
+h2. Full text search part 2
 
-登録したレコードに対して全文検索を実行してみます。
+Let's do full text search for added records.
 
 <pre>
 !!!irb
@@ -424,15 +403,13 @@ h2. 全文検索その2
 [4, Wed Jul 28 20:46:23 +0900 2010, "Matzにっき", "タポロボ", "Ruby 日記"]
 </pre>
 
-カラム名と同じメソッドでカラムへのアクセスできます。複合デー
-タ型の要素も再帰的に辿ることができます。（同様の出力を普通の
-RDBで実現するためには、 @Items@ テーブル、
-@Comments@ テーブル、 @Users@ テーブルのJOIN操作が
-必要になります。）
+We can access the columns with the same name method as each them.
+These methods suport to access the complex data type.
+(In usually RDB, you should namage JOIN tables, @Items@, @Comments@,
+@Users@.)
 
-上の式の中で、肝心の検索処理は、第一引数の式を評価する時点で
-完了していて、レコードセットオブジェクトとしてメモリに蓄積さ
-れています。
+The search is finished when the first sentence in this codes. The
+results of this search is the object as records set.
 
 <pre>
 !!!irb
@@ -440,9 +417,8 @@ RDBで実現するためには、 @Items@ テーブル、
 #<Groonga::Hash ..., size: <4>>
 </pre>
 
-レコードセットは、出力する前に様々に加工することができます。
-
-以下は、日付で降順にソートしてから出力した例です。
+You can arrange this records set before output.
+For example, sort these records in the descending order by date.
 
 <pre>
 !!!irb
@@ -461,8 +437,7 @@ RDBで実現するためには、 @Items@ テーブル、
 => [...]
 </pre>
 
-同じitemが何度も出てくると検索結果が見にくいので、item毎にグ
-ループ化してみます。
+Let's group the result by each item for easy view.
 
 <pre>
 !!!irb
@@ -478,36 +453,31 @@ RDBで実現するためには、 @Items@ テーブル、
 => nil
 </pre>
 
-@n_sub_records@ というのはグループ化した単位に含まれるレコード
-の件数を示します。SQLで言えば、GROUP BY句を含むクエリのcount
-関数のような働きです。
+@n_sub_records@ is the number of records in each group.
+It is similar value as count() function of a query including "GROUP
+BY" in SQL.
 
-h2. 少し複雑な検索
+h2. more complex search
 
-さらに実用的な検索について考えてみましょう。
+Now, we challenge the more useful search.
 
-ブックマークが大量に蓄積されるに従って、より的確に適合度を算
-出する必要性に迫られます。
+We should calcurate goodness of fit of search explicitly.
 
-今のところ検索対象として利用できるのは @Items.title@ 
-と @Comments.content@ ですが、 @Items.title@ は
-元ページから得られるやや信頼できる情報なのに対して、
-@Comments.content@ はブックマークユーザが任意に設定で
-きる情報で、やや信憑性に乏しいと言えます。しかし、再現率を確
-保するためにはユーザのコメントも是非対象に含めたいところです。
+We can use @Items.title@ and @Comments.content@ as search targets now.
+@Items.title@ is the a few reliable information taken from each
+original pages. On the other hands, @Comments.content@ is the less
+reliable information because this depends on users of bookmark
+application.
 
-そこで、以下のようなポリシーで検索を行うことにします。
+Then, we search records with this policy:
 
-*  @Items.title@ か @Comments.content@ のいずれ
-  かにマッチするitemを検索する。
-* ただし、 @Items.title@ にマッチしたレコードはスコア
-  を10倍重み付けする。
-* 同一のitemに対して、キーワードにマッチする @comment@ 
-  が複数存在した場合は、それぞれの @comment@ のスコアの
-  和を、該当するitemのスコアとする。
+* Search item matched @Items.title@ or @Comments.content@.
+* Add 10 times heavier weight to socres of each record matched
+  @Items.title@ than ones of @Comments.comment@.
+* If multi @comment@ of one item are matched keyword, specify the sum
+  of scores of each @coments@ as score of the item.
 
-以下のようにして、commentとitemとそれぞれに対する検索結果を求
-めます。
+On this polcy, we try to type below:
 
 <pre>
 !!!irb
@@ -522,8 +492,8 @@ h2. 少し複雑な検索
 #<Groonga::Hash ..., size: <4>>
 </pre>
 
-_ruby_comments_の結果をitem毎にグループ化し、_ruby_items_と
-unionして出力します。
+We group the results of _ruby_comments_ in each item and union
+_ruby_items_ .
 
 <pre>
 !!!irb
@@ -539,4 +509,4 @@ unionして出力します。
 [2, "Matzにっき"]
 </pre>
 
-これで目的の結果が得られました。
+Then, we get the result.
