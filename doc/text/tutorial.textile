@@ -477,7 +477,7 @@ Then, we search records with this policy:
 * If multi @comment@ of one item are matched keyword, specify the sum
   of scores of each @coments@ as score of the item.
 
-On this polcy, we try to type below:
+On this policy, we try to type below:
 
 <pre>
 !!!irb
