@@ -1,6 +1,6 @@
 /* -*- coding: utf-8; c-file-style: "ruby" -*- */
 /*
-  Copyright (C) 2009-2011  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2013  Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -299,5 +299,4 @@ rb_grn_init_table_cursor (VALUE mGrn)
     rb_grn_init_hash_cursor(mGrn);
     rb_grn_init_patricia_trie_cursor(mGrn);
     rb_grn_init_double_array_trie_cursor(mGrn);
-    rb_grn_init_view_cursor(mGrn);
 }

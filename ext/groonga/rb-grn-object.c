@@ -1,6 +1,6 @@
 /* -*- coding: utf-8; c-file-style: "ruby" -*- */
 /*
-  Copyright (C) 2009-2011  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2013  Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -113,7 +113,6 @@ rb_grn_object_run_finalizer (grn_ctx *context, grn_obj *grn_object,
       case GRN_CURSOR_TABLE_PAT_KEY:
       case GRN_CURSOR_TABLE_DAT_KEY:
       case GRN_CURSOR_TABLE_NO_KEY:
-      case GRN_CURSOR_TABLE_VIEW:
 	break;
       case GRN_TABLE_HASH_KEY:
       case GRN_TABLE_PAT_KEY:
@@ -122,7 +121,6 @@ rb_grn_object_run_finalizer (grn_ctx *context, grn_obj *grn_object,
 					   RB_GRN_TABLE_KEY_SUPPORT(rb_grn_object));
 	break;
       case GRN_TABLE_NO_KEY:
-      case GRN_TABLE_VIEW:
 	rb_grn_table_finalizer(context, grn_object,
 			       RB_GRN_TABLE(rb_grn_object));
 	break;
@@ -238,17 +236,11 @@ rb_grn_object_to_ruby_class (grn_obj *object)
       case GRN_TABLE_NO_KEY:
 	klass = rb_cGrnArray;
 	break;
-      case GRN_TABLE_VIEW:
-	klass = rb_cGrnView;
-	break;
       case GRN_TYPE:
 	klass = rb_cGrnType;
 	break;
       case GRN_ACCESSOR:
 	klass = rb_cGrnAccessor;
-	break;
-      case GRN_ACCESSOR_VIEW:
-	klass = rb_cGrnViewAccessor;
 	break;
       case GRN_SNIP:
 	klass = rb_cGrnSnippet;
@@ -279,9 +271,6 @@ rb_grn_object_to_ruby_class (grn_obj *object)
 	break;
       case GRN_CURSOR_TABLE_NO_KEY:
 	klass = rb_cGrnArrayCursor;
-	break;
-      case GRN_CURSOR_TABLE_VIEW:
-	klass = rb_cGrnViewCursor;
 	break;
       default:
 	rb_raise(rb_eTypeError,
@@ -416,7 +405,6 @@ rb_grn_object_assign (VALUE klass, VALUE self, VALUE rb_context,
 	klass == rb_cGrnPatriciaTrieCursor ||
 	klass == rb_cGrnDoubleArrayTrieCursor ||
 	klass == rb_cGrnArrayCursor ||
-	klass == rb_cGrnViewCursor ||
 	klass == rb_cGrnIndexCursor ||
 	klass == rb_cGrnProcedure ||
 	klass == rb_cGrnVariable) {
@@ -450,12 +438,6 @@ rb_grn_object_assign (VALUE klass, VALUE self, VALUE rb_context,
 	rb_grn_object_bind_common(klass, self, rb_context, rb_grn_object,
 				  context, object);
 	rb_grn_accessor_bind(RB_GRN_ACCESSOR(rb_grn_object), context, object);
-    } else if (klass == rb_cGrnViewAccessor) {
-	rb_grn_object = ALLOC(RbGrnNamedObject);
-	rb_grn_object_bind_common(klass, self, rb_context, rb_grn_object,
-				  context, object);
-	rb_grn_named_object_bind(RB_GRN_NAMED_OBJECT(rb_grn_object),
-				 context, object);
     } else if (klass == rb_cGrnExpression) {
 	rb_grn_object = ALLOC(RbGrnExpression);
 	rb_grn_object_bind_common(klass, self, rb_context, rb_grn_object,
@@ -815,8 +797,6 @@ rb_grn_object_inspect_content_flags_with_label (VALUE inspected,
 	    rb_ary_push(inspected_flags, rb_str_new2("TABLE_DAT_KEY"));
 	if (flags & GRN_OBJ_TABLE_NO_KEY)
 	    rb_ary_push(inspected_flags, rb_str_new2("TABLE_NO_KEY"));
-	if (flags & GRN_OBJ_TABLE_VIEW)
-	    rb_ary_push(inspected_flags, rb_str_new2("TABLE_VIEW"));
     }
 
     switch (object->header.type) {
@@ -1245,7 +1225,6 @@ rb_grn_object_array_reference (VALUE self, VALUE rb_id)
 	break;
       case GRN_TYPE:
       case GRN_ACCESSOR: /* FIXME */
-      case GRN_ACCESSOR_VIEW: /* FIXME */
 	GRN_OBJ_INIT(&value, GRN_BULK, 0, range_id);
 	break;
       case GRN_COLUMN_VAR_SIZE:
@@ -1301,7 +1280,6 @@ rb_uvector_value_p (RbGrnObject *rb_grn_object, VALUE rb_value)
       case GRN_TABLE_PAT_KEY:
       case GRN_TABLE_DAT_KEY:
       case GRN_TABLE_NO_KEY:
-      case GRN_TABLE_VIEW:
 	first_element = rb_ary_entry(rb_value, 0);
 	if (rb_respond_to(first_element, rb_intern("record_raw_id"))) {
 	    return GRN_TRUE;

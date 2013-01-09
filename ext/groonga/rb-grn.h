@@ -1,6 +1,6 @@
 /* -*- c-file-style: "ruby" -*- */
 /*
-  Copyright (C) 2009-2012  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2013  Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -90,7 +90,6 @@ RB_GRN_BEGIN_DECLS
 #define RB_GRN_COLUMN(object) ((RbGrnColumn *)(object))
 #define RB_GRN_INDEX_COLUMN(object) ((RbGrnIndexColumn *)(object))
 #define RB_GRN_ACCESSOR(object) ((RbGrnAccessor *)(object))
-#define RB_GRN_ACCESSOR_VIEW(object) ((RbGrnAccessor *)(object))
 #define RB_GRN_EXPRESSION(object) ((RbGrnExpression *)(object))
 #define RB_GRN_SNIPPET(object) ((RbGrnSnippet *)(object))
 #define RB_GRN_UNBIND_FUNCTION(function) ((RbGrnUnbindFunction)(function))
@@ -222,13 +221,11 @@ RB_GRN_VAR VALUE rb_cGrnHash;
 RB_GRN_VAR VALUE rb_cGrnPatriciaTrie;
 RB_GRN_VAR VALUE rb_cGrnDoubleArrayTrie;
 RB_GRN_VAR VALUE rb_cGrnArray;
-RB_GRN_VAR VALUE rb_cGrnView;
 RB_GRN_VAR VALUE rb_cGrnTableCursor;
 RB_GRN_VAR VALUE rb_mGrnTableCursorKeySupport;
 RB_GRN_VAR VALUE rb_cGrnHashCursor;
 RB_GRN_VAR VALUE rb_cGrnPatriciaTrieCursor;
 RB_GRN_VAR VALUE rb_cGrnDoubleArrayTrieCursor;
-RB_GRN_VAR VALUE rb_cGrnViewCursor;
 RB_GRN_VAR VALUE rb_cGrnArrayCursor;
 RB_GRN_VAR VALUE rb_cGrnType;
 RB_GRN_VAR VALUE rb_cGrnProcedure;
@@ -238,12 +235,10 @@ RB_GRN_VAR VALUE rb_cGrnVariableSizeColumn;
 RB_GRN_VAR VALUE rb_cGrnIndexColumn;
 RB_GRN_VAR VALUE rb_cGrnIndexCursor;
 RB_GRN_VAR VALUE rb_cGrnAccessor;
-RB_GRN_VAR VALUE rb_cGrnViewAccessor;
 RB_GRN_VAR VALUE rb_cGrnGeoPoint;
 RB_GRN_VAR VALUE rb_cGrnTokyoGeoPoint;
 RB_GRN_VAR VALUE rb_cGrnWGS84GeoPoint;
 RB_GRN_VAR VALUE rb_cGrnRecord;
-RB_GRN_VAR VALUE rb_cGrnViewRecord;
 RB_GRN_VAR VALUE rb_cGrnLogger;
 RB_GRN_VAR VALUE rb_cGrnSnippet;
 RB_GRN_VAR VALUE rb_cGrnVariable;
@@ -267,14 +262,12 @@ void           rb_grn_init_array                    (VALUE mGrn);
 void           rb_grn_init_hash                     (VALUE mGrn);
 void           rb_grn_init_patricia_trie            (VALUE mGrn);
 void           rb_grn_init_double_array_trie        (VALUE mGrn);
-void           rb_grn_init_view                     (VALUE mGrn);
 void           rb_grn_init_table_cursor             (VALUE mGrn);
 void           rb_grn_init_table_cursor_key_support (VALUE mGrn);
 void           rb_grn_init_array_cursor             (VALUE mGrn);
 void           rb_grn_init_hash_cursor              (VALUE mGrn);
 void           rb_grn_init_patricia_trie_cursor     (VALUE mGrn);
 void           rb_grn_init_double_array_trie_cursor (VALUE mGrn);
-void           rb_grn_init_view_cursor              (VALUE mGrn);
 void           rb_grn_init_type                     (VALUE mGrn);
 void           rb_grn_init_procedure                (VALUE mGrn);
 void           rb_grn_init_column                   (VALUE mGrn);
@@ -284,10 +277,8 @@ void           rb_grn_init_index_column             (VALUE mGrn);
 void           rb_grn_init_index_cursor             (VALUE mGrn);
 void           rb_grn_init_posting                  (VALUE mGrn);
 void           rb_grn_init_accessor                 (VALUE mGrn);
-void           rb_grn_init_view_accessor            (VALUE mGrn);
 void           rb_grn_init_geo_point                (VALUE mGrn);
 void           rb_grn_init_record                   (VALUE mGrn);
-void           rb_grn_init_view_record              (VALUE mGrn);
 void           rb_grn_init_variable                 (VALUE mGrn);
 void           rb_grn_init_operator                 (VALUE mGrn);
 void           rb_grn_init_expression               (VALUE mGrn);
@@ -537,11 +528,6 @@ VALUE          rb_grn_record_new_added              (VALUE table,
 VALUE          rb_grn_record_new_raw                (VALUE table,
 						     VALUE id,
 						     VALUE values);
-
-VALUE          rb_grn_view_record_new               (VALUE    view,
-						     grn_obj *id);
-VALUE          rb_grn_view_record_new_raw           (VALUE view,
-						     VALUE id);
 
 VALUE          rb_grn_record_expression_builder_new (VALUE table,
 						     VALUE name);

@@ -1,7 +1,7 @@
 /* -*- coding: utf-8; c-file-style: "ruby" -*- */
 /* vim: set sts=4 sw=4 ts=8 noet: */
 /*
-  Copyright (C) 2009-2011  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2013  Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -62,8 +62,6 @@ rb_grn_inspect_type (unsigned char type)
     return "cursor-table-dat-key";
   case GRN_CURSOR_TABLE_NO_KEY:
     return "cursor-table-no-key";
-  case GRN_CURSOR_TABLE_VIEW:
-    return "cursor-table-view";
   case GRN_CURSOR_COLUMN_INDEX:
     return "cursor-column-index";
   case GRN_TYPE:
@@ -80,8 +78,6 @@ rb_grn_inspect_type (unsigned char type)
     return "table-dat-key";
   case GRN_TABLE_NO_KEY:
     return "table-no-key";
-  case GRN_TABLE_VIEW:
-    return "table-view";
   case GRN_DB:
     return "db";
   case GRN_COLUMN_FIX_SIZE:
@@ -428,7 +424,7 @@ rb_grn_bulk_from_ruby_object_with_type (VALUE object, grn_ctx *context,
 
     string_p = rb_type(object) == T_STRING;
     table_type_p = (GRN_TABLE_HASH_KEY <= type->header.type &&
-		    type->header.type <= GRN_TABLE_VIEW);
+		    type->header.type <= GRN_TABLE_NO_KEY);
 
     switch (type_id) {
       case GRN_DB_INT32:
@@ -834,7 +830,7 @@ rb_grn_value_from_ruby_object (VALUE object, grn_ctx *context,
 
     string_p = rb_type(object) == T_STRING;
     table_type_p = (GRN_TABLE_HASH_KEY <= type->header.type &&
-		    type->header.type <= GRN_TABLE_VIEW);
+		    type->header.type <= GRN_TABLE_NO_KEY);
     if (!string_p) {
 	return RVAL2GRNBULK_WITH_TYPE(object, context, value, type_id, type);
     }
