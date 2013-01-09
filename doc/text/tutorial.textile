@@ -351,7 +351,7 @@ For usefull, we define methods for above processes.
 => nil
 </pre>
 
-We assigns @items@ and @comments@ to each instance variable, so we can
+We assign @items@ and @comments@ to each instance variable, so we can
 use them in @add_bookmark@ method.
 
 @add_bookmark@ executes processes like below:
