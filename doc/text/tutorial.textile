@@ -104,9 +104,9 @@ Let's add records to @Items@ table.
 
 <pre>
 !!!irb
->> items.add("http://ja.wikipedia.org/wiki/Ruby")
+>> items.add("http://en.wikipedia.org/wiki/Ruby")
 => #<Groonga::Record ...>
->> items.add("http://www.ruby-lang.org/ja/")
+>> items.add("http://www.ruby-lang.org/")
 => #<Groonga::Record ...>
 </pre>
 
@@ -122,7 +122,7 @@ If we can get record by primary key, type like below:
 
 <pre>
 !!!irb
->> items["http://ja.wikipedia.org/wiki/Ruby"]
+>> items["http://en.wikipedia.org/wiki/Ruby"]
 => #<Groonga::Record ...>
 </pre>
 
@@ -201,10 +201,10 @@ Let's put some values to @title@ of each record we added before.
 
 <pre>
 !!!irb
->> items["http://ja.wikipedia.org/wiki/Ruby"].title = "Ruby"
+>> items["http://en.wikipedia.org/wiki/Ruby"].title = "Ruby"
 => "Ruby"
->> items["http://www.ruby-lang.org/ja/"].title = "オブジェクトスクリプト言語Ruby"
-"オブジェクトスクリプト言語Ruby"
+>> items["http://www.ruby-lang.org/"].title = "Ruby Programming Language"
+"Ruby Programming Language"
 </pre>
 
 Now, we can do full text search like above:
@@ -221,7 +221,7 @@ Keys in this hash table is records of hitted @Items@.
 <pre>
 !!!irb
 >> ruby_items.collect {|record| record.key.key}
-=> ["http://ja.wikipedia.org/wiki/Ruby", "http://www.ruby-lang.org/ja/"]
+=> ["http://en.wikipedia.org/wiki/Ruby", "http://www.ruby-lang.org/"]
 </pre>
 
 In above example, we get records in @Items@ with @record.key@, and
@@ -232,7 +232,7 @@ We can access a refered key in records briefly with @record["_key"]@.
 <pre>
 !!!irb
 >> ruby_items.collect {|record| record["_key"]}
-=> ["http://ja.wikipedia.org/wiki/Ruby", "http://www.ruby-lang.org/ja/"]
+=> ["http://en.wikipedia.org/wiki/Ruby", "http://www.ruby-lang.org/"]
 </pre>
 
 h2. Improve the simple bookmark application
@@ -288,9 +288,9 @@ Secondly, we add some users to @Users@.
 !!!irb
 >> users = Groonga["Users"]
 => #<Groonga::Hash ...>
->> users.add("moritan", :name => "モリタン")
+>> users.add("alice", :name => "Alice")
 => #<Groonga::Record ...>
->> users.add("taporobo", :name => "タポロボ")
+>> users.add("bob", :name => "Bob")
 => #<Groonga::Record ...>
 </pre>
 
@@ -302,7 +302,7 @@ First, we check if the page has been added @Items@ already.
 
 <pre>
 !!!irb
->> items.has_key?("http://www.rubyist.net/~matz/")
+>> items.has_key?("http://www.ruby-doc.org/")
 => false
 </pre>
 
@@ -310,8 +310,8 @@ The page hasn't been added, so we add it to @Items@.
 
 <pre>
 !!!irb
->> items.add("http://www.rubyist.net/~matz/",
-?>           :title => "Matzにっき")
+>> items.add("http://www.ruby-doc.org/",
+?>           :title => "Ruby-Doc.org: Documenting the Ruby Language")
 => #<Groonga::Record ...>
 </pre>
 
@@ -324,9 +324,9 @@ as its @item@ column.
 => true
 >> comments = Groonga["Comments"]
 => #<Groonga::Array ...>
->> comments.add(:item => "http://www.rubyist.net/~matz/",
-?>              :author => "moritan",
-?>              :content => "Ruby Matz",
+>> comments.add(:item => "http://www.ruby-doc.org/",
+?>              :author => "alice",
+?>              :content => "Ruby documents",
 ?>              :issued => Time.parse("2010-11-20T18:01:22+09:00"))
 => #<Groonga::Record ...>
 </pre>
@@ -364,17 +364,17 @@ With this method, lets bookmark some pages.
 
 <pre>
 !!!irb
->> add_bookmark("http://jp.rubyist.net/magazine/",
-?>              "Rubyist Magazine - るびま", "moritan", "Ruby 記事",
+>> add_bookmark("https://rubygems.org/",
+?>              "RubyGems.org | your community gem host", "alice", "Ruby gems",
 ?>              Time.parse("2010-10-07T14:18:28+09:00"))
 => #<Groonga::Record ...>
->> add_bookmark("http://groonga.rubyforge.org/",
-?>              "Rubyでgroonga使って全文検索 - ラングバ", "taporobo",
-?>              "Ruby groonga 全文検索",
+>> add_bookmark("http://ranguba.org/",
+?>              "Fulltext search by Ruby with groonga - Ranguba", "bob",
+?>              "Ruby groonga fulltextsearch",
 ?>              Time.parse("2010-11-11T12:39:59+09:00"))
 => #<Groonga::Record ...>
->> add_bookmark("http://www.rubyist.net/~matz/",
-?>              "Matz日記", "taporobo", "Ruby 日記",
+>> add_bookmark("http://www.ruby-doc.org/",
+?>              "ruby-doc", "bob", "ruby documents",
 ?>              Time.parse("2010-07-28T20:46:23+09:00"))
 => #<Groonga::Record ...>
 </pre>
@@ -390,17 +390,17 @@ Let's do full text search for added records.
 >>   end
 => #<Groonga::Hash ...>
 >> records.each do |record|
-?>     comment = record.value
+?>     comment = record
 >>   p [comment.id,
 ?>       comment.issued,
 ?>       comment.item.title,
 ?>       comment.author.name,
 ?>       comment.content]
 >>   end
-[1, Sat Nov 20 18:01:22 +0900 2010, "Matzにっき", "モリタン", "Ruby Matz"]
-[2, Thu Oct 07 14:18:28 +0900 2010, "Rubyist Magazine - るびま", "モリタン", "Ruby 記事"]
-[3, Thu Nov 11 12:39:59 +0900 2010, "Rubyでgroonga使って全文検索 - ラングバ", "タポロボ", "Ruby groonga 全文検索検"]
-[4, Wed Jul 28 20:46:23 +0900 2010, "Matzにっき", "タポロボ", "Ruby 日記"]
+[1, 2010-11-20 18:01:22 +0900, "Ruby-Doc.org: Documenting the Ruby Language", "Alice", "Ruby documents"]
+[2, 2010-10-07 14:18:28 +0900, "RubyGems.org | your community gem host", "Alice", "Ruby gems"]
+[3, 2010-11-11 12:39:59 +0900, "Fulltext search by Ruby with groonga - Ranguba", "Bob", "Ruby groonga fulltextsearch"]
+[4, 2010-07-28 20:46:23 +0900, "Ruby-Doc.org: Documenting the Ruby Language", "Bob", "ruby documents"]
 </pre>
 
 We can access the columns with the same name method as each them.
@@ -423,17 +423,17 @@ For example, sort these records in the descending order by date.
 <pre>
 !!!irb
 >> records.sort([{:key => "issued", :order => "descending"}]).each do |record|
-?>     comment = record.key
+?>     comment = record
 >>   p [comment.id,
 ?>       comment.issued,
 ?>       comment.item.title,
 ?>       comment.author.name,
 ?>       comment.content]
 >>   end
-[1, Sat Nov 20 18:01:22 +0900 2010, "Matzにっき", "モリタン", "Ruby Matz"]
-[3, Thu Nov 11 12:39:59 +0900 2010, "Rubyでgroonga使って全文検索 - ラングバ", "タポロボ", "Ruby groonga 全文検索"]
-[2, Thu Oct 07 14:18:28 +0900 2010, "Rubyist Magazine - るびま", "モリタン", "Ruby 記事"]
-[4, Wed Jul 28 20:46:23 +0900 2010, "Matzにっき, "タポロボ", "Ruby 日記"]
+[1, 2010-11-20 18:01:22 +0900, "Ruby-Doc.org: Documenting the Ruby Language", "Alice", "Ruby documents"]
+[2, 2010-11-11 12:39:59 +0900, "Fulltext search by Ruby with groonga - Ranguba", "Bob", "Ruby groonga fulltextsearch"]
+[3, 2010-10-07 14:18:28 +0900, "RubyGems.org | your community gem host", "Alice", "Ruby gems"]
+[4, 2010-07-28 20:46:23 +0900, "Ruby-Doc.org: Documenting the Ruby Language", "Bob", "ruby documents"]
 => [...]
 </pre>
 
@@ -447,9 +447,9 @@ Let's group the result by each item for easy view.
 ?>       item.key,
 ?>       item.title]
 >>   end
-[2, "http://www.rubyist.net/~matz/", "Matzにっき"]
-[1, "http://jp.rubyist.net/magazine/", "Rubyist Magazine - るびま"]
-[1, "http://groonga.rubyforge.org/", "Rubyでgroonga使って全文検索 - ラングバ"]
+[2, "http://www.ruby-doc.org/", "Ruby-Doc.org: Documenting the Ruby Language"]
+[1, "https://rubygems.org/", "RubyGems.org | your community gem host"]
+[1, "http://ranguba.org/", "Fulltext search by Ruby with groonga - Ranguba"]
 => nil
 </pre>
 
@@ -502,11 +502,11 @@ _ruby_items_ .
 >> ruby_items.sort([{:key => "_score", :order => "descending"}]).each do |record|
 >>   p [record.score, record.title]
 >> end
-[10, "Rubyist Magazine - るびま"]
+[22, "Ruby-Doc.org: Documenting the Ruby Language"]
+[11, "Fulltext search by Ruby with groonga - Ranguba"]
+[10, "Ruby Programming Language"]
 [10, "Ruby"]
-[10, "Rubyでgroonga使って全文検索 - ラングバ"]
-[10, "オブジェクトスクリプト言語Ruby"]
-[2, "Matzにっき"]
+[1, "RubyGems.org | your community gem host"]
 </pre>
 
 Then, we get the result.
