@@ -212,7 +212,7 @@ Now, we can do full text search like above:
 <pre>
 !!!irb
 >> ruby_items = items.select {|record| record.title =~ "Ruby"}
-=> #<Groonga::Hash ..., size: <2>>
+=> #<Groonga::Hash ..., normalizer: (nil)>
 </pre>
 
 Groonga returns the search result as Groonga::Hash.
