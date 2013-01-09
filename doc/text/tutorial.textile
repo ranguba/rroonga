@@ -157,7 +157,7 @@ Then we define the @Terms@ for it.
 !!!irb
 >> Groonga::Schema.create_table("Terms",
 ?>                              :type => :patricia_trie,
-?>                              :normalizer => NormalizerAuto,
+?>                              :normalizer => :NormalizerAuto,
 ?>                              :default_tokenizer => "TokenBigram")
 </pre>
 
@@ -171,7 +171,7 @@ Full text search with N-gram uses splited N characters and their
 position in texts. "N" in N-gram specifies the number of each terms.
 Groonga supports Unigram (N=1), Bigram (N=2) and Trigram (N=3).
 
-We also specify @:normalizer => NormalizerAuto@ to search texts with
+We also specify @:normalizer => :NormalizerAuto@ to search texts with
 ignoring the case.
 
 Now, we ready table for terms, so we define the index of
