@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: rroonga 2.1.0\n"
 "POT-Creation-Date: 2011-11-20 22:17+0900\n"
-"PO-Revision-Date: 2013-01-09 18:20+0900\n"
+"PO-Revision-Date: 2013-01-09 18:33+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: \n"
@@ -1040,12 +1040,12 @@ msgid "<pre>\n!!!irb\n% irb --simple-prompt -rubygems -rgroonga\n>>\n</pre>"
 msgstr ""
 
 #: ./doc/text/tutorial.textile:25
-msgid "Now we use UTF-8 as the encoding of database."
-msgstr ""
+msgid "Now you use UTF-8 as the encoding of database."
+msgstr "まず、エンコーディングを設定します。ここではUTF-8を利用します。<"
 
 #: ./doc/text/tutorial.textile:27
 msgid "<pre>\n!!!irb\n>> $KCODE = \"UTF-8\"\n=> \"UTF-8\"\n>> Groonga::Context.default_options = {:encoding => :utf8}\n=> {:encoding=>:utf8}\n</pre>"
-msgstr "まず、エンコーディングを設定します。ここではUTF-8を利用します。"
+msgstr ""
 
 #: ./doc/text/tutorial.textile:35
 msgid "Then, try to create database in a file."
@@ -1096,7 +1096,7 @@ msgstr ""
 "  =:"
 
 #: ./doc/text/tutorial.textile:73
-msgid "Now, we use Groonga::Hash and create the table named @Items@. The type\nof its primary key is String."
+msgid "Now, you use Groonga::Hash and create the table named @Items@. The type\nof its primary key is String."
 msgstr "ここではハッシュテーブルを利用して、 @Items@ という名前のテーブルを作成します。キーは文字列とします。"
 
 #: ./doc/text/tutorial.textile:76
@@ -1104,7 +1104,7 @@ msgid "<pre>\n!!!irb\n>> Groonga::Schema.create_table(\"Items\", :type => :hash)
 msgstr ""
 
 #: ./doc/text/tutorial.textile:82
-msgid "We have @Items@ table by this code.\nWe can refer the defined table with Groonga.[] like below:"
+msgid "You have @Items@ table by this code.\nYou can refer the defined table with Groonga.[] like below:"
 msgstr ""
 "これで @Items@ という名前のテーブルが作成できました。\n"
 "定義したテーブルはGroonga.[]で参照できます。"
@@ -1114,7 +1114,7 @@ msgid "<pre>\n!!!irb\n>> items = Groonga[\"Items\"]\n=> #<Groonga::Hash ...>\n</
 msgstr ""
 
 #: ./doc/text/tutorial.textile:91
-msgid "We can treat it like Hash.\nFor example, let's type @items.size@ to get the number of records in\nthe table."
+msgid "You can treat it like Hash.\nFor example, let's type @items.size@ to get the number of records in\nthe table."
 msgstr ""
 "テーブルはRubyのHashのように扱えます。\n"
 "例えば、以下のように @size@ でテーブルに登録されているレコード\n"
@@ -1145,7 +1145,7 @@ msgid "<pre>\n!!!irb\n>> items.size\n=> 2\n</pre>"
 msgstr ""
 
 #: ./doc/text/tutorial.textile:121
-msgid "If we can get record by primary key, type like below:"
+msgid "If you can get record by primary key, type like below:"
 msgstr "主キーを指定してレコードを取り出す時には以下のようにします。"
 
 #: ./doc/text/tutorial.textile:123
@@ -1161,7 +1161,7 @@ msgid "Let's add item's title to full text search."
 msgstr "各itemのタイトル文字列を登録して、全文検索できるようにしてみましょう。"
 
 #: ./doc/text/tutorial.textile:133
-msgid "first, we add the @Text@ type column \"@title@\" to @Items@ table."
+msgid "first, you add the @Text@ type column \"@title@\" to @Items@ table."
 msgstr "まず @Items@ テーブルに @title@ という名前のカラムを追加します。ここでは、 @Text@ 型のデータを持つカラムとして定義します。"
 
 # Groonga::Schema.remove_column
@@ -1170,7 +1170,7 @@ msgid "<pre>\n!!!irb\n>> Groonga::Schema.change_table(\"Items\") do |table|\n?> 
 msgstr ""
 
 #: ./doc/text/tutorial.textile:143
-msgid "Defined columns is named as @#{TABLE_NAME}.#{COLUMN_NAME}@.\nWe can refer them with {Groonga.[]} as same as tables."
+msgid "Defined columns is named as @#{TABLE_NAME}.#{COLUMN_NAME}@.\nYou can refer them with {Groonga.[]} as same as tables."
 msgstr ""
 "定義したカラムは @#{テーブル名}.#{カラム名}@ という名前になります。\n"
 "テーブルと同じように {Groonga.[]} で参照できます。"
@@ -1180,7 +1180,7 @@ msgid "<pre>\n!!!irb\n>> title_column = Groonga[\"Items.title\"]\n=> #<Groonga::
 msgstr ""
 
 #: ./doc/text/tutorial.textile:153
-msgid "Secondly, let's add the table containing terms from splited from texts.\nThen we define the @Terms@ for it."
+msgid "Secondly, let's add the table containing terms from splited from texts.\nThen you define the @Terms@ for it."
 msgstr "次に、全文検索するために、文字列を分解して得られる各単語を格納するためのテーブルを別途用意します。ここではTermsという名前でテーブルを定義します。"
 
 #: ./doc/text/tutorial.textile:156
@@ -1188,18 +1188,18 @@ msgid "<pre>\n!!!irb\n>> Groonga::Schema.create_table(\"Terms\",\n?>            
 msgstr ""
 
 #: ./doc/text/tutorial.textile:164
-msgid "We specify @:default_tokenzier => \"TokenBigram\"@ for \"Tokenizer\" in\nthe above code.\n\"Tokenizer\" is the object to split terms from texts. The default value\nfor it is none.\nFull text search requires a tokenizer, so we specify \"Bigram\", a type\nof N-gram.\nFull text search with N-gram uses splited N characters and their\nposition in texts. \"N\" in N-gram specifies the number of each terms.\nGroonga supports Unigram (N=1), Bigram (N=2) and Trigram (N=3)."
+msgid "You specify @:default_tokenzier => \"TokenBigram\"@ for \"Tokenizer\" in\nthe above code.\n\"Tokenizer\" is the object to split terms from texts. The default value\nfor it is none.\nFull text search requires a tokenizer, so you specify \"Bigram\", a type\nof N-gram.\nFull text search with N-gram uses splited N characters and their\nposition in texts. \"N\" in N-gram specifies the number of each terms.\nGroonga supports Unigram (N=1), Bigram (N=2) and Trigram (N=3)."
 msgstr ""
 "ここでは、トークナイザとして @:default_tokenzier => \"TokenBigram\"@ を指定しています。トークナイザとは文字列を単語に分解するオブジェクトのことです。デフォルトではトークナイザは指定されていません。全文検索を利用するためにはトークナイザを指定する必要があるので、ここではN-gramの一種であるバイグラムを指定しています。\n"
 "\n"
 "N-gramを利用した全文検索では、分解したN文字とその出現位置を利用して全文検索を行います。N-gramのNは文字列を何文字毎に分解するかの文字数になります。groongaは1文字で分解するユニグラム、2文字のバイグラム、3文字のトリグラムをサポートしています。"
 
 #: ./doc/text/tutorial.textile:174
-msgid "We also specify @:normalizer => :NormalizerAuto@ to search texts with\nignoring the case."
+msgid "You also specify @:normalizer => :NormalizerAuto@ to search texts with\nignoring the case."
 msgstr "また、大文字小文字の区別なく検索するために @:normalizer => :NormalizerAuto@ も指定しています。"
 
 #: ./doc/text/tutorial.textile:177
-msgid "Now, we ready table for terms, so we define the index of\n@Items.tiltle@ column."
+msgid "Now, you ready table for terms, so you define the index of\n@Items.tiltle@ column."
 msgstr "単語格納用テーブルの準備ができたので、 @Items@ テーブルの @title@ カラムに対するインデックスを定義します。"
 
 # Groonga::Schema.remove_column
@@ -1216,11 +1216,11 @@ msgid "When a record is added to @Items@, groonga adds records associated\neach 
 msgstr "@Items@ にレコードが登録されると、その中に含まれる単語に該当するレコードが @Terms@ に自動的に追加されるようになります。"
 
 #: ./doc/text/tutorial.textile:195
-msgid "@Terms@ is a few particular table, but we can add some columns to term\ntable such as @Terms@ and manage many attributes of each terms. It is\nvery useful to process particular search."
+msgid "@Terms@ is a few particular table, but you can add some columns to term\ntable such as @Terms@ and manage many attributes of each terms. It is\nvery useful to process particular search."
 msgstr "@Terms@ は、文書に含まれる語彙に相当する、やや特殊なテーブルだと言えます。しかし、他のテーブルと同様に語彙テーブルには自由にカラムを追加し、単語毎の様々な属性を管理することができます。これはある種の検索処理を行う際には非常に便利に機能します。"
 
 #: ./doc/text/tutorial.textile:199
-msgid "Now, we finished table definition.\nLet's put some values to @title@ of each record we added before."
+msgid "Now, you finished table definition.\nLet's put some values to @title@ of each record you added before."
 msgstr ""
 "これでテーブルの定義は完了です。\n"
 "先ほど登録した各レコードの @title@ カラムに値をセットします。"
@@ -1230,7 +1230,7 @@ msgid "<pre>\n!!!irb\n>> items[\"http://en.wikipedia.org/wiki/Ruby\"].title = \"
 msgstr ""
 
 #: ./doc/text/tutorial.textile:210
-msgid "Now, we can do full text search like above:"
+msgid "Now, you can do full text search like above:"
 msgstr "ここまでのコードより、以下のようにして検索することができます。"
 
 #: ./doc/text/tutorial.textile:212
@@ -1246,11 +1246,11 @@ msgid "<pre>\n!!!irb\n>> ruby_items.collect {|record| record.key.key}\n=> [\"htt
 msgstr ""
 
 #: ./doc/text/tutorial.textile:227
-msgid "In above example, we get records in @Items@ with @record.key@, and\nkeys of them with @record.key.key@."
+msgid "In above example, you get records in @Items@ with @record.key@, and\nkeys of them with @record.key.key@."
 msgstr "上の例では @record.key@ で @Items@ のレコードを取得して、さらにそのキーを指定して（ @record.key.key@ ）で @Items@ のキーを返しています。"
 
 #: ./doc/text/tutorial.textile:230
-msgid "We can access a refered key in records briefly with @record[\"_key\"]@."
+msgid "You can access a refered key in records briefly with @record[\"_key\"]@."
 msgstr "@record[\"_key\"]@ でアクセスすると自動的に参照しているレコードを辿っていき、参照先のキーにアクセスできます。"
 
 #: ./doc/text/tutorial.textile:232
@@ -1262,11 +1262,11 @@ msgid "h2. Improve the simple bookmark application"
 msgstr "シンプルなブックマークアプリの拡張"
 
 #: ./doc/text/tutorial.textile:240
-msgid "Let's try to improve this simple application a little. We can create\nbookmark application for multi users and they can comment to each\nbookmarks."
+msgid "Let's try to improve this simple application a little. You can create\nbookmark application for multi users and they can comment to each\nbookmarks."
 msgstr "ここまでで作った単機能のアプリケーションをもう少し拡張して、複数のユーザが、それぞれにコメントを記入できるブックマークアプリケーションにしてみましょう。"
 
 #: ./doc/text/tutorial.textile:244
-msgid "First, we add tables for users and for comments like below:"
+msgid "First, you add tables for users and for comments like below:"
 msgstr "まず、ユーザ情報とコメント情報を格納するテーブルを追加して、下図のようなテーブル構成にします。"
 
 # Groonga::Schema
@@ -1292,7 +1292,7 @@ msgid "<pre>\n!!!irb\n>> Groonga::Schema.create_table(\"Comments\") do |table|\n
 msgstr ""
 
 #: ./doc/text/tutorial.textile:272
-msgid "Then we define the index of @content@ column in @Comments@ for full\ntext search."
+msgid "Then you define the index of @content@ column in @Comments@ for full\ntext search."
 msgstr "@Comments@ テーブルの @content@ カラムを全文検索できるようにインデックスを定義します。"
 
 # Groonga::Schema.remove_column
@@ -1301,11 +1301,11 @@ msgid "<pre>\n!!!irb\n>> Groonga::Schema.change_table(\"Terms\") do |table|\n?> 
 msgstr ""
 
 #: ./doc/text/tutorial.textile:283
-msgid "We finish table definition by above code."
+msgid "You finish table definition by above code."
 msgstr "これでテーブルが定義できました。"
 
 #: ./doc/text/tutorial.textile:285
-msgid "Secondly, we add some users to @Users@."
+msgid "Secondly, you add some users to @Users@."
 msgstr "続いてユーザを何人か追加します。"
 
 #: ./doc/text/tutorial.textile:287
@@ -1313,11 +1313,11 @@ msgid "<pre>\n!!!irb\n>> users = Groonga[\"Users\"]\n=> #<Groonga::Hash ...>\n>>
 msgstr ""
 
 #: ./doc/text/tutorial.textile:297
-msgid "Now, let's write the process to bookmark by a user.\nWe assume that the user, @moritan@, bookmark a page including\ninfomation related Ruby."
+msgid "Now, let's write the process to bookmark by a user.\nYou assume that the user, @moritan@, bookmark a page including\ninfomation related Ruby."
 msgstr "ここで、実際にユーザがブックマークを貼る時の処理を実行してみましょう。ユーザ @moritan@ が、Ruby関連のとあるページをブックマークしたと想定します。"
 
 #: ./doc/text/tutorial.textile:301
-msgid "First, we check if the page has been added @Items@ already."
+msgid "First, you check if the page has been added @Items@ already."
 msgstr "まず対象のページが @Items@ テーブルに登録済かどうか調べます。"
 
 #: ./doc/text/tutorial.textile:303
@@ -1325,7 +1325,7 @@ msgid "<pre>\n!!!irb\n>> items.has_key?(\"http://www.ruby-doc.org/\")\n=> false\
 msgstr ""
 
 #: ./doc/text/tutorial.textile:309
-msgid "The page hasn't been added, so we add it to @Items@."
+msgid "The page hasn't been added, so you add it to @Items@."
 msgstr "未登録でした。なので、まず当該ページを @Items@ に登録します。"
 
 #: ./doc/text/tutorial.textile:311
@@ -1333,7 +1333,7 @@ msgid "<pre>\n!!!irb\n>> items.add(\"http://www.ruby-doc.org/\",\n?>           :
 msgstr ""
 
 #: ./doc/text/tutorial.textile:318
-msgid "Next, we add the record to @Comments@. This record contains this page\nas its @item@ column."
+msgid "Next, you add the record to @Comments@. This record contains this page\nas its @item@ column."
 msgstr "次に、登録したitemを @item@ カラムの値に指定して@Comments@ にレコードを登録します。"
 
 #: ./doc/text/tutorial.textile:321
@@ -1345,7 +1345,7 @@ msgid "h2. Define methods for this process"
 msgstr "h2. メソッド化"
 
 #: ./doc/text/tutorial.textile:336
-msgid "For usefull, we define methods for above processes."
+msgid "For usefull, you define methods for above processes."
 msgstr "このあとの利便性のため、上記の一連の手続きをメソッドにまとめてみます。"
 
 #: ./doc/text/tutorial.textile:338
@@ -1353,7 +1353,7 @@ msgid "<pre>\n!!!irb\n>> @items = items\n=> #<Groonga::Hash ...>\n>> @comments =
 msgstr ""
 
 #: ./doc/text/tutorial.textile:354
-msgid "We assign @items@ and @comments@ to each instance variable, so we can\nuse them in @add_bookmark@ method."
+msgid "You assign @items@ and @comments@ to each instance variable, so you can\nuse them in @add_bookmark@ method."
 msgstr "@items@ と @comments@ をインスタンス変数に代入しているのはメソッド内からでも見えるようにするためです。"
 
 #: ./doc/text/tutorial.textile:357
@@ -1388,7 +1388,7 @@ msgid "<pre>\n!!!irb\n>> records = comments.select do |record|\n?>     record[\"
 msgstr ""
 
 #: ./doc/text/tutorial.textile:406
-msgid "We can access the columns with the same name method as each them.\nThese methods suport to access the complex data type.\n(In usually RDB, you should namage JOIN tables, @Items@, @Comments@,\n@Users@.)"
+msgid "You can access the columns with the same name method as each them.\nThese methods suport to access the complex data type.\n(In usually RDB, you should namage JOIN tables, @Items@, @Comments@,\n@Users@.)"
 msgstr "カラム名と同じメソッドでカラムへのアクセスできます。複合データ型の要素も再帰的に辿ることができます。（同様の出力を普通のRDBで実現するためには、 @Items@ テーブル、@Comments@ テーブル、 @Users@ テーブルのJOIN操作が必要になります。）"
 
 #: ./doc/text/tutorial.textile:411
@@ -1426,19 +1426,19 @@ msgid "h2. more complex search"
 msgstr "h2. 少し複雑な検索"
 
 #: ./doc/text/tutorial.textile:462
-msgid "Now, we challenge the more useful search."
+msgid "Now, you challenge the more useful search."
 msgstr "さらに実用的な検索を考えてみましょう。"
 
 #: ./doc/text/tutorial.textile:464
-msgid "We should calcurate goodness of fit of search explicitly."
+msgid "You should calcurate goodness of fit of search explicitly."
 msgstr "ブックマークが大量に蓄積されるに従って、より的確に適合度を算出する必要性に迫られます。"
 
 #: ./doc/text/tutorial.textile:466
-msgid "We can use @Items.title@ and @Comments.content@ as search targets now.\n@Items.title@ is the a few reliable information taken from each\noriginal pages. On the other hands, @Comments.content@ is the less\nreliable information because this depends on users of bookmark\napplication."
+msgid "You can use @Items.title@ and @Comments.content@ as search targets now.\n@Items.title@ is the a few reliable information taken from each\noriginal pages. On the other hands, @Comments.content@ is the less\nreliable information because this depends on users of bookmark\napplication."
 msgstr "今のところ検索対象として利用できるのは @Items.title@ と @Comments.content@ ですが、 @Items.title@ は元ページから得られるやや信頼できる情報なのに対して、@Comments.content@ はブックマークユーザが任意に設定できる情報で、やや信憑性に乏しいと言えます。しかし、再現率を確保するためにはユーザのコメントも是非対象に含めたいところです。"
 
 #: ./doc/text/tutorial.textile:472
-msgid "Then, we search records with this policy:"
+msgid "Then, you search records with this policy:"
 msgstr "そこで、以下のようなポリシーで検索を行うことにします。"
 
 #: ./doc/text/tutorial.textile:474
@@ -1449,7 +1449,7 @@ msgstr ""
 "* 同一のitemに対して、キーワードにマッチする @comment@ が複数存在した場合は、それぞれの @comment@ のスコアの和を、該当するitemのスコアとする。"
 
 #: ./doc/text/tutorial.textile:480
-msgid "On this policy, we try to type below:"
+msgid "On this policy, you try to type below:"
 msgstr "以下のようにして、commentとitemとそれぞれに対する検索結果を求めます。"
 
 #: ./doc/text/tutorial.textile:482
@@ -1457,7 +1457,7 @@ msgid "<pre>\n!!!irb\n>> ruby_comments = @comments.select {|record| record.conte
 msgstr ""
 
 #: ./doc/text/tutorial.textile:495
-msgid "We group the results of _ruby_comments_ in each item and union\n_ruby_items_ ."
+msgid "You group the results of _ruby_comments_ in each item and union\n_ruby_items_ ."
 msgstr "_ruby_comments_ の結果をitem毎にグループ化し、_ruby_items_ と対応させて出力します。"
 
 #: ./doc/text/tutorial.textile:498
@@ -1465,7 +1465,7 @@ msgid "<pre>\n!!!irb\n>> ruby_items = ruby_comments.group(\"item\").union!(ruby_
 msgstr ""
 
 #: ./doc/text/tutorial.textile:512
-msgid "Then, we get the result."
+msgid "Then, you get the result."
 msgstr "これで目的の結果が得られました。"
 
 #: ./ext/groonga/rb-grn-accessor.c:77
@@ -5848,375 +5848,3 @@ msgstr ""
 #: ./lib/groonga/view-record.rb:32
 msgid "_record_ と _other_ が同じgroongaのレコードなら +true+ を返し、\nそうでなければ +false+ を返す。"
 msgstr ""
-
-#: ./doc/text/tutorial.textile:1
-#~ msgid "h1. チュートリアル"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:3
-#~ msgid "このページでは簡単なアプリケーションの作成を通して\nrroongaの操作方法を紹介します。"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:6
-#~ msgid "h2. インストール"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:8
-#~ msgid "rroongaはRubyGemsでインストールできます。"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:15
-#~ msgid "h2. データベースの作成"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:17
-#~ msgid "簡単なブックマークアプリケーション用のデータベースを作ってみ\nます。以下のようにgroongaライブラリを読み込んでirbを起動しま\nす。"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:27
-#~ msgid "まず、エンコーディングを設定します。ここではUTF-8を利用します。"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:37
-#~ msgid "それでは、ファイルを指定してデータベースを作成します。"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:45
-#~ msgid "ここで作成したデータベースは、これ以降、暗黙のうちに利用され\nます。最初にデータベースを作成したら特に意識する必要はありま\nせん。"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:49
-#~ msgid "h2. テーブルの定義"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:51
-#~ msgid "groongaには以下の3種類のテーブルがあります。"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:53
-#~ msgid "- Groonga::Hash :=\n  ハッシュテーブル。主キーでレコードを管理します。キーと完全\n  一致するレコードを非常に高速に検索することができます。\n  =:"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:58
-#~ msgid "- Groonga::PatriciaTrie :=\n  パトリシアトライ。ハッシュテーブルに比べて完全一致検索の速\n  度がやや遅いですが、前方一致検索・共通接頭辞探索などの検索\n  が行えます。またカーソルを用いてキーの昇降順にレコードを取\n  り出すことができます。\n  =:"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:65
-#~ msgid "- Groonga::Array :=\n  配列。主キーの存在しないテーブルです。レコードはIDによって\n  識別します。\n  =:"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:70
-#~ msgid "ここではハッシュテーブルを利用して、 @Items@ という名前のテー\nブルを作成します。キーは文字列とします。"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:79
-#~ msgid "これで @Items@ という名前のテーブルが作成できました。"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:81
-#~ msgid "定義したテーブルはGroonga.[]で参照できます。"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:89
-#~ msgid "テーブルはRubyのHashのように扱えます。"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:91
-#~ msgid "例えば、以下のように @size@ でテーブルに登録されているレコード\nの件数を取得できます。"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:100
-#~ msgid "h2. レコードを追加する"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:102
-#~ msgid "@Items@ テーブルにレコードを追加します。"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:104
-#~ msgid "<pre>\n!!!irb\n>> items.add(\"http://ja.wikipedia.org/wiki/Ruby\")\n=> #<Groonga::Record ...>\n>> items.add(\"http://www.ruby-lang.org/ja/\")\n=> #<Groonga::Record ...>\n</pre>"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:112
-#~ msgid "件数を確認すると確かに2件増えています。"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:120
-#~ msgid "主キーを指定してレコードを取り出す時には以下のようにします。"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:122
-#~ msgid "<pre>\n!!!irb\n>> items[\"http://ja.wikipedia.org/wiki/Ruby\"]\n=> #<Groonga::Record ...>\n</pre>"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:128
-#~ msgid "h2. 全文検索を行う"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:130
-#~ msgid "各itemのタイトル文字列を登録して、全文検索できるようにしてみ\nましょう。"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:133
-#~ msgid "まず @Items@ テーブルに @title@ という名前のカラムを追加し\nます。ここでは、 @Text@ 型のデータを持つカラムとして定義\nします。"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:145
-#~ msgid "定義したカラムは @#{テーブル名}.#{カラム名}@ という名前になります。\nテーブルと同じように {Groonga.[]} で参照できます。"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:154
-#~ msgid "全文検索するために、文字列を分解して得られる各単語を格納する\nためのテーブルを別途用意します。ここではTermsという名前でテー\nブルを定義します。"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:158
-#~ msgid "<pre>\n!!!irb\n>> Groonga::Schema.create_table(\"Terms\",\n?>                              :type => :patricia_trie,\n?>                              :key_normalize => true,\n?>                              :default_tokenizer => \"TokenBigram\")\n</pre>"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:166
-#~ msgid "ここでは、トークナイザとして<tt>:default_tokenzier =>\n\"TokenBigram\"</tt> を指定しています。トークナイザとは文字列を\n単語に分解するオブジェクトのことです。デフォルトではトークナ\nイザは指定されていません。全文検索を利用するためにはトークナ\nイザを指定する必要があるので、ここではN-gramの一種であるバイ\nグラムを指定しています。"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:173
-#~ msgid "N-gramを利用した全文検索では、分解したN文字とその出現位置を利\n用して全文検索を行います。N-gramのNは文字列を何文字毎に分解す\nるかの文字数になります。groongaは1文字で分解するユニグラム、\n2文字のバイグラム、3文字のトリグラムをサポートしています。"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:178
-#~ msgid "また、大文字小文字の区別なく検索するために\n@:key_normalize => true@ も指定しています。"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:181
-#~ msgid "単語格納用テーブルの準備ができたので、 @Items@ テーブ\nルの @title@ カラムに対するインデックスを定義します。"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:192
-#~ msgid "少し違和感を感じるかも知れませんが、 @Items@ テーブル\nのカラムに対するインデックスは、 @Terms@ テーブルのカ\nラムとして定義します。"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:196
-#~ msgid "@Items@ にレコードが登録されると、その中に含まれる単\n語に該当するレコードが @Terms@ に自動的に追加されるよ\nうになります。"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:200
-#~ msgid "@Terms@ は、文書に含まれる語彙に相当する、やや特殊な\nテーブルだと言えます。しかし、他のテーブルと同様に語彙テーブ\nルには自由にカラムを追加し、単語毎の様々な属性を管理すること\nができます。これはある種の検索処理を行う際には非常に便利に機\n能します。"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:206
-#~ msgid "これでテーブルの定義は完了です。"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:208
-#~ msgid "先ほど登録した各レコードの @title@ カラムに値をセットします。"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:210
-#~ msgid "<pre>\n!!!irb\n>> items[\"http://ja.wikipedia.org/wiki/Ruby\"].title = \"Ruby\"\n=> \"Ruby\"\n>> items[\"http://www.ruby-lang.org/ja/\"].title = \"オブジェクトスクリプト言語Ruby\"\n\"オブジェクトスクリプト言語Ruby\"\n</pre>"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:218
-#~ msgid "以下のようにして検索することができます。"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:220
-#~ msgid "<pre>\n!!!irb\n>> ruby_items = items.select {|record| record.title =~ \"Ruby\"}\n=> #<Groonga::Hash ..., size: <2>>\n</pre>"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:226
-#~ msgid "検索結果はGroonga::Hashで返されます。ハッシュのキーに見つかっ\nた @Items@ のレコードが入っています。"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:229
-#~ msgid "<pre>\n!!!irb\n>> ruby_items.collect {|record| record.key.key}\n=> [\"http://ja.wikipedia.org/wiki/Ruby\", \"http://www.ruby-lang.org/ja/\"]\n</pre>"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:235
-#~ msgid "上の例では @record.key@ で @Items@ のレコードを取得して、\nさらにそのキーを指定して（ @record.key.key@ ）で @Items@ \nのキーを返しています。"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:239
-#~ msgid "@record[\"_key\"]@ でアクセスすると自動的に参照しているレコード\nを辿っていき、参照先のキーにアクセスできます。"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:242
-#~ msgid "<pre>\n!!!irb\n>> ruby_items.collect {|record| record[\"_key\"]}\n=> [\"http://ja.wikipedia.org/wiki/Ruby\", \"http://www.ruby-lang.org/ja/\"]\n</pre>"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:248
-#~ msgid "h2. マルチユーザ向けのブックマークアプリケーション"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:250
-#~ msgid "ここまでで作った単機能のアプリケーションをもう少し拡張して、\n複数のユーザが、それぞれにコメントを記入できるブックマークア\nプリケーションにしてみましょう。"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:254
-#~ msgid "まず、ユーザ情報とコメント情報を格納するテーブルを追加して、\n下図のようなテーブル構成にします。"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:259
-#~ msgid "まず、 @Users@ テーブルを追加します。"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:269
-#~ msgid "次に、 @Comments@ テーブルを追加します。"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:282
-#~ msgid "@Comments@ テーブルの @content@ カラムを全文検索できる\nようにインデックスを定義します。"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:293
-#~ msgid "これでテーブルが定義できました。"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:295
-#~ msgid "続いてユーザを何人か追加します。"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:297
-#~ msgid "<pre>\n!!!irb\n>> users = Groonga[\"Users\"]\n=> #<Groonga::Hash ...>\n>> users.add(\"moritan\", :name => \"モリタン\")\n=> #<Groonga::Record ...>\n>> users.add(\"taporobo\", :name => \"タポロボ\")\n=> #<Groonga::Record ...>\n</pre>"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:307
-#~ msgid "次に、実際にユーザがブックマークを貼る時の処理を実行してみま\nしょう。"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:310
-#~ msgid "ユーザ @moritan@ が、Ruby関連のとあるページをブックマークしたと\n想定します。"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:313
-#~ msgid "まず対象のページが @Items@ テーブルに登録済かどうか調\nべます。"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:316
-#~ msgid "<pre>\n!!!irb\n>> items.has_key?(\"http://www.rubyist.net/~matz/\")\n=> false\n</pre>"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:322
-#~ msgid "未登録なのでまず当該ページを @Items@ に登録します。"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:324
-#~ msgid "<pre>\n!!!irb\n>> items.add(\"http://www.rubyist.net/~matz/\",\n?>           :title => \"Matzにっき\")\n=> #<Groonga::Record ...>\n</pre>"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:331
-#~ msgid "次に、登録したitemを @item@ カラムの値に指定して\n@Comments@ にレコードを登録します。"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:334
-#~ msgid "<pre>\n!!!irb\n>> require \"time\"\n=> true\n>> comments = Groonga[\"Comments\"]\n=> #<Groonga::Array ...>\n>> comments.add(:item => \"http://www.rubyist.net/~matz/\",\n?>              :author => \"moritan\",\n?>              :content => \"Ruby Matz\",\n?>              :issued => Time.parse(\"2010-11-20T18:01:22+09:00\"))\n=> #<Groonga::Record ...>\n</pre>"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:347
-#~ msgid "h2. メソッド化"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:349
-#~ msgid "上記の一連の手続きをメソッドにまとめてみます。"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:367
-#~ msgid "@items@ と @comments@ をインスタンス変数に代入しているのはメ\nソッド内からでも見えるようにするためです。"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:370
-#~ msgid "@add_bookmark@ は以下のような手順を実行しています。"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:372
-#~ msgid "*  @Items@ テーブルに該当ページのレコードがあるかどうか調べる。\n* レコードがなければ追加する。\n*  @Comments@ テーブルにレコードを登録する。"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:376
-#~ msgid "作成したメソッドを呼び出していくつかブックマークを登録してみ\nましょう。"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:379
-#~ msgid "<pre>\n!!!irb\n>> add_bookmark(\"http://jp.rubyist.net/magazine/\",\n?>              \"Rubyist Magazine - るびま\", \"moritan\", \"Ruby 記事\",\n?>              Time.parse(\"2010-10-07T14:18:28+09:00\"))\n=> #<Groonga::Record ...>\n>> add_bookmark(\"http://groonga.rubyforge.org/\",\n?>              \"Rubyでgroonga使って全文検索 - ラングバ\", \"taporobo\",\n?>              \"Ruby groonga 全文検索\",\n?>              Time.parse(\"2010-11-11T12:39:59+09:00\"))\n=> #<Groonga::Record ...>\n>> add_bookmark(\"http://www.rubyist.net/~matz/\",\n?>              \"Matz日記\", \"taporobo\", \"Ruby 日記\",\n?>              Time.parse(\"2010-07-28T20:46:23+09:00\"))\n=> #<Groonga::Record ...>\n</pre>"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:396
-#~ msgid "h2. 全文検索その2"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:398
-#~ msgid "登録したレコードに対して全文検索を実行してみます。"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:400
-#~ msgid "<pre>\n!!!irb\n>> records = comments.select do |record|\n?>     record[\"content\"] =~ \"Ruby\"\n>>   end\n=> #<Groonga::Hash ...>\n>> records.each do |record|\n?>     comment = record.value\n>>   p [comment.id,\n?>       comment.issued,\n?>       comment.item.title,\n?>       comment.author.name,\n?>       comment.content]\n>>   end\n[1, Sat Nov 20 18:01:22 +0900 2010, \"Matzにっき\", \"モリタン\", \"Ruby Matz\"]\n[2, Thu Oct 07 14:18:28 +0900 2010, \"Rubyist Magazine - るびま\", \"モリタン\", \"Ruby 記事\"]\n[3, Thu Nov 11 12:39:59 +0900 2010, \"Rubyでgroonga使って全文検索 - ラングバ\", \"タポロボ\", \"Ruby groonga 全文検索検\"]\n[4, Wed Jul 28 20:46:23 +0900 2010, \"Matzにっき\", \"タポロボ\", \"Ruby 日記\"]\n</pre>"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:420
-#~ msgid "カラム名と同じメソッドでカラムへのアクセスできます。複合デー\nタ型の要素も再帰的に辿ることができます。（同様の出力を普通の\nRDBで実現するためには、 @Items@ テーブル、\n@Comments@ テーブル、 @Users@ テーブルのJOIN操作が\n必要になります。）"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:426
-#~ msgid "上の式の中で、肝心の検索処理は、第一引数の式を評価する時点で\n完了していて、レコードセットオブジェクトとしてメモリに蓄積さ\nれています。"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:436
-#~ msgid "レコードセットは、出力する前に様々に加工することができます。"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:438
-#~ msgid "以下は、日付で降順にソートしてから出力した例です。"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:440
-#~ msgid "<pre>\n!!!irb\n>> records.sort([{:key => \"issued\", :order => \"descending\"}]).each do |record|\n?>     comment = record.key\n>>   p [comment.id,\n?>       comment.issued,\n?>       comment.item.title,\n?>       comment.author.name,\n?>       comment.content]\n>>   end\n[1, Sat Nov 20 18:01:22 +0900 2010, \"Matzにっき\", \"モリタン\", \"Ruby Matz\"]\n[3, Thu Nov 11 12:39:59 +0900 2010, \"Rubyでgroonga使って全文検索 - ラングバ\", \"タポロボ\", \"Ruby groonga 全文検索\"]\n[2, Thu Oct 07 14:18:28 +0900 2010, \"Rubyist Magazine - るびま\", \"モリタン\", \"Ruby 記事\"]\n[4, Wed Jul 28 20:46:23 +0900 2010, \"Matzにっき, \"タポロボ\", \"Ruby 日記\"]\n=> [...]\n</pre>"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:457
-#~ msgid "同じitemが何度も出てくると検索結果が見にくいので、item毎にグ\nループ化してみます。"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:460
-#~ msgid "<pre>\n!!!irb\n>> records.group(\"item\").each do |record|\n?>     item = record.key\n>>   p [record.n_sub_records,\n?>       item.key,\n?>       item.title]\n>>   end\n[2, \"http://www.rubyist.net/~matz/\", \"Matzにっき\"]\n[1, \"http://jp.rubyist.net/magazine/\", \"Rubyist Magazine - るびま\"]\n[1, \"http://groonga.rubyforge.org/\", \"Rubyでgroonga使って全文検索 - ラングバ\"]\n=> nil\n</pre>"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:474
-#~ msgid "@n_sub_records@ というのはグループ化した単位に含まれるレコード\nの件数を示します。SQLで言えば、GROUP BY句を含むクエリのcount\n関数のような働きです。"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:478
-#~ msgid "h2. 少し複雑な検索"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:480
-#~ msgid "さらに実用的な検索について考えてみましょう。"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:482
-#~ msgid "ブックマークが大量に蓄積されるに従って、より的確に適合度を算\n出する必要性に迫られます。"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:485
-#~ msgid "今のところ検索対象として利用できるのは @Items.title@ \nと @Comments.content@ ですが、 @Items.title@ は\n元ページから得られるやや信頼できる情報なのに対して、\n@Comments.content@ はブックマークユーザが任意に設定で\nきる情報で、やや信憑性に乏しいと言えます。しかし、再現率を確\n保するためにはユーザのコメントも是非対象に含めたいところです。"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:492
-#~ msgid "そこで、以下のようなポリシーで検索を行うことにします。"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:494
-#~ msgid "*  @Items.title@ か @Comments.content@ のいずれ\n  かにマッチするitemを検索する。\n* ただし、 @Items.title@ にマッチしたレコードはスコア\n  を10倍重み付けする。\n* 同一のitemに対して、キーワードにマッチする @comment@ \n  が複数存在した場合は、それぞれの @comment@ のスコアの\n  和を、該当するitemのスコアとする。"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:502
-#~ msgid "以下のようにして、commentとitemとそれぞれに対する検索結果を求\nめます。"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:518
-#~ msgid "_ruby_comments_の結果をitem毎にグループ化し、_ruby_items_と\nunionして出力します。"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:521
-#~ msgid "<pre>\n!!!irb\n>> ruby_items = ruby_comments.group(\"item\").union!(ruby_items)\n#<Groonga::Hash ..., size: <5>>\n>> ruby_items.sort([{:key => \"_score\", :order => \"descending\"}]).each do |record|\n>>   p [record.score, record.title]\n>> end\n[10, \"Rubyist Magazine - るびま\"]\n[10, \"Ruby\"]\n[10, \"Rubyでgroonga使って全文検索 - ラングバ\"]\n[10, \"オブジェクトスクリプト言語Ruby\"]\n[2, \"Matzにっき\"]\n</pre>"
-#~ msgstr ""
-
-#: ./doc/text/tutorial.textile:535
-#~ msgid "これで目的の結果が得られました。"
-#~ msgstr ""

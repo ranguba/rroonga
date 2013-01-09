@@ -22,7 +22,7 @@ Please execute irb with loading rroonga with this command:
 >>
 </pre>
 
-Now we use UTF-8 as the encoding of database.
+Now you use UTF-8 as the encoding of database.
 
 <pre>
 !!!irb
@@ -70,7 +70,7 @@ Groonga supports 4 types of tables.
   Array. It doesn't have primary keys. It manages records by ID.
   =:
 
-Now, we use Groonga::Hash and create the table named @Items@. The type
+Now, you use Groonga::Hash and create the table named @Items@. The type
 of its primary key is String.
 
 <pre>
@@ -79,8 +79,8 @@ of its primary key is String.
 => [...]
 </pre>
 
-We have @Items@ table by this code.
-We can refer the defined table with Groonga.[] like below:
+You have @Items@ table by this code.
+You can refer the defined table with Groonga.[] like below:
 
 <pre>
 !!!irb
@@ -88,7 +88,7 @@ We can refer the defined table with Groonga.[] like below:
 => #<Groonga::Hash ...>
 </pre>
 
-We can treat it like Hash.
+You can treat it like Hash.
 For example, let's type @items.size@ to get the number of records in
 the table.
 
@@ -118,7 +118,7 @@ Please check the number of records. It increases from 0 to 2.
 => 2
 </pre>
 
-If we can get record by primary key, type like below:
+If you can get record by primary key, type like below:
 
 <pre>
 !!!irb
@@ -130,7 +130,7 @@ h2. Full text search
 
 Let's add item's title to full text search.
 
-first, we add the @Text@ type column "@title@" to @Items@ table.
+first, you add the @Text@ type column "@title@" to @Items@ table.
 
 <pre>
 !!!irb
@@ -141,7 +141,7 @@ first, we add the @Text@ type column "@title@" to @Items@ table.
 </pre>
 
 Defined columns is named as @#{TABLE_NAME}.#{COLUMN_NAME}@.
-We can refer them with {Groonga.[]} as same as tables.
+You can refer them with {Groonga.[]} as same as tables.
 
 <pre>
 !!!irb
@@ -151,7 +151,7 @@ We can refer them with {Groonga.[]} as same as tables.
 
 
 Secondly, let's add the table containing terms from splited from texts.
-Then we define the @Terms@ for it.
+Then you define the @Terms@ for it.
 
 <pre>
 !!!irb
@@ -161,20 +161,20 @@ Then we define the @Terms@ for it.
 ?>                              :default_tokenizer => "TokenBigram")
 </pre>
 
-We specify @:default_tokenzier => "TokenBigram"@ for "Tokenizer" in
+You specify @:default_tokenzier => "TokenBigram"@ for "Tokenizer" in
 the above code.
 "Tokenizer" is the object to split terms from texts. The default value
 for it is none.
-Full text search requires a tokenizer, so we specify "Bigram", a type
+Full text search requires a tokenizer, so you specify "Bigram", a type
 of N-gram.
 Full text search with N-gram uses splited N characters and their
 position in texts. "N" in N-gram specifies the number of each terms.
 Groonga supports Unigram (N=1), Bigram (N=2) and Trigram (N=3).
 
-We also specify @:normalizer => :NormalizerAuto@ to search texts with
+You also specify @:normalizer => :NormalizerAuto@ to search texts with
 ignoring the case.
 
-Now, we ready table for terms, so we define the index of
+Now, you ready table for terms, so you define the index of
 @Items.tiltle@ column.
 
 <pre>
@@ -192,12 +192,12 @@ When a record is added to @Items@, groonga adds records associated
 each terms in it to @Terms@ automatically.
 
 
-@Terms@ is a few particular table, but we can add some columns to term
+@Terms@ is a few particular table, but you can add some columns to term
 table such as @Terms@ and manage many attributes of each terms. It is
 very useful to process particular search.
 
-Now, we finished table definition.
-Let's put some values to @title@ of each record we added before.
+Now, you finished table definition.
+Let's put some values to @title@ of each record you added before.
 
 <pre>
 !!!irb
@@ -207,7 +207,7 @@ Let's put some values to @title@ of each record we added before.
 "Ruby Programming Language"
 </pre>
 
-Now, we can do full text search like above:
+Now, you can do full text search like above:
 
 <pre>
 !!!irb
@@ -224,10 +224,10 @@ Keys in this hash table is records of hitted @Items@.
 => ["http://en.wikipedia.org/wiki/Ruby", "http://www.ruby-lang.org/"]
 </pre>
 
-In above example, we get records in @Items@ with @record.key@, and
+In above example, you get records in @Items@ with @record.key@, and
 keys of them with @record.key.key@.
 
-We can access a refered key in records briefly with @record["_key"]@.
+You can access a refered key in records briefly with @record["_key"]@.
 
 <pre>
 !!!irb
@@ -237,11 +237,11 @@ We can access a refered key in records briefly with @record["_key"]@.
 
 h2. Improve the simple bookmark application
 
-Let's try to improve this simple application a little. We can create
+Let's try to improve this simple application a little. You can create
 bookmark application for multi users and they can comment to each
 bookmarks.
 
-First, we add tables for users and for comments like below:
+First, you add tables for users and for comments like below:
 
 !http://qwik.jp/senna/senna2.files/rect4605.png!
 
@@ -269,7 +269,7 @@ Next, let's add the table for comments as @Comments@.
 => [...]
 </pre>
 
-Then we define the index of @content@ column in @Comments@ for full
+Then you define the index of @content@ column in @Comments@ for full
 text search.
 
 <pre>
@@ -280,9 +280,9 @@ text search.
 => [...]
 </pre>
 
-We finish table definition by above code.
+You finish table definition by above code.
 
-Secondly, we add some users to @Users@.
+Secondly, you add some users to @Users@.
 
 <pre>
 !!!irb
@@ -295,10 +295,10 @@ Secondly, we add some users to @Users@.
 </pre>
 
 Now, let's write the process to bookmark by a user.
-We assume that the user, @moritan@, bookmark a page including
+You assume that the user, @moritan@, bookmark a page including
 infomation related Ruby.
 
-First, we check if the page has been added @Items@ already.
+First, you check if the page has been added @Items@ already.
 
 <pre>
 !!!irb
@@ -306,7 +306,7 @@ First, we check if the page has been added @Items@ already.
 => false
 </pre>
 
-The page hasn't been added, so we add it to @Items@.
+The page hasn't been added, so you add it to @Items@.
 
 <pre>
 !!!irb
@@ -315,7 +315,7 @@ The page hasn't been added, so we add it to @Items@.
 => #<Groonga::Record ...>
 </pre>
 
-Next, we add the record to @Comments@. This record contains this page
+Next, you add the record to @Comments@. This record contains this page
 as its @item@ column.
 
 <pre>
@@ -333,7 +333,7 @@ as its @item@ column.
 
 h2. Define methods for this process
 
-For usefull, we define methods for above processes.
+For usefull, you define methods for above processes.
 
 <pre>
 !!!irb
@@ -351,7 +351,7 @@ For usefull, we define methods for above processes.
 => nil
 </pre>
 
-We assign @items@ and @comments@ to each instance variable, so we can
+You assign @items@ and @comments@ to each instance variable, so you can
 use them in @add_bookmark@ method.
 
 @add_bookmark@ executes processes like below:
@@ -403,7 +403,7 @@ Let's do full text search for added records.
 [4, 2010-07-28 20:46:23 +0900, "Ruby-Doc.org: Documenting the Ruby Language", "Bob", "ruby documents"]
 </pre>
 
-We can access the columns with the same name method as each them.
+You can access the columns with the same name method as each them.
 These methods suport to access the complex data type.
 (In usually RDB, you should namage JOIN tables, @Items@, @Comments@,
 @Users@.)
@@ -459,17 +459,17 @@ BY" in SQL.
 
 h2. more complex search
 
-Now, we challenge the more useful search.
+Now, you challenge the more useful search.
 
-We should calcurate goodness of fit of search explicitly.
+You should calcurate goodness of fit of search explicitly.
 
-We can use @Items.title@ and @Comments.content@ as search targets now.
+You can use @Items.title@ and @Comments.content@ as search targets now.
 @Items.title@ is the a few reliable information taken from each
 original pages. On the other hands, @Comments.content@ is the less
 reliable information because this depends on users of bookmark
 application.
 
-Then, we search records with this policy:
+Then, you search records with this policy:
 
 * Search item matched @Items.title@ or @Comments.content@.
 * Add 10 times heavier weight to socres of each record matched
@@ -477,7 +477,7 @@ Then, we search records with this policy:
 * If multi @comment@ of one item are matched keyword, specify the sum
   of scores of each @coments@ as score of the item.
 
-On this policy, we try to type below:
+On this policy, you try to type below:
 
 <pre>
 !!!irb
@@ -492,7 +492,7 @@ On this policy, we try to type below:
 #<Groonga::Hash ..., size: <4>>
 </pre>
 
-We group the results of _ruby_comments_ in each item and union
+You group the results of _ruby_comments_ in each item and union
 _ruby_items_ .
 
 <pre>
@@ -509,4 +509,4 @@ _ruby_items_ .
 [1, "RubyGems.org | your community gem host"]
 </pre>
 
-Then, we get the result.
+Then, you get the result.
