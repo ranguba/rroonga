@@ -15,7 +15,6 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-require "groonga/command/parser"
 require "groonga/command"
 
 module Groonga
@@ -85,42 +84,18 @@ module Groonga
     #
     # @param [String] dumped_commands commands dumped by grndump.
     def restore(dumped_commands)
-      parser = create_parser
+      buffer = ""
       dumped_commands.each_line do |line|
-        parser << line
+        case line
+        when /\r?\n\z/
+          buffer << $PREMATCH
+        else
+          buffer << line
+          send(buffer)
+          buffer.clear
+        end
       end
-    end
-
-    private
-    def create_parser
-      values = []
-      parser = Groonga::Command::Parser.new
-
-      parser.on_command do |command|
-        send(command.to_command_format)
-        receive
-      end
-
-      parser.on_load_start do |command|
-        send(command.to_command_format)
-        receive
-        values = []
-      end
-
-      parser.on_load_columns do |command, columns|
-        values << columns
-      end
-
-      parser.on_load_value do |command, value|
-        values << value
-      end
-
-      parser.on_load_complete do |command|
-        send(values.to_s)
-        receive
-      end
-
-      parser
+      send(buffer) unless buffer.empty?
     end
   end
 end
