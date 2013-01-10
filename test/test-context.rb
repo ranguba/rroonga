@@ -129,42 +129,19 @@ class ContextTest < Test::Unit::TestCase
   end
 
   def test_restore
-    db_path = @tmp_dir + "db"
-    database = Groonga::Database.create(:path => db_path.to_s)
-    context = Groonga::Context.default
+    dumped_db_path = @tmp_dir + "dumped.db"
+    Groonga::Database.create(:path => dumped_db_path.to_s)
+    Groonga::Schema.create_table("Items", :type => :hash)
+    dumped_commands = dump
 
+    restored_db_path = @tmp_dir + "restored.db"
+    Groonga::Database.create(:path => restored_db_path.to_s)
     context.restore(dumped_commands)
-
-    table_names = database.tables.collect {|table| table.name}
-    assert_equal(["Items"], table_names)
-
-    items = Groonga["Items"]
-    assert_true(items.have_column?("title"))
-
-    values = items.records.collect do |record|
-      [record.key, record.title]
-    end
-    expected_values = [
-      ["http://en.wikipedia.org/wiki/Ruby", "Ruby"],
-      ["http://www.ruby-lang.org/", "Ruby Programming Language"]
-    ]
-    assert_equal(expected_values, values)
+    assert_equal(dumped_commands, dump)
   end
 
   private
-  def dumped_commands
-<<-EOD
-table_create Items TABLE_HASH_KEY \\
-             --key_type ShortText
-
-column_create Items title COLUMN_SCALAR Text
-
-load --table Items
-[
-["_key","title"],
-["http://en.wikipedia.org/wiki/Ruby","Ruby"],
-["http://www.ruby-lang.org/","Ruby Programming Language"]
-]
-EOD
+  def dump
+    Groonga::DatabaseDumper.new.dump
   end
 end
