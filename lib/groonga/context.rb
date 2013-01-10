@@ -87,15 +87,20 @@ module Groonga
       buffer = ""
       dumped_commands.each_line do |line|
         case line
-        when /\r?\n\z/
+        when /\\\r?\n\z/
           buffer << $PREMATCH
         else
-          buffer << line
+          buffer << line.chomp
           send(buffer)
+          receive
           buffer.clear
         end
       end
-      send(buffer) unless buffer.empty?
+
+      unless buffer.empty?
+        send(buffer)
+        receive
+      end
     end
   end
 end
