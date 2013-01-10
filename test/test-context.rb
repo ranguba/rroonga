@@ -138,6 +138,20 @@ class ContextTest < Test::Unit::TestCase
     assert_equal("#{command}\n\n", dump)
   end
 
+  def test_restore_continuation_lines
+    restore_command = <<-EOD
+table_create Items TABLE_HASH_KEY \\
+             --key_type ShortText
+EOD
+    restored_db_path = @tmp_dir + "restored.db"
+    Groonga::Database.create(:path => restored_db_path.to_s)
+    context.restore(restore_command)
+
+    expected_command = "table_create Items TABLE_HASH_KEY " +
+                          "--key_type ShortText\n\n\n"
+    assert_equal(expected_command, dump)
+  end
+
   private
   def dump
     Groonga::DatabaseDumper.new.dump
