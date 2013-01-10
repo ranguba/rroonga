@@ -75,5 +75,19 @@ module Groonga
       select = Command::Select.new(self, table, options)
       select.exec
     end
+
+    # Restore commands dumped by "grndump" command.
+    #
+    # @example
+    #   dumped_commands = File.read("dump.grn")
+    #   context.restore(dumped_commands)
+    #
+    # @param [String] dumped_commands commands dumped by grndump.
+    def restore(dumped_commands)
+      dumped_commands.each_line do |line|
+        send(line.chomp)
+        receive
+      end
+    end
   end
 end
