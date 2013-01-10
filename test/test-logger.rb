@@ -27,6 +27,7 @@ class LoggerTest < Test::Unit::TestCase
   end
 
   def test_reopen
+    Groonga::Logger.unregister
     if File.exist?(@default_log_path)
       FileUtils.mv(@default_log_path, "#{@default_log_path}.old")
     end

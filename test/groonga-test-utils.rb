@@ -63,7 +63,9 @@ module GroongaTestUtils
   def setup_log_path
     @dump_log = false
 
-    Groonga::Logger.log_path = (@tmp_dir + "groonga.log").to_s
+    @log_path = @tmp_dir + "groonga.log"
+    logger = Groonga::FileLogger.new(@log_path.to_s)
+    Groonga::Logger.register(logger)
 
     @query_log_path = @tmp_dir + "groonga-query.log"
     query_logger = Groonga::FileQueryLogger.new(@query_log_path.to_s)

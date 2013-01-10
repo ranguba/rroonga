@@ -1,6 +1,6 @@
 /* -*- coding: utf-8; c-file-style: "ruby" -*- */
 /*
-  Copyright (C) 2009-2011  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2013  Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -18,12 +18,6 @@
 
 #include "rb-grn.h"
 
-/* FIXME */
-void grn_log_reopen(grn_ctx *ctx);
-extern const char *grn_log_path;
-extern const char *grn_qlog_path;
-
-
 /*
  * Document-class: Groonga::Logger
  *
@@ -31,63 +25,20 @@ extern const char *grn_qlog_path;
  *
  */
 
-#define RVAL2GRNWRAPPER(object)  (rb_grn_logger_info_wrapper_from_ruby_object(object))
-#define RVAL2GRNLOGLEVEL(object) (rb_grn_log_level_from_ruby_object(object))
-#define GRNLOGLEVEL2RVAL(level)  (rb_grn_log_level_to_ruby_object(level))
+#define GRNLOGLEVEL2RVAL(level)    (rb_grn_log_level_to_ruby_object(level))
+#define RVAL2GRNLOGLEVEL(rb_level) (rb_grn_log_level_from_ruby_object(rb_level))
 
 VALUE cGrnLogger;
+VALUE mGrnLoggerFlags;
+VALUE cGrnCallbackLogger;
 
-typedef struct _rb_grn_logger_info_wrapper
-{
-    grn_logger_info *logger;
-    VALUE handler;
-} rb_grn_logger_info_wrapper;
+static ID id_new;
+static ID id_parse;
+static ID id_log;
+static ID id_reopen;
+static ID id_fin;
 
-static rb_grn_logger_info_wrapper *
-rb_grn_logger_info_wrapper_from_ruby_object (VALUE object)
-{
-    rb_grn_logger_info_wrapper *wrapper;
-
-    if (NIL_P(object))
-        return NULL;
-
-    if (!RVAL2CBOOL(rb_obj_is_kind_of(object, cGrnLogger))) {
-	rb_raise(rb_eTypeError, "not a groonga logger");
-    }
-
-    Data_Get_Struct(object, rb_grn_logger_info_wrapper, wrapper);
-    if (!wrapper)
-        rb_raise(rb_eTypeError, "groonga logger is NULL");
-
-    return wrapper;
-}
-
-grn_logger_info *
-rb_grn_logger_from_ruby_object (VALUE object)
-{
-    rb_grn_logger_info_wrapper *wrapper;
-
-    wrapper = RVAL2GRNWRAPPER(object);
-    if (!wrapper)
-        return NULL;
-
-    return wrapper->logger;
-}
-
-static void
-rb_grn_logger_free (void *object)
-{
-    rb_grn_logger_info_wrapper *wrapper = object;
-
-    xfree(wrapper->logger);
-    xfree(wrapper);
-}
-
-static VALUE
-rb_grn_logger_alloc (VALUE klass)
-{
-    return Data_Wrap_Struct(klass, NULL, rb_grn_logger_free, NULL);
-}
+static grn_logger rb_grn_logger;
 
 static grn_log_level
 rb_grn_log_level_from_ruby_object (VALUE rb_level)
@@ -172,80 +123,70 @@ rb_grn_log_level_to_ruby_object (grn_log_level level)
 }
 
 static void
-rb_grn_log (int level, const char *time, const char *title,
-            const char *message, const char *location, void *func_arg)
+rb_grn_logger_reset_with_error_check (VALUE klass, grn_ctx *context)
 {
-    rb_grn_logger_info_wrapper *wrapper = func_arg;
+    VALUE current_logger;
 
-    rb_funcall(wrapper->handler, rb_intern("call"), 5,
-               GRNLOGLEVEL2RVAL(level),
-               rb_str_new2(time),
-               rb_str_new2(title),
-               rb_str_new2(message),
-               rb_str_new2(location));
-}
+    current_logger = rb_cv_get(klass, "@@current_logger");
+    if (NIL_P(current_logger))
+        return;
+    rb_cv_set(klass, "@@current_logger", Qnil);
 
-static void
-rb_grn_logger_set_handler (VALUE self, VALUE rb_handler)
-{
-    rb_grn_logger_info_wrapper *wrapper;
-    grn_logger_info *logger;
-
-    wrapper = RVAL2GRNWRAPPER(self);
-    wrapper->handler = rb_handler;
-    rb_iv_set(self, "@handler", rb_handler);
-
-    logger = wrapper->logger;
-    if (NIL_P(rb_handler)) {
-        logger->func = NULL;
-        logger->func_arg = NULL;
+    if (context) {
+	grn_logger_set(context, NULL);
+	rb_grn_context_check(context, current_logger);
     } else {
-        logger->func = rb_grn_log;
-        logger->func_arg = wrapper;
+	grn_logger_set(NULL, NULL);
     }
 }
 
-static VALUE
-rb_grn_logger_initialize (int argc, VALUE *argv, VALUE self)
+static void
+rb_grn_logger_reset (VALUE klass)
 {
-    rb_grn_logger_info_wrapper *wrapper;
-    grn_logger_info *logger;
-    grn_log_level level;
-    int flags = 0;
-    VALUE options, rb_level, rb_time, rb_title, rb_message, rb_location;
-    VALUE rb_handler;
+    rb_grn_logger_reset_with_error_check(klass, NULL);
+}
 
-    rb_scan_args(argc, argv, "01&", &options, &rb_handler);
+static void
+rb_grn_logger_log (grn_ctx *ctx, grn_log_level level,
+		   const char *timestamp, const char *title, const char *message,
+		   const char *location, void *user_data)
+{
+    VALUE handler = (VALUE)user_data;
 
-    rb_grn_scan_options(options,
-                        "level", &rb_level,
-                        "time", &rb_time,
-                        "title", &rb_title,
-                        "message", &rb_message,
-                        "location", &rb_location,
-                        NULL);
+    if (NIL_P(handler))
+        return;
 
-    level = RVAL2GRNLOGLEVEL(rb_level);
+    /* TODO: use rb_protect(). */
+    rb_funcall(handler, id_log, 5,
+               GRNLOGLEVEL2RVAL(level),
+               rb_str_new2(timestamp),
+               rb_str_new2(title),
+               rb_str_new2(message),
+	       rb_str_new2(location));
+}
 
-    if (NIL_P(rb_time) || RVAL2CBOOL(rb_time))
-        flags |= GRN_LOG_TIME;
-    if (NIL_P(rb_title) || RVAL2CBOOL(rb_title))
-        flags |= GRN_LOG_TITLE;
-    if (NIL_P(rb_message) || RVAL2CBOOL(rb_message))
-        flags |= GRN_LOG_MESSAGE;
-    if (NIL_P(rb_location) || RVAL2CBOOL(rb_location))
-        flags |= GRN_LOG_LOCATION;
+static void
+rb_grn_logger_reopen (grn_ctx *ctx, void *user_data)
+{
+    VALUE handler = (VALUE)user_data;
 
-    wrapper = ALLOC(rb_grn_logger_info_wrapper);
-    logger = ALLOC(grn_logger_info);
-    wrapper->logger = logger;
-    DATA_PTR(self) = wrapper;
+    if (NIL_P(handler))
+        return;
 
-    logger->max_level = level;
-    logger->flags = flags;
-    rb_grn_logger_set_handler(self, rb_handler);
+    /* TODO: use rb_protect(). */
+    rb_funcall(handler, id_reopen, 0);
+}
 
-    return Qnil;
+static void
+rb_grn_logger_fin (grn_ctx *ctx, void *user_data)
+{
+    VALUE handler = (VALUE)user_data;
+
+    if (NIL_P(handler))
+        return;
+
+    /* TODO: use rb_protect(). */
+    rb_funcall(handler, id_fin, 0);
 }
 
 /*
@@ -281,102 +222,122 @@ rb_grn_logger_initialize (int argc, VALUE *argv, VALUE self)
 static VALUE
 rb_grn_logger_s_register (int argc, VALUE *argv, VALUE klass)
 {
-    VALUE logger, rb_context = Qnil;
-    grn_ctx *context;
-
-    logger = rb_funcall2(klass, rb_intern("new"), argc, argv);
-    rb_grn_logger_set_handler(logger, rb_block_proc());
-    context = rb_grn_context_ensure(&rb_context);
-    grn_logger_info_set(context, RVAL2GRNLOGGER(logger));
-    rb_grn_context_check(context, logger);
-    rb_cv_set(klass, "@@current_logger", logger);
-
-    return Qnil;
-}
-
-static void
-rb_grn_logger_reset_with_error_check (VALUE klass, grn_ctx *context)
-{
-    VALUE current_logger;
-
-    current_logger = rb_cv_get(klass, "@@current_logger");
-    if (NIL_P(current_logger))
-        return;
-
-    rb_cv_set(klass, "@@current_logger", Qnil);
-    if (context) {
-	grn_logger_info_set(context, NULL);
-	rb_grn_context_check(context, current_logger);
-    } else {
-	grn_logger_info_set(NULL, NULL);
-    }
-}
-
-static void
-rb_grn_logger_reset (VALUE klass)
-{
-    rb_grn_logger_reset_with_error_check(klass, NULL);
-}
-
-static VALUE
-rb_grn_logger_s_reopen_with_related_object (VALUE klass, VALUE related_object)
-{
-#ifdef WIN32
-    rb_raise(rb_eNotImpError, "grn_log_reopen() isn't available on Windows.");
-#else
     VALUE rb_context = Qnil;
     grn_ctx *context;
+    VALUE rb_logger, rb_callback;
+    VALUE rb_options, rb_max_level;
+    VALUE rb_time, rb_title, rb_message, rb_location;
+    VALUE rb_flags;
+    grn_log_level max_level = GRN_LOG_DEFAULT_LEVEL;
+    int flags = 0;
+
+    rb_scan_args(argc, argv, "02&", &rb_logger, &rb_options, &rb_callback);
+
+    if (rb_block_given_p()) {
+        rb_logger = rb_funcall(cGrnCallbackLogger, id_new, 1, rb_callback);
+    }
+
+    rb_grn_scan_options(rb_options,
+                        "max_level", &rb_max_level,
+                        "time",	     &rb_time,
+                        "title",     &rb_title,
+                        "message",   &rb_message,
+                        "location",  &rb_location,
+                        "flags",     &rb_flags,
+                        NULL);
+    if (!NIL_P(rb_max_level)) {
+	max_level = RVAL2GRNLOGLEVEL(rb_max_level);
+    }
+
+    if (NIL_P(rb_time) || CBOOL2RVAL(rb_time)) {
+	flags |= GRN_LOG_TIME;
+    }
+    if (NIL_P(rb_title) || CBOOL2RVAL(rb_title)) {
+	flags |= GRN_LOG_TITLE;
+    }
+    if (NIL_P(rb_message) || CBOOL2RVAL(rb_message)) {
+	flags |= GRN_LOG_MESSAGE;
+    }
+    if (NIL_P(rb_location) || CBOOL2RVAL(rb_location)) {
+	flags |= GRN_LOG_LOCATION;
+    }
+    if (!NIL_P(rb_flags)) {
+        flags = rb_funcall(mGrnLoggerFlags, id_parse, 2,
+                           INT2NUM(flags), rb_flags);
+    }
+
+    rb_grn_logger.max_level = max_level;
+    rb_grn_logger.flags = flags;
+    rb_grn_logger.user_data = (void *)rb_logger;
 
     context = rb_grn_context_ensure(&rb_context);
-    rb_grn_logger_reset_with_error_check(klass, context);
-    grn_log_reopen(context);
-    rb_grn_context_check(context, related_object);
-#endif
+    grn_logger_set(context, &rb_grn_logger);
+    rb_grn_context_check(context, rb_logger);
+    rb_cv_set(klass, "@@current_logger", rb_logger);
 
     return Qnil;
 }
 
 /*
- * groongaのデフォルトロガーがログを出力するファイルを再オー
- * プンする。ログファイルのバックアップ時などに使用する。
+ * Unregister the registered logger. The default logger is used after
+ * unregistering.
  *
- * {Groonga::Logger.register} で独自のロガーを設定している場合
- * は例外が発生する。
+ * @overload unregister
+ *   @return void
+ */
+static VALUE
+rb_grn_logger_s_unregister (VALUE klass)
+{
+    VALUE current_logger;
+    VALUE rb_context = Qnil;
+    grn_ctx *context;
+
+    current_logger = rb_cv_get(klass, "@@current_logger");
+    if (NIL_P(current_logger))
+        return Qnil;
+
+    rb_cv_set(klass, "@@current_logger", Qnil);
+
+    context = rb_grn_context_ensure(&rb_context);
+    grn_logger_set(context, NULL);
+    rb_grn_context_check(context, klass);
+
+    return Qnil;
+}
+
+static VALUE
+rb_grn_logger_s_reopen_with_related_object (VALUE klass, VALUE related_object)
+{
+    VALUE rb_context = Qnil;
+    grn_ctx *context;
+
+    context = rb_grn_context_ensure(&rb_context);
+    rb_grn_logger_reset_with_error_check(klass, context);
+    grn_logger_reopen(context);
+    rb_grn_context_check(context, related_object);
+
+    return Qnil;
+}
+
+/*
+ * Sends reopen request to the current logger. It is useful for
+ * rotating log file.
  *
  * @overload reopen
+ *   @return void
  */
 static VALUE
 rb_grn_logger_s_reopen (VALUE klass)
 {
-    return rb_grn_logger_s_reopen_with_related_object(klass, klass);
-}
+    VALUE rb_context = Qnil;
+    grn_ctx *context;
 
-#ifndef WIN32
-static VALUE
-rb_grn_logger_s_set_path (VALUE klass, VALUE rb_path,
-			  const char **path, const char *class_variable_name)
-{
-    grn_bool need_reopen = GRN_FALSE;
-
-    if (NIL_P(rb_path)) {
-	need_reopen = *path != NULL;
-	*path = NULL;
-    } else {
-	const char *current_path = *path;
-	*path = RSTRING_PTR(rb_path);
-	if (!current_path || strcmp(*path, current_path) != 0) {
-	    need_reopen = GRN_TRUE;
-	}
-    }
-    rb_cv_set(klass, class_variable_name, rb_path);
-
-    if (need_reopen) {
-	rb_grn_logger_s_reopen_with_related_object(klass, rb_path);
-    }
+    context = rb_grn_context_ensure(&rb_context);
+    grn_logger_reopen(context);
+    rb_grn_context_check(context, klass);
 
     return Qnil;
 }
-#endif
 
 /*
  * groongaのデフォルトロガーがログを出力するファイルのパスを返す。
@@ -387,16 +348,14 @@ rb_grn_logger_s_set_path (VALUE klass, VALUE rb_path,
 static VALUE
 rb_grn_logger_s_get_log_path (VALUE klass)
 {
-#ifdef WIN32
-    rb_raise(rb_eNotImpError, "grn_log_path isn't available on Windows.");
-    return Qnil;
-#else
-    if (grn_log_path) {
-	return rb_str_new2(grn_log_path);
+    const char *path;
+
+    path = grn_default_logger_get_path();
+    if (path) {
+	return rb_str_new2(path);
     } else {
 	return Qnil;
     }
-#endif
 }
 
 /*
@@ -409,14 +368,30 @@ rb_grn_logger_s_get_log_path (VALUE klass)
  * @overload log_path=(path)
  */
 static VALUE
-rb_grn_logger_s_set_log_path (VALUE klass, VALUE path)
+rb_grn_logger_s_set_log_path (VALUE klass, VALUE rb_path)
 {
-#ifdef WIN32
-    rb_raise(rb_eNotImpError, "grn_qlog_path isn't available on Windows.");
+    grn_bool need_reopen = GRN_FALSE;
+    const char *current_path;
+
+    current_path = grn_default_logger_get_path();
+    if (NIL_P(rb_path)) {
+	need_reopen = current_path != NULL;
+	grn_default_logger_set_path(NULL);
+    } else {
+	const char *new_path;
+	new_path = RSTRING_PTR(rb_path);
+	if (!current_path || strcmp(new_path, current_path) != 0) {
+	    need_reopen = GRN_TRUE;
+	}
+	grn_default_logger_set_path(new_path);
+    }
+    rb_cv_set(klass, "@@log_path", rb_path);
+
+    if (need_reopen) {
+	rb_grn_logger_s_reopen_with_related_object(klass, rb_path);
+    }
+
     return Qnil;
-#else
-    return rb_grn_logger_s_set_path(klass, path, &grn_log_path, "@@log_path");
-#endif
 }
 
 /*
@@ -428,16 +403,14 @@ rb_grn_logger_s_set_log_path (VALUE klass, VALUE path)
 static VALUE
 rb_grn_logger_s_get_query_log_path (VALUE klass)
 {
-#ifdef WIN32
-    rb_raise(rb_eNotImpError, "grn_qlog_path isn't available on Windows.");
-    return Qnil;
-#else
-    if (grn_qlog_path) {
-	return rb_str_new2(grn_qlog_path);
+    const char *path;
+
+    path = grn_default_query_logger_get_path();
+    if (path) {
+	return rb_str_new2(path);
     } else {
 	return Qnil;
     }
-#endif
 }
 
 /*
@@ -450,28 +423,56 @@ rb_grn_logger_s_get_query_log_path (VALUE klass)
  * @overload query_log_path=(path)
  */
 static VALUE
-rb_grn_logger_s_set_query_log_path (VALUE klass, VALUE path)
+rb_grn_logger_s_set_query_log_path (VALUE klass, VALUE rb_path)
 {
-#ifdef WIN32
-    rb_raise(rb_eNotImpError, "grn_qlog_path isn't available on Windows.");
+    grn_bool need_reopen = GRN_FALSE;
+    const char *current_path;
+
+    current_path = grn_default_query_logger_get_path();
+    if (NIL_P(rb_path)) {
+	need_reopen = current_path != NULL;
+	grn_default_query_logger_set_path(NULL);
+    } else {
+	const char *new_path;
+	new_path = RSTRING_PTR(rb_path);
+	if (!current_path || strcmp(new_path, current_path) != 0) {
+	    need_reopen = GRN_TRUE;
+	}
+	grn_default_query_logger_set_path(new_path);
+    }
+    rb_cv_set(klass, "@@query_log_path", rb_path);
+
+    if (need_reopen) {
+	rb_grn_logger_s_reopen_with_related_object(klass, rb_path);
+    }
+
     return Qnil;
-#else
-    return rb_grn_logger_s_set_path(klass, path, &grn_qlog_path,
-				    "@@query_log_path");
-#endif
 }
 
 void
 rb_grn_init_logger (VALUE mGrn)
 {
+    id_new    = rb_intern("new");
+    id_parse  = rb_intern("parse");
+    id_log    = rb_intern("log");
+    id_reopen = rb_intern("reopen");
+    id_fin    = rb_intern("fin");
+
+    rb_grn_logger.log    = rb_grn_logger_log;
+    rb_grn_logger.reopen = rb_grn_logger_reopen;
+    rb_grn_logger.fin    = rb_grn_logger_fin;
+
+    rb_grn_logger.user_data = (void *)Qnil;
+
     cGrnLogger = rb_define_class_under(mGrn, "Logger", rb_cObject);
-    rb_define_alloc_func(cGrnLogger, rb_grn_logger_alloc);
 
     rb_cv_set(cGrnLogger, "@@current_logger", Qnil);
     rb_cv_set(cGrnLogger, "@@log_path", Qnil);
     rb_cv_set(cGrnLogger, "@@query_log_path", Qnil);
     rb_define_singleton_method(cGrnLogger, "register",
                                rb_grn_logger_s_register, -1);
+    rb_define_singleton_method(cGrnLogger, "unregister",
+                               rb_grn_logger_s_unregister, 0);
     rb_define_singleton_method(cGrnLogger, "reopen",
                                rb_grn_logger_s_reopen, 0);
     rb_define_singleton_method(cGrnLogger, "log_path",
@@ -484,5 +485,16 @@ rb_grn_init_logger (VALUE mGrn)
                                rb_grn_logger_s_set_query_log_path, 1);
     rb_set_end_proc(rb_grn_logger_reset, cGrnLogger);
 
-    rb_define_method(cGrnLogger, "initialize", rb_grn_logger_initialize, -1);
+    mGrnLoggerFlags = rb_define_module_under(cGrnLogger, "Flags");
+#define DEFINE_FLAG(NAME)                                       \
+    rb_define_const(mGrnLoggerFlags,				\
+                    #NAME, INT2NUM(GRN_LOG_ ## NAME))
+    DEFINE_FLAG(TIME);
+    DEFINE_FLAG(TITLE);
+    DEFINE_FLAG(MESSAGE);
+    DEFINE_FLAG(LOCATION);
+#undef DEFINE_FLAG
+
+    cGrnCallbackLogger =
+        rb_define_class_under(mGrn, "CallbackLogger", cGrnLogger);
 }
