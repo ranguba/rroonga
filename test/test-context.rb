@@ -129,15 +129,13 @@ class ContextTest < Test::Unit::TestCase
   end
 
   def test_restore
-    dumped_db_path = @tmp_dir + "dumped.db"
-    Groonga::Database.create(:path => dumped_db_path.to_s)
-    Groonga::Schema.create_table("Items", :type => :hash)
-    dumped_commands = dump
-
     restored_db_path = @tmp_dir + "restored.db"
     Groonga::Database.create(:path => restored_db_path.to_s)
-    context.restore(dumped_commands)
-    assert_equal(dumped_commands, dump)
+
+    command = "table_create Items TABLE_HASH_KEY --key_type ShortText\n"
+    context.restore(command)
+
+    assert_equal("#{command}\n\n", dump)
   end
 
   private
