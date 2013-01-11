@@ -97,7 +97,6 @@ module Groonga
           buffer.clear
         end
       end
-
       unless buffer.empty?
         send(buffer)
         receive
