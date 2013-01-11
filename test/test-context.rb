@@ -130,14 +130,11 @@ class ContextTest < Test::Unit::TestCase
 
   class RestoreTest < self
     def test_simple
-      restored_db_path = @tmp_dir + "restored.db"
-      Groonga::Database.create(:path => restored_db_path.to_s)
-
       commands = <<EOD
 table_create Items TABLE_HASH_KEY --key_type ShortText
 column_create Items title COLUMN_SCALAR Text
 EOD
-      context.restore(commands)
+      restore(commands)
 
       assert_equal("#{commands}\n\n", dump)
     end
@@ -147,9 +144,7 @@ EOD
 table_create Items TABLE_HASH_KEY\\
  --key_type ShortText
 EOD
-      restored_db_path = @tmp_dir + "restored.db"
-      Groonga::Database.create(:path => restored_db_path.to_s)
-      context.restore(restore_command)
+      restore(restore_command)
 
       assert_equal(<<-EOC, dump)
 table_create Items TABLE_HASH_KEY --key_type ShortText
@@ -159,6 +154,13 @@ EOC
     end
 
     private
+    def restore(commands)
+      restored_db_path = @tmp_dir + "restored.db"
+      Groonga::Database.create(:path => restored_db_path.to_s)
+
+      context.restore(commands)
+    end
+
     def dump
       Groonga::DatabaseDumper.new.dump
     end
