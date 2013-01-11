@@ -64,11 +64,13 @@ module Groonga
       dump_plugins(options) if options[:dump_plugins]
       if options[:dump_schema]
         schema_dumper.dump_tables
-        options[:output].write("\n")
-        schema_dumper.dump_reference_columns
+        if schema_dumper.have_reference_columns?
+          options[:output].write("\n")
+          schema_dumper.dump_reference_columns
+        end
       end
       dump_tables(options) if options[:dump_tables]
-      if options[:dump_schema]
+      if options[:dump_schema] and schema_dumper.have_index_columns?
         options[:output].write("\n")
         schema_dumper.dump_index_columns
       end
@@ -153,9 +155,21 @@ module Groonga
       end
     end
 
+    def have_reference_columns?
+      run do |syntax|
+        syntax.have_reference_columns?
+      end
+    end
+
     def dump_reference_columns
       run do |syntax|
         syntax.dump_reference_columns
+      end
+    end
+
+    def have_index_columns?
+      run do |syntax|
+        syntax.have_index_columns?
       end
     end
 
@@ -220,6 +234,10 @@ module Groonga
         end
       end
 
+      def have_reference_columns?
+        not reference_columns.empty?
+      end
+
       def dump_reference_columns
         group_columns(reference_columns).each do |table, columns|
           change_table(table) do
@@ -228,6 +246,10 @@ module Groonga
             end
           end
         end
+      end
+
+      def have_index_columns?
+        not index_columns.empty?
       end
 
       def dump_index_columns

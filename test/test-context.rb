@@ -136,7 +136,7 @@ column_create Items title COLUMN_SCALAR Text
 EOD
       restore(commands)
 
-      assert_equal("#{commands}\n\n", dump)
+      assert_equal(commands, dump)
     end
 
     def test_continuation_lines
@@ -148,8 +148,6 @@ EOD
 
       assert_equal(<<-EOC, dump)
 table_create Items TABLE_HASH_KEY --key_type ShortText
-
-
 EOC
     end
 
@@ -164,8 +162,6 @@ EOC
       assert_equal(<<-EOC, dump)
 table_create Items TABLE_HASH_KEY --key_type ShortText
 column_create Items title COLUMN_SCALAR Text
-
-
 EOC
     end
 
