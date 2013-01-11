@@ -86,11 +86,12 @@ module Groonga
     def restore(dumped_commands)
       buffer = ""
       dumped_commands.each_line do |line|
+        line = line.chomp
         case line
-        when /\\\r?\n\z/
+        when /\\\z/
           buffer << $PREMATCH
         else
-          buffer << line.chomp
+          buffer << line
           send(buffer)
           receive
           buffer.clear
