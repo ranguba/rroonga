@@ -165,6 +165,19 @@ column_create Items title COLUMN_SCALAR Text
 EOC
     end
 
+    def test_comment
+      restore(<<-EOC)
+table_create Items TABLE_HASH_KEY --key_type ShortText
+# column_create Items url COLUMN_SCALAR ShortText
+column_create Items title COLUMN_SCALAR Text
+EOC
+
+      assert_equal(<<-EOC, dump)
+table_create Items TABLE_HASH_KEY --key_type ShortText
+column_create Items title COLUMN_SCALAR Text
+EOC
+    end
+
     private
     def restore(commands)
       restored_db_path = @tmp_dir + "restored.db"
