@@ -133,13 +133,13 @@ class ContextTest < Test::Unit::TestCase
       restored_db_path = @tmp_dir + "restored.db"
       Groonga::Database.create(:path => restored_db_path.to_s)
 
-      command = <<EOD
+      commands = <<EOD
 table_create Items TABLE_HASH_KEY --key_type ShortText
 column_create Items title COLUMN_SCALAR Text
 EOD
-      context.restore(command)
+      context.restore(commands)
 
-      assert_equal("#{command}\n\n", dump)
+      assert_equal("#{commands}\n\n", dump)
     end
 
     def test_continuation_lines
