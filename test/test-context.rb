@@ -140,11 +140,11 @@ EOD
     end
 
     def test_continuation_lines
-      restore_command = <<-EOD
+      dumped_commands = <<-EOD
 table_create Items TABLE_HASH_KEY\\
  --key_type ShortText
 EOD
-      restore(restore_command)
+      restore(dumped_commands)
 
       assert_equal(<<-EOC, dump)
 table_create Items TABLE_HASH_KEY --key_type ShortText
