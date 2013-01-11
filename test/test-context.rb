@@ -128,7 +128,8 @@ class ContextTest < Test::Unit::TestCase
     assert_true(context.closed?)
   end
 
-  def test_restore
+  class RestoreTest < self
+  def test_simple
     restored_db_path = @tmp_dir + "restored.db"
     Groonga::Database.create(:path => restored_db_path.to_s)
 
@@ -141,7 +142,7 @@ EOD
     assert_equal("#{command}\n\n", dump)
   end
 
-  def test_restore_continuation_lines
+  def test_continuation_lines
     restore_command = <<-EOD
 table_create Items TABLE_HASH_KEY\\\\
  --key_type ShortText
@@ -158,5 +159,6 @@ EOD
   private
   def dump
     Groonga::DatabaseDumper.new.dump
+  end
   end
 end
