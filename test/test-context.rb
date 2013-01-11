@@ -151,9 +151,11 @@ EOD
       Groonga::Database.create(:path => restored_db_path.to_s)
       context.restore(restore_command)
 
-      expected_command = "table_create Items TABLE_HASH_KEY " +
-                            "--key_type ShortText\n\n\n"
-      assert_equal(expected_command, dump)
+      assert_equal(<<-EOC, dump)
+table_create Items TABLE_HASH_KEY --key_type ShortText
+
+
+EOC
     end
 
     private
