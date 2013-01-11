@@ -144,7 +144,7 @@ EOD
 
     def test_continuation_lines
       restore_command = <<-EOD
-table_create Items TABLE_HASH_KEY\\\\
+table_create Items TABLE_HASH_KEY\\
  --key_type ShortText
 EOD
       restored_db_path = @tmp_dir + "restored.db"
