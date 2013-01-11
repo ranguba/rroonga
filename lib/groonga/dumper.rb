@@ -31,6 +31,16 @@ module Groonga
 
   # データベースの内容をgrn式形式の文字列として出力するクラス。
   class DatabaseDumper
+    class << self
+      # Dump database
+      #
+      # TODO: document options paramter
+      def dump(options={})
+        dumper = new(options)
+        dumper.dump
+      end
+    end
+
     def initialize(options={})
       @options = options
     end

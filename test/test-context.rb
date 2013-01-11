@@ -162,7 +162,7 @@ EOC
     end
 
     def dump
-      Groonga::DatabaseDumper.new.dump
+      Groonga::DatabaseDumper.dump
     end
   end
 end
