@@ -19,10 +19,10 @@ context.restore(dumped_commands)
 h3. Fixes
 
 * Added missing Groonga::Logger.
-* [dumper] Reduced needless new lines in dumped command.
+* [dumper] Reduced needless new lines in dumped commands.
 * For installing groonga with this gem:
-** Fix the needless install of needless document.
-** Fix the needless  build of static library.
+** Fix the needless install of documents.
+** Fix the needless build of static library.
 
 * For ranguba project:
 ** [template] Removed needless block for sponsor by rubyforge.
