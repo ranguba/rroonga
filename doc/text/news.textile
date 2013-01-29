@@ -5,9 +5,9 @@ h2(#2-1-3). 2.1.3: 2013-01-29
 h3. Improvements
 
 * Removed Groonga::View removed in groonga 2.1.2.
-* [doc] Add tutorial in English.
-** English:  http://ranguba.org/rroonga/en/file.tutorial.html
-** Japanese: http://ranguba.org/rroonga/ja/file.tutorial.html
+* [doc] Added tutorial in English.
+** for English:http://ranguba.org/rroonga/en/file.tutorial.html
+** for Japanese:http://ranguba.org/rroonga/ja/file.tutorial.html
 * [context] Added Context#restore. This method restores command dumped
   by "grndump" command. Please see example below:
 <pre>
