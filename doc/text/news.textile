@@ -16,13 +16,13 @@ dumped_commands = File.read("dump.grn")
 context.restore(dumped_commands)
 </pre>
 * Supported new logger API in groonga. Old API isn't used anymore.
+* For installing groonga with this gem:
+** Fix the needless install of documents.
+** Fix the needless build of static library.
 
 h3. Fixes
 
 * [dumper] Reduced needless new lines in dumped commands.
-* For installing groonga with this gem:
-** Fix the needless install of documents.
-** Fix the needless build of static library.
 
 * For ranguba project:
 ** [template] Removed needless block for sponsor by rubyforge.
