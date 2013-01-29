@@ -74,6 +74,7 @@ namespace :reference do
 end
 
 Packnga::ReleaseTask.new(spec) do |task|
+  task.index_html_dir = "../ranguba.org"
 end
 
 module YARD
