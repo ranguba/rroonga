@@ -17,8 +17,8 @@ context.restore(dumped_commands)
 </pre>
 * Supported new logger API in groonga. Old API isn't used anymore.
 * For installing groonga with this gem:
-** Fix the needless install of documents.
-** Fix the needless build of static library.
+** Stopped to install documentation about groonga. See "Web site":http://groonga.org/docs/ instead.
+** Stopped to build static library because it isn't used by rroonga.
 
 h3. Fixes
 
