@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2010-2012  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2010-2013  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -28,22 +28,81 @@ module Groonga
       Database.open(path, options, &block)
     end
 
-    # _path_ に新しくデータベースを作成する。 _path_ を省略すると
-    # 一時データベースとなる。
+    # This is convenience method. It wraps {Groonga::Database.create}
+    # for the context.
     #
-    # @example
-    #   #一時データベースを作成:
-    #   context.create_database
+    # @overload create_database
+    #   Creates a new temproary database for the context.
     #
-    #   #永続データベースを作成:
-    #   context.create_database("/tmp/db.groonga")
-    def create_database(path=nil)
+    #   @return [Groonga::Database] A new temporary database.
+    #
+    #   @example Creating a new temporary database
+    #     temporary_database = context.create_database
+    #
+    # @overload create_database(&block)
+    #   Creates a new temproary database for the context. The database
+    #   is closed after the passed block is finished.
+    #
+    #   @yield [database] Yields a newly created temporary database
+    #     for the context. The database is available only in the
+    #     block.
+    #
+    #   @yeildparam [Groonga::Database] database A newly created
+    #     temporary database for the context.
+    #
+    #   @yeildreturn [Object] The returned value from the block is the
+    #     returned value from this method.
+    #
+    #   @return Returned value from the block.
+    #
+    #   @example Creating a new temporary database with block
+    #     context.create_database do |temporary_database|
+    #       # ...
+    #     end
+    #
+    # @overload create_database(path)
+    #   Creates a new persistent database for the context to the _path_.
+    #
+    #   @param [String] path Database path for a new persistent
+    #     database.
+    #
+    #   @return [Groonga::Database] A new persistent database for the
+    #     context.
+    #
+    #   @example Creating a new persistent database to _"/tmp/db.groonga"_
+    #     database = context.create_database("/tmp/db.groonga")
+    #
+    # @overload create_database(path, &block)
+    #   Creates a new persistent database for the context to the
+    #   _path_. The database is closed after the passed block is
+    #   finished.
+    #
+    #   @param [String] path Database path for a new persistent
+    #     database.
+    #
+    #   @yield [database] Yields a newly created persistent database
+    #     for the context. The database is available only in the
+    #     block.
+    #
+    #   @yeildparam [Groonga::Database] database A newly created
+    #     persistent database for the context.
+    #
+    #   @yeildreturn [Object] The returned value from the block is the
+    #     returned value from this method.
+    #
+    #   @return Returned value from the block.
+    #
+    #   @example Creating a new persistent database to _"/tmp/db.groonga"_ database with block
+    #     context.create_database("/tmp/db.groonga") do |persistent_database|
+    #       # ...
+    #     end
+    def create_database(path=nil, &block)
       options = {:context => self}
       if path
         options[:path] = path
       end
 
-      Database.create(options)
+      Database.create(options, &block)
     end
 
     # groongaのプラグインディレクトリにあるプラグイン _name_
