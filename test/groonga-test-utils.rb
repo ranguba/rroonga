@@ -46,7 +46,7 @@ module GroongaTestUtils
 
   def setup_tmp_directory
     @base_tmp_dir = Pathname(File.dirname(__FILE__)) + "tmp"
-    memory_file_system = "/dev/shm"
+    memory_file_system = "/run/shm"
     if File.exist?(memory_file_system)
       FileUtils.mkdir_p(@base_tmp_dir.parent.to_s)
       FileUtils.rm_f(@base_tmp_dir.to_s)
