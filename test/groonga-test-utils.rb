@@ -15,6 +15,7 @@
 
 require 'fileutils'
 require 'pathname'
+require 'tempfile'
 require 'time'
 require 'erb'
 require 'stringio'

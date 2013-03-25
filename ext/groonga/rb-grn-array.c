@@ -1,6 +1,6 @@
 /* -*- coding: utf-8; c-file-style: "ruby" -*- */
 /*
-  Copyright (C) 2009-2011  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2013  Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -192,6 +192,220 @@ rb_grn_array_add (int argc, VALUE *argv, VALUE self)
     }
 }
 
+typedef struct _YieldRecordCallbackData
+{
+    VALUE self;
+    VALUE record;
+    grn_id id;
+    int status;
+} YieldRecordCallbackData;
+
+static VALUE
+yield_record (VALUE user_data)
+{
+    YieldRecordCallbackData *data = (YieldRecordCallbackData *)user_data;
+    volatile VALUE record;
+
+    if (data->id == GRN_ID_NIL) {
+	record = Qnil;
+    } else {
+	record = rb_grn_record_new(data->self, data->id, Qnil);
+    }
+    data->record = record;
+
+    return rb_yield(record);
+}
+
+static void
+yield_record_callback (grn_ctx *ctx, grn_array *array,
+                       grn_id id, void *user_data)
+{
+    YieldRecordCallbackData *data = user_data;
+
+    data->id = id;
+    rb_protect(yield_record, (VALUE)(data), &(data->status));
+}
+
+/*
+ * Pushes a record to the array. The record should be filled in the
+ * given block. The pushed record can be pulled by
+ * {Groonga::Array#pull}.
+ *
+ * @example A program that pushes a job without error handling
+ *   queue = Groonga::Array.create(:name => "CrawlURLQueue")
+ *   queue.define_column("url", "ShortText")
+ *   urls = ["http://groonga.org/", "http://ranguba.org/"]
+ *   urls.each do |url|
+ *     queue.push do |record|
+ *       record.url = url
+ *     end
+ *   end
+ *
+ * @example A program that pulls a job without error handling
+ *   queue = Groonga::Array.open(:name => "CrawlURLQueue")
+ *   loop do
+ *     url = nil
+ *     queue.pull do |record|
+ *       url = record.url
+ *       record.delete
+ *     end
+ *     # Crawl URL
+ *   end
+ *
+ * The record that is passed to the given block may be nil. You need
+ * to handle the case. For example, just ignoring it or reports an
+ * error.
+ *
+ * @example A program that pushes a job with error handling
+ *   queue = Groonga::Array.create(:name => "CrawlURLQueue")
+ *   queue.define_column("url", "ShortText")
+ *   urls = ["http://groonga.org/", "http://ranguba.org/"]
+ *   urls.each do |url|
+ *     queue.push do |record|
+ *       record.url = url if record # check record is not nil
+ *     end
+ *   end
+ *
+ * If an error is occurred in the given block, the pushed record may
+ * not be filled completely. You should handle the case in pull side.
+ *
+ * @example A program that has an error in push block
+ *   queue = Groonga::Array.create(:name => "CrawlURLQueue")
+ *   queue.define_column("url", "ShortText")
+ *   urls = ["http://groonga.org/", "http://ranguba.org/"]
+ *   urls.each do |url|
+ *     queue.push do |record|
+ *       record.url = uri # Typo! It should be ur*l* not ur*i*
+ *       # record.url isn't set
+ *     end
+ *   end
+ *
+ * @example A program that pulls a job with error handling
+ *   queue = Groonga::Array.open(:name => "CrawlURLQueue")
+ *   loop do
+ *     url = nil
+ *     queue.pull do |record|
+ *       url = record.url # record.url is nil!
+ *       record.delete
+ *     end
+ *     next if url.nil? # Ignore an uncompleted added job
+ *     # Crawl URL
+ *   end
+ *
+ * @overload push
+ *   @yield [record] Filles columns of a pushed record in the given block.
+ *   @yieldparam record [Groonga::Record or nil]
+ *     A pushed record. It is nil when pushing is failed.
+ *   @return [Groonga::Record or nil] A pushed record that is yielded.
+ *
+ */
+static VALUE
+rb_grn_array_push (VALUE self)
+{
+    grn_ctx *context = NULL;
+    grn_obj *table;
+    YieldRecordCallbackData data;
+
+    if (!rb_block_given_p()) {
+	rb_raise(rb_eArgError,
+                 "tried to call Groonga::Array#push without a block");
+    }
+
+    table = SELF(self, &context);
+
+    data.self = self;
+    data.record = Qnil;
+    data.status = 0;
+    grn_array_push(context, (grn_array *)table, yield_record_callback, &data);
+    if (data.status != 0) {
+	rb_jump_tag(data.status);
+    }
+    rb_grn_context_check(context, self);
+
+    return data.record;
+}
+
+/*
+ * Pulles a record from the array. The required values should be
+ * retrieved in the given block.
+ *
+ * If {Groonga::Array#push} failes to fill values of the pushed
+ * record, the pulled record may be uncompleted. It should be handled
+ * by your application.
+ *
+ * If you passes @:block? => true@ option, the pull operation blocks
+ * until a pushed record is pushed. It is the default behavior.
+ *
+ * If you passes @:block? => false@ option, the pull operation returns
+ * immediately, the given block isn't called and returns nil when no
+ * record exist in the array.
+ *
+ * @example A program that pulls with non-block mode
+ *   queue = Groonga::Array.open(:name => "CrawlURLQueue")
+ *   loop do
+ *     url = nil
+ *     # The case for no pushed records in the array.
+ *     pulled_record = queue.pull(:block? => false) do |record|
+ *       # This block isn't called
+ *       url = record.url
+ *       record.delete
+ *     end
+ *     p pulled_record.nil? # => true
+ *   end
+ *
+ * @see {Groonga::Array#push} Examples exist in the push documentation.
+ *
+ * @overload pull(options={})
+ *   @param [::Hash] options The option parameters.
+ *   @option options [Boolean] :block? (true)
+ *     Whether the pull operation is blocked or not when no record exist
+ *     in the array.
+ *   @yield [record] Gets required values for a pull record in the given block.
+ *   @yieldparam record [Groonga::Record or nil]
+ *     A pulled record. It is nil when no records exist in the array
+ *     and @block?@ parameter is not @true@.
+ *   @return [Groonga::Record or nil] A pulled record that is yielded.
+ *
+ */
+static VALUE
+rb_grn_array_pull (int argc, VALUE *argv, VALUE self)
+{
+    grn_ctx *context = NULL;
+    grn_obj *table;
+    VALUE options;
+    VALUE rb_block_p;
+    YieldRecordCallbackData data;
+
+    rb_scan_args(argc, argv, "01", &options);
+
+    rb_grn_scan_options(options,
+			"block?", &rb_block_p,
+			NULL);
+
+    if (!rb_block_given_p()) {
+	rb_raise(rb_eArgError,
+                 "tried to call Groonga::Array#pull without a block");
+    }
+
+    table = SELF(self, &context);
+
+    if (NIL_P(rb_block_p)) {
+        rb_block_p = Qtrue;
+    }
+
+    data.self = self;
+    data.record = Qnil;
+    data.status = 0;
+    grn_array_pull(context, (grn_array *)table, RVAL2CBOOL(rb_block_p),
+                   yield_record_callback, &data);
+    if (data.status != 0) {
+	rb_jump_tag(data.status);
+    }
+    rb_grn_context_check(context, self);
+
+    return data.record;
+}
+
 void
 rb_grn_init_array (VALUE mGrn)
 {
@@ -201,4 +415,6 @@ rb_grn_init_array (VALUE mGrn)
 			       rb_grn_array_s_create, -1);
 
     rb_define_method(rb_cGrnArray, "add", rb_grn_array_add, -1);
+    rb_define_method(rb_cGrnArray, "push", rb_grn_array_push, 0);
+    rb_define_method(rb_cGrnArray, "pull", rb_grn_array_pull, -1);
 }

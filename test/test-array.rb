@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2012  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2013  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -16,7 +16,7 @@
 class ArrayTest < Test::Unit::TestCase
   include GroongaTestUtils
 
-  setup :setup_database
+  setup :setup_database, :before => :append
 
   def test_support_key?
     assert_not_predicate(Groonga::Array.create(:name => "Users"), :support_key?)
@@ -142,5 +142,89 @@ class ArrayTest < Test::Unit::TestCase
 
     user_ids = users.each.collect(&:id)
     assert_equal([1, 2, 3], user_ids)
+  end
+
+  class TestPushPull < self
+    def setup
+      @queue = Groonga::Array.create(:name => "Queue")
+      @queue.define_column("content", "ShortText")
+    end
+
+    def teardown
+      @queue = nil
+    end
+
+    def test_block?
+      Tempfile.open("output") do |output|
+        Tempfile.open("blocked_pull.rb") do |pull_rb|
+          pull_rb.puts(pull_rb_source(":block? => true"))
+          pull_rb.close
+
+          pid = spawn({}, RbConfig.ruby, pull_rb.path, :out => output.path)
+          sleep(0.5)
+          @queue.push do |record|
+            record.content = "The first record"
+          end
+          Process.waitpid(pid)
+          assert_equal(<<-EXPECTED_OUTPUT, output.read)
+start
+1, The first record
+done
+EXPECTED_OUTPUT
+        end
+      end
+    end
+
+    def test_not_block?
+      Tempfile.open("output") do |output|
+        Tempfile.open("not_blocked_pull.rb") do |pull_rb|
+          pull_rb.puts(pull_rb_source(":block? => false"))
+          pull_rb.close
+
+          pid = spawn({}, RbConfig.ruby, pull_rb.path, :out => output.path)
+          Process.waitpid(pid)
+          assert_equal(<<-EXPECTED_OUTPUT, output.read)
+start
+done
+EXPECTED_OUTPUT
+
+          @queue.push do |record|
+            record.content = "The first record"
+          end
+          pid = spawn({}, RbConfig.ruby, pull_rb.path, :out => output.path)
+          Process.waitpid(pid)
+          output.rewind
+          assert_equal(<<-EXPECTED_OUTPUT, output.read)
+start
+1, The first record
+done
+EXPECTED_OUTPUT
+        end
+      end
+    end
+
+    private
+    def pull_rb_source(options)
+      base_dir = File.expand_path(File.join(File.dirname(__FILE__), ".."))
+      <<-CODE
+base_dir = #{base_dir.dump}
+ext_dir = File.join(base_dir, "ext", "groonga")
+lib_dir = File.join(base_dir, "lib")
+
+$LOAD_PATH.unshift(ext_dir)
+$LOAD_PATH.unshift(lib_dir)
+
+require "groonga"
+
+puts("start")
+Groonga::Context.default.open_database(#{@database_path.to_s.dump}) do
+  queue = Groonga["Queue"]
+  queue.pull(#{options}) do |record|
+    puts([record.id, record.content].join(", "))
+  end
+end
+puts("done")
+CODE
+    end
   end
 end
