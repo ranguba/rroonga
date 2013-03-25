@@ -75,6 +75,12 @@ rb_grn_object_from_ruby_object (VALUE object, grn_ctx **context)
     if (!rb_grn_object)
 	rb_raise(rb_eGrnError, "groonga object is NULL");
 
+    if (!rb_grn_object->object) {
+	rb_raise(rb_eGrnClosed,
+                 "can't access already closed groonga object: %s",
+                 rb_grn_inspect(CLASS_OF(rb_grn_object->self)));
+    }
+
     if (context && !*context)
 	*context = rb_grn_object->context;
 
@@ -519,12 +525,6 @@ rb_grn_object_deconstruct (RbGrnObject *rb_grn_object,
 {
     if (!rb_grn_object)
 	return;
-
-    if (!rb_grn_object->object) {
-	rb_raise(rb_eGrnClosed,
-		 "can't access already closed groonga object: %s",
-		 rb_grn_inspect(CLASS_OF(rb_grn_object->self)));
-    }
 
     if (object)
 	*object = rb_grn_object->object;
