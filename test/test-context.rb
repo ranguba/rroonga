@@ -178,12 +178,32 @@ column_create Items title COLUMN_SCALAR Text
 EOC
     end
 
+    def test_block
+      table_create = "table_create Items TABLE_HASH_KEY --key_type ShortText"
+      column_create = "column_create Items title COLUMN_SCALAR Text"
+      commands = <<-COMMANDS
+#{table_create}
+
+#{column_create}
+COMMANDS
+      responses = []
+      restore(commands) do |command, response|
+        responses << [command.dup, response]
+      end
+      assert_equal([
+                     [table_create, "true"],
+                     ["", ""],
+                     [column_create,"true"]
+                   ],
+                   responses)
+    end
+
     private
-    def restore(commands)
+    def restore(commands, &block)
       restored_db_path = @tmp_dir + "restored.db"
       Groonga::Database.create(:path => restored_db_path.to_s)
 
-      context.restore(commands)
+      context.restore(commands, &block)
     end
 
     def dump

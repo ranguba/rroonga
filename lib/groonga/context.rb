@@ -137,28 +137,49 @@ module Groonga
 
     # Restore commands dumped by "grndump" command.
     #
-    # @example
+    # @example Restore dumped commands.
     #   dumped_commands = File.read("dump.grn")
     #   context.restore(dumped_commands)
     #
+    # If block is given, response is yielded.
+    #
+    # @example Restore dumped commands and reports result.
+    #   dumped_commands = File.read("dump.grn")
+    #   context.restore(dumped_commands) do |command, response|
+    #     puts("#{command} -> #{response}")
+    #   end
+    #
     # @param [String] dumped_commands commands dumped by grndump.
+    # @yield [command, response]
+    #   Yields a sent command and its response if block is given.
+    # @yieldparam command [String] A sent command.
+    # @yieldparam response [String] A response for a command.
+    # @return [void]
     def restore(dumped_commands)
       buffer = ""
+      continued = false
       dumped_commands.each_line do |line|
         line = line.chomp
         case line
         when /\\\z/
+          continued = true
           buffer << $PREMATCH
         else
+          continued = false
           buffer << line
           send(buffer)
-          receive
+          _, response = receive
+          if block_given?
+            not_shared_command = continued ? buffer.dup : line
+            yield(not_shared_command, response)
+          end
           buffer.clear
         end
       end
       unless buffer.empty?
         send(buffer)
-        receive
+        _, response = receive
+        yield(buffer.dup, response) if block_given?
       end
     end
   end
