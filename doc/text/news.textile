@@ -1,5 +1,19 @@
 h1. NEWS
 
+h2(#2-1-4). 2.1.4: 2013-03-29
+
+h3. Improvements
+
+* Required groonga >= 3.0.2.
+* Added block support to {Groonga::Context#create_database}. If a
+  block is given, created database is closed on block exit.
+* [experimental] Added {Groonga::Array#push}.
+* [experimental] Added {Groonga::Array#pull}.
+* Added more closed object checks.
+  [GitHub #8][Reported by KITAITI Makoto]
+* Added block support to {Groonga::Context#restore}. If a block is
+  given, command and its response are yielded.
+
 h2(#2-1-3). 2.1.3: 2013-01-29
 
 h3. Improvements
