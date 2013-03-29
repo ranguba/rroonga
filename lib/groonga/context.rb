@@ -47,10 +47,10 @@ module Groonga
     #     for the context. The database is available only in the
     #     block.
     #
-    #   @yeildparam [Groonga::Database] database A newly created
+    #   @yieldparam [Groonga::Database] database A newly created
     #     temporary database for the context.
     #
-    #   @yeildreturn [Object] The returned value from the block is the
+    #   @yieldreturn [Object] The returned value from the block is the
     #     returned value from this method.
     #
     #   @return Returned value from the block.
@@ -84,10 +84,10 @@ module Groonga
     #     for the context. The database is available only in the
     #     block.
     #
-    #   @yeildparam [Groonga::Database] database A newly created
+    #   @yieldparam [Groonga::Database] database A newly created
     #     persistent database for the context.
     #
-    #   @yeildreturn [Object] The returned value from the block is the
+    #   @yieldreturn [Object] The returned value from the block is the
     #     returned value from this method.
     #
     #   @return Returned value from the block.
