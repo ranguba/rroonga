@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: rroonga 2.1.0\n"
 "POT-Creation-Date: 2011-11-20 22:17+0900\n"
-"PO-Revision-Date: 2013-01-29 18:40+0900\n"
+"PO-Revision-Date: 2013-03-29 10:59+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: \n"
@@ -174,9 +174,8 @@ msgid "h1. NEWS"
 msgstr "h1. お知らせ"
 
 #: ./doc/text/news.textile:3
-#, fuzzy
 msgid "h2(#2-1-4). 2.1.4: 2013-03-29"
-msgstr "* @kamipoさん"
+msgstr ""
 
 #: ./doc/text/news.textile:5 ./doc/text/news.textile:19
 #: ./doc/text/news.textile:54 ./doc/text/news.textile:61
@@ -206,13 +205,19 @@ msgid ""
 "* Added block support to {Groonga::Context#restore}. If a block is\n"
 "  given, command and its response are yielded."
 msgstr ""
+"* groonga >= 3.0.2を必須にした。\n"
+"* {Groonga::Context#create_database}がブロックをサポートした。ブロックを渡すとブロックを抜ける時に作成したデータベースを閉じる。\n"
+"* [実験的] {Groonga::Array#push}を追加した。\n"
+"* [実験的] {Groonga::Array#pull}を追加した。\n"
+"* 閉じたオブジェクトのチェックを増やした。\n"
+"  [GitHub #8][KITAITI Makotoさんが報告]\n"
+"* {Groonga::Context#restore}がブロックをサポートした。ブロックを渡すと実行したコマンドとそのレスポンスをブロックに渡す。"
 
 #: ./doc/text/news.textile:17
 msgid "h2(#2-1-3). 2.1.3: 2013-01-29"
 msgstr ""
 
 #: ./doc/text/news.textile:21
-#, fuzzy
 msgid ""
 "* Removed Groonga::View removed in groonga 2.1.2.\n"
 "* [doc] Added tutorial in English.\n"
@@ -240,7 +245,11 @@ msgstr ""
 "!!!ruby\n"
 "dumped_commands = File.read(\"dump.grn\")\n"
 "context.restore(dumped_commands)\n"
-"</pre>"
+"</pre>\n"
+"* groongaの新しいlogger APIをサポートしました。古いAPIはもう使われていません。\n"
+"* このgemと一緒にインストールされるgroongaについて:\n"
+"** groongaのドキュメントはインストールしないようにした。ドキュメントは \"Webサイト\":http://groonga.org/ja/docs/ を見てください。\n"
+"** rroongaでは使っていないのでスタティックライブラリはビルドしないようにした。"
 
 #: ./doc/text/news.textile:37 ./doc/text/news.textile:48
 #: ./doc/text/news.textile:183 ./doc/text/news.textile:207
@@ -2585,9 +2594,8 @@ msgstr ""
 
 # @overload
 #: ./ext/groonga/rb-grn-array.c:302
-#, fuzzy
 msgid "tag|overload|push"
-msgstr "登録されたロガーの登録を削除する。削除後はデフォルトのロガーが使われます。"
+msgstr ""
 
 # @example
 #: ./ext/groonga/rb-grn-array.c:302
@@ -2636,9 +2644,8 @@ msgstr ""
 
 # @overload
 #: ./ext/groonga/rb-grn-array.c:370
-#, fuzzy
 msgid "tag|overload|pull"
-msgstr "登録されたロガーの登録を削除する。削除後はデフォルトのロガーが使われます。"
+msgstr ""
 
 # @see
 #: ./ext/groonga/rb-grn-array.c:370
@@ -5975,9 +5982,8 @@ msgstr ""
 
 # @overload
 #: ./lib/groonga/context.rb:99
-#, fuzzy
 msgid "tag|overload|create_database"
-msgstr "登録されたロガーの登録を削除する。削除後はデフォルトのロガーが使われます。"
+msgstr ""
 
 #: ./lib/groonga/context.rb:109
 msgid ""
@@ -8101,42 +8107,3 @@ msgid ""
 "そうでなければ +false+ を返す。"
 msgstr ""
 
-#: ./doc/text/news.textile:7
-#~ msgid ""
-#~ "* Removed Groonga::View removed in groonga 2.1.2.\n"
-#~ "* [doc] Added tutorial in English.\n"
-#~ "** for English:http://ranguba.org/rroonga/en/file.tutorial.html\n"
-#~ "** for Japanese:http://ranguba.org/rroonga/ja/file.tutorial.html\n"
-#~ "* [context] Added Context#restore. This method restores command dumped\n"
-#~ "  by \"grndump\" command. Please see example below:\n"
-#~ "<pre>\n"
-#~ "!!!ruby\n"
-#~ "dumped_commands = File.read(\"dump.grn\")\n"
-#~ "context.restore(dumped_commands)\n"
-#~ "</pre>"
-#~ msgstr ""
-#~ "* groonga 2.1.2で削除されたGroonga::Viewの機能を削除。\n"
-#~ "* [doc] 英訳したチュートリアルを追加。\n"
-#~ "** 英語版:  http://ranguba.org/rroonga/en/file.tutorial.html\n"
-#~ "** 日本語版: http://ranguba.org/rroonga/ja/file.tutorial.html\n"
-#~ "* [context] Context#restoreを追加。このメソッドはgroongaに搭載されている\"grndump\"コマンドによってダンプされたコマンドをリストアできます。\n"
-#~ "例：\n"
-#~ "<pre>\n"
-#~ "!!!ruby\n"
-#~ "dumped_commands = File.read(\"dump.grn\")\n"
-#~ "context.restore(dumped_commands)\n"
-#~ "</pre>"
-
-#: ./doc/text/news.textile:21
-#~ msgid ""
-#~ "* Added missing Groonga::Logger.\n"
-#~ "* [dumper] Reduced needless new lines in dumped commands.\n"
-#~ "* For installing groonga with this gem:\n"
-#~ "** Fix the needless install of documents.\n"
-#~ "** Fix the needless build of static library."
-#~ msgstr ""
-#~ "* Groonga::Loggerの内容が古かったのを修正した。\n"
-#~ "* [dumper] ダンプしたコマンドに余計な改行が含まれていたのを削除。\n"
-#~ "* rroongaをインストール時にgroongaをインストールする際：\n"
-#~ "** 必要のないドキュメントがインストールされるのを修正した。\n"
-#~ "** 必要のない静的ライブラリをビルドしないようにした。"
