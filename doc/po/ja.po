@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: rroonga 2.1.0\n"
 "POT-Creation-Date: 2011-11-20 22:17+0900\n"
-"PO-Revision-Date: 2013-03-29 10:59+0900\n"
+"PO-Revision-Date: 2013-03-29 11:03+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: \n"
@@ -224,7 +224,7 @@ msgstr "h3. 感謝"
 
 #: ./doc/text/news.textile:19
 msgid "* KITAITI Makoto"
-msgstr ""
+msgstr "* KITAITI Makotoさん"
 
 #: ./doc/text/news.textile:21
 msgid "h2(#2-1-3). 2.1.3: 2013-01-29"
