@@ -14,6 +14,10 @@ h3. Improvements
 * Added block support to {Groonga::Context#restore}. If a block is
   given, command and its response are yielded.
 
+h3. Thanks
+
+* KITAITI Makoto
+
 h2(#2-1-3). 2.1.3: 2013-01-29
 
 h3. Improvements
