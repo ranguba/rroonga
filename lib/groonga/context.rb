@@ -149,7 +149,8 @@ module Groonga
     #     puts("#{command} -> #{response}")
     #   end
     #
-    # @param [String] dumped_commands commands dumped by grndump.
+    # @param [#each_line] dumped_commands commands dumped by grndump.
+    #   commands is an object as File, String, and so on.
     # @yield [command, response]
     #   Yields a sent command and its response if block is given.
     # @yieldparam command [String] A sent command.
