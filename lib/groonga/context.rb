@@ -142,8 +142,8 @@ module Groonga
     #   context.restore(dumped_commands)
     #
     # @example Restore dumped commands from a File object.
-    #   File.open("dump.grn") do |dumped_commands|
-    #     context.restore(dumped_commands)
+    #   File.open("dump.grn") do |file|
+    #     context.restore(file)
     #   end
     #
     # If block is given, response is yielded.
