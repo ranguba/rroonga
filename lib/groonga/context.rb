@@ -146,7 +146,7 @@ module Groonga
     #     context.restore(file)
     #   end
     #
-    # If block is given, response is yielded.
+    # If block is given, a response is yielded.
     #
     # @example Restore dumped commands and reports result.
     #   dumped_commands = File.read("dump.grn")
@@ -155,8 +155,9 @@ module Groonga
     #   end
     #
     # @param [#each_line] dumped_commands commands dumped by grndump.
-    #   It can be String object or any objects like IO object such as
-    #   File object. It should have #each_line that iterates a line.
+    #   It can be a String object or any objects like a IO object such
+    #   as a File object. It should have #each_line that iterates a
+    #   line.
     # @yield [command, response]
     #   Yields a sent command and its response if block is given.
     # @yieldparam command [String] A sent command.
