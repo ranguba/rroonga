@@ -137,9 +137,14 @@ module Groonga
 
     # Restore commands dumped by "grndump" command.
     #
-    # @example Restore dumped commands.
+    # @example Restore dumped commands as a String object.
     #   dumped_commands = File.read("dump.grn")
     #   context.restore(dumped_commands)
+    #
+    # @example Restore dumped commands from a File object.
+    #   File.open("dump.grn") do |dumped_commands|
+    #     context.restore(dumped_commands)
+    #   end
     #
     # If block is given, response is yielded.
     #
