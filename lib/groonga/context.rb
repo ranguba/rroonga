@@ -155,7 +155,8 @@ module Groonga
     #   end
     #
     # @param [#each_line] dumped_commands commands dumped by grndump.
-    #   commands is an object as File, String, and so on.
+    #   It can be String or IO like object such as File. It should have
+    #   #each_line that iterates a line.
     # @yield [command, response]
     #   Yields a sent command and its response if block is given.
     # @yieldparam command [String] A sent command.
