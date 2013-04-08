@@ -239,7 +239,7 @@ rb_grn_logger_s_register (int argc, VALUE *argv, VALUE klass)
 
     rb_grn_scan_options(rb_options,
                         "max_level", &rb_max_level,
-                        "time",	     &rb_time,
+                        "time",      &rb_time,
                         "title",     &rb_title,
                         "message",   &rb_message,
                         "location",  &rb_location,
