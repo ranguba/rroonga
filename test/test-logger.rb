@@ -28,11 +28,15 @@ class LoggerTest < Test::Unit::TestCase
 
   def test_reopen
     Groonga::Logger.unregister
+    p [@default_log_path, File.exist?(@default_log_path)]
+    system("ls -lah #{@default_log_path}")
     if File.exist?(@default_log_path)
       FileUtils.mv(@default_log_path, "#{@default_log_path}.old")
     end
     assert_false(File.exist?(@default_log_path))
     Groonga::Logger.reopen
+    p [@default_log_path, File.exist?(@default_log_path)]
+    system("ls -lah #{@default_log_path}")
     assert_true(File.exist?(@default_log_path))
   end
 end
