@@ -413,7 +413,6 @@ rb_grn_init_logger (VALUE mGrn)
 
     rb_cv_set(cGrnLogger, "@@current_logger", Qnil);
     rb_cv_set(cGrnLogger, "@@log_path", Qnil);
-    rb_cv_set(cGrnLogger, "@@query_log_path", Qnil);
     rb_define_singleton_method(cGrnLogger, "register",
                                rb_grn_logger_s_register, -1);
     rb_define_singleton_method(cGrnLogger, "unregister",
