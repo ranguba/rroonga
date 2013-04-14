@@ -340,52 +340,61 @@ rb_grn_logger_s_reopen (VALUE klass)
 }
 
 /*
- * groongaのデフォルトロガーがログを出力するファイルのパスを返す。
+ * Gets the current log path that is used the default logger.
  *
- * @overload log_path
- *   @return [String]
+ * @overload path
+ *   @return [String or nil] The current log path
  */
 static VALUE
-rb_grn_logger_s_get_log_path (VALUE klass)
+rb_grn_logger_s_get_path (VALUE klass)
 {
     const char *path;
+    VALUE rb_path = Qnil;
 
     path = grn_default_logger_get_path();
     if (path) {
-	return rb_str_new2(path);
-    } else {
-	return Qnil;
+	rb_path = rb_str_new2(path);
     }
+    return rb_path;
 }
 
 /*
- * groongaのデフォルトロガーがログを出力するファイルのパスを
- * 指定する。
+ * Sets the log path that is used the default logger. If you're using
+ * custom logger by {#register}, the log path isn't used. Because it
+ * is for the default logger.
  *
- * {Groonga::Logger.register} で独自のロガーを設定している場合、
- * 設定している独自ロガーは無効になる。
+ * If you specify nil as path, logging by the default logger is
+ * disabled.
  *
- * @overload log_path=(path)
+ * @example Changes the log path for the default logger
+ *   Groonga::Logger.path = "/tmp/groonga.log"
+ *
+ * @example Disables log by the default logger
+ *   Groonga::Logger.path = nil
+ *
+ * @overload path=(path)
+ *   @param path [String or nil] The log path for the default logger.
+ *     If nil is specified, logging by the default logger is disabled.
+ *   @return void
  */
 static VALUE
-rb_grn_logger_s_set_log_path (VALUE klass, VALUE rb_path)
+rb_grn_logger_s_set_path (VALUE klass, VALUE rb_path)
 {
     grn_bool need_reopen = GRN_FALSE;
-    const char *current_path;
+    const char *old_path = NULL;
+    const char *path = NULL;
 
-    current_path = grn_default_logger_get_path();
-    if (NIL_P(rb_path)) {
-	need_reopen = current_path != NULL;
-	grn_default_logger_set_path(NULL);
-    } else {
-	const char *new_path;
-	new_path = RSTRING_PTR(rb_path);
-	if (!current_path || strcmp(new_path, current_path) != 0) {
-	    need_reopen = GRN_TRUE;
-	}
-	grn_default_logger_set_path(new_path);
+    rb_path = rb_grn_check_convert_to_string(rb_path);
+    if (!NIL_P(rb_path)) {
+        path = StringValuePtr(rb_path);
     }
-    rb_cv_set(klass, "@@log_path", rb_path);
+
+    old_path = grn_default_logger_get_path();
+    if (!rb_grn_equal_string(old_path, path)) {
+        need_reopen = GRN_TRUE;
+    }
+
+    grn_default_logger_set_path(path);
 
     if (need_reopen) {
 	rb_grn_logger_s_reopen_with_related_object(klass, rb_path);
@@ -412,7 +421,6 @@ rb_grn_init_logger (VALUE mGrn)
     cGrnLogger = rb_define_class_under(mGrn, "Logger", rb_cObject);
 
     rb_cv_set(cGrnLogger, "@@current_logger", Qnil);
-    rb_cv_set(cGrnLogger, "@@log_path", Qnil);
     rb_define_singleton_method(cGrnLogger, "register",
                                rb_grn_logger_s_register, -1);
     rb_define_singleton_method(cGrnLogger, "unregister",
