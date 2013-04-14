@@ -419,10 +419,10 @@ rb_grn_init_logger (VALUE mGrn)
                                rb_grn_logger_s_unregister, 0);
     rb_define_singleton_method(cGrnLogger, "reopen",
                                rb_grn_logger_s_reopen, 0);
-    rb_define_singleton_method(cGrnLogger, "log_path",
-                               rb_grn_logger_s_get_log_path, 0);
-    rb_define_singleton_method(cGrnLogger, "log_path=",
-                               rb_grn_logger_s_set_log_path, 1);
+    rb_define_singleton_method(cGrnLogger, "path",
+                               rb_grn_logger_s_get_path, 0);
+    rb_define_singleton_method(cGrnLogger, "path=",
+                               rb_grn_logger_s_set_path, 1);
     rb_set_end_proc(rb_grn_logger_reset, cGrnLogger);
 
     mGrnLoggerFlags = rb_define_module_under(cGrnLogger, "Flags");

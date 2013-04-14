@@ -43,6 +43,18 @@ module Groonga
     end
 
     class << self
+      # @deprecated since 3.0.1. Use {Groonga::Logger.path}
+      #   instead.
+      def log_path
+        path
+      end
+
+      # @deprecated since 3.0.1. Use {Groonga::Logger.path=}
+      #   instead.
+      def log_path=(path)
+        self.path = path
+      end
+
       # @deprecated since 3.0.1. Use {Groonga::QueryLogger.path}
       #   instead.
       def query_log_path
