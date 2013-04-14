@@ -100,7 +100,7 @@ rb_grn_scan_options (VALUE options, ...)
     VALUE *value;
     va_list args;
 
-    options = rb_check_convert_type(options, T_HASH, "Hash", "to_hash");
+    options = rb_grn_check_convert_to_hash(options);
     if (NIL_P(options)) {
 	if (NIL_P(original_options)) {
 	    options = rb_hash_new();
@@ -157,6 +157,12 @@ VALUE
 rb_grn_convert_to_array (VALUE object)
 {
     return rb_convert_type(object, RUBY_T_ARRAY, "Array", "to_ary");
+}
+
+VALUE
+rb_grn_check_convert_to_hash (VALUE object)
+{
+    return rb_check_convert_type(object, RUBY_T_HASH, "Hash", "to_hash");
 }
 
 static VALUE
