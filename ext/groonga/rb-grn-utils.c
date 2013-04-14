@@ -166,6 +166,12 @@ rb_grn_check_convert_to_string (VALUE object)
 }
 
 VALUE
+rb_grn_check_convert_to_array (VALUE object)
+{
+    return rb_check_array_type(object);
+}
+
+VALUE
 rb_grn_check_convert_to_hash (VALUE object)
 {
     return rb_check_convert_type(object, RUBY_T_HASH, "Hash", "to_hash");

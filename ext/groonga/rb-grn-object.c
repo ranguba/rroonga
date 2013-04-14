@@ -1302,7 +1302,7 @@ rb_grn_object_set_raw (RbGrnObject *rb_grn_object, grn_id id,
     VALUE exception, rb_values;
 
     context = rb_grn_object->context;
-    rb_values = rb_check_array_type(rb_value);
+    rb_values = rb_grn_check_convert_to_array(rb_value);
     if (NIL_P(rb_values)) {
 	if (NIL_P(rb_value)) {
 	    GRN_OBJ_INIT(&value, GRN_BULK, 0, GRN_ID_NIL);
