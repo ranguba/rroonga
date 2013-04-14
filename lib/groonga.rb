@@ -15,14 +15,14 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-require 'pathname'
+require "pathname"
 
 base_dir = Pathname.new(__FILE__).dirname.dirname.expand_path
 local_groonga_dir = base_dir + "vendor" + "local"
 local_groonga_bin_dir = local_groonga_dir + "bin"
 if local_groonga_bin_dir.exist?
   prepend_path = Proc.new do |environment_name, separator|
-    paths = (ENV[environment_name] || '').split(/#{separator}/)
+    paths = (ENV[environment_name] || "").split(/#{separator}/)
     dir = local_groonga_bin_dir.to_s
     dir = dir.gsub(/\//, File::ALT_SEPARATOR) if File::ALT_SEPARATOR
     unless paths.include?(dir)
@@ -34,16 +34,16 @@ if local_groonga_bin_dir.exist?
   prepend_path.call("PATH", File::PATH_SEPARATOR)
 end
 
-require 'groonga/geo-point'
-require 'groonga/view-record'
-require 'groonga/record'
-require 'groonga/expression-builder'
-require 'groonga/posting'
+require "groonga/geo-point"
+require "groonga/view-record"
+require "groonga/record"
+require "groonga/expression-builder"
+require "groonga/posting"
 begin
   major, minor, _ = RUBY_VERSION.split(/\./)
   require "#{major}.#{minor}/groonga.so"
 rescue LoadError
-  require 'groonga.so'
+  require "groonga.so"
 end
 
 ##
@@ -90,13 +90,13 @@ module Groonga
   end
 end
 
-require 'groonga/context'
-require 'groonga/database'
-require 'groonga/patricia-trie'
-require 'groonga/index-column'
-require 'groonga/dumper'
-require 'groonga/schema'
-require 'groonga/pagination'
-require 'groonga/grntest-log'
-require 'groonga/logger'
-require 'groonga/query-logger'
+require "groonga/context"
+require "groonga/database"
+require "groonga/patricia-trie"
+require "groonga/index-column"
+require "groonga/dumper"
+require "groonga/schema"
+require "groonga/pagination"
+require "groonga/grntest-log"
+require "groonga/logger"
+require "groonga/query-logger"
