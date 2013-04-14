@@ -242,8 +242,8 @@ rb_grn_query_logger_s_get_path (VALUE klass)
  * you're using custom query logger by {#register}, the query log path
  * isn't used. Because it is for the default query logger.
  *
- * You can disable query logging by the default query logger by
- * specifing nil as path.
+ * If you specify nil as path, query logging by the default query
+ * logger is disabled.
  *
  * @example Changes the query log path for the default query logger
  *   Groonga::QueryLogger.path = "/tmp/query.log"
