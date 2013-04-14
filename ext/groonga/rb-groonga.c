@@ -40,7 +40,6 @@ rb_grn_init_runtime_version (VALUE mGrn)
     runtime_version = rb_ary_new();
 
     component_start = grn_get_version();
-    printf("grn_get_version(): <%s>\n", component_start);
     component_end = strstr(component_start, ".");
     component_length = component_end - component_start;
     major = rb_str_new(component_start, component_length);
