@@ -621,11 +621,6 @@ rb_grn_vector_from_ruby_object (VALUE object, grn_ctx *context, grn_obj *vector)
     grn_obj value_buffer;
     int i, n;
 
-    if (vector)
-	GRN_OBJ_INIT(vector, GRN_VECTOR, 0, GRN_ID_NIL);
-    else
-	vector = grn_obj_open(context, GRN_VECTOR, 0, 0);
-
     if (NIL_P(object))
 	return vector;
 
