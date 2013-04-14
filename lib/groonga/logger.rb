@@ -39,6 +39,18 @@ module Groonga
           labels << "none" if labels.empty?
           labels.join("|")
         end
+
+        # @deprecated since 3.0.1. Use {Groonga::QueryLogger.path}
+        #   instead.
+        def query_log_path
+          QueryLogger.path
+        end
+
+        # @deprecated since 3.0.1. Use {Groonga::QueryLogger.path=}
+        #   instead.
+        def query_log_path=(path)
+          QueryLogger.path = path
+        end
       end
     end
 

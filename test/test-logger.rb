@@ -18,12 +18,12 @@ class LoggerTest < Test::Unit::TestCase
 
   def setup
     @default_log_path = Groonga::Logger.log_path
-    @default_query_log_path = Groonga::Logger.query_log_path
+    @default_query_log_path = Groonga::QueryLogger.path
   end
 
   def teardown
     Groonga::Logger.log_path = @default_log_path
-    Groonga::Logger.query_log_path = @default_query_log_path
+    Groonga::QueryLogger.path = @default_query_log_path
   end
 
   def test_reopen

@@ -1,6 +1,6 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
-  Copyright (C) 2012  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2012-2013  Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -218,6 +218,59 @@ rb_grn_query_logger_s_reopen (VALUE klass)
     return Qnil;
 }
 
+/*
+ * Gets the current query log path that is used the default query logger.
+ *
+ * @overload path
+ *   @return [String or nil] The current query log path
+ */
+static VALUE
+rb_grn_query_logger_s_get_path (VALUE klass)
+{
+    const char *path;
+    VALUE rb_path = Qnil;
+
+    path = grn_default_query_logger_get_path();
+    if (path) {
+	rb_path = rb_str_new2(path);
+    }
+    return rb_path;
+}
+
+/*
+ * Sets the query log path that is used the default query logger. If
+ * you're using custom query logger by {#register}, the query log path
+ * isn't used. Because it is for the default query logger.
+ *
+ * You can disable query logging by the default query logger by
+ * specifing nil as path.
+ *
+ * @example Changes the query log path for the default query logger
+ *   Groonga::QueryLogger.path = "/tmp/query.log"
+ *
+ * @example Disables query log by the default query logger
+ *   Groonga::QueryLogger.path = nil
+ *
+ * @overload path=(path)
+ *   @param path [String or nil] The query log path for the default query
+ *     logger. If nil is specified, query logging by the default query logger
+ *     is disabled.
+ *   @return void
+ */
+static VALUE
+rb_grn_query_logger_s_set_path (VALUE klass, VALUE rb_path)
+{
+    const char *path = NULL;
+
+    rb_path = rb_grn_check_convert_to_string(rb_path);
+    if (!NIL_P(rb_path)) {
+        path = StringValuePtr(rb_path);
+    }
+    grn_default_query_logger_set_path(path);
+
+    return Qnil;
+}
+
 void
 rb_grn_init_query_logger (VALUE mGrn)
 {
@@ -242,6 +295,10 @@ rb_grn_init_query_logger (VALUE mGrn)
                                rb_grn_query_logger_s_unregister, 0);
     rb_define_singleton_method(cGrnQueryLogger, "reopen",
                                rb_grn_query_logger_s_reopen, 0);
+    rb_define_singleton_method(cGrnQueryLogger, "path",
+                               rb_grn_query_logger_s_get_path, 0);
+    rb_define_singleton_method(cGrnQueryLogger, "path=",
+                               rb_grn_query_logger_s_set_path, 1);
 
     mGrnQueryLoggerFlags = rb_define_module_under(cGrnQueryLogger, "Flags");
 #define DEFINE_FLAG(NAME)                                       \

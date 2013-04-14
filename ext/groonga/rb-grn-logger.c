@@ -394,61 +394,6 @@ rb_grn_logger_s_set_log_path (VALUE klass, VALUE rb_path)
     return Qnil;
 }
 
-/*
- * groongaのデフォルトロガーがクエリログを出力するファイルのパスを返す。
- *
- * @overload query_log_path
- *   @return [String]
- */
-static VALUE
-rb_grn_logger_s_get_query_log_path (VALUE klass)
-{
-    const char *path;
-
-    path = grn_default_query_logger_get_path();
-    if (path) {
-	return rb_str_new2(path);
-    } else {
-	return Qnil;
-    }
-}
-
-/*
- * groongaのデフォルトロガーがクエリログを出力するファイルの
- * パスを指定する。
- *
- * {Groonga::Logger.register} で独自のロガーを設定している場合、
- * 設定している独自ロガーは無効になる。
- *
- * @overload query_log_path=(path)
- */
-static VALUE
-rb_grn_logger_s_set_query_log_path (VALUE klass, VALUE rb_path)
-{
-    grn_bool need_reopen = GRN_FALSE;
-    const char *current_path;
-
-    current_path = grn_default_query_logger_get_path();
-    if (NIL_P(rb_path)) {
-	need_reopen = current_path != NULL;
-	grn_default_query_logger_set_path(NULL);
-    } else {
-	const char *new_path;
-	new_path = RSTRING_PTR(rb_path);
-	if (!current_path || strcmp(new_path, current_path) != 0) {
-	    need_reopen = GRN_TRUE;
-	}
-	grn_default_query_logger_set_path(new_path);
-    }
-    rb_cv_set(klass, "@@query_log_path", rb_path);
-
-    if (need_reopen) {
-	rb_grn_logger_s_reopen_with_related_object(klass, rb_path);
-    }
-
-    return Qnil;
-}
-
 void
 rb_grn_init_logger (VALUE mGrn)
 {
@@ -479,10 +424,6 @@ rb_grn_init_logger (VALUE mGrn)
                                rb_grn_logger_s_get_log_path, 0);
     rb_define_singleton_method(cGrnLogger, "log_path=",
                                rb_grn_logger_s_set_log_path, 1);
-    rb_define_singleton_method(cGrnLogger, "query_log_path",
-                               rb_grn_logger_s_get_query_log_path, 0);
-    rb_define_singleton_method(cGrnLogger, "query_log_path=",
-                               rb_grn_logger_s_set_query_log_path, 1);
     rb_set_end_proc(rb_grn_logger_reset, cGrnLogger);
 
     mGrnLoggerFlags = rb_define_module_under(cGrnLogger, "Flags");
