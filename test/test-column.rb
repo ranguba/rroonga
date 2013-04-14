@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2011  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2013  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -346,5 +346,35 @@ class ColumnTest < Test::Unit::TestCase
 
     @posts.add("Hello!", :body => "World")
     @posts.add("My Hobby", :body => "Drive and Eat")
+  end
+
+  class WeightTest < self
+    def test_vector
+      Groonga::Schema.define do |schema|
+        schema.create_table("Shops", :type => :hash) do |table|
+          table.short_text("tags", :type => :vector)
+        end
+
+        schema.create_table("Tags",
+                            :type => :patricia_trie) do |table|
+          table.index("Shops.tags", :with_weight => true)
+        end
+      end
+
+      shops = Groonga["Shops"]
+      shops.add("Soul Food India",
+                :tags => [
+                  {:value => "curry", :weight => 10},
+                  {:value => "hot",   :weight => 3},
+                ])
+      matched_records = shops.select do |record|
+        record.tags =~ "curry"
+      end
+      matched_record_values = matched_records.collect do |record|
+        [record._key, record.score]
+      end
+      assert_equal([["Soul Food India", 11]],
+                   matched_record_values)
+    end
   end
 end

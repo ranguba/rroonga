@@ -586,6 +586,34 @@ rb_grn_vector_to_ruby_object (grn_ctx *context, grn_obj *vector)
     return array;
 }
 
+static void
+rb_grn_add_vector_element (VALUE rb_element, grn_ctx *context, grn_obj *vector,
+                           grn_obj *value_buffer)
+{
+    unsigned int weight = 0;
+    if (RVAL2CBOOL(rb_obj_is_kind_of(rb_element, rb_cHash))) {
+        VALUE rb_value;
+        VALUE rb_weight;
+        ID id_value;
+        ID id_weight;
+        CONST_ID(id_value, "value");
+        CONST_ID(id_weight, "weight");
+        rb_value = rb_hash_aref(rb_element, ID2SYM(id_value));
+        rb_weight = rb_hash_aref(rb_element, ID2SYM(id_weight));
+        RVAL2GRNOBJ(rb_value, context, &value_buffer);
+        if (!NIL_P(rb_weight)) {
+            weight = NUM2UINT(rb_weight);
+        }
+    } else {
+        RVAL2GRNOBJ(rb_element, context, &value_buffer);
+    }
+    grn_vector_add_element(context, vector,
+                           GRN_BULK_HEAD(value_buffer),
+                           GRN_BULK_VSIZE(value_buffer),
+                           weight,
+                           value_buffer->header.domain);
+}
+
 grn_obj *
 rb_grn_vector_from_ruby_object (VALUE object, grn_ctx *context, grn_obj *vector)
 {
@@ -605,13 +633,7 @@ rb_grn_vector_from_ruby_object (VALUE object, grn_ctx *context, grn_obj *vector)
     n = RARRAY_LEN(object);
     values = RARRAY_PTR(object);
     for (i = 0; i < n; i++) {
-	grn_obj *_value = &value;
-	RVAL2GRNOBJ(values[i], context, &_value);
-	grn_vector_add_element(context, vector,
-			       GRN_BULK_HEAD(&value),
-			       GRN_BULK_VSIZE(&value),
-			       0,
-			       value.header.domain);
+        rb_grn_add_vector_element(values[i], context, vector, &value);
     }
     GRN_OBJ_FIN(context, &value);
 
