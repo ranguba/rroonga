@@ -614,23 +614,59 @@ rb_grn_add_vector_element (VALUE rb_element, grn_ctx *context, grn_obj *vector,
                            value_buffer->header.domain);
 }
 
+typedef struct {
+    VALUE array;
+    grn_ctx *context;
+    grn_obj *vector;
+    grn_obj value_buffer;
+} VectorFromRubyData;
+
+static VALUE
+rb_grn_vector_from_ruby_object_body (VALUE user_data)
+{
+    VectorFromRubyData *data = (VectorFromRubyData *)user_data;
+    VALUE *rb_values;
+    grn_ctx *context;
+    grn_obj *vector;
+    grn_obj *value_buffer;
+    int i, n;
+
+    n = RARRAY_LEN(data->array);
+    rb_values = RARRAY_PTR(data->array);
+    context = data->context;
+    vector = data->vector;
+    value_buffer = &(data->value_buffer);
+    for (i = 0; i < n; i++) {
+        rb_grn_add_vector_element(rb_values[i], context, vector, value_buffer);
+    }
+
+    return Qnil;
+}
+
+static VALUE
+rb_grn_vector_from_ruby_object_ensure (VALUE user_data)
+{
+    VectorFromRubyData *data = (VectorFromRubyData *)user_data;
+
+    GRN_OBJ_FIN(data->context, &(data->value_buffer));
+
+    return Qnil;
+}
+
 grn_obj *
 rb_grn_vector_from_ruby_object (VALUE object, grn_ctx *context, grn_obj *vector)
 {
-    VALUE *values;
-    grn_obj value_buffer;
-    int i, n;
+    VectorFromRubyData data;
 
     if (NIL_P(object))
 	return vector;
 
-    GRN_VOID_INIT(&value_buffer);
-    n = RARRAY_LEN(object);
-    values = RARRAY_PTR(object);
-    for (i = 0; i < n; i++) {
-        rb_grn_add_vector_element(values[i], context, vector, &value_buffer);
-    }
-    GRN_OBJ_FIN(context, &value_buffer);
+    data.array = object;
+    data.context = context;
+    data.vector = vector;
+    GRN_VOID_INIT(&(data.value_buffer));
+    rb_ensure(rb_grn_vector_from_ruby_object_body,   (VALUE)(&data),
+              rb_grn_vector_from_ruby_object_ensure, (VALUE)(&data));
 
     return vector;
 }
