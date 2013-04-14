@@ -88,7 +88,7 @@ rb_grn_plugin_s_register (int argc, VALUE *argv, VALUE klass)
     grn_ctx *context;
 
     if (argc >= 1) {
-        rb_name = rb_check_string_type(argv[0]);
+        rb_name = rb_grn_check_convert_to_string(argv[0]);
     }
 
     if (NIL_P(rb_name)) {

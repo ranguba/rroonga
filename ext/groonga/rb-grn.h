@@ -320,6 +320,7 @@ void           rb_grn_scan_options                  (VALUE options, ...)
 grn_bool       rb_grn_equal_option                  (VALUE option,
 						     const char *key);
 VALUE          rb_grn_convert_to_array              (VALUE object);
+VALUE          rb_grn_check_convert_to_string       (VALUE object);
 VALUE          rb_grn_check_convert_to_hash         (VALUE object);
 
 VALUE          rb_grn_object_alloc                  (VALUE klass);
