@@ -618,7 +618,7 @@ grn_obj *
 rb_grn_vector_from_ruby_object (VALUE object, grn_ctx *context, grn_obj *vector)
 {
     VALUE *values;
-    grn_obj value;
+    grn_obj value_buffer;
     int i, n;
 
     if (vector)
@@ -629,13 +629,13 @@ rb_grn_vector_from_ruby_object (VALUE object, grn_ctx *context, grn_obj *vector)
     if (NIL_P(object))
 	return vector;
 
-    GRN_VOID_INIT(&value);
+    GRN_VOID_INIT(&value_buffer);
     n = RARRAY_LEN(object);
     values = RARRAY_PTR(object);
     for (i = 0; i < n; i++) {
-        rb_grn_add_vector_element(values[i], context, vector, &value);
+        rb_grn_add_vector_element(values[i], context, vector, &value_buffer);
     }
-    GRN_OBJ_FIN(context, &value);
+    GRN_OBJ_FIN(context, &value_buffer);
 
     return vector;
 }
