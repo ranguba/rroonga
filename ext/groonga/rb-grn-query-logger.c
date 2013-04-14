@@ -260,13 +260,25 @@ rb_grn_query_logger_s_get_path (VALUE klass)
 static VALUE
 rb_grn_query_logger_s_set_path (VALUE klass, VALUE rb_path)
 {
+    grn_bool need_reopen = GRN_FALSE;
+    const char *old_path = NULL;
     const char *path = NULL;
 
     rb_path = rb_grn_check_convert_to_string(rb_path);
     if (!NIL_P(rb_path)) {
         path = StringValuePtr(rb_path);
     }
+
+    old_path = grn_default_query_logger_get_path();
+    if (!rb_grn_equal_string(old_path, path)) {
+        need_reopen = GRN_TRUE;
+    }
+
     grn_default_query_logger_set_path(path);
+
+    if (need_reopen) {
+        rb_grn_query_logger_s_reopen(klass);
+    }
 
     return Qnil;
 }

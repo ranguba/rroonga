@@ -153,6 +153,20 @@ rb_grn_equal_option (VALUE option, const char *key)
     return GRN_FALSE;
 }
 
+grn_bool
+rb_grn_equal_string (const char *string1, const char *string2)
+{
+    if (string1 == string2) {
+        return GRN_TRUE;
+    }
+
+    if (!string1 || !string2) {
+        return GRN_FALSE;
+    }
+
+    return strcmp(string1, string2) == 0;
+}
+
 VALUE
 rb_grn_convert_to_array (VALUE object)
 {
