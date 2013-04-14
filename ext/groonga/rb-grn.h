@@ -319,6 +319,7 @@ void           rb_grn_scan_options                  (VALUE options, ...)
                                                      RB_GRN_GNUC_NULL_TERMINATED;
 grn_bool       rb_grn_equal_option                  (VALUE option,
 						     const char *key);
+VALUE          rb_grn_convert_to_array              (VALUE object);
 
 VALUE          rb_grn_object_alloc                  (VALUE klass);
 void           rb_grn_object_bind                   (VALUE self,

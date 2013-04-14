@@ -153,6 +153,12 @@ rb_grn_equal_option (VALUE option, const char *key)
     return GRN_FALSE;
 }
 
+VALUE
+rb_grn_convert_to_array (VALUE object)
+{
+    return rb_convert_type(object, RUBY_T_ARRAY, "Array", "to_ary");
+}
+
 static VALUE
 rb_grn_bulk_to_ruby_object_by_range_id (grn_ctx *context, grn_obj *bulk,
 					grn_id range_id,
@@ -661,7 +667,7 @@ rb_grn_vector_from_ruby_object (VALUE object, grn_ctx *context, grn_obj *vector)
     if (NIL_P(object))
 	return vector;
 
-    data.array = object;
+    data.array = rb_grn_convert_to_array(object);
     data.context = context;
     data.vector = vector;
     GRN_VOID_INIT(&(data.value_buffer));
