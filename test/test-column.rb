@@ -349,7 +349,12 @@ class ColumnTest < Test::Unit::TestCase
   end
 
   class WeightTest < self
-    def test_vector
+    def setup
+      super
+      setup_schema
+    end
+
+    def setup_schema
       Groonga::Schema.define do |schema|
         schema.create_table("Shops", :type => :hash) do |table|
           table.short_text("tags", :type => :vector)
@@ -360,7 +365,9 @@ class ColumnTest < Test::Unit::TestCase
           table.index("Shops.tags", :with_weight => true)
         end
       end
+    end
 
+    def test_vector
       shops = Groonga["Shops"]
       shops.add("Soul Food India",
                 :tags => [
@@ -375,6 +382,72 @@ class ColumnTest < Test::Unit::TestCase
       end
       assert_equal([["Soul Food India", 11]],
                    matched_record_values)
+    end
+
+    class UpdateTest < self
+      def test_new_value
+        shops = Groonga["Shops"]
+        record = shops.add("Soul Food India",
+                           :tags => [
+                             {:value => "curry", :weight => 10},
+                             {:value => "hot",   :weight => 3},
+                           ])
+        new_value = "india"
+        new_value_weight = 100
+        record.tags = [
+          {:value => new_value, :weight => new_value_weight},
+        ]
+        matched_records = shops.select do |record|
+          record.tags =~ new_value
+        end
+        matched_record_values = matched_records.collect do |record|
+          [record._key, record.score]
+        end
+        assert_equal([["Soul Food India", new_value_weight + 1]],
+                     matched_record_values)
+      end
+
+      def test_old_value
+        shops = Groonga["Shops"]
+        old_value = "curry"
+        record = shops.add("Soul Food India",
+                           :tags => [
+                             {:value => old_value, :weight => 10},
+                             {:value => "hot",     :weight => 3},
+                           ])
+        record.tags = [
+          {:value => "india", :weight => 100},
+        ]
+        matched_records = shops.select do |record|
+          record.tags =~ old_value
+        end
+        matched_record_values = matched_records.collect do |record|
+          [record._key, record.score]
+        end
+        assert_equal([], matched_record_values)
+      end
+
+      def test_replaced_value
+        shops = Groonga["Shops"]
+        replaced_value = "hot"
+        record = shops.add("Soul Food India",
+                           :tags => [
+                             {:value => "curry",        :weight => 10},
+                             {:value => replaced_value, :weight => 3},
+                           ])
+        replaced_value_weight = 100
+        record.tags = [
+          {:value => replaced_value, :weight => replaced_value_weight},
+        ]
+        matched_records = shops.select do |record|
+          record.tags =~ replaced_value
+        end
+        matched_record_values = matched_records.collect do |record|
+          [record._key, record.score]
+        end
+        assert_equal([["Soul Food India", replaced_value_weight + 1]],
+                     matched_record_values)
+      end
     end
   end
 end
