@@ -375,14 +375,8 @@ class ColumnTest < Test::Unit::TestCase
                   {:value => "curry", :weight => 10},
                   {:value => "hot",   :weight => 3},
                 ])
-      matched_records = @shops.select do |record|
-        record.tags =~ "curry"
-      end
-      matched_record_values = matched_records.collect do |record|
-        [record._key, record.score]
-      end
       assert_equal([["Soul Food India", 11]],
-                   matched_record_values)
+                   select_by_tag("curry"))
     end
 
     def test_offline_index
@@ -396,14 +390,18 @@ class ColumnTest < Test::Unit::TestCase
         table.index("Shops.tags", :with_weight => true)
       end
 
+      assert_equal([["Soul Food India", 11]],
+                   select_by_tag("curry"))
+    end
+
+    private
+    def select_by_tag(tag)
       matched_records = @shops.select do |record|
-        record.tags =~ "curry"
+        record.tags =~ tag
       end
-      matched_record_values = matched_records.collect do |record|
+      matched_records.collect do |record|
         [record._key, record.score]
       end
-      assert_equal([["Soul Food India", 11]],
-                   matched_record_values)
     end
 
     class UpdateTest < self
@@ -418,14 +416,8 @@ class ColumnTest < Test::Unit::TestCase
         record.tags = [
           {:value => new_value, :weight => new_value_weight},
         ]
-        matched_records = @shops.select do |record|
-          record.tags =~ new_value
-        end
-        matched_record_values = matched_records.collect do |record|
-          [record._key, record.score]
-        end
         assert_equal([["Soul Food India", new_value_weight + 1]],
-                     matched_record_values)
+                     select_by_tag(new_value))
       end
 
       def test_old_value
@@ -438,13 +430,7 @@ class ColumnTest < Test::Unit::TestCase
         record.tags = [
           {:value => "india", :weight => 100},
         ]
-        matched_records = @shops.select do |record|
-          record.tags =~ old_value
-        end
-        matched_record_values = matched_records.collect do |record|
-          [record._key, record.score]
-        end
-        assert_equal([], matched_record_values)
+        assert_equal([], select_by_tag(old_value))
       end
 
       def test_replaced_value
@@ -458,14 +444,8 @@ class ColumnTest < Test::Unit::TestCase
         record.tags = [
           {:value => replaced_value, :weight => replaced_value_weight},
         ]
-        matched_records = @shops.select do |record|
-          record.tags =~ replaced_value
-        end
-        matched_record_values = matched_records.collect do |record|
-          [record._key, record.score]
-        end
         assert_equal([["Soul Food India", replaced_value_weight + 1]],
-                     matched_record_values)
+                     select_by_tag(replaced_value))
       end
     end
   end
