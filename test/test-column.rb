@@ -371,20 +371,20 @@ class ColumnTest < Test::Unit::TestCase
 
     def test_vector
       @shops.add("Soul Food India",
-                :tags => [
-                  {:value => "curry", :weight => 10},
-                  {:value => "hot",   :weight => 3},
-                ])
+                 :tags => [
+                   {:value => "curry", :weight => 10},
+                   {:value => "hot",   :weight => 3},
+                 ])
       assert_equal([["Soul Food India", 11]],
                    select_by_tag("curry"))
     end
 
     def test_offline_index
       @shops.add("Soul Food India",
-                :tags => [
-                  {:value => "curry", :weight => 10},
-                  {:value => "hot",   :weight => 3},
-                ])
+                 :tags => [
+                   {:value => "curry", :weight => 10},
+                   {:value => "hot",   :weight => 3},
+                 ])
       Groonga::Schema.remove_column("Tags", "Shops_tags")
       Groonga::Schema.change_table("Tags") do |table|
         table.index("Shops.tags", :with_weight => true)
@@ -407,10 +407,10 @@ class ColumnTest < Test::Unit::TestCase
     class UpdateTest < self
       def test_new_value
         record = @shops.add("Soul Food India",
-                           :tags => [
-                             {:value => "curry", :weight => 10},
-                             {:value => "hot",   :weight => 3},
-                           ])
+                            :tags => [
+                              {:value => "curry", :weight => 10},
+                              {:value => "hot",   :weight => 3},
+                            ])
         new_value = "india"
         new_value_weight = 100
         record.tags = [
@@ -423,10 +423,10 @@ class ColumnTest < Test::Unit::TestCase
       def test_old_value
         old_value = "curry"
         record = @shops.add("Soul Food India",
-                           :tags => [
-                             {:value => old_value, :weight => 10},
-                             {:value => "hot",     :weight => 3},
-                           ])
+                            :tags => [
+                              {:value => old_value, :weight => 10},
+                              {:value => "hot",     :weight => 3},
+                            ])
         record.tags = [
           {:value => "india", :weight => 100},
         ]
@@ -436,10 +436,10 @@ class ColumnTest < Test::Unit::TestCase
       def test_replaced_value
         replaced_value = "hot"
         record = @shops.add("Soul Food India",
-                           :tags => [
-                             {:value => "curry",        :weight => 10},
-                             {:value => replaced_value, :weight => 3},
-                           ])
+                            :tags => [
+                              {:value => "curry",        :weight => 10},
+                              {:value => replaced_value, :weight => 3},
+                            ])
         replaced_value_weight = 100
         record.tags = [
           {:value => replaced_value, :weight => replaced_value_weight},
