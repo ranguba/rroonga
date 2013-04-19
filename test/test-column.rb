@@ -384,6 +384,28 @@ class ColumnTest < Test::Unit::TestCase
                    matched_record_values)
     end
 
+    def test_offline_index
+      shops = Groonga["Shops"]
+      shops.add("Soul Food India",
+                :tags => [
+                  {:value => "curry", :weight => 10},
+                  {:value => "hot",   :weight => 3},
+                ])
+      Groonga::Schema.remove_column("Tags", "Shops_tags")
+      Groonga::Schema.change_table("Tags") do |table|
+        table.index("Shops.tags", :with_weight => true)
+      end
+
+      matched_records = shops.select do |record|
+        record.tags =~ "curry"
+      end
+      matched_record_values = matched_records.collect do |record|
+        [record._key, record.score]
+      end
+      assert_equal([["Soul Food India", 11]],
+                   matched_record_values)
+    end
+
     class UpdateTest < self
       def test_new_value
         shops = Groonga["Shops"]
