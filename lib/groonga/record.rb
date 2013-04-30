@@ -32,6 +32,9 @@ module Groonga
     #  ...,
     # ]
     # </pre>
+    #
+    # Each value is set by {#[]=}. See {#[]=} how to set weight for a
+    # value.
     def initialize(table, id, values=nil)
       @table = table
       @id = id
@@ -67,8 +70,26 @@ module Groonga
       @table.column_value(@id, column_name, :id => true)
     end
 
-    # このレコードの _column_name_ で指定されたカラムの値を設定す
-    # る。
+    # Sets column value of the record.
+    #
+    # @overload []=(column_name, value)
+    #   @param column_name [String] The column name.
+    #   @param value [Object] The column value. Weight of the value is 0.
+    #
+    #   @example Set a new value with the default weight
+    #     user["age"] = 29
+    #
+    # @overload []=(column_name, value_with_weight)
+    #   @param column_name [String] The column name.
+    #   @param value_with_weight [::Hash] The column value with weight.
+    #   @option value_with_weight [Object] :value (nil) The column value.
+    #   @option value_with_weight [Integer or nil] :weight (nil)
+    #     The weight for the value.
+    #
+    #   @example Set a new value with weight "2"
+    #     user["age"] = {:value => 29, :weight => 2}
+    #
+    # @see Groonga::Table#set_column_value
     def []=(column_name, value)
       @table.set_column_value(@id, column_name, value, :id => true)
     end
