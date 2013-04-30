@@ -223,6 +223,8 @@ rb_grn_query_logger_s_reopen (VALUE klass)
  *
  * @overload path
  *   @return [String or nil] The current query log path
+ *
+ * @since 3.0.1
  */
 static VALUE
 rb_grn_query_logger_s_get_path (VALUE klass)
@@ -256,6 +258,8 @@ rb_grn_query_logger_s_get_path (VALUE klass)
  *     logger. If nil is specified, query logging by the default query logger
  *     is disabled.
  *   @return void
+ *
+ * @since 3.0.1
  */
 static VALUE
 rb_grn_query_logger_s_set_path (VALUE klass, VALUE rb_path)

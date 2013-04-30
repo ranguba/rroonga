@@ -344,6 +344,8 @@ rb_grn_logger_s_reopen (VALUE klass)
  *
  * @overload path
  *   @return [String or nil] The current log path
+ *
+ * @since 3.0.1
  */
 static VALUE
 rb_grn_logger_s_get_path (VALUE klass)
@@ -376,6 +378,8 @@ rb_grn_logger_s_get_path (VALUE klass)
  *   @param path [String or nil] The log path for the default logger.
  *     If nil is specified, logging by the default logger is disabled.
  *   @return void
+ *
+ * @since 3.0.1
  */
 static VALUE
 rb_grn_logger_s_set_path (VALUE klass, VALUE rb_path)
