@@ -4,7 +4,7 @@ notifications:
 rvm:
   - 1.9.3
   - 2.0.0
-env:
-  - GROONGA_MASTER=yes
+#env:
+#  - GROONGA_MASTER=yes
 before_install:
   - curl https://raw.github.com/groonga/groonga/master/data/travis/setup.sh | sh
