@@ -1,5 +1,25 @@
 h1. NEWS
 
+h2(#3-0-1). 3.0.1: 2013-05-01
+
+h3. Improvements
+
+* Required groonga >= 3.0.3.
+* Supported assigning weight to value.
+* Renamed to Groonga::QueryLogger.path from Groonga::Logger.query_log_path.
+* Renamed to Groonga::QueryLogger.path= from Groonga::Logger.query_log_path=.
+* Renamed to Groonga::Logger.path from Groonga::Logger.log_path.
+* Renamed to Groonga::Logger.path= from Groonga::Logger.log_path=.
+* Added missing "Packnga >= 0.9.7" requirement.
+
+h3. Fixes
+
+* Fixed a memory leak on error.
+
+h3. Thanks
+
+* takkanm
+
 h2(#3-0-0). 3.0.0: 2013-03-29
 
 h3. Improvements
