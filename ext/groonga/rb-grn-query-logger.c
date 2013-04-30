@@ -239,7 +239,7 @@ rb_grn_query_logger_s_get_path (VALUE klass)
 
 /*
  * Sets the query log path that is used the default query logger. If
- * you're using custom query logger by {#register}, the query log path
+ * you're using custom query logger by {.register}, the query log path
  * isn't used. Because it is for the default query logger.
  *
  * If you specify nil as path, query logging by the default query

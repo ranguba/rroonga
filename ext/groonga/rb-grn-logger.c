@@ -360,7 +360,7 @@ rb_grn_logger_s_get_path (VALUE klass)
 
 /*
  * Sets the log path that is used the default logger. If you're using
- * custom logger by {#register}, the log path isn't used. Because it
+ * custom logger by {.register}, the log path isn't used. Because it
  * is for the default logger.
  *
  * If you specify nil as path, logging by the default logger is
