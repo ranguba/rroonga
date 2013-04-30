@@ -1562,7 +1562,7 @@ rb_grn_table_set_column_value (VALUE self, VALUE rb_id,
  * 同じ引数で動くようになる。
  *
  * @overload set_column_value(id, name, value)
- * @overload set_column_value(id, name, valuf, :id => true)
+ * @overload set_column_value(id, name, value, :id => true)
  */
 static VALUE
 rb_grn_table_set_column_value_convenience (int argc, VALUE *argv, VALUE self)
