@@ -353,7 +353,7 @@ rb_grn_array_push (VALUE self)
  *     p pulled_record.nil? # => true
  *   end
  *
- * @see {Groonga::Array#push} Examples exist in the push documentation.
+ * @see Groonga::Array#push Examples exist in the push documentation.
  *
  * @overload pull(options={})
  *   @param [::Hash] options The option parameters.
