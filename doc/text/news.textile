@@ -10,7 +10,7 @@ h3. Improvements
 * Renamed to {Groonga::QueryLogger.path} from {Groonga::Logger.query_log_path}.
 * Renamed to {Groonga::QueryLogger.path=} from {Groonga::Logger.query_log_path=}.
 * Renamed to {Groonga::Logger.path} from {Groonga::Logger.log_path}.
-* Renamed to {Groonga::Logger.path=} from {Groonga::Logger.log_path}=.
+* Renamed to {Groonga::Logger.path=} from {Groonga::Logger.log_path=}.
 * Added missing "Packnga >= 0.9.7" requirement. [Reported by takkanm]
 
 h3. Fixes
