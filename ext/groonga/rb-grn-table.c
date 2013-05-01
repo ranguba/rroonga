@@ -1140,11 +1140,11 @@ rb_grn_table_delete (int argc, VALUE *argv, VALUE self)
  *   {::Array} since 2.1.0. If you want to get before 2.1.0 style
  *   result, use the following code:
  *
- *   @example Describe incompatible API change
- *     result_since_2_1_0 = table.sort(["sort_key"])
- *     result_before_2_1_0 = result_since_2_1_0.collect do |record|
- *       record.value
- *     end
+ * @example Describe incompatible API change
+ *   result_since_2_1_0 = table.sort(["sort_key"])
+ *   result_before_2_1_0 = result_since_2_1_0.collect do |record|
+ *     record.value
+ *   end
  */
 static VALUE
 rb_grn_table_sort (int argc, VALUE *argv, VALUE self)
