@@ -76,7 +76,7 @@ module Groonga
     #   @param column_name [String] The column name.
     #   @param value [Object] The column value. Weight of the value is 0.
     #
-    #   @example Set a new value with the default weight
+    #   @example Set a new value
     #     user["age"] = 29
     #
     # @overload []=(column_name, value_with_weight)
@@ -84,10 +84,12 @@ module Groonga
     #   @param value_with_weight [::Hash] The column value with weight.
     #   @option value_with_weight [Object] :value (nil) The column value.
     #   @option value_with_weight [Integer or nil] :weight (nil)
-    #     The weight for the value.
+    #     The weight for the value. You need to use vector column and
+    #     weight supported index column for weight. See
+    #     {Groonga;:Table#set_column_value} for details.
     #
     #   @example Set a new value with weight "2"
-    #     user["age"] = {:value => 29, :weight => 2}
+    #     user["tags"] = [{:value => "groonga", :weight => 2}]
     #
     # @see Groonga::Table#set_column_value
     def []=(column_name, value)
