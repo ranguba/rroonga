@@ -15,18 +15,18 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-require 'English'
+require "English"
 
-require 'find'
-require 'fileutils'
-require 'pathname'
-require 'erb'
-require 'rubygems'
-require 'rubygems/package_task'
-require 'yard'
-require 'bundler/gem_helper'
-require 'rake/extensiontask'
-require 'packnga'
+require "find"
+require "fileutils"
+require "pathname"
+require "erb"
+require "rubygems"
+require "rubygems/package_task"
+require "yard"
+require "bundler/gem_helper"
+require "rake/extensiontask"
+require "packnga"
 
 if YAML.const_defined?(:ENGINE)
   begin
@@ -38,7 +38,7 @@ end
 base_dir = File.join(File.dirname(__FILE__))
 
 groonga_ext_dir = File.join(base_dir, "ext", "groonga")
-groonga_lib_dir = File.join(base_dir, 'lib')
+groonga_lib_dir = File.join(base_dir, "lib")
 $LOAD_PATH.unshift(groonga_ext_dir)
 $LOAD_PATH.unshift(groonga_lib_dir)
 ENV["RUBYLIB"] = "#{groonga_lib_dir}:#{groonga_ext_dir}:#{ENV['RUBYLIB']}"
