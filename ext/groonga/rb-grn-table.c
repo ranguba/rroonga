@@ -1554,15 +1554,162 @@ rb_grn_table_set_column_value (VALUE self, VALUE rb_id,
 }
 
 /*
- * _table_ の _id_ に対応するカラム _name_ の値として _value_ 設定す
- * る。既存の値は上書きされる。
+ * Sets @value@ as the value of column @name@ of the record that has
+ * @id@ ID. It overwrites the previous value.
  *
- * @:id => true@ が指定できるのは利便性のため。
- * {Groonga::Array} でも {Groonga::Hash} や {Groonga::PatriciaTrie} と
- * 同じ引数で動くようになる。
+ * @return [void]
  *
  * @overload set_column_value(id, name, value)
- * @overload set_column_value(id, name, value, :id => true)
+ *   @!macro [new] table.set_column_value.base_arguments
+ *     @param id [Integer] The ID of the target record.
+ *     @param name [String or Symbol] The name of the target column.
+ *   @!macro [new] table.set_column_value.value
+ *     @param value [::Object] The new value.
+ *
+ *   @!macro table.set_column_value.base_arguments
+ *   @!macro table.set_column_value.value
+ *
+ * @overload set_column_value(id, name, vector_value_with_weight)
+ *   Sets the vector column value and its weight. Weight is used when fulltext
+ *   search. In fulltext search, score @1@ is added when a record is matched
+ *   against a query. If weight is set, score @1 + weight@ is added when
+ *   a record is matched against a query.
+ *
+ *   @note To use weight, there are two requirements. They are using vector
+ *     column and using index column with weight support. Weight supported
+ *     index column can be created with @:with_weight => true@ option.
+ *     See {#define_index_column}.
+ *
+ *   @example Sets vector value with weight
+ *     Groonga::Schema.define do |schema|
+ *       schema.create_table("Sites") do |table|
+ *         table.short_text("name")
+ *         table.short_text("tags", :type => :vector) # It must be vector
+ *       end
+ *
+ *       schema.create_table("Tags",
+ *                           :type     => :patricia_trie,
+ *                           :key_type => :short_text) do |table|
+ *         table.index("Sites.tags",
+ *                     :with_weight => true) # Don't forget :with_weight => true!
+ *       end
+ *     end
+ *
+ *     sites = Groonga["Sites"]
+ *
+ *     groonga_org_id = sites.add.id
+ *     sites.set_column_value(groonga_org_id,
+ *                            "name",
+ *                            "groonga.org")
+ *     sites.set_column_value(groonga_org_id,
+ *                            "tags",
+ *                            [
+ *                              # 10 weight is set
+ *                              {
+ *                                :value => "groonga",
+ *                                :weight => 10,
+ *                              },
+ *                              # No :weight. The default weight is used.
+ *                              {
+ *                                :value => "search engine",
+ *                              },
+ *                              # Value only. The default weight is used.
+ *                              "fulltext search",
+ *                            ])
+ *
+ *     # "groonga" tag has 10 weight.
+ *     records = sites.select do |record|
+ *       record.tags =~ "groonga"
+ *     end
+ *     p records.collect(&:score) # => [11] (1 + 10 weight)
+ *
+ *     # "search engine" tag has the default weight. (0 weight)
+ *     records = sites.select do |record|
+ *       record.tags =~ "search engine"
+ *     end
+ *     p records.collect(&:score) # => [1] (1 + 0 weight)
+ *
+ *     # "fulltext search" tag has the default weight. (0 weight)
+ *     records = sites.select do |record|
+ *       record.tags =~ "fulltext search"
+ *     end
+ *     p records.collect(&:score) # => [1] (1 + 0 weight)
+ *
+ *   @!macro [new] table.set_column_value.vector_value_with_weight
+ *     @param vector_value_with_weight
+ *       [::Array<::Hash{:value => ::Object, :weight => Integer}, ::Object>]
+ *       The new vector value with weight. The vector value can contain both
+ *       ::Hash and value. If a contained element uses ::Hash style, it can
+ *       specify its weight. If a contained element doesn't use ::Hash style,
+ *       it can't specify its weight.
+ *
+ *       If ::Hash contains @:weight@ key, its value is used as weight for
+ *       @:value@ key's value. If ::Hash contains only @:value@ or @:weight@
+ *       value is nil, the default weight is used. The default weight is 0.
+ *
+ *   @!macro table.set_column_value.base_arguments
+ *   @!macro table.set_column_value.vector_value_with_weight
+ *
+ * @overload set_column_value(id, name, value, options)
+ *   This usage is just for convenience. #set_column_value is overrided
+ *   by {Groonga::Table::KeySupport#set_column_value}.
+ *   {Groonga::Table::KeySupport#set_column_value} accepts not only ID
+ *   but also key value as the first argument. If you specify
+ *   @:id => true@ as @options, you can use both this
+ *   {#set_column_value} method and {Groonga::Table::KeySupport#set_column_value}
+ *   with the same way.
+ *
+ *   @example Uses @:id => true@ for polymorphic usage
+ *     Groonga::Schema.define do |schema|
+ *       schema.create_table("Sites",
+ *                           :type     => :hash,
+ *                           :key_type => :short_text) do |table|
+ *         table.short_text("name")
+ *       end
+ *
+ *       schema.create_table("Logs") do |table|
+ *         table.short_text("content")
+ *       end
+ *     end
+ *
+ *     sites = Groonga["Sites"]
+ *     logs = Groonga["Logs"]
+ *
+ *     groonga_org_key = "http://groonga.org/"
+ *     groonga_org_id = sites.add(groonga_org_key).id
+ *     p sites.class # => Groonga::Hash
+ *     # :id => true is required!
+ *     sites.set_column_value(groonga_org_id,
+ *                            "name",
+ *                            "The official groonga site",
+ *                            :id => true)
+ *     p sites[groonga_org_key].name # => "The official groonga site"
+ *
+ *     log_id = logs.add.id
+ *     p logs.class # => Groonga::Array
+ *     # :id => true is optional. It is just ignored.
+ *     logs.set_column_value(log_id,
+ *                           "content",
+ *                           "127.0.0.1 - - [...]",
+ *                           :id => true)
+ *     p logs[log_id].content # => "127.0.0.1 - - [...]"
+ *
+ *   @!macro [new] table.set_column_value.options
+ *     @param options [::Hash] The options
+ *     @option options [Boolean] :id It is just for convenience.
+ *       Specify @true@ for polymorphic usage.
+ *
+ *   @!macro table.set_column_value.base_arguments
+ *   @!macro table.set_column_value.value
+ *   @!macro table.set_column_value.options
+ *
+ * @overload set_column_value(id, name, vector_value_with_weight, options)
+ *   It is weight supported vector value variable of @:id => true@ option.
+ *   See other signature for usage.
+ *
+ *   @!macro table.set_column_value.base_arguments
+ *   @!macro table.set_column_value.vector_value_with_weight
+ *   @!macro table.set_column_value.options
  */
 static VALUE
 rb_grn_table_set_column_value_convenience (int argc, VALUE *argv, VALUE self)
