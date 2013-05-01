@@ -60,19 +60,6 @@ document_task = Packnga::DocumentTask.new(spec) do |task|
   task.translate_language = "ja"
 end
 
-namespace :reference do
-  namespace :publication do
-    task :keep_compatible do
-      File.open(document_task.htaccess, "a") do |file|
-        file.puts("Redirect permanent /#{spec.name}/text/TUTORIAL_ja_rdoc.html " +
-                  "#{spec.homepage}#{spec.name}/ja/file.tutorial.html")
-      end
-    end
-
-    task :generate => :keep_compatible
-  end
-end
-
 Packnga::ReleaseTask.new(spec) do |task|
   task.index_html_dir = "../ranguba.org"
 end
