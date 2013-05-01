@@ -7,10 +7,10 @@ h3. Improvements
 * Required groonga >= 3.0.3.
 * Supported assigning weight to value. See {Groonga::Table#set_column_value},
   {Groonga::Record#initialize} and {Groonga::Record#[]=} for details.
-* Renamed to Groonga::QueryLogger.path from Groonga::Logger.query_log_path.
-* Renamed to Groonga::QueryLogger.path= from Groonga::Logger.query_log_path=.
-* Renamed to Groonga::Logger.path from Groonga::Logger.log_path.
-* Renamed to Groonga::Logger.path= from Groonga::Logger.log_path=.
+* Renamed to {Groonga::QueryLogger.path} from {Groonga::Logger.query_log_path}.
+* Renamed to {Groonga::QueryLogger.path=} from {Groonga::Logger.query_log_path=}.
+* Renamed to {Groonga::Logger.path} from {Groonga::Logger.log_path}.
+* Renamed to {Groonga::Logger.path=} from {Groonga::Logger.log_path}=.
 * Added missing "Packnga >= 0.9.7" requirement. [Reported by takkanm]
 
 h3. Fixes
