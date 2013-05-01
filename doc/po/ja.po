@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: rroonga 2.1.0\n"
 "POT-Creation-Date: 2011-11-20 22:17+0900\n"
-"PO-Revision-Date: 2013-03-29 11:03+0900\n"
+"PO-Revision-Date: 2013-05-01 16:31+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: \n"
@@ -174,9 +174,8 @@ msgid "h1. NEWS"
 msgstr "h1. お知らせ"
 
 #: ./doc/text/news.textile:3
-#, fuzzy
 msgid "h2(#3-0-1). 3.0.1: 2013-05-01"
-msgstr "* groonga 0.1.6対応"
+msgstr ""
 
 #: ./doc/text/news.textile:5 ./doc/text/news.textile:26
 #: ./doc/text/news.textile:44 ./doc/text/news.textile:79
@@ -200,12 +199,19 @@ msgid ""
 "* Required groonga >= 3.0.3.\n"
 "* Supported assigning weight to value. See {Groonga::Table#set_column_value},\n"
 "  {Groonga::Record#initialize} and {Groonga::Record#[]=} for details.\n"
-"* Renamed to Groonga::QueryLogger.path from Groonga::Logger.query_log_path.\n"
-"* Renamed to Groonga::QueryLogger.path= from Groonga::Logger.query_log_path=.\n"
-"* Renamed to Groonga::Logger.path from Groonga::Logger.log_path.\n"
-"* Renamed to Groonga::Logger.path= from Groonga::Logger.log_path=.\n"
+"* Renamed to {Groonga::QueryLogger.path} from {Groonga::Logger.query_log_path}.\n"
+"* Renamed to {Groonga::QueryLogger.path=} from {Groonga::Logger.query_log_path=}.\n"
+"* Renamed to {Groonga::Logger.path} from {Groonga::Logger.log_path}.\n"
+"* Renamed to {Groonga::Logger.path=} from {Groonga::Logger.log_path=}.\n"
 "* Added missing \"Packnga >= 0.9.7\" requirement. [Reported by takkanm]"
 msgstr ""
+"* groonga >= 3.0.3を必須にした。\n"
+"* 値に重みを指定できるようにした。詳細は{Groonga::Table#set_column_value}、{Groonga::Record#initialize}、{Groonga::Record#[]=}を参照。\n"
+"* {Groonga::Logger.query_log_path}を{Groonga::QueryLogger.path}へ改名した。\n"
+"* {Groonga::Logger.query_log_path=}を{Groonga::QueryLogger.path=}へ改名した。\n"
+"* {Groonga::Logger.log_path}を{Groonga::Logger.path}へ改名した。\n"
+"* {Groonga::Logger.log_path=}を{Groonga::Logger.path=}へ改名した。\n"
+"* \"Packnga >= 0.9.7\"への依存が抜けていたので追加した。 [takkanmさんが報告]"
 
 #: ./doc/text/news.textile:16 ./doc/text/news.textile:62
 #: ./doc/text/news.textile:73 ./doc/text/news.textile:208
@@ -224,7 +230,7 @@ msgstr "h3. 修正"
 
 #: ./doc/text/news.textile:18
 msgid "* Fixed a memory leak on error."
-msgstr ""
+msgstr "* エラー発生時にメモリリークする問題を修正。"
 
 #: ./doc/text/news.textile:20 ./doc/text/news.textile:38
 #: ./doc/text/news.textile:158 ./doc/text/news.textile:236
@@ -237,16 +243,12 @@ msgid "h3. Thanks"
 msgstr "h3. 感謝"
 
 #: ./doc/text/news.textile:22
-#, fuzzy
 msgid "* takkanm"
-msgstr ""
-"* @takkanmさん\n"
-"* 平野さん"
+msgstr "* @takkanmさん"
 
 #: ./doc/text/news.textile:24
-#, fuzzy
 msgid "h2(#3-0-0). 3.0.0: 2013-03-29"
-msgstr "* @kamipoさん"
+msgstr ""
 
 #: ./doc/text/news.textile:28
 msgid ""
@@ -2884,7 +2886,7 @@ msgstr ""
 
 #: ./ext/groonga/rb-grn-column.c:565 ./ext/groonga/rb-grn-column.c:600
 #: ./ext/groonga/rb-grn-column.c:625 ./ext/groonga/rb-grn-column.c:652
-#: ./lib/groonga/record.rb:135 ./lib/groonga/record.rb:142
+#: ./lib/groonga/record.rb:137 ./lib/groonga/record.rb:144
 msgid "1.0.5"
 msgstr ""
 
@@ -4177,7 +4179,7 @@ msgstr ""
 #: ./ext/groonga/rb-grn-index-column.c:161
 #: ./ext/groonga/rb-grn-object.c:1355
 #: ./ext/groonga/rb-grn-table-key-support.c:482
-#: ./lib/groonga/record.rb:93
+#: ./lib/groonga/record.rb:95
 msgid "tag|overload|[]="
 msgstr ""
 
@@ -4519,9 +4521,8 @@ msgstr ""
 # @overload
 #: ./ext/groonga/rb-grn-logger.c:384
 #: ./ext/groonga/rb-grn-query-logger.c:264
-#, fuzzy
 msgid "tag|overload|path="
-msgstr "登録されたロガーの登録を削除する。削除後はデフォルトのロガーが使われます。"
+msgstr ""
 
 # @example Disables log by the default logger
 #: ./ext/groonga/rb-grn-logger.c:384
@@ -5594,7 +5595,7 @@ msgid ""
 "{Groonga::ResourceDeadlockAvoided} 例外が発生する。"
 msgstr ""
 
-#: ./ext/groonga/rb-grn-table.c:1787 ./lib/groonga/record.rb:263
+#: ./ext/groonga/rb-grn-table.c:1787 ./lib/groonga/record.rb:265
 msgid "ブロックを指定した場合はブロックを抜けたときにunlockする。"
 msgstr ""
 
@@ -6091,7 +6092,7 @@ msgstr ""
 
 #: ./lib/groonga/context.rb:133 ./lib/groonga/pagination.rb:114
 #: ./lib/groonga/patricia-trie.rb:51 ./lib/groonga/posting.rb:72
-#: ./lib/groonga/record.rb:270 ./lib/groonga/schema.rb:167
+#: ./lib/groonga/record.rb:272 ./lib/groonga/schema.rb:167
 #: ./lib/groonga/schema.rb:425 ./lib/groonga/schema.rb:451
 #: ./lib/groonga/schema.rb:505 ./lib/groonga/schema.rb:517
 #: ./lib/groonga/schema.rb:543 ./lib/groonga/schema.rb:631
@@ -6106,7 +6107,7 @@ msgstr "オプションを設定するハッシュ。指定されなかったオ
 
 # @option
 #: ./lib/groonga/context.rb:133 ./lib/groonga/pagination.rb:114
-#: ./lib/groonga/patricia-trie.rb:51 ./lib/groonga/record.rb:270
+#: ./lib/groonga/patricia-trie.rb:51 ./lib/groonga/record.rb:272
 #: ./lib/groonga/schema.rb:167 ./lib/groonga/schema.rb:425
 #: ./lib/groonga/schema.rb:451 ./lib/groonga/schema.rb:505
 #: ./lib/groonga/schema.rb:517 ./lib/groonga/schema.rb:543
@@ -6119,7 +6120,7 @@ msgid "tag|option|options"
 msgstr ""
 
 #: ./lib/groonga/context.rb:133 ./lib/groonga/pagination.rb:114
-#: ./lib/groonga/patricia-trie.rb:51 ./lib/groonga/record.rb:270
+#: ./lib/groonga/patricia-trie.rb:51 ./lib/groonga/record.rb:272
 #: ./lib/groonga/schema.rb:167 ./lib/groonga/schema.rb:425
 #: ./lib/groonga/schema.rb:451 ./lib/groonga/schema.rb:505
 #: ./lib/groonga/schema.rb:517 ./lib/groonga/schema.rb:543
@@ -7097,209 +7098,209 @@ msgid "Sets column value of the record."
 msgstr ""
 
 # @see
-#: ./lib/groonga/record.rb:93
+#: ./lib/groonga/record.rb:95
 msgid "tag|see|Groonga::Table#set_column_value"
 msgstr ""
 
-#: ./lib/groonga/record.rb:98
+#: ./lib/groonga/record.rb:100
 msgid ""
 "このレコードの _column_name_ で指定されたカラムの値の最後に\n"
 "_value_ を追加する。"
 msgstr ""
 
-#: ./lib/groonga/record.rb:104
+#: ./lib/groonga/record.rb:106
 msgid ""
 "このレコードの _column_name_ で指定されたカラムの値の最初に\n"
 "_value_ を追加する。"
 msgstr ""
 
-#: ./lib/groonga/record.rb:110
+#: ./lib/groonga/record.rb:112
 msgid ""
 "_record_ が所属するテーブルで主キーを使える場合は +true+\n"
 "を返し、使えない場合は +false+ を返す。"
 msgstr ""
 
-#: ./lib/groonga/record.rb:116
+#: ./lib/groonga/record.rb:118
 msgid ""
 "名前が _name_ のカラムがレコードの所属するテーブルで定義され\n"
 "ているなら +true+ を返す。"
 msgstr ""
 
 # Groonga::Record#reference_column?
-#: ./lib/groonga/record.rb:122
+#: ./lib/groonga/record.rb:124
 msgid "名前が _name_ のカラムが参照カラムであるなら +true+ を返す。"
 msgstr ""
 
 # Groonga::Record#index_column?
-#: ./lib/groonga/record.rb:127
+#: ./lib/groonga/record.rb:129
 msgid ""
 "名前が _name_ のカラムが索引カラム\n"
 "（ {Groonga::IndexColumn} ）であるなら +true+ を返す。"
 msgstr ""
 
-#: ./lib/groonga/record.rb:133
+#: ./lib/groonga/record.rb:135
 msgid "名前が _name_ のカラムの値がベクターであるなら +true+ を返す。"
 msgstr ""
 
-#: ./lib/groonga/record.rb:140
+#: ./lib/groonga/record.rb:142
 msgid "名前が _name_ のカラムの値がスカラーであるなら +true+ を返す。"
 msgstr ""
 
 # Groonga::Record#search
-#: ./lib/groonga/record.rb:147
+#: ./lib/groonga/record.rb:149
 msgid ""
 "名前が _name_ の {Groonga::IndexColumn} の search メソッドを呼ぶ。\n"
 "_query_ と _options_ はそのメソッドにそのまま渡される。詳しく\n"
 "は {Groonga::IndexColumn#search} を参照。"
 msgstr ""
 
-#: ./lib/groonga/record.rb:154
+#: ./lib/groonga/record.rb:156
 msgid "レコードの主キーを返す。"
 msgstr ""
 
 # Groonga::Record#key
-#: ./lib/groonga/record.rb:156
+#: ./lib/groonga/record.rb:158
 msgid ""
 "_record_ が所属するテーブルが {Groonga::Array} の場合は常\n"
 "に +nil+ を返す。"
 msgstr ""
 
-#: ./lib/groonga/record.rb:166
+#: ./lib/groonga/record.rb:168
 msgid "レコードを一意に識別するための情報を返す。"
 msgstr ""
 
 # Groonga::Record#record_id
-#: ./lib/groonga/record.rb:168
+#: ./lib/groonga/record.rb:170
 msgid ""
 "_record_ が所属するテーブルが {Groonga::Array} の場合はID\n"
 "を返し、それ以外の場合は主キーを返す。"
 msgstr ""
 
-#: ./lib/groonga/record.rb:178 ./lib/groonga/record.rb:182
+#: ./lib/groonga/record.rb:180 ./lib/groonga/record.rb:184
 msgid "レコードのIDを返す。"
 msgstr ""
 
-#: ./lib/groonga/record.rb:184
+#: ./lib/groonga/record.rb:186
 msgid ""
 "レコードのスコア値を返す。検索結果として生成されたテーブル\n"
 "のみに定義される。"
 msgstr ""
 
-#: ./lib/groonga/record.rb:190
+#: ./lib/groonga/record.rb:192
 msgid "Sets score. Score column exists only search result table."
 msgstr ""
 
-#: ./lib/groonga/record.rb:192
+#: ./lib/groonga/record.rb:194
 msgid "The new score."
 msgstr ""
 
 # @param [Integer]
-#: ./lib/groonga/record.rb:192
+#: ./lib/groonga/record.rb:194
 msgid "tag|param|new_score"
 msgstr ""
 
 # Groonga::Record#support_score?
-#: ./lib/groonga/record.rb:197
+#: ./lib/groonga/record.rb:199
 msgid ""
 "{Groonga::Record#score} が利用できる場合は +true+ を\n"
 "返す。"
 msgstr ""
 
-#: ./lib/groonga/record.rb:203
+#: ./lib/groonga/record.rb:205
 msgid ""
 "主キーの値が同一であったレコードの件数を返す。検索結果とし\n"
 "て生成されたテーブルのみに定義される。"
 msgstr ""
 
-#: ./lib/groonga/record.rb:206
+#: ./lib/groonga/record.rb:208
 msgid ""
 "{Groonga::Record#support_sub_records?} でこの値を利用でき\n"
 "るかがわかる。"
 msgstr "Groonga::Record#support_sub_records?を追加。"
 
-#: ./lib/groonga/record.rb:212
+#: ./lib/groonga/record.rb:214
 msgid ""
 "{Groonga::Record#n_sub_records} が利用できる場合は +true+ を\n"
 "返す。"
 msgstr ""
 
-#: ./lib/groonga/record.rb:218
+#: ./lib/groonga/record.rb:220
 msgid "レコードの値を返す。"
 msgstr ""
 
-#: ./lib/groonga/record.rb:223
+#: ./lib/groonga/record.rb:225
 msgid "レコードの値を設定する。既存の値は上書きされる。"
 msgstr ""
 
 # Groonga::Record#increment!
-#: ./lib/groonga/record.rb:228
+#: ./lib/groonga/record.rb:230
 msgid ""
 "このレコードの _name_ で指定されたカラムの値を _delta_ だけ増\n"
 "加する。 _delta_ が +nil+ の場合は1増加する。"
 msgstr ""
 
 # Groonga::Record#decrement!
-#: ./lib/groonga/record.rb:234
+#: ./lib/groonga/record.rb:236
 msgid ""
 "このレコードの _name_ で指定されたカラムの値を _delta_ だけ減\n"
 "少する。 _delta_ が +nil+ の場合は1減少する。"
 msgstr ""
 
-#: ./lib/groonga/record.rb:240
+#: ./lib/groonga/record.rb:242
 msgid "レコードが所属するテーブルの全てのカラムを返す。"
 msgstr ""
 
-#: ./lib/groonga/record.rb:245
+#: ./lib/groonga/record.rb:247
 msgid ""
 "レコードが所属しているテーブルで定義されているインデックス\n"
 "型のカラムでない全カラムを対象とし、カラムの名前をキーとし\n"
 "たこのレコードのカラムの値のハッシュを返す。"
 msgstr ""
 
-#: ./lib/groonga/record.rb:249
+#: ./lib/groonga/record.rb:251
 msgid "return same attributes object if duplicate records exist."
 msgstr ""
 
-#: ./lib/groonga/record.rb:255
+#: ./lib/groonga/record.rb:257
 msgid "レコードを削除する。"
 msgstr ""
 
-#: ./lib/groonga/record.rb:260
+#: ./lib/groonga/record.rb:262
 msgid ""
 "レコードが所属するテーブルをロックする。ロックに失敗した場\n"
 "合は {Groonga::ResourceDeadlockAvoided} 例外が発生する。"
 msgstr ""
 
-#: ./lib/groonga/record.rb:265
+#: ./lib/groonga/record.rb:267
 msgid "利用可能な _option_ は以下の通り。"
 msgstr ""
 
-#: ./lib/groonga/record.rb:275
+#: ./lib/groonga/record.rb:277
 msgid "レコードが所属するテーブルのロックを解除する。"
 msgstr ""
 
-#: ./lib/groonga/record.rb:277 ./lib/groonga/record.rb:284
-#: ./lib/groonga/record.rb:291
+#: ./lib/groonga/record.rb:279 ./lib/groonga/record.rb:286
+#: ./lib/groonga/record.rb:293
 msgid "利用可能なオプションは現在は無い。"
 msgstr ""
 
-#: ./lib/groonga/record.rb:282
+#: ./lib/groonga/record.rb:284
 msgid "レコードが所属するテーブルのロックを強制的に解除する。"
 msgstr ""
 
-#: ./lib/groonga/record.rb:289
+#: ./lib/groonga/record.rb:291
 msgid "レコードが所属するテーブルがロックされていれば +true+ を返す。"
 msgstr ""
 
-#: ./lib/groonga/record.rb:296
+#: ./lib/groonga/record.rb:298
 msgid "レコードが持つIDが有効なIDであれば +true+ を返す。"
 msgstr ""
 
-#: ./lib/groonga/record.rb:384
+#: ./lib/groonga/record.rb:386
 msgid "Returns the value of attribute attributes"
 msgstr ""
 
-#: ./lib/groonga/record.rb:385
+#: ./lib/groonga/record.rb:387
 msgid "a new instance of AttributeHashBuilder"
 msgstr ""
 
