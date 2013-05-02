@@ -113,6 +113,7 @@ class VariableSizeColumnTest < Test::Unit::TestCase
   end
 
   class VectorTest < self
+    class ReferenceTest < self
     def test_append
       assert_equal([], @morita["friends"])
       @morita.append("friends", @yu)
@@ -128,7 +129,9 @@ class VariableSizeColumnTest < Test::Unit::TestCase
       @morita.prepend("friends", @gunyara_kun)
       assert_equal([@gunyara_kun, @yu], @morita["friends"])
     end
+    end
 
+    class StringTest < self
     def test_string_vector
       omit("append/prepend for non table domain column " +
            "isn't supported by groonga.")
@@ -137,6 +140,7 @@ class VariableSizeColumnTest < Test::Unit::TestCase
       assert_equal(["morita"], @morita["nick_names"])
       @morita.prepend("nick_names", "moritapo")
       assert_equal(["moritapo", "morita"], @morita["nick_names"])
+    end
     end
   end
 
