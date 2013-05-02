@@ -113,31 +113,31 @@ class VariableSizeColumnTest < Test::Unit::TestCase
   end
 
   class VectorTest < self
-  def test_append
-    assert_equal([], @morita["friends"])
-    @morita.append("friends", @yu)
-    assert_equal([@yu], @morita["friends"])
-    @morita.append("friends", @gunyara_kun)
-    assert_equal([@yu, @gunyara_kun], @morita["friends"])
-  end
+    def test_append
+      assert_equal([], @morita["friends"])
+      @morita.append("friends", @yu)
+      assert_equal([@yu], @morita["friends"])
+      @morita.append("friends", @gunyara_kun)
+      assert_equal([@yu, @gunyara_kun], @morita["friends"])
+    end
 
-  def test_prepend
-    assert_equal([], @morita["friends"])
-    @morita.prepend("friends", @yu)
-    assert_equal([@yu], @morita["friends"])
-    @morita.prepend("friends", @gunyara_kun)
-    assert_equal([@gunyara_kun, @yu], @morita["friends"])
-  end
+    def test_prepend
+      assert_equal([], @morita["friends"])
+      @morita.prepend("friends", @yu)
+      assert_equal([@yu], @morita["friends"])
+      @morita.prepend("friends", @gunyara_kun)
+      assert_equal([@gunyara_kun, @yu], @morita["friends"])
+    end
 
-  def test_string_vector
-    omit("append/prepend for non table domain column " +
-         "isn't supported by groonga.")
-    assert_equal([], @morita["nick_names"])
-    @morita.append("nick_names", "morita")
-    assert_equal(["morita"], @morita["nick_names"])
-    @morita.prepend("nick_names", "moritapo")
-    assert_equal(["moritapo", "morita"], @morita["nick_names"])
-  end
+    def test_string_vector
+      omit("append/prepend for non table domain column " +
+           "isn't supported by groonga.")
+      assert_equal([], @morita["nick_names"])
+      @morita.append("nick_names", "morita")
+      assert_equal(["morita"], @morita["nick_names"])
+      @morita.prepend("nick_names", "moritapo")
+      assert_equal(["moritapo", "morita"], @morita["nick_names"])
+    end
   end
 
   def test_defrag
