@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2011  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2013  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -51,7 +51,7 @@ class SchemaDumperTest < Test::Unit::TestCase
     end
   end
 
-  def define_reference_schema
+  def define_reference_column_schema
     Groonga::Schema.define do |schema|
       schema.create_table("Items") do |table|
         table.short_text("title")
@@ -127,8 +127,8 @@ end
 EOS
     end
 
-    def test_reference
-      define_reference_schema
+    def test_reference_column
+      define_reference_column_schema
       assert_equal(<<-EOS, dump)
 create_table("Comments",
              :force => true) do |table|
@@ -195,8 +195,8 @@ column_create Posts title COLUMN_SCALAR ShortText
 EOS
     end
 
-    def test_reference
-      define_reference_schema
+    def test_reference_column
+      define_reference_column_schema
       assert_equal(<<-EOS, dump)
 table_create Comments TABLE_NO_KEY
 column_create Comments content COLUMN_SCALAR Text
