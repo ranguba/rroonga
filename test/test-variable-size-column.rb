@@ -112,6 +112,13 @@ class VariableSizeColumnTest < Test::Unit::TestCase
     assert_equal(@users, @name.table)
   end
 
+  def test_defrag
+    1000.times do |i|
+      @users.add(:name => "user #{i}" * 1000)
+    end
+    assert_equal(3, @name.defrag)
+  end
+
   class VectorTest < self
     class ReferenceTest < self
       def test_append
@@ -212,12 +219,5 @@ class VariableSizeColumnTest < Test::Unit::TestCase
                      groonga_org.modified_times)
       end
     end
-  end
-
-  def test_defrag
-    1000.times do |i|
-      @users.add(:name => "user #{i}" * 1000)
-    end
-    assert_equal(3, @name.defrag)
   end
 end
