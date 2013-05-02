@@ -1454,5 +1454,4 @@ rb_grn_init_object (VALUE mGrn)
     rb_define_method(rb_cGrnObject, "remove", rb_grn_object_remove, 0);
 
     rb_define_method(rb_cGrnObject, "builtin?", rb_grn_object_builtin_p, 0);
-
 }
