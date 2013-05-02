@@ -716,19 +716,27 @@ rb_grn_vector_from_ruby_object (VALUE object, grn_ctx *context, grn_obj *vector)
 }
 
 VALUE
-rb_grn_uvector_to_ruby_object (grn_ctx *context, grn_obj *uvector)
+rb_grn_uvector_to_ruby_object (grn_ctx *context, grn_obj *uvector,
+                               grn_obj *range, VALUE related_object)
 {
     VALUE array;
     grn_id *current, *end;
+    VALUE rb_range = Qnil;
 
     if (!uvector)
         return Qnil;
 
     array = rb_ary_new();
+    if (range)
+        rb_range = GRNTABLE2RVAL(context, range, GRN_FALSE);
     current = (grn_id *)GRN_BULK_HEAD(uvector);
     end = (grn_id *)GRN_BULK_CURR(uvector);
     while (current < end) {
-        rb_ary_push(array, UINT2NUM(*current));
+        VALUE record = Qnil;
+        if (*current != GRN_ID_NIL) {
+            record = rb_grn_record_new(rb_range, *current, Qnil);
+        }
+        rb_ary_push(array, record);
         current++;
     }
 
@@ -800,23 +808,7 @@ rb_grn_value_to_ruby_object (grn_ctx *context,
         return GRNBULK2RVAL(context, value, range, related_object);
         break;
       case GRN_UVECTOR:
-        {
-            VALUE rb_value, rb_range = Qnil;
-            grn_id *uvector, *uvector_end;
-
-            rb_value = rb_ary_new();
-            if (range)
-                rb_range = GRNTABLE2RVAL(context, range, GRN_FALSE);
-            uvector = (grn_id *)GRN_BULK_HEAD(value);
-            uvector_end = (grn_id *)GRN_BULK_CURR(value);
-            for (; uvector < uvector_end; uvector++) {
-                VALUE record = Qnil;
-                if (*uvector != GRN_ID_NIL)
-                    record = rb_grn_record_new(rb_range, *uvector, Qnil);
-                rb_ary_push(rb_value, record);
-            }
-            return rb_value;
-        }
+        return GRNUVECTOR2RVAL(context, value, range, related_object);
         break;
       case GRN_VECTOR:
         return GRNVECTOR2RVAL(context, value);

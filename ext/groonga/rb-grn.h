@@ -616,8 +616,8 @@ VALUE          rb_grn_column_expression_builder_build
 
 #define RVAL2GRNUVECTOR(object, context, uvector, related_object)	\
     (rb_grn_uvector_from_ruby_object(object, context, uvector, related_object))
-#define GRNUVECTOR2RVAL(context, uvector) \
-    (rb_grn_uvector_to_ruby_object(context, uvector))
+#define GRNUVECTOR2RVAL(context, uvector, range, related_object)        \
+    (rb_grn_uvector_to_ruby_object(context, uvector, range, related_object))
 
 #define GRNVALUE2RVAL(context, value, range, related_object) \
     (rb_grn_value_to_ruby_object(context, value, range, related_object))
@@ -735,7 +735,9 @@ grn_obj       *rb_grn_uvector_from_ruby_object      (VALUE object,
 						     grn_obj *uvector,
 						     VALUE related_object);
 VALUE          rb_grn_uvector_to_ruby_object        (grn_ctx *context,
-						     grn_obj *uvector);
+						     grn_obj *uvector,
+                                                     grn_obj *range,
+                                                     VALUE related_object);
 
 VALUE          rb_grn_value_to_ruby_object          (grn_ctx *context,
 						     grn_obj *value,
