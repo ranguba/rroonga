@@ -136,8 +136,16 @@ class VariableSizeColumnTest < Test::Unit::TestCase
         @morita.prepend("friends", @gunyara_kun)
         assert_equal([@gunyara_kun, @yu], @morita["friends"])
       end
+    end
 
-      def test_cast
+    class CastTest < self
+      def setup
+        setup_database
+        setup_schema
+        setup_shortcuts
+      end
+
+      def setup_schema
         Groonga::Schema.define do |schema|
           schema.create_table("Times",
                               :type => :hash,
@@ -150,9 +158,14 @@ class VariableSizeColumnTest < Test::Unit::TestCase
             table.reference("modified_times", "Times", :type => :vector)
           end
         end
+      end
 
-        sites = Groonga["Sites"]
-        groonga_org = sites.add("http://groonga.org/",
+      def setup_shortcuts
+        @sites = Groonga["Sites"]
+      end
+
+      def test_reference
+        groonga_org = @sites.add("http://groonga.org/",
                                 :modified_times => [
                                   "2013-04-29 00:00:00",
                                   "2013-05-02 01:46:48",
