@@ -84,5 +84,16 @@ class FixSizeColumnTest < Test::Unit::TestCase
         assert_in_delta(issued, record["issued"].to_f, 0.001)
       end
     end
+
+    class TimeTest < self
+      def test_assign
+        comments = Groonga::Array.create(:name => "Comments")
+        comments.define_column("issued", "Time")
+        issued_in_float = 1187430026.29
+        issued = Time.at(issued_in_float)
+        record = comments.add(:issued => issued)
+        assert_in_delta(issued_in_float, record["issued"].to_f, 0.001)
+      end
+    end
   end
 end
