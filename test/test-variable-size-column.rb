@@ -112,7 +112,8 @@ class VariableSizeColumnTest < Test::Unit::TestCase
     assert_equal(@users, @name.table)
   end
 
-  def test_vector_append
+  class VectorTest < self
+  def test_append
     assert_equal([], @morita["friends"])
     @morita.append("friends", @yu)
     assert_equal([@yu], @morita["friends"])
@@ -120,7 +121,7 @@ class VariableSizeColumnTest < Test::Unit::TestCase
     assert_equal([@yu, @gunyara_kun], @morita["friends"])
   end
 
-  def test_vector_prepend
+  def test_prepend
     assert_equal([], @morita["friends"])
     @morita.prepend("friends", @yu)
     assert_equal([@yu], @morita["friends"])
@@ -136,6 +137,7 @@ class VariableSizeColumnTest < Test::Unit::TestCase
     assert_equal(["morita"], @morita["nick_names"])
     @morita.prepend("nick_names", "moritapo")
     assert_equal(["moritapo", "morita"], @morita["nick_names"])
+  end
   end
 
   def test_defrag
