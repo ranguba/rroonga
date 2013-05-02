@@ -64,7 +64,9 @@ class FixSizeColumnTest < Test::Unit::TestCase
     assert_equal(@bookmarks, @viewed.table)
   end
 
-  def test_assign_time
+  class TimeTest < self
+    class IntegerTest < self
+  def test_assign
     comments = Groonga::Array.create(:name => "Comments")
     comments.define_column("title", "ShortText")
     comments.define_column("issued", "Time")
@@ -73,5 +75,7 @@ class FixSizeColumnTest < Test::Unit::TestCase
     record = comments.add(:title => title, :issued => issued)
     assert_equal([title, Time.at(issued)],
                  [record["title"], record["issued"]])
+  end
+    end
   end
 end
