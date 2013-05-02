@@ -287,7 +287,7 @@ module Groonga
         sorted_columns.each(&block)
       end
 
-      def collect_columns
+      def find_all_columns
         columns = []
         each_table do |table|
           each_column(table) do |column|
@@ -298,13 +298,13 @@ module Groonga
       end
 
       def reference_columns
-        @reference_columns ||= collect_columns do |column|
+        @reference_columns ||= find_all_columns do |column|
           reference_column?(column)
         end
       end
 
       def index_columns
-        @index_columns ||= collect_columns do |column|
+        @index_columns ||= find_all_columns do |column|
           index_column?(column)
         end
       end
