@@ -161,7 +161,7 @@ class VariableSizeColumnTest < Test::Unit::TestCase
                        Time.new(2013, 4, 29, 0,  0,  0),
                        Time.new(2013, 5,  2, 1, 46, 48),
                      ],
-                     groonga_org.modified_times)
+                     groonga_org.modified_times.collect(&:key))
       end
     end
 
