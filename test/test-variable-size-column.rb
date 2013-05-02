@@ -166,10 +166,10 @@ class VariableSizeColumnTest < Test::Unit::TestCase
 
       def test_reference
         groonga_org = @sites.add("http://groonga.org/",
-                                :modified_times => [
-                                  "2013-04-29 00:00:00",
-                                  "2013-05-02 01:46:48",
-                                ])
+                                 :modified_times => [
+                                   "2013-04-29 00:00:00",
+                                   "2013-05-02 01:46:48",
+                                 ])
         assert_equal([
                        Time.new(2013, 4, 29, 0,  0,  0),
                        Time.new(2013, 5,  2, 1, 46, 48),
