@@ -708,7 +708,10 @@ rb_grn_vector_from_ruby_object (VALUE object, grn_ctx *context, grn_obj *vector)
     data.array = rb_grn_convert_to_array(object);
     data.context = context;
     data.vector = vector;
-    GRN_VOID_INIT(&(data.value_buffer));
+    GRN_OBJ_INIT(&(data.value_buffer),
+                 GRN_BULK,
+                 0,
+                 vector->header.domain);
     rb_ensure(rb_grn_vector_from_ruby_object_body,   (VALUE)(&data),
               rb_grn_vector_from_ruby_object_ensure, (VALUE)(&data));
 
@@ -719,39 +722,107 @@ VALUE
 rb_grn_uvector_to_ruby_object (grn_ctx *context, grn_obj *uvector,
                                grn_obj *range, VALUE related_object)
 {
-    VALUE array;
-    grn_id *current, *end;
-    VALUE rb_range = Qnil;
+    VALUE array = Qnil;
 
     if (!uvector)
         return Qnil;
 
-    array = rb_ary_new();
-    if (range)
-        rb_range = GRNTABLE2RVAL(context, range, GRN_FALSE);
-    current = (grn_id *)GRN_BULK_HEAD(uvector);
-    end = (grn_id *)GRN_BULK_CURR(uvector);
-    while (current < end) {
-        VALUE record = Qnil;
-        if (*current != GRN_ID_NIL) {
-            record = rb_grn_record_new(rb_range, *current, Qnil);
+    if (!range) {
+        rb_raise(rb_eTypeError,
+                 "unknown range uvector can't be converted: <%s>",
+                 rb_grn_inspect(related_object));
+    }
+
+    switch (range->header.type) {
+      case GRN_TYPE:
+        {
+            const char *current, *end;
+            grn_id range_id;
+            grn_obj value;
+            int value_size;
+            value_size = grn_obj_get_range(context, range);
+            array = rb_ary_new();
+            current = GRN_BULK_HEAD(uvector);
+            end = GRN_BULK_CURR(uvector);
+            range_id = grn_obj_id(context, range);
+            GRN_OBJ_INIT(&value, GRN_BULK, GRN_OBJ_DO_SHALLOW_COPY, range_id);
+            while (current < end) {
+                VALUE rb_value;
+                GRN_TEXT_SET(context, &value, current, value_size);
+                rb_value = GRNBULK2RVAL(context, &value, range, related_object);
+                rb_ary_push(array, rb_value);
+                current += value_size;
+            }
+            GRN_OBJ_FIN(context, &value);
         }
-        rb_ary_push(array, record);
-        current++;
+        break;
+      case GRN_TABLE_HASH_KEY:
+      case GRN_TABLE_PAT_KEY:
+      case GRN_TABLE_DAT_KEY:
+      case GRN_TABLE_NO_KEY:
+        {
+            grn_id *current, *end;
+            VALUE rb_range = Qnil;
+            array = rb_ary_new();
+            rb_range = GRNTABLE2RVAL(context, range, GRN_FALSE);
+            current = (grn_id *)GRN_BULK_HEAD(uvector);
+            end = (grn_id *)GRN_BULK_CURR(uvector);
+            while (current < end) {
+                VALUE record = Qnil;
+                if (*current != GRN_ID_NIL) {
+                    record = rb_grn_record_new(rb_range, *current, Qnil);
+                }
+                rb_ary_push(array, record);
+                current++;
+            }
+        }
+        break;
+      default:
+        rb_raise(rb_eTypeError,
+                 "unknown range uvector can't be converted: %s(%#x): <%s>",
+                 rb_grn_inspect_type(range->header.type),
+                 range->header.type,
+                 rb_grn_inspect(related_object));
+        break;
     }
 
     return array;
 }
 
-grn_obj *
-rb_grn_uvector_from_ruby_object (VALUE object, grn_ctx *context,
-                                 grn_obj *uvector, VALUE related_object)
+static grn_obj *
+rb_grn_uvector_from_ruby_object_type (VALUE object,
+                                      grn_ctx *context,
+                                      grn_obj *uvector,
+                                      grn_obj *type,
+                                      VALUE related_object)
+{
+    VALUE *rb_values;
+    int i, n;
+    grn_obj value;
+    int value_size;
+
+    n = RARRAY_LEN(object);
+    rb_values = RARRAY_PTR(object);
+    GRN_OBJ_INIT(&value, GRN_BULK, 0, uvector->header.domain);
+    value_size = grn_obj_get_range(context, type);
+    for (i = 0; i < n; i++) {
+        GRN_BULK_REWIND(&value);
+        RVAL2GRNBULK(rb_values[i], context, &value);
+        grn_bulk_write(context, uvector, GRN_BULK_HEAD(&value), value_size);
+    }
+    GRN_OBJ_FIN(context, &value);
+
+    return uvector;
+}
+
+static grn_obj *
+rb_grn_uvector_from_ruby_object_reference (VALUE object,
+                                           grn_ctx *context,
+                                           grn_obj *uvector,
+                                           VALUE related_object)
 {
     VALUE *values;
     int i, n;
-
-    if (NIL_P(object))
-        return NULL;
 
     n = RARRAY_LEN(object);
     values = RARRAY_PTR(object);
@@ -785,6 +856,41 @@ rb_grn_uvector_from_ruby_object (VALUE object, grn_ctx *context,
     }
 
     return uvector;
+}
+
+grn_obj *
+rb_grn_uvector_from_ruby_object (VALUE object, grn_ctx *context,
+                                 grn_obj *uvector, VALUE related_object)
+{
+    grn_obj *domain;
+
+    if (NIL_P(object))
+        return NULL;
+
+    domain = grn_ctx_at(context, uvector->header.domain);
+    /* TODO: unlink domain */
+    switch (domain->header.type) {
+      case GRN_TYPE:
+        return rb_grn_uvector_from_ruby_object_type(object,
+                                                    context,
+                                                    uvector,
+                                                    domain,
+                                                    related_object);
+        break;
+      case GRN_TABLE_HASH_KEY:
+      case GRN_TABLE_PAT_KEY:
+      case GRN_TABLE_DAT_KEY:
+      case GRN_TABLE_NO_KEY:
+        return rb_grn_uvector_from_ruby_object_reference(object,
+                                                         context,
+                                                         uvector,
+                                                         related_object);
+        break;
+      default:
+        /* TODO: raise */
+        return NULL;
+        break;
+    }
 }
 
 VALUE

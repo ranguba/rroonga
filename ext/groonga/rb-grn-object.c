@@ -1269,12 +1269,9 @@ rb_uvector_value_p (RbGrnObject *rb_grn_object, VALUE rb_value)
 
     switch (rb_grn_object->range->header.type) {
       case GRN_TYPE:
-	/* TODO: support not sizeof(grn_id) uvector. */
-	/*
-	if (!(rb_grn_object->range->header.flags | GRN_OBJ_KEY_VAR_SIZE)) {
+	if (!(rb_grn_object->range->header.flags & GRN_OBJ_KEY_VAR_SIZE)) {
 	    return GRN_TRUE;
 	}
-	*/
 	break;
       case GRN_TABLE_HASH_KEY:
       case GRN_TABLE_PAT_KEY:
@@ -1312,8 +1309,7 @@ rb_grn_object_set_raw (RbGrnObject *rb_grn_object, grn_id id,
 	}
     } else {
 	if (rb_uvector_value_p(rb_grn_object, rb_values)) {
-	    GRN_OBJ_INIT(&value, GRN_UVECTOR, 0,
-			 rb_grn_object->object->header.domain);
+	    GRN_OBJ_INIT(&value, GRN_UVECTOR, 0, rb_grn_object->range_id);
 	    RVAL2GRNUVECTOR(rb_values, context, &value, related_object);
 	} else {
 	    GRN_OBJ_INIT(&value, GRN_VECTOR, 0, GRN_ID_NIL);
