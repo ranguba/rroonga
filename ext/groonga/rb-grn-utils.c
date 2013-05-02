@@ -496,6 +496,12 @@ rb_grn_bulk_from_ruby_object_with_type (VALUE object, grn_ctx *context,
             int64_t sec;
             int32_t usec;
 
+            if (string_p) {
+                ID id_parse;
+                CONST_ID(id_parse, "parse");
+                object = rb_funcall(rb_cTime, id_parse, 1, object);
+            }
+
             switch (TYPE(object)) {
             case T_FIXNUM:
             case T_BIGNUM:

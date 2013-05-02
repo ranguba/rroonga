@@ -95,5 +95,14 @@ class FixSizeColumnTest < Test::Unit::TestCase
         assert_in_delta(issued_in_float, record["issued"].to_f, 0.001)
       end
     end
+
+    class StringTest < self
+      def test_assign
+        comments = Groonga::Array.create(:name => "Comments")
+        comments.define_column("issued", "Time")
+        record = comments.add(:issued => "2010/06/01 00:00:00")
+        assert_equal(Time.new(2010, 6, 1, 0, 0, 0), record["issued"])
+      end
+    end
   end
 end
