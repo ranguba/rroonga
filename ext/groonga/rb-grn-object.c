@@ -1289,42 +1289,81 @@ rb_uvector_value_p (RbGrnObject *rb_grn_object, VALUE rb_value)
     return GRN_FALSE;
 }
 
+typedef struct {
+    RbGrnObject *rb_grn_object;
+    grn_id id;
+    grn_obj value;
+    VALUE rb_value;
+    int flags;
+    VALUE related_object;
+} SetRawData;
+
+static VALUE
+rb_grn_object_set_raw_body (VALUE user_data)
+{
+    SetRawData *data = (SetRawData *)user_data;
+    RbGrnObject *rb_grn_object;
+    grn_ctx *context;
+    grn_obj *value;
+    grn_rc rc;
+    VALUE rb_value, rb_values;
+    VALUE related_object;
+
+    rb_grn_object = data->rb_grn_object;
+    context = rb_grn_object->context;
+    value = &(data->value);
+    rb_value = data->rb_value;
+    rb_values = rb_grn_check_convert_to_array(rb_value);
+    related_object = data->related_object;
+    if (NIL_P(rb_values)) {
+        if (NIL_P(rb_value)) {
+            GRN_OBJ_INIT(value, GRN_BULK, 0, GRN_ID_NIL);
+        } else {
+            GRN_OBJ_INIT(value, GRN_BULK, 0, GRN_ID_NIL);
+            RVAL2GRNBULK(rb_value, context, value);
+        }
+    } else {
+        if (rb_uvector_value_p(rb_grn_object, rb_values)) {
+            GRN_OBJ_INIT(value, GRN_UVECTOR, 0, rb_grn_object->range_id);
+            RVAL2GRNUVECTOR(rb_values, context, value, related_object);
+        } else {
+            GRN_OBJ_INIT(value, GRN_VECTOR, 0, GRN_ID_NIL);
+            RVAL2GRNVECTOR(rb_values, context, value);
+        }
+    }
+    rc = grn_obj_set_value(context, rb_grn_object->object, data->id,
+                           value, data->flags);
+    rb_grn_context_check(context, related_object);
+    rb_grn_rc_check(rc, related_object);
+
+    return Qnil;
+}
+
+static VALUE
+rb_grn_object_set_raw_ensure (VALUE user_data)
+{
+    SetRawData *data = (SetRawData *)user_data;
+
+    grn_obj_unlink(data->rb_grn_object->context, &(data->value));
+
+    return Qnil;
+}
+
 VALUE
 rb_grn_object_set_raw (RbGrnObject *rb_grn_object, grn_id id,
                        VALUE rb_value, int flags, VALUE related_object)
 {
-    grn_ctx *context;
-    grn_obj value;
-    grn_rc rc;
-    VALUE exception, rb_values;
+    SetRawData data;
 
-    context = rb_grn_object->context;
-    rb_values = rb_grn_check_convert_to_array(rb_value);
-    if (NIL_P(rb_values)) {
-        if (NIL_P(rb_value)) {
-            GRN_OBJ_INIT(&value, GRN_BULK, 0, GRN_ID_NIL);
-        } else {
-            GRN_OBJ_INIT(&value, GRN_BULK, 0, GRN_ID_NIL);
-            RVAL2GRNBULK(rb_value, context, &value);
-        }
-    } else {
-        if (rb_uvector_value_p(rb_grn_object, rb_values)) {
-            GRN_OBJ_INIT(&value, GRN_UVECTOR, 0, rb_grn_object->range_id);
-            RVAL2GRNUVECTOR(rb_values, context, &value, related_object);
-        } else {
-            GRN_OBJ_INIT(&value, GRN_VECTOR, 0, GRN_ID_NIL);
-            RVAL2GRNVECTOR(rb_values, context, &value);
-        }
-    }
-    rc = grn_obj_set_value(context, rb_grn_object->object, id,
-                           &value, flags);
-    exception = rb_grn_context_to_exception(context, related_object);
-    grn_obj_unlink(context, &value);
-    if (!NIL_P(exception))
-        rb_exc_raise(exception);
-    rb_grn_rc_check(rc, related_object);
+    data.rb_grn_object = rb_grn_object;
+    data.id = id;
+    GRN_VOID_INIT(&(data.value));
+    data.rb_value = rb_value;
+    data.flags = flags;
+    data.related_object = related_object;
 
-    return Qnil;
+    return rb_ensure(rb_grn_object_set_raw_body, (VALUE)(&data),
+                     rb_grn_object_set_raw_ensure, (VALUE)(&data));
 }
 
 static VALUE

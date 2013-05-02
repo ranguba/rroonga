@@ -840,7 +840,6 @@ rb_grn_uvector_from_ruby_object_reference (VALUE object,
             if (rb_respond_to(value, rb_intern("record_raw_id"))) {
                 id = NUM2UINT(rb_funcall(value, rb_intern("record_raw_id"), 0));
             } else {
-                grn_obj_unlink(context, uvector);
                 rb_raise(rb_eArgError,
                          "uvector value should be one of "
                          "[Fixnum or object that has #record_raw_id]: "
