@@ -851,6 +851,7 @@ rb_grn_uvector_from_ruby_object_reference (UVectorFromRubyData *data)
         VALUE rb_value;
         grn_id id;
         void *grn_value;
+        ID id_record_raw_id;
 
         rb_value = rb_values[i];
         switch (TYPE(rb_value)) {
@@ -858,8 +859,9 @@ rb_grn_uvector_from_ruby_object_reference (UVectorFromRubyData *data)
             id = NUM2UINT(rb_value);
             break;
           default:
-            if (rb_respond_to(rb_value, rb_intern("record_raw_id"))) {
-                id = NUM2UINT(rb_funcall(rb_value, rb_intern("record_raw_id"), 0));
+            CONST_ID(id_record_raw_id, "record_raw_id");
+            if (rb_respond_to(rb_value, id_record_raw_id)) {
+                id = NUM2UINT(rb_funcall(rb_value, id_record_raw_id, 0));
             } else {
                 rb_raise(rb_eArgError,
                          "uvector value should be one of "
