@@ -789,62 +789,83 @@ rb_grn_uvector_to_ruby_object (grn_ctx *context, grn_obj *uvector,
     return array;
 }
 
-static grn_obj *
-rb_grn_uvector_from_ruby_object_type (VALUE object,
-                                      grn_ctx *context,
-                                      grn_obj *uvector,
-                                      grn_obj *type,
-                                      VALUE related_object)
+typedef struct  {
+    VALUE object;
+    grn_ctx *context;
+    grn_obj *uvector;
+    VALUE related_object;
+
+    grn_obj element_buffer;
+    grn_obj *domain;
+    grn_bool succeeded;
+} UVectorFromRubyData;
+
+static void
+rb_grn_uvector_from_ruby_object_type (UVectorFromRubyData *data)
 {
+    VALUE object;
+    grn_ctx *context;
+    grn_obj *uvector;
+    grn_obj *type;
     VALUE *rb_values;
     int i, n;
-    grn_obj value;
+    grn_obj *grn_value;
     int value_size;
+
+    object = data->object;
+    context = data->context;
+    uvector = data->uvector;
+    type = data->domain;
+    grn_value = &(data->element_buffer);
 
     n = RARRAY_LEN(object);
     rb_values = RARRAY_PTR(object);
-    GRN_OBJ_INIT(&value, GRN_BULK, 0, uvector->header.domain);
     value_size = grn_obj_get_range(context, type);
     for (i = 0; i < n; i++) {
-        GRN_BULK_REWIND(&value);
-        RVAL2GRNBULK(rb_values[i], context, &value);
-        grn_bulk_write(context, uvector, GRN_BULK_HEAD(&value), value_size);
+        GRN_BULK_REWIND(grn_value);
+        RVAL2GRNBULK(rb_values[i], context, grn_value);
+        grn_bulk_write(context, uvector, GRN_BULK_HEAD(grn_value), value_size);
     }
-    GRN_OBJ_FIN(context, &value);
 
-    return uvector;
+    data->succeeded = GRN_TRUE;
 }
 
-static grn_obj *
-rb_grn_uvector_from_ruby_object_reference (VALUE object,
-                                           grn_ctx *context,
-                                           grn_obj *uvector,
-                                           VALUE related_object)
+static void
+rb_grn_uvector_from_ruby_object_reference (UVectorFromRubyData *data)
 {
-    VALUE *values;
+    VALUE object;
+    grn_ctx *context;
+    grn_obj *uvector;
+    VALUE related_object;
+    VALUE *rb_values;
     int i, n;
 
+    object = data->object;
+    context = data->context;
+    uvector = data->uvector;
+    related_object = data->related_object;
+
     n = RARRAY_LEN(object);
-    values = RARRAY_PTR(object);
+    rb_values = RARRAY_PTR(object);
     for (i = 0; i < n; i++) {
-        VALUE value;
+        VALUE rb_value;
         grn_id id;
         void *grn_value;
 
-        value = values[i];
-        switch (TYPE(value)) {
+        rb_value = rb_values[i];
+        switch (TYPE(rb_value)) {
           case T_FIXNUM:
-            id = NUM2UINT(value);
+            id = NUM2UINT(rb_value);
             break;
           default:
-            if (rb_respond_to(value, rb_intern("record_raw_id"))) {
-                id = NUM2UINT(rb_funcall(value, rb_intern("record_raw_id"), 0));
+            if (rb_respond_to(rb_value, rb_intern("record_raw_id"))) {
+                id = NUM2UINT(rb_funcall(rb_value, rb_intern("record_raw_id"), 0));
             } else {
                 rb_raise(rb_eArgError,
                          "uvector value should be one of "
                          "[Fixnum or object that has #record_raw_id]: "
                          "%s (%s): %s",
-                         rb_grn_inspect(value),
+                         rb_grn_inspect(rb_value),
                          rb_grn_inspect(object),
                          rb_grn_inspect(related_object));
             }
@@ -854,42 +875,83 @@ rb_grn_uvector_from_ruby_object_reference (VALUE object,
         grn_bulk_write(context, uvector, grn_value, sizeof(grn_id));
     }
 
-    return uvector;
+    data->succeeded = GRN_TRUE;
+}
+
+static VALUE
+rb_grn_uvector_from_ruby_object_body (VALUE user_data)
+{
+    UVectorFromRubyData *data = (UVectorFromRubyData *)user_data;
+    grn_obj *domain;
+
+    domain = data->domain;
+    switch (domain->header.type) {
+      case GRN_TYPE:
+        rb_grn_uvector_from_ruby_object_type(data);
+        break;
+      case GRN_TABLE_HASH_KEY:
+      case GRN_TABLE_PAT_KEY:
+      case GRN_TABLE_DAT_KEY:
+      case GRN_TABLE_NO_KEY:
+        rb_grn_uvector_from_ruby_object_reference(data);
+        break;
+      default:
+        rb_raise(rb_eTypeError,
+                 "can't convert to unknown domain uvector: %s(%#x): <%s>",
+                 rb_grn_inspect_type(domain->header.type),
+                 domain->header.type,
+                 rb_grn_inspect(data->related_object));
+        break;
+    }
+
+    return Qnil;
+}
+
+static VALUE
+rb_grn_uvector_from_ruby_object_ensure (VALUE user_data)
+{
+    UVectorFromRubyData *data = (UVectorFromRubyData *)user_data;
+
+    if (data->domain) {
+        grn_obj_unlink(data->context, data->domain);
+    }
+    GRN_OBJ_FIN(data->context, &(data->element_buffer));
+
+    return Qnil;
 }
 
 grn_obj *
 rb_grn_uvector_from_ruby_object (VALUE object, grn_ctx *context,
                                  grn_obj *uvector, VALUE related_object)
 {
-    grn_obj *domain;
+    UVectorFromRubyData data;
 
     if (NIL_P(object))
         return NULL;
 
-    domain = grn_ctx_at(context, uvector->header.domain);
-    /* TODO: unlink domain */
-    switch (domain->header.type) {
-      case GRN_TYPE:
-        return rb_grn_uvector_from_ruby_object_type(object,
-                                                    context,
-                                                    uvector,
-                                                    domain,
-                                                    related_object);
-        break;
-      case GRN_TABLE_HASH_KEY:
-      case GRN_TABLE_PAT_KEY:
-      case GRN_TABLE_DAT_KEY:
-      case GRN_TABLE_NO_KEY:
-        return rb_grn_uvector_from_ruby_object_reference(object,
-                                                         context,
-                                                         uvector,
-                                                         related_object);
-        break;
-      default:
-        /* TODO: raise */
-        return NULL;
-        break;
+    data.domain = grn_ctx_at(context, uvector->header.domain);
+    if (!data.domain) {
+        rb_raise(rb_eArgError,
+                 "unknown domain uvector can't be converted: <%s>",
+                 rb_grn_inspect(related_object));
     }
+
+    GRN_OBJ_INIT(&(data.element_buffer), GRN_BULK, 0, uvector->header.domain);
+
+    data.object = object;
+    data.context = context;
+    data.uvector = uvector;
+    data.related_object = related_object;
+    data.succeeded = GRN_FALSE;
+
+    rb_ensure(rb_grn_uvector_from_ruby_object_body, (VALUE)(&data),
+              rb_grn_uvector_from_ruby_object_ensure, (VALUE)(&data));
+
+    if (!data.succeeded) {
+        return NULL;
+    }
+
+    return uvector;
 }
 
 VALUE
