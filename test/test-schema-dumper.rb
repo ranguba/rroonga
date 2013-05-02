@@ -51,6 +51,20 @@ class SchemaDumperTest < Test::Unit::TestCase
     end
   end
 
+  def define_reference_table_schema
+    Groonga::Schema.define do |schema|
+      schema.create_table("Terms",
+                          :type => :hash,
+                          :key_type => :short_text) do |table|
+      end
+
+      schema.create_table("IndexTerms",
+                          :type => :hash,
+                          :key_type => "Terms") do |table|
+      end
+    end
+  end
+
   def define_reference_column_schema
     Groonga::Schema.define do |schema|
       schema.create_table("Items") do |table|
@@ -127,6 +141,23 @@ end
 EOS
     end
 
+    def test_reference_table
+      define_reference_table_schema
+      assert_equal(<<-EOS, dump)
+create_table("Terms",
+             :type => :hash,
+             :key_type => "ShortText",
+             :force => true) do |table|
+end
+
+create_table("IndexTerms",
+             :type => :hash,
+             :key_type => "Terms",
+             :force => true) do |table|
+end
+EOS
+    end
+
     def test_reference_column
       define_reference_column_schema
       assert_equal(<<-EOS, dump)
@@ -192,6 +223,15 @@ EOS
 table_create Posts TABLE_NO_KEY
 column_create Posts comments COLUMN_VECTOR ShortText
 column_create Posts title COLUMN_SCALAR ShortText
+EOS
+    end
+
+    def test_reference_table
+      define_reference_table_schema
+      assert_equal(<<-EOS, dump)
+table_create Terms TABLE_HASH_KEY --key_type ShortText
+
+table_create IndexTerms TABLE_HASH_KEY --key_type Terms
 EOS
     end
 

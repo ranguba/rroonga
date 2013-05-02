@@ -277,8 +277,17 @@ module Groonga
 
       def each_table
         each_options = {:order_by => :key, :ignore_missing_object => true}
+        reference_tables = []
         @database.each(each_options) do |object|
-          yield(object) if object.is_a?(Groonga::Table)
+          next unless object.is_a?(Groonga::Table)
+          if reference_table?(object)
+            reference_tables << object
+          else
+            yield(object)
+          end
+        end
+        reference_tables.each do |table|
+          yield(table)
         end
       end
 
@@ -331,6 +340,10 @@ module Groonga
 
       def table_separator
         write("\n")
+      end
+
+      def reference_table?(table)
+        table.support_key? and table.domain.is_a?(Groonga::Table)
       end
 
       def column_type(column)
