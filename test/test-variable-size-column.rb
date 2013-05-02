@@ -138,46 +138,6 @@ class VariableSizeColumnTest < Test::Unit::TestCase
       end
     end
 
-    class CastTest < self
-      def setup
-        setup_database
-        setup_schema
-        setup_shortcuts
-      end
-
-      def setup_schema
-        Groonga::Schema.define do |schema|
-          schema.create_table("Times",
-                              :type => :hash,
-                              :key_type => :time) do |table|
-          end
-
-          schema.create_table("Sites",
-                              :type => :hash,
-                              :key_type => :short_text) do |table|
-            table.reference("modified_times", "Times", :type => :vector)
-          end
-        end
-      end
-
-      def setup_shortcuts
-        @sites = Groonga["Sites"]
-      end
-
-      def test_reference
-        groonga_org = @sites.add("http://groonga.org/",
-                                 :modified_times => [
-                                   "2013-04-29 00:00:00",
-                                   "2013-05-02 01:46:48",
-                                 ])
-        assert_equal([
-                       Time.new(2013, 4, 29, 0,  0,  0),
-                       Time.new(2013, 5,  2, 1, 46, 48),
-                     ],
-                     groonga_org.modified_times.collect(&:key))
-      end
-    end
-
     class StringTest < self
       def test_append
         omit("append for non table domain column isn't supported by groonga.")
@@ -230,6 +190,46 @@ class VariableSizeColumnTest < Test::Unit::TestCase
                        Time.new(2013, 5,  2, 1, 46, 48),
                      ],
                      groonga_org.modified_times)
+      end
+    end
+
+    class CastTest < self
+      def setup
+        setup_database
+        setup_schema
+        setup_shortcuts
+      end
+
+      def setup_schema
+        Groonga::Schema.define do |schema|
+          schema.create_table("Times",
+                              :type => :hash,
+                              :key_type => :time) do |table|
+          end
+
+          schema.create_table("Sites",
+                              :type => :hash,
+                              :key_type => :short_text) do |table|
+            table.reference("modified_times", "Times", :type => :vector)
+          end
+        end
+      end
+
+      def setup_shortcuts
+        @sites = Groonga["Sites"]
+      end
+
+      def test_reference
+        groonga_org = @sites.add("http://groonga.org/",
+                                 :modified_times => [
+                                   "2013-04-29 00:00:00",
+                                   "2013-05-02 01:46:48",
+                                 ])
+        assert_equal([
+                       Time.new(2013, 4, 29, 0,  0,  0),
+                       Time.new(2013, 5,  2, 1, 46, 48),
+                     ],
+                     groonga_org.modified_times.collect(&:key))
       end
     end
   end
