@@ -39,126 +39,126 @@ rb_grn_object_from_ruby_object (VALUE object, grn_ctx **context)
         return NULL;
 
     if (context && *context) {
-	grn_obj *grn_object;
-	if (RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cString))) {
-	    const char *name;
-	    unsigned int name_size;
+        grn_obj *grn_object;
+        if (RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cString))) {
+            const char *name;
+            unsigned int name_size;
 
-	    name = StringValuePtr(object);
-	    name_size = RSTRING_LEN(object);
-	    grn_object = rb_grn_context_get_backward_compatibility(*context,
-								   name,
-								   name_size);
-	    rb_grn_context_check(*context, object);
-	    if (!grn_object)
-		rb_raise(rb_eArgError,
-			 "unregistered groonga object: name: <%s>",
-			 rb_grn_inspect(object));
-	    return grn_object;
-	} else if (RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cInteger))) {
-	    grn_object = grn_ctx_at(*context, NUM2UINT(object));
-	    rb_grn_context_check(*context, object);
-	    if (!grn_object)
-		rb_raise(rb_eArgError,
-			 "unregistered groonga object: ID: <%s>",
-			 rb_grn_inspect(object));
-	    return grn_object;
-	}
+            name = StringValuePtr(object);
+            name_size = RSTRING_LEN(object);
+            grn_object = rb_grn_context_get_backward_compatibility(*context,
+                                                                   name,
+                                                                   name_size);
+            rb_grn_context_check(*context, object);
+            if (!grn_object)
+                rb_raise(rb_eArgError,
+                         "unregistered groonga object: name: <%s>",
+                         rb_grn_inspect(object));
+            return grn_object;
+        } else if (RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cInteger))) {
+            grn_object = grn_ctx_at(*context, NUM2UINT(object));
+            rb_grn_context_check(*context, object);
+            if (!grn_object)
+                rb_raise(rb_eArgError,
+                         "unregistered groonga object: ID: <%s>",
+                         rb_grn_inspect(object));
+            return grn_object;
+        }
     }
 
     if (!RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cGrnObject))) {
-	rb_raise(rb_eTypeError, "not a groonga object: <%s>",
-		 rb_grn_inspect(object));
+        rb_raise(rb_eTypeError, "not a groonga object: <%s>",
+                 rb_grn_inspect(object));
     }
 
     Data_Get_Struct(object, RbGrnObject, rb_grn_object);
     if (!rb_grn_object)
-	rb_raise(rb_eGrnError, "groonga object is NULL");
+        rb_raise(rb_eGrnError, "groonga object is NULL");
 
     if (!rb_grn_object->object) {
-	rb_raise(rb_eGrnClosed,
+        rb_raise(rb_eGrnClosed,
                  "can't access already closed groonga object: %s",
                  rb_grn_inspect(CLASS_OF(rb_grn_object->self)));
     }
 
     if (context && !*context)
-	*context = rb_grn_object->context;
+        *context = rb_grn_object->context;
 
     return rb_grn_object->object;
 }
 
 static void
 rb_grn_object_run_finalizer (grn_ctx *context, grn_obj *grn_object,
-			     RbGrnObject *rb_grn_object)
+                             RbGrnObject *rb_grn_object)
 {
     RbGrnContext *rb_grn_context = NULL;
 
     if (rb_grn_exited)
-	return;
+        return;
 
     grn_obj_set_finalizer(context, grn_object, NULL);
 
     debug("finalize: %p:%p:%p:%p:%p:%p %s(%#x)\n",
-	  context, grn_object, rb_grn_object,
-	  rb_grn_object->context, rb_grn_object->object,
-	  rb_grn_object->rb_grn_context,
-	  rb_grn_inspect_type(grn_object->header.type),
-	  grn_object->header.type);
+          context, grn_object, rb_grn_object,
+          rb_grn_object->context, rb_grn_object->object,
+          rb_grn_object->rb_grn_context,
+          rb_grn_inspect_type(grn_object->header.type),
+          grn_object->header.type);
 
     rb_grn_context = rb_grn_object->rb_grn_context;
     rb_grn_object->have_finalizer = GRN_FALSE;
 
     switch (grn_object->header.type) {
       case GRN_DB:
-	rb_grn_database_finalizer(context, rb_grn_context,
-				  grn_object, rb_grn_object);
-	break;
+        rb_grn_database_finalizer(context, rb_grn_context,
+                                  grn_object, rb_grn_object);
+        break;
       case GRN_TYPE:
       case GRN_PROC:
       case GRN_CURSOR_TABLE_HASH_KEY:
       case GRN_CURSOR_TABLE_PAT_KEY:
       case GRN_CURSOR_TABLE_DAT_KEY:
       case GRN_CURSOR_TABLE_NO_KEY:
-	break;
+        break;
       case GRN_TABLE_HASH_KEY:
       case GRN_TABLE_PAT_KEY:
       case GRN_TABLE_DAT_KEY:
-	rb_grn_table_key_support_finalizer(context, grn_object,
-					   RB_GRN_TABLE_KEY_SUPPORT(rb_grn_object));
-	break;
+        rb_grn_table_key_support_finalizer(context, grn_object,
+                                           RB_GRN_TABLE_KEY_SUPPORT(rb_grn_object));
+        break;
       case GRN_TABLE_NO_KEY:
-	rb_grn_table_finalizer(context, grn_object,
-			       RB_GRN_TABLE(rb_grn_object));
-	break;
+        rb_grn_table_finalizer(context, grn_object,
+                               RB_GRN_TABLE(rb_grn_object));
+        break;
       case GRN_CURSOR_COLUMN_INDEX:
-	  break;
+          break;
       case GRN_COLUMN_FIX_SIZE:
       case GRN_COLUMN_VAR_SIZE:
-	rb_grn_column_finalizer(context, grn_object,
-				RB_GRN_COLUMN(rb_grn_object));
-	break;
+        rb_grn_column_finalizer(context, grn_object,
+                                RB_GRN_COLUMN(rb_grn_object));
+        break;
       case GRN_COLUMN_INDEX:
-	rb_grn_index_column_finalizer(context, grn_object,
-				      RB_GRN_INDEX_COLUMN(rb_grn_object));
-	break;
+        rb_grn_index_column_finalizer(context, grn_object,
+                                      RB_GRN_INDEX_COLUMN(rb_grn_object));
+        break;
       case GRN_ACCESSOR:
-	rb_grn_accessor_finalizer(context, grn_object,
-				  RB_GRN_ACCESSOR(rb_grn_object));
-	break;
+        rb_grn_accessor_finalizer(context, grn_object,
+                                  RB_GRN_ACCESSOR(rb_grn_object));
+        break;
       case GRN_EXPR:
-	rb_grn_expression_finalizer(context, grn_object,
-				    RB_GRN_EXPRESSION(rb_grn_object));
-	break;
+        rb_grn_expression_finalizer(context, grn_object,
+                                    RB_GRN_EXPRESSION(rb_grn_object));
+        break;
       case GRN_SNIP:
-	rb_grn_snippet_finalizer(context, grn_object,
-				 RB_GRN_SNIPPET(rb_grn_object));
-	break;
+        rb_grn_snippet_finalizer(context, grn_object,
+                                 RB_GRN_SNIPPET(rb_grn_object));
+        break;
       default:
-	rb_raise(rb_eTypeError,
-		 "unsupported groonga object type for finalizer: %s(%#x)",
-		 rb_grn_inspect_type(grn_object->header.type),
-		 grn_object->header.type);
-	break;
+        rb_raise(rb_eTypeError,
+                 "unsupported groonga object type for finalizer: %s(%#x)",
+                 rb_grn_inspect_type(grn_object->header.type),
+                 grn_object->header.type);
+        break;
     }
 
     rb_grn_object->rb_grn_context = NULL;
@@ -168,13 +168,13 @@ rb_grn_object_run_finalizer (grn_ctx *context, grn_obj *grn_object,
 
 static grn_obj *
 rb_grn_object_finalizer (grn_ctx *context, int n_args, grn_obj **grn_objects,
-			 grn_user_data *user_data)
+                         grn_user_data *user_data)
 {
     RbGrnObject *rb_grn_object;
     grn_obj *grn_object = *grn_objects;
 
     if (rb_grn_exited)
-	return NULL;
+        return NULL;
 
     rb_grn_object = user_data->ptr;
 
@@ -193,30 +193,30 @@ rb_grn_object_free (RbGrnObject *rb_grn_object)
     context = rb_grn_object->context;
     grn_object = rb_grn_object->object;
     debug("rb-free: %p:%p:%p; %d:%d\n", context, grn_object, rb_grn_object,
-	  rb_grn_object->have_finalizer, rb_grn_object->need_close);
+          rb_grn_object->have_finalizer, rb_grn_object->need_close);
     if (!rb_grn_exited && context && grn_object &&
-	(rb_grn_object->have_finalizer || rb_grn_object->need_close)) {
-	grn_user_data *user_data = NULL;
+        (rb_grn_object->have_finalizer || rb_grn_object->need_close)) {
+        grn_user_data *user_data = NULL;
 
-	if (rb_grn_object->have_finalizer) {
-	    user_data = grn_obj_user_data(context, grn_object);
-	}
-	debug("type: %s(%#x); need_close: %d; user_data: %p; ptr: %p\n",
-	      rb_grn_inspect_type(grn_object->header.type),
-	      grn_object->header.type,
-	      rb_grn_object->need_close,
-	      user_data,
-	      user_data ? user_data->ptr : NULL);
-	if (rb_grn_object->have_finalizer) {
-	    if (user_data && user_data->ptr) {
-		rb_grn_object_finalizer(context, 1, &grn_object, user_data);
-	    } else {
-		rb_grn_object_run_finalizer(context, grn_object, rb_grn_object);
-	    }
-	}
-	if (rb_grn_object->need_close) {
-	    grn_obj_unlink(context, grn_object);
-	}
+        if (rb_grn_object->have_finalizer) {
+            user_data = grn_obj_user_data(context, grn_object);
+        }
+        debug("type: %s(%#x); need_close: %d; user_data: %p; ptr: %p\n",
+              rb_grn_inspect_type(grn_object->header.type),
+              grn_object->header.type,
+              rb_grn_object->need_close,
+              user_data,
+              user_data ? user_data->ptr : NULL);
+        if (rb_grn_object->have_finalizer) {
+            if (user_data && user_data->ptr) {
+                rb_grn_object_finalizer(context, 1, &grn_object, user_data);
+            } else {
+                rb_grn_object_run_finalizer(context, grn_object, rb_grn_object);
+            }
+        }
+        if (rb_grn_object->need_close) {
+            grn_obj_unlink(context, grn_object);
+        }
     }
     xfree(rb_grn_object);
 }
@@ -228,61 +228,61 @@ rb_grn_object_to_ruby_class (grn_obj *object)
 
     switch (object->header.type) {
       case GRN_DB:
-	klass = rb_cGrnDatabase;
-	break;
+        klass = rb_cGrnDatabase;
+        break;
       case GRN_TABLE_HASH_KEY:
-	klass = rb_cGrnHash;
-	break;
+        klass = rb_cGrnHash;
+        break;
       case GRN_TABLE_PAT_KEY:
-	klass = rb_cGrnPatriciaTrie;
-	break;
+        klass = rb_cGrnPatriciaTrie;
+        break;
       case GRN_TABLE_DAT_KEY:
-	klass = rb_cGrnDoubleArrayTrie;
-	break;
+        klass = rb_cGrnDoubleArrayTrie;
+        break;
       case GRN_TABLE_NO_KEY:
-	klass = rb_cGrnArray;
-	break;
+        klass = rb_cGrnArray;
+        break;
       case GRN_TYPE:
-	klass = rb_cGrnType;
-	break;
+        klass = rb_cGrnType;
+        break;
       case GRN_ACCESSOR:
-	klass = rb_cGrnAccessor;
-	break;
+        klass = rb_cGrnAccessor;
+        break;
       case GRN_SNIP:
-	klass = rb_cGrnSnippet;
-	break;
+        klass = rb_cGrnSnippet;
+        break;
       case GRN_PROC:
-	klass = rb_cGrnProcedure;
-	break;
+        klass = rb_cGrnProcedure;
+        break;
       case GRN_COLUMN_FIX_SIZE:
-	klass = rb_cGrnFixSizeColumn;
-	break;
+        klass = rb_cGrnFixSizeColumn;
+        break;
       case GRN_COLUMN_VAR_SIZE:
-	klass = rb_cGrnVariableSizeColumn;
-	break;
+        klass = rb_cGrnVariableSizeColumn;
+        break;
       case GRN_COLUMN_INDEX:
-	klass = rb_cGrnIndexColumn;
-	break;
+        klass = rb_cGrnIndexColumn;
+        break;
       case GRN_EXPR:
-	klass = rb_cGrnExpression;
-	break;
+        klass = rb_cGrnExpression;
+        break;
       case GRN_CURSOR_TABLE_HASH_KEY:
-	klass = rb_cGrnHashCursor;
-	break;
+        klass = rb_cGrnHashCursor;
+        break;
       case GRN_CURSOR_TABLE_PAT_KEY:
-	klass = rb_cGrnPatriciaTrieCursor;
-	break;
+        klass = rb_cGrnPatriciaTrieCursor;
+        break;
       case GRN_CURSOR_TABLE_DAT_KEY:
-	klass = rb_cGrnDoubleArrayTrieCursor;
-	break;
+        klass = rb_cGrnDoubleArrayTrieCursor;
+        break;
       case GRN_CURSOR_TABLE_NO_KEY:
-	klass = rb_cGrnArrayCursor;
-	break;
+        klass = rb_cGrnArrayCursor;
+        break;
       default:
-	rb_raise(rb_eTypeError,
-		 "unsupported groonga object type for class detection: 0x%x",
-		 object->header.type);
-	break;
+        rb_raise(rb_eTypeError,
+                 "unsupported groonga object type for class detection: 0x%x",
+                 object->header.type);
+        break;
     }
 
     return klass;
@@ -290,7 +290,7 @@ rb_grn_object_to_ruby_class (grn_obj *object)
 
 VALUE
 rb_grn_object_to_ruby_object (VALUE klass, grn_ctx *context, grn_obj *object,
-			      grn_bool owner)
+                              grn_bool owner)
 {
     RbGrnContext *rb_grn_context;
     VALUE rb_object, rb_context = Qnil;
@@ -301,7 +301,7 @@ rb_grn_object_to_ruby_object (VALUE klass, grn_ctx *context, grn_obj *object,
 
     user_data = grn_obj_user_data(context, object);
     if (user_data && user_data->ptr) {
-	return RB_GRN_OBJECT(user_data->ptr)->self;
+        return RB_GRN_OBJECT(user_data->ptr)->self;
     }
 
     if (NIL_P(klass))
@@ -309,7 +309,7 @@ rb_grn_object_to_ruby_object (VALUE klass, grn_ctx *context, grn_obj *object,
 
     rb_grn_context = GRN_CTX_USER_DATA(context)->ptr;
     if (rb_grn_context)
-	rb_context = rb_grn_context->self;
+        rb_context = rb_grn_context->self;
     rb_object = rb_obj_alloc(klass);
     rb_grn_object_assign(klass, rb_object, rb_context, context, object);
 
@@ -324,16 +324,16 @@ rb_grn_object_alloc (VALUE klass)
 
 static void
 rb_grn_object_bind_common (VALUE klass, VALUE self, VALUE rb_context,
-			   RbGrnObject *rb_grn_object,
-			   grn_ctx *context, grn_obj *object)
+                           RbGrnObject *rb_grn_object,
+                           grn_ctx *context, grn_obj *object)
 {
     grn_user_data *user_data;
     RbGrnContext *rb_grn_context;
 
     debug("bind: %p:%p:%p %s(%#x)\n",
-	  context, object, rb_grn_object,
-	  rb_grn_inspect_type(object->header.type),
-	  object->header.type);
+          context, object, rb_grn_object,
+          rb_grn_inspect_type(object->header.type),
+          object->header.type);
 
     Data_Get_Struct(rb_context, RbGrnContext, rb_grn_context);
     rb_grn_object->rb_grn_context = rb_grn_context;
@@ -346,133 +346,133 @@ rb_grn_object_bind_common (VALUE klass, VALUE self, VALUE rb_context,
 
     user_data = grn_obj_user_data(context, object);
     if (user_data) {
-	debug("set-finalizer: %p:%p:%p %s(%#x)\n",
-	      context, object, rb_grn_object,
-	      rb_grn_inspect_type(object->header.type),
-	      object->header.type);
-	user_data->ptr = rb_grn_object;
-	grn_obj_set_finalizer(context, object, rb_grn_object_finalizer);
-	rb_grn_object->have_finalizer = GRN_TRUE;
+        debug("set-finalizer: %p:%p:%p %s(%#x)\n",
+              context, object, rb_grn_object,
+              rb_grn_inspect_type(object->header.type),
+              object->header.type);
+        user_data->ptr = rb_grn_object;
+        grn_obj_set_finalizer(context, object, rb_grn_object_finalizer);
+        rb_grn_object->have_finalizer = GRN_TRUE;
     } else if (object->header.type == GRN_ACCESSOR) {
-	debug("set-finalizer(implicit): %p:%p:%p %s(%#x)\n",
-	      context, object, rb_grn_object,
-	      rb_grn_inspect_type(object->header.type),
-	      object->header.type);
-	 /* TODO: We want to call finalizer for GRN_ACCESSOR. */
-	rb_grn_object->have_finalizer = GRN_FALSE;
+        debug("set-finalizer(implicit): %p:%p:%p %s(%#x)\n",
+              context, object, rb_grn_object,
+              rb_grn_inspect_type(object->header.type),
+              object->header.type);
+         /* TODO: We want to call finalizer for GRN_ACCESSOR. */
+        rb_grn_object->have_finalizer = GRN_FALSE;
     }
 
     switch (object->header.type) {
       case GRN_PROC:
       case GRN_TYPE:
       case GRN_ACCESSOR: /* TODO: We want to close GRN_ACCESSOR. */
-	rb_grn_object->need_close = GRN_FALSE;
-	break;
+        rb_grn_object->need_close = GRN_FALSE;
+        break;
       default:
-	if (klass == rb_cGrnVariable)
-	    rb_grn_object->need_close = GRN_FALSE;
-	break;
+        if (klass == rb_cGrnVariable)
+            rb_grn_object->need_close = GRN_FALSE;
+        break;
     }
 
     rb_grn_object->domain_id = GRN_ID_NIL;
     if (object)
-	rb_grn_object->domain_id = object->header.domain;
+        rb_grn_object->domain_id = object->header.domain;
     if (rb_grn_object->domain_id == GRN_ID_NIL)
-	rb_grn_object->domain = NULL;
+        rb_grn_object->domain = NULL;
     else
-	rb_grn_object->domain = grn_ctx_at(context, rb_grn_object->domain_id);
+        rb_grn_object->domain = grn_ctx_at(context, rb_grn_object->domain_id);
 
     rb_grn_object->range_id = GRN_ID_NIL;
     if (object && object->header.type != GRN_TYPE)
-	rb_grn_object->range_id = grn_obj_get_range(context, object);
+        rb_grn_object->range_id = grn_obj_get_range(context, object);
     if (rb_grn_object->range_id == GRN_ID_NIL)
-	rb_grn_object->range = NULL;
+        rb_grn_object->range = NULL;
     else
-	rb_grn_object->range = grn_ctx_at(context, rb_grn_object->range_id);
+        rb_grn_object->range = grn_ctx_at(context, rb_grn_object->range_id);
 
     DATA_PTR(self) = rb_grn_object;
 }
 
 void
 rb_grn_object_assign (VALUE klass, VALUE self, VALUE rb_context,
-		      grn_ctx *context, grn_obj *object)
+                      grn_ctx *context, grn_obj *object)
 {
     void *rb_grn_object;
 
     if (!object)
-	return;
+        return;
 
     if (NIL_P(klass))
-	klass = rb_obj_class(self);
+        klass = rb_obj_class(self);
 
     if (klass == rb_cGrnDatabase ||
-	(RVAL2CBOOL(rb_obj_is_kind_of(self, rb_cGrnType))) ||
-	klass == rb_cGrnHashCursor ||
-	klass == rb_cGrnPatriciaTrieCursor ||
-	klass == rb_cGrnDoubleArrayTrieCursor ||
-	klass == rb_cGrnArrayCursor ||
-	klass == rb_cGrnIndexCursor ||
-	klass == rb_cGrnProcedure ||
-	klass == rb_cGrnVariable) {
-	rb_grn_object = ALLOC(RbGrnObject);
-	rb_grn_object_bind_common(klass, self, rb_context, rb_grn_object,
-				  context, object);
+        (RVAL2CBOOL(rb_obj_is_kind_of(self, rb_cGrnType))) ||
+        klass == rb_cGrnHashCursor ||
+        klass == rb_cGrnPatriciaTrieCursor ||
+        klass == rb_cGrnDoubleArrayTrieCursor ||
+        klass == rb_cGrnArrayCursor ||
+        klass == rb_cGrnIndexCursor ||
+        klass == rb_cGrnProcedure ||
+        klass == rb_cGrnVariable) {
+        rb_grn_object = ALLOC(RbGrnObject);
+        rb_grn_object_bind_common(klass, self, rb_context, rb_grn_object,
+                                  context, object);
     } else if (RVAL2CBOOL(rb_obj_is_kind_of(self, rb_mGrnTableKeySupport))) {
-	rb_grn_object = ALLOC(RbGrnTableKeySupport);
-	rb_grn_object_bind_common(klass, self, rb_context, rb_grn_object,
-				  context, object);
-	rb_grn_table_key_support_bind(RB_GRN_TABLE_KEY_SUPPORT(rb_grn_object),
-				      context, object);
+        rb_grn_object = ALLOC(RbGrnTableKeySupport);
+        rb_grn_object_bind_common(klass, self, rb_context, rb_grn_object,
+                                  context, object);
+        rb_grn_table_key_support_bind(RB_GRN_TABLE_KEY_SUPPORT(rb_grn_object),
+                                      context, object);
     } else if (RVAL2CBOOL(rb_obj_is_kind_of(self, rb_cGrnTable))) {
-	rb_grn_object = ALLOC(RbGrnTable);
-	rb_grn_object_bind_common(klass, self, rb_context, rb_grn_object,
-				  context, object);
-	rb_grn_table_bind(RB_GRN_TABLE(rb_grn_object), context, object);
+        rb_grn_object = ALLOC(RbGrnTable);
+        rb_grn_object_bind_common(klass, self, rb_context, rb_grn_object,
+                                  context, object);
+        rb_grn_table_bind(RB_GRN_TABLE(rb_grn_object), context, object);
     } else if (RVAL2CBOOL(rb_obj_is_kind_of(self, rb_cGrnIndexColumn))) {
-	rb_grn_object = ALLOC(RbGrnIndexColumn);
-	rb_grn_object_bind_common(klass, self, rb_context, rb_grn_object,
-				  context, object);
-	rb_grn_index_column_bind(RB_GRN_INDEX_COLUMN(rb_grn_object),
-				 context, object);
+        rb_grn_object = ALLOC(RbGrnIndexColumn);
+        rb_grn_object_bind_common(klass, self, rb_context, rb_grn_object,
+                                  context, object);
+        rb_grn_index_column_bind(RB_GRN_INDEX_COLUMN(rb_grn_object),
+                                 context, object);
     } else if (RVAL2CBOOL(rb_obj_is_kind_of(self, rb_cGrnColumn))) {
-	rb_grn_object = ALLOC(RbGrnColumn);
-	rb_grn_object_bind_common(klass, self, rb_context, rb_grn_object,
-				  context, object);
-	rb_grn_column_bind(RB_GRN_COLUMN(rb_grn_object), context, object);
+        rb_grn_object = ALLOC(RbGrnColumn);
+        rb_grn_object_bind_common(klass, self, rb_context, rb_grn_object,
+                                  context, object);
+        rb_grn_column_bind(RB_GRN_COLUMN(rb_grn_object), context, object);
     } else if (klass == rb_cGrnAccessor) {
-	rb_grn_object = ALLOC(RbGrnAccessor);
-	rb_grn_object_bind_common(klass, self, rb_context, rb_grn_object,
-				  context, object);
-	rb_grn_accessor_bind(RB_GRN_ACCESSOR(rb_grn_object), context, object);
+        rb_grn_object = ALLOC(RbGrnAccessor);
+        rb_grn_object_bind_common(klass, self, rb_context, rb_grn_object,
+                                  context, object);
+        rb_grn_accessor_bind(RB_GRN_ACCESSOR(rb_grn_object), context, object);
     } else if (klass == rb_cGrnExpression) {
-	rb_grn_object = ALLOC(RbGrnExpression);
-	rb_grn_object_bind_common(klass, self, rb_context, rb_grn_object,
-				  context, object);
-	rb_grn_expression_bind(RB_GRN_EXPRESSION(rb_grn_object),
-			       context, object);
+        rb_grn_object = ALLOC(RbGrnExpression);
+        rb_grn_object_bind_common(klass, self, rb_context, rb_grn_object,
+                                  context, object);
+        rb_grn_expression_bind(RB_GRN_EXPRESSION(rb_grn_object),
+                               context, object);
     } else if (klass == rb_cGrnSnippet) {
-	rb_grn_object = ALLOC(RbGrnSnippet);
-	rb_grn_object_bind_common(klass, self, rb_context, rb_grn_object,
-				  context, object);
-	rb_grn_snippet_bind(RB_GRN_SNIPPET(rb_grn_object),
-			    context, object);
+        rb_grn_object = ALLOC(RbGrnSnippet);
+        rb_grn_object_bind_common(klass, self, rb_context, rb_grn_object,
+                                  context, object);
+        rb_grn_snippet_bind(RB_GRN_SNIPPET(rb_grn_object),
+                            context, object);
     } else {
-	rb_raise(rb_eTypeError,
-		 "unsupported groonga object type for assignment: %s(%#x)",
-		 rb_grn_inspect_type(object->header.type),
-		 object->header.type);
+        rb_raise(rb_eTypeError,
+                 "unsupported groonga object type for assignment: %s(%#x)",
+                 rb_grn_inspect_type(object->header.type),
+                 object->header.type);
     }
 
     rb_iv_set(self, "@context", rb_context);
 
     debug("assign: %p:%p:%p %s(%#x)\n",
-	  context, object, rb_grn_object,
-	  rb_grn_inspect_type(object->header.type), object->header.type);
+          context, object, rb_grn_object,
+          rb_grn_inspect_type(object->header.type), object->header.type);
 }
 
 void
 rb_grn_named_object_bind (RbGrnNamedObject *rb_grn_named_object,
-			  grn_ctx *context, grn_obj *object)
+                          grn_ctx *context, grn_obj *object)
 {
     rb_grn_named_object->name = NULL;
     rb_grn_named_object->name_size = 0;
@@ -480,35 +480,35 @@ rb_grn_named_object_bind (RbGrnNamedObject *rb_grn_named_object,
 
 void
 rb_grn_named_object_finalizer (grn_ctx *context, grn_obj *grn_object,
-			       RbGrnNamedObject *rb_grn_named_object)
+                               RbGrnNamedObject *rb_grn_named_object)
 {
     if (rb_grn_named_object->name)
-	xfree(rb_grn_named_object->name);
+        xfree(rb_grn_named_object->name);
     rb_grn_named_object->name = NULL;
     rb_grn_named_object->name_size = 0;
 }
 
 void
 rb_grn_named_object_set_name (RbGrnNamedObject *rb_grn_named_object,
-			      const char *name, unsigned name_size)
+                              const char *name, unsigned name_size)
 {
     if (rb_grn_named_object->name) {
-	xfree(rb_grn_named_object->name);
-	rb_grn_named_object->name = NULL;
+        xfree(rb_grn_named_object->name);
+        rb_grn_named_object->name = NULL;
     }
     if (name_size > 0) {
-	RbGrnObject *rb_grn_object;
-	rb_grn_named_object->name = ALLOC_N(char, name_size + 1);
-	memcpy(rb_grn_named_object->name, name, name_size);
-	rb_grn_named_object->name[name_size] = '\0';
-	rb_grn_object = RB_GRN_OBJECT(rb_grn_named_object);
-	debug("set-name: %p:%p:%p %s(%#x): <%.*s>\n",
-	      rb_grn_object->context,
-	      rb_grn_object->object,
-	      rb_grn_named_object,
-	      rb_grn_inspect_type(rb_grn_object->object->header.type),
-	      rb_grn_object->object->header.type,
-	      name_size, name);
+        RbGrnObject *rb_grn_object;
+        rb_grn_named_object->name = ALLOC_N(char, name_size + 1);
+        memcpy(rb_grn_named_object->name, name, name_size);
+        rb_grn_named_object->name[name_size] = '\0';
+        rb_grn_object = RB_GRN_OBJECT(rb_grn_named_object);
+        debug("set-name: %p:%p:%p %s(%#x): <%.*s>\n",
+              rb_grn_object->context,
+              rb_grn_object->object,
+              rb_grn_named_object,
+              rb_grn_inspect_type(rb_grn_object->object->header.type),
+              rb_grn_object->object->header.type,
+              name_size, name);
     }
     rb_grn_named_object->name_size = name_size;
 }
@@ -516,28 +516,28 @@ rb_grn_named_object_set_name (RbGrnNamedObject *rb_grn_named_object,
 
 void
 rb_grn_object_deconstruct (RbGrnObject *rb_grn_object,
-			   grn_obj **object,
-			   grn_ctx **context,
-			   grn_id *domain_id,
-			   grn_obj **domain,
-			   grn_id *range_id,
-			   grn_obj **range)
+                           grn_obj **object,
+                           grn_ctx **context,
+                           grn_id *domain_id,
+                           grn_obj **domain,
+                           grn_id *range_id,
+                           grn_obj **range)
 {
     if (!rb_grn_object)
-	return;
+        return;
 
     if (object)
-	*object = rb_grn_object->object;
+        *object = rb_grn_object->object;
     if (context)
-	*context = rb_grn_object->context;
+        *context = rb_grn_object->context;
     if (domain_id)
-	*domain_id = rb_grn_object->domain_id;
+        *domain_id = rb_grn_object->domain_id;
     if (domain)
-	*domain = rb_grn_object->domain;
+        *domain = rb_grn_object->domain;
     if (range_id)
-	*range_id = rb_grn_object->range_id;
+        *range_id = rb_grn_object->range_id;
     if (range)
-	*range = rb_grn_object->range;
+        *range = rb_grn_object->range;
 }
 
 /*
@@ -555,10 +555,10 @@ rb_grn_object_close (VALUE self)
 
     rb_grn_object = SELF(self);
     rb_grn_object_deconstruct(rb_grn_object, &object, &context,
-			      NULL, NULL, NULL, NULL);
+                              NULL, NULL, NULL, NULL);
     if (object && context) {
-	rb_grn_object_run_finalizer(context, object, rb_grn_object);
-	grn_obj_close(context, object);
+        rb_grn_object_run_finalizer(context, object, rb_grn_object);
+        grn_obj_close(context, object);
     }
 
     return Qnil;
@@ -578,12 +578,12 @@ rb_grn_object_unlink (VALUE self)
 
     rb_grn_object = SELF(self);
     rb_grn_object_deconstruct(rb_grn_object, &object, &context,
-			      NULL, NULL, NULL, NULL);
+                              NULL, NULL, NULL, NULL);
     if (object && context) {
-	if (!(rb_grn_object->object->header.flags & GRN_OBJ_PERSISTENT)) {
-	    rb_grn_object_run_finalizer(context, object, rb_grn_object);
-	}
-	grn_obj_unlink(context, object);
+        if (!(rb_grn_object->object->header.flags & GRN_OBJ_PERSISTENT)) {
+            rb_grn_object_run_finalizer(context, object, rb_grn_object);
+        }
+        grn_obj_unlink(context, object);
     }
 
     return Qnil;
@@ -630,16 +630,16 @@ rb_grn_object_inspect_header (VALUE self, VALUE inspected)
 
 static VALUE
 rb_grn_object_inspect_content_id_with_label (VALUE inspected,
-					     grn_ctx *context, grn_obj *object)
+                                             grn_ctx *context, grn_obj *object)
 {
     grn_id id;
 
     rb_str_cat2(inspected, "id: <");
     id = grn_obj_id(context, object);
     if (id == GRN_ID_NIL)
-	rb_str_cat2(inspected, "nil");
+        rb_str_cat2(inspected, "nil");
     else
-	rb_str_concat(inspected, rb_obj_as_string(UINT2NUM(id)));
+        rb_str_concat(inspected, rb_obj_as_string(UINT2NUM(id)));
     rb_str_cat2(inspected, ">");
 
     return inspected;
@@ -647,24 +647,24 @@ rb_grn_object_inspect_content_id_with_label (VALUE inspected,
 
 VALUE
 rb_grn_object_inspect_object_content_name (VALUE inspected,
-					   grn_ctx *context, grn_obj *object)
+                                           grn_ctx *context, grn_obj *object)
 {
     int name_size;
 
     name_size = grn_obj_name(context, object, NULL, 0);
     if (name_size == 0) {
-	rb_str_cat2(inspected, "(anonymous)");
+        rb_str_cat2(inspected, "(anonymous)");
     } else {
-	grn_obj name;
+        grn_obj name;
 
-	GRN_OBJ_INIT(&name, GRN_BULK, 0, GRN_ID_NIL);
-	grn_bulk_space(context, &name, name_size);
-	grn_obj_name(context, object, GRN_BULK_HEAD(&name), name_size);
-	GRN_TEXT_PUTC(context, &name, '\0');
-	rb_str_cat2(inspected, "<");
-	rb_str_cat2(inspected, GRN_BULK_HEAD(&name));
-	rb_str_cat2(inspected, ">");
-	grn_obj_unlink(context, &name);
+        GRN_OBJ_INIT(&name, GRN_BULK, 0, GRN_ID_NIL);
+        grn_bulk_space(context, &name, name_size);
+        grn_obj_name(context, object, GRN_BULK_HEAD(&name), name_size);
+        GRN_TEXT_PUTC(context, &name, '\0');
+        rb_str_cat2(inspected, "<");
+        rb_str_cat2(inspected, GRN_BULK_HEAD(&name));
+        rb_str_cat2(inspected, ">");
+        grn_obj_unlink(context, &name);
     }
 
     return inspected;
@@ -672,7 +672,7 @@ rb_grn_object_inspect_object_content_name (VALUE inspected,
 
 static VALUE
 rb_grn_object_inspect_content_name_with_label (VALUE inspected,
-					       grn_ctx *context, grn_obj *object)
+                                               grn_ctx *context, grn_obj *object)
 {
 
     rb_str_cat2(inspected, "name: ");
@@ -682,18 +682,18 @@ rb_grn_object_inspect_content_name_with_label (VALUE inspected,
 
 static VALUE
 rb_grn_object_inspect_content_path_with_label (VALUE inspected,
-					       grn_ctx *context, grn_obj *object)
+                                               grn_ctx *context, grn_obj *object)
 {
     const char *path;
 
     rb_str_cat2(inspected, "path: ");
     path = grn_obj_path(context, object);
     if (path) {
-	rb_str_cat2(inspected, "<");
-	rb_str_cat2(inspected, path);
-	rb_str_cat2(inspected, ">");
+        rb_str_cat2(inspected, "<");
+        rb_str_cat2(inspected, path);
+        rb_str_cat2(inspected, ">");
     } else {
-	rb_str_cat2(inspected, "(temporary)");
+        rb_str_cat2(inspected, "(temporary)");
     }
 
     return inspected;
@@ -701,32 +701,32 @@ rb_grn_object_inspect_content_path_with_label (VALUE inspected,
 
 static VALUE
 rb_grn_object_inspect_content_domain_with_label (VALUE inspected,
-						 grn_ctx *context,
-						 grn_obj *object)
+                                                 grn_ctx *context,
+                                                 grn_obj *object)
 {
     grn_id domain;
 
     rb_str_cat2(inspected, "domain: ");
     domain = object->header.domain;
     if (domain == GRN_ID_NIL) {
-	rb_str_cat2(inspected, "(nil)");
+        rb_str_cat2(inspected, "(nil)");
     } else {
-	grn_obj *domain_object;
+        grn_obj *domain_object;
 
-	domain_object = grn_ctx_at(context, domain);
-	if (domain_object) {
-	    if (domain_object == object) {
-		rb_str_cat2(inspected, "(self)");
-	    } else {
-		rb_grn_object_inspect_object_content_name(inspected,
-							  context,
-							  domain_object);
-	    }
-	} else {
-	    rb_str_cat2(inspected, "(");
-	    rb_str_concat(inspected, rb_obj_as_string(UINT2NUM(domain)));
-	    rb_str_cat2(inspected, ")");
-	}
+        domain_object = grn_ctx_at(context, domain);
+        if (domain_object) {
+            if (domain_object == object) {
+                rb_str_cat2(inspected, "(self)");
+            } else {
+                rb_grn_object_inspect_object_content_name(inspected,
+                                                          context,
+                                                          domain_object);
+            }
+        } else {
+            rb_str_cat2(inspected, "(");
+            rb_str_concat(inspected, rb_obj_as_string(UINT2NUM(domain)));
+            rb_str_cat2(inspected, ")");
+        }
     }
 
     return inspected;
@@ -734,8 +734,8 @@ rb_grn_object_inspect_content_domain_with_label (VALUE inspected,
 
 static VALUE
 rb_grn_object_inspect_content_range_with_label (VALUE inspected,
-						grn_ctx *context,
-						grn_obj *object)
+                                                grn_ctx *context,
+                                                grn_obj *object)
 {
     grn_id range;
 
@@ -744,31 +744,31 @@ rb_grn_object_inspect_content_range_with_label (VALUE inspected,
     range = grn_obj_get_range(context, object);
     switch (object->header.type) {
       case GRN_TYPE:
-	rb_str_cat2(inspected, "<");
-	rb_str_concat(inspected, rb_inspect(UINT2NUM(range)));
-	rb_str_cat2(inspected, ">");
-	break;
+        rb_str_cat2(inspected, "<");
+        rb_str_concat(inspected, rb_inspect(UINT2NUM(range)));
+        rb_str_cat2(inspected, ">");
+        break;
       default:
-	if (range == GRN_ID_NIL) {
-	    rb_str_cat2(inspected, "(nil)");
-	} else {
-	    grn_obj *range_object;
+        if (range == GRN_ID_NIL) {
+            rb_str_cat2(inspected, "(nil)");
+        } else {
+            grn_obj *range_object;
 
-	    range_object = grn_ctx_at(context, range);
-	    if (range_object) {
-		if (range_object == object) {
-		    rb_str_cat2(inspected, "(self)");
-		} else {
-		    rb_grn_object_inspect_object_content_name(inspected,
-							      context,
-							      range_object);
-		}
-	    } else {
-		rb_str_cat2(inspected, "(");
-		rb_str_concat(inspected, rb_obj_as_string(UINT2NUM(range)));
-		rb_str_cat2(inspected, ")");
-	    }
-	}
+            range_object = grn_ctx_at(context, range);
+            if (range_object) {
+                if (range_object == object) {
+                    rb_str_cat2(inspected, "(self)");
+                } else {
+                    rb_grn_object_inspect_object_content_name(inspected,
+                                                              context,
+                                                              range_object);
+                }
+            } else {
+                rb_str_cat2(inspected, "(");
+                rb_str_concat(inspected, rb_obj_as_string(UINT2NUM(range)));
+                rb_str_cat2(inspected, ")");
+            }
+        }
     }
 
     return inspected;
@@ -776,8 +776,8 @@ rb_grn_object_inspect_content_range_with_label (VALUE inspected,
 
 static VALUE
 rb_grn_object_inspect_content_flags_with_label (VALUE inspected,
-						grn_ctx *context,
-						grn_obj *object)
+                                                grn_ctx *context,
+                                                grn_obj *object)
 {
     grn_obj_flags flags;
     VALUE inspected_flags;
@@ -789,107 +789,107 @@ rb_grn_object_inspect_content_flags_with_label (VALUE inspected,
     inspected_flags = rb_ary_new();
 
     if (0) {
-	if (flags & GRN_OBJ_TABLE_HASH_KEY)
-	    rb_ary_push(inspected_flags, rb_str_new2("TABLE_HASH_KEY"));
-	if (flags & GRN_OBJ_TABLE_PAT_KEY)
-	    rb_ary_push(inspected_flags, rb_str_new2("TABLE_PAT_KEY"));
-	if (flags & GRN_OBJ_TABLE_DAT_KEY)
-	    rb_ary_push(inspected_flags, rb_str_new2("TABLE_DAT_KEY"));
-	if (flags & GRN_OBJ_TABLE_NO_KEY)
-	    rb_ary_push(inspected_flags, rb_str_new2("TABLE_NO_KEY"));
+        if (flags & GRN_OBJ_TABLE_HASH_KEY)
+            rb_ary_push(inspected_flags, rb_str_new2("TABLE_HASH_KEY"));
+        if (flags & GRN_OBJ_TABLE_PAT_KEY)
+            rb_ary_push(inspected_flags, rb_str_new2("TABLE_PAT_KEY"));
+        if (flags & GRN_OBJ_TABLE_DAT_KEY)
+            rb_ary_push(inspected_flags, rb_str_new2("TABLE_DAT_KEY"));
+        if (flags & GRN_OBJ_TABLE_NO_KEY)
+            rb_ary_push(inspected_flags, rb_str_new2("TABLE_NO_KEY"));
     }
 
     switch (object->header.type) {
       case GRN_COLUMN_FIX_SIZE:
       case GRN_COLUMN_VAR_SIZE:
       case GRN_TYPE:
-	if (flags & GRN_OBJ_KEY_VAR_SIZE) {
-	    rb_ary_push(inspected_flags, rb_str_new2("KEY_VAR_SIZE"));
-	} else {
-	    switch (flags & GRN_OBJ_KEY_MASK) {
-	      case GRN_OBJ_KEY_UINT:
-		rb_ary_push(inspected_flags, rb_str_new2("KEY_UINT"));
-		break;
-	      case GRN_OBJ_KEY_INT:
-		rb_ary_push(inspected_flags, rb_str_new2("KEY_INT"));
-		break;
-	      case GRN_OBJ_KEY_FLOAT:
-		rb_ary_push(inspected_flags, rb_str_new2("KEY_FLOAT"));
-		break;
-	      case GRN_OBJ_KEY_GEO_POINT:
-		rb_ary_push(inspected_flags, rb_str_new2("KEY_GEO_POINT"));
-		break;
-	      default:
-		break;
-	    }
-	}
-	break;
+        if (flags & GRN_OBJ_KEY_VAR_SIZE) {
+            rb_ary_push(inspected_flags, rb_str_new2("KEY_VAR_SIZE"));
+        } else {
+            switch (flags & GRN_OBJ_KEY_MASK) {
+              case GRN_OBJ_KEY_UINT:
+                rb_ary_push(inspected_flags, rb_str_new2("KEY_UINT"));
+                break;
+              case GRN_OBJ_KEY_INT:
+                rb_ary_push(inspected_flags, rb_str_new2("KEY_INT"));
+                break;
+              case GRN_OBJ_KEY_FLOAT:
+                rb_ary_push(inspected_flags, rb_str_new2("KEY_FLOAT"));
+                break;
+              case GRN_OBJ_KEY_GEO_POINT:
+                rb_ary_push(inspected_flags, rb_str_new2("KEY_GEO_POINT"));
+                break;
+              default:
+                break;
+            }
+        }
+        break;
       default:
-	break;
+        break;
     }
 
     switch (object->header.type) {
       case GRN_TABLE_HASH_KEY:
       case GRN_TABLE_PAT_KEY:
       case GRN_TABLE_DAT_KEY:
-	if (flags & GRN_OBJ_KEY_WITH_SIS)
-	    rb_ary_push(inspected_flags, rb_str_new2("KEY_WITH_SIS"));
-	if (flags & GRN_OBJ_KEY_NORMALIZE)
-	    rb_ary_push(inspected_flags, rb_str_new2("KEY_NORMALIZE"));
-	break;
+        if (flags & GRN_OBJ_KEY_WITH_SIS)
+            rb_ary_push(inspected_flags, rb_str_new2("KEY_WITH_SIS"));
+        if (flags & GRN_OBJ_KEY_NORMALIZE)
+            rb_ary_push(inspected_flags, rb_str_new2("KEY_NORMALIZE"));
+        break;
       default:
-	break;
+        break;
     }
 
     if (0) {
-	if (flags & GRN_OBJ_COLUMN_SCALAR)
-	    rb_ary_push(inspected_flags, rb_str_new2("COLUMN_SCALAR"));
-	if (flags & GRN_OBJ_COLUMN_VECTOR)
-	    rb_ary_push(inspected_flags, rb_str_new2("COLUMN_VECTOR"));
-	if (flags & GRN_OBJ_COLUMN_INDEX)
-	    rb_ary_push(inspected_flags, rb_str_new2("COLUMN_INDEX"));
+        if (flags & GRN_OBJ_COLUMN_SCALAR)
+            rb_ary_push(inspected_flags, rb_str_new2("COLUMN_SCALAR"));
+        if (flags & GRN_OBJ_COLUMN_VECTOR)
+            rb_ary_push(inspected_flags, rb_str_new2("COLUMN_VECTOR"));
+        if (flags & GRN_OBJ_COLUMN_INDEX)
+            rb_ary_push(inspected_flags, rb_str_new2("COLUMN_INDEX"));
     }
 
     switch (object->header.type) {
       case GRN_COLUMN_FIX_SIZE:
       case GRN_COLUMN_VAR_SIZE:
-	if (flags & GRN_OBJ_COMPRESS_ZLIB)
-	    rb_ary_push(inspected_flags, rb_str_new2("COMPRESS_ZLIB"));
-	if (flags & GRN_OBJ_COMPRESS_LZO)
-	    rb_ary_push(inspected_flags, rb_str_new2("COMPRESS_LZO"));
-	break;
+        if (flags & GRN_OBJ_COMPRESS_ZLIB)
+            rb_ary_push(inspected_flags, rb_str_new2("COMPRESS_ZLIB"));
+        if (flags & GRN_OBJ_COMPRESS_LZO)
+            rb_ary_push(inspected_flags, rb_str_new2("COMPRESS_LZO"));
+        break;
       case GRN_COLUMN_INDEX:
-	if (flags & GRN_OBJ_WITH_SECTION)
-	    rb_ary_push(inspected_flags, rb_str_new2("WITH_SECTION"));
-	if (flags & GRN_OBJ_WITH_WEIGHT)
-	    rb_ary_push(inspected_flags, rb_str_new2("WITH_WEIGHT"));
-	if (flags & GRN_OBJ_WITH_POSITION)
-	    rb_ary_push(inspected_flags, rb_str_new2("WITH_POSITION"));
-	break;
+        if (flags & GRN_OBJ_WITH_SECTION)
+            rb_ary_push(inspected_flags, rb_str_new2("WITH_SECTION"));
+        if (flags & GRN_OBJ_WITH_WEIGHT)
+            rb_ary_push(inspected_flags, rb_str_new2("WITH_WEIGHT"));
+        if (flags & GRN_OBJ_WITH_POSITION)
+            rb_ary_push(inspected_flags, rb_str_new2("WITH_POSITION"));
+        break;
       default:
-	break;
+        break;
     }
 
     if (flags & GRN_OBJ_RING_BUFFER)
-	rb_ary_push(inspected_flags, rb_str_new2("RING_BUFFER"));
+        rb_ary_push(inspected_flags, rb_str_new2("RING_BUFFER"));
 
     if (flags & GRN_OBJ_WITH_SUBREC) {
-	rb_ary_push(inspected_flags, rb_str_new2("WITH_SUBREC"));
+        rb_ary_push(inspected_flags, rb_str_new2("WITH_SUBREC"));
 
-	if (flags & GRN_OBJ_UNIT_DOCUMENT_SECTION)
-	    rb_ary_push(inspected_flags, rb_str_new2("UNIT_DOCUMENT_SECTION"));
-	if (flags & GRN_OBJ_UNIT_DOCUMENT_POSITION)
-	    rb_ary_push(inspected_flags, rb_str_new2("UNIT_DOCUMENT_POSITION"));
+        if (flags & GRN_OBJ_UNIT_DOCUMENT_SECTION)
+            rb_ary_push(inspected_flags, rb_str_new2("UNIT_DOCUMENT_SECTION"));
+        if (flags & GRN_OBJ_UNIT_DOCUMENT_POSITION)
+            rb_ary_push(inspected_flags, rb_str_new2("UNIT_DOCUMENT_POSITION"));
 
-	if (flags & GRN_OBJ_UNIT_SECTION_POSITION)
-	    rb_ary_push(inspected_flags, rb_str_new2("UNIT_SECTION_POSITION"));
+        if (flags & GRN_OBJ_UNIT_SECTION_POSITION)
+            rb_ary_push(inspected_flags, rb_str_new2("UNIT_SECTION_POSITION"));
 
-	if (flags & GRN_OBJ_UNIT_USERDEF_DOCUMENT)
-	    rb_ary_push(inspected_flags, rb_str_new2("UNIT_USERDEF_DOCUMENT"));
-	if (flags & GRN_OBJ_UNIT_USERDEF_SECTION)
-	    rb_ary_push(inspected_flags, rb_str_new2("UNIT_USERDEF_SECTION"));
-	if (flags & GRN_OBJ_UNIT_USERDEF_POSITION)
-	    rb_ary_push(inspected_flags, rb_str_new2("UNIT_USERDEF_POSITION"));
+        if (flags & GRN_OBJ_UNIT_USERDEF_DOCUMENT)
+            rb_ary_push(inspected_flags, rb_str_new2("UNIT_USERDEF_DOCUMENT"));
+        if (flags & GRN_OBJ_UNIT_USERDEF_SECTION)
+            rb_ary_push(inspected_flags, rb_str_new2("UNIT_USERDEF_SECTION"));
+        if (flags & GRN_OBJ_UNIT_USERDEF_POSITION)
+            rb_ary_push(inspected_flags, rb_str_new2("UNIT_USERDEF_POSITION"));
     }
 
     rb_str_cat2(inspected, "<");
@@ -901,7 +901,7 @@ rb_grn_object_inspect_content_flags_with_label (VALUE inspected,
 
 VALUE
 rb_grn_object_inspect_object_content (VALUE inspected,
-				      grn_ctx *context, grn_obj *object)
+                                      grn_ctx *context, grn_obj *object)
 {
     rb_grn_object_inspect_content_id_with_label(inspected, context, object);
     rb_str_cat2(inspected, ", ");
@@ -927,18 +927,18 @@ rb_grn_object_inspect_content (VALUE self, VALUE inspected)
 
     rb_grn_object = SELF(self);
     if (!rb_grn_object)
-	return inspected;
+        return inspected;
 
     context = rb_grn_object->context;
     object = rb_grn_object->object;
 
     rb_str_cat2(inspected, " ");
     if (rb_grn_exited) {
-	rb_str_cat2(inspected, "(finished)");
+        rb_str_cat2(inspected, "(finished)");
     } else if (object) {
-	rb_grn_object_inspect_object_content(inspected, context, object);
+        rb_grn_object_inspect_object_content(inspected, context, object);
     } else {
-	rb_str_cat2(inspected, "(closed)");
+        rb_str_cat2(inspected, "(closed)");
     }
 
     return inspected;
@@ -986,11 +986,11 @@ rb_grn_object_get_id (VALUE self)
 
     rb_grn_object = SELF(self);
     if (!rb_grn_object->object)
-	return Qnil;
+        return Qnil;
 
     id = grn_obj_id(rb_grn_object->context, rb_grn_object->object);
     if (id == GRN_ID_NIL)
-	return Qnil;
+        return Qnil;
     else
         return UINT2NUM(id);
 }
@@ -1010,14 +1010,14 @@ rb_grn_object_get_path (VALUE self)
 
     rb_grn_object = SELF(self);
     if (!rb_grn_object->object)
-	return Qnil;
+        return Qnil;
 
     path = grn_obj_path(rb_grn_object->context, rb_grn_object->object);
 
     if (!path)
-	return Qnil;
+        return Qnil;
     else
-	return rb_str_new2(path);
+        return rb_str_new2(path);
 }
 
 /*
@@ -1033,7 +1033,7 @@ rb_grn_object_temporary_p (VALUE self)
 
     rb_grn_object = SELF(self);
     if (!rb_grn_object->object)
-	return Qnil;
+        return Qnil;
 
     return CBOOL2RVAL(!(rb_grn_object->object->header.flags & GRN_OBJ_PERSISTENT));
 }
@@ -1051,7 +1051,7 @@ rb_grn_object_persistent_p (VALUE self)
 
     rb_grn_object = SELF(self);
     if (!rb_grn_object->object)
-	return Qnil;
+        return Qnil;
 
     return CBOOL2RVAL(rb_grn_object->object->header.flags & GRN_OBJ_PERSISTENT);
 }
@@ -1075,20 +1075,20 @@ rb_grn_object_get_domain (VALUE self)
     rb_grn_object = SELF(self);
     object = rb_grn_object->object;
     if (!object)
-	return Qnil;
+        return Qnil;
 
     context = rb_grn_object->context;
     domain = object->header.domain;
     if (domain == GRN_ID_NIL) {
-	return Qnil;
+        return Qnil;
     } else {
-	grn_obj *domain_object;
+        grn_obj *domain_object;
 
-	domain_object = grn_ctx_at(context, domain);
-	if (domain_object)
-	    return GRNOBJECT2RVAL(Qnil, context, domain_object, GRN_FALSE);
-	else
-	    return UINT2NUM(domain);
+        domain_object = grn_ctx_at(context, domain);
+        if (domain_object)
+            return GRNOBJECT2RVAL(Qnil, context, domain_object, GRN_FALSE);
+        else
+            return UINT2NUM(domain);
     }
 }
 
@@ -1108,16 +1108,16 @@ rb_grn_object_get_name (VALUE self)
 
     rb_grn_object = SELF(self);
     if (!rb_grn_object->object)
-	return Qnil;
+        return Qnil;
 
     name_size = grn_obj_name(rb_grn_object->context, rb_grn_object->object,
-			     NULL, 0);
+                             NULL, 0);
     if (name_size == 0)
-	return Qnil;
+        return Qnil;
 
     name = xmalloc(name_size);
     grn_obj_name(rb_grn_object->context, rb_grn_object->object,
-		 name, name_size);
+                 name, name_size);
     rb_name = rb_str_new(name, name_size);
     xfree(name);
 
@@ -1145,20 +1145,20 @@ rb_grn_object_get_range (VALUE self)
     rb_grn_object = SELF(self);
     object = rb_grn_object->object;
     if (!object)
-	return Qnil;
+        return Qnil;
 
     context = rb_grn_object->context;
     range = grn_obj_get_range(context, object);
     if (range == GRN_ID_NIL) {
-	return Qnil;
+        return Qnil;
     } else {
-	grn_obj *range_object;
+        grn_obj *range_object;
 
-	range_object = grn_ctx_at(context, range);
-	if (range_object)
-	    return GRNOBJECT2RVAL(Qnil, context, range_object, GRN_FALSE);
-	else
-	    return UINT2NUM(range);
+        range_object = grn_ctx_at(context, range);
+        if (range_object)
+            return GRNOBJECT2RVAL(Qnil, context, range_object, GRN_FALSE);
+        else
+            return UINT2NUM(range);
     }
 }
 
@@ -1210,7 +1210,7 @@ rb_grn_object_array_reference (VALUE self, VALUE rb_id)
     context = rb_grn_object->context;
     object = rb_grn_object->object;
     if (!object)
-	return Qnil;
+        return Qnil;
 
     id = NUM2UINT(rb_id);
     range_id = grn_obj_get_range(context, object);
@@ -1221,43 +1221,43 @@ rb_grn_object_array_reference (VALUE self, VALUE rb_id)
       case GRN_TABLE_PAT_KEY:
       case GRN_TABLE_DAT_KEY:
       case GRN_TABLE_NO_KEY:
-	GRN_OBJ_INIT(&value, GRN_BULK, 0, GRN_ID_NIL);
-	break;
+        GRN_OBJ_INIT(&value, GRN_BULK, 0, GRN_ID_NIL);
+        break;
       case GRN_TYPE:
       case GRN_ACCESSOR: /* FIXME */
-	GRN_OBJ_INIT(&value, GRN_BULK, 0, range_id);
-	break;
+        GRN_OBJ_INIT(&value, GRN_BULK, 0, range_id);
+        break;
       case GRN_COLUMN_VAR_SIZE:
       case GRN_COLUMN_FIX_SIZE:
-	switch (object->header.flags & GRN_OBJ_COLUMN_TYPE_MASK) {
-	  case GRN_OBJ_COLUMN_VECTOR:
-	    GRN_OBJ_INIT(&value, GRN_VECTOR, 0, range_id);
-	    break;
-	  case GRN_OBJ_COLUMN_SCALAR:
-	    GRN_OBJ_INIT(&value, GRN_BULK, 0, range_id);
-	    break;
-	  default:
-	    rb_raise(rb_eGrnError, "unsupported column type: %u: %s",
-		     range_type, rb_grn_inspect(self));
-	    break;
-	}
-	break;
+        switch (object->header.flags & GRN_OBJ_COLUMN_TYPE_MASK) {
+          case GRN_OBJ_COLUMN_VECTOR:
+            GRN_OBJ_INIT(&value, GRN_VECTOR, 0, range_id);
+            break;
+          case GRN_OBJ_COLUMN_SCALAR:
+            GRN_OBJ_INIT(&value, GRN_BULK, 0, range_id);
+            break;
+          default:
+            rb_raise(rb_eGrnError, "unsupported column type: %u: %s",
+                     range_type, rb_grn_inspect(self));
+            break;
+        }
+        break;
       case GRN_COLUMN_INDEX:
-	GRN_UINT32_INIT(&value, 0);
-	break;
+        GRN_UINT32_INIT(&value, 0);
+        break;
       default:
-	rb_raise(rb_eGrnError,
-		 "unsupported type: %s", rb_grn_inspect(self));
-	break;
+        rb_raise(rb_eGrnError,
+                 "unsupported type: %s", rb_grn_inspect(self));
+        break;
     }
 
     grn_obj_get_value(context, object, id, &value);
     exception = rb_grn_context_to_exception(context, self);
     if (NIL_P(exception))
-	rb_value = GRNVALUE2RVAL(context, &value, range, self);
+        rb_value = GRNVALUE2RVAL(context, &value, range, self);
     grn_obj_unlink(context, &value);
     if (!NIL_P(exception))
-	rb_exc_raise(exception);
+        rb_exc_raise(exception);
 
     return rb_value;
 }
@@ -1269,21 +1269,21 @@ rb_uvector_value_p (RbGrnObject *rb_grn_object, VALUE rb_value)
 
     switch (rb_grn_object->range->header.type) {
       case GRN_TYPE:
-	if (!(rb_grn_object->range->header.flags & GRN_OBJ_KEY_VAR_SIZE)) {
-	    return GRN_TRUE;
-	}
-	break;
+        if (!(rb_grn_object->range->header.flags & GRN_OBJ_KEY_VAR_SIZE)) {
+            return GRN_TRUE;
+        }
+        break;
       case GRN_TABLE_HASH_KEY:
       case GRN_TABLE_PAT_KEY:
       case GRN_TABLE_DAT_KEY:
       case GRN_TABLE_NO_KEY:
-	first_element = rb_ary_entry(rb_value, 0);
-	if (rb_respond_to(first_element, rb_intern("record_raw_id"))) {
-	    return GRN_TRUE;
-	}
-	break;
+        first_element = rb_ary_entry(rb_value, 0);
+        if (rb_respond_to(first_element, rb_intern("record_raw_id"))) {
+            return GRN_TRUE;
+        }
+        break;
       default:
-	break;
+        break;
     }
 
     return GRN_FALSE;
@@ -1291,7 +1291,7 @@ rb_uvector_value_p (RbGrnObject *rb_grn_object, VALUE rb_value)
 
 VALUE
 rb_grn_object_set_raw (RbGrnObject *rb_grn_object, grn_id id,
-		       VALUE rb_value, int flags, VALUE related_object)
+                       VALUE rb_value, int flags, VALUE related_object)
 {
     grn_ctx *context;
     grn_obj value;
@@ -1301,27 +1301,27 @@ rb_grn_object_set_raw (RbGrnObject *rb_grn_object, grn_id id,
     context = rb_grn_object->context;
     rb_values = rb_grn_check_convert_to_array(rb_value);
     if (NIL_P(rb_values)) {
-	if (NIL_P(rb_value)) {
-	    GRN_OBJ_INIT(&value, GRN_BULK, 0, GRN_ID_NIL);
-	} else {
-	    GRN_OBJ_INIT(&value, GRN_BULK, 0, GRN_ID_NIL);
-	    RVAL2GRNBULK(rb_value, context, &value);
-	}
+        if (NIL_P(rb_value)) {
+            GRN_OBJ_INIT(&value, GRN_BULK, 0, GRN_ID_NIL);
+        } else {
+            GRN_OBJ_INIT(&value, GRN_BULK, 0, GRN_ID_NIL);
+            RVAL2GRNBULK(rb_value, context, &value);
+        }
     } else {
-	if (rb_uvector_value_p(rb_grn_object, rb_values)) {
-	    GRN_OBJ_INIT(&value, GRN_UVECTOR, 0, rb_grn_object->range_id);
-	    RVAL2GRNUVECTOR(rb_values, context, &value, related_object);
-	} else {
-	    GRN_OBJ_INIT(&value, GRN_VECTOR, 0, GRN_ID_NIL);
-	    RVAL2GRNVECTOR(rb_values, context, &value);
-	}
+        if (rb_uvector_value_p(rb_grn_object, rb_values)) {
+            GRN_OBJ_INIT(&value, GRN_UVECTOR, 0, rb_grn_object->range_id);
+            RVAL2GRNUVECTOR(rb_values, context, &value, related_object);
+        } else {
+            GRN_OBJ_INIT(&value, GRN_VECTOR, 0, GRN_ID_NIL);
+            RVAL2GRNVECTOR(rb_values, context, &value);
+        }
     }
     rc = grn_obj_set_value(context, rb_grn_object->object, id,
-			   &value, flags);
+                           &value, flags);
     exception = rb_grn_context_to_exception(context, related_object);
     grn_obj_unlink(context, &value);
     if (!NIL_P(exception))
-	rb_exc_raise(exception);
+        rb_exc_raise(exception);
     rb_grn_rc_check(rc, related_object);
 
     return Qnil;
@@ -1335,7 +1335,7 @@ rb_grn_object_set (VALUE self, VALUE rb_id, VALUE rb_value, int flags)
 
     rb_grn_object = SELF(self);
     if (!rb_grn_object->object)
-	return Qnil;
+        return Qnil;
 
     id = NUM2UINT(rb_id);
 
@@ -1391,7 +1391,7 @@ rb_grn_object_remove (VALUE self)
 
     rb_grn_object = SELF(self);
     if (!rb_grn_object->object)
-	return Qnil;
+        return Qnil;
 
     context = rb_grn_object->context;
     rc = grn_obj_remove(context, rb_grn_object->object);
@@ -1410,10 +1410,10 @@ rb_grn_object_builtin_p (VALUE self)
     grn_bool builtin = GRN_FALSE;
 
     rb_grn_object_deconstruct(SELF(self), &object, &context,
-			      NULL, NULL, NULL, NULL);
+                              NULL, NULL, NULL, NULL);
 
     if (context && object) {
-	builtin = grn_obj_is_builtin(context, object);
+        builtin = grn_obj_is_builtin(context, object);
     }
 
     return CBOOL2RVAL(builtin);
@@ -1437,7 +1437,7 @@ rb_grn_init_object (VALUE mGrn)
 
     rb_define_method(rb_cGrnObject, "temporary?", rb_grn_object_temporary_p, 0);
     rb_define_method(rb_cGrnObject, "persistent?",
-		     rb_grn_object_persistent_p, 0);
+                     rb_grn_object_persistent_p, 0);
 
     rb_define_method(rb_cGrnObject, "==", rb_grn_object_equal, 1);
 
