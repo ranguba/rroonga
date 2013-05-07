@@ -102,6 +102,7 @@ module Groonga
       options[:database].each(each_options(:order_by => :key)) do |object|
         next unless object.is_a?(Groonga::Table)
         next if object.size.zero?
+        next if index_only_table?(object)
         next if target_table?(options[:exclude_tables], object, false)
         next unless target_table?(options[:tables], object, true)
         options[:output].write("\n") if !first_table or options[:dump_schema]
@@ -122,6 +123,12 @@ module Groonga
                                          #{suffix_re}\z)/x,
                                      '')
       output.write("register #{plugin_name}\n")
+    end
+
+    def index_only_table?(table)
+      table.columns.all? do |column|
+        column.index?
+      end
     end
 
     def target_table?(target_tables, table, default_value)

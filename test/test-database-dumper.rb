@@ -296,4 +296,46 @@ EOS
                    dump)
     end
   end
+
+  class IndexTest < self
+    def setup_tables
+      Groonga::Schema.define do |schema|
+        schema.create_table("Posts") do |table|
+          table.text("title")
+          table.short_text("tag_text")
+        end
+
+        schema.create_table("Tags",
+                            :type => :hash,
+                            :key_type => :short_text,
+                            :default_tokenizer => :delimit) do |table|
+          table.index("Posts.tag_text")
+        end
+      end
+    end
+
+    setup
+    def setup_data
+      posts.add(:title => "Why search engine find?",
+                :tag_text => "search mori")
+    end
+
+    def test_index_column_only
+      assert_equal(<<-COMMAND, dump)
+table_create Posts TABLE_NO_KEY
+column_create Posts tag_text COLUMN_SCALAR ShortText
+column_create Posts title COLUMN_SCALAR Text
+
+table_create Tags TABLE_HASH_KEY --key_type ShortText --default_tokenizer TokenDelimit
+
+load --table Posts
+[
+["_id","tag_text","title"],
+[1,"search mori","Why search engine find?"]
+]
+
+column_create Tags Posts_tag_text COLUMN_INDEX Posts tag_text
+COMMAND
+    end
+  end
 end
