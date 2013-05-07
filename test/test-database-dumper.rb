@@ -107,13 +107,13 @@ column_create Users Posts_author COLUMN_INDEX Posts author
 EOS
   end
 
-  class EmptyTest < DatabaseDumperTest
+  class EmptyTest < self
     def test_default
       assert_equal(dumped_schema, dump)
     end
   end
 
-  class HaveDataTest < DatabaseDumperTest
+  class HaveDataTest < self
     setup
     def setup_data
       posts.add(:author => "mori",
@@ -287,7 +287,7 @@ EOS
     end
   end
 
-  class PluginTest < DatabaseDumperTest
+  class PluginTest < self
     def test_standard_plugin
       Groonga::Plugin.register("suggest/suggest")
       assert_equal("register suggest/suggest\n" +
