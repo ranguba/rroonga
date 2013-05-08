@@ -1,6 +1,6 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
-  Copyright (C) 2009-2012  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2013  Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -157,6 +157,8 @@ rb_grn_index_column_deconstruct (RbGrnIndexColumn *rb_grn_index_column,
  *     新しい値を指定する。 _value_ を指定した場合と _options_ で
  *     @{:value => value}@ を指定した場合は同じ動作とな
  *     る。
+ *
+ * @deprecated Since 3.0.2. Use {#add}, {#delete} or {#update} instead.
  */
 static VALUE
 rb_grn_index_column_array_set (VALUE self, VALUE rb_id, VALUE rb_value)
@@ -217,6 +219,349 @@ rb_grn_index_column_array_set (VALUE self, VALUE rb_id, VALUE rb_value)
     rb_grn_rc_check(rc, self);
 
     return original_rb_value;
+}
+
+/*
+ * Adds a record that has @value@ content to inverted index for fast
+ * fulltext serach. Normally, this method is not used
+ * explicitly. Inverted index for fulltext search is updated
+ * automatically by using @:source@ option of
+ * {Groonga::Table#define_index_column}.
+ *
+ * @example Adds sentences of an article to index
+ *   articles = Groonga::Array.create(:name => "Articles")
+ *   articles.define_column("title", "ShortText")
+ *   articles.define_column("content", "Text")
+ *
+ *   terms = Groonga::Hash.create(:name => "Terms",
+ *                                :key_type => "ShortText",
+ *                                :default_tokenizer => "TokenBigram")
+ *   content_index = terms.define_index_column("content", articles,
+ *                                             :with_position => true,
+ *                                             :with_section => true)
+ *
+ *   content = <<-CONTENT
+ *   Groonga is a fast and accurate full text search engine based on
+ *   inverted index. One of the characteristics of groonga is that a
+ *   newly registered document instantly appears in search
+ *   results. Also, groonga allows updates without read locks. These
+ *   characteristics result in superior performance on real-time
+ *   applications.
+ *
+ *   Groonga is also a column-oriented database management system
+ *   (DBMS). Compared with well-known row-oriented systems, such as
+ *   MySQL and PostgreSQL, column-oriented systems are more suited for
+ *   aggregate queries. Due to this advantage, groonga can cover
+ *   weakness of row-oriented systems.
+ *
+ *   The basic functions of groonga are provided in a C library. Also,
+ *   libraries for using groonga in other languages, such as Ruby, are
+ *   provided by related projects. In addition, groonga-based storage
+ *   engines are provided for MySQL and PostgreSQL. These libraries
+ *   and storage engines allow any application to use groonga. See
+ *   usage examples.
+ *   CONTENT
+ *
+ *   groonga = articles.add(:title => "groonga", :content => content)
+ *
+ *   content.split(/\n{2,}/).each_with_index do |sentence, i|
+ *     content_index.add(groonga, sentence, :section => i + 1)
+ *   end
+ *
+ *   content_index.search("engine").each do |record|
+ *     p record.key["title"] # -> "groonga"
+ *   end
+ *
+ * @overload add(record, value, options={})
+ *   @param [Groonga::Record, Integer] record
+ *     The record that has a @value@ as its value. It can be Integer as
+ *     record id.
+ *   @param [String] value
+ *     The value of the @record@.
+ *   @param [::Hash] options
+ *     The options.
+ *   @option options [Integer] :section (1)
+ *     The section number. It is one-origin.
+ *
+ *     You must specify @{:with_section => true}@ in
+ *     {Groonga::Table#define_index_column} to use this option.
+ *   @return [void]
+ *
+ * @since 3.0.2
+ */
+static VALUE
+rb_grn_index_column_add (int argc, VALUE *argv, VALUE self)
+{
+    grn_ctx *context = NULL;
+    grn_obj *column, *range;
+    grn_rc rc;
+    grn_id id;
+    unsigned int section;
+    grn_obj *new_value;
+    VALUE rb_record, rb_value, rb_options, rb_section;
+
+    rb_scan_args(argc, argv, "21", &rb_record, &rb_value, &rb_options);
+
+    rb_grn_index_column_deconstruct(SELF(self), &column, &context,
+                                    NULL, NULL,
+                                    &new_value, NULL,
+                                    NULL, &range,
+                                    NULL, NULL);
+
+    id = RVAL2GRNID(rb_record, context, range, self);
+
+    GRN_BULK_REWIND(new_value);
+    RVAL2GRNBULK(rb_value, context, new_value);
+
+    rb_grn_scan_options(rb_options,
+                        "section", &rb_section,
+                        NULL);
+
+    if (NIL_P(rb_section)) {
+	section = 1;
+    } else {
+	section = NUM2UINT(rb_section);
+    }
+
+    rc = grn_column_index_update(context, column, id, section, NULL, new_value);
+    rb_grn_context_check(context, self);
+    rb_grn_rc_check(rc, self);
+
+    return self;
+}
+
+/*
+ * Deletes a record that has @value@ content from inverted
+ * index. Normally, this method is not used explicitly. Inverted index
+ * for fulltext search is updated automatically by using @:source@
+ * option of {Groonga::Table#define_index_column}.
+ *
+ * @example Deletes sentences of an article to index
+ *   articles = Groonga::Array.create(:name => "Articles")
+ *   articles.define_column("title", "ShortText")
+ *   articles.define_column("content", "Text")
+ *
+ *   terms = Groonga::Hash.create(:name => "Terms",
+ *                                :key_type => "ShortText",
+ *                                :default_tokenizer => "TokenBigram")
+ *   content_index = terms.define_index_column("content", articles,
+ *                                             :with_position => true,
+ *                                             :with_section => true)
+ *
+ *   content = <<-CONTENT
+ *   Groonga is a fast and accurate full text search engine based on
+ *   inverted index. One of the characteristics of groonga is that a
+ *   newly registered document instantly appears in search
+ *   results. Also, groonga allows updates without read locks. These
+ *   characteristics result in superior performance on real-time
+ *   applications.
+ *
+ *   Groonga is also a column-oriented database management system
+ *   (DBMS). Compared with well-known row-oriented systems, such as
+ *   MySQL and PostgreSQL, column-oriented systems are more suited for
+ *   aggregate queries. Due to this advantage, groonga can cover
+ *   weakness of row-oriented systems.
+ *
+ *   The basic functions of groonga are provided in a C library. Also,
+ *   libraries for using groonga in other languages, such as Ruby, are
+ *   provided by related projects. In addition, groonga-based storage
+ *   engines are provided for MySQL and PostgreSQL. These libraries
+ *   and storage engines allow any application to use groonga. See
+ *   usage examples.
+ *   CONTENT
+ *
+ *   groonga = articles.add(:title => "groonga", :content => content)
+ *
+ *   content.split(/\n{2,}/).each_with_index do |sentence, i|
+ *     content_index.add(groonga, sentence, :section => i + 1)
+ *   end
+ *
+ *   content_index.search("engine").each do |record|
+ *     p record.key["title"] # -> "groonga"
+ *   end
+ *
+ *   content.split(/\n{2,}/).each_with_index do |sentence, i|
+ *     content_index.delete(groonga, sentence, :section => i + 1)
+ *   end
+ *
+ *   p content_index.search("engine").size # -> 0
+ *
+ * @overload delete(record, value, options={})
+ *   @param [Groonga::Record, Integer] record
+ *     The record that has a @value@ as its value. It can be Integer as
+ *     record id.
+ *   @param [String] value
+ *     The value of the @record@.
+ *   @param [::Hash] options
+ *     The options.
+ *   @option options [Integer] :section (1)
+ *     The section number. It is one-origin.
+ *
+ *     You must specify @{:with_section => true}@ in
+ *     {Groonga::Table#define_index_column} to use this option.
+ *   @return [void]
+ *
+ * @since 3.0.2
+ */
+static VALUE
+rb_grn_index_column_delete (int argc, VALUE *argv, VALUE self)
+{
+    grn_ctx *context = NULL;
+    grn_obj *column, *range;
+    grn_rc rc;
+    grn_id id;
+    unsigned int section;
+    grn_obj *old_value;
+    VALUE rb_record, rb_value, rb_options, rb_section;
+
+    rb_scan_args(argc, argv, "21", &rb_record, &rb_value, &rb_options);
+
+    rb_grn_index_column_deconstruct(SELF(self), &column, &context,
+                                    NULL, NULL,
+                                    NULL, &old_value,
+                                    NULL, &range,
+                                    NULL, NULL);
+
+    id = RVAL2GRNID(rb_record, context, range, self);
+
+    GRN_BULK_REWIND(old_value);
+    RVAL2GRNBULK(rb_value, context, old_value);
+
+    rb_grn_scan_options(rb_options,
+                        "section", &rb_section,
+                        NULL);
+
+    if (NIL_P(rb_section)) {
+	section = 1;
+    } else {
+	section = NUM2UINT(rb_section);
+    }
+
+    rc = grn_column_index_update(context, column, id, section, old_value, NULL);
+    rb_grn_context_check(context, self);
+    rb_grn_rc_check(rc, self);
+
+    return self;
+}
+
+/*
+ * Updates a record that has @new_value@ as new content and
+ * @old_value@ as old content in inverted index. Normally, this method
+ * is not used explicitly. Inverted index for fulltext search is
+ * updated automatically by using @:source@ option of
+ * {Groonga::Table#define_index_column}.
+ *
+ * @example Updates sentences of an article to index
+ *   articles = Groonga::Array.create(:name => "Articles")
+ *   articles.define_column("title", "ShortText")
+ *   articles.define_column("content", "Text")
+ *
+ *   terms = Groonga::Hash.create(:name => "Terms",
+ *                                :key_type => "ShortText",
+ *                                :default_tokenizer => "TokenBigram")
+ *   content_index = terms.define_index_column("content", articles,
+ *                                             :with_position => true,
+ *                                             :with_section => true)
+ *
+ *   old_sentence = <<-SENTENCE
+ *   Groonga is a fast and accurate full text search engine based on
+ *   inverted index. One of the characteristics of groonga is that a
+ *   newly registered document instantly appears in search
+ *   results. Also, groonga allows updates without read locks. These
+ *   characteristics result in superior performance on real-time
+ *   applications.
+ *   SENTENCE
+ *
+ *   new_sentence = <<-SENTENCE
+ *   Groonga is also a column-oriented database management system
+ *   (DBMS). Compared with well-known row-oriented systems, such as
+ *   MySQL and PostgreSQL, column-oriented systems are more suited for
+ *   aggregate queries. Due to this advantage, groonga can cover
+ *   weakness of row-oriented systems.
+ *   SENTENCE
+ *
+ *   groonga = articles.add(:title => "groonga", :content => old_sentence)
+ *
+ *   content_index.add(groonga, old_sentence, :section => 1)
+ *   p content_index.search("engine").size # -> 1
+ *   p content_index.search("MySQL").size  # -> 0
+ *
+ *   groonga[:content] = new_sentence
+ *   content_index.update(groonga, old_sentence, new_sentence, :section => 1)
+ *   p content_index.search("engine").size # -> 0
+ *   p content_index.search("MySQL").size  # -> 1
+ *
+ * @overload update(record, old_value, new_value, options={})
+ *   @param [Groonga::Record, Integer] record
+ *     The record that has a @new_value@ as its new value and
+ *     @old_value@ as its old value. It can be Integer as record id.
+ *   @param [String] old_value
+ *     The old value of the @record@.
+ *   @param [String] new_value
+ *     The new value of the @record@.
+ *   @param [::Hash] options
+ *     The options.
+ *   @option options [Integer] :section (1)
+ *     The section number. It is one-origin.
+ *
+ *     You must specify @{:with_section => true}@ in
+ *     {Groonga::Table#define_index_column} to use this option.
+ *   @return [void]
+ *
+ * @since 3.0.2
+ */
+static VALUE
+rb_grn_index_column_update (int argc, VALUE *argv, VALUE self)
+{
+    grn_ctx *context = NULL;
+    grn_obj *column, *range;
+    grn_rc rc;
+    grn_id id;
+    unsigned int section;
+    grn_obj *old_value, *new_value;
+    VALUE rb_record, rb_old_value, rb_new_value, rb_options, rb_section;
+
+    rb_scan_args(argc, argv, "31",
+                 &rb_record, &rb_old_value, &rb_new_value, &rb_options);
+
+    rb_grn_index_column_deconstruct(SELF(self), &column, &context,
+                                    NULL, NULL,
+                                    &new_value, &old_value,
+                                    NULL, &range,
+                                    NULL, NULL);
+
+    id = RVAL2GRNID(rb_record, context, range, self);
+
+    if (NIL_P(rb_old_value)) {
+        old_value = NULL;
+    } else {
+        GRN_BULK_REWIND(old_value);
+        RVAL2GRNBULK(rb_old_value, context, old_value);
+    }
+
+    if (NIL_P(rb_new_value)) {
+        new_value = NULL;
+    } else {
+        GRN_BULK_REWIND(new_value);
+        RVAL2GRNBULK(rb_new_value, context, new_value);
+    }
+
+    rb_grn_scan_options(rb_options,
+                        "section", &rb_section,
+                        NULL);
+
+    if (NIL_P(rb_section)) {
+	section = 1;
+    } else {
+	section = NUM2UINT(rb_section);
+    }
+
+    rc = grn_column_index_update(context, column, id, section,
+                                 old_value, new_value);
+    rb_grn_context_check(context, self);
+    rb_grn_rc_check(rc, self);
+
+    return self;
 }
 
 /*
@@ -626,6 +971,13 @@ rb_grn_init_index_column (VALUE mGrn)
 
     rb_define_method(rb_cGrnIndexColumn, "[]=",
 		     rb_grn_index_column_array_set, 2);
+
+    rb_define_method(rb_cGrnIndexColumn, "add",
+		     rb_grn_index_column_add, -1);
+    rb_define_method(rb_cGrnIndexColumn, "delete",
+		     rb_grn_index_column_delete, -1);
+    rb_define_method(rb_cGrnIndexColumn, "update",
+		     rb_grn_index_column_update, -1);
 
     rb_define_method(rb_cGrnIndexColumn, "sources",
 		     rb_grn_index_column_get_sources, 0);
