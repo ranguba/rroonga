@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2012  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2013  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -556,6 +556,24 @@ class RecordTest < Test::Unit::TestCase
     array_like_object = array_like_class.new([kou_at_clear_code])
     kou = @users.add("kou")
     kou.addresses = array_like_object
+  end
+
+  def test_to_json
+    values = {
+      "uri" => "http://groonga.org/",
+      "rate" => 5,
+      "comment" => "Great!"
+    }
+    groonga = @bookmarks.add(values)
+    expected = {
+      "_id"     => groonga.id,
+      "comment" => values["comment"],
+      "content" => nil,
+      "rate"    => values["rate"],
+      "uri"     => values["uri"],
+      "user"    => nil,
+    }.to_json
+    assert_equal(expected, groonga.to_json)
   end
 
   private

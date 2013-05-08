@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2009-2011  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2013  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -251,6 +251,13 @@ module Groonga
     def attributes
       accessor = AttributeHashBuilder.new(self)
       accessor.build
+    end
+
+    alias_method :as_json, :attributes
+
+    # @return [String] the record formatted as JSON.
+    def to_json(*args)
+      as_json.to_json(*args)
     end
 
     # レコードを削除する。
