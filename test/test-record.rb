@@ -596,18 +596,18 @@ class RecordTest < Test::Unit::TestCase
     def test_to_json
       created_at = Time.parse("2013-05-16T16:57:34+09:00")
       values = {
-        "uri" => "http://groonga.org/",
-        "rate" => 5,
-        "comment" => "Great!",
+        "uri"        => "http://groonga.org/",
+        "rate"       => 5,
+        "comment"    => "Great!",
         "created_at" => created_at,
       }
       groonga = @bookmarks.add(values)
       expected = {
-        "_id"     => groonga.id,
-        "comment" => values["comment"],
+        "_id"        => groonga.id,
+        "comment"    => values["comment"],
         "created_at" => created_at.iso8601,
-        "rate"    => values["rate"],
-        "uri"     => values["uri"],
+        "rate"       => values["rate"],
+        "uri"        => values["uri"],
       }.to_json
       assert_equal(expected, groonga.to_json)
     end
