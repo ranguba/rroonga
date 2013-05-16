@@ -576,22 +576,22 @@ class RecordTest < Test::Unit::TestCase
   end
 
   class JSONTest < self
-  def test_to_json
-    values = {
-      "uri" => "http://groonga.org/",
-      "rate" => 5,
-      "comment" => "Great!"
-    }
-    groonga = @bookmarks.add(values)
-    expected = {
-      "_id"     => groonga.id,
-      "comment" => values["comment"],
-      "content" => nil,
-      "rate"    => values["rate"],
-      "uri"     => values["uri"],
-      "user"    => nil,
-    }.to_json
-    assert_equal(expected, groonga.to_json)
-  end
+    def test_to_json
+      values = {
+        "uri" => "http://groonga.org/",
+        "rate" => 5,
+        "comment" => "Great!"
+      }
+      groonga = @bookmarks.add(values)
+      expected = {
+        "_id"     => groonga.id,
+        "comment" => values["comment"],
+        "content" => nil,
+        "rate"    => values["rate"],
+        "uri"     => values["uri"],
+        "user"    => nil,
+      }.to_json
+      assert_equal(expected, groonga.to_json)
+    end
   end
 end
