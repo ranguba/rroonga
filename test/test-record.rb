@@ -558,6 +558,24 @@ class RecordTest < Test::Unit::TestCase
     kou.addresses = array_like_object
   end
 
+  private
+  def top_page
+    {
+      "uri" => "http://groonga.org/",
+      "rate" => 5,
+      "comment" => "Great!",
+    }
+  end
+
+  def doc_page
+    {
+      "uri" => "http://groonga.org/document.html",
+      "rate" => 8,
+      "comment" => "Informative"
+    }
+  end
+
+  class JSONTest < self
   def test_to_json
     values = {
       "uri" => "http://groonga.org/",
@@ -575,21 +593,5 @@ class RecordTest < Test::Unit::TestCase
     }.to_json
     assert_equal(expected, groonga.to_json)
   end
-
-  private
-  def top_page
-    {
-      "uri" => "http://groonga.org/",
-      "rate" => 5,
-      "comment" => "Great!",
-    }
-  end
-
-  def doc_page
-    {
-      "uri" => "http://groonga.org/document.html",
-      "rate" => 8,
-      "comment" => "Informative"
-    }
   end
 end
