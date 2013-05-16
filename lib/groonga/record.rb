@@ -16,6 +16,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 require 'English'
+require "time"
 
 module Groonga
   class Record
@@ -253,7 +254,16 @@ module Groonga
       accessor.build
     end
 
-    alias_method :as_json, :attributes
+    def as_json
+      accessor = AttributeHashBuilder.new(self) do |value|
+        if value.is_a?(Time)
+          value.iso8601
+        else
+          value
+        end
+      end
+      accessor.build
+    end
 
     # @return [String] the record formatted as JSON.
     def to_json(*args)
@@ -391,9 +401,10 @@ module Groonga
     class AttributeHashBuilder
       attr_reader :attributes
 
-      def initialize(root_record)
+      def initialize(root_record, &value_translator)
         @root_record = root_record
         @all_built_attributes = {}
+        @value_translator = value_translator
       end
 
       def build
@@ -422,6 +433,7 @@ module Groonga
         if value.is_a?(Record)
           build_attributes(value)
         else
+          value = @value_translator.call(value) if @value_translator
           value
         end
       end

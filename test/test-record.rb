@@ -576,20 +576,38 @@ class RecordTest < Test::Unit::TestCase
   end
 
   class JSONTest < self
+    def setup
+      setup_database
+      setup_schema
+    end
+
+    def setup_schema
+      Groonga::Schema.define do |schema|
+        schema.create_table("Bookmarks") do |table|
+          table.short_text("uri")
+          table.int32("rate")
+          table.text("comment")
+          table.time("created_at")
+        end
+      end
+      @bookmarks = Groonga["Bookmarks"]
+    end
+
     def test_to_json
+      created_at = Time.parse("2013-05-16T16:57:34+09:00")
       values = {
         "uri" => "http://groonga.org/",
         "rate" => 5,
-        "comment" => "Great!"
+        "comment" => "Great!",
+        "created_at" => created_at,
       }
       groonga = @bookmarks.add(values)
       expected = {
         "_id"     => groonga.id,
         "comment" => values["comment"],
-        "content" => nil,
+        "created_at" => created_at.iso8601,
         "rate"    => values["rate"],
         "uri"     => values["uri"],
-        "user"    => nil,
       }.to_json
       assert_equal(expected, groonga.to_json)
     end
