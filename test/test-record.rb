@@ -409,7 +409,6 @@ class RecordTest < Test::Unit::TestCase
         "uri" => "http://groonga.org/",
         "user" => nil
       },
-      "_nsubrecs" => 1,
       "_score" => 1,
     }
 

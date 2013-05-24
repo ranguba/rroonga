@@ -18,6 +18,16 @@
 
 #include "rb-grn.h"
 
+/* GRN_TABLE_* should be defined in groonga.h. If they are defined in
+ * groonga.h, the following defines are removed. */
+#ifndef GRN_TABLE_GROUPED
+#  define GRN_TABLE_GROUPED (0x01<<0)
+#endif
+#ifndef GRN_TABLE_IS_GROUPED
+#  define GRN_TABLE_IS_GROUPED(table) \
+    ((table)->header.impl_flags & GRN_TABLE_GROUPED)
+#endif
+
 grn_obj *grn_table_open(grn_ctx *ctx,
                         const char *name, unsigned name_size, const char *path);
 grn_obj *grn_column_open(grn_ctx *ctx, grn_obj *table,
@@ -2249,6 +2259,18 @@ rb_grn_table_support_sub_records_p (VALUE self)
     return CBOOL2RVAL(table->header.flags & GRN_OBJ_WITH_SUBREC);
 }
 
+static VALUE
+rb_grn_table_have_sub_records_p (VALUE self)
+{
+    grn_obj *table;
+
+    rb_grn_table_deconstruct(SELF(self), &table, NULL,
+                             NULL, NULL,
+                             NULL, NULL, NULL,
+                             NULL);
+    return CBOOL2RVAL(GRN_TABLE_IS_GROUPED(table));
+}
+
 /*
  * _table_ に _id_ で指定したIDのレコードが存在する場合は +true+ 、
  * 存在しない場合は +false+ を返す。
@@ -2413,6 +2435,8 @@ rb_grn_init_table (VALUE mGrn)
                      rb_grn_table_support_key_p, 0);
     rb_define_method(rb_cGrnTable, "support_sub_records?",
                      rb_grn_table_support_sub_records_p, 0);
+    rb_define_method(rb_cGrnTable, "have_sub_records?",
+                     rb_grn_table_have_sub_records_p, 0);
 
     rb_define_method(rb_cGrnTable, "exist?", rb_grn_table_exist_p, 1);
 

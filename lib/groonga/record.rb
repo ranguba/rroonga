@@ -217,6 +217,12 @@ module Groonga
       @table.support_sub_records?
     end
 
+    # {Groonga::Record#n_sub_records} が利用できる場合は +true+ を
+    # 返す。
+    def have_sub_records?
+      @table.have_sub_records?
+    end
+
     # レコードの値を返す。
     def value
       @table.value(@id, :id => true)
@@ -482,7 +488,7 @@ module Groonga
       end
 
       def add_n_sub_records(attributes, record)
-        if record.support_sub_records?
+        if record.have_sub_records?
           attributes["_nsubrecs"] = record.n_sub_records
         end
       end
