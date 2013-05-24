@@ -99,10 +99,8 @@ class RecordTest < Test::Unit::TestCase
 
   def test_have_column_nsubrecs_existent
     @users.add("mori")
-    bookmarks = @users.select do |record|
-      record.key == "mori"
-    end
-    assert_true(bookmarks.to_a.first.have_column?(:_nsubrecs))
+    grouped_users = @users.group("_key")
+    assert_true(grouped_users.first.have_column?(:_nsubrecs))
   end
 
   def test_have_column_nsubrecs_nonexistent
