@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2011  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2013  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -647,13 +647,14 @@ class TableTest < Test::Unit::TestCase
   def test_have_column_nsubrecs_existent
     users = Groonga::Hash.create(:name => "Users",
                                  :key_type => "ShortText")
-    assert_true(users.select.have_column?(:_nsubrecs))
+    grouped_users = users.group("_key")
+    assert_true(grouped_users.have_column?(:_nsubrecs))
   end
 
   def test_have_column_nsubrecs_nonexistent
     users = Groonga::Hash.create(:name => "Users",
                                  :key_type => "ShortText")
-    assert_false(users.have_column?(:_nsubrecs))
+    assert_false(users.select.have_column?(:_nsubrecs))
   end
 
   def test_have_column_score_existent
