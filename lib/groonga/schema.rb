@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2009-2011  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2013  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -1463,7 +1463,7 @@ module Groonga
         return false unless table.range == resolve_name(options[:value_type])
         sub_records = options[:sub_records]
         sub_records = false if sub_records.nil?
-        return false unless table.support_sub_records? == sub_records
+        return false unless table.have_sub_records_space? == sub_records
 
         case table
         when Groonga::Array

@@ -522,8 +522,8 @@ class RecordTest < Test::Unit::TestCase
   def test_support_sub_records
     morita = @users.add("morita")
     assert_not_predicate(morita, :support_sub_records?)
-    users = @users.select {|record| record.key == "morita"}
-    assert_predicate(users.to_a[0], :support_sub_records?)
+    grouped_users = @users.group("_key")
+    assert_predicate(grouped_users.first, :support_sub_records?)
   end
 
   def test_set_record_like_object

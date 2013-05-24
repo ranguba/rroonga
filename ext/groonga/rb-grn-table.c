@@ -2256,11 +2256,35 @@ rb_grn_table_support_sub_records_p (VALUE self)
                              NULL, NULL,
                              NULL, NULL, NULL,
                              NULL);
-    return CBOOL2RVAL(table->header.flags & GRN_OBJ_WITH_SUBREC);
+    return CBOOL2RVAL(GRN_TABLE_IS_GROUPED(table));
 }
 
+/*
+ * {Groonga::Table#group} returns a table that contains grouped
+ * records. If grouped table has a space to store the number of
+ * records for each group, the number of records is stored to
+ * it. Records for each group are called as "sub records".
+ *
+ * Normally, you don't need to care about the space because rroonga
+ * creates a table with the space automatically. Normal tables
+ * (persistent tables) don't have the space because they don't need
+ * it.
+ *
+ * @eample A normal table don't have the space
+ *    users = Groonga["Users"] # A normal table
+ *    users.have_sub_records_space? # => false
+ *
+ * @eample A grouped table has the space
+ *    users = Groonga["Users"]              # A normal table
+ *    grouped_users = users.group("_key")   # A grouped table
+ *    grouped_users.have_sub_records_space? # => true
+ *
+ * @overload have_sub_records_space?
+ * @return [Boolean] @true@ if the table has a space for storing
+ *    the number of sub records, @false@ otherwise.
+ */
 static VALUE
-rb_grn_table_have_sub_records_p (VALUE self)
+rb_grn_table_have_sub_records_space_p (VALUE self)
 {
     grn_obj *table;
 
@@ -2268,7 +2292,7 @@ rb_grn_table_have_sub_records_p (VALUE self)
                              NULL, NULL,
                              NULL, NULL, NULL,
                              NULL);
-    return CBOOL2RVAL(GRN_TABLE_IS_GROUPED(table));
+    return CBOOL2RVAL(table->header.flags & GRN_OBJ_WITH_SUBREC);
 }
 
 /*
@@ -2435,8 +2459,8 @@ rb_grn_init_table (VALUE mGrn)
                      rb_grn_table_support_key_p, 0);
     rb_define_method(rb_cGrnTable, "support_sub_records?",
                      rb_grn_table_support_sub_records_p, 0);
-    rb_define_method(rb_cGrnTable, "have_sub_records?",
-                     rb_grn_table_have_sub_records_p, 0);
+    rb_define_method(rb_cGrnTable, "have_sub_records_space?",
+                     rb_grn_table_have_sub_records_space_p, 0);
 
     rb_define_method(rb_cGrnTable, "exist?", rb_grn_table_exist_p, 1);
 

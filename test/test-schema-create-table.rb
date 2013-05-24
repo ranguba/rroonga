@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2011  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2013  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -84,7 +84,7 @@ module SchemaCreateTableTests
     Groonga::Schema.create_table("Posts",
                                  options(:sub_records => true)) do |table|
     end
-    assert_true(context["Posts"].support_sub_records?)
+    assert_true(context["Posts"].have_sub_records_space?)
   end
 
   def test_different_sub_records
