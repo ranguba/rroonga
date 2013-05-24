@@ -626,18 +626,5 @@ EOC
       assert_equal([["morita", 2]],
                    result.collect {|record| [record["_key"], record.key.score]})
     end
-
-    def test_n_sub_records
-      result = @users.select do |record|
-        (record.name =~ "o") | (record.key == "yu")
-      end
-      result = result.select do |record|
-        record.n_sub_records > 1
-      end
-      matched_records = result.collect do |record|
-        [record["_key"], record.key.n_sub_records]
-      end
-      assert_equal([["yu", 2]], matched_records)
-    end
   end
 end
