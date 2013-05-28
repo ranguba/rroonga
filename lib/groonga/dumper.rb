@@ -54,15 +54,12 @@ module Groonga
         options[:context] ||= Groonga::Context.default
         options[:database] = options[:context].database
       end
-      options[:dump_plugins] = true if options[:dump_plugins].nil?
       options[:dump_schema] = true if options[:dump_schema].nil?
       options[:dump_tables] = true if options[:dump_tables].nil?
 
       if options[:dump_schema]
+        dump_plugins(options)
         schema_dumper = SchemaDumper.new(options.merge(:syntax => :command))
-      end
-      dump_plugins(options) if options[:dump_plugins]
-      if options[:dump_schema]
         schema_dumper.dump_tables
         if schema_dumper.have_reference_columns?
           options[:output].write("\n")
