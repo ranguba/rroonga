@@ -1,5 +1,26 @@
 h1. NEWS
 
+h2(#3-0-1). 3.0.2: 2013-05-29
+
+h3. Improvements
+
+* Required groonga >= 3.0.4.
+* Supported set/get a vector of Time.
+* [grndump] Stopped to dump index only tables. They are needless.
+* Added {Groonga::Record#to_json}.
+* Added {Groonga::IndexColumn#add}.
+* Added {Groonga::IndexColumn#delete}.
+* Added {Groonga::IndexColumn#update}.
+* Deprecated {Groonga::IndexColumn#[]=}. Use {Groonga::IndexColumn#add},
+  {Groonga::IndexColumn#delete} or {Groonga::IndexColumn#update} instead.
+* Added {Groonga::Table#have_n_sub_records_space?}.
+* [grndump] Don't dump "register PLUGIN" when schema dump is disabled.
+
+h3. Fixes
+
+* [grndump]
+  Fixed a bug that reference tables may be dumpped before referenced tables.
+
 h2(#3-0-1). 3.0.1: 2013-05-01
 
 h3. Improvements
