@@ -167,11 +167,6 @@ end
 desc "Configure"
 task :configure => "Makefile"
 
-desc "Build"
-task :build => :configure do
-  sh("make")
-end
-
 desc "Run test"
 task :test => :configure do
   ruby("-rubygems", "test/run-test.rb")
