@@ -2270,11 +2270,11 @@ rb_grn_table_support_sub_records_p (VALUE self)
  * (persistent tables) don't have the space because they don't need
  * it.
  *
- * @eample A normal table don't have the space
+ * @example A normal table don't have the space
  *    users = Groonga["Users"] # A normal table
  *    users.have_n_sub_records_space? # => false
  *
- * @eample A grouped table has the space
+ * @example A grouped table has the space
  *    users = Groonga["Users"]                # A normal table
  *    grouped_users = users.group("_key")     # A grouped table
  *    grouped_users.have_n_sub_records_space? # => true
