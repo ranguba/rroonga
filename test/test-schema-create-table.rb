@@ -84,7 +84,7 @@ module SchemaCreateTableTests
     Groonga::Schema.create_table("Posts",
                                  options(:sub_records => true)) do |table|
     end
-    assert_true(context["Posts"].have_sub_records_space?)
+    assert_true(context["Posts"].have_n_sub_records_space?)
   end
 
   def test_different_sub_records

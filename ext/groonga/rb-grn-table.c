@@ -2272,19 +2272,19 @@ rb_grn_table_support_sub_records_p (VALUE self)
  *
  * @eample A normal table don't have the space
  *    users = Groonga["Users"] # A normal table
- *    users.have_sub_records_space? # => false
+ *    users.have_n_sub_records_space? # => false
  *
  * @eample A grouped table has the space
- *    users = Groonga["Users"]              # A normal table
- *    grouped_users = users.group("_key")   # A grouped table
- *    grouped_users.have_sub_records_space? # => true
+ *    users = Groonga["Users"]                # A normal table
+ *    grouped_users = users.group("_key")     # A grouped table
+ *    grouped_users.have_n_sub_records_space? # => true
  *
- * @overload have_sub_records_space?
+ * @overload have_n_sub_records_space?
  * @return [Boolean] @true@ if the table has a space for storing
  *    the number of sub records, @false@ otherwise.
  */
 static VALUE
-rb_grn_table_have_sub_records_space_p (VALUE self)
+rb_grn_table_have_n_sub_records_space_p (VALUE self)
 {
     grn_obj *table;
 
@@ -2459,8 +2459,8 @@ rb_grn_init_table (VALUE mGrn)
                      rb_grn_table_support_key_p, 0);
     rb_define_method(rb_cGrnTable, "support_sub_records?",
                      rb_grn_table_support_sub_records_p, 0);
-    rb_define_method(rb_cGrnTable, "have_sub_records_space?",
-                     rb_grn_table_have_sub_records_space_p, 0);
+    rb_define_method(rb_cGrnTable, "have_n_sub_records_space?",
+                     rb_grn_table_have_n_sub_records_space_p, 0);
 
     rb_define_method(rb_cGrnTable, "exist?", rb_grn_table_exist_p, 1);
 

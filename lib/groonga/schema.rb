@@ -1463,7 +1463,7 @@ module Groonga
         return false unless table.range == resolve_name(options[:value_type])
         sub_records = options[:sub_records]
         sub_records = false if sub_records.nil?
-        return false unless table.have_sub_records_space? == sub_records
+        return false unless table.have_n_sub_records_space? == sub_records
 
         case table
         when Groonga::Array
