@@ -2120,6 +2120,12 @@ rb_grn_table_select (int argc, VALUE *argv, VALUE self)
                                   GRN_TABLE_HASH_KEY | GRN_OBJ_WITH_SUBREC,
                                   table,
                                   NULL);
+        rb_grn_context_check(context, self);
+        if (!result) {
+            rb_raise(rb_eGrnNoMemoryAvailable,
+                     "failed to create result table: %s",
+                     rb_grn_inspect(rb_ary_new4(argc, argv)));
+        }
         rb_result = GRNTABLE2RVAL(context, result, GRN_TRUE);
     } else {
         result = RVAL2GRNTABLE(rb_result, &context);

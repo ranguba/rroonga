@@ -57,7 +57,7 @@ static VALUE eGrnBrokenPipe;
 static VALUE eGrnDomainError;
 static VALUE eGrnResultTooLarge;
 static VALUE eGrnResourceDeadlockAvoided;
-static VALUE eGrnNoMemoryAvailable;
+VALUE rb_eGrnNoMemoryAvailable;
 static VALUE eGrnFilenameTooLong;
 static VALUE eGrnNoLocksAvailable;
 static VALUE eGrnFunctionNotImplemented;
@@ -211,7 +211,7 @@ rb_grn_rc_to_exception (grn_rc rc)
         exception = eGrnResourceDeadlockAvoided;
         break;
       case GRN_NO_MEMORY_AVAILABLE:
-        exception = eGrnNoMemoryAvailable;
+        exception = rb_eGrnNoMemoryAvailable;
         break;
       case GRN_FILENAME_TOO_LONG:
         exception = eGrnFilenameTooLong;
@@ -910,7 +910,7 @@ rb_grn_init_exception (VALUE mGrn)
      *
      * メモリが足りないときに発生する。
      */
-    eGrnNoMemoryAvailable =
+    rb_eGrnNoMemoryAvailable =
         rb_define_class_under(mGrn, "NoMemoryAvailable", rb_eGrnError);
 
     /*
