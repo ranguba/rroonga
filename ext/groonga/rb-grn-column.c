@@ -228,7 +228,7 @@ rb_grn_column_get_local_name (VALUE self)
  *       - Groonga::Operator::AND :=
  *         マッチしたレコードのスコアを増加。マッチしなかった
  *         レコードを削除。 =:
- *       - Groonga::Operator::BUT :=
+ *       - Groonga::Operator::AND_NOT :=
  *         マッチしたレコードを削除。 =:
  *       - Groonga::Operator::ADJUST :=
  *         マッチしたレコードのスコアを増加。 =:

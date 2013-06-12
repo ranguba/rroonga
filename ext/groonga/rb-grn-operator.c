@@ -35,15 +35,19 @@ rb_grn_operator_from_ruby_object (VALUE rb_operator)
         operator = GRN_OP_AND;
     } else if (rb_grn_equal_option(rb_operator, "but") ||
                rb_grn_equal_option(rb_operator, "not") ||
-               rb_grn_equal_option(rb_operator, "-")) {
-        operator = GRN_OP_BUT;
+               rb_grn_equal_option(rb_operator, "and-not") ||
+               rb_grn_equal_option(rb_operator, "and_not") ||
+               rb_grn_equal_option(rb_operator, "-") ||
+               rb_grn_equal_option(rb_operator, "&!")) {
+        operator = GRN_OP_AND_NOT;
     } else if (rb_grn_equal_option(rb_operator, "adjust") ||
                rb_grn_equal_option(rb_operator, ">")) {
         operator = GRN_OP_ADJUST;
     } else {
         rb_raise(rb_eArgError,
                  "operator should be one of "
-                 "[:or, :||, :and, :+, :&&, :but, :not, :-, :adjust, :>]: <%s>",
+                 "[:or, :||, :and, :+, :&&, :but, :not, :and_not, :-, :&!, "
+                 ":adjust, :>]: <%s>",
                  rb_grn_inspect(rb_operator));
     }
 
@@ -73,6 +77,9 @@ rb_grn_init_operator (VALUE mGrn)
                     UINT2NUM(GRN_OP_GET_VALUE));
     rb_define_const(rb_mGrnOperator, "AND",
                     UINT2NUM(GRN_OP_AND));
+    rb_define_const(rb_mGrnOperator, "AND_NOT",
+                    UINT2NUM(GRN_OP_AND_NOT));
+    /* Just for backward compatiblity. TODO: REMOVE ME! */
     rb_define_const(rb_mGrnOperator, "BUT",
                     UINT2NUM(GRN_OP_BUT));
     rb_define_const(rb_mGrnOperator, "OR",

@@ -2005,7 +2005,7 @@ rb_grn_table_is_locked (int argc, VALUE *argv, VALUE self)
  *         は何もしない。 =:
  *       - Groonga::Operator::AND :=
  *         マッチしたレコードのスコアを増加。マッチしなかったレコードを削除。 =:
- *       - Groonga::Operator::BUT :=
+ *       - Groonga::Operator::AND_NOT :=
  *         マッチしたレコードを削除。 =:
  *       - Groonga::Operator::ADJUST :=
  *         マッチしたレコードのスコアを増加。 =:
@@ -2218,7 +2218,7 @@ rb_grn_table_intersection_bang (VALUE self, VALUE rb_other)
 static VALUE
 rb_grn_table_difference_bang (VALUE self, VALUE rb_other)
 {
-    return rb_grn_table_set_operation_bang(self, rb_other, GRN_OP_BUT);
+    return rb_grn_table_set_operation_bang(self, rb_other, GRN_OP_AND_NOT);
 }
 
 /*

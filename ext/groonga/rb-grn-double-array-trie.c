@@ -286,7 +286,7 @@ rb_grn_double_array_trie_s_create (int argc, VALUE *argv, VALUE klass)
  *     - Groonga::Operator::AND :=
  *       マッチしたレコードのスコアを増加。マッチしなかった
  *       レコードを削除。 =:
- *     - Groonga::Operator::BUT :=
+ *     - Groonga::Operator::AND_NOT :=
  *       マッチしたレコードを削除。 =:
  *     - Groonga::Operator::ADJUST :=
  *       マッチしたレコードのスコアを増加。 =:

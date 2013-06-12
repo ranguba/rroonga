@@ -277,7 +277,7 @@ rb_grn_expression_append_operation (VALUE self, VALUE rb_operation,
  *       レコードはいずれかの条件にマッチすればいい。 =:
  *     - Groonga::Operator::AND :=
  *       レコードは全ての条件にマッチしなければならない。 =:
- *     - Groonga::Operator::BUT :=
+ *     - Groonga::Operator::AND_NOT :=
  *       最初の条件にレコードはマッチし、残りの条件にレコードは
  *       マッチしてはならない。 =:
  *
