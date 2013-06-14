@@ -144,7 +144,7 @@ end
 def configure_command_line(prefix)
   command_line = ["./configure"]
   debug_build_p = ENV["RROONGA_DEBUG_BUILD"] == "yes"
-  debug_flags = ["CFLAGS=-ggdb3 -O0", "CXXFLAGS=-ggdb3 -O0"]
+  debug_flags = ["CFLAGS=-g3 -O0", "CXXFLAGS=-g3 -O0"]
   command_line.concat(debug_flags) if debug_build_p
   command_line << "--prefix=#{prefix}"
   command_line << "--disable-static"
