@@ -203,10 +203,31 @@ EXPECTED_OUTPUT
       end
     end
 
+    def test_unblock
+      IO.pipe do |read_io, write_io|
+        Tempfile.open("not_blocked_pull.rb") do |pull_rb|
+          pull_rb.puts(pull_rb_source(":block? => true"))
+          pull_rb.close
+
+          pid = spawn({}, RbConfig.ruby, pull_rb.path, :out => write_io)
+          assert_equal("start", read_io.gets.chomp)
+          Process.kill(:TERM, pid)
+          @queue.unblock
+          assert_equal("SIGTERM", read_io.gets.chomp)
+          @queue.unblock
+          Process.waitpid(pid)
+          write_io.close
+          assert_equal("done", read_io.read.chomp)
+        end
+      end
+    end
+
     private
     def pull_rb_source(options)
       base_dir = File.expand_path(File.join(File.dirname(__FILE__), ".."))
       <<-CODE
+$stdout.sync = true
+
 base_dir = #{base_dir.dump}
 ext_dir = File.join(base_dir, "ext", "groonga")
 lib_dir = File.join(base_dir, "lib")
@@ -215,6 +236,10 @@ $LOAD_PATH.unshift(ext_dir)
 $LOAD_PATH.unshift(lib_dir)
 
 require "groonga"
+
+trap(:TERM) do
+  puts("SIGTERM")
+end
 
 puts("start")
 Groonga::Context.default.open_database(#{@database_path.to_s.dump}) do

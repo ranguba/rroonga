@@ -353,6 +353,21 @@ rb_grn_array_push (VALUE self)
  *     p pulled_record.nil? # => true
  *   end
  *
+ * Note that your signal handlers can't be ran while a pull
+ * operation. You need to use {Groonga::Array#unblock} from
+ * another process to unblock the pull operation. If you call
+ * {Groonga::Array#unblock}, signal handler can be ran.
+ *
+ * @example Signal handler isn't called
+ *   queue = Groonga::Array.open(:name => "CrawlURLQueue")
+ *   trap(:INT) do
+ *     p :not_called!
+ *   end
+ *   queue.pull do |record|
+ *     # Send SIGINT while blocking the pull operation.
+ *     # The signal handler isn't called.
+ *   end
+ *
  * @see Groonga::Array#push Examples exist in the push documentation.
  *
  * @overload pull(options={})
@@ -406,6 +421,45 @@ rb_grn_array_pull (int argc, VALUE *argv, VALUE self)
     return data.record;
 }
 
+/*
+ * Unblocks all {Groonga::Array#pull} operations for the array.
+ *
+ * @example Pull, unblock and signal
+ *   # pull.rb
+ *   queue = Groonga::Array.open(:name => "CrawlURLQueue")
+ *   trap(:INT) do
+ *     p :called!
+ *   end
+ *   queue.pull do |record|
+ *     # 1. Send SIGINT while blocking the pull operation.
+ *     #    The signal handler isn't called.
+ *     # 2. Run unblock.rb.
+ *     #    The signal handler is called!
+ *   end
+ *
+ *   # unblock.rb
+ *   queue = Groonga::Array.open(:name => "CrawlURLQueue")
+ *   queue.unblock
+ *
+ * @see Groonga::Array#pull
+ *
+ * @overload unblock
+ *   @return [void]
+ *
+ */
+static VALUE
+rb_grn_array_unblock (VALUE self)
+{
+    grn_ctx *context = NULL;
+    grn_obj *table;
+
+    table = SELF(self, &context);
+
+    grn_array_unblock(context, (grn_array *)table);
+
+    return Qnil;
+}
+
 void
 rb_grn_init_array (VALUE mGrn)
 {
@@ -417,4 +471,5 @@ rb_grn_init_array (VALUE mGrn)
     rb_define_method(rb_cGrnArray, "add", rb_grn_array_add, -1);
     rb_define_method(rb_cGrnArray, "push", rb_grn_array_push, 0);
     rb_define_method(rb_cGrnArray, "pull", rb_grn_array_pull, -1);
+    rb_define_method(rb_cGrnArray, "unblock", rb_grn_array_unblock, 0);
 }
