@@ -326,7 +326,7 @@ rb_grn_array_push (VALUE self)
 }
 
 /*
- * Pulles a record from the array. The required values should be
+ * Pulls a record from the array. The required values should be
  * retrieved in the given block.
  *
  * If {Groonga::Array#push} failes to fill values of the pushed
