@@ -141,6 +141,16 @@ def extract_groonga_win32_binary(major, minor, micro)
   message(" done\n")
 end
 
+def run_command(start_message, command)
+  message(start_message)
+  if xsystem(command)
+    message(" done\n")
+  else
+    message(" failed\n")
+    exit(false)
+  end
+end
+
 def configure_command_line(prefix)
   command_line = ["./configure"]
   debug_build_p = ENV["RROONGA_DEBUG_BUILD"] == "yes"
@@ -155,10 +165,37 @@ def configure_command_line(prefix)
   escaped_command_line.join(" ")
 end
 
-def build_groonga(major, minor, micro)
+def install_for_gnu_build_system(install_dir)
+  run_command("configuring...",
+              configure_command_line(install_dir))
+  run_command("building (maybe long time)...",
+              "make")
+  run_command("installing...",
+              "make install")
+end
+
+def build_groonga_from_git(major, minor, micro)
+  message("removing old cloned repository...")
+  FileUtils.rm_rf("groonga")
+  message(" done\n")
+
+  run_command("cloning...",
+              "git clone --depth 1 https://github.com/groonga/groonga")
+
+  Dir.chdir("groonga") do
+    run_command("running autogen.sh...",
+                "./autogen.sh")
+    install_for_gnu_build_system(local_groonga_install_dir)
+  end
+
+  message("removing cloned repository...")
+  FileUtils.rm_rf("groonga")
+  message(" done\n")
+end
+
+def build_groonga_from_tar_gz(major, minor, micro)
   tar_gz = "groonga-#{major}.#{minor}.#{micro}.tar.gz"
   url = "http://packages.groonga.org/source/groonga/#{tar_gz}"
-  install_dir = local_groonga_install_dir
 
   download(url)
 
@@ -172,29 +209,7 @@ def build_groonga(major, minor, micro)
 
   groonga_source_dir = "groonga-#{major}.#{minor}.#{micro}"
   Dir.chdir(groonga_source_dir) do
-    message("configuring...")
-    if xsystem(configure_command_line(install_dir))
-      message(" done\n")
-    else
-      message(" failed\n")
-      exit(false)
-    end
-
-    message("building (maybe long time)...")
-    if xsystem("make")
-      message(" done\n")
-    else
-      message(" failed\n")
-      exit(false)
-    end
-
-    message("installing...")
-    if xsystem("make install")
-      message(" done\n")
-    else
-      message(" failed\n")
-      exit(false)
-    end
+    install_for_gnu_build_system(local_groonga_install_dir)
   end
 
   message("removing source...")
@@ -204,6 +219,14 @@ def build_groonga(major, minor, micro)
   message("removing source archive...")
   FileUtils.rm_rf(tar_gz)
   message(" done\n")
+end
+
+def build_groonga(major, minor, micro)
+  if RequiredGroongaVersion::RELEASED_DATE > Time.now
+    build_groonga_from_git(major, minor, micro)
+  else
+    build_groonga_from_tar_gz(major, minor, micro)
+  end
 end
 
 unless PKGConfig.have_package(package_name, major, minor, micro)

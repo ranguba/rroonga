@@ -21,6 +21,7 @@ module RroongaBuild
     MINOR = 0
     MICRO = 5
     VERSION = [MAJOR, MINOR, MICRO]
+    RELEASED_DATE = Time.utc(2013, 6, 29)
   end
 
   module_function
