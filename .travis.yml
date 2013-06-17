@@ -1,6 +1,6 @@
 notifications:
   recipients:
-    - kou@clear-code.com
+    - groonga-commit@rubyforge.org
 rvm:
   - 1.9.3
   - 2.0.0
