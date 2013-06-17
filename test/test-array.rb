@@ -214,8 +214,7 @@ EXPECTED_OUTPUT
           Process.kill(:TERM, pid)
           @queue.unblock
           assert_equal("SIGTERM", read_io.gets.chomp)
-          @queue.unblock
-          Process.waitpid(pid)
+          wait_finished(pid)
           write_io.close
           assert_equal("done", read_io.read.chomp)
         end
@@ -250,6 +249,17 @@ Groonga::Context.default.open_database(#{@database_path.to_s.dump}) do
 end
 puts("done")
 CODE
+    end
+
+    def wait_finished(pid)
+      n_retries = 3
+      n_retries.times do |i|
+        @queue.unblock
+        finished_pid = Process.waitpid(pid, Process::WNOHANG)
+        return if finished_pid
+        sleep((2 ** i) * 0.1)
+      end
+      Process.waitpid(pid)
     end
   end
 end
