@@ -1331,7 +1331,7 @@ rb_grn_table_group (int argc, VALUE *argv, VALUE self)
         VALUE rb_result;
 
         result = grn_table_create_for_group(context, NULL, 0, NULL,
-                                            keys[i].key, max_n_sub_records);
+                                            keys[i].key, table, max_n_sub_records);
         results[i].table = result;
         results[i].key_begin = 0;
         results[i].key_end = 0;
