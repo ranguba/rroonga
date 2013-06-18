@@ -1265,9 +1265,9 @@ rb_grn_table_group (int argc, VALUE *argv, VALUE self)
     grn_obj *table;
     grn_table_sort_key *keys;
     grn_table_group_result *results;
-    int i, n_keys, n_results;
+    int i, n_keys, n_results, max_n_sub_records = 0;
     grn_rc rc;
-    VALUE rb_keys, rb_options;
+    VALUE rb_keys, rb_options, rb_max_n_sub_records;
     VALUE *rb_group_keys;
     VALUE rb_results;
 
@@ -1285,6 +1285,13 @@ rb_grn_table_group (int argc, VALUE *argv, VALUE self)
         n_keys = 1;
         rb_group_keys = &rb_keys;
     }
+
+    rb_grn_scan_options(rb_options,
+                        "max_nsubrecs", &rb_max_n_sub_records,
+                        NULL);
+
+    if (!NIL_P(rb_max_n_sub_records))
+        max_n_sub_records = NUM2INT(rb_max_n_sub_records);
 
     keys = ALLOCA_N(grn_table_sort_key, n_keys);
     for (i = 0; i < n_keys; i++) {
@@ -1321,13 +1328,10 @@ rb_grn_table_group (int argc, VALUE *argv, VALUE self)
     rb_results = rb_ary_new();
     for (i = 0; i < n_results; i++) {
         grn_obj *result;
-        grn_id range_id;
         VALUE rb_result;
 
-        range_id = grn_obj_get_range(context, keys[i].key);
-        result = grn_table_create(context, NULL, 0, NULL,
-                                  GRN_TABLE_HASH_KEY | GRN_OBJ_WITH_SUBREC,
-                                  grn_ctx_at(context, range_id), 0);
+        result = grn_table_create_for_group(context, NULL, 0, NULL,
+                                            keys[i].key, max_n_sub_records);
         results[i].table = result;
         results[i].key_begin = 0;
         results[i].key_end = 0;
