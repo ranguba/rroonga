@@ -2251,12 +2251,13 @@ static VALUE
 rb_grn_table_support_sub_records_p (VALUE self)
 {
     grn_obj *table;
+    grn_ctx *context;
 
-    rb_grn_table_deconstruct(SELF(self), &table, NULL,
+    rb_grn_table_deconstruct(SELF(self), &table, &context,
                              NULL, NULL,
                              NULL, NULL, NULL,
                              NULL);
-    return CBOOL2RVAL(grn_table_is_grouped(table));
+    return CBOOL2RVAL(grn_table_is_grouped(context, table));
 }
 
 /*
