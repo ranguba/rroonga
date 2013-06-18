@@ -18,16 +18,6 @@
 
 #include "rb-grn.h"
 
-/* GRN_TABLE_* should be defined in groonga.h. If they are defined in
- * groonga.h, the following defines are removed. */
-#ifndef GRN_TABLE_GROUPED
-#  define GRN_TABLE_GROUPED (0x01<<0)
-#endif
-#ifndef GRN_TABLE_IS_GROUPED
-#  define GRN_TABLE_IS_GROUPED(table) \
-    ((table)->header.impl_flags & GRN_TABLE_GROUPED)
-#endif
-
 grn_obj *grn_table_open(grn_ctx *ctx,
                         const char *name, unsigned name_size, const char *path);
 grn_obj *grn_column_open(grn_ctx *ctx, grn_obj *table,
@@ -2262,7 +2252,7 @@ rb_grn_table_support_sub_records_p (VALUE self)
                              NULL, NULL,
                              NULL, NULL, NULL,
                              NULL);
-    return CBOOL2RVAL(GRN_TABLE_IS_GROUPED(table));
+    return CBOOL2RVAL(grn_table_is_grouped(table));
 }
 
 /*
