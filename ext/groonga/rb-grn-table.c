@@ -1353,6 +1353,34 @@ rb_grn_table_group (int argc, VALUE *argv, VALUE self)
         return rb_results;
 }
 
+static VALUE
+rb_grn_table_sub_records_each (VALUE self, VALUE rb_id)
+{
+    VALUE rb_range;
+    grn_obj *table, *range;
+    grn_ctx *context = NULL;
+    grn_id *sub_records_buffer;
+    unsigned int i, n_sub_records, max_n_sub_records;
+
+    rb_grn_table_deconstruct(SELF(self), &table, &context,
+                             NULL, NULL,
+                             NULL, NULL, &range,
+                             NULL);
+    if (!(max_n_sub_records = grn_table_max_n_subrecs(context, table))) {
+        return Qnil;
+    }
+    RETURN_ENUMERATOR(self, 0, NULL);
+    sub_records_buffer = ALLOCA_N(grn_id, max_n_sub_records);
+    n_sub_records = grn_table_get_subrecs(context, table, NUM2UINT(rb_id),
+                                          sub_records_buffer, NULL,
+                                          (int)max_n_sub_records);
+    rb_range = GRNOBJECT2RVAL(Qnil, context, range, GRN_FALSE);
+    for (i = 0; i < n_sub_records; i++) {
+        rb_yield(rb_grn_record_new(rb_range, sub_records_buffer[i], Qnil));
+    }
+    return Qnil;
+}
+
 /*
  * _table_ の _id_ に対応する {Groonga::Record} を返す。
  *
@@ -2423,6 +2451,9 @@ rb_grn_init_table (VALUE mGrn)
     rb_define_method(rb_cGrnTable, "truncate", rb_grn_table_truncate, 0);
 
     rb_define_method(rb_cGrnTable, "each", rb_grn_table_each, -1);
+
+    rb_define_method(rb_cGrnTable, "each_sub_records",
+                     rb_grn_table_sub_records_each, 1);
 
     rb_define_method(rb_cGrnTable, "delete", rb_grn_table_delete, -1);
 
