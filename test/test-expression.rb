@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2009-2011  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2013  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -30,9 +30,9 @@ class ExpressionTest < Test::Unit::TestCase
     expression.append_object(ryoqun)
     expression.append_object(mori)
 
-    assert_equal("ryoqun", expression["user"])
-    assert_equal("ryoqun", expression[0])
-    assert_equal("mori", expression[1])
+    assert_equal("ryoqun", expression["user"].value)
+    assert_equal("ryoqun", expression[0].value)
+    assert_equal("mori", expression[1].value)
   end
 
   def test_get_value

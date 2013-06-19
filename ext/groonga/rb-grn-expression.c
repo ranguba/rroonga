@@ -500,7 +500,7 @@ static VALUE
 rb_grn_expression_array_reference (VALUE self, VALUE rb_name_or_offset)
 {
     grn_ctx *context = NULL;
-    grn_obj *expression, *variable, *value;
+    grn_obj *expression, *variable;
     char *name = NULL;
     unsigned name_size = 0;
     int offset;
@@ -514,19 +514,17 @@ rb_grn_expression_array_reference (VALUE self, VALUE rb_name_or_offset)
         name = RSTRING_PTR(rb_name_or_offset);
         name_size = RSTRING_LEN(rb_name_or_offset);
         variable = grn_expr_get_var(context, expression, name, name_size);
-        return GRNBULK2RVAL(context, variable, NULL, self);
         break;
     case T_FIXNUM:
         offset = NUM2INT(rb_name_or_offset);
-        value = grn_expr_get_var_by_offset(context, expression, offset);
-        return GRNBULK2RVAL(context, value, NULL, self);
+        variable = grn_expr_get_var_by_offset(context, expression, offset);
         break;
     default:
         rb_raise(rb_eArgError, "xxx");
         break;
     }
 
-    return Qnil;
+    return GRNVARIABLE2RVAL(context, variable);
 }
 
 /* REMOVE ME */
