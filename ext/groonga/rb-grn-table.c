@@ -1354,7 +1354,7 @@ rb_grn_table_group (int argc, VALUE *argv, VALUE self)
 }
 
 static VALUE
-rb_grn_table_sub_records_each (VALUE self, VALUE rb_id)
+rb_grn_table_each_sub_record (VALUE self, VALUE rb_id)
 {
     VALUE rb_range;
     grn_obj *table, *range;
@@ -2452,8 +2452,8 @@ rb_grn_init_table (VALUE mGrn)
 
     rb_define_method(rb_cGrnTable, "each", rb_grn_table_each, -1);
 
-    rb_define_method(rb_cGrnTable, "each_sub_records",
-                     rb_grn_table_sub_records_each, 1);
+    rb_define_method(rb_cGrnTable, "each_sub_record",
+                     rb_grn_table_each_sub_record, 1);
 
     rb_define_method(rb_cGrnTable, "delete", rb_grn_table_delete, -1);
 
