@@ -222,6 +222,13 @@ module Groonga
       @table.value(@id, :id => true)
     end
 
+    include Enumerable
+
+    # レコードに保存されたサブレコードのそれぞれについてblockを実行する。
+    def each(&block)
+      table.each_sub_record(id, &block)
+    end
+
     # レコードの値を設定する。既存の値は上書きされる。
     def value=(value)
       @table.set_value(@id, value, :id => true)
