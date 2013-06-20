@@ -681,6 +681,43 @@ class TableTest < Test::Unit::TestCase
     assert_not_predicate(bookmarks, :builtin?)
   end
 
+  def test_sub_record
+    bookmarks = Groonga::Hash.create(:name => "Bookmarks")
+    bookmarks.define_column("title", "Text")
+    comments = Groonga::Array.create(:name => "Comments")
+    comments.define_column("bookmark", bookmarks)
+    comments.define_column("content", "Text")
+    comments.define_column("issued", "Int32")
+
+    groonga = bookmarks.add("http://groonga.org/", :title => "groonga")
+    ruby = bookmarks.add("http://ruby-lang.org/", :title => "Ruby")
+
+    now = Time.now.to_i
+    comments.add(:bookmark => groonga,
+                 :content => "full-text search",
+                 :issued => now)
+    comments.add(:bookmark => groonga,
+                 :content => "column store",
+                 :issued => now)
+    comments.add(:bookmark => ruby,
+                 :content => "object oriented script language",
+                 :issued => now)
+
+    records = comments.select do |record|
+      record["issued"] > 0
+    end
+
+    assert_equal([["groonga", ["column store","full-text search"]],
+                  ["Ruby", ["object oriented script language"]]],
+                 records.group(".bookmark",
+                               :max_nsubrecs => 2).collect do |record|
+                   [record.title,
+                    record.collect do |sub_record|
+                      sub_record.content
+                    end]
+                 end)
+  end
+
   class OtherProcessTest < self
     def test_create
       by_other_process do
