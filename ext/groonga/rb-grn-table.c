@@ -1257,8 +1257,8 @@ rb_grn_table_sort (int argc, VALUE *argv, VALUE self)
  *   @return [[Groonga::Hash, ...]]
  * @overload group(key, options={})
  *   @return [Groonga::Hash]
- * @option options :max_nsubrecs
- *   グループ化した後のレコードのそれぞれについて最大 _:max_nsubrecs_ 件まで
+ * @option options :max_n_sub_records
+ *   グループ化した後のレコードのそれぞれについて最大 _:max_n_sub_records_ 件まで
  *   そのグループに含まれる _table_ のレコードをサブレコードとして格納する。
  */
 static VALUE
@@ -1290,7 +1290,7 @@ rb_grn_table_group (int argc, VALUE *argv, VALUE self)
     }
 
     rb_grn_scan_options(rb_options,
-                        "max_nsubrecs", &rb_max_n_sub_records,
+                        "max_n_sub_records", &rb_max_n_sub_records,
                         NULL);
 
     if (!NIL_P(rb_max_n_sub_records))

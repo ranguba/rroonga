@@ -717,7 +717,7 @@ class TableTest < Test::Unit::TestCase
                    ["object oriented script language",
                     "multi paradigm programming language"]]],
                  records.group(".bookmark",
-                               :max_nsubrecs => 2).collect do |record|
+                               :max_n_sub_records => 2).collect do |record|
                    [record.title,
                     record.collect do |sub_record|
                       sub_record.content
@@ -728,7 +728,7 @@ class TableTest < Test::Unit::TestCase
                           :limit => 3, :offset => 0)
     assert_equal([["Ruby", [100, 80]], ["groonga", [5]]],
                  sorted.group(".bookmark",
-                               :max_nsubrecs => 2).collect do |record|
+                               :max_n_sub_records => 2).collect do |record|
                    [record.title,
                     record.collect do |sub_record|
                       sub_record.rank
