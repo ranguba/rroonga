@@ -68,13 +68,19 @@ static VALUE
 rb_grn_variable_get_value (VALUE self)
 {
     grn_ctx *context = NULL;
-    grn_obj *variable;
+    grn_obj *variable, *value;
 
     rb_grn_variable_deconstruct(SELF(self), &variable, &context,
                                 NULL, NULL,
                                 NULL, NULL);
 
-    return GRNOBJ2RVAL(Qnil, context, variable, self);
+    if (variable->header.type == GRN_PTR) {
+        value = GRN_PTR_VALUE(variable);
+    } else {
+        value = variable;
+    }
+
+    return GRNOBJ2RVAL(Qnil, context, value, self);
 }
 
 /*
@@ -83,7 +89,7 @@ rb_grn_variable_get_value (VALUE self)
  * @overload value=(value)
  */
 static VALUE
-rb_grn_variable_set_value (VALUE self, VALUE value)
+rb_grn_variable_set_value (VALUE self, VALUE rb_value)
 {
     grn_ctx *context = NULL;
     grn_obj *variable;
@@ -91,7 +97,14 @@ rb_grn_variable_set_value (VALUE self, VALUE value)
     rb_grn_variable_deconstruct(SELF(self), &variable, &context,
                                 NULL, NULL,
                                 NULL, NULL);
-    RVAL2GRNOBJ(value, context, &variable);
+    if (variable->header.type == GRN_PTR) {
+        grn_obj *value = NULL;
+        RVAL2GRNOBJ(rb_value, context, &value);
+        GRN_PTR_SET(context, variable, value);
+    } else {
+        RVAL2GRNOBJ(rb_value, context, &variable);
+    }
+
     return Qnil;
 }
 

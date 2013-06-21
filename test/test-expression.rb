@@ -131,4 +131,14 @@ class ExpressionTest < Test::Unit::TestCase
                  snippet.execute("ラングバプロジェクトはカラムストア機能も"))
     snippet.close
   end
+
+  class VariableTest < self
+    def test_reference
+      expression = Groonga::Expression.new
+      variable = expression.define_variable(:name => "$condition",
+                                            :reference => true)
+      variable.value = "TODO: Change me to expression"
+      assert_equal("TODO: Change me to expression", variable.value)
+    end
+  end
 end

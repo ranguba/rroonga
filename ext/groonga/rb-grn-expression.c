@@ -112,10 +112,14 @@ rb_grn_expression_initialize (int argc, VALUE *argv, VALUE self)
  * @overload define_variable(options={})
  *   @param [::Hash] options The name and value
  *     pairs. Omitted names are initialized as the default value.
- *   @option options :name (false)
+ *   @option options :name [String] (nil)
  *     変数の名前。省略した場合は名前を付けない。
- *   @option options :domain
+ *   @option options :domain [Groonga::Table] (nil)
  *     テーブルを指定すると、そのテーブル用のレコードとして初期化する。
+ *   @option options :reference [Bool] (nil)
+ *     Initializes this variable as reference hold variable if
+ *     @:reference@ is true. Reference hold variable is GRN_PTR type
+ *     in groonga. You can't use @:reference@ with @:domain@.
  * @return [Groonga::Variable]
  *
  */
@@ -126,7 +130,7 @@ rb_grn_expression_define_variable (int argc, VALUE *argv, VALUE self)
     grn_obj *expression, *variable;
     char *name = NULL;
     unsigned name_size = 0;
-    VALUE options, rb_name, rb_domain, rb_variable;
+    VALUE options, rb_name, rb_domain, rb_variable, rb_reference;
 
     rb_scan_args(argc, argv, "01", &options);
 
@@ -137,6 +141,7 @@ rb_grn_expression_define_variable (int argc, VALUE *argv, VALUE self)
     rb_grn_scan_options(options,
 			"name", &rb_name,
 			"domain", &rb_domain,
+                        "reference", &rb_reference,
 			NULL);
 
     if (!NIL_P(rb_name)) {
@@ -151,6 +156,8 @@ rb_grn_expression_define_variable (int argc, VALUE *argv, VALUE self)
 	grn_id domain_id;
 	domain_id = NUM2UINT(rb_funcall(rb_domain, rb_intern("id"), 0));
 	GRN_RECORD_INIT(variable, 0, domain_id);
+    } else if (!NIL_P(rb_reference) && RVAL2CBOOL(rb_reference)) {
+        GRN_PTR_INIT(variable, 0, GRN_DB_OBJECT);
     }
 
     return rb_variable;
