@@ -1147,7 +1147,9 @@ rb_grn_obj_to_ruby_object (VALUE klass, grn_ctx *context,
       /* case GRN_PTR: */
       /* case GRN_UVECTOR: */
       /* case GRN_PVECTOR: */
-      /* case GRN_VECTOR: */
+      case GRN_VECTOR:
+        return GRNVECTOR2RVAL(context, obj);
+        break;
       /* case GRN_MSG: */
       /* case GRN_QUERY: */
       /* case GRN_ACCESSOR: */
