@@ -694,6 +694,12 @@ class TableTest < Test::Unit::TestCase
 
     now = Time.now.to_i
     comments.add(:bookmark => groonga,
+                 :content => "dummy1",
+                 :rank => 0)
+    comments.add(:bookmark => groonga,
+                 :content => "dummy2",
+                 :rank => 0)
+    comments.add(:bookmark => groonga,
                  :content => "full-text search",
                  :rank => 1)
     comments.add(:bookmark => groonga,
