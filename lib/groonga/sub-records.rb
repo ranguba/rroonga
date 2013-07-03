@@ -16,23 +16,41 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 module Groonga
+  # Represents sub records of a {Record}. Grouped result set by
+  # {Table#group} only has sub records.
+  #
+  # {SubRecords} acts like an ::Array.
   class SubRecords
     include Enumerable
 
+    # The record that has this sub records.
     attr_reader :record
 
+    # Creates a sub records container for the _record_.
+    #
+    # Normally, users don't need to instantiate {SubRecords}
+    # directly. {Record#sub_records} creates and returns a
+    # {SubRecords}.
+    #
+    # @param record [Record] The record that has this sub records.
     def initialize(record)
       @record = record
     end
 
+    # @yield [record] Gives a sub record to the block.
+    # @yieldparam record [Record] A sub record.
+    # @return [void]
     def each(&block)
       @record.table.each_sub_record(@record.record_raw_id, &block)
     end
 
+    # @return [Array<Record>] Sub records as ::Array.
     def to_a
       @sub_records ||= super
     end
 
+    # @param index [Integer] A 0-origin index.
+    # @return [Record] A sub record at _index_.
     def [](index)
       to_a[index]
     end
