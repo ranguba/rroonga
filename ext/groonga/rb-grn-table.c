@@ -60,10 +60,10 @@ rb_grn_table_to_ruby_object (grn_ctx *context, grn_obj *table,
 
 void
 rb_grn_table_finalizer (grn_ctx *context, grn_obj *object,
-			RbGrnTable *rb_grn_table)
+                        RbGrnTable *rb_grn_table)
 {
     if (context && rb_grn_table->value)
-	grn_obj_unlink(context, rb_grn_table->value);
+        grn_obj_unlink(context, rb_grn_table->value);
     rb_grn_table->value = NULL;
     rb_grn_table->columns = Qnil;
 }
