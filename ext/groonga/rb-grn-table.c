@@ -1356,6 +1356,16 @@ rb_grn_table_group (int argc, VALUE *argv, VALUE self)
         return rb_results;
 }
 
+/*
+ * Iterates each sub records for the record _id_.
+ *
+ * @overload each_sub_record(id)
+ *   @yield [sub_record] Gives a sub record for the record _id_ to the block.
+ *   @yieldparam sub_record [Record] A sub record for the record _id_.
+ *   @return [void]
+ *
+ * @since 3.0.3
+ */
 static VALUE
 rb_grn_table_each_sub_record (VALUE self, VALUE rb_id)
 {
