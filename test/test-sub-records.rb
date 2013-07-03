@@ -93,4 +93,17 @@ class SubRecordsTest < Test::Unit::TestCase
                  ],
                  groups)
   end
+
+  def test_to_ary
+    grouped_records = @records.group("bookmark", :max_n_sub_records => 2)
+    sub_record1, sub_record2 = grouped_records.first.sub_records
+    assert_equal([
+                   "full-text search",
+                   "column store",
+                 ],
+                 [
+                   sub_record1.content,
+                   sub_record2.content,
+                 ])
+  end
 end

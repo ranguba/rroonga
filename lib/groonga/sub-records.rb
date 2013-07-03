@@ -49,6 +49,9 @@ module Groonga
       @sub_records ||= super
     end
 
+    # Acts as ::Array
+    alias_method :to_ary, :to_a
+
     # @param index [Integer] A 0-origin index.
     # @return [Record] A sub record at _index_.
     def [](index)
