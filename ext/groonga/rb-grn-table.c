@@ -1369,7 +1369,8 @@ rb_grn_table_each_sub_record (VALUE self, VALUE rb_id)
                              NULL, NULL,
                              NULL, NULL, &range,
                              NULL);
-    if (!(max_n_sub_records = grn_table_max_n_subrecs(context, table))) {
+    max_n_sub_records = grn_table_max_n_subrecs(context, table);
+    if (!max_n_sub_records) {
         return Qnil;
     }
     RETURN_ENUMERATOR(self, 0, NULL);
