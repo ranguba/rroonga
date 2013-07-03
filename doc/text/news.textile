@@ -1,5 +1,28 @@
 h1. NEWS
 
+h2(#3-0-3). 3.0.3: 2013-07-04
+
+h3. Improvements
+
+* Required groonga >= 3.0.5.
+* Added an error check for creating a result of {Groonga::Table#select}.
+* Added {Groonga::Operator::AND_NOT}.
+* Deprecated {Groonga::Operator::BUT} because groonga deprecated it.
+  Use {Groonga::Operator::AND_NOT} instead.
+* Added {Groonga::Array#unblock}.
+* Added @:max_n_sub_records@ option to {Groonga::Table#group}.
+* Added {Groonga::Table#each_sub_record}.
+* Supported groonga to Ruby conversion for vector value.
+* Added @:reference => true@ option to {Groonga::Expression#define_variable}
+  that defines reference type variable.
+* Added {Groonga::Record#sub_records} that returns sub records for the record.
+  Sub records is a {Groonga::SubRecords} instance.
+
+h3. Fixes
+
+* Fixed {Groonga::Expression#[]} return type. It returns {Groonga::Variable}
+  instead of value itself. CAUTION: It is a backward incompatible change.
+
 h2(#3-0-2). 3.0.2: 2013-05-29
 
 h3. Improvements
