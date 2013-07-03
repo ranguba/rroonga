@@ -681,65 +681,108 @@ class TableTest < Test::Unit::TestCase
     assert_not_predicate(bookmarks, :builtin?)
   end
 
-  def test_sub_record
-    bookmarks = Groonga::Hash.create(:name => "Bookmarks")
-    bookmarks.define_column("title", "Text")
-    comments = Groonga::Array.create(:name => "Comments")
-    comments.define_column("bookmark", bookmarks)
-    comments.define_column("content", "Text")
-    comments.define_column("rank", "Int32")
+  class GroupTest < self
+    class MaxNSubRecordsTest < self
+      setup
+      def setup_schema
+        Groonga::Schema.define do |schema|
+          schema.create_table("Bookmarks", :type => :hash) do |table|
+            table.text("title")
+          end
 
-    groonga = bookmarks.add("http://groonga.org/", :title => "groonga")
-    ruby = bookmarks.add("http://ruby-lang.org/", :title => "Ruby")
+          schema.create_table("Comments", :type => :array) do |table|
+            table.reference("bookmark")
+            table.text("content")
+            table.int32("rank")
+          end
+        end
+      end
 
-    now = Time.now.to_i
-    comments.add(:bookmark => groonga,
-                 :content => "dummy1",
-                 :rank => 0)
-    comments.add(:bookmark => groonga,
-                 :content => "dummy2",
-                 :rank => 0)
-    comments.add(:bookmark => groonga,
-                 :content => "full-text search",
-                 :rank => 1)
-    comments.add(:bookmark => groonga,
-                 :content => "column store",
-                 :rank => 5)
-    comments.add(:bookmark => ruby,
-                 :content => "object oriented script language",
-                 :rank => 100)
-    comments.add(:bookmark => ruby,
-                 :content => "multi paradigm programming language",
-                 :rank => 80)
+      setup
+      def setup_data
+        setup_bookmarks
+        setup_comments
+      end
 
-    records = comments.select do |record|
-      record.rank > 0
+      def setup_bookmarks
+        @bookmarks = Groonga["Bookmarks"]
+        @groonga = @bookmarks.add("http://groonga.org/", :title => "groonga")
+        @ruby = @bookmarks.add("http://ruby-lang.org/", :title => "Ruby")
+      end
+
+      def setup_comments
+        @comments = Groonga["Comments"]
+        @comments.add(:bookmark => @groonga,
+                      :content => "garbage comment1",
+                      :rank => 0)
+        @comments.add(:bookmark => @groonga,
+                      :content => "garbage comment2",
+                      :rank => 0)
+        @comments.add(:bookmark => @groonga,
+                      :content => "full-text search",
+                      :rank => 1)
+        @comments.add(:bookmark => @groonga,
+                      :content => "column store",
+                      :rank => 5)
+        @comments.add(:bookmark => @ruby,
+                      :content => "object oriented script language",
+                      :rank => 100)
+        @comments.add(:bookmark => @ruby,
+                      :content => "multi paradigm programming language",
+                      :rank => 80)
+      end
+
+      setup
+      def setup_searched
+        @records = @comments.select do |record|
+          record.rank > 0
+        end
+      end
+
+      def test_upper_limit
+        grouped_records = @records.group("bookmark", :max_n_sub_records => 2)
+        groups = grouped_records.collect do |record|
+          sub_record_contents = record.sub_records.collect do |sub_record|
+            sub_record.content
+          end
+          [record.title, sub_record_contents]
+        end
+        assert_equal([
+                       [
+                         "groonga",
+                         [
+                           "full-text search",
+                           "column store",
+                         ],
+                       ],
+                       [
+                         "Ruby",
+                         [
+                           "object oriented script language",
+                           "multi paradigm programming language",
+                         ],
+                       ],
+                     ],
+                     groups)
+      end
+
+      def test_less_than_limit
+        sorted = @records.sort([{:key => "rank", :order => :descending}],
+                               :limit => 3, :offset => 0)
+        grouped_records = sorted.group("bookmark", :max_n_sub_records => 2)
+        groups = grouped_records.collect do |record|
+          sub_record_ranks = record.sub_records.collect do |sub_record|
+            sub_record.rank
+          end
+          [record.title, sub_record_ranks]
+        end
+        assert_equal([
+                       ["Ruby", [100, 80]],
+                       ["groonga", [5]]
+                     ],
+                     groups)
+      end
     end
-
-    assert_equal([["groonga",
-                   ["full-text search",
-                    "column store"]],
-                  ["Ruby",
-                   ["object oriented script language",
-                    "multi paradigm programming language"]]],
-                 records.group(".bookmark",
-                               :max_n_sub_records => 2).collect do |record|
-                   [record.title,
-                    record.collect do |sub_record|
-                      sub_record.content
-                    end]
-                 end)
-
-    sorted = records.sort([{:key => "rank", :order => :descending}],
-                          :limit => 3, :offset => 0)
-    assert_equal([["Ruby", [100, 80]], ["groonga", [5]]],
-                 sorted.group(".bookmark",
-                               :max_n_sub_records => 2).collect do |record|
-                   [record.title,
-                    record.collect do |sub_record|
-                      sub_record.rank
-                    end]
-                 end)
   end
 
   class OtherProcessTest < self

@@ -18,6 +18,8 @@
 require 'English'
 require "time"
 
+require "groonga/sub-records"
+
 module Groonga
   class Record
     # レコードが所属するテーブル
@@ -222,13 +224,6 @@ module Groonga
       @table.value(@id, :id => true)
     end
 
-    include Enumerable
-
-    # レコードに保存されたサブレコードのそれぞれについてblockを実行する。
-    def each(&block)
-      table.each_sub_record(id, &block)
-    end
-
     # レコードの値を設定する。既存の値は上書きされる。
     def value=(value)
       @table.set_value(@id, value, :id => true)
@@ -321,6 +316,11 @@ module Groonga
     # レコードが持つIDが有効なIDであれば +true+ を返す。
     def valid_id?
       @table.exist?(@id)
+    end
+
+    # @return [SubRecords] Sub records of the record.
+    def sub_records
+      SubRecords.new(self)
     end
 
     # @private
