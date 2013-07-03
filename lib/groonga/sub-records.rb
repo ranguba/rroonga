@@ -28,6 +28,14 @@ module Groonga
     def each(&block)
       @record.table.each_sub_record(@record.record_raw_id, &block)
     end
+
+    def to_a
+      @sub_records ||= super
+    end
+
+    def [](index)
+      to_a[index]
+    end
   end
 end
 
