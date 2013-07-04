@@ -1,5 +1,11 @@
 h1. NEWS
 
+h2(#3-0-4). 3.0.4: 2013-07-04
+
+h3. Fixes
+
+* Fixed a rroogna 3.0.3 gem package for Windows.
+
 h2(#3-0-3). 3.0.3: 2013-07-04
 
 h3. Improvements
