@@ -89,7 +89,7 @@ module Groonga
     #   @option value_with_weight [Integer or nil] :weight (nil)
     #     The weight for the value. You need to use vector column and
     #     weight supported index column for weight. See
-    #     {Groonga;:Table#set_column_value} for details.
+    #     {Groonga::Table#set_column_value} for details.
     #
     #   @example Set a new value with weight "2"
     #     user["tags"] = [{:value => "groonga", :weight => 2}]
