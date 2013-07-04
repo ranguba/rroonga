@@ -451,7 +451,7 @@ rb_grn_index_column_delete (int argc, VALUE *argv, VALUE self)
  * updated automatically by using @:source@ option of
  * {Groonga::Table#define_index_column}.
  *
- * @example Updates sentences of an article to index
+ * @example Updates sentences of an article in index
  *   articles = Groonga::Array.create(:name => "Articles")
  *   articles.define_column("title", "ShortText")
  *   articles.define_column("content", "Text")
