@@ -5,7 +5,7 @@ h2(#3-0-3). 3.0.3: 2013-07-04
 h3. Improvements
 
 * Required groonga >= 3.0.5.
-* Added an error check for creating a result of {Groonga::Table#select}.
+* Added an error check for creating a result table of {Groonga::Table#select}.
 * Added {Groonga::Operator::AND_NOT}.
 * Deprecated {Groonga::Operator::BUT} because groonga deprecated it.
   Use {Groonga::Operator::AND_NOT} instead.
