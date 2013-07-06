@@ -1009,8 +1009,6 @@ rb_grn_object_get_path (VALUE self)
     const char *path;
 
     rb_grn_object = SELF(self);
-    if (!rb_grn_object)
-        return Qnil;
     if (!rb_grn_object->object)
         return Qnil;
 
