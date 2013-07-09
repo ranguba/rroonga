@@ -123,7 +123,7 @@ create_table("Posts",
   table.short_text("comments", :type => :vector)
   table.short_text("title")
 end
-SCHEMA
+      SCHEMA
     end
 
     def test_built_in_types
@@ -148,7 +148,7 @@ create_table("Posts",
   table.unsigned_integer8("uint8")
   table.float("vote_average")
 end
-SCHEMA
+      SCHEMA
     end
 
     def test_reference_table
@@ -165,7 +165,7 @@ create_table("IndexTerms",
              :key_type => "Terms",
              :force => true) do |table|
 end
-SCHEMA
+      SCHEMA
     end
 
     def test_reference_column
@@ -192,7 +192,7 @@ change_table("Comments") do |table|
   table.reference("children", "Items", :type => :vector)
   table.reference("item", "Items")
 end
-SCHEMA
+      SCHEMA
     end
 
     def test_index
@@ -217,7 +217,7 @@ change_table("Terms") do |table|
   table.index("Items", "_key", :name => "Items__key")
   table.index("Items", "title", :name => "Items_title")
 end
-SCHEMA
+      SCHEMA
     end
 
     def test_double_array_trie
@@ -245,7 +245,7 @@ end
 table_create Posts TABLE_NO_KEY
 column_create Posts comments COLUMN_VECTOR ShortText
 column_create Posts title COLUMN_SCALAR ShortText
-SCHEMA
+      SCHEMA
     end
 
     def test_reference_table
@@ -254,7 +254,7 @@ SCHEMA
 table_create Terms TABLE_HASH_KEY --key_type ShortText
 
 table_create IndexTerms TABLE_HASH_KEY --key_type Terms
-SCHEMA
+      SCHEMA
     end
 
     def test_reference_column
@@ -273,7 +273,7 @@ column_create Users name COLUMN_SCALAR ShortText
 column_create Comments author COLUMN_SCALAR Users
 column_create Comments children COLUMN_VECTOR Items
 column_create Comments item COLUMN_SCALAR Items
-SCHEMA
+      SCHEMA
     end
 
     def test_index
@@ -286,7 +286,7 @@ table_create Terms TABLE_PAT_KEY|KEY_NORMALIZE --key_type ShortText --default_to
 
 column_create Terms Items__key COLUMN_INDEX|WITH_POSITION Items _key
 column_create Terms Items_title COLUMN_INDEX|WITH_POSITION Items title
-SCHEMA
+      SCHEMA
     end
 
     def test_double_array_trie
@@ -294,7 +294,7 @@ SCHEMA
       assert_equal(<<-SCHEMA, dump)
 table_create Accounts TABLE_DAT_KEY --key_type ShortText
 column_create Accounts name COLUMN_SCALAR ShortText
-SCHEMA
+      SCHEMA
     end
 
     private
