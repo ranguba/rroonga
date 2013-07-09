@@ -205,6 +205,18 @@ rb_grn_bulk_to_ruby_object_by_range_id (grn_ctx *context, grn_obj *bulk,
       case GRN_DB_BOOL:
         *rb_value = GRN_BOOL_VALUE(bulk) ? Qtrue : Qfalse;
         break;
+      case GRN_DB_INT8:
+        *rb_value = INT2NUM(GRN_INT8_VALUE(bulk));
+        break;
+      case GRN_DB_UINT8:
+        *rb_value = UINT2NUM(GRN_UINT8_VALUE(bulk));
+        break;
+      case GRN_DB_INT16:
+        *rb_value = INT2NUM(GRN_INT16_VALUE(bulk));
+        break;
+      case GRN_DB_UINT16:
+        *rb_value = UINT2NUM(GRN_UINT16_VALUE(bulk));
+        break;
       case GRN_DB_INT32:
         *rb_value = INT2NUM(GRN_INT32_VALUE(bulk));
         break;
