@@ -414,6 +414,8 @@ module Groonga
             parameters << ":type => :hash"
           when Groonga::PatriciaTrie
             parameters << ":type => :patricia_trie"
+          when Groonga::DoubleArrayTrie
+            parameters << ":type => :double_array_trie"
           end
           if table.domain
             parameters << ":key_type => #{table.domain.name.dump}"
@@ -547,6 +549,8 @@ module Groonga
           flags << "TABLE_HASH_KEY"
         when Groonga::PatriciaTrie
           flags << "TABLE_PAT_KEY"
+        when Groonga::DoubleArrayTrie
+          flags << "TABLE_DAT_KEY"
         end
         if table.domain
           flags << "KEY_NORMALIZE" if default_normalizer?(_normalizer_name)
