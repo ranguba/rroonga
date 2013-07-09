@@ -104,6 +104,16 @@ class SchemaDumperTest < Test::Unit::TestCase
     end
   end
 
+  def define_double_array_trie_schema
+    Groonga::Schema.define do |schema|
+      schema.create_table("Accounts",
+                          :type => :double_array_trie,
+                          :key_type => "ShortText") do |table|
+        table.short_text("name")
+      end
+    end
+  end
+
   class RubySyntaxSchemaDumperTest < SchemaDumperTest
     def test_simple
       define_simple_schema
@@ -210,6 +220,18 @@ end
 EOS
     end
 
+    def test_double_array_trie
+      define_double_array_trie_schema
+      assert_equal(<<-SCHEMA, dump)
+create_table("Accounts",
+             :type => :double_array_trie,
+             :key_type => "ShortText",
+             :force => true) do |table|
+  table.short_text("name")
+end
+      SCHEMA
+    end
+
     private
     def dump
       Groonga::Schema.dump
@@ -265,6 +287,14 @@ table_create Terms TABLE_PAT_KEY|KEY_NORMALIZE --key_type ShortText --default_to
 column_create Terms Items__key COLUMN_INDEX|WITH_POSITION Items _key
 column_create Terms Items_title COLUMN_INDEX|WITH_POSITION Items title
 EOS
+    end
+
+    def test_double_array_trie
+      define_double_array_trie_schema
+      assert_equal(<<-SCHEMA, dump)
+table_create Accounts TABLE_DAT_KEY --key_type ShortText
+column_create Accounts name COLUMN_SCALAR ShortText
+SCHEMA
     end
 
     private
