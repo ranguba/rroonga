@@ -117,18 +117,18 @@ class SchemaDumperTest < Test::Unit::TestCase
   class RubySyntaxSchemaDumperTest < SchemaDumperTest
     def test_simple
       define_simple_schema
-      assert_equal(<<-EOS, dump)
+      assert_equal(<<-SCHEMA, dump)
 create_table("Posts",
              :force => true) do |table|
   table.short_text("comments", :type => :vector)
   table.short_text("title")
 end
-EOS
+SCHEMA
     end
 
     def test_built_in_types
       define_built_in_types_schema
-      assert_equal(<<-EOS, dump)
+      assert_equal(<<-SCHEMA, dump)
 create_table("Posts",
              :force => true) do |table|
   table.long_text("attachment")
@@ -148,12 +148,12 @@ create_table("Posts",
   table.unsigned_integer8("uint8")
   table.float("vote_average")
 end
-EOS
+SCHEMA
     end
 
     def test_reference_table
       define_reference_table_schema
-      assert_equal(<<-EOS, dump)
+      assert_equal(<<-SCHEMA, dump)
 create_table("Terms",
              :type => :hash,
              :key_type => "ShortText",
@@ -165,12 +165,12 @@ create_table("IndexTerms",
              :key_type => "Terms",
              :force => true) do |table|
 end
-EOS
+SCHEMA
     end
 
     def test_reference_column
       define_reference_column_schema
-      assert_equal(<<-EOS, dump)
+      assert_equal(<<-SCHEMA, dump)
 create_table("Comments",
              :force => true) do |table|
   table.text("content")
@@ -192,12 +192,12 @@ change_table("Comments") do |table|
   table.reference("children", "Items", :type => :vector)
   table.reference("item", "Items")
 end
-EOS
+SCHEMA
     end
 
     def test_index
       define_index_schema
-      assert_equal(<<-EOS, dump)
+      assert_equal(<<-SCHEMA, dump)
 create_table("Items",
              :type => :hash,
              :key_type => "ShortText",
@@ -217,7 +217,7 @@ change_table("Terms") do |table|
   table.index("Items", "_key", :name => "Items__key")
   table.index("Items", "title", :name => "Items_title")
 end
-EOS
+SCHEMA
     end
 
     def test_double_array_trie
@@ -241,25 +241,25 @@ end
   class CommandSyntaxSchemaDumperTest < SchemaDumperTest
     def test_simple
       define_simple_schema
-      assert_equal(<<-EOS, dump)
+      assert_equal(<<-SCHEMA, dump)
 table_create Posts TABLE_NO_KEY
 column_create Posts comments COLUMN_VECTOR ShortText
 column_create Posts title COLUMN_SCALAR ShortText
-EOS
+SCHEMA
     end
 
     def test_reference_table
       define_reference_table_schema
-      assert_equal(<<-EOS, dump)
+      assert_equal(<<-SCHEMA, dump)
 table_create Terms TABLE_HASH_KEY --key_type ShortText
 
 table_create IndexTerms TABLE_HASH_KEY --key_type Terms
-EOS
+SCHEMA
     end
 
     def test_reference_column
       define_reference_column_schema
-      assert_equal(<<-EOS, dump)
+      assert_equal(<<-SCHEMA, dump)
 table_create Comments TABLE_NO_KEY
 column_create Comments content COLUMN_SCALAR Text
 column_create Comments issued COLUMN_SCALAR Time
@@ -273,12 +273,12 @@ column_create Users name COLUMN_SCALAR ShortText
 column_create Comments author COLUMN_SCALAR Users
 column_create Comments children COLUMN_VECTOR Items
 column_create Comments item COLUMN_SCALAR Items
-EOS
+SCHEMA
     end
 
     def test_index
       define_index_schema
-      assert_equal(<<-EOS, dump)
+      assert_equal(<<-SCHEMA, dump)
 table_create Items TABLE_HASH_KEY --key_type ShortText
 column_create Items title COLUMN_SCALAR ShortText
 
@@ -286,7 +286,7 @@ table_create Terms TABLE_PAT_KEY|KEY_NORMALIZE --key_type ShortText --default_to
 
 column_create Terms Items__key COLUMN_INDEX|WITH_POSITION Items _key
 column_create Terms Items_title COLUMN_INDEX|WITH_POSITION Items title
-EOS
+SCHEMA
     end
 
     def test_double_array_trie
