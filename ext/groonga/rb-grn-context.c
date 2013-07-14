@@ -470,6 +470,8 @@ rb_grn_context_initialize (int argc, VALUE *argv, VALUE self)
 	GRN_CTX_SET_ENCODING(context, encoding);
     }
 
+    rb_iv_set(self, "@memory_pools", rb_ary_new());
+
     debug("context new: %p\n", context);
 
     return Qnil;
@@ -922,6 +924,14 @@ rb_grn_context_array_reference (VALUE self, VALUE name_or_id)
     rb_grn_context_check(context, name_or_id);
 
     return GRNOBJECT2RVAL(Qnil, context, object, GRN_FALSE);
+}
+
+void
+rb_grn_context_object_created (VALUE rb_context, VALUE rb_object)
+{
+    ID id_object_created;
+    CONST_ID(id_object_created, "object_created");
+    rb_funcall(rb_context, id_object_created, 1, rb_object);
 }
 
 void

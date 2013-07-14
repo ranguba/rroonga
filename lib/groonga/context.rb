@@ -17,6 +17,8 @@
 
 require "groonga/command"
 
+require "groonga/memory-pool"
+
 module Groonga
   class Context
     # _path_ にある既存のデータベースを開く。ブロックを指定した場
@@ -189,6 +191,126 @@ module Groonga
         _, response = receive
         yield(buffer.dup, response) if block_given?
       end
+    end
+
+    # Pushes a new memory pool to the context. Temporary objects that
+    # are created between pushing a new memory pool and popping the
+    # new memory pool are closed automatically when popping the new
+    # memory pool.
+    #
+    # It is useful for request and response style applications. These
+    # style applications can close temporary objects between a request
+    # and resopnse pair. There are some merits for closing temporary
+    # objects explicilty rather than closing implicitly by GC:
+    #
+    #   * Less memory consumption
+    #   * Faster
+    #
+    # The "less memory consumption" merit is caused by temporary
+    # objects are closed each request and response pair. The max
+    # memory consumption in these applications is the same as the max
+    # memory consumption in a request and response pair. If temporary
+    # objects are closed by GC, the max memory consumption in these
+    # applications is the same as the max memory consumption between
+    # the current GC and the next GC. These applications process many
+    # request and response pairs during two GCs.
+    #
+    # The "faster" merit is caused by reducing GC. You can reduce GC,
+    # your application run faster because GC is a heavy process. You
+    # can reduce GC because memory consumption is reduced.
+    #
+    # You can nest {#push_memory_pool} and {#pop_memory_pool} pair.
+    #
+    # @example Pushes a new memory pool with block
+    #   adults = nil
+    #   context.push_memory_pool do
+    #     users = context["Users"]
+    #     adults = users.select do |user|
+    #       user.age >= 20
+    #     end
+    #     p adults.temporary? # => true
+    #     p adults.closed?    # => false
+    #   end
+    #   p adults.closed?      # => true
+    #
+    # @example Pushes a new memory pool without block
+    #   adults = nil
+    #   context.push_memory_pool
+    #   users = context["Users"]
+    #   adults = users.select do |user|
+    #     user.age >= 20
+    #   end
+    #   p adults.temporary? # => true
+    #   p adults.closed?    # => false
+    #   context.pop_memory_pool
+    #   p adults.closed?    # => true
+    #
+    # @example Nesting push and pop pair
+    #   adults = nil
+    #   context.push_memory_pool do
+    #     users = context["Users"]
+    #     adults = users.select do |user|
+    #       user.age >= 20
+    #     end
+    #     grouped_adults = nil
+    #     context.push_memory_pool do
+    #       grouped_adults = adults.group(["hobby"])
+    #       p grouped_adults.temporary? # => true
+    #       p grouped_adults.closed?    # => false
+    #     end
+    #     p grouped_adults.closed?      # => true
+    #     p adults.temporary?           # => true
+    #     p adults.closed?              # => false
+    #   end
+    #   p adults.closed?                # => true
+    #
+    # @overload push_memory_pool
+    #   Pushes a new memory pool to the context. You need to pop the
+    #   memory pool explicitly by yourself.
+    #
+    #   @return [void]
+    #
+    # @overload push_memory_pool {}
+    #   Closes temporary objects created in the given block
+    #   automatically.
+    #
+    #   @yield []
+    #     Yields the block. Temporary objects created in the block
+    #     are closed automatically when the block is exited.
+    #   @yieldreturn [Object] It is the return value of this
+    #     method call.
+    #   @return [Object] The value returned by the block.
+    #
+    # @since 3.0.5
+    def push_memory_pool
+      memory_pool = MemoryPool.new
+      @memory_pools.push(memory_pool)
+      return unless block_given?
+
+      begin
+        yield
+      ensure
+        pop_memory_pool
+      end
+    end
+
+    # Pops the pushed memory pool.
+    #
+    # @return [void]
+    #
+    # @see push_memory_pool
+    #
+    # @since 3.0.5
+    def pop_memory_pool
+      memory_pool = @memory_pools.pop
+      memory_pool.close
+    end
+
+    # @api private
+    def object_created(object)
+      return if @memory_pools.empty?
+      memory_pool = @memory_pools.last
+      memory_pool.register(object)
     end
   end
 end

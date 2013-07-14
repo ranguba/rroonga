@@ -313,6 +313,16 @@ rb_grn_object_to_ruby_object (VALUE klass, grn_ctx *context, grn_obj *object,
     rb_object = rb_obj_alloc(klass);
     rb_grn_object_assign(klass, rb_object, rb_context, context, object);
 
+    switch (object->header.type) {
+    case GRN_TABLE_NO_KEY:
+    case GRN_TABLE_HASH_KEY:
+    case GRN_TABLE_PAT_KEY:
+    case GRN_TABLE_DAT_KEY:
+        rb_grn_context_object_created(rb_context, rb_object);
+    default:
+        break;
+    }
+
     return rb_object;
 }
 
