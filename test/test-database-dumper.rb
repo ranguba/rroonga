@@ -1,4 +1,4 @@
-# Copyright (C) 2011-2012  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2011-2013  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -62,6 +62,10 @@ class DatabaseDumperTest < Test::Unit::TestCase
 
   def posts
     context["Posts"]
+  end
+
+  def users
+    context["Users"]
   end
 
   def dumped_schema
@@ -336,6 +340,36 @@ load --table Posts
 
 column_create Tags Posts_tag_text COLUMN_INDEX Posts tag_text
 COMMAND
+    end
+  end
+
+  class NoColumnTest < self
+    def setup_tables
+      Groonga::Schema.define do |schema|
+        schema.create_table("Users",
+                            :type => :patricia_trie,
+                            :key_type => "ShortText") do |table|
+        end
+      end
+    end
+
+    setup
+    def setup_data
+      users.add("s-yata")
+      users.add("mori")
+    end
+
+    def test_have_records
+      assert_equal(<<-EOS, dump)
+table_create Users TABLE_PAT_KEY --key_type ShortText
+
+load --table Users
+[
+[\"_key\"],
+[\"mori\"],
+[\"s-yata\"]
+]
+EOS
     end
   end
 end
