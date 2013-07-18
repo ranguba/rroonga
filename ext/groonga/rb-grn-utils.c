@@ -385,9 +385,6 @@ rb_grn_bulk_from_ruby_object (VALUE object, grn_ctx *context, grn_obj *bulk)
         rb_grn_context_text_set(context, bulk, object);
         break;
       case T_FIXNUM:
-        grn_obj_reinit(context, bulk, GRN_DB_INT32, 0);
-        GRN_INT32_SET(context, bulk, NUM2INT(object));
-        break;
       case T_BIGNUM:
         {
             int64_t int64_value;
