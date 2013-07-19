@@ -163,61 +163,61 @@ rb_grn_hash_s_create (int argc, VALUE *argv, VALUE klass)
     rb_scan_args(argc, argv, "01", &options);
 
     rb_grn_scan_options(options,
-			"context", &rb_context,
-			"name", &rb_name,
+                        "context", &rb_context,
+                        "name", &rb_name,
                         "path", &rb_path,
-			"persistent", &rb_persistent,
-			"key_normalize", &rb_key_normalize,
-			"key_type", &rb_key_type,
-			"value_type", &rb_value_type,
-			"default_tokenizer", &rb_default_tokenizer,
-			"sub_records", &rb_sub_records,
-			"normalizer", &rb_normalizer,
-			NULL);
+                        "persistent", &rb_persistent,
+                        "key_normalize", &rb_key_normalize,
+                        "key_type", &rb_key_type,
+                        "value_type", &rb_value_type,
+                        "default_tokenizer", &rb_default_tokenizer,
+                        "sub_records", &rb_sub_records,
+                        "normalizer", &rb_normalizer,
+                        NULL);
 
     context = rb_grn_context_ensure(&rb_context);
 
     if (!NIL_P(rb_name)) {
         name = StringValuePtr(rb_name);
-	name_size = RSTRING_LEN(rb_name);
-	flags |= GRN_OBJ_PERSISTENT;
+        name_size = RSTRING_LEN(rb_name);
+        flags |= GRN_OBJ_PERSISTENT;
     }
 
     if (!NIL_P(rb_path)) {
         path = StringValueCStr(rb_path);
-	flags |= GRN_OBJ_PERSISTENT;
+        flags |= GRN_OBJ_PERSISTENT;
     }
 
     if (RVAL2CBOOL(rb_persistent))
-	flags |= GRN_OBJ_PERSISTENT;
+        flags |= GRN_OBJ_PERSISTENT;
 
     if (RVAL2CBOOL(rb_key_normalize))
-	flags |= GRN_OBJ_KEY_NORMALIZE;
+        flags |= GRN_OBJ_KEY_NORMALIZE;
 
     if (NIL_P(rb_key_type)) {
-	key_type = grn_ctx_at(context, GRN_DB_SHORT_TEXT);
+        key_type = grn_ctx_at(context, GRN_DB_SHORT_TEXT);
     } else {
-	key_type = RVAL2GRNOBJECT(rb_key_type, &context);
+        key_type = RVAL2GRNOBJECT(rb_key_type, &context);
     }
 
     if (!NIL_P(rb_value_type))
-	value_type = RVAL2GRNOBJECT(rb_value_type, &context);
+        value_type = RVAL2GRNOBJECT(rb_value_type, &context);
 
     if (RVAL2CBOOL(rb_sub_records))
-	flags |= GRN_OBJ_WITH_SUBREC;
+        flags |= GRN_OBJ_WITH_SUBREC;
 
     table = grn_table_create(context, name, name_size, path,
-			     flags, key_type, value_type);
+                             flags, key_type, value_type);
     if (!table)
-	rb_grn_context_check(context, rb_ary_new4(argc, argv));
+        rb_grn_context_check(context, rb_ary_new4(argc, argv));
     rb_table = GRNOBJECT2RVAL(klass, context, table, GRN_TRUE);
 
     if (!NIL_P(rb_default_tokenizer))
-	rb_funcall(rb_table, rb_intern("default_tokenizer="), 1,
-		   rb_default_tokenizer);
+        rb_funcall(rb_table, rb_intern("default_tokenizer="), 1,
+                   rb_default_tokenizer);
     if (!NIL_P(rb_normalizer))
-	rb_funcall(rb_table, rb_intern("normalizer="), 1,
-		   rb_normalizer);
+        rb_funcall(rb_table, rb_intern("normalizer="), 1,
+                   rb_normalizer);
 
     if (rb_block_given_p())
         return rb_ensure(rb_yield, rb_table, rb_grn_object_close, rb_table);
@@ -263,30 +263,30 @@ rb_grn_hash_search (int argc, VALUE *argv, VALUE self)
     VALUE rb_key, options, rb_result;
 
     rb_grn_table_key_support_deconstruct(SELF(self), &table, &context,
-					 &key, &domain_id, &domain,
-					 NULL, NULL, NULL,
-					 NULL);
+                                         &key, &domain_id, &domain,
+                                         NULL, NULL, NULL,
+                                         NULL);
 
     rb_scan_args(argc, argv, "11", &rb_key, &options);
 
     RVAL2GRNKEY(rb_key, context, key, domain_id, domain, self);
 
     rb_grn_scan_options(options,
-			"result", &rb_result,
-			NULL);
+                        "result", &rb_result,
+                        NULL);
 
     if (NIL_P(rb_result)) {
-	result = grn_table_create(context, NULL, 0, NULL,
-				  GRN_OBJ_TABLE_HASH_KEY | GRN_OBJ_WITH_SUBREC,
-				  table, 0);
-	rb_grn_context_check(context, self);
-	rb_result = GRNOBJECT2RVAL(Qnil, context, result, GRN_TRUE);
+        result = grn_table_create(context, NULL, 0, NULL,
+                                  GRN_OBJ_TABLE_HASH_KEY | GRN_OBJ_WITH_SUBREC,
+                                  table, 0);
+        rb_grn_context_check(context, self);
+        rb_result = GRNOBJECT2RVAL(Qnil, context, result, GRN_TRUE);
     } else {
-	result = RVAL2GRNOBJECT(rb_result, &context);
+        result = RVAL2GRNOBJECT(rb_result, &context);
     }
 
     rc = grn_obj_search(context, table, key,
-			result, GRN_OP_OR, NULL);
+                        result, GRN_OP_OR, NULL);
     rb_grn_rc_check(rc, self);
 
     return rb_result;
@@ -300,7 +300,7 @@ rb_grn_init_hash (VALUE mGrn)
     rb_include_module(rb_cGrnHash, rb_mGrnTableKeySupport);
 
     rb_define_singleton_method(rb_cGrnHash, "create",
-			       rb_grn_hash_s_create, -1);
+                               rb_grn_hash_s_create, -1);
 
     rb_define_method(rb_cGrnHash, "search", rb_grn_hash_search, -1);
 }

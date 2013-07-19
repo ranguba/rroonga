@@ -44,13 +44,13 @@ rb_grn_table_cursor_get_key (VALUE self)
     grn_table_cursor *cursor;
 
     rb_grn_table_cursor_deconstruct(SELF(self), &cursor, &context,
-				    NULL, NULL, NULL, NULL);
+                                    NULL, NULL, NULL, NULL);
     if (context && cursor) {
         void *key;
         int key_size;
-	grn_obj *table;
+        grn_obj *table;
 
-	table = grn_table_cursor_table(context, cursor);
+        table = grn_table_cursor_table(context, cursor);
         key_size = grn_table_cursor_get_key(context, cursor, &key);
         rb_key = GRNKEY2RVAL(context, key, key_size, table, self);
     }
@@ -62,7 +62,7 @@ void
 rb_grn_init_table_cursor_key_support (VALUE mGrn)
 {
     rb_mGrnTableCursorKeySupport =
-	rb_define_module_under(rb_cGrnTableCursor, "KeySupport");
+        rb_define_module_under(rb_cGrnTableCursor, "KeySupport");
 
     rb_define_method(rb_mGrnTableCursorKeySupport, "key",
                      rb_grn_table_cursor_get_key, 0);

@@ -49,15 +49,15 @@ rb_grn_context_from_ruby_object (VALUE object)
     RbGrnContext *rb_grn_context;
 
     if (!RVAL2CBOOL(rb_obj_is_kind_of(object, cGrnContext))) {
-	rb_raise(rb_eTypeError, "not a groonga context");
+        rb_raise(rb_eTypeError, "not a groonga context");
     }
 
     Data_Get_Struct(object, RbGrnContext, rb_grn_context);
     if (!rb_grn_context)
-	rb_raise(rb_eGrnError, "groonga context is NULL");
+        rb_raise(rb_eGrnError, "groonga context is NULL");
     if (!rb_grn_context->context)
-	rb_raise(rb_eGrnClosed,
-		 "can't access already closed groonga context");
+        rb_raise(rb_eGrnClosed,
+                 "can't access already closed groonga context");
     return rb_grn_context->context;
 }
 
@@ -72,12 +72,12 @@ rb_grn_context_register_floating_object (RbGrnObject *rb_grn_object)
     context = rb_grn_context->context;
     floating_objects = rb_grn_context->floating_objects;
     if (!floating_objects) {
-	rb_grn_context_reset_floating_objects(rb_grn_context);
-	floating_objects = rb_grn_context->floating_objects;
+        rb_grn_context_reset_floating_objects(rb_grn_context);
+        floating_objects = rb_grn_context->floating_objects;
     }
     grn_hash_add(context, floating_objects,
-		 (const void *)(&rb_grn_object), sizeof(RbGrnObject *),
-		 NULL, NULL);
+                 (const void *)(&rb_grn_object), sizeof(RbGrnObject *),
+                 NULL, NULL);
     rb_grn_object->floating = GRN_TRUE;
 }
 
@@ -89,17 +89,17 @@ rb_grn_context_unregister_floating_object (RbGrnObject *rb_grn_object)
     grn_hash *floating_objects;
 
     if (!rb_grn_object->floating)
-	return;
+        return;
 
     rb_grn_context = rb_grn_object->rb_grn_context;
     if (!rb_grn_context)
-	return;
+        return;
 
     context = rb_grn_context->context;
     floating_objects = rb_grn_context->floating_objects;
     grn_hash_delete(context, floating_objects,
-		    (const void *)&rb_grn_object, sizeof(RbGrnObject *),
-		    NULL);
+                    (const void *)&rb_grn_object, sizeof(RbGrnObject *),
+                    NULL);
     rb_grn_object->floating = GRN_FALSE;
 }
 
@@ -113,13 +113,13 @@ rb_grn_context_close_floating_objects (RbGrnContext *rb_grn_context)
     context = rb_grn_context->context;
     floating_objects = rb_grn_context->floating_objects;
     if (!floating_objects)
-	return;
+        return;
 
     rb_grn_context->floating_objects = NULL;
     GRN_HASH_EACH(context, floating_objects, id, &floating_object, NULL, NULL, {
-	    (*floating_object)->floating = GRN_FALSE;
-	    grn_obj_close(context, RB_GRN_OBJECT(*floating_object)->object);
-	});
+            (*floating_object)->floating = GRN_FALSE;
+            grn_obj_close(context, RB_GRN_OBJECT(*floating_object)->object);
+        });
     grn_hash_close(context, floating_objects);
 }
 
@@ -131,9 +131,9 @@ rb_grn_context_reset_floating_objects (RbGrnContext *rb_grn_context)
     rb_grn_context_close_floating_objects(rb_grn_context);
     context = rb_grn_context->context;
     rb_grn_context->floating_objects = grn_hash_create(context, NULL,
-						       sizeof(RbGrnObject *),
-						       0,
-						       GRN_OBJ_TABLE_HASH_KEY);
+                                                       sizeof(RbGrnObject *),
+                                                       0,
+                                                       GRN_OBJ_TABLE_HASH_KEY);
 }
 
 void
@@ -145,15 +145,15 @@ rb_grn_context_mark_grn_id (grn_ctx *context, grn_id id)
 
     object = grn_ctx_at(context, id);
     if (!object)
-	return;
+        return;
 
     user_data = grn_obj_user_data(context, object);
     if (!user_data)
-	return;
+        return;
 
     rb_grn_object = RB_GRN_OBJECT(user_data->ptr);
     if (!rb_grn_object)
-	return;
+        return;
 
     rb_gc_mark(rb_grn_object->self);
 }
@@ -176,10 +176,10 @@ static void
 rb_grn_context_fin (grn_ctx *context)
 {
     if (context->stat == GRN_CTX_FIN)
-	return;
+        return;
 
     if (!(context->flags & GRN_CTX_PER_DB)) {
-	rb_grn_context_unlink_database(context);
+        rb_grn_context_unlink_database(context);
     }
     grn_ctx_fin(context);
 }
@@ -194,7 +194,7 @@ rb_grn_context_free (void *pointer)
     debug("context-free: %p\n", context);
     rb_grn_context_close_floating_objects(rb_grn_context);
     if (context && !rb_grn_exited)
-	rb_grn_context_fin(context);
+        rb_grn_context_fin(context);
     debug("context-free: %p: done\n", context);
     xfree(rb_grn_context);
 }
@@ -207,30 +207,30 @@ rb_grn_context_alloc (VALUE klass)
 
 static grn_obj *
 rb_grn_context_finalizer (grn_ctx *context, int n_args, grn_obj **grn_objects,
-			  grn_user_data *user_data)
+                          grn_user_data *user_data)
 {
     RbGrnContext *rb_grn_context;
 
     if (rb_grn_exited)
-	return NULL;
+        return NULL;
 
     rb_grn_context = user_data->ptr;
 
     rb_grn_context_close_floating_objects(rb_grn_context);
     if (!(context->flags & GRN_CTX_PER_DB)) {
-	rb_grn_context_unlink_database(context);
+        rb_grn_context_unlink_database(context);
     }
 
     GRN_CTX_USER_DATA(context)->ptr = NULL;
     grn_ctx_set_finalizer(context, NULL);
 
     debug("context-finalize: %p:%p:%p\n",
-	  context, rb_grn_context, rb_grn_context->context);
+          context, rb_grn_context, rb_grn_context->context);
 
     rb_grn_context->context = NULL;
 
     debug("context-finalize: %p:%p:%p: done\n",
-	  context, rb_grn_context, rb_grn_context->context);
+          context, rb_grn_context, rb_grn_context->context);
 
     return NULL;
 }
@@ -243,7 +243,7 @@ rb_grn_context_to_exception (grn_ctx *context, VALUE related_object)
     grn_obj bulk;
 
     if (context->rc == GRN_SUCCESS)
-	return Qnil;
+        return Qnil;
 
     exception_class = rb_grn_rc_to_exception(context->rc);
     message = rb_grn_rc_to_message(context->rc);
@@ -255,8 +255,8 @@ rb_grn_context_to_exception (grn_ctx *context, VALUE related_object)
         GRN_TEXT_PUTS(context, &bulk, context->errbuf);
     }
     if (!NIL_P(related_object)) {
-	GRN_TEXT_PUTS(context, &bulk, ": ");
-	GRN_TEXT_PUTS(context, &bulk, rb_grn_inspect(related_object));
+        GRN_TEXT_PUTS(context, &bulk, ": ");
+        GRN_TEXT_PUTS(context, &bulk, rb_grn_inspect(related_object));
     }
     if (context->errline > 0) {
         GRN_TEXT_PUTS(context, &bulk, "\n");
@@ -268,8 +268,8 @@ rb_grn_context_to_exception (grn_ctx *context, VALUE related_object)
         GRN_TEXT_PUTS(context, &bulk, "()");
     }
     exception = rb_funcall(exception_class, rb_intern("new"), 1,
-			   rb_str_new(GRN_BULK_HEAD(&bulk),
-				      GRN_BULK_VSIZE(&bulk)));
+                           rb_str_new(GRN_BULK_HEAD(&bulk),
+                                      GRN_BULK_VSIZE(&bulk)));
     grn_obj_unlink(context, &bulk);
 
     return exception;
@@ -282,7 +282,7 @@ rb_grn_context_check (grn_ctx *context, VALUE related_object)
 
     exception = rb_grn_context_to_exception(context, related_object);
     if (NIL_P(exception))
-	return;
+        return;
 
     rb_exc_raise(exception);
 }
@@ -291,7 +291,7 @@ grn_ctx *
 rb_grn_context_ensure (VALUE *context)
 {
     if (NIL_P(*context))
-	*context = rb_grn_context_get_default();
+        *context = rb_grn_context_get_default();
     return SELF(*context);
 }
 
@@ -299,10 +299,10 @@ VALUE
 rb_grn_context_rb_string_new (grn_ctx *context, const char *string, long length)
 {
     if (length < 0)
-	length = strlen(string);
+        length = strlen(string);
 #ifdef HAVE_RUBY_ENCODING_H
     return rb_enc_str_new(string, length,
-			  rb_grn_encoding_to_ruby_encoding(context->encoding));
+                          rb_grn_encoding_to_ruby_encoding(context->encoding));
 #else
     return rb_str_new(string, length);
 #endif
@@ -318,25 +318,25 @@ rb_grn_context_rb_string_encode (grn_ctx *context, VALUE rb_string)
 
     context_encoding = context->encoding;
     if (context->encoding == GRN_ENC_DEFAULT)
-	context->encoding = grn_get_default_encoding();
+        context->encoding = grn_get_default_encoding();
     if (context->encoding == GRN_ENC_NONE)
-	return rb_string;
+        return rb_string;
 
     if (RSTRING_LEN(rb_string) < 0)
-	return rb_string;
+        return rb_string;
 
     encoding = rb_enc_get(rb_string);
     to_encoding = rb_grn_encoding_to_ruby_encoding(context_encoding);
     index = rb_enc_to_index(encoding);
     to_index = rb_enc_to_index(to_encoding);
     if (index == to_index)
-	return rb_string;
+        return rb_string;
 
     if (rb_enc_asciicompat(to_encoding) && rb_enc_str_asciionly_p(rb_string))
-	return rb_string;
+        return rb_string;
 
     rb_string = rb_str_encode(rb_string, rb_enc_from_encoding(to_encoding),
-			      0, Qnil);
+                              0, Qnil);
 #endif
     return rb_string;
 }
@@ -366,8 +366,8 @@ rb_grn_context_s_get_default (VALUE self)
 
     context = rb_cv_get(self, "@@default");
     if (NIL_P(context)) {
-	context = rb_funcall(cGrnContext, rb_intern("new"), 0);
-	rb_cv_set(self, "@@default", context);
+        context = rb_funcall(cGrnContext, rb_intern("new"), 0);
+        rb_cv_set(self, "@@default", context);
     }
     return context;
 }
@@ -441,15 +441,15 @@ rb_grn_context_initialize (int argc, VALUE *argv, VALUE self)
     rb_scan_args(argc, argv, "01", &options);
     default_options = rb_grn_context_s_get_default_options(rb_obj_class(self));
     if (NIL_P(default_options))
-	default_options = rb_hash_new();
+        default_options = rb_hash_new();
 
     if (NIL_P(options))
-	options = rb_hash_new();
+        options = rb_hash_new();
     options = rb_funcall(default_options, rb_intern("merge"), 1, options);
 
     rb_grn_scan_options(options,
-			"encoding", &rb_encoding,
-			NULL);
+                        "encoding", &rb_encoding,
+                        NULL);
 
     rb_grn_context = ALLOC(RbGrnContext);
     DATA_PTR(self) = rb_grn_context;
@@ -464,10 +464,10 @@ rb_grn_context_initialize (int argc, VALUE *argv, VALUE self)
     grn_ctx_set_finalizer(context, rb_grn_context_finalizer);
 
     if (!NIL_P(rb_encoding)) {
-	grn_encoding encoding;
+        grn_encoding encoding;
 
-	encoding = RVAL2GRNENCODING(rb_encoding, NULL);
-	GRN_CTX_SET_ENCODING(context, encoding);
+        encoding = RVAL2GRNENCODING(rb_encoding, NULL);
+        GRN_CTX_SET_ENCODING(context, encoding);
     }
 
     rb_iv_set(self, "@memory_pools", rb_ary_new());
@@ -492,10 +492,10 @@ rb_grn_context_close (VALUE self)
 
     context = SELF(self);
     if (context) {
-	rc = grn_ctx_fin(context);
-	Data_Get_Struct(self, RbGrnContext, rb_grn_context);
-	rb_grn_context->context = NULL;
-	rb_grn_rc_check(rc, self);
+        rc = grn_ctx_fin(context);
+        Data_Get_Struct(self, RbGrnContext, rb_grn_context);
+        rb_grn_context->context = NULL;
+        rb_grn_rc_check(rc, self);
     }
 
     return Qnil;
@@ -727,22 +727,22 @@ rb_grn_context_connect (int argc, VALUE *argv, VALUE self)
 
     rb_scan_args(argc, argv, "01", &options);
     rb_grn_scan_options(options,
-			"host", &rb_host,
-			"port", &rb_port,
-			NULL);
+                        "host", &rb_host,
+                        "port", &rb_port,
+                        NULL);
 
     context = SELF(self);
 
     if (NIL_P(rb_host)) {
-	host = "localhost";
+        host = "localhost";
     } else {
-	host = StringValueCStr(rb_host);
+        host = StringValueCStr(rb_host);
     }
 
     if (NIL_P(rb_port)) {
-	port = 10041;
+        port = 10041;
     } else {
-	port = NUM2INT(rb_port);
+        port = NUM2INT(rb_port);
     }
 
     rc = grn_ctx_connect(context, host, port, flags);
@@ -794,9 +794,9 @@ rb_grn_context_receive (VALUE self)
     context = SELF(self);
     query_id = grn_ctx_recv(context, &result, &result_size, &flags);
     if (result) {
-	rb_result = rb_str_new(result, result_size);
+        rb_result = rb_str_new(result, result_size);
     } else {
-	rb_result = Qnil;
+        rb_result = Qnil;
     }
     rb_grn_context_check(context, self);
 
@@ -809,38 +809,38 @@ grn_type_name_old_to_new (const char *name, unsigned int name_size)
     unsigned int i;
 
     for (i = 0; i < name_size; i++) {
-	if (name[i] == '\0')
-	    return NULL;
+        if (name[i] == '\0')
+            return NULL;
     }
 
     if (strcmp(name, "<int>") == 0) {
-	return "Int32";
+        return "Int32";
     } else if (strcmp(name, "<uint>") == 0) {
-	return "UInt32";
+        return "UInt32";
     } else if (strcmp(name, "<int64>") == 0) {
-	return "Int64";
+        return "Int64";
     } else if (strcmp(name, "<uint64>") == 0) {
-	return "UInt64";
+        return "UInt64";
     } else if (strcmp(name, "<float>") == 0) {
-	return "Float";
+        return "Float";
     } else if (strcmp(name, "<time>") == 0) {
-	return "Time";
+        return "Time";
     } else if (strcmp(name, "<shorttext>") == 0) {
-	return "ShortText";
+        return "ShortText";
     } else if (strcmp(name, "<text>") == 0) {
-	return "Text";
+        return "Text";
     } else if (strcmp(name, "<longtext>") == 0) {
-	return "LongText";
+        return "LongText";
     } else if (strcmp(name, "<token:delimit>") == 0) {
-	return "TokenDelimit";
+        return "TokenDelimit";
     } else if (strcmp(name, "<token:unigram>") == 0) {
-	return "TokenUnigram";
+        return "TokenUnigram";
     } else if (strcmp(name, "<token:bigram>") == 0) {
-	return "TokenBigram";
+        return "TokenBigram";
     } else if (strcmp(name, "<token:trigram>") == 0) {
-	return "TokenTrigram";
+        return "TokenTrigram";
     } else if (strcmp(name, "<token:mecab>") == 0) {
-	return "TokenMecab";
+        return "TokenMecab";
     }
 
     return NULL;
@@ -848,26 +848,26 @@ grn_type_name_old_to_new (const char *name, unsigned int name_size)
 
 grn_obj *
 rb_grn_context_get_backward_compatibility (grn_ctx *context,
-					   const char *name,
-					   unsigned int name_size)
+                                           const char *name,
+                                           unsigned int name_size)
 {
     grn_obj *object;
 
     object = grn_ctx_get(context, name, name_size);
     if (!object) {
-	const char *new_type_name;
+        const char *new_type_name;
 
-	new_type_name = grn_type_name_old_to_new(name, name_size);
-	if (new_type_name) {
-	    object = grn_ctx_get(context, new_type_name, strlen(new_type_name));
+        new_type_name = grn_type_name_old_to_new(name, name_size);
+        if (new_type_name) {
+            object = grn_ctx_get(context, new_type_name, strlen(new_type_name));
 #if 0
-	    if (object) {
-		rb_warn("deprecated old data type name <%s> is used. "
-			"Use new data type name <%s> instead.",
-			name, new_type_name);
-	    }
+            if (object) {
+                rb_warn("deprecated old data type name <%s> is used. "
+                        "Use new data type name <%s> instead.",
+                        name, new_type_name);
+            }
 #endif
-	}
+        }
     }
 
     return object;
@@ -900,26 +900,26 @@ rb_grn_context_array_reference (VALUE self, VALUE name_or_id)
     context = SELF(self);
     switch (TYPE(name_or_id)) {
       case T_SYMBOL:
-	name = rb_id2name(SYM2ID(name_or_id));
-	name_size = strlen(name);
-	object = rb_grn_context_get_backward_compatibility(context,
-							   name, name_size);
-	break;
+        name = rb_id2name(SYM2ID(name_or_id));
+        name_size = strlen(name);
+        object = rb_grn_context_get_backward_compatibility(context,
+                                                           name, name_size);
+        break;
       case T_STRING:
-	name = StringValuePtr(name_or_id);
-	name_size = RSTRING_LEN(name_or_id);
-	object = rb_grn_context_get_backward_compatibility(context,
-							   name, name_size);
-	break;
+        name = StringValuePtr(name_or_id);
+        name_size = RSTRING_LEN(name_or_id);
+        object = rb_grn_context_get_backward_compatibility(context,
+                                                           name, name_size);
+        break;
       case T_FIXNUM:
-	id = NUM2UINT(name_or_id);
-	object = grn_ctx_at(context, id);
-	break;
+        id = NUM2UINT(name_or_id);
+        object = grn_ctx_at(context, id);
+        break;
       default:
-	rb_raise(rb_eArgError,
-		 "should be String, Symbol or unsigned integer: %s",
-		 rb_grn_inspect(name_or_id));
-	break;
+        rb_raise(rb_eArgError,
+                 "should be String, Symbol or unsigned integer: %s",
+                 rb_grn_inspect(name_or_id));
+        break;
     }
     rb_grn_context_check(context, name_or_id);
 
@@ -944,13 +944,13 @@ rb_grn_init_context (VALUE mGrn)
     rb_cv_set(cGrnContext, "@@default_options", Qnil);
 
     rb_define_singleton_method(cGrnContext, "default",
-			       rb_grn_context_s_get_default, 0);
+                               rb_grn_context_s_get_default, 0);
     rb_define_singleton_method(cGrnContext, "default=",
-			       rb_grn_context_s_set_default, 1);
+                               rb_grn_context_s_set_default, 1);
     rb_define_singleton_method(cGrnContext, "default_options",
-			       rb_grn_context_s_get_default_options, 0);
+                               rb_grn_context_s_get_default_options, 0);
     rb_define_singleton_method(cGrnContext, "default_options=",
-			       rb_grn_context_s_set_default_options, 1);
+                               rb_grn_context_s_set_default_options, 1);
 
     rb_define_method(cGrnContext, "initialize", rb_grn_context_initialize, -1);
 
@@ -962,16 +962,16 @@ rb_grn_init_context (VALUE mGrn)
     rb_define_method(cGrnContext, "encoding", rb_grn_context_get_encoding, 0);
     rb_define_method(cGrnContext, "encoding=", rb_grn_context_set_encoding, 1);
     rb_define_method(cGrnContext, "ruby_encoding",
-		     rb_grn_context_get_ruby_encoding, 0);
+                     rb_grn_context_get_ruby_encoding, 0);
     rb_define_method(cGrnContext, "match_escalation_threshold",
-		     rb_grn_context_get_match_escalation_threshold, 0);
+                     rb_grn_context_get_match_escalation_threshold, 0);
     rb_define_method(cGrnContext, "match_escalation_threshold=",
-		     rb_grn_context_set_match_escalation_threshold, 1);
+                     rb_grn_context_set_match_escalation_threshold, 1);
 
     rb_define_method(cGrnContext, "support_zlib?",
-		     rb_grn_context_support_zlib_p, 0);
+                     rb_grn_context_support_zlib_p, 0);
     rb_define_method(cGrnContext, "support_lzo?",
-		     rb_grn_context_support_lzo_p, 0);
+                     rb_grn_context_support_lzo_p, 0);
 
     rb_define_method(cGrnContext, "database", rb_grn_context_get_database, 0);
 

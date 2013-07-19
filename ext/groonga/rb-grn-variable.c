@@ -54,8 +54,8 @@ rb_grn_variable_deconstruct (RbGrnVariable *rb_grn_variable,
 
     rb_grn_object = RB_GRN_OBJECT(rb_grn_variable);
     rb_grn_object_deconstruct(rb_grn_object, variable, context,
-			      domain_id, domain,
-			      range_id, range);
+                              domain_id, domain,
+                              range_id, range);
 }
 
 /*

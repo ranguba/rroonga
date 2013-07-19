@@ -44,8 +44,8 @@ rb_grn_fix_size_column_array_reference (VALUE self, VALUE rb_id)
     grn_obj *value;
 
     rb_grn_column_deconstruct(SELF(self), &fix_size_column, &context,
-			      NULL, NULL,
-			      &value, NULL, &range);
+                              NULL, NULL,
+                              &value, NULL, &range);
 
     id = NUM2UINT(rb_id);
     GRN_BULK_REWIND(value);
@@ -74,8 +74,8 @@ rb_grn_fix_size_column_array_set (VALUE self, VALUE rb_id, VALUE rb_value)
     grn_id id;
 
     rb_grn_column_deconstruct(SELF(self), &column, &context,
-			      &domain_id, &domain,
-			      &value, &range_id, &range);
+                              &domain_id, &domain,
+                              &value, &range_id, &range);
 
     id = NUM2UINT(rb_id);
     RVAL2GRNVALUE(rb_value, context, value, range_id, range);
@@ -100,12 +100,12 @@ rb_grn_fix_size_column_integer_set (int argc, VALUE *argv, VALUE self, int flags
     rb_scan_args(argc, argv, "11", &rb_id, &rb_delta);
 
     rb_grn_column_deconstruct(SELF(self), &column, &context,
-			      NULL, NULL,
-			      &value, NULL, NULL);
+                              NULL, NULL,
+                              &value, NULL, NULL);
 
     id = NUM2UINT(rb_id);
     if (NIL_P(rb_delta))
-	rb_delta = INT2NUM(1);
+        rb_delta = INT2NUM(1);
 
     GRN_BULK_REWIND(value);
     RVAL2GRNBULK(rb_delta, context, value);
@@ -145,15 +145,15 @@ void
 rb_grn_init_fix_size_column (VALUE mGrn)
 {
     rb_cGrnFixSizeColumn =
-	rb_define_class_under(mGrn, "FixSizeColumn", rb_cGrnColumn);
+        rb_define_class_under(mGrn, "FixSizeColumn", rb_cGrnColumn);
 
     rb_define_method(rb_cGrnFixSizeColumn, "[]",
-		     rb_grn_fix_size_column_array_reference, 1);
+                     rb_grn_fix_size_column_array_reference, 1);
     rb_define_method(rb_cGrnFixSizeColumn, "[]=",
-		     rb_grn_fix_size_column_array_set, 2);
+                     rb_grn_fix_size_column_array_set, 2);
 
     rb_define_method(rb_cGrnFixSizeColumn, "increment!",
-		     rb_grn_fix_size_column_increment, -1);
+                     rb_grn_fix_size_column_increment, -1);
     rb_define_method(rb_cGrnFixSizeColumn, "decrement!",
-		     rb_grn_fix_size_column_decrement, -1);
+                     rb_grn_fix_size_column_decrement, -1);
 }

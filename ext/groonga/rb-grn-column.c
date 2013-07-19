@@ -53,7 +53,7 @@ grn_obj *
 rb_grn_column_from_ruby_object (VALUE object, grn_ctx **context)
 {
     if (!RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cGrnColumn))) {
-	rb_raise(rb_eTypeError, "not a groonga column");
+        rb_raise(rb_eTypeError, "not a groonga column");
     }
 
     return RVAL2GRNOBJECT(object, context);
@@ -61,14 +61,14 @@ rb_grn_column_from_ruby_object (VALUE object, grn_ctx **context)
 
 VALUE
 rb_grn_column_to_ruby_object (VALUE klass, grn_ctx *context, grn_obj *column,
-			      grn_bool owner)
+                              grn_bool owner)
 {
     return GRNOBJECT2RVAL(klass, context, column, owner);
 }
 
 void
 rb_grn_column_bind (RbGrnColumn *rb_column,
-		    grn_ctx *context, grn_obj *column)
+                    grn_ctx *context, grn_obj *column)
 {
     RbGrnObject *rb_grn_object;
 
@@ -80,34 +80,34 @@ rb_grn_column_bind (RbGrnColumn *rb_column,
 
 void
 rb_grn_column_finalizer (grn_ctx *context, grn_obj *grn_object,
-			 RbGrnColumn *rb_column)
+                         RbGrnColumn *rb_column)
 {
     rb_grn_named_object_finalizer(context, grn_object,
-				  RB_GRN_NAMED_OBJECT(rb_column));
+                                  RB_GRN_NAMED_OBJECT(rb_column));
     if (context && rb_column->value)
-	grn_obj_unlink(context, rb_column->value);
+        grn_obj_unlink(context, rb_column->value);
     rb_column->value = NULL;
 }
 
 void
 rb_grn_column_deconstruct (RbGrnColumn *rb_column,
-			   grn_obj **column,
-			   grn_ctx **context,
-			   grn_id *domain_id,
-			   grn_obj **domain,
-			   grn_obj **value,
-			   grn_id *range_id,
-			   grn_obj **range)
+                           grn_obj **column,
+                           grn_ctx **context,
+                           grn_id *domain_id,
+                           grn_obj **domain,
+                           grn_obj **value,
+                           grn_id *range_id,
+                           grn_obj **range)
 {
     RbGrnObject *rb_grn_object;
 
     rb_grn_object = RB_GRN_OBJECT(rb_column);
     rb_grn_object_deconstruct(rb_grn_object, column, context,
-			      domain_id, domain,
-			      range_id, range);
+                              domain_id, domain,
+                              range_id, range);
 
     if (value)
-	*value = rb_column->value;
+        *value = rb_column->value;
 }
 
 /*
@@ -124,8 +124,8 @@ rb_grn_column_get_table (VALUE self)
     grn_obj *table;
 
     rb_grn_object_deconstruct((RbGrnObject *)(SELF(self)), &column, &context,
-			      NULL, NULL,
-			      NULL, NULL);
+                              NULL, NULL,
+                              NULL, NULL);
     table = grn_column_table(context, column);
     rb_grn_context_check(context, self);
 
@@ -154,11 +154,11 @@ rb_grn_column_get_local_name (VALUE self)
 
     rb_grn_column = SELF(self);
     rb_grn_object_deconstruct(RB_GRN_OBJECT(rb_grn_column), &column, &context,
-			      NULL, NULL,
-			      NULL, NULL);
+                              NULL, NULL,
+                              NULL, NULL);
     name_size = grn_column_name(context, column, NULL, 0);
     if (name_size == 0)
-	return Qnil;
+        return Qnil;
 
     name = xmalloc(name_size);
     grn_column_name(context, column, name, name_size);
@@ -317,8 +317,8 @@ rb_grn_column_select (int argc, VALUE *argv, VALUE self)
     rb_scan_args(argc, argv, "02", &condition_or_options, &options);
 
     rb_grn_column_deconstruct(SELF(self), &column, &context,
-			      NULL, NULL,
-			      NULL, NULL, NULL);
+                              NULL, NULL,
+                              NULL, NULL, NULL);
     table = grn_column_table(context, column);
 
     if (RVAL2CBOOL(rb_obj_is_kind_of(condition_or_options, rb_cString))) {
@@ -329,35 +329,35 @@ rb_grn_column_select (int argc, VALUE *argv, VALUE self)
     } else {
         if (!NIL_P(options))
             rb_raise(rb_eArgError,
-		     "should be [query_string, option_hash], "
-		     "[expression, option_hash] "
-		     "or [option_hash]: %s",
-		     rb_grn_inspect(rb_ary_new4(argc, argv)));
+                     "should be [query_string, option_hash], "
+                     "[expression, option_hash] "
+                     "or [option_hash]: %s",
+                     rb_grn_inspect(rb_ary_new4(argc, argv)));
         options = condition_or_options;
     }
 
     rb_grn_scan_options(options,
-			"operator", &rb_operator,
-			"result", &rb_result,
-			"name", &rb_name,
-			"syntax", &rb_syntax,
-			"allow_pragma", &rb_allow_pragma,
-			"allow_column", &rb_allow_column,
-			"allow_update", &rb_allow_update,
-			"allow_leading_not", &rb_allow_leading_not,
-			NULL);
+                        "operator", &rb_operator,
+                        "result", &rb_result,
+                        "name", &rb_name,
+                        "syntax", &rb_syntax,
+                        "allow_pragma", &rb_allow_pragma,
+                        "allow_column", &rb_allow_column,
+                        "allow_update", &rb_allow_update,
+                        "allow_leading_not", &rb_allow_leading_not,
+                        NULL);
 
     if (!NIL_P(rb_operator))
-	operator = NUM2INT(rb_operator);
+        operator = NUM2INT(rb_operator);
 
     if (NIL_P(rb_result)) {
-	result = grn_table_create(context, NULL, 0, NULL,
-				  GRN_TABLE_HASH_KEY | GRN_OBJ_WITH_SUBREC,
-				  table,
-				  0);
-	rb_result = GRNTABLE2RVAL(context, result, GRN_TRUE);
+        result = grn_table_create(context, NULL, 0, NULL,
+                                  GRN_TABLE_HASH_KEY | GRN_OBJ_WITH_SUBREC,
+                                  table,
+                                  0);
+        rb_result = GRNTABLE2RVAL(context, result, GRN_TRUE);
     } else {
-	result = RVAL2GRNTABLE(rb_result, &context);
+        result = RVAL2GRNTABLE(rb_result, &context);
     }
 
     if (NIL_P(rb_expression)) {
@@ -377,8 +377,8 @@ rb_grn_column_select (int argc, VALUE *argv, VALUE self)
     rb_grn_context_check(context, self);
 
     rb_attr(rb_singleton_class(rb_result),
-	    rb_intern("expression"),
-	    GRN_TRUE, GRN_FALSE, GRN_FALSE);
+            rb_intern("expression"),
+            GRN_TRUE, GRN_FALSE, GRN_FALSE);
     rb_iv_set(rb_result, "@expression", rb_expression);
 
     return rb_result;
@@ -404,15 +404,15 @@ rb_grn_column_unlock (int argc, VALUE *argv, VALUE self)
     rb_scan_args(argc, argv, "01",  &options);
 
     rb_grn_column_deconstruct(SELF(self), &column, &context,
-			     NULL, NULL,
-			     NULL, NULL, NULL);
+                             NULL, NULL,
+                             NULL, NULL, NULL);
 
     rb_grn_scan_options(options,
-			"id", &rb_id,
-			NULL);
+                        "id", &rb_id,
+                        NULL);
 
     if (!NIL_P(rb_id))
-	id = NUM2UINT(rb_id);
+        id = NUM2UINT(rb_id);
 
     rc = grn_obj_unlock(context, column, id);
     rb_grn_context_check(context, self);
@@ -459,28 +459,28 @@ rb_grn_column_lock (int argc, VALUE *argv, VALUE self)
     rb_scan_args(argc, argv, "01",  &options);
 
     rb_grn_column_deconstruct(SELF(self), &column, &context,
-			     NULL, NULL,
-			     NULL, NULL, NULL);
+                             NULL, NULL,
+                             NULL, NULL, NULL);
 
     rb_grn_scan_options(options,
-			"timeout", &rb_timeout,
-			"id", &rb_id,
-			NULL);
+                        "timeout", &rb_timeout,
+                        "id", &rb_id,
+                        NULL);
 
     if (!NIL_P(rb_timeout))
-	timeout = NUM2UINT(rb_timeout);
+        timeout = NUM2UINT(rb_timeout);
 
     if (!NIL_P(rb_id))
-	id = NUM2UINT(rb_id);
+        id = NUM2UINT(rb_id);
 
     rc = grn_obj_lock(context, column, id, timeout);
     rb_grn_context_check(context, self);
     rb_grn_rc_check(rc, self);
 
     if (rb_block_given_p()) {
-	return rb_ensure(rb_yield, Qnil, rb_grn_column_unlock_ensure, self);
+        return rb_ensure(rb_yield, Qnil, rb_grn_column_unlock_ensure, self);
     } else {
-	return Qnil;
+        return Qnil;
     }
 }
 
@@ -505,15 +505,15 @@ rb_grn_column_clear_lock (int argc, VALUE *argv, VALUE self)
     rb_scan_args(argc, argv, "01",  &options);
 
     rb_grn_column_deconstruct(SELF(self), &column, &context,
-			     NULL, NULL,
-			     NULL, NULL, NULL);
+                             NULL, NULL,
+                             NULL, NULL, NULL);
 
     rb_grn_scan_options(options,
-			"id", &rb_id,
-			NULL);
+                        "id", &rb_id,
+                        NULL);
 
     if (!NIL_P(rb_id))
-	id = NUM2UINT(rb_id);
+        id = NUM2UINT(rb_id);
 
     grn_obj_clear_lock(context, column);
 
@@ -541,15 +541,15 @@ rb_grn_column_is_locked (int argc, VALUE *argv, VALUE self)
     rb_scan_args(argc, argv, "01",  &options);
 
     rb_grn_column_deconstruct(SELF(self), &column, &context,
-			     NULL, NULL,
-			     NULL, NULL, NULL);
+                             NULL, NULL,
+                             NULL, NULL, NULL);
 
     rb_grn_scan_options(options,
-			"id", &rb_id,
-			NULL);
+                        "id", &rb_id,
+                        NULL);
 
     if (!NIL_P(rb_id))
-	id = NUM2UINT(rb_id);
+        id = NUM2UINT(rb_id);
 
     return CBOOL2RVAL(grn_obj_is_locked(context, column));
 }
@@ -572,8 +572,8 @@ rb_grn_column_reference_p (VALUE self)
     unsigned short int type;
 
     rb_grn_column_deconstruct(SELF(self), &column, &context,
-			     NULL, NULL,
-			     NULL, NULL, NULL);
+                             NULL, NULL,
+                             NULL, NULL, NULL);
 
     range_id = grn_obj_get_range(context, column);
     range = grn_ctx_at(context, range_id);
@@ -583,9 +583,9 @@ rb_grn_column_reference_p (VALUE self)
       case GRN_TABLE_HASH_KEY:
       case GRN_TABLE_PAT_KEY:
       case GRN_TABLE_NO_KEY:
-	return Qtrue;
+        return Qtrue;
       default:
-	return Qfalse;
+        return Qfalse;
     }
 }
 
@@ -604,13 +604,13 @@ rb_grn_column_index_p (VALUE self)
     grn_obj *column;
 
     rb_grn_column_deconstruct(SELF(self), &column, &context,
-			     NULL, NULL,
-			     NULL, NULL, NULL);
+                             NULL, NULL,
+                             NULL, NULL, NULL);
 
     if (column->header.type == GRN_COLUMN_INDEX) {
-	return Qtrue;
+        return Qtrue;
     } else {
-	return Qfalse;
+        return Qfalse;
     }
 }
 
@@ -629,15 +629,15 @@ rb_grn_column_vector_p (VALUE self)
     grn_obj *column;
 
     rb_grn_column_deconstruct(SELF(self), &column, &context,
-			     NULL, NULL,
-			     NULL, NULL, NULL);
+                             NULL, NULL,
+                             NULL, NULL, NULL);
 
     if (column->header.type == GRN_COLUMN_VAR_SIZE &&
-	((column->header.flags & GRN_OBJ_COLUMN_TYPE_MASK) ==
-	 GRN_OBJ_COLUMN_VECTOR)) {
-	return Qtrue;
+        ((column->header.flags & GRN_OBJ_COLUMN_TYPE_MASK) ==
+         GRN_OBJ_COLUMN_VECTOR)) {
+        return Qtrue;
     } else {
-	return Qfalse;
+        return Qfalse;
     }
 }
 
@@ -656,21 +656,21 @@ rb_grn_column_scalar_p (VALUE self)
     grn_obj *column;
 
     rb_grn_column_deconstruct(SELF(self), &column, &context,
-			     NULL, NULL,
-			     NULL, NULL, NULL);
+                             NULL, NULL,
+                             NULL, NULL, NULL);
 
     switch (column->header.type) {
       case GRN_COLUMN_FIX_SIZE:
-	return Qtrue;
+        return Qtrue;
       case GRN_COLUMN_VAR_SIZE:
-	if ((column->header.flags & GRN_OBJ_COLUMN_TYPE_MASK) ==
-	    GRN_OBJ_COLUMN_SCALAR) {
-	    return Qtrue;
-	} else {
-	    return Qfalse;
-	}
+        if ((column->header.flags & GRN_OBJ_COLUMN_TYPE_MASK) ==
+            GRN_OBJ_COLUMN_SCALAR) {
+            return Qtrue;
+        } else {
+            return Qfalse;
+        }
       default:
-	return Qfalse;
+        return Qfalse;
     }
 }
 
@@ -694,27 +694,27 @@ rb_grn_column_get_indexes (int argc, VALUE *argv, VALUE self)
     rb_scan_args(argc, argv, "01", &rb_operator);
 
     rb_grn_column_deconstruct(SELF(self), &column, &context,
-			     NULL, NULL,
-			     NULL, NULL, NULL);
+                             NULL, NULL,
+                             NULL, NULL, NULL);
 
     if (!NIL_P(rb_operator)) {
-	operator = RVAL2GRNOPERATOR(rb_operator);
+        operator = RVAL2GRNOPERATOR(rb_operator);
     }
 
     rb_indexes = rb_ary_new();
     n_indexes = grn_column_index(context, column, operator,
-				 NULL, 0, NULL);
+                                 NULL, 0, NULL);
     if (n_indexes == 0)
-	return rb_indexes;
+        return rb_indexes;
 
     indexes = xmalloc(sizeof(grn_obj *) * n_indexes);
     n_indexes = grn_column_index(context, column, operator,
-				 indexes, n_indexes, NULL);
+                                 indexes, n_indexes, NULL);
     for (i = 0; i < n_indexes; i++) {
-	VALUE rb_index;
-	rb_index = GRNOBJECT2RVAL(Qnil, context, indexes[i], GRN_FALSE);
-	rb_ary_push(rb_indexes, rb_index);
-	grn_obj_unlink(context, indexes[i]);
+        VALUE rb_index;
+        rb_index = GRNOBJECT2RVAL(Qnil, context, indexes[i], GRN_FALSE);
+        rb_ary_push(rb_indexes, rb_index);
+        grn_obj_unlink(context, indexes[i]);
     }
     xfree(indexes);
     return rb_indexes;
@@ -736,8 +736,8 @@ rb_grn_column_rename (VALUE self, VALUE rb_name)
     int name_size;
 
     rb_grn_column_deconstruct(SELF(self), &column, &context,
-			      NULL, NULL,
-			      NULL, NULL, NULL);
+                              NULL, NULL,
+                              NULL, NULL, NULL);
 
     name = StringValueCStr(rb_name);
     name_size = RSTRING_LEN(rb_name);
@@ -756,7 +756,7 @@ rb_grn_init_column (VALUE mGrn)
 
     rb_define_method(rb_cGrnColumn, "table", rb_grn_column_get_table, 0);
     rb_define_method(rb_cGrnColumn, "local_name",
-		     rb_grn_column_get_local_name, 0);
+                     rb_grn_column_get_local_name, 0);
 
     rb_define_method(rb_cGrnColumn, "select", rb_grn_column_select, -1);
     rb_define_method(rb_cGrnColumn, "lock", rb_grn_column_lock, -1);

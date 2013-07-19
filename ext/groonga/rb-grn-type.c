@@ -35,7 +35,7 @@ grn_obj *
 rb_grn_type_from_ruby_object (VALUE object)
 {
     if (!RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cGrnType))) {
-	rb_raise(rb_eTypeError, "not a groonga type");
+        rb_raise(rb_eTypeError, "not a groonga type");
     }
 
     return RVAL2GRNOBJECT(object, NULL);
@@ -43,7 +43,7 @@ rb_grn_type_from_ruby_object (VALUE object)
 
 VALUE
 rb_grn_type_to_ruby_object (grn_ctx *context, grn_obj *type,
-			    grn_bool owner)
+                            grn_bool owner)
 {
     return GRNOBJECT2RVAL(rb_cGrnType, context, type, owner);
 }
@@ -82,10 +82,10 @@ rb_grn_type_initialize (int argc, VALUE *argv, VALUE self)
     rb_scan_args(argc, argv, "11", &rb_name, &options);
 
     rb_grn_scan_options(options,
-			"context", &rb_context,
-			"type", &rb_type,
-			"size", &rb_size,
-			NULL);
+                        "context", &rb_context,
+                        "type", &rb_type,
+                        "size", &rb_size,
+                        NULL);
 
     name = StringValuePtr(rb_name);
     name_size = RSTRING_LEN(rb_name);
@@ -93,25 +93,25 @@ rb_grn_type_initialize (int argc, VALUE *argv, VALUE self)
     context = rb_grn_context_ensure(&rb_context);
 
     if (NIL_P(rb_type) ||
-	rb_grn_equal_option(rb_type, "variable")) {
+        rb_grn_equal_option(rb_type, "variable")) {
         flags = GRN_OBJ_KEY_VAR_SIZE;
     } else if (rb_grn_equal_option(rb_type, "integer") ||
                rb_grn_equal_option(rb_type, "int")) {
-	flags = GRN_OBJ_KEY_INT;
+        flags = GRN_OBJ_KEY_INT;
         size = sizeof(int);
     } else if (rb_grn_equal_option(rb_type, "unsigned_integer") ||
-	       rb_grn_equal_option(rb_type, "uint")) {
-	flags = GRN_OBJ_KEY_UINT;
+               rb_grn_equal_option(rb_type, "uint")) {
+        flags = GRN_OBJ_KEY_UINT;
         size = sizeof(unsigned int);
     } else if (rb_grn_equal_option(rb_type, "float")) {
-	flags = GRN_OBJ_KEY_FLOAT;
+        flags = GRN_OBJ_KEY_FLOAT;
         size = sizeof(double);
     } else {
-	rb_raise(rb_eArgError,
-		 ":type should be one of "
-		 "[:integer, :int, :unsigned_integer, :uint, "
-		 ":float, :variable]: %s",
-		 rb_grn_inspect(options));
+        rb_raise(rb_eArgError,
+                 ":type should be one of "
+                 "[:integer, :int, :unsigned_integer, :uint, "
+                 ":float, :variable]: %s",
+                 rb_grn_inspect(options));
     }
 
     if (NIL_P(rb_size)) {
@@ -227,10 +227,10 @@ rb_grn_init_type (VALUE mGrn)
     rb_define_method(rb_cGrnType, "flags", rb_grn_type_flags, 0);
     rb_define_method(rb_cGrnType, "fixed_size?", rb_grn_type_fixed_size_p, 0);
     rb_define_method(rb_cGrnType, "variable_size?",
-		     rb_grn_type_variable_size_p, 0);
+                     rb_grn_type_variable_size_p, 0);
 
     rb_define_method(rb_cGrnType, "unsigned_integer?",
-		     rb_grn_type_unsigned_integer_p, 0);
+                     rb_grn_type_unsigned_integer_p, 0);
     rb_define_alias(rb_cGrnType, "uint?", "unsigned_integer?");
 
     rb_define_method(rb_cGrnType, "integer?", rb_grn_type_integer_p, 0);

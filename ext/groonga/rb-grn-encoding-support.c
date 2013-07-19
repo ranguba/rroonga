@@ -59,5 +59,5 @@ rb_grn_init_encoding_support (VALUE mGrn)
     rb_mGrnEncodingSupport = rb_define_module_under(mGrn, "EncodingSupport");
 
     rb_define_method(rb_mGrnEncodingSupport, "encoding",
-		     rb_grn_encoding_support_get_encoding, 0);
+                     rb_grn_encoding_support_get_encoding, 0);
 }

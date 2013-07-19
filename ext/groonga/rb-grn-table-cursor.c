@@ -35,38 +35,38 @@ rb_grn_table_cursor_from_ruby_object (VALUE object, grn_ctx **context)
     grn_table_cursor *table_cursor;
 
     if (!RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cGrnTableCursor))) {
-	rb_raise(rb_eTypeError, "not a groonga table cursor");
+        rb_raise(rb_eTypeError, "not a groonga table cursor");
     }
 
     rb_grn_table_cursor_deconstruct(SELF(object), &table_cursor, NULL,
-				    NULL, NULL,
-				    NULL, NULL);
+                                    NULL, NULL,
+                                    NULL, NULL);
     return table_cursor;
 }
 
 VALUE
 rb_grn_table_cursor_to_ruby_object (VALUE klass, grn_ctx *context,
-				    grn_table_cursor *cursor,
-				    grn_bool owner)
+                                    grn_table_cursor *cursor,
+                                    grn_bool owner)
 {
     return GRNOBJECT2RVAL(klass, context, cursor, owner);
 }
 
 void
 rb_grn_table_cursor_deconstruct (RbGrnTableCursor *rb_grn_table_cursor,
-				 grn_table_cursor **cursor,
-				 grn_ctx **context,
-				 grn_id *domain_id,
-				 grn_obj **domain,
-				 grn_id *range_id,
-				 grn_obj **range)
+                                 grn_table_cursor **cursor,
+                                 grn_ctx **context,
+                                 grn_id *domain_id,
+                                 grn_obj **domain,
+                                 grn_id *range_id,
+                                 grn_obj **range)
 {
     RbGrnObject *rb_grn_object;
 
     rb_grn_object = RB_GRN_OBJECT(rb_grn_table_cursor);
     rb_grn_object_deconstruct(rb_grn_object, cursor, context,
-			      domain_id, domain,
-			      range_id, range);
+                              domain_id, domain,
+                              range_id, range);
 }
 
 int
@@ -75,17 +75,17 @@ rb_grn_table_cursor_order_to_flag (VALUE rb_order)
     int flag = 0;
 
     if (NIL_P(rb_order) ||
-	rb_grn_equal_option(rb_order, "asc") ||
-	rb_grn_equal_option(rb_order, "ascending")) {
-	flag |= GRN_CURSOR_ASCENDING;
+        rb_grn_equal_option(rb_order, "asc") ||
+        rb_grn_equal_option(rb_order, "ascending")) {
+        flag |= GRN_CURSOR_ASCENDING;
     } else if (rb_grn_equal_option(rb_order, "desc") ||
-	       rb_grn_equal_option(rb_order, "descending")) {
-	flag |= GRN_CURSOR_DESCENDING;
+               rb_grn_equal_option(rb_order, "descending")) {
+        flag |= GRN_CURSOR_DESCENDING;
     } else {
-	rb_raise(rb_eArgError,
-		 "order should be one of "
-		 "[:asc, :ascending, :desc, :descending]: %s",
-		 rb_grn_inspect(rb_order));
+        rb_raise(rb_eArgError,
+                 "order should be one of "
+                 "[:asc, :ascending, :desc, :descending]: %s",
+                 rb_grn_inspect(rb_order));
     }
 
     return flag;
@@ -93,32 +93,32 @@ rb_grn_table_cursor_order_to_flag (VALUE rb_order)
 
 int
 rb_grn_table_cursor_order_by_to_flag (unsigned char table_type,
-				      VALUE rb_table,
-				      VALUE rb_order_by)
+                                      VALUE rb_table,
+                                      VALUE rb_order_by)
 {
     int flag = 0;
 
     if (NIL_P(rb_order_by)) {
-	if (table_type == GRN_TABLE_PAT_KEY) {
-	    flag |= GRN_CURSOR_BY_KEY;
-	} else {
-	    flag |= GRN_CURSOR_BY_ID;
-	}
+        if (table_type == GRN_TABLE_PAT_KEY) {
+            flag |= GRN_CURSOR_BY_KEY;
+        } else {
+            flag |= GRN_CURSOR_BY_ID;
+        }
     } else if (rb_grn_equal_option(rb_order_by, "id")) {
-	flag |= GRN_CURSOR_BY_ID;
+        flag |= GRN_CURSOR_BY_ID;
     } else if (rb_grn_equal_option(rb_order_by, "key")) {
-	if (table_type != GRN_TABLE_PAT_KEY) {
-	    rb_raise(rb_eArgError,
-		     "order_by => :key is available "
-		     "only for Groonga::PatriciaTrie: %s",
-		     rb_grn_inspect(rb_table));
-	}
-	flag |= GRN_CURSOR_BY_KEY;
+        if (table_type != GRN_TABLE_PAT_KEY) {
+            rb_raise(rb_eArgError,
+                     "order_by => :key is available "
+                     "only for Groonga::PatriciaTrie: %s",
+                     rb_grn_inspect(rb_table));
+        }
+        flag |= GRN_CURSOR_BY_KEY;
     } else {
-	rb_raise(rb_eArgError,
-		 "order_by should be one of [:id%s]: %s",
-		 table_type == GRN_TABLE_PAT_KEY ? ", :key" : "",
-		 rb_grn_inspect(rb_order_by));
+        rb_raise(rb_eArgError,
+                 "order_by should be one of [:id%s]: %s",
+                 table_type == GRN_TABLE_PAT_KEY ? ", :key" : "",
+                 rb_grn_inspect(rb_order_by));
     }
 
     return flag;
@@ -138,7 +138,7 @@ rb_grn_table_cursor_get_value (VALUE self)
     VALUE rb_value = Qnil;
 
     rb_grn_table_cursor_deconstruct(SELF(self), &cursor, &context,
-				    NULL, NULL, NULL, NULL);
+                                    NULL, NULL, NULL, NULL);
     if (context && cursor) {
         int n;
         void *value;
@@ -163,14 +163,14 @@ rb_grn_table_cursor_set_value (VALUE self, VALUE value)
     grn_table_cursor *cursor;
 
     rb_grn_table_cursor_deconstruct(SELF(self), &cursor, &context,
-				    NULL, NULL, NULL, NULL);
+                                    NULL, NULL, NULL, NULL);
     if (context && cursor) {
         grn_rc rc;
 
         rc = grn_table_cursor_set_value(context,
                                         cursor,
                                         StringValuePtr(value),
-					GRN_OBJ_SET);
+                                        GRN_OBJ_SET);
         rb_grn_rc_check(rc, self);
     }
 
@@ -189,7 +189,7 @@ rb_grn_table_cursor_delete (VALUE self)
     grn_table_cursor *cursor;
 
     rb_grn_table_cursor_deconstruct(SELF(self), &cursor, &context,
-				    NULL, NULL, NULL, NULL);
+                                    NULL, NULL, NULL, NULL);
     if (context && cursor) {
         grn_rc rc;
 
@@ -214,14 +214,14 @@ rb_grn_table_cursor_next (VALUE self)
     grn_table_cursor *cursor;
 
     rb_grn_table_cursor_deconstruct(SELF(self), &cursor, &context,
-				    NULL, NULL, NULL, NULL);
+                                    NULL, NULL, NULL, NULL);
     if (context && cursor) {
         grn_id record_id;
 
         record_id = grn_table_cursor_next(context, cursor);
         if (record_id != GRN_ID_NIL) /* FIXME: use grn_table_cursor_table */
             rb_record = rb_grn_record_new(rb_iv_get(self, "@table"),
-					  record_id, Qnil);
+                                          record_id, Qnil);
     }
 
     return rb_record;
@@ -243,13 +243,13 @@ rb_grn_table_cursor_each (VALUE self)
     RETURN_ENUMERATOR(self, 0, NULL);
 
     rb_grn_table_cursor_deconstruct(SELF(self), &cursor, &context,
-				    NULL, NULL, NULL, NULL);
+                                    NULL, NULL, NULL, NULL);
 
     if (context && cursor) {
-	while ((record_id = grn_table_cursor_next(context, cursor))) {
-	    rb_yield(rb_grn_record_new(rb_iv_get(self, "@table"),
-				       record_id, Qnil));
-	}
+        while ((record_id = grn_table_cursor_next(context, cursor))) {
+            rb_yield(rb_grn_record_new(rb_iv_get(self, "@table"),
+                                       record_id, Qnil));
+        }
     }
 
     return Qnil;

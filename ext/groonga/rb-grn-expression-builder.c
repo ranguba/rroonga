@@ -25,14 +25,14 @@ VALUE
 rb_grn_record_expression_builder_new (VALUE table, VALUE name)
 {
     return rb_funcall(rb_cGrnRecordExpressionBuilder,
-		      rb_intern("new"), 2, table, name);
+                      rb_intern("new"), 2, table, name);
 }
 
 VALUE
 rb_grn_column_expression_builder_new (VALUE column, VALUE name, VALUE query)
 {
     return rb_funcall(rb_cGrnColumnExpressionBuilder,
-		      rb_intern("new"), 3, column, name, query);
+                      rb_intern("new"), 3, column, name, query);
 }
 
 static VALUE
@@ -51,18 +51,18 @@ VALUE
 rb_grn_record_expression_builder_build (VALUE self)
 {
     if (rb_block_given_p())
-	return rb_iterate(build, self, build_block, self);
+        return rb_iterate(build, self, build_block, self);
     else
-	return build(self);
+        return build(self);
 }
 
 VALUE
 rb_grn_column_expression_builder_build (VALUE self)
 {
     if (rb_block_given_p())
-	return rb_iterate(build, self, build_block, self);
+        return rb_iterate(build, self, build_block, self);
     else
-	return build(self);
+        return build(self);
 }
 
 void

@@ -82,10 +82,10 @@ grn_encoding
 rb_grn_encoding_from_ruby_object (VALUE object, grn_ctx *context)
 {
     if (NIL_P(object)) {
-	if (context)
-	    return context->encoding;
-	else
-	    return GRN_ENC_DEFAULT;
+        if (context)
+            return context->encoding;
+        else
+            return GRN_ENC_DEFAULT;
     }
 
     if (rb_grn_equal_option(object, "default")) {
@@ -93,14 +93,14 @@ rb_grn_encoding_from_ruby_object (VALUE object, grn_ctx *context)
     } else if (rb_grn_equal_option(object, "none")) {
         return GRN_ENC_NONE;
     } else if (rb_grn_equal_option(object, "euc_jp") ||
-	       rb_grn_equal_option(object, "euc-jp")) {
+               rb_grn_equal_option(object, "euc-jp")) {
         return GRN_ENC_EUC_JP;
     } else if (rb_grn_equal_option(object, "utf8") ||
-	       rb_grn_equal_option(object, "utf-8")) {
+               rb_grn_equal_option(object, "utf-8")) {
         return GRN_ENC_UTF8;
     } else if (rb_grn_equal_option(object, "sjis") ||
-	       rb_grn_equal_option(object, "shift_jis") ||
-	       rb_grn_equal_option(object, "shift-jis")) {
+               rb_grn_equal_option(object, "shift_jis") ||
+               rb_grn_equal_option(object, "shift-jis")) {
         return GRN_ENC_SJIS;
     } else if (rb_grn_equal_option(object, "latin1")) {
         return GRN_ENC_LATIN1;
@@ -120,29 +120,29 @@ rb_grn_encoding_to_ruby_object (grn_encoding encoding)
 
     switch (encoding) {
       case GRN_ENC_DEFAULT:
-	rb_encoding = RB_GRN_ENCODING_DEFAULT;
+        rb_encoding = RB_GRN_ENCODING_DEFAULT;
         break;
       case GRN_ENC_NONE:
-	rb_encoding = RB_GRN_ENCODING_NONE;
+        rb_encoding = RB_GRN_ENCODING_NONE;
         break;
       case GRN_ENC_EUC_JP:
-	rb_encoding = RB_GRN_ENCODING_EUC_JP;
+        rb_encoding = RB_GRN_ENCODING_EUC_JP;
         break;
       case GRN_ENC_UTF8:
-	rb_encoding = RB_GRN_ENCODING_UTF8;
+        rb_encoding = RB_GRN_ENCODING_UTF8;
         break;
       case GRN_ENC_SJIS:
-	rb_encoding = RB_GRN_ENCODING_SJIS;
+        rb_encoding = RB_GRN_ENCODING_SJIS;
         break;
       case GRN_ENC_LATIN1:
-	rb_encoding = RB_GRN_ENCODING_LATIN1;
+        rb_encoding = RB_GRN_ENCODING_LATIN1;
         break;
       case GRN_ENC_KOI8R:
-	rb_encoding = RB_GRN_ENCODING_KOI8R;
+        rb_encoding = RB_GRN_ENCODING_KOI8R;
         break;
       default:
-	rb_raise(rb_eArgError, "unknown encoding: %d", encoding);
-	break;
+        rb_raise(rb_eArgError, "unknown encoding: %d", encoding);
+        break;
     }
 
     return rb_encoding;
@@ -155,30 +155,30 @@ rb_grn_encoding_to_ruby_encoding (grn_encoding encoding)
     rb_encoding *rb_encoding;
 
     if (encoding == GRN_ENC_DEFAULT)
-	encoding = grn_get_default_encoding();
+        encoding = grn_get_default_encoding();
 
     switch (encoding) {
       case GRN_ENC_NONE:
-	rb_encoding = rb_ascii8bit_encoding();
+        rb_encoding = rb_ascii8bit_encoding();
         break;
       case GRN_ENC_EUC_JP:
-	rb_encoding = rb_enc_find("euc-jp");
+        rb_encoding = rb_enc_find("euc-jp");
         break;
       case GRN_ENC_UTF8:
-	rb_encoding = rb_utf8_encoding();
+        rb_encoding = rb_utf8_encoding();
         break;
       case GRN_ENC_SJIS:
-	rb_encoding = rb_enc_find("CP932");
+        rb_encoding = rb_enc_find("CP932");
         break;
       case GRN_ENC_LATIN1:
-	rb_encoding = rb_enc_find("ISO-8859-1");
+        rb_encoding = rb_enc_find("ISO-8859-1");
         break;
       case GRN_ENC_KOI8R:
-	rb_encoding = rb_enc_find("KOI8-R");
+        rb_encoding = rb_enc_find("KOI8-R");
         break;
       default:
-	rb_raise(rb_eArgError, "unknown encoding: %d", encoding);
-	break;
+        rb_raise(rb_eArgError, "unknown encoding: %d", encoding);
+        break;
     }
 
     return rb_encoding;
@@ -222,9 +222,9 @@ rb_grn_init_encoding (VALUE mGrn)
     mGrnEncoding = rb_define_module_under(mGrn, "Encoding");
 
     rb_define_singleton_method(mGrnEncoding, "default",
-			       rb_grn_encoding_s_get_default, 0);
+                               rb_grn_encoding_s_get_default, 0);
     rb_define_singleton_method(mGrnEncoding, "default=",
-			       rb_grn_encoding_s_set_default, 1);
+                               rb_grn_encoding_s_set_default, 1);
 
 #define DEFINE_ENCODING(name, value)                                    \
     RB_GRN_ENCODING_ ## name = RB_GRN_INTERN(value);                    \

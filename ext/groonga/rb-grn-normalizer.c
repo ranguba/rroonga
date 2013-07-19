@@ -56,18 +56,18 @@ rb_grn_normalizer_s_normalize (VALUE klass, VALUE rb_string)
     context = rb_grn_context_ensure(&rb_context);
     rb_encoded_string = rb_grn_context_rb_string_encode(context, rb_string);
     grn_string = grn_string_open(context,
-				 RSTRING_PTR(rb_encoded_string),
-				 RSTRING_LEN(rb_encoded_string),
-				 normalizer,
-				 flags);
+                                 RSTRING_PTR(rb_encoded_string),
+                                 RSTRING_LEN(rb_encoded_string),
+                                 normalizer,
+                                 flags);
     rb_grn_context_check(context, rb_string);
     grn_string_get_normalized(context, grn_string,
-			      &normalized_string, &normalized_string_length,
-			      NULL);
+                              &normalized_string, &normalized_string_length,
+                              NULL);
     rb_normalized_string =
-	rb_grn_context_rb_string_new(context,
-				     normalized_string,
-				     normalized_string_length);
+        rb_grn_context_rb_string_new(context,
+                                     normalized_string,
+                                     normalized_string_length);
     grn_obj_close(context, grn_string);
 
     return rb_normalized_string;
@@ -79,5 +79,5 @@ rb_grn_init_normalizer (VALUE mGrn)
     rb_cGrnNormalizer = rb_define_class_under(mGrn, "Normalizer", rb_cObject);
 
     rb_define_singleton_method(rb_cGrnNormalizer, "normalize",
-			       rb_grn_normalizer_s_normalize, 1);
+                               rb_grn_normalizer_s_normalize, 1);
 }

@@ -30,28 +30,28 @@ VALUE rb_cGrnSnippet;
 
 void
 rb_grn_snippet_finalizer (grn_ctx *context, grn_obj *object,
-			  RbGrnSnippet *rb_grn_snippet)
+                          RbGrnSnippet *rb_grn_snippet)
 {
     rb_grn_context_unregister_floating_object(RB_GRN_OBJECT(rb_grn_snippet));
 }
 
 void
 rb_grn_snippet_bind (RbGrnSnippet *rb_grn_snippet,
-		     grn_ctx *context, grn_obj *snippet)
+                     grn_ctx *context, grn_obj *snippet)
 {
 }
 
 void
 rb_grn_snippet_deconstruct (RbGrnSnippet *rb_grn_snippet,
-			    grn_obj **snippet,
-			    grn_ctx **context)
+                            grn_obj **snippet,
+                            grn_ctx **context)
 {
     RbGrnObject *rb_grn_object;
 
     rb_grn_object = RB_GRN_OBJECT(rb_grn_snippet);
     rb_grn_object_deconstruct(rb_grn_object, snippet, context,
-			      NULL, NULL,
-			      NULL, NULL);
+                              NULL, NULL,
+                              NULL, NULL);
 }
 
 /*
@@ -112,10 +112,10 @@ rb_grn_snippet_initialize (int argc, VALUE *argv, VALUE self)
 
     context = rb_grn_context_ensure(&rb_context);
     if (!grn_ctx_db(context)) {
-	rb_raise(rb_eArgError,
-		 "Groonga::Context should be associated with a database by "
-		 "Groonga::Database#open or #create: %s",
-		 rb_grn_inspect(rb_context));
+        rb_raise(rb_eArgError,
+                 "Groonga::Context should be associated with a database by "
+                 "Groonga::Database#open or #create: %s",
+                 rb_grn_inspect(rb_context));
     }
 
     if (RVAL2CBOOL(rb_normalize))
@@ -234,9 +234,9 @@ rb_grn_snippet_execute (VALUE self, VALUE rb_string)
     rb_grn_snippet_deconstruct(SELF(self), &snippet, &context);
 
     if (TYPE(rb_string) != T_STRING) {
-	rb_raise(rb_eGrnInvalidArgument,
-		 "snippet text must be String: <%s>",
-		 rb_grn_inspect(rb_string));
+        rb_raise(rb_eGrnInvalidArgument,
+                 "snippet text must be String: <%s>",
+                 rb_grn_inspect(rb_string));
     }
 
 #ifdef HAVE_RUBY_ENCODING_H
@@ -257,7 +257,7 @@ rb_grn_snippet_execute (VALUE self, VALUE rb_string)
         unsigned result_length;
 
         rc = grn_snip_get_result(context, (grn_snip *)snippet,
-				 i, result, &result_length);
+                                 i, result, &result_length);
         rb_grn_rc_check(rc, self);
         rb_result = rb_grn_context_rb_string_new(context, result, result_length);
         rb_ary_push(rb_results, rb_result);

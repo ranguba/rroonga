@@ -54,17 +54,17 @@ rb_grn_init_runtime_version (VALUE mGrn)
     component_start = component_end + 1;
     component_end = strstr(component_start, "-");
     if (component_end) {
-	component_length = component_end - component_start;
+        component_length = component_end - component_start;
     } else {
-	component_length = strlen(component_start);
+        component_length = strlen(component_start);
     }
     micro = rb_str_new(component_start, component_length);
     rb_ary_push(runtime_version, rb_Integer(micro));
 
     if (component_end) {
-	tag = rb_str_new2(component_end + 1);
+        tag = rb_str_new2(component_end + 1);
     } else {
-	tag = Qnil;
+        tag = Qnil;
     }
     rb_ary_push(runtime_version, tag);
 
@@ -85,9 +85,9 @@ rb_grn_init_version (VALUE mGrn)
     rb_grn_init_runtime_version(mGrn);
 
     build_version = rb_ary_new3(3,
-				INT2NUM(GRN_MAJOR_VERSION),
-				INT2NUM(GRN_MINOR_VERSION),
-				INT2NUM(GRN_MICRO_VERSION));
+                                INT2NUM(GRN_MAJOR_VERSION),
+                                INT2NUM(GRN_MINOR_VERSION),
+                                INT2NUM(GRN_MICRO_VERSION));
     rb_obj_freeze(build_version);
     /*
      * ビルドしたgroongaのバージョン。 @[メジャーバージョン,
@@ -96,9 +96,9 @@ rb_grn_init_version (VALUE mGrn)
     rb_define_const(mGrn, "BUILD_VERSION", build_version);
 
     bindings_version = rb_ary_new3(3,
-				   INT2NUM(RB_GRN_MAJOR_VERSION),
-				   INT2NUM(RB_GRN_MINOR_VERSION),
-				   INT2NUM(RB_GRN_MICRO_VERSION));
+                                   INT2NUM(RB_GRN_MAJOR_VERSION),
+                                   INT2NUM(RB_GRN_MINOR_VERSION),
+                                   INT2NUM(RB_GRN_MICRO_VERSION));
     rb_obj_freeze(bindings_version);
     /*
      * rroongaのバージョン。 @[メジャーバージョン, マ

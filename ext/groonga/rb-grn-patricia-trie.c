@@ -174,65 +174,65 @@ rb_grn_patricia_trie_s_create (int argc, VALUE *argv, VALUE klass)
     rb_scan_args(argc, argv, "01", &options);
 
     rb_grn_scan_options(options,
-			"context", &rb_context,
-			"name", &rb_name,
+                        "context", &rb_context,
+                        "name", &rb_name,
                         "path", &rb_path,
-			"persistent", &rb_persistent,
-			"key_normalize", &rb_key_normalize,
-			"key_with_sis", &rb_key_with_sis,
-			"key_type", &rb_key_type,
-			"value_type", &rb_value_type,
-			"default_tokenizer", &rb_default_tokenizer,
-			"sub_records", &rb_sub_records,
-			"normalizer", &rb_normalizer,
-			NULL);
+                        "persistent", &rb_persistent,
+                        "key_normalize", &rb_key_normalize,
+                        "key_with_sis", &rb_key_with_sis,
+                        "key_type", &rb_key_type,
+                        "value_type", &rb_value_type,
+                        "default_tokenizer", &rb_default_tokenizer,
+                        "sub_records", &rb_sub_records,
+                        "normalizer", &rb_normalizer,
+                        NULL);
 
     context = rb_grn_context_ensure(&rb_context);
 
     if (!NIL_P(rb_name)) {
         name = StringValuePtr(rb_name);
-	name_size = RSTRING_LEN(rb_name);
-	flags |= GRN_OBJ_PERSISTENT;
+        name_size = RSTRING_LEN(rb_name);
+        flags |= GRN_OBJ_PERSISTENT;
     }
 
     if (!NIL_P(rb_path)) {
         path = StringValueCStr(rb_path);
-	flags |= GRN_OBJ_PERSISTENT;
+        flags |= GRN_OBJ_PERSISTENT;
     }
 
     if (RVAL2CBOOL(rb_persistent))
-	flags |= GRN_OBJ_PERSISTENT;
+        flags |= GRN_OBJ_PERSISTENT;
 
     if (RVAL2CBOOL(rb_key_normalize))
-	flags |= GRN_OBJ_KEY_NORMALIZE;
+        flags |= GRN_OBJ_KEY_NORMALIZE;
 
     if (RVAL2CBOOL(rb_key_with_sis))
-	flags |= GRN_OBJ_KEY_WITH_SIS;
+        flags |= GRN_OBJ_KEY_WITH_SIS;
 
     if (NIL_P(rb_key_type)) {
-	key_type = grn_ctx_at(context, GRN_DB_SHORT_TEXT);
+        key_type = grn_ctx_at(context, GRN_DB_SHORT_TEXT);
     } else {
-	key_type = RVAL2GRNOBJECT(rb_key_type, &context);
+        key_type = RVAL2GRNOBJECT(rb_key_type, &context);
     }
 
     if (!NIL_P(rb_value_type))
-	value_type = RVAL2GRNOBJECT(rb_value_type, &context);
+        value_type = RVAL2GRNOBJECT(rb_value_type, &context);
 
     if (RVAL2CBOOL(rb_sub_records))
-	flags |= GRN_OBJ_WITH_SUBREC;
+        flags |= GRN_OBJ_WITH_SUBREC;
 
     table = grn_table_create(context, name, name_size, path,
-			     flags, key_type, value_type);
+                             flags, key_type, value_type);
     if (!table)
-	rb_grn_context_check(context, rb_ary_new4(argc, argv));
+        rb_grn_context_check(context, rb_ary_new4(argc, argv));
     rb_table = GRNOBJECT2RVAL(klass, context, table, GRN_TRUE);
 
     if (!NIL_P(rb_default_tokenizer))
-	rb_funcall(rb_table, rb_intern("default_tokenizer="), 1,
-		   rb_default_tokenizer);
+        rb_funcall(rb_table, rb_intern("default_tokenizer="), 1,
+                   rb_default_tokenizer);
     if (!NIL_P(rb_normalizer))
-	rb_funcall(rb_table, rb_intern("normalizer="), 1,
-		   rb_normalizer);
+        rb_funcall(rb_table, rb_intern("normalizer="), 1,
+                   rb_normalizer);
 
     if (rb_block_given_p())
         return rb_ensure(rb_yield, rb_table, rb_grn_object_close, rb_table);
@@ -296,35 +296,35 @@ rb_grn_patricia_trie_search (int argc, VALUE *argv, VALUE self)
     VALUE rb_key, options, rb_result, rb_operator, rb_type;
 
     rb_grn_table_key_support_deconstruct(SELF(self), &table, &context,
-					 &key, &domain_id, &domain,
-					 NULL, NULL, NULL,
-					 NULL);
+                                         &key, &domain_id, &domain,
+                                         NULL, NULL, NULL,
+                                         NULL);
 
     rb_scan_args(argc, argv, "11", &rb_key, &options);
 
     RVAL2GRNKEY(rb_key, context, key, domain_id, domain, self);
 
     rb_grn_scan_options(options,
-			"result", &rb_result,
-			"operator", &rb_operator,
-			"type", &rb_type,
-			NULL);
+                        "result", &rb_result,
+                        "operator", &rb_operator,
+                        "type", &rb_type,
+                        NULL);
 
     if (NIL_P(rb_result)) {
-	result = grn_table_create(context, NULL, 0, NULL,
-				  GRN_OBJ_TABLE_HASH_KEY | GRN_OBJ_WITH_SUBREC,
-				  table, 0);
-	rb_grn_context_check(context, self);
-	rb_result = GRNOBJECT2RVAL(Qnil, context, result, GRN_TRUE);
+        result = grn_table_create(context, NULL, 0, NULL,
+                                  GRN_OBJ_TABLE_HASH_KEY | GRN_OBJ_WITH_SUBREC,
+                                  table, 0);
+        rb_grn_context_check(context, self);
+        rb_result = GRNOBJECT2RVAL(Qnil, context, result, GRN_TRUE);
     } else {
-	result = RVAL2GRNOBJECT(rb_result, &context);
+        result = RVAL2GRNOBJECT(rb_result, &context);
     }
 
     operator = RVAL2GRNOPERATOR(rb_operator);
 
     rc = grn_obj_search(context, table, key,
-			result, operator,
-			search_options_is_set ? &search_options : NULL);
+                        result, operator,
+                        search_options_is_set ? &search_options : NULL);
     rb_grn_rc_check(rc, self);
 
     return rb_result;
@@ -384,47 +384,47 @@ rb_grn_patricia_trie_scan (VALUE self, VALUE rb_string)
     string_length = RSTRING_LEN(rb_string);
 
     rb_grn_table_key_support_deconstruct(SELF(self), &table, &context,
-					 NULL, NULL, NULL,
-					 NULL, NULL, NULL,
-					 NULL);
+                                         NULL, NULL, NULL,
+                                         NULL, NULL, NULL,
+                                         NULL);
 
     block_given = rb_block_given_p();
     if (!block_given)
-	rb_result = rb_ary_new();
+        rb_result = rb_ary_new();
 
     while (string_length > 0) {
-	const char *rest;
-	int i, n_hits;
-	unsigned int previous_offset = 0;
+        const char *rest;
+        int i, n_hits;
+        unsigned int previous_offset = 0;
 
-	n_hits = grn_pat_scan(context, (grn_pat *)table,
-			      string, string_length,
-			      hits, sizeof(hits) / sizeof(*hits),
-			      &rest);
-	for (i = 0; i < n_hits; i++) {
-	    VALUE record, term, matched_info;
+        n_hits = grn_pat_scan(context, (grn_pat *)table,
+                              string, string_length,
+                              hits, sizeof(hits) / sizeof(*hits),
+                              &rest);
+        for (i = 0; i < n_hits; i++) {
+            VALUE record, term, matched_info;
 
-	    if (hits[i].offset < previous_offset)
-		continue;
+            if (hits[i].offset < previous_offset)
+                continue;
 
-	    record = rb_grn_record_new(self, hits[i].id, Qnil);
-	    term = rb_grn_context_rb_string_new(context,
-						string + hits[i].offset,
-						hits[i].length);
-	    matched_info = rb_ary_new3(4,
-				       record,
-				       term,
-				       UINT2NUM(hits[i].offset),
-				       UINT2NUM(hits[i].length));
-	    if (block_given) {
-		rb_yield(matched_info);
-	    } else {
-		rb_ary_push(rb_result, matched_info);
-	    }
-	    previous_offset = hits[i].offset;
-	}
-	string_length -= rest - string;
-	string = rest;
+            record = rb_grn_record_new(self, hits[i].id, Qnil);
+            term = rb_grn_context_rb_string_new(context,
+                                                string + hits[i].offset,
+                                                hits[i].length);
+            matched_info = rb_ary_new3(4,
+                                       record,
+                                       term,
+                                       UINT2NUM(hits[i].offset),
+                                       UINT2NUM(hits[i].length));
+            if (block_given) {
+                rb_yield(matched_info);
+            } else {
+                rb_ary_push(rb_result, matched_info);
+            }
+            previous_offset = hits[i].offset;
+        }
+        string_length -= rest - string;
+        string = rest;
     }
 
     return rb_result;
@@ -447,21 +447,21 @@ rb_grn_patricia_trie_prefix_search (VALUE self, VALUE rb_prefix)
     VALUE rb_result;
 
     rb_grn_table_key_support_deconstruct(SELF(self), &table, &context,
-					 &key, &domain_id, &domain,
-					 NULL, NULL, NULL,
-					 NULL);
+                                         &key, &domain_id, &domain,
+                                         NULL, NULL, NULL,
+                                         NULL);
 
     result = grn_table_create(context, NULL, 0, NULL,
-			      GRN_OBJ_TABLE_HASH_KEY,
-			      table, 0);
+                              GRN_OBJ_TABLE_HASH_KEY,
+                              table, 0);
     rb_grn_context_check(context, self);
     rb_result = GRNOBJECT2RVAL(Qnil, context, result, GRN_TRUE);
 
     GRN_BULK_REWIND(key);
     RVAL2GRNKEY(rb_prefix, context, key, domain_id, domain, self);
     grn_pat_prefix_search(context, (grn_pat *)table,
-			  GRN_BULK_HEAD(key), GRN_BULK_VSIZE(key),
-			  (grn_hash *)result);
+                          GRN_BULK_HEAD(key), GRN_BULK_VSIZE(key),
+                          (grn_hash *)result);
     rb_grn_context_check(context, self);
 
     return rb_result;
@@ -479,15 +479,15 @@ rb_grn_patricia_trie_register_key_with_sis_p (VALUE self)
     grn_obj *table;
 
     rb_grn_table_key_support_deconstruct(SELF(self), &table, NULL,
-					 NULL, NULL, NULL,
-					 NULL, NULL, NULL,
-					 NULL);
+                                         NULL, NULL, NULL,
+                                         NULL, NULL, NULL,
+                                         NULL);
     return CBOOL2RVAL(table->header.flags & GRN_OBJ_KEY_WITH_SIS);
 }
 
 static grn_table_cursor *
 rb_grn_patricia_trie_open_grn_prefix_cursor (int argc, VALUE *argv, VALUE self,
-					     grn_ctx **context)
+                                             grn_ctx **context)
 {
     grn_obj *table;
     grn_table_cursor *cursor;
@@ -500,81 +500,81 @@ rb_grn_patricia_trie_open_grn_prefix_cursor (int argc, VALUE *argv, VALUE self,
     VALUE rb_greater_than, rb_less_than, rb_offset, rb_limit;
 
     rb_grn_table_deconstruct((RbGrnTable *)SELF(self), &table, context,
-			     NULL, NULL,
-			     NULL, NULL, NULL,
-			     NULL);
+                             NULL, NULL,
+                             NULL, NULL, NULL,
+                             NULL);
 
     rb_scan_args(argc, argv, "11", &rb_prefix, &options);
 
     rb_grn_scan_options(options,
-			"key_bytes", &rb_key_bytes,
+                        "key_bytes", &rb_key_bytes,
                         "key_bites", &rb_key_bits,
                         "offset", &rb_offset,
                         "limit", &rb_limit,
-			"order", &rb_order,
-			"order_by", &rb_order_by,
-			"greater_than", &rb_greater_than,
-			"less_than", &rb_less_than,
-			NULL);
+                        "order", &rb_order,
+                        "order_by", &rb_order_by,
+                        "greater_than", &rb_greater_than,
+                        "less_than", &rb_less_than,
+                        NULL);
 
     prefix = StringValuePtr(rb_prefix);
     if (!NIL_P(rb_key_bytes) && !NIL_P(rb_key_bits)) {
-	rb_raise(rb_eArgError,
-		 "should not specify both :key_bytes and :key_bits once: %s",
-		 rb_grn_inspect(rb_ary_new4(argc, argv)));
+        rb_raise(rb_eArgError,
+                 "should not specify both :key_bytes and :key_bits once: %s",
+                 rb_grn_inspect(rb_ary_new4(argc, argv)));
     } else if (!NIL_P(rb_key_bytes)) {
-	prefix_size = NUM2UINT(rb_key_bytes);
+        prefix_size = NUM2UINT(rb_key_bytes);
     } else if (!NIL_P(rb_key_bits)) {
-	prefix_size = NUM2UINT(rb_key_bits);
-	flags |= GRN_CURSOR_SIZE_BY_BIT;
+        prefix_size = NUM2UINT(rb_key_bits);
+        flags |= GRN_CURSOR_SIZE_BY_BIT;
     } else {
-	prefix_size = RSTRING_LEN(rb_prefix);
+        prefix_size = RSTRING_LEN(rb_prefix);
     }
     if (!NIL_P(rb_offset))
-	offset = NUM2INT(rb_offset);
+        offset = NUM2INT(rb_offset);
     if (!NIL_P(rb_limit))
-	limit = NUM2INT(rb_limit);
+        limit = NUM2INT(rb_limit);
 
     if (NIL_P(rb_order)) {
     } else if (rb_grn_equal_option(rb_order, "asc") ||
-	       rb_grn_equal_option(rb_order, "ascending")) {
-	flags |= GRN_CURSOR_ASCENDING;
+               rb_grn_equal_option(rb_order, "ascending")) {
+        flags |= GRN_CURSOR_ASCENDING;
     } else if (rb_grn_equal_option(rb_order, "desc") ||
-	       rb_grn_equal_option(rb_order, "descending")) {
-	flags |= GRN_CURSOR_DESCENDING;
+               rb_grn_equal_option(rb_order, "descending")) {
+        flags |= GRN_CURSOR_DESCENDING;
     } else {
-	rb_raise(rb_eArgError,
-		 "order should be one of "
-		 "[:asc, :ascending, :desc, :descending]: %s",
-		 rb_grn_inspect(rb_order));
+        rb_raise(rb_eArgError,
+                 "order should be one of "
+                 "[:asc, :ascending, :desc, :descending]: %s",
+                 rb_grn_inspect(rb_order));
     }
     if (NIL_P(rb_order_by)) {
     } else if (rb_grn_equal_option(rb_order_by, "id")) {
-	flags |= GRN_CURSOR_BY_ID;
+        flags |= GRN_CURSOR_BY_ID;
     } else if (rb_grn_equal_option(rb_order_by, "key")) {
-	if (table->header.type != GRN_TABLE_PAT_KEY) {
-	    rb_raise(rb_eArgError,
-		     "order_by => :key is available "
-		     "only for Groonga::PatriciaTrie: %s",
-		     rb_grn_inspect(self));
-	}
-	flags |= GRN_CURSOR_BY_KEY;
+        if (table->header.type != GRN_TABLE_PAT_KEY) {
+            rb_raise(rb_eArgError,
+                     "order_by => :key is available "
+                     "only for Groonga::PatriciaTrie: %s",
+                     rb_grn_inspect(self));
+        }
+        flags |= GRN_CURSOR_BY_KEY;
     } else {
-	rb_raise(rb_eArgError,
-		 "order_by should be one of [:id%s]: %s",
-		 table->header.type == GRN_TABLE_PAT_KEY ? ", :key" : "",
-		 rb_grn_inspect(rb_order_by));
+        rb_raise(rb_eArgError,
+                 "order_by should be one of [:id%s]: %s",
+                 table->header.type == GRN_TABLE_PAT_KEY ? ", :key" : "",
+                 rb_grn_inspect(rb_order_by));
     }
 
     if (RVAL2CBOOL(rb_greater_than))
-	flags |= GRN_CURSOR_GT;
+        flags |= GRN_CURSOR_GT;
     if (RVAL2CBOOL(rb_less_than))
-	flags |= GRN_CURSOR_LT;
+        flags |= GRN_CURSOR_LT;
 
     cursor = grn_table_cursor_open(*context, table,
-				   prefix, prefix_size,
-				   NULL, 0,
-				   offset, limit, flags);
+                                   prefix, prefix_size,
+                                   NULL, 0,
+                                   offset, limit, flags);
     rb_grn_context_check(*context, self);
 
     return cursor;
@@ -629,18 +629,18 @@ rb_grn_patricia_trie_open_prefix_cursor (int argc, VALUE *argv, VALUE self)
     VALUE rb_cursor;
 
     cursor = rb_grn_patricia_trie_open_grn_prefix_cursor(argc, argv,
-							 self, &context);
+                                                         self, &context);
     rb_cursor = GRNTABLECURSOR2RVAL(Qnil, context, cursor);
     rb_iv_set(rb_cursor, "@table", self); /* FIXME: cursor should mark table */
     if (rb_block_given_p())
-	return rb_ensure(rb_yield, rb_cursor, rb_grn_object_close, rb_cursor);
+        return rb_ensure(rb_yield, rb_cursor, rb_grn_object_close, rb_cursor);
     else
-	return rb_cursor;
+        return rb_cursor;
 }
 
 static grn_table_cursor *
 rb_grn_patricia_trie_open_grn_rk_cursor (int argc, VALUE *argv, VALUE self,
-					     grn_ctx **context)
+                                             grn_ctx **context)
 {
     grn_obj *table;
     grn_table_cursor *cursor;
@@ -652,48 +652,48 @@ rb_grn_patricia_trie_open_grn_rk_cursor (int argc, VALUE *argv, VALUE self,
     VALUE rb_greater_than, rb_less_than, rb_offset, rb_limit;
 
     rb_grn_table_deconstruct((RbGrnTable *)SELF(self), &table, context,
-			     NULL, NULL,
-			     NULL, NULL, NULL,
-			     NULL);
+                             NULL, NULL,
+                             NULL, NULL, NULL,
+                             NULL);
 
     rb_scan_args(argc, argv, "11", &rb_prefix, &options);
 
     rb_grn_scan_options(options,
-			"key_bytes", &rb_key_bytes,
+                        "key_bytes", &rb_key_bytes,
                         "key_bites", &rb_key_bits,
                         "offset", &rb_offset,
                         "limit", &rb_limit,
-			"greater_than", &rb_greater_than,
-			"less_than", &rb_less_than,
-			NULL);
+                        "greater_than", &rb_greater_than,
+                        "less_than", &rb_less_than,
+                        NULL);
 
     prefix = StringValuePtr(rb_prefix);
     if (!NIL_P(rb_key_bytes) && !NIL_P(rb_key_bits)) {
-	rb_raise(rb_eArgError,
-		 "should not specify both :key_bytes and :key_bits once: %s",
-		 rb_grn_inspect(rb_ary_new4(argc, argv)));
+        rb_raise(rb_eArgError,
+                 "should not specify both :key_bytes and :key_bits once: %s",
+                 rb_grn_inspect(rb_ary_new4(argc, argv)));
     } else if (!NIL_P(rb_key_bytes)) {
-	prefix_size = NUM2UINT(rb_key_bytes);
+        prefix_size = NUM2UINT(rb_key_bytes);
     } else if (!NIL_P(rb_key_bits)) {
-	prefix_size = NUM2UINT(rb_key_bits);
-	flags |= GRN_CURSOR_SIZE_BY_BIT;
+        prefix_size = NUM2UINT(rb_key_bits);
+        flags |= GRN_CURSOR_SIZE_BY_BIT;
     } else {
-	prefix_size = RSTRING_LEN(rb_prefix);
+        prefix_size = RSTRING_LEN(rb_prefix);
     }
     if (!NIL_P(rb_offset))
-	offset = NUM2INT(rb_offset);
+        offset = NUM2INT(rb_offset);
     if (!NIL_P(rb_limit))
-	limit = NUM2INT(rb_limit);
+        limit = NUM2INT(rb_limit);
 
     if (RVAL2CBOOL(rb_greater_than))
-	flags |= GRN_CURSOR_GT;
+        flags |= GRN_CURSOR_GT;
     if (RVAL2CBOOL(rb_less_than))
-	flags |= GRN_CURSOR_LT;
+        flags |= GRN_CURSOR_LT;
 
     cursor = grn_table_cursor_open(*context, table,
-				   prefix, prefix_size,
-				   NULL, 0,
-				   offset, limit, flags);
+                                   prefix, prefix_size,
+                                   NULL, 0,
+                                   offset, limit, flags);
     rb_grn_context_check(*context, self);
 
     return cursor;
@@ -741,19 +741,19 @@ rb_grn_patricia_trie_open_rk_cursor (int argc, VALUE *argv, VALUE self)
     VALUE rb_cursor;
 
     cursor = rb_grn_patricia_trie_open_grn_rk_cursor(argc, argv,
-								self, &context);
+                                                                self, &context);
     rb_cursor = GRNTABLECURSOR2RVAL(Qnil, context, cursor);
     rb_iv_set(rb_cursor, "@table", self); /* FIXME: cursor should mark table */
     if (rb_block_given_p())
-	return rb_ensure(rb_yield, rb_cursor, rb_grn_object_close, rb_cursor);
+        return rb_ensure(rb_yield, rb_cursor, rb_grn_object_close, rb_cursor);
     else
-	return rb_cursor;
+        return rb_cursor;
 }
 
 
 static grn_table_cursor *
 rb_grn_patricia_trie_open_grn_near_cursor (int argc, VALUE *argv, VALUE self,
-					     grn_ctx **context, int flags)
+                                             grn_ctx **context, int flags)
 {
     grn_obj *table;
     grn_obj *key_p = NULL, casted_key;
@@ -766,46 +766,46 @@ rb_grn_patricia_trie_open_grn_near_cursor (int argc, VALUE *argv, VALUE self,
     flags |= GRN_CURSOR_PREFIX;
 
     rb_grn_table_deconstruct((RbGrnTable *)SELF(self), &table, context,
-			     NULL, NULL,
-			     NULL, NULL, NULL,
-			     NULL);
+                             NULL, NULL,
+                             NULL, NULL, NULL,
+                             NULL);
 
     rb_scan_args(argc, argv, "11", &rb_key, &options);
 
     rb_grn_scan_options(options,
-			"size", &rb_min_size,
+                        "size", &rb_min_size,
                         "offset", &rb_offset,
                         "limit", &rb_limit,
-			"greater_than", &rb_greater_than,
-			"less_than", &rb_less_than,
-			NULL);
+                        "greater_than", &rb_greater_than,
+                        "less_than", &rb_less_than,
+                        NULL);
 
     key_p = RVAL2GRNBULK_WITH_TYPE(rb_key, *context, key_p,
-				   table->header.domain,
-				   grn_ctx_at(*context, table->header.domain));
+                                   table->header.domain,
+                                   grn_ctx_at(*context, table->header.domain));
     GRN_OBJ_INIT(&casted_key, GRN_BULK, 0, table->header.domain);
     if (key_p->header.domain != table->header.domain) {
-	grn_obj_cast(*context, key_p, &casted_key, GRN_FALSE);
-	grn_obj_unlink(*context, key_p);
-	key_p = &casted_key;
+        grn_obj_cast(*context, key_p, &casted_key, GRN_FALSE);
+        grn_obj_unlink(*context, key_p);
+        key_p = &casted_key;
     }
 
     if (!NIL_P(rb_min_size))
-	min_size = NUM2UINT(rb_min_size);
+        min_size = NUM2UINT(rb_min_size);
     if (!NIL_P(rb_offset))
-	offset = NUM2INT(rb_offset);
+        offset = NUM2INT(rb_offset);
     if (!NIL_P(rb_limit))
-	limit = NUM2INT(rb_limit);
+        limit = NUM2INT(rb_limit);
 
     if (RVAL2CBOOL(rb_greater_than))
-	flags |= GRN_CURSOR_GT;
+        flags |= GRN_CURSOR_GT;
     if (RVAL2CBOOL(rb_less_than))
-	flags |= GRN_CURSOR_LT;
+        flags |= GRN_CURSOR_LT;
 
     cursor = grn_table_cursor_open(*context, table,
-				   NULL, min_size,
-				   GRN_BULK_HEAD(key_p), GRN_BULK_VSIZE(key_p),
-				   offset, limit, flags);
+                                   NULL, min_size,
+                                   GRN_BULK_HEAD(key_p), GRN_BULK_VSIZE(key_p),
+                                   offset, limit, flags);
     GRN_OBJ_FIN(*context, &casted_key);
     rb_grn_context_check(*context, self);
 
@@ -850,42 +850,42 @@ rb_grn_patricia_trie_open_near_cursor (int argc, VALUE *argv, VALUE self)
     VALUE rb_cursor;
 
     cursor = rb_grn_patricia_trie_open_grn_near_cursor(argc, argv,
-						       self, &context, GRN_CURSOR_RK);
+                                                       self, &context, GRN_CURSOR_RK);
     rb_cursor = GRNTABLECURSOR2RVAL(Qnil, context, cursor);
     rb_iv_set(rb_cursor, "@table", self); /* FIXME: cursor should mark table */
     if (rb_block_given_p())
-	return rb_ensure(rb_yield, rb_cursor, rb_grn_object_close, rb_cursor);
+        return rb_ensure(rb_yield, rb_cursor, rb_grn_object_close, rb_cursor);
     else
-	return rb_cursor;
+        return rb_cursor;
 }
 
 void
 rb_grn_init_patricia_trie (VALUE mGrn)
 {
     rb_cGrnPatriciaTrie =
-	rb_define_class_under(mGrn, "PatriciaTrie", rb_cGrnTable);
+        rb_define_class_under(mGrn, "PatriciaTrie", rb_cGrnTable);
 
     rb_include_module(rb_cGrnPatriciaTrie, rb_mGrnTableKeySupport);
     rb_define_singleton_method(rb_cGrnPatriciaTrie, "create",
-			       rb_grn_patricia_trie_s_create, -1);
+                               rb_grn_patricia_trie_s_create, -1);
 
     rb_define_method(rb_cGrnPatriciaTrie, "search",
-		     rb_grn_patricia_trie_search, -1);
+                     rb_grn_patricia_trie_search, -1);
     rb_define_method(rb_cGrnPatriciaTrie, "scan",
-		     rb_grn_patricia_trie_scan, 1);
+                     rb_grn_patricia_trie_scan, 1);
     rb_define_method(rb_cGrnPatriciaTrie, "prefix_search",
-		     rb_grn_patricia_trie_prefix_search, 1);
+                     rb_grn_patricia_trie_prefix_search, 1);
 
     rb_define_method(rb_cGrnPatriciaTrie, "register_key_with_sis?",
-		     rb_grn_patricia_trie_register_key_with_sis_p, 0);
+                     rb_grn_patricia_trie_register_key_with_sis_p, 0);
 
     rb_define_method(rb_cGrnPatriciaTrie, "open_prefix_cursor",
-		     rb_grn_patricia_trie_open_prefix_cursor,
-		     -1);
+                     rb_grn_patricia_trie_open_prefix_cursor,
+                     -1);
     rb_define_method(rb_cGrnPatriciaTrie, "open_rk_cursor",
-		     rb_grn_patricia_trie_open_rk_cursor,
-		     -1);
+                     rb_grn_patricia_trie_open_rk_cursor,
+                     -1);
     rb_define_method(rb_cGrnPatriciaTrie, "open_near_cursor",
-		     rb_grn_patricia_trie_open_near_cursor,
-		     -1);
+                     rb_grn_patricia_trie_open_near_cursor,
+                     -1);
 }

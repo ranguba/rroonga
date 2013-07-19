@@ -85,38 +85,38 @@ rb_grn_log_level_to_ruby_object (grn_log_level level)
 
     switch (level) {
       case GRN_LOG_NONE:
-	rb_level = RB_GRN_INTERN("none");
-	break;
+        rb_level = RB_GRN_INTERN("none");
+        break;
       case GRN_LOG_EMERG:
-	rb_level = RB_GRN_INTERN("emergency");
-	break;
+        rb_level = RB_GRN_INTERN("emergency");
+        break;
       case GRN_LOG_ALERT:
-	rb_level = RB_GRN_INTERN("alert");
-	break;
+        rb_level = RB_GRN_INTERN("alert");
+        break;
       case GRN_LOG_CRIT:
-	rb_level = RB_GRN_INTERN("critical");
-	break;
+        rb_level = RB_GRN_INTERN("critical");
+        break;
       case GRN_LOG_ERROR:
-	rb_level = RB_GRN_INTERN("error");
-	break;
+        rb_level = RB_GRN_INTERN("error");
+        break;
       case GRN_LOG_WARNING:
-	rb_level = RB_GRN_INTERN("warning");
-	break;
+        rb_level = RB_GRN_INTERN("warning");
+        break;
       case GRN_LOG_NOTICE:
-	rb_level = RB_GRN_INTERN("notice");
-	break;
+        rb_level = RB_GRN_INTERN("notice");
+        break;
       case GRN_LOG_INFO:
-	rb_level = RB_GRN_INTERN("info");
-	break;
+        rb_level = RB_GRN_INTERN("info");
+        break;
       case GRN_LOG_DEBUG:
-	rb_level = RB_GRN_INTERN("debug");
-	break;
+        rb_level = RB_GRN_INTERN("debug");
+        break;
       case GRN_LOG_DUMP:
-	rb_level = RB_GRN_INTERN("dump");
-	break;
+        rb_level = RB_GRN_INTERN("dump");
+        break;
       default:
-	rb_level = INT2NUM(level);
-	break;
+        rb_level = INT2NUM(level);
+        break;
     }
 
     return rb_level;
@@ -133,10 +133,10 @@ rb_grn_logger_reset_with_error_check (VALUE klass, grn_ctx *context)
     rb_cv_set(klass, "@@current_logger", Qnil);
 
     if (context) {
-	grn_logger_set(context, NULL);
-	rb_grn_context_check(context, current_logger);
+        grn_logger_set(context, NULL);
+        rb_grn_context_check(context, current_logger);
     } else {
-	grn_logger_set(NULL, NULL);
+        grn_logger_set(NULL, NULL);
     }
 }
 
@@ -148,8 +148,8 @@ rb_grn_logger_reset (VALUE klass)
 
 static void
 rb_grn_logger_log (grn_ctx *ctx, grn_log_level level,
-		   const char *timestamp, const char *title, const char *message,
-		   const char *location, void *user_data)
+                   const char *timestamp, const char *title, const char *message,
+                   const char *location, void *user_data)
 {
     VALUE handler = (VALUE)user_data;
 
@@ -162,7 +162,7 @@ rb_grn_logger_log (grn_ctx *ctx, grn_log_level level,
                rb_str_new2(timestamp),
                rb_str_new2(title),
                rb_str_new2(message),
-	       rb_str_new2(location));
+               rb_str_new2(location));
 }
 
 static void
@@ -246,20 +246,20 @@ rb_grn_logger_s_register (int argc, VALUE *argv, VALUE klass)
                         "flags",     &rb_flags,
                         NULL);
     if (!NIL_P(rb_max_level)) {
-	max_level = RVAL2GRNLOGLEVEL(rb_max_level);
+        max_level = RVAL2GRNLOGLEVEL(rb_max_level);
     }
 
     if (NIL_P(rb_time) || CBOOL2RVAL(rb_time)) {
-	flags |= GRN_LOG_TIME;
+        flags |= GRN_LOG_TIME;
     }
     if (NIL_P(rb_title) || CBOOL2RVAL(rb_title)) {
-	flags |= GRN_LOG_TITLE;
+        flags |= GRN_LOG_TITLE;
     }
     if (NIL_P(rb_message) || CBOOL2RVAL(rb_message)) {
-	flags |= GRN_LOG_MESSAGE;
+        flags |= GRN_LOG_MESSAGE;
     }
     if (NIL_P(rb_location) || CBOOL2RVAL(rb_location)) {
-	flags |= GRN_LOG_LOCATION;
+        flags |= GRN_LOG_LOCATION;
     }
     if (!NIL_P(rb_flags)) {
         flags = rb_funcall(mGrnLoggerFlags, id_parse, 2,
@@ -355,7 +355,7 @@ rb_grn_logger_s_get_path (VALUE klass)
 
     path = grn_default_logger_get_path();
     if (path) {
-	rb_path = rb_str_new2(path);
+        rb_path = rb_str_new2(path);
     }
     return rb_path;
 }
@@ -401,7 +401,7 @@ rb_grn_logger_s_set_path (VALUE klass, VALUE rb_path)
     grn_default_logger_set_path(path);
 
     if (need_reopen) {
-	rb_grn_logger_s_reopen_with_related_object(klass, rb_path);
+        rb_grn_logger_s_reopen_with_related_object(klass, rb_path);
     }
 
     return Qnil;
@@ -439,7 +439,7 @@ rb_grn_init_logger (VALUE mGrn)
 
     mGrnLoggerFlags = rb_define_module_under(cGrnLogger, "Flags");
 #define DEFINE_FLAG(NAME)                                       \
-    rb_define_const(mGrnLoggerFlags,				\
+    rb_define_const(mGrnLoggerFlags,                            \
                     #NAME, INT2NUM(GRN_LOG_ ## NAME))
     DEFINE_FLAG(TIME);
     DEFINE_FLAG(TITLE);

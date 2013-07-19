@@ -103,7 +103,7 @@ rb_grn_rc_to_exception (grn_rc rc)
 
     switch (rc) {
       case GRN_SUCCESS:
-	return Qnil;
+        return Qnil;
         break;
       case GRN_END_OF_DATA:
         exception = eGrnEndOfData;
@@ -339,8 +339,8 @@ rb_grn_rc_to_message (grn_rc rc)
 
     switch (rc) {
       case GRN_SUCCESS:
-	return NULL;
-	break;
+        return NULL;
+        break;
       case GRN_END_OF_DATA:
         message = "end of data";
         break;
@@ -576,13 +576,13 @@ rb_grn_rc_check (grn_rc rc, VALUE related_object)
 
     exception = rb_grn_rc_to_exception(rc);
     if (NIL_P(exception))
-	return;
+        return;
     message = rb_grn_rc_to_message(rc);
 
     if (NIL_P(related_object))
-	rb_raise(exception, "%s", message);
+        rb_raise(exception, "%s", message);
     else
-	rb_raise(exception, "%s: %s", rb_grn_inspect(related_object),  message);
+        rb_raise(exception, "%s: %s", rb_grn_inspect(related_object),  message);
 }
 
 void
@@ -727,7 +727,7 @@ rb_grn_init_exception (VALUE mGrn)
      */
     eGrnResourceTemporarilyUnavailable =
         rb_define_class_under(mGrn, "ResourceTemporarilyUnavailable",
-			      rb_eGrnError);
+                              rb_eGrnError);
 
     /*
      * Document-class: Groonga::NotEnoughSpace
@@ -1198,7 +1198,7 @@ rb_grn_init_exception (VALUE mGrn)
      * 未サポートのコマンドバージョンを指定したときに発生する。
      */
     eGrnUnsupportedCommandVersion =
-	rb_define_class_under(mGrn, "UnsupportedCommandVersion", rb_eGrnError);
+        rb_define_class_under(mGrn, "UnsupportedCommandVersion", rb_eGrnError);
 
     /*
      * Document-class: Groonga::NormalizerError
@@ -1208,5 +1208,5 @@ rb_grn_init_exception (VALUE mGrn)
      * @since 2.1.0
      */
     eGrnNormalizerError =
-	rb_define_class_under(mGrn, "NormalizerError", rb_eGrnError);
+        rb_define_class_under(mGrn, "NormalizerError", rb_eGrnError);
 }

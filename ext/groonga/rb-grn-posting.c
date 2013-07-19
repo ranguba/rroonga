@@ -23,7 +23,7 @@ VALUE rb_cGrnPosting;
 
 VALUE
 rb_grn_posting_new (grn_posting *posting, grn_id term_id,
-		    VALUE rb_table, VALUE rb_lexicon)
+                    VALUE rb_table, VALUE rb_lexicon)
 {
     VALUE parameters;
 
@@ -46,7 +46,7 @@ rb_grn_posting_new (grn_posting *posting, grn_id term_id,
     rb_hash_aset(parameters, ID2SYM(rb_intern("lexicon")), rb_lexicon);
 
     return rb_funcall(rb_cGrnPosting, rb_intern("new"), 1,
-		      parameters);
+                      parameters);
 }
 
 void

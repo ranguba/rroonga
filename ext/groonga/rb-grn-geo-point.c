@@ -37,14 +37,14 @@ VALUE
 rb_grn_tokyo_geo_point_new_raw (VALUE latitude, VALUE longitude)
 {
     return rb_funcall(rb_cGrnTokyoGeoPoint, rb_intern("new"), 2,
-		      latitude, longitude);
+                      latitude, longitude);
 }
 
 VALUE
 rb_grn_wgs84_geo_point_new_raw (VALUE latitude, VALUE longitude)
 {
     return rb_funcall(rb_cGrnWGS84GeoPoint, rb_intern("new"), 2,
-		      latitude, longitude);
+                      latitude, longitude);
 }
 
 void

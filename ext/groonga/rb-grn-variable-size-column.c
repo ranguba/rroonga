@@ -55,42 +55,42 @@ rb_grn_variable_size_column_compressed_p (int argc, VALUE *argv, VALUE self)
     rb_scan_args(argc, argv, "01", &type);
 
     if (NIL_P(type)) {
-	accept_any_type = GRN_TRUE;
+        accept_any_type = GRN_TRUE;
     } else {
-	if (rb_grn_equal_option(type, "zlib")) {
-	    need_zlib_check = GRN_TRUE;
-	} else if (rb_grn_equal_option(type, "lzo")) {
-	    need_lzo_check = GRN_TRUE;
-	} else {
-	    rb_raise(rb_eArgError,
-		     "compressed type should be <:zlib> or <:lzo>: <%s>",
-		     rb_grn_inspect(type));
-	}
+        if (rb_grn_equal_option(type, "zlib")) {
+            need_zlib_check = GRN_TRUE;
+        } else if (rb_grn_equal_option(type, "lzo")) {
+            need_lzo_check = GRN_TRUE;
+        } else {
+            rb_raise(rb_eArgError,
+                     "compressed type should be <:zlib> or <:lzo>: <%s>",
+                     rb_grn_inspect(type));
+        }
     }
 
     rb_grn_column = SELF(self);
     rb_grn_object_deconstruct(RB_GRN_OBJECT(rb_grn_column), &column, &context,
-			      NULL, NULL,
-			      NULL, NULL);
+                              NULL, NULL,
+                              NULL, NULL);
 
     flags = column->header.flags;
     switch (flags & GRN_OBJ_COMPRESS_MASK) {
       case GRN_OBJ_COMPRESS_ZLIB:
-	if (accept_any_type || need_zlib_check) {
-	    grn_obj support_p;
-	    GRN_BOOL_INIT(&support_p, 0);
-	    grn_obj_get_info(context, NULL, GRN_INFO_SUPPORT_ZLIB, &support_p);
-	    compressed_p = GRN_BOOL_VALUE(&support_p);
-	}
-	break;
+        if (accept_any_type || need_zlib_check) {
+            grn_obj support_p;
+            GRN_BOOL_INIT(&support_p, 0);
+            grn_obj_get_info(context, NULL, GRN_INFO_SUPPORT_ZLIB, &support_p);
+            compressed_p = GRN_BOOL_VALUE(&support_p);
+        }
+        break;
       case GRN_OBJ_COMPRESS_LZO:
-	if (accept_any_type || need_lzo_check) {
-	    grn_obj support_p;
-	    GRN_BOOL_INIT(&support_p, 0);
-	    grn_obj_get_info(context, NULL, GRN_INFO_SUPPORT_LZO, &support_p);
-	    compressed_p = GRN_BOOL_VALUE(&support_p);
-	}
-	break;
+        if (accept_any_type || need_lzo_check) {
+            grn_obj support_p;
+            GRN_BOOL_INIT(&support_p, 0);
+            grn_obj_get_info(context, NULL, GRN_INFO_SUPPORT_LZO, &support_p);
+            compressed_p = GRN_BOOL_VALUE(&support_p);
+        }
+        break;
     }
 
     return CBOOL2RVAL(compressed_p);
@@ -121,16 +121,16 @@ rb_grn_variable_size_column_defrag (int argc, VALUE *argv, VALUE self)
 
     rb_scan_args(argc, argv, "01", &options);
     rb_grn_scan_options(options,
-			"threshold", &rb_threshold,
-			NULL);
+                        "threshold", &rb_threshold,
+                        NULL);
     if (!NIL_P(rb_threshold)) {
-	threshold = NUM2INT(rb_threshold);
+        threshold = NUM2INT(rb_threshold);
     }
 
     rb_grn_column = SELF(self);
     rb_grn_object_deconstruct(RB_GRN_OBJECT(rb_grn_column), &column, &context,
-			      NULL, NULL,
-			      NULL, NULL);
+                              NULL, NULL,
+                              NULL, NULL);
     n_segments = grn_obj_defrag(context, column, threshold);
     rb_grn_context_check(context, self);
 
@@ -141,10 +141,10 @@ void
 rb_grn_init_variable_size_column (VALUE mGrn)
 {
     rb_cGrnVariableSizeColumn =
-	rb_define_class_under(mGrn, "VariableSizeColumn", rb_cGrnColumn);
+        rb_define_class_under(mGrn, "VariableSizeColumn", rb_cGrnColumn);
 
     rb_define_method(rb_cGrnVariableSizeColumn, "compressed?",
-		     rb_grn_variable_size_column_compressed_p, -1);
+                     rb_grn_variable_size_column_compressed_p, -1);
     rb_define_method(rb_cGrnVariableSizeColumn, "defrag",
-		     rb_grn_variable_size_column_defrag, -1);
+                     rb_grn_variable_size_column_defrag, -1);
 }

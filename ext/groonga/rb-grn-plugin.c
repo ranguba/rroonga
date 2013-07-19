@@ -36,12 +36,12 @@ rb_grn_plugin_from_ruby_object (VALUE object)
     RbGrnPlugin *rb_grn_plugin;
 
     if (!RVAL2CBOOL(rb_obj_is_kind_of(object, cGrnPlugin))) {
-	rb_raise(rb_eTypeError, "not a groonga plugin");
+        rb_raise(rb_eTypeError, "not a groonga plugin");
     }
 
     Data_Get_Struct(object, RbGrnPlugin, rb_grn_plugin);
     if (!rb_grn_plugin)
-	rb_raise(rb_eGrnError, "groonga plugin is NULL");
+        rb_raise(rb_eGrnError, "groonga plugin is NULL");
     return rb_grn_plugin->id;
 }
 
@@ -152,9 +152,9 @@ rb_grn_init_plugin (VALUE mGrn)
     rb_define_alloc_func(cGrnPlugin, rb_grn_plugin_alloc);
 
     rb_define_singleton_method(cGrnPlugin, "register",
-			       rb_grn_plugin_s_register, -1);
+                               rb_grn_plugin_s_register, -1);
     rb_define_singleton_method(cGrnPlugin, "system_plugins_dir",
-			       rb_grn_plugin_s_system_plugins_dir, 0);
+                               rb_grn_plugin_s_system_plugins_dir, 0);
     rb_define_singleton_method(cGrnPlugin, "suffix",
-			       rb_grn_plugin_s_suffix, 0);
+                               rb_grn_plugin_s_suffix, 0);
 }

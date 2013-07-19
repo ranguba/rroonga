@@ -26,7 +26,7 @@ grn_obj *
 rb_grn_accessor_from_ruby_object (VALUE object)
 {
     if (!RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cGrnAccessor))) {
-	rb_raise(rb_eTypeError, "not a groonga accessor");
+        rb_raise(rb_eTypeError, "not a groonga accessor");
     }
 
     return RVAL2GRNOBJECT(object, NULL);
@@ -34,14 +34,14 @@ rb_grn_accessor_from_ruby_object (VALUE object)
 
 VALUE
 rb_grn_accessor_to_ruby_object (grn_ctx *context, grn_obj *table,
-				grn_bool owner)
+                                grn_bool owner)
 {
     return GRNOBJECT2RVAL(rb_cGrnAccessor, context, table, owner);
 }
 
 void
 rb_grn_accessor_bind (RbGrnAccessor *rb_accessor,
-		      grn_ctx *context, grn_obj *accessor)
+                      grn_ctx *context, grn_obj *accessor)
 {
     RbGrnObject *rb_grn_object;
     RbGrnNamedObject *rb_grn_named_object;
@@ -54,22 +54,22 @@ rb_grn_accessor_bind (RbGrnAccessor *rb_accessor,
 
     name_size = grn_column_name(context, accessor, name, sizeof(name));
     if (name_size > 0) {
-	rb_grn_named_object_set_name(rb_grn_named_object, name, name_size);
+        rb_grn_named_object_set_name(rb_grn_named_object, name, name_size);
     }
 
     rb_accessor->value = grn_obj_open(context, GRN_BULK, 0,
-				      rb_grn_object->range_id);
+                                      rb_grn_object->range_id);
 }
 
 
 void
 rb_grn_accessor_finalizer (grn_ctx *context, grn_obj *grn_object,
-			   RbGrnAccessor *rb_accessor)
+                           RbGrnAccessor *rb_accessor)
 {
     rb_grn_named_object_finalizer(context, grn_object,
-				  RB_GRN_NAMED_OBJECT(rb_accessor));
+                                  RB_GRN_NAMED_OBJECT(rb_accessor));
     if (context && rb_accessor->value)
-	grn_obj_unlink(context, rb_accessor->value);
+        grn_obj_unlink(context, rb_accessor->value);
     rb_accessor->value = NULL;
 }
 
@@ -93,10 +93,10 @@ rb_grn_accessor_get_local_name (VALUE self)
     rb_grn_accessor = SELF(self);
     rb_grn_named_object = RB_GRN_NAMED_OBJECT(rb_grn_accessor);
     if (rb_grn_named_object->name_size == 0)
-	return Qnil;
+        return Qnil;
 
     return rb_str_new(rb_grn_named_object->name,
-		      rb_grn_named_object->name_size);
+                      rb_grn_named_object->name_size);
 }
 
 /*
@@ -111,5 +111,5 @@ rb_grn_init_accessor (VALUE mGrn)
     rb_cGrnAccessor = rb_define_class_under(mGrn, "Accessor", rb_cGrnObject);
 
     rb_define_method(rb_cGrnAccessor, "local_name",
-		     rb_grn_accessor_get_local_name, 0);
+                     rb_grn_accessor_get_local_name, 0);
 }

@@ -293,7 +293,7 @@ void           rb_grn_init_normalizer               (VALUE mGrn);
 VALUE          rb_grn_rc_to_exception               (grn_rc rc);
 const char    *rb_grn_rc_to_message                 (grn_rc rc);
 void           rb_grn_rc_check                      (grn_rc rc,
-						     VALUE related_object);
+                                                     VALUE related_object);
 
 void           rb_grn_context_register_floating_object
                                                     (RbGrnObject *rb_grn_object);
@@ -302,26 +302,26 @@ void           rb_grn_context_unregister_floating_object
 void           rb_grn_context_close_floating_objects(RbGrnContext *rb_grn_context);
 void           rb_grn_context_reset_floating_objects(RbGrnContext *rb_grn_context);
 void           rb_grn_context_mark_grn_id           (grn_ctx *context,
-						     grn_id   id);
+                                                     grn_id   id);
 grn_ctx       *rb_grn_context_ensure                (VALUE *context);
 VALUE          rb_grn_context_get_default           (void);
 VALUE          rb_grn_context_to_exception          (grn_ctx *context,
-						     VALUE related_object);
+                                                     VALUE related_object);
 void           rb_grn_context_check                 (grn_ctx *context,
-						     VALUE related_object);
+                                                     VALUE related_object);
 grn_obj       *rb_grn_context_get_backward_compatibility
                                                     (grn_ctx *context,
-						     const char *name,
-						     unsigned int name_size);
+                                                     const char *name,
+                                                     unsigned int name_size);
 void           rb_grn_context_object_created        (VALUE rb_context,
-						     VALUE rb_object);
+                                                     VALUE rb_object);
 
 const char    *rb_grn_inspect                       (VALUE object);
 const char    *rb_grn_inspect_type                  (unsigned char type);
 void           rb_grn_scan_options                  (VALUE options, ...)
                                                      RB_GRN_GNUC_NULL_TERMINATED;
 grn_bool       rb_grn_equal_option                  (VALUE option,
-						     const char *key);
+                                                     const char *key);
 grn_bool       rb_grn_equal_string                  (const char *string1,
                                                      const char *string2);
 VALUE          rb_grn_convert_to_array              (VALUE object);
@@ -331,220 +331,220 @@ VALUE          rb_grn_check_convert_to_hash         (VALUE object);
 
 VALUE          rb_grn_object_alloc                  (VALUE klass);
 void           rb_grn_object_bind                   (VALUE self,
-						     VALUE rb_context,
-						     RbGrnObject *rb_grn_object,
-						     grn_ctx *context,
-						     grn_obj *object);
+                                                     VALUE rb_context,
+                                                     RbGrnObject *rb_grn_object,
+                                                     grn_ctx *context,
+                                                     grn_obj *object);
 void           rb_grn_object_free                   (RbGrnObject *rb_grn_object);
 void           rb_grn_object_assign                 (VALUE klass,
-						     VALUE self,
-						     VALUE rb_context,
-						     grn_ctx *context,
-						     grn_obj *object);
+                                                     VALUE self,
+                                                     VALUE rb_context,
+                                                     grn_ctx *context,
+                                                     grn_obj *object);
 void           rb_grn_object_deconstruct            (RbGrnObject *rb_grn_object,
-						     grn_obj **object,
-						     grn_ctx **context,
-						     grn_id *domain_id,
-						     grn_obj **domain,
-						     grn_id *range_id,
-						     grn_obj **range);
+                                                     grn_obj **object,
+                                                     grn_ctx **context,
+                                                     grn_id *domain_id,
+                                                     grn_obj **domain,
+                                                     grn_id *range_id,
+                                                     grn_obj **range);
 
 VALUE          rb_grn_object_get_id                 (VALUE object);
 VALUE          rb_grn_object_array_reference        (VALUE object,
-						     VALUE rb_id);
+                                                     VALUE rb_id);
 VALUE          rb_grn_object_set_raw                (RbGrnObject *rb_grn_object,
-						     grn_id id,
-						     VALUE rb_value,
-						     int flags,
-						     VALUE related_object);
+                                                     grn_id id,
+                                                     VALUE rb_value,
+                                                     int flags,
+                                                     VALUE related_object);
 VALUE          rb_grn_object_close                  (VALUE object);
 VALUE          rb_grn_object_closed_p               (VALUE object);
 VALUE          rb_grn_object_inspect_object         (VALUE inspected,
-						     grn_ctx *context,
-						     grn_obj *object);
+                                                     grn_ctx *context,
+                                                     grn_obj *object);
 VALUE          rb_grn_object_inspect_object_content (VALUE inspected,
-						     grn_ctx *context,
-						     grn_obj *object);
+                                                     grn_ctx *context,
+                                                     grn_obj *object);
 VALUE          rb_grn_object_inspect_object_content_name
                                                     (VALUE inspected,
-						     grn_ctx *context,
-						     grn_obj *object);
+                                                     grn_ctx *context,
+                                                     grn_obj *object);
 VALUE          rb_grn_object_inspect_header         (VALUE object,
-						     VALUE inspected);
+                                                     VALUE inspected);
 VALUE          rb_grn_object_inspect_content        (VALUE object,
-						     VALUE inspected);
+                                                     VALUE inspected);
 VALUE          rb_grn_object_inspect_footer         (VALUE object,
-						     VALUE inspected);
+                                                     VALUE inspected);
 
 void           rb_grn_database_finalizer            (grn_ctx *context,
-						     RbGrnContext *rb_grn_context,
-						     grn_obj *column,
-						     RbGrnObject *rb_grn_database);
+                                                     RbGrnContext *rb_grn_context,
+                                                     grn_obj *column,
+                                                     RbGrnObject *rb_grn_database);
 
 void           rb_grn_named_object_bind             (RbGrnNamedObject *rb_grn_named_object,
-						     grn_ctx *context,
-						     grn_obj *object);
+                                                     grn_ctx *context,
+                                                     grn_obj *object);
 void           rb_grn_named_object_finalizer        (grn_ctx *context,
-						     grn_obj *column,
-						     RbGrnNamedObject *rb_grn_named_object);
+                                                     grn_obj *column,
+                                                     RbGrnNamedObject *rb_grn_named_object);
 void           rb_grn_named_object_set_name         (RbGrnNamedObject *rb_grn_named_object,
-						     const char *name,
-						     unsigned name_size);
+                                                     const char *name,
+                                                     unsigned name_size);
 
 void           rb_grn_table_bind                    (RbGrnTable *rb_grn_table,
-						     grn_ctx *context,
-						     grn_obj *table_key_support);
+                                                     grn_ctx *context,
+                                                     grn_obj *table_key_support);
 void           rb_grn_table_finalizer               (grn_ctx *context,
-						     grn_obj *grn_object,
-						     RbGrnTable *rb_grn_table);
+                                                     grn_obj *grn_object,
+                                                     RbGrnTable *rb_grn_table);
 void           rb_grn_table_deconstruct             (RbGrnTable *rb_grn_table,
-						     grn_obj **table,
-						     grn_ctx **context,
-						     grn_id *domain_id,
-						     grn_obj **domain,
-						     grn_obj **value,
-						     grn_id *range_id,
-						     grn_obj **range,
-						     VALUE *columns);
+                                                     grn_obj **table,
+                                                     grn_ctx **context,
+                                                     grn_id *domain_id,
+                                                     grn_obj **domain,
+                                                     grn_obj **value,
+                                                     grn_id *range_id,
+                                                     grn_obj **range,
+                                                     VALUE *columns);
 
 VALUE          rb_grn_table_delete_by_id            (VALUE self,
-						     VALUE rb_id);
+                                                     VALUE rb_id);
 VALUE          rb_grn_table_delete_by_expression    (VALUE self);
 VALUE          rb_grn_table_array_reference         (VALUE self,
-						     VALUE rb_id);
+                                                     VALUE rb_id);
 VALUE          rb_grn_table_array_set               (VALUE self,
-						     VALUE rb_id,
-						     VALUE rb_value);
+                                                     VALUE rb_id,
+                                                     VALUE rb_value);
 VALUE          rb_grn_table_get_value               (VALUE self,
-						     VALUE rb_id);
+                                                     VALUE rb_id);
 VALUE          rb_grn_table_set_value               (VALUE self,
-						     VALUE rb_id,
-						     VALUE rb_value);
+                                                     VALUE rb_id,
+                                                     VALUE rb_value);
 VALUE          rb_grn_table_get_column              (VALUE self,
-						     VALUE rb_name);
+                                                     VALUE rb_name);
 VALUE          rb_grn_table_get_column_surely       (VALUE self,
-						     VALUE rb_name);
+                                                     VALUE rb_name);
 VALUE          rb_grn_table_get_column_value_raw    (VALUE self,
-						     grn_id id,
-						     VALUE rb_name);
+                                                     grn_id id,
+                                                     VALUE rb_name);
 VALUE          rb_grn_table_get_column_value        (VALUE self,
-						     VALUE rb_id,
-						     VALUE rb_name);
+                                                     VALUE rb_id,
+                                                     VALUE rb_name);
 VALUE          rb_grn_table_set_column_value_raw    (VALUE self,
-						     grn_id id,
-						     VALUE rb_name,
-						     VALUE rb_value);
+                                                     grn_id id,
+                                                     VALUE rb_name,
+                                                     VALUE rb_value);
 VALUE          rb_grn_table_set_column_value        (VALUE self,
-						     VALUE rb_id,
-						     VALUE rb_name,
-						     VALUE rb_value);
+                                                     VALUE rb_id,
+                                                     VALUE rb_name,
+                                                     VALUE rb_value);
 VALUE          rb_grn_table_inspect_content         (VALUE object,
-						     VALUE inspected);
+                                                     VALUE inspected);
 
 grn_ctx       *rb_grn_table_cursor_ensure_context   (VALUE cursor,
-						     VALUE *rb_context);
+                                                     VALUE *rb_context);
 int            rb_grn_table_cursor_order_to_flag    (VALUE rb_order);
 int            rb_grn_table_cursor_order_by_to_flag (unsigned char table_type,
-						     VALUE rb_table,
-						     VALUE rb_order_by);
+                                                     VALUE rb_table,
+                                                     VALUE rb_order_by);
 
 void           rb_grn_table_key_support_bind        (RbGrnTableKeySupport *rb_grn_table_key_support,
-						     grn_ctx *context,
-						     grn_obj *table_key_support);
+                                                     grn_ctx *context,
+                                                     grn_obj *table_key_support);
 void           rb_grn_table_key_support_finalizer   (grn_ctx *context,
-						     grn_obj *grn_object,
-						     RbGrnTableKeySupport *rb_grn_table_key_support);
+                                                     grn_obj *grn_object,
+                                                     RbGrnTableKeySupport *rb_grn_table_key_support);
 void           rb_grn_table_key_support_deconstruct (RbGrnTableKeySupport *rb_grn_table_key_support,
-						     grn_obj **table_key_support,
-						     grn_ctx **context,
-						     grn_obj **key,
-						     grn_id *domain_id,
-						     grn_obj **domain,
-						     grn_obj **value,
-						     grn_id *range_id,
-						     grn_obj **range,
-						     VALUE *columns);
+                                                     grn_obj **table_key_support,
+                                                     grn_ctx **context,
+                                                     grn_obj **key,
+                                                     grn_id *domain_id,
+                                                     grn_obj **domain,
+                                                     grn_obj **value,
+                                                     grn_id *range_id,
+                                                     grn_obj **range,
+                                                     VALUE *columns);
 grn_id         rb_grn_table_key_support_get         (VALUE self,
-						     VALUE rb_key);
+                                                     VALUE rb_key);
 
 void           rb_grn_column_bind                   (RbGrnColumn *rb_grn_column,
-						     grn_ctx *context,
-						     grn_obj *column);
+                                                     grn_ctx *context,
+                                                     grn_obj *column);
 void           rb_grn_column_finalizer              (grn_ctx *context,
-						     grn_obj *column,
-						     RbGrnColumn *rb_grn_column);
+                                                     grn_obj *column,
+                                                     RbGrnColumn *rb_grn_column);
 void           rb_grn_column_deconstruct            (RbGrnColumn *rb_grn_column,
-						     grn_obj **column,
-						     grn_ctx **context,
-						     grn_id *domain_id,
-						     grn_obj **domain,
-						     grn_obj **value,
-						     grn_id *range_id,
-						     grn_obj **range);
+                                                     grn_obj **column,
+                                                     grn_ctx **context,
+                                                     grn_id *domain_id,
+                                                     grn_obj **domain,
+                                                     grn_obj **value,
+                                                     grn_id *range_id,
+                                                     grn_obj **range);
 
 void           rb_grn_index_column_bind             (RbGrnIndexColumn *rb_grn_index_column,
-						     grn_ctx *context,
-						     grn_obj *object);
+                                                     grn_ctx *context,
+                                                     grn_obj *object);
 void           rb_grn_index_column_finalizer        (grn_ctx *context,
-						     grn_obj *grn_object,
-						     RbGrnIndexColumn *rb_grn_index_column);
+                                                     grn_obj *grn_object,
+                                                     RbGrnIndexColumn *rb_grn_index_column);
 void           rb_grn_index_column_deconstruct      (RbGrnIndexColumn *rb_grn_index_column,
-						     grn_obj **column,
-						     grn_ctx **context,
-						     grn_id *domain_id,
-						     grn_obj **domain,
-						     grn_obj **value,
-						     grn_obj **old_value,
-						     grn_id *range_id,
-						     grn_obj **range,
-						     grn_obj **id_query,
-						     grn_obj **string_query);
+                                                     grn_obj **column,
+                                                     grn_ctx **context,
+                                                     grn_id *domain_id,
+                                                     grn_obj **domain,
+                                                     grn_obj **value,
+                                                     grn_obj **old_value,
+                                                     grn_id *range_id,
+                                                     grn_obj **range,
+                                                     grn_obj **id_query,
+                                                     grn_obj **string_query);
 
 void           rb_grn_accessor_bind                 (RbGrnAccessor *rb_grn_accessor,
-						     grn_ctx *context,
-						     grn_obj *accessor);
+                                                     grn_ctx *context,
+                                                     grn_obj *accessor);
 void           rb_grn_accessor_finalizer            (grn_ctx *context,
-						     grn_obj *accessor,
-						     RbGrnAccessor *rb_grn_accessor);
+                                                     grn_obj *accessor,
+                                                     RbGrnAccessor *rb_grn_accessor);
 
 void           rb_grn_expression_bind               (RbGrnExpression *rb_grn_expression,
-						     grn_ctx *context,
-						     grn_obj *expression);
+                                                     grn_ctx *context,
+                                                     grn_obj *expression);
 void           rb_grn_expression_finalizer          (grn_ctx *context,
-						     grn_obj *grn_object,
-						     RbGrnExpression *rb_grn_expression);
+                                                     grn_obj *grn_object,
+                                                     RbGrnExpression *rb_grn_expression);
 
 VALUE          rb_grn_posting_new                   (grn_posting *posting,
-						     grn_id term_id,
-						     VALUE rb_table,
-						     VALUE rb_lexicon);
+                                                     grn_id term_id,
+                                                     VALUE rb_table,
+                                                     VALUE rb_lexicon);
 
 VALUE          rb_grn_tokyo_geo_point_new           (int   latitude,
-						     int   longitude);
+                                                     int   longitude);
 VALUE          rb_grn_wgs84_geo_point_new           (int   latitude,
-						     int   longitude);
+                                                     int   longitude);
 VALUE          rb_grn_tokyo_geo_point_new_raw       (VALUE latitude,
-						     VALUE longitude);
+                                                     VALUE longitude);
 VALUE          rb_grn_wgs84_geo_point_new_raw       (VALUE latitude,
-						     VALUE longitude);
+                                                     VALUE longitude);
 
 VALUE          rb_grn_record_new                    (VALUE table,
-						     grn_id id,
-						     VALUE values);
+                                                     grn_id id,
+                                                     VALUE values);
 VALUE          rb_grn_record_new_added              (VALUE table,
-						     grn_id id,
-						     VALUE values);
+                                                     grn_id id,
+                                                     VALUE values);
 VALUE          rb_grn_record_new_raw                (VALUE table,
-						     VALUE id,
-						     VALUE values);
+                                                     VALUE id,
+                                                     VALUE values);
 
 VALUE          rb_grn_record_expression_builder_new (VALUE table,
-						     VALUE name);
+                                                     VALUE name);
 VALUE          rb_grn_record_expression_builder_build
                                                     (VALUE self);
 VALUE          rb_grn_column_expression_builder_new (VALUE column,
-						     VALUE name,
-						     VALUE query);
+                                                     VALUE name,
+                                                     VALUE query);
 VALUE          rb_grn_column_expression_builder_build
                                                     (VALUE self);
 
@@ -568,9 +568,9 @@ VALUE          rb_grn_column_expression_builder_build
 #define GRNOBJECT2RCLASS(object)      (rb_grn_object_to_ruby_class(object))
 
 /* TODO: MORE BETTER NAME!!! PLEASE!!! */
-#define RVAL2GRNOBJ(rb_object, context, object)	\
+#define RVAL2GRNOBJ(rb_object, context, object) \
     (rb_grn_obj_from_ruby_object(rb_object, context, object))
-#define GRNOBJ2RVAL(klass, context, object, related_object)	\
+#define GRNOBJ2RVAL(klass, context, object, related_object)     \
     (rb_grn_obj_to_ruby_object(klass, context, object, related_object))
 
 #define RVAL2GRNDB(object)            (rb_grn_database_from_ruby_object(object))
@@ -593,7 +593,7 @@ VALUE          rb_grn_column_expression_builder_build
 
 #define GRNINDEXCURSOR2RVAL(context, cursor, rb_table, rb_lexicon) \
     (rb_grn_index_cursor_to_ruby_object(context, cursor, rb_table, rb_lexicon, \
-					GRN_TRUE))
+                                        GRN_TRUE))
 
 #define RVAL2GRNACCESSOR(object) \
     (rb_grn_accessor_from_ruby_object(object))
@@ -607,17 +607,17 @@ VALUE          rb_grn_column_expression_builder_build
 
 #define RVAL2GRNBULK(object, context, bulk) \
     (rb_grn_bulk_from_ruby_object(object, context, bulk))
-#define RVAL2GRNBULK_WITH_TYPE(object, context, bulk, type_id, type)	\
+#define RVAL2GRNBULK_WITH_TYPE(object, context, bulk, type_id, type)    \
     (rb_grn_bulk_from_ruby_object_with_type(object, context, bulk, type_id, type))
-#define GRNBULK2RVAL(context, bulk, range, related_object)	\
+#define GRNBULK2RVAL(context, bulk, range, related_object)      \
     (rb_grn_bulk_to_ruby_object(context, bulk, range, related_object))
 
-#define RVAL2GRNVECTOR(object, context, vector)	\
+#define RVAL2GRNVECTOR(object, context, vector) \
     (rb_grn_vector_from_ruby_object(object, context, vector))
 #define GRNVECTOR2RVAL(context, vector) \
     (rb_grn_vector_to_ruby_object(context, vector))
 
-#define RVAL2GRNUVECTOR(object, context, uvector, related_object)	\
+#define RVAL2GRNUVECTOR(object, context, uvector, related_object)       \
     (rb_grn_uvector_from_ruby_object(object, context, uvector, related_object))
 #define GRNUVECTOR2RVAL(context, uvector, range, related_object)        \
     (rb_grn_uvector_to_ruby_object(context, uvector, range, related_object))
@@ -631,8 +631,8 @@ VALUE          rb_grn_column_expression_builder_build
 #define GRNKEY2RVAL(context, key, key_size, table, related_object) \
     (rb_grn_key_to_ruby_object(context, key, key_size, table, related_object))
 #define RVAL2GRNKEY(object, context, key, domain_id, domain, related_object) \
-    (rb_grn_key_from_ruby_object(object, context, key, domain_id,	\
-				 domain, related_object))
+    (rb_grn_key_from_ruby_object(object, context, key, domain_id,       \
+                                 domain, related_object))
 
 #define RVAL2GRNVALUE(object, context, key, domain_id, domain) \
     (rb_grn_value_from_ruby_object(object, context, key, domain_id, domain))
@@ -644,7 +644,7 @@ VALUE          rb_grn_column_expression_builder_build
 
 
 grn_encoding   rb_grn_encoding_from_ruby_object     (VALUE object,
-						     grn_ctx *context);
+                                                     grn_ctx *context);
 VALUE          rb_grn_encoding_to_ruby_object       (grn_encoding encoding);
 #ifdef HAVE_RUBY_ENCODING_H
 rb_encoding   *rb_grn_encoding_to_ruby_encoding     (grn_encoding encoding);
@@ -655,60 +655,60 @@ VALUE          rb_grn_encoding_to_ruby_encoding_object
 grn_ctx       *rb_grn_context_from_ruby_object      (VALUE object);
 VALUE          rb_grn_context_to_ruby_object        (grn_ctx *context);
 VALUE          rb_grn_context_rb_string_new         (grn_ctx *context,
-						     const char *string,
-						     long length);
+                                                     const char *string,
+                                                     long length);
 VALUE          rb_grn_context_rb_string_encode      (grn_ctx *context,
-						     VALUE rb_string);
+                                                     VALUE rb_string);
 void           rb_grn_context_text_set              (grn_ctx *context,
-						     grn_obj *bulk,
-						     VALUE rb_string);
+                                                     grn_obj *bulk,
+                                                     VALUE rb_string);
 
 grn_obj       *rb_grn_object_from_ruby_object       (VALUE object,
-						     grn_ctx **context);
+                                                     grn_ctx **context);
 VALUE          rb_grn_object_to_ruby_object         (VALUE klass,
-						     grn_ctx *context,
-						     grn_obj *object,
-						     grn_bool owner);
+                                                     grn_ctx *context,
+                                                     grn_obj *object,
+                                                     grn_bool owner);
 VALUE          rb_grn_object_to_ruby_class          (grn_obj *object);
 
 grn_obj       *rb_grn_database_from_ruby_object     (VALUE object);
 VALUE          rb_grn_database_to_ruby_object       (grn_ctx *context,
-						     grn_obj *db,
-						     grn_bool owner);
+                                                     grn_obj *db,
+                                                     grn_bool owner);
 
 grn_obj       *rb_grn_table_from_ruby_object        (VALUE object,
-						     grn_ctx **context);
+                                                     grn_ctx **context);
 VALUE          rb_grn_table_to_ruby_object          (grn_ctx *context,
-						     grn_obj *table,
-						     grn_bool owner);
+                                                     grn_obj *table,
+                                                     grn_bool owner);
 
 grn_table_cursor *
                rb_grn_table_cursor_from_ruby_object (VALUE object,
-						     grn_ctx **context);
+                                                     grn_ctx **context);
 VALUE          rb_grn_table_cursor_to_ruby_object   (VALUE klass,
-						     grn_ctx *context,
-						     grn_table_cursor *cursor,
-						     grn_bool owner);
+                                                     grn_ctx *context,
+                                                     grn_table_cursor *cursor,
+                                                     grn_bool owner);
 VALUE          rb_grn_table_cursor_to_ruby_class    (grn_table_cursor *cursor);
 void           rb_grn_table_cursor_deconstruct      (RbGrnTableCursor *rb_grn_table_cursor,
-						     grn_table_cursor **cursor,
-						     grn_ctx **context,
-						     grn_id *domain_id,
-						     grn_obj **domain,
-						     grn_id *range_id,
-						     grn_obj **range);
+                                                     grn_table_cursor **cursor,
+                                                     grn_ctx **context,
+                                                     grn_id *domain_id,
+                                                     grn_obj **domain,
+                                                     grn_id *range_id,
+                                                     grn_obj **range);
 
 grn_obj       *rb_grn_column_from_ruby_object       (VALUE object,
-						     grn_ctx **context);
+                                                     grn_ctx **context);
 VALUE          rb_grn_column_to_ruby_object         (VALUE klass,
-						     grn_ctx *context,
-						     grn_obj *column,
-						     grn_bool owner);
+                                                     grn_ctx *context,
+                                                     grn_obj *column,
+                                                     grn_bool owner);
 VALUE          rb_grn_index_cursor_to_ruby_object   (grn_ctx *context,
-						     grn_obj *cursor,
-						     VALUE rb_table,
-						     VALUE rb_lexicon,
-						     grn_bool owner);
+                                                     grn_obj *cursor,
+                                                     VALUE rb_table,
+                                                     VALUE rb_lexicon,
+                                                     grn_bool owner);
 
 grn_operator   rb_grn_operator_from_ruby_object     (VALUE object);
 
@@ -716,78 +716,78 @@ grn_logger_info *
                rb_grn_logger_from_ruby_object       (VALUE object);
 
 grn_obj       *rb_grn_bulk_from_ruby_object         (VALUE object,
-						     grn_ctx *context,
-						     grn_obj *bulk);
+                                                     grn_ctx *context,
+                                                     grn_obj *bulk);
 grn_obj       *rb_grn_bulk_from_ruby_object_with_type
                                                     (VALUE object,
-						     grn_ctx *context,
-						     grn_obj *bulk,
-						     grn_id type_id,
-						     grn_obj *type);
+                                                     grn_ctx *context,
+                                                     grn_obj *bulk,
+                                                     grn_id type_id,
+                                                     grn_obj *type);
 VALUE          rb_grn_bulk_to_ruby_object           (grn_ctx *context,
-						     grn_obj *bulk,
-						     grn_obj *range,
-						     VALUE related_object);
+                                                     grn_obj *bulk,
+                                                     grn_obj *range,
+                                                     VALUE related_object);
 grn_obj       *rb_grn_vector_from_ruby_object       (VALUE object,
-						     grn_ctx *context,
-						     grn_obj *vector);
+                                                     grn_ctx *context,
+                                                     grn_obj *vector);
 VALUE          rb_grn_vector_to_ruby_object         (grn_ctx *context,
-						     grn_obj *vector);
+                                                     grn_obj *vector);
 grn_obj       *rb_grn_uvector_from_ruby_object      (VALUE object,
-						     grn_ctx *context,
-						     grn_obj *uvector,
-						     VALUE related_object);
+                                                     grn_ctx *context,
+                                                     grn_obj *uvector,
+                                                     VALUE related_object);
 VALUE          rb_grn_uvector_to_ruby_object        (grn_ctx *context,
-						     grn_obj *uvector,
+                                                     grn_obj *uvector,
                                                      grn_obj *range,
                                                      VALUE related_object);
 
 VALUE          rb_grn_value_to_ruby_object          (grn_ctx *context,
-						     grn_obj *value,
-						     grn_obj *range,
-						     VALUE related_object);
+                                                     grn_obj *value,
+                                                     grn_obj *range,
+                                                     VALUE related_object);
 
 grn_id         rb_grn_id_from_ruby_object           (VALUE object,
-						     grn_ctx *context,
-						     grn_obj *table,
-						     VALUE related_object);
+                                                     grn_ctx *context,
+                                                     grn_obj *table,
+                                                     VALUE related_object);
 
 VALUE          rb_grn_key_to_ruby_object            (grn_ctx *context,
-						     const void *key,
-						     int key_size,
-						     grn_obj *table,
-						     VALUE related_object);
+                                                     const void *key,
+                                                     int key_size,
+                                                     grn_obj *table,
+                                                     VALUE related_object);
 grn_obj       *rb_grn_key_from_ruby_object          (VALUE rb_key,
-						     grn_ctx *context,
-						     grn_obj *key,
-						     grn_id domain_id,
-						     grn_obj *domain,
-						     VALUE related_object);
+                                                     grn_ctx *context,
+                                                     grn_obj *key,
+                                                     grn_id domain_id,
+                                                     grn_obj *domain,
+                                                     VALUE related_object);
 grn_obj       *rb_grn_value_from_ruby_object        (VALUE rb_key,
-						     grn_ctx *context,
-						     grn_obj *value,
-						     grn_id domain_id,
-						     grn_obj *domain);
+                                                     grn_ctx *context,
+                                                     grn_obj *value,
+                                                     grn_id domain_id,
+                                                     grn_obj *domain);
 
 VALUE          rb_grn_variable_to_ruby_object       (grn_ctx *context,
-						     grn_obj *variable);
+                                                     grn_obj *variable);
 grn_obj       *rb_grn_variable_from_ruby_object     (VALUE rb_variable,
-						     grn_ctx **context);
+                                                     grn_ctx **context);
 
 grn_obj       *rb_grn_obj_from_ruby_object          (VALUE rb_object,
-						     grn_ctx *context,
-						     grn_obj **obj);
+                                                     grn_ctx *context,
+                                                     grn_obj **obj);
 VALUE          rb_grn_obj_to_ruby_object            (VALUE klass,
-						     grn_ctx *context,
-						     grn_obj *obj,
-						     VALUE related_object);
+                                                     grn_ctx *context,
+                                                     grn_obj *obj,
+                                                     VALUE related_object);
 
 void           rb_grn_snippet_bind                  (RbGrnSnippet *rb_grn_snippet,
-						     grn_ctx *context,
-						     grn_obj *snippet);
+                                                     grn_ctx *context,
+                                                     grn_obj *snippet);
 void           rb_grn_snippet_finalizer             (grn_ctx *context,
-						     grn_obj *grn_object,
-						     RbGrnSnippet *rb_grn_snippet);
+                                                     grn_obj *grn_object,
+                                                     RbGrnSnippet *rb_grn_snippet);
 RB_GRN_END_DECLS
 
 #endif

@@ -37,7 +37,7 @@ grn_obj *
 rb_grn_database_from_ruby_object (VALUE object)
 {
     if (!RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cGrnDatabase))) {
-	rb_raise(rb_eTypeError, "not a groonga database");
+        rb_raise(rb_eTypeError, "not a groonga database");
     }
 
     return RVAL2GRNOBJECT(object, NULL);
@@ -45,7 +45,7 @@ rb_grn_database_from_ruby_object (VALUE object)
 
 VALUE
 rb_grn_database_to_ruby_object (grn_ctx *context, grn_obj *database,
-				grn_bool owner)
+                                grn_bool owner)
 {
     return GRNOBJECT2RVAL(rb_cGrnDatabase, context, database, owner);
 }
@@ -57,12 +57,12 @@ rb_grn_database_mark_existing_ruby_object (grn_ctx *context, grn_obj *database)
     grn_id id;
 
     cursor = grn_table_cursor_open(context, database, NULL, 0, NULL, 0,
-				   0, -1, GRN_CURSOR_ASCENDING);
+                                   0, -1, GRN_CURSOR_ASCENDING);
     if (!cursor)
-	return;
+        return;
 
     while ((id = grn_table_cursor_next(context, cursor)) != GRN_ID_NIL) {
-	rb_grn_context_mark_grn_id(context, id);
+        rb_grn_context_mark_grn_id(context, id);
     }
     grn_table_cursor_close(context, cursor);
 }
@@ -75,12 +75,12 @@ rb_grn_database_mark (void *data)
     grn_obj *database;
 
     if (!rb_grn_database)
-	return;
+        return;
 
     context = rb_grn_database->context;
     database = rb_grn_database->object;
     if (!context || !database)
-	return;
+        return;
 
     rb_grn_database_mark_existing_ruby_object(context, database);
 }
@@ -89,35 +89,35 @@ static VALUE
 rb_grn_database_alloc (VALUE klass)
 {
     return Data_Wrap_Struct(klass, rb_grn_database_mark, rb_grn_object_free,
-			    NULL);
+                            NULL);
 }
 
 static void
 rb_grn_database_deconstruct (RbGrnObject *rb_grn_database,
-			     grn_obj **database,
-			     grn_ctx **context,
-			     grn_id *domain_id,
-			     grn_obj **domain,
-			     grn_id *range_id,
-			     grn_obj **range)
+                             grn_obj **database,
+                             grn_ctx **context,
+                             grn_id *domain_id,
+                             grn_obj **domain,
+                             grn_id *range_id,
+                             grn_obj **range)
 {
     rb_grn_object_deconstruct(rb_grn_database, database, context,
-			      domain_id, domain,
-			      range_id, range);
+                              domain_id, domain,
+                              range_id, range);
 }
 
 void
 rb_grn_database_finalizer (grn_ctx *context,
-			   RbGrnContext *rb_grn_context,
-			   grn_obj *column,
-			   RbGrnObject *rb_grn_database)
+                           RbGrnContext *rb_grn_context,
+                           grn_obj *column,
+                           RbGrnObject *rb_grn_database)
 {
     if (rb_grn_context) {
-	rb_grn_context_close_floating_objects(rb_grn_context);
+        rb_grn_context_close_floating_objects(rb_grn_context);
     }
 
     if (!(context->flags & GRN_CTX_PER_DB)) {
-	grn_ctx_use(context, NULL);
+        grn_ctx_use(context, NULL);
     }
 }
 
@@ -134,7 +134,7 @@ rb_grn_database_close (VALUE self)
 
     rb_context = rb_iv_get(self, "@context");
     if (!NIL_P(rb_context))
-	rb_iv_set(rb_context, "database", Qnil);
+        rb_iv_set(rb_context, "database", Qnil);
 
     return rb_grn_object_close(self);
 }
@@ -184,9 +184,9 @@ rb_grn_database_s_create (int argc, VALUE *argv, VALUE klass)
 
     rb_grn_scan_options(options,
                         "path", &rb_path,
-			"context", &rb_context,
+                        "context", &rb_context,
                         "builtin_type_names", &builtin_type_names,
-			NULL);
+                        NULL);
 
     if (!NIL_P(rb_path))
         path = StringValuePtr(rb_path);
@@ -197,7 +197,7 @@ rb_grn_database_s_create (int argc, VALUE *argv, VALUE klass)
 
     old_database = grn_ctx_db(context);
     if (old_database)
-	grn_obj_unlink(context, old_database);
+        grn_obj_unlink(context, old_database);
     reset_floating_objects(rb_context);
     database = grn_db_create(context, path, &create_args);
     rb_grn_context_check(context, rb_ary_new4(argc, argv));
@@ -205,12 +205,12 @@ rb_grn_database_s_create (int argc, VALUE *argv, VALUE klass)
     rb_database = GRNOBJECT2RVAL(klass, context, database, owner);
     rb_iv_set(rb_database, "@context", rb_context);
     if (!NIL_P(rb_context))
-	rb_iv_set(rb_context, "database", rb_database);
+        rb_iv_set(rb_context, "database", rb_database);
     rb_grn_context_check(context, rb_ary_new4(argc, argv));
 
     if (rb_block_given_p())
         return rb_ensure(rb_yield, rb_database,
-			 rb_grn_database_close, rb_database);
+                         rb_grn_database_close, rb_database);
     else
         return rb_database;
 }
@@ -246,14 +246,14 @@ rb_grn_database_initialize (int argc, VALUE *argv, VALUE self)
 
     path = StringValuePtr(rb_path);
     rb_grn_scan_options(options,
-			"context", &rb_context,
-			NULL);
+                        "context", &rb_context,
+                        NULL);
 
     context = rb_grn_context_ensure(&rb_context);
 
     old_database = grn_ctx_db(context);
     if (old_database)
-	grn_obj_unlink(context, old_database);
+        grn_obj_unlink(context, old_database);
     reset_floating_objects(rb_context);
     database = grn_db_open(context, path);
     rb_grn_object_assign(Qnil, self, rb_context, context, database);
@@ -261,7 +261,7 @@ rb_grn_database_initialize (int argc, VALUE *argv, VALUE self)
 
     rb_iv_set(self, "@context", rb_context);
     if (!NIL_P(rb_context))
-	rb_iv_set(rb_context, "database", self);
+        rb_iv_set(rb_context, "database", self);
 
     return Qnil;
 }
@@ -355,45 +355,45 @@ rb_grn_database_each (int argc, VALUE *argv, VALUE self)
     RETURN_ENUMERATOR(self, argc, argv);
 
     rb_grn_database_deconstruct(SELF(self), &database, &context,
-				NULL, NULL, NULL, NULL);
+                                NULL, NULL, NULL, NULL);
 
     rb_scan_args(argc, argv, "01", &rb_options);
 
     rb_grn_scan_options(rb_options,
-			"order", &rb_order,
-			"order_by", &rb_order_by,
-			"ignore_missing_object", &rb_ignore_missing_object,
-			NULL);
+                        "order", &rb_order,
+                        "order_by", &rb_order_by,
+                        "ignore_missing_object", &rb_ignore_missing_object,
+                        NULL);
 
     flags |= rb_grn_table_cursor_order_to_flag(rb_order);
     flags |= rb_grn_table_cursor_order_by_to_flag(GRN_TABLE_PAT_KEY,
-						  self,
-						  rb_order_by);
+                                                  self,
+                                                  rb_order_by);
 
     cursor = grn_table_cursor_open(context, database, NULL, 0, NULL, 0,
-				   0, -1,
-				   flags);
+                                   0, -1,
+                                   flags);
     rb_cursor = GRNTABLECURSOR2RVAL(Qnil, context, cursor);
     rb_iv_set(self, "cursor", rb_cursor);
     while ((id = grn_table_cursor_next(context, cursor)) != GRN_ID_NIL) {
-	grn_obj *object;
+        grn_obj *object;
 
-	object = grn_ctx_at(context, id);
-	if (!object && RTEST(rb_ignore_missing_object)) {
-	    context->rc = GRN_SUCCESS;
-	    continue;
-	}
+        object = grn_ctx_at(context, id);
+        if (!object && RTEST(rb_ignore_missing_object)) {
+            context->rc = GRN_SUCCESS;
+            continue;
+        }
 
-	exception = rb_grn_context_to_exception(context, self);
-	if (!NIL_P(exception)) {
-	    rb_grn_object_close(rb_cursor);
-	    rb_iv_set(self, "cursor", Qnil);
-	    rb_exc_raise(exception);
-	}
+        exception = rb_grn_context_to_exception(context, self);
+        if (!NIL_P(exception)) {
+            rb_grn_object_close(rb_cursor);
+            rb_iv_set(self, "cursor", Qnil);
+            rb_exc_raise(exception);
+        }
 
-	if (object) {
-	    rb_yield(GRNOBJECT2RVAL(Qnil, context, object, GRN_FALSE));
-	}
+        if (object) {
+            rb_yield(GRNOBJECT2RVAL(Qnil, context, object, GRN_FALSE));
+        }
     }
     rb_grn_object_close(rb_cursor);
     rb_iv_set(self, "cursor", Qnil);
@@ -414,7 +414,7 @@ rb_grn_database_unlock (VALUE self)
     grn_rc rc;
 
     rb_grn_database_deconstruct(SELF(self), &database, &context,
-				NULL, NULL, NULL, NULL);
+                                NULL, NULL, NULL, NULL);
 
     rc = grn_obj_unlock(context, database, GRN_ID_NIL);
     rb_grn_context_check(context, self);
@@ -451,23 +451,23 @@ rb_grn_database_lock (int argc, VALUE *argv, VALUE self)
     rb_scan_args(argc, argv, "01",  &options);
 
     rb_grn_database_deconstruct(SELF(self), &database, &context,
-				NULL, NULL, NULL, NULL);
+                                NULL, NULL, NULL, NULL);
 
     rb_grn_scan_options(options,
-			"timeout", &rb_timeout,
-			NULL);
+                        "timeout", &rb_timeout,
+                        NULL);
 
     if (!NIL_P(rb_timeout))
-	timeout = NUM2UINT(rb_timeout);
+        timeout = NUM2UINT(rb_timeout);
 
     rc = grn_obj_lock(context, database, GRN_ID_NIL, timeout);
     rb_grn_context_check(context, self);
     rb_grn_rc_check(rc, self);
 
     if (rb_block_given_p()) {
-	return rb_ensure(rb_yield, Qnil, rb_grn_database_unlock, self);
+        return rb_ensure(rb_yield, Qnil, rb_grn_database_unlock, self);
     } else {
-	return Qnil;
+        return Qnil;
     }
 }
 
@@ -483,7 +483,7 @@ rb_grn_database_clear_lock (VALUE self)
     grn_obj *database;
 
     rb_grn_database_deconstruct(SELF(self), &database, &context,
-				NULL, NULL, NULL, NULL);
+                                NULL, NULL, NULL, NULL);
 
     grn_obj_clear_lock(context, database);
 
@@ -502,7 +502,7 @@ rb_grn_database_is_locked (VALUE self)
     grn_obj *database;
 
     rb_grn_database_deconstruct(SELF(self), &database, &context,
-				NULL, NULL, NULL, NULL);
+                                NULL, NULL, NULL, NULL);
 
     return CBOOL2RVAL(grn_obj_is_locked(context, database));
 }
@@ -519,7 +519,7 @@ rb_grn_database_touch (VALUE self)
     grn_obj *database;
 
     rb_grn_database_deconstruct(SELF(self), &database, &context,
-				NULL, NULL, NULL, NULL);
+                                NULL, NULL, NULL, NULL);
 
     grn_db_touch(context, database);
     return Qnil;
@@ -548,14 +548,14 @@ rb_grn_database_defrag (int argc, VALUE *argv, VALUE self)
 
     rb_scan_args(argc, argv, "01", &options);
     rb_grn_scan_options(options,
-			"threshold", &rb_threshold,
-			NULL);
+                        "threshold", &rb_threshold,
+                        NULL);
     if (!NIL_P(rb_threshold)) {
-	threshold = NUM2INT(rb_threshold);
+        threshold = NUM2INT(rb_threshold);
     }
 
     rb_grn_database_deconstruct(SELF(self), &database, &context,
-				NULL, NULL, NULL, NULL);
+                                NULL, NULL, NULL, NULL);
     n_segments = grn_obj_defrag(context, database, threshold);
     rb_grn_context_check(context, self);
 
@@ -572,23 +572,23 @@ rb_grn_init_database (VALUE mGrn)
     rb_include_module(rb_cGrnDatabase, rb_mGrnEncodingSupport);
 
     rb_define_singleton_method(rb_cGrnDatabase, "create",
-			       rb_grn_database_s_create, -1);
+                               rb_grn_database_s_create, -1);
     rb_define_singleton_method(rb_cGrnDatabase, "open",
-			       rb_grn_database_s_open, -1);
+                               rb_grn_database_s_open, -1);
 
     rb_define_method(rb_cGrnDatabase, "initialize",
-		     rb_grn_database_initialize, -1);
+                     rb_grn_database_initialize, -1);
 
     rb_define_method(rb_cGrnDatabase, "each",
-		     rb_grn_database_each, -1);
+                     rb_grn_database_each, -1);
 
     rb_define_method(rb_cGrnDatabase, "close",
-		     rb_grn_database_close, 0);
+                     rb_grn_database_close, 0);
 
     rb_define_method(rb_cGrnDatabase, "lock", rb_grn_database_lock, -1);
     rb_define_method(rb_cGrnDatabase, "unlock", rb_grn_database_unlock, 0);
     rb_define_method(rb_cGrnDatabase, "clear_lock",
-		     rb_grn_database_clear_lock, 0);
+                     rb_grn_database_clear_lock, 0);
     rb_define_method(rb_cGrnDatabase, "locked?", rb_grn_database_is_locked, 0);
 
     rb_define_method(rb_cGrnDatabase, "touch", rb_grn_database_touch, 0);

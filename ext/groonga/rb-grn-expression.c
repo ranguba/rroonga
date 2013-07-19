@@ -31,10 +31,10 @@ VALUE rb_cGrnExpression;
 
 void
 rb_grn_expression_finalizer (grn_ctx *context, grn_obj *object,
-			     RbGrnExpression *rb_grn_expression)
+                             RbGrnExpression *rb_grn_expression)
 {
     if (context && rb_grn_expression->value)
-	grn_obj_unlink(context, rb_grn_expression->value);
+        grn_obj_unlink(context, rb_grn_expression->value);
 
     rb_grn_context_unregister_floating_object(RB_GRN_OBJECT(rb_grn_expression));
 
@@ -59,7 +59,7 @@ rb_grn_expression_deconstruct (RbGrnExpression *rb_grn_expression,
                                grn_ctx **context,
                                grn_id *domain_id,
                                grn_obj **domain,
-			       grn_obj **value,
+                               grn_obj **value,
                                grn_id *range_id,
                                grn_obj **range)
 {
@@ -67,11 +67,11 @@ rb_grn_expression_deconstruct (RbGrnExpression *rb_grn_expression,
 
     rb_grn_object = RB_GRN_OBJECT(rb_grn_expression);
     rb_grn_object_deconstruct(rb_grn_object, expression, context,
-			      domain_id, domain,
-			      range_id, range);
+                              domain_id, domain,
+                              range_id, range);
 
     if (value)
-	*value = rb_grn_expression->value;
+        *value = rb_grn_expression->value;
 }
 
 static VALUE
@@ -92,8 +92,8 @@ rb_grn_expression_initialize (int argc, VALUE *argv, VALUE self)
     context = rb_grn_context_ensure(&rb_context);
 
     if (!NIL_P(rb_name)) {
-	name = StringValuePtr(rb_name);
-	name_size = RSTRING_LEN(rb_name);
+        name = StringValuePtr(rb_name);
+        name_size = RSTRING_LEN(rb_name);
     }
 
     expression = grn_expr_create(context, name, name_size);
@@ -139,23 +139,23 @@ rb_grn_expression_define_variable (int argc, VALUE *argv, VALUE self)
                                   NULL, NULL, NULL);
 
     rb_grn_scan_options(options,
-			"name", &rb_name,
-			"domain", &rb_domain,
+                        "name", &rb_name,
+                        "domain", &rb_domain,
                         "reference", &rb_reference,
-			NULL);
+                        NULL);
 
     if (!NIL_P(rb_name)) {
-	name = StringValuePtr(rb_name);
-	name_size = RSTRING_LEN(rb_name);
+        name = StringValuePtr(rb_name);
+        name_size = RSTRING_LEN(rb_name);
     }
 
     variable = grn_expr_add_var(context, expression, name, name_size);
     rb_variable = GRNVARIABLE2RVAL(context, variable);
 
     if (RVAL2CBOOL(rb_obj_is_kind_of(rb_domain, rb_cGrnTable))) {
-	grn_id domain_id;
-	domain_id = NUM2UINT(rb_funcall(rb_domain, rb_intern("id"), 0));
-	GRN_RECORD_INIT(variable, 0, domain_id);
+        grn_id domain_id;
+        domain_id = NUM2UINT(rb_funcall(rb_domain, rb_intern("id"), 0));
+        GRN_RECORD_INIT(variable, 0, domain_id);
     } else if (!NIL_P(rb_reference) && RVAL2CBOOL(rb_reference)) {
         GRN_PTR_INIT(variable, 0, GRN_DB_OBJECT);
     }
@@ -228,7 +228,7 @@ rb_grn_expression_append_constant (int argc, VALUE *argv, VALUE self)
 
     rb_grn_expression_deconstruct(SELF(self), &expression, &context,
                                   NULL, NULL, NULL,
-				  NULL, NULL);
+                                  NULL, NULL);
 
     RVAL2GRNOBJ(rb_constant, context, &constant);
     grn_expr_append_const(context, expression, constant, operator, n_arguments);
@@ -236,7 +236,7 @@ rb_grn_expression_append_constant (int argc, VALUE *argv, VALUE self)
     exception = rb_grn_context_to_exception(context, self);
     grn_obj_unlink(context, constant);
     if (!NIL_P(exception))
-	rb_exc_raise(exception);
+        rb_exc_raise(exception);
 
     return self;
 }
@@ -248,7 +248,7 @@ rb_grn_expression_append_constant (int argc, VALUE *argv, VALUE self)
  */
 static VALUE
 rb_grn_expression_append_operation (VALUE self, VALUE rb_operation,
-				    VALUE rb_n_arguments)
+                                    VALUE rb_n_arguments)
 {
     grn_ctx *context = NULL;
     grn_obj *expression;
@@ -355,11 +355,11 @@ rb_grn_expression_parse (int argc, VALUE *argv, VALUE self)
                         "default_column", &rb_default_column,
                         "default_operator", &rb_default_operator,
                         "default_mode", &rb_default_mode,
-			"syntax", &rb_syntax,
-			"allow_pragma", &rb_allow_pragma,
-			"allow_column", &rb_allow_column,
-			"allow_update", &rb_allow_update,
-			"allow_leading_not", &rb_allow_leading_not,
+                        "syntax", &rb_syntax,
+                        "allow_pragma", &rb_allow_pragma,
+                        "allow_column", &rb_allow_column,
+                        "allow_update", &rb_allow_update,
+                        "allow_leading_not", &rb_allow_leading_not,
                         NULL);
 
     query = StringValuePtr(rb_query);
@@ -370,79 +370,79 @@ rb_grn_expression_parse (int argc, VALUE *argv, VALUE self)
                                   NULL, NULL, NULL);
 
     if (NIL_P(rb_default_column)) {
-	default_column = NULL;
+        default_column = NULL;
     } else if (RVAL2CBOOL(rb_obj_is_kind_of(rb_default_column, rb_cGrnObject))) {
-	default_column = RVAL2GRNOBJECT(rb_default_column, &context);
+        default_column = RVAL2GRNOBJECT(rb_default_column, &context);
     } else {
-	default_column = RVAL2GRNBULK(rb_default_column, context, NULL);
-	default_column_is_created = GRN_TRUE;
+        default_column = RVAL2GRNBULK(rb_default_column, context, NULL);
+        default_column_is_created = GRN_TRUE;
     }
 
     if (!NIL_P(rb_default_mode))
-	default_mode = RVAL2GRNOPERATOR(rb_default_mode);
+        default_mode = RVAL2GRNOPERATOR(rb_default_mode);
     if (!NIL_P(rb_default_operator))
-	default_operator = RVAL2GRNOPERATOR(rb_default_operator);
+        default_operator = RVAL2GRNOPERATOR(rb_default_operator);
 
     if (NIL_P(rb_syntax) ||
-	rb_grn_equal_option(rb_syntax, "query")) {
-	flags = GRN_EXPR_SYNTAX_QUERY;
+        rb_grn_equal_option(rb_syntax, "query")) {
+        flags = GRN_EXPR_SYNTAX_QUERY;
     } else if (rb_grn_equal_option(rb_syntax, "script")) {
-	flags = GRN_EXPR_SYNTAX_SCRIPT;
+        flags = GRN_EXPR_SYNTAX_SCRIPT;
     } else {
-	rb_raise(rb_eArgError,
-		 "syntax should be one of "
-		 "[nil, :query, :script]: %s",
-		 rb_grn_inspect(rb_syntax));
+        rb_raise(rb_eArgError,
+                 "syntax should be one of "
+                 "[nil, :query, :script]: %s",
+                 rb_grn_inspect(rb_syntax));
     }
 
     if (NIL_P(rb_allow_pragma)) {
-	if (!(flags & GRN_EXPR_SYNTAX_SCRIPT))
-	    flags |= GRN_EXPR_ALLOW_PRAGMA;
+        if (!(flags & GRN_EXPR_SYNTAX_SCRIPT))
+            flags |= GRN_EXPR_ALLOW_PRAGMA;
     } else {
-	if ((flags & GRN_EXPR_SYNTAX_SCRIPT))
-	    rb_raise(rb_eArgError,
-		     ":allow_pragma isn't allowed in script syntax");
-	if (RVAL2CBOOL(rb_allow_pragma))
-	    flags |= GRN_EXPR_ALLOW_PRAGMA;
+        if ((flags & GRN_EXPR_SYNTAX_SCRIPT))
+            rb_raise(rb_eArgError,
+                     ":allow_pragma isn't allowed in script syntax");
+        if (RVAL2CBOOL(rb_allow_pragma))
+            flags |= GRN_EXPR_ALLOW_PRAGMA;
     }
 
     if (NIL_P(rb_allow_column)) {
-	if (!(flags & GRN_EXPR_SYNTAX_SCRIPT))
-	    flags |= GRN_EXPR_ALLOW_COLUMN;
+        if (!(flags & GRN_EXPR_SYNTAX_SCRIPT))
+            flags |= GRN_EXPR_ALLOW_COLUMN;
     } else {
-	if ((flags & GRN_EXPR_SYNTAX_SCRIPT))
-	    rb_raise(rb_eArgError,
-		     ":allow_column isn't allowed in script syntax");
-	if (RVAL2CBOOL(rb_allow_column))
-	    flags |= GRN_EXPR_ALLOW_COLUMN;
+        if ((flags & GRN_EXPR_SYNTAX_SCRIPT))
+            rb_raise(rb_eArgError,
+                     ":allow_column isn't allowed in script syntax");
+        if (RVAL2CBOOL(rb_allow_column))
+            flags |= GRN_EXPR_ALLOW_COLUMN;
     }
 
     if (NIL_P(rb_allow_update)) {
-	flags |= GRN_EXPR_ALLOW_UPDATE;
+        flags |= GRN_EXPR_ALLOW_UPDATE;
     } else {
-	if (RVAL2CBOOL(rb_allow_update))
-	    flags |= GRN_EXPR_ALLOW_UPDATE;
+        if (RVAL2CBOOL(rb_allow_update))
+            flags |= GRN_EXPR_ALLOW_UPDATE;
     }
 
     if (!NIL_P(rb_allow_leading_not)) {
-	if (RVAL2CBOOL(rb_allow_leading_not))
-	    flags |= GRN_EXPR_ALLOW_LEADING_NOT;
+        if (RVAL2CBOOL(rb_allow_leading_not))
+            flags |= GRN_EXPR_ALLOW_LEADING_NOT;
     }
 
     rc = grn_expr_parse(context, expression, query, query_size,
-			default_column, default_mode, default_operator,
-			flags);
+                        default_column, default_mode, default_operator,
+                        flags);
     if (rc != GRN_SUCCESS) {
-	VALUE related_object;
+        VALUE related_object;
 
-	related_object = rb_ary_new3(2, self, rb_ary_new4(argc, argv));
-	exception = rb_grn_context_to_exception(context, related_object);
+        related_object = rb_ary_new3(2, self, rb_ary_new4(argc, argv));
+        exception = rb_grn_context_to_exception(context, related_object);
     }
     if (default_column_is_created)
-	grn_obj_unlink(context, default_column);
+        grn_obj_unlink(context, default_column);
 
     if (!NIL_P(exception))
-	rb_exc_raise(exception);
+        rb_exc_raise(exception);
 
     return Qnil;
 }
@@ -564,8 +564,8 @@ rb_grn_expression_inspect (VALUE self)
 #endif
     GRN_TEXT_PUTS(context, &inspected, ">");
     rb_inspected = rb_grn_context_rb_string_new(context,
-						GRN_TEXT_VALUE(&inspected),
-						GRN_TEXT_LEN(&inspected));
+                                                GRN_TEXT_VALUE(&inspected),
+                                                GRN_TEXT_LEN(&inspected));
     GRN_OBJ_FIN(context, &inspected);
 
     return rb_inspected;
@@ -657,15 +657,15 @@ rb_grn_expression_snippet (int argc, VALUE *argv, VALUE self)
                         NULL);
 
     if (TYPE(rb_tags) != T_ARRAY) {
-	rb_raise(rb_eArgError,
-		 "tags should be "
-		 "[\"open_tag\", \"close_tag\"] or "
-		 "[[\"open_tag1\", \"close_tag1\"], ...]: %s",
-		 rb_grn_inspect(rb_tags));
+        rb_raise(rb_eArgError,
+                 "tags should be "
+                 "[\"open_tag\", \"close_tag\"] or "
+                 "[[\"open_tag1\", \"close_tag1\"], ...]: %s",
+                 rb_grn_inspect(rb_tags));
     }
 
     if (TYPE(RARRAY_PTR(rb_tags)[0]) == T_STRING) {
-	rb_tags = rb_ary_new3(1, rb_tags);
+        rb_tags = rb_ary_new3(1, rb_tags);
     }
 
     rb_tag_values = RARRAY_PTR(rb_tags);
@@ -675,21 +675,21 @@ rb_grn_expression_snippet (int argc, VALUE *argv, VALUE self)
     close_tags = ALLOCA_N(char *, n_tags);
     close_tag_lengths = ALLOCA_N(unsigned int, n_tags);
     for (i = 0; i < n_tags; i++) {
-	VALUE *tag_pair;
+        VALUE *tag_pair;
 
-	if (TYPE(rb_tag_values[i]) != T_ARRAY ||
-	    RARRAY_LEN(rb_tag_values[i]) != 2) {
-	    rb_raise(rb_eArgError,
-		     "tags should be "
-		     "[\"open_tag\", \"close_tag\"] or"
-		     "[[\"open_tag1\", \"close_tag1\"], ...]: %s",
-		     rb_grn_inspect(rb_tags));
-	}
-	tag_pair = RARRAY_PTR(rb_tag_values[i]);
-	open_tags[i] = StringValuePtr(tag_pair[0]);
-	open_tag_lengths[i] = RSTRING_LEN(tag_pair[0]);
-	close_tags[i] = StringValuePtr(tag_pair[1]);
-	close_tag_lengths[i] = RSTRING_LEN(tag_pair[1]);
+        if (TYPE(rb_tag_values[i]) != T_ARRAY ||
+            RARRAY_LEN(rb_tag_values[i]) != 2) {
+            rb_raise(rb_eArgError,
+                     "tags should be "
+                     "[\"open_tag\", \"close_tag\"] or"
+                     "[[\"open_tag1\", \"close_tag1\"], ...]: %s",
+                     rb_grn_inspect(rb_tags));
+        }
+        tag_pair = RARRAY_PTR(rb_tag_values[i]);
+        open_tags[i] = StringValuePtr(tag_pair[0]);
+        open_tag_lengths[i] = RSTRING_LEN(tag_pair[0]);
+        close_tags[i] = StringValuePtr(tag_pair[1]);
+        close_tag_lengths[i] = RSTRING_LEN(tag_pair[1]);
     }
 
     if (RVAL2CBOOL(rb_normalize))
@@ -707,7 +707,7 @@ rb_grn_expression_snippet (int argc, VALUE *argv, VALUE self)
         mapping = (grn_snip_mapping *)-1;
 
     snippet = grn_expr_snip(context, expression, flags, width, max_results,
-			    n_tags,
+                            n_tags,
                             (const char **)open_tags, open_tag_lengths,
                             (const char **)close_tags, close_tag_lengths,
                             mapping);

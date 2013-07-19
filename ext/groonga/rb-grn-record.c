@@ -40,7 +40,7 @@ VALUE
 rb_grn_record_new_raw (VALUE table, VALUE rb_id, VALUE values)
 {
     return rb_funcall(rb_cGrnRecord, rb_intern("new"), 3,
-		      table, rb_id, values);
+                      table, rb_id, values);
 }
 
 void

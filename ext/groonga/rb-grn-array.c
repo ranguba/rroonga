@@ -98,40 +98,40 @@ rb_grn_array_s_create (int argc, VALUE *argv, VALUE klass)
     rb_scan_args(argc, argv, "01", &options);
 
     rb_grn_scan_options(options,
-			"context", &rb_context,
-			"name", &rb_name,
+                        "context", &rb_context,
+                        "name", &rb_name,
                         "path", &rb_path,
-			"persistent", &rb_persistent,
-			"value_type", &rb_value_type,
-			"sub_records", &rb_sub_records,
-			NULL);
+                        "persistent", &rb_persistent,
+                        "value_type", &rb_value_type,
+                        "sub_records", &rb_sub_records,
+                        NULL);
 
     context = rb_grn_context_ensure(&rb_context);
 
     if (!NIL_P(rb_name)) {
         name = StringValuePtr(rb_name);
-	name_size = RSTRING_LEN(rb_name);
-	flags |= GRN_OBJ_PERSISTENT;
+        name_size = RSTRING_LEN(rb_name);
+        flags |= GRN_OBJ_PERSISTENT;
     }
 
     if (!NIL_P(rb_path)) {
         path = StringValueCStr(rb_path);
-	flags |= GRN_OBJ_PERSISTENT;
+        flags |= GRN_OBJ_PERSISTENT;
     }
 
     if (RVAL2CBOOL(rb_persistent))
-	flags |= GRN_OBJ_PERSISTENT;
+        flags |= GRN_OBJ_PERSISTENT;
 
     if (!NIL_P(rb_value_type))
-	value_type = RVAL2GRNOBJECT(rb_value_type, &context);
+        value_type = RVAL2GRNOBJECT(rb_value_type, &context);
 
     if (RVAL2CBOOL(rb_sub_records))
-	flags |= GRN_OBJ_WITH_SUBREC;
+        flags |= GRN_OBJ_WITH_SUBREC;
 
     table = grn_table_create(context, name, name_size, path,
-			     flags, NULL, value_type);
+                             flags, NULL, value_type);
     if (!table)
-	rb_grn_context_check(context, rb_ary_new4(argc, argv));
+        rb_grn_context_check(context, rb_ary_new4(argc, argv));
     rb_table = GRNOBJECT2RVAL(klass, context, table, GRN_TRUE);
     rb_grn_context_check(context, rb_table);
     rb_iv_set(rb_table, "@context", rb_context);
@@ -186,9 +186,9 @@ rb_grn_array_add (int argc, VALUE *argv, VALUE self)
     rb_grn_context_check(context, self);
 
     if (GRN_ID_NIL == id) {
-	return Qnil;
+        return Qnil;
     } else {
-	return rb_grn_record_new_added(self, id, values);
+        return rb_grn_record_new_added(self, id, values);
     }
 }
 
@@ -207,9 +207,9 @@ yield_record (VALUE user_data)
     volatile VALUE record;
 
     if (data->id == GRN_ID_NIL) {
-	record = Qnil;
+        record = Qnil;
     } else {
-	record = rb_grn_record_new(data->self, data->id, Qnil);
+        record = rb_grn_record_new(data->self, data->id, Qnil);
     }
     data->record = record;
 
@@ -307,7 +307,7 @@ rb_grn_array_push (VALUE self)
     YieldRecordCallbackData data;
 
     if (!rb_block_given_p()) {
-	rb_raise(rb_eArgError,
+        rb_raise(rb_eArgError,
                  "tried to call Groonga::Array#push without a block");
     }
 
@@ -318,7 +318,7 @@ rb_grn_array_push (VALUE self)
     data.status = 0;
     grn_array_push(context, (grn_array *)table, yield_record_callback, &data);
     if (data.status != 0) {
-	rb_jump_tag(data.status);
+        rb_jump_tag(data.status);
     }
     rb_grn_context_check(context, self);
 
@@ -394,11 +394,11 @@ rb_grn_array_pull (int argc, VALUE *argv, VALUE self)
     rb_scan_args(argc, argv, "01", &options);
 
     rb_grn_scan_options(options,
-			"block?", &rb_block_p,
-			NULL);
+                        "block?", &rb_block_p,
+                        NULL);
 
     if (!rb_block_given_p()) {
-	rb_raise(rb_eArgError,
+        rb_raise(rb_eArgError,
                  "tried to call Groonga::Array#pull without a block");
     }
 
@@ -414,7 +414,7 @@ rb_grn_array_pull (int argc, VALUE *argv, VALUE self)
     grn_array_pull(context, (grn_array *)table, RVAL2CBOOL(rb_block_p),
                    yield_record_callback, &data);
     if (data.status != 0) {
-	rb_jump_tag(data.status);
+        rb_jump_tag(data.status);
     }
     rb_grn_context_check(context, self);
 
@@ -466,7 +466,7 @@ rb_grn_init_array (VALUE mGrn)
     rb_cGrnArray = rb_define_class_under(mGrn, "Array", rb_cGrnTable);
 
     rb_define_singleton_method(rb_cGrnArray, "create",
-			       rb_grn_array_s_create, -1);
+                               rb_grn_array_s_create, -1);
 
     rb_define_method(rb_cGrnArray, "add", rb_grn_array_add, -1);
     rb_define_method(rb_cGrnArray, "push", rb_grn_array_push, 0);

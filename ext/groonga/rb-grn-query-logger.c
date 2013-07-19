@@ -234,7 +234,7 @@ rb_grn_query_logger_s_get_path (VALUE klass)
 
     path = grn_default_query_logger_get_path();
     if (path) {
-	rb_path = rb_str_new2(path);
+        rb_path = rb_str_new2(path);
     }
     return rb_path;
 }

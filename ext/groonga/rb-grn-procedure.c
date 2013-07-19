@@ -26,7 +26,7 @@ grn_obj *
 rb_grn_procedure_from_ruby_object (VALUE object)
 {
     if (!RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cGrnProcedure))) {
-	rb_raise(rb_eTypeError, "not a groonga procedure");
+        rb_raise(rb_eTypeError, "not a groonga procedure");
     }
 
     return RVAL2GRNOBJECT(object, NULL);
@@ -34,7 +34,7 @@ rb_grn_procedure_from_ruby_object (VALUE object)
 
 VALUE
 rb_grn_procedure_to_ruby_object (grn_ctx *context, grn_obj *procedure,
-				 grn_bool owner)
+                                 grn_bool owner)
 {
     return GRNOBJECT2RVAL(rb_cGrnProcedure, context, procedure, owner);
 }

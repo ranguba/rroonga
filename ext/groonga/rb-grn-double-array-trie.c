@@ -183,66 +183,66 @@ rb_grn_double_array_trie_s_create (int argc, VALUE *argv, VALUE klass)
     rb_scan_args(argc, argv, "01", &options);
 
     rb_grn_scan_options(options,
-			"context", &rb_context,
-			"name", &rb_name,
+                        "context", &rb_context,
+                        "name", &rb_name,
                         "path", &rb_path,
-			"persistent", &rb_persistent,
-			"key_normalize", &rb_key_normalize,
-			"key_with_sis", &rb_key_with_sis,
-			"key_type", &rb_key_type,
-			"value_type", &rb_value_type,
-			"default_tokenizer", &rb_default_tokenizer,
-			"sub_records", &rb_sub_records,
-			"normalizer", &rb_normalizer,
-			NULL);
+                        "persistent", &rb_persistent,
+                        "key_normalize", &rb_key_normalize,
+                        "key_with_sis", &rb_key_with_sis,
+                        "key_type", &rb_key_type,
+                        "value_type", &rb_value_type,
+                        "default_tokenizer", &rb_default_tokenizer,
+                        "sub_records", &rb_sub_records,
+                        "normalizer", &rb_normalizer,
+                        NULL);
 
     context = rb_grn_context_ensure(&rb_context);
 
     if (!NIL_P(rb_name)) {
         name = StringValuePtr(rb_name);
-	name_size = RSTRING_LEN(rb_name);
-	flags |= GRN_OBJ_PERSISTENT;
+        name_size = RSTRING_LEN(rb_name);
+        flags |= GRN_OBJ_PERSISTENT;
     }
 
     if (!NIL_P(rb_path)) {
         path = StringValueCStr(rb_path);
-	flags |= GRN_OBJ_PERSISTENT;
+        flags |= GRN_OBJ_PERSISTENT;
     }
 
     if (RVAL2CBOOL(rb_persistent))
-	flags |= GRN_OBJ_PERSISTENT;
+        flags |= GRN_OBJ_PERSISTENT;
 
     if (RVAL2CBOOL(rb_key_normalize))
-	flags |= GRN_OBJ_KEY_NORMALIZE;
+        flags |= GRN_OBJ_KEY_NORMALIZE;
 
     if (RVAL2CBOOL(rb_key_with_sis))
-	flags |= GRN_OBJ_KEY_WITH_SIS;
+        flags |= GRN_OBJ_KEY_WITH_SIS;
 
     if (NIL_P(rb_key_type)) {
-	key_type = grn_ctx_at(context, GRN_DB_SHORT_TEXT);
+        key_type = grn_ctx_at(context, GRN_DB_SHORT_TEXT);
     } else {
-	key_type = RVAL2GRNOBJECT(rb_key_type, &context);
+        key_type = RVAL2GRNOBJECT(rb_key_type, &context);
     }
 
     if (!NIL_P(rb_value_type))
-	value_type = RVAL2GRNOBJECT(rb_value_type, &context);
+        value_type = RVAL2GRNOBJECT(rb_value_type, &context);
 
     if (RVAL2CBOOL(rb_sub_records))
-	flags |= GRN_OBJ_WITH_SUBREC;
+        flags |= GRN_OBJ_WITH_SUBREC;
 
     table = grn_table_create(context, name, name_size, path,
-			     flags, key_type, value_type);
+                             flags, key_type, value_type);
     if (!table)
-	rb_grn_context_check(context, rb_ary_new4(argc, argv));
+        rb_grn_context_check(context, rb_ary_new4(argc, argv));
     rb_table = GRNOBJECT2RVAL(klass, context, table, GRN_TRUE);
 
     if (!NIL_P(rb_default_tokenizer))
-	rb_funcall(rb_table, rb_intern("default_tokenizer="), 1,
-		   rb_default_tokenizer);
+        rb_funcall(rb_table, rb_intern("default_tokenizer="), 1,
+                   rb_default_tokenizer);
 
     if (!NIL_P(rb_normalizer))
-	rb_funcall(rb_table, rb_intern("normalizer="), 1,
-		   rb_normalizer);
+        rb_funcall(rb_table, rb_intern("normalizer="), 1,
+                   rb_normalizer);
 
     if (rb_block_given_p())
         return rb_ensure(rb_yield, rb_table, rb_grn_object_close, rb_table);
@@ -308,35 +308,35 @@ rb_grn_double_array_trie_search (int argc, VALUE *argv, VALUE self)
     VALUE rb_key, options, rb_result, rb_operator, rb_type;
 
     rb_grn_table_key_support_deconstruct(SELF(self), &table, &context,
-					 &key, &domain_id, &domain,
-					 NULL, NULL, NULL,
-					 NULL);
+                                         &key, &domain_id, &domain,
+                                         NULL, NULL, NULL,
+                                         NULL);
 
     rb_scan_args(argc, argv, "11", &rb_key, &options);
 
     RVAL2GRNKEY(rb_key, context, key, domain_id, domain, self);
 
     rb_grn_scan_options(options,
-			"result", &rb_result,
-			"operator", &rb_operator,
-			"type", &rb_type,
-			NULL);
+                        "result", &rb_result,
+                        "operator", &rb_operator,
+                        "type", &rb_type,
+                        NULL);
 
     if (NIL_P(rb_result)) {
-	result = grn_table_create(context, NULL, 0, NULL,
-				  GRN_OBJ_TABLE_HASH_KEY | GRN_OBJ_WITH_SUBREC,
-				  table, 0);
-	rb_grn_context_check(context, self);
-	rb_result = GRNOBJECT2RVAL(Qnil, context, result, GRN_TRUE);
+        result = grn_table_create(context, NULL, 0, NULL,
+                                  GRN_OBJ_TABLE_HASH_KEY | GRN_OBJ_WITH_SUBREC,
+                                  table, 0);
+        rb_grn_context_check(context, self);
+        rb_result = GRNOBJECT2RVAL(Qnil, context, result, GRN_TRUE);
     } else {
-	result = RVAL2GRNOBJECT(rb_result, &context);
+        result = RVAL2GRNOBJECT(rb_result, &context);
     }
 
     operator = RVAL2GRNOPERATOR(rb_operator);
 
     rc = grn_obj_search(context, table, key,
-			result, operator,
-			search_options_is_set ? &search_options : NULL);
+                        result, operator,
+                        search_options_is_set ? &search_options : NULL);
     rb_grn_rc_check(rc, self);
 
     return rb_result;
@@ -357,81 +357,81 @@ rb_grn_double_array_trie_open_grn_prefix_cursor (int argc, VALUE *argv,
     VALUE rb_greater_than, rb_less_than, rb_offset, rb_limit;
 
     rb_grn_table_deconstruct((RbGrnTable *)SELF(self), &table, context,
-			     NULL, NULL,
-			     NULL, NULL, NULL,
-			     NULL);
+                             NULL, NULL,
+                             NULL, NULL, NULL,
+                             NULL);
 
     rb_scan_args(argc, argv, "11", &rb_prefix, &options);
 
     rb_grn_scan_options(options,
-			"key_bytes", &rb_key_bytes,
+                        "key_bytes", &rb_key_bytes,
                         "key_bites", &rb_key_bits,
                         "offset", &rb_offset,
                         "limit", &rb_limit,
-			"order", &rb_order,
-			"order_by", &rb_order_by,
-			"greater_than", &rb_greater_than,
-			"less_than", &rb_less_than,
-			NULL);
+                        "order", &rb_order,
+                        "order_by", &rb_order_by,
+                        "greater_than", &rb_greater_than,
+                        "less_than", &rb_less_than,
+                        NULL);
 
     prefix = StringValuePtr(rb_prefix);
     if (!NIL_P(rb_key_bytes) && !NIL_P(rb_key_bits)) {
-	rb_raise(rb_eArgError,
-		 "should not specify both :key_bytes and :key_bits once: %s",
-		 rb_grn_inspect(rb_ary_new4(argc, argv)));
+        rb_raise(rb_eArgError,
+                 "should not specify both :key_bytes and :key_bits once: %s",
+                 rb_grn_inspect(rb_ary_new4(argc, argv)));
     } else if (!NIL_P(rb_key_bytes)) {
-	prefix_size = NUM2UINT(rb_key_bytes);
+        prefix_size = NUM2UINT(rb_key_bytes);
     } else if (!NIL_P(rb_key_bits)) {
-	prefix_size = NUM2UINT(rb_key_bits);
-	flags |= GRN_CURSOR_SIZE_BY_BIT;
+        prefix_size = NUM2UINT(rb_key_bits);
+        flags |= GRN_CURSOR_SIZE_BY_BIT;
     } else {
-	prefix_size = RSTRING_LEN(rb_prefix);
+        prefix_size = RSTRING_LEN(rb_prefix);
     }
     if (!NIL_P(rb_offset))
-	offset = NUM2INT(rb_offset);
+        offset = NUM2INT(rb_offset);
     if (!NIL_P(rb_limit))
-	limit = NUM2INT(rb_limit);
+        limit = NUM2INT(rb_limit);
 
     if (NIL_P(rb_order)) {
     } else if (rb_grn_equal_option(rb_order, "asc") ||
-	       rb_grn_equal_option(rb_order, "ascending")) {
-	flags |= GRN_CURSOR_ASCENDING;
+               rb_grn_equal_option(rb_order, "ascending")) {
+        flags |= GRN_CURSOR_ASCENDING;
     } else if (rb_grn_equal_option(rb_order, "desc") ||
-	       rb_grn_equal_option(rb_order, "descending")) {
-	flags |= GRN_CURSOR_DESCENDING;
+               rb_grn_equal_option(rb_order, "descending")) {
+        flags |= GRN_CURSOR_DESCENDING;
     } else {
-	rb_raise(rb_eArgError,
-		 "order should be one of "
-		 "[:asc, :ascending, :desc, :descending]: %s",
-		 rb_grn_inspect(rb_order));
+        rb_raise(rb_eArgError,
+                 "order should be one of "
+                 "[:asc, :ascending, :desc, :descending]: %s",
+                 rb_grn_inspect(rb_order));
     }
     if (NIL_P(rb_order_by)) {
     } else if (rb_grn_equal_option(rb_order_by, "id")) {
-	flags |= GRN_CURSOR_BY_ID;
+        flags |= GRN_CURSOR_BY_ID;
     } else if (rb_grn_equal_option(rb_order_by, "key")) {
-	if (table->header.type != GRN_TABLE_PAT_KEY) {
-	    rb_raise(rb_eArgError,
-		     "order_by => :key is available "
-		     "only for Groonga::DoubleArrayTrie: %s",
-		     rb_grn_inspect(self));
-	}
-	flags |= GRN_CURSOR_BY_KEY;
+        if (table->header.type != GRN_TABLE_PAT_KEY) {
+            rb_raise(rb_eArgError,
+                     "order_by => :key is available "
+                     "only for Groonga::DoubleArrayTrie: %s",
+                     rb_grn_inspect(self));
+        }
+        flags |= GRN_CURSOR_BY_KEY;
     } else {
-	rb_raise(rb_eArgError,
-		 "order_by should be one of [:id%s]: %s",
-		 table->header.type == GRN_TABLE_PAT_KEY ? ", :key" : "",
-		 rb_grn_inspect(rb_order_by));
+        rb_raise(rb_eArgError,
+                 "order_by should be one of [:id%s]: %s",
+                 table->header.type == GRN_TABLE_PAT_KEY ? ", :key" : "",
+                 rb_grn_inspect(rb_order_by));
     }
 
     if (RVAL2CBOOL(rb_greater_than))
-	flags |= GRN_CURSOR_GT;
+        flags |= GRN_CURSOR_GT;
     if (RVAL2CBOOL(rb_less_than))
-	flags |= GRN_CURSOR_LT;
+        flags |= GRN_CURSOR_LT;
 
     cursor = grn_table_cursor_open(*context, table,
-				   prefix, prefix_size,
-				   NULL, 0,
-				   offset, limit, flags);
+                                   prefix, prefix_size,
+                                   NULL, 0,
+                                   offset, limit, flags);
     rb_grn_context_check(*context, self);
 
     return cursor;
@@ -486,28 +486,28 @@ rb_grn_double_array_trie_open_prefix_cursor (int argc, VALUE *argv, VALUE self)
     VALUE rb_cursor;
 
     cursor = rb_grn_double_array_trie_open_grn_prefix_cursor(argc, argv,
-							 self, &context);
+                                                         self, &context);
     rb_cursor = GRNTABLECURSOR2RVAL(Qnil, context, cursor);
     rb_iv_set(rb_cursor, "@table", self); /* FIXME: cursor should mark table */
     if (rb_block_given_p())
-	return rb_ensure(rb_yield, rb_cursor, rb_grn_object_close, rb_cursor);
+        return rb_ensure(rb_yield, rb_cursor, rb_grn_object_close, rb_cursor);
     else
-	return rb_cursor;
+        return rb_cursor;
 }
 
 void
 rb_grn_init_double_array_trie (VALUE mGrn)
 {
     rb_cGrnDoubleArrayTrie =
-	rb_define_class_under(mGrn, "DoubleArrayTrie", rb_cGrnTable);
+        rb_define_class_under(mGrn, "DoubleArrayTrie", rb_cGrnTable);
 
     rb_include_module(rb_cGrnDoubleArrayTrie, rb_mGrnTableKeySupport);
     rb_define_singleton_method(rb_cGrnDoubleArrayTrie, "create",
-			       rb_grn_double_array_trie_s_create, -1);
+                               rb_grn_double_array_trie_s_create, -1);
 
     rb_define_method(rb_cGrnDoubleArrayTrie, "search",
-		     rb_grn_double_array_trie_search, -1);
+                     rb_grn_double_array_trie_search, -1);
 
     rb_define_method(rb_cGrnDoubleArrayTrie, "open_prefix_cursor",
-		     rb_grn_double_array_trie_open_prefix_cursor, -1);
+                     rb_grn_double_array_trie_open_prefix_cursor, -1);
 }
