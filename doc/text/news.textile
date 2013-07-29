@@ -8,7 +8,8 @@ h3. Improvements
 * Supported Int8/UInt8/Int16/UInt16 to Ruby conversion.
   [groonga-dev,01524][Reported by Masaharu YOSHIOKA]
 * Added memory pool mechanism to reduce GC easily.
-  Context#push_memory_pool and Context#pop_memory_pool are added.
+  {Groonga::Context#push_memory_pool} and {Groonga::Context#pop_memory_pool}
+  are added.
   You can close temporary table objects automatically:
   <pre>
   context.push_memory_pool do
