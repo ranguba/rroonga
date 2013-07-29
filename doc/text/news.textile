@@ -1,5 +1,33 @@
 h1. NEWS
 
+h2(#3-0-5). 3.0.5: 2013-07-29
+
+h3. Improvements
+
+* [dumper] supported dumping of DoubleArrayTrie
+* Supported Int8/UInt8/Int16/UInt16 to Ruby conversion.
+  [groonga-dev,01524][Reported by Masaharu YOSHIOKA]
+* Added memory pool mechanism to reduce GC easily.
+  Context#push_memory_pool and Context#pop_memory_pool are added.
+  You can close temporary table objects automatically:
+  <pre>
+  context.push_memory_pool do
+    # create tempoeray table objects by select, group, sort and so on...
+  end
+  # createed tempoeray table objects are closed automatically
+  </pre>
+* Supported max int32 over Fixnum
+  [Reported by xtuaok]
+
+h3. Fixes
+
+* [dumper] fixed a bug that no column table isn't dumped.
+
+h3. Thanks
+
+* Masaharu YOSHIOKA
+* xtuaok
+
 h2(#3-0-4). 3.0.4: 2013-07-04
 
 h3. Fixes
