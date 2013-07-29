@@ -4,7 +4,7 @@ h2(#3-0-5). 3.0.5: 2013-07-29
 
 h3. Improvements
 
-* [dumper] supported dumping of DoubleArrayTrie
+* [dumper] supported dumping of DoubleArrayTrie.
 * Supported Int8/UInt8/Int16/UInt16 to Ruby conversion.
   [groonga-dev,01524][Reported by Masaharu YOSHIOKA]
 * Added memory pool mechanism to reduce GC easily.
