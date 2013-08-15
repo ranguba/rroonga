@@ -26,8 +26,6 @@ Now you use UTF-8 as the encoding of database.
 
 <pre>
 !!!irb
->> $KCODE = "UTF-8"
-=> "UTF-8"
 >> Groonga::Context.default_options = {:encoding => :utf8}
 => {:encoding=>:utf8}
 </pre>
