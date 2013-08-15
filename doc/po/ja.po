@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: rroonga 2.1.0\n"
 "POT-Creation-Date: 2011-11-20 22:17+0900\n"
-"PO-Revision-Date: 2013-07-29 23:01+0900\n"
+"PO-Revision-Date: 2013-08-15 11:59+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: \n"
@@ -1761,7 +1761,7 @@ msgstr ""
 
 #: ../../doc/text/tutorial.textile:25
 msgid "Now you use UTF-8 as the encoding of database."
-msgstr "まず、エンコーディングを設定します。ここではUTF-8を利用します。<"
+msgstr "まず、エンコーディングを設定します。ここではUTF-8を利用します。"
 
 #: ../../doc/text/tutorial.textile:27
 msgid ""
