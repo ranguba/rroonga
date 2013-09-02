@@ -46,5 +46,19 @@ class TableKeySupportTest < Test::Unit::TestCase
       id = ids.add(key)
       assert_equal(key, id.key)
     end
+
+    def test_int32
+      key = -65536
+      ids = Groonga::Hash.create(:name => "IDs", :key_type => "Int32")
+      id = ids.add(key)
+      assert_equal(key, id.key)
+    end
+
+    def test_uint32
+      key = 65536
+      ids = Groonga::Hash.create(:name => "IDs", :key_type => "UInt32")
+      id = ids.add(key)
+      assert_equal(key, id.key)
+    end
   end
 end
