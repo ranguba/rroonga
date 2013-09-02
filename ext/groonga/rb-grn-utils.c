@@ -452,18 +452,21 @@ rb_grn_bulk_from_ruby_object_with_type (VALUE object, grn_ctx *context,
 {
     const char *string;
     unsigned int size;
-    int8_t int8_value;
-    uint8_t uint8_value;
-    int16_t int16_value;
-    uint16_t uint16_value;
-    int32_t int32_value;
-    uint32_t uint32_value;
-    int64_t int64_value;
-    uint64_t uint64_value;
-    int64_t time_value;
-    double double_value;
-    grn_geo_point geo_point_value;
-    grn_id record_id, range;
+    union {
+        int8_t int8_value;
+        uint8_t uint8_value;
+        int16_t int16_value;
+        uint16_t uint16_value;
+        int32_t int32_value;
+        uint32_t uint32_value;
+        int64_t int64_value;
+        uint64_t uint64_value;
+        int64_t time_value;
+        double double_value;
+        grn_geo_point geo_point_value;
+        grn_id record_id;
+    } value;
+    grn_id range;
     VALUE rb_type_object;
     grn_obj_flags flags = 0;
     grn_bool string_p, table_type_p;
@@ -474,49 +477,49 @@ rb_grn_bulk_from_ruby_object_with_type (VALUE object, grn_ctx *context,
 
     switch (type_id) {
     case GRN_DB_INT8:
-        int8_value = NUM2SHORT(object);
-        string = (const char *)&int8_value;
-        size = sizeof(int8_value);
+        value.int8_value = NUM2SHORT(object);
+        string = (const char *)&(value.int8_value);
+        size = sizeof(value.int8_value);
         break;
     case GRN_DB_UINT8:
-        uint8_value = NUM2USHORT(object);
-        string = (const char *)&uint8_value;
-        size = sizeof(uint8_value);
+        value.uint8_value = NUM2USHORT(object);
+        string = (const char *)&(value.uint8_value);
+        size = sizeof(value.uint8_value);
         break;
     case GRN_DB_INT16:
-        int16_value = NUM2SHORT(object);
-        string = (const char *)&int16_value;
-        size = sizeof(int16_value);
+        value.int16_value = NUM2SHORT(object);
+        string = (const char *)&(value.int16_value);
+        size = sizeof(value.int16_value);
         break;
     case GRN_DB_UINT16:
-        uint16_value = NUM2USHORT(object);
-        string = (const char *)&uint16_value;
-        size = sizeof(uint16_value);
+        value.uint16_value = NUM2USHORT(object);
+        string = (const char *)&(value.uint16_value);
+        size = sizeof(value.uint16_value);
         break;
     case GRN_DB_INT32:
-        int32_value = NUM2INT(object);
-        string = (const char *)&int32_value;
-        size = sizeof(int32_value);
+        value.int32_value = NUM2INT(object);
+        string = (const char *)&(value.int32_value);
+        size = sizeof(value.int32_value);
         break;
     case GRN_DB_UINT32:
-        uint32_value = NUM2UINT(object);
-        string = (const char *)&uint32_value;
-        size = sizeof(uint32_value);
+        value.uint32_value = NUM2UINT(object);
+        string = (const char *)&(value.uint32_value);
+        size = sizeof(value.uint32_value);
         break;
     case GRN_DB_INT64:
-        int64_value = NUM2LL(object);
-        string = (const char *)&int64_value;
-        size = sizeof(int64_value);
+        value.int64_value = NUM2LL(object);
+        string = (const char *)&(value.int64_value);
+        size = sizeof(value.int64_value);
         break;
     case GRN_DB_UINT64:
-        uint64_value = NUM2ULL(object);
-        string = (const char *)&uint64_value;
-        size = sizeof(uint64_value);
+        value.uint64_value = NUM2ULL(object);
+        string = (const char *)&(value.uint64_value);
+        size = sizeof(value.uint64_value);
         break;
     case GRN_DB_FLOAT:
-        double_value = NUM2DBL(object);
-        string = (const char *)&double_value;
-        size = sizeof(double_value);
+        value.double_value = NUM2DBL(object);
+        string = (const char *)&(value.double_value);
+        size = sizeof(value.double_value);
         break;
     case GRN_DB_TIME: {
         VALUE rb_sec, rb_usec;
@@ -553,9 +556,9 @@ rb_grn_bulk_from_ruby_object_with_type (VALUE object, grn_ctx *context,
             break;
         }
 
-        time_value = GRN_TIME_PACK(sec, usec);
-        string = (const char *)&time_value;
-        size = sizeof(time_value);
+        value.time_value = GRN_TIME_PACK(sec, usec);
+        string = (const char *)&(value.time_value);
+        size = sizeof(value.time_value);
         break;
     }
     case GRN_DB_SHORT_TEXT:
@@ -584,10 +587,10 @@ rb_grn_bulk_from_ruby_object_with_type (VALUE object, grn_ctx *context,
         rb_geo_point = rb_funcall(rb_geo_point, rb_intern("to_msec"), 0);
         rb_latitude  = rb_funcall(rb_geo_point, rb_intern("latitude"), 0);
         rb_longitude = rb_funcall(rb_geo_point, rb_intern("longitude"), 0);
-        geo_point_value.latitude = NUM2INT(rb_latitude);
-        geo_point_value.longitude = NUM2INT(rb_longitude);
-        string = (const char *)&geo_point_value;
-        size = sizeof(geo_point_value);
+        value.geo_point_value.latitude = NUM2INT(rb_latitude);
+        value.geo_point_value.longitude = NUM2INT(rb_longitude);
+        string = (const char *)&(value.geo_point_value);
+        size = sizeof(value.geo_point_value);
         break;
     }
     case GRN_DB_VOID:
@@ -604,9 +607,9 @@ rb_grn_bulk_from_ruby_object_with_type (VALUE object, grn_ctx *context,
     default:
         if (table_type_p &&
             (NIL_P(object) || (string_p && RSTRING_LEN(object) == 0))) {
-            record_id = GRN_ID_NIL;
-            string = (const char *)&record_id;
-            size = sizeof(record_id);
+            value.record_id = GRN_ID_NIL;
+            string = (const char *)&(value.record_id);
+            size = sizeof(value.record_id);
             if (bulk && bulk->header.domain != type_id) {
                 grn_obj_reinit(context, bulk, type_id, 0);
             }
