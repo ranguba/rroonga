@@ -33,62 +33,62 @@ rb_grn_inspect (VALUE object)
 const char *
 rb_grn_inspect_type (unsigned char type)
 {
-  switch (type) {
-  case GRN_VOID:
-    return "void";
-  case GRN_BULK:
-    return "bulk";
-  case GRN_PTR:
-    return "ptr";
-  case GRN_UVECTOR:
-    return "uvector";
-  case GRN_PVECTOR:
-    return "pvector";
-  case GRN_MSG:
-    return "msg";
-  case GRN_QUERY:
-    return "query";
-  case GRN_ACCESSOR:
-    return "accessor";
-  case GRN_SNIP:
-    return "snip";
-  case GRN_PATSNIP:
-    return "patsnip";
-  case GRN_CURSOR_TABLE_HASH_KEY:
-    return "cursor-table-hash-key";
-  case GRN_CURSOR_TABLE_PAT_KEY:
-    return "cursor-table-pat-key";
-  case GRN_CURSOR_TABLE_DAT_KEY:
-    return "cursor-table-dat-key";
-  case GRN_CURSOR_TABLE_NO_KEY:
-    return "cursor-table-no-key";
-  case GRN_CURSOR_COLUMN_INDEX:
-    return "cursor-column-index";
-  case GRN_TYPE:
-    return "type";
-  case GRN_PROC:
-    return "proc";
-  case GRN_EXPR:
-    return "expr";
-  case GRN_TABLE_HASH_KEY:
-    return "table-hash-key";
-  case GRN_TABLE_PAT_KEY:
-    return "table-pat-key";
-  case GRN_TABLE_DAT_KEY:
-    return "table-dat-key";
-  case GRN_TABLE_NO_KEY:
-    return "table-no-key";
-  case GRN_DB:
-    return "db";
-  case GRN_COLUMN_FIX_SIZE:
-    return "column-fix-size";
-  case GRN_COLUMN_VAR_SIZE:
-    return "column-var-size";
-  case GRN_COLUMN_INDEX:
-    return "column-index";
-  default:
-    return "unknown";
-  }
+    switch (type) {
+    case GRN_VOID:
+        return "void";
+    case GRN_BULK:
+        return "bulk";
+    case GRN_PTR:
+        return "ptr";
+    case GRN_UVECTOR:
+        return "uvector";
+    case GRN_PVECTOR:
+        return "pvector";
+    case GRN_MSG:
+        return "msg";
+    case GRN_QUERY:
+        return "query";
+    case GRN_ACCESSOR:
+        return "accessor";
+    case GRN_SNIP:
+        return "snip";
+    case GRN_PATSNIP:
+        return "patsnip";
+    case GRN_CURSOR_TABLE_HASH_KEY:
+        return "cursor-table-hash-key";
+    case GRN_CURSOR_TABLE_PAT_KEY:
+        return "cursor-table-pat-key";
+    case GRN_CURSOR_TABLE_DAT_KEY:
+        return "cursor-table-dat-key";
+    case GRN_CURSOR_TABLE_NO_KEY:
+        return "cursor-table-no-key";
+    case GRN_CURSOR_COLUMN_INDEX:
+        return "cursor-column-index";
+    case GRN_TYPE:
+        return "type";
+    case GRN_PROC:
+        return "proc";
+    case GRN_EXPR:
+        return "expr";
+    case GRN_TABLE_HASH_KEY:
+        return "table-hash-key";
+    case GRN_TABLE_PAT_KEY:
+        return "table-pat-key";
+    case GRN_TABLE_DAT_KEY:
+        return "table-dat-key";
+    case GRN_TABLE_NO_KEY:
+        return "table-no-key";
+    case GRN_DB:
+        return "db";
+    case GRN_COLUMN_FIX_SIZE:
+        return "column-fix-size";
+    case GRN_COLUMN_VAR_SIZE:
+        return "column-var-size";
+    case GRN_COLUMN_INDEX:
+        return "column-index";
+    default:
+        return "unknown";
+    }
 }
 
 void
@@ -199,73 +199,70 @@ rb_grn_bulk_to_ruby_object_by_range_id (grn_ctx *context, grn_obj *bulk,
     grn_bool success = GRN_TRUE;
 
     switch (range_id) {
-      case GRN_DB_VOID:
+    case GRN_DB_VOID:
         *rb_value = rb_str_new(GRN_TEXT_VALUE(bulk), GRN_TEXT_LEN(bulk));
         break;
-      case GRN_DB_BOOL:
+    case GRN_DB_BOOL:
         *rb_value = GRN_BOOL_VALUE(bulk) ? Qtrue : Qfalse;
         break;
-      case GRN_DB_INT8:
+    case GRN_DB_INT8:
         *rb_value = INT2NUM(GRN_INT8_VALUE(bulk));
         break;
-      case GRN_DB_UINT8:
+    case GRN_DB_UINT8:
         *rb_value = UINT2NUM(GRN_UINT8_VALUE(bulk));
         break;
-      case GRN_DB_INT16:
+    case GRN_DB_INT16:
         *rb_value = INT2NUM(GRN_INT16_VALUE(bulk));
         break;
-      case GRN_DB_UINT16:
+    case GRN_DB_UINT16:
         *rb_value = UINT2NUM(GRN_UINT16_VALUE(bulk));
         break;
-      case GRN_DB_INT32:
+    case GRN_DB_INT32:
         *rb_value = INT2NUM(GRN_INT32_VALUE(bulk));
         break;
-      case GRN_DB_UINT32:
+    case GRN_DB_UINT32:
         *rb_value = UINT2NUM(GRN_UINT32_VALUE(bulk));
         break;
-      case GRN_DB_INT64:
+    case GRN_DB_INT64:
         *rb_value = LL2NUM(GRN_INT64_VALUE(bulk));
         break;
-      case GRN_DB_UINT64:
+    case GRN_DB_UINT64:
         *rb_value = ULL2NUM(GRN_UINT64_VALUE(bulk));
         break;
-      case GRN_DB_FLOAT:
+    case GRN_DB_FLOAT:
         *rb_value = rb_float_new(GRN_FLOAT_VALUE(bulk));
         break;
-      case GRN_DB_TIME:
-        {
-            int64_t time_value, sec, usec;
+    case GRN_DB_TIME: {
+        int64_t time_value, sec, usec;
 
-            time_value = GRN_TIME_VALUE(bulk);
-            GRN_TIME_UNPACK(time_value, sec, usec);
-            *rb_value = rb_funcall(rb_cTime, rb_intern("at"), 2,
-                                   LL2NUM(sec), LL2NUM(usec));
-        }
+        time_value = GRN_TIME_VALUE(bulk);
+        GRN_TIME_UNPACK(time_value, sec, usec);
+        *rb_value = rb_funcall(rb_cTime, rb_intern("at"), 2,
+                               LL2NUM(sec), LL2NUM(usec));
         break;
-      case GRN_DB_SHORT_TEXT:
-      case GRN_DB_TEXT:
-      case GRN_DB_LONG_TEXT:
+    }
+    case GRN_DB_SHORT_TEXT:
+    case GRN_DB_TEXT:
+    case GRN_DB_LONG_TEXT:
         *rb_value = rb_grn_context_rb_string_new(context,
                                                  GRN_TEXT_VALUE(bulk),
                                                  GRN_TEXT_LEN(bulk));
         break;
-      case GRN_DB_TOKYO_GEO_POINT:
-        {
-            int latitude, longitude;
+    case GRN_DB_TOKYO_GEO_POINT: {
+        int latitude, longitude;
 
-            GRN_GEO_POINT_VALUE(bulk, latitude, longitude);
-            *rb_value = rb_grn_tokyo_geo_point_new(latitude, longitude);
-        }
+        GRN_GEO_POINT_VALUE(bulk, latitude, longitude);
+        *rb_value = rb_grn_tokyo_geo_point_new(latitude, longitude);
         break;
-      case GRN_DB_WGS84_GEO_POINT:
-        {
-            int latitude, longitude;
+    }
+    case GRN_DB_WGS84_GEO_POINT: {
+        int latitude, longitude;
 
-            GRN_GEO_POINT_VALUE(bulk, latitude, longitude);
-            *rb_value = rb_grn_wgs84_geo_point_new(latitude, longitude);
-        }
+        GRN_GEO_POINT_VALUE(bulk, latitude, longitude);
+        *rb_value = rb_grn_wgs84_geo_point_new(latitude, longitude);
         break;
-      default:
+    }
+    default:
         success = GRN_FALSE;
         break;
     }
@@ -288,47 +285,46 @@ rb_grn_bulk_to_ruby_object_by_range_type (grn_ctx *context, grn_obj *bulk,
         return GRN_FALSE;
 
     switch (range->header.type) {
-      case GRN_TABLE_HASH_KEY:
-      case GRN_TABLE_PAT_KEY:
-      case GRN_TABLE_DAT_KEY:
-      case GRN_TABLE_NO_KEY:
-        {
-            grn_id id;
+    case GRN_TABLE_HASH_KEY:
+    case GRN_TABLE_PAT_KEY:
+    case GRN_TABLE_DAT_KEY:
+    case GRN_TABLE_NO_KEY: {
+        grn_id id;
 
-            id = *((grn_id *)GRN_BULK_HEAD(bulk));
-            if (id == GRN_ID_NIL) {
-                *rb_value = Qnil;
-            } else {
-                VALUE rb_range;
+        id = *((grn_id *)GRN_BULK_HEAD(bulk));
+        if (id == GRN_ID_NIL) {
+            *rb_value = Qnil;
+        } else {
+            VALUE rb_range;
 
-                rb_range = GRNOBJECT2RVAL(Qnil, context, range, GRN_FALSE);
-                *rb_value = rb_grn_record_new(rb_range, id, Qnil);
-            }
+            rb_range = GRNOBJECT2RVAL(Qnil, context, range, GRN_FALSE);
+            *rb_value = rb_grn_record_new(rb_range, id, Qnil);
         }
         break;
-      case GRN_TYPE:
+    }
+    case GRN_TYPE:
         if (range->header.flags & GRN_OBJ_KEY_VAR_SIZE) {
             *rb_value = rb_grn_context_rb_string_new(context,
                                                      GRN_BULK_HEAD(bulk),
                                                      GRN_BULK_VSIZE(bulk));
         } else {
             switch (range->header.flags & GRN_OBJ_KEY_MASK) {
-              case GRN_OBJ_KEY_UINT:
+            case GRN_OBJ_KEY_UINT:
                 *rb_value = INT2NUM(GRN_UINT32_VALUE(bulk));
                 break;
-              case GRN_OBJ_KEY_INT:
+            case GRN_OBJ_KEY_INT:
                 *rb_value = INT2NUM(GRN_INT32_VALUE(bulk));
                 break;
-              case GRN_OBJ_KEY_FLOAT:
+            case GRN_OBJ_KEY_FLOAT:
                 *rb_value = rb_float_new(GRN_FLOAT_VALUE(bulk));
                 break;
-              default:
+            default:
                 success = GRN_FALSE;
             }
             break;
         }
         break;
-      default:
+    default:
         success = GRN_FALSE;
         break;
     }
@@ -375,42 +371,41 @@ rb_grn_bulk_from_ruby_object (VALUE object, grn_ctx *context, grn_obj *bulk)
     }
 
     switch (TYPE(object)) {
-      case T_NIL:
+    case T_NIL:
         grn_obj_reinit(context, bulk, GRN_DB_VOID, 0);
         break;
-      case T_SYMBOL:
+    case T_SYMBOL:
         object = rb_funcall(object, rb_intern("to_s"), 0);
-      case T_STRING:
+    case T_STRING:
         grn_obj_reinit(context, bulk, GRN_DB_TEXT, 0);
         rb_grn_context_text_set(context, bulk, object);
         break;
-      case T_FIXNUM:
-      case T_BIGNUM:
-        {
-            int64_t int64_value;
-            int64_value = NUM2LL(object);
-            if (int64_value <= INT32_MAX) {
-                grn_obj_reinit(context, bulk, GRN_DB_INT32, 0);
-                GRN_INT32_SET(context, bulk, int64_value);
-            } else {
-                grn_obj_reinit(context, bulk, GRN_DB_INT64, 0);
-                GRN_INT64_SET(context, bulk, int64_value);
-            }
+    case T_FIXNUM:
+    case T_BIGNUM: {
+        int64_t int64_value;
+        int64_value = NUM2LL(object);
+        if (int64_value <= INT32_MAX) {
+            grn_obj_reinit(context, bulk, GRN_DB_INT32, 0);
+            GRN_INT32_SET(context, bulk, int64_value);
+        } else {
+            grn_obj_reinit(context, bulk, GRN_DB_INT64, 0);
+            GRN_INT64_SET(context, bulk, int64_value);
         }
         break;
-      case T_FLOAT:
+    }
+    case T_FLOAT:
         grn_obj_reinit(context, bulk, GRN_DB_FLOAT, 0);
         GRN_FLOAT_SET(context, bulk, NUM2DBL(object));
         break;
-      case T_TRUE:
+    case T_TRUE:
         grn_obj_reinit(context, bulk, GRN_DB_BOOL, 0);
         GRN_BOOL_SET(context, bulk, GRN_TRUE);
         break;
-      case T_FALSE:
+    case T_FALSE:
         grn_obj_reinit(context, bulk, GRN_DB_BOOL, 0);
         GRN_BOOL_SET(context, bulk, GRN_FALSE);
         break;
-      default:
+    default:
         if (RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cTime))) {
             VALUE sec, usec;
             int64_t time_value;
@@ -476,85 +471,84 @@ rb_grn_bulk_from_ruby_object_with_type (VALUE object, grn_ctx *context,
                     type->header.type <= GRN_TABLE_NO_KEY);
 
     switch (type_id) {
-      case GRN_DB_INT8:
+    case GRN_DB_INT8:
         int8_value = NUM2SHORT(object);
         string = (const char *)&int8_value;
         size = sizeof(int8_value);
         break;
-      case GRN_DB_UINT8:
+    case GRN_DB_UINT8:
         uint8_value = NUM2USHORT(object);
         string = (const char *)&uint8_value;
         size = sizeof(uint8_value);
         break;
-      case GRN_DB_INT32:
+    case GRN_DB_INT32:
         int32_value = NUM2INT(object);
         string = (const char *)&int32_value;
         size = sizeof(int32_value);
         break;
-      case GRN_DB_UINT32:
+    case GRN_DB_UINT32:
         uint32_value = NUM2UINT(object);
         string = (const char *)&uint32_value;
         size = sizeof(uint32_value);
         break;
-      case GRN_DB_INT64:
+    case GRN_DB_INT64:
         int64_value = NUM2LL(object);
         string = (const char *)&int64_value;
         size = sizeof(int64_value);
         break;
-      case GRN_DB_UINT64:
+    case GRN_DB_UINT64:
         uint64_value = NUM2ULL(object);
         string = (const char *)&uint64_value;
         size = sizeof(uint64_value);
         break;
-      case GRN_DB_FLOAT:
+    case GRN_DB_FLOAT:
         double_value = NUM2DBL(object);
         string = (const char *)&double_value;
         size = sizeof(double_value);
         break;
-      case GRN_DB_TIME:
-        {
-            VALUE rb_sec, rb_usec;
-            int64_t sec;
-            int32_t usec;
+    case GRN_DB_TIME: {
+        VALUE rb_sec, rb_usec;
+        int64_t sec;
+        int32_t usec;
 
-            if (string_p) {
-                ID id_parse;
-                CONST_ID(id_parse, "parse");
-                object = rb_funcall(rb_cTime, id_parse, 1, object);
-            }
-
-            switch (TYPE(object)) {
-            case T_FIXNUM:
-            case T_BIGNUM:
-                sec = NUM2LL(object);
-                usec = 0;
-                break;
-            case T_FLOAT:
-                rb_sec = rb_funcall(object, rb_intern("to_i"), 0);
-                rb_usec = rb_funcall(object, rb_intern("remainder"), 1,
-                                     INT2NUM(1));
-
-                sec = NUM2LL(rb_sec);
-                usec = (int32_t)(NUM2DBL(rb_usec) * 1000000);
-                break;
-            case T_NIL:
-                sec = 0;
-                usec = 0;
-                break;
-            default:
-                sec = NUM2LL(rb_funcall(object, rb_intern("to_i"), 0));
-                usec = NUM2INT(rb_funcall(object, rb_intern("usec"), 0));
-                break;
-            }
-
-            time_value = GRN_TIME_PACK(sec, usec);
+        if (string_p) {
+            ID id_parse;
+            CONST_ID(id_parse, "parse");
+            object = rb_funcall(rb_cTime, id_parse, 1, object);
         }
+
+        switch (TYPE(object)) {
+        case T_FIXNUM:
+        case T_BIGNUM:
+            sec = NUM2LL(object);
+            usec = 0;
+            break;
+        case T_FLOAT:
+            rb_sec = rb_funcall(object, rb_intern("to_i"), 0);
+            rb_usec = rb_funcall(object, rb_intern("remainder"), 1,
+                                 INT2NUM(1));
+
+            sec = NUM2LL(rb_sec);
+            usec = (int32_t)(NUM2DBL(rb_usec) * 1000000);
+            break;
+        case T_NIL:
+            sec = 0;
+            usec = 0;
+            break;
+        default:
+            sec = NUM2LL(rb_funcall(object, rb_intern("to_i"), 0));
+            usec = NUM2INT(rb_funcall(object, rb_intern("usec"), 0));
+            break;
+        }
+
+        time_value = GRN_TIME_PACK(sec, usec);
         string = (const char *)&time_value;
         size = sizeof(time_value);
         break;
-      case GRN_DB_SHORT_TEXT:
-      case GRN_DB_TEXT:
-      case GRN_DB_LONG_TEXT:
+    }
+    case GRN_DB_SHORT_TEXT:
+    case GRN_DB_TEXT:
+    case GRN_DB_LONG_TEXT:
         string = StringValuePtr(object);
         size = RSTRING_LEN(object);
         range = grn_obj_get_range(context, type);
@@ -564,39 +558,38 @@ rb_grn_bulk_from_ruby_object_with_type (VALUE object, grn_ctx *context,
                      size, range);
         flags |= GRN_OBJ_DO_SHALLOW_COPY;
         break;
-      case GRN_DB_TOKYO_GEO_POINT:
-      case GRN_DB_WGS84_GEO_POINT:
-        {
-            VALUE rb_geo_point;
-            VALUE rb_latitude, rb_longitude;
-            if (type_id == GRN_DB_TOKYO_GEO_POINT) {
-                rb_geo_point = rb_funcall(rb_cGrnTokyoGeoPoint,
-                                          rb_intern("new"), 1, object);
-            } else {
-                rb_geo_point = rb_funcall(rb_cGrnWGS84GeoPoint,
-                                          rb_intern("new"), 1, object);
-            }
-            rb_geo_point = rb_funcall(rb_geo_point, rb_intern("to_msec"), 0);
-            rb_latitude  = rb_funcall(rb_geo_point, rb_intern("latitude"), 0);
-            rb_longitude = rb_funcall(rb_geo_point, rb_intern("longitude"), 0);
-            geo_point_value.latitude = NUM2INT(rb_latitude);
-            geo_point_value.longitude = NUM2INT(rb_longitude);
-            string = (const char *)&geo_point_value;
-            size = sizeof(geo_point_value);
+    case GRN_DB_TOKYO_GEO_POINT:
+    case GRN_DB_WGS84_GEO_POINT: {
+        VALUE rb_geo_point;
+        VALUE rb_latitude, rb_longitude;
+        if (type_id == GRN_DB_TOKYO_GEO_POINT) {
+            rb_geo_point = rb_funcall(rb_cGrnTokyoGeoPoint,
+                                      rb_intern("new"), 1, object);
+        } else {
+            rb_geo_point = rb_funcall(rb_cGrnWGS84GeoPoint,
+                                      rb_intern("new"), 1, object);
         }
+        rb_geo_point = rb_funcall(rb_geo_point, rb_intern("to_msec"), 0);
+        rb_latitude  = rb_funcall(rb_geo_point, rb_intern("latitude"), 0);
+        rb_longitude = rb_funcall(rb_geo_point, rb_intern("longitude"), 0);
+        geo_point_value.latitude = NUM2INT(rb_latitude);
+        geo_point_value.longitude = NUM2INT(rb_longitude);
+        string = (const char *)&geo_point_value;
+        size = sizeof(geo_point_value);
         break;
-      case GRN_DB_VOID:
-      case GRN_DB_DELIMIT:
-      case GRN_DB_UNIGRAM:
-      case GRN_DB_BIGRAM:
-      case GRN_DB_TRIGRAM:
-      case GRN_DB_MECAB:
+    }
+    case GRN_DB_VOID:
+    case GRN_DB_DELIMIT:
+    case GRN_DB_UNIGRAM:
+    case GRN_DB_BIGRAM:
+    case GRN_DB_TRIGRAM:
+    case GRN_DB_MECAB:
         rb_type_object = GRNOBJECT2RVAL(Qnil, context, type, GRN_FALSE);
         rb_raise(rb_eArgError,
                  "unbulkable type: %s",
                  rb_grn_inspect(rb_type_object));
         break;
-      default:
+    default:
         if (table_type_p &&
             (NIL_P(object) || (string_p && RSTRING_LEN(object) == 0))) {
             record_id = GRN_ID_NIL;
@@ -755,50 +748,48 @@ rb_grn_uvector_to_ruby_object (grn_ctx *context, grn_obj *uvector,
     }
 
     switch (range->header.type) {
-      case GRN_TYPE:
-        {
-            const char *current, *end;
-            grn_id range_id;
-            grn_obj value;
-            int value_size;
-            value_size = grn_obj_get_range(context, range);
-            array = rb_ary_new();
-            current = GRN_BULK_HEAD(uvector);
-            end = GRN_BULK_CURR(uvector);
-            range_id = grn_obj_id(context, range);
-            GRN_OBJ_INIT(&value, GRN_BULK, GRN_OBJ_DO_SHALLOW_COPY, range_id);
-            while (current < end) {
-                VALUE rb_value;
-                GRN_TEXT_SET(context, &value, current, value_size);
-                rb_value = GRNBULK2RVAL(context, &value, range, related_object);
-                rb_ary_push(array, rb_value);
-                current += value_size;
+    case GRN_TYPE: {
+        const char *current, *end;
+        grn_id range_id;
+        grn_obj value;
+        int value_size;
+        value_size = grn_obj_get_range(context, range);
+        array = rb_ary_new();
+        current = GRN_BULK_HEAD(uvector);
+        end = GRN_BULK_CURR(uvector);
+        range_id = grn_obj_id(context, range);
+        GRN_OBJ_INIT(&value, GRN_BULK, GRN_OBJ_DO_SHALLOW_COPY, range_id);
+        while (current < end) {
+            VALUE rb_value;
+            GRN_TEXT_SET(context, &value, current, value_size);
+            rb_value = GRNBULK2RVAL(context, &value, range, related_object);
+            rb_ary_push(array, rb_value);
+            current += value_size;
+        }
+        GRN_OBJ_FIN(context, &value);
+        break;
+    }
+    case GRN_TABLE_HASH_KEY:
+    case GRN_TABLE_PAT_KEY:
+    case GRN_TABLE_DAT_KEY:
+    case GRN_TABLE_NO_KEY: {
+        grn_id *current, *end;
+        VALUE rb_range = Qnil;
+        array = rb_ary_new();
+        rb_range = GRNTABLE2RVAL(context, range, GRN_FALSE);
+        current = (grn_id *)GRN_BULK_HEAD(uvector);
+        end = (grn_id *)GRN_BULK_CURR(uvector);
+        while (current < end) {
+            VALUE record = Qnil;
+            if (*current != GRN_ID_NIL) {
+                record = rb_grn_record_new(rb_range, *current, Qnil);
             }
-            GRN_OBJ_FIN(context, &value);
+            rb_ary_push(array, record);
+            current++;
         }
         break;
-      case GRN_TABLE_HASH_KEY:
-      case GRN_TABLE_PAT_KEY:
-      case GRN_TABLE_DAT_KEY:
-      case GRN_TABLE_NO_KEY:
-        {
-            grn_id *current, *end;
-            VALUE rb_range = Qnil;
-            array = rb_ary_new();
-            rb_range = GRNTABLE2RVAL(context, range, GRN_FALSE);
-            current = (grn_id *)GRN_BULK_HEAD(uvector);
-            end = (grn_id *)GRN_BULK_CURR(uvector);
-            while (current < end) {
-                VALUE record = Qnil;
-                if (*current != GRN_ID_NIL) {
-                    record = rb_grn_record_new(rb_range, *current, Qnil);
-                }
-                rb_ary_push(array, record);
-                current++;
-            }
-        }
-        break;
-      default:
+    }
+    default:
         rb_raise(rb_eTypeError,
                  "unknown range uvector can't be converted: %s(%#x): <%s>",
                  rb_grn_inspect_type(range->header.type),
@@ -876,10 +867,10 @@ rb_grn_uvector_from_ruby_object_reference (UVectorFromRubyData *data)
 
         rb_value = rb_values[i];
         switch (TYPE(rb_value)) {
-          case T_FIXNUM:
+        case T_FIXNUM:
             id = NUM2UINT(rb_value);
             break;
-          default:
+        default:
             CONST_ID(id_record_raw_id, "record_raw_id");
             if (rb_respond_to(rb_value, id_record_raw_id)) {
                 id = NUM2UINT(rb_funcall(rb_value, id_record_raw_id, 0));
@@ -909,16 +900,16 @@ rb_grn_uvector_from_ruby_object_body (VALUE user_data)
 
     domain = data->domain;
     switch (domain->header.type) {
-      case GRN_TYPE:
+    case GRN_TYPE:
         rb_grn_uvector_from_ruby_object_type(data);
         break;
-      case GRN_TABLE_HASH_KEY:
-      case GRN_TABLE_PAT_KEY:
-      case GRN_TABLE_DAT_KEY:
-      case GRN_TABLE_NO_KEY:
+    case GRN_TABLE_HASH_KEY:
+    case GRN_TABLE_PAT_KEY:
+    case GRN_TABLE_DAT_KEY:
+    case GRN_TABLE_NO_KEY:
         rb_grn_uvector_from_ruby_object_reference(data);
         break;
-      default:
+    default:
         rb_raise(rb_eTypeError,
                  "can't convert to unknown domain uvector: %s(%#x): <%s>",
                  rb_grn_inspect_type(domain->header.type),
@@ -987,23 +978,23 @@ rb_grn_value_to_ruby_object (grn_ctx *context,
         return Qnil;
 
     switch (value->header.type) {
-      case GRN_VOID:
+    case GRN_VOID:
         return Qnil;
         break;
-      case GRN_BULK:
+    case GRN_BULK:
         if (GRN_BULK_EMPTYP(value))
             return Qnil;
         if (value->header.domain == GRN_ID_NIL && range)
             value->header.domain = grn_obj_id(context, range);
         return GRNBULK2RVAL(context, value, range, related_object);
         break;
-      case GRN_UVECTOR:
+    case GRN_UVECTOR:
         return GRNUVECTOR2RVAL(context, value, range, related_object);
         break;
-      case GRN_VECTOR:
+    case GRN_VECTOR:
         return GRNVECTOR2RVAL(context, value);
         break;
-      default:
+    default:
         rb_raise(rb_eGrnError,
                  "unsupported value type: %s(%#x): %s",
                  rb_grn_inspect_type(value->header.type),
@@ -1077,16 +1068,16 @@ rb_grn_key_from_ruby_object (VALUE rb_key, grn_ctx *context,
         return RVAL2GRNBULK(rb_key, context, key);
 
     switch (domain->header.type) {
-      case GRN_TYPE:
+    case GRN_TYPE:
         return RVAL2GRNBULK_WITH_TYPE(rb_key, context, key, domain_id, domain);
         break;
-      case GRN_TABLE_HASH_KEY:
-      case GRN_TABLE_PAT_KEY:
-      case GRN_TABLE_DAT_KEY:
-      case GRN_TABLE_NO_KEY:
+    case GRN_TABLE_HASH_KEY:
+    case GRN_TABLE_PAT_KEY:
+    case GRN_TABLE_DAT_KEY:
+    case GRN_TABLE_NO_KEY:
         id = RVAL2GRNID(rb_key, context, domain, related_object);
         break;
-      default:
+    default:
         if (!RVAL2CBOOL(rb_obj_is_kind_of(rb_key, rb_cInteger)))
             rb_raise(rb_eGrnError,
                      "should be unsigned integer: <%s>: <%s>",
@@ -1156,42 +1147,42 @@ rb_grn_obj_to_ruby_object (VALUE klass, grn_ctx *context,
 /*      klass = GRNOBJECT2RCLASS(obj); */
 
     switch (obj->header.type) {
-      case GRN_VOID:
+    case GRN_VOID:
         if (GRN_BULK_VSIZE(obj) > 0)
             return rb_str_new(GRN_BULK_HEAD(obj), GRN_BULK_VSIZE(obj));
         else
             return Qnil;
         break;
-      case GRN_BULK:
+    case GRN_BULK:
         return GRNBULK2RVAL(context, obj, NULL, related_object);
         break;
-      /* case GRN_PTR: */
-      /* case GRN_UVECTOR: */
-      /* case GRN_PVECTOR: */
-      case GRN_VECTOR:
+    /* case GRN_PTR: */
+    /* case GRN_UVECTOR: */
+    /* case GRN_PVECTOR: */
+    case GRN_VECTOR:
         return GRNVECTOR2RVAL(context, obj);
         break;
-      /* case GRN_MSG: */
-      /* case GRN_QUERY: */
-      /* case GRN_ACCESSOR: */
-      /* case GRN_SNIP: */
-      /* case GRN_PATSNIP: */
-      /* case GRN_CURSOR_TABLE_HASH_KEY: */
-      /* case GRN_CURSOR_TABLE_PAT_KEY: */
-      /* case GRN_CURSOR_TABLE_NO_KEY: */
-      /* case GRN_CURSOR_COLUMN_INDEX: */
-      /* case GRN_TYPE: */
-      /* case GRN_PROC: */
-      /* case GRN_EXPR: */
-      /* case GRN_TABLE_HASH_KEY: */
-      /* case GRN_TABLE_PAT_KEY: */
-      /* case GRN_TABLE_DAT_KEY: */
-      /* case GRN_TABLE_NO_KEY: */
-      /* case GRN_DB: */
-      /* case GRN_COLUMN_FIX_SIZE: */
-      /* case GRN_COLUMN_VAR_SIZE: */
-      /* case GRN_COLUMN_INDEX: */
-      default:
+    /* case GRN_MSG: */
+    /* case GRN_QUERY: */
+    /* case GRN_ACCESSOR: */
+    /* case GRN_SNIP: */
+    /* case GRN_PATSNIP: */
+    /* case GRN_CURSOR_TABLE_HASH_KEY: */
+    /* case GRN_CURSOR_TABLE_PAT_KEY: */
+    /* case GRN_CURSOR_TABLE_NO_KEY: */
+    /* case GRN_CURSOR_COLUMN_INDEX: */
+    /* case GRN_TYPE: */
+    /* case GRN_PROC: */
+    /* case GRN_EXPR: */
+    /* case GRN_TABLE_HASH_KEY: */
+    /* case GRN_TABLE_PAT_KEY: */
+    /* case GRN_TABLE_DAT_KEY: */
+    /* case GRN_TABLE_NO_KEY: */
+    /* case GRN_DB: */
+    /* case GRN_COLUMN_FIX_SIZE: */
+    /* case GRN_COLUMN_VAR_SIZE: */
+    /* case GRN_COLUMN_INDEX: */
+    default:
         rb_raise(rb_eTypeError,
                  "unsupported groonga object: %s(%#x): <%s>",
                  rb_grn_inspect_type(obj->header.type),
