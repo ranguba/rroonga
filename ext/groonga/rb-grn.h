@@ -32,6 +32,10 @@
 #  define RETURN_ENUMERATOR(obj, argc, argv)
 #endif
 
+#ifndef NUM2USHORT
+#  define NUM2USHORT(object) NUM2UINT(object)
+#endif
+
 #include <groonga.h>
 
 #if defined(__cplusplus)
