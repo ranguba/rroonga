@@ -454,6 +454,8 @@ rb_grn_bulk_from_ruby_object_with_type (VALUE object, grn_ctx *context,
     unsigned int size;
     int8_t int8_value;
     uint8_t uint8_value;
+    int16_t int16_value;
+    uint16_t uint16_value;
     int32_t int32_value;
     uint32_t uint32_value;
     int64_t int64_value;
@@ -480,6 +482,16 @@ rb_grn_bulk_from_ruby_object_with_type (VALUE object, grn_ctx *context,
         uint8_value = NUM2USHORT(object);
         string = (const char *)&uint8_value;
         size = sizeof(uint8_value);
+        break;
+    case GRN_DB_INT16:
+        int16_value = NUM2SHORT(object);
+        string = (const char *)&int16_value;
+        size = sizeof(int16_value);
+        break;
+    case GRN_DB_UINT16:
+        uint16_value = NUM2USHORT(object);
+        string = (const char *)&uint16_value;
+        size = sizeof(uint16_value);
         break;
     case GRN_DB_INT32:
         int32_value = NUM2INT(object);
