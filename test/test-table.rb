@@ -423,57 +423,6 @@ class TableTest < Test::Unit::TestCase
                  sorted_bookmarks.collect(&:value))
   end
 
-  def test_group
-    bookmarks = Groonga::Hash.create(:name => "Bookmarks")
-    bookmarks.define_column("title", "Text")
-    comments = Groonga::Array.create(:name => "Comments")
-    comments.define_column("bookmark", bookmarks)
-    comments.define_column("content", "Text")
-    comments.define_column("issued", "Int32")
-
-    groonga = bookmarks.add("http://groonga.org/", :title => "groonga")
-    ruby = bookmarks.add("http://ruby-lang.org/", :title => "Ruby")
-
-    now = Time.now.to_i
-    comments.add(:bookmark => groonga,
-                 :content => "full-text search",
-                 :issued => now)
-    comments.add(:bookmark => groonga,
-                 :content => "column store",
-                 :issued => now)
-    comments.add(:bookmark => ruby,
-                 :content => "object oriented script language",
-                 :issued => now)
-
-    records = comments.select do |record|
-      record["issued"] > 0
-    end
-    assert_equal([[2, "groonga", "http://groonga.org/"],
-                  [1, "Ruby", "http://ruby-lang.org/"]],
-                 records.group(".bookmark").collect do |record|
-                   bookmark = record.key
-                   [record.n_sub_records,
-                    bookmark["title"],
-                    bookmark.key]
-                 end)
-    assert_equal([[2, "groonga", "http://groonga.org/"],
-                  [1, "Ruby", "http://ruby-lang.org/"]],
-                 records.group(%w".bookmark").collect do |record|
-                   bookmark = record.key
-                   [record.n_sub_records,
-                    bookmark["title"],
-                    bookmark.key]
-                 end)
-  end
-
-  def test_group_with_unknown_key
-    bookmarks = Groonga::Hash.create(:name => "Bookmarks")
-    message = "unknown group key: <\"nonexistent\">: <#{bookmarks.inspect}>"
-    assert_raise(ArgumentError.new(message)) do
-      bookmarks.group("nonexistent")
-    end
-  end
-
   def test_union!
     bookmarks = Groonga::Hash.create(:name => "Bookmarks")
     bookmarks.define_column("title", "ShortText")
@@ -781,6 +730,84 @@ class TableTest < Test::Unit::TestCase
                        ["groonga", [5]]
                      ],
                      groups)
+      end
+    end
+
+    class KeyTest < self
+      setup
+      def setup_schema
+        Groonga::Schema.define do |schema|
+          schema.create_table("Bookmarks", :type => :hash) do |table|
+            table.text("title")
+          end
+
+          schema.create_table("Comments", :type => :array) do |table|
+            table.reference("bookmark")
+            table.text("content")
+            table.int32("rank")
+          end
+        end
+      end
+
+      setup
+      def setup_data
+        setup_bookmarks
+        setup_comments
+      end
+
+      def setup_bookmarks
+        @bookmarks = Groonga["Bookmarks"]
+        @groonga = @bookmarks.add("http://groonga.org/", :title => "groonga")
+        @ruby = @bookmarks.add("http://ruby-lang.org/", :title => "Ruby")
+      end
+
+      def setup_comments
+        @comments = Groonga["Comments"]
+        @comments.add(:bookmark => @groonga,
+                      :content => "full-text search")
+        @comments.add(:bookmark => @groonga,
+                      :content => "column store")
+        @comments.add(:bookmark => @ruby,
+                      :content => "object oriented script language")
+      end
+
+      def test_string
+        grouped_records = @comments.group("bookmark").collect do |record|
+          bookmark = record.key
+          [
+            record.n_sub_records,
+            bookmark["title"],
+            bookmark.key,
+          ]
+        end
+        assert_equal([
+                       [2, "groonga", "http://groonga.org/"],
+                       [1, "Ruby", "http://ruby-lang.org/"],
+                     ],
+                     grouped_records)
+      end
+
+      def test_array
+        grouped_records = @comments.group(["bookmark"]).collect do |record|
+          bookmark = record.key
+          [
+            record.n_sub_records,
+            bookmark["title"],
+            bookmark.key,
+          ]
+        end
+        assert_equal([
+                       [2, "groonga", "http://groonga.org/"],
+                       [1, "Ruby", "http://ruby-lang.org/"],
+                     ],
+                     grouped_records)
+      end
+
+      def test_nonexistent
+        message = "unknown group key: <\"nonexistent\">: <#{@comments.inspect}>"
+        assert_raise(ArgumentError.new(message)) do
+          @comments.group("nonexistent")
+        end
       end
     end
   end
