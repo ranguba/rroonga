@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2009-2012  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2013  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -242,9 +242,9 @@ class HashTest < Test::Unit::TestCase
 
   def test_big_key
     hash = Groonga::Hash.create(:key_type => "UInt64")
-    assert_nothing_raised do
-      hash.add(1 << 63)
-    end
+    big_key = 1 << 63
+    record = hash.add(big_key)
+    assert_equal(big_key, record.key)
   end
 
   def test_value_by_key
