@@ -19,6 +19,12 @@ class TableKeySupportTest < Test::Unit::TestCase
   setup :setup_database
 
   class TypeTest < self
+    def test_int8
+      ids = Groonga::Hash.create(:name => "IDs", :key_type => "Int8")
+      id = ids.add(-1)
+      assert_equal(-1, id.key)
+    end
+
     def test_uint8
       ids = Groonga::Hash.create(:name => "IDs", :key_type => "UInt8")
       id = ids.add(1)

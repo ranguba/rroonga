@@ -32,6 +32,10 @@
 #  define RETURN_ENUMERATOR(obj, argc, argv)
 #endif
 
+#ifndef NUM2SHORT
+#  define NUM2SHORT(object) NUM2INT(object)
+#endif
+
 #ifndef NUM2USHORT
 #  define NUM2USHORT(object) NUM2UINT(object)
 #endif
