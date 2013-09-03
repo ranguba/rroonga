@@ -235,6 +235,29 @@ class IndexColumnTest < Test::Unit::TestCase
   end
 
   class FlagTest < self
+  def define_index_column_with_flags
+    Groonga::Schema.define do |schema|
+      schema.create_table("Articles") do |table|
+        table.text("tags", :type => :vector)
+      end
+
+      schema.create_table("Tags",
+                          :type => :patricia_trie,
+                          :key_type => "ShortText",
+                          :default_tokenizer => "TokenDelimit") do |table|
+        table.index("Articles.tags",
+                    :name => "section",
+                    :with_section => true)
+        table.index("Articles.tags",
+                    :name => "weight",
+                    :with_weight => true)
+        table.index("Articles.tags",
+                    :name => "position",
+                    :with_position => true)
+      end
+    end
+  end
+
     def test_with_section?
       define_index_column_with_flags
       assert_equal({
@@ -284,28 +307,5 @@ class IndexColumnTest < Test::Unit::TestCase
       entry.key["content"]
     end
     assert_equal(expected, result)
-  end
-
-  def define_index_column_with_flags
-    Groonga::Schema.define do |schema|
-      schema.create_table("Articles") do |table|
-        table.text("tags", :type => :vector)
-      end
-
-      schema.create_table("Tags",
-                          :type => :patricia_trie,
-                          :key_type => "ShortText",
-                          :default_tokenizer => "TokenDelimit") do |table|
-        table.index("Articles.tags",
-                    :name => "section",
-                    :with_section => true)
-        table.index("Articles.tags",
-                    :name => "weight",
-                    :with_weight => true)
-        table.index("Articles.tags",
-                    :name => "position",
-                    :with_position => true)
-      end
-    end
   end
 end
