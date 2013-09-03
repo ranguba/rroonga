@@ -192,21 +192,33 @@ class IndexColumnTest < Test::Unit::TestCase
   end
 
   class NGramTest < self
+    setup
+    def setup_schema
+      Groonga::Schema.define do |schema|
+        schema.create_table("Articles") do |table|
+          table.text("content")
+        end
+
+        schema.create_table("Terms",
+                            :type => :patricia_trie,
+                            :key_type => "ShortText",
+                            :default_tokenizer => "TokenBigram") do |table|
+          table.index("Articles.content", :name => "content")
+        end
+      end
+
+      @articles = Groonga["Articles"]
+      @index = Groonga["Terms.content"]
+    end
+
     def test_shorter_query_than_ngram
-      articles = Groonga::Array.create(:name => "Articles")
-      articles.define_column("content", "Text")
+      @articles.add(:content => 'l')
+      @articles.add(:content => 'll')
+      @articles.add(:content => 'hello')
 
-      terms = Groonga::PatriciaTrie.create(:name => "Terms",
-                                           :default_tokenizer => "TokenBigram")
-      content_index = terms.define_index_column("content", articles,
-                                                :source => "Articles.content")
-      articles.add(:content => 'l')
-      articles.add(:content => 'll')
-      articles.add(:content => 'hello')
-
-      assert_search(["hello"], content_index, "he")
-      assert_search(["ll", "hello"], content_index, "ll")
-      assert_search(["l", "ll", "hello"], content_index, "l")
+      assert_search(["hello"], @index, "he")
+      assert_search(["ll", "hello"], @index, "ll")
+      assert_search(["l", "ll", "hello"], @index, "l")
     end
 
     private
