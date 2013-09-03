@@ -23,38 +23,38 @@ class IndexColumnTest < Test::Unit::TestCase
   end
 
   class PredicateTest < self
-  def test_index?
-    articles = Groonga::Array.create(:name => "Articles")
-    articles.define_column("content", "Text")
+    def test_index?
+      articles = Groonga::Array.create(:name => "Articles")
+      articles.define_column("content", "Text")
 
-    terms = Groonga::Hash.create(:name => "Terms",
-                                 :default_tokenizer => "TokenBigram")
-    content_index = terms.define_index_column("content", articles,
-                                              :with_section => true)
-    assert_predicate(content_index, :index?)
-  end
+      terms = Groonga::Hash.create(:name => "Terms",
+                                   :default_tokenizer => "TokenBigram")
+      content_index = terms.define_index_column("content", articles,
+                                                :with_section => true)
+      assert_predicate(content_index, :index?)
+    end
 
-  def test_vector?
-    articles = Groonga::Array.create(:name => "Articles")
-    articles.define_column("content", "Text")
+    def test_vector?
+      articles = Groonga::Array.create(:name => "Articles")
+      articles.define_column("content", "Text")
 
-    terms = Groonga::Hash.create(:name => "Terms",
-                                 :default_tokenizer => "TokenBigram")
-    content_index = terms.define_index_column("content", articles,
-                                              :with_section => true)
-    assert_not_predicate(content_index, :vector?)
-  end
+      terms = Groonga::Hash.create(:name => "Terms",
+                                   :default_tokenizer => "TokenBigram")
+      content_index = terms.define_index_column("content", articles,
+                                                :with_section => true)
+      assert_not_predicate(content_index, :vector?)
+    end
 
-  def test_scalar?
-    articles = Groonga::Array.create(:name => "Articles")
-    articles.define_column("content", "Text")
+    def test_scalar?
+      articles = Groonga::Array.create(:name => "Articles")
+      articles.define_column("content", "Text")
 
-    terms = Groonga::Hash.create(:name => "Terms",
-                                 :default_tokenizer => "TokenBigram")
-    content_index = terms.define_index_column("content", articles,
-                                              :with_section => true)
-    assert_not_predicate(content_index, :scalar?)
-  end
+      terms = Groonga::Hash.create(:name => "Terms",
+                                   :default_tokenizer => "TokenBigram")
+      content_index = terms.define_index_column("content", articles,
+                                                :with_section => true)
+      assert_not_predicate(content_index, :scalar?)
+    end
   end
 
   def test_array_set_with_record
