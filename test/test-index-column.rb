@@ -237,15 +237,19 @@ class IndexColumnTest < Test::Unit::TestCase
   class FlagTest < self
     def setup
       super
-      define_index_column_with_flags
+      define_table
     end
 
-    def define_index_column_with_flags
+    def define_table
       Groonga::Schema.define do |schema|
         schema.create_table("Articles") do |table|
           table.text("tags", :type => :vector)
         end
+      end
+    end
 
+    def test_with_section?
+      Groonga::Schema.define do |schema|
         schema.create_table("Tags",
                             :type => :patricia_trie,
                             :key_type => "ShortText",
@@ -254,52 +258,66 @@ class IndexColumnTest < Test::Unit::TestCase
                       :name => "section",
                       :with_section => true)
           table.index("Articles.tags",
-                      :name => "weight",
-                      :with_weight => true)
-          table.index("Articles.tags",
-                      :name => "position",
-                      :with_position => true)
+                      :name => "no_section")
         end
       end
-    end
 
-    def test_with_section?
-      assert_equal({
-                     :section => true,
-                     :weight => false,
-                     :position => false,
-                   },
-                   {
-                     :section => context["Tags.section"].with_section?,
-                     :weight => context["Tags.weight"].with_section?,
-                     :position => context["Tags.position"].with_section?,
-                   })
+      assert_equal([
+                     true,
+                     false,
+                   ],
+                   [
+                     context["Tags.section"].with_section?,
+                     context["Tags.no_section"].with_section?,
+                   ])
     end
 
     def test_with_weight?
-      assert_equal({
-                     :section => false,
-                     :weight => true,
-                     :position => false,
-                   },
-                   {
-                     :section => context["Tags.section"].with_weight?,
-                     :weight => context["Tags.weight"].with_weight?,
-                     :position => context["Tags.position"].with_weight?,
-                   })
+      Groonga::Schema.define do |schema|
+        schema.create_table("Tags",
+                            :type => :patricia_trie,
+                            :key_type => "ShortText",
+                            :default_tokenizer => "TokenDelimit") do |table|
+          table.index("Articles.tags",
+                      :name => "weight",
+                      :with_weight => true)
+          table.index("Articles.tags",
+                      :name => "no_weight")
+        end
+      end
+
+      assert_equal([
+                     true,
+                     false,
+                   ],
+                   [
+                     context["Tags.weight"].with_weight?,
+                     context["Tags.no_weight"].with_weight?,
+                   ])
     end
 
     def test_with_position?
-      assert_equal({
-                     :section => false,
-                     :weight => false,
-                     :position => true,
-                   },
-                   {
-                     :section => context["Tags.section"].with_position?,
-                     :weight => context["Tags.weight"].with_position?,
-                     :position => context["Tags.position"].with_position?,
-                   })
+      Groonga::Schema.define do |schema|
+        schema.create_table("Tags",
+                            :type => :patricia_trie,
+                            :key_type => "ShortText",
+                            :default_tokenizer => "TokenDelimit") do |table|
+          table.index("Articles.tags",
+                      :name => "position",
+                      :with_position => true)
+          table.index("Articles.tags",
+                      :name => "no_position")
+        end
+      end
+
+      assert_equal([
+                     true,
+                     false,
+                   ],
+                   [
+                     context["Tags.position"].with_position?,
+                     context["Tags.no_position"].with_position?,
+                   ])
     end
   end
 
