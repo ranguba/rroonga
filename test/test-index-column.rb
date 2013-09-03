@@ -216,17 +216,16 @@ class IndexColumnTest < Test::Unit::TestCase
       @articles.add(:content => 'll')
       @articles.add(:content => 'hello')
 
-      assert_search(["hello"], @index, "he")
-      assert_search(["ll", "hello"], @index, "ll")
-      assert_search(["l", "ll", "hello"], @index, "l")
+      assert_equal(["hello"], search("he"))
+      assert_equal(["ll", "hello"], search("ll"))
+      assert_equal(["l", "ll", "hello"], search("l"))
     end
 
     private
-    def assert_search(expected, content_index, keyword)
-      result = content_index.search(keyword).collect do |entry|
+    def search(keyword)
+      @index.search(keyword).collect do |entry|
         entry.key["content"]
       end
-      assert_equal(expected, result)
     end
   end
 
