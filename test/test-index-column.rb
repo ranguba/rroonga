@@ -53,15 +53,20 @@ class IndexColumnTest < Test::Unit::TestCase
   end
 
   class CRUDTest < self
-    def test_array_set_with_record
-      articles = Groonga::Array.create(:name => "Articles")
-      articles.define_column("content", "Text")
+    setup
+    def setup_schema
+      @articles = Groonga::Array.create(:name => "Articles")
+      @articles.define_column("content", "Text")
 
       terms = Groonga::Hash.create(:name => "Terms",
+                                   :key_type => "ShortText",
                                    :default_tokenizer => "TokenBigram")
-      content_index = terms.define_index_column("content", articles,
-                                                :with_section => true)
+      @index = terms.define_index_column("content", @articles,
+                                         :with_position => true,
+                                         :with_section => true)
+    end
 
+    def test_array_set_with_record
       content = <<-EOC
       groonga は組み込み型の全文検索エンジンライブラリです。
       DBMSやスクリプト言語処理系等に組み込むことによって、その
@@ -77,26 +82,16 @@ class IndexColumnTest < Test::Unit::TestCase
       索引タイプを選択できます。
       EOC
 
-      groonga = articles.add(:content => content)
+      groonga = @articles.add(:content => content)
 
       content.split(/\n{2,}/).each_with_index do |sentence, i|
-        content_index[groonga] = {:value => sentence, :section => i + 1}
+        @index[groonga] = {:value => sentence, :section => i + 1}
       end
       assert_equal([groonga],
-                   content_index.search("エンジン").collect {|record| record.key})
+                   @index.search("エンジン").collect {|record| record.key})
     end
 
     def test_add
-      articles = Groonga::Array.create(:name => "Articles")
-      articles.define_column("content", "Text")
-
-      terms = Groonga::Hash.create(:name => "Terms",
-                                   :key_type => "ShortText",
-                                   :default_tokenizer => "TokenBigram")
-      content_index = terms.define_index_column("content", articles,
-                                                :with_position => true,
-                                                :with_section => true)
-
       content = <<-CONTENT
       Groonga is a fast and accurate full text search engine based on
       inverted index. One of the characteristics of groonga is that a
@@ -119,25 +114,15 @@ class IndexColumnTest < Test::Unit::TestCase
       usage examples.
       CONTENT
 
-      groonga = articles.add(:content => content)
+      groonga = @articles.add(:content => content)
 
       content.split(/\n{2,}/).each_with_index do |sentence, i|
-        content_index.add(groonga, sentence, :section => i + 1)
+        @index.add(groonga, sentence, :section => i + 1)
       end
-      assert_equal([groonga], content_index.search("engine").collect(&:key))
+      assert_equal([groonga], @index.search("engine").collect(&:key))
     end
 
     def test_delete
-      articles = Groonga::Array.create(:name => "Articles")
-      articles.define_column("content", "Text")
-
-      terms = Groonga::Hash.create(:name => "Terms",
-                                   :key_type => "ShortText",
-                                   :default_tokenizer => "TokenBigram")
-      content_index = terms.define_index_column("content", articles,
-                                                :with_position => true,
-                                                :with_section => true)
-
       content = <<-CONTENT
       Groonga is a fast and accurate full text search engine based on
       inverted index. One of the characteristics of groonga is that a
@@ -160,28 +145,18 @@ class IndexColumnTest < Test::Unit::TestCase
       usage examples.
       CONTENT
 
-      groonga = articles.add(:content => content)
+      groonga = @articles.add(:content => content)
 
       content.split(/\n{2,}/).each_with_index do |sentence, i|
-        content_index.add(groonga, sentence, :section => i + 1)
+        @index.add(groonga, sentence, :section => i + 1)
       end
       content.split(/\n{2,}/).each_with_index do |sentence, i|
-        content_index.delete(groonga, sentence, :section => i + 1)
+        @index.delete(groonga, sentence, :section => i + 1)
       end
-      assert_equal([], content_index.search("engine").collect(&:key))
+      assert_equal([], @index.search("engine").collect(&:key))
     end
 
     def test_update
-      articles = Groonga::Array.create(:name => "Articles")
-      articles.define_column("content", "Text")
-
-      terms = Groonga::Hash.create(:name => "Terms",
-                                   :key_type => "ShortText",
-                                   :default_tokenizer => "TokenBigram")
-      content_index = terms.define_index_column("content", articles,
-                                                :with_position => true,
-                                                :with_section => true)
-
       old_sentence = <<-SENTENCE
       Groonga is a fast and accurate full text search engine based on
       inverted index. One of the characteristics of groonga is that a
@@ -199,20 +174,20 @@ class IndexColumnTest < Test::Unit::TestCase
       weakness of row-oriented systems.
       SENTENCE
 
-      groonga = articles.add(:content => old_sentence)
+      groonga = @articles.add(:content => old_sentence)
 
-      content_index.add(groonga, old_sentence, :section => 1)
+      @index.add(groonga, old_sentence, :section => 1)
       assert_equal([groonga],
-                   content_index.search("engine").collect(&:key))
+                   @index.search("engine").collect(&:key))
       assert_equal([],
-                   content_index.search("MySQL").collect(&:key))
+                   @index.search("MySQL").collect(&:key))
 
       groonga[:content] = new_sentence
-      content_index.update(groonga, old_sentence, new_sentence, :section => 1)
+      @index.update(groonga, old_sentence, new_sentence, :section => 1)
       assert_equal([],
-                   content_index.search("engine").collect(&:key))
+                   @index.search("engine").collect(&:key))
       assert_equal([groonga],
-                   content_index.search("MySQL").collect(&:key))
+                   @index.search("MySQL").collect(&:key))
     end
   end
 
