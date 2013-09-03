@@ -208,6 +208,14 @@ class IndexColumnTest < Test::Unit::TestCase
       assert_search(["ll", "hello"], content_index, "ll")
       assert_search(["l", "ll", "hello"], content_index, "l")
     end
+
+    private
+    def assert_search(expected, content_index, keyword)
+      result = content_index.search(keyword).collect do |entry|
+        entry.key["content"]
+      end
+      assert_equal(expected, result)
+    end
   end
 
   class FlagTest < self
@@ -295,13 +303,5 @@ class IndexColumnTest < Test::Unit::TestCase
                      context["Tags.no_position"].with_position?,
                    ])
     end
-  end
-
-  private
-  def assert_search(expected, content_index, keyword)
-    result = content_index.search(keyword).collect do |entry|
-      entry.key["content"]
-    end
-    assert_equal(expected, result)
   end
 end
