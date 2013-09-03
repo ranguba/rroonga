@@ -211,11 +211,14 @@ class IndexColumnTest < Test::Unit::TestCase
       @index = Groonga["Terms.content"]
     end
 
-    def test_shorter_query_than_ngram
+    setup
+    def setup_records
       @articles.add(:content => 'l')
       @articles.add(:content => 'll')
       @articles.add(:content => 'hello')
+    end
 
+    def test_shorter_query_than_ngram
       assert_equal(["hello"], search("he"))
       assert_equal(["ll", "hello"], search("ll"))
       assert_equal(["l", "ll", "hello"], search("l"))
