@@ -235,6 +235,11 @@ class IndexColumnTest < Test::Unit::TestCase
   end
 
   class FlagTest < self
+    def setup
+      super
+      define_index_column_with_flags
+    end
+
     def define_index_column_with_flags
       Groonga::Schema.define do |schema|
         schema.create_table("Articles") do |table|
@@ -259,7 +264,6 @@ class IndexColumnTest < Test::Unit::TestCase
     end
 
     def test_with_section?
-      define_index_column_with_flags
       assert_equal({
                      :section => true,
                      :weight => false,
@@ -273,7 +277,6 @@ class IndexColumnTest < Test::Unit::TestCase
     end
 
     def test_with_weight?
-      define_index_column_with_flags
       assert_equal({
                      :section => false,
                      :weight => true,
@@ -287,7 +290,6 @@ class IndexColumnTest < Test::Unit::TestCase
     end
 
     def test_with_position?
-      define_index_column_with_flags
       assert_equal({
                      :section => false,
                      :weight => false,
