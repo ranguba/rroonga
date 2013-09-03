@@ -52,6 +52,7 @@ class IndexColumnTest < Test::Unit::TestCase
     end
   end
 
+  class CRUDTest < self
   def test_array_set_with_record
     articles = Groonga::Array.create(:name => "Articles")
     articles.define_column("content", "Text")
@@ -212,6 +213,7 @@ class IndexColumnTest < Test::Unit::TestCase
                  content_index.search("engine").collect(&:key))
     assert_equal([groonga],
                  content_index.search("MySQL").collect(&:key))
+  end
   end
 
   def test_shorter_query_than_ngram
