@@ -235,47 +235,47 @@ class IndexColumnTest < Test::Unit::TestCase
   end
 
   class FlagTest < self
-  def test_with_section?
-    define_index_column_with_flags
-    assert_equal({
-                   :section => true,
-                   :weight => false,
-                   :position => false,
-                 },
-                 {
-                   :section => context["Tags.section"].with_section?,
-                   :weight => context["Tags.weight"].with_section?,
-                   :position => context["Tags.position"].with_section?,
-                 })
-  end
+    def test_with_section?
+      define_index_column_with_flags
+      assert_equal({
+                     :section => true,
+                     :weight => false,
+                     :position => false,
+                   },
+                   {
+                     :section => context["Tags.section"].with_section?,
+                     :weight => context["Tags.weight"].with_section?,
+                     :position => context["Tags.position"].with_section?,
+                   })
+    end
 
-  def test_with_weight?
-    define_index_column_with_flags
-    assert_equal({
-                   :section => false,
-                   :weight => true,
-                   :position => false,
-                 },
-                 {
-                   :section => context["Tags.section"].with_weight?,
-                   :weight => context["Tags.weight"].with_weight?,
-                   :position => context["Tags.position"].with_weight?,
-                 })
-  end
+    def test_with_weight?
+      define_index_column_with_flags
+      assert_equal({
+                     :section => false,
+                     :weight => true,
+                     :position => false,
+                   },
+                   {
+                     :section => context["Tags.section"].with_weight?,
+                     :weight => context["Tags.weight"].with_weight?,
+                     :position => context["Tags.position"].with_weight?,
+                   })
+    end
 
-  def test_with_position?
-    define_index_column_with_flags
-    assert_equal({
-                   :section => false,
-                   :weight => false,
-                   :position => true,
-                 },
-                 {
-                   :section => context["Tags.section"].with_position?,
-                   :weight => context["Tags.weight"].with_position?,
-                   :position => context["Tags.position"].with_position?,
-                 })
-  end
+    def test_with_position?
+      define_index_column_with_flags
+      assert_equal({
+                     :section => false,
+                     :weight => false,
+                     :position => true,
+                   },
+                   {
+                     :section => context["Tags.section"].with_position?,
+                     :weight => context["Tags.weight"].with_position?,
+                     :position => context["Tags.position"].with_position?,
+                   })
+    end
   end
 
   private
