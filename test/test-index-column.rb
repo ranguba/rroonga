@@ -22,6 +22,7 @@ class IndexColumnTest < Test::Unit::TestCase
     setup_database
   end
 
+  class PredicateTest < self
   def test_index?
     articles = Groonga::Array.create(:name => "Articles")
     articles.define_column("content", "Text")
@@ -53,6 +54,7 @@ class IndexColumnTest < Test::Unit::TestCase
     content_index = terms.define_index_column("content", articles,
                                               :with_section => true)
     assert_not_predicate(content_index, :scalar?)
+  end
   end
 
   def test_array_set_with_record
