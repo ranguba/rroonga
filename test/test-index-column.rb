@@ -234,6 +234,7 @@ class IndexColumnTest < Test::Unit::TestCase
     assert_search(["l", "ll", "hello"], content_index, "l")
   end
 
+  class FlagTest < self
   def test_with_section?
     define_index_column_with_flags
     assert_equal({
@@ -274,6 +275,7 @@ class IndexColumnTest < Test::Unit::TestCase
                    :weight => context["Tags.weight"].with_position?,
                    :position => context["Tags.position"].with_position?,
                  })
+  end
   end
 
   private
