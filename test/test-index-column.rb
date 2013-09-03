@@ -218,9 +218,11 @@ class IndexColumnTest < Test::Unit::TestCase
       @articles.add(:content => 'hello')
     end
 
-    def test_shorter_query_than_ngram
-      assert_equal(["hello"], search("he"))
+    def test_N_length_query
       assert_equal(["ll", "hello"], search("ll"))
+    end
+
+    def test_shorter_query
       assert_equal(["l", "ll", "hello"], search("l"))
     end
 
