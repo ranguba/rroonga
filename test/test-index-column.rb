@@ -191,6 +191,7 @@ class IndexColumnTest < Test::Unit::TestCase
     end
   end
 
+  class NGramTest < self
   def test_shorter_query_than_ngram
     articles = Groonga::Array.create(:name => "Articles")
     articles.define_column("content", "Text")
@@ -206,6 +207,7 @@ class IndexColumnTest < Test::Unit::TestCase
     assert_search(["hello"], content_index, "he")
     assert_search(["ll", "hello"], content_index, "ll")
     assert_search(["l", "ll", "hello"], content_index, "l")
+  end
   end
 
   class FlagTest < self
