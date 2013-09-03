@@ -192,22 +192,22 @@ class IndexColumnTest < Test::Unit::TestCase
   end
 
   class NGramTest < self
-  def test_shorter_query_than_ngram
-    articles = Groonga::Array.create(:name => "Articles")
-    articles.define_column("content", "Text")
+    def test_shorter_query_than_ngram
+      articles = Groonga::Array.create(:name => "Articles")
+      articles.define_column("content", "Text")
 
-    terms = Groonga::PatriciaTrie.create(:name => "Terms",
-                                         :default_tokenizer => "TokenBigram")
-    content_index = terms.define_index_column("content", articles,
-                                              :source => "Articles.content")
-    articles.add(:content => 'l')
-    articles.add(:content => 'll')
-    articles.add(:content => 'hello')
+      terms = Groonga::PatriciaTrie.create(:name => "Terms",
+                                           :default_tokenizer => "TokenBigram")
+      content_index = terms.define_index_column("content", articles,
+                                                :source => "Articles.content")
+      articles.add(:content => 'l')
+      articles.add(:content => 'll')
+      articles.add(:content => 'hello')
 
-    assert_search(["hello"], content_index, "he")
-    assert_search(["ll", "hello"], content_index, "ll")
-    assert_search(["l", "ll", "hello"], content_index, "l")
-  end
+      assert_search(["hello"], content_index, "he")
+      assert_search(["ll", "hello"], content_index, "ll")
+      assert_search(["l", "ll", "hello"], content_index, "l")
+    end
   end
 
   class FlagTest < self
