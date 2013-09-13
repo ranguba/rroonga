@@ -24,6 +24,13 @@ module RroongaBuild
     RELEASED_DATE = Time.utc(2013, 6, 29)
   end
 
+  module LatestGroongaVersion
+    MAJOR = 3
+    MINOR = 0
+    MICRO = 7
+    VERSION = [MAJOR, MINOR, MICRO]
+  end
+
   module_function
   def local_groonga_base_dir
     File.join(File.dirname(__FILE__), "vendor")
