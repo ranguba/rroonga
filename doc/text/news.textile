@@ -1,5 +1,12 @@
 h1. NEWS
 
+h2(#3-0-6). 3.0.6: 2013-09-13
+
+h3. Improvements
+
+* Supported accessing reference column that referes a table that uses
+  Int8/UInt8/Int16/UInt16 key.
+
 h2(#3-0-5). 3.0.5: 2013-07-29
 
 h3. Improvements
