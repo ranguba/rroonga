@@ -2431,6 +2431,38 @@ rb_grn_table_rename (VALUE self, VALUE rb_name)
     return self;
 }
 
+/*
+ * Tokenize a string using the table as lexicon.
+ *
+ */
+static VALUE
+rb_grn_table_tokenize (VALUE self, VALUE rb_string, VALUE rb_addp)
+{
+    grn_ctx *context;
+    grn_obj *table;
+    char *string;
+    int string_size;
+    grn_bool addp = GRN_FALSE;
+    grn_obj *result;
+
+    rb_grn_table_deconstruct(SELF(self), &table, &context,
+                             NULL, NULL, NULL,
+                             NULL, NULL,
+                             NULL);
+
+    string = StringValueCStr(rb_string);
+    string_size = RSTRING_LEN(rb_string);
+
+    if (RVAL2CBOOL(rb_addp)) {
+        addp = GRN_TRUE;
+    }
+
+    result = grn_table_tokenize(context, table, string, string_size, NULL, addp);
+    rb_grn_context_check(context, self);
+
+    return GRNUVECTOR2RVAL(context, result, table, self);
+}
+
 void
 rb_grn_init_table (VALUE mGrn)
 {
@@ -2513,6 +2545,8 @@ rb_grn_init_table (VALUE mGrn)
     rb_define_method(rb_cGrnTable, "defrag", rb_grn_table_defrag, -1);
 
     rb_define_method(rb_cGrnTable, "rename", rb_grn_table_rename, 1);
+
+    rb_define_method(rb_cGrnTable, "tokenize", rb_grn_table_tokenize, 2);
 
     rb_grn_init_table_key_support(mGrn);
     rb_grn_init_array(mGrn);
