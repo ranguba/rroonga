@@ -75,4 +75,32 @@ class TableKeySupportTest < Test::Unit::TestCase
       assert_equal(key, id.key)
     end
   end
+
+  class TokenizeTest < self
+    class TableTypeTest < self
+      def test_hash
+        Groonga::Schema.create_table("Terms",
+                                     :type => :hash,
+                                     :key_type => "ShortText",
+                                     :default_tokenizer => "TokenBigram",
+                                     :normalizer => "NormalizerAuto")
+        terms = Groonga["Terms"]
+        tokens = terms.tokenize("Hello World!")
+        assert_equal(["!", "hello", "world"],
+                     tokens.collect(&:key).sort)
+      end
+
+      def test_patricia_trie
+        Groonga::Schema.create_table("Terms",
+                                     :type => :patricia_trie,
+                                     :key_type => "ShortText",
+                                     :default_tokenizer => "TokenBigram",
+                                     :normalizer => "NormalizerAuto")
+        terms = Groonga["Terms"]
+        tokens = terms.tokenize("Hello World!")
+        assert_equal(["!", "hello", "world"],
+                     tokens.collect(&:key).sort)
+      end
+    end
+  end
 end
