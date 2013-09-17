@@ -232,8 +232,8 @@ end
 unless PKGConfig.have_package(package_name, major, minor, micro)
   unless have_local_groonga?(package_name, major, minor, micro)
     required_version = [major, minor, micro]
-    if (required_version <=> LatestGroongaVersion::VERSISON) > 0
-      target_version = LatestGroongaVersion::VERSISON
+    if (required_version <=> LatestGroongaVersion::VERSION) > 0
+      target_version = LatestGroongaVersion::VERSION
     else
       target_version = required_version
     end
