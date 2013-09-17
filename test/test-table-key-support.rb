@@ -102,5 +102,39 @@ class TableKeySupportTest < Test::Unit::TestCase
                      tokens.collect(&:key).sort)
       end
     end
+
+    class AddOptionTest < self
+      setup
+      def setup_lexicon
+        Groonga::Schema.create_table("Terms",
+                                     :type => :patricia_trie,
+                                     :key_type => "ShortText",
+                                     :default_tokenizer => "TokenBigram",
+                                     :normalizer => "NormalizerAuto")
+        @lexicon = Groonga["Terms"]
+      end
+
+      def test_default
+        tokens = @lexicon.tokenize("Hello World!")
+        assert_equal(["!", "hello", "world"],
+                     tokens.collect(&:key).sort)
+      end
+
+      def test_true
+        tokens = @lexicon.tokenize("Hello World!", :add => true)
+        assert_equal(["!", "hello", "world"],
+                     tokens.collect(&:key).sort)
+      end
+
+      def test_false
+        tokens = @lexicon.tokenize("Hello groonga!", :add => true)
+        assert_equal(["!", "groonga", "hello"],
+                     tokens.collect(&:key).sort)
+
+        tokens = @lexicon.tokenize("Hello World!", :add => false)
+        assert_equal(["!", "hello"],
+                     tokens.collect(&:key).sort)
+      end
+    end
   end
 end
