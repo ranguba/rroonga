@@ -2431,59 +2431,6 @@ rb_grn_table_rename (VALUE self, VALUE rb_name)
     return self;
 }
 
-/*
- * Tokenize a string using the table as lexicon.
- *
- * @overload tokenize(string, options={})
- *   @param [String] string The string to be tokenized.
- *   @param [::Hash] options
- *   @option options [Bool] :add (true) Adds a new token to the table if true.
- *      Returned tokens include the new token. Otherwise, a new token is
- *      just ignored.
- *   @return [::Array<Groonga::Record>] Tokenized tokens.
- */
-static VALUE
-rb_grn_table_tokenize (int argc, VALUE *argv, VALUE self)
-{
-    VALUE rb_string, rb_add_p;
-    VALUE rb_options;
-    VALUE rb_tokens = Qnil;
-    grn_ctx *context;
-    grn_obj *table;
-    char *string;
-    int string_size;
-    grn_bool add_p;
-    grn_obj tokens;
-
-    rb_scan_args(argc, argv, "11", &rb_string, &rb_options);
-    rb_grn_scan_options(rb_options,
-                        "add", &rb_add_p,
-                        NULL);
-    if (NIL_P(rb_add_p)) {
-        rb_add_p = Qtrue;
-    }
-
-    rb_grn_table_deconstruct(SELF(self), &table, &context,
-                             NULL, NULL, NULL,
-                             NULL, NULL,
-                             NULL);
-
-    string = StringValueCStr(rb_string);
-    string_size = RSTRING_LEN(rb_string);
-
-    add_p = RVAL2CBOOL(rb_add_p);
-
-    GRN_RECORD_INIT(&tokens, GRN_OBJ_VECTOR, grn_obj_id(context, table));
-    grn_table_tokenize(context, table, string, string_size, &tokens, add_p);
-    if (context->rc == GRN_SUCCESS) {
-        rb_tokens = GRNUVECTOR2RVAL(context, &tokens, table, self);
-    }
-    grn_obj_unlink(context, &tokens);
-    rb_grn_context_check(context, self);
-
-    return rb_tokens;
-}
-
 void
 rb_grn_init_table (VALUE mGrn)
 {
@@ -2566,8 +2513,6 @@ rb_grn_init_table (VALUE mGrn)
     rb_define_method(rb_cGrnTable, "defrag", rb_grn_table_defrag, -1);
 
     rb_define_method(rb_cGrnTable, "rename", rb_grn_table_rename, 1);
-
-    rb_define_method(rb_cGrnTable, "tokenize", rb_grn_table_tokenize, -1);
 
     rb_grn_init_table_key_support(mGrn);
     rb_grn_init_array(mGrn);
