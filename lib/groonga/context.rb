@@ -15,9 +15,8 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-require "groonga/command"
-
 require "groonga/memory-pool"
+require "groonga/context/command-executor"
 
 module Groonga
   class Context
@@ -133,8 +132,12 @@ module Groonga
     # @option options [Array] XXX TODO
     #   TODO
     def select(table, options={})
-      select = Command::Select.new(self, table, options)
-      select.exec
+      execute_command("select", {:table => table}.merge(options))
+    end
+
+    def execute_command(name, parameters={})
+      executor = CommandExecutor.new(self)
+      executor.execute(name, parameters)
     end
 
     # Restore commands dumped by "grndump" command.

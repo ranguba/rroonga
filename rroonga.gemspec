@@ -1,6 +1,6 @@
 # -*- mode: ruby; coding: utf-8 -*-
 #
-# Copyright (C) 2012  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2012-2013  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -82,6 +82,7 @@ Gem::Specification.new do |s|
   s.required_ruby_version = ">= 1.9.3"
 
   s.add_runtime_dependency("pkg-config")
+  s.add_runtime_dependency("groonga-client", ">= 0.0.3")
   s.add_runtime_dependency("json")
   s.add_runtime_dependency("archive-zip")
   s.add_development_dependency("test-unit", [">= 2.4.6"])

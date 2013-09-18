@@ -41,6 +41,18 @@ require "test/unit/notify"
 
 Test::Unit::Priority.enable
 
+
+groonga_command_dir = File.join(base_dir, "..", "groonga-command")
+if File.exist?(groonga_command_dir)
+  $LOAD_PATH.unshift(File.join(groonga_command_dir, "lib"))
+end
+
+groonga_client_dir = File.join(base_dir, "..", "groonga-client")
+if File.exist?(groonga_client_dir)
+  $LOAD_PATH.unshift(File.join(groonga_client_dir, "lib"))
+end
+
+
 $LOAD_PATH.unshift(ext_dir)
 $LOAD_PATH.unshift(lib_dir)
 $LOAD_PATH.unshift(base_dir)

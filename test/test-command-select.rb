@@ -76,45 +76,37 @@ class CommandSelectTest < Test::Unit::TestCase
                  [result.n_hits, result.records])
   end
 
-  def test_drill_down
+  def test_drilldowns
     result = context.select(@users,
                             :output_columns => ["_key"],
                             :drill_down => ["_key", "book"],
                             :drill_down_output_columns => "_key",
                             :drill_down_limit => 10)
-    drill_down = normalize_drill_down(result.drill_down)
-    assert_equal([4,
-                  [{"_key" => "morita"},
-                   {"_key" => "gunyara-kun"},
-                   {"_key" => "yu"},
-                   {"_key" => "ryoqun"}],
-                  {
+    drilldowns = normalize_drilldowns(result.drilldowns)
+    assert_equal({
                     "_key" => [4, [{"_key" => "morita"},
                                    {"_key" => "gunyara-kun"},
                                    {"_key" => "yu"},
                                    {"_key" => "ryoqun"}]],
                     "book" => [2, [{"_key" => "the groonga book"},
                                    {"_key" => "the groonga book (2)"}]],
-                  },
-                 ],
-                 [result.n_hits, result.records, drill_down])
+                 },
+                 drilldowns)
   end
 
-  def test_drill_down_with_no_hit
+  def test_drilldowns_with_no_hit
     result = context.select(@users,
                             :filter => "_key == \"no\\ hit\"",
                             :output_columns => ["_key"],
                             :drill_down => ["_key", "book"],
                             :drill_down_output_columns => "_key",
                             :drill_down_limit => 10)
-    drill_down = normalize_drill_down(result.drill_down)
-    assert_equal([0, [],
-                  {
-                    "_key" => [0, []],
-                    "book" => [0, []],
-                  },
-                 ],
-                 [result.n_hits, result.records, drill_down])
+    drilldowns = normalize_drilldowns(result.drilldowns)
+    assert_equal({
+                   "_key" => [0, []],
+                   "book" => [0, []],
+                 },
+                 drilldowns)
   end
 
   def test_time
@@ -201,12 +193,12 @@ class CommandSelectTest < Test::Unit::TestCase
   end
 
   private
-  def normalize_drill_down(drill_down)
-    normalized_drill_down = {}
-    drill_down.each do |key, drill|
-      normalized_drill_down[key] = [drill.n_hits, drill.records]
+  def normalize_drilldowns(drilldowns)
+    normalized_drilldowns = {}
+    drilldowns.each do |drilldown|
+      normalized_drilldowns[drilldown.key] = [drilldown.n_hits, drilldown.items]
     end
-    normalized_drill_down
+    normalized_drilldowns
   end
 
   class EscapeTest < self
