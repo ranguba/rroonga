@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 #
-# Copyright (C) 2009-2010  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2013  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -46,13 +46,13 @@ $LOAD_PATH.unshift(lib_dir)
 $LOAD_PATH.unshift(base_dir)
 
 $LOAD_PATH.unshift(test_dir)
-require 'groonga-test-utils'
+require "groonga-test-utils"
 
 pkg_config = File.join(base_dir, "vendor", "local", "lib", "pkgconfig")
 PKGConfig.add_path(pkg_config)
 
 Dir.glob("#{base_dir}/test/**/test{_,-}*.rb") do |file|
-  require file.sub(/\.rb$/, '')
+  require file.sub(/\.rb$/, "")
 end
 
 ENV["TEST_UNIT_MAX_DIFF_TARGET_STRING_SIZE"] ||= "5000"
