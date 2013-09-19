@@ -70,7 +70,7 @@ Gem::Specification.new do |s|
     s.extra_rdoc_files = ["README.textile"]
     s.test_files = Dir.glob("test/**/*.rb")
     Dir.chdir("bin") do
-      s.executables = Dir.glob("*")
+      s.executables = Dir.glob("*") - ["groonga-index-validate"]
     end
   end
 
