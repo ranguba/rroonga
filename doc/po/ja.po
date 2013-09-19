@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: rroonga 2.1.0\n"
 "POT-Creation-Date: 2011-11-20 22:17+0900\n"
-"PO-Revision-Date: 2013-09-19 21:38+0900\n"
+"PO-Revision-Date: 2013-09-19 21:42+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: \n"
@@ -207,6 +207,9 @@ msgid ""
 "  about rerturn object details.\n"
 "** Added groonga-client gem, groogna-command gem, gqtp gem dependencies."
 msgstr ""
+"* {Groonga::TableKeySupport#tokenize}を追加。groonga 3.0.8が必要だが、groonga 3.0.8はまだリリースされていない。\n"
+"* {Groonga::Cotnext#select}の戻り値オブジェクトをgroonga-client gemの戻り値オブジェクトに変更。これは非互換の変更である。いくつかのAPIが変わっている。例えば、 @drill_down@ は @drilldowns@ になっている。戻り値オブジェクトの詳細は \"Groonga::Client::Response::Select\":http://rubydoc.info/gems/groonga-client/Groonga/Client/Response/Select を参照。\n"
+"** groonga-client gem、groogna-command gem、gqtp gemに依存するようになった。"
 
 #: ../../doc/text/news.textile:16 ../../doc/text/news.textile:52
 #: ../../doc/text/news.textile:63 ../../doc/text/news.textile:85
@@ -229,7 +232,7 @@ msgstr "h3. 修正"
 msgid ""
 "* Fixed a bug that auto groonga installation is failed.\n"
 "  [GitHub#12][Patch by Keita Haga]"
-msgstr ""
+msgstr "* groongaの自動インストールが失敗するバグを修正。 [GitHub#12][Keita Hagaさんがパッチ提供]"
 
 #: ../../doc/text/news.textile:21 ../../doc/text/news.textile:56
 #: ../../doc/text/news.textile:128 ../../doc/text/news.textile:146
@@ -244,7 +247,7 @@ msgstr "h3. 感謝"
 
 #: ../../doc/text/news.textile:23
 msgid "* Keita Haga"
-msgstr ""
+msgstr "* Keita Hagaさん"
 
 #: ../../doc/text/news.textile:25
 msgid "h2(#3-0-6). 3.0.6: 2013-09-13"
