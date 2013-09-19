@@ -1,5 +1,27 @@
 h1. NEWS
 
+h2(#3-0-7). 3.0.7: 2013-09-19
+
+h3. Improvements
+
+* Added {Groonga::TableKeySupport#tokenize}. It requires groonga
+  3.0.8. Groonga 3.0.8 is not released yet.
+* Changed return object of {Groonga::Cotnext#select} to groonga-client gem's
+  return object. It is a backward imcompatible change. Some APIs are changed.
+  For example, @drill_down@ is renamed to @drilldowns@. See
+  "Groonga::Client::Response::Select":http://rubydoc.info/gems/groonga-client/Groonga/Client/Response/Select
+  about rerturn object details.
+** Added groonga-client gem, groogna-command gem, gqtp gem dependencies.
+
+h3. Fixes
+
+* Fixed a bug that auto groonga installation is failed.
+  [GitHub#12][Patch by Keita Haga]
+
+h3. Thanks
+
+* Keita Haga
+
 h2(#3-0-6). 3.0.6: 2013-09-13
 
 h3. Improvements
