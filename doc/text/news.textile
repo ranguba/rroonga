@@ -6,7 +6,7 @@ h3. Improvements
 
 * Added {Groonga::TableKeySupport#tokenize}. It requires groonga
   3.0.8. Groonga 3.0.8 is not released yet.
-* Changed return object of {Groonga::Cotnext#select} to groonga-client gem's
+* Changed return object of {Groonga::Context#select} to groonga-client gem's
   return object. It is a backward imcompatible change. Some APIs are changed.
   For example, @drill_down@ is renamed to @drilldowns@. See
   "Groonga::Client::Response::Select":http://rubydoc.info/gems/groonga-client/Groonga/Client/Response/Select
