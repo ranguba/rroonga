@@ -1,5 +1,11 @@
 h1. NEWS
 
+h2(#3-0-8). 3.0.8: 2013-09-29
+
+h3. Improvements
+
+* Supported groonga 3.0.8.
+
 h2(#3-0-7). 3.0.7: 2013-09-19
 
 h3. Improvements
