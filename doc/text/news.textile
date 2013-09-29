@@ -5,6 +5,8 @@ h2(#3-0-8). 3.0.8: 2013-09-29
 h3. Improvements
 
 * Supported groonga 3.0.8.
+* Supported x64-mingw32 Ruby.
+* Supported Ruby 2.1.0 preview1.
 
 h2(#3-0-7). 3.0.7: 2013-09-19
 
