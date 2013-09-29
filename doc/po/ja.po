@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: rroonga 2.1.0\n"
 "POT-Creation-Date: 2011-11-20 22:17+0900\n"
-"PO-Revision-Date: 2013-09-19 21:44+0900\n"
+"PO-Revision-Date: 2013-09-29 14:51+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: \n"
@@ -179,9 +179,8 @@ msgid "h1. NEWS"
 msgstr "h1. お知らせ"
 
 #: ../../doc/text/news.textile:3
-#, fuzzy
 msgid "h2(#3-0-8). 3.0.8: 2013-09-29"
-msgstr "* @kamipoさん"
+msgstr ""
 
 #: ../../doc/text/news.textile:5 ../../doc/text/news.textile:11
 #: ../../doc/text/news.textile:33 ../../doc/text/news.textile:40
@@ -204,9 +203,8 @@ msgid "h3. Improvements"
 msgstr "h3. 改善"
 
 #: ../../doc/text/news.textile:7
-#, fuzzy
 msgid "* Supported groonga 3.0.8."
-msgstr "* groonga 1.2.3対応。"
+msgstr "* groonga 3.0.8対応。"
 
 #: ../../doc/text/news.textile:9
 msgid "h2(#3-0-7). 3.0.7: 2013-09-19"
