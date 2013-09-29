@@ -12,7 +12,7 @@ h2(#3-0-7). 3.0.7: 2013-09-19
 
 h3. Improvements
 
-* Added {Groonga::TableKeySupport#tokenize}. It requires groonga
+* Added {Groonga::Table::KeySupport#tokenize}. It requires groonga
   3.0.8. Groonga 3.0.8 is not released yet.
 * Changed return object of {Groonga::Context#select} to groonga-client gem's
   return object. It is a backward imcompatible change. Some APIs are changed.
