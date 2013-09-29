@@ -112,7 +112,7 @@ namespace :win32 do
     task :download do
       require "open-uri"
       require "rroonga-build"
-      groonga_version = RroongaBuild::RequiredGroongaVersion::VERSION.join(".")
+      groonga_version = RroongaBuild::LatestGroongaVersion::VERSION.join(".")
       base_name = "groonga-#{groonga_version}-"
       if groonga_win32_i386_p
         base_name << "x86"
