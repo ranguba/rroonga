@@ -258,8 +258,6 @@ have_header("ruby/st.h") unless have_macro("HAVE_RUBY_ST_H", "ruby.h")
 have_func("rb_errinfo", "ruby.h")
 have_type("enum ruby_value_type", "ruby.h")
 
-have_func("grn_table_tokenize", "groonga.h")
-
 checking_for(checking_message("--enable-debug-log option")) do
   enable_debug_log = enable_config("debug-log", false)
   if enable_debug_log

@@ -877,7 +877,6 @@ rb_grn_table_key_support_support_key_p (VALUE self)
     return table->header.domain == GRN_ID_NIL ? Qfalse : Qtrue;
 }
 
-#ifdef HAVE_GRN_TABLE_TOKENIZE
 /*
  * Tokenize a string using the table as lexicon.
  *
@@ -930,7 +929,6 @@ rb_grn_table_key_support_tokenize (int argc, VALUE *argv, VALUE self)
 
     return rb_tokens;
 }
-#endif
 
 void
 rb_grn_init_table_key_support (VALUE mGrn)
@@ -984,8 +982,6 @@ rb_grn_init_table_key_support (VALUE mGrn)
     rb_define_method(rb_mGrnTableKeySupport, "support_key?",
                      rb_grn_table_key_support_support_key_p, 0);
 
-#ifdef HAVE_GRN_TABLE_TOKENIZE
     rb_define_method(rb_mGrnTableKeySupport, "tokenize",
                      rb_grn_table_key_support_tokenize, -1);
-#endif
 }
