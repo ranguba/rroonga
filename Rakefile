@@ -150,7 +150,17 @@ Rake::ExtensionTask.new("groonga", spec) do |ext|
     ext.cross_compile = true
     ext.cross_compiling do |_spec|
       if windows?(_spec.platform.to_s)
-        _spec.files += collect_binary_files(relative_binary_dir)
+        binary_files = collect_binary_files(relative_binary_dir)
+        _spec.files += binary_files
+        stage_path = "#{ext.tmp_dir}/#{_spec.platform}/stage"
+        binary_files.each do |binary_file|
+          stage_binary_file = "#{stage_path}/#{binary_file}"
+          stage_binary_dir = File.dirname(stage_binary_file)
+          directory stage_binary_dir
+          file stage_binary_file => [stage_binary_dir, binary_file] do
+            cp binary_file, stage_binary_file
+          end
+        end
       end
     end
   end
