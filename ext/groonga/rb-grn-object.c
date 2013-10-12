@@ -1436,15 +1436,14 @@ rb_grn_object_remove (VALUE self)
 {
     RbGrnObject *rb_grn_object;
     grn_ctx *context;
-    grn_rc rc;
 
     rb_grn_object = SELF(self);
     if (!rb_grn_object->object)
         return Qnil;
 
     context = rb_grn_object->context;
-    rc = grn_obj_remove(context, rb_grn_object->object);
-    rb_grn_rc_check(rc, self);
+    grn_obj_remove(context, rb_grn_object->object);
+    rb_grn_context_check(context, self);
 
     rb_iv_set(self, "@context", Qnil);
 
