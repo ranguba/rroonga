@@ -320,4 +320,26 @@ class IndexColumnTest < Test::Unit::TestCase
                    ])
     end
   end
+
+  class SourceTest < self
+    def test_nil
+      Groonga::Schema.define do |schema|
+        schema.create_table("Contents",
+                            :type => :patricia_trie,
+                            :key_type => "ShortText") do |table|
+        end
+
+        schema.create_table("Terms",
+                            :type => :patricia_trie,
+                            :key_type => "ShortText",
+                            :default_tokenizer => "TokenBigram") do |table|
+        end
+      end
+
+      index = Groonga["Terms"].define_index_column("index", "Contents")
+      assert_raise(ArgumentError.new("couldn't find source: <nil>")) do
+        index.source = nil
+      end
+    end
+  end
 end

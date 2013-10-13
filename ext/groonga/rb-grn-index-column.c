@@ -657,6 +657,10 @@ resolve_source_id (grn_ctx *context, grn_obj *column, grn_id range_id,
             source = RVAL2GRNOBJECT(rb_source, &context);
         }
         rb_grn_context_check(context, rb_source);
+        if (!source) {
+            rb_raise(rb_eArgError, "couldn't find source: <%s>",
+                     rb_grn_inspect(rb_source));
+        }
         if (source->header.type == GRN_ACCESSOR) {
             char name[256];
             int length;
