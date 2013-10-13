@@ -171,4 +171,78 @@ class DatabaseTest < Test::Unit::TestCase
     assert_equal(["HashTable", "PatriciaTrie", "DoubleArrayTrie"].sort,
                  @database.tables.collect(&:name).sort)
   end
+
+  class TestRemove < self
+    setup :setup_database
+
+    def test_referenced_table
+      Groonga::Schema.define do |schema|
+        schema.create_table("Names",
+                            :type => :hash,
+                            :key_type => :short_text) do |table|
+        end
+
+        schema.create_table("Shops",
+                            :type => :hash,
+                            :key_type => "Names") do |table|
+        end
+      end
+
+      path = @database.path
+      @database.remove
+      assert_false(File.exist?(path))
+    end
+
+    def test_referenced_column
+      Groonga::Schema.define do |schema|
+        schema.create_table("Categories",
+                            :type => :hash,
+                            :key_type => :short_text) do |table|
+        end
+
+        schema.create_table("Contents") do |table|
+          table.reference("category", "Categories")
+        end
+      end
+
+      path = @database.path
+      @database.remove
+      assert_false(File.exist?(path))
+    end
+
+    def test_indexed_table
+      Groonga::Schema.define do |schema|
+        schema.create_table("Categories",
+                            :type => :hash,
+                            :key_type => :short_text) do |table|
+        end
+
+        schema.create_table("Terms") do |table|
+          table.index("Categories._key")
+        end
+      end
+
+      path = @database.path
+      @database.remove
+      assert_false(File.exist?(path))
+    end
+
+    def test_indexed_column
+      Groonga::Schema.define do |schema|
+        schema.create_table("Categories",
+                            :type => :hash,
+                            :key_type => :short_text) do |table|
+          table.text("content")
+        end
+
+        schema.create_table("Terms") do |table|
+          table.index("Categories.content")
+        end
+      end
+
+      path = @database.path
+      @database.remove
+      assert_false(File.exist?(path))
+    end
+  end
 end
