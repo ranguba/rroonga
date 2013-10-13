@@ -638,7 +638,7 @@ module Groonga
       def restore(dumped_text, options={})
         define(options) do |schema|
           schema.restore(dumped_text)
-	end
+        end
       end
 
       # @private
