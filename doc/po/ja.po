@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: rroonga 2.1.0\n"
 "POT-Creation-Date: 2011-11-20 22:17+0900\n"
-"PO-Revision-Date: 2013-09-29 19:24+0900\n"
+"PO-Revision-Date: 2013-10-29 18:30+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: \n"
@@ -179,9 +179,8 @@ msgid "h1. NEWS"
 msgstr "h1. お知らせ"
 
 #: ../../doc/text/news.textile:3
-#, fuzzy
 msgid "h2(#3-0-9). 3.0.9: 2013-10-29"
-msgstr "* @kamipoさん"
+msgstr ""
 
 #: ../../doc/text/news.textile:5 ../../doc/text/news.textile:17
 #: ../../doc/text/news.textile:25 ../../doc/text/news.textile:47
@@ -205,9 +204,11 @@ msgstr "h3. 改善"
 
 #: ../../doc/text/news.textile:7
 msgid ""
-"* Supported groonga 3.0.9.\n"
+"* Supported Groonga 3.0.9.\n"
 "* Supported showing error message on error in {Groonga::Object#remove}."
 msgstr ""
+"* Groonga 3.0.9対応\n"
+"* {Groonga::Object#remove}でエラーが発生した時にエラーメッセージも含めるようにした。"
 
 #: ../../doc/text/news.textile:10 ../../doc/text/news.textile:36
 #: ../../doc/text/news.textile:72 ../../doc/text/news.textile:83
@@ -231,7 +232,7 @@ msgstr "h3. 修正"
 msgid ""
 "* Fixed a crash bug that is caused by assigning @nil@ as source of\n"
 "  index column."
-msgstr ""
+msgstr "* インデックスカラムのソースに @nil@ を指定するとクラッシュする問題を修正した。"
 
 #: ../../doc/text/news.textile:15
 msgid "h2(#3-0-8). 3.0.8: 2013-09-29"
