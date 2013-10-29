@@ -1,5 +1,17 @@
 h1. NEWS
 
+h2(#3-0-9). 3.0.9: 2013-10-29
+
+h3. Improvements
+
+* Supported groonga 3.0.9.
+* Supported showing error message on error in {Groonga::Object#remove}.
+
+h3. Fixes
+
+* Fixed a crash bug that is caused by assigning @nil@ as source of
+  index column.
+
 h2(#3-0-8). 3.0.8: 2013-09-29
 
 h3. Improvements
