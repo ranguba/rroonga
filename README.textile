@@ -36,8 +36,8 @@ contributed patches.)
 
 h2. Dependencies
 
-* Ruby >= 1.8 (including 1.9.2)
-* groonga >= 1.2.0
+* Ruby >= 1.9.3
+* Groonga >= 3.0.8
 
 h2. Install
 
