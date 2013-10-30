@@ -2,15 +2,15 @@ h1. README
 
 h2. Name
 
-rroonga
+Rroonga
 
 h2. Description
 
 Ruby bindings for groonga that provide full text search and
 column store features.
 
-rroonga is an extension library to use groonga's DB-API
-layer. rroonga provides Rubyish readable and writable API
+Rroonga is an extension library to use groonga's DB-API
+layer. Rroonga provides Rubyish readable and writable API
 not C like API. You can use groonga's fast and highly
 functional features from Ruby with Rubyish form.
 
