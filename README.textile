@@ -6,17 +6,17 @@ Rroonga
 
 h2. Description
 
-Ruby bindings for groonga that provide full text search and
+Ruby bindings for Groonga that provide full text search and
 column store features.
 
-Rroonga is an extension library to use groonga's DB-API
+Rroonga is an extension library to use Groonga's DB-API
 layer. Rroonga provides Rubyish readable and writable API
-not C like API. You can use groonga's fast and highly
+not C like API. You can use Groonga's fast and highly
 functional features from Ruby with Rubyish form.
 
-See the following URL about groonga.
+See the following URL about Groonga.
 
-* "The groonga official site":http://groonga.org/
+* "The Groonga official site":http://groonga.org/
 
 h2. Authors
 
@@ -58,7 +58,7 @@ h2. Mailing list
 
 h2. Thanks
 
-* Daijiro MORI: sent patches to support the latest groonga.
+* Daijiro MORI: sent patches to support the latest Groonga.
 * Tasuku SUENAGA: sent bug reports.
 * niku: sent bug reports.
 * dara:
