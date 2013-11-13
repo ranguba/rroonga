@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 #
-# Copyright (C) 2009-2012  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2013  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -159,6 +159,7 @@ def configure_command_line(prefix)
   command_line << "--prefix=#{prefix}"
   command_line << "--disable-static"
   command_line << "--disable-document"
+  command_line << "--without-cutter"
   escaped_command_line = command_line.collect do |command|
     Shellwords.escape(command)
   end
