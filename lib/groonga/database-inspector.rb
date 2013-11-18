@@ -46,7 +46,8 @@ module Groonga
       def report
         write("Database\n")
         indent do
-          write("path: #{inspect_path(@database.path)}\n")
+          write("path:      #{inspect_path(@database.path)}\n")
+          write("N records: #{count_total_n_records}\n")
         end
       end
 
@@ -69,6 +70,12 @@ module Groonga
           "(null)"
         else
           "<#{path}>"
+        end
+      end
+
+      def count_total_n_records
+        @database.tables.inject(0) do |previous, table|
+          previous + table.size
         end
       end
     end

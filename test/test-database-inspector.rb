@@ -27,11 +27,48 @@ class DatabaseInspectorTest < Test::Unit::TestCase
   end
 
   class TestDatabase < self
-    def test_path
+    def test_empty
       assert_equal(<<-INSPECTED, report)
 Database
-  path: <#{@database_path}>
+  path:      <#{@database_path}>
+  N records: 0
       INSPECTED
+    end
+
+    class TestNRecords < self
+      setup
+      def setup_tables
+        Groonga::Schema.define(:context => context) do |schema|
+          schema.create_table("Users") do
+          end
+
+          schema.create_table("Bookmarks") do
+          end
+        end
+
+        @users = context["Users"]
+        @bookmarks = context["Bookmarks"]
+      end
+
+      def test_no_records
+        assert_equal(<<-INSPECTED, report)
+Database
+  path:      <#{@database_path}>
+  N records: 0
+        INSPECTED
+      end
+
+      def test_has_records
+        @users.add
+        @users.add
+        @bookmarks.add
+
+        assert_equal(<<-INSPECTED, report)
+Database
+  path:      <#{@database_path}>
+  N records: 3
+        INSPECTED
+      end
     end
   end
 end
