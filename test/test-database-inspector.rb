@@ -47,12 +47,9 @@ Database
       def setup_tables
         Groonga::Schema.define(:context => context) do |schema|
           schema.create_table("Users") do |table|
-            table.short_text("name")
-            table.int8("age")
           end
 
           schema.create_table("Bookmarks") do |table|
-            table.text("description")
           end
         end
 
@@ -67,7 +64,7 @@ Database
   Disk usage: #{inspect_disk_usage(@database.disk_usage)}
   N records:  0
   N tables:   2
-  N columns:  3
+  N columns:  0
         INSPECTED
       end
 
@@ -81,6 +78,84 @@ Database
   Path:       <#{@database_path}>
   Disk usage: #{inspect_disk_usage(@database.disk_usage)}
   N records:  3
+  N tables:   2
+  N columns:  0
+        INSPECTED
+      end
+    end
+
+    class TestNTables < self
+      def test_no_tables
+        assert_equal(<<-INSPECTED, report)
+Database
+  Path:       <#{@database_path}>
+  Disk usage: #{inspect_disk_usage(@database.disk_usage)}
+  N records:  0
+  N tables:   0
+  N columns:  0
+        INSPECTED
+      end
+
+      def test_has_tables
+        Groonga::Schema.define(:context => context) do |schema|
+          schema.create_table("Users") do |table|
+          end
+
+          schema.create_table("Bookmarks") do |table|
+          end
+        end
+
+        assert_equal(<<-INSPECTED, report)
+Database
+  Path:       <#{@database_path}>
+  Disk usage: #{inspect_disk_usage(@database.disk_usage)}
+  N records:  0
+  N tables:   2
+  N columns:  0
+        INSPECTED
+      end
+    end
+
+    class TestNColumns < self
+      setup
+      def setup_tables
+        Groonga::Schema.define(:context => context) do |schema|
+          schema.create_table("Users") do |table|
+          end
+
+          schema.create_table("Bookmarks") do |table|
+          end
+        end
+      end
+
+      def test_no_columns
+        assert_equal(<<-INSPECTED, report)
+Database
+  Path:       <#{@database_path}>
+  Disk usage: #{inspect_disk_usage(@database.disk_usage)}
+  N records:  0
+  N tables:   2
+  N columns:  0
+        INSPECTED
+      end
+
+      def test_has_columns
+        Groonga::Schema.define(:context => context) do |schema|
+          schema.create_table("Users") do |table|
+            table.short_text("name")
+            table.int8("age")
+          end
+
+          schema.create_table("Bookmarks") do |table|
+            table.text("description")
+          end
+        end
+
+        assert_equal(<<-INSPECTED, report)
+Database
+  Path:       <#{@database_path}>
+  Disk usage: #{inspect_disk_usage(@database.disk_usage)}
+  N records:  0
   N tables:   2
   N columns:  3
         INSPECTED
