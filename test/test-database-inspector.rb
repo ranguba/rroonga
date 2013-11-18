@@ -38,6 +38,7 @@ Database
   Disk usage: #{inspect_disk_usage(@database.disk_usage)}
   N records:  0
   N tables:   0
+  N columns:  0
       INSPECTED
     end
 
@@ -45,10 +46,13 @@ Database
       setup
       def setup_tables
         Groonga::Schema.define(:context => context) do |schema|
-          schema.create_table("Users") do
+          schema.create_table("Users") do |table|
+            table.short_text("name")
+            table.int8("age")
           end
 
-          schema.create_table("Bookmarks") do
+          schema.create_table("Bookmarks") do |table|
+            table.text("description")
           end
         end
 
@@ -63,6 +67,7 @@ Database
   Disk usage: #{inspect_disk_usage(@database.disk_usage)}
   N records:  0
   N tables:   2
+  N columns:  3
         INSPECTED
       end
 
@@ -77,6 +82,7 @@ Database
   Disk usage: #{inspect_disk_usage(@database.disk_usage)}
   N records:  3
   N tables:   2
+  N columns:  3
         INSPECTED
       end
     end

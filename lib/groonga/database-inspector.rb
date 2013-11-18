@@ -50,6 +50,7 @@ module Groonga
           write("Disk usage: #{inspect_disk_usage(@database.disk_usage)}\n")
           write("N records:  #{count_total_n_records}\n")
           write("N tables:   #{count_n_tables}\n")
+          write("N columns:  #{count_total_n_columns}\n")
         end
       end
 
@@ -104,6 +105,12 @@ module Groonga
 
       def count_n_tables
         @database.tables.size
+      end
+
+      def count_total_n_columns
+        @database.tables.inject(0) do |previous, table|
+          previous + table.columns.size
+        end
       end
     end
   end
