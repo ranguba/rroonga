@@ -172,7 +172,7 @@ class DatabaseTest < Test::Unit::TestCase
                  @database.tables.collect(&:name).sort)
   end
 
-  class TestRemove < self
+  class RemoveTest < self
     setup :setup_database
 
     def test_referenced_table
