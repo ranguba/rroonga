@@ -39,6 +39,8 @@ Database
   N records:  0
   N tables:   0
   N columns:  0
+  Plugins:
+    None
       INSPECTED
     end
 
@@ -65,6 +67,8 @@ Database
   N records:  0
   N tables:   2
   N columns:  0
+  Plugins:
+    None
         INSPECTED
       end
 
@@ -80,6 +84,8 @@ Database
   N records:  3
   N tables:   2
   N columns:  0
+  Plugins:
+    None
         INSPECTED
       end
     end
@@ -93,6 +99,8 @@ Database
   N records:  0
   N tables:   0
   N columns:  0
+  Plugins:
+    None
         INSPECTED
       end
 
@@ -112,6 +120,8 @@ Database
   N records:  0
   N tables:   2
   N columns:  0
+  Plugins:
+    None
         INSPECTED
       end
     end
@@ -136,6 +146,8 @@ Database
   N records:  0
   N tables:   2
   N columns:  0
+  Plugins:
+    None
         INSPECTED
       end
 
@@ -158,6 +170,37 @@ Database
   N records:  0
   N tables:   2
   N columns:  3
+  Plugins:
+    None
+        INSPECTED
+      end
+    end
+
+    class TestPlugins < self
+      def test_no_plugins
+        assert_equal(<<-INSPECTED, report)
+Database
+  Path:       <#{@database_path}>
+  Disk usage: #{inspect_disk_usage(@database.disk_usage)}
+  N records:  0
+  N tables:   0
+  N columns:  0
+  Plugins:
+    None
+        INSPECTED
+      end
+
+      def test_has_plugin
+        context.register_plugin("query_expanders/tsv")
+        assert_equal(<<-INSPECTED, report)
+Database
+  Path:       <#{@database_path}>
+  Disk usage: #{inspect_disk_usage(@database.disk_usage)}
+  N records:  0
+  N tables:   0
+  N columns:  0
+  Plugins:
+    * query_expanders/tsv#{Groonga::Plugin.suffix}
         INSPECTED
       end
     end

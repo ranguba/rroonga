@@ -51,10 +51,25 @@ module Groonga
           write("N records:  #{count_total_n_records}\n")
           write("N tables:   #{count_n_tables}\n")
           write("N columns:  #{count_total_n_columns}\n")
+          report_plugins
         end
       end
 
       private
+      def report_plugins
+        write("Plugins:\n")
+        indent do
+          plugin_paths = @database.plugin_paths
+          if plugin_paths.empty?
+            write("None\n")
+            return
+          end
+          plugin_paths.each do |path|
+            write("* #{path}\n")
+          end
+        end
+      end
+
       def indent
         indent_width = @indent_width
         @indent_width += 2
