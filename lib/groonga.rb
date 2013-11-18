@@ -35,7 +35,6 @@ if local_groonga_bin_dir.exist?
 end
 
 require "groonga/geo-point"
-require "groonga/view-record"
 require "groonga/record"
 require "groonga/expression-builder"
 require "groonga/posting"
