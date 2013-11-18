@@ -49,6 +49,7 @@ module Groonga
           write("Path:       #{inspect_path(@database.path)}\n")
           write("Disk usage: #{inspect_disk_usage(@database.disk_usage)}\n")
           write("N records:  #{count_total_n_records}\n")
+          write("N tables:   #{count_n_tables}\n")
         end
       end
 
@@ -99,6 +100,10 @@ module Groonga
         @database.tables.inject(0) do |previous, table|
           previous + table.size
         end
+      end
+
+      def count_n_tables
+        @database.tables.size
       end
     end
   end

@@ -37,6 +37,7 @@ Database
   Path:       <#{@database_path}>
   Disk usage: #{inspect_disk_usage(@database.disk_usage)}
   N records:  0
+  N tables:   0
       INSPECTED
     end
 
@@ -61,6 +62,7 @@ Database
   Path:       <#{@database_path}>
   Disk usage: #{inspect_disk_usage(@database.disk_usage)}
   N records:  0
+  N tables:   2
         INSPECTED
       end
 
@@ -74,6 +76,7 @@ Database
   Path:       <#{@database_path}>
   Disk usage: #{inspect_disk_usage(@database.disk_usage)}
   N records:  3
+  N tables:   2
         INSPECTED
       end
     end
