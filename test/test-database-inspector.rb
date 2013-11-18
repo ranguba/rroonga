@@ -30,7 +30,7 @@ class DatabaseInspectorTest < Test::Unit::TestCase
     "%.3fMiB" % (@database.disk_usage / (2 ** 20).to_f)
   end
 
-  class TestDatabase < self
+  class DatabaseTest < self
     def test_empty
       assert_equal(<<-INSPECTED, report)
 Database
@@ -42,7 +42,7 @@ Database
       INSPECTED
     end
 
-    class TestNRecords < self
+    class NRecordsTest < self
       setup
       def setup_tables
         Groonga::Schema.define(:context => context) do |schema|
@@ -84,7 +84,7 @@ Database
       end
     end
 
-    class TestNTables < self
+    class NTablesTest < self
       def test_no_tables
         assert_equal(<<-INSPECTED, report)
 Database
