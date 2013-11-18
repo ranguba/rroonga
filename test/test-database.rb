@@ -172,6 +172,13 @@ class DatabaseTest < Test::Unit::TestCase
                  @database.tables.collect(&:name).sort)
   end
 
+  def test_plugin_paths
+    setup_database
+    context.register_plugin("query_expanders/tsv")
+    assert_equal(["query_expanders/tsv#{Groonga::Plugin.suffix}"],
+                 @database.plugin_paths)
+  end
+
   class RemoveTest < self
     setup :setup_database
 

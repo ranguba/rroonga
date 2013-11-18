@@ -24,6 +24,22 @@ module Groonga
       end
     end
 
+    # @return [Array<String>] registered plugin paths.
+    def plugin_paths
+      processed_paths = {}
+      paths = []
+      each(:ignore_missing_object => true, :order_by => :id) do |object|
+        next unless object.is_a?(Groonga::Procedure)
+        next if object.builtin?
+        path = object.path
+        next if path.nil?
+        next if processed_paths.has_key?(path)
+        processed_paths[path] = true
+        paths << path
+      end
+      paths
+    end
+
     def disk_usage
       return 0 if path.nil?
 

@@ -81,15 +81,9 @@ module Groonga
 
     private
     def dump_plugins(options)
-      plugin_paths = {}
-      options[:database].each(each_options(:order_by => :id)) do |object|
-        next unless object.is_a?(Groonga::Procedure)
-        next if object.builtin?
-        path = object.path
-        next if path.nil?
-        next if plugin_paths.has_key?(path)
-        plugin_paths[path] = true
-        dump_plugin(object, options)
+      plugin_paths = options[:database].plugin_paths
+      plugin_paths.each do |path|
+        dump_plugin(path, options)
       end
       options[:output].write("\n") unless plugin_paths.empty?
     end
@@ -112,13 +106,13 @@ module Groonga
       TableDumper.new(table, options).dump
     end
 
-    def dump_plugin(plugin, options)
+    def dump_plugin(path, options)
       output = options[:output]
       plugins_dir_re = Regexp.escape(Groonga::Plugin.system_plugins_dir)
       suffix_re = Regexp.escape(Groonga::Plugin.suffix)
-      plugin_name = plugin.path.gsub(/(?:\A#{plugins_dir_re}\/|
-                                         #{suffix_re}\z)/x,
-                                     '')
+      plugin_name = path.gsub(/(?:\A#{plugins_dir_re}\/|
+                                  #{suffix_re}\z)/x,
+                              '')
       output.write("register #{plugin_name}\n")
     end
 
