@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2012  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2012-2013  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -23,6 +23,16 @@ module Groonga
     def dump(output_directory)
       dumper = IndexColumnDumper.new(self, output_directory)
       dumper.dump
+    end
+
+    def disk_usage
+      return 0 if path.nil?
+
+      usage = super
+      chunk_path = "#{path}.c"
+      measurer = StatisticMeasurer.new
+      usage += measurer.measure_disk_usage(chunk_path)
+      usage
     end
   end
 

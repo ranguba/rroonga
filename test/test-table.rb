@@ -837,6 +837,46 @@ class TableTest < Test::Unit::TestCase
     end
   end
 
+  class DiskUsageTest < self
+    def test_array
+      Groonga::Schema.create_table("Users", :type => :array)
+      users = Groonga["Users"]
+      users.add
+      assert_equal(File.size(users.path),
+                   users.disk_usage)
+    end
+
+    def test_hash
+      Groonga::Schema.create_table("Users",
+                                   :type => :hash,
+                                   :key_type => "ShortText")
+      users = Groonga["Users"]
+      users.add("mori")
+      assert_equal(File.size(users.path),
+                   users.disk_usage)
+    end
+
+    def test_patricia_trie
+      Groonga::Schema.create_table("Users",
+                                   :type => :patricia_trie,
+                                   :key_type => "ShortText")
+      users = Groonga["Users"]
+      users.add("mori")
+      assert_equal(File.size(users.path),
+                   users.disk_usage)
+    end
+
+    def test_double_array_trie
+      Groonga::Schema.create_table("Users",
+                                   :type => :double_array_trie,
+                                   :key_type => "ShortText")
+      users = Groonga["Users"]
+      users.add("mori")
+      assert_equal(File.size(users.path) + File.size("#{users.path}.001"),
+                   users.disk_usage)
+    end
+  end
+
   private
   def create_bookmarks
     bookmarks = Groonga::Array.create(:name => "Bookmarks")

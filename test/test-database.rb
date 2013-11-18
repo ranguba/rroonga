@@ -245,4 +245,21 @@ class DatabaseTest < Test::Unit::TestCase
       assert_false(File.exist?(path))
     end
   end
+
+  class DiskUsageTest < self
+    setup :setup_database
+
+    def test_empty
+      paths = [
+        @database.path,
+        "#{@database.path}.001",
+        "#{@database.path}.0000000",
+      ]
+      expected_usage = paths.inject(0) do |previous, path|
+        previous + File.size(path)
+      end
+      assert_equal(expected_usage,
+                   @database.disk_usage)
+    end
+  end
 end

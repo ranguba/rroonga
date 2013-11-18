@@ -449,4 +449,30 @@ class ColumnTest < Test::Unit::TestCase
       end
     end
   end
+
+  class DiskUsageTest < self
+    def setup
+      setup_database
+
+      Groonga::Schema.define do |schema|
+        schema.create_table("Users") do |table|
+          table.short_text("name")
+          table.int32("age")
+        end
+      end
+
+      @users_name_column = context["Users.name"]
+      @users_age_column = context["Users.age"]
+    end
+
+    def test_jagged_array
+      assert_equal(File.size(@users_name_column.path),
+                   @users_name_column.disk_usage)
+    end
+
+    def test_rectangle_array
+      assert_equal(File.size(@users_age_column.path),
+                   @users_age_column.disk_usage)
+    end
+  end
 end

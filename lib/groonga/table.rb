@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2012-2013  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2013  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -16,29 +16,10 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 module Groonga
-  class Database
-    # @return [Array<Groonga::Table>] tables defined in the database.
-    def tables
-      find_all do |object|
-        object.is_a?(Groonga::Table)
-      end
-    end
-
+  class Table
     def disk_usage
-      return 0 if path.nil?
-
-      usage = 0
       measurer = StatisticMeasurer.new
-      usage += measurer.measure_disk_usage(path)
-      usage += measurer.measure_disk_usage("%s.%07X" % [path, 0])
-      usage
-    end
-
-    def dump_index(output_directory)
-      each do |object|
-        next unless object.is_a?(Groonga::IndexColumn)
-        object.dump(output_directory)
-      end
+      measurer.measure_disk_usage(path)
     end
   end
 end

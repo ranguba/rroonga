@@ -342,4 +342,27 @@ class IndexColumnTest < Test::Unit::TestCase
       end
     end
   end
+
+  class DiskUsageTest < self
+    def setup
+      setup_database
+      setup_index
+    end
+
+    def setup_index
+      articles = Groonga::Array.create(:name => "Articles")
+      articles.define_column("content", "Text")
+
+      terms = Groonga::Hash.create(:name => "Terms",
+                                   :key_type => "ShortText",
+                                   :default_tokenizer => "TokenBigram")
+      @index = terms.define_index_column("content", articles,
+                                         :with_section => true)
+    end
+
+    def test_disk_usage
+      assert_equal(File.size(@index.path) + File.size("#{@index.path}.c"),
+                   @index.disk_usage)
+    end
+  end
 end
