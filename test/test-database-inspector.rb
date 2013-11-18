@@ -26,12 +26,17 @@ class DatabaseInspectorTest < Test::Unit::TestCase
     output.string
   end
 
+  def inspect_disk_usage(disk_usage)
+    "%.3fMiB" % (@database.disk_usage / (2 ** 20).to_f)
+  end
+
   class TestDatabase < self
     def test_empty
       assert_equal(<<-INSPECTED, report)
 Database
-  path:      <#{@database_path}>
-  N records: 0
+  Path:       <#{@database_path}>
+  Disk usage: #{inspect_disk_usage(@database.disk_usage)}
+  N records:  0
       INSPECTED
     end
 
@@ -53,8 +58,9 @@ Database
       def test_no_records
         assert_equal(<<-INSPECTED, report)
 Database
-  path:      <#{@database_path}>
-  N records: 0
+  Path:       <#{@database_path}>
+  Disk usage: #{inspect_disk_usage(@database.disk_usage)}
+  N records:  0
         INSPECTED
       end
 
@@ -65,8 +71,9 @@ Database
 
         assert_equal(<<-INSPECTED, report)
 Database
-  path:      <#{@database_path}>
-  N records: 3
+  Path:       <#{@database_path}>
+  Disk usage: #{inspect_disk_usage(@database.disk_usage)}
+  N records:  3
         INSPECTED
       end
     end

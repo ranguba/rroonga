@@ -46,8 +46,9 @@ module Groonga
       def report
         write("Database\n")
         indent do
-          write("path:      #{inspect_path(@database.path)}\n")
-          write("N records: #{count_total_n_records}\n")
+          write("Path:       #{inspect_path(@database.path)}\n")
+          write("Disk usage: #{inspect_disk_usage(@database.disk_usage)}\n")
+          write("N records:  #{count_total_n_records}\n")
         end
       end
 
@@ -70,6 +71,27 @@ module Groonga
           "(null)"
         else
           "<#{path}>"
+        end
+      end
+
+      KiB = (2 ** 10).to_f
+      MiB = (2 ** 20).to_f
+      GiB = (2 ** 30).to_f
+      TiB = (2 ** 40).to_f
+      PiB = (2 ** 50).to_f
+      def inspect_disk_usage(disk_usage)
+        if disk_usage < KiB
+          "%dB" % disk_usage
+        elsif disk_usage < MiB
+          "%.3fKiB" % (disk_usage / KiB)
+        elsif disk_usage < GiB
+          "%.3fMiB" % (disk_usage / MiB)
+        elsif disk_usage < TiB
+          "%.3fGiB" % (disk_usage / GiB)
+        elsif disk_usage < PiB
+          "%.3fTiB" % (disk_usage / TiB)
+        else
+          "%.3fPiB" % (disk_usage / PiB)
         end
       end
 
