@@ -62,19 +62,7 @@ Database
       end
 
       def test_no_records
-        assert_equal(<<-INSPECTED, report)
-Database
-  Path:       <#{@database_path}>
-  Disk usage: #{inspect_disk_usage(@database.disk_usage)}
-  N records:  0
-  N tables:   2
-  N columns:  0
-  Plugins:
-    None
-  Tables:
-    Bookmarks:
-    Users:
-        INSPECTED
+        assert_equal(inspected("  N records:  0"), report)
       end
 
       def test_has_records
@@ -82,11 +70,16 @@ Database
         @users.add
         @bookmarks.add
 
-        assert_equal(<<-INSPECTED, report)
+        assert_equal(inspected("  N records:  3"), report)
+      end
+
+      private
+      def inspected(inspected_n_records)
+        <<-INSPECTED
 Database
   Path:       <#{@database_path}>
   Disk usage: #{inspect_disk_usage(@database.disk_usage)}
-  N records:  3
+#{inspected_n_records}
   N tables:   2
   N columns:  0
   Plugins:
@@ -100,18 +93,7 @@ Database
 
     class NTablesTest < self
       def test_no_tables
-        assert_equal(<<-INSPECTED, report)
-Database
-  Path:       <#{@database_path}>
-  Disk usage: #{inspect_disk_usage(@database.disk_usage)}
-  N records:  0
-  N tables:   0
-  N columns:  0
-  Plugins:
-    None
-  Tables:
-    None
-        INSPECTED
+        assert_equal(inspected("  N tables:   0"), report)
       end
 
       def test_has_tables
@@ -123,18 +105,30 @@ Database
           end
         end
 
-        assert_equal(<<-INSPECTED, report)
+        assert_equal(inspected("  N tables:   2"), report)
+      end
+
+      private
+      def inspected(inspected_n_tables)
+        inspected_tables = "  Tables:\n"
+        if @database.tables.empty?
+          inspected_tables << "    None\n"
+        else
+          @database.tables.each do |table|
+            inspected_tables << "    #{table.name}:\n"
+          end
+        end
+
+        <<-INSPECTED
 Database
   Path:       <#{@database_path}>
   Disk usage: #{inspect_disk_usage(@database.disk_usage)}
   N records:  0
-  N tables:   2
+#{inspected_n_tables}
   N columns:  0
   Plugins:
     None
-  Tables:
-    Bookmarks:
-    Users:
+#{inspected_tables.chomp}
         INSPECTED
       end
     end
@@ -152,19 +146,7 @@ Database
       end
 
       def test_no_columns
-        assert_equal(<<-INSPECTED, report)
-Database
-  Path:       <#{@database_path}>
-  Disk usage: #{inspect_disk_usage(@database.disk_usage)}
-  N records:  0
-  N tables:   2
-  N columns:  0
-  Plugins:
-    None
-  Tables:
-    Bookmarks:
-    Users:
-        INSPECTED
+        assert_equal(inspected("  N columns:  0"), report)
       end
 
       def test_has_columns
@@ -179,13 +161,18 @@ Database
           end
         end
 
-        assert_equal(<<-INSPECTED, report)
+        assert_equal(inspected("  N columns:  3"), report)
+      end
+
+      private
+      def inspected(inspected_n_columns)
+        <<-INSPECTED
 Database
   Path:       <#{@database_path}>
   Disk usage: #{inspect_disk_usage(@database.disk_usage)}
   N records:  0
   N tables:   2
-  N columns:  3
+#{inspected_n_columns}
   Plugins:
     None
   Tables:
@@ -197,31 +184,30 @@ Database
 
     class PluginsTest < self
       def test_no_plugins
-        assert_equal(<<-INSPECTED, report)
-Database
-  Path:       <#{@database_path}>
-  Disk usage: #{inspect_disk_usage(@database.disk_usage)}
-  N records:  0
-  N tables:   0
-  N columns:  0
+        assert_equal(inspected(<<-INSPECTED), report)
   Plugins:
-    None
-  Tables:
     None
         INSPECTED
       end
 
       def test_has_plugin
         context.register_plugin("query_expanders/tsv")
-        assert_equal(<<-INSPECTED, report)
+        assert_equal(inspected(<<-INSPECTED), report)
+  Plugins:
+    * query_expanders/tsv#{Groonga::Plugin.suffix}
+        INSPECTED
+      end
+
+      private
+      def inspected(inspected_plugins)
+        <<-INSPECTED
 Database
   Path:       <#{@database_path}>
   Disk usage: #{inspect_disk_usage(@database.disk_usage)}
   N records:  0
   N tables:   0
   N columns:  0
-  Plugins:
-    * query_expanders/tsv#{Groonga::Plugin.suffix}
+#{inspected_plugins.chomp}
   Tables:
     None
         INSPECTED
