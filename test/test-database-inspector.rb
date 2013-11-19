@@ -415,6 +415,45 @@ Database
       end
     end
 
+    class KeyTypeTest < self
+      def test_array
+        Groonga::Schema.create_table("Users")
+        @table = Groonga["Users"]
+        assert_equal(inspected("(no key)"), report)
+      end
+
+      def test_key_support_table
+        Groonga::Schema.create_table("Users",
+                                     :type => :hash,
+                                     :key_type => "Int32")
+        @table = Groonga["Users"]
+        assert_equal(inspected("Int32"), report)
+      end
+
+      private
+      def inspected(key_type)
+        <<-INSPECTED
+Database
+  Path:       <#{@database_path}>
+  Disk usage: #{inspect_disk_usage(@database.disk_usage)}
+  N records:  #{@table.size}
+  N tables:   #{@database.tables.size}
+  N columns:  0
+  Plugins:
+    None
+  Tables:
+    #{@table.name}:
+      ID:         #{@table.id}
+      Type:       #{inspect_table_type(@table)}
+      Key type:   #{key_type}
+      Tokenizer:  #{inspect_tokenizer(@table)}
+      Path:       <#{@table.path}>
+      Disk usage: #{inspect_disk_usage(@table.disk_usage)}
+      N records:  #{@table.size}
+        INSPECTED
+      end
+    end
+
     class TokenizerTest < self
       def test_array
         Groonga::Schema.create_table("Users")
