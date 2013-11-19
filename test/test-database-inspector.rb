@@ -41,6 +41,8 @@ Database
   N columns:  0
   Plugins:
     None
+  Tables:
+    None
       INSPECTED
     end
 
@@ -69,6 +71,9 @@ Database
   N columns:  0
   Plugins:
     None
+  Tables:
+    Bookmarks:
+    Users:
         INSPECTED
       end
 
@@ -86,6 +91,9 @@ Database
   N columns:  0
   Plugins:
     None
+  Tables:
+    Bookmarks:
+    Users:
         INSPECTED
       end
     end
@@ -100,6 +108,8 @@ Database
   N tables:   0
   N columns:  0
   Plugins:
+    None
+  Tables:
     None
         INSPECTED
       end
@@ -122,6 +132,9 @@ Database
   N columns:  0
   Plugins:
     None
+  Tables:
+    Bookmarks:
+    Users:
         INSPECTED
       end
     end
@@ -148,6 +161,9 @@ Database
   N columns:  0
   Plugins:
     None
+  Tables:
+    Bookmarks:
+    Users:
         INSPECTED
       end
 
@@ -172,6 +188,9 @@ Database
   N columns:  3
   Plugins:
     None
+  Tables:
+    Bookmarks:
+    Users:
         INSPECTED
       end
     end
@@ -187,6 +206,8 @@ Database
   N columns:  0
   Plugins:
     None
+  Tables:
+    None
         INSPECTED
       end
 
@@ -201,6 +222,46 @@ Database
   N columns:  0
   Plugins:
     * query_expanders/tsv#{Groonga::Plugin.suffix}
+  Tables:
+    None
+        INSPECTED
+      end
+    end
+  end
+
+  class TableTest < self
+    class NoColumnTest < self
+      def test_nothing
+        assert_equal(inspected(<<-INSPECTED), report)
+  Tables:
+    None
+        INSPECTED
+      end
+
+      def test_empty
+        Groonga::Schema.define(:context => context) do |schema|
+          schema.create_table("Users") do |table|
+          end
+        end
+
+        assert_equal(inspected(<<-INSPECTED), report)
+  Tables:
+    Users:
+        INSPECTED
+      end
+
+      private
+      def inspected(inspected_tables)
+        <<-INSPECTED.chomp
+Database
+  Path:       <#{@database_path}>
+  Disk usage: #{inspect_disk_usage(@database.disk_usage)}
+  N records:  0
+  N tables:   #{@database.tables.size}
+  N columns:  0
+  Plugins:
+    None
+#{inspected_tables}
         INSPECTED
       end
     end

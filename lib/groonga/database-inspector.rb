@@ -52,6 +52,7 @@ module Groonga
           write("N tables:   #{count_n_tables}\n")
           write("N columns:  #{count_total_n_columns}\n")
           report_plugins
+          report_tables
         end
       end
 
@@ -68,6 +69,24 @@ module Groonga
             write("* #{path}\n")
           end
         end
+      end
+
+      def report_tables
+        write("Tables:\n")
+        indent do
+          tables = @database.tables
+          if tables.empty?
+            write("None\n")
+            return
+          end
+          tables.each do |table|
+            report_table(table)
+          end
+        end
+      end
+
+      def report_table(table)
+        write("#{table.name}:\n")
       end
 
       def indent
