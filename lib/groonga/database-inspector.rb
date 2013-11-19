@@ -92,6 +92,7 @@ module Groonga
           write("Type:       #{inspect_table_type(table)}\n")
           write("Key type:   #{inspect_key_type(table)}\n")
           write("Tokenizer:  #{inspect_tokenizer(table)}\n")
+          write("Normalizer: #{inspect_normalizer(table)}\n")
           write("Path:       #{inspect_path(table.path)}\n")
           write("Disk usage: #{inspect_disk_usage(table.disk_usage)}\n")
           write("N records:  #{table.size}\n")
@@ -186,6 +187,19 @@ module Groonga
             tokenizer.name
           else
             "(no tokenizer)"
+          end
+        else
+          "(no key)"
+        end
+      end
+
+      def inspect_normalizer(table)
+        if table.support_key?
+          normalizer = table.normalizer
+          if normalizer
+            normalizer.name
+          else
+            "(no normalizer)"
           end
         else
           "(no key)"

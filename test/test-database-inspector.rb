@@ -41,6 +41,7 @@ class DatabaseInspectorTest < Test::Unit::TestCase
       Type:       #{inspect_table_type(table)}
       Key type:   #{inspect_key_type(table)}
       Tokenizer:  #{inspect_tokenizer(table)}
+      Normalizer: #{inspect_normalizer(table)}
       Path:       <#{table.path}>
       Disk usage: #{inspect_disk_usage(table.disk_usage)}
       N records:  #{table.size}
@@ -75,6 +76,19 @@ class DatabaseInspectorTest < Test::Unit::TestCase
         tokenizer.name
       else
         "(no tokenizer)"
+      end
+    else
+      "(no key)"
+    end
+  end
+
+  def inspect_normalizer(table)
+    if table.support_key?
+      normalizer = table.normalizer
+      if normalizer
+        normalizer.name
+      else
+        "(no normalizer)"
       end
     else
       "(no key)"
@@ -292,6 +306,7 @@ Database
       Type:       #{inspect_table_type(users)}
       Key type:   #{inspect_key_type(users)}
       Tokenizer:  #{inspect_tokenizer(users)}
+      Normalizer: #{inspect_normalizer(users)}
       Path:       <#{users.path}>
       Disk usage: #{inspect_disk_usage(users.disk_usage)}
       N records:  #{users.size}
@@ -353,6 +368,7 @@ Database
       Type:       #{inspect_table_type(@users)}
       Key type:   #{inspect_key_type(@users)}
       Tokenizer:  #{inspect_tokenizer(@users)}
+      Normalizer: #{inspect_normalizer(@users)}
       Path:       <#{@users.path}>
       Disk usage: #{inspect_disk_usage(@users.disk_usage)}
       N records:  #{n_records}
@@ -408,6 +424,7 @@ Database
       Type:       #{type}
       Key type:   #{inspect_key_type(@table)}
       Tokenizer:  #{inspect_tokenizer(@table)}
+      Normalizer: #{inspect_normalizer(@table)}
       Path:       <#{@table.path}>
       Disk usage: #{inspect_disk_usage(@table.disk_usage)}
       N records:  #{@table.size}
@@ -447,6 +464,7 @@ Database
       Type:       #{inspect_table_type(@table)}
       Key type:   #{key_type}
       Tokenizer:  #{inspect_tokenizer(@table)}
+      Normalizer: #{inspect_normalizer(@table)}
       Path:       <#{@table.path}>
       Disk usage: #{inspect_disk_usage(@table.disk_usage)}
       N records:  #{@table.size}
@@ -495,6 +513,56 @@ Database
       Type:       #{inspect_table_type(@table)}
       Key type:   #{inspect_key_type(@table)}
       Tokenizer:  #{inspected_tokenizer}
+      Normalizer: #{inspect_normalizer(@table)}
+      Path:       <#{@table.path}>
+      Disk usage: #{inspect_disk_usage(@table.disk_usage)}
+      N records:  #{@table.size}
+        INSPECTED
+      end
+    end
+
+    class NormalizerTest < self
+      def test_array
+        Groonga::Schema.create_table("Users")
+        @table = Groonga["Users"]
+        assert_equal(inspected("(no key)"), report)
+      end
+
+      def test_no_normalizer
+        Groonga::Schema.create_table("Users",
+                                     :type => :hash,
+                                     :key_type => :short_text)
+        @table = Groonga["Users"]
+        assert_equal(inspected("(no normalizer)"), report)
+      end
+
+      def test_have_normalizer
+        Groonga::Schema.create_table("Users",
+                                     :type => :patricia_trie,
+                                     :key_type => :short_text,
+                                     :normalizer => "NormalizerAuto")
+        @table = Groonga["Users"]
+        assert_equal(inspected("NormalizerAuto"), report)
+      end
+
+      private
+      def inspected(inspected_normalizer)
+        <<-INSPECTED
+Database
+  Path:       <#{@database_path}>
+  Disk usage: #{inspect_disk_usage(@database.disk_usage)}
+  N records:  #{@table.size}
+  N tables:   #{@database.tables.size}
+  N columns:  0
+  Plugins:
+    None
+  Tables:
+    #{@table.name}:
+      ID:         #{@table.id}
+      Type:       #{inspect_table_type(@table)}
+      Key type:   #{inspect_key_type(@table)}
+      Tokenizer:  #{inspect_tokenizer(@table)}
+      Normalizer: #{inspected_normalizer}
       Path:       <#{@table.path}>
       Disk usage: #{inspect_disk_usage(@table.disk_usage)}
       N records:  #{@table.size}
