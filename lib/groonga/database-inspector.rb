@@ -91,6 +91,7 @@ module Groonga
           write("ID:         #{table.id}\n")
           write("Path:       #{inspect_path(table.path)}\n")
           write("Disk usage: #{inspect_disk_usage(table.disk_usage)}\n")
+          write("N records:  #{table.size}\n")
         end
       end
 

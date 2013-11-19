@@ -40,6 +40,7 @@ class DatabaseInspectorTest < Test::Unit::TestCase
       ID:         #{table.id}
       Path:       <#{table.path}>
       Disk usage: #{inspect_disk_usage(table.disk_usage)}
+      N records:  #{table.size}
     INSPECTED
   end
 
@@ -253,12 +254,13 @@ Database
       ID:         #{users.id}
       Path:       <#{users.path}>
       Disk usage: #{inspect_disk_usage(users.disk_usage)}
+      N records:  #{users.size}
         INSPECTED
       end
 
       private
       def inspected(inspected_tables)
-        <<-INSPECTED.chomp
+        <<-INSPECTED
 Database
   Path:       <#{@database_path}>
   Disk usage: #{inspect_disk_usage(@database.disk_usage)}
@@ -267,7 +269,50 @@ Database
   N columns:  0
   Plugins:
     None
-#{inspected_tables}
+#{inspected_tables.chomp}
+        INSPECTED
+      end
+    end
+
+    class NRecordsTest < self
+      setup
+      def setup_tables
+        Groonga::Schema.define(:context => context) do |schema|
+          schema.create_table("Users") do |table|
+          end
+        end
+        @users = context["Users"]
+      end
+
+      def test_no_record
+        assert_equal(inspected("      N records:  0"), report)
+      end
+
+      def test_empty
+        @users.add
+        @users.add
+        @users.add
+
+        assert_equal(inspected("      N records:  3"), report)
+      end
+
+      private
+      def inspected(inspected_n_records)
+        <<-INSPECTED
+Database
+  Path:       <#{@database_path}>
+  Disk usage: #{inspect_disk_usage(@database.disk_usage)}
+  N records:  #{@users.size}
+  N tables:   #{@database.tables.size}
+  N columns:  0
+  Plugins:
+    None
+  Tables:
+    #{@users.name}:
+      ID:         #{@users.id}
+      Path:       <#{@users.path}>
+      Disk usage: #{inspect_disk_usage(@users.disk_usage)}
+#{inspected_n_records}
         INSPECTED
       end
     end
