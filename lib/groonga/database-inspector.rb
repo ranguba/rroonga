@@ -87,6 +87,9 @@ module Groonga
 
       def report_table(table)
         write("#{table.name}:\n")
+        indent do
+          write("ID: #{table.id}\n")
+        end
       end
 
       def indent

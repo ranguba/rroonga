@@ -86,7 +86,9 @@ Database
     None
   Tables:
     Bookmarks:
+      ID: #{@bookmarks.id}
     Users:
+      ID: #{@users.id}
         INSPECTED
       end
     end
@@ -116,6 +118,7 @@ Database
         else
           @database.tables.each do |table|
             inspected_tables << "    #{table.name}:\n"
+            inspected_tables << "      ID: #{table.id}\n"
           end
         end
 
@@ -143,6 +146,9 @@ Database
           schema.create_table("Bookmarks") do |table|
           end
         end
+
+        @users = context["Users"]
+        @bookmarks = context["Bookmarks"]
       end
 
       def test_no_columns
@@ -177,7 +183,9 @@ Database
     None
   Tables:
     Bookmarks:
+      ID: #{@bookmarks.id}
     Users:
+      ID: #{@users.id}
         INSPECTED
       end
     end
@@ -229,10 +237,12 @@ Database
           schema.create_table("Users") do |table|
           end
         end
+        users = context["Users"]
 
         assert_equal(inspected(<<-INSPECTED), report)
   Tables:
     Users:
+      ID: #{users.id}
         INSPECTED
       end
 
