@@ -39,6 +39,7 @@ class DatabaseInspectorTest < Test::Unit::TestCase
     #{table.name}:
       ID:         #{table.id}
       Type:       #{inspect_table_type(table)}
+      Key type:   #{inspect_key_type(table)}
       Path:       <#{table.path}>
       Disk usage: #{inspect_disk_usage(table.disk_usage)}
       N records:  #{table.size}
@@ -55,6 +56,14 @@ class DatabaseInspectorTest < Test::Unit::TestCase
       "patricia trie"
     when Groonga::DoubleArrayTrie
       "double array trie"
+    end
+  end
+
+  def inspect_key_type(table)
+    if table.support_key?
+      table.domain.name
+    else
+      "(no key)"
     end
   end
 
@@ -267,6 +276,7 @@ Database
     Users:
       ID:         #{users.id}
       Type:       #{inspect_table_type(users)}
+      Key type:   #{inspect_key_type(users)}
       Path:       <#{users.path}>
       Disk usage: #{inspect_disk_usage(users.disk_usage)}
       N records:  #{users.size}
@@ -326,6 +336,7 @@ Database
     #{@users.name}:
       ID:         #{@users.id}
       Type:       #{inspect_table_type(@users)}
+      Key type:   #{inspect_key_type(@users)}
       Path:       <#{@users.path}>
       Disk usage: #{inspect_disk_usage(@users.disk_usage)}
 #{inspected_n_records}
@@ -379,6 +390,7 @@ Database
     #{@table.name}:
       ID:         #{@table.id}
       Type:       #{type}
+      Key type:   #{inspect_key_type(@table)}
       Path:       <#{@table.path}>
       Disk usage: #{inspect_disk_usage(@table.disk_usage)}
       N records:  #{@table.size}

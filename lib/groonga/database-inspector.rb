@@ -90,6 +90,7 @@ module Groonga
         indent do
           write("ID:         #{table.id}\n")
           write("Type:       #{inspect_table_type(table)}\n")
+          write("Key type:   #{inspect_key_type(table)}\n")
           write("Path:       #{inspect_path(table.path)}\n")
           write("Disk usage: #{inspect_disk_usage(table.disk_usage)}\n")
           write("N records:  #{table.size}\n")
@@ -166,6 +167,14 @@ module Groonga
           "double array trie"
         else
           "unknown (#{table.class})"
+        end
+      end
+
+      def inspect_key_type(table)
+        if table.support_key?
+          table.domain.name
+        else
+          "(no key)"
         end
       end
     end
