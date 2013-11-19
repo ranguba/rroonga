@@ -25,9 +25,12 @@ rb_grn_operator_from_ruby_object (VALUE rb_operator)
 {
     grn_operator operator = GRN_OP_OR;
 
-    if (NIL_P(rb_operator) ||
-        rb_grn_equal_option(rb_operator, "or") ||
-        rb_grn_equal_option(rb_operator, "||")) {
+    if (NIL_P(rb_operator)) {
+        operator = GRN_OP_OR;
+    } else if (RVAL2CBOOL(rb_obj_is_kind_of(rb_operator, rb_cInteger))) {
+        operator = NUM2UINT(rb_operator);
+    } else if (rb_grn_equal_option(rb_operator, "or") ||
+               rb_grn_equal_option(rb_operator, "||")) {
         operator = GRN_OP_OR;
     } else if (rb_grn_equal_option(rb_operator, "and") ||
                rb_grn_equal_option(rb_operator, "+") ||

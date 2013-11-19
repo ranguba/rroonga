@@ -141,4 +141,46 @@ class ExpressionTest < Test::Unit::TestCase
       assert_equal("TODO: Change me to expression", variable.value)
     end
   end
+
+  class ParseTest < self
+    setup
+    def setup_schema
+      Groonga::Schema.define do |schema|
+        schema.create_table("Users") do
+        end
+      end
+    end
+
+    setup
+    def setup_expression
+      @expression = Groonga::Expression.new
+      @variable = @expression.define_variable
+      @variable.value = Groonga["Users"].add
+    end
+
+    class DefaultOperatorTest < self
+      def test_nil
+        assert_equal("AND", parse(nil))
+      end
+
+      def test_name
+        assert_equal("OR", parse("or"))
+      end
+
+      def test_symbol
+        assert_equal("OR", parse("||"))
+      end
+
+      def test_integer
+        assert_equal("ADJUST", parse(Groonga::Operator::ADJUST))
+      end
+
+      private
+      def parse(default_operator)
+        @expression.parse("_id:1 _id:2", :default_operator => default_operator)
+        operator = @expression.inspect[/\d([a-zA-Z_-]+)}/, 1]
+        operator
+      end
+    end
+  end
 end

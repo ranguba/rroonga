@@ -381,7 +381,7 @@ rb_grn_expression_parse (int argc, VALUE *argv, VALUE self)
     if (!NIL_P(rb_default_mode))
         default_mode = NUM2UINT(rb_default_mode);
     if (!NIL_P(rb_default_operator))
-        default_operator = NUM2UINT(rb_default_operator);
+        default_operator = RVAL2GRNOPERATOR(rb_default_operator);
 
     if (NIL_P(rb_syntax) ||
         rb_grn_equal_option(rb_syntax, "query")) {
