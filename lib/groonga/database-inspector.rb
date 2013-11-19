@@ -91,6 +91,7 @@ module Groonga
           write("ID:         #{table.id}\n")
           write("Type:       #{inspect_table_type(table)}\n")
           write("Key type:   #{inspect_key_type(table)}\n")
+          write("Tokenizer:  #{inspect_tokenizer(table)}\n")
           write("Path:       #{inspect_path(table.path)}\n")
           write("Disk usage: #{inspect_disk_usage(table.disk_usage)}\n")
           write("N records:  #{table.size}\n")
@@ -173,6 +174,19 @@ module Groonga
       def inspect_key_type(table)
         if table.support_key?
           table.domain.name
+        else
+          "(no key)"
+        end
+      end
+
+      def inspect_tokenizer(table)
+        if table.support_key?
+          tokenizer = table.default_tokenizer
+          if tokenizer
+            tokenizer.name
+          else
+            "(no tokenizer)"
+          end
         else
           "(no key)"
         end

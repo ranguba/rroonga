@@ -40,6 +40,7 @@ class DatabaseInspectorTest < Test::Unit::TestCase
       ID:         #{table.id}
       Type:       #{inspect_table_type(table)}
       Key type:   #{inspect_key_type(table)}
+      Tokenizer:  #{inspect_tokenizer(table)}
       Path:       <#{table.path}>
       Disk usage: #{inspect_disk_usage(table.disk_usage)}
       N records:  #{table.size}
@@ -62,6 +63,19 @@ class DatabaseInspectorTest < Test::Unit::TestCase
   def inspect_key_type(table)
     if table.support_key?
       table.domain.name
+    else
+      "(no key)"
+    end
+  end
+
+  def inspect_tokenizer(table)
+    if table.support_key?
+      tokenizer = table.default_tokenizer
+      if tokenizer
+        tokenizer.name
+      else
+        "(no tokenizer)"
+      end
     else
       "(no key)"
     end
@@ -277,6 +291,7 @@ Database
       ID:         #{users.id}
       Type:       #{inspect_table_type(users)}
       Key type:   #{inspect_key_type(users)}
+      Tokenizer:  #{inspect_tokenizer(users)}
       Path:       <#{users.path}>
       Disk usage: #{inspect_disk_usage(users.disk_usage)}
       N records:  #{users.size}
@@ -337,6 +352,7 @@ Database
       ID:         #{@users.id}
       Type:       #{inspect_table_type(@users)}
       Key type:   #{inspect_key_type(@users)}
+      Tokenizer:  #{inspect_tokenizer(@users)}
       Path:       <#{@users.path}>
       Disk usage: #{inspect_disk_usage(@users.disk_usage)}
       N records:  #{n_records}
@@ -391,6 +407,55 @@ Database
       ID:         #{@table.id}
       Type:       #{type}
       Key type:   #{inspect_key_type(@table)}
+      Tokenizer:  #{inspect_tokenizer(@table)}
+      Path:       <#{@table.path}>
+      Disk usage: #{inspect_disk_usage(@table.disk_usage)}
+      N records:  #{@table.size}
+        INSPECTED
+      end
+    end
+
+    class TokenizerTest < self
+      def test_array
+        Groonga::Schema.create_table("Users")
+        @table = Groonga["Users"]
+        assert_equal(inspected("(no key)"), report)
+      end
+
+      def test_no_tokenizer
+        Groonga::Schema.create_table("Users",
+                                     :type => :hash,
+                                     :key_type => :short_text)
+        @table = Groonga["Users"]
+        assert_equal(inspected("(no tokenizer)"), report)
+      end
+
+      def test_have_tokenizer
+        Groonga::Schema.create_table("Users",
+                                     :type => :patricia_trie,
+                                     :key_type => :short_text,
+                                     :default_tokenizer => "TokenBigram")
+        @table = Groonga["Users"]
+        assert_equal(inspected("TokenBigram"), report)
+      end
+
+      private
+      def inspected(inspected_tokenizer)
+        <<-INSPECTED
+Database
+  Path:       <#{@database_path}>
+  Disk usage: #{inspect_disk_usage(@database.disk_usage)}
+  N records:  #{@table.size}
+  N tables:   #{@database.tables.size}
+  N columns:  0
+  Plugins:
+    None
+  Tables:
+    #{@table.name}:
+      ID:         #{@table.id}
+      Type:       #{inspect_table_type(@table)}
+      Key type:   #{inspect_key_type(@table)}
+      Tokenizer:  #{inspected_tokenizer}
       Path:       <#{@table.path}>
       Disk usage: #{inspect_disk_usage(@table.disk_usage)}
       N records:  #{@table.size}
