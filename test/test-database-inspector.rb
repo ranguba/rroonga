@@ -90,7 +90,7 @@ Database
       end
 
       def test_no_records
-        assert_equal(inspected("  N records:  0"), report)
+        assert_equal(inspected(0), report)
       end
 
       def test_has_records
@@ -98,16 +98,16 @@ Database
         @users.add
         @bookmarks.add
 
-        assert_equal(inspected("  N records:  3"), report)
+        assert_equal(inspected(3), report)
       end
 
       private
-      def inspected(inspected_n_records)
+      def inspected(n_records)
         <<-INSPECTED
 Database
   Path:       <#{@database_path}>
   Disk usage: #{inspect_disk_usage(@database.disk_usage)}
-#{inspected_n_records}
+  N records:  #{n_records}
   N tables:   2
   N columns:  0
   Plugins:
@@ -121,7 +121,7 @@ Database
 
     class NTablesTest < self
       def test_no_tables
-        assert_equal(inspected("  N tables:   0"), report)
+        assert_equal(inspected(0), report)
       end
 
       def test_has_tables
@@ -133,11 +133,11 @@ Database
           end
         end
 
-        assert_equal(inspected("  N tables:   2"), report)
+        assert_equal(inspected(2), report)
       end
 
       private
-      def inspected(inspected_n_tables)
+      def inspected(n_tables)
         inspected_tables = "  Tables:\n"
         if @database.tables.empty?
           inspected_tables << "    None\n"
@@ -152,7 +152,7 @@ Database
   Path:       <#{@database_path}>
   Disk usage: #{inspect_disk_usage(@database.disk_usage)}
   N records:  0
-#{inspected_n_tables}
+  N tables:   #{n_tables}
   N columns:  0
   Plugins:
     None
@@ -177,7 +177,7 @@ Database
       end
 
       def test_no_columns
-        assert_equal(inspected("  N columns:  0"), report)
+        assert_equal(inspected(0), report)
       end
 
       def test_has_columns
@@ -192,18 +192,18 @@ Database
           end
         end
 
-        assert_equal(inspected("  N columns:  3"), report)
+        assert_equal(inspected(3), report)
       end
 
       private
-      def inspected(inspected_n_columns)
+      def inspected(n_columns)
         <<-INSPECTED
 Database
   Path:       <#{@database_path}>
   Disk usage: #{inspect_disk_usage(@database.disk_usage)}
   N records:  0
   N tables:   2
-#{inspected_n_columns}
+  N columns:  #{n_columns}
   Plugins:
     None
   Tables:
