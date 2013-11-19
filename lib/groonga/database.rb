@@ -19,7 +19,11 @@ module Groonga
   class Database
     # @return [Array<Groonga::Table>] tables defined in the database.
     def tables
-      find_all do |object|
+      options = {
+        :ignore_missing_object => true,
+        :order_by => :key,
+      }
+      each(options).find_all do |object|
         object.is_a?(Groonga::Table)
       end
     end
