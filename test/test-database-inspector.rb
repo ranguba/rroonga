@@ -126,7 +126,7 @@ Database
       end
     end
 
-    class TestNColumns < self
+    class NColumnsTest < self
       setup
       def setup_tables
         Groonga::Schema.define(:context => context) do |schema|
@@ -176,7 +176,7 @@ Database
       end
     end
 
-    class TestPlugins < self
+    class PluginsTest < self
       def test_no_plugins
         assert_equal(<<-INSPECTED, report)
 Database
