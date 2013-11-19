@@ -38,10 +38,24 @@ class DatabaseInspectorTest < Test::Unit::TestCase
     <<-INSPECTED
     #{table.name}:
       ID:         #{table.id}
+      Type:       #{inspect_table_type(table)}
       Path:       <#{table.path}>
       Disk usage: #{inspect_disk_usage(table.disk_usage)}
       N records:  #{table.size}
     INSPECTED
+  end
+
+  def inspect_table_type(table)
+    case table
+    when Groonga::Array
+      "array"
+    when Groonga::Hash
+      "hash"
+    when Groonga::PatriciaTrie
+      "patricia trie"
+    when Groonga::DoubleArrayTrie
+      "double array trie"
+    end
   end
 
   class DatabaseTest < self
@@ -252,6 +266,7 @@ Database
   Tables:
     Users:
       ID:         #{users.id}
+      Type:       #{inspect_table_type(users)}
       Path:       <#{users.path}>
       Disk usage: #{inspect_disk_usage(users.disk_usage)}
       N records:  #{users.size}
@@ -310,9 +325,63 @@ Database
   Tables:
     #{@users.name}:
       ID:         #{@users.id}
+      Type:       #{inspect_table_type(@users)}
       Path:       <#{@users.path}>
       Disk usage: #{inspect_disk_usage(@users.disk_usage)}
 #{inspected_n_records}
+        INSPECTED
+      end
+    end
+
+    class TypeTest < self
+      def test_array
+        Groonga::Schema.create_table("Users")
+        @table = Groonga["Users"]
+        assert_equal(inspected("array"), report)
+      end
+
+      def test_hash
+        Groonga::Schema.create_table("Users",
+                                     :type => :hash,
+                                     :key_type => :short_text)
+        @table = Groonga["Users"]
+        assert_equal(inspected("hash"), report)
+      end
+
+      def test_patricia_trie
+        Groonga::Schema.create_table("Users",
+                                     :type => :patricia_trie,
+                                     :key_type => :short_text)
+        @table = Groonga["Users"]
+        assert_equal(inspected("patricia trie"), report)
+      end
+
+      def test_double_array_trie
+        Groonga::Schema.create_table("Users",
+                                     :type => :double_array_trie,
+                                     :key_type => :short_text)
+        @table = Groonga["Users"]
+        assert_equal(inspected("double array trie"), report)
+      end
+
+      private
+      def inspected(type)
+        <<-INSPECTED
+Database
+  Path:       <#{@database_path}>
+  Disk usage: #{inspect_disk_usage(@database.disk_usage)}
+  N records:  #{@table.size}
+  N tables:   #{@database.tables.size}
+  N columns:  0
+  Plugins:
+    None
+  Tables:
+    #{@table.name}:
+      ID:         #{@table.id}
+      Type:       #{type}
+      Path:       <#{@table.path}>
+      Disk usage: #{inspect_disk_usage(@table.disk_usage)}
+      N records:  #{@table.size}
         INSPECTED
       end
     end

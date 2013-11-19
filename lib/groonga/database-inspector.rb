@@ -89,6 +89,7 @@ module Groonga
         write("#{table.name}:\n")
         indent do
           write("ID:         #{table.id}\n")
+          write("Type:       #{inspect_table_type(table)}\n")
           write("Path:       #{inspect_path(table.path)}\n")
           write("Disk usage: #{inspect_disk_usage(table.disk_usage)}\n")
           write("N records:  #{table.size}\n")
@@ -150,6 +151,21 @@ module Groonga
       def count_total_n_columns
         @database.tables.inject(0) do |previous, table|
           previous + table.columns.size
+        end
+      end
+
+      def inspect_table_type(table)
+        case table
+        when Groonga::Array
+          "array"
+        when Groonga::Hash
+          "hash"
+        when Groonga::PatriciaTrie
+          "patricia trie"
+        when Groonga::DoubleArrayTrie
+          "double array trie"
+        else
+          "unknown (#{table.class})"
         end
       end
     end
