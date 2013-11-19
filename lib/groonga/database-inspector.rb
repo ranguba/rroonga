@@ -88,8 +88,9 @@ module Groonga
       def report_table(table)
         write("#{table.name}:\n")
         indent do
-          write("ID:   #{table.id}\n")
-          write("Path: #{inspect_path(table.path)}\n")
+          write("ID:         #{table.id}\n")
+          write("Path:       #{inspect_path(table.path)}\n")
+          write("Disk usage: #{inspect_disk_usage(table.disk_usage)}\n")
         end
       end
 

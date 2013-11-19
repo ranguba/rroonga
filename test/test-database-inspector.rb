@@ -27,7 +27,20 @@ class DatabaseInspectorTest < Test::Unit::TestCase
   end
 
   def inspect_disk_usage(disk_usage)
-    "%.3fMiB" % (@database.disk_usage / (2 ** 20).to_f)
+    if disk_usage < (2 ** 20)
+      "%.3fKiB" % (disk_usage / (2 ** 10).to_f)
+    else
+      "%.3fMiB" % (disk_usage / (2 ** 20).to_f)
+    end
+  end
+
+  def inspect_table(table)
+    <<-INSPECTED
+    #{table.name}:
+      ID:         #{table.id}
+      Path:       <#{table.path}>
+      Disk usage: #{inspect_disk_usage(table.disk_usage)}
+    INSPECTED
   end
 
   class DatabaseTest < self
@@ -85,12 +98,8 @@ Database
   Plugins:
     None
   Tables:
-    Bookmarks:
-      ID:   #{@bookmarks.id}
-      Path: <#{@bookmarks.path}>
-    Users:
-      ID:   #{@users.id}
-      Path: <#{@users.path}>
+#{inspect_table(@bookmarks).chomp}
+#{inspect_table(@users).chomp}
         INSPECTED
       end
     end
@@ -119,9 +128,7 @@ Database
           inspected_tables << "    None\n"
         else
           @database.tables.each do |table|
-            inspected_tables << "    #{table.name}:\n"
-            inspected_tables << "      ID:   #{table.id}\n"
-            inspected_tables << "      Path: <#{table.path}>\n"
+            inspected_tables << inspect_table(table)
           end
         end
 
@@ -185,12 +192,8 @@ Database
   Plugins:
     None
   Tables:
-    Bookmarks:
-      ID:   #{@bookmarks.id}
-      Path: <#{@bookmarks.path}>
-    Users:
-      ID:   #{@users.id}
-      Path: <#{@users.path}>
+#{inspect_table(@bookmarks).chomp}
+#{inspect_table(@users).chomp}
         INSPECTED
       end
     end
@@ -247,8 +250,9 @@ Database
         assert_equal(inspected(<<-INSPECTED), report)
   Tables:
     Users:
-      ID:   #{users.id}
-      Path: <#{users.path}>
+      ID:         #{users.id}
+      Path:       <#{users.path}>
+      Disk usage: #{inspect_disk_usage(users.disk_usage)}
         INSPECTED
       end
 
