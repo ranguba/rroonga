@@ -77,7 +77,7 @@ Database
     class NRecordsTest < self
       setup
       def setup_tables
-        Groonga::Schema.define(:context => context) do |schema|
+        Groonga::Schema.define do |schema|
           schema.create_table("Users") do |table|
           end
 
@@ -125,7 +125,7 @@ Database
       end
 
       def test_has_tables
-        Groonga::Schema.define(:context => context) do |schema|
+        Groonga::Schema.define do |schema|
           schema.create_table("Users") do |table|
           end
 
@@ -164,7 +164,7 @@ Database
     class NColumnsTest < self
       setup
       def setup_tables
-        Groonga::Schema.define(:context => context) do |schema|
+        Groonga::Schema.define do |schema|
           schema.create_table("Users") do |table|
           end
 
@@ -181,7 +181,7 @@ Database
       end
 
       def test_has_columns
-        Groonga::Schema.define(:context => context) do |schema|
+        Groonga::Schema.define do |schema|
           schema.create_table("Users") do |table|
             table.short_text("name")
             table.int8("age")
@@ -256,7 +256,7 @@ Database
       end
 
       def test_empty
-        Groonga::Schema.define(:context => context) do |schema|
+        Groonga::Schema.define do |schema|
           schema.create_table("Users") do |table|
           end
         end
@@ -292,7 +292,7 @@ Database
     class NRecordsTest < self
       setup
       def setup_tables
-        Groonga::Schema.define(:context => context) do |schema|
+        Groonga::Schema.define do |schema|
           schema.create_table("Users") do |table|
           end
         end
