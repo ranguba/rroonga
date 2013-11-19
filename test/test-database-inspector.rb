@@ -310,7 +310,7 @@ Database
       end
 
       def test_no_record
-        assert_equal(inspected("      N records:  0"), report)
+        assert_equal(inspected(0), report)
       end
 
       def test_empty
@@ -318,11 +318,11 @@ Database
         @users.add
         @users.add
 
-        assert_equal(inspected("      N records:  3"), report)
+        assert_equal(inspected(3), report)
       end
 
       private
-      def inspected(inspected_n_records)
+      def inspected(n_records)
         <<-INSPECTED
 Database
   Path:       <#{@database_path}>
@@ -339,7 +339,7 @@ Database
       Key type:   #{inspect_key_type(@users)}
       Path:       <#{@users.path}>
       Disk usage: #{inspect_disk_usage(@users.disk_usage)}
-#{inspected_n_records}
+      N records:  #{n_records}
         INSPECTED
       end
     end
