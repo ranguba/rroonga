@@ -86,9 +86,11 @@ Database
     None
   Tables:
     Bookmarks:
-      ID: #{@bookmarks.id}
+      ID:   #{@bookmarks.id}
+      Path: <#{@bookmarks.path}>
     Users:
-      ID: #{@users.id}
+      ID:   #{@users.id}
+      Path: <#{@users.path}>
         INSPECTED
       end
     end
@@ -118,7 +120,8 @@ Database
         else
           @database.tables.each do |table|
             inspected_tables << "    #{table.name}:\n"
-            inspected_tables << "      ID: #{table.id}\n"
+            inspected_tables << "      ID:   #{table.id}\n"
+            inspected_tables << "      Path: <#{table.path}>\n"
           end
         end
 
@@ -183,9 +186,11 @@ Database
     None
   Tables:
     Bookmarks:
-      ID: #{@bookmarks.id}
+      ID:   #{@bookmarks.id}
+      Path: <#{@bookmarks.path}>
     Users:
-      ID: #{@users.id}
+      ID:   #{@users.id}
+      Path: <#{@users.path}>
         INSPECTED
       end
     end
@@ -242,7 +247,8 @@ Database
         assert_equal(inspected(<<-INSPECTED), report)
   Tables:
     Users:
-      ID: #{users.id}
+      ID:   #{users.id}
+      Path: <#{users.path}>
         INSPECTED
       end
 
