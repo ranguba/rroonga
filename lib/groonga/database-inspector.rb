@@ -96,6 +96,7 @@ module Groonga
           write("Path:       #{inspect_path(table.path)}\n")
           write("Disk usage: #{inspect_disk_usage(table.disk_usage)}\n")
           write("N records:  #{table.size}\n")
+          write("N columns:  #{table.columns.size}\n")
         end
       end
 

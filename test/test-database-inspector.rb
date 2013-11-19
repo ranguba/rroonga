@@ -45,6 +45,7 @@ class DatabaseInspectorTest < Test::Unit::TestCase
       Path:       <#{table.path}>
       Disk usage: #{inspect_disk_usage(table.disk_usage)}
       N records:  #{table.size}
+      N columns:  #{table.columns.size}
     INSPECTED
   end
 
@@ -310,6 +311,7 @@ Database
       Path:       <#{users.path}>
       Disk usage: #{inspect_disk_usage(users.disk_usage)}
       N records:  #{users.size}
+      N columns:  #{users.columns.size}
         INSPECTED
       end
 
@@ -372,6 +374,7 @@ Database
       Path:       <#{@users.path}>
       Disk usage: #{inspect_disk_usage(@users.disk_usage)}
       N records:  #{n_records}
+      N columns:  #{@users.columns.size}
         INSPECTED
       end
     end
@@ -428,6 +431,7 @@ Database
       Path:       <#{@table.path}>
       Disk usage: #{inspect_disk_usage(@table.disk_usage)}
       N records:  #{@table.size}
+      N columns:  #{@table.columns.size}
         INSPECTED
       end
     end
@@ -468,6 +472,7 @@ Database
       Path:       <#{@table.path}>
       Disk usage: #{inspect_disk_usage(@table.disk_usage)}
       N records:  #{@table.size}
+      N columns:  #{@table.columns.size}
         INSPECTED
       end
     end
@@ -517,6 +522,7 @@ Database
       Path:       <#{@table.path}>
       Disk usage: #{inspect_disk_usage(@table.disk_usage)}
       N records:  #{@table.size}
+      N columns:  #{@table.columns.size}
         INSPECTED
       end
     end
@@ -566,6 +572,49 @@ Database
       Path:       <#{@table.path}>
       Disk usage: #{inspect_disk_usage(@table.disk_usage)}
       N records:  #{@table.size}
+      N columns:  #{@table.columns.size}
+        INSPECTED
+      end
+    end
+
+    class NColumnsTest < self
+      def test_no_columns
+        Groonga::Schema.create_table("Users")
+        @table = Groonga["Users"]
+        assert_equal(inspected(0), report)
+      end
+
+      def test_have_columns
+        Groonga::Schema.create_table("Users") do |table|
+          table.short_text("name")
+          table.int8("age")
+        end
+        @table = Groonga["Users"]
+        assert_equal(inspected(2), report)
+      end
+
+      private
+      def inspected(n_columns)
+        <<-INSPECTED
+Database
+  Path:       <#{@database_path}>
+  Disk usage: #{inspect_disk_usage(@database.disk_usage)}
+  N records:  #{@table.size}
+  N tables:   #{@database.tables.size}
+  N columns:  #{@table.columns.size}
+  Plugins:
+    None
+  Tables:
+    #{@table.name}:
+      ID:         #{@table.id}
+      Type:       #{inspect_table_type(@table)}
+      Key type:   #{inspect_key_type(@table)}
+      Tokenizer:  #{inspect_tokenizer(@table)}
+      Normalizer: #{inspect_normalizer(@table)}
+      Path:       <#{@table.path}>
+      Disk usage: #{inspect_disk_usage(@table.disk_usage)}
+      N records:  #{@table.size}
+      N columns:  #{n_columns}
         INSPECTED
       end
     end
