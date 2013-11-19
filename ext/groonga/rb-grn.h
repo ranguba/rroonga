@@ -609,6 +609,7 @@ VALUE          rb_grn_column_expression_builder_build
     (rb_grn_accessor_to_ruby_object(context, accessor, owner))
 
 #define RVAL2GRNOPERATOR(object)      (rb_grn_operator_from_ruby_object(object))
+#define RVAL2GRNSETOPERATOR(object)   (rb_grn_set_operator_from_ruby_object(object))
 
 #define RVAL2GRNLOGGER(object)        (rb_grn_logger_from_ruby_object(object))
 #define RVAL2GRNQUERYLOGGER(object)   (rb_grn_query_logger_from_ruby_object(object))
@@ -719,6 +720,7 @@ VALUE          rb_grn_index_cursor_to_ruby_object   (grn_ctx *context,
                                                      grn_bool owner);
 
 grn_operator   rb_grn_operator_from_ruby_object     (VALUE object);
+grn_operator   rb_grn_set_operator_from_ruby_object (VALUE object);
 
 grn_logger_info *
                rb_grn_logger_from_ruby_object       (VALUE object);

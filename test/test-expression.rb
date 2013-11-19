@@ -167,6 +167,10 @@ class ExpressionTest < Test::Unit::TestCase
         assert_equal("OR", parse("or"))
       end
 
+      def test_name_symbol
+        assert_equal("OR", parse(:or))
+      end
+
       def test_symbol
         assert_equal("OR", parse("||"))
       end
@@ -178,6 +182,33 @@ class ExpressionTest < Test::Unit::TestCase
       private
       def parse(default_operator)
         @expression.parse("_id:1 _id:2", :default_operator => default_operator)
+        operator = @expression.inspect[/\d([a-zA-Z_-]+)}/, 1]
+        operator
+      end
+    end
+
+    class DefaultModeTest < self
+      def test_nil
+        assert_equal("MATCH", parse(nil))
+      end
+
+      def test_name
+        assert_equal("EQUAL", parse("equal"))
+      end
+
+      def test_symbol
+        assert_equal("EQUAL", parse(:equal))
+      end
+
+      def test_integer
+        assert_equal("EQUAL", parse(Groonga::Operator::EQUAL))
+      end
+
+      private
+      def parse(default_mode)
+        @expression.parse("query",
+                          :default_column => "_id",
+                          :default_mode => default_mode)
         operator = @expression.inspect[/\d([a-zA-Z_-]+)}/, 1]
         operator
       end
