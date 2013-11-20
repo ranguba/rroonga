@@ -121,6 +121,8 @@ module Groonga
           write("ID:         #{column.id}\n")
           write("Type:       #{inspect_column_type(column)}\n")
           write("Value type: #{inspect_column_value_type(column)}\n")
+          write("Path:       #{inspect_path(column.path)}\n")
+          write("Disk usage: #{inspect_disk_usage(column.disk_usage)}\n")
         end
       end
 
