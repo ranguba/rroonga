@@ -117,6 +117,7 @@ class DatabaseInspectorTest < Test::Unit::TestCase
         #{column.local_name}:
           ID:         #{column.id}
           Type:       #{inspect_column_type(column)}
+          Value type: #{column.domain.name}
     INSPECTED
   end
 
@@ -724,6 +725,7 @@ Database
 #{@column.local_name}:
   ID:         #{@column.id}
   Type:       #{type}
+  Value type: #{@column.domain.name}
         INSPECTED
       end
     end

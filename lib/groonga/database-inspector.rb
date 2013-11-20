@@ -120,6 +120,7 @@ module Groonga
         indent do
           write("ID:         #{column.id}\n")
           write("Type:       #{inspect_column_type(column)}\n")
+          write("Value type: #{inspect_column_value_type(column)}\n")
         end
       end
 
@@ -238,6 +239,10 @@ module Groonga
         else
           "scalar"
         end
+      end
+
+      def inspect_column_value_type(column)
+        column.domain.name
       end
     end
   end
