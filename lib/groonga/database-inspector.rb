@@ -117,6 +117,9 @@ module Groonga
 
       def report_column(column)
         write("#{column.local_name}:\n")
+        indent do
+          write("ID:         #{column.id}\n")
+        end
       end
 
       def indent

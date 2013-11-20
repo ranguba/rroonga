@@ -115,6 +115,7 @@ class DatabaseInspectorTest < Test::Unit::TestCase
   def inspect_column(column)
     <<-INSPECTED
         #{column.local_name}:
+          ID:         #{column.id}
     INSPECTED
   end
 
