@@ -46,11 +46,14 @@ module Groonga
       def report
         write("Database\n")
         indent do
-          write("Path:       #{inspect_path(@database.path)}\n")
-          write("Disk usage: #{inspect_disk_usage(@database.disk_usage)}\n")
-          write("N records:  #{count_total_n_records}\n")
-          write("N tables:   #{count_n_tables}\n")
-          write("N columns:  #{count_total_n_columns}\n")
+          write("Path:             #{inspect_path(@database.path)}\n")
+          write("Total disk usage: " +
+                "#{inspect_disk_usage(total_disk_usage)}\n")
+          write("Disk usage:       " +
+                "#{inspect_sub_disk_usage(@database.disk_usage)}\n")
+          write("N records:        #{count_total_n_records}\n")
+          write("N tables:         #{count_n_tables}\n")
+          write("N columns:        #{count_total_n_columns}\n")
           report_plugins
           report_tables
         end
@@ -88,15 +91,19 @@ module Groonga
       def report_table(table)
         write("#{table.name}:\n")
         indent do
-          write("ID:         #{table.id}\n")
-          write("Type:       #{inspect_table_type(table)}\n")
-          write("Key type:   #{inspect_key_type(table)}\n")
-          write("Tokenizer:  #{inspect_tokenizer(table)}\n")
-          write("Normalizer: #{inspect_normalizer(table)}\n")
-          write("Path:       #{inspect_path(table.path)}\n")
-          write("Disk usage: #{inspect_disk_usage(table.disk_usage)}\n")
-          write("N records:  #{table.size}\n")
-          write("N columns:  #{table.columns.size}\n")
+          write("ID:               #{table.id}\n")
+          write("Type:             #{inspect_table_type(table)}\n")
+          write("Key type:         #{inspect_key_type(table)}\n")
+          write("Tokenizer:        #{inspect_tokenizer(table)}\n")
+          write("Normalizer:       #{inspect_normalizer(table)}\n")
+          write("Path:             #{inspect_path(table.path)}\n")
+          total_table_disk_usage = count_total_table_disk_usage(table)
+          write("Total disk usage: " +
+                "#{inspect_sub_disk_usage(total_table_disk_usage)}\n")
+          write("Disk usage:       " +
+                "#{inspect_sub_disk_usage(table.disk_usage)}\n")
+          write("N records:        #{table.size}\n")
+          write("N columns:        #{table.columns.size}\n")
           report_columns(table)
         end
       end
@@ -122,7 +129,7 @@ module Groonga
           write("Type:       #{inspect_column_type(column)}\n")
           write("Value type: #{inspect_column_value_type(column)}\n")
           write("Path:       #{inspect_path(column.path)}\n")
-          write("Disk usage: #{inspect_disk_usage(column.disk_usage)}\n")
+          write("Disk usage: #{inspect_sub_disk_usage(column.disk_usage)}\n")
         end
       end
 
@@ -168,6 +175,11 @@ module Groonga
         end
       end
 
+      def inspect_sub_disk_usage(disk_usage)
+        percent = disk_usage / total_disk_usage.to_f * 100
+        "%s (%.3f%%)" % [inspect_disk_usage(disk_usage), percent]
+      end
+
       def count_total_n_records
         @database.tables.inject(0) do |previous, table|
           previous + table.size
@@ -181,6 +193,22 @@ module Groonga
       def count_total_n_columns
         @database.tables.inject(0) do |previous, table|
           previous + table.columns.size
+        end
+      end
+
+      def total_disk_usage
+        @total_disk_usage ||= count_total_disk_usage
+      end
+
+      def count_total_disk_usage
+        @database.tables.inject(@database.disk_usage) do |previous, table|
+          previous + count_total_table_disk_usage(table)
+        end
+      end
+
+      def count_total_table_disk_usage(table)
+        table.columns.inject(table.disk_usage) do |previous, column|
+          previous + column.disk_usage
         end
       end
 

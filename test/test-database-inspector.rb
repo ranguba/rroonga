@@ -26,6 +26,18 @@ class DatabaseInspectorTest < Test::Unit::TestCase
     output.string
   end
 
+  def total_disk_usage
+    @database.tables.inject(@database.disk_usage) do |previous, table|
+      previous + total_table_disk_usage(table)
+    end
+  end
+
+  def total_table_disk_usage(table)
+    table.columns.inject(table.disk_usage) do |previous, column|
+      previous + column.disk_usage
+    end
+  end
+
   def inspect_disk_usage(disk_usage)
     if disk_usage < (2 ** 20)
       "%.3fKiB" % (disk_usage / (2 ** 10).to_f)
@@ -34,18 +46,24 @@ class DatabaseInspectorTest < Test::Unit::TestCase
     end
   end
 
+  def inspect_sub_disk_usage(disk_usage)
+    percent = disk_usage / total_disk_usage.to_f * 100
+    "%s (%.3f%%)" % [inspect_disk_usage(disk_usage), percent]
+  end
+
   def inspect_table(table)
     <<-INSPECTED
     #{table.name}:
-      ID:         #{table.id}
-      Type:       #{inspect_table_type(table)}
-      Key type:   #{inspect_key_type(table)}
-      Tokenizer:  #{inspect_tokenizer(table)}
-      Normalizer: #{inspect_normalizer(table)}
-      Path:       <#{table.path}>
-      Disk usage: #{inspect_disk_usage(table.disk_usage)}
-      N records:  #{table.size}
-      N columns:  #{table.columns.size}
+      ID:               #{table.id}
+      Type:             #{inspect_table_type(table)}
+      Key type:         #{inspect_key_type(table)}
+      Tokenizer:        #{inspect_tokenizer(table)}
+      Normalizer:       #{inspect_normalizer(table)}
+      Path:             <#{table.path}>
+      Total disk usage: #{inspect_sub_disk_usage(total_table_disk_usage(table))}
+      Disk usage:       #{inspect_sub_disk_usage(table.disk_usage)}
+      N records:        #{table.size}
+      N columns:        #{table.columns.size}
 #{inspect_columns(table.columns).chomp}
     INSPECTED
   end
@@ -119,7 +137,7 @@ class DatabaseInspectorTest < Test::Unit::TestCase
           Type:       #{inspect_column_type(column)}
           Value type: #{column.domain.name}
           Path:       <#{column.path}>
-          Disk usage: #{inspect_disk_usage(column.disk_usage)}
+          Disk usage: #{inspect_sub_disk_usage(column.disk_usage)}
     INSPECTED
   end
 
@@ -142,11 +160,12 @@ class DatabaseInspectorTest < Test::Unit::TestCase
     def test_empty
       assert_equal(<<-INSPECTED, report)
 Database
-  Path:       <#{@database_path}>
-  Disk usage: #{inspect_disk_usage(@database.disk_usage)}
-  N records:  0
-  N tables:   0
-  N columns:  0
+  Path:             <#{@database_path}>
+  Total disk usage: #{inspect_disk_usage(total_disk_usage)}
+  Disk usage:       #{inspect_sub_disk_usage(@database.disk_usage)}
+  N records:        0
+  N tables:         0
+  N columns:        0
   Plugins:
     None
   Tables:
@@ -185,11 +204,12 @@ Database
       def inspected(n_records)
         <<-INSPECTED
 Database
-  Path:       <#{@database_path}>
-  Disk usage: #{inspect_disk_usage(@database.disk_usage)}
-  N records:  #{n_records}
-  N tables:   2
-  N columns:  0
+  Path:             <#{@database_path}>
+  Total disk usage: #{inspect_disk_usage(total_disk_usage)}
+  Disk usage:       #{inspect_sub_disk_usage(@database.disk_usage)}
+  N records:        #{n_records}
+  N tables:         2
+  N columns:        0
   Plugins:
     None
   Tables:
@@ -229,11 +249,12 @@ Database
 
         <<-INSPECTED
 Database
-  Path:       <#{@database_path}>
-  Disk usage: #{inspect_disk_usage(@database.disk_usage)}
-  N records:  0
-  N tables:   #{n_tables}
-  N columns:  0
+  Path:             <#{@database_path}>
+  Total disk usage: #{inspect_disk_usage(total_disk_usage)}
+  Disk usage:       #{inspect_sub_disk_usage(@database.disk_usage)}
+  N records:        0
+  N tables:         #{n_tables}
+  N columns:        0
   Plugins:
     None
 #{inspected_tables.chomp}
@@ -279,11 +300,12 @@ Database
       def inspected(n_columns)
         <<-INSPECTED
 Database
-  Path:       <#{@database_path}>
-  Disk usage: #{inspect_disk_usage(@database.disk_usage)}
-  N records:  0
-  N tables:   2
-  N columns:  #{n_columns}
+  Path:             <#{@database_path}>
+  Total disk usage: #{inspect_disk_usage(total_disk_usage)}
+  Disk usage:       #{inspect_sub_disk_usage(@database.disk_usage)}
+  N records:        0
+  N tables:         2
+  N columns:        #{n_columns}
   Plugins:
     None
   Tables:
@@ -313,11 +335,12 @@ Database
       def inspected(inspected_plugins)
         <<-INSPECTED
 Database
-  Path:       <#{@database_path}>
-  Disk usage: #{inspect_disk_usage(@database.disk_usage)}
-  N records:  0
-  N tables:   0
-  N columns:  0
+  Path:             <#{@database_path}>
+  Total disk usage: #{inspect_disk_usage(total_disk_usage)}
+  Disk usage:       #{inspect_sub_disk_usage(@database.disk_usage)}
+  N records:        0
+  N tables:         0
+  N columns:        0
 #{inspected_plugins.chomp}
   Tables:
     None
@@ -327,52 +350,16 @@ Database
   end
 
   class TableTest < self
-    class NoColumnTest < self
-      def test_nothing
-        assert_equal(inspected(<<-INSPECTED), report)
-  Tables:
-    None
-        INSPECTED
-      end
+    private
+    def report
+      output = StringIO.new
+      reporter = Groonga::DatabaseInspector::Reporter.new(@database, output)
+      reporter.send(:report_table, @table)
+      output.string
+    end
 
-      def test_empty
-        Groonga::Schema.define do |schema|
-          schema.create_table("Users") do |table|
-          end
-        end
-        users = context["Users"]
-
-        assert_equal(inspected(<<-INSPECTED), report)
-  Tables:
-    Users:
-      ID:         #{users.id}
-      Type:       #{inspect_table_type(users)}
-      Key type:   #{inspect_key_type(users)}
-      Tokenizer:  #{inspect_tokenizer(users)}
-      Normalizer: #{inspect_normalizer(users)}
-      Path:       <#{users.path}>
-      Disk usage: #{inspect_disk_usage(users.disk_usage)}
-      N records:  #{users.size}
-      N columns:  #{users.columns.size}
-      Columns:
-        None
-        INSPECTED
-      end
-
-      private
-      def inspected(inspected_tables)
-        <<-INSPECTED
-Database
-  Path:       <#{@database_path}>
-  Disk usage: #{inspect_disk_usage(@database.disk_usage)}
-  N records:  0
-  N tables:   #{@database.tables.size}
-  N columns:  0
-  Plugins:
-    None
-#{inspected_tables.chomp}
-        INSPECTED
-      end
+    def inspect_columns(table)
+      super.gsub(/^    /, "")
     end
 
     class NRecordsTest < self
@@ -382,7 +369,7 @@ Database
           schema.create_table("Users") do |table|
           end
         end
-        @users = context["Users"]
+        @table = context["Users"]
       end
 
       def test_no_record
@@ -390,9 +377,9 @@ Database
       end
 
       def test_empty
-        @users.add
-        @users.add
-        @users.add
+        @table.add
+        @table.add
+        @table.add
 
         assert_equal(inspected(3), report)
       end
@@ -400,26 +387,18 @@ Database
       private
       def inspected(n_records)
         <<-INSPECTED
-Database
-  Path:       <#{@database_path}>
-  Disk usage: #{inspect_disk_usage(@database.disk_usage)}
-  N records:  #{@users.size}
-  N tables:   #{@database.tables.size}
-  N columns:  0
-  Plugins:
-    None
-  Tables:
-    #{@users.name}:
-      ID:         #{@users.id}
-      Type:       #{inspect_table_type(@users)}
-      Key type:   #{inspect_key_type(@users)}
-      Tokenizer:  #{inspect_tokenizer(@users)}
-      Normalizer: #{inspect_normalizer(@users)}
-      Path:       <#{@users.path}>
-      Disk usage: #{inspect_disk_usage(@users.disk_usage)}
-      N records:  #{n_records}
-      N columns:  #{@users.columns.size}
-#{inspect_columns(@users.columns).chomp}
+#{@table.name}:
+  ID:               #{@table.id}
+  Type:             #{inspect_table_type(@table)}
+  Key type:         #{inspect_key_type(@table)}
+  Tokenizer:        #{inspect_tokenizer(@table)}
+  Normalizer:       #{inspect_normalizer(@table)}
+  Path:             <#{@table.path}>
+  Total disk usage: #{inspect_sub_disk_usage(total_table_disk_usage(@table))}
+  Disk usage:       #{inspect_sub_disk_usage(@table.disk_usage)}
+  N records:        #{n_records}
+  N columns:        #{@table.columns.size}
+#{inspect_columns(@table.columns).chomp}
         INSPECTED
       end
     end
@@ -458,25 +437,17 @@ Database
       private
       def inspected(type)
         <<-INSPECTED
-Database
-  Path:       <#{@database_path}>
-  Disk usage: #{inspect_disk_usage(@database.disk_usage)}
-  N records:  #{@table.size}
-  N tables:   #{@database.tables.size}
-  N columns:  0
-  Plugins:
-    None
-  Tables:
-    #{@table.name}:
-      ID:         #{@table.id}
-      Type:       #{type}
-      Key type:   #{inspect_key_type(@table)}
-      Tokenizer:  #{inspect_tokenizer(@table)}
-      Normalizer: #{inspect_normalizer(@table)}
-      Path:       <#{@table.path}>
-      Disk usage: #{inspect_disk_usage(@table.disk_usage)}
-      N records:  #{@table.size}
-      N columns:  #{@table.columns.size}
+#{@table.name}:
+  ID:               #{@table.id}
+  Type:             #{type}
+  Key type:         #{inspect_key_type(@table)}
+  Tokenizer:        #{inspect_tokenizer(@table)}
+  Normalizer:       #{inspect_normalizer(@table)}
+  Path:             <#{@table.path}>
+  Total disk usage: #{inspect_sub_disk_usage(total_table_disk_usage(@table))}
+  Disk usage:       #{inspect_sub_disk_usage(@table.disk_usage)}
+  N records:        #{@table.size}
+  N columns:        #{@table.columns.size}
 #{inspect_columns(@table.columns).chomp}
         INSPECTED
       end
@@ -500,25 +471,17 @@ Database
       private
       def inspected(key_type)
         <<-INSPECTED
-Database
-  Path:       <#{@database_path}>
-  Disk usage: #{inspect_disk_usage(@database.disk_usage)}
-  N records:  #{@table.size}
-  N tables:   #{@database.tables.size}
-  N columns:  0
-  Plugins:
-    None
-  Tables:
-    #{@table.name}:
-      ID:         #{@table.id}
-      Type:       #{inspect_table_type(@table)}
-      Key type:   #{key_type}
-      Tokenizer:  #{inspect_tokenizer(@table)}
-      Normalizer: #{inspect_normalizer(@table)}
-      Path:       <#{@table.path}>
-      Disk usage: #{inspect_disk_usage(@table.disk_usage)}
-      N records:  #{@table.size}
-      N columns:  #{@table.columns.size}
+#{@table.name}:
+  ID:               #{@table.id}
+  Type:             #{inspect_table_type(@table)}
+  Key type:         #{key_type}
+  Tokenizer:        #{inspect_tokenizer(@table)}
+  Normalizer:       #{inspect_normalizer(@table)}
+  Path:             <#{@table.path}>
+  Total disk usage: #{inspect_sub_disk_usage(total_table_disk_usage(@table))}
+  Disk usage:       #{inspect_sub_disk_usage(@table.disk_usage)}
+  N records:        #{@table.size}
+  N columns:        #{@table.columns.size}
 #{inspect_columns(@table.columns).chomp}
         INSPECTED
       end
@@ -551,25 +514,17 @@ Database
       private
       def inspected(inspected_tokenizer)
         <<-INSPECTED
-Database
-  Path:       <#{@database_path}>
-  Disk usage: #{inspect_disk_usage(@database.disk_usage)}
-  N records:  #{@table.size}
-  N tables:   #{@database.tables.size}
-  N columns:  0
-  Plugins:
-    None
-  Tables:
-    #{@table.name}:
-      ID:         #{@table.id}
-      Type:       #{inspect_table_type(@table)}
-      Key type:   #{inspect_key_type(@table)}
-      Tokenizer:  #{inspected_tokenizer}
-      Normalizer: #{inspect_normalizer(@table)}
-      Path:       <#{@table.path}>
-      Disk usage: #{inspect_disk_usage(@table.disk_usage)}
-      N records:  #{@table.size}
-      N columns:  #{@table.columns.size}
+#{@table.name}:
+  ID:               #{@table.id}
+  Type:             #{inspect_table_type(@table)}
+  Key type:         #{inspect_key_type(@table)}
+  Tokenizer:        #{inspected_tokenizer}
+  Normalizer:       #{inspect_normalizer(@table)}
+  Path:             <#{@table.path}>
+  Total disk usage: #{inspect_sub_disk_usage(total_table_disk_usage(@table))}
+  Disk usage:       #{inspect_sub_disk_usage(@table.disk_usage)}
+  N records:        #{@table.size}
+  N columns:        #{@table.columns.size}
 #{inspect_columns(@table.columns).chomp}
         INSPECTED
       end
@@ -602,25 +557,17 @@ Database
       private
       def inspected(inspected_normalizer)
         <<-INSPECTED
-Database
-  Path:       <#{@database_path}>
-  Disk usage: #{inspect_disk_usage(@database.disk_usage)}
-  N records:  #{@table.size}
-  N tables:   #{@database.tables.size}
-  N columns:  0
-  Plugins:
-    None
-  Tables:
-    #{@table.name}:
-      ID:         #{@table.id}
-      Type:       #{inspect_table_type(@table)}
-      Key type:   #{inspect_key_type(@table)}
-      Tokenizer:  #{inspect_tokenizer(@table)}
-      Normalizer: #{inspected_normalizer}
-      Path:       <#{@table.path}>
-      Disk usage: #{inspect_disk_usage(@table.disk_usage)}
-      N records:  #{@table.size}
-      N columns:  #{@table.columns.size}
+#{@table.name}:
+  ID:               #{@table.id}
+  Type:             #{inspect_table_type(@table)}
+  Key type:         #{inspect_key_type(@table)}
+  Tokenizer:        #{inspect_tokenizer(@table)}
+  Normalizer:       #{inspected_normalizer}
+  Path:             <#{@table.path}>
+  Total disk usage: #{inspect_sub_disk_usage(total_table_disk_usage(@table))}
+  Disk usage:       #{inspect_sub_disk_usage(@table.disk_usage)}
+  N records:        #{@table.size}
+  N columns:        #{@table.columns.size}
 #{inspect_columns(@table.columns).chomp}
         INSPECTED
       end
@@ -645,25 +592,17 @@ Database
       private
       def inspected(n_columns)
         <<-INSPECTED
-Database
-  Path:       <#{@database_path}>
-  Disk usage: #{inspect_disk_usage(@database.disk_usage)}
-  N records:  #{@table.size}
-  N tables:   #{@database.tables.size}
-  N columns:  #{@table.columns.size}
-  Plugins:
-    None
-  Tables:
-    #{@table.name}:
-      ID:         #{@table.id}
-      Type:       #{inspect_table_type(@table)}
-      Key type:   #{inspect_key_type(@table)}
-      Tokenizer:  #{inspect_tokenizer(@table)}
-      Normalizer: #{inspect_normalizer(@table)}
-      Path:       <#{@table.path}>
-      Disk usage: #{inspect_disk_usage(@table.disk_usage)}
-      N records:  #{@table.size}
-      N columns:  #{n_columns}
+#{@table.name}:
+  ID:               #{@table.id}
+  Type:             #{inspect_table_type(@table)}
+  Key type:         #{inspect_key_type(@table)}
+  Tokenizer:        #{inspect_tokenizer(@table)}
+  Normalizer:       #{inspect_normalizer(@table)}
+  Path:             <#{@table.path}>
+  Total disk usage: #{inspect_sub_disk_usage(total_table_disk_usage(@table))}
+  Disk usage:       #{inspect_sub_disk_usage(@table.disk_usage)}
+  N records:        #{@table.size}
+  N columns:        #{n_columns}
 #{inspect_columns(@table.columns).chomp}
         INSPECTED
       end
@@ -729,7 +668,7 @@ Database
   Type:       #{type}
   Value type: #{@column.domain.name}
   Path:       <#{@column.path}>
-  Disk usage: #{inspect_disk_usage(@column.disk_usage)}
+  Disk usage: #{inspect_sub_disk_usage(@column.disk_usage)}
         INSPECTED
       end
     end
