@@ -116,7 +116,23 @@ class DatabaseInspectorTest < Test::Unit::TestCase
     <<-INSPECTED
         #{column.local_name}:
           ID:         #{column.id}
+          Type:       #{inspect_column_type(column)}
     INSPECTED
+  end
+
+  def inspect_column_type(column)
+    case column
+    when Groonga::FixSizeColumn
+      "scalar"
+    when Groonga::VariableSizeColumn
+      if column.vector?
+        "vector"
+      else
+        "scalar"
+      end
+    else
+      "index"
+    end
   end
 
   class DatabaseTest < self
@@ -646,6 +662,68 @@ Database
       N records:  #{@table.size}
       N columns:  #{n_columns}
 #{inspect_columns(@table.columns).chomp}
+        INSPECTED
+      end
+    end
+  end
+
+  class ColumnTest < self
+    private
+    def report
+      output = StringIO.new
+      reporter = Groonga::DatabaseInspector::Reporter.new(@database, output)
+      reporter.send(:report_column, @column)
+      output.string
+    end
+
+    class TypeTest < self
+      def test_scalar_fix_size
+        create_table do |table|
+          table.int32("age")
+        end
+        assert_equal(inspected("scalar"), report)
+      end
+
+      def test_scalar_variable_size
+        create_table do |table|
+          table.short_text("name")
+        end
+        assert_equal(inspected("scalar"), report)
+      end
+
+      def test_vector
+        create_table do |table|
+          table.short_text("tags", :type => :vector)
+        end
+        assert_equal(inspected("vector"), report)
+      end
+
+      def test_index
+        create_table do |table|
+        end
+        Groonga::Schema.create_table("Bookmarks") do |table|
+          table.reference("user", "Users")
+        end
+        create_table do |table|
+          table.index("Bookmarks.user")
+        end
+        assert_equal(inspected("index"), report)
+      end
+
+      private
+      def create_table
+        Groonga::Schema.create_table("Users") do |table|
+          yield(table)
+        end
+        @table = Groonga["Users"]
+        @column = @table.columns.first
+      end
+
+      def inspected(type)
+        <<-INSPECTED
+#{@column.local_name}:
+  ID:         #{@column.id}
+  Type:       #{type}
         INSPECTED
       end
     end

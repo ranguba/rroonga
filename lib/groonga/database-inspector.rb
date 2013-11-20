@@ -119,6 +119,7 @@ module Groonga
         write("#{column.local_name}:\n")
         indent do
           write("ID:         #{column.id}\n")
+          write("Type:       #{inspect_column_type(column)}\n")
         end
       end
 
@@ -226,6 +227,16 @@ module Groonga
           end
         else
           "(no key)"
+        end
+      end
+
+      def inspect_column_type(column)
+        if column.index?
+          "index"
+        elsif column.vector?
+          "vector"
+        else
+          "scalar"
         end
       end
     end
