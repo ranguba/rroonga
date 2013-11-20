@@ -97,7 +97,26 @@ module Groonga
           write("Disk usage: #{inspect_disk_usage(table.disk_usage)}\n")
           write("N records:  #{table.size}\n")
           write("N columns:  #{table.columns.size}\n")
+          report_columns(table)
         end
+      end
+
+      def report_columns(table)
+        write("Columns:\n")
+        indent do
+          columns = table.columns
+          if columns.empty?
+            write("None\n")
+            return
+          end
+          columns.each do |column|
+            report_column(column)
+          end
+        end
+      end
+
+      def report_column(column)
+        write("#{column.local_name}:\n")
       end
 
       def indent

@@ -46,6 +46,7 @@ class DatabaseInspectorTest < Test::Unit::TestCase
       Disk usage: #{inspect_disk_usage(table.disk_usage)}
       N records:  #{table.size}
       N columns:  #{table.columns.size}
+#{inspect_columns(table.columns).chomp}
     INSPECTED
   end
 
@@ -94,6 +95,27 @@ class DatabaseInspectorTest < Test::Unit::TestCase
     else
       "(no key)"
     end
+  end
+
+  def inspect_columns(columns)
+    if columns.empty?
+      <<-INSPECTED
+      Columns:
+        None
+      INSPECTED
+    else
+      inspected = "      Columns:\n"
+      columns.each do |column|
+        inspected << inspect_column(column)
+      end
+      inspected
+    end
+  end
+
+  def inspect_column(column)
+    <<-INSPECTED
+        #{column.local_name}:
+    INSPECTED
   end
 
   class DatabaseTest < self
@@ -312,6 +334,8 @@ Database
       Disk usage: #{inspect_disk_usage(users.disk_usage)}
       N records:  #{users.size}
       N columns:  #{users.columns.size}
+      Columns:
+        None
         INSPECTED
       end
 
@@ -375,6 +399,7 @@ Database
       Disk usage: #{inspect_disk_usage(@users.disk_usage)}
       N records:  #{n_records}
       N columns:  #{@users.columns.size}
+#{inspect_columns(@users.columns).chomp}
         INSPECTED
       end
     end
@@ -432,6 +457,7 @@ Database
       Disk usage: #{inspect_disk_usage(@table.disk_usage)}
       N records:  #{@table.size}
       N columns:  #{@table.columns.size}
+#{inspect_columns(@table.columns).chomp}
         INSPECTED
       end
     end
@@ -473,6 +499,7 @@ Database
       Disk usage: #{inspect_disk_usage(@table.disk_usage)}
       N records:  #{@table.size}
       N columns:  #{@table.columns.size}
+#{inspect_columns(@table.columns).chomp}
         INSPECTED
       end
     end
@@ -523,6 +550,7 @@ Database
       Disk usage: #{inspect_disk_usage(@table.disk_usage)}
       N records:  #{@table.size}
       N columns:  #{@table.columns.size}
+#{inspect_columns(@table.columns).chomp}
         INSPECTED
       end
     end
@@ -573,6 +601,7 @@ Database
       Disk usage: #{inspect_disk_usage(@table.disk_usage)}
       N records:  #{@table.size}
       N columns:  #{@table.columns.size}
+#{inspect_columns(@table.columns).chomp}
         INSPECTED
       end
     end
@@ -615,6 +644,7 @@ Database
       Disk usage: #{inspect_disk_usage(@table.disk_usage)}
       N records:  #{@table.size}
       N columns:  #{n_columns}
+#{inspect_columns(@table.columns).chomp}
         INSPECTED
       end
     end
