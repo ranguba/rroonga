@@ -159,6 +159,7 @@ def configure_command_line(prefix)
   command_line << "--prefix=#{prefix}"
   command_line << "--disable-static"
   command_line << "--disable-document"
+  command_line << "--disable-benchmark"
   command_line << "--without-cutter"
   escaped_command_line = command_line.collect do |command|
     Shellwords.escape(command)
