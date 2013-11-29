@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: rroonga 2.1.0\n"
 "POT-Creation-Date: 2011-11-20 22:17+0900\n"
-"PO-Revision-Date: 2013-10-29 18:30+0900\n"
+"PO-Revision-Date: 2013-11-29 10:46+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: \n"
@@ -32,32 +32,26 @@ msgid "h2. Description"
 msgstr "h2. 説明"
 
 #: ../../README.textile:9
-#, fuzzy
 msgid ""
 "Ruby bindings for Groonga that provide full text search and\n"
 "column store features."
-msgstr "全文検索機能とカラムストア機能を提供するgroongaのRubyバインディングです。"
+msgstr "全文検索機能とカラムストア機能を提供するGroongaのRubyバインディングです。"
 
 #: ../../README.textile:12
-#, fuzzy
 msgid ""
 "Rroonga is an extension library to use Groonga's DB-API\n"
 "layer. Rroonga provides Rubyish readable and writable API\n"
 "not C like API. You can use Groonga's fast and highly\n"
 "functional features from Ruby with Rubyish form."
-msgstr ""
-"groongaのいわゆるDB-API層をRubyから使うための拡張ライブラリです。groongaのAPIをそのままRubyレベルに提供するのではなく、Rub"
-"yらしく読み書きしやすいAPIとして提供します。高速・高機能なgroongaをRubyらしい書き方で利用できます。"
+msgstr "GroongaのいわゆるDB-API層をRubyから使うための拡張ライブラリです。GroongaのAPIをそのままRubyレベルに提供するのではなく、Rubyらしく読み書きしやすいAPIとして提供します。高速・高機能なGroongaをRubyらしい書き方で利用できます。"
 
 #: ../../README.textile:17
-#, fuzzy
 msgid "See the following URL about Groonga."
-msgstr "groongaに関する情報は以下のURLを参照して下さい。"
+msgstr "Groongaに関する情報は以下のURLを参照して下さい。"
 
 #: ../../README.textile:19
-#, fuzzy
 msgid "* \"The Groonga official site\":http://groonga.org/"
-msgstr "* \"groonga公式サイト\":http://groonga.org/"
+msgstr "* \"Groonga公式サイト\":http://groonga.org/ja/"
 
 #: ../../README.textile:21
 msgid "h2. Authors"
@@ -98,13 +92,10 @@ msgid "h2. Dependencies"
 msgstr "h2. 依存ソフトウェア"
 
 #: ../../README.textile:39
-#, fuzzy
 msgid ""
 "* Ruby >= 1.9.3\n"
 "* Groonga >= 3.0.8"
 msgstr ""
-"* Ruby >= 1.8 （1.9.2対応）\n"
-"* groonga >= 1.2.0"
 
 #: ../../README.textile:42 ../../doc/text/tutorial.textile:5
 msgid "h2. Install"
@@ -150,7 +141,6 @@ msgid "h2. Thanks"
 msgstr "h2. 感謝"
 
 #: ../../README.textile:61
-#, fuzzy
 msgid ""
 "* Daijiro MORI: sent patches to support the latest Groonga.\n"
 "* Tasuku SUENAGA: sent bug reports.\n"
@@ -166,7 +156,7 @@ msgid ""
 "* ongaeshi: sent a patch to build gem on Windows.\n"
 "* mallowlabs: send a patch."
 msgstr ""
-"* 森さん: 最新groonga対応パッチをくれました。\n"
+"* 森さん: 最新Groonga対応パッチをくれました。\n"
 "* グニャラくん: バグレポートをしてくれました。\n"
 "* にくさん: バグレポートをしてくれました。\n"
 "* daraさん:\n"
@@ -185,9 +175,8 @@ msgid "h1. NEWS"
 msgstr "h1. お知らせ"
 
 #: ../../doc/text/news.textile:3
-#, fuzzy
 msgid "h2(#3-1-0). 3.1.0: 2013-11-29"
-msgstr "* @kamipoさん"
+msgstr ""
 
 #: ../../doc/text/news.textile:5 ../../doc/text/news.textile:24
 #: ../../doc/text/news.textile:36 ../../doc/text/news.textile:44
@@ -218,6 +207,10 @@ msgid ""
 "* {Groonga::Database#tables} ignores missing objects rather than raising\n"
 "  an exception. Because the method is interested in only existing tables."
 msgstr ""
+"* 自動でGroongaをビルドする時にエラーになりにくくした。\n"
+"  [しまだこうじさんが報告]\n"
+"* 指定したデータベースの詳細を表示する @groonga-database-inspect@ を追加。\n"
+"* {Groonga::Database#tables} が未知のオブジェクトがあっても例外をあげずに無視するようになった。このように変更した理由は、このメッソッドは存在しているテーブルが欲しい、という要求に応えるためのメソッドであるため、存在しないオブジェクトがあるかどうかはこのメソッドにとって重要なことではないから。"
 
 #: ../../doc/text/news.textile:13 ../../doc/text/news.textile:29
 #: ../../doc/text/news.textile:55 ../../doc/text/news.textile:91
@@ -241,7 +234,7 @@ msgstr "h3. 修正"
 msgid ""
 "* Fixed a bug that {Groonga::Expression#parse} doesn't accept all\n"
 "  mode and operators."
-msgstr ""
+msgstr "* {Groonga::Expression#parse} がすべての種類のモード・オペレーターを受け取れない問題を修正。"
 
 #: ../../doc/text/news.textile:18 ../../doc/text/news.textile:60
 #: ../../doc/text/news.textile:95 ../../doc/text/news.textile:167
@@ -256,7 +249,7 @@ msgstr "h3. 感謝"
 
 #: ../../doc/text/news.textile:20
 msgid "* SHIMADA Koji"
-msgstr ""
+msgstr "* しまだこうじさん"
 
 #: ../../doc/text/news.textile:22
 msgid "h2(#3-0-9). 3.0.9: 2013-10-29"
@@ -9168,65 +9161,3 @@ msgstr ""
 #: ../../lib/groonga/sub-records.rb:57
 msgid "A 0-origin index."
 msgstr ""
-
-#: ../../README.textile:9
-#~ msgid ""
-#~ "Ruby bindings for groonga that provide full text search and\n"
-#~ "column store features."
-#~ msgstr "全文検索機能とカラムストア機能を提供するgroongaのRubyバインディングです。"
-
-#: ../../README.textile:12
-#~ msgid ""
-#~ "rroonga is an extension library to use groonga's DB-API\n"
-#~ "layer. rroonga provides Rubyish readable and writable API\n"
-#~ "not C like API. You can use groonga's fast and highly\n"
-#~ "functional features from Ruby with Rubyish form."
-#~ msgstr ""
-#~ "groongaのいわゆるDB-API層をRubyから使うための拡張ライブラリです。groongaのAPIをそのままRubyレベルに提供するのではなく、Rub"
-#~ "yらしく読み書きしやすいAPIとして提供します。高速・高機能なgroongaをRubyらしい書き方で利用できます。"
-
-#: ../../README.textile:17
-#~ msgid "See the following URL about groonga."
-#~ msgstr "groongaに関する情報は以下のURLを参照して下さい。"
-
-#: ../../README.textile:19
-#~ msgid "* \"The groonga official site\":http://groonga.org/"
-#~ msgstr "* \"groonga公式サイト\":http://groonga.org/"
-
-#: ../../README.textile:39
-#~ msgid ""
-#~ "* Ruby >= 1.8 (including 1.9.2)\n"
-#~ "* groonga >= 1.2.0"
-#~ msgstr ""
-#~ "* Ruby >= 1.8 （1.9.2対応）\n"
-#~ "* groonga >= 1.2.0"
-
-#: ../../README.textile:61
-#~ msgid ""
-#~ "* Daijiro MORI: sent patches to support the latest groonga.\n"
-#~ "* Tasuku SUENAGA: sent bug reports.\n"
-#~ "* niku: sent bug reports.\n"
-#~ "* dara:\n"
-#~ "** wrote tests.\n"
-#~ "** fixed bugs.\n"
-#~ "* id:mat_aki: sent bug reports.\n"
-#~ "* @yune_kotomi: sent a bug report.\n"
-#~ "* m_seki: sent bug reports.\n"
-#~ "* ono matope: sent bug reports.\n"
-#~ "* @kamipo: send a bug report.\n"
-#~ "* ongaeshi: sent a patch to build gem on Windows.\n"
-#~ "* mallowlabs: send a patch."
-#~ msgstr ""
-#~ "* 森さん: 最新groonga対応パッチをくれました。\n"
-#~ "* グニャラくん: バグレポートをしてくれました。\n"
-#~ "* にくさん: バグレポートをしてくれました。\n"
-#~ "* daraさん:\n"
-#~ "** テストを書いてくれました。\n"
-#~ "** バグを直してくれました。\n"
-#~ "* id:mat_akiさん: バグレポートをしてくれました。\n"
-#~ "* @yune_kotomiさん: バグレポートをしてくれました。\n"
-#~ "* 咳さん: バグレポートをしてくれました。\n"
-#~ "* 小野マトペさん: バグレポートをしてくれました。\n"
-#~ "* @kamipoさん: バグレポートをしてくれました。\n"
-#~ "* ongaeshiさん: Windows上でgemをビルドするためのパッチをくれました。\n"
-#~ "* mallowlabsさん: パッチを送ってくれました。"
