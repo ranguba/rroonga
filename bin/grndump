@@ -29,6 +29,7 @@ options.dump_schema = true
 options.dump_tables = true
 options.order_by = "id"
 option_parser = OptionParser.new do |parser|
+  parser.version = Groonga::BINDINGS_VERSION
   parser.banner += " DB_PATH"
 
   parser.on("--no-dump-schema",

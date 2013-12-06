@@ -25,6 +25,7 @@ require "groonga"
 options = OpenStruct.new
 
 parser = OptionParser.new
+parser.version = Groonga::BINDINGS_VERSION
 parser.banner += " DB_PATH"
 args = parser.parse!(ARGV)
 

@@ -26,6 +26,7 @@ options = OpenStruct.new
 options.output_directory = "index-dump"
 
 option_parser = OptionParser.new do |parser|
+  parser.version = Groonga::BINDINGS_VERSION
   parser.banner += " DB_PATH"
 
   parser.on("--output-directory=DIRECTORY",

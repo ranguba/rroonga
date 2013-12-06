@@ -28,6 +28,7 @@ options.resolution = 1
 options.output_items = ["qps"]
 options.output_path = nil
 option_parser = OptionParser.new do |parser|
+  parser.version = Groonga::BINDINGS_VERSION
   parser.banner += " LOG1 ..."
 
   available_formats = ["tsv", "csv"]
