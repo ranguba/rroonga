@@ -18,12 +18,21 @@ class DatabaseInspectorTest < Test::Unit::TestCase
 
   setup :setup_database, :before => :append
 
+  setup
+  def setup_options
+    @options = Groonga::DatabaseInspector::Options.new
+  end
+
   private
   def report
     output = StringIO.new
-    inspector = Groonga::DatabaseInspector.new(@database)
+    inspector = Groonga::DatabaseInspector.new(@database, @options)
     inspector.report(output)
     output.string
+  end
+
+  def create_reporter(output)
+    Groonga::DatabaseInspector::Reporter.new(@database, @options, output)
   end
 
   def total_disk_usage
@@ -169,6 +178,21 @@ Database
   Plugins:
     None
   Tables:
+    None
+      INSPECTED
+    end
+
+    def test_no_show_tables
+      @options.show_tables = false
+      assert_equal(<<-INSPECTED, report)
+Database
+  Path:             <#{@database_path}>
+  Total disk usage: #{inspect_disk_usage(total_disk_usage)}
+  Disk usage:       #{inspect_sub_disk_usage(@database.disk_usage)}
+  N records:        0
+  N tables:         0
+  N columns:        0
+  Plugins:
     None
       INSPECTED
     end
@@ -353,7 +377,7 @@ Database
     private
     def report
       output = StringIO.new
-      reporter = Groonga::DatabaseInspector::Reporter.new(@database, output)
+      reporter = create_reporter(output)
       reporter.send(:report_table, @table)
       output.string
     end
@@ -607,13 +631,41 @@ Database
         INSPECTED
       end
     end
+
+    class ColumnsTest < self
+      setup
+      def setup_tables
+        Groonga::Schema.create_table("Users") do |table|
+          table.short_text("name")
+          table.int8("age")
+        end
+        @table = Groonga["Users"]
+      end
+
+      def test_no_show_columns
+        @options.show_columns = false
+        assert_equal(<<-INSPECTED, report)
+#{@table.name}:
+  ID:               #{@table.id}
+  Type:             #{inspect_table_type(@table)}
+  Key type:         #{inspect_key_type(@table)}
+  Tokenizer:        #{inspect_tokenizer(@table)}
+  Normalizer:       #{inspect_normalizer(@table)}
+  Path:             <#{@table.path}>
+  Total disk usage: #{inspect_sub_disk_usage(total_table_disk_usage(@table))}
+  Disk usage:       #{inspect_sub_disk_usage(@table.disk_usage)}
+  N records:        #{@table.size}
+  N columns:        #{@table.columns.size}
+        INSPECTED
+      end
+    end
   end
 
   class ColumnTest < self
     private
     def report
       output = StringIO.new
-      reporter = Groonga::DatabaseInspector::Reporter.new(@database, output)
+      reporter = create_reporter(output)
       reporter.send(:report_column, @column)
       output.string
     end

@@ -22,11 +22,19 @@ require "pathname"
 
 require "groonga"
 
-options = OpenStruct.new
+options = Groonga::DatabaseInspector::Options.new
 
 parser = OptionParser.new
 parser.version = Groonga::BINDINGS_VERSION
 parser.banner += " DB_PATH"
+parser.on("--no-tables",
+          "Don't show table information") do |boolean|
+  options.show_tables = boolean
+end
+parser.on("--no-columns",
+          "Don't show column information") do |boolean|
+  options.show_columns = boolean
+end
 args = parser.parse!(ARGV)
 
 if args.size != 1
@@ -36,6 +44,6 @@ end
 db_path = args[0]
 
 Groonga::Database.open(db_path) do |database|
-  inspector = Groonga::DatabaseInspector.new(database)
+  inspector = Groonga::DatabaseInspector.new(database, options)
   inspector.report
 end

@@ -20,8 +20,10 @@ module Groonga
   # of the database.
   class DatabaseInspector
     # @param database [Database] The database to be inspected.
-    def initialize(database)
+    # @param options [Options] The options to custom this inspector behavior.
+    def initialize(database, options=nil)
       @database = database
+      @options = options || Options.new
     end
 
     # Report inspected result of the database.
@@ -30,15 +32,42 @@ module Groonga
     #   If it is @nil@, @$stdout@ is used.
     def report(output=nil)
       output ||= $stdout
-      reporter = Reporter.new(@database, output)
+      reporter = Reporter.new(@database, @options, output)
       reporter.report
+    end
+
+    # It is a class that keeps options for {DatabaseInspector}.
+    class Options
+      # @return [Boolean] (true) Shows information about tables if true,
+      #   doesn't show it otherwise.
+      attr_writer :show_tables
+
+      # @return [Boolean] (true) Shows information about columns if true,
+      #   doesn't show it otherwise. If {#show_tables} is false, information
+      #   about columns isn't always shown.
+      attr_writer :show_columns
+      def initialize
+        @show_tables = true
+        @show_columns = true
+      end
+
+      # (see #show_tables=)
+      def show_tables?
+        @show_tables
+      end
+
+      # (see #show_columns=)
+      def show_columns?
+        @show_columns
+      end
     end
 
     # @private
     class Reporter
-      def initialize(database, output)
+      def initialize(database, options, output)
         @database = database
         @context = @database.context
+        @options = options
         @output = output
         @indent_width = 0
       end
@@ -75,6 +104,7 @@ module Groonga
       end
 
       def report_tables
+        return unless @options.show_tables?
         write("Tables:\n")
         indent do
           tables = @database.tables
@@ -109,6 +139,7 @@ module Groonga
       end
 
       def report_columns(table)
+        return unless @options.show_columns?
         write("Columns:\n")
         indent do
           columns = table.columns
