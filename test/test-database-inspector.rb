@@ -144,7 +144,6 @@ class DatabaseInspectorTest < Test::Unit::TestCase
         #{column.local_name}:
           ID:         #{column.id}
           Type:       #{inspect_column_type(column)}
-          Value type: #{column.domain.name}
           Path:       <#{column.path}>
           Disk usage: #{inspect_sub_disk_usage(column.disk_usage)}
     INSPECTED
@@ -718,7 +717,6 @@ Database
 #{@column.local_name}:
   ID:         #{@column.id}
   Type:       #{type}
-  Value type: #{@column.domain.name}
   Path:       <#{@column.path}>
   Disk usage: #{inspect_sub_disk_usage(@column.disk_usage)}
         INSPECTED
