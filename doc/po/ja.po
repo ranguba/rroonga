@@ -127,13 +127,11 @@ msgstr "h2. メーリングリスト"
 
 #: ../../README.textile:56
 msgid ""
-"* English: \"groonga-users-en\":http://rubyforge.org/mailman/listinfo/groonga-us"
-"ers-en\n"
+"* English: \"groonga-talk\":http://lists.sourceforge.net/mailman/listinfo/groonga-talk\n"
 "* Japanese: \"groonga-dev\":http://lists.sourceforge.jp/mailman/listinfo/groonga"
 "-dev"
 msgstr ""
-"* 英語: \"groonga-users-en\":http://rubyforge.org/mailman/listinfo/groonga-users-e"
-"n\n"
+"* 英語: \"groonga-talk\":http://lists.sourceforge.net/mailman/listinfo/groonga-talk\n"
 "* 日本語: \"groonga-dev\":http://lists.sourceforge.jp/mailman/listinfo/groonga-dev"
 
 #: ../../README.textile:59
