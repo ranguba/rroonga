@@ -132,6 +132,27 @@ class ExpressionTest < Test::Unit::TestCase
     snippet.close
   end
 
+  class AppendOperatorTest < self
+    setup
+    def setup_expression
+      @expression = Groonga::Expression.new
+      @expression.append_constant(29)
+      @expression.append_constant(92)
+    end
+
+    def test_constant
+      @expression.append_operation(Groonga::Operator::PLUS, 2)
+      assert_equal("#<Groonga::Expression noname(){229,092,0PLUS}>",
+                   @expression.inspect)
+    end
+
+    def test_name
+      @expression.append_operation("plus", 2)
+      assert_equal("#<Groonga::Expression noname(){229,092,0PLUS}>",
+                   @expression.inspect)
+    end
+  end
+
   class VariableTest < self
     def test_reference
       expression = Groonga::Expression.new

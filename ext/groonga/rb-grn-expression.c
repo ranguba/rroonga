@@ -259,7 +259,7 @@ rb_grn_expression_append_operation (VALUE self, VALUE rb_operation,
                                   NULL, NULL,
                                   NULL, NULL, NULL);
 
-    operation = NUM2INT(rb_operation);
+    operation = RVAL2GRNOPERATOR(rb_operation);
     n_arguments = NUM2INT(rb_n_arguments);
     grn_expr_append_op(context, expression, operation, n_arguments);
     rb_grn_context_check(context, self);
