@@ -132,6 +132,29 @@ class ExpressionTest < Test::Unit::TestCase
     snippet.close
   end
 
+  class AppendObjectTest < self
+    setup
+    def setup_expression
+      @expression = Groonga::Expression.new
+    end
+
+    class OperatorTest < self
+      def test_constant
+        @expression.append_object(Groonga["TokenBigram"],
+                                  Groonga::Operator::PUSH,
+                                  1)
+        assert_equal("#<Groonga::Expression noname(){0TokenBigram}>",
+                     @expression.inspect)
+      end
+
+      def test_name
+        @expression.append_object(Groonga["TokenBigram"], "push", 1)
+        assert_equal("#<Groonga::Expression noname(){0TokenBigram}>",
+                     @expression.inspect)
+      end
+    end
+  end
+
   class AppendConstantTest < self
     setup
     def setup_expression

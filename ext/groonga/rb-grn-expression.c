@@ -184,7 +184,7 @@ rb_grn_expression_append_object (int argc, VALUE *argv, VALUE self)
 
     rb_scan_args(argc, argv, "12", &rb_object, &rb_operation, &rb_n_arguments);
     if (!NIL_P(rb_operation))
-        operation = NUM2INT(rb_operation);
+        operation = RVAL2GRNOPERATOR(rb_operation);
     if (!NIL_P(rb_n_arguments))
         n_arguments = NUM2INT(rb_n_arguments);
 
