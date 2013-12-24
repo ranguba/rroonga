@@ -132,6 +132,27 @@ class ExpressionTest < Test::Unit::TestCase
     snippet.close
   end
 
+  class AppendConstantTest < self
+    setup
+    def setup_expression
+      @expression = Groonga::Expression.new
+    end
+
+    class OperatorTest < self
+      def test_constant
+        @expression.append_constant(29, Groonga::Operator::PUSH, 1)
+        assert_equal("#<Groonga::Expression noname(){029}>",
+                     @expression.inspect)
+      end
+
+      def test_name
+        @expression.append_constant(29, "push", 1)
+        assert_equal("#<Groonga::Expression noname(){029}>",
+                     @expression.inspect)
+      end
+    end
+  end
+
   class AppendOperatorTest < self
     setup
     def setup_expression
