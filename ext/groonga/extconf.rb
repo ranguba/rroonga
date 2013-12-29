@@ -22,12 +22,7 @@ require "fileutils"
 require "shellwords"
 require "open-uri"
 
-begin
-  require "pkg-config"
-rescue LoadError
-  require "rubygems"
-  require "pkg-config"
-end
+require "pkg-config"
 
 base_dir = Pathname(__FILE__).dirname.parent.parent.expand_path
 $LOAD_PATH.unshift(base_dir.to_s)
