@@ -9,7 +9,7 @@ h3. Improvements
   all table information.
 * [groonga-database-inspect]: Added @--no-columns@ option for hiding
   all column information.
-* [doc] Updated English mailing list to use groonga-users-en.
+* [doc] Updated English mailing list to use Groonga-talk.
   [GitHub#14] [Patch by Masafumi Yokoyama]
 * {Groonga::Expression#append_operation} supports operator name.
 * {Groonga::Expression#append_constant} supports operator name.
