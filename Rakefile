@@ -26,13 +26,6 @@ require "bundler/gem_helper"
 require "rake/extensiontask"
 require "packnga"
 
-if YAML.const_defined?(:ENGINE)
-  begin
-    YAML::ENGINE.yamler = "psych"
-  rescue LoadError
-  end
-end
-
 base_dir = File.join(File.dirname(__FILE__))
 
 groonga_ext_dir = File.join(base_dir, "ext", "groonga")
