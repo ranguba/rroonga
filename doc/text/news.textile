@@ -1,5 +1,23 @@
 h1. NEWS
 
+h2(#3-1-1). 3.1.1: 2013-12-29
+
+h3. Improvements
+
+* [groonga-database-inspect]: Added @--no-tables@ option for hiding
+  all table information.
+* [groonga-database-inspect]: Added @--no-columns@ option for hiding
+  all column information.
+* [doc] Updated English mailing list to use groonga-users-en.
+  [GitHub#14] [Patch by Masafumi Yokoyama]
+* {Groonga::Expression#append_operation} supports operator name.
+* {Groonga::Expression#append_constant} supports operator name.
+* {Groonga::Expression#append_object} supports operator name.
+
+h3. Thanks
+
+* Masafumi Yokoyama
+
 h2(#3-1-0). 3.1.0: 2013-11-29
 
 h3. Improvements
