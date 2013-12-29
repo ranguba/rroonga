@@ -98,7 +98,7 @@ relative_binary_dir = File.join("vendor", "local")
 vendor_dir = File.join(base_dir, relative_vendor_dir)
 binary_dir = File.join(base_dir, relative_binary_dir)
 
-groonga_win32_i386_p = ENV["GROONGA64"] != "yes"
+groonga_win32_i386_p = ENV["RROONGA_USE_GROONGA_X64"].nil?
 
 namespace :win32 do
   namespace :groonga do
