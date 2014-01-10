@@ -310,7 +310,7 @@ class RecordTest < Test::Unit::TestCase
   end
 
   class AttributesTest < self
-    def test_attributes
+    def test_basic
       values = {
         "uri" => "http://groonga.org/",
         "rate" => 5,
@@ -323,7 +323,7 @@ class RecordTest < Test::Unit::TestCase
                    groonga.attributes)
     end
 
-    def test_recursive_attributes
+    def test_recursive
       need_self_recursive_equal
 
       @bookmarks.define_column("next", @bookmarks)
@@ -355,7 +355,7 @@ class RecordTest < Test::Unit::TestCase
       assert_equal(expected, top_page_record.attributes)
     end
 
-    def test_duplicate_records_attributes
+    def test_duplicate_records
       need_self_recursive_equal
 
       @bookmarks.define_column("next1", @bookmarks)
@@ -395,7 +395,7 @@ class RecordTest < Test::Unit::TestCase
                    actual_records["next2"].object_id)
     end
 
-    def test_select_result_attributes
+    def test_select_result
       @bookmarks.add(top_page)
       select_result = @bookmarks.select
       select_result_result = select_result.first
@@ -416,7 +416,7 @@ class RecordTest < Test::Unit::TestCase
       assert_equal(expected_attributes, select_result_result.attributes)
     end
 
-    def test_self_referencing_attributes
+    def test_self_referencing
       need_self_recursive_equal
 
       @bookmarks.define_column("next", @bookmarks)
@@ -437,7 +437,7 @@ class RecordTest < Test::Unit::TestCase
       assert_equal(expected, top_page_record.attributes)
     end
 
-    def test_vector_attributes
+    def test_vector
       @bookmarks.define_column("related_bookmarks", @bookmarks, :type => :vector)
 
       top_page_record = @bookmarks.add(top_page)
@@ -467,7 +467,7 @@ class RecordTest < Test::Unit::TestCase
       assert_equal(expected, top_page_record.attributes)
     end
 
-    def test_self_referencing_vector_attributes
+    def test_self_referencing_vector
       need_self_recursive_equal
 
       @bookmarks.define_column("related_bookmarks", @bookmarks, :type => :vector)
