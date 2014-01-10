@@ -310,198 +310,198 @@ class RecordTest < Test::Unit::TestCase
   end
 
   class AttributesTest < self
-  def test_attributes
-    values = {
-      "uri" => "http://groonga.org/",
-      "rate" => 5,
-      "comment" => "Great!"
-    }
-    groonga = @bookmarks.add(values)
-    assert_equal(values.merge("_id" => groonga.id,
-                              "content" => nil,
-                              "user" => nil),
-                 groonga.attributes)
-  end
+    def test_attributes
+      values = {
+        "uri" => "http://groonga.org/",
+        "rate" => 5,
+        "comment" => "Great!"
+      }
+      groonga = @bookmarks.add(values)
+      assert_equal(values.merge("_id" => groonga.id,
+                                "content" => nil,
+                                "user" => nil),
+                   groonga.attributes)
+    end
 
-  def test_recursive_attributes
-    need_self_recursive_equal
+    def test_recursive_attributes
+      need_self_recursive_equal
 
-    @bookmarks.define_column("next", @bookmarks)
+      @bookmarks.define_column("next", @bookmarks)
 
-    top_page_record = @bookmarks.add(top_page)
-    doc_page_record = @bookmarks.add(doc_page)
+      top_page_record = @bookmarks.add(top_page)
+      doc_page_record = @bookmarks.add(doc_page)
 
-    top_page_record["next"] = doc_page_record
-    doc_page_record["next"] = top_page_record
+      top_page_record["next"] = doc_page_record
+      doc_page_record["next"] = top_page_record
 
-    expected = {
-      "_id" => 1,
-      "user" => nil,
-      "uri" => "http://groonga.org/",
-      "rate" => 5,
-      "next" => {
+      expected = {
+        "_id" => 1,
+        "user" => nil,
+        "uri" => "http://groonga.org/",
+        "rate" => 5,
+        "next" => {
+          "_id" => 2,
+          "user" => nil,
+          "uri" => "http://groonga.org/document.html",
+          "rate" => 8,
+          "content" => nil,
+          "comment" => "Informative"
+        },
+        "content" => nil,
+        "comment" => "Great!"
+      }
+      expected["next"]["next"] = expected
+
+      assert_equal(expected, top_page_record.attributes)
+    end
+
+    def test_duplicate_records_attributes
+      need_self_recursive_equal
+
+      @bookmarks.define_column("next1", @bookmarks)
+      @bookmarks.define_column("next2", @bookmarks)
+
+      top_page_record = @bookmarks.add(top_page)
+      doc_page_record = @bookmarks.add(doc_page)
+
+      top_page_record["next1"] = doc_page_record
+      top_page_record["next2"] = doc_page_record
+      doc_page_record["next1"] = top_page_record
+
+      doc_page_attributes = {
         "_id" => 2,
         "user" => nil,
         "uri" => "http://groonga.org/document.html",
         "rate" => 8,
         "content" => nil,
-        "comment" => "Informative"
-      },
-      "content" => nil,
-      "comment" => "Great!"
-    }
-    expected["next"]["next"] = expected
-
-    assert_equal(expected, top_page_record.attributes)
-  end
-
-  def test_duplicate_records_attributes
-    need_self_recursive_equal
-
-    @bookmarks.define_column("next1", @bookmarks)
-    @bookmarks.define_column("next2", @bookmarks)
-
-    top_page_record = @bookmarks.add(top_page)
-    doc_page_record = @bookmarks.add(doc_page)
-
-    top_page_record["next1"] = doc_page_record
-    top_page_record["next2"] = doc_page_record
-    doc_page_record["next1"] = top_page_record
-
-    doc_page_attributes = {
-      "_id" => 2,
-      "user" => nil,
-      "uri" => "http://groonga.org/document.html",
-      "rate" => 8,
-      "content" => nil,
-      "comment" => "Informative",
-      "next2" => nil
-    }
-    top_page_attributes = {
-      "_id" => 1,
-      "user" => nil,
-      "uri" => "http://groonga.org/",
-      "rate" => 5,
-      "next1" => doc_page_attributes,
-      "next2" => doc_page_attributes,
-      "content" => nil,
-      "comment" => "Great!"
-    }
-    doc_page_attributes["next1"] = top_page_attributes
-
-    actual_records = top_page_record.attributes
-    assert_equal(top_page_attributes, actual_records)
-    assert_equal(actual_records["next1"].object_id,
-                 actual_records["next2"].object_id)
-  end
-
-  def test_select_result_attributes
-    @bookmarks.add(top_page)
-    select_result = @bookmarks.select
-    select_result_result = select_result.first
-
-    expected_attributes = {
-      "_id" => 1,
-      "_key" => {
-        "comment" => "Great!",
-        "content" => nil,
+        "comment" => "Informative",
+        "next2" => nil
+      }
+      top_page_attributes = {
         "_id" => 1,
-        "rate" => 5,
+        "user" => nil,
         "uri" => "http://groonga.org/",
-        "user" => nil
-      },
-      "_score" => 1,
-    }
+        "rate" => 5,
+        "next1" => doc_page_attributes,
+        "next2" => doc_page_attributes,
+        "content" => nil,
+        "comment" => "Great!"
+      }
+      doc_page_attributes["next1"] = top_page_attributes
 
-    assert_equal(expected_attributes, select_result_result.attributes)
-  end
+      actual_records = top_page_record.attributes
+      assert_equal(top_page_attributes, actual_records)
+      assert_equal(actual_records["next1"].object_id,
+                   actual_records["next2"].object_id)
+    end
 
-  def test_self_referencing_attributes
-    need_self_recursive_equal
+    def test_select_result_attributes
+      @bookmarks.add(top_page)
+      select_result = @bookmarks.select
+      select_result_result = select_result.first
 
-    @bookmarks.define_column("next", @bookmarks)
-
-    top_page_record = @bookmarks.add(top_page)
-    top_page_record["next"] = top_page_record
-
-    expected = {
-      "_id" => 1,
-      "user" => nil,
-      "uri" => "http://groonga.org/",
-      "rate" => 5,
-      "content" => nil,
-      "comment" => "Great!"
-    }
-    expected["next"] = expected
-
-    assert_equal(expected, top_page_record.attributes)
-  end
-
-  def test_vector_attributes
-    @bookmarks.define_column("related_bookmarks", @bookmarks, :type => :vector)
-
-    top_page_record = @bookmarks.add(top_page)
-    doc_page_record = @bookmarks.add(doc_page)
-    top_page_record["related_bookmarks"] = [doc_page_record]
-
-    expected = {
-      "_id" => 1,
-      "user" => nil,
-      "uri" => "http://groonga.org/",
-      "rate" => 5,
-      "related_bookmarks" => [
-        {
-          "_id" => 2,
-          "comment" => "Informative",
+      expected_attributes = {
+        "_id" => 1,
+        "_key" => {
+          "comment" => "Great!",
           "content" => nil,
-          "rate" => 8,
-          "related_bookmarks" => [],
-          "uri" => "http://groonga.org/document.html",
-          "user" => nil,
-        }
-      ],
-      "content" => nil,
-      "comment" => "Great!"
-    }
+          "_id" => 1,
+          "rate" => 5,
+          "uri" => "http://groonga.org/",
+          "user" => nil
+        },
+        "_score" => 1,
+      }
 
-    assert_equal(expected, top_page_record.attributes)
-  end
+      assert_equal(expected_attributes, select_result_result.attributes)
+    end
 
-  def test_self_referencing_vector_attributes
-    need_self_recursive_equal
+    def test_self_referencing_attributes
+      need_self_recursive_equal
 
-    @bookmarks.define_column("related_bookmarks", @bookmarks, :type => :vector)
+      @bookmarks.define_column("next", @bookmarks)
 
-    top_page_record = @bookmarks.add(top_page)
-    doc_page_record = @bookmarks.add(doc_page)
-    top_page_record["related_bookmarks"] = [
-      top_page_record,
-      doc_page_record
-    ]
+      top_page_record = @bookmarks.add(top_page)
+      top_page_record["next"] = top_page_record
 
-    top_page_attributes = {
-      "_id" => 1,
-      "user" => nil,
-      "uri" => "http://groonga.org/",
-      "rate" => 5,
-      "content" => nil,
-      "comment" => "Great!"
-    }
-    doc_page_attributes = {
-      "_id" => 2,
-      "comment" => "Informative",
-      "content" => nil,
-      "rate" => 8,
-      "related_bookmarks" => [],
-      "uri" => "http://groonga.org/document.html",
-      "user" => nil,
-    }
-    top_page_attributes["related_bookmarks"] = [
-      top_page_attributes,
-      doc_page_attributes
-    ]
-    assert_equal(top_page_attributes, top_page_record.attributes)
-  end
+      expected = {
+        "_id" => 1,
+        "user" => nil,
+        "uri" => "http://groonga.org/",
+        "rate" => 5,
+        "content" => nil,
+        "comment" => "Great!"
+      }
+      expected["next"] = expected
+
+      assert_equal(expected, top_page_record.attributes)
+    end
+
+    def test_vector_attributes
+      @bookmarks.define_column("related_bookmarks", @bookmarks, :type => :vector)
+
+      top_page_record = @bookmarks.add(top_page)
+      doc_page_record = @bookmarks.add(doc_page)
+      top_page_record["related_bookmarks"] = [doc_page_record]
+
+      expected = {
+        "_id" => 1,
+        "user" => nil,
+        "uri" => "http://groonga.org/",
+        "rate" => 5,
+        "related_bookmarks" => [
+          {
+            "_id" => 2,
+            "comment" => "Informative",
+            "content" => nil,
+            "rate" => 8,
+            "related_bookmarks" => [],
+            "uri" => "http://groonga.org/document.html",
+            "user" => nil,
+          }
+        ],
+        "content" => nil,
+        "comment" => "Great!"
+      }
+
+      assert_equal(expected, top_page_record.attributes)
+    end
+
+    def test_self_referencing_vector_attributes
+      need_self_recursive_equal
+
+      @bookmarks.define_column("related_bookmarks", @bookmarks, :type => :vector)
+
+      top_page_record = @bookmarks.add(top_page)
+      doc_page_record = @bookmarks.add(doc_page)
+      top_page_record["related_bookmarks"] = [
+        top_page_record,
+        doc_page_record
+      ]
+
+      top_page_attributes = {
+        "_id" => 1,
+        "user" => nil,
+        "uri" => "http://groonga.org/",
+        "rate" => 5,
+        "content" => nil,
+        "comment" => "Great!"
+      }
+      doc_page_attributes = {
+        "_id" => 2,
+        "comment" => "Informative",
+        "content" => nil,
+        "rate" => 8,
+        "related_bookmarks" => [],
+        "uri" => "http://groonga.org/document.html",
+        "user" => nil,
+      }
+      top_page_attributes["related_bookmarks"] = [
+        top_page_attributes,
+        doc_page_attributes
+      ]
+      assert_equal(top_page_attributes, top_page_record.attributes)
+    end
   end
 
   def test_dynamic_accessor
