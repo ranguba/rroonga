@@ -26,6 +26,21 @@ class HashTest < Test::Unit::TestCase
                      :support_key?)
   end
 
+  class SupportValueTest < self
+    def test_have_value_type
+      assert_predicate(Groonga::Hash.create(:name => "Users",
+                                            :key_type => "ShortText",
+                                            :value_type => "Int32"),
+                       :support_value?)
+    end
+
+    def test_no_value_type
+      assert_not_predicate(Groonga::Hash.create(:name => "Users",
+                                                :key_type => "ShortText"),
+                           :support_value?)
+    end
+  end
+
   class DeleteTest < self
     setup
     def setup_data

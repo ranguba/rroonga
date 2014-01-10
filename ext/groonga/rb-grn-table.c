@@ -2283,6 +2283,24 @@ rb_grn_table_support_key_p (VALUE self)
 }
 
 /*
+ * @overload support_value?
+ *
+ *   @return @true@ if the table is created with value type, @false@
+ *   otherwise.
+ */
+static VALUE
+rb_grn_table_support_value_p (VALUE self)
+{
+    grn_id range_id;
+
+    rb_grn_table_deconstruct(SELF(self), NULL, NULL,
+                             NULL, NULL,
+                             NULL, &range_id, NULL,
+                             NULL);
+    return CBOOL2RVAL(range_id != GRN_ID_NIL);
+}
+
+/*
  * グループ化したとき、テーブルにグループに含まれるレコード
  * 数を格納できる場合は +true+ 、格納できない場合は +false+ を返
  * す。
@@ -2503,6 +2521,8 @@ rb_grn_init_table (VALUE mGrn)
 
     rb_define_method(rb_cGrnTable, "support_key?",
                      rb_grn_table_support_key_p, 0);
+    rb_define_method(rb_cGrnTable, "support_value?",
+                     rb_grn_table_support_value_p, 0);
     rb_define_method(rb_cGrnTable, "support_sub_records?",
                      rb_grn_table_support_sub_records_p, 0);
     rb_define_method(rb_cGrnTable, "have_n_sub_records_space?",

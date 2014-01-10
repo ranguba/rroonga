@@ -22,6 +22,19 @@ class ArrayTest < Test::Unit::TestCase
     assert_not_predicate(Groonga::Array.create(:name => "Users"), :support_key?)
   end
 
+  class SupportValueTest < self
+    def test_have_value_type
+      assert_predicate(Groonga::Array.create(:name => "Users",
+                                             :value_type => "Int32"),
+                       :support_value?)
+    end
+
+    def test_no_value_type
+      assert_not_predicate(Groonga::Array.create(:name => "Users"),
+                           :support_value?)
+    end
+  end
+
   def test_inspect_size
     path = @tables_dir + "named.groonga"
     contain_table = Groonga::Array.create(:name => "name", :path => path.to_s)

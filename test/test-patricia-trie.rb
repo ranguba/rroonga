@@ -27,6 +27,21 @@ class PatriciaTrieTest < Test::Unit::TestCase
                      :support_key?)
   end
 
+  class SupportValueTest < self
+    def test_have_value_type
+      assert_predicate(Groonga::PatriciaTrie.create(:name => "Users",
+                                                    :key_type => "ShortText",
+                                                    :value_type => "Int32"),
+                       :support_value?)
+    end
+
+    def test_no_value_type
+      assert_not_predicate(Groonga::PatriciaTrie.create(:name => "Users",
+                                                        :key_type => "ShortText"),
+                           :support_value?)
+    end
+  end
+
   def test_encoding
     assert_equal(Groonga::Encoding.default,
                  Groonga::PatriciaTrie.create.encoding)
