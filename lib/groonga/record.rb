@@ -117,6 +117,12 @@ module Groonga
       @table.support_key?
     end
 
+    # @return @true@ if the table that the record belongs to is
+    # created with value type, @false@ otherwise.
+    def support_value?
+      @table.support_value?
+    end
+
     # 名前が _name_ のカラムがレコードの所属するテーブルで定義され
     # ているなら +true+ を返す。
     def have_column?(name)
