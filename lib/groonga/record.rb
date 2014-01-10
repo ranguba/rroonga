@@ -435,6 +435,7 @@ module Groonga
 
         add_id(attributes, record)
         add_key(attributes, record)
+        add_value(attributes, record)
         add_score(attributes, record)
         add_n_sub_records(attributes, record)
         add_columns(attributes, record)
@@ -485,6 +486,12 @@ module Groonga
       def add_key(attributes, record)
         if record.support_key?
           attributes["_key"] = build_value(record.key)
+        end
+      end
+
+      def add_value(attributes, record)
+        if record.support_value?
+          attributes["_value"] = build_value(record.value)
         end
       end
 

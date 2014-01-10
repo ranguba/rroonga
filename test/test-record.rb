@@ -318,6 +318,7 @@ class RecordTest < Test::Unit::TestCase
       }
       groonga = @bookmarks.add(values)
       assert_equal(values.merge("_id" => groonga.id,
+                                "_value" => 0,
                                 "content" => nil,
                                 "user" => nil),
                    groonga.attributes)
@@ -336,11 +337,13 @@ class RecordTest < Test::Unit::TestCase
 
       expected = {
         "_id" => 1,
+        "_value" => 0,
         "user" => nil,
         "uri" => "http://groonga.org/",
         "rate" => 5,
         "next" => {
           "_id" => 2,
+          "_value" => 0,
           "user" => nil,
           "uri" => "http://groonga.org/document.html",
           "rate" => 8,
@@ -370,6 +373,7 @@ class RecordTest < Test::Unit::TestCase
 
       doc_page_attributes = {
         "_id" => 2,
+        "_value" => 0,
         "user" => nil,
         "uri" => "http://groonga.org/document.html",
         "rate" => 8,
@@ -379,6 +383,7 @@ class RecordTest < Test::Unit::TestCase
       }
       top_page_attributes = {
         "_id" => 1,
+        "_value" => 0,
         "user" => nil,
         "uri" => "http://groonga.org/",
         "rate" => 5,
@@ -406,6 +411,7 @@ class RecordTest < Test::Unit::TestCase
           "comment" => "Great!",
           "content" => nil,
           "_id" => 1,
+          "_value" => 0,
           "rate" => 5,
           "uri" => "http://groonga.org/",
           "user" => nil
@@ -414,6 +420,27 @@ class RecordTest < Test::Unit::TestCase
       }
 
       assert_equal(expected_attributes, select_result_result.attributes)
+    end
+
+    def test_sort_result
+      @bookmarks.add(top_page)
+      sort_result = @bookmarks.sort(["_id"])
+      sort_result_result = sort_result.first
+
+      expected_attributes = {
+        "_id" => 1,
+        "_value" => {
+          "comment" => "Great!",
+          "content" => nil,
+          "_id" => 1,
+          "_value" => 0,
+          "rate" => 5,
+          "uri" => "http://groonga.org/",
+          "user" => nil
+        },
+      }
+
+      assert_equal(expected_attributes, sort_result_result.attributes)
     end
 
     def test_self_referencing
@@ -426,6 +453,7 @@ class RecordTest < Test::Unit::TestCase
 
       expected = {
         "_id" => 1,
+        "_value" => 0,
         "user" => nil,
         "uri" => "http://groonga.org/",
         "rate" => 5,
@@ -446,12 +474,14 @@ class RecordTest < Test::Unit::TestCase
 
       expected = {
         "_id" => 1,
+        "_value" => 0,
         "user" => nil,
         "uri" => "http://groonga.org/",
         "rate" => 5,
         "related_bookmarks" => [
           {
             "_id" => 2,
+            "_value" => 0,
             "comment" => "Informative",
             "content" => nil,
             "rate" => 8,
@@ -481,6 +511,7 @@ class RecordTest < Test::Unit::TestCase
 
       top_page_attributes = {
         "_id" => 1,
+        "_value" => 0,
         "user" => nil,
         "uri" => "http://groonga.org/",
         "rate" => 5,
@@ -489,6 +520,7 @@ class RecordTest < Test::Unit::TestCase
       }
       doc_page_attributes = {
         "_id" => 2,
+        "_value" => 0,
         "comment" => "Informative",
         "content" => nil,
         "rate" => 8,
