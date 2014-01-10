@@ -309,6 +309,7 @@ class RecordTest < Test::Unit::TestCase
     assert_not_predicate(groonga, :locked?)
   end
 
+  class AttributesTest < self
   def test_attributes
     values = {
       "uri" => "http://groonga.org/",
@@ -500,6 +501,7 @@ class RecordTest < Test::Unit::TestCase
       doc_page_attributes
     ]
     assert_equal(top_page_attributes, top_page_record.attributes)
+  end
   end
 
   def test_dynamic_accessor
