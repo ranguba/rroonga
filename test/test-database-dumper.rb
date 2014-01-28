@@ -1,4 +1,4 @@
-# Copyright (C) 2011-2013  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2011-2014  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -130,30 +130,54 @@ EOS
                 :title => "Why search engine find?")
     end
 
-    def test_default
-      assert_equal(<<-EOS, dump)
-#{dumped_schema_tables}
-
-#{dumped_schema_reference_columns}
-
+    def dumped_table_posts
+      <<-TABLE.chomp
 load --table Posts
 [
 ["_id","author","created_at","n_goods","published","rank","tag_text","tags","title"],
 [1,"mori",1268034720.0,4,true,10,"search mori",["search","mori"],"Why search engine find?"]
 ]
+      TABLE
+    end
 
+    def dumped_table_tags
+      <<-TABLE.chomp
 load --table Tags
 [
 ["_key","name"],
 ["search",""],
 ["mori",""]
 ]
+      TABLE
+    end
 
+    def dumped_table_users
+      <<-TABLE.chomp
 load --table Users
 [
 ["_key","name"],
 ["mori",""]
 ]
+      TABLE
+    end
+
+    def dumped_tables
+      <<-TABLES.chomp
+#{dumped_table_posts}
+
+#{dumped_table_tags}
+
+#{dumped_table_users}
+      TABLES
+    end
+
+    def test_default
+      assert_equal(<<-EOS, dump)
+#{dumped_schema_tables}
+
+#{dumped_schema_reference_columns}
+
+#{dumped_tables}
 
 #{dumped_schema_index_columns}
 EOS
@@ -165,11 +189,7 @@ EOS
 
 #{dumped_schema_reference_columns}
 
-load --table Posts
-[
-["_id","author","created_at","n_goods","published","rank","tag_text","tags","title"],
-[1,"mori",1268034720.0,4,true,10,"search mori",["search","mori"],"Why search engine find?"]
-]
+#{dumped_table_posts}
 
 #{dumped_schema_index_columns}
 EOS
@@ -181,11 +201,7 @@ EOS
 
 #{dumped_schema_reference_columns}
 
-load --table Posts
-[
-["_id","author","created_at","n_goods","published","rank","tag_text","tags","title"],
-[1,"mori",1268034720.0,4,true,10,"search mori",["search","mori"],"Why search engine find?"]
-]
+#{dumped_table_posts}
 
 #{dumped_schema_index_columns}
 EOS
@@ -200,18 +216,9 @@ EOS
 
 #{dumped_schema_reference_columns}
 
-load --table Tags
-[
-["_key","name"],
-["search",""],
-["mori",""]
-]
+#{dumped_table_tags}
 
-load --table Users
-[
-["_key","name"],
-["mori",""]
-]
+#{dumped_table_users}
 
 #{dumped_schema_index_columns}
 EOS
@@ -226,18 +233,9 @@ EOS
 
 #{dumped_schema_reference_columns}
 
-load --table Tags
-[
-["_key","name"],
-["search",""],
-["mori",""]
-]
+#{dumped_table_tags}
 
-load --table Users
-[
-["_key","name"],
-["mori",""]
-]
+#{dumped_table_users}
 
 #{dumped_schema_index_columns}
 EOS
@@ -253,11 +251,7 @@ EOS
 
 #{dumped_schema_reference_columns}
 
-load --table Users
-[
-["_key","name"],
-["mori",""]
-]
+#{dumped_table_users}
 
 #{dumped_schema_index_columns}
 EOS
@@ -265,24 +259,7 @@ EOS
 
     def test_no_schema
       assert_equal(<<-EOS, dump(:dump_schema => false))
-load --table Posts
-[
-["_id","author","created_at","n_goods","published","rank","tag_text","tags","title"],
-[1,"mori",1268034720.0,4,true,10,"search mori",["search","mori"],"Why search engine find?"]
-]
-
-load --table Tags
-[
-["_key","name"],
-["search",""],
-["mori",""]
-]
-
-load --table Users
-[
-["_key","name"],
-["mori",""]
-]
+#{dumped_tables}
 EOS
     end
 
