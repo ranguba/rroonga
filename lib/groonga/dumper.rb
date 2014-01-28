@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2011-2012  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2011-2014  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -55,11 +55,15 @@ module Groonga
         options[:database] = options[:context].database
       end
       options[:dump_schema] = true if options[:dump_schema].nil?
+      options[:dump_indexes] = true if options[:dump_indexes].nil?
       options[:dump_tables] = true if options[:dump_tables].nil?
+
+      if options[:dump_schema] or options[:dump_indexes]
+        schema_dumper = SchemaDumper.new(options.merge(:syntax => :command))
+      end
 
       if options[:dump_schema]
         dump_plugins(options)
-        schema_dumper = SchemaDumper.new(options.merge(:syntax => :command))
         schema_dumper.dump_tables
         if schema_dumper.have_reference_columns?
           options[:output].write("\n")
@@ -67,7 +71,7 @@ module Groonga
         end
       end
       dump_tables(options) if options[:dump_tables]
-      if options[:dump_schema] and schema_dumper.have_index_columns?
+      if options[:dump_indexes] and schema_dumper.have_index_columns?
         options[:output].write("\n")
         schema_dumper.dump_index_columns
       end

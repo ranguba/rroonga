@@ -69,17 +69,17 @@ class DatabaseDumperTest < Test::Unit::TestCase
   end
 
   def dumped_schema
-    <<-EOS
+    <<-SCHEMA
 #{dumped_schema_tables}
 
 #{dumped_schema_reference_columns}
 
 #{dumped_schema_index_columns}
-EOS
+SCHEMA
   end
 
   def dumped_schema_tables
-    <<-EOS.chomp
+    <<-SCHEMA.chomp
 table_create Posts TABLE_NO_KEY
 column_create Posts created_at COLUMN_SCALAR Time
 column_create Posts n_goods COLUMN_SCALAR UInt32
@@ -93,22 +93,22 @@ column_create Tags name COLUMN_SCALAR Text
 
 table_create Users TABLE_HASH_KEY --key_type ShortText
 column_create Users name COLUMN_SCALAR Text
-EOS
+SCHEMA
   end
 
   def dumped_schema_reference_columns
-    <<-EOS.chomp
+    <<-SCHEMA.chomp
 column_create Posts author COLUMN_SCALAR Users
 column_create Posts tags COLUMN_VECTOR Tags
-EOS
+SCHEMA
   end
 
   def dumped_schema_index_columns
-    <<-EOS.chomp
+    <<-SCHEMA.chomp
 column_create Tags Posts_tag_text COLUMN_INDEX Posts tag_text
 
 column_create Users Posts_author COLUMN_INDEX Posts author
-EOS
+SCHEMA
   end
 
   class EmptyTest < self
