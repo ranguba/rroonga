@@ -260,6 +260,14 @@ load --table Users
     def test_no_schema
       assert_equal(<<-DUMP, dump(:dump_schema => false))
 #{dumped_tables}
+
+#{dumped_schema_index_columns}
+      DUMP
+    end
+
+    def test_no_schema_no_indexes
+      assert_equal(<<-DUMP, dump(:dump_schema => false, :dump_indexes => false))
+#{dumped_tables}
       DUMP
     end
 
