@@ -372,7 +372,7 @@ class HashTest < Test::Unit::TestCase
                 :name => "user #{i}" * 1000,
                 :address => "address #{i}" * 1000)
     end
-    assert_equal(7, users.defrag)
+    assert_equal(3, users.defrag)
   end
 
   def test_rename

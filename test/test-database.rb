@@ -150,7 +150,7 @@ class DatabaseTest < Test::Unit::TestCase
       users.add(:name => "user #{i}" * 1000,
                 :address => "address #{i}" * 1000)
     end
-    assert_equal(7, @database.defrag)
+    assert_equal(3, @database.defrag)
   end
 
   def test_tables
