@@ -75,7 +75,7 @@ class DatabaseDumperTest < Test::Unit::TestCase
 #{dumped_schema_reference_columns}
 
 #{dumped_schema_index_columns}
-SCHEMA
+    SCHEMA
   end
 
   def dumped_schema_tables
@@ -93,14 +93,14 @@ column_create Tags name COLUMN_SCALAR Text
 
 table_create Users TABLE_HASH_KEY --key_type ShortText
 column_create Users name COLUMN_SCALAR Text
-SCHEMA
+    SCHEMA
   end
 
   def dumped_schema_reference_columns
     <<-SCHEMA.chomp
 column_create Posts author COLUMN_SCALAR Users
 column_create Posts tags COLUMN_VECTOR Tags
-SCHEMA
+    SCHEMA
   end
 
   def dumped_schema_index_columns
@@ -108,7 +108,7 @@ SCHEMA
 column_create Tags Posts_tag_text COLUMN_INDEX Posts tag_text
 
 column_create Users Posts_author COLUMN_INDEX Posts author
-SCHEMA
+    SCHEMA
   end
 
   class EmptyTest < self
@@ -180,7 +180,7 @@ load --table Users
 #{dumped_tables}
 
 #{dumped_schema_index_columns}
-DUMP
+      DUMP
     end
 
     def test_limit_tables
@@ -192,7 +192,7 @@ DUMP
 #{dumped_table_posts}
 
 #{dumped_schema_index_columns}
-DUMP
+      DUMP
     end
 
     def test_limit_tables_with_regexp
@@ -204,7 +204,7 @@ DUMP
 #{dumped_table_posts}
 
 #{dumped_schema_index_columns}
-DUMP
+      DUMP
     end
 
     def test_exclude_tables
@@ -221,7 +221,7 @@ DUMP
 #{dumped_table_users}
 
 #{dumped_schema_index_columns}
-DUMP
+      DUMP
     end
 
     def test_exclude_tables_with_regexp
@@ -238,7 +238,7 @@ DUMP
 #{dumped_table_users}
 
 #{dumped_schema_index_columns}
-DUMP
+      DUMP
     end
 
     def test_tables_combination
@@ -254,13 +254,13 @@ DUMP
 #{dumped_table_users}
 
 #{dumped_schema_index_columns}
-DUMP
+      DUMP
     end
 
     def test_no_schema
       assert_equal(<<-DUMP, dump(:dump_schema => false))
 #{dumped_tables}
-DUMP
+      DUMP
     end
 
     def test_no_tables
@@ -346,7 +346,7 @@ load --table Users
 [\"mori\"],
 [\"s-yata\"]
 ]
-DUMP
+      DUMP
     end
   end
 end
