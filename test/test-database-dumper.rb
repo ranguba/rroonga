@@ -172,7 +172,7 @@ load --table Users
     end
 
     def test_default
-      assert_equal(<<-EOS, dump)
+      assert_equal(<<-DUMP, dump)
 #{dumped_schema_tables}
 
 #{dumped_schema_reference_columns}
@@ -180,11 +180,11 @@ load --table Users
 #{dumped_tables}
 
 #{dumped_schema_index_columns}
-EOS
+DUMP
     end
 
     def test_limit_tables
-      assert_equal(<<-EOS, dump(:tables => ["Posts"]))
+      assert_equal(<<-DUMP, dump(:tables => ["Posts"]))
 #{dumped_schema_tables}
 
 #{dumped_schema_reference_columns}
@@ -192,11 +192,11 @@ EOS
 #{dumped_table_posts}
 
 #{dumped_schema_index_columns}
-EOS
+DUMP
     end
 
     def test_limit_tables_with_regexp
-      assert_equal(<<-EOS, dump(:tables => [/Posts?/]))
+      assert_equal(<<-DUMP, dump(:tables => [/Posts?/]))
 #{dumped_schema_tables}
 
 #{dumped_schema_reference_columns}
@@ -204,14 +204,14 @@ EOS
 #{dumped_table_posts}
 
 #{dumped_schema_index_columns}
-EOS
+DUMP
     end
 
     def test_exclude_tables
       dump_options = {
         :exclude_tables => ["Posts"],
       }
-      assert_equal(<<-EOS, dump(dump_options))
+      assert_equal(<<-DUMP, dump(dump_options))
 #{dumped_schema_tables}
 
 #{dumped_schema_reference_columns}
@@ -221,14 +221,14 @@ EOS
 #{dumped_table_users}
 
 #{dumped_schema_index_columns}
-EOS
+DUMP
     end
 
     def test_exclude_tables_with_regexp
       dump_options = {
         :exclude_tables => [/Posts?/],
       }
-      assert_equal(<<-EOS, dump(dump_options))
+      assert_equal(<<-DUMP, dump(dump_options))
 #{dumped_schema_tables}
 
 #{dumped_schema_reference_columns}
@@ -238,7 +238,7 @@ EOS
 #{dumped_table_users}
 
 #{dumped_schema_index_columns}
-EOS
+DUMP
     end
 
     def test_tables_combination
@@ -246,7 +246,7 @@ EOS
         :exclude_tables => ["Posts"],
         :tables => ["Posts", "Users"],
       }
-      assert_equal(<<-EOS, dump(dump_options))
+      assert_equal(<<-DUMP, dump(dump_options))
 #{dumped_schema_tables}
 
 #{dumped_schema_reference_columns}
@@ -254,13 +254,13 @@ EOS
 #{dumped_table_users}
 
 #{dumped_schema_index_columns}
-EOS
+DUMP
     end
 
     def test_no_schema
-      assert_equal(<<-EOS, dump(:dump_schema => false))
+      assert_equal(<<-DUMP, dump(:dump_schema => false))
 #{dumped_tables}
-EOS
+DUMP
     end
 
     def test_no_tables
@@ -337,7 +337,7 @@ COMMAND
     end
 
     def test_have_records
-      assert_equal(<<-EOS, dump)
+      assert_equal(<<-DUMP, dump)
 table_create Users TABLE_PAT_KEY --key_type ShortText
 
 load --table Users
@@ -346,7 +346,7 @@ load --table Users
 [\"mori\"],
 [\"s-yata\"]
 ]
-EOS
+DUMP
     end
   end
 end
