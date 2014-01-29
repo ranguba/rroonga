@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: rroonga 2.1.0\n"
 "POT-Creation-Date: 2011-11-20 22:17+0900\n"
-"PO-Revision-Date: 2013-12-29 12:05+0900\n"
+"PO-Revision-Date: 2014-01-29 23:56+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: \n"
@@ -177,31 +177,71 @@ msgid "h1. NEWS"
 msgstr "h1. お知らせ"
 
 #: ../../doc/text/news.textile:3
-msgid "h2(#3-1-1). 3.1.1: 2013-12-29"
+msgid "h2(#3-1-2). 3.1.2: 2014-01-29"
 msgstr ""
 
-#: ../../doc/text/news.textile:5 ../../doc/text/news.textile:24
-#: ../../doc/text/news.textile:45 ../../doc/text/news.textile:57
-#: ../../doc/text/news.textile:65 ../../doc/text/news.textile:87
-#: ../../doc/text/news.textile:94 ../../doc/text/news.textile:129
-#: ../../doc/text/news.textile:152 ../../doc/text/news.textile:173
-#: ../../doc/text/news.textile:194 ../../doc/text/news.textile:212
-#: ../../doc/text/news.textile:247 ../../doc/text/news.textile:254
-#: ../../doc/text/news.textile:333 ../../doc/text/news.textile:339
-#: ../../doc/text/news.textile:359 ../../doc/text/news.textile:382
-#: ../../doc/text/news.textile:416 ../../doc/text/news.textile:439
-#: ../../doc/text/news.textile:450 ../../doc/text/news.textile:469
-#: ../../doc/text/news.textile:488 ../../doc/text/news.textile:522
-#: ../../doc/text/news.textile:532 ../../doc/text/news.textile:542
-#: ../../doc/text/news.textile:558 ../../doc/text/news.textile:574
-#: ../../doc/text/news.textile:592 ../../doc/text/news.textile:616
-#: ../../doc/text/news.textile:645 ../../doc/text/news.textile:663
-#: ../../doc/text/news.textile:670 ../../doc/text/news.textile:717
-#: ../../doc/text/news.textile:738 ../../doc/text/news.textile:749
+#: ../../doc/text/news.textile:5 ../../doc/text/news.textile:22
+#: ../../doc/text/news.textile:41 ../../doc/text/news.textile:62
+#: ../../doc/text/news.textile:74 ../../doc/text/news.textile:82
+#: ../../doc/text/news.textile:104 ../../doc/text/news.textile:111
+#: ../../doc/text/news.textile:146 ../../doc/text/news.textile:169
+#: ../../doc/text/news.textile:190 ../../doc/text/news.textile:211
+#: ../../doc/text/news.textile:229 ../../doc/text/news.textile:264
+#: ../../doc/text/news.textile:271 ../../doc/text/news.textile:350
+#: ../../doc/text/news.textile:356 ../../doc/text/news.textile:376
+#: ../../doc/text/news.textile:399 ../../doc/text/news.textile:433
+#: ../../doc/text/news.textile:456 ../../doc/text/news.textile:467
+#: ../../doc/text/news.textile:486 ../../doc/text/news.textile:505
+#: ../../doc/text/news.textile:539 ../../doc/text/news.textile:549
+#: ../../doc/text/news.textile:559 ../../doc/text/news.textile:575
+#: ../../doc/text/news.textile:591 ../../doc/text/news.textile:609
+#: ../../doc/text/news.textile:633 ../../doc/text/news.textile:662
+#: ../../doc/text/news.textile:680 ../../doc/text/news.textile:687
+#: ../../doc/text/news.textile:734 ../../doc/text/news.textile:755
+#: ../../doc/text/news.textile:766
 msgid "h3. Improvements"
 msgstr "h3. 改善"
 
 #: ../../doc/text/news.textile:7
+msgid ""
+"* Added {Groonga::Table#support_value?}.\n"
+"* Added {Groonga::Record#support_value?}.\n"
+"* Added @_value@ value to {Groonga::Record#attributes} result.\n"
+"  [groonga-dev,02046] [Suggested by ongaeshi]\n"
+"* Added column values to {Groonga::Record#inspect} result.\n"
+"  [groonga-dev,02048] [Suggested by ongaeshi]\n"
+"* grndump: Added @--dump-indexes@ option that controls schema for\n"
+"  indexes output. It is useful to dump only schema for indexes."
+msgstr ""
+"* {Groonga::Table#support_value?}を追加。\n"
+"* {Groonga::Record#support_value?}を追加。\n"
+"* @_value@ の値を{Groonga::Record#attributes}の結果に追加。\n"
+"  [groonga-dev,02046] [おんがえしさんが提案]\n"
+"* カラムの値を{Groonga::Record#inspect}の結果に追加。\n"
+"  [groonga-dev,02048] [おんがえしさんが提案]\n"
+"* grndump: インデックスのスキーマを出力するかどうかを切り替える @--dump-indexes@ オプションを追加。インデックスのスキーマだけをダンプするときに有用。"
+
+#: ../../doc/text/news.textile:16 ../../doc/text/news.textile:35
+#: ../../doc/text/news.textile:55 ../../doc/text/news.textile:98
+#: ../../doc/text/news.textile:133 ../../doc/text/news.textile:205
+#: ../../doc/text/news.textile:223 ../../doc/text/news.textile:343
+#: ../../doc/text/news.textile:421 ../../doc/text/news.textile:450
+#: ../../doc/text/news.textile:479 ../../doc/text/news.textile:499
+#: ../../doc/text/news.textile:627 ../../doc/text/news.textile:655
+#: ../../doc/text/news.textile:728 ../../doc/text/news.textile:749
+#: ../../doc/text/news.textile:828 ../../doc/text/news.textile:942
+msgid "h3. Thanks"
+msgstr "h3. 感謝"
+
+#: ../../doc/text/news.textile:18 ../../doc/text/news.textile:730
+msgid "* ongaeshi"
+msgstr "* ongaeshiさん"
+
+#: ../../doc/text/news.textile:20
+msgid "h2(#3-1-1). 3.1.1: 2013-12-29"
+msgstr ""
+
+#: ../../doc/text/news.textile:24
 msgid ""
 "* Supported Groonga 3.1.1.\n"
 "* [groonga-database-inspect]: Added @--no-tables@ option for hiding\n"
@@ -223,27 +263,15 @@ msgstr ""
 "* {Groonga::Expression#append_constant} がオペレーター名に対応。\n"
 "* {Groonga::Expression#append_object} がオペレーター名に対応。"
 
-#: ../../doc/text/news.textile:18 ../../doc/text/news.textile:38
-#: ../../doc/text/news.textile:81 ../../doc/text/news.textile:116
-#: ../../doc/text/news.textile:188 ../../doc/text/news.textile:206
-#: ../../doc/text/news.textile:326 ../../doc/text/news.textile:404
-#: ../../doc/text/news.textile:433 ../../doc/text/news.textile:462
-#: ../../doc/text/news.textile:482 ../../doc/text/news.textile:610
-#: ../../doc/text/news.textile:638 ../../doc/text/news.textile:711
-#: ../../doc/text/news.textile:732 ../../doc/text/news.textile:811
-#: ../../doc/text/news.textile:925
-msgid "h3. Thanks"
-msgstr "h3. 感謝"
-
-#: ../../doc/text/news.textile:20
+#: ../../doc/text/news.textile:37
 msgid "* Masafumi Yokoyama"
 msgstr "* Masafumi Yokoyamaさん"
 
-#: ../../doc/text/news.textile:22
+#: ../../doc/text/news.textile:39
 msgid "h2(#3-1-0). 3.1.0: 2013-11-29"
 msgstr ""
 
-#: ../../doc/text/news.textile:26
+#: ../../doc/text/news.textile:43
 msgid ""
 "* Reduced build failure by automatically Groonga build.\n"
 "  [Reported by SHIMADA Koji]\n"
@@ -256,33 +284,35 @@ msgstr ""
 "  [しまだこうじさんが報告]\n"
 "* 指定したデータベースの詳細を表示する @groonga-database-inspect@ を追加。\n"
 "  [Genki Takiuchiさんが提案]\n"
-"* {Groonga::Database#tables} が未知のオブジェクトがあっても例外をあげずに無視するようになった。このように変更した理由は、このメッソッドは存在しているテーブルが欲しい、という要求に応えるためのメソッドであるため、存在しないオブジェクトがあるかどうかはこのメソッドにとって重要なことではないから。"
+"* {Groonga::Database#tables} が未知のオブジェクトがあっても例外をあげずに無視するようになった。このように変更した理由は、このメ"
+"ッソッドは存在しているテーブルが欲しい、という要求に応えるためのメソッドであるため、存在しないオブジェクトがあるかどうかはこのメソッドにとって重要なことでは"
+"ないから。"
 
-#: ../../doc/text/news.textile:33 ../../doc/text/news.textile:50
-#: ../../doc/text/news.textile:76 ../../doc/text/news.textile:112
-#: ../../doc/text/news.textile:123 ../../doc/text/news.textile:145
-#: ../../doc/text/news.textile:166 ../../doc/text/news.textile:184
-#: ../../doc/text/news.textile:230 ../../doc/text/news.textile:241
-#: ../../doc/text/news.textile:376 ../../doc/text/news.textile:400
-#: ../../doc/text/news.textile:410 ../../doc/text/news.textile:429
-#: ../../doc/text/news.textile:444 ../../doc/text/news.textile:455
-#: ../../doc/text/news.textile:510 ../../doc/text/news.textile:516
-#: ../../doc/text/news.textile:536 ../../doc/text/news.textile:550
-#: ../../doc/text/news.textile:567 ../../doc/text/news.textile:578
-#: ../../doc/text/news.textile:585 ../../doc/text/news.textile:604
-#: ../../doc/text/news.textile:705 ../../doc/text/news.textile:721
-#: ../../doc/text/news.textile:727 ../../doc/text/news.textile:743
-#: ../../doc/text/news.textile:800 ../../doc/text/news.textile:807
+#: ../../doc/text/news.textile:50 ../../doc/text/news.textile:67
+#: ../../doc/text/news.textile:93 ../../doc/text/news.textile:129
+#: ../../doc/text/news.textile:140 ../../doc/text/news.textile:162
+#: ../../doc/text/news.textile:183 ../../doc/text/news.textile:201
+#: ../../doc/text/news.textile:247 ../../doc/text/news.textile:258
+#: ../../doc/text/news.textile:393 ../../doc/text/news.textile:417
+#: ../../doc/text/news.textile:427 ../../doc/text/news.textile:446
+#: ../../doc/text/news.textile:461 ../../doc/text/news.textile:472
+#: ../../doc/text/news.textile:527 ../../doc/text/news.textile:533
+#: ../../doc/text/news.textile:553 ../../doc/text/news.textile:567
+#: ../../doc/text/news.textile:584 ../../doc/text/news.textile:595
+#: ../../doc/text/news.textile:602 ../../doc/text/news.textile:621
+#: ../../doc/text/news.textile:722 ../../doc/text/news.textile:738
+#: ../../doc/text/news.textile:744 ../../doc/text/news.textile:760
+#: ../../doc/text/news.textile:817 ../../doc/text/news.textile:824
 msgid "h3. Fixes"
 msgstr "h3. 修正"
 
-#: ../../doc/text/news.textile:35
+#: ../../doc/text/news.textile:52
 msgid ""
 "* Fixed a bug that {Groonga::Expression#parse} doesn't accept all\n"
 "  mode and operators."
 msgstr "* {Groonga::Expression#parse} がすべての種類のモード・オペレーターを受け取れない問題を修正。"
 
-#: ../../doc/text/news.textile:40
+#: ../../doc/text/news.textile:57
 msgid ""
 "* SHIMADA Koji\n"
 "* Genki Takiuchi"
@@ -290,11 +320,11 @@ msgstr ""
 "* しまだこうじさん\n"
 "* Genki Takiuchiさん"
 
-#: ../../doc/text/news.textile:43
+#: ../../doc/text/news.textile:60
 msgid "h2(#3-0-9). 3.0.9: 2013-10-29"
 msgstr ""
 
-#: ../../doc/text/news.textile:47
+#: ../../doc/text/news.textile:64
 msgid ""
 "* Supported Groonga 3.0.9.\n"
 "* Supported showing error message on error in {Groonga::Object#remove}."
@@ -302,17 +332,17 @@ msgstr ""
 "* Groonga 3.0.9対応\n"
 "* {Groonga::Object#remove}でエラーが発生した時にエラーメッセージも含めるようにした。"
 
-#: ../../doc/text/news.textile:52
+#: ../../doc/text/news.textile:69
 msgid ""
 "* Fixed a crash bug that is caused by assigning @nil@ as source of\n"
 "  index column."
 msgstr "* インデックスカラムのソースに @nil@ を指定するとクラッシュする問題を修正した。"
 
-#: ../../doc/text/news.textile:55
+#: ../../doc/text/news.textile:72
 msgid "h2(#3-0-8). 3.0.8: 2013-09-29"
 msgstr ""
 
-#: ../../doc/text/news.textile:59
+#: ../../doc/text/news.textile:76
 msgid ""
 "* Supported groonga 3.0.8.\n"
 "* Supported x64-mingw32 Ruby.\n"
@@ -322,11 +352,11 @@ msgstr ""
 "* x64-mingw32 Rubyサポート。\n"
 "* Ruby 2.1.0 preview1サポート。"
 
-#: ../../doc/text/news.textile:63
+#: ../../doc/text/news.textile:80
 msgid "h2(#3-0-7). 3.0.7: 2013-09-19"
 msgstr ""
 
-#: ../../doc/text/news.textile:67
+#: ../../doc/text/news.textile:84
 msgid ""
 "* Added {Groonga::Table::KeySupport#tokenize}. It requires groonga\n"
 "  3.0.8. Groonga 3.0.8 is not released yet.\n"
@@ -346,31 +376,31 @@ msgstr ""
 "ga/Client/Response/Select を参照。\n"
 "** groonga-client gem、groogna-command gem、gqtp gemに依存するようになった。"
 
-#: ../../doc/text/news.textile:78
+#: ../../doc/text/news.textile:95
 msgid ""
 "* Fixed a bug that auto groonga installation is failed.\n"
 "  [GitHub#12][Patch by Keita Haga]"
 msgstr "* groongaの自動インストールが失敗するバグを修正。 [GitHub#12][Keita Hagaさんがパッチ提供]"
 
-#: ../../doc/text/news.textile:83
+#: ../../doc/text/news.textile:100
 msgid "* Keita Haga"
 msgstr "* Keita Hagaさん"
 
-#: ../../doc/text/news.textile:85
+#: ../../doc/text/news.textile:102
 msgid "h2(#3-0-6). 3.0.6: 2013-09-13"
 msgstr ""
 
-#: ../../doc/text/news.textile:89
+#: ../../doc/text/news.textile:106
 msgid ""
 "* Supported accessing reference column that referes a table that uses\n"
 "  Int8/UInt8/Int16/UInt16 key."
 msgstr "* Int8/UInt8/Int16/UInt16がキーのテーブルを参照している参照型のカラムの読み書きをサポート。"
 
-#: ../../doc/text/news.textile:92
+#: ../../doc/text/news.textile:109
 msgid "h2(#3-0-5). 3.0.5: 2013-07-29"
 msgstr ""
 
-#: ../../doc/text/news.textile:96
+#: ../../doc/text/news.textile:113
 msgid ""
 "* [dumper] supported dumping of DoubleArrayTrie.\n"
 "* Supported Int8/UInt8/Int16/UInt16 to Ruby conversion.\n"
@@ -403,11 +433,11 @@ msgstr ""
 "* 32bit整数を超えるFixnumに対応。\n"
 "  [xtuaokさんが報告]"
 
-#: ../../doc/text/news.textile:114
+#: ../../doc/text/news.textile:131
 msgid "* [dumper] fixed a bug that no column table isn't dumped."
 msgstr "* [dumper] カラムのないテーブルがダンプされない問題を修正。"
 
-#: ../../doc/text/news.textile:118
+#: ../../doc/text/news.textile:135
 msgid ""
 "* Masaharu YOSHIOKA\n"
 "* xtuaok"
@@ -415,19 +445,19 @@ msgstr ""
 "* 吉岡 真治さん\n"
 "* xtuaokさん"
 
-#: ../../doc/text/news.textile:121
+#: ../../doc/text/news.textile:138
 msgid "h2(#3-0-4). 3.0.4: 2013-07-04"
 msgstr ""
 
-#: ../../doc/text/news.textile:125
+#: ../../doc/text/news.textile:142
 msgid "* Fixed a rroogna 3.0.3 gem package for Windows."
 msgstr "* Windows用のrroogna 3.0.3 gemパッケージを修正。"
 
-#: ../../doc/text/news.textile:127
+#: ../../doc/text/news.textile:144
 msgid "h2(#3-0-3). 3.0.3: 2013-07-04"
 msgstr ""
 
-#: ../../doc/text/news.textile:131
+#: ../../doc/text/news.textile:148
 msgid ""
 "* Required groonga >= 3.0.5.\n"
 "* Added an error check for creating a result table of {Groonga::Table#select}."
@@ -459,7 +489,7 @@ msgstr ""
 "* レコードのサブレコードを返す{Groonga::Record#sub_records}を追加。\n"
 "  サブレコードは{Groonga::SubRecords}のインスタンスである。"
 
-#: ../../doc/text/news.textile:147
+#: ../../doc/text/news.textile:164
 msgid ""
 "* Fixed {Groonga::Expression#[]} return type. It returns {Groonga::Variable}\n"
 "  instead of value itself. CAUTION: It is a backward incompatible change."
@@ -467,11 +497,11 @@ msgstr ""
 "* {Groonga::Expression#[]}の返り値の型を修正。値そのものではなく{Groonga::Variable}を返すようにした。注意: こ"
 "れは後方非互換の変更である。"
 
-#: ../../doc/text/news.textile:150
+#: ../../doc/text/news.textile:167
 msgid "h2(#3-0-2). 3.0.2: 2013-05-29"
 msgstr ""
 
-#: ../../doc/text/news.textile:154
+#: ../../doc/text/news.textile:171
 msgid ""
 "* Required groonga >= 3.0.4.\n"
 "* Supported set/get a vector of Time.\n"
@@ -497,17 +527,17 @@ msgstr ""
 "* {Groonga::Table#have_n_sub_records_space?}を追加。\n"
 "* [grndump] スキーマのダンプを無効にしているときは\"register PLUGIN\"もダンプしないようにした。"
 
-#: ../../doc/text/news.textile:168
+#: ../../doc/text/news.textile:185
 msgid ""
 "* [grndump]\n"
 "  Fixed a bug that reference tables may be dumpped before referenced tables."
 msgstr "* [grndump] 参照されているテーブルよりも前に参照しているテーブルがダンプされることがある問題を修正。"
 
-#: ../../doc/text/news.textile:171
+#: ../../doc/text/news.textile:188
 msgid "h2(#3-0-1). 3.0.1: 2013-05-01"
 msgstr ""
 
-#: ../../doc/text/news.textile:175
+#: ../../doc/text/news.textile:192
 msgid ""
 "* Required groonga >= 3.0.3.\n"
 "* Supported assigning weight to value. See {Groonga::Table#set_column_value},\n"
@@ -529,19 +559,19 @@ msgstr ""
 "* {Groonga::Logger.log_path=}を{Groonga::Logger.path=}へ改名した。\n"
 "* \"Packnga >= 0.9.7\"への依存が抜けていたので追加した。 [takkanmさんが報告]"
 
-#: ../../doc/text/news.textile:186
+#: ../../doc/text/news.textile:203
 msgid "* Fixed a memory leak on error."
 msgstr "* エラー発生時にメモリリークする問題を修正。"
 
-#: ../../doc/text/news.textile:190
+#: ../../doc/text/news.textile:207
 msgid "* takkanm"
 msgstr "* @takkanmさん"
 
-#: ../../doc/text/news.textile:192
+#: ../../doc/text/news.textile:209
 msgid "h2(#3-0-0). 3.0.0: 2013-03-29"
 msgstr ""
 
-#: ../../doc/text/news.textile:196
+#: ../../doc/text/news.textile:213
 msgid ""
 "* Required groonga >= 3.0.2.\n"
 "* Added block support to {Groonga::Context#create_database}. If a\n"
@@ -562,15 +592,15 @@ msgstr ""
 "  [GitHub #8][KITAITI Makotoさんが報告]\n"
 "* {Groonga::Context#restore}がブロックをサポートした。ブロックを渡すと実行したコマンドとそのレスポンスをブロックに渡す。"
 
-#: ../../doc/text/news.textile:208
+#: ../../doc/text/news.textile:225
 msgid "* KITAITI Makoto"
 msgstr "* KITAITI Makotoさん"
 
-#: ../../doc/text/news.textile:210
+#: ../../doc/text/news.textile:227
 msgid "h2(#2-1-3). 2.1.3: 2013-01-29"
 msgstr ""
 
-#: ../../doc/text/news.textile:214
+#: ../../doc/text/news.textile:231
 msgid ""
 "* Removed Groonga::View removed in groonga 2.1.2.\n"
 "* [doc] Added tutorial in English.\n"
@@ -607,11 +637,11 @@ msgstr ""
 "を見てください。\n"
 "** rroongaでは使っていないのでスタティックライブラリはビルドしないようにした。"
 
-#: ../../doc/text/news.textile:232
+#: ../../doc/text/news.textile:249
 msgid "* [dumper] Reduced needless new lines in dumped commands."
 msgstr ""
 
-#: ../../doc/text/news.textile:234
+#: ../../doc/text/news.textile:251
 msgid ""
 "* For ranguba project:\n"
 "** [template] Removed needless block for sponsor by rubyforge.\n"
@@ -623,29 +653,29 @@ msgstr ""
 "** [template] piwikのタグを削除。\n"
 "** [template] 日本語のリファレンスのURLを修正。"
 
-#: ../../doc/text/news.textile:239
+#: ../../doc/text/news.textile:256
 msgid "h2(#2-1-2). 2.1.2: 2013-01-04"
 msgstr ""
 
-#: ../../doc/text/news.textile:243
+#: ../../doc/text/news.textile:260
 msgid "* Fixed GC related crash. Table's domain and range are also marked."
 msgstr "* GC関係のバグを削除。"
 
-#: ../../doc/text/news.textile:245
+#: ../../doc/text/news.textile:262
 msgid "h2(#2-1-1). 2.1.1: 2012-12-29"
 msgstr ""
 
-#: ../../doc/text/news.textile:249
+#: ../../doc/text/news.textile:266
 msgid ""
 "* Required groonga 2.1.1 because groonga 2.1.0 has a serious bug\n"
 "  related to key normalization."
 msgstr "* groonga 2.1.0にキーの正規化に関する重大なバグがあったため、groonga 2.1.1を必須とした。"
 
-#: ../../doc/text/news.textile:252
+#: ../../doc/text/news.textile:269
 msgid "h2(#2-1-0). 2.1.0: 2012-12-29"
 msgstr ""
 
-#: ../../doc/text/news.textile:256
+#: ../../doc/text/news.textile:273
 msgid ""
 "* Required groonga 2.1.0.\n"
 "* Supported mass record deletion with block.\n"
@@ -681,7 +711,7 @@ msgstr ""
 "というディレクトリに保存されます。\n"
 "  例）"
 
-#: ../../doc/text/news.textile:273
+#: ../../doc/text/news.textile:290
 msgid ""
 "  <pre>\n"
 "   $ cat index-dump.sdf\n"
@@ -710,7 +740,7 @@ msgid ""
 "  </pre>"
 msgstr ""
 
-#: ../../doc/text/news.textile:296
+#: ../../doc/text/news.textile:313
 msgid ""
 "* Added flag options to Groonga::IndexColumn#open_cursor.\n"
 "  The flag options are :with_section, :with_weight, :with_position.\n"
@@ -735,14 +765,14 @@ msgstr ""
 "* [inspect] デフォルトのトークナイザーとノーマライザーの情報を表示するようにした。\n"
 "* Groonga::QueryLoggerをサポートした。このクラスはクエリログのロガーです。詳しくはリファレンスマニュアルをご覧ください。"
 
-#: ../../doc/text/news.textile:310 ../../doc/text/news.textile:352
-#: ../../doc/text/news.textile:371 ../../doc/text/news.textile:506
-#: ../../doc/text/news.textile:597 ../../doc/text/news.textile:633
-#: ../../doc/text/news.textile:700
+#: ../../doc/text/news.textile:327 ../../doc/text/news.textile:369
+#: ../../doc/text/news.textile:388 ../../doc/text/news.textile:523
+#: ../../doc/text/news.textile:614 ../../doc/text/news.textile:650
+#: ../../doc/text/news.textile:717
 msgid "h3. Changes"
 msgstr "h3. 変更"
 
-#: ../../doc/text/news.textile:312
+#: ../../doc/text/news.textile:329
 msgid ""
 "* Move groonga-query-log-extract to groonga-query-log.\n"
 "  Please install groogna-query-log gem to use this tool.\n"
@@ -771,7 +801,7 @@ msgstr ""
 "      record.value\n"
 "    end"
 
-#: ../../doc/text/news.textile:328
+#: ../../doc/text/news.textile:345
 msgid ""
 "* ongaeshi\n"
 "* Genki Takiuchi"
@@ -779,19 +809,19 @@ msgstr ""
 "* ongaeshiさん\n"
 "* Genki Takiuchiさん"
 
-#: ../../doc/text/news.textile:331
+#: ../../doc/text/news.textile:348
 msgid "h2(#2-0-8). 2.0.8: 2012-12-02"
 msgstr ""
 
-#: ../../doc/text/news.textile:335
+#: ../../doc/text/news.textile:352
 msgid "* Required groonga 2.0.9."
 msgstr "* groonga 2.0.9対応。"
 
-#: ../../doc/text/news.textile:337
+#: ../../doc/text/news.textile:354
 msgid "h2(#2-0-7). 2.0.7: 2012-11-29"
 msgstr ""
 
-#: ../../doc/text/news.textile:341
+#: ../../doc/text/news.textile:358
 msgid ""
 "* Added Groonga::Posting#record. This method returns the record for\n"
 "  the record ID in table.\n"
@@ -811,7 +841,7 @@ msgstr ""
 "* [Type] Groonga::Typeに次のメソッドを追加：#fixed_size?, #variable_size?, #unsigned_inte"
 "ger?, #integer?, #float?, #geo_point?"
 
-#: ../../doc/text/news.textile:354
+#: ../../doc/text/news.textile:371
 msgid ""
 "* Removed query log related codes.\n"
 "  This feature moved to groonga-query-log gem and it is relased soon."
@@ -819,11 +849,11 @@ msgstr ""
 "* クエリログ関連の機能を削除した。クエリログ関連の機能はgroonga-query-logというgemに移動しました。このgemは近日中にリリースする予定"
 "です。"
 
-#: ../../doc/text/news.textile:357
+#: ../../doc/text/news.textile:374
 msgid "h2(#2-0-6). 2.0.6: 2012-10-25"
 msgstr ""
 
-#: ../../doc/text/news.textile:361
+#: ../../doc/text/news.textile:378
 msgid ""
 "* [dump] Put index columns at the bottom (after loads).\n"
 "  It is for using offline index construction.\n"
@@ -840,21 +870,21 @@ msgstr ""
 "* selectメソッドを使うときに:allow_leading_notオプションを使用できるようにした。このオプションで「ある単語が含まれない全てのレコー"
 "ド」を検索すると検索が遅くなります。またレコードが多い時にも時間がかかるので注意して使ってください。"
 
-#: ../../doc/text/news.textile:373
+#: ../../doc/text/news.textile:390
 msgid ""
 "* Changed option name for debug build in extconf.rb from --with-debug\n"
 "  to --enable-debug-log."
 msgstr "* extconf.rbでデバッグ用ビルドに使うオプションを--with-debugから--enable-debug-logに変更。"
 
-#: ../../doc/text/news.textile:378
+#: ../../doc/text/news.textile:395
 msgid "* Fixed display collapse in the references."
 msgstr "* リファレンスの表示崩れを修正。"
 
-#: ../../doc/text/news.textile:380
+#: ../../doc/text/news.textile:397
 msgid "h2(#2-0-5). 2.0.5: 2012-09-28"
 msgstr ""
 
-#: ../../doc/text/news.textile:384
+#: ../../doc/text/news.textile:401
 msgid ""
 "* Supported groonga 2.0.7.\n"
 "* Removed the workaround to install rroonga with old groonga.\n"
@@ -888,27 +918,27 @@ msgstr ""
 "* Groonga::Context#ruby_encodingを追加。\n"
 "* コード内に書かれていてリファレンスに表示されていなかったドキュメントをリファレンスに追加。"
 
-#: ../../doc/text/news.textile:402
+#: ../../doc/text/news.textile:419
 msgid "* Added missing backslash escape for groonga command."
 msgstr "* groongaコマンドにバックスラッシュがあったときにエスケープするように修正した。"
 
-#: ../../doc/text/news.textile:406
+#: ../../doc/text/news.textile:423
 msgid "* @temitan"
 msgstr "* @temtanさん"
 
-#: ../../doc/text/news.textile:408
+#: ../../doc/text/news.textile:425
 msgid "h2(#2-0-4). 2.0.4: 2012-05-02"
 msgstr ""
 
-#: ../../doc/text/news.textile:412
+#: ../../doc/text/news.textile:429
 msgid "* Fixed a bug that weight of match target is ignored."
 msgstr "* マッチカラムの重みが無視される問題を修正。"
 
-#: ../../doc/text/news.textile:414
+#: ../../doc/text/news.textile:431
 msgid "h2(#2-0-3). 2.0.3: 2012-05-02"
 msgstr ""
 
-#: ../../doc/text/news.textile:418
+#: ../../doc/text/news.textile:435
 msgid ""
 "* Supported groonga 2.0.2.\n"
 "* Groonga::Table#each supports options that are same as\n"
@@ -930,19 +960,19 @@ msgstr ""
 "* 類似文書検索をサポート。構文は @table.select {|record| record.column.similar_search(text)}@"
 " 。"
 
-#: ../../doc/text/news.textile:431
+#: ../../doc/text/news.textile:448
 msgid "* Fixed a GC related crach bug."
 msgstr "* GC関連ででクラッシュするバグを修正。"
 
-#: ../../doc/text/news.textile:435
+#: ../../doc/text/news.textile:452
 msgid "* @ongaeshi"
 msgstr "* ongaeshiさん"
 
-#: ../../doc/text/news.textile:437
+#: ../../doc/text/news.textile:454
 msgid "h2(#2-0-2). 2.0.2: 2012-03-29"
 msgstr ""
 
-#: ../../doc/text/news.textile:441
+#: ../../doc/text/news.textile:458
 msgid ""
 "* Supported groonga 2.0.1.\n"
 "* Added \"logos\":http://groonga.rubyforge.org/#logo ."
@@ -950,15 +980,15 @@ msgstr ""
 "* groonga 2.0.1対応。\n"
 "* \"ロゴ\":http://groonga.rubyforge.org/#logo を追加。"
 
-#: ../../doc/text/news.textile:446
+#: ../../doc/text/news.textile:463
 msgid "* Fixed a Groonga::Snipet related crach bug caused by GC."
 msgstr "* Groonga::Snippetに関連したGCでクラッシュするバグを修正した。"
 
-#: ../../doc/text/news.textile:448
+#: ../../doc/text/news.textile:465
 msgid "h2(#2-0-0). 2.0.0: 2012-03-22"
 msgstr ""
 
-#: ../../doc/text/news.textile:452
+#: ../../doc/text/news.textile:469
 msgid ""
 "* Supported groonga 2.0.0.\n"
 "* [gem][windows] Removed mswin packages."
@@ -966,7 +996,7 @@ msgstr ""
 "* groonga 2.0.0対応。\n"
 "* [gem][windows] mswin用のパッケージを削除した。"
 
-#: ../../doc/text/news.textile:457
+#: ../../doc/text/news.textile:474
 msgid ""
 "* [test] Fixed version test failure. [GitHub#4] [Reported by @takkanm]\n"
 "* Fixed a Groonga::Expression related crach bug caused by GC.\n"
@@ -978,7 +1008,7 @@ msgstr ""
 "* [doc] 壊れたHTML出力を修正した。 [groonga-dev,00699] \n"
 "  [平野さんが報告]"
 
-#: ../../doc/text/news.textile:464
+#: ../../doc/text/news.textile:481
 msgid ""
 "* @takkanm\n"
 "* Hirano"
@@ -986,11 +1016,11 @@ msgstr ""
 "* @takkanmさん\n"
 "* 平野さん"
 
-#: ../../doc/text/news.textile:467
+#: ../../doc/text/news.textile:484
 msgid "h2(#1-3-1). 1.3.1: 2012-01-29"
 msgstr ""
 
-#: ../../doc/text/news.textile:471
+#: ../../doc/text/news.textile:488
 msgid ""
 "* Supported groonga 1.3.0.\n"
 "* [schema] Supported Int8, Int16, UInt8 and UInt16.\n"
@@ -1014,15 +1044,15 @@ msgstr ""
 "* エンコードされた文字列の扱ったときのパフォーマンスを改良。\n"
 "* Groonga::Command::Builder.escape_valueを追加。"
 
-#: ../../doc/text/news.textile:484
+#: ../../doc/text/news.textile:501
 msgid "* @mashiro"
 msgstr "* @mashiroさん"
 
-#: ../../doc/text/news.textile:486
+#: ../../doc/text/news.textile:503
 msgid "h2(#1-3-0). 1.3.0: 2011-11-29"
 msgstr ""
 
-#: ../../doc/text/news.textile:490
+#: ../../doc/text/news.textile:507
 msgid ""
 "* [schema] Remove also needless db.tables/ directory if it is empty.\n"
 "* [schema] Remove also needless db.tables/table.columns/ directory if it is em"
@@ -1057,27 +1087,27 @@ msgstr ""
 "* [schema] カラムのリネームに対応。\n"
 "* [schema] ダブル配列トライに対応。"
 
-#: ../../doc/text/news.textile:508
+#: ../../doc/text/news.textile:525
 msgid "* [schema] Don't use named path by default for location aware DB."
 msgstr "* [schema] DBを移動してもそのまま使えるようにするために、デフォルトではパスに意味のある名前をつけないようにした。"
 
-#: ../../doc/text/news.textile:512
+#: ../../doc/text/news.textile:529
 msgid "* Fixed a crash problem on GC."
 msgstr "* GC時にクラッシュする問題を修正。"
 
-#: ../../doc/text/news.textile:514
+#: ../../doc/text/news.textile:531
 msgid "h2. 1.2.9: 2011-09-16"
 msgstr ""
 
-#: ../../doc/text/news.textile:518
+#: ../../doc/text/news.textile:535
 msgid "* deleted unneed object files."
 msgstr "* 不要なオブジェクトファイルが入っていたのを削除。"
 
-#: ../../doc/text/news.textile:520
+#: ../../doc/text/news.textile:537
 msgid "h2. 1.2.8: 2011-09-16"
 msgstr ""
 
-#: ../../doc/text/news.textile:524
+#: ../../doc/text/news.textile:541
 msgid ""
 "* supported \"!=\" expression for column in block of Groonga::Table#select.\n"
 "* accepted Hash like object as options.\n"
@@ -1091,23 +1121,23 @@ msgstr ""
 "* Ruby文法においてのベクター形式のダンプに対応。\n"
 "* 環境変数GRN_CTX_PER_DBに対応。（注意：この環境変数を使用する際は注意して使ってください）"
 
-#: ../../doc/text/news.textile:530
+#: ../../doc/text/news.textile:547
 msgid "h2. 1.2.7: 2011-08-29"
 msgstr ""
 
-#: ../../doc/text/news.textile:534
+#: ../../doc/text/news.textile:551
 msgid "* Added Groonga::Snippet#close that frees resource."
 msgstr "* リソースを解放するGroonga::Snippet#closeを追加。"
 
-#: ../../doc/text/news.textile:538
+#: ../../doc/text/news.textile:555
 msgid "* Fixed build error on Ruby 1.8.7."
 msgstr "* Ruby 1.8.7でビルドできない問題を修正。"
 
-#: ../../doc/text/news.textile:540
+#: ../../doc/text/news.textile:557
 msgid "h2. 1.2.6: 2011-08-29"
 msgstr ""
 
-#: ../../doc/text/news.textile:544
+#: ../../doc/text/news.textile:561
 msgid ""
 "* Supported groonga 1.2.5.\n"
 "* Added Groonga::Record#added? that returns true when the record is just added"
@@ -1122,7 +1152,7 @@ msgstr ""
 "* データベース中のすべての可変長カラムをデフラグする Groonga::Database#defrag を追加。\n"
 "* シンボルでのカラム名指定に対応。"
 
-#: ../../doc/text/news.textile:552
+#: ../../doc/text/news.textile:569
 msgid ""
 "* Fixed install *.rb failure by gem install.\n"
 "* Fixed some memory leaks.\n"
@@ -1132,11 +1162,11 @@ msgstr ""
 "* メモリリークを修正。\n"
 "* 終了時にクラッシュする問題を修正。"
 
-#: ../../doc/text/news.textile:556
+#: ../../doc/text/news.textile:573
 msgid "h2. 1.2.5: 2011-08-05"
 msgstr ""
 
-#: ../../doc/text/news.textile:560
+#: ../../doc/text/news.textile:577
 msgid ""
 "* Re-supported tar.gz distribution.\n"
 "* Added Groonga::Context#close.\n"
@@ -1152,7 +1182,7 @@ msgstr ""
 "* grndump: ダンプしないテーブルを指定する--exclude-tableオプションを追加。\n"
 "* dump: パスが等しいかどうかのチェックを削除。"
 
-#: ../../doc/text/news.textile:569
+#: ../../doc/text/news.textile:586
 msgid ""
 "* dump: Fixed wrong index table type.\n"
 "* Re-supported auto groonga install."
@@ -1160,15 +1190,15 @@ msgstr ""
 "* [dump] 間違ったインデックス用テーブルを出力する問題を修正。\n"
 "* groongaの自動インストールを再サポート。"
 
-#: ../../doc/text/news.textile:572
+#: ../../doc/text/news.textile:589
 msgid "h2. 1.2.4: 2011-06-29"
 msgstr ""
 
-#: ../../doc/text/news.textile:576
+#: ../../doc/text/news.textile:593
 msgid "* Supported groonga 1.2.3."
 msgstr "* groonga 1.2.3対応。"
 
-#: ../../doc/text/news.textile:580
+#: ../../doc/text/news.textile:597
 msgid ""
 "* Re-supported auto groonga install.\n"
 "* Added missing pkg-config gem dependency."
@@ -1176,11 +1206,11 @@ msgstr ""
 "* groongaの自動インストールを再サポート。\n"
 "* pkg-config gemへの依存関係を追加。"
 
-#: ../../doc/text/news.textile:583
+#: ../../doc/text/news.textile:600
 msgid "h2. 1.2.3: 2011-06-27"
 msgstr ""
 
-#: ../../doc/text/news.textile:587
+#: ../../doc/text/news.textile:604
 msgid ""
 "* remove object files in gem packages.\n"
 "* fix charactor corruption in reference."
@@ -1188,11 +1218,11 @@ msgstr ""
 "* gemパッケージに含まれてしまったオブジェクトファイル(*.o)を削除。\n"
 "* 一部のリファレンスマニュアルの文字化けを修正。"
 
-#: ../../doc/text/news.textile:590
+#: ../../doc/text/news.textile:607
 msgid "h2. 1.2.2: 2011-06-27"
 msgstr ""
 
-#: ../../doc/text/news.textile:594
+#: ../../doc/text/news.textile:611
 msgid ""
 "* created \"Developers\" page in English.\n"
 "* added description for tasks of \"html:publish\" and \"publish\"."
@@ -1200,7 +1230,7 @@ msgstr ""
 "* 英語版の「開発者向け情報」ページを作成。\n"
 "* \"html:publish\"タスクと\"publish\"に関しての説明を追加。"
 
-#: ../../doc/text/news.textile:599
+#: ../../doc/text/news.textile:616
 msgid ""
 "* Groonga::Record#attributes return same attributes object for duplicate recor"
 "ds.\n"
@@ -1213,7 +1243,7 @@ msgstr ""
 "* 「開発者向け情報」ページ内にあるドキュメント作成ツールを変更。\n"
 "* NEWS*.rdocとtutorial.texttileをディレクトリdoc/text/に移動。"
 
-#: ../../doc/text/news.textile:606
+#: ../../doc/text/news.textile:623
 msgid ""
 "* fixed the tutorial path in index page.\n"
 "* fixed the path of tutorial in index page in English.\n"
@@ -1223,15 +1253,15 @@ msgstr ""
 "* インデックスページにある英語版「チュートリアル」ページへのリンクを修正。\n"
 "* 新しいgroongaのダウンロードURLに対応。 [mallowlabs]"
 
-#: ../../doc/text/news.textile:612
+#: ../../doc/text/news.textile:629
 msgid "* mallowlabs"
 msgstr "* mallowlabsさん"
 
-#: ../../doc/text/news.textile:614
+#: ../../doc/text/news.textile:631
 msgid "h2. 1.2.1: 2011-06-07"
 msgstr ""
 
-#: ../../doc/text/news.textile:618
+#: ../../doc/text/news.textile:635
 msgid ""
 "* added document of Groonga::Table#pagination.\n"
 "* added grndump in package.\n"
@@ -1261,7 +1291,7 @@ msgstr ""
 "* Groonga::IndexCursorを追加。[yoshihara]\n"
 "* Groonga::Object#builtin?を追加。[yoshihara]"
 
-#: ../../doc/text/news.textile:635
+#: ../../doc/text/news.textile:652
 msgid ""
 "* check existence of column before removing it.\n"
 "* removed grn expression document."
@@ -1269,7 +1299,7 @@ msgstr ""
 "* カラムが削除される前に、そのカラムがあるかチェックするようにした。\n"
 "* ドキュメントからgrn式のページを削除。"
 
-#: ../../doc/text/news.textile:640
+#: ../../doc/text/news.textile:657
 msgid ""
 "* mooz\n"
 "* yoshihara"
@@ -1277,11 +1307,11 @@ msgstr ""
 "* moozさん\n"
 "* yoshiharaさん"
 
-#: ../../doc/text/news.textile:643
+#: ../../doc/text/news.textile:660
 msgid "h2. 1.2.0: 2011-04-01"
 msgstr ""
 
-#: ../../doc/text/news.textile:647
+#: ../../doc/text/news.textile:664
 msgid ""
 "* Supported groonga 1.2.0.\n"
 "* Added Groonga::Accessor#local_name.\n"
@@ -1311,11 +1341,11 @@ msgstr ""
 "* Groonga::Schemaの型指定で\"ShortText\"など正式型名だけではなく、:short_textなどよりRubyらしい名前を使えるようにし"
 "た。"
 
-#: ../../doc/text/news.textile:661
+#: ../../doc/text/news.textile:678
 msgid "h2. 1.1.0: 2011-02-09"
 msgstr ""
 
-#: ../../doc/text/news.textile:665
+#: ../../doc/text/news.textile:682
 msgid ""
 "* Supported groonga 1.1.0.\n"
 "* Added Groonga::Plugin.register."
@@ -1323,11 +1353,11 @@ msgstr ""
 "* groonga 1.1.0対応。\n"
 "* Groonga::Plugin.registerを追加。"
 
-#: ../../doc/text/news.textile:668
+#: ../../doc/text/news.textile:685
 msgid "h2. 1.0.9: 2011-01-29"
 msgstr ""
 
-#: ../../doc/text/news.textile:672
+#: ../../doc/text/news.textile:689
 msgid ""
 "* Supported gem creation on Windows. [Patch by ongaeshi]\n"
 "* Supported generated directory that is created by Groonga::Schema removal\n"
@@ -1383,13 +1413,13 @@ msgstr ""
 "* Groonga::Table#have_column?が擬似カラムに対応。\n"
 "* Groonga::Record#have_column?が擬似カラムに対応。"
 
-#: ../../doc/text/news.textile:702
+#: ../../doc/text/news.textile:719
 msgid ""
 "* Renamed Groonga::Operatoion to Groonga::Operator.\n"
 "  (Groonga::Operation is deprecated but still usable.)"
 msgstr "* Groonga::OperatoionをGroonga::Operatorに変更。（しばらくはGroonga::Operationも使えるが、非推奨。）"
 
-#: ../../doc/text/news.textile:707
+#: ../../doc/text/news.textile:724
 msgid ""
 "* Fixed a crash bug when not default Groonga::Context is used in\n"
 "  Groonga::Table#select.\n"
@@ -1398,27 +1428,23 @@ msgstr ""
 "* 複数のGroonga::Contextを利用した場合にGroonga::Table#selectでクラッシュする問題を修正。\n"
 "* 例外発生時にクラッシュする問題を修正。"
 
-#: ../../doc/text/news.textile:713
-msgid "* ongaeshi"
-msgstr "* ongaeshiさん"
-
-#: ../../doc/text/news.textile:715
+#: ../../doc/text/news.textile:732
 msgid "h2. 1.0.8: 2010-12-25"
 msgstr ""
 
-#: ../../doc/text/news.textile:719
+#: ../../doc/text/news.textile:736
 msgid "* Improved Groonga::Schema's n-gram tokenizer detect process."
 msgstr "* Groonga::Schemaのn-gramトークナイザー検出処理を改良。"
 
-#: ../../doc/text/news.textile:723
+#: ../../doc/text/news.textile:740
 msgid "* Fixed GC problem caused by match_target in select."
 msgstr "* selectでmatch_targetを利用した場合に生きているオブジェクトもGCされる問題を修正。<"
 
-#: ../../doc/text/news.textile:725
+#: ../../doc/text/news.textile:742
 msgid "h2. 1.0.7: 2010-12-19"
 msgstr ""
 
-#: ../../doc/text/news.textile:729
+#: ../../doc/text/news.textile:746
 msgid ""
 "* Supported pkg-config installed by RubyGems on Ruby 1.8. [Reported by @kamipo"
 "]\n"
@@ -1427,29 +1453,29 @@ msgstr ""
 "* Ruby 1.8でRubyGemsでインストールされたpkg-configを使えるようにした。 [@kamipoさんが報告]\n"
 "* Groonga::Table#columnsのメモリリークを修正。"
 
-#: ../../doc/text/news.textile:734
+#: ../../doc/text/news.textile:751
 msgid "* @kamipo"
 msgstr ""
 
-#: ../../doc/text/news.textile:736
+#: ../../doc/text/news.textile:753
 msgid "h2. 1.0.5: 2010-11-29"
 msgstr "* @kamipoさん"
 
-#: ../../doc/text/news.textile:740
+#: ../../doc/text/news.textile:757
 msgid ""
 "* Added snail_case type name aliases for built-in groonga types\n"
 "  to Groonga::Schema."
 msgstr "* Groonga::Schemaでgroongaの組み込み型をshort_textなどのように「小文字 + アンダースコア」でも指定できるようにした。"
 
-#: ../../doc/text/news.textile:745
+#: ../../doc/text/news.textile:762
 msgid "* Fixed a crash bug on GC. [Ryo Onodera]"
 msgstr "* GC時にクラッシュするバグを修正。 [Ryo Onodera]"
 
-#: ../../doc/text/news.textile:747
+#: ../../doc/text/news.textile:764
 msgid "h2. 1.0.4: 2010-11-29"
 msgstr ""
 
-#: ../../doc/text/news.textile:751
+#: ../../doc/text/news.textile:768
 msgid ""
 "* Supported groonga 1.0.4.\n"
 "  * Added Groonga::UnsupportedCommandVersion.\n"
@@ -1520,11 +1546,11 @@ msgstr ""
 "* Groonga::Record#record_raw_idを追加。\n"
 "* ベクタの参照カラムの値にArray以外でもto_aryを持つオブジェクトを設定できるようにした。"
 
-#: ../../doc/text/news.textile:787
+#: ../../doc/text/news.textile:804
 msgid "h2. Changes"
 msgstr "h2. 変更"
 
-#: ../../doc/text/news.textile:789
+#: ../../doc/text/news.textile:806
 msgid ""
 "* Used :key as the default value of :order_by of\n"
 "  Groonga::PatriciaTrie#open_cursor.\n"
@@ -1546,7 +1572,7 @@ msgstr ""
 "* Groonga::Column#index?を追加。Groonga::Column#index_column?は非推奨。\n"
 "* Groonga::Column#reference?を追加。Groonga::Column#reference_column?は非推奨。"
 
-#: ../../doc/text/news.textile:802
+#: ../../doc/text/news.textile:819
 msgid ""
 "* Fixed index for key isn't be able to define.\n"
 "* Fixed a crash problem on GC."
@@ -1554,23 +1580,23 @@ msgstr ""
 "* keyにインデックスを張れない問題を修正。\n"
 "* GC時にクラッシュする問題を修正。"
 
-#: ../../doc/text/news.textile:805
+#: ../../doc/text/news.textile:822
 msgid "h2. 1.0.1: 2010-09-12"
 msgstr ""
 
-#: ../../doc/text/news.textile:809
+#: ../../doc/text/news.textile:826
 msgid "* Fixed wrong flag used on creating a table. [Reported by ono matope]"
 msgstr "* テーブル作成時に誤ったフラグを指定していた問題を修正。 [小野マトペさんが報告]"
 
-#: ../../doc/text/news.textile:813
+#: ../../doc/text/news.textile:830
 msgid "* ono matope"
 msgstr "* 小野マトペさん"
 
-#: ../../doc/text/news.textile:815
+#: ../../doc/text/news.textile:832
 msgid "h2. 1.0.0: 2010-08-29"
 msgstr ""
 
-#: ../../doc/text/news.textile:817
+#: ../../doc/text/news.textile:834
 msgid ""
 "* Supported groonga 1.0.0.\n"
 "  * Added Groonga::CASError.\n"
@@ -1591,11 +1617,11 @@ msgstr ""
 "* 値の近い順にレコードを取り出すカーソルを作るGroonga::PatriciaTrie#open_near_cursorを追加。\n"
 "* インデックスのソースに_keyを指定できるようになった。"
 
-#: ../../doc/text/news.textile:828
+#: ../../doc/text/news.textile:845
 msgid "h2. 0.9.5: 2010-07-20"
 msgstr ""
 
-#: ../../doc/text/news.textile:830
+#: ../../doc/text/news.textile:847
 msgid ""
 "* Supported groonga 0.7.4.\n"
 "* Imporoved Groonga::Table#select:\n"
@@ -1605,7 +1631,7 @@ msgstr ""
 "* Groonga::Table#selectを改良:\n"
 "* 重み付きマッチに対応:"
 
-#: ../../doc/text/news.textile:834
+#: ../../doc/text/news.textile:851
 msgid ""
 "    Here is an example to match source column or title column and\n"
 "    title column has high score:\n"
@@ -1621,7 +1647,7 @@ msgstr ""
 "      end\n"
 "* 配列で複数条件のand表現に対応:"
 
-#: ../../doc/text/news.textile:841
+#: ../../doc/text/news.textile:858
 msgid ""
 "    Here are examples that represents the same condition:\n"
 "      table.select do |record|\n"
@@ -1641,7 +1667,7 @@ msgstr ""
 "        conditions\n"
 "      end"
 
-#: ../../doc/text/news.textile:849
+#: ../../doc/text/news.textile:866
 msgid ""
 "      table.select do |record|\n"
 "        (record.title =~ \"query\") &\n"
@@ -1659,23 +1685,23 @@ msgstr ""
 "* Groonga::Table#support_sub_records?追加\n"
 "* ページネーション対応: Groonga::Table#paginate, Groonga::Pagination"
 
-#: ../../doc/text/news.textile:857
+#: ../../doc/text/news.textile:874
 msgid "h2. 0.9.4: 2010-04-22"
 msgstr ""
 
-#: ../../doc/text/news.textile:859 ../../doc/text/news.textile:863
+#: ../../doc/text/news.textile:876 ../../doc/text/news.textile:880
 msgid "* Fixed release miss."
 msgstr "* リリースミス修正。"
 
-#: ../../doc/text/news.textile:861
+#: ../../doc/text/news.textile:878
 msgid "h2. 0.9.3: 2010-04-22"
 msgstr ""
 
-#: ../../doc/text/news.textile:865
+#: ../../doc/text/news.textile:882
 msgid "h2. 0.9.2: 2010-04-22"
 msgstr ""
 
-#: ../../doc/text/news.textile:867
+#: ../../doc/text/news.textile:884
 msgid ""
 "* Supported groonga 0.1.9.\n"
 "* Many."
@@ -1683,19 +1709,19 @@ msgstr ""
 "* groonga 0.1.9対応。\n"
 "* たくさん。"
 
-#: ../../doc/text/news.textile:870
+#: ../../doc/text/news.textile:887
 msgid "h2. 0.9.1: 2010-02-09"
 msgstr ""
 
-#: ../../doc/text/news.textile:872
+#: ../../doc/text/news.textile:889
 msgid "* Supported groonga 0.1.6"
 msgstr ""
 
-#: ../../doc/text/news.textile:874
+#: ../../doc/text/news.textile:891
 msgid "h2. 0.9.0: 2010-02-09"
 msgstr "* groonga 0.1.6対応"
 
-#: ../../doc/text/news.textile:876
+#: ../../doc/text/news.textile:893
 msgid ""
 "* Supported groonga 0.1.5\n"
 "* Added API\n"
@@ -1793,7 +1819,7 @@ msgstr ""
 "* extconf.rbにデバッグモードでビルドする--with-debugオプションを追加\n"
 "* Ruby 1.9.1でextconf.rbが失敗する問題の修正"
 
-#: ../../doc/text/news.textile:927
+#: ../../doc/text/news.textile:944
 msgid ""
 "* dara\n"
 "* Ryo Onodera\n"
@@ -1803,11 +1829,11 @@ msgstr ""
 "* Ryo Onoderaさん\n"
 "* Tasuku SUENAGAさん"
 
-#: ../../doc/text/news.textile:931
+#: ../../doc/text/news.textile:948
 msgid "h2. 0.0.7: 2009-10-02"
 msgstr ""
 
-#: ../../doc/text/news.textile:933
+#: ../../doc/text/news.textile:950
 msgid ""
 "* Supported groonga 0.1.4\n"
 "* Added API\n"
@@ -1825,11 +1851,11 @@ msgstr ""
 "  * Groonga::Object#append\n"
 "  * Groonga::Object#prepend"
 
-#: ../../doc/text/news.textile:941
+#: ../../doc/text/news.textile:958
 msgid "h2. 0.0.6: 2009-07-31"
 msgstr ""
 
-#: ../../doc/text/news.textile:943
+#: ../../doc/text/news.textile:960
 msgid ""
 "* Supported groonga 0.1.1.\n"
 "* Fixed documents [id:mat_aki]\n"
@@ -1853,11 +1879,11 @@ msgstr ""
 "  * tar.gzも提供 [id:m_seki]\n"
 "* メモリリークの修正"
 
-#: ../../doc/text/news.textile:954
+#: ../../doc/text/news.textile:971
 msgid "h2. 0.0.3: 2009-07-18"
 msgstr ""
 
-#: ../../doc/text/news.textile:956
+#: ../../doc/text/news.textile:973
 msgid ""
 "* Added Groonga::TableKeySupport#has_key? [#26145] [Tasuku SUENAGA]\n"
 "* Groonga::Record#[] raises an exception for nonexistent\n"
@@ -1884,11 +1910,11 @@ msgstr ""
 "  * Groonga::Schema: スキーマ定義用DSL\n"
 "  * Groonga::Expression"
 
-#: ../../doc/text/news.textile:969
+#: ../../doc/text/news.textile:986
 msgid "h2. 0.0.2: 2009-06-04"
 msgstr ""
 
-#: ../../doc/text/news.textile:971
+#: ../../doc/text/news.textile:988
 msgid ""
 "* Supported groonga 0.0.8 [mori]\n"
 "* Improved preformance: cache key, value, domain and range\n"
@@ -1908,11 +1934,11 @@ msgstr ""
 "* Fixed install process [Tasuku SUENAGA]\n"
 "* メモリリークの修正"
 
-#: ../../doc/text/news.textile:980
+#: ../../doc/text/news.textile:997
 msgid "h2. 0.0.1: 2009-04-30"
 msgstr ""
 
-#: ../../doc/text/news.textile:982
+#: ../../doc/text/news.textile:999
 msgid "* Initial release!"
 msgstr "* 最初のリリース！"
 
@@ -2803,14 +2829,6 @@ msgid ""
 "にテーブルが破棄される。"
 msgstr ""
 
-# @overload
-#: ../../ext/groonga/rb-grn-array.c:86 ../../ext/groonga/rb-grn-database.c:172
-#: ../../ext/groonga/rb-grn-double-array-trie.c:168
-#: ../../ext/groonga/rb-grn-hash.c:149
-#: ../../ext/groonga/rb-grn-patricia-trie.c:159
-msgid "tag|overload|create"
-msgstr ""
-
 # @example
 #: ../../ext/groonga/rb-grn-array.c:86
 msgid ""
@@ -2826,6 +2844,14 @@ msgid ""
 "\n"
 "#それぞれのレコードに512バイトの値を格納できる無名一時テーブルを生成する。\n"
 "Groonga::Array.create(:value => 512)"
+msgstr ""
+
+# @overload
+#: ../../ext/groonga/rb-grn-array.c:86 ../../ext/groonga/rb-grn-database.c:172
+#: ../../ext/groonga/rb-grn-double-array-trie.c:168
+#: ../../ext/groonga/rb-grn-hash.c:149
+#: ../../ext/groonga/rb-grn-patricia-trie.c:159
+msgid "tag|overload|create"
 msgstr ""
 
 #: ../../ext/groonga/rb-grn-array.c:146
@@ -2894,7 +2920,7 @@ msgid ""
 "not be filled completely. You should handle the case in pull side."
 msgstr ""
 
-# @example A program that pushes a job without error handling
+# @example A program that has an error in push block
 #: ../../ext/groonga/rb-grn-array.c:302
 msgid ""
 "queue = Groonga::Array.create(:name => \"CrawlURLQueue\")\n"
@@ -2902,9 +2928,52 @@ msgid ""
 "urls = [\"http://groonga.org/\", \"http://ranguba.org/\"]\n"
 "urls.each do |url|\n"
 "  queue.push do |record|\n"
-"    record.url = url\n"
+"    record.url = uri # Typo! It should be ur*l* not ur*i*\n"
+"    # record.url isn't set\n"
 "  end\n"
 "end"
+msgstr ""
+
+# @example
+#: ../../ext/groonga/rb-grn-array.c:302
+msgid "tag|example|A program that pulls a job without error handling"
+msgstr ""
+
+# @example A program that pushes a job with error handling
+#: ../../ext/groonga/rb-grn-array.c:302
+msgid ""
+"queue = Groonga::Array.create(:name => \"CrawlURLQueue\")\n"
+"queue.define_column(\"url\", \"ShortText\")\n"
+"urls = [\"http://groonga.org/\", \"http://ranguba.org/\"]\n"
+"urls.each do |url|\n"
+"  queue.push do |record|\n"
+"    record.url = url if record # check record is not nil\n"
+"  end\n"
+"end"
+msgstr ""
+
+# @example
+#: ../../ext/groonga/rb-grn-array.c:302
+msgid "tag|example|A program that has an error in push block"
+msgstr ""
+
+# @example A program that pulls a job without error handling
+#: ../../ext/groonga/rb-grn-array.c:302
+msgid ""
+"queue = Groonga::Array.open(:name => \"CrawlURLQueue\")\n"
+"loop do\n"
+"  url = nil\n"
+"  queue.pull do |record|\n"
+"    url = record.url\n"
+"    record.delete\n"
+"  end\n"
+"  # Crawl URL\n"
+"end"
+msgstr ""
+
+# @example
+#: ../../ext/groonga/rb-grn-array.c:302
+msgid "tag|example|A program that pulls a job with error handling"
 msgstr ""
 
 # @example A program that pulls a job with error handling
@@ -2922,22 +2991,7 @@ msgid ""
 "end"
 msgstr ""
 
-# @overload
-#: ../../ext/groonga/rb-grn-array.c:302
-msgid "tag|overload|push"
-msgstr ""
-
-# @example
-#: ../../ext/groonga/rb-grn-array.c:302
-msgid "tag|example|A program that pulls a job with error handling"
-msgstr ""
-
-# @example
-#: ../../ext/groonga/rb-grn-array.c:302
-msgid "tag|example|A program that pushes a job without error handling"
-msgstr ""
-
-# @example A program that has an error in push block
+# @example A program that pushes a job without error handling
 #: ../../ext/groonga/rb-grn-array.c:302
 msgid ""
 "queue = Groonga::Array.create(:name => \"CrawlURLQueue\")\n"
@@ -2945,15 +2999,9 @@ msgid ""
 "urls = [\"http://groonga.org/\", \"http://ranguba.org/\"]\n"
 "urls.each do |url|\n"
 "  queue.push do |record|\n"
-"    record.url = uri # Typo! It should be ur*l* not ur*i*\n"
-"    # record.url isn't set\n"
+"    record.url = url\n"
 "  end\n"
 "end"
-msgstr ""
-
-# @example
-#: ../../ext/groonga/rb-grn-array.c:302
-msgid "tag|example|A program that has an error in push block"
 msgstr ""
 
 # @example
@@ -2963,34 +3011,12 @@ msgstr ""
 
 # @example
 #: ../../ext/groonga/rb-grn-array.c:302
-msgid "tag|example|A program that pulls a job without error handling"
+msgid "tag|example|A program that pushes a job without error handling"
 msgstr ""
 
-# @example A program that pulls a job without error handling
+# @overload
 #: ../../ext/groonga/rb-grn-array.c:302
-msgid ""
-"queue = Groonga::Array.open(:name => \"CrawlURLQueue\")\n"
-"loop do\n"
-"  url = nil\n"
-"  queue.pull do |record|\n"
-"    url = record.url\n"
-"    record.delete\n"
-"  end\n"
-"  # Crawl URL\n"
-"end"
-msgstr ""
-
-# @example A program that pushes a job with error handling
-#: ../../ext/groonga/rb-grn-array.c:302
-msgid ""
-"queue = Groonga::Array.create(:name => \"CrawlURLQueue\")\n"
-"queue.define_column(\"url\", \"ShortText\")\n"
-"urls = [\"http://groonga.org/\", \"http://ranguba.org/\"]\n"
-"urls.each do |url|\n"
-"  queue.push do |record|\n"
-"    record.url = url if record # check record is not nil\n"
-"  end\n"
-"end"
+msgid "tag|overload|push"
 msgstr ""
 
 # Groonga::Array#pull
@@ -3032,44 +3058,6 @@ msgid ""
 "{Groonga::Array#unblock}, signal handler can be ran."
 msgstr ""
 
-# @example
-#: ../../ext/groonga/rb-grn-array.c:385
-msgid "tag|example|Signal handler isn't called"
-msgstr ""
-
-# @overload
-#: ../../ext/groonga/rb-grn-array.c:385
-msgid "tag|overload|pull"
-msgstr ""
-
-# @example
-#: ../../ext/groonga/rb-grn-array.c:385
-msgid "tag|example|A program that pulls with non-block mode"
-msgstr ""
-
-# @see {Groonga::Array#push}
-#: ../../ext/groonga/rb-grn-array.c:385
-msgid "Examples exist in the push documentation."
-msgstr ""
-
-# @example Signal handler isn't called
-#: ../../ext/groonga/rb-grn-array.c:385
-msgid ""
-"queue = Groonga::Array.open(:name => \"CrawlURLQueue\")\n"
-"trap(:INT) do\n"
-"  p :not_called!\n"
-"end\n"
-"queue.pull do |record|\n"
-"  # Send SIGINT while blocking the pull operation.\n"
-"  # The signal handler isn't called.\n"
-"end"
-msgstr ""
-
-# @see
-#: ../../ext/groonga/rb-grn-array.c:385
-msgid "tag|see|Groonga::Array#push"
-msgstr ""
-
 # @example A program that pulls with non-block mode
 #: ../../ext/groonga/rb-grn-array.c:385
 msgid ""
@@ -3086,19 +3074,52 @@ msgid ""
 "end"
 msgstr ""
 
+# @example
+#: ../../ext/groonga/rb-grn-array.c:385
+msgid "tag|example|Signal handler isn't called"
+msgstr ""
+
+# @see {Groonga::Array#push}
+#: ../../ext/groonga/rb-grn-array.c:385
+msgid "Examples exist in the push documentation."
+msgstr ""
+
+# @see
+#: ../../ext/groonga/rb-grn-array.c:385
+msgid "tag|see|Groonga::Array#push"
+msgstr ""
+
+# @overload
+#: ../../ext/groonga/rb-grn-array.c:385
+msgid "tag|overload|pull"
+msgstr ""
+
+# @example Signal handler isn't called
+#: ../../ext/groonga/rb-grn-array.c:385
+msgid ""
+"queue = Groonga::Array.open(:name => \"CrawlURLQueue\")\n"
+"trap(:INT) do\n"
+"  p :not_called!\n"
+"end\n"
+"queue.pull do |record|\n"
+"  # Send SIGINT while blocking the pull operation.\n"
+"  # The signal handler isn't called.\n"
+"end"
+msgstr ""
+
+# @example
+#: ../../ext/groonga/rb-grn-array.c:385
+msgid "tag|example|A program that pulls with non-block mode"
+msgstr ""
+
 # Groonga::Array#unblock
 #: ../../ext/groonga/rb-grn-array.c:425
 msgid "Unblocks all {Groonga::Array#pull} operations for the array."
 msgstr ""
 
-# @see
+# @example
 #: ../../ext/groonga/rb-grn-array.c:450
-msgid "tag|see|Groonga::Array#pull"
-msgstr ""
-
-# @overload
-#: ../../ext/groonga/rb-grn-array.c:450
-msgid "tag|overload|unblock"
+msgid "tag|example|Pull, unblock and signal"
 msgstr ""
 
 # @example Pull, unblock and signal
@@ -3121,9 +3142,14 @@ msgid ""
 "queue.unblock"
 msgstr ""
 
-# @example
+# @see
 #: ../../ext/groonga/rb-grn-array.c:450
-msgid "tag|example|Pull, unblock and signal"
+msgid "tag|see|Groonga::Array#pull"
+msgstr ""
+
+# @overload
+#: ../../ext/groonga/rb-grn-array.c:450
+msgid "tag|overload|unblock"
 msgstr ""
 
 #: ../../ext/groonga/rb-grn-column.c:27 ../../lib/groonga/column.rb:27
@@ -3304,15 +3330,15 @@ msgid ""
 "そうでない場合は +false+ を返す。"
 msgstr ""
 
-#: ../../ext/groonga/rb-grn-column.c:565 ../../ext/groonga/rb-grn-column.c:600
-#: ../../ext/groonga/rb-grn-column.c:625 ../../ext/groonga/rb-grn-column.c:652
-#: ../../lib/groonga/record.rb:140 ../../lib/groonga/record.rb:147
-msgid "1.0.5"
-msgstr ""
-
 # @overload
 #: ../../ext/groonga/rb-grn-column.c:565
 msgid "tag|overload|reference?"
+msgstr ""
+
+#: ../../ext/groonga/rb-grn-column.c:565 ../../ext/groonga/rb-grn-column.c:600
+#: ../../ext/groonga/rb-grn-column.c:625 ../../ext/groonga/rb-grn-column.c:652
+#: ../../lib/groonga/record.rb:146 ../../lib/groonga/record.rb:153
+msgid "1.0.5"
 msgstr ""
 
 # Groonga::Column#index?
@@ -3357,6 +3383,11 @@ msgstr ""
 msgid "_operator_ を実行できる _column_ のインデックスを返す。"
 msgstr ""
 
+# @overload
+#: ../../ext/groonga/rb-grn-column.c:684
+msgid "tag|overload|indexes"
+msgstr ""
+
 #: ../../ext/groonga/rb-grn-column.c:684
 msgid "1.0.9"
 msgstr ""
@@ -3366,21 +3397,16 @@ msgstr ""
 msgid "_operator_ を実行できる _column_ のインデックス"
 msgstr ""
 
-# @overload
-#: ../../ext/groonga/rb-grn-column.c:684
-msgid "tag|overload|indexes"
-msgstr ""
-
-#: ../../ext/groonga/rb-grn-column.c:724 ../../ext/groonga/rb-grn-table.c:2404
+#: ../../ext/groonga/rb-grn-column.c:724 ../../ext/groonga/rb-grn-table.c:2422
 msgid "Renames the table to name."
 msgstr ""
 
-#: ../../ext/groonga/rb-grn-column.c:729 ../../ext/groonga/rb-grn-table.c:2376
+#: ../../ext/groonga/rb-grn-column.c:729 ../../ext/groonga/rb-grn-table.c:2394
 msgid "1.3.0"
 msgstr ""
 
 # @overload
-#: ../../ext/groonga/rb-grn-column.c:729 ../../ext/groonga/rb-grn-table.c:2410
+#: ../../ext/groonga/rb-grn-column.c:729 ../../ext/groonga/rb-grn-table.c:2428
 msgid "tag|overload|rename"
 msgstr ""
 
@@ -3543,17 +3569,17 @@ msgstr ""
 msgid "Gets the encoding used by the context as Ruby's encoding object."
 msgstr "コンテキストが使っているエンコーディングをRubyのエンコーディングオブジェクトで取得する。"
 
-# @overload
 #: ../../ext/groonga/rb-grn-context.c:599
-msgid "tag|overload|ruby_encoding"
+msgid "the encoding used by the context"
 msgstr ""
 
 #: ../../ext/groonga/rb-grn-context.c:599
 msgid "2.0.5"
 msgstr ""
 
+# @overload
 #: ../../ext/groonga/rb-grn-context.c:599
-msgid "the encoding used by the context"
+msgid "tag|overload|ruby_encoding"
 msgstr ""
 
 # Groonga::Context#match_escalation_threshold
@@ -3643,13 +3669,13 @@ msgstr ""
 msgid "groongaサーバからクエリ実行結果文字列を受信する。"
 msgstr ""
 
+#: ../../ext/groonga/rb-grn-context.c:784
+msgid "クエリ実行結果"
+msgstr ""
+
 # @overload
 #: ../../ext/groonga/rb-grn-context.c:784
 msgid "tag|overload|receive"
-msgstr ""
-
-#: ../../ext/groonga/rb-grn-context.c:784
-msgid "クエリ実行結果"
 msgstr ""
 
 #: ../../ext/groonga/rb-grn-context.c:878
@@ -3734,31 +3760,15 @@ msgstr ""
 msgid "データベース内のオブジェクトを順番にブロックに渡す。"
 msgstr ""
 
+#: ../../ext/groonga/rb-grn-database.c:343
+msgid "tag|example|すべてのオブジェクトの名前をキー名の降順で表示する:"
+msgstr ""
+
 # @overload
 #: ../../ext/groonga/rb-grn-database.c:343
 #: ../../ext/groonga/rb-grn-table-cursor.c:236
 #: ../../ext/groonga/rb-grn-table.c:930
 msgid "tag|overload|each"
-msgstr ""
-
-# @example すべてのオブジェクトの名前を表示する:
-#: ../../ext/groonga/rb-grn-database.c:343
-msgid ""
-"database.each do |object|\n"
-"  p object.name\n"
-"end"
-msgstr ""
-
-# @example すべてのオブジェクトの名前をID順で表示する:
-#: ../../ext/groonga/rb-grn-database.c:343
-msgid ""
-"database.each(:order_by => :id) do |object|\n"
-"  p object.name\n"
-"end"
-msgstr ""
-
-#: ../../ext/groonga/rb-grn-database.c:343
-msgid "tag|example|すべてのオブジェクトの名前をキー名の降順で表示する:"
 msgstr ""
 
 # @example すべてのオブジェクトの名前をキー名の降順で表示する:
@@ -3769,12 +3779,28 @@ msgid ""
 "end"
 msgstr ""
 
+# @example すべてのオブジェクトの名前を表示する:
+#: ../../ext/groonga/rb-grn-database.c:343
+msgid ""
+"database.each do |object|\n"
+"  p object.name\n"
+"end"
+msgstr ""
+
 #: ../../ext/groonga/rb-grn-database.c:343
 msgid "tag|example|すべてのオブジェクトの名前を表示する:"
 msgstr ""
 
 #: ../../ext/groonga/rb-grn-database.c:343
 msgid "tag|example|すべてのオブジェクトの名前をID順で表示する:"
+msgstr ""
+
+# @example すべてのオブジェクトの名前をID順で表示する:
+#: ../../ext/groonga/rb-grn-database.c:343
+msgid ""
+"database.each(:order_by => :id) do |object|\n"
+"  p object.name\n"
+"end"
 msgstr ""
 
 # Groonga::Database#unlock
@@ -3811,23 +3837,23 @@ msgstr ""
 msgid "Defrags all variable size columns in the database."
 msgstr "データベースの可変長カラムをすべてデフラグする。"
 
+#: ../../ext/groonga/rb-grn-database.c:540
+#: ../../ext/groonga/rb-grn-variable-size-column.c:112
+msgid "1.2.6"
+msgstr ""
+
 # @overload
 #: ../../ext/groonga/rb-grn-database.c:540
-#: ../../ext/groonga/rb-grn-table.c:2376
+#: ../../ext/groonga/rb-grn-table.c:2394
 #: ../../ext/groonga/rb-grn-variable-size-column.c:112
 msgid "tag|overload|defrag"
 msgstr ""
 
 #: ../../ext/groonga/rb-grn-database.c:540
-#: ../../ext/groonga/rb-grn-table.c:2376
+#: ../../ext/groonga/rb-grn-table.c:2394
 #: ../../ext/groonga/rb-grn-variable-size-column.c:112
 msgid "the number of defraged segments"
 msgstr "デフラグされたセグメントの数"
-
-#: ../../ext/groonga/rb-grn-database.c:540
-#: ../../ext/groonga/rb-grn-variable-size-column.c:112
-msgid "1.2.6"
-msgstr ""
 
 # Groonga::DoubleArrayTrieCursor
 #: ../../ext/groonga/rb-grn-double-array-trie-cursor.c:24
@@ -3938,18 +3964,18 @@ msgid ""
 "end"
 msgstr ""
 
-#: ../../ext/groonga/rb-grn-double-array-trie.c:297
-#: ../../ext/groonga/rb-grn-hash.c:255
-#: ../../ext/groonga/rb-grn-patricia-trie.c:285
-msgid "tag|example|複数のキーで検索し、結果を1つのテーブルに集める。"
-msgstr ""
-
 # @overload
 #: ../../ext/groonga/rb-grn-double-array-trie.c:297
 #: ../../ext/groonga/rb-grn-hash.c:255
 #: ../../ext/groonga/rb-grn-index-column.c:779
 #: ../../ext/groonga/rb-grn-patricia-trie.c:285
 msgid "tag|overload|search"
+msgstr ""
+
+#: ../../ext/groonga/rb-grn-double-array-trie.c:297
+#: ../../ext/groonga/rb-grn-hash.c:255
+#: ../../ext/groonga/rb-grn-patricia-trie.c:285
+msgid "tag|example|複数のキーで検索し、結果を1つのテーブルに集める。"
 msgstr ""
 
 #: ../../ext/groonga/rb-grn-double-array-trie.c:441
@@ -4463,14 +4489,14 @@ msgstr ""
 msgid "_object_ を追加し、 _n_arguments_ 個の引数を取る _operation_ を追加する。"
 msgstr ""
 
-# @overload
-#: ../../ext/groonga/rb-grn-expression.c:176
-msgid "tag|overload|append_object"
-msgstr ""
-
 #: ../../ext/groonga/rb-grn-expression.c:176
 #: ../../ext/groonga/rb-grn-expression.c:213
 msgid "self"
+msgstr ""
+
+# @overload
+#: ../../ext/groonga/rb-grn-expression.c:176
+msgid "tag|overload|append_object"
 msgstr ""
 
 # Groonga::Expression#append_constant
@@ -4735,10 +4761,6 @@ msgid ""
 "は少ない。"
 msgstr ""
 
-#: ../../ext/groonga/rb-grn-index-column.c:163
-msgid "tag|example|記事の段落毎に索引を作成する。"
-msgstr ""
-
 # @example 記事の段落毎に索引を作成する。
 #: ../../ext/groonga/rb-grn-index-column.c:163
 msgid ""
@@ -4783,6 +4805,10 @@ msgstr ""
 msgid "Since 3.0.2. Use {#add}, {#delete} or {#update} instead."
 msgstr ""
 
+#: ../../ext/groonga/rb-grn-index-column.c:163
+msgid "tag|example|記事の段落毎に索引を作成する。"
+msgstr ""
+
 # Groonga::IndexColumn#add
 #: ../../ext/groonga/rb-grn-index-column.c:225
 msgid ""
@@ -4793,9 +4819,11 @@ msgid ""
 "{Groonga::Table#define_index_column}."
 msgstr ""
 
-# @example
+# @since
 #: ../../ext/groonga/rb-grn-index-column.c:292
-msgid "tag|example|Adds sentences of an article to index"
+#: ../../ext/groonga/rb-grn-index-column.c:406
+#: ../../ext/groonga/rb-grn-index-column.c:513
+msgid "3.0.2"
 msgstr ""
 
 # @example Adds sentences of an article to index
@@ -4846,11 +4874,9 @@ msgid ""
 "end"
 msgstr ""
 
-# @since
+# @example
 #: ../../ext/groonga/rb-grn-index-column.c:292
-#: ../../ext/groonga/rb-grn-index-column.c:406
-#: ../../ext/groonga/rb-grn-index-column.c:513
-msgid "3.0.2"
+msgid "tag|example|Adds sentences of an article to index"
 msgstr ""
 
 # Groonga::IndexColumn#delete
@@ -4862,9 +4888,12 @@ msgid ""
 "option of {Groonga::Table#define_index_column}."
 msgstr ""
 
-# @example
+# @overload
 #: ../../ext/groonga/rb-grn-index-column.c:406
-msgid "tag|example|Deletes sentences of an article to index"
+#: ../../ext/groonga/rb-grn-table-cursor.c:185
+#: ../../ext/groonga/rb-grn-table-key-support.c:405
+#: ../../ext/groonga/rb-grn-table.c:1050
+msgid "tag|overload|delete"
 msgstr ""
 
 # @example Deletes sentences of an article to index
@@ -4922,12 +4951,9 @@ msgid ""
 "p content_index.search(\"engine\").size # -> 0"
 msgstr ""
 
-# @overload
+# @example
 #: ../../ext/groonga/rb-grn-index-column.c:406
-#: ../../ext/groonga/rb-grn-table-cursor.c:185
-#: ../../ext/groonga/rb-grn-table-key-support.c:405
-#: ../../ext/groonga/rb-grn-table.c:1050
-msgid "tag|overload|delete"
+msgid "tag|example|Deletes sentences of an article to index"
 msgstr ""
 
 # Groonga::IndexColumn#update
@@ -5116,17 +5142,17 @@ msgstr ""
 msgid "Gets the current log path that is used the default logger."
 msgstr ""
 
-# @overload
-#: ../../ext/groonga/rb-grn-logger.c:350 ../../ext/groonga/rb-grn-object.c:1015
-#: ../../ext/groonga/rb-grn-query-logger.c:229
-msgid "tag|overload|path"
-msgstr ""
-
 # @since
 #: ../../ext/groonga/rb-grn-logger.c:350 ../../ext/groonga/rb-grn-logger.c:384
 #: ../../ext/groonga/rb-grn-query-logger.c:229
 #: ../../ext/groonga/rb-grn-query-logger.c:264
 msgid "3.0.1"
+msgstr ""
+
+# @overload
+#: ../../ext/groonga/rb-grn-logger.c:350 ../../ext/groonga/rb-grn-object.c:1015
+#: ../../ext/groonga/rb-grn-query-logger.c:229
+msgid "tag|overload|path"
 msgstr ""
 
 # Groonga::Logger.path=
@@ -5144,14 +5170,9 @@ msgid ""
 "disabled."
 msgstr ""
 
-# @example Changes the log path for the default logger
+# @example Disables log by the default logger
 #: ../../ext/groonga/rb-grn-logger.c:384
-msgid "Groonga::Logger.path = \"/tmp/groonga.log\""
-msgstr ""
-
-# @example
-#: ../../ext/groonga/rb-grn-logger.c:384
-msgid "tag|example|Changes the log path for the default logger"
+msgid "Groonga::Logger.path = nil"
 msgstr ""
 
 # @overload
@@ -5160,14 +5181,19 @@ msgstr ""
 msgid "tag|overload|path="
 msgstr ""
 
+# @example Changes the log path for the default logger
+#: ../../ext/groonga/rb-grn-logger.c:384
+msgid "Groonga::Logger.path = \"/tmp/groonga.log\""
+msgstr ""
+
 # @example
 #: ../../ext/groonga/rb-grn-logger.c:384
 msgid "tag|example|Disables log by the default logger"
 msgstr ""
 
-# @example Disables log by the default logger
+# @example
 #: ../../ext/groonga/rb-grn-logger.c:384
-msgid "Groonga::Logger.path = nil"
+msgid "tag|example|Changes the log path for the default logger"
 msgstr ""
 
 #: ../../ext/groonga/rb-grn-normalizer.c:26
@@ -5469,6 +5495,11 @@ msgid ""
 "まとめて配列として返す。"
 msgstr ""
 
+# @overload
+#: ../../ext/groonga/rb-grn-patricia-trie.c:372
+msgid "tag|overload|scan"
+msgstr ""
+
 # @example
 #: ../../ext/groonga/rb-grn-patricia-trie.c:372
 msgid ""
@@ -5492,11 +5523,6 @@ msgid ""
 "  # -> [[muteki, \"muTEki\", 0, 6],\n"
 "  #     [adventure_of_link, \"リンクの冒険\", 7, 18],\n"
 "  #     [gaxtu, \"ガッ\", 42, 6]]"
-msgstr ""
-
-# @overload
-#: ../../ext/groonga/rb-grn-patricia-trie.c:372
-msgid "tag|overload|scan"
 msgstr ""
 
 # Groonga::PatriciaTrie#prefix_search
@@ -5622,6 +5648,11 @@ msgstr ""
 
 # @example
 #: ../../ext/groonga/rb-grn-query-logger.c:264
+msgid "tag|example|Disables query log by the default query logger"
+msgstr ""
+
+# @example
+#: ../../ext/groonga/rb-grn-query-logger.c:264
 msgid "tag|example|Changes the query log path for the default query logger"
 msgstr ""
 
@@ -5633,11 +5664,6 @@ msgstr ""
 # @example Changes the query log path for the default query logger
 #: ../../ext/groonga/rb-grn-query-logger.c:264
 msgid "Groonga::QueryLogger.path = \"/tmp/query.log\""
-msgstr ""
-
-# @example
-#: ../../ext/groonga/rb-grn-query-logger.c:264
-msgid "tag|example|Disables query log by the default query logger"
 msgstr ""
 
 #: ../../ext/groonga/rb-grn-snippet.c:26
@@ -5677,14 +5703,14 @@ msgstr ""
 msgid "カレントレコードの主キーを返す。"
 msgstr ""
 
-#: ../../ext/groonga/rb-grn-table-cursor-key-support.c:39
-msgid "カレントレコードの主キー"
-msgstr ""
-
 # @overload
 #: ../../ext/groonga/rb-grn-table-cursor-key-support.c:39
 #: ../../ext/groonga/rb-grn-table-key-support.c:302
 msgid "tag|overload|key"
+msgstr ""
+
+#: ../../ext/groonga/rb-grn-table-cursor-key-support.c:39
+msgid "カレントレコードの主キー"
 msgstr ""
 
 #: ../../ext/groonga/rb-grn-table-cursor.c:26
@@ -6139,19 +6165,6 @@ msgid ""
 "=:"
 msgstr ""
 
-# @example
-#: ../../ext/groonga/rb-grn-table.c:1149
-msgid "tag|example|Describe incompatible API change"
-msgstr ""
-
-# @note
-#: ../../ext/groonga/rb-grn-table.c:1149
-msgid ""
-"The return value is changed to {Groonga::Array} from\n"
-"{::Array} since 2.1.0. If you want to get before 2.1.0 style\n"
-"result, use the following code:"
-msgstr ""
-
 # @overload
 #: ../../ext/groonga/rb-grn-table.c:1149
 msgid "tag|overload|sort"
@@ -6180,6 +6193,14 @@ msgid ""
 "get the original record."
 msgstr ""
 
+# @note
+#: ../../ext/groonga/rb-grn-table.c:1149
+msgid ""
+"The return value is changed to {Groonga::Array} from\n"
+"{::Array} since 2.1.0. If you want to get before 2.1.0 style\n"
+"result, use the following code:"
+msgstr ""
+
 # @example Describe incompatible API change
 #: ../../ext/groonga/rb-grn-table.c:1149
 msgid ""
@@ -6187,6 +6208,11 @@ msgid ""
 "result_before_2_1_0 = result_since_2_1_0.collect do |record|\n"
 "  record.value\n"
 "end"
+msgstr ""
+
+# @example
+#: ../../ext/groonga/rb-grn-table.c:1149
+msgid "tag|example|Describe incompatible API change"
 msgstr ""
 
 #: ../../ext/groonga/rb-grn-table.c:1252
@@ -6199,7 +6225,7 @@ msgstr ""
 # @option
 #: ../../ext/groonga/rb-grn-table.c:1264 ../../lib/groonga/context.rb:134
 #: ../../lib/groonga/pagination.rb:114 ../../lib/groonga/patricia-trie.rb:51
-#: ../../lib/groonga/record.rb:291 ../../lib/groonga/schema.rb:167
+#: ../../lib/groonga/record.rb:297 ../../lib/groonga/schema.rb:167
 #: ../../lib/groonga/schema.rb:425 ../../lib/groonga/schema.rb:451
 #: ../../lib/groonga/schema.rb:505 ../../lib/groonga/schema.rb:517
 #: ../../lib/groonga/schema.rb:543 ../../lib/groonga/schema.rb:631
@@ -6283,7 +6309,7 @@ msgid ""
 "{Groonga::ResourceDeadlockAvoided} 例外が発生する。"
 msgstr ""
 
-#: ../../ext/groonga/rb-grn-table.c:1833 ../../lib/groonga/record.rb:284
+#: ../../ext/groonga/rb-grn-table.c:1833 ../../lib/groonga/record.rb:290
 msgid "ブロックを指定した場合はブロックを抜けたときにunlockする。"
 msgstr ""
 
@@ -6377,19 +6403,24 @@ msgid ""
 "+false+ を返す。"
 msgstr ""
 
-#: ../../ext/groonga/rb-grn-table.c:2286
+# @overload
+#: ../../ext/groonga/rb-grn-table.c:2291
+msgid "tag|overload|support_value?"
+msgstr ""
+
+#: ../../ext/groonga/rb-grn-table.c:2304
 msgid ""
 "グループ化したとき、テーブルにグループに含まれるレコード\n"
 "数を格納できる場合は +true+ 、格納できない場合は +false+ を返\n"
 "す。"
 msgstr ""
 
-#: ../../ext/groonga/rb-grn-table.c:2292
+#: ../../ext/groonga/rb-grn-table.c:2310
 msgid "tag|overload|support_sub_records?"
 msgstr ""
 
 # Groonga::Table#have_n_sub_records_space?
-#: ../../ext/groonga/rb-grn-table.c:2306
+#: ../../ext/groonga/rb-grn-table.c:2324
 msgid ""
 "{Groonga::Table#group} returns a table that contains grouped\n"
 "records. If grouped table has a space to store the number of\n"
@@ -6398,7 +6429,7 @@ msgid ""
 msgstr ""
 
 # Groonga::Table#have_n_sub_records_space?
-#: ../../ext/groonga/rb-grn-table.c:2311
+#: ../../ext/groonga/rb-grn-table.c:2329
 msgid ""
 "Normally, you don't need to care about the space because rroonga\n"
 "creates a table with the space automatically. Normal tables\n"
@@ -6406,8 +6437,25 @@ msgid ""
 "it."
 msgstr ""
 
+# @overload
+#: ../../ext/groonga/rb-grn-table.c:2347
+msgid "tag|overload|have_n_sub_records_space?"
+msgstr ""
+
+# @example A normal table don't have the space
+#: ../../ext/groonga/rb-grn-table.c:2347
+msgid ""
+"users = Groonga[\"Users\"] # A normal table\n"
+"users.have_n_sub_records_space? # => false"
+msgstr ""
+
+# @example
+#: ../../ext/groonga/rb-grn-table.c:2347
+msgid "tag|example|A grouped table has the space"
+msgstr ""
+
 # @example A grouped table has the space
-#: ../../ext/groonga/rb-grn-table.c:2329
+#: ../../ext/groonga/rb-grn-table.c:2347
 msgid ""
 "users = Groonga[\"Users\"]                # A normal table\n"
 "grouped_users = users.group(\"_key\")     # A grouped table\n"
@@ -6415,53 +6463,36 @@ msgid ""
 msgstr ""
 
 # @return [Boolean]
-#: ../../ext/groonga/rb-grn-table.c:2329
+#: ../../ext/groonga/rb-grn-table.c:2347
 msgid ""
 "@true@ if the table has a space for storing\n"
 "the number of sub records, @false@ otherwise."
 msgstr ""
 
-# @example A normal table don't have the space
-#: ../../ext/groonga/rb-grn-table.c:2329
-msgid ""
-"users = Groonga[\"Users\"] # A normal table\n"
-"users.have_n_sub_records_space? # => false"
-msgstr ""
-
-# @overload
-#: ../../ext/groonga/rb-grn-table.c:2329
-msgid "tag|overload|have_n_sub_records_space?"
-msgstr ""
-
 # @example
-#: ../../ext/groonga/rb-grn-table.c:2329
-msgid "tag|example|A grouped table has the space"
-msgstr ""
-
-# @example
-#: ../../ext/groonga/rb-grn-table.c:2329
+#: ../../ext/groonga/rb-grn-table.c:2347
 msgid "tag|example|A normal table don't have the space"
 msgstr ""
 
 # Groonga::Table#exist?
-#: ../../ext/groonga/rb-grn-table.c:2342
+#: ../../ext/groonga/rb-grn-table.c:2360
 msgid ""
 "_table_ に _id_ で指定したIDのレコードが存在する場合は +true+ 、\n"
 "存在しない場合は +false+ を返す。"
 msgstr ""
 
-#: ../../ext/groonga/rb-grn-table.c:2345
+#: ../../ext/groonga/rb-grn-table.c:2363
 msgid ""
 "注意: 実行には相応のコストがかかるのであまり頻繁に呼ばな\n"
 "いようにして下さい。"
 msgstr ""
 
 # @overload
-#: ../../ext/groonga/rb-grn-table.c:2350
+#: ../../ext/groonga/rb-grn-table.c:2368
 msgid "tag|overload|exist?"
 msgstr ""
 
-#: ../../ext/groonga/rb-grn-table.c:2364
+#: ../../ext/groonga/rb-grn-table.c:2382
 msgid "Defrags all variable size columns in the table."
 msgstr "テーブル内の全ての可変長カラムをデフラグします。"
 
@@ -6746,7 +6777,7 @@ msgstr ""
 
 #: ../../lib/groonga/context.rb:134 ../../lib/groonga/pagination.rb:114
 #: ../../lib/groonga/patricia-trie.rb:51 ../../lib/groonga/posting.rb:72
-#: ../../lib/groonga/record.rb:291 ../../lib/groonga/schema.rb:167
+#: ../../lib/groonga/record.rb:297 ../../lib/groonga/schema.rb:167
 #: ../../lib/groonga/schema.rb:425 ../../lib/groonga/schema.rb:451
 #: ../../lib/groonga/schema.rb:505 ../../lib/groonga/schema.rb:517
 #: ../../lib/groonga/schema.rb:543 ../../lib/groonga/schema.rb:631
@@ -6761,7 +6792,7 @@ msgstr "オプションを設定するハッシュ。指定されなかったオ
 
 #: ../../lib/groonga/context.rb:134 ../../lib/groonga/database-inspector.rb:24
 #: ../../lib/groonga/pagination.rb:114 ../../lib/groonga/patricia-trie.rb:51
-#: ../../lib/groonga/record.rb:291 ../../lib/groonga/schema.rb:167
+#: ../../lib/groonga/record.rb:297 ../../lib/groonga/schema.rb:167
 #: ../../lib/groonga/schema.rb:425 ../../lib/groonga/schema.rb:451
 #: ../../lib/groonga/schema.rb:505 ../../lib/groonga/schema.rb:517
 #: ../../lib/groonga/schema.rb:543 ../../lib/groonga/schema.rb:631
@@ -6786,11 +6817,6 @@ msgstr ""
 msgid "If block is given, a response is yielded."
 msgstr ""
 
-# @param [String]
-#: ../../lib/groonga/context.rb:171
-msgid "tag|param|dumped_commands"
-msgstr ""
-
 # @example
 #: ../../lib/groonga/context.rb:171
 msgid "tag|example|Restore dumped commands and reports result."
@@ -6810,11 +6836,9 @@ msgstr ""
 msgid "A response for a command."
 msgstr ""
 
-# @example
+# @yieldparam [String]
 #: ../../lib/groonga/context.rb:171
-msgid ""
-"dumped_commands = File.read(\"dump.grn\")\n"
-"context.restore(dumped_commands)"
+msgid "tag|yieldparam|response"
 msgstr ""
 
 # @example Restore dumped commands from a File object.
@@ -6825,23 +6849,21 @@ msgid ""
 "end"
 msgstr ""
 
-# @param [#each_line] dumped_commands
-#: ../../lib/groonga/context.rb:171
-msgid ""
-"commands dumped by grndump.\n"
-"It can be a String object or any objects like an IO object such\n"
-"as a File object. It should have #each_line that iterates a\n"
-"line."
-msgstr ""
-
 # @example
 #: ../../lib/groonga/context.rb:171
 msgid "tag|example|Restore dumped commands from a File object."
 msgstr ""
 
-# @yieldparam [String]
+# @example
 #: ../../lib/groonga/context.rb:171
-msgid "tag|yieldparam|response"
+msgid ""
+"dumped_commands = File.read(\"dump.grn\")\n"
+"context.restore(dumped_commands)"
+msgstr ""
+
+# @param [String]
+#: ../../lib/groonga/context.rb:171
+msgid "tag|param|dumped_commands"
 msgstr ""
 
 # @yieldparam [String] command
@@ -6857,6 +6879,15 @@ msgstr ""
 # @yield [command, response]
 #: ../../lib/groonga/context.rb:171
 msgid "Yields a sent command and its response if block is given."
+msgstr ""
+
+# @param [#each_line] dumped_commands
+#: ../../lib/groonga/context.rb:171
+msgid ""
+"commands dumped by grndump.\n"
+"It can be a String object or any objects like an IO object such\n"
+"as a File object. It should have #each_line that iterates a\n"
+"line."
 msgstr ""
 
 # @example
@@ -6915,6 +6946,56 @@ msgstr ""
 msgid "You can nest {#push_memory_pool} and {#pop_memory_pool} pair."
 msgstr ""
 
+# @example Pushes a new memory pool with block
+#: ../../lib/groonga/context.rb:288
+msgid ""
+"adults = nil\n"
+"context.push_memory_pool do\n"
+"  users = context[\"Users\"]\n"
+"  adults = users.select do |user|\n"
+"    user.age >= 20\n"
+"  end\n"
+"  p adults.temporary? # => true\n"
+"  p adults.closed?    # => false\n"
+"end\n"
+"p adults.closed?      # => true"
+msgstr ""
+
+# @example
+#: ../../lib/groonga/context.rb:288
+msgid "tag|example|Pushes a new memory pool with block"
+msgstr ""
+
+# @example
+#: ../../lib/groonga/context.rb:288
+msgid "tag|example|Nesting push and pop pair"
+msgstr ""
+
+# @example
+#: ../../lib/groonga/context.rb:288
+msgid "tag|example|Pushes a new memory pool without block"
+msgstr ""
+
+# @example Pushes a new memory pool without block
+#: ../../lib/groonga/context.rb:288
+msgid ""
+"adults = nil\n"
+"context.push_memory_pool\n"
+"users = context[\"Users\"]\n"
+"adults = users.select do |user|\n"
+"  user.age >= 20\n"
+"end\n"
+"p adults.temporary? # => true\n"
+"p adults.closed?    # => false\n"
+"context.pop_memory_pool\n"
+"p adults.closed?    # => true"
+msgstr ""
+
+# @since
+#: ../../lib/groonga/context.rb:288 ../../lib/groonga/context.rb:307
+msgid "3.0.5"
+msgstr ""
+
 # @example Nesting push and pop pair
 #: ../../lib/groonga/context.rb:288
 msgid ""
@@ -6937,59 +7018,9 @@ msgid ""
 "p adults.closed?                # => true"
 msgstr ""
 
-# @example
-#: ../../lib/groonga/context.rb:288
-msgid "tag|example|Pushes a new memory pool with block"
-msgstr ""
-
-# @example Pushes a new memory pool with block
-#: ../../lib/groonga/context.rb:288
-msgid ""
-"adults = nil\n"
-"context.push_memory_pool do\n"
-"  users = context[\"Users\"]\n"
-"  adults = users.select do |user|\n"
-"    user.age >= 20\n"
-"  end\n"
-"  p adults.temporary? # => true\n"
-"  p adults.closed?    # => false\n"
-"end\n"
-"p adults.closed?      # => true"
-msgstr ""
-
 # @overload
 #: ../../lib/groonga/context.rb:288
 msgid "tag|overload|push_memory_pool"
-msgstr ""
-
-# @example Pushes a new memory pool without block
-#: ../../lib/groonga/context.rb:288
-msgid ""
-"adults = nil\n"
-"context.push_memory_pool\n"
-"users = context[\"Users\"]\n"
-"adults = users.select do |user|\n"
-"  user.age >= 20\n"
-"end\n"
-"p adults.temporary? # => true\n"
-"p adults.closed?    # => false\n"
-"context.pop_memory_pool\n"
-"p adults.closed?    # => true"
-msgstr ""
-
-# @example
-#: ../../lib/groonga/context.rb:288
-msgid "tag|example|Nesting push and pop pair"
-msgstr ""
-
-# @since
-#: ../../lib/groonga/context.rb:288 ../../lib/groonga/context.rb:307
-msgid "3.0.5"
-msgstr ""
-
-# @example
-#: ../../lib/groonga/context.rb:288
-msgid "tag|example|Pushes a new memory pool without block"
 msgstr ""
 
 # Groonga::Context#pop_memory_pool
@@ -7019,6 +7050,16 @@ msgid ""
 "of the database."
 msgstr ""
 
+# @param [Database]
+#: ../../lib/groonga/database-inspector.rb:24
+msgid "tag|param|database"
+msgstr ""
+
+# @param [Options] options
+#: ../../lib/groonga/database-inspector.rb:24
+msgid "The options to custom this inspector behavior."
+msgstr ""
+
 # @return [DatabaseInspector]
 #: ../../lib/groonga/database-inspector.rb:24
 msgid "a new instance of DatabaseInspector"
@@ -7027,16 +7068,6 @@ msgstr ""
 # @param [Database] database
 #: ../../lib/groonga/database-inspector.rb:24
 msgid "The database to be inspected."
-msgstr ""
-
-# @param [Options] options
-#: ../../lib/groonga/database-inspector.rb:24
-msgid "The options to custom this inspector behavior."
-msgstr ""
-
-# @param [Database]
-#: ../../lib/groonga/database-inspector.rb:24
-msgid "tag|param|database"
 msgstr ""
 
 # Groonga::DatabaseInspector#report
@@ -7115,26 +7146,31 @@ msgstr ""
 msgid "a new instance of DatabaseDumper"
 msgstr ""
 
-#: ../../lib/groonga/dumper.rb:139
+#: ../../lib/groonga/dumper.rb:143
 msgid ""
 "スキーマの内容をRubyスクリプトまたはgrn式形式の文字列と\n"
 "して出力するクラス。"
 msgstr ""
 
-#: ../../lib/groonga/dumper.rb:141
+#: ../../lib/groonga/dumper.rb:145
 msgid "a new instance of SchemaDumper"
 msgstr ""
 
-#: ../../lib/groonga/dumper.rb:212
+#: ../../lib/groonga/dumper.rb:216
 msgid "a new instance of BaseSyntax"
 msgstr ""
 
-#: ../../lib/groonga/dumper.rb:629
+#: ../../lib/groonga/dumper.rb:633
 msgid "a new instance of TableDumper"
 msgstr ""
 
 #: ../../lib/groonga/expression-builder-19.rb:28
 msgid "a new instance of NotEqualExpressionBuilder"
+msgstr ""
+
+#: ../../lib/groonga/expression-builder.rb:22 ../../lib/groonga/schema.rb:73
+#: ../../lib/groonga/schema.rb:96 ../../lib/groonga/schema.rb:105
+msgid "Returns the value of attribute table"
 msgstr ""
 
 # @param
@@ -7157,15 +7193,6 @@ msgstr ""
 msgid "the value to set the attribute query to."
 msgstr ""
 
-#: ../../lib/groonga/expression-builder.rb:22 ../../lib/groonga/schema.rb:73
-#: ../../lib/groonga/schema.rb:96 ../../lib/groonga/schema.rb:105
-msgid "Returns the value of attribute table"
-msgstr ""
-
-#: ../../lib/groonga/expression-builder.rb:23
-msgid "Returns the value of attribute query"
-msgstr ""
-
 #: ../../lib/groonga/expression-builder.rb:23
 msgid "Sets the attribute query"
 msgstr ""
@@ -7175,17 +7202,21 @@ msgstr ""
 msgid "the value to set the attribute syntax to."
 msgstr ""
 
-#: ../../lib/groonga/expression-builder.rb:24
-msgid "Returns the value of attribute syntax"
+#: ../../lib/groonga/expression-builder.rb:23
+msgid "Returns the value of attribute query"
 msgstr ""
 
 #: ../../lib/groonga/expression-builder.rb:24
-msgid "Sets the attribute syntax"
+msgid "Returns the value of attribute syntax"
 msgstr ""
 
 # @param value
 #: ../../lib/groonga/expression-builder.rb:24
 msgid "the value to set the attribute allow_pragma to."
+msgstr ""
+
+#: ../../lib/groonga/expression-builder.rb:24
+msgid "Sets the attribute syntax"
 msgstr ""
 
 # Groonga::ExpressionBuildable#allow_pragma=
@@ -7207,32 +7238,27 @@ msgstr ""
 msgid "Sets the attribute allow_column"
 msgstr ""
 
-#: ../../lib/groonga/expression-builder.rb:26
-msgid "Returns the value of attribute allow_column"
-msgstr ""
-
 # @param value
 #: ../../lib/groonga/expression-builder.rb:26
 msgid "the value to set the attribute allow_update to."
 msgstr ""
 
-# Groonga::ExpressionBuildable#allow_update=
-#: ../../lib/groonga/expression-builder.rb:27
-msgid "Sets the attribute allow_update"
+#: ../../lib/groonga/expression-builder.rb:26
+msgid "Returns the value of attribute allow_column"
 msgstr ""
-
-#: ../../lib/groonga/expression-builder.rb:27
-msgid "Returns the value of attribute allow_update"
-msgstr "緯度の値を返す。"
 
 # @param value
 #: ../../lib/groonga/expression-builder.rb:27
 msgid "the value to set the attribute allow_leading_not to."
 msgstr ""
 
-# Groonga::ExpressionBuildable#allow_leading_not=
-#: ../../lib/groonga/expression-builder.rb:28
-msgid "Sets the attribute allow_leading_not"
+#: ../../lib/groonga/expression-builder.rb:27
+msgid "Returns the value of attribute allow_update"
+msgstr "緯度の値を返す。"
+
+# Groonga::ExpressionBuildable#allow_update=
+#: ../../lib/groonga/expression-builder.rb:27
+msgid "Sets the attribute allow_update"
 msgstr ""
 
 # @param value
@@ -7244,13 +7270,18 @@ msgstr ""
 msgid "Returns the value of attribute allow_leading_not"
 msgstr ""
 
-# Groonga::ExpressionBuildable#default_column=
-#: ../../lib/groonga/expression-builder.rb:29
-msgid "Sets the attribute default_column"
+# Groonga::ExpressionBuildable#allow_leading_not=
+#: ../../lib/groonga/expression-builder.rb:28
+msgid "Sets the attribute allow_leading_not"
 msgstr ""
 
 #: ../../lib/groonga/expression-builder.rb:29
 msgid "Returns the value of attribute default_column"
+msgstr ""
+
+# Groonga::ExpressionBuildable#default_column=
+#: ../../lib/groonga/expression-builder.rb:29
+msgid "Sets the attribute default_column"
 msgstr ""
 
 #: ../../lib/groonga/expression-builder.rb:103
@@ -7363,10 +7394,6 @@ msgid "the value to set the attribute longitude to."
 msgstr "経度の値を返す。"
 
 #: ../../lib/groonga/geo-point.rb:87
-msgid "Returns the value of attribute longitude"
-msgstr "経度の値を返す。"
-
-#: ../../lib/groonga/geo-point.rb:87
 msgid "Returns the value of attribute latitude"
 msgstr "緯度の値を返す。"
 
@@ -7376,6 +7403,10 @@ msgstr "緯度の値を返す。"
 
 #: ../../lib/groonga/geo-point.rb:87
 msgid "Sets the attribute longitude"
+msgstr "経度の値を返す。"
+
+#: ../../lib/groonga/geo-point.rb:87
+msgid "Returns the value of attribute longitude"
 msgstr "経度の値を返す。"
 
 # Groonga::GeoPoint#initialize
@@ -7431,20 +7462,21 @@ msgid "a new instance of EnvironmentEvent"
 msgstr ""
 
 #: ../../lib/groonga/grntest-log.rb:127
-msgid "Returns the value of attribute jobs"
+msgid "a new instance of JobsStartEvent"
 msgstr ""
 
 #: ../../lib/groonga/grntest-log.rb:127
-msgid "a new instance of JobsStartEvent"
+msgid "Returns the value of attribute jobs"
+msgstr ""
+
+# @return [Object]
+#: ../../lib/groonga/grntest-log.rb:132
+msgid "the current value of relative_start_time"
 msgstr ""
 
 # @return [Object]
 #: ../../lib/groonga/grntest-log.rb:132
 msgid "the current value of result"
-msgstr ""
-
-#: ../../lib/groonga/grntest-log.rb:132
-msgid "the newly set value"
 msgstr ""
 
 #: ../../lib/groonga/grntest-log.rb:132
@@ -7460,32 +7492,31 @@ msgstr ""
 msgid "the current value of relative_end_time"
 msgstr ""
 
-# @return [Object]
 #: ../../lib/groonga/grntest-log.rb:132
-msgid "the current value of id"
+msgid "the newly set value"
 msgstr ""
 
 #: ../../lib/groonga/grntest-log.rb:132
 msgid "the value to set the attribute result to."
 msgstr ""
 
+# @return [Object]
+#: ../../lib/groonga/grntest-log.rb:132
+msgid "the current value of id"
+msgstr ""
+
 #: ../../lib/groonga/grntest-log.rb:132
 msgid "the value to set the attribute command to."
-msgstr ""
-
-# @return [Object]
-#: ../../lib/groonga/grntest-log.rb:132
-msgid "the current value of relative_start_time"
-msgstr ""
-
-# @return [Object]
-#: ../../lib/groonga/grntest-log.rb:132
-msgid "the current value of command"
 msgstr ""
 
 #: ../../lib/groonga/grntest-log.rb:132
 msgid "the value to set the attribute relative_start_time to."
 msgstr "緯度の値を返す。"
+
+# @return [Object]
+#: ../../lib/groonga/grntest-log.rb:132
+msgid "the current value of command"
+msgstr ""
 
 #: ../../lib/groonga/grntest-log.rb:133
 msgid "Sets the attribute relative_end_time"
@@ -7496,7 +7527,7 @@ msgid "Returns the value of attribute relative_end_time"
 msgstr ""
 
 #: ../../lib/groonga/grntest-log.rb:133
-msgid "Returns the value of attribute relative_start_time"
+msgid "Sets the attribute relative_start_time"
 msgstr ""
 
 #: ../../lib/groonga/grntest-log.rb:133
@@ -7504,16 +7535,16 @@ msgid "Sets the attribute id"
 msgstr ""
 
 #: ../../lib/groonga/grntest-log.rb:133
-msgid "Sets the attribute relative_start_time"
-msgstr ""
-
-#: ../../lib/groonga/grntest-log.rb:133
-msgid "Returns the value of attribute id"
-msgstr ""
-
-#: ../../lib/groonga/grntest-log.rb:133
 msgid "Returns the value of attribute command"
 msgstr "commandの値を返す"
+
+#: ../../lib/groonga/grntest-log.rb:133
+msgid "Returns the value of attribute relative_start_time"
+msgstr ""
+
+#: ../../lib/groonga/grntest-log.rb:133
+msgid "Sets the attribute command"
+msgstr ""
 
 #: ../../lib/groonga/grntest-log.rb:133
 msgid "Returns the value of attribute result"
@@ -7524,15 +7555,11 @@ msgid "Sets the attribute result"
 msgstr ""
 
 #: ../../lib/groonga/grntest-log.rb:133
-msgid "Sets the attribute command"
+msgid "Returns the value of attribute id"
 msgstr ""
 
 #: ../../lib/groonga/grntest-log.rb:142
 msgid "Returns the value of attribute job"
-msgstr ""
-
-#: ../../lib/groonga/grntest-log.rb:142
-msgid "Returns the value of attribute latency"
 msgstr ""
 
 #: ../../lib/groonga/grntest-log.rb:142
@@ -7548,7 +7575,11 @@ msgid "Returns the value of attribute max"
 msgstr ""
 
 #: ../../lib/groonga/grntest-log.rb:142
-msgid "Returns the value of attribute qps"
+msgid "Returns the value of attribute min"
+msgstr ""
+
+#: ../../lib/groonga/grntest-log.rb:142
+msgid "Returns the value of attribute latency"
 msgstr ""
 
 #: ../../lib/groonga/grntest-log.rb:142
@@ -7556,7 +7587,7 @@ msgid "Returns the value of attribute elapsed"
 msgstr ""
 
 #: ../../lib/groonga/grntest-log.rb:142
-msgid "Returns the value of attribute min"
+msgid "Returns the value of attribute qps"
 msgstr ""
 
 #: ../../lib/groonga/grntest-log.rb:155
@@ -7802,11 +7833,11 @@ msgid "最初のページから最後のページまでを含んだRangeを返�
 msgstr ""
 
 #: ../../lib/groonga/pagination.rb:231
-msgid "tag|example|10ページある場合は以下を返す。"
+msgid "1..10"
 msgstr ""
 
 #: ../../lib/groonga/pagination.rb:231
-msgid "1..10"
+msgid "tag|example|10ページある場合は以下を返す。"
 msgstr ""
 
 #: ../../lib/groonga/patricia-trie.rb:21
@@ -7897,11 +7928,11 @@ msgid "Updates all values."
 msgstr ""
 
 #: ../../lib/groonga/posting.rb:72
-msgid "tag|option|parameters"
+msgid "tag|param|parameters"
 msgstr ""
 
 #: ../../lib/groonga/posting.rb:72
-msgid "tag|param|parameters"
+msgid "tag|option|parameters"
 msgstr ""
 
 #: ../../lib/groonga/posting.rb:85
@@ -8018,197 +8049,207 @@ msgid ""
 "を返し、使えない場合は +false+ を返す。"
 msgstr ""
 
+# Groonga::Record#support_value?
 #: ../../lib/groonga/record.rb:121
+msgid "created with value type, @false@ otherwise."
+msgstr ""
+
+# @return [Boolean]
+#: ../../lib/groonga/record.rb:122
+msgid "@true@ if the table that the record belongs to is"
+msgstr ""
+
+#: ../../lib/groonga/record.rb:127
 msgid ""
 "名前が _name_ のカラムがレコードの所属するテーブルで定義され\n"
 "ているなら +true+ を返す。"
 msgstr ""
 
 # Groonga::Record#reference_column?
-#: ../../lib/groonga/record.rb:127
+#: ../../lib/groonga/record.rb:133
 msgid "名前が _name_ のカラムが参照カラムであるなら +true+ を返す。"
 msgstr ""
 
 # Groonga::Record#index_column?
-#: ../../lib/groonga/record.rb:132
+#: ../../lib/groonga/record.rb:138
 msgid ""
 "名前が _name_ のカラムが索引カラム\n"
 "（ {Groonga::IndexColumn} ）であるなら +true+ を返す。"
 msgstr ""
 
-#: ../../lib/groonga/record.rb:138
+#: ../../lib/groonga/record.rb:144
 msgid "名前が _name_ のカラムの値がベクターであるなら +true+ を返す。"
 msgstr ""
 
-#: ../../lib/groonga/record.rb:145
+#: ../../lib/groonga/record.rb:151
 msgid "名前が _name_ のカラムの値がスカラーであるなら +true+ を返す。"
 msgstr ""
 
 # Groonga::Record#search
-#: ../../lib/groonga/record.rb:152
+#: ../../lib/groonga/record.rb:158
 msgid ""
 "名前が _name_ の {Groonga::IndexColumn} の search メソッドを呼ぶ。\n"
 "_query_ と _options_ はそのメソッドにそのまま渡される。詳しく\n"
 "は {Groonga::IndexColumn#search} を参照。"
 msgstr ""
 
-#: ../../lib/groonga/record.rb:159
+#: ../../lib/groonga/record.rb:165
 msgid "レコードの主キーを返す。"
 msgstr ""
 
 # Groonga::Record#key
-#: ../../lib/groonga/record.rb:161
+#: ../../lib/groonga/record.rb:167
 msgid ""
 "_record_ が所属するテーブルが {Groonga::Array} の場合は常\n"
 "に +nil+ を返す。"
 msgstr ""
 
-#: ../../lib/groonga/record.rb:171
+#: ../../lib/groonga/record.rb:177
 msgid "レコードを一意に識別するための情報を返す。"
 msgstr ""
 
 # Groonga::Record#record_id
-#: ../../lib/groonga/record.rb:173
+#: ../../lib/groonga/record.rb:179
 msgid ""
 "_record_ が所属するテーブルが {Groonga::Array} の場合はID\n"
 "を返し、それ以外の場合は主キーを返す。"
 msgstr ""
 
-#: ../../lib/groonga/record.rb:183 ../../lib/groonga/record.rb:187
+#: ../../lib/groonga/record.rb:189 ../../lib/groonga/record.rb:193
 msgid "レコードのIDを返す。"
 msgstr ""
 
-#: ../../lib/groonga/record.rb:189
+#: ../../lib/groonga/record.rb:195
 msgid ""
 "レコードのスコア値を返す。検索結果として生成されたテーブル\n"
 "のみに定義される。"
 msgstr ""
 
-#: ../../lib/groonga/record.rb:195
+#: ../../lib/groonga/record.rb:201
 msgid "Sets score. Score column exists only search result table."
 msgstr ""
 
 # @param [Integer]
-#: ../../lib/groonga/record.rb:197
+#: ../../lib/groonga/record.rb:203
 msgid "tag|param|new_score"
 msgstr ""
 
-#: ../../lib/groonga/record.rb:197
+#: ../../lib/groonga/record.rb:203
 msgid "The new score."
 msgstr ""
 
 # Groonga::Record#support_score?
-#: ../../lib/groonga/record.rb:202
+#: ../../lib/groonga/record.rb:208
 msgid ""
 "{Groonga::Record#score} が利用できる場合は +true+ を\n"
 "返す。"
 msgstr ""
 
-#: ../../lib/groonga/record.rb:208
+#: ../../lib/groonga/record.rb:214
 msgid ""
 "主キーの値が同一であったレコードの件数を返す。検索結果とし\n"
 "て生成されたテーブルのみに定義される。"
 msgstr ""
 
-#: ../../lib/groonga/record.rb:211
+#: ../../lib/groonga/record.rb:217
 msgid ""
 "{Groonga::Record#support_sub_records?} でこの値を利用でき\n"
 "るかがわかる。"
 msgstr "Groonga::Record#support_sub_records?を追加。"
 
-#: ../../lib/groonga/record.rb:217
+#: ../../lib/groonga/record.rb:223
 msgid ""
 "{Groonga::Record#n_sub_records} が利用できる場合は +true+ を\n"
 "返す。"
 msgstr ""
 
-#: ../../lib/groonga/record.rb:223
+#: ../../lib/groonga/record.rb:229
 msgid "レコードの値を返す。"
 msgstr ""
 
-#: ../../lib/groonga/record.rb:228
+#: ../../lib/groonga/record.rb:234
 msgid "レコードの値を設定する。既存の値は上書きされる。"
 msgstr ""
 
 # Groonga::Record#increment!
-#: ../../lib/groonga/record.rb:233
+#: ../../lib/groonga/record.rb:239
 msgid ""
 "このレコードの _name_ で指定されたカラムの値を _delta_ だけ増\n"
 "加する。 _delta_ が +nil+ の場合は1増加する。"
 msgstr ""
 
 # Groonga::Record#decrement!
-#: ../../lib/groonga/record.rb:239
+#: ../../lib/groonga/record.rb:245
 msgid ""
 "このレコードの _name_ で指定されたカラムの値を _delta_ だけ減\n"
 "少する。 _delta_ が +nil+ の場合は1減少する。"
 msgstr ""
 
-#: ../../lib/groonga/record.rb:245
+#: ../../lib/groonga/record.rb:251
 msgid "レコードが所属するテーブルの全てのカラムを返す。"
 msgstr ""
 
-#: ../../lib/groonga/record.rb:250
+#: ../../lib/groonga/record.rb:256
 msgid ""
 "レコードが所属しているテーブルで定義されているインデックス\n"
 "型のカラムでない全カラムを対象とし、カラムの名前をキーとし\n"
 "たこのレコードのカラムの値のハッシュを返す。"
 msgstr ""
 
-#: ../../lib/groonga/record.rb:254
+#: ../../lib/groonga/record.rb:260
 msgid "return same attributes object if duplicate records exist."
 msgstr ""
 
 # @return [String]
-#: ../../lib/groonga/record.rb:271
+#: ../../lib/groonga/record.rb:277
 msgid "the record formatted as JSON."
 msgstr ""
 
-#: ../../lib/groonga/record.rb:276
+#: ../../lib/groonga/record.rb:282
 msgid "レコードを削除する。"
 msgstr ""
 
-#: ../../lib/groonga/record.rb:281
+#: ../../lib/groonga/record.rb:287
 msgid ""
 "レコードが所属するテーブルをロックする。ロックに失敗した場\n"
 "合は {Groonga::ResourceDeadlockAvoided} 例外が発生する。"
 msgstr ""
 
-#: ../../lib/groonga/record.rb:286
+#: ../../lib/groonga/record.rb:292
 msgid "利用可能な _option_ は以下の通り。"
 msgstr ""
 
-#: ../../lib/groonga/record.rb:296
+#: ../../lib/groonga/record.rb:302
 msgid "レコードが所属するテーブルのロックを解除する。"
 msgstr ""
 
-#: ../../lib/groonga/record.rb:298 ../../lib/groonga/record.rb:305
-#: ../../lib/groonga/record.rb:312
+#: ../../lib/groonga/record.rb:304 ../../lib/groonga/record.rb:311
+#: ../../lib/groonga/record.rb:318
 msgid "利用可能なオプションは現在は無い。"
 msgstr ""
 
-#: ../../lib/groonga/record.rb:303
+#: ../../lib/groonga/record.rb:309
 msgid "レコードが所属するテーブルのロックを強制的に解除する。"
 msgstr ""
 
-#: ../../lib/groonga/record.rb:310
+#: ../../lib/groonga/record.rb:316
 msgid "レコードが所属するテーブルがロックされていれば +true+ を返す。"
 msgstr ""
 
-#: ../../lib/groonga/record.rb:317
+#: ../../lib/groonga/record.rb:323
 msgid "レコードが持つIDが有効なIDであれば +true+ を返す。"
 msgstr ""
 
 # @return [SubRecords]
-#: ../../lib/groonga/record.rb:322
+#: ../../lib/groonga/record.rb:328
 msgid "Sub records of the record."
 msgstr ""
 
-#: ../../lib/groonga/record.rb:410
+#: ../../lib/groonga/record.rb:421
 msgid "Returns the value of attribute attributes"
 msgstr ""
 
-#: ../../lib/groonga/record.rb:411
+#: ../../lib/groonga/record.rb:422
 msgid "a new instance of AttributeHashBuilder"
 msgstr ""
 
@@ -8256,14 +8297,14 @@ msgstr ""
 msgid "テーブルが存在しないときに発生する。"
 msgstr ""
 
-#: ../../lib/groonga/schema.rb:54
-msgid "a new instance of TableNotExists"
-msgstr ""
-
 #: ../../lib/groonga/schema.rb:54 ../../lib/groonga/schema.rb:63
 #: ../../lib/groonga/schema.rb:140 ../../lib/groonga/schema.rb:1692
 #: ../../lib/groonga/schema.rb:1758 ../../lib/groonga/schema.rb:1837
 msgid "Returns the value of attribute name"
+msgstr ""
+
+#: ../../lib/groonga/schema.rb:54
+msgid "a new instance of TableNotExists"
 msgstr ""
 
 #: ../../lib/groonga/schema.rb:61
@@ -8280,15 +8321,15 @@ msgid ""
 "うとしたときに発生する。"
 msgstr ""
 
+#: ../../lib/groonga/schema.rb:73
+msgid "a new instance of TableCreationWithDifferentOptions"
+msgstr ""
+
 #: ../../lib/groonga/schema.rb:73 ../../lib/groonga/schema.rb:85
 #: ../../lib/groonga/schema.rb:115 ../../lib/groonga/schema.rb:1693
 #: ../../lib/groonga/schema.rb:1759 ../../lib/groonga/schema.rb:1791
 #: ../../lib/groonga/schema.rb:1838
 msgid "Returns the value of attribute options"
-msgstr ""
-
-#: ../../lib/groonga/schema.rb:73
-msgid "a new instance of TableCreationWithDifferentOptions"
 msgstr ""
 
 #: ../../lib/groonga/schema.rb:82
@@ -8298,11 +8339,11 @@ msgid ""
 msgstr ""
 
 #: ../../lib/groonga/schema.rb:85
-msgid "a new instance of ColumnCreationWithDifferentOptions"
+msgid "Returns the value of attribute column"
 msgstr ""
 
 #: ../../lib/groonga/schema.rb:85
-msgid "Returns the value of attribute column"
+msgid "a new instance of ColumnCreationWithDifferentOptions"
 msgstr ""
 
 #: ../../lib/groonga/schema.rb:94
@@ -8318,11 +8359,11 @@ msgid "未知のインデックス対象を指定したときに発生する。"
 msgstr ""
 
 #: ../../lib/groonga/schema.rb:105
-msgid "Returns the value of attribute targets"
+msgid "a new instance of UnknownIndexTarget"
 msgstr ""
 
 #: ../../lib/groonga/schema.rb:105
-msgid "a new instance of UnknownIndexTarget"
+msgid "Returns the value of attribute targets"
 msgstr ""
 
 #: ../../lib/groonga/schema.rb:113
@@ -8334,19 +8375,15 @@ msgid "a new instance of UnknownOptions"
 msgstr ""
 
 #: ../../lib/groonga/schema.rb:115
-msgid "Returns the value of attribute unknown_keys"
+msgid "Returns the value of attribute available_keys"
 msgstr ""
 
 #: ../../lib/groonga/schema.rb:115
-msgid "Returns the value of attribute available_keys"
+msgid "Returns the value of attribute unknown_keys"
 msgstr ""
 
 #: ../../lib/groonga/schema.rb:127
 msgid "未知のテーブルの種類を指定したときに発生する。"
-msgstr ""
-
-#: ../../lib/groonga/schema.rb:129
-msgid "Returns the value of attribute available_types"
 msgstr ""
 
 #: ../../lib/groonga/schema.rb:129
@@ -8357,16 +8394,20 @@ msgstr ""
 msgid "Returns the value of attribute type"
 msgstr ""
 
+#: ../../lib/groonga/schema.rb:129
+msgid "Returns the value of attribute available_types"
+msgstr ""
+
 #: ../../lib/groonga/schema.rb:138
 msgid "参照先のテーブルを推測できないときに発生する。"
 msgstr ""
 
 #: ../../lib/groonga/schema.rb:140
-msgid "Returns the value of attribute tried_table_names"
+msgid "a new instance of UnguessableReferenceTable"
 msgstr ""
 
 #: ../../lib/groonga/schema.rb:140
-msgid "a new instance of UnguessableReferenceTable"
+msgid "Returns the value of attribute tried_table_names"
 msgstr ""
 
 #: ../../lib/groonga/schema.rb:152
@@ -8805,6 +8846,12 @@ msgstr ""
 msgid "table.index(\"Users.name\")"
 msgstr ""
 
+# @param [::Hash]
+# @param [Array]
+#: ../../lib/groonga/schema.rb:1101 ../../lib/groonga/schema.rb:1131
+msgid "tag|param|args"
+msgstr ""
+
 # @param [Array] args
 #: ../../lib/groonga/schema.rb:1101
 msgid ""
@@ -8835,12 +8882,6 @@ msgid ""
 "  自動的に有効になる。 =:"
 msgstr ""
 
-# @param [::Hash]
-# @param [Array]
-#: ../../lib/groonga/schema.rb:1101 ../../lib/groonga/schema.rb:1131
-msgid "tag|param|args"
-msgstr ""
-
 #: ../../lib/groonga/schema.rb:1118
 msgid ""
 "_target_table_ の _target_column_ を対象とするインデッ\n"
@@ -8868,24 +8909,6 @@ msgstr ""
 msgid "Defines a 8 bit signed integer column named @name@."
 msgstr "@name@ という名前8ビット符号付き整数のカラムを定義します。"
 
-#: ../../lib/groonga/schema.rb:1155 ../../lib/groonga/schema.rb:1165
-#: ../../lib/groonga/schema.rb:1194 ../../lib/groonga/schema.rb:1204
-#: ../../lib/groonga/schema.rb:1313 ../../lib/groonga/schema.rb:1323
-msgid "({}) the options"
-msgstr ""
-
-#: ../../lib/groonga/schema.rb:1155 ../../lib/groonga/schema.rb:1165
-#: ../../lib/groonga/schema.rb:1194 ../../lib/groonga/schema.rb:1204
-#: ../../lib/groonga/schema.rb:1313 ../../lib/groonga/schema.rb:1323
-msgid "the column name"
-msgstr ""
-
-#: ../../lib/groonga/schema.rb:1155 ../../lib/groonga/schema.rb:1165
-#: ../../lib/groonga/schema.rb:1194 ../../lib/groonga/schema.rb:1204
-#: ../../lib/groonga/schema.rb:1313 ../../lib/groonga/schema.rb:1323
-msgid "tag|see|#column"
-msgstr ""
-
 # @param [String or Symbol]
 #: ../../lib/groonga/schema.rb:1155 ../../lib/groonga/schema.rb:1165
 #: ../../lib/groonga/schema.rb:1194 ../../lib/groonga/schema.rb:1204
@@ -8897,6 +8920,24 @@ msgstr ""
 #: ../../lib/groonga/schema.rb:1194 ../../lib/groonga/schema.rb:1204
 #: ../../lib/groonga/schema.rb:1313 ../../lib/groonga/schema.rb:1323
 msgid "#column for available options."
+msgstr ""
+
+#: ../../lib/groonga/schema.rb:1155 ../../lib/groonga/schema.rb:1165
+#: ../../lib/groonga/schema.rb:1194 ../../lib/groonga/schema.rb:1204
+#: ../../lib/groonga/schema.rb:1313 ../../lib/groonga/schema.rb:1323
+msgid "({}) the options"
+msgstr ""
+
+#: ../../lib/groonga/schema.rb:1155 ../../lib/groonga/schema.rb:1165
+#: ../../lib/groonga/schema.rb:1194 ../../lib/groonga/schema.rb:1204
+#: ../../lib/groonga/schema.rb:1313 ../../lib/groonga/schema.rb:1323
+msgid "tag|see|#column"
+msgstr ""
+
+#: ../../lib/groonga/schema.rb:1155 ../../lib/groonga/schema.rb:1165
+#: ../../lib/groonga/schema.rb:1194 ../../lib/groonga/schema.rb:1204
+#: ../../lib/groonga/schema.rb:1313 ../../lib/groonga/schema.rb:1323
+msgid "the column name"
 msgstr ""
 
 #: ../../lib/groonga/schema.rb:1161 ../../lib/groonga/schema.rb:1169
@@ -9046,23 +9087,23 @@ msgid "a new instance of ViewRemoveDefinition"
 msgstr ""
 
 # @param value
-#: ../../lib/groonga/schema.rb:1691
-msgid "the value to set the attribute type to."
-msgstr ""
-
-# @param value
 #: ../../lib/groonga/schema.rb:1691 ../../lib/groonga/schema.rb:1757
 #: ../../lib/groonga/schema.rb:1836
 msgid "the value to set the attribute name to."
 msgstr ""
 
-#: ../../lib/groonga/schema.rb:1692 ../../lib/groonga/schema.rb:1758
-#: ../../lib/groonga/schema.rb:1837
-msgid "Sets the attribute name"
+# @param value
+#: ../../lib/groonga/schema.rb:1691
+msgid "the value to set the attribute type to."
 msgstr ""
 
 #: ../../lib/groonga/schema.rb:1692
 msgid "Sets the attribute type"
+msgstr ""
+
+#: ../../lib/groonga/schema.rb:1692 ../../lib/groonga/schema.rb:1758
+#: ../../lib/groonga/schema.rb:1837
+msgid "Sets the attribute name"
 msgstr ""
 
 #: ../../lib/groonga/schema.rb:1694
@@ -9084,15 +9125,15 @@ msgid "the value to set the attribute new_name to."
 msgstr ""
 
 #: ../../lib/groonga/schema.rb:1790
-msgid "Sets the attribute new_name"
-msgstr ""
-
-#: ../../lib/groonga/schema.rb:1790
 msgid "Returns the value of attribute current_name"
 msgstr ""
 
 #: ../../lib/groonga/schema.rb:1790
 msgid "Returns the value of attribute new_name"
+msgstr ""
+
+#: ../../lib/groonga/schema.rb:1790
+msgid "Sets the attribute new_name"
 msgstr ""
 
 #: ../../lib/groonga/schema.rb:1790
@@ -9105,12 +9146,12 @@ msgstr ""
 
 # @param value
 #: ../../lib/groonga/schema.rb:1836
-msgid "the value to set the attribute target_columns to."
+msgid "the value to set the attribute target_table to."
 msgstr ""
 
 # @param value
 #: ../../lib/groonga/schema.rb:1836
-msgid "the value to set the attribute target_table to."
+msgid "the value to set the attribute target_columns to."
 msgstr ""
 
 #: ../../lib/groonga/schema.rb:1837
@@ -9123,11 +9164,11 @@ msgid "Sets the attribute target_columns"
 msgstr ""
 
 #: ../../lib/groonga/schema.rb:1837
-msgid "Returns the value of attribute target_columns"
+msgid "Sets the attribute target_table"
 msgstr ""
 
 #: ../../lib/groonga/schema.rb:1837
-msgid "Sets the attribute target_table"
+msgid "Returns the value of attribute target_columns"
 msgstr ""
 
 #: ../../lib/groonga/schema.rb:1839
@@ -9139,14 +9180,14 @@ msgstr ""
 msgid "Measures statistic."
 msgstr ""
 
-# @param [String, nil]
-#: ../../lib/groonga/statistic-measurer.rb:25
-msgid "tag|param|path"
-msgstr ""
-
 # @return [Integer]
 #: ../../lib/groonga/statistic-measurer.rb:25
 msgid "0 if path is @nil@, disk usage of the path otherwise."
+msgstr ""
+
+# @param [String, nil]
+#: ../../lib/groonga/statistic-measurer.rb:25
+msgid "tag|param|path"
 msgstr ""
 
 # @param [String, nil] path
@@ -9185,14 +9226,14 @@ msgid ""
 "{SubRecords}."
 msgstr ""
 
-# @param [Record]
-#: ../../lib/groonga/sub-records.rb:36
-msgid "tag|param|record"
-msgstr ""
-
 # @return [SubRecords]
 #: ../../lib/groonga/sub-records.rb:36
 msgid "a new instance of SubRecords"
+msgstr ""
+
+# @param [Record]
+#: ../../lib/groonga/sub-records.rb:36
+msgid "tag|param|record"
 msgstr ""
 
 # @yield [record]
@@ -9200,14 +9241,14 @@ msgstr ""
 msgid "Gives a sub record to the block."
 msgstr ""
 
+#: ../../lib/groonga/sub-records.rb:43
+msgid "A sub record."
+msgstr "サブレコード。"
+
 # @yieldparam [Record]
 #: ../../lib/groonga/sub-records.rb:43
 msgid "tag|yieldparam|record"
 msgstr ""
-
-#: ../../lib/groonga/sub-records.rb:43
-msgid "A sub record."
-msgstr "サブレコード。"
 
 # @return [Array<Record>]
 #: ../../lib/groonga/sub-records.rb:48

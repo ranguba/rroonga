@@ -11,7 +11,7 @@ h3. Improvements
 * Added column values to {Groonga::Record#inspect} result.
   [groonga-dev,02048] [Suggested by ongaeshi]
 * grndump: Added @--dump-indexes@ option that controls schema for
-  indexes output. It is useful to dump only indexes.
+  indexes output. It is useful to dump only schema for indexes.
 
 h3. Thanks
 
