@@ -1,5 +1,22 @@
 h1. NEWS
 
+h2(#3-1-2). 3.1.2: 2014-01-29
+
+h3. Improvements
+
+* Added {Groonga::Table#support_value?}.
+* Added {Groonga::Record#support_value?}.
+* Added @_value@ value to {Groonga::Record#attributes} result.
+  [groonga-dev,02046] [Suggested by ongaeshi]
+* Added column values to {Groonga::Record#inspect} result.
+  [groonga-dev,02048] [Suggested by ongaeshi]
+* grndump: Added @--dump-indexes@ option that controls schema for
+  indexes output. It is useful to dump only indexes.
+
+h3. Thanks
+
+* ongaeshi
+
 h2(#3-1-1). 3.1.1: 2013-12-29
 
 h3. Improvements
