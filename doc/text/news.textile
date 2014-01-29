@@ -4,6 +4,7 @@ h2(#3-1-2). 3.1.2: 2014-01-29
 
 h3. Improvements
 
+* Supported Groonga 3.1.2. Groonga 3.1.1 or older are not supported.
 * Added {Groonga::Table#support_value?}.
 * Added {Groonga::Record#support_value?}.
 * Added @_value@ value to {Groonga::Record#attributes} result.
@@ -12,6 +13,8 @@ h3. Improvements
   [groonga-dev,02048] [Suggested by ongaeshi]
 * grndump: Added @--dump-indexes@ option that controls schema for
   indexes output. It is useful to dump only schema for indexes.
+* Added {Groonga.lock_timeout}.
+* Added {Groonga.lock_timeout=}.
 
 h3. Thanks
 
