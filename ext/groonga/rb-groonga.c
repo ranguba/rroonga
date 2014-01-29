@@ -107,6 +107,47 @@ rb_grn_init_version (VALUE mGrn)
     rb_define_const(mGrn, "BINDINGS_VERSION", bindings_version);
 }
 
+/*
+ * Returns the current lock timeout.
+ *
+ * See
+ * http://groonga.org/docs/reference/api/global_configurations.html
+ * about lock timeout.
+ *
+ * @overload lock_timeout
+ *    @return [Integer] The current lock timeout.
+ */
+static VALUE
+rb_grn_s_get_lock_timeout (VALUE klass)
+{
+    return INT2NUM(grn_get_lock_timeout());
+}
+
+/*
+ * Sets the current lock timeout.
+ *
+ * @overload lock_timeout=(timeout)
+ *    @param [Integer] timeout The new lock timeout.
+ *
+ * @see {#lock_timeout}
+ * @since 3.1.2
+ */
+static VALUE
+rb_grn_s_set_lock_timeout (VALUE klass, VALUE timeout)
+{
+    grn_set_lock_timeout(NUM2INT(timeout));
+    return Qnil;
+}
+
+static void
+rb_grn_init_lock_timeout (VALUE mGrn)
+{
+    rb_define_singleton_method(mGrn, "lock_timeout",
+                               rb_grn_s_get_lock_timeout, 0);
+    rb_define_singleton_method(mGrn, "lock_timeout=",
+                               rb_grn_s_set_lock_timeout, 1);
+}
+
 void
 Init_groonga (void)
 {
@@ -120,6 +161,7 @@ Init_groonga (void)
     rb_set_end_proc(finish_groonga, Qnil);
 
     rb_grn_init_version(mGrn);
+    rb_grn_init_lock_timeout(mGrn);
 
     rb_grn_init_utils(mGrn);
     rb_grn_init_encoding(mGrn);
