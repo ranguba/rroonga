@@ -1,6 +1,6 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
-  Copyright (C) 2009-2013  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2014  Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -82,9 +82,9 @@ RB_GRN_BEGIN_DECLS
 #  define debug(...)
 #endif
 
-#define RB_GRN_MAJOR_VERSION 3
-#define RB_GRN_MINOR_VERSION 1
-#define RB_GRN_MICRO_VERSION 2
+#define RB_GRN_MAJOR_VERSION 4
+#define RB_GRN_MINOR_VERSION 0
+#define RB_GRN_MICRO_VERSION 0
 
 #define RB_GRN_QUERY_DEFAULT_MAX_EXPRESSIONS 32
 
