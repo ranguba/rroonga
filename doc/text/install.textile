@@ -1,0 +1,77 @@
+h1. Install
+
+h2. Install from gem
+
+When Groonga is not installed, Install together.
+If use Windows, Please install from  Binary Package & gem.
+
+<pre>
+!!!command_line
+% sudo gem install rroonga
+</pre>
+
+h2. Install from Binary Package & gem
+
+It is useful when the following.
+
+* Failed to install Groonga
+* Reduction of installation time
+
+h3. Windows
+
+h4. RubyInstaller + DevKit
+
+<pre>
+!!!command_line
+% gem.bat install rroonga
+</pre>
+
+h4. ActiveScriptRuby
+
+<pre>
+!!!command_line
+% gem.bat install rroonga --platform x86-mingw32
+</pre>
+
+h3. Mac OS X
+
+h4. MacPorts
+
+<pre>
+!!!command_line
+% sudo port install groonga
+% sudo gem install rroonga
+</pre>
+
+h4. Homebrew
+
+TODO
+
+h3. Debian GNU/Linux
+
+TODO
+
+h3. Ubuntu
+
+<pre>
+!!!command_line
+% sudo apt-get install libgroonga-dev
+% sudo gem install rroonga
+</pre>
+
+h3. CentOS
+
+<pre>
+!!!command_line
+% sudo yum install groonga-devel -y
+% sudo gem install rroonga
+</pre>
+
+h3. Fedora
+
+TODO
+
+h2. Links
+
+* "2. Install — Groonga documentation":http://groonga.org/docs/install.html
+
