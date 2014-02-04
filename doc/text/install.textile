@@ -39,7 +39,7 @@ Type the following command on Ruby console:
 % gem.bat install rroonga
 </pre>
 
-This document assumes that you're using "RubyInstall for
+This document assumes that you're using "RubyInstaller for
 Windows":http://rubyinstaller.org/ .
 
 h3. OS X
