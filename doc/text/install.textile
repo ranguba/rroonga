@@ -10,11 +10,25 @@ Rroonga. You can't install Groonga by RubyGems because it isn't Ruby
 library. But don't worry. Rroonga provides the following options for
 easy to install:
 
-* Rroonga uses Groonga installed by your packaging system.
 * Rroonga downloads, builds and installs Groonga automatically. You
   don't need to do them explicitly.
+* Rroonga uses Groonga installed by your packaging system.
 
 The following sections describe the above in detail.
+
+h2. Install with auto Groonga build
+
+Rroonga searches Groonga on install. If Rroonga can't find
+Groonga, Rroonga downloads, builds and installs Groonga
+automatically.
+
+Type the following command to install Rroonga and Groonga. You don't
+need to install Groonga explicitly:
+
+<pre>
+!!!command_line
+% gem install rroonga
+</pre>
 
 h2. Install with Groonga package
 
@@ -125,23 +139,6 @@ included in the official Fedora repository.
 !!!command_line
 % sudo yum install groonga-devel -y
 % sudo gem install rroonga
-</pre>
-
-h2. Install with auto Groonga build
-
-There is another option to install Rroonga and Groonga. If you can't
-find the Groonga package, try this option.
-
-Rroonga searches Groonga on install. If Rroonga can't find
-Groonga, Rroonga downloads, builds and installs Groonga
-automatically.
-
-Type the following command to install Rroonga and Groonga. You don't
-need to install Groonga explicitly:
-
-<pre>
-!!!command_line
-% gem install rroonga
 </pre>
 
 h2. Links
