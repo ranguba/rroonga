@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: rroonga 2.1.0\n"
 "POT-Creation-Date: 2011-11-20 22:17+0900\n"
-"PO-Revision-Date: 2014-01-30 11:44+0900\n"
+"PO-Revision-Date: 2014-02-06 01:17+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: \n"
@@ -175,17 +175,17 @@ msgstr ""
 #: ../../doc/text/install.textile:1
 #, fuzzy
 msgid "h1. Install"
-msgstr "h2. インストール"
+msgstr "h1. インストール"
 
 #: ../../doc/text/install.textile:3
 msgid "This document describes how to install Rroonga."
-msgstr ""
+msgstr "Rroongaのインストール方法について説明します。"
 
 #: ../../doc/text/install.textile:5
 msgid ""
 "You can install Rrroonga by RubyGems. It is the standard way for Ruby\n"
 "libraries."
-msgstr ""
+msgstr "RroongaはRubyライブラリの基本的なインストール方法であるRubyGems経由でインストールすることが出来ます。"
 
 #: ../../doc/text/install.textile:8
 msgid ""
@@ -194,6 +194,9 @@ msgid ""
 "library. But don't worry. Rroonga provides the following options for\n"
 "easy to install:"
 msgstr ""
+"RroongaはGroongaに依存しているため、GroongaとRroongaの両方をインストールする必要があります。\n"
+"GroongaはRubyライブラリではないためRubyGemsからインストールすることが出来ません。\n"
+"でも大丈夫です。Rroongaは簡単にインストールする方法を提供しています: "
 
 #: ../../doc/text/install.textile:13
 msgid ""
@@ -201,14 +204,16 @@ msgid ""
 "  don't need to do them explicitly.\n"
 "* Rroonga uses Groonga installed by your packaging system."
 msgstr ""
+"* Rroongaと一緒に自動でGroongaをインストールする方法\n"
+"* Groongaのバイナリパッケージを事前にインストールする方法"
 
 #: ../../doc/text/install.textile:17
 msgid "The following sections describe the above in detail."
-msgstr ""
+msgstr "以下で詳しい方法を説明します。"
 
 #: ../../doc/text/install.textile:19
 msgid "h2. Install with auto Groonga build"
-msgstr ""
+msgstr "h2. Groongaの自動ビルド付きでインストール"
 
 #: ../../doc/text/install.textile:21
 msgid ""
@@ -216,12 +221,16 @@ msgid ""
 "Groonga, Rroonga downloads, builds and installs Groonga\n"
 "automatically."
 msgstr ""
+"Rroongaインストール時にGroongaを探します。Groongaが見つからなかった場合に\n"
+"ダウンロード、ビルド、インストールが自動的に行われます。"
 
 #: ../../doc/text/install.textile:25
 msgid ""
 "Type the following command to install Rroonga and Groonga. You don't\n"
 "need to install Groonga explicitly:"
 msgstr ""
+"以下のコマンドでRroongaとGroongaがインストールされます。\n"
+"明示的にGroongaをインストールする必要はありません。"
 
 #: ../../doc/text/install.textile:28
 msgid ""
@@ -233,7 +242,7 @@ msgstr ""
 
 #: ../../doc/text/install.textile:33
 msgid "h2. Install with Groonga package"
-msgstr ""
+msgstr "h2. Groongaパッケージを別途インストール"
 
 #: ../../doc/text/install.textile:35
 msgid ""
@@ -241,12 +250,17 @@ msgid ""
 "building Groonga by yourself. There are the following advantages for\n"
 "this option:"
 msgstr ""
+"自力でGroongaをビルドする代わりに各環境のパッケージシステムの\n"
+"Groongaパッケージを使うことが出来ます。\n"
+"以下の時に便利です:"
 
 #: ../../doc/text/install.textile:39
 msgid ""
 "* It reduces installation time.\n"
 "* It doesn't fail on building Groonga."
 msgstr ""
+"* インストール時間を短縮したい\n"
+"* Groongaのビルドに失敗する"
 
 #: ../../doc/text/install.textile:42
 msgid "It is the recommended option."
@@ -255,17 +269,19 @@ msgstr ""
 #: ../../doc/text/install.textile:44
 #, fuzzy
 msgid "h3. Windows"
-msgstr "h3. 修正"
+msgstr ""
 
 #: ../../doc/text/install.textile:46
 msgid ""
 "Rroonga gem for Windows includes both pre-compiled Rroonga and Groonga\n"
 "in the gem. So what you need to do is you just install rroonga gem."
 msgstr ""
+"Windows用のRrroongaは事前にコンパイルされたRroongaとGroonga両方を\n"
+"gemに内包しています。従って以下のコマンドを実行するだけでインストールすることが出来ます。"
 
 #: ../../doc/text/install.textile:49
 msgid "Type the following command on Ruby console:"
-msgstr ""
+msgstr "以下のコマンドを入力して下さい。"
 
 #: ../../doc/text/install.textile:51
 msgid ""
@@ -279,7 +295,7 @@ msgstr ""
 msgid ""
 "This document assumes that you're using \"RubyInstaller for\n"
 "Windows\":http://rubyinstaller.org/ ."
-msgstr ""
+msgstr "このドキュメントでは RubyInstaller for Windows を想定しています。"
 
 #: ../../doc/text/install.textile:59
 msgid "h3. OS X"
@@ -287,7 +303,7 @@ msgstr ""
 
 #: ../../doc/text/install.textile:61
 msgid "There are Groonga packages for OS X environment."
-msgstr ""
+msgstr "OSX環境におけるGroongaパッケージです。"
 
 #: ../../doc/text/install.textile:63
 msgid "h4. MacPorts"
@@ -298,6 +314,8 @@ msgid ""
 "If you're using \"MacPorts\":http://www.macports.org/ , type the\n"
 "following commands on your terminal:"
 msgstr ""
+"\"MacPorts\":http://www.macports.org/ を使っている人は\n"
+"以下のコマンドを入力して下さい。"
 
 #: ../../doc/text/install.textile:68
 msgid ""
@@ -317,6 +335,8 @@ msgid ""
 "If you're using \"Homebrew\":http://brew.sh/ , type the\n"
 "following commands on your terminal:"
 msgstr ""
+"\"Homebrew\":http://brew.sh/ を使っている人は\n"
+"以下のコマンドを入力して下さい。"
 
 #: ../../doc/text/install.textile:79
 msgid ""
@@ -337,12 +357,15 @@ msgid ""
 "documentation\":http://groonga.org/docs/install/debian.html how to set\n"
 "apt-line up."
 msgstr ""
+"aptを使ってGroongaパッケージをインストールすることが出来ます。\n"
+"\"Groonga documentation\":http://groonga.org/ja/docs/install/debian.html に\n"
+"apt-lineの設定があります。"
 
 #: ../../doc/text/install.textile:91 ../../doc/text/install.textile:106
 msgid ""
 "Type the following commands on your terminal after you finish to set\n"
 "apt-line up."
-msgstr ""
+msgstr "apt-lineの設定が終わったら、ターミナル上で以下のコマンドを実行して下さい。"
 
 #: ../../doc/text/install.textile:94 ../../doc/text/install.textile:109
 msgid ""
@@ -363,11 +386,14 @@ msgid ""
 "documentation\":http://groonga.org/docs/install/ubuntu.html how to set\n"
 "apt-line up."
 msgstr ""
+"aptを使ってGroongaパッケージをインストールすることが出来ます。\n"
+"\"Groonga documentation\":http://groonga.org/ja/docs/install/ubuntu.html に\n"
+"apt-lineの設定があります。"
 
 #: ../../doc/text/install.textile:115
 #, fuzzy
 msgid "h3. CentOS"
-msgstr "h3. 変更"
+msgstr ""
 
 #: ../../doc/text/install.textile:117
 msgid ""
@@ -375,18 +401,25 @@ msgid ""
 "documentation\":http://groonga.org/docs/install/centos.html how to set\n"
 "yum repository up."
 msgstr ""
+"yumを使ってGroongaパッケージをインストールすることが出来ます。\n"
+"\"Groonga documentation\":http://groonga.org/ja/docs/install/centos.html に\n"
+"yumレポジトリの設定があります。"
 
 #: ../../doc/text/install.textile:121
 msgid ""
 "But you need to install Ruby 1.9.3 or later by yourself. Both CentOS 5\n"
 "and 6 ship Ruby 1.8. Rroonga doesn't support Ruby 1.8."
 msgstr ""
+"事前にRuby 1.9.3 以降をインストールして下さい。\n"
+"CentOS 5 と 6 はRuby 1.8 で動いていますが、RroongaはRuby 1.8 をサポートしません。"
 
 #: ../../doc/text/install.textile:124
 msgid ""
 "Type the following commands on your terminal after you finish to set\n"
 "yum repository up and installing Ruby 1.9.3 or later."
 msgstr ""
+"yumレポジトリの設定とRuby 1.9.3 以降のインストールが終わったら、\n"
+"ターミナル上で以下のコマンドを実行して下さい。"
 
 #: ../../doc/text/install.textile:127
 msgid ""
@@ -406,6 +439,8 @@ msgid ""
 "You can install the Groonga package by yum. The Groonga package is\n"
 "included in the official Fedora repository."
 msgstr ""
+"yumを使ってRroongaをインストールすることが出来ます。\n"
+"Groongaパッケージは公式のFedoraレポジトリに含まれています。"
 
 #: ../../doc/text/install.textile:138
 msgid ""
@@ -419,11 +454,11 @@ msgstr ""
 #: ../../doc/text/install.textile:144
 #, fuzzy
 msgid "h2. Links"
-msgstr "h2. 感謝"
+msgstr "h2. リンク"
 
 #: ../../doc/text/install.textile:146
 msgid "* \"2. Install - Groonga documentation\":http://groonga.org/docs/install.html"
-msgstr ""
+msgstr "* \"2. インストール - Groonga ドキュメント\":http://groonga.org/ja/docs/install.html"
 
 #: ../../doc/text/news.textile:1
 msgid "h1. NEWS"
