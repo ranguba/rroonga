@@ -39,8 +39,6 @@ this option:
 * It reduces installation time.
 * It doesn't fail on building Groonga.
 
-It is the recommended option.
-
 h3. Windows
 
 Rroonga gem for Windows includes both pre-compiled Rroonga and Groonga
