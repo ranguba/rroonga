@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: rroonga 2.1.0\n"
 "POT-Creation-Date: 2011-11-20 22:17+0900\n"
-"PO-Revision-Date: 2014-02-06 01:17+0900\n"
+"PO-Revision-Date: 2014-02-07 20:35+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: \n"
@@ -173,7 +173,6 @@ msgstr ""
 "* mallowlabsさん: パッチを送ってくれました。"
 
 #: ../../doc/text/install.textile:1
-#, fuzzy
 msgid "h1. Install"
 msgstr "h1. インストール"
 
@@ -263,7 +262,6 @@ msgstr ""
 "* Groongaのビルドに失敗する"
 
 #: ../../doc/text/install.textile:44
-#, fuzzy
 msgid "h3. Windows"
 msgstr ""
 
@@ -387,7 +385,6 @@ msgstr ""
 "apt-lineの設定があります。"
 
 #: ../../doc/text/install.textile:115
-#, fuzzy
 msgid "h3. CentOS"
 msgstr ""
 
@@ -448,7 +445,6 @@ msgid ""
 msgstr ""
 
 #: ../../doc/text/install.textile:144
-#, fuzzy
 msgid "h2. Links"
 msgstr "h2. リンク"
 
