@@ -289,7 +289,7 @@ msgstr ""
 msgid ""
 "This document assumes that you're using \"RubyInstaller for\n"
 "Windows\":http://rubyinstaller.org/ ."
-msgstr "このドキュメントでは RubyInstaller for Windows を想定しています。"
+msgstr "このドキュメントでは \"RubyInstaller for Windows\":http://rubyinstaller.org/ を想定しています。"
 
 #: ../../doc/text/install.textile:57
 msgid "h3. OS X"
