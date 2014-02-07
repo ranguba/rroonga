@@ -43,7 +43,7 @@ module Groonga
       attr_writer :show_tables
 
       # @return [Boolean] (true) Shows information about columns if true,
-      #   doesn't show it otherwise. If {#show_tables} is false, information
+      #   doesn't show it otherwise. If {#show_tables?} is false, information
       #   about columns isn't always shown.
       attr_writer :show_columns
       def initialize
