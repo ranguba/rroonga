@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: rroonga 2.1.0\n"
 "POT-Creation-Date: 2011-11-20 22:17+0900\n"
-"PO-Revision-Date: 2014-02-07 20:35+0900\n"
+"PO-Revision-Date: 2014-02-07 20:43+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: \n"
@@ -297,7 +297,7 @@ msgstr ""
 
 #: ../../doc/text/install.textile:59
 msgid "There are Groonga packages for OS X environment."
-msgstr "OS X環境におけるGroongaパッケージです。"
+msgstr "OS X環境用のGroongaパッケージがあります。"
 
 #: ../../doc/text/install.textile:61
 msgid "h4. MacPorts"
