@@ -1,6 +1,6 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
-  Copyright (C) 2009-2012  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2014  Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -624,7 +624,7 @@ rb_grn_expression_snippet (int argc, VALUE *argv, VALUE self)
 {
     grn_ctx *context = NULL;
     grn_obj *expression;
-    grn_snip *snippet;
+    grn_obj *snippet;
     VALUE options;
     VALUE rb_normalize, rb_skip_leading_spaces;
     VALUE rb_width, rb_max_results, rb_tags;
@@ -714,7 +714,7 @@ rb_grn_expression_snippet (int argc, VALUE *argv, VALUE self)
     related_object = rb_ary_new3(2, self, rb_ary_new4(argc, argv));
     rb_grn_context_check(context, related_object);
 
-    return GRNOBJECT2RVAL(Qnil, context, (grn_obj *)snippet, GRN_TRUE);
+    return GRNOBJECT2RVAL(Qnil, context, snippet, GRN_TRUE);
 }
 
 void

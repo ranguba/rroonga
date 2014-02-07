@@ -1,6 +1,6 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
-  Copyright (C) 2009-2012  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2014  Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -83,7 +83,7 @@ static VALUE
 rb_grn_snippet_initialize (int argc, VALUE *argv, VALUE self)
 {
     grn_ctx *context = NULL;
-    grn_snip *snippet = NULL;
+    grn_obj *snippet = NULL;
     VALUE options;
     VALUE rb_context, rb_normalize, rb_skip_leading_spaces;
     VALUE rb_width, rb_max_results, rb_default_open_tag, rb_default_close_tag;
@@ -148,7 +148,7 @@ rb_grn_snippet_initialize (int argc, VALUE *argv, VALUE self)
                             mapping);
     rb_grn_context_check(context, rb_ary_new4(argc, argv));
 
-    rb_grn_object_assign(Qnil, self, rb_context, context, (grn_obj *)snippet);
+    rb_grn_object_assign(Qnil, self, rb_context, context, snippet);
     rb_grn_context_register_floating_object(DATA_PTR(self));
 
     rb_iv_set(self, "@context", rb_context);
@@ -203,7 +203,7 @@ rb_grn_snippet_add_keyword (int argc, VALUE *argv, VALUE self)
         close_tag_length = RSTRING_LEN(rb_close_tag);
     }
 
-    rc = grn_snip_add_cond(context, (grn_snip *)snippet,
+    rc = grn_snip_add_cond(context, snippet,
                            keyword, keyword_length,
                            open_tag, open_tag_length,
                            close_tag, close_tag_length);
@@ -245,7 +245,7 @@ rb_grn_snippet_execute (VALUE self, VALUE rb_string)
     string = StringValuePtr(rb_string);
     string_length = RSTRING_LEN(rb_string);
 
-    rc = grn_snip_exec(context, (grn_snip *)snippet, string, string_length,
+    rc = grn_snip_exec(context, snippet, string, string_length,
                        &n_results, &max_tagged_length);
     rb_grn_context_check(context, self);
     rb_grn_rc_check(rc, self);
@@ -256,7 +256,7 @@ rb_grn_snippet_execute (VALUE self, VALUE rb_string)
         VALUE rb_result;
         unsigned result_length;
 
-        rc = grn_snip_get_result(context, (grn_snip *)snippet,
+        rc = grn_snip_get_result(context, snippet,
                                  i, result, &result_length);
         rb_grn_rc_check(rc, self);
         rb_result = rb_grn_context_rb_string_new(context, result, result_length);
