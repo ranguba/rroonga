@@ -297,7 +297,7 @@ msgstr ""
 
 #: ../../doc/text/install.textile:59
 msgid "There are Groonga packages for OS X environment."
-msgstr "OSX環境におけるGroongaパッケージです。"
+msgstr "OS X環境におけるGroongaパッケージです。"
 
 #: ../../doc/text/install.textile:61
 msgid "h4. MacPorts"
