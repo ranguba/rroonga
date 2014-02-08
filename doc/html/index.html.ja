@@ -38,7 +38,7 @@
         </p>
         <ul>
           <li><a href="#about-rroonga">rroonga</a>: Groongaの機能をRubyから利用するためのライブラリ</li>
-          <li><a href="#about-active-groonga">ActiveGroonga</a>: rroongaをWebアプリケーションから使いやすくするためのライブラリ</li>
+          <li><a href="#about-active-groonga">ActiveGroonga</a>: RroongaをWebアプリケーションから使いやすくするためのライブラリ</li>
           <li><a href="#about-active-groonga-fabrication">ActiveGroonga Fabrication</a>: FabricationにActiveGroongaサポートを追加するライブラリ</li>
           <li><a href="#about-racknga">racknga</a>: 検索用Webアプリケーションの構築・運用を支援するユーティリティ</li>
           <li><a href="#about-packnga">Packnga</a>: 多言語対応ドキュメント付きパッケージ作成用ライブラリ</li>
@@ -54,37 +54,37 @@
           <li><a href="#license">ライセンス</a></li>
         </ul>
 
-        <h2 id="about-rroonga">rroonga</h2>
+        <h2 id="about-rroonga">Rroonga</h2>
         <p>
-          rroonga（るるんが）はGroonga（ぐるんが）のいわゆるDB-APIの層の機能をRubyレベルに提供します。rroongaの機能を特にWebアプリケーションから使いやすくするための機能は<a href="#about-active-groonga">ActiveGroonga</a>で提供します。検索用Webアプリケーションを構築・運用するときに便利な機能は<a href="#about-racknga">racknga</a>で提供します。どのライブラリもGroongaの機能をRubyらしい読み書きしやすい構文で利用できることが利点です。
+          Rroonga（るるんが）はGroonga（ぐるんが）のいわゆるDB-APIの層の機能をRubyレベルに提供します。Rroongaの機能を特にWebアプリケーションから使いやすくするための機能は<a href="#about-active-groonga">ActiveGroonga</a>で提供します。検索用Webアプリケーションを構築・運用するときに便利な機能は<a href="#about-racknga">racknga</a>で提供します。どのライブラリもGroongaの機能をRubyらしい読み書きしやすい構文で利用できることが利点です。
         </p>
 
-        <h3>rroongaの最新リリース</h3>
+        <h3>Rroongaの最新リリース</h3>
         <p>
           2012-05-02にリリースされた<a href="rroonga/ja/file.news.html#2-0-4">2.0.4</a>が最新です。
         </p>
 
-        <h3 id="install-rroonga">rroongaのインストール</h3>
+        <h3 id="install-rroonga">Rroongaのインストール</h3>
         <p>
           RubyGemsでインストールできます。
         </p>
         <ul>
-          <li><a href="rroonga/ja/file.install.html">rroongaのインストール</a></li>
+          <li><a href="rroonga/ja/file.install.html">Rroongaのインストール</a></li>
         </ul>
 
-        <h3>rroongaのドキュメント</h3>
+        <h3>Rroongaのドキュメント</h3>
         <p>
           リファレンスマニュアルとチュートリアルがあります。
           どちらもまだ未完成で、半分位できています。
         </p>
         <ul>
-          <li><a href="rroonga/ja/">rroongaのリファレンスマニュアル</a></li>
-          <li><a href="rroonga/ja/file.tutorial.html">rroongaのチュートリアル</a></li>
+          <li><a href="rroonga/ja/">Rroongaのリファレンスマニュアル</a></li>
+          <li><a href="rroonga/ja/file.tutorial.html">Rroongaのチュートリアル</a></li>
         </ul>
 
         <h2 id="about-active-groonga">ActiveGroonga</h2>
         <p>
-          ActiveGroongaはrroongaの機能を使ってより利用しやすい全文検索機能・データストア機能を提供するライブラリです。
+          ActiveGroongaはRroongaの機能を使ってより利用しやすい全文検索機能・データストア機能を提供するライブラリです。
           ActiveRecordのようなAPIでGroongaで管理しているデータを通常のオブジェクトのように扱えます。
         </p>
         <p>
@@ -146,7 +146,7 @@
 
         <h2 id="about-racknga">racknga</h2>
         <p>
-          racknga（らくんが）はRackベースのWebアプリケーションでrroongaを便利に使うための機能（ミドルウェアなど）を提供するライブラリです。
+          racknga（らくんが）はRackベースのWebアプリケーションでRroongaを便利に使うための機能（ミドルウェアなど）を提供するライブラリです。
         </p>
 
         <h3>rackngaの最新リリース</h3>
@@ -254,18 +254,18 @@
 
         <h2 id="logo">ロゴ</h2>
         <p>
-          ラングバプロジェクトはrroonga用のロゴを提供しています。これらはCC-BY 3.0ライセンスで利用できます。原著作者表記には「The Ranguba project」、「ラングバプロジェクト」、「The Groonga project」、「Groongaプロジェクト」のどれかを使ってください。
+          ラングバプロジェクトはRroonga用のロゴを提供しています。これらはCC-BY 3.0ライセンスで利用できます。原著作者表記には「The Ranguba project」、「ラングバプロジェクト」、「The Groonga project」、「Groongaプロジェクト」のどれかを使ってください。
         </p>
 
         <p>
-          みなさんのプロジェクトでrroongaを使っている場合は、どうぞこのロゴを使ってrroongaを広めてください！
+          みなさんのプロジェクトでRroongaを使っている場合は、どうぞこのロゴを使ってRroongaを広めてください！
         </p>
 
-        <h3 id="rroonga-logo">rroongaロゴ</h3>
+        <h3 id="rroonga-logo">Rroongaロゴ</h3>
         <p>
           <a href="logos/rroonga-logo.png">
             <img src="logos/rroonga-logo.png"
-                 alt="rroongaロゴ" />
+                 alt="Rroongaロゴ" />
           </a>
         </p>
         <p>
@@ -273,11 +273,11 @@
           (<a href="logos/rroonga-logo.svg">SVGバージョン</a>)
         </p>
 
-        <h3 id="rroonga-logo-foreground-white">白文字のrroongaロゴ</h3>
+        <h3 id="rroonga-logo-foreground-white">白文字のRroongaロゴ</h3>
         <p>
           <a href="logos/rroonga-logo-foreground-white.png">
             <img src="logos/rroonga-logo-foreground-white.png"
-                 alt="白文字のrroongaロゴ" />
+                 alt="白文字のRroongaロゴ" />
           </a>
         </p>
         <p>
@@ -285,11 +285,11 @@
           (<a href="logos/rroonga-logo-foreground-white.svg">SVGバージョン</a>)
         </p>
 
-        <h3 id="rroonga-icon">rroongaアイコン</h3>
+        <h3 id="rroonga-icon">Rroongaアイコン</h3>
         <p>
           <a href="logos/rroonga-icon.png">
             <img src="logos/rroonga-icon.png"
-                 alt="rroongaアイコン" />
+                 alt="Rroongaアイコン" />
           </a>
         </p>
         <p>
@@ -297,11 +297,11 @@
           (<a href="logos/rroonga-icon.svg">SVGバージョン</a>)
         </p>
 
-        <h3 id="rroonga-icon-foreground-white">白文字のrroongaアイコン</h3>
+        <h3 id="rroonga-icon-foreground-white">白文字のRroongaアイコン</h3>
         <p>
           <a href="logos/rroonga-icon-foreground-white.png">
             <img src="logos/rroonga-icon-foreground-white.png"
-                 alt="白文字のrroongaアイコン" />
+                 alt="白文字のRroongaアイコン" />
           </a>
         </p>
         <p>
@@ -309,11 +309,11 @@
           (<a href="logos/rroonga-icon-foreground-white.svg">SVGバージョン</a>)
         </p>
 
-        <h3 id="rroonga-icon-full-size">rroongaアイコン（フルサイズバージョン）</h3>
+        <h3 id="rroonga-icon-full-size">Rroongaアイコン（フルサイズバージョン）</h3>
         <p>
           <a href="logos/rroonga-icon-full-size.png">
             <img src="logos/rroonga-icon-full-size.png"
-                 alt="rroongaアイコン（フルサイズバージョン）" />
+                 alt="Rroongaアイコン（フルサイズバージョン）" />
           </a>
         </p>
         <p>
@@ -323,18 +323,18 @@
 
         <h2 id="license">ライセンス</h2>
         <p>
-          rroonga、ActiveGroonga、racknga、ChupaTextはフリーソフトウェアです。あなたは、Free Software Foundationが公表した<a href="http://www.gnu.org/licenses/lgpl-2.1.txt">GNU Lesser General Public License 2.1</a>に定める条項に従って本プログラムを再頒布または変更することができます。
+          Rroonga、ActiveGroonga、racknga、ChupaTextはフリーソフトウェアです。あなたは、Free Software Foundationが公表した<a href="http://www.gnu.org/licenses/lgpl-2.1.txt">GNU Lesser General Public License 2.1</a>に定める条項に従って本プログラムを再頒布または変更することができます。
         </p>
 
         <p>
-          rroonga、ActiveGroonga、racknga、ChupaTextは有用とは思いますが、頒布にあたっては、市場性及び特定目的適合性についての暗黙の保証を含めて、いかなる保証も行ないません。詳細については<a href="http://www.gnu.org/licenses/lgpl-2.1.txt">GNU Lesser General Public License 2.1</a>をお読みください。
+          Rroonga、ActiveGroonga、racknga、ChupaTextは有用とは思いますが、頒布にあたっては、市場性及び特定目的適合性についての暗黙の保証を含めて、いかなる保証も行ないません。詳細については<a href="http://www.gnu.org/licenses/lgpl-2.1.txt">GNU Lesser General Public License 2.1</a>をお読みください。
         </p>
       </div>
 
       <div class="sidebar">
         <ul>
           <li><a href="http://rubyforge.org/projects/groonga/">プロジェクトページ</a></li>
-          <li><a href="#about-rroonga">rroonga</a></li>
+          <li><a href="#about-rroonga">Rroonga</a></li>
           <li><a href="#about-active-groonga">ActiveGroonga</a></li>
           <li><a href="#about-active-groonga-fabrication">ActiveGroonga Fabrication</a></li>
           <li><a href="#about-racknga">racknga</a></li>
