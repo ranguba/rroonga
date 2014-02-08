@@ -25,7 +25,7 @@
       <ul class="menu">
         <li id="menu-reference"><a href="rroonga/ja/">リファレンスマニュアル</a></li>
         <li id="menu-tutorial"><a href="rroonga/ja/file.tutorial.html">チュートリアル</a></li>
-        <li id="menu-install"><a href="#install-rroonga">インストール</a></li>
+        <li id="menu-install"><a href="rroonga/ja/file.install.html">インストール</a></li>
         <li id="menu-developer"><a href="developer.html.ja">開発者向け情報</a></li>
       </ul>
     </div>
@@ -66,9 +66,11 @@
 
         <h3 id="install-rroonga">rroongaのインストール</h3>
         <p>
-          RubyGemsでインストールできます。groongaがインストールされていない場合は自動でダウンロード・ビルドし利用します。
+          RubyGemsでインストールできます。
         </p>
-        <pre class="command">% sudo gem install rroonga</pre>
+        <ul>
+          <li><a href="rroonga/ja/file.install.html">rroongaのインストール</a></li>
+        </ul>
 
         <h3>rroongaのドキュメント</h3>
         <p>
