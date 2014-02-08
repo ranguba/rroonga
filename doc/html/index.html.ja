@@ -66,11 +66,9 @@
 
         <h3 id="install-rroonga">Rroongaのインストール</h3>
         <p>
-          RubyGemsでインストールできます。
+          RubyGemsでインストールできます。（<a href="rroonga/ja/file.install.html">詳細</a>）
         </p>
-        <ul>
-          <li><a href="rroonga/ja/file.install.html">Rroongaのインストール</a></li>
-        </ul>
+        <pre class="command">% sudo gem install rroonga</pre>
 
         <h3>Rroongaのドキュメント</h3>
         <p>
