@@ -8,13 +8,13 @@
     <link rel="stylesheet" href="ranguba.css" type="text/css" />
     <link rel="shortcut icon" href="/favicon.ico" />
     <link rel="icon" href="/favicon.png" />
-    <title>Rubyでgroonga使って全文検索 - ラングバ</title>
+    <title>RubyでGroonga使って全文検索 - ラングバ</title>
   </head>
   <body>
     <div class="header">
       <div class="title">
         <a href="index.html.ja">
-          <span class="title">Rubyでgroonga使って全文検索</span>
+          <span class="title">RubyでGroonga使って全文検索</span>
           <span class="title-separator">-</span>
           <span class="title-project">ラングバ</span>
         </a>
@@ -34,10 +34,10 @@
       <div class="main">
         <h1>ラングバプロジェクト</h1>
         <p>
-          ラングバプロジェクトは<a href="http://groonga.org/">カラムストア機能も備える高速・高機能な全文検索エンジンgroonga</a>を用いた全文検索システムを提供するプロジェクトです。groongaの機能をRubyから利用するためのライブラリ、様々な文書から検索対象のテキストを抽出するユーティリティ、検索用Webインターフェイスなどを提供します。提供する機能の一覧は以下の通りです。
+          ラングバプロジェクトは<a href="http://groonga.org/">カラムストア機能も備える高速・高機能な全文検索エンジンGroonga</a>を用いた全文検索システムを提供するプロジェクトです。Groongaの機能をRubyから利用するためのライブラリ、様々な文書から検索対象のテキストを抽出するユーティリティ、検索用Webインターフェイスなどを提供します。提供する機能の一覧は以下の通りです。
         </p>
         <ul>
-          <li><a href="#about-rroonga">rroonga</a>: groongaの機能をRubyから利用するためのライブラリ</li>
+          <li><a href="#about-rroonga">rroonga</a>: Groongaの機能をRubyから利用するためのライブラリ</li>
           <li><a href="#about-active-groonga">ActiveGroonga</a>: rroongaをWebアプリケーションから使いやすくするためのライブラリ</li>
           <li><a href="#about-active-groonga-fabrication">ActiveGroonga Fabrication</a>: FabricationにActiveGroongaサポートを追加するライブラリ</li>
           <li><a href="#about-racknga">racknga</a>: 検索用Webアプリケーションの構築・運用を支援するユーティリティ</li>
@@ -56,7 +56,7 @@
 
         <h2 id="about-rroonga">rroonga</h2>
         <p>
-          rroonga（るるんが）はgroonga（ぐるんが）のいわゆるDB-APIの層の機能をRubyレベルに提供します。rroongaの機能を特にWebアプリケーションから使いやすくするための機能は<a href="#about-active-groonga">ActiveGroonga</a>で提供します。検索用Webアプリケーションを構築・運用するときに便利な機能は<a href="#about-racknga">racknga</a>で提供します。どのライブラリもgroongaの機能をRubyらしい読み書きしやすい構文で利用できることが利点です。
+          rroonga（るるんが）はGroonga（ぐるんが）のいわゆるDB-APIの層の機能をRubyレベルに提供します。rroongaの機能を特にWebアプリケーションから使いやすくするための機能は<a href="#about-active-groonga">ActiveGroonga</a>で提供します。検索用Webアプリケーションを構築・運用するときに便利な機能は<a href="#about-racknga">racknga</a>で提供します。どのライブラリもGroongaの機能をRubyらしい読み書きしやすい構文で利用できることが利点です。
         </p>
 
         <h3>rroongaの最新リリース</h3>
@@ -85,10 +85,10 @@
         <h2 id="about-active-groonga">ActiveGroonga</h2>
         <p>
           ActiveGroongaはrroongaの機能を使ってより利用しやすい全文検索機能・データストア機能を提供するライブラリです。
-          ActiveRecordのようなAPIでgroongaで管理しているデータを通常のオブジェクトのように扱えます。
+          ActiveRecordのようなAPIでGroongaで管理しているデータを通常のオブジェクトのように扱えます。
         </p>
         <p>
-          ActiveGroongaはRuby on Railsに対応しています。データストアにRDBではなくgroongaを利用し、全文検索機能を強化したRailsアプリケーションを開発できます。
+          ActiveGroongaはRuby on Railsに対応しています。データストアにRDBではなくGroongaを利用し、全文検索機能を強化したRailsアプリケーションを開発できます。
           ActiveGroongaは以下のようにActiveRecordのような機能を持っているため、これまでのRailsアプリケーションの知識を利用することができます。
           <ul>
             <li>マイグレーション</li>
@@ -244,7 +244,7 @@
 
         <h2 id="about-ranguba">文書検索ラングバ</h2>
         <p>
-          文書検索ラングバはgroongaを利用した全文検索システムです。クローラー、インデクサー、検索インターフェイスなどすべてを含んだ全文検索システムです。
+          文書検索ラングバはGroongaを利用した全文検索システムです。クローラー、インデクサー、検索インターフェイスなどすべてを含んだ全文検索システムです。
         </p>
 
         <h3>文書検索ラングバ</h3>
@@ -254,7 +254,7 @@
 
         <h2 id="logo">ロゴ</h2>
         <p>
-          ラングバプロジェクトはrroonga用のロゴを提供しています。これらはCC-BY 3.0ライセンスで利用できます。原著作者表記には「The Ranguba project」、「ラングバプロジェクト」、「The groonga project」、「groongaプロジェクト」のどれかを使ってください。
+          ラングバプロジェクトはrroonga用のロゴを提供しています。これらはCC-BY 3.0ライセンスで利用できます。原著作者表記には「The Ranguba project」、「ラングバプロジェクト」、「The Groonga project」、「Groongaプロジェクト」のどれかを使ってください。
         </p>
 
         <p>
@@ -346,7 +346,7 @@
           <li><a href="#license">ライセンス</a></li>
           <li>
             <a href="http://lists.sourceforge.jp/mailman/listinfo/groonga-dev">メーリングリスト</a>
-            （groongaのメーリングリストにお願いします）
+            （Groongaのメーリングリストにお願いします）
           </li>
         </ul>
       </div>
