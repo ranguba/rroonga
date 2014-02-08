@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: rroonga 2.1.0\n"
 "POT-Creation-Date: 2011-11-20 22:17+0900\n"
-"PO-Revision-Date: 2014-02-07 20:47+0900\n"
+"PO-Revision-Date: 2014-02-08 18:07+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: \n"
@@ -457,9 +457,8 @@ msgid "h1. NEWS"
 msgstr "h1. お知らせ"
 
 #: ../../doc/text/news.textile:3
-#, fuzzy
 msgid "h2(#4-0-0). 4.0.0: 2014-02-09"
-msgstr "* groonga 0.1.6対応"
+msgstr ""
 
 #: ../../doc/text/news.textile:5 ../../doc/text/news.textile:17
 #: ../../doc/text/news.textile:37 ../../doc/text/news.textile:56
@@ -488,6 +487,8 @@ msgid ""
 "* Supported Groonga 4.0.0. Groonga 3.1.2 or older are not supported.\n"
 "* Added install document. [Patch by ongaeshi]"
 msgstr ""
+"* Groonga 4.0.0対応。Groonga 3.1.2以前のサポートを廃止。\n"
+"* インストールドキュメントを追加。[おんがえしさんがパッチ提供]"
 
 #: ../../doc/text/news.textile:10 ../../doc/text/news.textile:31
 #: ../../doc/text/news.textile:50 ../../doc/text/news.textile:70
