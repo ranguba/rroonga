@@ -1,5 +1,17 @@
 h1. NEWS
 
+h2(#4-0-0). 4.0.0: 2014-02-09
+
+h3. Improvements
+
+* Supported Groonga 4.0.0. Groonga 3.1.2 or older are not supported.
+* Added install document. [Patch by ongaeshi]
+
+h3. Thanks
+
+* ongaeshi
+
+
 h2(#3-1-2). 3.1.2: 2014-01-29
 
 h3. Improvements
