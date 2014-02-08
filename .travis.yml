@@ -7,8 +7,8 @@ rvm:
   - 2.1.0
 # env:
 #   - GROONGA_MASTER=yes
-matrix:
-  allow_failures:
-    - rvm: 2.1.0
+# matrix:
+#   allow_failures:
+#     - rvm: 2.1.0
 before_install:
   - curl https://raw.github.com/groonga/groonga/master/data/travis/setup.sh | sh
