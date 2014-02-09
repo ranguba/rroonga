@@ -2,3 +2,5 @@
 --markup textile
 lib/**/*.rb
 ext/**/*.c
+-
+doc/text/*
