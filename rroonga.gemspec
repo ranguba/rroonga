@@ -59,7 +59,7 @@ Gem::Specification.new do |s|
   description = clean_white_space.call(entries[entries.index("Description") + 1])
   s.summary, s.description, = description.split(/\n\n+/, 3)
 
-  s.files = ["README.textile", "AUTHORS", "Rakefile", "Gemfile"]
+  s.files = ["README.textile", "AUTHORS", "Rakefile", "Gemfile", ".yardopts"]
   s.files += Dir.glob("doc/text/*.textile")
   s.files += ["#{s.name}.gemspec"]
   s.files += ["rroonga-build.rb", "extconf.rb"]
