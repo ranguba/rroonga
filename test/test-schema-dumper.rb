@@ -214,8 +214,8 @@ create_table("Terms",
 end
 
 change_table("Terms") do |table|
-  table.index("Items", "_key", :name => "Items__key")
-  table.index("Items", "title", :name => "Items_title")
+  table.index("Items", "_key", :name => "Items__key", :with_position => true)
+  table.index("Items", "title", :name => "Items_title", :with_position => true)
 end
       SCHEMA
     end

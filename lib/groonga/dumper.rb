@@ -477,9 +477,15 @@ module Groonga
           end
           dump_object(name)
         end.join(", ")
+        options = {
+          :name => column.local_name,
+        }
+        options[:with_section]  = true if column.with_section?
+        options[:with_weight]   = true if column.with_weight?
+        options[:with_position] = true if column.with_position?
         arguments = [dump_object(target_table_name),
                      sources.size == 1 ? source_names : "[#{source_names}]",
-                     ":name => #{dump_object(column.local_name)}"]
+                     dump_options(options)]
         write("  table.index(#{arguments.join(', ')})\n")
       end
 
@@ -516,13 +522,16 @@ module Groonga
         options[:type] = :vector if column.vector?
         return nil if options.empty?
 
-        dumped_options = ""
-        options.each do |key, value|
+        dump_options(options)
+      end
+
+      def dump_options(options)
+        dumped_options = options.collect do |key, value|
           dumped_key = dump_object(key)
           dumped_value = dump_object(value)
-          dumped_options << "#{dumped_key} => #{dumped_value}"
+          "#{dumped_key} => #{dumped_value}"
         end
-        dumped_options
+        dumped_options.join(", ")
       end
 
       def dump_object(object)
