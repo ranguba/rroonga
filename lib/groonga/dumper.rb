@@ -460,9 +460,11 @@ module Groonga
         name = column.local_name
         reference = column.range
         options = column_options(column)
-        arguments = [dump_object(name),
-                     dump_object(reference.name),
-                     options].compact.join(", ")
+        arguments = [
+          dump_object(name),
+          dump_object(reference.name),
+          options,
+        ].compact.join(", ")
         write("  table.reference(#{arguments})\n")
       end
 
@@ -483,9 +485,11 @@ module Groonga
         options[:with_section]  = true if column.with_section?
         options[:with_weight]   = true if column.with_weight?
         options[:with_position] = true if column.with_position?
-        arguments = [dump_object(target_table_name),
-                     sources.size == 1 ? source_names : "[#{source_names}]",
-                     dump_options(options)]
+        arguments = [
+          dump_object(target_table_name),
+          sources.size == 1 ? source_names : "[#{source_names}]",
+          dump_options(options),
+        ]
         write("  table.index(#{arguments.join(', ')})\n")
       end
 
