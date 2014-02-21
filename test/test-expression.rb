@@ -37,7 +37,7 @@ class ExpressionTest < Test::Unit::TestCase
 
   def test_get_value
     users = Groonga::Hash.create(:name => "Users")
-    name = users.define_column("name", "ShortText")
+    users.define_column("name", "ShortText")
 
     morita = users.add("morita", :name => "mori daijiro")
 
@@ -51,7 +51,7 @@ class ExpressionTest < Test::Unit::TestCase
 
   def test_get_value_with_variable
     users = Groonga::Hash.create(:name => "Users")
-    name = users.define_column("name", "ShortText")
+    users.define_column("name", "ShortText")
 
     morita = users.add("morita", :name => "mori daijiro")
     gunyara_kun = users.add("gunyara-kun", :name => "Tasuku SUENAGA")
