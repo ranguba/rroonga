@@ -104,6 +104,23 @@ class SchemaDumperTest < Test::Unit::TestCase
     end
   end
 
+  def define_forward_index_schema
+    Groonga::Schema.define do |schema|
+      schema.create_table("Tags",
+                          :type => :hash,
+                          :key_type => "ShortText") do |table|
+      end
+
+      schema.create_table("Memos",
+                          :type => :patricia_trie,
+                          :key_type => "ShortText") do |table|
+        table.index("Tags",
+                    :name => "tags",
+                    :with_weight => true)
+      end
+    end
+  end
+
   def define_double_array_trie_schema
     Groonga::Schema.define do |schema|
       schema.create_table("Accounts",
@@ -220,6 +237,27 @@ end
       SCHEMA
     end
 
+    def test_forward_index
+      define_forward_index_schema
+      assert_equal(<<-SCHEMA, dump)
+create_table("Memos",
+             :type => :patricia_trie,
+             :key_type => "ShortText",
+             :force => true) do |table|
+end
+
+create_table("Tags",
+             :type => :hash,
+             :key_type => "ShortText",
+             :force => true) do |table|
+end
+
+change_table("Memos") do |table|
+  table.index("Tags", [], :name => "tags", :with_weight => true)
+end
+      SCHEMA
+    end
+
     def test_double_array_trie
       define_double_array_trie_schema
       assert_equal(<<-SCHEMA, dump)
@@ -286,6 +324,17 @@ table_create Terms TABLE_PAT_KEY|KEY_NORMALIZE --key_type ShortText --default_to
 
 column_create Terms Items__key COLUMN_INDEX|WITH_POSITION Items _key
 column_create Terms Items_title COLUMN_INDEX|WITH_POSITION Items title
+      SCHEMA
+    end
+
+    def test_forward_index
+      define_forward_index_schema
+      assert_equal(<<-SCHEMA, dump)
+table_create Memos TABLE_PAT_KEY --key_type ShortText
+
+table_create Tags TABLE_HASH_KEY --key_type ShortText
+
+column_create Memos tags COLUMN_INDEX|WITH_WEIGHT Tags
       SCHEMA
     end
 

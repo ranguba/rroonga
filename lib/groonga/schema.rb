@@ -1445,7 +1445,7 @@ module Groonga
             target_column_full_name = target_column_full_name.name
           end
           target_table, target_column = target_column_full_name.split(/\./, 2)
-          target_columns = [target_column]
+          target_columns = [target_column].compact
           key = [target_table, target_columns]
         else
           target_table_name = target_table_or_target_column_full_name
