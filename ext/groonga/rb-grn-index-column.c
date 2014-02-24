@@ -1047,6 +1047,58 @@ rb_grn_index_column_with_position_p (VALUE self)
 }
 
 /*
+ * @overload inverted?
+ * @returns [Boolean] @true@ if the index column is inverted index,
+ *   @false@ otherwise.
+ */
+static VALUE
+rb_grn_index_column_inverted_p (VALUE self)
+{
+    grn_ctx *context;
+    grn_obj *column;
+    grn_obj sources;
+    grn_bool inverted_p;
+
+    rb_grn_index_column_deconstruct(SELF(self), &column, &context,
+                                    NULL, NULL,
+                                    NULL, NULL, NULL, NULL, NULL,
+                                    NULL, NULL);
+
+    GRN_RECORD_INIT(&sources, GRN_OBJ_VECTOR, GRN_ID_NIL);
+    grn_obj_get_info(context, column, GRN_INFO_SOURCE, &sources);
+    inverted_p = (GRN_BULK_VSIZE(&sources) > 0);
+    GRN_OBJ_FIN(context, &sources);
+
+    return CBOOL2RVAL(inverted_p);
+}
+
+/*
+ * @overload forward?
+ * @returns [Boolean] @true@ if the index column is forward index,
+ *   @false@ otherwise.
+ */
+static VALUE
+rb_grn_index_column_forward_p (VALUE self)
+{
+    grn_ctx *context;
+    grn_obj *column;
+    grn_obj sources;
+    grn_bool forward_p;
+
+    rb_grn_index_column_deconstruct(SELF(self), &column, &context,
+                                    NULL, NULL,
+                                    NULL, NULL, NULL, NULL, NULL,
+                                    NULL, NULL);
+
+    GRN_RECORD_INIT(&sources, GRN_OBJ_VECTOR, GRN_ID_NIL);
+    grn_obj_get_info(context, column, GRN_INFO_SOURCE, &sources);
+    forward_p = (GRN_BULK_VSIZE(&sources) == 0);
+    GRN_OBJ_FIN(context, &sources);
+
+    return CBOOL2RVAL(forward_p);
+}
+
+/*
  * Opens cursor to iterate posting in the index column.
  *
  * @example
@@ -1163,6 +1215,13 @@ rb_grn_init_index_column (VALUE mGrn)
                      rb_grn_index_column_with_weight_p, 0);
     rb_define_method(rb_cGrnIndexColumn, "with_position?",
                      rb_grn_index_column_with_position_p, 0);
+
+    rb_define_method(rb_cGrnIndexColumn, "inverted?",
+                     rb_grn_index_column_inverted_p, 0);
+    rb_define_method(rb_cGrnIndexColumn, "forward?",
+                     rb_grn_index_column_forward_p, 0);
+
+
     rb_define_method(rb_cGrnIndexColumn, "open_cursor",
                      rb_grn_index_column_open_cursor, -1);
 }

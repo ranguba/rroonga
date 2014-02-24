@@ -175,6 +175,34 @@ class IndexColumnTest < Test::Unit::TestCase
     end
   end
 
+  class InvertedIndexTest < self
+    setup
+    def setup_schema
+      Groonga::Schema.define do |schema|
+        schema.create_table("Tags",
+                            :type => :patricia_trie,
+                            :key_type => :short_text) do |table|
+        end
+
+        schema.create_table("Products",
+                            :type => :patricia_trie,
+                            :key_type => :short_text) do |table|
+          table.reference("tags", "Tags", :type => :vector)
+        end
+
+        schema.change_table("Tags") do |table|
+          table.index("Products.tags", :name => "products_tags")
+        end
+      end
+
+      @index = Groonga["Tags.products_tags"]
+    end
+
+    def test_predicate
+      assert_true(@index.inverted?)
+    end
+  end
+
   class ForwardIndexTest < self
     setup
     def setup_schema
@@ -194,6 +222,11 @@ class IndexColumnTest < Test::Unit::TestCase
       end
 
       @products = Groonga["Products"]
+      @index = Groonga["Products.tags"]
+    end
+
+    def test_predicate
+      assert_true(@index.forward?)
     end
 
     def test_accessor
