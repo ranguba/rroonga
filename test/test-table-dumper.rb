@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2011-2012  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2011-2014  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -348,6 +348,56 @@ load --table Users
 [\"s-yata\",\"Susumu Yata\"]
 ]
 EOS
+    end
+  end
+
+  class ForwardIndexTest < self
+    def setup
+      Groonga::Schema.define do |schema|
+        schema.create_table("Tags",
+                            :type => :hash,
+                            :key_type => "ShortText") do |table|
+        end
+
+        schema.create_table("Products",
+                            :type => :patricia_trie,
+                            :key_type => "ShortText") do |table|
+          table.index("Tags",
+                      :name => "tags",
+                      :with_weight => true)
+        end
+      end
+    end
+
+    def products
+      Groonga["Products"]
+    end
+
+    def test_weight
+      products.add("Groonga", :tags => [
+                     {
+                       :value  => "groonga",
+                       :weight => 100,
+                     },
+                   ])
+      products.add("Mroonga", :tags => [
+                     {
+                       :value  => "mroonga",
+                       :weight => 100,
+                     },
+                     {
+                       :value  => "groonga",
+                       :weight => 10,
+                     },
+                   ])
+      assert_equal(<<-COMMAND, dump("Products"))
+load --table Products
+[
+[\"_key\",\"tags\"],
+[\"Groonga\",{\"groonga\":100}],
+[\"Mroonga\",{\"groonga\":10,\"mroonga\":100}]
+]
+      COMMAND
     end
   end
 end
