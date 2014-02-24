@@ -55,15 +55,24 @@ class IndexColumnTest < Test::Unit::TestCase
   class CRUDTest < self
     setup
     def setup_schema
-      @articles = Groonga::Array.create(:name => "Articles")
-      @articles.define_column("content", "Text")
+      Groonga::Schema.define do |schema|
+        schema.create_table("Articles") do |table|
+          table.text("content")
+        end
 
-      terms = Groonga::Hash.create(:name => "Terms",
-                                   :key_type => "ShortText",
-                                   :default_tokenizer => "TokenBigram")
-      @index = terms.define_index_column("content", @articles,
-                                         :with_position => true,
-                                         :with_section => true)
+        schema.create_table("Terms",
+                            :type => :hash,
+                            :key_type => "ShortText",
+                            :default_tokenizer => "TokenBigram") do |table|
+          table.index("Articles.content",
+                      :name => "articles_content",
+                      :with_position => true,
+                      :with_section => true)
+        end
+      end
+
+      @articles = Groonga["Articles"]
+      @index = Groonga["Terms.articles_content"]
     end
 
     def test_add
