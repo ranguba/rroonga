@@ -79,10 +79,8 @@ module Groonga
         end
       end
 
-      if builders.empty? or builders == [self]
-        expression.append_constant(1)
-        expression.append_constant(1)
-        expression.append_operation(Groonga::Operation::OR, 2)
+      if builders.empty?
+        expression.append_constant(true)
       else
         combined_builder = builders.inject(nil) do |previous, builder|
           if previous.nil?

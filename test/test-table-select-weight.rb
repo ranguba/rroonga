@@ -120,4 +120,16 @@ class TableSelectWeightTest < Test::Unit::TestCase
       [record.title, record.score]
     end
   end
+
+  def test_one_column_only
+    result = @comments.select do |record|
+      record.match("Hello") do |match_record|
+        match_record.title
+      end
+    end
+    assert_equal_select_result([["Hello", 1]],
+                               result) do |record|
+      [record.title, record.score]
+    end
+  end
 end
