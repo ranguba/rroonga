@@ -164,6 +164,7 @@ struct _RbGrnIndexColumn
 {
     RbGrnColumn parent;
     grn_obj *old_value;
+    grn_obj *set_value;
     grn_obj *id_query;
     grn_obj *string_query;
 };
@@ -503,6 +504,7 @@ void           rb_grn_index_column_deconstruct      (RbGrnIndexColumn *rb_grn_in
                                                      grn_obj **domain,
                                                      grn_obj **value,
                                                      grn_obj **old_value,
+                                                     grn_obj **set_value,
                                                      grn_id *range_id,
                                                      grn_obj **range,
                                                      grn_obj **id_query,

@@ -652,7 +652,6 @@ rb_grn_vector_to_ruby_object (grn_ctx *context, grn_obj *vector)
         grn_obj_reinit(context, &value, domain, 0);
         grn_bulk_write(context, &value, _value, length);
         rb_ary_push(array, GRNOBJ2RVAL(Qnil, context, &value, Qnil));
-        /* UINT2NUM(weight); */ /* TODO: How handle weight? */
     }
     GRN_OBJ_FIN(context, &value);
 

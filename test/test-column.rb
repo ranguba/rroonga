@@ -93,18 +93,52 @@ class ColumnTest < Test::Unit::TestCase
     assert_equal([@bookmarks_content], @bookmarks_index_content.sources)
   end
 
-  def test_update_index_column
-    groonga = @bookmarks.add
-    groonga["content"] = "<html><body>groonga</body></html>"
+  class UpdateIndexTest < self
+    def setup
+      setup_database
+    end
 
-    ruby = @bookmarks.add
-    ruby["content"] = "<html><body>ruby</body></html>"
+    def test_forward_index
+      Groonga::Schema.define do |schema|
+        schema.create_table("Tags",
+                            :type => :patricia_trie,
+                            :key_type => :short_text) do |table|
+        end
 
-    @bookmarks_index_content[groonga.id] = groonga["content"]
-    @bookmarks_index_content[ruby.id] = ruby["content"]
+        schema.create_table("Products",
+                            :type => :patricia_trie,
+                            :key_type => :short_text) do |table|
+          table.index("Tags",
+                      :name => "tags",
+                      :with_weight => true)
+        end
+      end
 
-    assert_content_search([groonga], "groonga")
-    assert_content_search([groonga, ruby], "html")
+      products = Groonga["Products"]
+      groonga = products.add("Groonga")
+      groonga.tags = [
+        {
+          :value  => "groonga",
+          :weight => 100,
+        },
+        {
+          :value  => "full text search",
+          :weight => 1000,
+        },
+      ]
+
+      assert_equal([
+                     {
+                       :value  => "groonga",
+                       :weight => 100,
+                     },
+                     {
+                       :value  => "full text search",
+                       :weight => 1000,
+                     },
+                   ],
+                   groonga.tags)
+    end
   end
 
   def test_range

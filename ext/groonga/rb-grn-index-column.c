@@ -1,6 +1,6 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
-  Copyright (C) 2009-2013  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2014  Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -44,6 +44,7 @@ rb_grn_index_column_finalizer (grn_ctx *context, grn_obj *object,
     grn_obj_unlink(context, rb_grn_index_column->id_query);
     grn_obj_unlink(context, rb_grn_index_column->string_query);
     grn_obj_unlink(context, rb_grn_index_column->old_value);
+    grn_obj_unlink(context, rb_grn_index_column->set_value);
 
     rb_grn_column_finalizer(context, object, RB_GRN_COLUMN(rb_grn_index_column));
 }
@@ -59,6 +60,9 @@ rb_grn_index_column_bind (RbGrnIndexColumn *rb_grn_index_column,
 
     rb_grn_index_column->old_value = grn_obj_open(context, GRN_BULK, 0,
                                                   rb_grn_object->range_id);
+    rb_grn_index_column->set_value =
+        grn_obj_open(context, GRN_VECTOR, 0,
+                     rb_grn_object->range->header.domain);
 
     rb_grn_index_column->id_query = grn_obj_open(context, GRN_BULK, 0,
                                                  rb_grn_object->domain_id);
@@ -75,6 +79,7 @@ rb_grn_index_column_deconstruct (RbGrnIndexColumn *rb_grn_index_column,
                                  grn_obj **domain,
                                  grn_obj **value,
                                  grn_obj **old_value,
+                                 grn_obj **set_value,
                                  grn_id *range_id,
                                  grn_obj **range,
                                  grn_obj **id_query,
@@ -89,6 +94,8 @@ rb_grn_index_column_deconstruct (RbGrnIndexColumn *rb_grn_index_column,
 
     if (old_value)
         *old_value = rb_grn_index_column->old_value;
+    if (set_value)
+        *set_value = rb_grn_index_column->set_value;
     if (id_query)
         *id_query = rb_grn_index_column->id_query;
     if (string_query)
@@ -96,69 +103,223 @@ rb_grn_index_column_deconstruct (RbGrnIndexColumn *rb_grn_index_column,
 }
 
 /*
- * IDが _id_ であるレコードを高速に全文検索するため転置索引を作
- * 成する。多くの場合、 {Groonga::Table#define_index_column} で
- * +:source+ オプションを指定することにより、自動的に全文検索
- * 用の索引は更新されるので、明示的にこのメソッドを使うこと
- * は少ない。
+ * It gets a value of forward index for the record that ID is _id_.
  *
- * @example 記事の段落毎に索引を作成する。
- *   articles = Groonga::Array.create(:name => "<articles>")
- *   articles.define_column("title", "ShortText")
- *   articles.define_column("content", "Text")
+ * This method is for forward index. You can't use this method for
+ * inverted index.
  *
- *   terms = Groonga::Hash.create(:name => "<terms>",
- *                                :default_tokenizer => "TokenBigram")
- *   content_index = terms.define_index_column("content", articles,
- *                                             :with_section => true)
+ * @example Gets forward index value
+ *    Groonga::Schema.define do |schema|
+ *      schema.create_table("Tags",
+ *                          :type => :hash,
+ *                          :key_type => "ShortText") do |table|
+ *      end
  *
- *   content = <<-EOC
- *   groonga は組み込み型の全文検索エンジンライブラリです。
- *   DBMSやスクリプト言語処理系等に組み込むことによって、その
- *   全文検索機能を強化することができます。また、リレーショナ
- *   ルモデルに基づくデータストア機能を内包しており、groonga
- *   単体でも高速なデータストアサーバとして使用することができ
- *   ます。
+ *      schema.create_table("Products",
+ *                          :type => :patricia_trie,
+ *                          :key_type => "ShortText") do |table|
+ *        # This is forward index.
+ *        # ":with_weight => true" is important to store weight value.
+ *        table.index("Tags",
+ *                    :name => "tags",
+ *                    :with_weight => true)
+ *      end
+ *    end
  *
- *   ■全文検索方式
- *   転置索引型の全文検索エンジンです。転置索引は圧縮されてファ
- *   イルに格納され、検索時のディスク読み出し量を小さく、かつ
- *   局所的に抑えるように設計されています。用途に応じて以下の
- *   索引タイプを選択できます。
- *   EOC
+ *    products = Groonga["Products"]
+ *    rroonga = products.add("Rroonga")
+ *    rroonga.tags = [
+ *      {
+ *        :value  => "ruby",
+ *        :weight => 100,
+ *      },
+ *      {
+ *        :value  => "groonga",
+ *        :weight => 10,
+ *      },
+ *    ]
  *
- *   groonga = articles.add(:title => "groonga", :content => content)
+ *    p rroonga.tags
+ *    # => [
+ *    #      {:value => "ruby",    :weight => 100},
+ *    #      {:value => "groonga", :weight => 10}
+ *    #    ]
  *
- *   content.split(/\n{2,}/).each_with_index do |sentence, i|
- *     content_index[groonga] = {:value => sentence, :section => i + 1}
- *   end
+ * @overload [](id)
+ *   @param [Integer, Record] id The record ID.
+ *   @return [Array<Hash<Symbol, String>>] An array of values.
+ *     Each value is a Hash like the following form:
  *
- *   content_index.search("エンジン").collect do |record|
- *     p record.key["title"] # -> "groonga"
- *   end
+ *     <pre>
+ *     {
+ *       :value  => [KEY],
+ *       :weight => [WEIGHT],
+ *     }
+ *     </pre>
  *
- * @overload []=(id, value)
- *   @param [String] value 新しい値
- * @overload []=(id, options)
- *   _options_ を指定することにより、 _value_ を指定したときよりも索引の作
- *   成を制御できる。
- *   @param [::Hash] options The name and value
- *     pairs. Omitted names are initialized as the default value
- *   @option options :section
- *     段落番号を指定する。省略した場合は1を指定したとみなされ
- *     る。
- *     {Groonga::Table#define_index_column} で
- *     @{:with_section => true}@ を指定していなければい
- *     けない。
- *   @option options :old_value
- *     以前の値を指定する。省略した場合は現在の値が用いられる。
- *     通常は指定する必要はない。
- *   @option options :value
- *     新しい値を指定する。 _value_ を指定した場合と _options_ で
- *     @{:value => value}@ を指定した場合は同じ動作とな
- *     る。
+ *     @[KEY]@ is the key of the table that is specified as range on
+ *     creating the forward index.
  *
- * @deprecated Since 3.0.2. Use {#add}, {#delete} or {#update} instead.
+ *     @[WEIGHT]@ is a positive integer.
+ *
+ * @since 4.0.1.
+ */
+static VALUE
+rb_grn_index_column_array_reference (VALUE self, VALUE rb_id)
+{
+    grn_ctx *context = NULL;
+    grn_obj *column, *range;
+    grn_id id;
+    grn_obj *set_value;
+    VALUE rb_value;
+    unsigned int i, n;
+
+    rb_grn_index_column_deconstruct(SELF(self), &column, &context,
+                                    NULL, NULL,
+                                    NULL, NULL, &set_value,
+                                    NULL, &range,
+                                    NULL, NULL);
+
+    id = RVAL2GRNID(rb_id, context, range, self);
+
+    grn_obj_reinit(context, set_value,
+                   set_value->header.domain,
+                   set_value->header.flags | GRN_OBJ_VECTOR);
+    grn_obj_get_value(context, column, id, set_value);
+    rb_grn_context_check(context, self);
+
+    n = grn_vector_size(context, set_value);
+    rb_value = rb_ary_new2(n);
+    for (i = 0; i < n; i++) {
+        const char *value;
+        unsigned int value_length;
+        unsigned int weight = 0;
+        grn_id domain;
+        VALUE rb_element;
+
+        value_length = grn_vector_get_element(context, set_value, i,
+                                              &value, &weight, &domain);
+        rb_element = rb_hash_new();
+        rb_hash_aset(rb_element,
+                     ID2SYM(rb_intern("value")),
+                     rb_str_new(value, value_length));
+        rb_hash_aset(rb_element,
+                     ID2SYM(rb_intern("weight")),
+                     UINT2NUM(weight));
+
+        rb_ary_push(rb_value, rb_element);
+    }
+
+    return rb_value;
+}
+
+/*
+ * It updates forward index for the record that ID is _id_.
+ *
+ * This method is for forward index. You can't use this method for
+ * inverted index.
+ *
+ * Inverted index is updated automatically. You don't need to
+ * use this method for inverted index.
+ *
+ * You can define a forward index by omitting source on defining an
+ * index column.
+ *
+ * @example Use forward index as matrix search result weight
+ *    Groonga::Schema.define do |schema|
+ *      schema.create_table("Tags",
+ *                          :type => :hash,
+ *                          :key_type => "ShortText") do |table|
+ *      end
+ *
+ *      schema.create_table("Products",
+ *                          :type => :patricia_trie,
+ *                          :key_type => "ShortText") do |table|
+ *        # This is forward index.
+ *        # ":with_weight => true" is important for matrix search result weight.
+ *        table.index("Tags",
+ *                    :name => "tags",
+ *                    :with_weight => true)
+ *      end
+ *
+ *      schema.change_table("Tags") do |table|
+ *        # This is inverted index.
+ *        # It is just for tag search. It isn't for matrix search result weight.
+ *        table.index("Products.tags")
+ *      end
+ *    end
+ *
+ *    products = Groonga["Products"]
+ *    groonga = products.add("Groonga")
+ *    groonga.tags = [
+ *      {
+ *        :value  => "groonga",
+ *        :weight => 100,
+ *      },
+ *    ]
+ *    rroonga = products.add("Rroonga")
+ *    rroonga.tags = [
+ *      {
+ *        :value  => "ruby",
+ *        :weight => 100,
+ *      },
+ *      {
+ *        :value  => "groonga",
+ *        :weight => 10,
+ *      },
+ *    ]
+ *
+ *    result = products.select do |record|
+ *      # Search by "groonga"
+ *      record.match("groonga") do |match_target|
+ *        match_target.tags
+ *      end
+ *    end
+ *
+ *    result.each do |record|
+ *      p [record.key.key, record.score]
+ *    end
+ *    # Matches all records with weight.
+ *    # => ["Groonga", 100]
+ *    #    ["Rroonga", 10]
+ *
+ *    # Increases score for "ruby" 10 times
+ *    products.select(# The previous search result. Required.
+ *                    :result => result,
+ *                    # It just adds score to existing records in the result. Required.
+ *                    :operator => Groonga::Operator::ADJUST) do |record|
+ *      record.match("ruby") do |target|
+ *        target.tags * 10 # 10 times
+ *      end
+ *    end
+ *
+ *    result.each do |record|
+ *      p [record.key.key, record.score]
+ *    end
+ *    # Weight is used for increasing score.
+ *    # => ["Groonga", 100]  <- Not changed.
+ *    #    ["Rroonga", 1010] <- 1000 (= 100 * 10) increased.
+ *
+ * @overload []=(id, documents)
+ *   @param [Integer, Record] id The record ID.
+ *   @param [Array<Hash<Symbol, String>>] documents An array of values.
+ *     Each value is a Hash like the following form:
+ *
+ *     <pre>
+ *     {
+ *       :value  => [KEY],
+ *       :weight => [WEIGHT],
+ *     }
+ *     </pre>
+ *
+ *     @[KEY]@ must be the same type of the key of the table that is
+ *     specified as range on creating the forward index.
+ *
+ *     @[WEIGHT]@ must be an positive integer.
+ *
+ * This method was deprecated since 3.0.2. This method behavior was
+ * changed since 4.0.1. Use {#add}, {#delete} or {#update} instead for
+ * old behavior.
  */
 static VALUE
 rb_grn_index_column_array_set (VALUE self, VALUE rb_id, VALUE rb_value)
@@ -167,58 +328,59 @@ rb_grn_index_column_array_set (VALUE self, VALUE rb_id, VALUE rb_value)
     grn_obj *column, *range;
     grn_rc rc;
     grn_id id;
-    unsigned int section;
-    grn_obj *old_value, *new_value;
-    VALUE original_rb_value, rb_section, rb_old_value, rb_new_value;
-
-    original_rb_value = rb_value;
+    grn_obj *new_value, *set_value;
+    int i, n;
+    int flags = GRN_OBJ_SET;
 
     rb_grn_index_column_deconstruct(SELF(self), &column, &context,
                                     NULL, NULL,
-                                    &new_value, &old_value,
+                                    &new_value, NULL, &set_value,
                                     NULL, &range,
                                     NULL, NULL);
 
     id = RVAL2GRNID(rb_id, context, range, self);
 
-    if (!RVAL2CBOOL(rb_obj_is_kind_of(rb_value, rb_cHash))) {
-        VALUE hash_value;
-        hash_value = rb_hash_new();
-        rb_hash_aset(hash_value, RB_GRN_INTERN("value"), rb_value);
-        rb_value = hash_value;
+    if (!RVAL2CBOOL(rb_obj_is_kind_of(rb_value, rb_cArray))) {
+        rb_raise(rb_eArgError,
+                 "<%s>: "
+                 "forward index value must be an array of index value: <%s>",
+                 rb_grn_inspect(self),
+                 rb_grn_inspect(rb_value));
     }
 
-    rb_grn_scan_options(rb_value,
-                        "section", &rb_section,
-                        "old_value", &rb_old_value,
-                        "value", &rb_new_value,
-                        NULL);
+    grn_obj_reinit(context, set_value,
+                   set_value->header.domain,
+                   set_value->header.flags | GRN_OBJ_VECTOR);
+    n = RARRAY_LEN(rb_value);
+    for (i = 0; i < n; i++) {
+        unsigned int weight = 0;
+        VALUE rb_new_value, rb_weight;
 
-    if (NIL_P(rb_section))
-        section = 1;
-    else
-        section = NUM2UINT(rb_section);
+        rb_grn_scan_options(RARRAY_PTR(rb_value)[i],
+                            "value", &rb_new_value,
+                            "weight", &rb_weight,
+                            NULL);
 
-    if (NIL_P(rb_old_value)) {
-        old_value = NULL;
-    } else {
-        GRN_BULK_REWIND(old_value);
-        RVAL2GRNBULK(rb_old_value, context, old_value);
-    }
+        if (!NIL_P(rb_weight)) {
+            weight = NUM2UINT(rb_weight);
+        }
 
-    if (NIL_P(rb_new_value)) {
-        new_value = NULL;
-    } else {
         GRN_BULK_REWIND(new_value);
-        RVAL2GRNBULK(rb_new_value, context, new_value);
-    }
+        if (!NIL_P(rb_new_value)) {
+            RVAL2GRNBULK(rb_new_value, context, new_value);
+        }
 
-    rc = grn_column_index_update(context, column,
-                                 id, section, old_value, new_value);
+        grn_vector_add_element(context, set_value,
+                               GRN_BULK_HEAD(new_value),
+                               GRN_BULK_VSIZE(new_value),
+                               weight,
+                               new_value->header.domain);
+    }
+    rc = grn_obj_set_value(context, column, id, set_value, flags);
     rb_grn_context_check(context, self);
     rb_grn_rc_check(rc, self);
 
-    return original_rb_value;
+    return rb_value;
 }
 
 /*
@@ -304,7 +466,7 @@ rb_grn_index_column_add (int argc, VALUE *argv, VALUE self)
 
     rb_grn_index_column_deconstruct(SELF(self), &column, &context,
                                     NULL, NULL,
-                                    &new_value, NULL,
+                                    &new_value, NULL, NULL,
                                     NULL, &range,
                                     NULL, NULL);
 
@@ -418,7 +580,7 @@ rb_grn_index_column_delete (int argc, VALUE *argv, VALUE self)
 
     rb_grn_index_column_deconstruct(SELF(self), &column, &context,
                                     NULL, NULL,
-                                    NULL, &old_value,
+                                    NULL, &old_value, NULL,
                                     NULL, &range,
                                     NULL, NULL);
 
@@ -526,7 +688,7 @@ rb_grn_index_column_update (int argc, VALUE *argv, VALUE self)
 
     rb_grn_index_column_deconstruct(SELF(self), &column, &context,
                                     NULL, NULL,
-                                    &new_value, &old_value,
+                                    &new_value, &old_value, NULL,
                                     NULL, &range,
                                     NULL, NULL);
 
@@ -583,7 +745,7 @@ rb_grn_index_column_get_sources (VALUE self)
 
     rb_grn_index_column_deconstruct(SELF(self), &column, &context,
                                     NULL, NULL,
-                                    NULL, NULL, NULL, NULL,
+                                    NULL, NULL, NULL, NULL, NULL,
                                     NULL, NULL);
 
     GRN_OBJ_INIT(&sources, GRN_BULK, 0, GRN_ID_NIL);
@@ -702,7 +864,7 @@ rb_grn_index_column_set_sources (VALUE self, VALUE rb_sources)
 
     rb_grn_index_column_deconstruct(SELF(self), &column, &context,
                                     NULL, NULL,
-                                    NULL, NULL,
+                                    NULL, NULL, NULL,
                                     &range_id, NULL,
                                     NULL, NULL);
 
@@ -790,7 +952,7 @@ rb_grn_index_column_search (int argc, VALUE *argv, VALUE self)
 
     rb_grn_index_column_deconstruct(SELF(self), &column, &context,
                                     NULL, NULL,
-                                    NULL, NULL, NULL, &range,
+                                    NULL, NULL, NULL, NULL, &range,
                                     &id_query, &string_query);
 
     rb_scan_args(argc, argv, "11", &rb_query, &options);
@@ -842,7 +1004,7 @@ rb_grn_index_column_with_section_p (VALUE self)
 
     rb_grn_index_column_deconstruct(SELF(self), &column, NULL,
                                     NULL, NULL,
-                                    NULL, NULL, NULL, NULL,
+                                    NULL, NULL, NULL, NULL, NULL,
                                     NULL, NULL);
 
     return CBOOL2RVAL(column->header.flags & GRN_OBJ_WITH_SECTION);
@@ -860,7 +1022,7 @@ rb_grn_index_column_with_weight_p (VALUE self)
 
     rb_grn_index_column_deconstruct(SELF(self), &column, NULL,
                                     NULL, NULL,
-                                    NULL, NULL, NULL, NULL,
+                                    NULL, NULL, NULL, NULL, NULL,
                                     NULL, NULL);
 
     return CBOOL2RVAL(column->header.flags & GRN_OBJ_WITH_WEIGHT);
@@ -878,7 +1040,7 @@ rb_grn_index_column_with_position_p (VALUE self)
 
     rb_grn_index_column_deconstruct(SELF(self), &column, NULL,
                                     NULL, NULL,
-                                    NULL, NULL, NULL, NULL,
+                                    NULL, NULL, NULL, NULL, NULL,
                                     NULL, NULL);
 
     return CBOOL2RVAL(column->header.flags & GRN_OBJ_WITH_POSITION);
@@ -906,24 +1068,24 @@ rb_grn_index_column_with_position_p (VALUE self)
 static VALUE
 rb_grn_index_column_open_cursor (int argc, VALUE *argv, VALUE self)
 {
-    grn_ctx *context;
-    grn_obj *column;
-    grn_obj *range_object;
+    grn_ctx          *context;
+    grn_obj          *column;
+    grn_obj          *range_object;
     grn_table_cursor *table_cursor;
-    grn_id rid_min = GRN_ID_NIL;
-    grn_id rid_max = GRN_ID_MAX;
-    int flags = 0;
-    grn_obj *index_cursor;
-    VALUE rb_table_cursor;
-    VALUE options;
-    VALUE rb_with_section, rb_with_weight, rb_with_position;
-    VALUE rb_table;
-    VALUE rb_lexicon;
-    VALUE rb_cursor;
+    grn_id            rid_min = GRN_ID_NIL;
+    grn_id            rid_max = GRN_ID_MAX;
+    int               flags   = 0;
+    grn_obj          *index_cursor;
+    VALUE             rb_table_cursor;
+    VALUE             options;
+    VALUE             rb_with_section, rb_with_weight, rb_with_position;
+    VALUE             rb_table;
+    VALUE             rb_lexicon;
+    VALUE             rb_cursor;
 
     rb_grn_index_column_deconstruct(SELF(self), &column, &context,
                                     NULL, NULL,
-                                    NULL, NULL,
+                                    NULL, NULL, NULL,
                                     NULL, &range_object,
                                     NULL, NULL);
 
@@ -935,8 +1097,8 @@ rb_grn_index_column_open_cursor (int argc, VALUE *argv, VALUE self)
                         NULL);
 
     table_cursor = RVAL2GRNTABLECURSOR(rb_table_cursor, NULL);
-    rb_table = GRNOBJECT2RVAL(Qnil, context, range_object, GRN_FALSE);
-    rb_lexicon = rb_iv_get(rb_table_cursor, "@table");
+    rb_table     = GRNOBJECT2RVAL(Qnil, context, range_object, GRN_FALSE);
+    rb_lexicon   = rb_iv_get(rb_table_cursor, "@table");
 
     if (NIL_P(rb_with_section)) {
         flags |= column->header.flags & GRN_OBJ_WITH_SECTION;
@@ -973,6 +1135,8 @@ rb_grn_init_index_column (VALUE mGrn)
     rb_cGrnIndexColumn =
         rb_define_class_under(mGrn, "IndexColumn", rb_cGrnColumn);
 
+    rb_define_method(rb_cGrnIndexColumn, "[]",
+                     rb_grn_index_column_array_reference, 1);
     rb_define_method(rb_cGrnIndexColumn, "[]=",
                      rb_grn_index_column_array_set, 2);
 
