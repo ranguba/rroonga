@@ -66,31 +66,6 @@ class IndexColumnTest < Test::Unit::TestCase
                                          :with_section => true)
     end
 
-    def test_array_set_with_record
-      content = <<-EOC
-      groonga は組み込み型の全文検索エンジンライブラリです。
-      DBMSやスクリプト言語処理系等に組み込むことによって、その
-      全文検索機能を強化することができます。また、リレーショナ
-      ルモデルに基づくデータストア機能を内包しており、groonga
-      単体でも高速なデータストアサーバとして使用することができ
-      ます。
-
-      ■全文検索方式
-      転置索引型の全文検索エンジンです。転置索引は圧縮されてファ
-      イルに格納され、検索時のディスク読み出し量を小さく、かつ
-      局所的に抑えるように設計されています。用途に応じて以下の
-      索引タイプを選択できます。
-      EOC
-
-      groonga = @articles.add(:content => content)
-
-      content.split(/\n{2,}/).each_with_index do |sentence, i|
-        @index[groonga] = {:value => sentence, :section => i + 1}
-      end
-      assert_equal([groonga],
-                   @index.search("エンジン").collect {|record| record.key})
-    end
-
     def test_add
       content = <<-CONTENT
       Groonga is a fast and accurate full text search engine based on
