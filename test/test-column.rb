@@ -93,54 +93,6 @@ class ColumnTest < Test::Unit::TestCase
     assert_equal([@bookmarks_content], @bookmarks_index_content.sources)
   end
 
-  class UpdateIndexTest < self
-    def setup
-      setup_database
-    end
-
-    def test_forward_index
-      Groonga::Schema.define do |schema|
-        schema.create_table("Tags",
-                            :type => :patricia_trie,
-                            :key_type => :short_text) do |table|
-        end
-
-        schema.create_table("Products",
-                            :type => :patricia_trie,
-                            :key_type => :short_text) do |table|
-          table.index("Tags",
-                      :name => "tags",
-                      :with_weight => true)
-        end
-      end
-
-      products = Groonga["Products"]
-      groonga = products.add("Groonga")
-      groonga.tags = [
-        {
-          :value  => "groonga",
-          :weight => 100,
-        },
-        {
-          :value  => "full text search",
-          :weight => 1000,
-        },
-      ]
-
-      assert_equal([
-                     {
-                       :value  => "groonga",
-                       :weight => 100,
-                     },
-                     {
-                       :value  => "full text search",
-                       :weight => 1000,
-                     },
-                   ],
-                   groonga.tags)
-    end
-  end
-
   def test_range
     assert_equal(context[Groonga::Type::SHORT_TEXT], @bookmarks_uri.range)
     assert_equal(context[Groonga::Type::TEXT], @bookmarks_comment.range)

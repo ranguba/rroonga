@@ -191,6 +191,54 @@ class IndexColumnTest < Test::Unit::TestCase
     end
   end
 
+  class ForwardIndexTest < self
+    setup
+    def setup_schema
+      Groonga::Schema.define do |schema|
+        schema.create_table("Tags",
+                            :type => :patricia_trie,
+                            :key_type => :short_text) do |table|
+        end
+
+        schema.create_table("Products",
+                            :type => :patricia_trie,
+                            :key_type => :short_text) do |table|
+          table.index("Tags",
+                      :name => "tags",
+                      :with_weight => true)
+        end
+      end
+
+      @products = Groonga["Products"]
+    end
+
+    def test_accessor
+      groonga = @products.add("Groonga")
+      groonga.tags = [
+        {
+          :value  => "groonga",
+          :weight => 100,
+        },
+        {
+          :value  => "full text search",
+          :weight => 1000,
+        },
+      ]
+
+      assert_equal([
+                     {
+                       :value  => "groonga",
+                       :weight => 100,
+                     },
+                     {
+                       :value  => "full text search",
+                       :weight => 1000,
+                     },
+                   ],
+                   groonga.tags)
+    end
+  end
+
   class NGramTest < self
     setup
     def setup_schema
