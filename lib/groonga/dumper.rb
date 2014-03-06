@@ -97,7 +97,7 @@ module Groonga
       options[:database].each(each_options(:order_by => :key)) do |object|
         next unless object.is_a?(Groonga::Table)
         next if object.size.zero?
-        next if inverted_index_only_table?(object)
+        next if index_only_table?(object)
         next if target_table?(options[:exclude_tables], object, false)
         next unless target_table?(options[:tables], object, true)
         options[:output].write("\n") if !first_table or options[:dump_schema]
@@ -120,10 +120,10 @@ module Groonga
       output.write("register #{plugin_name}\n")
     end
 
-    def inverted_index_only_table?(table)
+    def index_only_table?(table)
       return false if table.columns.empty?
       table.columns.all? do |column|
-        column.index? and column.inverted?
+        column.index?
       end
     end
 
@@ -524,6 +524,7 @@ module Groonga
       def column_options(column)
         options = {}
         options[:type] = :vector if column.vector?
+        options[:with_weight] = true if column.with_weight?
         return nil if options.empty?
 
         dump_options(options)
@@ -608,6 +609,7 @@ module Groonga
         elsif column.vector?
           flags << "COLUMN_VECTOR"
         end
+        flags << "WITH_WEIGHT" if column.with_weight?
         # TODO: support COMPRESS_ZLIB and COMPRESS_LZO?
         parameters << "#{flags.join('|')}"
         parameters << "#{column.range.name}"
@@ -700,8 +702,8 @@ module Groonga
     def resolve_value(record, column, value)
       case value
       when ::Array
-        if column.index?
-          resolve_forward_index_value(record, column, value)
+        if column.vector? and column.with_weight?
+          resolve_weight_vector_value(record, column, value)
         else
           value.collect do |v|
             resolve_value(record, column, v)
@@ -743,17 +745,17 @@ module Groonga
       end
     end
 
-    def resolve_forward_index_value(record, column, entries)
-      resolved_forward_index_entries = {}
+    def resolve_weight_vector_value(record, column, entries)
+      resolved_weight_vector_entries = {}
       sorted_entries = entries.sort_by do |entry|
         entry[:value]
       end
       sorted_entries.each do |entry|
         resolved_value = resolve_value(record, column, entry[:value])
         resolved_weight = resolve_value(record, column, entry[:weight])
-        resolved_forward_index_entries[resolved_value] = resolved_weight
+        resolved_weight_vector_entries[resolved_value] = resolved_weight
       end
-      resolved_forward_index_entries
+      resolved_weight_vector_entries
     end
 
     def fix_encoding(value)
@@ -779,7 +781,7 @@ module Groonga
       end
       columns << @table.column("_value") unless @table.range.nil?
       data_columns = @table.columns.reject do |column|
-        column.index? and column.inverted?
+        column.index?
       end
       sorted_columns = data_columns.sort_by do |column|
         column.local_name

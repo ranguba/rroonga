@@ -351,20 +351,15 @@ EOS
     end
   end
 
-  class ForwardIndexTest < self
+  class WeightVectorIndexTest < self
     def setup
       Groonga::Schema.define do |schema|
-        schema.create_table("Tags",
-                            :type => :hash,
-                            :key_type => "ShortText") do |table|
-        end
-
         schema.create_table("Products",
                             :type => :patricia_trie,
                             :key_type => "ShortText") do |table|
-          table.index("Tags",
-                      :name => "tags",
-                      :with_weight => true)
+          table.short_text("tags",
+                           :type => :vector,
+                           :with_weight => true)
         end
       end
     end

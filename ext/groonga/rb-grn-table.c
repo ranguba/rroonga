@@ -226,6 +226,11 @@ rb_grn_table_inspect (VALUE self)
  *
  *     - +:scalar+ := スカラ値(単独の値)を格納する。
  *     - +:vector+ := 値の配列を格納する。
+ *   @option options [Boolean] :with_weight (false)
+ *     It specifies whether making the column weight vector column or not.
+ *     Weight vector column can store weight for each element.
+ *
+ *     You can't use this option for scalar column.
  *   @option options :compress
  *     値の圧縮方法を指定する。省略した場合は、圧縮しない。
  *
@@ -244,7 +249,7 @@ rb_grn_table_define_column (int argc, VALUE *argv, VALUE self)
     unsigned name_size = 0;
     grn_obj_flags flags = 0;
     VALUE rb_name, rb_value_type;
-    VALUE options, rb_path, rb_persistent, rb_compress, rb_type;
+    VALUE options, rb_path, rb_persistent, rb_compress, rb_type, rb_with_weight;
     VALUE columns;
     VALUE rb_column;
 
@@ -262,6 +267,7 @@ rb_grn_table_define_column (int argc, VALUE *argv, VALUE self)
                         "path", &rb_path,
                         "persistent", &rb_persistent,
                         "type", &rb_type,
+                        "with_weight", &rb_with_weight,
                         "compress", &rb_compress,
                         NULL);
 
@@ -292,6 +298,15 @@ rb_grn_table_define_column (int argc, VALUE *argv, VALUE self)
                  "invalid column type: %s: "
                  "available types: [:scalar, :vector, nil]",
                  rb_grn_inspect(rb_type));
+    }
+
+    if (RVAL2CBOOL(rb_with_weight)) {
+        if (flags & GRN_OBJ_COLUMN_VECTOR) {
+            flags |= GRN_OBJ_WITH_WEIGHT;
+        } else {
+            rb_raise(rb_eArgError,
+                     "can't use weight for scalar column");
+        }
     }
 
     if (NIL_P(rb_compress)) {

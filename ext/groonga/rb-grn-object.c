@@ -444,6 +444,13 @@ rb_grn_object_assign (VALUE klass, VALUE self, VALUE rb_context,
                                   context, object);
         rb_grn_index_column_bind(RB_GRN_INDEX_COLUMN(rb_grn_object),
                                  context, object);
+    } else if (RVAL2CBOOL(rb_obj_is_kind_of(self, rb_cGrnVariableSizeColumn))) {
+        rb_grn_object = ALLOC(RbGrnVariableSizeColumn);
+        rb_grn_object_bind_common(klass, self, rb_context, rb_grn_object,
+                                  context, object);
+        rb_grn_variable_size_column_bind(RB_GRN_VARIABLE_SIZE_COLUMN(rb_grn_object),
+                                         context,
+                                         object);
     } else if (RVAL2CBOOL(rb_obj_is_kind_of(self, rb_cGrnColumn))) {
         rb_grn_object = ALLOC(RbGrnColumn);
         rb_grn_object_bind_common(klass, self, rb_context, rb_grn_object,

@@ -1010,6 +1010,11 @@ module Groonga
       #
       #   - :scalar := スカラ値(単独の値)を格納する。
       #   - :vector := 値の配列を格納する。
+      # @option options [Boolean] :with_weight (false)
+      #    It specifies whether making the column weight vector column or not.
+      #    Weight vector column can store weight for each element.
+      #
+      #    You can't use this option for scalar column.
       # @option options :compress
       #
       #   値の圧縮方法を指定する。省略した場合は、圧縮しない。
@@ -1729,13 +1734,22 @@ module Groonga
       end
 
       def same_column?(context, column)
-        column.range == resolved_type(context)
+        return false unless column.range == resolved_type(context)
+        if column.scalar?
+          [nil, :scalar].include?(@options[:type])
+        else
+          return false unless @options[:type] == :vector
+          with_weight = @options[:with_weight]
+          with_weight = false if with_weight.nil?
+          column.with_weight? == with_weight
+        end
       end
 
       def define_options(context, table)
         {
           :path => path(context, table),
           :type => @options[:type],
+          :with_weight => @options[:with_weight],
           :compress => @options[:compress],
         }
       end

@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2013  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2014  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -104,19 +104,14 @@ class SchemaDumperTest < Test::Unit::TestCase
     end
   end
 
-  def define_forward_index_schema
+  def define_weight_vector_schema
     Groonga::Schema.define do |schema|
-      schema.create_table("Tags",
-                          :type => :hash,
-                          :key_type => "ShortText") do |table|
-      end
-
       schema.create_table("Memos",
                           :type => :patricia_trie,
                           :key_type => "ShortText") do |table|
-        table.index("Tags",
-                    :name => "tags",
-                    :with_weight => true)
+        table.short_text("tags",
+                         :type => :vector,
+                         :with_weight => true)
       end
     end
   end
@@ -237,23 +232,14 @@ end
       SCHEMA
     end
 
-    def test_forward_index
-      define_forward_index_schema
+    def test_weight_vector
+      define_weight_vector_schema
       assert_equal(<<-SCHEMA, dump)
 create_table("Memos",
              :type => :patricia_trie,
              :key_type => "ShortText",
              :force => true) do |table|
-end
-
-create_table("Tags",
-             :type => :hash,
-             :key_type => "ShortText",
-             :force => true) do |table|
-end
-
-change_table("Memos") do |table|
-  table.index("Tags", [], :name => "tags", :with_weight => true)
+  table.short_text("tags", :type => :vector, :with_weight => true)
 end
       SCHEMA
     end
@@ -327,14 +313,11 @@ column_create Terms Items_title COLUMN_INDEX|WITH_POSITION Items title
       SCHEMA
     end
 
-    def test_forward_index
-      define_forward_index_schema
+    def test_weight_vector
+      define_weight_vector_schema
       assert_equal(<<-SCHEMA, dump)
 table_create Memos TABLE_PAT_KEY --key_type ShortText
-
-table_create Tags TABLE_HASH_KEY --key_type ShortText
-
-column_create Memos tags COLUMN_INDEX|WITH_WEIGHT Tags
+column_create Memos tags COLUMN_VECTOR|WITH_WEIGHT ShortText
       SCHEMA
     end
 

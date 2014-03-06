@@ -1,7 +1,7 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /* vim: set sts=4 sw=4 ts=8 noet: */
 /*
-  Copyright (C) 2009-2011  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2014  Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -71,10 +71,29 @@ rb_grn_column_bind (RbGrnColumn *rb_column,
                     grn_ctx *context, grn_obj *column)
 {
     RbGrnObject *rb_grn_object;
+    int column_type;
+    unsigned char value_type;
 
     rb_grn_object = RB_GRN_OBJECT(rb_column);
     rb_grn_named_object_bind(RB_GRN_NAMED_OBJECT(rb_column), context, column);
-    rb_column->value = grn_obj_open(context, GRN_BULK, 0,
+
+    column_type = (column->header.flags & GRN_OBJ_COLUMN_TYPE_MASK);
+    if (column_type == GRN_OBJ_COLUMN_VECTOR) {
+        switch (rb_grn_object->range->header.type) {
+        case GRN_TABLE_HASH_KEY:
+        case GRN_TABLE_PAT_KEY:
+        case GRN_TABLE_DAT_KEY:
+        case GRN_TABLE_NO_KEY:
+            value_type = GRN_UVECTOR;
+            break;
+        default:
+            value_type = GRN_VECTOR;
+            break;
+        }
+    } else {
+        value_type = GRN_BULK;
+    }
+    rb_column->value = grn_obj_open(context, value_type, 0,
                                     rb_grn_object->range_id);
 }
 
@@ -675,6 +694,24 @@ rb_grn_column_scalar_p (VALUE self)
 }
 
 /*
+ * @overload with_weight?
+ * @returns [Boolean] @true@ if the column is vector and created with
+ *   @:with_weight => true@ flag, @false@ otherwise.
+ * @since 4.0.1
+ */
+static VALUE
+rb_grn_column_with_weight_p(VALUE self)
+{
+    grn_obj *column;
+
+    rb_grn_column_deconstruct(SELF(self), &column, NULL,
+                              NULL, NULL,
+                              NULL, NULL, NULL);
+
+    return CBOOL2RVAL(column->header.flags & GRN_OBJ_WITH_WEIGHT);
+}
+
+/*
  * _operator_ を実行できる _column_ のインデックスを返す。
  * @since 1.0.9
  * @return [Array<index_column>] _operator_ を実行できる _column_ のインデックス
@@ -771,6 +808,9 @@ rb_grn_init_column (VALUE mGrn)
     rb_define_alias(rb_cGrnColumn, "index_column?", "index?");
     rb_define_method(rb_cGrnColumn, "vector?", rb_grn_column_vector_p, 0);
     rb_define_method(rb_cGrnColumn, "scalar?", rb_grn_column_scalar_p, 0);
+
+    rb_define_method(rb_cGrnColumn, "with_weight?",
+                     rb_grn_column_with_weight_p, 0);
 
     rb_define_method(rb_cGrnColumn, "indexes", rb_grn_column_get_indexes, -1);
 

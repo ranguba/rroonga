@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2009-2013  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2014  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -172,87 +172,6 @@ class IndexColumnTest < Test::Unit::TestCase
                    @index.search("engine").collect(&:key))
       assert_equal([groonga],
                    @index.search("MySQL").collect(&:key))
-    end
-  end
-
-  class InvertedIndexTest < self
-    setup
-    def setup_schema
-      Groonga::Schema.define do |schema|
-        schema.create_table("Tags",
-                            :type => :patricia_trie,
-                            :key_type => :short_text) do |table|
-        end
-
-        schema.create_table("Products",
-                            :type => :patricia_trie,
-                            :key_type => :short_text) do |table|
-          table.reference("tags", "Tags", :type => :vector)
-        end
-
-        schema.change_table("Tags") do |table|
-          table.index("Products.tags", :name => "products_tags")
-        end
-      end
-
-      @index = Groonga["Tags.products_tags"]
-    end
-
-    def test_predicate
-      assert_true(@index.inverted?)
-    end
-  end
-
-  class ForwardIndexTest < self
-    setup
-    def setup_schema
-      Groonga::Schema.define do |schema|
-        schema.create_table("Tags",
-                            :type => :patricia_trie,
-                            :key_type => :short_text) do |table|
-        end
-
-        schema.create_table("Products",
-                            :type => :patricia_trie,
-                            :key_type => :short_text) do |table|
-          table.index("Tags",
-                      :name => "tags",
-                      :with_weight => true)
-        end
-      end
-
-      @products = Groonga["Products"]
-      @index = Groonga["Products.tags"]
-    end
-
-    def test_predicate
-      assert_true(@index.forward?)
-    end
-
-    def test_accessor
-      groonga = @products.add("Groonga")
-      groonga.tags = [
-        {
-          :value  => "groonga",
-          :weight => 100,
-        },
-        {
-          :value  => "full text search",
-          :weight => 1000,
-        },
-      ]
-
-      assert_equal([
-                     {
-                       :value  => "groonga",
-                       :weight => 100,
-                     },
-                     {
-                       :value  => "full text search",
-                       :weight => 1000,
-                     },
-                   ],
-                   groonga.tags)
     end
   end
 

@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2011  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2014  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -18,7 +18,10 @@ class VariableSizeColumnTest < Test::Unit::TestCase
 
   def setup
     setup_database
+    setup_schema
+  end
 
+  def setup_schema
     setup_users_table
     setup_users
   end
@@ -231,6 +234,48 @@ class VariableSizeColumnTest < Test::Unit::TestCase
                        Time.new(2013, 5,  2, 1, 46, 48),
                      ],
                      groonga_org.modified_times.collect(&:key))
+      end
+    end
+
+    class WeightTest < self
+      def setup_schema
+        Groonga::Schema.define do |schema|
+          schema.create_table("Products",
+                              :type => :patricia_trie,
+                              :key_type => :short_text) do |table|
+            table.short_text("tags",
+                             :type => :vector,
+                             :with_weight => true)
+          end
+        end
+
+        @products = Groonga["Products"]
+      end
+
+      def test_accessor
+        groonga = @products.add("Groonga")
+        groonga.tags = [
+          {
+            :value  => "groonga",
+            :weight => 100,
+          },
+          {
+            :value  => "full text search",
+            :weight => 1000,
+          },
+        ]
+
+        assert_equal([
+                       {
+                         :value  => "groonga",
+                         :weight => 100,
+                       },
+                       {
+                         :value  => "full text search",
+                         :weight => 1000,
+                       },
+                     ],
+                     groonga.tags)
       end
     end
   end

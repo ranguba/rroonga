@@ -96,6 +96,7 @@ RB_GRN_BEGIN_DECLS
 #define RB_GRN_TABLE_KEY_SUPPORT(object) ((RbGrnTableKeySupport *)(object))
 #define RB_GRN_TABLE_CURSOR(object) ((RbGrnTableCursort *)(object))
 #define RB_GRN_COLUMN(object) ((RbGrnColumn *)(object))
+#define RB_GRN_VARIABLE_SIZE_COLUMN(object) ((RbGrnVariableSizeColumn *)(object))
 #define RB_GRN_INDEX_COLUMN(object) ((RbGrnIndexColumn *)(object))
 #define RB_GRN_ACCESSOR(object) ((RbGrnAccessor *)(object))
 #define RB_GRN_EXPRESSION(object) ((RbGrnExpression *)(object))
@@ -157,6 +158,13 @@ struct _RbGrnColumn
 {
     RbGrnNamedObject parent;
     grn_obj *value;
+};
+
+typedef struct _RbGrnVariableSizeColumn RbGrnVariableSizeColumn;
+struct _RbGrnVariableSizeColumn
+{
+    RbGrnColumn parent;
+    grn_obj *element_value;
 };
 
 typedef struct _RbGrnIndexColumn RbGrnIndexColumn;
@@ -490,6 +498,13 @@ void           rb_grn_column_deconstruct            (RbGrnColumn *rb_grn_column,
                                                      grn_obj **value,
                                                      grn_id *range_id,
                                                      grn_obj **range);
+
+void           rb_grn_variable_size_column_bind     (RbGrnVariableSizeColumn *rb_grn_column,
+                                                     grn_ctx *context,
+                                                     grn_obj *column);
+void           rb_grn_variable_size_column_finalizer(grn_ctx *context,
+                                                     grn_obj *column,
+                                                     RbGrnVariableSizeColumn *rb_grn_column);
 
 void           rb_grn_index_column_bind             (RbGrnIndexColumn *rb_grn_index_column,
                                                      grn_ctx *context,
