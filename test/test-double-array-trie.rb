@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2011-2012  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2011-2014  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -158,12 +158,13 @@ class DoubleArrayTrieTest < Test::Unit::TestCase
                                             :key_type => "ShortText")
     users.define_column("name", "ShortText")
     users.define_column("address", "ShortText")
-    1000.times do |i|
+    large_data = "x" * (2 ** 16)
+    100.times do |i|
       users.add("user #{i}",
-                :name => "user #{i}" * 1000,
-                :address => "address #{i}" * 1000)
+                :name => "user #{i}" + large_data,
+                :address => "address #{i}" + large_data)
     end
-    assert_equal(3, users.defrag)
+    assert_equal(2, users.defrag)
   end
 
   def test_rename

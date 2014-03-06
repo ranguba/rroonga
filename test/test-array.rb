@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2013  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2014  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -117,11 +117,12 @@ class ArrayTest < Test::Unit::TestCase
     users = Groonga::Array.create(:name => "Users")
     users.define_column("name", "ShortText")
     users.define_column("address", "ShortText")
-    1000.times do |i|
-      users.add(:name => "user #{i}" * 1000,
-                :address => "address #{i}" * 1000)
+    large_data = "x" * (2 ** 16)
+    100.times do |i|
+      users.add(:name => "user #{i}" + large_data,
+                :address => "address #{i}" + large_data)
     end
-    assert_equal(3, users.defrag)
+    assert_equal(2, users.defrag)
   end
 
   def test_rename

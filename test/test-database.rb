@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2013  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2014  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -146,11 +146,12 @@ class DatabaseTest < Test::Unit::TestCase
       end
     end
     users = context["Users"]
-    1000.times do |i|
-      users.add(:name => "user #{i}" * 1000,
-                :address => "address #{i}" * 1000)
+    large_data = "x" * (2 ** 16)
+    100.times do |i|
+      users.add(:name => "user #{i}" + large_data,
+                :address => "address #{i}" + large_data)
     end
-    assert_equal(3, @database.defrag)
+    assert_equal(2, @database.defrag)
   end
 
   def test_tables
