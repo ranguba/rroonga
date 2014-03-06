@@ -113,8 +113,9 @@ class VariableSizeColumnTest < Test::Unit::TestCase
   end
 
   def test_defrag
-    1000.times do |i|
-      @users.add(:name => "user #{i}" * 1000)
+    large_data = "x" * (2 ** 16)
+    100.times do |i|
+      @users.add(:name => "user #{i}" + large_data)
     end
     assert_equal(1, @name.defrag)
   end
