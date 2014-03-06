@@ -225,7 +225,7 @@ rb_grn_variable_size_column_array_reference (VALUE self, VALUE rb_id)
  *                          :key_type => "ShortText") do |table|
  *        # This is weight vector.
  *        # ":with_weight => true" is important for matrix search result weight.
- *        table.short_text("Tags",
+ *        table.short_text("tags",
  *                         :type => :vector,
  *                         :with_weight => true)
  *      end
@@ -269,8 +269,8 @@ rb_grn_variable_size_column_array_reference (VALUE self, VALUE rb_id)
  *      p [record.key.key, record.score]
  *    end
  *    # Matches all records with weight.
- *    # => ["Groonga", 100]
- *    #    ["Rroonga", 10]
+ *    # => ["Groonga", 101]
+ *    #    ["Rroonga", 11]
  *
  *    # Increases score for "ruby" 10 times
  *    products.select(# The previous search result. Required.
@@ -286,8 +286,8 @@ rb_grn_variable_size_column_array_reference (VALUE self, VALUE rb_id)
  *      p [record.key.key, record.score]
  *    end
  *    # Weight is used for increasing score.
- *    # => ["Groonga", 100]  <- Not changed.
- *    #    ["Rroonga", 1010] <- 1000 (= 100 * 10) increased.
+ *    # => ["Groonga", 101]  <- Not changed.
+ *    #    ["Rroonga", 1021] <- 1021 (= 101 * 10 + 1) increased.
  *
  * @overload []=(id, elements)
  *   This description is for weight vector column.
@@ -307,7 +307,9 @@ rb_grn_variable_size_column_array_reference (VALUE self, VALUE rb_id)
  *     @[KEY]@ must be the same type of the key of the table that is
  *     specified as range on creating the weight vector.
  *
- *     @[WEIGHT]@ must be an positive integer.
+ *     @[WEIGHT]@ must be an positive integer. Note that search
+ *     becomes @weight + 1@. It means that You want to get 10 as
+ *     score, you should set 9 as weight.
  *
  * @overload []=(id, value)
  *   This description is for variable size columns except weight
