@@ -395,10 +395,6 @@ module Groonga
         return nil if normalizer.nil?
         normalizer.name
       end
-
-      def default_normalizer?(normalizer_name)
-        normalizer_name == "NormalizerAuto"
-      end
     end
 
     # @private
@@ -418,15 +414,12 @@ module Groonga
           end
           if table.domain
             parameters << ":key_type => #{table.domain.name.dump}"
-            if default_normalizer?(_normalizer_name)
-              parameters << ":key_normalize => true"
-            end
           end
           default_tokenizer = table.default_tokenizer
           if default_tokenizer
             parameters << ":default_tokenizer => #{default_tokenizer.name.dump}"
           end
-          if _normalizer_name and not default_normalizer?(_normalizer_name)
+          if _normalizer_name
             parameters << ":normalizer => #{_normalizer_name.dump}"
           end
         end
@@ -566,7 +559,6 @@ module Groonga
           flags << "TABLE_DAT_KEY"
         end
         if table.domain
-          flags << "KEY_NORMALIZE" if default_normalizer?(_normalizer_name)
           if table.is_a?(Groonga::PatriciaTrie) and table.register_key_with_sis?
             flags << "KEY_WITH_SIS"
           end
@@ -584,7 +576,7 @@ module Groonga
             parameters << "--default_tokenizer #{default_tokenizer.name}"
           end
         end
-        if _normalizer_name and not default_normalizer?(_normalizer_name)
+        if _normalizer_name
           parameters << "--normalizer #{_normalizer_name}"
         end
         write("table_create #{table.name} #{parameters.join(' ')}\n")

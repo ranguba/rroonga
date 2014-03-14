@@ -96,8 +96,8 @@ class SchemaDumperTest < Test::Unit::TestCase
       schema.create_table("Terms",
                           :type => :patricia_trie,
                           :key_type => "ShortText",
-                          :key_normalize => true,
-                          :default_tokenizer => "TokenBigram") do |table|
+                          :default_tokenizer => "TokenBigram",
+                          :normalizer => "NormalizerAuto") do |table|
         table.index("Items", "_key")
         table.index("Items", "title")
       end
@@ -220,8 +220,8 @@ end
 create_table("Terms",
              :type => :patricia_trie,
              :key_type => "ShortText",
-             :key_normalize => true,
              :default_tokenizer => "TokenBigram",
+             :normalizer => "NormalizerAuto",
              :force => true) do |table|
 end
 
@@ -306,7 +306,7 @@ column_create Comments item COLUMN_SCALAR Items
 table_create Items TABLE_HASH_KEY --key_type ShortText
 column_create Items title COLUMN_SCALAR ShortText
 
-table_create Terms TABLE_PAT_KEY|KEY_NORMALIZE --key_type ShortText --default_tokenizer TokenBigram
+table_create Terms TABLE_PAT_KEY --key_type ShortText --default_tokenizer TokenBigram --normalizer NormalizerAuto
 
 column_create Terms Items__key COLUMN_INDEX|WITH_POSITION Items _key
 column_create Terms Items_title COLUMN_INDEX|WITH_POSITION Items title
