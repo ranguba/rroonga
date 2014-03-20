@@ -1283,7 +1283,8 @@ rb_grn_table_group (int argc, VALUE *argv, VALUE self)
     grn_obj *table;
     grn_table_sort_key *keys;
     grn_table_group_result *results;
-    int i, n_keys, n_results, max_n_sub_records = 0;
+    int i, n_keys, n_results;
+    unsigned int max_n_sub_records = 0;
     grn_rc rc;
     VALUE rb_keys, rb_options, rb_max_n_sub_records;
     VALUE *rb_group_keys;
@@ -1309,7 +1310,7 @@ rb_grn_table_group (int argc, VALUE *argv, VALUE self)
                         NULL);
 
     if (!NIL_P(rb_max_n_sub_records))
-        max_n_sub_records = NUM2INT(rb_max_n_sub_records);
+        max_n_sub_records = NUM2UINT(rb_max_n_sub_records);
 
     keys = ALLOCA_N(grn_table_sort_key, n_keys);
     for (i = 0; i < n_keys; i++) {
