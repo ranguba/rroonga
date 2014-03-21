@@ -252,7 +252,7 @@ class VariableSizeColumnTest < Test::Unit::TestCase
         @products = Groonga["Products"]
       end
 
-      def test_accessor
+      def test_array
         groonga = @products.add("Groonga")
         groonga.tags = [
           {
@@ -264,6 +264,26 @@ class VariableSizeColumnTest < Test::Unit::TestCase
             :weight => 1000,
           },
         ]
+
+        assert_equal([
+                       {
+                         :value  => "groonga",
+                         :weight => 100,
+                       },
+                       {
+                         :value  => "full text search",
+                         :weight => 1000,
+                       },
+                     ],
+                     groonga.tags)
+      end
+
+      def test_hash
+        groonga = @products.add("Groonga")
+        groonga.tags = {
+          "groonga" => 100,
+          "full text search" => 1000,
+        }
 
         assert_equal([
                        {
