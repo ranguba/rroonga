@@ -666,15 +666,16 @@ rb_grn_index_column_search (int argc, VALUE *argv, VALUE self)
     grn_obj *query = NULL, *id_query = NULL, *string_query = NULL;
     grn_obj *result;
     grn_operator operator;
+    grn_search_optarg options;
     grn_rc rc;
-    VALUE rb_query, options, rb_result, rb_operator;
+    VALUE rb_query, rb_options, rb_result, rb_operator, rb_mode, rb_weight;
 
     rb_grn_index_column_deconstruct(SELF(self), &column, &context,
                                     NULL, NULL,
                                     NULL, NULL, NULL, NULL, &range,
                                     &id_query, &string_query);
 
-    rb_scan_args(argc, argv, "11", &rb_query, &options);
+    rb_scan_args(argc, argv, "11", &rb_query, &rb_options);
 
     if (CBOOL2RVAL(rb_obj_is_kind_of(rb_query, rb_cInteger))) {
         grn_id id;
@@ -688,9 +689,11 @@ rb_grn_index_column_search (int argc, VALUE *argv, VALUE self)
         query = string_query;
     }
 
-    rb_grn_scan_options(options,
+    rb_grn_scan_options(rb_options,
                         "result", &rb_result,
                         "operator", &rb_operator,
+                        "mode", &rb_mode,
+                        "weight", &rb_weight,
                         NULL);
 
     if (NIL_P(rb_result)) {
@@ -705,7 +708,23 @@ rb_grn_index_column_search (int argc, VALUE *argv, VALUE self)
 
     operator = RVAL2GRNOPERATOR(rb_operator);
 
-    rc = grn_obj_search(context, column, query, result, operator, NULL);
+    if (NIL_P(rb_mode)) {
+        options.mode = GRN_OP_EXACT;
+    } else {
+        options.mode = RVAL2GRNOPERATOR(rb_mode);
+    }
+    options.similarity_threshold = 0;
+    options.max_interval = 0;
+    options.weight_vector = NULL;
+    if (NIL_P(rb_weight)) {
+        options.vector_size = 0;
+    } else {
+        options.vector_size = NUM2UINT(rb_weight);
+    }
+    options.proc = NULL;
+    options.max_size = 0;
+
+    rc = grn_obj_search(context, column, query, result, operator, &options);
     rb_grn_rc_check(rc, self);
 
     return rb_result;

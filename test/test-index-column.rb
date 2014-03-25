@@ -349,4 +349,150 @@ class IndexColumnTest < Test::Unit::TestCase
                    @index.disk_usage)
     end
   end
+
+  class SearchTest < self
+    class WeightTest < self
+      def setup
+        super
+        setup_schema
+      end
+
+      def setup_schema
+        Groonga::Schema.define do |schema|
+          schema.create_table("Memos",
+                              :type => :hash,
+                              :key_type => :short_text) do |table|
+            table.short_text("tags",
+                             :type => :vector,
+                             :with_weight => true)
+          end
+
+          schema.create_table("Tags",
+                              :type => :hash,
+                              :key_type => :short_text) do |table|
+            table.index("Memos.tags",
+                        :name => "memos_index",
+                        :with_weight => true)
+          end
+        end
+
+        @memos = context["Memos"]
+        @index = context["Tags.memos_index"]
+      end
+
+      def search(keyword, options={})
+        @index.search(keyword, options).collect do |record|
+          {
+            :key => record._key,
+            :score => record.score,
+          }
+        end
+      end
+
+      def test_index
+        record = @memos.add("Rroonga is fun!")
+        record.tags = [
+          {
+            :value => "rroonga",
+            :weight => 9,
+          }
+        ]
+
+        expected = [
+          {
+            :key => "Rroonga is fun!",
+            :score => 10,
+          }
+        ]
+        assert_equal(expected, search("rroonga"))
+      end
+
+      def test_search
+        record = @memos.add("Rroonga is fun!")
+        record.tags = [
+          {
+            :value => "rroonga",
+          }
+        ]
+
+        expected = [
+          {
+            :key => "Rroonga is fun!",
+            :score => 5,
+          }
+        ]
+        assert_equal(expected, search("rroonga", :weight => 5))
+      end
+
+      def test_index_and_search
+        record = @memos.add("Rroonga is fun!")
+        record.tags = [
+          {
+            :value => "rroonga",
+            :weight => 9,
+          }
+        ]
+
+        expected = [
+          {
+            :key => "Rroonga is fun!",
+            :score => 50
+          }
+        ]
+        assert_equal(expected, search("rroonga", :weight => 5))
+      end
+    end
+
+    class OperatorTest < self
+      def setup
+        super
+        setup_schema
+      end
+
+      def setup_schema
+        Groonga::Schema.define do |schema|
+          schema.create_table("Memos",
+                              :type => :hash,
+                              :key_type => :short_text) do |table|
+            table.short_text("tags", :type => :vector)
+          end
+
+          schema.create_table("Tags",
+                              :type => :hash,
+                              :key_type => :short_text) do |table|
+            table.index("Memos.tags",
+                        :name => "memos_index")
+          end
+        end
+
+        @memos = context["Memos"]
+        @index = context["Tags.memos_index"]
+      end
+
+      def test_adjust
+        @memos.add("Rroonga is fun!", :tags => ["rroonga", "groonga"])
+        @memos.add("Groonga is fast!", :tags => ["groonga"])
+
+        result = @index.search("groonga")
+        @index.search("rroonga", :result => result, :operator => :adjust)
+        expected = [
+          {
+            :key => "Rroonga is fun!",
+            :score => 2,
+          },
+          {
+            :key => "Groonga is fast!",
+            :score => 1,
+          }
+        ]
+        actual = result.collect do |record|
+          {
+            :key => record._key,
+            :score => record.score,
+          }
+        end
+        assert_equal(expected, actual)
+      end
+    end
+  end
 end
