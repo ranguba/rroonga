@@ -717,7 +717,7 @@ rb_grn_index_column_search (int argc, VALUE *argv, VALUE self)
     options.max_interval = 0;
     options.weight_vector = NULL;
     if (NIL_P(rb_weight)) {
-        options.vector_size = 0;
+        options.vector_size = 1;
     } else {
         options.vector_size = NUM2UINT(rb_weight);
     }
