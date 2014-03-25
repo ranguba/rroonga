@@ -123,6 +123,10 @@ rb_grn_scan_options (VALUE options, ...)
         rb_key = RB_GRN_INTERN(key);
         rb_ary_push(available_keys, rb_key);
         *value = rb_funcall(options, rb_intern("delete"), 1, rb_key);
+        if (NIL_P(*value)) {
+            rb_key = rb_str_new_cstr(key);
+            *value = rb_funcall(options, rb_intern("delete"), 1, rb_key);
+        }
 
         key = va_arg(args, const char *);
     }
