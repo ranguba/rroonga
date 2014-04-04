@@ -5,7 +5,7 @@ h2(#4-0-1). 4.0.1: 2014-04-04
 h3. Improvements
 
 * Supported Groonga 4.0.1. Groonga 4.0.0 or older are not supported.
-* Supported no watch match column case.
+* Supported no weight match column case.
   <pre>
   table.select do |record|
     match_target = record.match_target do |target|
@@ -19,7 +19,7 @@ h3. Improvements
   Old Groonga can't restore dumped database.
 * {Groonga::IndexClumn#search}: Added @mode@ option.
 * {Groonga::IndexClumn#search}: Added @weight@ option.
-* Accepted String as key.
+* Accepted String as option key.
 
 h3. Fixes
 
