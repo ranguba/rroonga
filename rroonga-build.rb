@@ -19,7 +19,7 @@ module RroongaBuild
   module RequiredGroongaVersion
     MAJOR = 4
     MINOR = 0
-    MICRO = 0 # TODO: It should be updated when Groonga 4.0.1 is released.
+    MICRO = 1
     VERSION = [MAJOR, MINOR, MICRO]
     RELEASED_DATE = Time.utc(2014, 3, 29)
   end
@@ -27,7 +27,7 @@ module RroongaBuild
   module LatestGroongaVersion
     MAJOR = 4
     MINOR = 0
-    MICRO = 0
+    MICRO = 1
     VERSION = [MAJOR, MINOR, MICRO]
   end
 
