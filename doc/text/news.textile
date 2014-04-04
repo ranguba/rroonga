@@ -1,5 +1,31 @@
 h1. NEWS
 
+h2(#4-0-1). 4.0.1: 2014-04-04
+
+h3. Improvements
+
+* Supported Groonga 4.0.1. Groonga 4.0.0 or older are not supported.
+* Supported no watch match column case.
+  <pre>
+  table.select do |record|
+    match_target = record.match_target do |target|
+      target.column
+    end
+    match_target =~ keyword
+  end
+  </pre>
+* Supported weight vector.
+* grndump: Changed to use @--normalizer@ instead of @KEY_NORMALIZE@.
+  Old Groonga can't restore dumped database.
+* {Groonga::IndexClumn#search}: Added @mode@ option.
+* {Groonga::IndexClumn#search}: Added @weight@ option.
+* Accepted String as key.
+
+h3. Fixes
+
+* Fixed a bug that index dump drops index options in Ruby syntax.
+
+
 h2(#4-0-0). 4.0.0: 2014-02-09
 
 h3. Improvements
