@@ -695,7 +695,7 @@ rb_grn_column_scalar_p (VALUE self)
 
 /*
  * @overload with_weight?
- * @returns [Boolean] @true@ if the column is vector and created with
+ * @return [Boolean] @true@ if the column is vector and created with
  *   @:with_weight => true@ flag, @false@ otherwise.
  * @since 4.0.1
  */
