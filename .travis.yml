@@ -4,7 +4,7 @@ notifications:
 rvm:
   - 1.9.3
   - 2.0.0
-  - 2.1.0
+  - 2.1
 # env:
 #   - GROONGA_MASTER=yes
 # matrix:
