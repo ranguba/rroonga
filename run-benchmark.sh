@@ -48,4 +48,4 @@ table.remove
 database.remove
 EOF
 
-ruby column-benchmark.rb
+ruby -I lib -I ext/groogna column-benchmark.rb
