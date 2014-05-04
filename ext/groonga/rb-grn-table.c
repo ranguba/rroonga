@@ -556,8 +556,11 @@ rb_grn_table_get_column (VALUE self, VALUE rb_name)
         RbGrnObject *rb_grn_object;
         rb_grn_object = user_data->ptr;
         if (rb_grn_object) {
-            rb_ary_push(columns, rb_grn_object->self);
-            return rb_grn_object->self;
+            rb_column = rb_grn_object->self;
+            rb_ary_push(columns, rb_column);
+            rb_grn_named_object_set_name(RB_GRN_NAMED_OBJECT(DATA_PTR(rb_column)),
+                                         name, name_size);
+            return rb_column;
         }
     }
 
@@ -566,8 +569,6 @@ rb_grn_table_get_column (VALUE self, VALUE rb_name)
     if (owner) {
         rb_iv_set(rb_column, "table", self);
     }
-    rb_grn_named_object_set_name(RB_GRN_NAMED_OBJECT(DATA_PTR(rb_column)),
-                                 name, name_size);
 
     return rb_column;
 }
