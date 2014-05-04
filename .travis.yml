@@ -13,4 +13,4 @@ rvm:
 before_install:
   - curl --silent --location https://github.com/groonga/groonga/raw/master/data/travis/setup.sh | sh
 after_script:
-  - ./run-benchmark.sh
+  - bundle exec ./run-benchmark.sh
