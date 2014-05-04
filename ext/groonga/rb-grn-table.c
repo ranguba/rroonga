@@ -638,6 +638,8 @@ rb_grn_table_get_columns (int argc, VALUE *argv, VALUE self)
         grn_id *column_id;
         grn_obj *column;
         VALUE rb_column;
+        grn_user_data *user_data;
+        grn_bool need_to_set_name = GRN_FALSE;
 
         grn_table_cursor_get_key(context, cursor, &key);
         column_id = key;
@@ -649,7 +651,21 @@ rb_grn_table_get_columns (int argc, VALUE *argv, VALUE self)
             rb_exc_raise(exception);
         }
 
+        user_data = grn_obj_user_data(context, column);
+        if (user_data && !user_data->ptr) {
+            need_to_set_name = GRN_TRUE;
+        }
         rb_column = GRNOBJECT2RVAL(Qnil, context, column, GRN_FALSE);
+        if (need_to_set_name) {
+            char name[GRN_TABLE_MAX_KEY_SIZE];
+            int name_size = 0;
+            RbGrnNamedObject *rb_grn_named_object;
+            name_size = grn_column_name(context, column,
+                                        name, GRN_TABLE_MAX_KEY_SIZE);
+            rb_grn_named_object = RB_GRN_NAMED_OBJECT(DATA_PTR(rb_column));
+            rb_grn_named_object_set_name(rb_grn_named_object, name, name_size);
+        }
+
         rb_ary_push(rb_columns, rb_column);
     }
     rc = grn_table_cursor_close(context, cursor);
