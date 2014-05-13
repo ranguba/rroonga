@@ -88,10 +88,10 @@ column_create Posts rank COLUMN_SCALAR Int32
 column_create Posts tag_text COLUMN_SCALAR ShortText
 column_create Posts title COLUMN_SCALAR Text
 
-table_create Tags TABLE_HASH_KEY --key_type ShortText --default_tokenizer TokenDelimit
+table_create Tags TABLE_HASH_KEY ShortText --default_tokenizer TokenDelimit
 column_create Tags name COLUMN_SCALAR Text
 
-table_create Users TABLE_HASH_KEY --key_type ShortText
+table_create Users TABLE_HASH_KEY ShortText
 column_create Users name COLUMN_SCALAR Text
     SCHEMA
   end
@@ -315,7 +315,7 @@ table_create Posts TABLE_NO_KEY
 column_create Posts tag_text COLUMN_SCALAR ShortText
 column_create Posts title COLUMN_SCALAR Text
 
-table_create Tags TABLE_HASH_KEY --key_type ShortText --default_tokenizer TokenDelimit
+table_create Tags TABLE_HASH_KEY ShortText --default_tokenizer TokenDelimit
 
 load --table Posts
 [
@@ -346,7 +346,7 @@ COMMAND
 
     def test_have_records
       assert_equal(<<-DUMP, dump)
-table_create Users TABLE_PAT_KEY --key_type ShortText
+table_create Users TABLE_PAT_KEY ShortText
 
 load --table Users
 [

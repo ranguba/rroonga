@@ -565,7 +565,7 @@ module Groonga
         end
         parameters << "#{flags.join('|')}"
         if table.domain
-          parameters << "--key_type #{table.domain.name}"
+          parameters << table.domain.name
         end
         if table.range
           parameters << "--value_type #{table.range.name}"

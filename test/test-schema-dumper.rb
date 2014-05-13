@@ -275,9 +275,9 @@ column_create Posts title COLUMN_SCALAR ShortText
     def test_reference_table
       define_reference_table_schema
       assert_equal(<<-SCHEMA, dump)
-table_create Terms TABLE_HASH_KEY --key_type ShortText
+table_create Terms TABLE_HASH_KEY ShortText
 
-table_create IndexTerms TABLE_HASH_KEY --key_type Terms
+table_create IndexTerms TABLE_HASH_KEY Terms
       SCHEMA
     end
 
@@ -303,10 +303,10 @@ column_create Comments item COLUMN_SCALAR Items
     def test_index
       define_index_schema
       assert_equal(<<-SCHEMA, dump)
-table_create Items TABLE_HASH_KEY --key_type ShortText
+table_create Items TABLE_HASH_KEY ShortText
 column_create Items title COLUMN_SCALAR ShortText
 
-table_create Terms TABLE_PAT_KEY --key_type ShortText --default_tokenizer TokenBigram --normalizer NormalizerAuto
+table_create Terms TABLE_PAT_KEY ShortText --default_tokenizer TokenBigram --normalizer NormalizerAuto
 
 column_create Terms Items__key COLUMN_INDEX|WITH_POSITION Items _key
 column_create Terms Items_title COLUMN_INDEX|WITH_POSITION Items title
@@ -316,7 +316,7 @@ column_create Terms Items_title COLUMN_INDEX|WITH_POSITION Items title
     def test_weight_vector
       define_weight_vector_schema
       assert_equal(<<-SCHEMA, dump)
-table_create Memos TABLE_PAT_KEY --key_type ShortText
+table_create Memos TABLE_PAT_KEY ShortText
 column_create Memos tags COLUMN_VECTOR|WITH_WEIGHT ShortText
       SCHEMA
     end
@@ -324,7 +324,7 @@ column_create Memos tags COLUMN_VECTOR|WITH_WEIGHT ShortText
     def test_double_array_trie
       define_double_array_trie_schema
       assert_equal(<<-SCHEMA, dump)
-table_create Accounts TABLE_DAT_KEY --key_type ShortText
+table_create Accounts TABLE_DAT_KEY ShortText
 column_create Accounts name COLUMN_SCALAR ShortText
       SCHEMA
     end

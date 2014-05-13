@@ -132,7 +132,7 @@ class ContextTest < Test::Unit::TestCase
   class RestoreTest < self
     def test_simple
       commands = <<EOD
-table_create Items TABLE_HASH_KEY --key_type ShortText
+table_create Items TABLE_HASH_KEY ShortText
 column_create Items title COLUMN_SCALAR Text
 EOD
       restore(commands)
@@ -143,44 +143,44 @@ EOD
     def test_continuation_lines
       dumped_commands = <<-EOD
 table_create Items TABLE_HASH_KEY\\
- --key_type ShortText
+ ShortText
 EOD
       restore(dumped_commands)
 
       assert_equal(<<-EOC, dump)
-table_create Items TABLE_HASH_KEY --key_type ShortText
+table_create Items TABLE_HASH_KEY ShortText
 EOC
     end
 
     def test_empty_line
       restore(<<-EOC)
-table_create Items TABLE_HASH_KEY --key_type ShortText
+table_create Items TABLE_HASH_KEY ShortText
 
 column_create Items title COLUMN_SCALAR Text
 
 EOC
 
       assert_equal(<<-EOC, dump)
-table_create Items TABLE_HASH_KEY --key_type ShortText
+table_create Items TABLE_HASH_KEY ShortText
 column_create Items title COLUMN_SCALAR Text
 EOC
     end
 
     def test_comment
       restore(<<-EOC)
-table_create Items TABLE_HASH_KEY --key_type ShortText
+table_create Items TABLE_HASH_KEY ShortText
 # column_create Items url COLUMN_SCALAR ShortText
 column_create Items title COLUMN_SCALAR Text
 EOC
 
       assert_equal(<<-EOC, dump)
-table_create Items TABLE_HASH_KEY --key_type ShortText
+table_create Items TABLE_HASH_KEY ShortText
 column_create Items title COLUMN_SCALAR Text
 EOC
     end
 
     def test_block
-      table_create = "table_create Items TABLE_HASH_KEY --key_type ShortText"
+      table_create = "table_create Items TABLE_HASH_KEY ShortText"
       column_create = "column_create Items title COLUMN_SCALAR Text"
       commands = <<-COMMANDS
 #{table_create}
