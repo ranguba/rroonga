@@ -41,7 +41,10 @@ module Groonga
     #   other_text_handler = Proc.new do |string|
     #     h(string)
     #   end
-    #   words.tag_keys(text) do |record, word|
+    #   options = {
+    #     :other_text_handler => other_text_handler,
+    #   }
+    #   words.tag_keys(text, options) do |record, word|
     #     "<span class=\"keyword\">#{h(word)}(#{h(record.key)})</span>\n"
     #   end
     #   # =>
