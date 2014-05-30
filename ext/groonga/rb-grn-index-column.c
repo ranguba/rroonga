@@ -160,7 +160,7 @@ rb_grn_index_column_inspect_content (VALUE self, VALUE inspected)
 
             grn_obj_unlink(context, source);
         } else {
-            rb_str_catf(inspected, "(null:%u)", source_id);
+            rb_str_catf(inspected, "(nil:%u)", source_id);
         }
     }
     rb_str_cat2(inspected, ">");
