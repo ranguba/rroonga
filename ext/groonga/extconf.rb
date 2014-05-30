@@ -103,6 +103,11 @@ def extract_zip(filename, destrination_dir)
   end
 
   Archive::Zip.extract(filename, destrination_dir)
+rescue LoadError
+  command_line = ["unzip", filename, "-d", destrination_dir]
+  unless system(*command_line)
+    raise "Failed to unzip: #{command_line.join(' ')}"
+  end
 end
 
 def extract_groonga_win32_binary(major, minor, micro)
