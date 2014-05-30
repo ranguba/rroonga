@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2011  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2014  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -713,6 +713,33 @@ class SchemaTest < Test::Unit::TestCase
       assert_equal("Terms.posts_content_index", renamed_index.name)
       assert_equal("Terms.posts_content_index", index.name)
       assert_equal([context["Posts.content"]], renamed_index.sources)
+    end
+
+    class MultipleColumnTest < self
+      setup
+      def setup_index
+        Groonga::Schema.create_table("Posts") do |table|
+          table.short_text :title
+          table.long_text :content
+        end
+        Groonga::Schema.create_table("Terms") do |table|
+          table.index "Posts", "title", "content"
+        end
+
+        @index = context["Terms.Posts_title_content"]
+      end
+
+      def test_source
+        assert_equal([
+                       "Posts.title",
+                       "Posts.content",
+                     ],
+                     @index.sources.collect(&:name))
+      end
+
+      def test_with_section
+        assert_true(@index.with_section?)
+      end
     end
   end
 

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2009-2013  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2014  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -1305,6 +1305,7 @@ module Groonga
       def parse_index_argument(target_table_or_target_column_full_name, *args)
         options = nil
         options = args.pop if args.last.is_a?(::Hash)
+        options ||= {}
         if args.empty?
           target_column_full_name = target_table_or_target_column_full_name
           if target_column_full_name.is_a?(Groonga::Column)
@@ -1321,7 +1322,10 @@ module Groonga
           target_columns = args
           key = [target_table_name, target_columns]
         end
-        [key, target_table, target_columns, options || {}]
+        if target_columns.size > 1 and options[:with_section].nil?
+          options[:with_section] = true
+        end
+        [key, target_table, target_columns, options]
       end
 
       def same_table?(table, options)
