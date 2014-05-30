@@ -102,6 +102,94 @@ rb_grn_index_column_deconstruct (RbGrnIndexColumn *rb_grn_index_column,
         *string_query = rb_grn_index_column->string_query;
 }
 
+static VALUE
+rb_grn_index_column_inspect_content (VALUE self, VALUE inspected)
+{
+    grn_ctx *context = NULL;
+    grn_obj *index_column;
+    grn_obj source_ids;
+    unsigned int i, n_ids;
+
+    rb_grn_index_column_deconstruct(SELF(self), &index_column, &context,
+                                    NULL, NULL,
+                                    NULL, NULL, NULL,
+                                    NULL, NULL,
+                                    NULL, NULL);
+    if (!context)
+        return inspected;
+    if (!index_column)
+        return inspected;
+
+    GRN_UINT32_INIT(&source_ids, GRN_OBJ_VECTOR);
+
+    grn_obj_get_info(context, index_column, GRN_INFO_SOURCE, &source_ids);
+    n_ids = GRN_BULK_VSIZE(&source_ids) / sizeof(grn_id);
+
+    rb_str_cat2(inspected, ", ");
+    rb_str_cat2(inspected, "sources: ");
+
+    rb_str_cat2(inspected, "<");
+    for (i = 0; i < n_ids; i++) {
+        grn_id source_id;
+        grn_obj *source;
+
+        if (i > 0) {
+            rb_str_cat2(inspected, ",");
+        }
+
+        source_id = GRN_UINT32_VALUE_AT(&source_ids, i);
+        source = grn_ctx_at(context, source_id);
+        if (source) {
+            char source_name[GRN_TABLE_MAX_KEY_SIZE];
+            unsigned int source_name_size;
+
+            switch (source->header.type) {
+            case GRN_TABLE_HASH_KEY:
+            case GRN_TABLE_PAT_KEY:
+            case GRN_TABLE_DAT_KEY:
+            case GRN_TABLE_NO_KEY:
+                rb_str_cat2(inspected, GRN_COLUMN_NAME_KEY);
+                break;
+            default:
+                source_name_size =
+                    grn_column_name(context, source,
+                                    source_name, GRN_TABLE_MAX_KEY_SIZE);
+                rb_str_cat(inspected, source_name, source_name_size);
+                break;
+            }
+
+            grn_obj_unlink(context, source);
+        } else {
+            rb_str_catf(inspected, "(null:%u)", source_id);
+        }
+    }
+    rb_str_cat2(inspected, ">");
+
+    grn_obj_unlink(context, &source_ids);
+
+    return inspected;
+}
+
+/*
+ * Inspects the index column.
+ *
+ * @overload inspect
+ *   @return [String] the inspected string.
+ */
+static VALUE
+rb_grn_index_column_inspect (VALUE self)
+{
+    VALUE inspected;
+
+    inspected = rb_str_new2("");
+    rb_grn_object_inspect_header(self, inspected);
+    rb_grn_object_inspect_content(self, inspected);
+    rb_grn_index_column_inspect_content(self, inspected);
+    rb_grn_object_inspect_footer(self, inspected);
+
+    return inspected;
+}
+
 /*
  * Adds a record that has @value@ content to inverted index for fast
  * fulltext serach. Normally, this method is not used
@@ -872,6 +960,9 @@ rb_grn_init_index_column (VALUE mGrn)
 {
     rb_cGrnIndexColumn =
         rb_define_class_under(mGrn, "IndexColumn", rb_cGrnColumn);
+
+    rb_define_method(rb_cGrnIndexColumn, "inspect",
+                     rb_grn_index_column_inspect, 0);
 
     rb_define_method(rb_cGrnIndexColumn, "add",
                      rb_grn_index_column_add, -1);

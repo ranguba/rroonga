@@ -910,63 +910,6 @@ rb_grn_object_inspect_content_flags_with_label (VALUE inspected,
     return inspected;
 }
 
-static VALUE
-rb_grn_object_inspect_content_sources_with_label (VALUE inspected,
-                                                  grn_ctx *context,
-                                                  grn_obj *object)
-{
-    grn_obj source_ids;
-    unsigned int i, n_ids;
-
-    GRN_UINT32_INIT(&source_ids, GRN_OBJ_VECTOR);
-
-    grn_obj_get_info(context, object, GRN_INFO_SOURCE, &source_ids);
-    n_ids = GRN_BULK_VSIZE(&source_ids) / sizeof(grn_id);
-
-    rb_str_cat2(inspected, "sources: ");
-
-    rb_str_cat2(inspected, "<");
-    for (i = 0; i < n_ids; i++) {
-        grn_id source_id;
-        grn_obj *source;
-
-        if (i > 0) {
-            rb_str_cat2(inspected, ",");
-        }
-
-        source_id = GRN_UINT32_VALUE_AT(&source_ids, i);
-        source = grn_ctx_at(context, source_id);
-        if (source) {
-            char source_name[GRN_TABLE_MAX_KEY_SIZE];
-            unsigned int source_name_size;
-
-            switch (source->header.type) {
-            case GRN_TABLE_HASH_KEY:
-            case GRN_TABLE_PAT_KEY:
-            case GRN_TABLE_DAT_KEY:
-            case GRN_TABLE_NO_KEY:
-                rb_str_cat2(inspected, GRN_COLUMN_NAME_KEY);
-                break;
-            default:
-                source_name_size =
-                    grn_column_name(context, source,
-                                    source_name, GRN_TABLE_MAX_KEY_SIZE);
-                rb_str_cat(inspected, source_name, source_name_size);
-                break;
-            }
-
-            grn_obj_unlink(context, source);
-        } else {
-            rb_str_catf(inspected, "(null:%u)", source_id);
-        }
-    }
-    rb_str_cat2(inspected, ">");
-
-    grn_obj_unlink(context, &source_ids);
-
-    return inspected;
-}
-
 VALUE
 rb_grn_object_inspect_object_content (VALUE inspected,
                                       grn_ctx *context, grn_obj *object)
@@ -982,11 +925,6 @@ rb_grn_object_inspect_object_content (VALUE inspected,
     rb_grn_object_inspect_content_range_with_label(inspected, context, object);
     rb_str_cat2(inspected, ", ");
     rb_grn_object_inspect_content_flags_with_label(inspected, context, object);
-    if (object->header.type == GRN_COLUMN_INDEX) {
-        rb_str_cat2(inspected, ", ");
-        rb_grn_object_inspect_content_sources_with_label(inspected, context,
-                                                         object);
-    }
 
     return inspected;
 }
