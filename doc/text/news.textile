@@ -1,5 +1,30 @@
 h1. NEWS
 
+h2(#4-0-2). 4.0.2: 2014-05-29
+
+h3. Improvements
+
+* Removed needless @--key_type@ option in dump.
+  [Reported by Genki Takiuchi]
+* Added sources information to {Groonga::IndexColumn#inspect}.
+* Enabled @with_section@ flag for multiple column index by default.
+  See {Groonga::Schema::TableDefinition#index}.
+* Enabled @with_position@ flag for index of a table that has a default
+  tokenizer by default. You need to specify @:with_position => false@
+  explicitly to disable @with_position@ flag for @TokenDelimit@.
+  @TokenDelimit@ is a tokenizer that doesn't need @with_position@ flag.
+  See {Groonga::Schema.create_table}.
+
+h3. Fixes
+
+* [GitHub#16] Fixed a memory leak of {Groonga::Table#column}.
+  [Reported by rutice]
+
+h3. Thanks
+
+* rutice
+* Genki Takiuchi
+
 h2(#4-0-1). 4.0.1: 2014-04-04
 
 h3. Improvements
