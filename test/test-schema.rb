@@ -610,7 +610,8 @@ class SchemaTest < Test::Unit::TestCase
                    "path: <#{path}>, " +
                    "domain: <Terms>, " +
                    "range: <Posts>, " +
-                   "flags: <WITH_SECTION|WITH_WEIGHT|WITH_POSITION>>",
+                   "flags: <WITH_SECTION|WITH_WEIGHT|WITH_POSITION>, " +
+                   "sources: <content>>",
                    index_column.inspect)
     end
 
@@ -662,7 +663,8 @@ class SchemaTest < Test::Unit::TestCase
                    "path: <#{index_column.path}>, " +
                    "domain: <Terms>, " +
                    "range: <Posts>, " +
-                   "flags: <WITH_POSITION>>",
+                   "flags: <WITH_POSITION>, " +
+                   "sources: <_key>>",
                    index_column.inspect)
     end
 
