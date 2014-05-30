@@ -962,8 +962,10 @@ module Groonga
       #   - :with_position :=
       #     +true+ を指定すると転置索引に出現位置情報を合わせて
       #     格納する。未指定または +nil+ を指定した場合、テーブル
-      #     がN-gram系のトークナイザーを利用している場合は
-      #     自動的に有効になる。 =:
+      #     がトークナイザー利用している場合は自動的に有効になる。
+      #     +TokenDelimit+ など全文検索用ではないトークナイザーを
+      #     使う場合は明示的に +false+ を指定することで使用リソース
+      #     を少なくできる。=:
       def index(target_table_or_target_column_full_name, *args)
         key, target_table, target_columns, options =
           parse_index_argument(target_table_or_target_column_full_name, *args)

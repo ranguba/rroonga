@@ -287,20 +287,25 @@ class IndexColumnTest < Test::Unit::TestCase
                             :key_type => "ShortText",
                             :default_tokenizer => "TokenDelimit") do |table|
           table.index("Articles.tags",
-                      :name => "position",
+                      :name => "true",
                       :with_position => true)
           table.index("Articles.tags",
-                      :name => "no_position")
+                      :name => "default")
+          table.index("Articles.tags",
+                      :name => "false",
+                      :with_position => false)
         end
       end
 
       assert_equal([
                      true,
                      false,
+                     true,
                    ],
                    [
-                     context["Tags.position"].with_position?,
-                     context["Tags.no_position"].with_position?,
+                     context["Tags.true"].with_position?,
+                     context["Tags.false"].with_position?,
+                     context["Tags.default"].with_position?,
                    ])
     end
   end

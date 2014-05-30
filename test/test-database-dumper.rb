@@ -50,7 +50,7 @@ class DatabaseDumperTest < Test::Unit::TestCase
       end
 
       schema.change_table("Tags") do |table|
-        table.index("Posts.tag_text")
+        table.index("Posts.tag_text", :with_position => false)
       end
     end
   end
@@ -298,7 +298,7 @@ load --table Users
                             :type => :hash,
                             :key_type => :short_text,
                             :default_tokenizer => :delimit) do |table|
-          table.index("Posts.tag_text")
+          table.index("Posts.tag_text", :with_position => false)
         end
       end
     end

@@ -335,27 +335,6 @@ rb_grn_table_define_column (int argc, VALUE *argv, VALUE self)
     return rb_column;
 }
 
-static grn_bool
-n_gram_tokenizer_p(grn_ctx *context, grn_obj *tokenizer)
-{
-    char tokenizer_name[GRN_TABLE_MAX_KEY_SIZE];
-    int name_size;
-
-    name_size = grn_obj_name(context, tokenizer,
-                             tokenizer_name, sizeof(tokenizer_name) - 1);
-    if (name_size == 0)
-        return GRN_FALSE;
-
-    tokenizer_name[name_size] = '\0';
-
-#define HAVE_PREFIX_P(prefix) \
-    (strncmp(tokenizer_name, prefix, strlen(prefix)) == 0)
-    return (HAVE_PREFIX_P("TokenUnigram") ||
-            HAVE_PREFIX_P("TokenBigram") ||
-            HAVE_PREFIX_P("TokenTrigram"));
-#undef HAVE_PREFIX_P
-}
-
 /*
  * テーブルに名前が _name_ で型が _value_type_ のインデックスカ
  * ラムを定義し、新しく定義されたカラムを返す。
@@ -454,7 +433,7 @@ rb_grn_table_define_index_column (int argc, VALUE *argv, VALUE self)
         tokenizer = grn_obj_get_info(context, table,
                                      GRN_INFO_DEFAULT_TOKENIZER,
                                      NULL);
-        if (tokenizer && n_gram_tokenizer_p(context, tokenizer)) {
+        if (tokenizer) {
             rb_with_position = Qtrue;
         }
     }
