@@ -666,22 +666,16 @@ VALUE
 rb_grn_object_inspect_object_content_name (VALUE inspected,
                                            grn_ctx *context, grn_obj *object)
 {
+    char name[GRN_TABLE_MAX_KEY_SIZE];
     int name_size;
 
-    name_size = grn_obj_name(context, object, NULL, 0);
+    name_size = grn_obj_name(context, object, name, GRN_TABLE_MAX_KEY_SIZE);
     if (name_size == 0) {
         rb_str_cat2(inspected, "(anonymous)");
     } else {
-        grn_obj name;
-
-        GRN_OBJ_INIT(&name, GRN_BULK, 0, GRN_ID_NIL);
-        grn_bulk_space(context, &name, name_size);
-        grn_obj_name(context, object, GRN_BULK_HEAD(&name), name_size);
-        GRN_TEXT_PUTC(context, &name, '\0');
         rb_str_cat2(inspected, "<");
-        rb_str_cat2(inspected, GRN_BULK_HEAD(&name));
+        rb_str_cat(inspected, name, name_size);
         rb_str_cat2(inspected, ">");
-        grn_obj_unlink(context, &name);
     }
 
     return inspected;
