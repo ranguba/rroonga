@@ -1,5 +1,17 @@
 h1. NEWS
 
+h2(#4-0-3). 4.0.3: 2014-06-04
+
+h3. Fixes
+
+* [windows] Fixed a bug that Rroonga reports load error by
+  bundling the fixed version Groonga package.
+  [groonga-dev,02398][Reported by Masafumi Yokoyama]
+
+h3. Thanks
+
+* Masafumi Yokoyama
+
 h2(#4-0-2). 4.0.2: 2014-05-29
 
 h3. Improvements
