@@ -93,12 +93,35 @@ def collect_binary_files(binary_dir)
   binary_files
 end
 
+def collect_gcc_related_dll_files
+  dll_files = []
+  dll_names = ["libwinpthread-1.dll"]
+  dll_names.each do |dll_name|
+    dll_files << absolete_gcc_dll_path(dll_name)
+  end
+  dll_files
+end
+
+def absolete_gcc_dll_path(dll_name)
+  `#{build_host}-gcc -print-file-name=#{dll_name}`.strip
+end
+
+def build_host
+  if groonga_win32_i386_p
+    "i686-w64-mingw32"
+  else
+    "x86_64-w64-mingw32"
+  end
+end
+
 relative_vendor_dir = "vendor"
 relative_binary_dir = File.join("vendor", "local")
 vendor_dir = File.join(base_dir, relative_vendor_dir)
 binary_dir = File.join(base_dir, relative_binary_dir)
 
-groonga_win32_i386_p = ENV["RROONGA_USE_GROONGA_X64"].nil?
+def groonga_win32_i386_p
+  ENV["RROONGA_USE_GROONGA_X64"].nil?
+end
 
 Rake::ExtensionTask.new("groonga", spec) do |ext|
   if groonga_win32_i386_p
@@ -112,6 +135,12 @@ Rake::ExtensionTask.new("groonga", spec) do |ext|
     ext.cross_compile = true
     ext.cross_compiling do |_spec|
       if windows?(_spec.platform.to_s)
+        binary_path = "#{relative_binary_dir}/bin"
+        directory binary_path
+        dll_files = collect_gcc_related_dll_files
+        dll_files.each do |dll_file|
+          cp dll_file, binary_path
+        end
         binary_files = collect_binary_files(relative_binary_dir)
         _spec.files += binary_files
         stage_path = "#{ext.tmp_dir}/#{_spec.platform}/stage"
