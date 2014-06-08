@@ -1,6 +1,6 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
-  Copyright (C) 2009  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2014  Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -17,8 +17,6 @@
 */
 
 #include "rb-grn.h"
-
-#define SELF(object) (RVAL2GRNPROCEDURE(object))
 
 VALUE rb_cGrnProcedure;
 
@@ -39,6 +37,19 @@ rb_grn_procedure_to_ruby_object (grn_ctx *context, grn_obj *procedure,
     return GRNOBJECT2RVAL(rb_cGrnProcedure, context, procedure, owner);
 }
 
+static VALUE
+rb_grn_procedure_get_type (VALUE self)
+{
+    grn_ctx *context;
+    grn_obj *procedure;
+    grn_proc_type type;
+
+    procedure = RVAL2GRNOBJECT(self, &context);
+    type = grn_proc_get_type(context, procedure);
+
+    return INT2NUM(type);
+}
+
 void
 rb_grn_init_procedure (VALUE mGrn)
 {
@@ -49,4 +60,6 @@ rb_grn_init_procedure (VALUE mGrn)
     rb_define_const(rb_cGrnProcedure, "BIGRAM", INT2NUM(GRN_DB_BIGRAM));
     rb_define_const(rb_cGrnProcedure, "TRIGRAM", INT2NUM(GRN_DB_TRIGRAM));
     rb_define_const(rb_cGrnProcedure, "MECAB", INT2NUM(GRN_DB_MECAB));
+
+    rb_define_method(rb_cGrnProcedure, "type", rb_grn_procedure_get_type, 0);
 }

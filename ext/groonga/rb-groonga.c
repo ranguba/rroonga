@@ -1,6 +1,6 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
-  Copyright (C) 2009-2013  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2014  Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -175,6 +175,7 @@ Init_groonga (void)
     rb_grn_init_posting(mGrn);
     rb_grn_init_type(mGrn);
     rb_grn_init_procedure(mGrn);
+    rb_grn_init_procedure_type(mGrn);
     rb_grn_init_column(mGrn);
     rb_grn_init_accessor(mGrn);
     rb_grn_init_geo_point(mGrn);

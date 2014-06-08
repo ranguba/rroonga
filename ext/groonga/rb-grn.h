@@ -288,6 +288,7 @@ void           rb_grn_init_patricia_trie_cursor     (VALUE mGrn);
 void           rb_grn_init_double_array_trie_cursor (VALUE mGrn);
 void           rb_grn_init_type                     (VALUE mGrn);
 void           rb_grn_init_procedure                (VALUE mGrn);
+void           rb_grn_init_procedure_type           (VALUE mGrn);
 void           rb_grn_init_column                   (VALUE mGrn);
 void           rb_grn_init_fix_size_column          (VALUE mGrn);
 void           rb_grn_init_variable_size_column     (VALUE mGrn);

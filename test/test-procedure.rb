@@ -1,4 +1,4 @@
-# Copyright (C) 2009  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2014  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -33,5 +33,12 @@ class ProcedureTest < Test::Unit::TestCase
     expected_name = nil if procedure.nil? and options[:accept_nil]
     assert_equal(expected_name,
                  procedure ? procedure.name : procedure)
+  end
+
+  class TypeTest < self
+    def test_tokenizer
+      tokenizer = Groonga["TokenBigram"]
+      assert_equal(Groonga::ProcedureType::TOKENIZER, tokenizer.type)
+    end
   end
 end
