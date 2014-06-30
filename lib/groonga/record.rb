@@ -352,7 +352,11 @@ module Groonga
 
     # @private
     def inspect
-      super.gsub(/>\z/, ", attributes: #{attributes.inspect}>")
+      if @table.closed?
+        super.gsub(/>\z/, " (closed)>")
+      else
+        super.gsub(/>\z/, ", attributes: #{attributes.inspect}>")
+      end
     end
 
     private
