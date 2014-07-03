@@ -238,6 +238,7 @@ class VariableSizeColumnTest < Test::Unit::TestCase
     end
 
     class WeightTest < self
+      class TypeTest < self
       def setup_schema
         Groonga::Schema.define do |schema|
           schema.create_table("Products",
@@ -314,6 +315,7 @@ class VariableSizeColumnTest < Test::Unit::TestCase
                        },
                      ],
                      groonga.tags)
+      end
       end
     end
   end
