@@ -239,83 +239,83 @@ class VariableSizeColumnTest < Test::Unit::TestCase
 
     class WeightTest < self
       class TypeTest < self
-      def setup_schema
-        Groonga::Schema.define do |schema|
-          schema.create_table("Products",
-                              :type => :patricia_trie,
-                              :key_type => :short_text) do |table|
-            table.short_text("tags",
-                             :type => :vector,
-                             :with_weight => true)
+        def setup_schema
+          Groonga::Schema.define do |schema|
+            schema.create_table("Products",
+                                :type => :patricia_trie,
+                                :key_type => :short_text) do |table|
+              table.short_text("tags",
+                               :type => :vector,
+                               :with_weight => true)
+            end
           end
+
+          @products = Groonga["Products"]
         end
 
-        @products = Groonga["Products"]
-      end
+        def test_string_key
+          groonga = @products.add("Groonga")
+          groonga.tags = [
+            {
+              "value"  => "groonga",
+              "weight" => 100,
+            },
+          ]
 
-      def test_string_key
-        groonga = @products.add("Groonga")
-        groonga.tags = [
-          {
-            "value"  => "groonga",
-            "weight" => 100,
-          },
-        ]
+          assert_equal([
+                         {
+                           :value  => "groonga",
+                           :weight => 100,
+                         },
+                       ],
+                       groonga.tags)
+        end
 
-        assert_equal([
-                       {
-                         :value  => "groonga",
-                         :weight => 100,
-                       },
-                     ],
-                     groonga.tags)
-      end
+        def test_array
+          groonga = @products.add("Groonga")
+          groonga.tags = [
+            {
+              :value  => "groonga",
+              :weight => 100,
+            },
+            {
+              :value  => "full text search",
+              :weight => 1000,
+            },
+          ]
 
-      def test_array
-        groonga = @products.add("Groonga")
-        groonga.tags = [
-          {
-            :value  => "groonga",
-            :weight => 100,
-          },
-          {
-            :value  => "full text search",
-            :weight => 1000,
-          },
-        ]
+          assert_equal([
+                         {
+                           :value  => "groonga",
+                           :weight => 100,
+                         },
+                         {
+                           :value  => "full text search",
+                           :weight => 1000,
+                         },
+                       ],
+                       groonga.tags)
+        end
 
-        assert_equal([
-                       {
-                         :value  => "groonga",
-                         :weight => 100,
-                       },
-                       {
-                         :value  => "full text search",
-                         :weight => 1000,
-                       },
-                     ],
-                     groonga.tags)
-      end
+        def test_hash
+          groonga = @products.add("Groonga")
+          groonga.tags = {
+            "groonga" => 100,
+            "full text search" => 1000,
+          }
 
-      def test_hash
-        groonga = @products.add("Groonga")
-        groonga.tags = {
-          "groonga" => 100,
-          "full text search" => 1000,
-        }
-
-        assert_equal([
-                       {
-                         :value  => "groonga",
-                         :weight => 100,
-                       },
-                       {
-                         :value  => "full text search",
-                         :weight => 1000,
-                       },
-                     ],
-                     groonga.tags)
-      end
+          assert_equal([
+                         {
+                           :value  => "groonga",
+                           :weight => 100,
+                         },
+                         {
+                           :value  => "full text search",
+                           :weight => 1000,
+                         },
+                       ],
+                       groonga.tags)
+        end
       end
     end
   end
