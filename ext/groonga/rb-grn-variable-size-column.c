@@ -163,6 +163,7 @@ rb_grn_variable_size_column_array_reference (VALUE self, VALUE rb_id)
     grn_id id;
     grn_obj *value;
     VALUE rb_value;
+    VALUE rb_range;
     unsigned int i, n;
 
     rb_grn_variable_size_column_deconstruct(SELF(self), &column, &context,
@@ -181,25 +182,36 @@ rb_grn_variable_size_column_array_reference (VALUE self, VALUE rb_id)
     grn_obj_get_value(context, column, id, value);
     rb_grn_context_check(context, self);
 
+    rb_range = GRNTABLE2RVAL(context, range, GRN_FALSE);
+
     n = grn_vector_size(context, value);
     rb_value = rb_ary_new2(n);
     for (i = 0; i < n; i++) {
-        const char *element_value;
-        unsigned int element_value_length;
+        VALUE rb_element_value;
         unsigned int weight = 0;
         grn_id domain;
         VALUE rb_element;
 
-        element_value_length = grn_vector_get_element(context,
-                                                      value,
-                                                      i,
-                                                      &element_value,
-                                                      &weight,
-                                                      &domain);
+        if (value->header.type == GRN_UVECTOR) {
+            grn_id id;
+            id = grn_uvector_get_element(context, value, i, &weight);
+            rb_element_value = rb_grn_record_new(rb_range, id, Qnil);
+        } else {
+            const char *element_value;
+            unsigned int element_value_length;
+            element_value_length = grn_vector_get_element(context,
+                                                          value,
+                                                          i,
+                                                          &element_value,
+                                                          &weight,
+                                                          &domain);
+            rb_element_value = rb_str_new(element_value, element_value_length);
+        }
+
         rb_element = rb_hash_new();
         rb_hash_aset(rb_element,
                      ID2SYM(rb_intern("value")),
-                     rb_str_new(element_value, element_value_length));
+                     rb_element_value);
         rb_hash_aset(rb_element,
                      ID2SYM(rb_intern("weight")),
                      UINT2NUM(weight));
@@ -211,9 +223,11 @@ rb_grn_variable_size_column_array_reference (VALUE self, VALUE rb_id)
 }
 
 typedef struct {
+    VALUE self;
     grn_ctx *context;
     grn_obj *vector;
     grn_obj *element_value;
+    grn_obj *range;
 } HashElementToVectorElementData;
 
 static int
@@ -223,15 +237,21 @@ hash_element_to_vector_element(VALUE key, VALUE value, VALUE user_data)
         (HashElementToVectorElementData *)user_data;
     unsigned int weight;
 
-    GRN_BULK_REWIND(data->element_value);
-    RVAL2GRNBULK(key, data->context, data->element_value);
-
     weight = NUM2UINT(value);
-    grn_vector_add_element(data->context, data->vector,
-                           GRN_BULK_HEAD(data->element_value),
-                           GRN_BULK_VSIZE(data->element_value),
-                           weight,
-                           data->element_value->header.domain);
+
+    if (data->vector->header.type == GRN_UVECTOR) {
+        grn_id id = RVAL2GRNID(key, data->context, data->range, data->self);
+        grn_uvector_add_element(data->context, data->vector, id, weight);
+    } else {
+        GRN_BULK_REWIND(data->element_value);
+        RVAL2GRNBULK(key, data->context, data->element_value);
+
+        grn_vector_add_element(data->context, data->vector,
+                               GRN_BULK_HEAD(data->element_value),
+                               GRN_BULK_VSIZE(data->element_value),
+                               weight,
+                               data->element_value->header.domain);
+    }
 
     return ST_CONTINUE;
 }
@@ -373,6 +393,7 @@ rb_grn_variable_size_column_array_set (VALUE self, VALUE rb_id, VALUE rb_value)
     grn_obj_reinit(context, value,
                    value->header.domain,
                    value->header.flags | GRN_OBJ_VECTOR);
+    value->header.flags |= GRN_OBJ_WITH_WEIGHT;
     if (RVAL2CBOOL(rb_obj_is_kind_of(rb_value, rb_cArray))) {
         int i, n;
         n = RARRAY_LEN(rb_value);
@@ -389,22 +410,29 @@ rb_grn_variable_size_column_array_set (VALUE self, VALUE rb_id, VALUE rb_value)
                 weight = NUM2UINT(rb_weight);
             }
 
-            GRN_BULK_REWIND(element_value);
-            if (!NIL_P(rb_element_value)) {
-                RVAL2GRNBULK(rb_element_value, context, element_value);
-            }
+            if (value->header.type == GRN_UVECTOR) {
+                grn_id id = RVAL2GRNID(rb_element_value, context, range, self);
+                grn_uvector_add_element(context, value, id, weight);
+            } else {
+                GRN_BULK_REWIND(element_value);
+                if (!NIL_P(rb_element_value)) {
+                    RVAL2GRNBULK(rb_element_value, context, element_value);
+                }
 
-            grn_vector_add_element(context, value,
-                                   GRN_BULK_HEAD(element_value),
-                                   GRN_BULK_VSIZE(element_value),
-                                   weight,
-                                   element_value->header.domain);
+                grn_vector_add_element(context, value,
+                                       GRN_BULK_HEAD(element_value),
+                                       GRN_BULK_VSIZE(element_value),
+                                       weight,
+                                       element_value->header.domain);
+            }
         }
     } else if (RVAL2CBOOL(rb_obj_is_kind_of(rb_value, rb_cHash))) {
         HashElementToVectorElementData data;
+        data.self = self;
         data.context = context;
         data.vector = value;
         data.element_value = element_value;
+        data.range = range;
         rb_hash_foreach(rb_value, hash_element_to_vector_element, (VALUE)&data);
     } else {
         rb_raise(rb_eArgError,

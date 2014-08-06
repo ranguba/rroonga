@@ -317,6 +317,73 @@ class VariableSizeColumnTest < Test::Unit::TestCase
                        groonga.tags)
         end
       end
+
+      class ReferenceTest < self
+        def setup_schema
+          Groonga::Schema.define do |schema|
+            schema.create_table("Tags",
+                                :type => :patricia_trie,
+                                :key_type => :short_text) do |table|
+            end
+            schema.create_table("Products",
+                                :type => :patricia_trie,
+                                :key_type => :short_text) do |table|
+              table.reference("tags", "Tags",
+                              :type => :vector,
+                              :with_weight => true)
+            end
+          end
+
+          @products = Groonga["Products"]
+          @tags = Groonga["Tags"]
+        end
+
+        def test_array
+          groonga = @products.add("Groonga")
+          groonga.tags = [
+            {
+              :value  => @tags.add("groonga"),
+              :weight => 100,
+            },
+            {
+              :value  => @tags.add("full text search"),
+              :weight => 1000,
+            },
+          ]
+
+          assert_equal([
+                         {
+                           :value  => @tags["groonga"],
+                           :weight => 100,
+                         },
+                         {
+                           :value  => @tags["full text search"],
+                           :weight => 1000,
+                         },
+                       ],
+                       groonga.tags)
+        end
+
+        def test_hash
+          groonga = @products.add("Groonga")
+          groonga.tags = {
+            @tags.add("groonga") => 100,
+            @tags.add("full text search") => 1000,
+          }
+
+          assert_equal([
+                         {
+                           :value  => @tags["groonga"],
+                           :weight => 100,
+                         },
+                         {
+                           :value  => @tags["full text search"],
+                           :weight => 1000,
+                         },
+                       ],
+                       groonga.tags)
+        end
+      end
     end
   end
 end
