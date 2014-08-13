@@ -156,4 +156,11 @@ namespace :test do
   end
 end
 
+desc "Remove Groonga binary directory"
+namespace :clean do
+  task :groonga do
+    rm_rf binary_dir
+  end
+end
+
 task :default => :test
