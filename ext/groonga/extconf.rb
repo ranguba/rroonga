@@ -231,7 +231,7 @@ def build_groonga(major, minor, micro)
   end
 end
 
-unless PKGConfig.have_package(package_name, major, minor, micro)
+def install_local_groonga(package_name, major, minor, micro)
   unless have_local_groonga?(package_name, major, minor, micro)
     required_version = [major, minor, micro]
     if (required_version <=> LatestGroongaVersion::VERSION) < 0
@@ -245,6 +245,16 @@ unless PKGConfig.have_package(package_name, major, minor, micro)
     exit(false)
   end
   add_rpath_for_local_groonga
+end
+
+if win32?
+  unless have_local_groonga?(package_name, major, minor, micro)
+    install_local_groonga(package_name, major, minor, micro)
+  end
+else
+  unless PKGConfig.have_package(package_name, major, minor, micro)
+    install_local_groonga(package_name, major, minor, micro)
+  end
 end
 
 real_version = PKGConfig.modversion(package_name)
