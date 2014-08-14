@@ -74,7 +74,7 @@ Gem::Specification.new do |s|
     end
   end
 
-  s.homepage = "http://groonga.rubyforge.org/#about-rroonga"
+  s.homepage = "http://ranguba.org/#about-rroonga"
   s.licenses = ["LGPLv2"]
   s.require_paths = ["lib", "ext/groonga"]
   s.rubyforge_project = "groonga"
