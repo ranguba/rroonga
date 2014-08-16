@@ -109,9 +109,6 @@ rb_grn_object_run_finalizer (grn_ctx *context, grn_obj *grn_object,
     rb_grn_object->have_finalizer = GRN_FALSE;
 
     switch (grn_object->header.type) {
-    case GRN_BULK:
-        /* Do nothing */
-        break;
     case GRN_DB:
         rb_grn_database_finalizer(context, rb_grn_context,
                                   grn_object, rb_grn_object);
@@ -326,9 +323,6 @@ rb_grn_object_to_ruby_object (VALUE klass, grn_ctx *context, grn_obj *object,
         rb_grn_context_object_created(rb_context, rb_object);
         break;
     default:
-        if (RVAL2CBOOL(rb_obj_is_kind_of(rb_object, rb_cGrnVariable))) {
-            rb_grn_context_object_created(rb_context, rb_object);
-        }
         break;
     }
 
