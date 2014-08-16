@@ -77,6 +77,7 @@ rb_grn_table_bind (RbGrnTable *rb_grn_table,
     rb_grn_object = RB_GRN_OBJECT(rb_grn_table);
     rb_grn_table->value = grn_obj_open(context, GRN_BULK, 0,
                                        rb_grn_object->range_id);
+    rb_grn_table->columns = Qnil; /* For GC while the below rb_ary_new(). */
     rb_grn_table->columns = rb_ary_new();
 }
 
