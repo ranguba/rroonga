@@ -79,6 +79,8 @@ rb_grn_context_register_floating_object (RbGrnObject *rb_grn_object)
                  (const void *)(&rb_grn_object), sizeof(RbGrnObject *),
                  NULL, NULL);
     rb_grn_object->floating = GRN_TRUE;
+
+    rb_grn_context_object_created(rb_grn_context->self, rb_grn_object->self);
 }
 
 void
