@@ -315,6 +315,7 @@ rb_grn_object_to_ruby_object (VALUE klass, grn_ctx *context, grn_obj *object,
 
     switch (object->header.type) {
     case GRN_ACCESSOR:
+    case GRN_SNIP:
     case GRN_TABLE_NO_KEY:
     case GRN_TABLE_HASH_KEY:
     case GRN_TABLE_PAT_KEY:
