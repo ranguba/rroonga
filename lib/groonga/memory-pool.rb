@@ -24,7 +24,6 @@ module Groonga
 
     def register(object)
       return unless object.temporary?
-      return unless object.is_a?(Groonga::Table)
       @temporary_objects[object] = true
     end
 
