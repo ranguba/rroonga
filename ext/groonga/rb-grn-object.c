@@ -1,6 +1,6 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
-  Copyright (C) 2009-2013  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2014  Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -52,7 +52,7 @@ rb_grn_object_from_ruby_object (VALUE object, grn_ctx **context)
             rb_grn_context_check(*context, object);
             if (!grn_object)
                 rb_raise(rb_eArgError,
-                         "unregistered groonga object: name: <%s>",
+                         "unregistered Groonga object: name: <%s>",
                          rb_grn_inspect(object));
             return grn_object;
         } else if (RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cInteger))) {
@@ -60,24 +60,24 @@ rb_grn_object_from_ruby_object (VALUE object, grn_ctx **context)
             rb_grn_context_check(*context, object);
             if (!grn_object)
                 rb_raise(rb_eArgError,
-                         "unregistered groonga object: ID: <%s>",
+                         "unregistered Groonga object: ID: <%s>",
                          rb_grn_inspect(object));
             return grn_object;
         }
     }
 
     if (!RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cGrnObject))) {
-        rb_raise(rb_eTypeError, "not a groonga object: <%s>",
+        rb_raise(rb_eTypeError, "not a Groonga object: <%s>",
                  rb_grn_inspect(object));
     }
 
     Data_Get_Struct(object, RbGrnObject, rb_grn_object);
     if (!rb_grn_object)
-        rb_raise(rb_eGrnError, "groonga object is NULL");
+        rb_raise(rb_eGrnError, "Groonga object is NULL");
 
     if (!rb_grn_object->object) {
         rb_raise(rb_eGrnClosed,
-                 "can't access already closed groonga object: %s",
+                 "can't access already closed Groonga object: %s",
                  rb_grn_inspect(CLASS_OF(rb_grn_object->self)));
     }
 
@@ -155,7 +155,7 @@ rb_grn_object_run_finalizer (grn_ctx *context, grn_obj *grn_object,
         break;
     default:
         rb_raise(rb_eTypeError,
-                 "unsupported groonga object type for finalizer: %s(%#x)",
+                 "unsupported Groonga object type for finalizer: %s(%#x)",
                  rb_grn_inspect_type(grn_object->header.type),
                  grn_object->header.type);
         break;
@@ -280,7 +280,7 @@ rb_grn_object_to_ruby_class (grn_obj *object)
         break;
       default:
         rb_raise(rb_eTypeError,
-                 "unsupported groonga object type for class detection: 0x%x",
+                 "unsupported Groonga object type for class detection: 0x%x",
                  object->header.type);
         break;
     }
@@ -478,7 +478,7 @@ rb_grn_object_assign (VALUE klass, VALUE self, VALUE rb_context,
                             context, object);
     } else {
         rb_raise(rb_eTypeError,
-                 "unsupported groonga object type for assignment: %s(%#x)",
+                 "unsupported Groonga object type for assignment: %s(%#x)",
                  rb_grn_inspect_type(object->header.type),
                  object->header.type);
     }
@@ -1177,7 +1177,7 @@ rb_grn_object_get_range (VALUE self)
 }
 
 /*
- * _object_ と _other_ が同じgroongaのオブジェクトなら +true+ を返
+ * _object_ と _other_ が同じGroongaのオブジェクトなら +true+ を返
  * し、そうでなければ +false+ を返す。
  *
  * @overload ==(other)
