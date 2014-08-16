@@ -88,6 +88,19 @@ rb_grn_object_from_ruby_object (VALUE object, grn_ctx **context)
 }
 
 static void
+rb_grn_object_unbind (RbGrnObject *rb_grn_object)
+{
+    debug("unbind: %p:%p:%p %s(%#x)\n",
+          rb_grn_object->context, rb_grn_object->object, rb_grn_object,
+          rb_grn_inspect_type(rb_grn_object->object->header.type),
+          rb_grn_object->object->header.type);
+
+    rb_grn_object->rb_grn_context = NULL;
+    rb_grn_object->context = NULL;
+    rb_grn_object->object = NULL;
+}
+
+static void
 rb_grn_object_run_finalizer (grn_ctx *context, grn_obj *grn_object,
                              RbGrnObject *rb_grn_object)
 {
@@ -160,19 +173,8 @@ rb_grn_object_run_finalizer (grn_ctx *context, grn_obj *grn_object,
                  grn_object->header.type);
         break;
     }
-}
 
-static void
-rb_grn_object_unbind (RbGrnObject *rb_grn_object)
-{
-    debug("unbind: %p:%p:%p %s(%#x)\n",
-          rb_grn_object->context, rb_grn_object->object, rb_grn_object,
-          rb_grn_inspect_type(rb_grn_object->object->header.type),
-          rb_grn_object->object->header.type);
-
-    rb_grn_object->rb_grn_context = NULL;
-    rb_grn_object->context = NULL;
-    rb_grn_object->object = NULL;
+    rb_grn_object_unbind(rb_grn_object);
 }
 
 static grn_obj *
@@ -189,7 +191,6 @@ rb_grn_object_finalizer (grn_ctx *context, int n_args, grn_obj **grn_objects,
 
     grn_obj_user_data(context, grn_object)->ptr = NULL;
     rb_grn_object_run_finalizer(context, grn_object, rb_grn_object);
-    rb_grn_object_unbind(rb_grn_object);
 
     return NULL;
 }
@@ -223,6 +224,7 @@ rb_grn_object_free (RbGrnObject *rb_grn_object)
             } else {
                 rb_grn_object_run_finalizer(context, grn_object, rb_grn_object);
             }
+        } else {
             rb_grn_object_unbind(rb_grn_object);
         }
         if (rb_grn_object->need_close) {
@@ -588,8 +590,9 @@ rb_grn_object_close (VALUE self)
     if (object && context) {
         if (rb_grn_object->have_finalizer) {
             rb_grn_object_run_finalizer(context, object, rb_grn_object);
+        } else {
+            rb_grn_object_unbind(rb_grn_object);
         }
-        rb_grn_object_unbind(rb_grn_object);
         grn_obj_close(context, object);
     }
 
