@@ -544,7 +544,7 @@ rb_grn_table_get_column (VALUE self, VALUE rb_name)
     owner = column->header.type == GRN_ACCESSOR;
     rb_column = GRNCOLUMN2RVAL(Qnil, context, column, owner);
     if (owner) {
-        rb_iv_set(rb_column, "table", self);
+        rb_grn_context_register_floating_object(DATA_PTR(rb_column));
     }
     rb_grn_named_object_set_name(RB_GRN_NAMED_OBJECT(DATA_PTR(rb_column)),
                                  name, name_size);

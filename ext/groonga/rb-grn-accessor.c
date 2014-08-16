@@ -66,6 +66,7 @@ void
 rb_grn_accessor_finalizer (grn_ctx *context, grn_obj *grn_object,
                            RbGrnAccessor *rb_accessor)
 {
+    rb_grn_context_unregister_floating_object(RB_GRN_OBJECT(rb_accessor));
     rb_grn_named_object_finalizer(context, grn_object,
                                   RB_GRN_NAMED_OBJECT(rb_accessor));
     if (context && rb_accessor->value)

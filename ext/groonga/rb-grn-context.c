@@ -120,7 +120,7 @@ rb_grn_context_close_floating_objects (RbGrnContext *rb_grn_context)
     rb_grn_context->floating_objects = NULL;
     GRN_HASH_EACH(context, floating_objects, id, &floating_object, NULL, NULL, {
             (*floating_object)->floating = GRN_FALSE;
-            grn_obj_close(context, RB_GRN_OBJECT(*floating_object)->object);
+            rb_funcall((*floating_object)->self, rb_intern("close"), 0);
         });
     grn_hash_close(context, floating_objects);
 }
