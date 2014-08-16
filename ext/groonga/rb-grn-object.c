@@ -577,7 +577,9 @@ rb_grn_object_close (VALUE self)
     rb_grn_object_deconstruct(rb_grn_object, &object, &context,
                               NULL, NULL, NULL, NULL);
     if (object && context) {
-        rb_grn_object_run_finalizer(context, object, rb_grn_object);
+        if (rb_grn_object->have_finalizer) {
+            rb_grn_object_run_finalizer(context, object, rb_grn_object);
+        }
         grn_obj_close(context, object);
     }
 
