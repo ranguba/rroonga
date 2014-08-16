@@ -109,51 +109,51 @@ rb_grn_object_run_finalizer (grn_ctx *context, grn_obj *grn_object,
     rb_grn_object->have_finalizer = GRN_FALSE;
 
     switch (grn_object->header.type) {
-      case GRN_DB:
+    case GRN_DB:
         rb_grn_database_finalizer(context, rb_grn_context,
                                   grn_object, rb_grn_object);
         break;
-      case GRN_TYPE:
-      case GRN_PROC:
-      case GRN_CURSOR_TABLE_HASH_KEY:
-      case GRN_CURSOR_TABLE_PAT_KEY:
-      case GRN_CURSOR_TABLE_DAT_KEY:
-      case GRN_CURSOR_TABLE_NO_KEY:
+    case GRN_TYPE:
+    case GRN_PROC:
+    case GRN_CURSOR_TABLE_HASH_KEY:
+    case GRN_CURSOR_TABLE_PAT_KEY:
+    case GRN_CURSOR_TABLE_DAT_KEY:
+    case GRN_CURSOR_TABLE_NO_KEY:
         break;
-      case GRN_TABLE_HASH_KEY:
-      case GRN_TABLE_PAT_KEY:
-      case GRN_TABLE_DAT_KEY:
+    case GRN_TABLE_HASH_KEY:
+    case GRN_TABLE_PAT_KEY:
+    case GRN_TABLE_DAT_KEY:
         rb_grn_table_key_support_finalizer(context, grn_object,
                                            RB_GRN_TABLE_KEY_SUPPORT(rb_grn_object));
         break;
-      case GRN_TABLE_NO_KEY:
+    case GRN_TABLE_NO_KEY:
         rb_grn_table_finalizer(context, grn_object,
                                RB_GRN_TABLE(rb_grn_object));
         break;
-      case GRN_CURSOR_COLUMN_INDEX:
-          break;
-      case GRN_COLUMN_FIX_SIZE:
-      case GRN_COLUMN_VAR_SIZE:
+    case GRN_CURSOR_COLUMN_INDEX:
+        break;
+    case GRN_COLUMN_FIX_SIZE:
+    case GRN_COLUMN_VAR_SIZE:
         rb_grn_column_finalizer(context, grn_object,
                                 RB_GRN_COLUMN(rb_grn_object));
         break;
-      case GRN_COLUMN_INDEX:
+    case GRN_COLUMN_INDEX:
         rb_grn_index_column_finalizer(context, grn_object,
                                       RB_GRN_INDEX_COLUMN(rb_grn_object));
         break;
-      case GRN_ACCESSOR:
+    case GRN_ACCESSOR:
         rb_grn_accessor_finalizer(context, grn_object,
                                   RB_GRN_ACCESSOR(rb_grn_object));
         break;
-      case GRN_EXPR:
+    case GRN_EXPR:
         rb_grn_expression_finalizer(context, grn_object,
                                     RB_GRN_EXPRESSION(rb_grn_object));
         break;
-      case GRN_SNIP:
+    case GRN_SNIP:
         rb_grn_snippet_finalizer(context, grn_object,
                                  RB_GRN_SNIPPET(rb_grn_object));
         break;
-      default:
+    default:
         rb_raise(rb_eTypeError,
                  "unsupported groonga object type for finalizer: %s(%#x)",
                  rb_grn_inspect_type(grn_object->header.type),
