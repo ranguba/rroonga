@@ -66,7 +66,7 @@ class DatabaseTest < Test::Unit::TestCase
     end
 
     Groonga::Database.create(:path => @database_path.to_s)
-    assert_not_predicate(Groonga::Database.new(db_path.to_s), :closed?)
+    assert_not_predicate(Groonga::Database.new(@database_path.to_s), :closed?)
   end
 
   def test_each
