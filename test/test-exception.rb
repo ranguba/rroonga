@@ -103,6 +103,11 @@ class TooManyOpenFilesTest < Test::Unit::TestCase
     @sub_context = create_sub_context
   end
 
+  def teardown
+    @sub_context.database.close
+    @sub_context.close
+  end
+
   def test_database_each
     setup_users
 
