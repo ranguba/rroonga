@@ -20,11 +20,12 @@ class DatabaseTest < Test::Unit::TestCase
     assert_nil(Groonga::Context.default.database)
 
     assert_not_predicate(@database_path, :exist?)
-    database = Groonga::Database.create(:path => @database_path.to_s)
-    assert_predicate(@database_path, :exist?)
-    assert_not_predicate(database, :closed?)
+    Groonga::Database.create(:path => @database_path.to_s) do |database|
+      assert_predicate(@database_path, :exist?)
+      assert_not_predicate(database, :closed?)
 
-    assert_equal(database, Groonga::Context.default.database)
+      assert_equal(database, Groonga::Context.default.database)
+    end
   end
 
   def test_temporary
@@ -36,10 +37,14 @@ class DatabaseTest < Test::Unit::TestCase
   end
 
   def test_open
-    database = Groonga::Database.create(:path => @database_path.to_s)
-    database.close
-
+    create_context = Groonga::Context.new
+    database = nil
+    create_context.create_database(@database_path.to_s) do |_database|
+      database = _database
+    end
     assert_predicate(database, :closed?)
+    create_context.close
+
     called = false
     Groonga::Database.open(@database_path.to_s) do |_database|
       database = _database
@@ -51,27 +56,40 @@ class DatabaseTest < Test::Unit::TestCase
   end
 
   def test_close
-    database = Groonga::Database.create(:path => @database_path.to_s)
-    database.close
+    create_context = Groonga::Context.new
+    create_context.create_database(@database_path.to_s) do
+    end
+    create_context.close
 
-    database = Groonga::Database.open(@database_path.to_s)
-    assert_not_predicate(database, :closed?)
-    database.close
+    database = nil
+    Groonga::Database.open(@database_path.to_s) do |_database|
+      database = _database
+      assert_not_predicate(database, :closed?)
+    end
     assert_predicate(database, :closed?)
   end
 
   def test_new
     assert_raise(Groonga::NoSuchFileOrDirectory) do
-      Groonga::Database.new(@database_path.to_s)
+      new_context = Groonga::Context.new
+      Groonga::Database.new(@database_path.to_s, :context => new_context)
     end
 
-    Groonga::Database.create(:path => @database_path.to_s)
-    assert_not_predicate(Groonga::Database.new(@database_path.to_s), :closed?)
+    create_context = Groonga::Context.new
+    create_context.create_database(@database_path.to_s) do
+    end
+
+    database = Groonga::Database.new(@database_path.to_s)
+    begin
+      assert_not_predicate(database, :closed?)
+    ensure
+      database.close
+    end
   end
 
   def test_each
-    database = Groonga::Database.create(:path => @database_path.to_s)
-    default_object_names = database.collect {|object| object.name}.sort
+    setup_database
+    default_object_names = @database.collect {|object| object.name}.sort
     assert_send([default_object_names, :include?, "Bool"])
   end
 
