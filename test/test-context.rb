@@ -199,13 +199,17 @@ COMMANDS
 
     private
     def restore(commands, &block)
-      Groonga::Database.create(:path => @database_path.to_s)
-
-      context.restore(commands, &block)
+      restore_context = Groonga::Context.new
+      restore_context.create_database(@database_path.to_s) do
+        restore_context.restore(commands, &block)
+      end
     end
 
     def dump
-      Groonga::DatabaseDumper.dump
+      dump_context = Groonga::Context.new
+      dump_context.open_database(@database_path.to_s) do
+        Groonga::DatabaseDumper.dump(:context => dump_context)
+      end
     end
   end
 end
