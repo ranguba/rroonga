@@ -571,20 +571,12 @@ rb_grn_object_deconstruct (RbGrnObject *rb_grn_object,
         *range = rb_grn_object->range;
 }
 
-/*
- * _object_ が使用しているリソースを開放する。これ以降 _object_ を
- * 使うことはできない。
- *
- * @overload close
- */
-VALUE
-rb_grn_object_close (VALUE self)
+void
+rb_grn_object_close_raw (RbGrnObject *rb_grn_object)
 {
-    RbGrnObject *rb_grn_object;
     grn_obj *object;
     grn_ctx *context;
 
-    rb_grn_object = SELF(self);
     rb_grn_object_deconstruct(rb_grn_object, &object, &context,
                               NULL, NULL, NULL, NULL);
     if (object && context) {
@@ -595,6 +587,21 @@ rb_grn_object_close (VALUE self)
         }
         grn_obj_close(context, object);
     }
+}
+
+/*
+ * _object_ が使用しているリソースを開放する。これ以降 _object_ を
+ * 使うことはできない。
+ *
+ * @overload close
+ */
+VALUE
+rb_grn_object_close (VALUE self)
+{
+    RbGrnObject *rb_grn_object;
+
+    rb_grn_object = SELF(self);
+    rb_grn_object_close_raw(rb_grn_object);
 
     return Qnil;
 }

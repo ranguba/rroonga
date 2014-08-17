@@ -375,6 +375,7 @@ VALUE          rb_grn_object_set_raw                (RbGrnObject *rb_grn_object,
                                                      VALUE rb_value,
                                                      int flags,
                                                      VALUE related_object);
+void           rb_grn_object_close_raw              (RbGrnObject *rb_grn_object);
 VALUE          rb_grn_object_close                  (VALUE object);
 VALUE          rb_grn_object_closed_p               (VALUE object);
 VALUE          rb_grn_object_inspect_object         (VALUE inspected,

@@ -1,6 +1,6 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
-  Copyright (C) 2010-2012  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2010-2014  Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -120,7 +120,7 @@ rb_grn_context_close_floating_objects (RbGrnContext *rb_grn_context)
     rb_grn_context->floating_objects = NULL;
     GRN_HASH_EACH(context, floating_objects, id, &floating_object, NULL, NULL, {
         (*floating_object)->floating = GRN_FALSE;
-        rb_funcall((*floating_object)->self, rb_intern("close"), 0);
+        rb_grn_object_close_raw(*floating_object);
     });
     grn_hash_close(context, floating_objects);
 }
