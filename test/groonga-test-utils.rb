@@ -123,7 +123,6 @@ module GroongaTestUtils
     teardown_database
     Groonga::Context.default.close
     Groonga::Context.default = nil
-    GC.start
     teardown_log_path
     teardown_tmp_directory
   end
