@@ -19,10 +19,9 @@ class DatabaseTest < Test::Unit::TestCase
   def test_create
     assert_nil(Groonga::Context.default.database)
 
-    db_path = @tmp_dir + "db"
-    assert_not_predicate(db_path, :exist?)
-    database = Groonga::Database.create(:path => db_path.to_s)
-    assert_predicate(db_path, :exist?)
+    assert_not_predicate(@database_path, :exist?)
+    database = Groonga::Database.create(:path => @database_path.to_s)
+    assert_predicate(@database_path, :exist?)
     assert_not_predicate(database, :closed?)
 
     assert_equal(database, Groonga::Context.default.database)
@@ -37,13 +36,12 @@ class DatabaseTest < Test::Unit::TestCase
   end
 
   def test_open
-    db_path = @tmp_dir + "db"
-    database = Groonga::Database.create(:path => db_path.to_s)
+    database = Groonga::Database.create(:path => @database_path.to_s)
     database.close
 
     assert_predicate(database, :closed?)
     called = false
-    Groonga::Database.open(db_path.to_s) do |_database|
+    Groonga::Database.open(@database_path.to_s) do |_database|
       database = _database
       assert_not_predicate(database, :closed?)
       called = true
@@ -53,29 +51,26 @@ class DatabaseTest < Test::Unit::TestCase
   end
 
   def test_close
-    db_path = @tmp_dir + "db"
-    database = Groonga::Database.create(:path => db_path.to_s)
+    database = Groonga::Database.create(:path => @database_path.to_s)
     database.close
 
-    database = Groonga::Database.open(db_path.to_s)
+    database = Groonga::Database.open(@database_path.to_s)
     assert_not_predicate(database, :closed?)
     database.close
     assert_predicate(database, :closed?)
   end
 
   def test_new
-    db_path = @tmp_dir + "db"
     assert_raise(Groonga::NoSuchFileOrDirectory) do
-      Groonga::Database.new(db_path.to_s)
+      Groonga::Database.new(@database_path.to_s)
     end
 
-    Groonga::Database.create(:path => db_path.to_s)
+    Groonga::Database.create(:path => @database_path.to_s)
     assert_not_predicate(Groonga::Database.new(db_path.to_s), :closed?)
   end
 
   def test_each
-    db_path = @tmp_dir + "db"
-    database = Groonga::Database.create(:path => db_path.to_s)
+    database = Groonga::Database.create(:path => @database_path.to_s)
     default_object_names = database.collect {|object| object.name}.sort
     assert_send([default_object_names, :include?, "Bool"])
   end

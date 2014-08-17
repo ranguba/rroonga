@@ -30,12 +30,11 @@ class ContextTest < Test::Unit::TestCase
   end
 
   def test_create_database
-    db_path = @tmp_dir + "db"
-    assert_not_predicate(db_path, :exist?)
+    assert_not_predicate(@database_path, :exist?)
     context = Groonga::Context.new
     assert_equal(nil, context.database)
-    database = context.create_database(db_path.to_s)
-    assert_predicate(db_path, :exist?)
+    database = context.create_database(@database_path.to_s)
+    assert_predicate(@database_path, :exist?)
     assert_not_predicate(database, :closed?)
     assert_equal(database, context.database)
   end
@@ -50,14 +49,13 @@ class ContextTest < Test::Unit::TestCase
   end
 
   def test_open_database
-    db_path = @tmp_dir + "db"
-    database = Groonga::Database.create(:path => db_path.to_s)
+    database = Groonga::Database.create(:path => @database_path.to_s)
     database.close
 
     assert_predicate(database, :closed?)
     called = false
     context = Groonga::Context.new
-    context.open_database(db_path.to_s) do |_database|
+    context.open_database(@database_path.to_s) do |_database|
       database = _database
       assert_not_predicate(database, :closed?)
       called = true
@@ -201,8 +199,7 @@ COMMANDS
 
     private
     def restore(commands, &block)
-      restored_db_path = @tmp_dir + "restored.db"
-      Groonga::Database.create(:path => restored_db_path.to_s)
+      Groonga::Database.create(:path => @database_path.to_s)
 
       context.restore(commands, &block)
     end

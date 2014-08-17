@@ -1,4 +1,4 @@
-# Copyright (C) 2009  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2014  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -43,6 +43,8 @@ module GroongaTestUtils
     setup_context
 
     @database = nil
+    name_for_path = name.gsub(/[\(\)\[\] ]/, "-")
+    @database_path = @tmp_dir + "#{name_for_path}.db"
   end
 
   def setup_tmp_directory
@@ -107,7 +109,6 @@ module GroongaTestUtils
   end
 
   def setup_database
-    @database_path = @tmp_dir + "database"
     @database = Groonga::Database.create(:path => @database_path.to_s)
   end
 
