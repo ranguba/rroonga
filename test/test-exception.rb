@@ -100,7 +100,7 @@ class TooManyOpenFilesTest < Test::Unit::TestCase
 
   def setup
     setup_database
-    @context = create_sub_context
+    @sub_context = create_sub_context
   end
 
   def test_database_each
@@ -108,7 +108,7 @@ class TooManyOpenFilesTest < Test::Unit::TestCase
 
     assert_error do
       over_limit do
-        @context.database.each do
+        @sub_context.database.each do
         end
       end
     end
@@ -119,7 +119,7 @@ class TooManyOpenFilesTest < Test::Unit::TestCase
 
     assert_error do
       over_limit do
-        @context["Users"]
+        @sub_context["Users"]
       end
     end
   end
@@ -131,7 +131,7 @@ class TooManyOpenFilesTest < Test::Unit::TestCase
       end
     end
 
-    table = @context["Users"]
+    table = @sub_context["Users"]
     assert_error do
       over_limit do
         table.columns
@@ -152,7 +152,7 @@ class TooManyOpenFilesTest < Test::Unit::TestCase
       end
     end
 
-    column = @context["Users"].column("Bookmarks_user")
+    column = @sub_context["Users"].column("Bookmarks_user")
     assert_error do
       over_limit do
         column.sources
@@ -223,7 +223,7 @@ class TooManyOpenFilesTest < Test::Unit::TestCase
   end
 
   def create_reference_table(key)
-    Groonga::Hash.create(:context => @context,
+    Groonga::Hash.create(:context => @sub_context,
                          :name => "Bookmarks",
                          :key_type => key)
   end
