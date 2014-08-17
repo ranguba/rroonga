@@ -49,13 +49,17 @@ class ContextTest < Test::Unit::TestCase
   end
 
   def test_open_database
-    database = Groonga::Database.create(:path => @database_path.to_s)
-    database.close
-
+    create_context = Groonga::Context.new
+    database = nil
+    create_context.create_database(@database_path.to_s) do |_database|
+      database = _database
+    end
     assert_predicate(database, :closed?)
+    create_context.close
+
     called = false
-    context = Groonga::Context.new
-    context.open_database(@database_path.to_s) do |_database|
+    open_context = Groonga::Context.new
+    open_context.open_database(@database_path.to_s) do |_database|
       database = _database
       assert_not_predicate(database, :closed?)
       called = true
