@@ -1,5 +1,33 @@
 h1. NEWS
 
+h2(#4-0-4). 4.0.4: 2014-08-29 (planned)
+
+h3. Improvements
+
+* Supported Groonga 4.0.4. Groonga 4.0.3 or older are not supported.
+* Added {Groonga::ProcedureType} that has constants as GRN_PROC_XXX.
+* Added {Groonga::Procedure#type} as grn_proc_get_type().
+  <pre>
+  procedure = Groonga["TokenBigram"]
+  p procedure.type == Groonga::ProcedureType::TOKENIZER  #=> true
+  </pre>
+* Avoided a crash when {Groonga::Record#inspct} is called on exit.
+  [GitHub#18] [Reported by Ippei Obayashi]
+* Updated Free Software Foundation address. [Masafumi Yokoyama]
+* Supported reference weight vector. It requires Groonga 4.0.4 or later.
+* Updated homepage in gemspec to use ranguba.org. [Masafumi Yokoyama]
+* Reduce memory usage without GC.
+
+h3. Fixes
+
+* Fixed a GC related crash when GC is run while {Groonga::Table#group}.
+
+h3. Thanks
+
+* Ippei Obayashi
+* uu59
+* cosmo0920
+
 h2(#4-0-3). 4.0.3: 2014-06-04
 
 h3. Fixes
