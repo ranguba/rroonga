@@ -1,10 +1,10 @@
 h1. NEWS
 
-h2(#4-0-4). 4.0.4: 2014-08-29 (planned)
+h2(#4-0-4). 4.0.4: 2014-08-29
 
 h3. Improvements
 
-* Supported Groonga 4.0.4. Groonga 4.0.3 or older are not supported.
+* Supported Groonga 4.0.4 or later. Groonga 4.0.3 or older are not supported.
 * Added {Groonga::ProcedureType} that has constants as GRN_PROC_XXX.
 * Added {Groonga::Procedure#type} as grn_proc_get_type().
   <pre>
