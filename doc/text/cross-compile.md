@@ -11,6 +11,7 @@ How to Cross compile Rroonga
 ```bash
 $ rbenv install 1.9.3-p547
 $ gem install rubygems-update
+$ update_rubygems
 $ gem install bundler
 $ rbenv install 2.0.0-p353
 $ gem install bundler
