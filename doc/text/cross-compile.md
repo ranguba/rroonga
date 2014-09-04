@@ -50,7 +50,6 @@ $ bundle exec rake-compiler cross-ruby HOST=x86_64-w64-mingw32 VERSION=2.1.2 [EX
 $ rbenv local 1.9.3-p547
 $ bundle exec rake:build
 $ bundle exec rake RUBY_CC_VERSION=1.9.3:2.0.0:2.1.2 cross clean native gem
-$ make clean
 $ bundle exec rake clean:groonga
 $ bundle exec rake RUBY_CC_VERSION=1.9.3:2.0.0:2.1.2 cross RROONGA_USE_GROONGA_X64=true clean native gem
 ```
