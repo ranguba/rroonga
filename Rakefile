@@ -163,4 +163,17 @@ namespace :clean do
   end
 end
 
+desc "Build cross compile binary with Vagrant"
+namespace :build do
+  task :windows do
+    pkg_dir = "#{base_dir}/pkg"
+    mkdir pkg_dir unless File.exist?(pkg_dir)
+    cd "build/windows" do
+      sh("vagrant", "up")
+      cp_r("pkg", base_dir)
+      sh("vagrant", "destroy", "-f")
+    end
+  end
+end
+
 task :default => :test
