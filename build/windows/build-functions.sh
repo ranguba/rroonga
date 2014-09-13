@@ -18,7 +18,7 @@ function ruby_install_with_bundler() {
 function bundle_install() {
     ruby_version=$1
     rbenv local $ruby_version
-    bundle install --path vendor/bundle
+    bundle install --path vendor/bundle -j $CPU_NUMS
 }
 
 function install_rake_compiler_cross_ruby() {
