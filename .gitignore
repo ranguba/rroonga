@@ -20,3 +20,5 @@
 /doc/po/rroonga.pot
 /.yardoc/
 /references/
+/build/windows/.vagrant/
+/build/windows/pkg/
