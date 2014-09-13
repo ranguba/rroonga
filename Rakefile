@@ -170,7 +170,7 @@ namespace :build do
     mkdir pkg_dir unless File.exist?(pkg_dir)
     cd "build/windows" do
       sh("vagrant", "up")
-      cp_r("pkg", base_dir)
+      cp(Dir.glob("pkg/rroonga-*-mingw32.gem"), pkg_dir)
       sh("vagrant", "destroy", "-f")
     end
   end
