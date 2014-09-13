@@ -26,7 +26,7 @@ bash -l -c 'source ~/.bashrc'
 old_ruby_install_with_bundler $RUBY19
 # Ruby 2.0.0
 ruby_install_with_bundler $RUBY20
-# Ruby 2.1.2
+# Ruby 2.1.x
 ruby_install_with_bundler $RUBY21
 
 if [ ! -d ~/rroonga ]; then
@@ -48,5 +48,5 @@ install_rake_compiler_cross_ruby $RUBY21
 # cross-compile
 cross_compile
 
-# copy pkg/*.gem to /vagrant/pkgs
+# copy pkg/*.gem to /vagrant/pkg
 cp_pkg_gems
