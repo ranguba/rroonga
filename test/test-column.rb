@@ -169,7 +169,7 @@ class ColumnTest < Test::Unit::TestCase
                  result.records.collect do |record|
                    record["body"]
                  end)
-    assert_equal("#<Groonga::Expression noname($1:\"\")" +
+    assert_equal("#<Groonga::Expression noname($1:null)" +
                  "{2body GET_VALUE,0\"drive\",0MATCH}>",
                  result.expression.inspect)
   end
@@ -200,7 +200,7 @@ class ColumnTest < Test::Unit::TestCase
                  result.records.collect do |record|
                    record["body"]
                  end)
-    assert_equal("#<Groonga::Expression noname($1:\"\")" +
+    assert_equal("#<Groonga::Expression noname($1:null)" +
                  "{2body GET_VALUE,0\"drive\",0MATCH}>",
                  result.expression.inspect)
   end
@@ -218,8 +218,8 @@ class ColumnTest < Test::Unit::TestCase
                  result.records.collect do |record|
                    record["body"]
                  end)
-    assert_equal("#<Groonga::Expression noname($1:\"\")" +
-                 "{0\"\",2body GET_VALUE,0\"drive\",0MATCH}>",
+    assert_equal("#<Groonga::Expression noname($1:null)" +
+                 "{0null,2body GET_VALUE,0\"drive\",0MATCH}>",
                  result.expression.inspect)
   end
 
@@ -233,8 +233,8 @@ class ColumnTest < Test::Unit::TestCase
                  result.records.collect do |record|
                    record["body"]
                  end)
-    assert_equal("#<Groonga::Expression noname($1:\"\")" +
-                 "{1\"\",2body GET_VALUE,0\"drive\",0MATCH}>",
+    assert_equal("#<Groonga::Expression noname($1:null)" +
+                 "{1null,2body GET_VALUE,0\"drive\",0MATCH}>",
                  result.expression.inspect)
   end
 
