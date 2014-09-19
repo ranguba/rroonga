@@ -1,7 +1,7 @@
 How to Cross compile Rroonga
 ===
 
-# For GNU/Linux Users
+# For Debian GNU/Linux like Linux distribution Users
 
 ## apt
 
