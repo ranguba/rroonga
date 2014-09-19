@@ -1,6 +1,8 @@
 How to Cross compile Rroonga
 ===
 
+# For GNU/Linux Users
+
 ## apt
 
 * mingw-w64
