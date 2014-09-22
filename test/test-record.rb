@@ -625,6 +625,7 @@ class RecordTest < Test::Unit::TestCase
     end
 
     def test_to_json
+      ENV["TZ"] = "Japan"
       created_at = Time.parse("2013-05-16T16:57:34+09:00")
       values = {
         "uri"        => "http://groonga.org/",
