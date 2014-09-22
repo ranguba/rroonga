@@ -642,11 +642,5 @@ class RecordTest < Test::Unit::TestCase
       }.to_json
       assert_equal(expected, groonga.to_json)
     end
-
-    def test_time_zone
-      ENV["TZ"] = "Japan"
-      t = Time.new
-      assert_equal("JST", t.zone.to_s)
-    end
   end
 end
