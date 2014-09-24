@@ -85,7 +85,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency("groonga-client", ">= 0.0.3")
   s.add_runtime_dependency("json")
   s.add_runtime_dependency("archive-zip")
-  s.add_development_dependency("test-unit", [">= 2.4.6"])
+  s.add_development_dependency("test-unit", [">= 3.0.0"])
   s.add_development_dependency("test-unit-notify")
   s.add_development_dependency("rake")
   s.add_development_dependency("rake-compiler")
