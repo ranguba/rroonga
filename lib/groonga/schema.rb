@@ -73,7 +73,7 @@ module Groonga
       def initialize(table, options)
         @table = table
         @options = options
-        super("creating table with differnt options: " +
+        super("creating table with different options: " +
               "#{@table.inspect}: #{@options.inspect}")
       end
     end
@@ -85,7 +85,7 @@ module Groonga
       def initialize(column, options)
         @column = column
         @options = options
-        super("creating column with differnt option: " +
+        super("creating column with different option: " +
               "#{@column.inspect}: #{@options.inspect}")
       end
     end
