@@ -44,8 +44,8 @@
 #  define rb_sym2str(name) (rb_id2name(SYM2ID(name)))
 #endif
 
-#ifndef HAVE_RB_STR2SYM
-#  define rb_str2sym(name) (ID2SYM(rb_intern(name)))
+#ifndef HAVE_RB_TO_SYMBOL
+#  define rb_to_symbol(name) (ID2SYM(name))
 #endif
 
 #include <groonga.h>
