@@ -210,10 +210,10 @@ rb_grn_variable_size_column_array_reference (VALUE self, VALUE rb_id)
 
         rb_element = rb_hash_new();
         rb_hash_aset(rb_element,
-                     rb_str2sym("value"),
+                     ID2SYM(rb_intern("value")),
                      rb_element_value);
         rb_hash_aset(rb_element,
-                     rb_str2sym("weight"),
+                     ID2SYM(rb_intern("weight")),
                      UINT2NUM(weight));
 
         rb_ary_push(rb_value, rb_element);

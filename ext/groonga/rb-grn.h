@@ -584,7 +584,7 @@ VALUE          rb_grn_column_expression_builder_build
                                                     (VALUE self);
 
 
-#define RB_GRN_INTERN(string)         (rb_str2sym(string))
+#define RB_GRN_INTERN(string)         (ID2SYM(rb_intern(string)))
 
 #define RVAL2CBOOL(object)            (RTEST(object))
 #define CBOOL2RVAL(boolean)           ((boolean) ? Qtrue : Qfalse)
