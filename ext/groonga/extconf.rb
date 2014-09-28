@@ -268,6 +268,8 @@ $defs << "-DGRN_MICRO_VERSION=#{real_micro}"
 
 have_header("ruby/st.h") unless have_macro("HAVE_RUBY_ST_H", "ruby.h")
 have_func("rb_errinfo", "ruby.h")
+have_func("rb_sym2str", "ruby.h")
+have_func("rb_str2sym", "ruby.h")
 have_type("enum ruby_value_type", "ruby.h")
 
 checking_for(checking_message("--enable-debug-log option")) do
