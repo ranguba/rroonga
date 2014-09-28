@@ -42,6 +42,8 @@
 
 #ifndef HAVE_RB_SYM2STR
 #  define rb_sym2str(name) (rb_id2name(SYM2ID(name)))
+#else
+#  define rb_sym2str(name) (RSTRING_PTR(rb_sym2str(name)))
 #endif
 
 #ifndef HAVE_RB_TO_SYMBOL
