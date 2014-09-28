@@ -496,7 +496,7 @@ rb_grn_double_array_trie_open_prefix_cursor (int argc, VALUE *argv, VALUE self)
         return rb_cursor;
 }
 
-VALUE
+static VALUE
 rb_grn_double_array_trie_update_by_id (VALUE self, VALUE rb_id, VALUE rb_new_key)
 {
     grn_ctx *context;
