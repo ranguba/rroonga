@@ -902,7 +902,7 @@ rb_grn_context_array_reference (VALUE self, VALUE name_or_id)
     context = SELF(self);
     switch (TYPE(name_or_id)) {
       case T_SYMBOL:
-        name = rb_id2name(SYM2ID(name_or_id));
+        name = rb_sym2str(name_or_id);
         name_size = strlen(name);
         object = rb_grn_context_get_backward_compatibility(context,
                                                            name, name_size);
