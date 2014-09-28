@@ -470,7 +470,7 @@ ruby_object_to_column_name (VALUE rb_name,
 {
     switch (TYPE(rb_name)) {
       case T_SYMBOL:
-        *name = rb_sym2str(rb_name);
+        *name = SYM2STR(rb_name);
         *name_size = strlen(*name);
         break;
       case T_STRING:
