@@ -40,6 +40,14 @@
 #  define NUM2USHORT(object) NUM2UINT(object)
 #endif
 
+#ifndef HAVE_RB_SYM2STR
+#  define rb_sym2str(name) (rb_id2name(SYM2ID(name)))
+#endif
+
+#ifndef HAVE_RB_STR2SYM
+#  define rb_str2sym(name) (ID2SYM(rb_intern(name)))
+#endif
+
 #include <groonga.h>
 
 #if defined(__cplusplus)
