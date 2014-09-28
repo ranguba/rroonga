@@ -536,13 +536,13 @@ rb_grn_double_array_trie_update (int argc, VALUE *argv, VALUE self)
 
     rb_scan_args(argc, argv, "21",
                  &rb_current_key_or_id, &rb_new_key, &rb_options);
-        rb_grn_scan_options(rb_options,
-                            "id", &rb_option_id,
-                            NULL);
-        if (RVAL2CBOOL(rb_option_id)) {
-            rb_id = rb_current_key_or_id;
-            return rb_grn_double_array_trie_update_by_id(self, rb_id, rb_new_key);
-        }
+    rb_grn_scan_options(rb_options,
+                        "id", &rb_option_id,
+                        NULL);
+    if (RVAL2CBOOL(rb_option_id)) {
+        rb_id = rb_current_key_or_id;
+        return rb_grn_double_array_trie_update_by_id(self, rb_id, rb_new_key);
+    }
 
     id = rb_grn_table_key_support_get(self, rb_current_key_or_id);
     rb_id = UINT2NUM(id);
