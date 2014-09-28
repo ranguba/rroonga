@@ -46,8 +46,8 @@
 #  define SYM2STR(name) (RSTRING_PTR(rb_sym2str(name)))
 #endif
 
-#ifndef HAVE_RB_TO_SYMBOL
-#  define rb_to_symbol(name) (ID2SYM(name))
+#ifndef HAVE_RB_ID2SYM
+#  define rb_id2sym(name) (ID2SYM(name))
 #endif
 
 #include <groonga.h>
