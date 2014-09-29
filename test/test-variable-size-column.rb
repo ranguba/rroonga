@@ -79,9 +79,9 @@ class VariableSizeColumnTest < Test::Unit::TestCase
     description = @users.define_column("description", "ShortText",
                                        :compress => :zlib)
     if context.support_zlib?
-      assert_send([description, :compressed?, :zlib])
+      assert { description.compressed?(:zlib) }
     else
-      assert_not_send([description, :compressed?, :zlib])
+      assert { not description.compressed?(:zlib) }
     end
   end
 
@@ -89,9 +89,9 @@ class VariableSizeColumnTest < Test::Unit::TestCase
     description = @users.define_column("description", "ShortText",
                                        :compress => :lzo)
     if context.support_lzo?
-      assert_send([description, :compressed?, :lzo])
+      assert { description.compressed?(:lzo) }
     else
-      assert_not_send([description, :compressed?, :lzo])
+      assert { not description.compressed?(:lzo) }
     end
   end
 
