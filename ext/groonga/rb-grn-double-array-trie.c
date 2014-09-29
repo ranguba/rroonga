@@ -1,6 +1,7 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /* vim: set sts=4 sw=4 ts=8 noet: */
 /*
+  Copyright (C) 2014  Masafumi Yokoyama <myokoym@gmail.com>
   Copyright (C) 2011  Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
@@ -495,6 +496,59 @@ rb_grn_double_array_trie_open_prefix_cursor (int argc, VALUE *argv, VALUE self)
         return rb_cursor;
 }
 
+static VALUE
+rb_grn_double_array_trie_update_by_id (VALUE self, VALUE rb_id, VALUE rb_new_key)
+{
+    grn_ctx *context;
+    grn_obj *table;
+    grn_id id, domain_id;
+    grn_obj *new_key, *domain;
+    grn_rc rc;
+
+    rb_grn_table_key_support_deconstruct(SELF(self), &table, &context,
+                                         &new_key, &domain_id, &domain,
+                                         NULL, NULL, NULL,
+                                         NULL);
+
+    id = NUM2UINT(rb_id);
+    RVAL2GRNKEY(rb_new_key, context, new_key, domain_id, domain, self);
+    rc = grn_table_update_by_id(context, table, id,
+                                GRN_BULK_HEAD(new_key), GRN_BULK_VSIZE(new_key));
+    rb_grn_rc_check(rc, self);
+
+    return Qnil;
+}
+
+/*
+ * Renames key of a record.
+ *
+ * @overload update(current_key, new_key)
+ * @overload update(id, new_key, :id=>true)
+ *
+ * @since 4.0.5
+ */
+static VALUE
+rb_grn_double_array_trie_update (int argc, VALUE *argv, VALUE self)
+{
+    grn_id id;
+    VALUE rb_current_key_or_id, rb_new_key, rb_options;
+    VALUE rb_option_id, rb_id;
+
+    rb_scan_args(argc, argv, "21",
+                 &rb_current_key_or_id, &rb_new_key, &rb_options);
+    rb_grn_scan_options(rb_options,
+                        "id", &rb_option_id,
+                        NULL);
+    if (RVAL2CBOOL(rb_option_id)) {
+        rb_id = rb_current_key_or_id;
+        return rb_grn_double_array_trie_update_by_id(self, rb_id, rb_new_key);
+    }
+
+    id = rb_grn_table_key_support_get(self, rb_current_key_or_id);
+    rb_id = UINT2NUM(id);
+    return rb_grn_double_array_trie_update_by_id(self, rb_id, rb_new_key);
+}
+
 void
 rb_grn_init_double_array_trie (VALUE mGrn)
 {
@@ -510,4 +564,7 @@ rb_grn_init_double_array_trie (VALUE mGrn)
 
     rb_define_method(rb_cGrnDoubleArrayTrie, "open_prefix_cursor",
                      rb_grn_double_array_trie_open_prefix_cursor, -1);
+
+    rb_define_method(rb_cGrnDoubleArrayTrie, "update",
+                     rb_grn_double_array_trie_update, -1);
 }

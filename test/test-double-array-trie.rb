@@ -134,6 +134,24 @@ class DoubleArrayTrieTest < Test::Unit::TestCase
     assert_equal(expected, actual)
   end
 
+  def test_update_by_key
+    users = Groonga::DoubleArrayTrie.create(:name => "Users",
+                                            :key_type => "ShortText")
+    users.add("Bob")
+
+    users.update("Bob", "Alice")
+    assert_equal(["Alice"], users.collect {|user| user.key})
+  end
+
+  def test_update_by_id
+    users = Groonga::DoubleArrayTrie.create(:name => "Users",
+                                            :key_type => "ShortText")
+    users.add("Bob")
+
+    users.update(users["Bob"].id, "Alice", :id => true)
+    assert_equal(["Alice"], users.collect {|user| user.key})
+  end
+
   def test_add_uint_key
     numbers = Groonga::DoubleArrayTrie.create(:name => "Numbers",
                                               :key_type => "UInt32")
