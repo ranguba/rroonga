@@ -670,12 +670,8 @@ rb_grn_add_vector_element (VALUE rb_element, grn_ctx *context, grn_obj *vector,
     if (RVAL2CBOOL(rb_obj_is_kind_of(rb_element, rb_cHash))) {
         VALUE rb_value;
         VALUE rb_weight;
-        ID id_value;
-        ID id_weight;
-        CONST_ID(id_value, "value");
-        CONST_ID(id_weight, "weight");
-        rb_value = rb_hash_aref(rb_element, rb_id2sym(id_value));
-        rb_weight = rb_hash_aref(rb_element, rb_id2sym(id_weight));
+        rb_value = rb_hash_aref(rb_element, RB_GRN_INTERN("value"));
+        rb_weight = rb_hash_aref(rb_element, RB_GRN_INTERN("weight"));
         RVAL2GRNOBJ(rb_value, context, &value_buffer);
         if (!NIL_P(rb_weight)) {
             weight = NUM2UINT(rb_weight);
