@@ -1,7 +1,7 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
   Copyright (C) 2011  Haruka Yoshihara <yoshihara@clear-code.com>
-  Copyright (C) 2012  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2012-2014  Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -30,7 +30,7 @@ rb_grn_posting_new (grn_posting *posting, grn_id term_id,
     parameters = rb_hash_new();
 
 #define SET_PARAMETER(key, value) \
-    rb_hash_aset(parameters, (rb_str_intern(rb_str_new2((key)))), INT2NUM((value)))
+    rb_hash_aset(parameters, RB_GRN_INTERN(key), INT2NUM((value)))
 
     SET_PARAMETER("record_id", posting->rid);
     SET_PARAMETER("section_id", posting->sid);
@@ -42,8 +42,8 @@ rb_grn_posting_new (grn_posting *posting, grn_id term_id,
 
 #undef SET_PARAMETER
 
-    rb_hash_aset(parameters, rb_str_intern(rb_str_new2("table")), rb_table);
-    rb_hash_aset(parameters, rb_str_intern(rb_str_new2("lexicon")), rb_lexicon);
+    rb_hash_aset(parameters, RB_GRN_INTERN("table"), rb_table);
+    rb_hash_aset(parameters, RB_GRN_INTERN("lexicon"), rb_lexicon);
 
     return rb_funcall(rb_cGrnPosting, rb_intern("new"), 1,
                       parameters);
