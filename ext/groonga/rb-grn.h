@@ -41,9 +41,7 @@
 #endif
 
 #ifndef HAVE_RB_SYM2STR
-#  define SYM2STR(name) (rb_id2name(SYM2ID(name)))
-#else
-#  define SYM2STR(name) (RSTRING_PTR(rb_sym2str(name)))
+#  define rb_sym2str(symbol) (rb_id2str(SYM2ID(symbol)))
 #endif
 
 #ifndef HAVE_RB_ID2SYM
@@ -605,6 +603,8 @@ VALUE          rb_grn_column_expression_builder_build
 
 #define RVAL2CBOOL(object)            (RTEST(object))
 #define CBOOL2RVAL(boolean)           ((boolean) ? Qtrue : Qfalse)
+
+#define RSYMBOL2CSTR(rb_symbol)       (RSTRING_PTR(rb_sym2str(rb_symbol)))
 
 #define RVAL2GRNENCODING(object, context) \
                                       (rb_grn_encoding_from_ruby_object(object, context))
