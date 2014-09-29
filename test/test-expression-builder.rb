@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 #
+# Copyright (C) 2014  Masafumi Yokoyama <myokoym@gmail.com>
 # Copyright (C) 2009-2012  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
@@ -386,7 +387,7 @@ EOC
       result = @documents.select do |record|
         record.content.similar_search("fast full text search real time")
       end
-      assert_equal(["Groonga overview", "Column store and aggregate query"].sort,
+      assert_equal(["Groonga overview"],
                    result.collect {|record| record.key.key}.sort)
     end
 
@@ -394,7 +395,7 @@ EOC
       result = @documents.column("content").select do |content|
         content.similar_search("fast full text search real time")
       end
-      assert_equal(["Groonga overview", "Column store and aggregate query"].sort,
+      assert_equal(["Groonga overview"],
                    result.collect {|record| record.key.key}.sort)
     end
   end
