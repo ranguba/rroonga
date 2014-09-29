@@ -2,7 +2,7 @@
 /* vim: set sts=4 sw=4 ts=8 noet: */
 /*
   Copyright (C) 2014  Masafumi Yokoyama <myokoym@gmail.com>
-  Copyright (C) 2011  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2011-2014  Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -20,7 +20,7 @@
 
 #include "rb-grn.h"
 
-#define SELF(object) ((RbGrnTableKeySupport *)DATA_PTR(object))
+#define SELF(object) ((RbGrnDoubleArrayTrie *)DATA_PTR(object))
 
 VALUE rb_cGrnDoubleArrayTrie;
 
@@ -42,6 +42,74 @@ VALUE rb_cGrnDoubleArrayTrie;
  * predictive search and common prefix search like
  * {Groonga::PatriciaTrie} . It also supports cursor API.
  */
+
+static void
+rb_grn_double_array_trie_deconstruct (RbGrnDoubleArrayTrie *rb_grn_double_array_trie,
+                                      grn_obj **double_array_trie,
+                                      grn_ctx **context,
+                                      grn_obj **key,
+                                      grn_obj **new_key,
+                                      grn_id *domain_id,
+                                      grn_obj **domain,
+                                      grn_obj **value,
+                                      grn_id *range_id,
+                                      grn_obj **range,
+                                      VALUE *columns)
+{
+    RbGrnTableKeySupport *rb_grn_table_key_support;
+
+    rb_grn_table_key_support =
+        RB_GRN_TABLE_KEY_SUPPORT(rb_grn_double_array_trie);
+
+    rb_grn_table_key_support_deconstruct(rb_grn_table_key_support,
+                                         double_array_trie, context,
+                                         key, domain_id, domain,
+                                         value, range_id, range,
+                                         columns);
+
+    if (new_key)
+        *new_key = rb_grn_double_array_trie->new_key;
+}
+
+void
+rb_grn_double_array_trie_finalizer (grn_ctx *context,
+                                    grn_obj *grn_object,
+                                    RbGrnDoubleArrayTrie *rb_grn_double_array_trie)
+{
+    RbGrnTableKeySupport *rb_grn_table_key_support;
+
+    if (!context)
+        return;
+
+    if (rb_grn_double_array_trie->new_key)
+        grn_obj_unlink(context, rb_grn_double_array_trie->new_key);
+    rb_grn_double_array_trie->new_key = NULL;
+
+    rb_grn_table_key_support =
+        RB_GRN_TABLE_KEY_SUPPORT(rb_grn_double_array_trie);
+    rb_grn_table_key_support_finalizer(context, grn_object,
+                                       rb_grn_table_key_support);
+}
+
+void
+rb_grn_double_array_trie_bind (RbGrnDoubleArrayTrie *rb_grn_double_array_trie,
+                               grn_ctx *context,
+                               grn_obj *double_array_trie)
+{
+    RbGrnObject *rb_grn_object;
+    RbGrnTableKeySupport *rb_grn_table_key_support;
+
+    rb_grn_object = RB_GRN_OBJECT(rb_grn_double_array_trie);
+
+    rb_grn_table_key_support =
+        RB_GRN_TABLE_KEY_SUPPORT(rb_grn_double_array_trie);
+    rb_grn_table_key_support_bind(rb_grn_table_key_support,
+                                  context,
+                                  double_array_trie);
+
+    rb_grn_double_array_trie->new_key =
+        grn_obj_open(context, GRN_BULK, 0, rb_grn_object->domain_id);
+}
 
 /*
  * It creates a table that manages records by double array trie.
@@ -308,8 +376,8 @@ rb_grn_double_array_trie_search (int argc, VALUE *argv, VALUE self)
     grn_bool search_options_is_set = GRN_FALSE;
     VALUE rb_key, options, rb_result, rb_operator, rb_type;
 
-    rb_grn_table_key_support_deconstruct(SELF(self), &table, &context,
-                                         &key, &domain_id, &domain,
+    rb_grn_double_array_trie_deconstruct(SELF(self), &table, &context,
+                                         &key, NULL, &domain_id, &domain,
                                          NULL, NULL, NULL,
                                          NULL);
 
@@ -505,8 +573,8 @@ rb_grn_double_array_trie_update_by_id (VALUE self, VALUE rb_id, VALUE rb_new_key
     grn_obj *new_key, *domain;
     grn_rc rc;
 
-    rb_grn_table_key_support_deconstruct(SELF(self), &table, &context,
-                                         &new_key, &domain_id, &domain,
+    rb_grn_double_array_trie_deconstruct(SELF(self), &table, &context,
+                                         NULL, &new_key, &domain_id, &domain,
                                          NULL, NULL, NULL,
                                          NULL);
 
@@ -514,6 +582,35 @@ rb_grn_double_array_trie_update_by_id (VALUE self, VALUE rb_id, VALUE rb_new_key
     RVAL2GRNKEY(rb_new_key, context, new_key, domain_id, domain, self);
     rc = grn_table_update_by_id(context, table, id,
                                 GRN_BULK_HEAD(new_key), GRN_BULK_VSIZE(new_key));
+    rb_grn_rc_check(rc, self);
+
+    return Qnil;
+}
+
+static VALUE
+rb_grn_double_array_trie_update_by_key (VALUE self,
+                                        VALUE rb_current_key,
+                                        VALUE rb_new_key)
+{
+    grn_ctx *context;
+    grn_obj *table;
+    grn_id domain_id;
+    grn_obj *current_key, *new_key, *domain;
+    grn_rc rc;
+
+    rb_grn_double_array_trie_deconstruct(SELF(self), &table, &context,
+                                         &current_key, &new_key,
+                                         &domain_id, &domain,
+                                         NULL, NULL, NULL,
+                                         NULL);
+
+    RVAL2GRNKEY(rb_current_key, context, current_key, domain_id, domain, self);
+    RVAL2GRNKEY(rb_new_key, context, new_key, domain_id, domain, self);
+    rc = grn_table_update(context, table,
+                          GRN_BULK_HEAD(current_key),
+                          GRN_BULK_VSIZE(current_key),
+                          GRN_BULK_HEAD(new_key),
+                          GRN_BULK_VSIZE(new_key));
     rb_grn_rc_check(rc, self);
 
     return Qnil;
@@ -530,9 +627,8 @@ rb_grn_double_array_trie_update_by_id (VALUE self, VALUE rb_id, VALUE rb_new_key
 static VALUE
 rb_grn_double_array_trie_update (int argc, VALUE *argv, VALUE self)
 {
-    grn_id id;
     VALUE rb_current_key_or_id, rb_new_key, rb_options;
-    VALUE rb_option_id, rb_id;
+    VALUE rb_option_id;
 
     rb_scan_args(argc, argv, "21",
                  &rb_current_key_or_id, &rb_new_key, &rb_options);
@@ -540,13 +636,16 @@ rb_grn_double_array_trie_update (int argc, VALUE *argv, VALUE self)
                         "id", &rb_option_id,
                         NULL);
     if (RVAL2CBOOL(rb_option_id)) {
+        VALUE rb_id;
         rb_id = rb_current_key_or_id;
         return rb_grn_double_array_trie_update_by_id(self, rb_id, rb_new_key);
+    } else {
+        VALUE rb_current_key;
+        rb_current_key = rb_current_key_or_id;
+        return rb_grn_double_array_trie_update_by_key(self,
+                                                      rb_current_key,
+                                                      rb_new_key);
     }
-
-    id = rb_grn_table_key_support_get(self, rb_current_key_or_id);
-    rb_id = UINT2NUM(id);
-    return rb_grn_double_array_trie_update_by_id(self, rb_id, rb_new_key);
 }
 
 void

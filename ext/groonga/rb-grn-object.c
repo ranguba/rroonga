@@ -135,9 +135,12 @@ rb_grn_object_run_finalizer (grn_ctx *context, grn_obj *grn_object,
         break;
     case GRN_TABLE_HASH_KEY:
     case GRN_TABLE_PAT_KEY:
-    case GRN_TABLE_DAT_KEY:
         rb_grn_table_key_support_finalizer(context, grn_object,
                                            RB_GRN_TABLE_KEY_SUPPORT(rb_grn_object));
+        break;
+    case GRN_TABLE_DAT_KEY:
+        rb_grn_double_array_trie_finalizer(context, grn_object,
+                                           RB_GRN_DOUBLE_ARRAY_TRIE(rb_grn_object));
         break;
     case GRN_TABLE_NO_KEY:
         rb_grn_table_finalizer(context, grn_object,
@@ -441,6 +444,12 @@ rb_grn_object_assign (VALUE klass, VALUE self, VALUE rb_context,
         rb_grn_object = ALLOC(RbGrnObject);
         rb_grn_object_bind_common(klass, self, rb_context, rb_grn_object,
                                   context, object);
+    } else if (klass == rb_cGrnDoubleArrayTrie) {
+        rb_grn_object = ALLOC(RbGrnDoubleArrayTrie);
+        rb_grn_object_bind_common(klass, self, rb_context, rb_grn_object,
+                                  context, object);
+        rb_grn_double_array_trie_bind(RB_GRN_DOUBLE_ARRAY_TRIE(rb_grn_object),
+                                      context, object);
     } else if (RVAL2CBOOL(rb_obj_is_kind_of(self, rb_mGrnTableKeySupport))) {
         rb_grn_object = ALLOC(RbGrnTableKeySupport);
         rb_grn_object_bind_common(klass, self, rb_context, rb_grn_object,

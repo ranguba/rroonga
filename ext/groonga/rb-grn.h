@@ -104,6 +104,7 @@ RB_GRN_BEGIN_DECLS
 #define RB_GRN_NAMED_OBJECT(object) ((RbGrnNamedObject *)(object))
 #define RB_GRN_TABLE(object) ((RbGrnTable *)(object))
 #define RB_GRN_TABLE_KEY_SUPPORT(object) ((RbGrnTableKeySupport *)(object))
+#define RB_GRN_DOUBLE_ARRAY_TRIE(object) ((RbGrnDoubleArrayTrie *)(object))
 #define RB_GRN_TABLE_CURSOR(object) ((RbGrnTableCursort *)(object))
 #define RB_GRN_COLUMN(object) ((RbGrnColumn *)(object))
 #define RB_GRN_VARIABLE_SIZE_COLUMN(object) ((RbGrnVariableSizeColumn *)(object))
@@ -161,6 +162,13 @@ struct _RbGrnTableKeySupport
 {
     RbGrnTable parent;
     grn_obj *key;
+};
+
+typedef struct _RbGrnDoubleArrayTrie RbGrnDoubleArrayTrie;
+struct _RbGrnDoubleArrayTrie
+{
+    RbGrnTableKeySupport parent;
+    grn_obj *new_key;
 };
 
 typedef struct _RbGrnColumn RbGrnColumn;
@@ -495,6 +503,13 @@ void           rb_grn_table_key_support_deconstruct (RbGrnTableKeySupport *rb_gr
                                                      VALUE *columns);
 grn_id         rb_grn_table_key_support_get         (VALUE self,
                                                      VALUE rb_key);
+
+void           rb_grn_double_array_trie_bind        (RbGrnDoubleArrayTrie *rb_grn_double_array_trie,
+                                                     grn_ctx *context,
+                                                     grn_obj *double_array_trie);
+void           rb_grn_double_array_trie_finalizer   (grn_ctx *context,
+                                                     grn_obj *grn_object,
+                                                     RbGrnDoubleArrayTrie *rb_grn_double_array_trie);
 
 void           rb_grn_column_bind                   (RbGrnColumn *rb_grn_column,
                                                      grn_ctx *context,
