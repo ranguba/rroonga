@@ -44,8 +44,8 @@
 #  define rb_sym2str(symbol) (rb_id2str(SYM2ID(symbol)))
 #endif
 
-#ifndef HAVE_RB_ID2SYM
-#  define rb_id2sym(name) (ID2SYM(name))
+#ifndef HAVE_RB_TO_SYMBOL
+#  define rb_to_symbol(rb_string) (rb_str_intern(rb_string))
 #endif
 
 #include <groonga.h>
@@ -599,7 +599,7 @@ VALUE          rb_grn_column_expression_builder_build
                                                     (VALUE self);
 
 
-#define RB_GRN_INTERN(string)         (rb_str_intern(rb_str_new2(string)))
+#define RB_GRN_INTERN(c_string)       (rb_to_symbol(rb_str_new2(c_string)))
 
 #define RVAL2CBOOL(object)            (RTEST(object))
 #define CBOOL2RVAL(boolean)           ((boolean) ? Qtrue : Qfalse)

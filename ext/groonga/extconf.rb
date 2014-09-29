@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 #
-# Copyright (C) 2009-2013  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2014  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -269,7 +269,7 @@ $defs << "-DGRN_MICRO_VERSION=#{real_micro}"
 have_header("ruby/st.h") unless have_macro("HAVE_RUBY_ST_H", "ruby.h")
 have_func("rb_errinfo", "ruby.h")
 have_func("rb_sym2str", "ruby.h")
-have_func("rb_id2sym", "ruby.h")
+have_func("rb_to_string", "ruby.h")
 have_type("enum ruby_value_type", "ruby.h")
 
 checking_for(checking_message("--enable-debug-log option")) do
