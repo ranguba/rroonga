@@ -176,6 +176,15 @@ class RecordTest < Test::Unit::TestCase
     assert_equal(2, @bookmarks.size)
   end
 
+  def test_rename
+    users = Groonga::DoubleArrayTrie.create(:name => "DATUsers",
+                                            :key_type => "ShortText")
+    bob = users.add("Bob")
+
+    bob.rename("Alice")
+    assert_equal("Alice", bob._key)
+  end
+
   def test_key
     documents = Groonga::PatriciaTrie.create(:name => "Documents",
                                              :key_type => "ShortText")

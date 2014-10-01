@@ -283,6 +283,17 @@ module Groonga
       @table.delete(@id)
     end
 
+    # キーを変更する。
+    #
+    # @since 4.0.5
+    def rename(new_key)
+      if @table.is_a?(DoubleArrayTrie)
+        @table.update(@id, new_key, :id => true)
+      else
+        raise OperationNotSupported, "`#{@table.class}` does not support `Groonga::Record#rename`. Use `Groonga::DoubleArrayTrie`."
+      end
+    end
+
     # レコードが所属するテーブルをロックする。ロックに失敗した場
     # 合は {Groonga::ResourceDeadlockAvoided} 例外が発生する。
     #
