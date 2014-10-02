@@ -292,7 +292,7 @@ module Groonga
       if @table.is_a?(DoubleArrayTrie)
         @table.update(@id, new_key, :id => true)
       else
-        raise OperationNotSupported, "`#{@table.class}` does not support `Groonga::Record#rename`. Use `Groonga::DoubleArrayTrie`."
+        raise OperationNotSupported, "Only Groonga::DoubleArrayTrie table supports Groonga::Record#rename: <#{@table.class}>"
       end
     end
 
