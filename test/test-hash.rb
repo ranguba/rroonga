@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 #
+# Copyright (C) 2014  Masafumi Yokoyama <myokoym@gmail.com>
 # Copyright (C) 2009-2014  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
@@ -55,7 +56,7 @@ class HashTest < Test::Unit::TestCase
     end
 
     def test_id
-      @bookmarks.delete(@google.id)
+      @bookmarks.delete(@google.id, :id => true)
       assert_equal(["groonga", "Cutter"],
                    @bookmarks.collect {|bookmark| bookmark.key})
     end
@@ -72,6 +73,17 @@ class HashTest < Test::Unit::TestCase
       end
       assert_equal(["Google", "Cutter"],
                    @bookmarks.collect {|bookmark| bookmark.key})
+    end
+
+    def test_key_of_int32
+      numbers = Groonga::Hash.create(:name => "Numbers",
+                                     :key_type => "Int32")
+      numbers.add(100)
+      numbers.add(200)
+
+      numbers.delete(100)
+      assert_equal([200],
+                   numbers.collect {|number| number.key})
     end
   end
 

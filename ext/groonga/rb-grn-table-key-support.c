@@ -1,5 +1,6 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
+  Copyright (C) 2014  Masafumi Yokoyama <myokoym@gmail.com>
   Copyright (C) 2009-2013  Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
@@ -378,7 +379,7 @@ rb_grn_table_key_support_delete_by_key (VALUE self, VALUE rb_key)
 }
 
 /*
- * @overload delete(id)
+ * @overload delete(id, :id=>true)
  *   Delete a record that has ID @id@.
  *
  *   @param id [Integer] The ID of delete target record.
@@ -405,14 +406,18 @@ rb_grn_table_key_support_delete_by_key (VALUE self, VALUE rb_key)
 static VALUE
 rb_grn_table_key_support_delete (int argc, VALUE *argv, VALUE self)
 {
-    VALUE rb_id_or_key;
+    VALUE rb_id_or_key, rb_options;
+    VALUE rb_option_id;
 
     if (rb_block_given_p()) {
         return rb_grn_table_delete_by_expression(self);
     }
 
-    rb_scan_args(argc, argv, "1", &rb_id_or_key);
-    if (FIXNUM_P(rb_id_or_key)) {
+    rb_scan_args(argc, argv, "11", &rb_id_or_key, &rb_options);
+    rb_grn_scan_options(rb_options,
+                        "id", &rb_option_id,
+                        NULL);
+    if (RVAL2CBOOL(rb_option_id)) {
         return rb_grn_table_delete_by_id(self, rb_id_or_key);
     } else {
         return rb_grn_table_key_support_delete_by_key(self, rb_id_or_key);
