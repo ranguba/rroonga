@@ -281,7 +281,7 @@ module Groonga
 
     # Delete the record.
     def delete
-      if @table.is_a?(Groonga::Table::KeySupport)
+      if @table.is_a?(Table::KeySupport)
         @table.delete(@id, :id => true)
       else
         @table.delete(@id)
