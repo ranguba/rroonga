@@ -281,7 +281,11 @@ module Groonga
 
     # Delete the record.
     def delete
+      if @table.is_a?(Groonga::Table::KeySupport)
       @table.delete(@id, :id => true)
+      else
+        @table.delete(@id)
+      end
     end
 
     # Renames key of the record. Only available for
