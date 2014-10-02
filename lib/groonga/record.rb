@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 #
+# Copyright (C) 2014  Masafumi Yokoyama <myokoym@gmail.com>
 # Copyright (C) 2009-2014  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
@@ -283,7 +284,8 @@ module Groonga
       @table.delete(@id)
     end
 
-    # キーを変更する。
+    # Renames key of the record. Only available for
+    # {Groonga::DoubleArrayTrie} table.
     #
     # @since 4.0.5
     def rename(new_key)
