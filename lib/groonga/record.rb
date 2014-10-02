@@ -279,9 +279,9 @@ module Groonga
       as_json.to_json(*args)
     end
 
-    # レコードを削除する。
+    # Delete the record.
     def delete
-      @table.delete(@id)
+      @table.delete(@id, :id => true)
     end
 
     # Renames key of the record. Only available for
