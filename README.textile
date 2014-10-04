@@ -1,5 +1,7 @@
 h1. README
 
+!https://badge.fury.io/rb/rroonga.svg!:http://badge.fury.io/rb/rroonga
+
 h2. Name
 
 Rroonga
