@@ -1,6 +1,7 @@
 h1. README
 
 !https://badge.fury.io/rb/rroonga.svg!:http://badge.fury.io/rb/rroonga
+!https://travis-ci.org/ranguba/rroonga.svg?branch=master!:https://travis-ci.org/ranguba/rroonga
 
 h2. Name
 
