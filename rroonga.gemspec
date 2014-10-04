@@ -55,7 +55,7 @@ Gem::Specification.new do |s|
   s.email = emails
 
   readme_path = File.join(base_dir, "README.md")
-  entries = File.read(readme_path).split(/^h2\.\s(.*)$/)
+  entries = File.read(readme_path).split(/^##\s(.*)$/)
   description = clean_white_space.call(entries[entries.index("Description") + 1])
   s.summary, s.description, = description.split(/\n\n+/, 3)
 
