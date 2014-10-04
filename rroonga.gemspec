@@ -54,12 +54,12 @@ Gem::Specification.new do |s|
   s.authors = authors
   s.email = emails
 
-  readme_path = File.join(base_dir, "README.textile")
+  readme_path = File.join(base_dir, "README.md")
   entries = File.read(readme_path).split(/^h2\.\s(.*)$/)
   description = clean_white_space.call(entries[entries.index("Description") + 1])
   s.summary, s.description, = description.split(/\n\n+/, 3)
 
-  s.files = ["README.textile", "AUTHORS", "Rakefile", "Gemfile", ".yardopts"]
+  s.files = ["README.md", "AUTHORS", "Rakefile", "Gemfile", ".yardopts"]
   s.files += Dir.glob("doc/text/*.textile")
   s.files += ["#{s.name}.gemspec"]
   s.files += ["rroonga-build.rb", "extconf.rb"]
@@ -67,7 +67,7 @@ Gem::Specification.new do |s|
     s.files += Dir.glob("{lib,benchmark,misc,example}/**/*.rb")
     s.files += Dir.glob("ext/**/*.{c,h,rb,def}")
     s.extensions = ["ext/groonga/extconf.rb"]
-    s.extra_rdoc_files = ["README.textile"]
+    s.extra_rdoc_files = ["README.md"]
     s.test_files = Dir.glob("test/**/*.rb")
     Dir.chdir("bin") do
       s.executables = Dir.glob("*")
