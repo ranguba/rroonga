@@ -17,6 +17,7 @@
 /Gemfile.lock
 /doc/po/*/*.edit.po
 /doc/po/*/*.po.time_stamp
+/doc/po/*/rroonga.po
 /doc/po/rroonga.pot
 /.yardoc/
 /references/
