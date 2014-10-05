@@ -14,16 +14,26 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
-msgid "h1. README"
+#, fuzzy
+msgid "# README"
 msgstr "h1. はじめに"
 
-msgid "h2. Name"
+msgid ""
+"[![Gem Version](https://badge.fury.io/rb/rroonga.svg)](http://badge.fury.io/rb"
+"/rroonga)\n"
+"[![Build Status](https://travis-ci.org/ranguba/rroonga.svg?branch=master)](htt"
+"ps://travis-ci.org/ranguba/rroonga)"
+msgstr ""
+
+#, fuzzy
+msgid "## Name"
 msgstr "h2. 名前"
 
 msgid "Rroonga"
 msgstr ""
 
-msgid "h2. Description"
+#, fuzzy
+msgid "## Description"
 msgstr "h2. 説明"
 
 msgid ""
@@ -43,28 +53,25 @@ msgstr ""
 msgid "See the following URL about Groonga."
 msgstr "Groongaに関する情報は以下のURLを参照して下さい。"
 
-msgid "* \"The Groonga official site\":http://groonga.org/"
+#, fuzzy
+msgid "* [The Groonga official site](http://groonga.org/)"
 msgstr "* \"Groonga公式サイト\":http://groonga.org/ja/"
 
-msgid "h2. Authors"
+#, fuzzy
+msgid "## Authors"
 msgstr "h2. 作者"
 
 msgid ""
-"* Kouhei Sutou <kou@clear-code.com>\n"
-"* Tasuku SUENAGA <a@razil.jp>\n"
-"* Daijiro MORI <morita@razil.jp>\n"
-"* Yuto HAYAMIZU <y.hayamizu@gmail.com>\n"
-"* SHIDARA Yoji <dara@shidara.net>\n"
-"* yoshihara haruka <yoshihara@clear-code.com>"
+"* Kouhei Sutou `<kou@clear-code.com>`\n"
+"* Tasuku SUENAGA `<a@razil.jp>`\n"
+"* Daijiro MORI `<morita@razil.jp>`\n"
+"* Yuto HAYAMIZU `<y.hayamizu@gmail.com>`\n"
+"* SHIDARA Yoji `<dara@shidara.net>`\n"
+"* yoshihara haruka `<yoshihara@clear-code.com>`"
 msgstr ""
-"* Kouhei Sutou <kou@clear-code.com>\n"
-"* Tasuku SUENAGA <a@razil.jp>\n"
-"* Daijiro MORI <morita@razil.jp>\n"
-"* Yuto HAYAMIZU <y.hayamizu@gmail.com>\n"
-"* SHIDARA Yoji <dara@shidara.net>\n"
-"* yoshihara haruka <yoshihara@clear-code.com>"
 
-msgid "h2. License"
+#, fuzzy
+msgid "## License"
 msgstr "h2. ライセンス"
 
 msgid "LGPL 2.1. See license/LGPL for details."
@@ -75,7 +82,8 @@ msgid ""
 "contributed patches.)"
 msgstr "（コントリビュートされたパッチなども含み、Kouhei Sutouがライセンスを変更する権利を持ちます。）"
 
-msgid "h2. Dependencies"
+#, fuzzy
+msgid "## Dependencies"
 msgstr "h2. 依存ソフトウェア"
 
 msgid ""
@@ -83,49 +91,53 @@ msgid ""
 "* Groonga >= 4.0.4"
 msgstr ""
 
-msgid "h2. Install"
+#, fuzzy
+msgid "## Install"
 msgstr "h2. インストール"
 
-msgid ""
-"<pre>\n"
-"!!!command_line\n"
-"% sudo gem install rroonga\n"
-"</pre>"
+msgid "    % sudo gem install rroonga"
 msgstr ""
 
-msgid "h2. Documents"
+#, fuzzy
+msgid "## Documents"
 msgstr "h2. ドキュメント"
 
+#, fuzzy
 msgid ""
-"* \"Reference manual in English\":http://ranguba.org/rroonga/en/\n"
-"* \"Reference manual in Japanese\":http://ranguba.org/rroonga/ja/"
+"* [Reference manual in English](http://ranguba.org/rroonga/en/)\n"
+"* [Reference manual in Japanese](http://ranguba.org/rroonga/ja/)"
 msgstr ""
 "* \"リファレンスマニュアル（英語）\":http://ranguba.org/rroonga/en/\n"
 "* \"リファレンスマニュアル（日本語）\":http://ranguba.org/rroonga/ja/"
 
-msgid "h2. Mailing list"
+#, fuzzy
+msgid "## Mailing list"
 msgstr "h2. メーリングリスト"
 
+#, fuzzy
 msgid ""
-"* English: \"groonga-talk\":http://lists.sourceforge.net/mailman/listinfo/groong"
-"a-talk\n"
-"* Japanese: \"groonga-dev\":http://lists.sourceforge.jp/mailman/listinfo/groonga"
-"-dev"
+"* English: [groonga-talk](http://lists.sourceforge.net/mailman/listinfo/groong"
+"a-talk)\n"
+"* Japanese: [groonga-dev](http://lists.sourceforge.jp/mailman/listinfo/groonga"
+"-dev)"
 msgstr ""
 "* 英語: \"groonga-talk\":http://lists.sourceforge.net/mailman/listinfo/groonga-tal"
 "k\n"
 "* 日本語: \"groonga-dev\":http://lists.sourceforge.jp/mailman/listinfo/groonga-dev"
 
-msgid "h2. Thanks"
+#, fuzzy
+#, fuzzy
+msgid "## Thanks"
 msgstr "h2. 感謝"
 
+#, fuzzy
 msgid ""
 "* Daijiro MORI: sent patches to support the latest Groonga.\n"
 "* Tasuku SUENAGA: sent bug reports.\n"
 "* niku: sent bug reports.\n"
 "* dara:\n"
-"** wrote tests.\n"
-"** fixed bugs.\n"
+"  * wrote tests.\n"
+"  * fixed bugs.\n"
 "* id:mat_aki: sent bug reports.\n"
 "* @yune_kotomi: sent a bug report.\n"
 "* m_seki: sent bug reports.\n"
@@ -147,6 +159,116 @@ msgstr ""
 "* @kamipoさん: バグレポートをしてくれました。\n"
 "* ongaeshiさん: Windows上でgemをビルドするためのパッチをくれました。\n"
 "* mallowlabsさん: パッチを送ってくれました。"
+
+msgid ""
+"How to Cross compile Rroonga\n"
+"==="
+msgstr ""
+
+msgid "# For Debian GNU/Linux like Linux distribution Users"
+msgstr ""
+
+msgid "## apt"
+msgstr ""
+
+msgid ""
+"* mingw-w64\n"
+"* build-essential"
+msgstr ""
+
+msgid "## prepare ruby and rubygems"
+msgstr ""
+
+msgid ""
+"```bash\n"
+"$ rbenv install 1.9.3-p547\n"
+"$ gem install rubygems-update\n"
+"$ update_rubygems\n"
+"$ gem install bundler\n"
+"$ rbenv install 2.0.0-p576\n"
+"$ gem install bundler\n"
+"$ rbenv install 2.1.3\n"
+"$ gem install bundler\n"
+"```"
+msgstr ""
+
+msgid "## bundle install"
+msgstr ""
+
+msgid ""
+"```bash\n"
+"$ rbenv local 1.9.3-p547\n"
+"$ bundle install [--path vendor/bundle]\n"
+"$ rbenv local 2.0.0-p576\n"
+"$ bundle install [--path vendor/bundle]\n"
+"$ rbenv local 2.1.3\n"
+"$ bundle install [--path vendor/bundle]\n"
+"```"
+msgstr ""
+
+msgid "## rake-compiler"
+msgstr ""
+
+msgid ""
+"```bash\n"
+"$ rbenv local 1.9.3-p547\n"
+"$ bundle exec rake-compiler cross-ruby HOST=i686-w64-mingw32 VERSION=1.9.3-p54"
+"7 [EXTS=--without-extensions]\n"
+"$ bundle exec rake-compiler cross-ruby HOST=x86_64-w64-mingw32 VERSION=1.9.3-p"
+"547 [EXTS=--without-extensions]\n"
+"$ rbenv local 2.0.0-p576\n"
+"$ bundle exec rake-compiler cross-ruby HOST=i686-w64-mingw32 VERSION=2.0.0-p57"
+"6 [EXTS=--without-extensions]\n"
+"$ bundle exec rake-compiler cross-ruby HOST=x86_64-w64-mingw32 VERSION=2.0.0-p"
+"576 [EXTS=--without-extensions]\n"
+"[$ rbenv local 2.1.3]\n"
+"$ bundle exec rake-compiler cross-ruby HOST=i686-w64-mingw32 VERSION=2.1.3 [EX"
+"TS=--without-extensions]\n"
+"$ bundle exec rake-compiler cross-ruby HOST=x86_64-w64-mingw32 VERSION=2.1.3 ["
+"EXTS=--without-extensions]\n"
+"```"
+msgstr ""
+
+msgid "## cross compile"
+msgstr ""
+
+msgid ""
+"```bash\n"
+"$ rbenv local 1.9.3-p547\n"
+"$ bundle exec rake:build\n"
+"$ bundle exec rake RUBY_CC_VERSION=1.9.3:2.0.0:2.1.3 cross clean native gem\n"
+"$ bundle exec rake clean:groonga\n"
+"$ bundle exec rake RUBY_CC_VERSION=1.9.3:2.0.0:2.1.3 cross RROONGA_USE_GROONGA"
+"_X64=true clean native gem\n"
+"```"
+msgstr ""
+
+msgid "# For Vagrant tool Users"
+msgstr ""
+
+msgid "Vagrant is provided in `Windows`, `OS X` and `Linux(deb)/Linux(rpm)`."
+msgstr ""
+
+msgid "## execute vagrant"
+msgstr ""
+
+msgid "`build\\windows\\` directory contains Vagrantfile and its provisioning scripts."
+msgstr ""
+
+msgid "execute following command:"
+msgstr ""
+
+msgid ""
+"```bash\n"
+"$ cd build\\windows\n"
+"$ vagrant up\n"
+"```"
+msgstr ""
+
+msgid ""
+"Then, `pkg` directory is created. And cross compiled gems move into `pkg` dire"
+"ctory."
+msgstr ""
 
 msgid "h1. Install"
 msgstr "h1. インストール"
@@ -389,11 +511,42 @@ msgstr "* \"2. インストール - Groonga ドキュメント\":http://groonga.
 msgid "h1. NEWS"
 msgstr "h1. お知らせ"
 
-msgid "h2(#4-0-4). 4.0.4: 2014-08-29"
-msgstr ""
+#, fuzzy
+msgid "h2(#4-0-5). 4.0.5: 2014-10-05"
+msgstr "* @kamipoさん"
 
 msgid "h3. Improvements"
 msgstr "h3. 改善"
+
+msgid ""
+"* [windows] Added cross build task.\n"
+"* Added {Groonga::DoubleArrayTrie#update}.\n"
+"  [GitHub#24] [Patch by Masafumi Yokoyama]\n"
+"* Added {Groonga::Record#rename}.\n"
+"* [windows] Disabled debug flags."
+msgstr ""
+
+msgid "h3. Fixes"
+msgstr "h3. 修正"
+
+msgid ""
+"* Added @:id => true@ option to {Groonga::Table::KeySupport#delete}.\n"
+"  @Groonga::Table::KeySupport#delete@ accepts both ID and key. If passed\n"
+"  value is integer, it is handled as ID. But we can use @Int32@ as key.\n"
+"  In the case, we can't delete a record by key. Therefore, we added\n"
+"  @Groonga::Table::KeySupport#delete(id, :id => true)@ API. It introduces\n"
+"  a backward incompatibility, but it is OK because the current API is a\n"
+"  bug."
+msgstr ""
+
+msgid "h3. Thanks"
+msgstr "h3. 感謝"
+
+msgid "* Masafumi Yokoyama"
+msgstr "* Masafumi Yokoyamaさん"
+
+msgid "h2(#4-0-4). 4.0.4: 2014-08-29"
+msgstr ""
 
 msgid ""
 "* Supported Groonga 4.0.4 or later. Groonga 4.0.3 or older are not supported.\n"
@@ -424,14 +577,8 @@ msgstr ""
 "* gemspecのホームページをranguba.orgに更新。[Masafumi Yokoyama]\n"
 "* メモリー管理まわりの改善。（GCしなくてもメモリー使用量が減るなど）"
 
-msgid "h3. Fixes"
-msgstr "h3. 修正"
-
 msgid "* Fixed a GC related crash when GC is run while {Groonga::Table#group}."
 msgstr "* GCに関連したクラッシュを修正。（{Groonga::Table#group}中にGCが動いた場合など）"
-
-msgid "h3. Thanks"
-msgstr "h3. 感謝"
 
 msgid ""
 "* Ippei Obayashi\n"
@@ -452,9 +599,6 @@ msgid ""
 msgstr ""
 "* [windows] load errorが発生する問題を修正。これはGroongaの問題だったので問題を修正したGroongaをバンドルしなおした。\n"
 "  [groonga-dev,02398][Masafumi Yokoyama報告]"
-
-msgid "* Masafumi Yokoyama"
-msgstr "* Masafumi Yokoyamaさん"
 
 msgid "h2(#4-0-2). 4.0.2: 2014-05-29"
 msgstr ""
@@ -2188,8 +2332,18 @@ msgstr "h1. チュートリアル"
 msgid "This page introduce how to use rroonga via a simple application making."
 msgstr "このページでは簡単なアプリケーションの作成を通してrroongaの操作方法を紹介します。"
 
+msgid "h2. Install"
+msgstr "h2. インストール"
+
 msgid "You can install rroonga in your compter with RubyGems."
 msgstr "rroongaはRubyGemsでインストールできます。"
+
+msgid ""
+"<pre>\n"
+"!!!command_line\n"
+"% sudo gem install rroonga\n"
+"</pre>"
+msgstr ""
 
 msgid "h2. Create Database"
 msgstr "h2. データベースの作成"
@@ -2923,16 +3077,16 @@ msgstr "これで目的の結果が得られました。"
 msgid "アクセサ名を返す。"
 msgstr ""
 
-# @overload
-msgid "tag|overload|local_name"
-msgstr ""
-
 # @example
 msgid ""
 "items = Groonga::Array.create(:name => \"Items\")\n"
 "id = items.column(\"_id\")\n"
 "id.name # => nil\n"
 "id.local_name # => \"_id\""
+msgstr ""
+
+# @overload
+msgid "tag|overload|local_name"
 msgstr ""
 
 msgid ""
@@ -2992,10 +3146,6 @@ msgid ""
 "...}@ と指定する。"
 msgstr ""
 
-# @overload
-msgid "tag|overload|add"
-msgstr ""
-
 # @example
 msgid ""
 "#以下のようなユーザを格納するGroonga::Arrayが\n"
@@ -3012,6 +3162,10 @@ msgid ""
 "#gunyara-kunユーザを追加する。\n"
 "gunyara_kun = users.add(:name => \"gunyara-kun\",\n"
 "                        :uri => \"http://d.hatena.ne.jp/tasukuchan/\")"
+msgstr ""
+
+# @overload
+msgid "tag|overload|add"
 msgstr ""
 
 # Groonga::Array#push
@@ -3034,23 +3188,6 @@ msgid ""
 "not be filled completely. You should handle the case in pull side."
 msgstr ""
 
-# @example A program that pulls a job without error handling
-msgid ""
-"queue = Groonga::Array.open(:name => \"CrawlURLQueue\")\n"
-"loop do\n"
-"  url = nil\n"
-"  queue.pull do |record|\n"
-"    url = record.url\n"
-"    record.delete\n"
-"  end\n"
-"  # Crawl URL\n"
-"end"
-msgstr ""
-
-# @example
-msgid "tag|example|A program that pushes a job without error handling"
-msgstr ""
-
 # @example A program that pushes a job without error handling
 msgid ""
 "queue = Groonga::Array.create(:name => \"CrawlURLQueue\")\n"
@@ -3061,26 +3198,6 @@ msgid ""
 "    record.url = url\n"
 "  end\n"
 "end"
-msgstr ""
-
-# @example A program that pushes a job with error handling
-msgid ""
-"queue = Groonga::Array.create(:name => \"CrawlURLQueue\")\n"
-"queue.define_column(\"url\", \"ShortText\")\n"
-"urls = [\"http://groonga.org/\", \"http://ranguba.org/\"]\n"
-"urls.each do |url|\n"
-"  queue.push do |record|\n"
-"    record.url = url if record # check record is not nil\n"
-"  end\n"
-"end"
-msgstr ""
-
-# @example
-msgid "tag|example|A program that pulls a job without error handling"
-msgstr ""
-
-# @overload
-msgid "tag|overload|push"
 msgstr ""
 
 # @example A program that pulls a job with error handling
@@ -3101,6 +3218,51 @@ msgstr ""
 msgid "tag|example|A program that pulls a job with error handling"
 msgstr ""
 
+# @example
+msgid "tag|example|A program that pushes a job without error handling"
+msgstr ""
+
+# @example A program that pushes a job with error handling
+msgid ""
+"queue = Groonga::Array.create(:name => \"CrawlURLQueue\")\n"
+"queue.define_column(\"url\", \"ShortText\")\n"
+"urls = [\"http://groonga.org/\", \"http://ranguba.org/\"]\n"
+"urls.each do |url|\n"
+"  queue.push do |record|\n"
+"    record.url = url if record # check record is not nil\n"
+"  end\n"
+"end"
+msgstr ""
+
+# @overload
+msgid "tag|overload|push"
+msgstr ""
+
+# @example
+msgid "tag|example|A program that has an error in push block"
+msgstr ""
+
+# @example
+msgid "tag|example|A program that pulls a job without error handling"
+msgstr ""
+
+# @example A program that pulls a job without error handling
+msgid ""
+"queue = Groonga::Array.open(:name => \"CrawlURLQueue\")\n"
+"loop do\n"
+"  url = nil\n"
+"  queue.pull do |record|\n"
+"    url = record.url\n"
+"    record.delete\n"
+"  end\n"
+"  # Crawl URL\n"
+"end"
+msgstr ""
+
+# @example
+msgid "tag|example|A program that pushes a job with error handling"
+msgstr ""
+
 # @example A program that has an error in push block
 msgid ""
 "queue = Groonga::Array.create(:name => \"CrawlURLQueue\")\n"
@@ -3112,14 +3274,6 @@ msgid ""
 "    # record.url isn't set\n"
 "  end\n"
 "end"
-msgstr ""
-
-# @example
-msgid "tag|example|A program that has an error in push block"
-msgstr ""
-
-# @example
-msgid "tag|example|A program that pushes a job with error handling"
 msgstr ""
 
 # Groonga::Array#pull
@@ -3156,12 +3310,36 @@ msgid ""
 "{Groonga::Array#unblock}, signal handler can be ran."
 msgstr ""
 
+# @example
+msgid "tag|example|A program that pulls with non-block mode"
+msgstr ""
+
 # @overload
 msgid "tag|overload|pull"
 msgstr ""
 
 # @example
-msgid "tag|example|A program that pulls with non-block mode"
+msgid "tag|example|Signal handler isn't called"
+msgstr ""
+
+# @see {Groonga::Array#push}
+msgid "Examples exist in the push documentation."
+msgstr ""
+
+# @example Signal handler isn't called
+msgid ""
+"queue = Groonga::Array.open(:name => \"CrawlURLQueue\")\n"
+"trap(:INT) do\n"
+"  p :not_called!\n"
+"end\n"
+"queue.pull do |record|\n"
+"  # Send SIGINT while blocking the pull operation.\n"
+"  # The signal handler isn't called.\n"
+"end"
+msgstr ""
+
+# @see
+msgid "tag|see|Groonga::Array#push"
 msgstr ""
 
 # @example A program that pulls with non-block mode
@@ -3177,30 +3355,6 @@ msgid ""
 "  end\n"
 "  p pulled_record.nil? # => true\n"
 "end"
-msgstr ""
-
-# @example
-msgid "tag|example|Signal handler isn't called"
-msgstr ""
-
-# @example Signal handler isn't called
-msgid ""
-"queue = Groonga::Array.open(:name => \"CrawlURLQueue\")\n"
-"trap(:INT) do\n"
-"  p :not_called!\n"
-"end\n"
-"queue.pull do |record|\n"
-"  # Send SIGINT while blocking the pull operation.\n"
-"  # The signal handler isn't called.\n"
-"end"
-msgstr ""
-
-# @see {Groonga::Array#push}
-msgid "Examples exist in the push documentation."
-msgstr ""
-
-# @see
-msgid "tag|see|Groonga::Array#push"
 msgstr ""
 
 # Groonga::Array#unblock
@@ -3384,11 +3538,11 @@ msgid ""
 "そうでない場合は +false+ を返す。"
 msgstr ""
 
-# @overload
-msgid "tag|overload|reference?"
+msgid "1.0.5"
 msgstr ""
 
-msgid "1.0.5"
+# @overload
+msgid "tag|overload|reference?"
 msgstr ""
 
 # Groonga::Column#index?
@@ -3422,10 +3576,6 @@ msgstr ""
 msgid "tag|overload|scalar?"
 msgstr ""
 
-# @since
-msgid "4.0.1"
-msgstr ""
-
 # @return [Boolean]
 msgid ""
 "@true@ if the column is vector and created with\n"
@@ -3436,8 +3586,16 @@ msgstr ""
 msgid "tag|overload|with_weight?"
 msgstr ""
 
+# @since
+msgid "4.0.1"
+msgstr ""
+
 # Groonga::Column#indexes
 msgid "_operator_ を実行できる _column_ のインデックスを返す。"
+msgstr ""
+
+# @overload
+msgid "tag|overload|indexes"
 msgstr ""
 
 # @return [Array<index_column>]
@@ -3445,10 +3603,6 @@ msgid "_operator_ を実行できる _column_ のインデックス"
 msgstr ""
 
 msgid "1.0.9"
-msgstr ""
-
-# @overload
-msgid "tag|overload|indexes"
 msgstr ""
 
 msgid "Renames the table to name."
@@ -3582,11 +3736,11 @@ msgstr "コンテキストが使っているエンコーディングをRubyの�
 msgid "the encoding used by the context"
 msgstr ""
 
-msgid "2.0.5"
-msgstr ""
-
 # @overload
 msgid "tag|overload|ruby_encoding"
+msgstr ""
+
+msgid "2.0.5"
 msgstr ""
 
 # Groonga::Context#match_escalation_threshold
@@ -3732,18 +3886,8 @@ msgstr ""
 msgid "データベース内のオブジェクトを順番にブロックに渡す。"
 msgstr ""
 
-# @example すべてのオブジェクトの名前をID順で表示する:
-msgid ""
-"database.each(:order_by => :id) do |object|\n"
-"  p object.name\n"
-"end"
-msgstr ""
-
-# @example すべてのオブジェクトの名前を表示する:
-msgid ""
-"database.each do |object|\n"
-"  p object.name\n"
-"end"
+# @overload
+msgid "tag|overload|each"
 msgstr ""
 
 # @example すべてのオブジェクトの名前をキー名の降順で表示する:
@@ -3756,14 +3900,24 @@ msgstr ""
 msgid "tag|example|すべてのオブジェクトの名前をキー名の降順で表示する:"
 msgstr ""
 
-msgid "tag|example|すべてのオブジェクトの名前をID順で表示する:"
-msgstr ""
-
 msgid "tag|example|すべてのオブジェクトの名前を表示する:"
 msgstr ""
 
-# @overload
-msgid "tag|overload|each"
+msgid "tag|example|すべてのオブジェクトの名前をID順で表示する:"
+msgstr ""
+
+# @example すべてのオブジェクトの名前を表示する:
+msgid ""
+"database.each do |object|\n"
+"  p object.name\n"
+"end"
+msgstr ""
+
+# @example すべてのオブジェクトの名前をID順で表示する:
+msgid ""
+"database.each(:order_by => :id) do |object|\n"
+"  p object.name\n"
+"end"
 msgstr ""
 
 # Groonga::Database#unlock
@@ -3793,11 +3947,11 @@ msgstr ""
 msgid "Defrags all variable size columns in the database."
 msgstr "データベースの可変長カラムをすべてデフラグする。"
 
-# @overload
-msgid "tag|overload|defrag"
+msgid "1.2.6"
 msgstr ""
 
-msgid "1.2.6"
+# @overload
+msgid "tag|overload|defrag"
 msgstr ""
 
 msgid "the number of defraged segments"
@@ -3917,6 +4071,18 @@ msgid ""
 msgstr ""
 
 msgid "tag|overload|open_prefix_cursor"
+msgstr ""
+
+# Groonga::DoubleArrayTrie#update
+msgid "Renames key of a record."
+msgstr ""
+
+# @overload
+msgid "tag|overload|update"
+msgstr ""
+
+# @since
+msgid "4.0.5"
 msgstr ""
 
 msgid ""
@@ -4534,10 +4700,6 @@ msgid ""
 "{Groonga::Table#define_index_column}."
 msgstr ""
 
-# @example
-msgid "tag|example|Adds sentences of an article to index"
-msgstr ""
-
 # @example Adds sentences of an article to index
 msgid ""
 "articles = Groonga::Array.create(:name => \"Articles\")\n"
@@ -4585,6 +4747,10 @@ msgid ""
 "end"
 msgstr ""
 
+# @example
+msgid "tag|example|Adds sentences of an article to index"
+msgstr ""
+
 # @since
 msgid "3.0.2"
 msgstr ""
@@ -4599,10 +4765,6 @@ msgstr ""
 
 # @example
 msgid "tag|example|Deletes sentences of an article to index"
-msgstr ""
-
-# @overload
-msgid "tag|overload|delete"
 msgstr ""
 
 # @example Deletes sentences of an article to index
@@ -4657,6 +4819,10 @@ msgid ""
 "end\n"
 "\n"
 "p content_index.search(\"engine\").size # -> 0"
+msgstr ""
+
+# @overload
+msgid "tag|overload|delete"
 msgstr ""
 
 # Groonga::IndexColumn#update
@@ -4714,10 +4880,6 @@ msgid ""
 "p content_index.search(\"MySQL\").size  # -> 1"
 msgstr ""
 
-# @overload
-msgid "tag|overload|update"
-msgstr ""
-
 # Groonga::IndexColumn#sources
 msgid "インデックス対象となっている {Groonga::Column} の配列を返す。"
 msgstr ""
@@ -4769,11 +4931,11 @@ msgstr ""
 msgid "Opens cursor to iterate posting in the index column."
 msgstr ""
 
-# @overload
-msgid "tag|overload|open_cursor"
+msgid "# TODO"
 msgstr ""
 
-msgid "# TODO"
+# @overload
+msgid "tag|overload|open_cursor"
 msgstr ""
 
 msgid "groongaから出力されるログを記録するためのクラス。"
@@ -4831,12 +4993,16 @@ msgid ""
 "disabled."
 msgstr ""
 
+# @overload
+msgid "tag|overload|path="
+msgstr ""
+
 # @example Disables log by the default logger
 msgid "Groonga::Logger.path = nil"
 msgstr ""
 
-# @overload
-msgid "tag|overload|path="
+# @example
+msgid "tag|example|Changes the log path for the default logger"
 msgstr ""
 
 # @example
@@ -4845,10 +5011,6 @@ msgstr ""
 
 # @example Changes the log path for the default logger
 msgid "Groonga::Logger.path = \"/tmp/groonga.log\""
-msgstr ""
-
-# @example
-msgid "tag|example|Changes the log path for the default logger"
 msgstr ""
 
 msgid "It normalizes string."
@@ -5237,7 +5399,7 @@ msgid "Groonga::QueryLogger.path = \"/tmp/query.log\""
 msgstr ""
 
 # @example
-msgid "tag|example|Changes the query log path for the default query logger"
+msgid "tag|example|Disables query log by the default query logger"
 msgstr ""
 
 # @example Disables query log by the default query logger
@@ -5245,7 +5407,7 @@ msgid "Groonga::QueryLogger.path = nil"
 msgstr ""
 
 # @example
-msgid "tag|example|Disables query log by the default query logger"
+msgid "tag|example|Changes the query log path for the default query logger"
 msgstr ""
 
 msgid "スニペット（検索語周辺のテキスト）を生成するためのオブジェクト。"
@@ -5421,6 +5583,9 @@ msgstr ""
 msgid "{Groonga::IndexColumn} で使用するトークナイザを設定する。"
 msgstr ""
 
+msgid "tag|overload|default_tokenizer="
+msgstr ""
+
 # @example
 msgid ""
 "# 2-gramを使用。\n"
@@ -5439,9 +5604,6 @@ msgid ""
 "table.default_tokenizer = \"TokenMecab\""
 msgstr ""
 
-msgid "tag|overload|default_tokenizer="
-msgstr ""
-
 # Groonga::Table::KeySupport#normalizer
 msgid "Returns the normalizer that is used by {Groonga::IndexColumn}."
 msgstr ""
@@ -5454,6 +5616,10 @@ msgstr ""
 msgid "Specifies the normalizer used by {Groonga::IndexColumn}."
 msgstr ""
 
+# @overload
+msgid "tag|overload|normalizer="
+msgstr ""
+
 # @example
 msgid ""
 "# Uses NFKC normalizer.\n"
@@ -5462,10 +5628,6 @@ msgid ""
 "table.normalizer = Groonga::Context[\"NormalizerNFKC51\"]\n"
 "# Uses auto normalizer that is a normalizer for backward compatibility.\n"
 "table.normalizer = \"TNormalizerAuto\""
-msgstr ""
-
-# @overload
-msgid "tag|overload|normalizer="
 msgstr ""
 
 msgid ""
@@ -5661,14 +5823,6 @@ msgstr ""
 msgid "tag|example|Describe incompatible API change"
 msgstr ""
 
-# @example Describe incompatible API change
-msgid ""
-"result_since_2_1_0 = table.sort([\"sort_key\"])\n"
-"result_before_2_1_0 = result_since_2_1_0.collect do |record|\n"
-"  record.value\n"
-"end"
-msgstr ""
-
 # @overload
 msgid "tag|overload|sort"
 msgstr ""
@@ -5695,6 +5849,14 @@ msgid ""
 "get the original record."
 msgstr ""
 
+# @example Describe incompatible API change
+msgid ""
+"result_since_2_1_0 = table.sort([\"sort_key\"])\n"
+"result_before_2_1_0 = result_since_2_1_0.collect do |record|\n"
+"  record.value\n"
+"end"
+msgstr ""
+
 msgid ""
 "_table_ のレコードを _key1_ , _key2_ , _..._ で指定したキーの\n"
 "値でグループ化する。多くの場合、キーにはカラムを指定する。\n"
@@ -5713,12 +5875,12 @@ msgstr ""
 msgid "Iterates each sub records for the record _id_."
 msgstr ""
 
-# @overload
-msgid "tag|overload|each_sub_record"
-msgstr ""
-
 # @since
 msgid "3.0.3"
+msgstr ""
+
+# @overload
+msgid "tag|overload|each_sub_record"
 msgstr ""
 
 # Groonga::Table#[]
@@ -5873,11 +6035,22 @@ msgid ""
 "it."
 msgstr ""
 
-# @example A grouped table has the space
+# @example A normal table don't have the space
 msgid ""
-"users = Groonga[\"Users\"]                # A normal table\n"
-"grouped_users = users.group(\"_key\")     # A grouped table\n"
-"grouped_users.have_n_sub_records_space? # => true"
+"users = Groonga[\"Users\"] # A normal table\n"
+"users.have_n_sub_records_space? # => false"
+msgstr ""
+
+# @example
+msgid "tag|example|A grouped table has the space"
+msgstr ""
+
+# @example
+msgid "tag|example|A normal table don't have the space"
+msgstr ""
+
+# @overload
+msgid "tag|overload|have_n_sub_records_space?"
 msgstr ""
 
 # @return [Boolean]
@@ -5886,22 +6059,11 @@ msgid ""
 "the number of sub records, @false@ otherwise."
 msgstr ""
 
-# @example
-msgid "tag|example|A grouped table has the space"
-msgstr ""
-
-# @overload
-msgid "tag|overload|have_n_sub_records_space?"
-msgstr ""
-
-# @example
-msgid "tag|example|A normal table don't have the space"
-msgstr ""
-
-# @example A normal table don't have the space
+# @example A grouped table has the space
 msgid ""
-"users = Groonga[\"Users\"] # A normal table\n"
-"users.have_n_sub_records_space? # => false"
+"users = Groonga[\"Users\"]                # A normal table\n"
+"grouped_users = users.group(\"_key\")     # A grouped table\n"
+"grouped_users.have_n_sub_records_space? # => true"
 msgstr ""
 
 # Groonga::Table#exist?
@@ -6047,10 +6209,6 @@ msgid ""
 "size column works what you think."
 msgstr ""
 
-# @example
-msgid "tag|example|Use weight vector as matrix search result weight"
-msgstr ""
-
 # @example Use weight vector as matrix search result weight
 msgid ""
 "Groonga::Schema.define do |schema|\n"
@@ -6125,17 +6283,21 @@ msgid ""
 "#    [\"Rroonga\", 1021] <- 1021 (= 101 * 10 + 1) increased."
 msgstr ""
 
+# @example
+msgid "tag|example|Use weight vector as matrix search result weight"
+msgstr ""
+
 msgid ""
 "Returns whether the column is compressed or not. If\n"
 "@type@ is specified, it returns whether the column is\n"
 "compressed by @type@ or not."
 msgstr "カラムが圧縮されているかどうかを返します。もし @type@ が指定されているなら、カラムが @type@ によって圧縮されているかどうかを返します。"
 
-# @overload
-msgid "tag|overload|compressed?"
+msgid "1.3.1"
 msgstr ""
 
-msgid "1.3.1"
+# @overload
+msgid "tag|overload|compressed?"
 msgstr ""
 
 msgid "Defrags the column."
@@ -6207,16 +6369,16 @@ msgstr ""
 msgid "Sets the current lock timeout."
 msgstr ""
 
-# @overload
-msgid "tag|overload|lock_timeout="
+# @see
+msgid "tag|see|{#lock_timeout}"
 msgstr ""
 
 # @since
 msgid "3.1.2"
 msgstr ""
 
-# @see
-msgid "tag|see|{#lock_timeout}"
+# @overload
+msgid "tag|overload|lock_timeout="
 msgstr ""
 
 msgid ""
@@ -6282,13 +6444,13 @@ msgstr ""
 msgid "_options_ に指定できるキーは以下の通り。"
 msgstr ""
 
+msgid "tag|param|options"
+msgstr ""
+
 msgid ""
 "The name and value\n"
 "pairs. Omitted names are initialized as the default value."
 msgstr "オプションを設定するハッシュ。指定されなかったオプションはデフォルト値が使われます。"
-
-msgid "tag|param|options"
-msgstr ""
 
 # Groonga::Context#restore
 msgid "Restore commands dumped by \"grndump\" command."
@@ -6298,8 +6460,18 @@ msgstr ""
 msgid "If block is given, a response is yielded."
 msgstr ""
 
-# @yield [command, response]
-msgid "Yields a sent command and its response if block is given."
+# @yieldparam [String]
+msgid "tag|yieldparam|response"
+msgstr ""
+
+# @example
+msgid ""
+"dumped_commands = File.read(\"dump.grn\")\n"
+"context.restore(dumped_commands)"
+msgstr ""
+
+# @example
+msgid "tag|example|Restore dumped commands and reports result."
 msgstr ""
 
 # @example Restore dumped commands from a File object.
@@ -6309,22 +6481,12 @@ msgid ""
 "end"
 msgstr ""
 
-# @example
-msgid "tag|example|Restore dumped commands and reports result."
-msgstr ""
-
-# @example
-msgid ""
-"dumped_commands = File.read(\"dump.grn\")\n"
-"context.restore(dumped_commands)"
-msgstr ""
-
 # @yieldparam [String] response
 msgid "A response for a command."
 msgstr ""
 
-# @yieldparam [String]
-msgid "tag|yieldparam|response"
+# @example
+msgid "tag|example|Restore dumped commands as a String object."
 msgstr ""
 
 # @yieldparam [String] command
@@ -6335,8 +6497,8 @@ msgstr ""
 msgid "tag|yieldparam|command"
 msgstr ""
 
-# @example
-msgid "tag|example|Restore dumped commands from a File object."
+# @yield [command, response]
+msgid "Yields a sent command and its response if block is given."
 msgstr ""
 
 # @param [#each_line] dumped_commands
@@ -6360,7 +6522,7 @@ msgid ""
 msgstr ""
 
 # @example
-msgid "tag|example|Restore dumped commands as a String object."
+msgid "tag|example|Restore dumped commands from a File object."
 msgstr ""
 
 # Groonga::Context#push_memory_pool
@@ -6412,26 +6574,26 @@ msgstr ""
 msgid "tag|example|Pushes a new memory pool with block"
 msgstr ""
 
-# @example Pushes a new memory pool with block
-msgid ""
-"adults = nil\n"
-"context.push_memory_pool do\n"
-"  users = context[\"Users\"]\n"
-"  adults = users.select do |user|\n"
-"    user.age >= 20\n"
-"  end\n"
-"  p adults.temporary? # => true\n"
-"  p adults.closed?    # => false\n"
-"end\n"
-"p adults.closed?      # => true"
+# @since
+msgid "3.0.5"
 msgstr ""
 
 # @example
 msgid "tag|example|Pushes a new memory pool without block"
 msgstr ""
 
-# @since
-msgid "3.0.5"
+# @example Pushes a new memory pool without block
+msgid ""
+"adults = nil\n"
+"context.push_memory_pool\n"
+"users = context[\"Users\"]\n"
+"adults = users.select do |user|\n"
+"  user.age >= 20\n"
+"end\n"
+"p adults.temporary? # => true\n"
+"p adults.closed?    # => false\n"
+"context.pop_memory_pool\n"
+"p adults.closed?    # => true"
 msgstr ""
 
 # @example
@@ -6463,18 +6625,18 @@ msgstr ""
 msgid "tag|overload|push_memory_pool"
 msgstr ""
 
-# @example Pushes a new memory pool without block
+# @example Pushes a new memory pool with block
 msgid ""
 "adults = nil\n"
-"context.push_memory_pool\n"
-"users = context[\"Users\"]\n"
-"adults = users.select do |user|\n"
-"  user.age >= 20\n"
+"context.push_memory_pool do\n"
+"  users = context[\"Users\"]\n"
+"  adults = users.select do |user|\n"
+"    user.age >= 20\n"
+"  end\n"
+"  p adults.temporary? # => true\n"
+"  p adults.closed?    # => false\n"
 "end\n"
-"p adults.temporary? # => true\n"
-"p adults.closed?    # => false\n"
-"context.pop_memory_pool\n"
-"p adults.closed?    # => true"
+"p adults.closed?      # => true"
 msgstr ""
 
 # Groonga::Context#pop_memory_pool
@@ -6499,34 +6661,34 @@ msgid ""
 "of the database."
 msgstr ""
 
-# @param [Database]
-msgid "tag|param|database"
-msgstr ""
-
 # @param [Database] database
 msgid "The database to be inspected."
-msgstr ""
-
-# @return [DatabaseInspector]
-msgid "a new instance of DatabaseInspector"
 msgstr ""
 
 # @param [Options] options
 msgid "The options to custom this inspector behavior."
 msgstr ""
 
-# Groonga::DatabaseInspector#report
-msgid "Report inspected result of the database."
+# @return [DatabaseInspector]
+msgid "a new instance of DatabaseInspector"
 msgstr ""
 
-# @param [#write]
-msgid "tag|param|output"
+# @param [Database]
+msgid "tag|param|database"
+msgstr ""
+
+# Groonga::DatabaseInspector#report
+msgid "Report inspected result of the database."
 msgstr ""
 
 # @param [#write] output
 msgid ""
 "(nil) The output of inspected result.\n"
 "If it is @nil@, @$stdout@ is used."
+msgstr ""
+
+# @param [#write]
+msgid "tag|param|output"
 msgstr ""
 
 # Groonga::DatabaseInspector::Options
@@ -6592,8 +6754,7 @@ msgstr ""
 msgid "a new instance of NotEqualExpressionBuilder"
 msgstr ""
 
-# @param value
-msgid "the value to set the attribute query to."
+msgid "Returns the value of attribute table"
 msgstr ""
 
 # @param
@@ -6601,17 +6762,18 @@ msgstr ""
 msgid "tag|param|value"
 msgstr ""
 
-msgid "Returns the value of attribute table"
+# @param value
+msgid "the value to set the attribute query to."
 msgstr ""
 
-msgid "Sets the attribute query"
+# @param value
+msgid "the value to set the attribute syntax to."
 msgstr ""
 
 msgid "Returns the value of attribute query"
 msgstr ""
 
-# @param value
-msgid "the value to set the attribute syntax to."
+msgid "Sets the attribute query"
 msgstr ""
 
 msgid "Sets the attribute syntax"
@@ -6624,6 +6786,9 @@ msgstr ""
 msgid "the value to set the attribute allow_pragma to."
 msgstr ""
 
+msgid "Returns the value of attribute allow_pragma"
+msgstr ""
+
 # Groonga::ExpressionBuildable#allow_pragma=
 msgid "Sets the attribute allow_pragma"
 msgstr ""
@@ -6632,30 +6797,27 @@ msgstr ""
 msgid "the value to set the attribute allow_column to."
 msgstr ""
 
-msgid "Returns the value of attribute allow_pragma"
-msgstr ""
-
 # Groonga::ExpressionBuildable#allow_column=
 msgid "Sets the attribute allow_column"
-msgstr ""
-
-msgid "Returns the value of attribute allow_column"
 msgstr ""
 
 # @param value
 msgid "the value to set the attribute allow_update to."
 msgstr ""
 
+msgid "Returns the value of attribute allow_column"
+msgstr ""
+
 # Groonga::ExpressionBuildable#allow_update=
 msgid "Sets the attribute allow_update"
 msgstr ""
 
-msgid "Returns the value of attribute allow_update"
-msgstr "緯度の値を返す。"
-
 # @param value
 msgid "the value to set the attribute allow_leading_not to."
 msgstr ""
+
+msgid "Returns the value of attribute allow_update"
+msgstr "緯度の値を返す。"
 
 # Groonga::ExpressionBuildable#allow_leading_not=
 msgid "Sets the attribute allow_leading_not"
@@ -7414,7 +7576,14 @@ msgstr ""
 msgid "the record formatted as JSON."
 msgstr ""
 
-msgid "レコードを削除する。"
+# Groonga::Record#delete
+msgid "Delete the record."
+msgstr ""
+
+# Groonga::Record#rename
+msgid ""
+"Renames key of the record. Only available for\n"
+"{Groonga::DoubleArrayTrie} table."
 msgstr ""
 
 msgid ""
@@ -7459,9 +7628,6 @@ msgid ""
 "追加・削除することができる。"
 msgstr ""
 
-msgid "tag|example|上図のようなスキーマを定義する場合は以下のようになる。"
-msgstr ""
-
 # @example 上図のようなスキーマを定義する場合は以下のようになる。
 msgid ""
 "Groonga::Schema.define do |schema|\n"
@@ -7480,6 +7646,9 @@ msgid ""
 "    table.time(\"issued\")\n"
 "  end\n"
 "end"
+msgstr ""
+
+msgid "tag|example|上図のようなスキーマを定義する場合は以下のようになる。"
 msgstr ""
 
 msgid "スキーマ操作で発生する例外のスーパークラス。"
@@ -7932,17 +8101,17 @@ msgstr ""
 msgid "Defines a 8 bit signed integer column named @name@."
 msgstr "@name@ という名前8ビット符号付き整数のカラムを定義します。"
 
-# @param [String or Symbol]
-msgid "tag|param|name"
+msgid "({}) the options"
 msgstr ""
 
-msgid "({}) the options"
+msgid "#column for available options."
 msgstr ""
 
 msgid "tag|see|#column"
 msgstr ""
 
-msgid "#column for available options."
+# @param [String or Symbol]
+msgid "tag|param|name"
 msgstr ""
 
 msgid "the column name"
@@ -8059,23 +8228,23 @@ msgid "a new instance of ColumnRemoveDefinition"
 msgstr ""
 
 # @param value
-msgid "the value to set the attribute current_name to."
+msgid "the value to set the attribute new_name to."
 msgstr ""
 
 # @param value
-msgid "the value to set the attribute new_name to."
+msgid "the value to set the attribute current_name to."
+msgstr ""
+
+msgid "Sets the attribute current_name"
 msgstr ""
 
 msgid "Returns the value of attribute new_name"
 msgstr ""
 
-msgid "Sets the attribute new_name"
-msgstr ""
-
 msgid "Returns the value of attribute current_name"
 msgstr ""
 
-msgid "Sets the attribute current_name"
+msgid "Sets the attribute new_name"
 msgstr ""
 
 msgid "a new instance of ColumnRenameDefinition"
@@ -8109,16 +8278,16 @@ msgstr ""
 msgid "Measures statistic."
 msgstr ""
 
-# @param [String, nil] path
-msgid "Measures disk usage of the path."
-msgstr ""
-
 # @return [Integer]
 msgid "0 if path is @nil@, disk usage of the path otherwise."
 msgstr ""
 
 # @param [String, nil]
 msgid "tag|param|path"
+msgstr ""
+
+# @param [String, nil] path
+msgid "Measures disk usage of the path."
 msgstr ""
 
 # Groonga::SubRecords
