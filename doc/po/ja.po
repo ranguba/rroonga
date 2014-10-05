@@ -14,9 +14,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
-#, fuzzy
 msgid "# README"
-msgstr "h1. はじめに"
+msgstr "# はじめに"
 
 msgid ""
 "[![Gem Version](https://badge.fury.io/rb/rroonga.svg)](http://badge.fury.io/rb"
@@ -25,16 +24,14 @@ msgid ""
 "ps://travis-ci.org/ranguba/rroonga)"
 msgstr ""
 
-#, fuzzy
 msgid "## Name"
-msgstr "h2. 名前"
+msgstr "## 名前"
 
 msgid "Rroonga"
 msgstr ""
 
-#, fuzzy
 msgid "## Description"
-msgstr "h2. 説明"
+msgstr "## 説明"
 
 msgid ""
 "Ruby bindings for Groonga that provide full text search and\n"
@@ -53,13 +50,11 @@ msgstr ""
 msgid "See the following URL about Groonga."
 msgstr "Groongaに関する情報は以下のURLを参照して下さい。"
 
-#, fuzzy
 msgid "* [The Groonga official site](http://groonga.org/)"
-msgstr "* \"Groonga公式サイト\":http://groonga.org/ja/"
+msgstr "* [Groonga公式サイト](http://groonga.org/ja/)"
 
-#, fuzzy
 msgid "## Authors"
-msgstr "h2. 作者"
+msgstr "## 作者"
 
 msgid ""
 "* Kouhei Sutou `<kou@clear-code.com>`\n"
@@ -70,9 +65,8 @@ msgid ""
 "* yoshihara haruka `<yoshihara@clear-code.com>`"
 msgstr ""
 
-#, fuzzy
 msgid "## License"
-msgstr "h2. ライセンス"
+msgstr "## ライセンス"
 
 msgid "LGPL 2.1. See license/LGPL for details."
 msgstr "LGPL 2.1です。詳しくはlicense/LGPLをご覧ください。"
@@ -82,55 +76,46 @@ msgid ""
 "contributed patches.)"
 msgstr "（コントリビュートされたパッチなども含み、Kouhei Sutouがライセンスを変更する権利を持ちます。）"
 
-#, fuzzy
 msgid "## Dependencies"
-msgstr "h2. 依存ソフトウェア"
+msgstr "## 依存ソフトウェア"
 
 msgid ""
 "* Ruby >= 1.9.3\n"
 "* Groonga >= 4.0.4"
 msgstr ""
 
-#, fuzzy
 msgid "## Install"
-msgstr "h2. インストール"
+msgstr "## インストール"
 
 msgid "    % sudo gem install rroonga"
 msgstr ""
 
-#, fuzzy
 msgid "## Documents"
-msgstr "h2. ドキュメント"
+msgstr "## ドキュメント"
 
-#, fuzzy
 msgid ""
 "* [Reference manual in English](http://ranguba.org/rroonga/en/)\n"
 "* [Reference manual in Japanese](http://ranguba.org/rroonga/ja/)"
 msgstr ""
-"* \"リファレンスマニュアル（英語）\":http://ranguba.org/rroonga/en/\n"
-"* \"リファレンスマニュアル（日本語）\":http://ranguba.org/rroonga/ja/"
+"* [リファレンスマニュアル（英語）](http://ranguba.org/rroonga/en/)\n"
+"* [リファレンスマニュアル（日本語）](http://ranguba.org/rroonga/ja/)"
 
-#, fuzzy
 msgid "## Mailing list"
-msgstr "h2. メーリングリスト"
+msgstr "## メーリングリスト"
 
-#, fuzzy
 msgid ""
 "* English: [groonga-talk](http://lists.sourceforge.net/mailman/listinfo/groong"
 "a-talk)\n"
 "* Japanese: [groonga-dev](http://lists.sourceforge.jp/mailman/listinfo/groonga"
 "-dev)"
 msgstr ""
-"* 英語: \"groonga-talk\":http://lists.sourceforge.net/mailman/listinfo/groonga-tal"
-"k\n"
-"* 日本語: \"groonga-dev\":http://lists.sourceforge.jp/mailman/listinfo/groonga-dev"
+"* 英語: [groonga-talk](http://lists.sourceforge.net/mailman/listinfo/groonga-tal"
+"k)\n"
+"* 日本語: [groonga-dev](http://lists.sourceforge.jp/mailman/listinfo/groonga-dev)"
 
-#, fuzzy
-#, fuzzy
 msgid "## Thanks"
-msgstr "h2. 感謝"
+msgstr "## 感謝"
 
-#, fuzzy
 msgid ""
 "* Daijiro MORI: sent patches to support the latest Groonga.\n"
 "* Tasuku SUENAGA: sent bug reports.\n"
@@ -150,8 +135,8 @@ msgstr ""
 "* グニャラくん: バグレポートをしてくれました。\n"
 "* にくさん: バグレポートをしてくれました。\n"
 "* daraさん:\n"
-"** テストを書いてくれました。\n"
-"** バグを直してくれました。\n"
+"  * テストを書いてくれました。\n"
+"  * バグを直してくれました。\n"
 "* id:mat_akiさん: バグレポートをしてくれました。\n"
 "* @yune_kotomiさん: バグレポートをしてくれました。\n"
 "* 咳さん: バグレポートをしてくれました。\n"
@@ -511,9 +496,8 @@ msgstr "* \"2. インストール - Groonga ドキュメント\":http://groonga.
 msgid "h1. NEWS"
 msgstr "h1. お知らせ"
 
-#, fuzzy
 msgid "h2(#4-0-5). 4.0.5: 2014-10-05"
-msgstr "* @kamipoさん"
+msgstr ""
 
 msgid "h3. Improvements"
 msgstr "h3. 改善"
@@ -525,6 +509,11 @@ msgid ""
 "* Added {Groonga::Record#rename}.\n"
 "* [windows] Disabled debug flags."
 msgstr ""
+"* [windows] クロスビルド用タスクを追加。\n"
+"* {Groonga::DoubleArrayTrie#update} を追加。\n"
+"  [GitHub#24] [Masafumi Yokoyamaさんがパッチ提供]\n"
+"* {Groonga::Record#rename} を追加。\n"
+"* [windows] デバッグフラグを無効にした。"
 
 msgid "h3. Fixes"
 msgstr "h3. 修正"
@@ -538,6 +527,12 @@ msgid ""
 "  a backward incompatibility, but it is OK because the current API is a\n"
 "  bug."
 msgstr ""
+"* {Groonga::Table::KeySupport#delete}に @:id => true@ オプションを追加。\n"
+"  @Groonga::Table::KeySupport#delete@ はIDとキーの両方を受け入れていて、\n"
+"  数値が渡されたときはIDとして扱われます。しかし、キーには数値も使えます。\n"
+"  その場合、キーによる削除ができません。そこで、\n"
+"  @Groonga::Table::KeySupport#delete(id, :id => true)@ というAPIを追加しました。\n"
+"  この変更は後方互換性がありませんが、現在のAPIはバグなので許容します。"
 
 msgid "h3. Thanks"
 msgstr "h3. 感謝"
@@ -2242,9 +2237,8 @@ msgstr "* 最初のリリース！"
 msgid "# Release"
 msgstr ""
 
-#, fuzzy
 msgid "This document describes how to release Rroonga."
-msgstr "Rroongaのインストール方法について説明します。"
+msgstr "Rroongaのリリース方法について説明します。"
 
 msgid "## 1. Summarize the changes for this release"
 msgstr ""
@@ -2296,9 +2290,8 @@ msgid ""
 "* Fixes: fixed bugs, ..."
 msgstr ""
 
-#, fuzzy
 msgid "### Thanks"
-msgstr "h2. 感謝"
+msgstr "### 感謝"
 
 msgid ""
 "If a contributor name is in a commit log, create \"Thanks\" group and write the "
@@ -2311,20 +2304,17 @@ msgstr ""
 msgid "    h2(#x-x-x). x.x.x: YYYY-MM-DD"
 msgstr ""
 
-#, fuzzy
 msgid "    h3. Improvements"
-msgstr "h3. 改善"
+msgstr "    h3. 改善"
 
 msgid "    * ..."
 msgstr ""
 
-#, fuzzy
 msgid "    h3. Fixes"
-msgstr "h3. 修正"
+msgstr "    h3. 修正"
 
-#, fuzzy
 msgid "    h3. Thanks"
-msgstr "h3. 感謝"
+msgstr "    h3. 感謝"
 
 msgid "h1. Tutorial"
 msgstr "h1. チュートリアル"
