@@ -1,5 +1,29 @@
 h1. NEWS
 
+h2(#4-0-5). 4.0.5: 2014-10-05
+
+h3. Improvements
+
+* [windows] Added cross build task.
+* Added {Groonga::DoubleArrayTrie#update}.
+  [GitHub#24] [Patch by Masafumi Yokoyama]
+* Added {Groonga::Record#rename}.
+* [windows] Disabled debug flags.
+
+h3. Fixes
+
+* Added @:id => true@ option to {Groonga::Table::KeySupport#delete}.
+  @Groonga::Table::KeySupport#delete@ accepts both ID and key. If passed
+  value is integer, it is handled as ID. But we can use @Int32@ as key.
+  In the case, we can't delete a record by key. Therefore, we added
+  @Groonga::Table::KeySupport#delete(id, :id => true)@ API. It introduces
+  a backward incompatibility, but it is OK because the current API is a
+  bug.
+
+h3. Thanks
+
+* Masafumi Yokoyama
+
 h2(#4-0-4). 4.0.4: 2014-08-29
 
 h3. Improvements
