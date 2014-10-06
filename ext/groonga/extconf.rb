@@ -313,6 +313,14 @@ checking_for(checking_message("--enable-debug-build option")) do
   enable_debug_build
 end
 
+checking_for(checking_message("--enable-untyped-data-warning option")) do
+  enable_check_untyped_data = enable_config("untyped-data-warning", false)
+  if enable_check_untyped_data
+    $defs << "-DRUBY_UNTYPED_DATA_WARNING"
+  end
+  enable_check_untyped_data
+end
+
 if ENV["INSTALL_RB"] == "yes"
   $INSTALLFILES ||= []
   $INSTALLFILES << ["../../lib/**/*.rb", "$(RUBYLIBDIR)", "../../lib"]
