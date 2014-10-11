@@ -340,7 +340,7 @@ rb_grn_patricia_trie_search (int argc, VALUE *argv, VALUE self)
  *
  * @example
  *   words = Groonga::PatriciaTrie.create(:key_type => "ShortText",
- *                                        :key_normalize => true)
+ *                                        :normalizer => "NormalizerAuto")
  *   words.add("リンク")
  *   adventure_of_link = words.add('リンクの冒険')
  *   words.add('冒険')
