@@ -33,7 +33,7 @@ module Groonga
     #   include ERB::Util
     #   Groonga::Context.default_options = {:encoding => "utf-8"}
     #   words = Groonga::PatriciaTrie.create(:key_type => "ShortText",
-    #                                        :key_normalize => true)
+    #                                        :normalizer => "NormalizerAuto")
     #   words.add('ｶﾞｯ')
     #   words.add('ＭＵＴＥＫＩ')
     #
