@@ -627,6 +627,9 @@ rb_grn_bulk_from_ruby_object_with_type (VALUE object, grn_ctx *context,
         bulk = grn_obj_open(context, GRN_BULK, flags, GRN_ID_NIL);
         rb_grn_context_check(context, object);
     }
+    if (bulk->header.domain != type_id) {
+        grn_obj_reinit(context, bulk, type_id, 0);
+    }
     GRN_TEXT_SET(context, bulk, string, size);
 
     return bulk;
