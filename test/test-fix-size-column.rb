@@ -31,47 +31,47 @@ class FixSizeColumnTest < Test::Unit::TestCase
       @bookmarks = Groonga::Array.create(:name => "Bookmarks",
                                          :path => @bookmarks_path.to_s)
 
-      @viewed_column_path = @columns_dir + "viewed"
-      @viewed = @bookmarks.define_column("viewed", "Int32",
-                                         :path => @viewed_column_path.to_s)
+      @n_viewed_column_path = @columns_dir + "n_viewed"
+      @n_viewed = @bookmarks.define_column("n_viewed", "Int32",
+                                           :path => @n_viewed_column_path.to_s)
     end
 
     def test_index?
-      assert_not_predicate(@viewed, :index?)
+      assert_not_predicate(@n_viewed, :index?)
     end
 
     def test_vector?
-      assert_not_predicate(@viewed, :vector?)
+      assert_not_predicate(@n_viewed, :vector?)
     end
 
     def test_scalar?
-      assert_predicate(@viewed, :scalar?)
+      assert_predicate(@n_viewed, :scalar?)
     end
 
     def test_inspect
       assert_equal("#<Groonga::FixSizeColumn " +
-                   "id: <#{@viewed.id}>, " +
-                   "name: <Bookmarks.viewed>, " +
-                   "path: <#{@viewed_column_path}>, " +
+                   "id: <#{@n_viewed.id}>, " +
+                   "name: <Bookmarks.n_viewed>, " +
+                   "path: <#{@n_viewed_column_path}>, " +
                    "domain: <Bookmarks>, " +
                    "range: <Int32>, " +
                    "flags: <KEY_INT>" +
                    ">",
-                   @viewed.inspect)
+                   @n_viewed.inspect)
     end
 
     def test_domain
-      assert_equal(@bookmarks, @viewed.domain)
+      assert_equal(@bookmarks, @n_viewed.domain)
     end
 
     def test_table
-      assert_equal(@bookmarks, @viewed.table)
+      assert_equal(@bookmarks, @n_viewed.table)
     end
 
     def test_assign_int_after_string
       assert_nothing_raised do
-        @bookmarks.add(:viewed => "100")
-        @bookmarks.add(:viewed => 100)
+        @bookmarks.add(:n_viewed => "100")
+        @bookmarks.add(:n_viewed => 100)
       end
     end
   end
