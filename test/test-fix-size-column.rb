@@ -64,6 +64,13 @@ class FixSizeColumnTest < Test::Unit::TestCase
     assert_equal(@bookmarks, @viewed.table)
   end
 
+  def test_assign_int_after_string
+      assert_nothing_raised do
+          @bookmarks.add(:viewed => "100")
+          @bookmarks.add(:viewed => 100)
+      end
+  end
+
   class TimeTest < self
     class IntegerTest < self
       def test_assign
