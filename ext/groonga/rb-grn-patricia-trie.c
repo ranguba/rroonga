@@ -1,7 +1,7 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /* vim: set sts=4 sw=4 ts=8 noet: */
 /*
-  Copyright (C) 2009  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2014  Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -753,7 +753,7 @@ rb_grn_patricia_trie_open_rk_cursor (int argc, VALUE *argv, VALUE self)
 
 static grn_table_cursor *
 rb_grn_patricia_trie_open_grn_near_cursor (int argc, VALUE *argv, VALUE self,
-                                             grn_ctx **context, int flags)
+                                           grn_ctx **context, int flags)
 {
     grn_obj *table;
     grn_obj *key_p = NULL, casted_key;
