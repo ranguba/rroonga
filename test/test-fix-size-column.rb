@@ -68,10 +68,11 @@ class FixSizeColumnTest < Test::Unit::TestCase
       assert_equal(@bookmarks, @n_viewed.table)
     end
 
-    def test_assign_int_after_string
-      assert_nothing_raised do
+    class AssignTest < self
+      def test_different_types
         @bookmarks.add(:n_viewed => "100")
-        @bookmarks.add(:n_viewed => 100)
+        record = @bookmarks.add(:n_viewed => 101)
+        assert_equal(101, record.n_viewed)
       end
     end
   end
