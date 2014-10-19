@@ -756,7 +756,7 @@ rb_grn_patricia_trie_open_grn_near_cursor (int argc, VALUE *argv, VALUE self,
                                            grn_ctx **context, int flags)
 {
     grn_obj *table;
-    grn_obj *key_p = NULL, casted_key;
+    grn_obj *key;
     grn_table_cursor *cursor;
     unsigned min_size = 0;
     int offset = 0, limit = -1;
@@ -765,10 +765,10 @@ rb_grn_patricia_trie_open_grn_near_cursor (int argc, VALUE *argv, VALUE self,
 
     flags |= GRN_CURSOR_PREFIX;
 
-    rb_grn_table_deconstruct((RbGrnTable *)SELF(self), &table, context,
-                             NULL, NULL,
-                             NULL, NULL, NULL,
-                             NULL);
+    rb_grn_table_key_support_deconstruct(SELF(self), &table, context,
+                                         &key, NULL, NULL,
+                                         NULL, NULL, NULL,
+                                         NULL);
 
     rb_scan_args(argc, argv, "11", &rb_key, &options);
 
@@ -780,15 +780,9 @@ rb_grn_patricia_trie_open_grn_near_cursor (int argc, VALUE *argv, VALUE self,
                         "less_than", &rb_less_than,
                         NULL);
 
-    key_p = RVAL2GRNBULK_WITH_TYPE(rb_key, *context, key_p,
-                                   table->header.domain,
-                                   grn_ctx_at(*context, table->header.domain));
-    GRN_OBJ_INIT(&casted_key, GRN_BULK, 0, table->header.domain);
-    if (key_p->header.domain != table->header.domain) {
-        grn_obj_cast(*context, key_p, &casted_key, GRN_FALSE);
-        grn_obj_unlink(*context, key_p);
-        key_p = &casted_key;
-    }
+    RVAL2GRNBULK_WITH_TYPE(rb_key, *context, key,
+                           table->header.domain,
+                           grn_ctx_at(*context, table->header.domain));
 
     if (!NIL_P(rb_min_size))
         min_size = NUM2UINT(rb_min_size);
@@ -804,9 +798,8 @@ rb_grn_patricia_trie_open_grn_near_cursor (int argc, VALUE *argv, VALUE self,
 
     cursor = grn_table_cursor_open(*context, table,
                                    NULL, min_size,
-                                   GRN_BULK_HEAD(key_p), GRN_BULK_VSIZE(key_p),
+                                   GRN_BULK_HEAD(key), GRN_BULK_VSIZE(key),
                                    offset, limit, flags);
-    GRN_OBJ_FIN(*context, &casted_key);
     rb_grn_context_check(*context, self);
 
     return cursor;
