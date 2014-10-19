@@ -1,4 +1,4 @@
-# Copyright (C) 2009  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2014  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -18,7 +18,11 @@ class FixSizeColumnTest < Test::Unit::TestCase
 
   def setup
     setup_database
+  end
 
+  class OperationTest < self
+  def setup
+    super
     setup_bookmarks_table
   end
 
@@ -69,6 +73,7 @@ class FixSizeColumnTest < Test::Unit::TestCase
       @bookmarks.add(:viewed => "100")
       @bookmarks.add(:viewed => 100)
     end
+  end
   end
 
   class TimeTest < self
