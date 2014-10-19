@@ -756,7 +756,8 @@ rb_grn_patricia_trie_open_grn_near_cursor (int argc, VALUE *argv, VALUE self,
                                            grn_ctx **context, int flags)
 {
     grn_obj *table;
-    grn_obj *key;
+    grn_id domain_id;
+    grn_obj *key, *domain;
     grn_table_cursor *cursor;
     unsigned min_size = 0;
     int offset = 0, limit = -1;
@@ -766,7 +767,7 @@ rb_grn_patricia_trie_open_grn_near_cursor (int argc, VALUE *argv, VALUE self,
     flags |= GRN_CURSOR_PREFIX;
 
     rb_grn_table_key_support_deconstruct(SELF(self), &table, context,
-                                         &key, NULL, NULL,
+                                         &key, &domain_id, &domain,
                                          NULL, NULL, NULL,
                                          NULL);
 
@@ -780,9 +781,7 @@ rb_grn_patricia_trie_open_grn_near_cursor (int argc, VALUE *argv, VALUE self,
                         "less_than", &rb_less_than,
                         NULL);
 
-    RVAL2GRNBULK_WITH_TYPE(rb_key, *context, key,
-                           table->header.domain,
-                           grn_ctx_at(*context, table->header.domain));
+    RVAL2GRNBULK_WITH_TYPE(rb_key, *context, key, domain_id, domain);
 
     if (!NIL_P(rb_min_size))
         min_size = NUM2UINT(rb_min_size);
