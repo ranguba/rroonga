@@ -65,10 +65,10 @@ class FixSizeColumnTest < Test::Unit::TestCase
   end
 
   def test_assign_int_after_string
-      assert_nothing_raised do
-          @bookmarks.add(:viewed => "100")
-          @bookmarks.add(:viewed => 100)
-      end
+    assert_nothing_raised do
+      @bookmarks.add(:viewed => "100")
+      @bookmarks.add(:viewed => 100)
+    end
   end
 
   class TimeTest < self
