@@ -21,59 +21,59 @@ class FixSizeColumnTest < Test::Unit::TestCase
   end
 
   class OperationTest < self
-  def setup
-    super
-    setup_bookmarks_table
-  end
-
-  def setup_bookmarks_table
-    @bookmarks_path = @tables_dir + "bookmarks"
-    @bookmarks = Groonga::Array.create(:name => "Bookmarks",
-                                       :path => @bookmarks_path.to_s)
-
-    @viewed_column_path = @columns_dir + "viewed"
-    @viewed = @bookmarks.define_column("viewed", "Int32",
-                                       :path => @viewed_column_path.to_s)
-  end
-
-  def test_index?
-    assert_not_predicate(@viewed, :index?)
-  end
-
-  def test_vector?
-    assert_not_predicate(@viewed, :vector?)
-  end
-
-  def test_scalar?
-    assert_predicate(@viewed, :scalar?)
-  end
-
-  def test_inspect
-    assert_equal("#<Groonga::FixSizeColumn " +
-                 "id: <#{@viewed.id}>, " +
-                 "name: <Bookmarks.viewed>, " +
-                 "path: <#{@viewed_column_path}>, " +
-                 "domain: <Bookmarks>, " +
-                 "range: <Int32>, " +
-                 "flags: <KEY_INT>" +
-                 ">",
-                 @viewed.inspect)
-  end
-
-  def test_domain
-    assert_equal(@bookmarks, @viewed.domain)
-  end
-
-  def test_table
-    assert_equal(@bookmarks, @viewed.table)
-  end
-
-  def test_assign_int_after_string
-    assert_nothing_raised do
-      @bookmarks.add(:viewed => "100")
-      @bookmarks.add(:viewed => 100)
+    def setup
+      super
+      setup_bookmarks_table
     end
-  end
+
+    def setup_bookmarks_table
+      @bookmarks_path = @tables_dir + "bookmarks"
+      @bookmarks = Groonga::Array.create(:name => "Bookmarks",
+                                         :path => @bookmarks_path.to_s)
+
+      @viewed_column_path = @columns_dir + "viewed"
+      @viewed = @bookmarks.define_column("viewed", "Int32",
+                                         :path => @viewed_column_path.to_s)
+    end
+
+    def test_index?
+      assert_not_predicate(@viewed, :index?)
+    end
+
+    def test_vector?
+      assert_not_predicate(@viewed, :vector?)
+    end
+
+    def test_scalar?
+      assert_predicate(@viewed, :scalar?)
+    end
+
+    def test_inspect
+      assert_equal("#<Groonga::FixSizeColumn " +
+                   "id: <#{@viewed.id}>, " +
+                   "name: <Bookmarks.viewed>, " +
+                   "path: <#{@viewed_column_path}>, " +
+                   "domain: <Bookmarks>, " +
+                   "range: <Int32>, " +
+                   "flags: <KEY_INT>" +
+                   ">",
+                   @viewed.inspect)
+    end
+
+    def test_domain
+      assert_equal(@bookmarks, @viewed.domain)
+    end
+
+    def test_table
+      assert_equal(@bookmarks, @viewed.table)
+    end
+
+    def test_assign_int_after_string
+      assert_nothing_raised do
+        @bookmarks.add(:viewed => "100")
+        @bookmarks.add(:viewed => 100)
+      end
+    end
   end
 
   class TimeTest < self
