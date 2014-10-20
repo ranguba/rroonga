@@ -1,10 +1,10 @@
 h1. Tutorial
 
-This page introduce how to use rroonga via a simple application making.
+This page introduce how to use Rroonga via a simple application making.
 
 h2. Install
 
-You can install rroonga in your compter with RubyGems.
+You can install Rroonga in your compter with RubyGems.
 
 <pre>
 !!!command_line
@@ -14,7 +14,7 @@ You can install rroonga in your compter with RubyGems.
 h2. Create Database
 
 Let's create database for simple bookmark application.
-Please execute irb with loading rroonga with this command:
+Please execute irb with loading Rroonga with this command:
 
 <pre>
 !!!irb
