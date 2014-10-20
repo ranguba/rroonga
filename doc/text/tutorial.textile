@@ -18,7 +18,7 @@ Please execute irb with loading Rroonga with this command:
 
 <pre>
 !!!irb
-% irb --simple-prompt -rgroonga
+% irb --simple-prompt -r groonga
 >>
 </pre>
 
