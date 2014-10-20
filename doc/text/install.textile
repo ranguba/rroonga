@@ -48,7 +48,7 @@ Type the following command on Ruby console:
 
 <pre>
 !!!command_line
-% gem.bat install rroonga
+% gem install rroonga
 </pre>
 
 This document assumes that you're using "RubyInstaller for
