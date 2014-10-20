@@ -2,7 +2,7 @@ h1. Install
 
 This document describes how to install Rroonga.
 
-You can install Rrroonga by RubyGems. It is the standard way for Ruby
+You can install Rroonga by RubyGems. It is the standard way for Ruby
 libraries.
 
 Rroonga is depends on Groonga. So you need to install both Groonga and
