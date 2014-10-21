@@ -758,7 +758,7 @@ rb_grn_column_get_indexes (int argc, VALUE *argv, VALUE self)
 }
 
 /*
- * Renames the table to name.
+ * Renames the column to name.
  * @since 1.3.0
  * @overload rename(name)
  *   @param name [String] the new name
@@ -782,7 +782,8 @@ rb_grn_column_rename (VALUE self, VALUE rb_name)
     rc = grn_column_rename(context, column, name, name_size);
     rb_grn_context_check(context, self);
     rb_grn_rc_check(rc, self);
-
+    rb_grn_named_object_set_name(RB_GRN_NAMED_OBJECT(DATA_PTR(self)),
+                                 name, name_size);
     return self;
 }
 
