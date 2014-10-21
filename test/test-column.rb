@@ -461,4 +461,23 @@ class ColumnTest < Test::Unit::TestCase
                    @users_age_column.disk_usage)
     end
   end
+
+  class RenameTest < self
+    def setup
+      setup_database
+
+      Groonga::Schema.define do |schema|
+        schema.create_table("Users") do |table|
+          table.short_text("name")
+        end
+      end
+
+      @users = context["Users"]
+    end
+
+    def test_old_name_reference
+      @users.column("name").rename("nick")
+      assert_nil(@users.column("name"))
+    end
+  end
 end
