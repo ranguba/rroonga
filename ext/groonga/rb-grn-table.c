@@ -924,6 +924,50 @@ rb_grn_table_truncate (VALUE self)
     return Qnil;
 }
 
+typedef struct {
+    grn_ctx *context;
+    grn_table_cursor *cursor;
+    VALUE self;
+} EachData;
+
+static VALUE
+rb_grn_table_each_body (VALUE user_data)
+{
+    EachData *data = (EachData *)user_data;
+    grn_ctx *context = data->context;
+    grn_table_cursor *cursor = data->cursor;
+    VALUE self = data->self;
+    RbGrnObject *rb_grn_object;
+
+    rb_grn_object = RB_GRN_OBJECT(SELF(self));
+    while (GRN_TRUE) {
+        grn_id id;
+
+        if (!rb_grn_object->object) {
+            break;
+        }
+
+        id = grn_table_cursor_next(context, cursor);
+        if (id == GRN_ID_NIL) {
+            break;
+        }
+
+        rb_yield(rb_grn_record_new(self, id, Qnil));
+    }
+
+    return Qnil;
+}
+
+static VALUE
+rb_grn_table_each_ensure (VALUE user_data)
+{
+    EachData *data = (EachData *)user_data;
+
+    grn_table_cursor_close(data->context, data->cursor);
+
+    return Qnil;
+}
+
 /*
  * テーブルに登録されているレコードを順番にブロックに渡す。
  *
@@ -940,24 +984,19 @@ rb_grn_table_truncate (VALUE self)
 static VALUE
 rb_grn_table_each (int argc, VALUE *argv, VALUE self)
 {
-    RbGrnTable *rb_table;
-    RbGrnObject *rb_grn_object;
-    grn_ctx *context = NULL;
-    grn_table_cursor *cursor;
-    VALUE rb_cursor;
-    grn_id id;
+    EachData data;
 
     RETURN_ENUMERATOR(self, argc, argv);
 
-    cursor = rb_grn_table_open_grn_cursor(argc, argv, self, &context);
-    rb_cursor = GRNTABLECURSOR2RVAL(Qnil, context, cursor);
-    rb_table = SELF(self);
-    rb_grn_object = RB_GRN_OBJECT(rb_table);
-    while (rb_grn_object->object &&
-           (id = grn_table_cursor_next(context, cursor)) != GRN_ID_NIL) {
-        rb_yield(rb_grn_record_new(self, id, Qnil));
+    data.cursor = rb_grn_table_open_grn_cursor(argc, argv, self,
+                                               &(data.context));
+    if (!data.cursor) {
+        return Qnil;
     }
-    rb_grn_object_close(rb_cursor);
+
+    data.self = self;
+    rb_ensure(rb_grn_table_each_body, (VALUE)&data,
+              rb_grn_table_each_ensure, (VALUE)&data);
 
     return Qnil;
 }
