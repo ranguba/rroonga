@@ -673,22 +673,13 @@ rb_grn_context_support_zlib_p (VALUE self)
  * groongaがLZOサポート付きでビルドされていれば +true+ 、そう
  * でなければ +false+ を返す。
  *
+ * Groonga >= 4.0.7 ではLZOサポートがなくなった。常にfalseを返す。
  * @overload support_lzo?
  */
 static VALUE
 rb_grn_context_support_lzo_p (VALUE self)
 {
-    VALUE rb_support_p;
-    grn_ctx *context;
-    grn_obj support_p;
-
-    context = SELF(self);
-    GRN_BOOL_INIT(&support_p, 0);
-    grn_obj_get_info(context, NULL, GRN_INFO_SUPPORT_LZO, &support_p);
-    rb_support_p = CBOOL2RVAL(GRN_BOOL_VALUE(&support_p));
-    GRN_OBJ_FIN(context, &support_p);
-
-    return rb_support_p;
+    return Qfalse;
 }
 
 /*
