@@ -683,6 +683,28 @@ rb_grn_context_support_lzo_p (VALUE self)
 }
 
 /*
+ * groongaがLZ4サポート付きでビルドされていれば +true+ 、そう
+ * でなければ +false+ を返す。
+ *
+ * @overload support_lz4?
+ */
+static VALUE
+rb_grn_context_support_lz4_p (VALUE self)
+{
+    VALUE rb_support_p;
+    grn_ctx *context;
+    grn_obj support_p;
+
+    context = SELF(self);
+    GRN_BOOL_INIT(&support_p, 0);
+    grn_obj_get_info(context, NULL, GRN_INFO_SUPPORT_LZ4, &support_p);
+    rb_support_p = CBOOL2RVAL(GRN_BOOL_VALUE(&support_p));
+    GRN_OBJ_FIN(context, &support_p);
+
+    return rb_support_p;
+}
+
+/*
  * コンテキストが使うデータベースを返す。
  *
  * @overload database
@@ -965,6 +987,8 @@ rb_grn_init_context (VALUE mGrn)
                      rb_grn_context_support_zlib_p, 0);
     rb_define_method(cGrnContext, "support_lzo?",
                      rb_grn_context_support_lzo_p, 0);
+    rb_define_method(cGrnContext, "support_lz4?",
+                     rb_grn_context_support_lz4_p, 0);
 
     rb_define_method(cGrnContext, "database", rb_grn_context_get_database, 0);
 
