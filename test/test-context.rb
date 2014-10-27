@@ -115,7 +115,7 @@ class ContextTest < Test::Unit::TestCase
   end
 
   def test_support_lzo?
-    assert_boolean(Groonga::Context.default.support_lzo?)
+    assert_false(Groonga::Context.default.support_lzo?)
   end
 
   def test_match_escalation_threshold
