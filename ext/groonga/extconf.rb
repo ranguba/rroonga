@@ -167,6 +167,18 @@ def configure_command_line(prefix)
   escaped_command_line.join(" ")
 end
 
+def n_processors
+  proc_file = "/proc/cpuinfo"
+  use_processors = 1
+  if File.exist?(proc_file)
+    cpu_nums = `cat #{proc_file} |grep processor|wc -l`
+  elsif RUBY_PLATFORM =~ /darwin/
+    cpu_nums = `sysctl -n hw.ncpu`
+  end
+  use_processors = cpu_nums.to_i
+  use_processors
+end
+
 def install_for_gnu_build_system(install_dir)
   run_command("configuring...",
               configure_command_line(install_dir))
