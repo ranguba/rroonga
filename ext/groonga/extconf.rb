@@ -172,7 +172,7 @@ def n_processors
   use_processors = 1
   if File.exist?(proc_file)
     cpu_nums = `cat #{proc_file} | grep processor | wc -l`
-  elsif RUBY_PLATFORM =~ /darwin/
+  elsif /darwin/ =~ RUBY_PLATFORM
     cpu_nums = `sysctl -n hw.ncpu`
   end
   use_processors = cpu_nums.to_i
