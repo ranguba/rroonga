@@ -183,7 +183,7 @@ def install_for_gnu_build_system(install_dir)
   run_command("configuring...",
               configure_command_line(install_dir))
   run_command("building (maybe long time)...",
-              "make")
+              "make -j#{n_processors}")
   run_command("installing...",
               "make install")
 end
