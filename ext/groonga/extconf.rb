@@ -171,11 +171,11 @@ def n_processors
   proc_file = "/proc/cpuinfo"
   use_processors = 1
   if File.exist?(proc_file)
-    cpu_nums = File.readlines(proc_file).grep(/^processor/).size
+    n_cpus = File.readlines(proc_file).grep(/^processor/).size
   elsif /darwin/ =~ RUBY_PLATFORM
-    cpu_nums = `sysctl -n hw.ncpu`
+    n_cpus = `sysctl -n hw.ncpu`
   end
-  use_processors = cpu_nums.to_i
+  use_processors = n_cpus.to_i
   use_processors
 end
 
