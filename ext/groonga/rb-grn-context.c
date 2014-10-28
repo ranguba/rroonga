@@ -670,10 +670,11 @@ rb_grn_context_support_zlib_p (VALUE self)
 }
 
 /*
- * groongaがLZOサポート付きでビルドされていれば +true+ 、そう
- * でなければ +false+ を返す。
+ * If Groonga supports LZO compression, it returns +true+,
+ * otherwise it returns +false+.
  *
- * Groonga >= 4.0.7 ではLZOサポートがなくなった。常にfalseを返す。
+ * Groonga does not support LZO compression 4.0.7 or later.
+ * This method always returns +false+.
  * @overload support_lzo?
  */
 static VALUE
@@ -683,8 +684,8 @@ rb_grn_context_support_lzo_p (VALUE self)
 }
 
 /*
- * groongaがLZ4サポート付きでビルドされていれば +true+ 、そう
- * でなければ +false+ を返す。
+ * If Groonga supports LZ4 compression, it returns +true+,
+ * otherwise it returns +false+.
  *
  * @overload support_lz4?
  */
