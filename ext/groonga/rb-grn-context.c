@@ -675,6 +675,7 @@ rb_grn_context_support_zlib_p (VALUE self)
  *
  * Groonga does not support LZO compression 4.0.7 or later.
  * This method always returns +false+.
+ *
  * @overload support_lzo?
  */
 static VALUE
