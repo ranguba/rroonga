@@ -171,7 +171,7 @@ def n_processors
   proc_file = "/proc/cpuinfo"
   use_processors = 1
   if File.exist?(proc_file)
-    cpu_nums = `cat #{proc_file} |grep processor|wc -l`
+    cpu_nums = `cat #{proc_file} | grep processor | wc -l`
   elsif RUBY_PLATFORM =~ /darwin/
     cpu_nums = `sysctl -n hw.ncpu`
   end
