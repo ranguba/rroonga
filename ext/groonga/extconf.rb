@@ -169,14 +169,13 @@ end
 
 def n_processors
   proc_file = "/proc/cpuinfo"
-  use_processors = 1
   if File.exist?(proc_file)
-    n_cpus = File.readlines(proc_file).grep(/^processor/).size
+    File.readlines(proc_file).grep(/^processor/).size
   elsif /darwin/ =~ RUBY_PLATFORM
-    n_cpus = `sysctl -n hw.ncpu`
+    `sysctl -n hw.ncpu`.to_i
+  else
+    1
   end
-  use_processors = n_cpus.to_i
-  use_processors
 end
 
 def install_for_gnu_build_system(install_dir)
