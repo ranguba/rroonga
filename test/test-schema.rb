@@ -1,4 +1,5 @@
 # Copyright (C) 2009-2014  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2014  Masafumi Yokoyama <myokoym@gmail.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -341,7 +342,7 @@ class SchemaTest < Test::Unit::TestCase
                    "path: <#{path}>, " +
                    "domain: <Posts>, " +
                    "range: <Niku>, " +
-                   "flags: <KEY_VAR_SIZE|COMPRESS_LZO>>",
+                   "flags: <KEY_VAR_SIZE|COMPRESS_LZ4>>",
                    column.inspect)
     end
   end

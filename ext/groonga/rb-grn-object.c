@@ -1,6 +1,7 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
   Copyright (C) 2009-2014  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2014  Masafumi Yokoyama <myokoym@gmail.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -901,8 +902,8 @@ rb_grn_object_inspect_content_flags_with_label (VALUE inspected,
       case GRN_COLUMN_VAR_SIZE:
         if (flags & GRN_OBJ_COMPRESS_ZLIB)
             rb_ary_push(inspected_flags, rb_str_new2("COMPRESS_ZLIB"));
-        if (flags & GRN_OBJ_COMPRESS_LZO)
-            rb_ary_push(inspected_flags, rb_str_new2("COMPRESS_LZO"));
+        if (flags & GRN_OBJ_COMPRESS_LZ4)
+            rb_ary_push(inspected_flags, rb_str_new2("COMPRESS_LZ4"));
         break;
       case GRN_COLUMN_INDEX:
         if (flags & GRN_OBJ_WITH_SECTION)
