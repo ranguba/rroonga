@@ -330,7 +330,7 @@ class SchemaTest < Test::Unit::TestCase
                      :path => path.to_s,
                      :persistent => true,
                      :type => :vector,
-                     :compress => :lzo)
+                     :compress => :lz4)
       end
 
       column_name = "Posts.rate"

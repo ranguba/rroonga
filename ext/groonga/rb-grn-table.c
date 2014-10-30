@@ -1,6 +1,7 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
   Copyright (C) 2009-2014  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2014  Masafumi Yokoyama <myokoym@gmail.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -235,7 +236,7 @@ rb_grn_table_inspect (VALUE self)
  *     値の圧縮方法を指定する。省略した場合は、圧縮しない。
  *
  *     - +:zlib+ := 値をzlib圧縮して格納する。
- *     - +:lzo+ := 値をlzo圧縮して格納する。
+ *     - +:lz4+ := 値をlz4圧縮して格納する。
  *
  * @return [Groonga::FixSizeColumn or Groonga::VariableSizeColumn]
  */
@@ -313,11 +314,14 @@ rb_grn_table_define_column (int argc, VALUE *argv, VALUE self)
     } else if (rb_grn_equal_option(rb_compress, "zlib")) {
         flags |= GRN_OBJ_COMPRESS_ZLIB;
     } else if (rb_grn_equal_option(rb_compress, "lzo")) {
-        flags |= GRN_OBJ_COMPRESS_LZO;
+        /* TODO: for backward compatibility */
+        flags |= GRN_OBJ_COMPRESS_LZ4;
+    } else if (rb_grn_equal_option(rb_compress, "lz4")) {
+        flags |= GRN_OBJ_COMPRESS_LZ4;
     } else {
         rb_raise(rb_eArgError,
                  "invalid compress type: %s: "
-                 "available types: [:zlib, :lzo, nil]",
+                 "available types: [:zlib, :lz4, nil]",
                  rb_grn_inspect(rb_compress));
     }
 

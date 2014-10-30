@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # Copyright (C) 2009-2014  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2014  Masafumi Yokoyama <myokoym@gmail.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -881,7 +882,7 @@ module Groonga
       #   値の圧縮方法を指定する。省略した場合は、圧縮しない。
       #
       #   - :zlib := 値をzlib圧縮して格納する。
-      #   - :lzo := 値をlzo圧縮して格納する。
+      #   - :lz4 := 値をlz4圧縮して格納する。
       def column(name, type, options={})
         definition = self[name, ColumnDefinition]
         if definition.nil?
