@@ -1,4 +1,5 @@
 # Copyright (C) 2009-2010  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2014  Masafumi Yokoyama <myokoym@gmail.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -83,7 +84,7 @@ class ExceptionTest < Test::Unit::TestCase
     assert_const_defined(Groonga, :OperationNotSupported)
     assert_const_defined(Groonga, :AddressIsInUse)
     assert_const_defined(Groonga, :ZLibError)
-    assert_const_defined(Groonga, :LZOError)
+    assert_const_defined(Groonga, :LZ4Error)
     assert_const_defined(Groonga, :StackOverFlow)
     assert_const_defined(Groonga, :SyntaxError)
     assert_const_defined(Groonga, :RetryMax)

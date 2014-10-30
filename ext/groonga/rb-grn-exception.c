@@ -1,6 +1,7 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
   Copyright (C) 2009-2012  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2014  Masafumi Yokoyama <myokoym@gmail.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -83,7 +84,7 @@ static VALUE eGrnNotSocket;
 static VALUE eGrnOperationNotSupported;
 static VALUE eGrnAddressIsInUse;
 static VALUE eGrnZLibError;
-static VALUE eGrnLZOError;
+static VALUE eGrnLZ4Error;
 static VALUE eGrnStackOverFlow;
 static VALUE eGrnSyntaxError;
 static VALUE eGrnRetryMax;
@@ -288,8 +289,8 @@ rb_grn_rc_to_exception (grn_rc rc)
       case GRN_ZLIB_ERROR:
         exception = eGrnZLibError;
         break;
-      case GRN_LZO_ERROR:
-        exception = eGrnLZOError;
+      case GRN_LZ4_ERROR:
+        exception = eGrnLZ4Error;
         break;
       case GRN_STACK_OVER_FLOW:
         exception = eGrnStackOverFlow;
@@ -524,8 +525,8 @@ rb_grn_rc_to_message (grn_rc rc)
       case GRN_ZLIB_ERROR:
         message = "ZLib error";
         break;
-      case GRN_LZO_ERROR:
-        message = "LZO error";
+      case GRN_LZ4_ERROR:
+        message = "LZ4 error";
         break;
       case GRN_STACK_OVER_FLOW:
         message = "stack over flow";
@@ -1114,12 +1115,12 @@ rb_grn_init_exception (VALUE mGrn)
         rb_define_class_under(mGrn, "ZLibError", rb_eGrnError);
 
     /*
-     * Document-class: Groonga::LZOError
+     * Document-class: Groonga::LZ4Error
      *
-     * LZOに問題があるときに発生する。
+     * LZ4に問題があるときに発生する。
      */
-    eGrnLZOError =
-        rb_define_class_under(mGrn, "LZOError", rb_eGrnError);
+    eGrnLZ4Error =
+        rb_define_class_under(mGrn, "LZ4Error", rb_eGrnError);
 
     /*
      * Document-class: Groonga::StackOverFlow
