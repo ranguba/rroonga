@@ -1,6 +1,7 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
   Copyright (C) 2009-2014  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2014  Masafumi Yokoyama <myokoym@gmail.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -458,7 +459,7 @@ rb_grn_variable_size_column_array_set (VALUE self, VALUE rb_id, VALUE rb_value)
  * @overload compressed?
  *   @return [Boolean] whether the column is compressed or not.
  * @overload compressed?(type)
- *   @param [:zlib, :lzo] type (nil)
+ *   @param [:zlib, :lz4] type (nil)
  *   @return [Boolean] whether specified compressed type is used or not.
  * @since 1.3.1
  */
@@ -473,7 +474,7 @@ rb_grn_variable_size_column_compressed_p (int argc, VALUE *argv, VALUE self)
     grn_bool compressed_p = GRN_FALSE;
     grn_bool accept_any_type = GRN_FALSE;
     grn_bool need_zlib_check = GRN_FALSE;
-    grn_bool need_lzo_check = GRN_FALSE;
+    grn_bool need_lz4_check = GRN_FALSE;
 
     rb_scan_args(argc, argv, "01", &type);
 
@@ -483,10 +484,13 @@ rb_grn_variable_size_column_compressed_p (int argc, VALUE *argv, VALUE self)
         if (rb_grn_equal_option(type, "zlib")) {
             need_zlib_check = GRN_TRUE;
         } else if (rb_grn_equal_option(type, "lzo")) {
-            need_lzo_check = GRN_TRUE;
+            /* TODO: for backward compatibility */
+            need_lz4_check = GRN_TRUE;
+        } else if (rb_grn_equal_option(type, "lz4")) {
+            need_lz4_check = GRN_TRUE;
         } else {
             rb_raise(rb_eArgError,
-                     "compressed type should be <:zlib> or <:lzo>: <%s>",
+                     "compressed type should be <:zlib> or <:lz4>: <%s>",
                      rb_grn_inspect(type));
         }
     }
@@ -506,11 +510,11 @@ rb_grn_variable_size_column_compressed_p (int argc, VALUE *argv, VALUE self)
             compressed_p = GRN_BOOL_VALUE(&support_p);
         }
         break;
-      case GRN_OBJ_COMPRESS_LZO:
-        if (accept_any_type || need_lzo_check) {
+      case GRN_OBJ_COMPRESS_LZ4:
+        if (accept_any_type || need_lz4_check) {
             grn_obj support_p;
             GRN_BOOL_INIT(&support_p, 0);
-            grn_obj_get_info(context, NULL, GRN_INFO_SUPPORT_LZO, &support_p);
+            grn_obj_get_info(context, NULL, GRN_INFO_SUPPORT_LZ4, &support_p);
             compressed_p = GRN_BOOL_VALUE(&support_p);
         }
         break;

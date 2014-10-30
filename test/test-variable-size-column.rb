@@ -1,4 +1,5 @@
 # Copyright (C) 2009-2014  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2014  Masafumi Yokoyama <myokoym@gmail.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -85,13 +86,13 @@ class VariableSizeColumnTest < Test::Unit::TestCase
     end
   end
 
-  def test_compressed_lzo?
+  def test_compressed_lz4?
     description = @users.define_column("description", "ShortText",
-                                       :compress => :lzo)
-    if context.support_lzo?
-      assert {description.compressed?(:lzo)}
+                                       :compress => :lz4)
+    if context.support_lz4?
+      assert {description.compressed?(:lz4)}
     else
-      assert {not description.compressed?(:lzo)}
+      assert {not description.compressed?(:lz4)}
     end
   end
 
