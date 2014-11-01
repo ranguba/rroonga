@@ -4,9 +4,9 @@ base_dir = File.join(File.dirname(__FILE__), "..", "..")
 $LOAD_PATH.unshift(File.join(base_dir, "ext"))
 $LOAD_PATH.unshift(File.join(base_dir, "lib"))
 
-require 'rubygems'
-require 'rack'
-require 'groonga'
+require "rubygems"
+require "rack"
+require "groonga"
 
 use Rack::CommonLogger
 use Rack::Runtime
@@ -27,8 +27,8 @@ class Searcher
     response = Rack::Response.new
     response["Content-Type"] = "text/html; charset=UTF-8"
 
-    if request.post? or request['query']
-      query = request['query'] || ''
+    if request.post? or request["query"]
+      query = request["query"] || ""
       if query.empty?
         request.path_info = "/"
       else
@@ -87,14 +87,14 @@ EOF
   end
 
   def query(request)
-    unescape(request.path_info.gsub(/\A\/|\/\z/, ''))
+    unescape(request.path_info.gsub(/\A\/|\/\z/, ""))
   end
 
   def page(request)
-    (request['page'] || 0).to_i
+    (request["page"] || 0).to_i
   end
 
-  def path(request, component='')
+  def path(request, component="")
     escape_html("#{request.script_name}/#{component}")
   end
 
@@ -163,9 +163,9 @@ EOS
 
   def render_record(request, response, record)
     response.write("    <div class='record'>\n")
-    href = escape_html(record['.path'])
-    title = escape_html(record['.title'])
-    last_modified = escape_html(record['.last-modified'].iso8601)
+    href = escape_html(record[".path"])
+    title = escape_html(record[".title"])
+    last_modified = escape_html(record[".last-modified"].iso8601)
     score = record.score
     response.write("      <h2><a href='#{href}'>#{title}</a>(#{score})</h2>\n")
     render_snippet(request, response, record)

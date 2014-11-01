@@ -5,15 +5,15 @@ if ARGV.size < 2 or ARGV.find {|option| option == "-h" or option == "--help"}
   exit
 end
 
-require 'pathname'
+require "pathname"
 
 base_directory = Pathname(__FILE__).dirname + ".."
 $LOAD_PATH.unshift((base_directory + "ext").to_s)
 $LOAD_PATH.unshift((base_directory + "lib").to_s)
 
-require 'rubygems'
-require 'groonga'
-require 'nokogiri'
+require "rubygems"
+require "groonga"
+require "nokogiri"
 
 database_file, *targets = ARGV
 
@@ -71,8 +71,8 @@ targets.each do |target|
         end
         html_document.css("img").each do |image|
           image_content = []
-          title = image['title']
-          alt = image['alt']
+          title = image["title"]
+          alt = image["alt"]
           image_content << title if title and !title.empty?
           image_content << alt if alt and !alt.empty?
           contents.concat(image_content) unless image_content.empty?

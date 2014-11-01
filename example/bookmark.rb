@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 
 base_dir = File.join(File.dirname(__FILE__), "..")
-groonga_ext_dir = File.join(base_dir, 'ext', 'groonga')
-groonga_lib_dir = File.join(base_dir, 'lib')
+groonga_ext_dir = File.join(base_dir, "ext", "groonga")
+groonga_lib_dir = File.join(base_dir, "lib")
 $LOAD_PATH.unshift(groonga_ext_dir)
 $LOAD_PATH.unshift(groonga_lib_dir)
 
@@ -14,7 +14,7 @@ rescue LoadError
   require "groonga"
 end
 
-require 'time'
+require "time"
 
 # Groonga::Logger.register(:level => :debug) do |level, time, title, message, location|
 #   p [level, time, title, message, location]
@@ -25,8 +25,8 @@ Groonga::Context.default_options = {:encoding => :utf8}
 
 path = ARGV[0]
 if path.nil?
-  require 'tmpdir'
-  require 'fileutils'
+  require "tmpdir"
+  require "fileutils"
   temporary_directory = File.join(Dir.tmpdir, "rroonga")
   FileUtils.mkdir_p(temporary_directory)
   at_exit {FileUtils.rm_rf(temporary_directory)}
