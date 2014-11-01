@@ -51,13 +51,13 @@ class Searcher
 <head>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
   <meta name="robot" content="noindex,nofollow" />
-  <title>groongaで全文検索</title>
+  <title>Groongaで全文検索</title>
   <link rel="stylesheet" href="#{path(request, 'css/groonga.css')}"
         type="text/css" media="all" />
 </head>
 <body>
 <div class="header">
-  <h1>groongaで全文検索</h1>
+  <h1>Groongaで全文検索</h1>
 </div>
 
 <div class="content">
@@ -71,7 +71,7 @@ EOH
 
 <div class="footer">
 <p class="powered-by-groonga">
-  <a href="http://groonga.org/">groonga</a>
+  <a href="http://groonga.org/">Groonga</a>
   #{Groonga::VERSION.join('.')}を使っています。
 </p>
 <p class="powered-by-ruby-groonga">
@@ -120,7 +120,7 @@ EOF
       records = []
       response.write(<<-EOS)
   <div class='search-summary'>
-    <p>Rubyでgroonga使って全文検索</p>
+    <p>RubyでGroonga使って全文検索</p>
   </div>
 EOS
     else

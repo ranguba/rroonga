@@ -111,7 +111,7 @@ p(add_bookmark("http://jp.rubyist.net/magazine/",
                "Rubyist Magazine - るびま", "moritan", "Ruby 記事",
                Time.parse("2010-10-07T14:18:28+09:00")))
 p(add_bookmark("http://groonga.rubyforge.org/",
-               "Rubyでgroonga使って全文検索 - ラングバ", "taporobo",
+               "RubyでGroonga使って全文検索 - ラングバ", "taporobo",
                "Ruby groonga 全文検索",
                Time.parse("2010-11-11T12:39:59+09:00")))
 p(add_bookmark("http://www.rubyist.net/~matz/",
