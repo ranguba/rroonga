@@ -51,7 +51,7 @@ begin
   $LOAD_PATH.unshift(File.join(base_dir, "ext", "groonga"))
   $LOAD_PATH.unshift(File.join(base_dir, "lib"))
 
-  require 'groonga'
+  require "groonga"
   tmp_dir = "/tmp/groonga"
   FileUtils.rm_rf(tmp_dir)
   FileUtils.mkdir(tmp_dir)
@@ -89,7 +89,7 @@ rescue LoadError
 end
 
 begin
-  require 'localmemcache'
+  require "localmemcache"
 
   LocalMemCache.drop(:namespace => "write-many-small-items", :force => true)
   mem_cache = LocalMemCache.new(:namespace => "write-many-small-items")
@@ -102,9 +102,9 @@ rescue LoadError
 end
 
 begin
-  require 'tokyocabinet'
+  require "tokyocabinet"
 
-  tc_hash_memory = TokyoCabinet::ADB::new
+  tc_hash_memory = TokyoCabinet::ADB.new
   tc_hash_memory.open("*#bnum=#{n}#mode=wct#xmsiz=0")
   item("TC: Hash: memory") do
     values.each do |value|
@@ -112,7 +112,7 @@ begin
     end
   end
 
-  tc_tree_memory = TokyoCabinet::ADB::new
+  tc_tree_memory = TokyoCabinet::ADB.new
   tc_tree_memory.open("+#bnum=#{n}#mode=wct#xmsiz=0")
   item("TC: Tree: memory") do
     values.each do |value|
@@ -121,7 +121,7 @@ begin
   end
 
   hash_file = Tempfile.new(["tc-hash", ".tch"])
-  tc_hash_file = TokyoCabinet::ADB::new
+  tc_hash_file = TokyoCabinet::ADB.new
   tc_hash_file.open("#{hash_file.path}#bnum=#{n}#mode=wct#xmsiz=0")
   item("TC: Hash: file") do
     values.each do |value|
@@ -130,7 +130,7 @@ begin
   end
 
   tree_file = Tempfile.new(["tc-tree", ".tcb"])
-  tc_tree_file = TokyoCabinet::ADB::new
+  tc_tree_file = TokyoCabinet::ADB.new
   tc_tree_file.open("#{tree_file.path}#bnum=#{n}#mode=wct#xmsiz=0")
   item("TC: Tree: file") do
     values.each do |value|

@@ -1,10 +1,10 @@
-#encoding: UTF-8
+# -*- coding: utf-8 -*-
 
-require 'benchmark'
-require 'shellwords'
-require 'optparse'
+require "benchmark"
+require "shellwords"
+require "optparse"
 
-require 'groonga'
+require "groonga"
 
 Groonga::Logger.query_log_path = "/tmp/query.log"
 
@@ -17,7 +17,7 @@ module ColumnTokenizer
     end
     tokens.each do |token|
       unless token == "*"
-        token.sub!(/[^A-Za-z0-9_]\z/, '')
+        token.sub!(/[^A-Za-z0-9_]\z/, "")
       end
     end
   end
@@ -217,7 +217,7 @@ class Query
     end
 
     def to_parameter_symbol(name)
-      name.sub(NAMED_PARAMETER_PREFIX, '').to_sym
+      name.sub(NAMED_PARAMETER_PREFIX, "").to_sym
     end
 
     def create_query
@@ -383,7 +383,7 @@ class SelectorByMethod < Selector
     tokens = tokenize_column_list(sort_by)
 
     tokens.collect do |token|
-      key = token.sub(DESCENDING_ORDER_PREFIX, '')
+      key = token.sub(DESCENDING_ORDER_PREFIX, "")
       if token =~ DESCENDING_ORDER_PREFIX
         descending_order_sort_key(key)
       else
@@ -493,7 +493,7 @@ class SelectorByMethod < Selector
     columns = columns.collect do |column|
       if column == "*"
         table.columns.collect(&:name).collect do |name|
-          name.sub(/\A[A-Za-z0-9_]+\./, '')
+          name.sub(/\A[A-Za-z0-9_]+\./, "")
         end
       else
         column if column_included_in_record?(column, result.first)

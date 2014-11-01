@@ -1,10 +1,10 @@
-require 'fileutils'
-require 'shellwords'
+require "fileutils"
+require "shellwords"
 
-require 'groonga'
+require "groonga"
 
 $LOAD_PATH.unshift(File.dirname(__FILE__))
-require 'create-wikipedia-database'
+require "create-wikipedia-database"
 
 class SampleRecords
   def initialize(record_count)

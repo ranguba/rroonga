@@ -1,10 +1,10 @@
 # Wikipedia data: http://download.wikimedia.org/jawiki/latest/jawiki-latest-pages-articles.xml.bz2
 
-require 'time'
-require 'fileutils'
-require 'groonga'
+require "time"
+require "fileutils"
+require "groonga"
 
-require 'nokogiri'
+require "nokogiri"
 
 class WikipediaExtractor
   def initialize(listener)
@@ -200,7 +200,7 @@ class GroongaLoader
   def load_links(title, content)
     links = content.scan(/\[\[.*?\]\]/)
     links = links.collect do |link|
-      link.sub(/\A\[\[/, '').sub(/\]\]\z/, '').sub(/\|[^\|]+\z/, '')
+      link.sub(/\A\[\[/, "").sub(/\]\]\z/, "").sub(/\|[^\|]+\z/, "")
     end
     @documents.add(title, :links => links)
   end

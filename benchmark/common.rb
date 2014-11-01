@@ -1,7 +1,7 @@
-require 'benchmark'
-require 'tempfile'
+require "benchmark"
+require "tempfile"
 
-def memory_usage()
+def memory_usage
   status = `cat /proc/#{$$}/status`
   lines = status.split("\n")
   lines.each do |line|
@@ -10,7 +10,7 @@ def memory_usage()
       return line.to_i / 1024.0
     end
   end
-  return -1;
+  return -1
 end
 
 @items = []
