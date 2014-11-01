@@ -40,7 +40,7 @@ ARGF.each_line do |line|
   case line
   when /\A\s+(GRN_OP_\w+)/
     operator = $1
-    rb_operator = operator.gsub(/\AGRN_OP_/, "").split("_").map{ |word|
+    rb_operator = operator.gsub(/\AGRN_OP_/, "").split("_").map {|word|
       replace_dictionary[word] || word
     }.join("_")
     puts "    rb_define_const(rb_mGrnOperation, \"%s\",
