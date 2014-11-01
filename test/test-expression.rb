@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # Copyright (C) 2009-2013  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2014  Masafumi Yokoyama <myokoym@gmail.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -130,6 +131,24 @@ class ExpressionTest < Test::Unit::TestCase
     assert_equal(["ラングバプロジェクト"],
                  snippet.execute("ラングバプロジェクトはカラムストア機能も"))
     snippet.close
+  end
+
+  def test_keywords
+    users = Groonga::Array.create(:name => "Users")
+    users.define_column("name", "ShortText")
+
+    expression = Groonga::Expression.new
+    variable = expression.define_variable(:domain => users)
+    expression.append_object(variable)
+    expression.parse("ラングバ OR Ruby OR groonga", :default_column => name)
+    expression.compile
+
+    assert_equal([
+                   "Ruby",
+                   "groonga",
+                   "ラングバ",
+                 ],
+                 expression.keywords.sort)
   end
 
   class AppendObjectTest < self

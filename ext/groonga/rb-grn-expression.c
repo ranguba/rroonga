@@ -1,6 +1,7 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
   Copyright (C) 2009-2014  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2014  Masafumi Yokoyama <myokoym@gmail.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -717,6 +718,47 @@ rb_grn_expression_snippet (int argc, VALUE *argv, VALUE self)
     return GRNOBJECT2RVAL(Qnil, context, snippet, GRN_TRUE);
 }
 
+/*
+ * Extracts keywords from _expression_. The keywords order isn't
+ * guaranteed.
+ *
+ * @example
+ *   expression.parse("Ruby OR Groonga")
+ *   expression.keywords  #=> ["Groonga", "Ruby"]
+ *
+ * @overload keywords
+ *   @return [::Array<String>] the extracted keywords
+ *
+ * @since 4.0.6
+ */
+static VALUE
+rb_grn_expression_get_keywords (VALUE self)
+{
+    grn_ctx *context = NULL;
+    grn_obj *expression;
+    grn_obj keywords;
+    VALUE rb_keywords = rb_ary_new();
+
+    rb_grn_expression_deconstruct(SELF(self), &expression, &context,
+                                  NULL, NULL,
+                                  NULL, NULL, NULL);
+
+    GRN_PTR_INIT(&keywords, GRN_OBJ_VECTOR, GRN_ID_NIL);
+    grn_expr_get_keywords(context, expression, &keywords);
+    {
+        int i, n_keywords;
+        n_keywords = GRN_BULK_VSIZE(&keywords) / sizeof(grn_obj *);
+        for (i = 0; i < n_keywords; i++) {
+            grn_obj *keyword = GRN_PTR_VALUE_AT(&keywords, i);
+            rb_ary_push(rb_keywords,
+                        GRNBULK2RVAL(context, keyword, NULL, self));
+        }
+    }
+    GRN_OBJ_FIN(context, &keywords);
+
+    return rb_keywords;
+}
+
 void
 rb_grn_init_expression (VALUE mGrn)
 {
@@ -747,6 +789,9 @@ rb_grn_init_expression (VALUE mGrn)
 
     rb_define_method(rb_cGrnExpression, "snippet",
                      rb_grn_expression_snippet, -1);
+
+    rb_define_method(rb_cGrnExpression, "keywords",
+                     rb_grn_expression_get_keywords, 0);
 
     rb_define_method(rb_cGrnExpression, "inspect",
                      rb_grn_expression_inspect, 0);
