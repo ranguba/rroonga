@@ -20,7 +20,6 @@ require "time"
 #   p [level, time, title, message, location]
 # end
 
-$KCODE = "UTF-8"
 Groonga::Context.default_options = {:encoding => :utf8}
 
 path = ARGV[0]
