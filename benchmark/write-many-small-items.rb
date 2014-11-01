@@ -1,4 +1,4 @@
-#!/usr/bin/ruby
+#!/usr/bin/env ruby
 
 # This benchmark is based on Tokyo Cabinet's benchmark at
 # http://alpha.mixi.co.jp/blog/?p=791
