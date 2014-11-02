@@ -331,27 +331,38 @@ column_create Accounts name COLUMN_SCALAR ShortText
     end
 
     class ColumnCompressionTest < self
+      def setup
+        super
+        @context ||= Groonga::Context.default
+      end
+
       def test_zlib
         define_column_compression_zlib_schema
+        flags = "COLUMN_SCALAR"
+        flags << "|COMPRESS_ZLIB" if @context.support_zlib?
         assert_equal(<<-SCHEMA, dump)
 table_create Posts TABLE_NO_KEY
-column_create Posts title COLUMN_SCALAR|COMPRESS_ZLIB ShortText
+column_create Posts title #{flags} ShortText
         SCHEMA
       end
 
       def test_lz4
         define_column_compression_lz4_schema
+        flags = "COLUMN_SCALAR"
+        flags << "|COMPRESS_LZ4" if @context.support_lz4?
         assert_equal(<<-SCHEMA, dump)
 table_create Posts TABLE_NO_KEY
-column_create Posts title COLUMN_SCALAR|COMPRESS_LZ4 ShortText
+column_create Posts title #{flags} ShortText
         SCHEMA
       end
 
       def test_with_weight_vector
         define_column_compression_with_weight_vector_schema
+        flags = "COLUMN_VECTOR|WITH_WEIGHT"
+        flags << "|COMPRESS_ZLIB" if @context.support_zlib?
         assert_equal(<<-SCHEMA, dump)
 table_create Posts TABLE_NO_KEY
-column_create Posts comments COLUMN_VECTOR|WITH_WEIGHT|COMPRESS_ZLIB ShortText
+column_create Posts comments #{flags} ShortText
         SCHEMA
       end
 
