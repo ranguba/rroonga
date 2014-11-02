@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # Copyright (C) 2011-2014  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2014  Masafumi Yokoyama <myokoym@gmail.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -602,7 +603,13 @@ module Groonga
           flags << "COLUMN_VECTOR"
         end
         flags << "WITH_WEIGHT" if column.with_weight?
-        # TODO: support COMPRESS_ZLIB and COMPRESS_LZO?
+        if column.is_a?(Groonga::VariableSizeColumn)
+          if column.compressed?(:zlib)
+            flags << "COMPRESS_ZLIB"
+          elsif column.compressed?(:lz4)
+            flags << "COMPRESS_LZ4"
+          end
+        end
         parameters << "#{flags.join('|')}"
         parameters << "#{column.range.name}"
         write("column_create #{parameters.join(' ')}\n")

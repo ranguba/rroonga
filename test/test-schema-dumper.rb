@@ -1,4 +1,5 @@
 # Copyright (C) 2009-2014  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2014  Masafumi Yokoyama <myokoym@gmail.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -327,6 +328,60 @@ column_create Memos tags COLUMN_VECTOR|WITH_WEIGHT ShortText
 table_create Accounts TABLE_DAT_KEY ShortText
 column_create Accounts name COLUMN_SCALAR ShortText
       SCHEMA
+    end
+
+    class ColumnCompressionTest < self
+      def test_zlib
+        define_column_compression_zlib_schema
+        assert_equal(<<-SCHEMA, dump)
+table_create Posts TABLE_NO_KEY
+column_create Posts title COLUMN_SCALAR|COMPRESS_ZLIB ShortText
+        SCHEMA
+      end
+
+      def test_lz4
+        define_column_compression_lz4_schema
+        assert_equal(<<-SCHEMA, dump)
+table_create Posts TABLE_NO_KEY
+column_create Posts title COLUMN_SCALAR|COMPRESS_LZ4 ShortText
+        SCHEMA
+      end
+
+      def test_with_weight_vector
+        define_column_compression_with_weight_vector_schema
+        assert_equal(<<-SCHEMA, dump)
+table_create Posts TABLE_NO_KEY
+column_create Posts comments COLUMN_VECTOR|WITH_WEIGHT|COMPRESS_ZLIB ShortText
+        SCHEMA
+      end
+
+      private
+      def define_column_compression_zlib_schema
+        Groonga::Schema.define do |schema|
+          schema.create_table("Posts") do |table|
+            table.short_text("title", :compress => :zlib)
+          end
+        end
+      end
+
+      def define_column_compression_lz4_schema
+        Groonga::Schema.define do |schema|
+          schema.create_table("Posts") do |table|
+            table.short_text("title", :compress => :lz4)
+          end
+        end
+      end
+
+      def define_column_compression_with_weight_vector_schema
+        Groonga::Schema.define do |schema|
+          schema.create_table("Posts") do |table|
+            table.short_text("comments",
+                             :type => :vector,
+                             :with_weight => true,
+                             :compress => :zlib)
+          end
+        end
+      end
     end
 
     private
