@@ -103,7 +103,7 @@ module GroongaTestUtils
   end
 
   def setup_logger
-    Groonga::Logger.register(:max_level => :dump) do |args|
+    Groonga::Logger.register(:max_level => :dump) do |*args|
       p args
     end
   end
