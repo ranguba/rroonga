@@ -199,7 +199,7 @@ rb_grn_logger_fin (grn_ctx *ctx, void *user_data)
  *     渡さないようにすることができ、その場合は空文字列が実際には渡される。
  *   @param options [::Hash] The name and value
  *     pairs. Omitted names are initialized as the default value.
- *   @option options :level (:notice)
+ *   @option options :max_level (:notice)
  *     ログのレベルを +:none+ ,  +:emergency+ ,  +:alert+ ,
  *     +:critical+ , +:error+ , +:warning+ , +:notice+ , +:info+ ,
  *     +:debug+ ,  +:dump+ のいずれかで指定する。それより重要度が
