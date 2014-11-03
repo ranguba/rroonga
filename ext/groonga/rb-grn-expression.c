@@ -495,6 +495,37 @@ rb_grn_expression_compile (VALUE self)
 }
 
 /*
+ * Dump execution plan of the `expression` in string.
+ *
+ * @overload dump_plan
+ * @since 4.0.8
+ */
+static VALUE
+rb_grn_expression_dump_plan (VALUE self)
+{
+/* TODO: Remove me after Groogna 4.0.8 is released. */
+#ifdef HAVE_GRN_EXPR_DUMP_PLAN
+    grn_ctx *context = NULL;
+    grn_obj *expression;
+    grn_obj dumped_plan;
+    VALUE rb_dumped_plan;
+
+    rb_grn_expression_deconstruct(SELF(self), &expression, &context,
+                                  NULL, NULL,
+                                  NULL, NULL, NULL);
+
+    GRN_TEXT_INIT(&dumped_plan, 0);
+    grn_expr_dump_plan(context, expression, &dumped_plan);
+    rb_dumped_plan = GRNBULK2RVAL(context, &dumped_plan, NULL, self);
+    grn_obj_unlink(context, &dumped_plan);
+
+    return rb_dumped_plan;
+#else
+    return rb_str_new2("");
+#endif
+}
+
+/*
  * _expression_ で使用可能な変数のうち、名前が _name_
  * または _offset_ 番目に {Expression#append_object}
  * された変数の値を返す。
@@ -783,6 +814,8 @@ rb_grn_init_expression (VALUE mGrn)
                      rb_grn_expression_execute, 0);
     rb_define_method(rb_cGrnExpression, "compile",
                      rb_grn_expression_compile, 0);
+    rb_define_method(rb_cGrnExpression, "dump_plan",
+                     rb_grn_expression_dump_plan, 0);
 
     rb_define_method(rb_cGrnExpression, "[]",
                      rb_grn_expression_array_reference, 1);
