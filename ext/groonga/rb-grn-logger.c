@@ -193,8 +193,9 @@ rb_grn_logger_fin (grn_ctx *ctx, void *user_data)
  * groongaがログを出力する度に呼び出されるブロックを登録する。
  *
  * @overload register(options={})
- *   @yield [level, time, title, message, location]
- *     _level_ はSymbol、それ以外は全て文字列で渡される。 _level_ 以外
+ *   @yield [event, level, time, title, message, location]
+ *     _event_ と _level_ はSymbol、それ以外は全て文字列で渡される。
+ *     _event_ と _level_ 以外
  *     の4つについては _options_ で +false+ を指定することでブロックに
  *     渡さないようにすることができ、その場合は空文字列が実際には渡される。
  *   @param options [::Hash] The name and value
