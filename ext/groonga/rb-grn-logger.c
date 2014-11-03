@@ -234,6 +234,9 @@ rb_grn_logger_s_register (int argc, VALUE *argv, VALUE klass)
     rb_scan_args(argc, argv, "02&", &rb_logger, &rb_options, &rb_callback);
 
     if (rb_block_given_p()) {
+        if (!NIL_P(rb_logger)) {
+            rb_options = rb_logger;
+        }
         rb_logger = rb_funcall(cGrnCallbackLogger, id_new, 1, rb_callback);
     }
 
