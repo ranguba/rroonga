@@ -236,7 +236,7 @@ rb_grn_table_inspect (VALUE self)
  *     値の圧縮方法を指定する。省略した場合は、圧縮しない。
  *
  *     - +:zlib+ := 値をzlib圧縮して格納する。
- *     - +:lz4+ := 値をlz4圧縮して格納する。
+ *     - +:lz4+ := 値をLZ4圧縮して格納する。
  *
  * @return [Groonga::FixSizeColumn or Groonga::VariableSizeColumn]
  */
