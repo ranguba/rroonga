@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2010  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2014  Kouhei Sutou <kou@clear-code.com>
 # Copyright (C) 2014  Masafumi Yokoyama <myokoym@gmail.com>
 #
 # This library is free software; you can redistribute it and/or
@@ -93,6 +93,7 @@ class ExceptionTest < Test::Unit::TestCase
     assert_const_defined(Groonga, :TooSmallOffset)
     assert_const_defined(Groonga, :TooLargeOffset)
     assert_const_defined(Groonga, :TooSmallLimit)
+    assert_const_defined(Groonga, :TokenFilterError)
   end
 end
 

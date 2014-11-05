@@ -1,6 +1,6 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
-  Copyright (C) 2009-2012  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2014  Kouhei Sutou <kou@clear-code.com>
   Copyright (C) 2014  Masafumi Yokoyama <myokoym@gmail.com>
 
   This library is free software; you can redistribute it and/or
@@ -96,6 +96,7 @@ static VALUE eGrnTooSmallLimit;
 static VALUE eGrnCASError;
 static VALUE eGrnUnsupportedCommandVersion;
 static VALUE eGrnNormalizerError;
+static VALUE eGrnTokenFilterError;
 
 VALUE
 rb_grn_rc_to_exception (grn_rc rc)
@@ -324,6 +325,9 @@ rb_grn_rc_to_exception (grn_rc rc)
         break;
       case GRN_NORMALIZER_ERROR:
         exception = eGrnNormalizerError;
+        break;
+      case GRN_TOKEN_FILTER_ERROR:
+        exception = eGrnTokenFilterError;
         break;
     }
 
@@ -560,6 +564,9 @@ rb_grn_rc_to_message (grn_rc rc)
         break;
       case GRN_NORMALIZER_ERROR:
         message = "normalizer error";
+        break;
+      case GRN_TOKEN_FILTER_ERROR:
+        message = "token filter error";
         break;
     }
 
@@ -1210,4 +1217,14 @@ rb_grn_init_exception (VALUE mGrn)
      */
     eGrnNormalizerError =
         rb_define_class_under(mGrn, "NormalizerError", rb_eGrnError);
+
+    /*
+     * Document-class: Groonga::TokenFilterError
+     *
+     * It is used when a token filter causes an error.
+     *
+     * @since 4.0.6
+     */
+    eGrnTokenFilterError =
+        rb_define_class_under(mGrn, "TokenFilterError", rb_eGrnError);
 }
