@@ -1,5 +1,39 @@
 h1. NEWS
 
+h2(#4-0-6). 4.0.6: 2014-11-06
+
+h3. Improvements
+
+* Supported Groonga 4.0.7. [GitHub#28]
+** Changed {Groonga::Context#support_lzo?} always returns @false@.
+** Added {Groonga::Context#support_lz4?}.
+** Supported @:lz4@ in {Groonga::Table#define_column} options.
+** Supported @:lz4@ in {Groonga::VariableSizeColumn#compressed?} options.
+** Added {Groonga::LZ4Error}.
+** Added {Groonga::TokenFilterError}.
+** [grndump] Supported @COMPRESS_ZLIB@ and @COMPRESS_LZ4@ flags.
+* Added {Groonga::Expression#keywords}. [GitHub#30]
+* Stopped to require logger object as the first argument of
+  {Groonga::Logger.register} when block is specified.
+
+h3. Fixes
+
+* [doc] Removed deprecated example.
+  [GitHub#26] [Patch by ongaeshi]
+* Fixed a bug that a column assignment raises an error when
+  you assign value with type A and then assign value type B again.
+  [GitHub#27] [Patch by Daisuke Goto]
+* Fixed a memory leak in {Groonga::PatriciaTrie#open_near_cursor}.
+* Fixed a bug that you can access a column renamed by
+  {Groonga::Column#rename} with old name.
+  [GitHub#29] [Patch by Daisuke Goto]
+* [doc] Fixed wrong option name of {Groonga::Logger.register}.
+
+h3. Thanks
+
+* ongaeshi
+* Daisuke Goto
+
 h2(#4-0-5). 4.0.5: 2014-10-05
 
 h3. Improvements
