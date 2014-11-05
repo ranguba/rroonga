@@ -635,6 +635,50 @@ rb_grn_bulk_from_ruby_object_with_type (VALUE object, grn_ctx *context,
     return bulk;
 }
 
+VALUE
+rb_grn_pvector_to_ruby_object (grn_ctx *context, grn_obj *pvector)
+{
+    VALUE array;
+    unsigned int i, n;
+
+    if (!pvector)
+        return Qnil;
+
+    n = GRN_BULK_VSIZE(pvector) / sizeof(grn_obj *);
+    array = rb_ary_new2(n);
+    for (i = 0; i < n; i++) {
+        grn_obj *object = GRN_PTR_VALUE_AT(pvector, i);
+
+        rb_ary_push(array, GRNOBJECT2RVAL(Qnil, context, object, GRN_FALSE));
+    }
+
+    return array;
+}
+
+grn_obj *
+rb_grn_pvector_from_ruby_object (VALUE object,
+                                 grn_ctx *context,
+                                 grn_obj *pvector)
+{
+    int i, n;
+    VALUE array;
+
+    if (NIL_P(object))
+        return pvector;
+
+    array = rb_grn_convert_to_array(object);
+
+    n = RARRAY_LEN(array);
+    for (i = 0; i < n; i++) {
+        VALUE rb_value = RARRAY_PTR(array)[i];
+        grn_obj *value;
+
+        value = RVAL2GRNOBJECT(rb_value, &context);
+        GRN_PTR_PUT(context, pvector, value);
+    }
+
+    return pvector;
+}
 
 VALUE
 rb_grn_vector_to_ruby_object (grn_ctx *context, grn_obj *vector)
@@ -1175,7 +1219,9 @@ rb_grn_obj_to_ruby_object (VALUE klass, grn_ctx *context,
         break;
     /* case GRN_PTR: */
     /* case GRN_UVECTOR: */
-    /* case GRN_PVECTOR: */
+    case GRN_PVECTOR:
+        return GRNPVECTOR2RVAL(context, obj);
+        break;
     case GRN_VECTOR:
         return GRNVECTOR2RVAL(context, obj);
         break;

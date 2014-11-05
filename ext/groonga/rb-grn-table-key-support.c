@@ -1,7 +1,7 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
   Copyright (C) 2014  Masafumi Yokoyama <myokoym@gmail.com>
-  Copyright (C) 2009-2013  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2014  Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -785,6 +785,69 @@ rb_grn_table_key_support_set_default_tokenizer (VALUE self, VALUE rb_tokenizer)
 }
 
 /*
+ * Returns the token filters that are used by {Groonga::IndexColumn}.
+ *
+ * @overload token_filters
+ *   @return [::Array<Groonga::Procedure>]
+ */
+static VALUE
+rb_grn_table_key_support_get_token_filters (VALUE self)
+{
+    grn_ctx *context = NULL;
+    grn_obj *table;
+    grn_obj token_filters;
+    VALUE rb_token_filters;
+
+    rb_grn_table_key_support_deconstruct(SELF(self), &table, &context,
+                                         NULL, NULL, NULL,
+                                         NULL, NULL, NULL,
+                                         NULL);
+
+    GRN_PTR_INIT(&token_filters, GRN_VECTOR, GRN_ID_NIL);
+    grn_obj_get_info(context, table, GRN_INFO_TOKEN_FILTERS,
+                     &token_filters);
+    rb_token_filters = GRNPVECTOR2RVAL(context, &token_filters);
+    rb_grn_context_check(context, self);
+
+    return rb_token_filters;
+}
+
+/*
+ * Sets token filters that used in {Groonga::IndexColumn}.
+ *
+ * @example
+ *   # Use "TokenFilterStem" and "TokenfilterStopWord"
+ *   table.token_filters = ["TokenFilterStem", "TokenFilterStopWord"]
+ *
+ * @overload token_filters=(token_filters)
+ *   @param token_filters [::Array<String>] Token filter names.
+ */
+static VALUE
+rb_grn_table_key_support_set_token_filters (VALUE self,
+                                            VALUE rb_token_filters)
+{
+    grn_ctx *context;
+    grn_obj *table;
+    grn_obj token_filters;
+    grn_rc rc;
+
+    rb_grn_table_key_support_deconstruct(SELF(self), &table, &context,
+                                         NULL, NULL, NULL,
+                                         NULL, NULL, NULL,
+                                         NULL);
+
+    GRN_PTR_INIT(&token_filters, GRN_OBJ_VECTOR, GRN_ID_NIL);
+    RVAL2GRNPVECTOR(rb_token_filters, context, &token_filters);
+    rc = grn_obj_set_info(context, table,
+                          GRN_INFO_TOKEN_FILTERS, &token_filters);
+    grn_obj_unlink(context, &token_filters);
+    rb_grn_context_check(context, self);
+    rb_grn_rc_check(rc, self);
+
+    return Qnil;
+}
+
+/*
  * Returns the normalizer that is used by {Groonga::IndexColumn}.
  *
  * @overload normalizer
@@ -975,6 +1038,11 @@ rb_grn_init_table_key_support (VALUE mGrn)
                      rb_grn_table_key_support_get_default_tokenizer, 0);
     rb_define_method(rb_mGrnTableKeySupport, "default_tokenizer=",
                      rb_grn_table_key_support_set_default_tokenizer, 1);
+
+    rb_define_method(rb_mGrnTableKeySupport, "token_filters",
+                     rb_grn_table_key_support_get_token_filters, 0);
+    rb_define_method(rb_mGrnTableKeySupport, "token_filters=",
+                     rb_grn_table_key_support_set_token_filters, 1);
 
     rb_define_method(rb_mGrnTableKeySupport, "normalizer",
                      rb_grn_table_key_support_get_normalizer, 0);
