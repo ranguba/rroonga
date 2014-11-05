@@ -93,6 +93,9 @@ class ExceptionTest < Test::Unit::TestCase
     assert_const_defined(Groonga, :TooSmallOffset)
     assert_const_defined(Groonga, :TooLargeOffset)
     assert_const_defined(Groonga, :TooSmallLimit)
+    assert_const_defined(Groonga, :CASError)
+    assert_const_defined(Groonga, :UnsupportedCommandVersion)
+    assert_const_defined(Groonga, :NormalizerError)
     assert_const_defined(Groonga, :TokenFilterError)
   end
 end
