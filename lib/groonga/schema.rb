@@ -193,68 +193,74 @@ module Groonga
       #   @option options [:array, :hash, :patricia_trie, :double_array_trie] :type The table type
       #
       #     テーブルの型を指定する。
-      #     +:array+ , +:hash+ , +:patricia_trie+ ,
-      #     +:double_array_trie+ のいずれかを指定する。
+      #     `:array`, `:hash`, `:patricia_trie`,
+      #     `:double_array_trie` のいずれかを指定する。
       #     (:key_typeの項も参照)
       #
       #   @option options [Boolean] :force (false)
       #
-      #     +true+ を指定すると既存の同名のテーブルが
+      #     `true`を指定すると既存の同名のテーブルが
       #     存在していても、強制的にテーブルを作成する。
       #
       #   @option options [Groonga::Context] :context (Groonga::Context.default) The context
       #
       #     スキーマ定義時に使用する {Groonga::Context} を指定する。
+      #
       #   @option options :path The path
       #
       #     テーブルを保存するパスを指定する。
       #     パスを指定すると永続テーブルになる。
+      #
       #   @option options :persistent (true) The persistent
       #
-      #     テーブルを永続テーブルとする。 +:path+ を省略した場合は
+      #     テーブルを永続テーブルとする。`:path`を省略した場合は
       #     パス名は自動的に作成される。デフォルトでは永続テーブルとなる。
+      #
       #   @option options :value_type (nil) The value_type
       #
       #     値の型を指定する。省略すると値のための領域を確保しない。
       #     値を保存したい場合は必ず指定すること。
+      #
       #   @option options :sub_records The sub_records
       #
-      #     +true+ を指定すると {Groonga::Table#group} で
-      #     グループ化したときに、 {Groonga::Record#n_sub_records} でグループに
+      #     `true`を指定すると{Groonga::Table#group}で
+      #     グループ化したときに、{Groonga::Record#n_sub_records}でグループに
       #     含まれるレコードの件数を取得できる。
       #
       # @!macro [new] schema.create_table.key_support.options
       #   @option options :key_type The key_type
       #
-      #     キーの種類を示すオブジェクトを指定する。
-      #     キーの種類には型名（"Int32"や"ShortText"など）または {Groonga::Type}
-      #     またはテーブル（ {Groonga::Array} 、 {Groonga::Hash} 、
-      #     {Groonga::PatriciaTrie} 、 {Groonga::DoubleArrayTrie} の
-      #     どれか）を指定する。 {Groonga::Type} を指定した場合は、その型が示す範囲の
-      #     値をキーとして使用する。ただし、キーの最大サイズは4096バイトで
-      #     あるため、 {Groonga::Type::TEXT} や {Groonga::Type::LONG_TEXT} は使用できない
-      #     。テーブルを指定した場合はレコードIDをキーとして使用する。
-      #     指定したテーブルの {Groonga::Record} をキーとして使用することもでき、
-      #     その場合は自動的に {Groonga::Record} からレコードIDを取得する。
-      #     省略した場合は文字列をキーとして使用する。
-      #     この場合、4096バイトまで使用可能である。
+      #     キーの種類を示すオブジェクトを指定する。キーの種類には型名
+      #     （`"Int32"`や`"ShortText"`など）または {Groonga::Type}また
+      #     はテーブル（ {Groonga::Array} 、 {Groonga::Hash} 、
+      #     {Groonga::PatriciaTrie} 、 {Groonga::DoubleArrayTrie} のど
+      #     れか）を指定する。 {Groonga::Type} を指定した場合は、その
+      #     型が示す範囲の値をキーとして使用する。ただし、キーの最大サ
+      #     イズは4096バイトであるため、 {Groonga::Type::TEXT} や
+      #     {Groonga::Type::LONG_TEXT} は使用できない。テーブルを指定
+      #     した場合はレコードIDをキーとして使用する。指定したテーブル
+      #     の {Groonga::Record} をキーとして使用することもでき、その
+      #     場合は自動的に {Groonga::Record} からレコードIDを取得する。
+      #     省略した場合は文字列をキーとして使用する。この場合、4096バ
+      #     イトまで使用可能である。
+      #
       #   @option options :default_tokenizer The default_tokenizer
       #
       #     {Groonga::IndexColumn} で
       #     使用するトークナイザを指定する。デフォルトでは
       #     何も設定されていないので、テーブルに
-      #     {Groonga::IndexColumn} を定義する場合は @"TokenBigram"@
+      #     {Groonga::IndexColumn} を定義する場合は `"TokenBigram"`
       #     などを指定する必要がある。
       #
       #   @option options :key_normalize (false) Keys are normalized
-      #     if this value is @true@.
+      #     if this value is `true`.
       #
-      #     @deprecated Use @:normalizer => "NormalizerAuto"@ instead.
+      #     @deprecated Use `:normalizer => "NormalizerAuto"` instead.
       #
       #   @option options [String, Groonga::Procedure, nil] :normalizer
       #     The normalizer that is used by {Groonga::IndexColumn}. You
       #     can specify this by normalizer name as String such as
-      #     @"NormalizerAuto"@ or normalizer object.
+      #     `"NormalizerAuto"` or normalizer object.
       #
       # _options_ に指定可能な値は以下の通り。
       #
