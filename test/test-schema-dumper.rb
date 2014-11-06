@@ -87,6 +87,7 @@ class SchemaDumperTest < Test::Unit::TestCase
   end
 
   def define_index_schema
+    context.register_plugin("token_filters/stop_word")
     Groonga::Schema.define do |schema|
       schema.create_table("Items",
                           :type => :hash,
@@ -98,6 +99,7 @@ class SchemaDumperTest < Test::Unit::TestCase
                           :type => :patricia_trie,
                           :key_type => "ShortText",
                           :default_tokenizer => "TokenBigram",
+                          :token_filters => ["TokenFilterStopWord"],
                           :normalizer => "NormalizerAuto") do |table|
         table.index("Items", "_key")
         table.index("Items", "title")
@@ -222,6 +224,7 @@ create_table("Terms",
              :type => :patricia_trie,
              :key_type => "ShortText",
              :default_tokenizer => "TokenBigram",
+             :token_filters => ["TokenFilterStopWord"],
              :normalizer => "NormalizerAuto",
              :force => true) do |table|
 end
@@ -307,7 +310,7 @@ column_create Comments item COLUMN_SCALAR Items
 table_create Items TABLE_HASH_KEY ShortText
 column_create Items title COLUMN_SCALAR ShortText
 
-table_create Terms TABLE_PAT_KEY ShortText --default_tokenizer TokenBigram --normalizer NormalizerAuto
+table_create Terms TABLE_PAT_KEY ShortText --default_tokenizer TokenBigram --token_filters TokenFilterStopWord --normalizer NormalizerAuto
 
 column_create Terms Items__key COLUMN_INDEX|WITH_POSITION Items _key
 column_create Terms Items_title COLUMN_INDEX|WITH_POSITION Items title

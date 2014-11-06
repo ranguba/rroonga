@@ -420,6 +420,14 @@ module Groonga
           if default_tokenizer
             parameters << ":default_tokenizer => #{default_tokenizer.name.dump}"
           end
+          token_filters = table.token_filters
+          unless token_filters.empty?
+            dumped_token_filter_names = token_filters.collect do |token_filter|
+              token_filter.name.dump
+            end
+            dumped_token_filters = "[#{dumped_token_filter_names.join(', ')}]"
+            parameters << ":token_filters => #{dumped_token_filters}"
+          end
           if _normalizer_name
             parameters << ":normalizer => #{_normalizer_name.dump}"
           end
@@ -575,6 +583,13 @@ module Groonga
           default_tokenizer = table.default_tokenizer
           if default_tokenizer
             parameters << "--default_tokenizer #{default_tokenizer.name}"
+          end
+          token_filters = table.token_filters
+          unless token_filters.empty?
+            token_filter_names = token_filters.collect do |token_filter|
+              token_filter.name
+            end
+            parameters << "--token_filters #{token_filter_names.join(',')}"
           end
         end
         if _normalizer_name
