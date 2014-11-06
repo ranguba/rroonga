@@ -64,6 +64,14 @@ class PatriciaTrieTest < Test::Unit::TestCase
       assert_equal([context["TokenFilterStopWord"]],
                    trie.token_filters)
     end
+
+    def test_create
+      context.register_plugin("token_filters/stop_word")
+      token_filters = ["TokenFilterStopWord"]
+      trie = Groonga::PatriciaTrie.create(:token_filters => token_filters)
+      assert_equal([context["TokenFilterStopWord"]],
+                   trie.token_filters)
+    end
   end
 
   def test_normalizer

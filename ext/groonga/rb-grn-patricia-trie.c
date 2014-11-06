@@ -141,6 +141,11 @@ VALUE rb_cGrnPatriciaTrie;
  *       デフォルトでは何も設定されていないので、テーブルに
  *       {Groonga::IndexColumn} を定義する場合は
  *       @"TokenBigram"@ などを指定する必要がある。
+ *
+ *     @option options [::Array<String, Groonga::Procedure>, nil]
+ *       :token_filters (nil) The token filters to be used in the
+ *       table.
+ *
  *     @option options :sub_records
  *       +true+ を指定すると {#group} でグループ化したときに、
  *       {Groonga::Record#n_sub_records} でグループに含まれるレコー
@@ -168,7 +173,9 @@ rb_grn_patricia_trie_s_create (int argc, VALUE *argv, VALUE klass)
     VALUE options, rb_context, rb_name, rb_path, rb_persistent;
     VALUE rb_key_normalize, rb_key_with_sis, rb_key_type;
     VALUE rb_value_type;
-    VALUE rb_default_tokenizer, rb_sub_records;
+    VALUE rb_default_tokenizer;
+    VALUE rb_token_filters;
+    VALUE rb_sub_records;
     VALUE rb_normalizer;
 
     rb_scan_args(argc, argv, "01", &options);
@@ -183,6 +190,7 @@ rb_grn_patricia_trie_s_create (int argc, VALUE *argv, VALUE klass)
                         "key_type", &rb_key_type,
                         "value_type", &rb_value_type,
                         "default_tokenizer", &rb_default_tokenizer,
+                        "token_filters", &rb_token_filters,
                         "sub_records", &rb_sub_records,
                         "normalizer", &rb_normalizer,
                         NULL);
@@ -230,6 +238,9 @@ rb_grn_patricia_trie_s_create (int argc, VALUE *argv, VALUE klass)
     if (!NIL_P(rb_default_tokenizer))
         rb_funcall(rb_table, rb_intern("default_tokenizer="), 1,
                    rb_default_tokenizer);
+    if (!NIL_P(rb_token_filters))
+        rb_funcall(rb_table, rb_intern("token_filters="), 1,
+                   rb_token_filters);
     if (!NIL_P(rb_normalizer))
         rb_funcall(rb_table, rb_intern("normalizer="), 1,
                    rb_normalizer);
