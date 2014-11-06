@@ -1,5 +1,5 @@
 --output-dir doc/reference/en
---markup textile
+--markup markdown
 lib/**/*.rb
 ext/**/*.c
 -
