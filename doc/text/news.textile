@@ -10,8 +10,15 @@ h3. Improvements
 ** Supported @:lz4@ in {Groonga::Table#define_column} options.
 ** Supported @:lz4@ in {Groonga::VariableSizeColumn#compressed?} options.
 ** Added {Groonga::LZ4Error}.
-** Added {Groonga::TokenFilterError}.
 ** [grndump] Supported @COMPRESS_ZLIB@ and @COMPRESS_LZ4@ flags.
+** Added {Groonga::TableKeySupport#token_filters}.
+** Added {Groonga::TableKeySupport#token_filters=}.
+** Supported @:token_filters@ in {Groonga::Hash.create} options.
+** Supported @:token_filters@ in {Groonga::PatriciaTrie.create} options.
+** Supported @:token_filters@ in {Groonga::DoubleArrayTrie.create} options.
+** Supported @:token_filters@ in {Groonga::Schema.create_table} options.
+** Added {Groonga::TokenFilterError}.
+** [grndump] Supported token filters.
 * Added {Groonga::Expression#keywords}. [GitHub#30]
 * Stopped to require logger object as the first argument of
   {Groonga::Logger.register} when block is specified.
