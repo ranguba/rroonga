@@ -25,7 +25,7 @@ module Groonga
   # {Groonga::Schema} を使うことにより簡単にテーブルやカラムを
   # 追加・削除することができる。
   #
-  # !http://qwik.jp/senna/senna2.files/rect4605.png!
+  # ![Sample schema](https://raw.githubusercontent.com/ranguba/rroonga/master/doc/images/sample-schema.png)
   #
   # @example 上図のようなスキーマを定義する場合は以下のようになる。
   #   Groonga::Schema.define do |schema|

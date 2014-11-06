@@ -61,6 +61,7 @@ Gem::Specification.new do |s|
 
   s.files = ["README.md", "AUTHORS", "Rakefile", "Gemfile", ".yardopts"]
   s.files += Dir.glob("doc/text/*.textile")
+  s.files += Dir.glob("doc/images/*")
   s.files += ["#{s.name}.gemspec"]
   s.files += ["rroonga-build.rb", "extconf.rb"]
   Dir.chdir(base_dir) do
