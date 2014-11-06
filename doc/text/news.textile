@@ -11,8 +11,8 @@ h3. Improvements
 ** Supported @:lz4@ in {Groonga::VariableSizeColumn#compressed?} options.
 ** Added {Groonga::LZ4Error}.
 ** [grndump] Supported @COMPRESS_ZLIB@ and @COMPRESS_LZ4@ flags.
-** Added {Groonga::TableKeySupport#token_filters}.
-** Added {Groonga::TableKeySupport#token_filters=}.
+** Added {Groonga::Table::KeySupport#token_filters}.
+** Added {Groonga::Table::KeySupport#token_filters=}.
 ** Supported @:token_filters@ in {Groonga::Hash.create} options.
 ** Supported @:token_filters@ in {Groonga::PatriciaTrie.create} options.
 ** Supported @:token_filters@ in {Groonga::DoubleArrayTrie.create} options.
