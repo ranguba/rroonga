@@ -145,6 +145,29 @@ rb_grn_table_key_support_inspect_content (VALUE self, VALUE inspected)
     }
 
     {
+        int i, n;
+        grn_obj token_filters;
+
+        rb_str_cat2(inspected, ", ");
+        rb_str_cat2(inspected, "token_filters: [");
+
+        GRN_PTR_INIT(&token_filters, GRN_OBJ_VECTOR, GRN_ID_NIL);
+        grn_obj_get_info(context, table,
+                         GRN_INFO_TOKEN_FILTERS,
+                         &token_filters);
+        n = GRN_BULK_VSIZE(&token_filters) / sizeof(grn_obj *);
+        for (i = 0; i < n; i++) {
+            grn_obj *token_filter = GRN_PTR_VALUE_AT(&token_filters, i);
+            if (i > 0) {
+                rb_str_cat2(inspected, ", ");
+            }
+            rb_grn_object_inspect_object_content_name(inspected, context,
+                                                      token_filter);
+        }
+        rb_str_cat2(inspected, "]");
+    }
+
+    {
         grn_obj *normalizer;
 
         rb_str_cat2(inspected, ", ");

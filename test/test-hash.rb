@@ -129,6 +129,7 @@ class HashTest < Test::Unit::TestCase
                  "size: <0>, " +
                  "encoding: <#{encoding.inspect}>, " +
                  "default_tokenizer: (nil), " +
+                 "token_filters: [], " +
                  "normalizer: (nil)>",
                  anonymous_table.inspect)
   end
@@ -145,6 +146,7 @@ class HashTest < Test::Unit::TestCase
                  "size: <0>, " +
                  "encoding: <#{encoding.inspect}>, " +
                  "default_tokenizer: (nil), " +
+                 "token_filters: [], " +
                  "normalizer: (nil)>",
                  anonymous_table.inspect)
   end
@@ -162,6 +164,7 @@ class HashTest < Test::Unit::TestCase
                  "size: <0>, " +
                  "encoding: <#{encoding.inspect}>, " +
                  "default_tokenizer: (nil), " +
+                 "token_filters: [], " +
                  "normalizer: (nil)>",
                  named_table.inspect)
   end
@@ -178,6 +181,7 @@ class HashTest < Test::Unit::TestCase
                  "size: <0>, " +
                  "encoding: <#{encoding.inspect}>, " +
                  "default_tokenizer: (nil), " +
+                 "token_filters: [], " +
                  "normalizer: (nil)>",
                  named_table.inspect)
   end

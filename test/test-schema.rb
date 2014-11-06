@@ -112,6 +112,7 @@ class SchemaTest < Test::Unit::TestCase
                    "size: <0>, " +
                    "encoding: <#{Groonga::Encoding.default.inspect}>, " +
                    "default_tokenizer: <#{tokenizer.name}>, " +
+                   "token_filters: [], " +
                    "normalizer: (nil)>",
                    table.inspect)
     end
@@ -171,6 +172,7 @@ class SchemaTest < Test::Unit::TestCase
                    "size: <0>, " +
                    "encoding: <#{Groonga::Encoding.default.inspect}>, " +
                    "default_tokenizer: <TokenBigram>, " +
+                   "token_filters: [], " +
                    "normalizer: <NormalizerAuto>>",
                    table.inspect)
     end
@@ -230,6 +232,7 @@ class SchemaTest < Test::Unit::TestCase
                    "size: <0>, " +
                    "encoding: <#{Groonga::Encoding.default.inspect}>, " +
                    "default_tokenizer: <TokenBigram>, " +
+                   "token_filters: [], " +
                    "normalizer: <NormalizerAuto>>",
                    table.inspect)
     end
