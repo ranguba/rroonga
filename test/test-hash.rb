@@ -196,14 +196,14 @@ class HashTest < Test::Unit::TestCase
   end
 
   class TokenFiltersTest < self
-  def test_accessor
-    context.register_plugin("token_filters/stop_word")
-    hash = Groonga::Hash.create
-    assert_equal([], hash.token_filters)
-    hash.token_filters = ["TokenFilterStopWord"]
-    assert_equal([context["TokenFilterStopWord"]],
-                 hash.token_filters)
-  end
+    def test_accessor
+      context.register_plugin("token_filters/stop_word")
+      hash = Groonga::Hash.create
+      assert_equal([], hash.token_filters)
+      hash.token_filters = ["TokenFilterStopWord"]
+      assert_equal([context["TokenFilterStopWord"]],
+                   hash.token_filters)
+    end
   end
 
   def test_normalizer
