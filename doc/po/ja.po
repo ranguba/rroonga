@@ -261,7 +261,6 @@ msgstr "h1. インストール"
 msgid "This document describes how to install Rroonga."
 msgstr "Rroongaのインストール方法について説明します。"
 
-#, fuzzy
 msgid ""
 "You can install Rroonga by RubyGems. It is the standard way for Ruby\n"
 "libraries."
@@ -497,9 +496,8 @@ msgstr "* \"2. インストール - Groonga ドキュメント\":http://groonga.
 msgid "h1. NEWS"
 msgstr "h1. お知らせ"
 
-#, fuzzy
 msgid "h2(#4-0-6). 4.0.6: 2014-11-06"
-msgstr "* @kamipoさん"
+msgstr ""
 
 msgid "h3. Improvements"
 msgstr "h3. 改善"
@@ -524,6 +522,24 @@ msgid ""
 "* Stopped to require logger object as the first argument of\n"
 "  {Groonga::Logger.register} when block is specified."
 msgstr ""
+"* Groonga 4.0.7に対応。 [GitHub#28]\n"
+"** {Groonga::Context#support_lzo?} は常に @false@ を返すように変更。\n"
+"** {Groonga::Context#support_lz4?} を追加。\n"
+"** {Groonga::Table#define_column} を @:lz4@ オプションに対応。\n"
+"** {Groonga::VariableSizeColumn#compressed?} を @:lz4@ オプションに対応。\n"
+"** {Groonga::LZ4Error} を追加。\n"
+"** [grndump] @COMPRESS_ZLIB@ と @COMPRESS_LZ4@ フラグに対応。\n"
+"** {Groonga::TableKeySupport#token_filters} を追加。\n"
+"** {Groonga::TableKeySupport#token_filters=} を追加。\n"
+"** {Groonga::Hash.create} を @:token_filters@ に対応。\n"
+"** {Groonga::PatriciaTrie.create} を @:token_filters@ に対応。\n"
+"** {Groonga::DoubleArrayTrie.create} を @:token_filters@ に対応。\n"
+"** {Groonga::Schema.create_table} を @:token_filters@ に対応。\n"
+"** {Groonga::TokenFilterError} を追加。\n"
+"** [grndump] トークンフィルターに対応。\n"
+"* {Groonga::Expression#keywords} を追加。 [GitHub#30]\n"
+"* {Groonga::Logger.register} にブロックが指定された場合、第一引数に"
+"  ロガーを指定しなくてもいいようにした。"
 
 msgid "h3. Fixes"
 msgstr "h3. 修正"
@@ -540,17 +556,26 @@ msgid ""
 "  [GitHub#29] [Patch by Daisuke Goto]\n"
 "* [doc] Fixed wrong option name of {Groonga::Logger.register}."
 msgstr ""
+"* [doc] 非推奨のオプションが例に使われていたのを修正。\n"
+"  [GitHub#26] [ongaeshiさんがパッチ提供]\n"
+"* カラムに値を設定するとき、すでに入っている型とは違う型の値を設定"
+"  するとエラーになる場合があるバグを修正。\n"
+"  [GitHub#27] [Daisuke Gotoさんがパッチ提供]\n"
+"* {Groonga::PatriciaTrie#open_near_cursor} のメモリリークを修正。\n"
+"* {Groonga::Column#rename} でカラムをリネームしたとき、"
+"  古い名前でアクセスできてしまうバグを修正。\n"
+"  [GitHub#29] [Daisuke Gotoさんがパッチ提供]\n"
+"* [doc] {Groonga::Logger.register} のオプションの名前を修正。"
 
 msgid "h3. Thanks"
 msgstr "h3. 感謝"
 
-#, fuzzy
 msgid ""
 "* ongaeshi\n"
 "* Daisuke Goto"
 msgstr ""
 "* ongaeshiさん\n"
-"* Genki Takiuchiさん"
+"* Daisuke Gotoさん"
 
 msgid "h2(#4-0-5). 4.0.5: 2014-10-05"
 msgstr ""
@@ -1832,10 +1857,10 @@ msgstr ""
 "* Groonga::Table#columnsのメモリリークを修正。"
 
 msgid "* @kamipo"
-msgstr ""
+msgstr "* @kamipoさん"
 
 msgid "h2. 1.0.5: 2010-11-29"
-msgstr "* @kamipoさん"
+msgstr ""
 
 msgid ""
 "* Added snail_case type name aliases for built-in groonga types\n"
@@ -2366,16 +2391,14 @@ msgstr "    h3. 感謝"
 msgid "h1. Tutorial"
 msgstr "h1. チュートリアル"
 
-#, fuzzy
 msgid "This page introduce how to use Rroonga via a simple application making."
-msgstr "このページでは簡単なアプリケーションの作成を通してrroongaの操作方法を紹介します。"
+msgstr "このページでは簡単なアプリケーションの作成を通してRroongaの操作方法を紹介します。"
 
 msgid "h2. Install"
 msgstr "h2. インストール"
 
-#, fuzzy
 msgid "You can install Rroonga in your compter with RubyGems."
-msgstr "rroongaはRubyGemsでインストールできます。"
+msgstr "RroongaはRubyGemsでインストールできます。"
 
 msgid ""
 "<pre>\n"
@@ -2387,7 +2410,6 @@ msgstr ""
 msgid "h2. Create Database"
 msgstr "h2. データベースの作成"
 
-#, fuzzy
 msgid ""
 "Let's create database for simple bookmark application.\n"
 "Please execute irb with loading Rroonga with this command:"
@@ -3760,9 +3782,8 @@ msgstr ""
 msgid "tag|overload|indexes"
 msgstr ""
 
-#, fuzzy
 msgid "Renames the column to name."
-msgstr "カラムをデフラグします。"
+msgstr "カラムをリネームします。"
 
 # @param [String] name
 msgid "the new name"
@@ -3965,9 +3986,8 @@ msgid ""
 msgstr ""
 
 # @overload
-#, fuzzy
 msgid "tag|overload|support_lz4?"
-msgstr "登録されたロガーの登録を削除する。削除後はデフォルトのロガーが使われます。"
+msgstr ""
 
 msgid "コンテキストが使うデータベースを返す。"
 msgstr ""
@@ -4069,7 +4089,6 @@ msgstr ""
 msgid "作成されたデータベースを返す。"
 msgstr ""
 
-#, fuzzy
 msgid ""
 "options The name and value\n"
 "pairs. Omitted names are initialized as the default value."
@@ -4814,9 +4833,8 @@ msgid "4.0.8"
 msgstr ""
 
 # @overload
-#, fuzzy
 msgid "tag|overload|dump_plan"
-msgstr "登録されたロガーの登録を削除する。削除後はデフォルトのロガーが使われます。"
+msgstr ""
 
 # Groonga::Expression#[]
 msgid ""
@@ -4887,9 +4905,8 @@ msgid ""
 msgstr ""
 
 # @overload
-#, fuzzy
 msgid "tag|overload|keywords"
-msgstr "登録されたロガーの登録を削除する。削除後はデフォルトのロガーが使われます。"
+msgstr ""
 
 # @example
 msgid ""
@@ -4976,7 +4993,6 @@ msgid ""
 "を抜けると自動的にテーブルが破棄される。"
 msgstr ""
 
-#, fuzzy
 msgid ""
 "The name and value\n"
 "pairs. Omitted names are initialized as the default value"
@@ -5480,7 +5496,6 @@ msgid ""
 "Groonga::Normalizer.normalize(\"AbC\") # => \"abc\""
 msgstr ""
 
-#, fuzzy
 msgid "The normalized string"
 msgstr "文字列を正規化するクラスです。"
 
@@ -6199,9 +6214,8 @@ msgid "Returns the token filters that are used by {Groonga::IndexColumn}."
 msgstr ""
 
 # @overload
-#, fuzzy
 msgid "tag|overload|token_filters"
-msgstr "登録されたロガーの登録を削除する。削除後はデフォルトのロガーが使われます。"
+msgstr ""
 
 # Groonga::Table::KeySupport#token_filters=
 msgid "Sets token filters that used in {Groonga::IndexColumn}."
@@ -6214,9 +6228,8 @@ msgid ""
 msgstr ""
 
 # @overload
-#, fuzzy
 msgid "tag|overload|token_filters="
-msgstr "登録されたロガーの登録を削除する。削除後はデフォルトのロガーが使われます。"
+msgstr ""
 
 # @param [::Array<String>] token_filters
 msgid "Token filter names."
