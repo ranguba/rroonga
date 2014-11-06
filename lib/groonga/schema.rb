@@ -252,6 +252,25 @@ module Groonga
       #     {Groonga::IndexColumn} を定義する場合は `"TokenBigram"`
       #     などを指定する必要がある。
       #
+      #   @option options [::Array<String, Groonga::Procedure>, nil]
+      #     :token_filters (nil) The token filters to be used
+      #     in the table.
+      #
+      #     Here is an example to set two token filters.
+      #
+      #     ```ruby
+      #     Groonga::Schema.define do |schema|
+      #       schema.create_table("Terms",
+      #                           # ...
+      #                           :token_filters => [
+      #                             "TokenFilterStem",
+      #                             "TokenFilterStopWord",
+      #                           ]) do |table|
+      #         # ...
+      #       end
+      #     end
+      #     ```
+      #
       #   @option options :key_normalize (false) Keys are normalized
       #     if this value is `true`.
       #
@@ -1172,6 +1191,7 @@ module Groonga
                                :type, :path, :persistent,
                                :key_type, :value_type, :sub_records,
                                :default_tokenizer,
+                               :token_filters,
                                :key_normalize, :key_with_sis,
                                :named_path,
                                :normalizer]
@@ -1213,10 +1233,17 @@ module Groonga
           :context => context,
           :sub_records => @options[:sub_records],
         }
+        token_filters = @options[:token_filters]
+        if token_filters
+          token_filters = token_filters.collect do |token_filter|
+            normalize_type(token_filter)
+          end
+        end
         key_support_table_common = {
           :key_type => normalize_key_type(@options[:key_type] || "ShortText"),
           :key_normalize => @options[:key_normalize],
           :default_tokenizer => normalize_type(@options[:default_tokenizer]),
+          :token_filters => token_filters,
           :normalizer => normalize_type(@options[:normalizer]),
         }
 
@@ -1292,13 +1319,22 @@ module Groonga
         when Groonga::Hash, Groonga::PatriciaTrie, Groonga::DoubleArrayTrie
           key_type = normalize_key_type(options[:key_type])
           return false unless table.domain == resolve_name(key_type)
+
           default_tokenizer = normalize_type(options[:default_tokenizer])
           default_tokenizer = resolve_name(default_tokenizer)
           return false unless table.default_tokenizer == default_tokenizer
+
+          token_filters = options[:token_filters] || []
+          token_filters = token_filters.collect do |token_filter|
+            resolve_name(normalize_type(token_filter))
+          end
+          return false unless table.token_filters == token_filters
+
           normalizer = normalize_type(options[:normalizer])
           normalizer ||= default_normalizer_name if options[:key_normalize]
           normalizer = resolve_name(normalizer)
           return false unless table.normalizer == normalizer
+
           if table.is_a?(Groonga::PatriciaTrie)
             key_with_sis = options[:key_with_sis]
             key_with_sis = false if key_with_sis.nil?

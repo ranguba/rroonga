@@ -91,14 +91,17 @@ class SchemaTest < Test::Unit::TestCase
     end
 
     def test_full_option
+      context.register_plugin("token_filters/stop_word")
       path = @tmp_dir + "hash.groonga"
       tokenizer = context["TokenTrigram"]
+      token_filter = context["TokenFilterStopWord"]
       Groonga::Schema.create_table("Posts",
                                    :type => :hash,
                                    :key_type => "integer",
                                    :path => path.to_s,
                                    :value_type => "UInt32",
                                    :default_tokenizer => tokenizer,
+                                   :token_filters => [token_filter],
                                    :named_path => true) do |table|
       end
       table = context["Posts"]
@@ -112,7 +115,7 @@ class SchemaTest < Test::Unit::TestCase
                    "size: <0>, " +
                    "encoding: <#{Groonga::Encoding.default.inspect}>, " +
                    "default_tokenizer: <#{tokenizer.name}>, " +
-                   "token_filters: [], " +
+                   "token_filters: [<#{token_filter.name}>], " +
                    "normalizer: (nil)>",
                    table.inspect)
     end
@@ -150,6 +153,7 @@ class SchemaTest < Test::Unit::TestCase
     end
 
     def test_full_option
+      context.register_plugin("token_filters/stop_word")
       path = @tmp_dir + "patricia-trie.groonga"
       Groonga::Schema.create_table("Posts",
                                    :type => :patricia_trie,
@@ -157,6 +161,7 @@ class SchemaTest < Test::Unit::TestCase
                                    :path => path.to_s,
                                    :value_type => "Float",
                                    :default_tokenizer => "TokenBigram",
+                                   :token_filters => ["TokenFilterStopWord"],
                                    :key_with_sis => true,
                                    :named_path => true,
                                    :normalizer => "NormalizerAuto") do |table|
@@ -172,7 +177,7 @@ class SchemaTest < Test::Unit::TestCase
                    "size: <0>, " +
                    "encoding: <#{Groonga::Encoding.default.inspect}>, " +
                    "default_tokenizer: <TokenBigram>, " +
-                   "token_filters: [], " +
+                   "token_filters: [<TokenFilterStopWord>], " +
                    "normalizer: <NormalizerAuto>>",
                    table.inspect)
     end
@@ -211,6 +216,7 @@ class SchemaTest < Test::Unit::TestCase
     end
 
     def test_full_option
+      context.register_plugin("token_filters/stop_word")
       path = @tmp_dir + "double-array-trie.groonga"
       Groonga::Schema.create_table("Posts",
                                    :type => :double_array_trie,
@@ -218,6 +224,7 @@ class SchemaTest < Test::Unit::TestCase
                                    :path => path.to_s,
                                    :value_type => "Float",
                                    :default_tokenizer => "TokenBigram",
+                                   :token_filters => ["TokenFilterStopWord"],
                                    :named_path => true,
                                    :normalizer => "NormalizerAuto") do |table|
       end
@@ -232,7 +239,7 @@ class SchemaTest < Test::Unit::TestCase
                    "size: <0>, " +
                    "encoding: <#{Groonga::Encoding.default.inspect}>, " +
                    "default_tokenizer: <TokenBigram>, " +
-                   "token_filters: [], " +
+                   "token_filters: [<TokenFilterStopWord>], " +
                    "normalizer: <NormalizerAuto>>",
                    table.inspect)
     end
