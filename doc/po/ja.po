@@ -81,7 +81,7 @@ msgstr "## 依存ソフトウェア"
 
 msgid ""
 "* Ruby >= 1.9.3\n"
-"* Groonga >= 4.0.4"
+"* Groonga >= 4.0.7"
 msgstr ""
 
 msgid "## Install"
