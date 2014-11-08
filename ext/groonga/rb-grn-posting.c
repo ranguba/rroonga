@@ -32,13 +32,15 @@ rb_grn_posting_new (grn_posting *posting, grn_id term_id,
 #define SET_PARAMETER(key, value) \
     rb_hash_aset(parameters, RB_GRN_INTERN(key), INT2NUM((value)))
 
-    SET_PARAMETER("record_id", posting->rid);
-    SET_PARAMETER("section_id", posting->sid);
+    if (posting) {
+        SET_PARAMETER("record_id", posting->rid);
+        SET_PARAMETER("section_id", posting->sid);
+        SET_PARAMETER("position", posting->pos);
+        SET_PARAMETER("term_frequency", posting->tf);
+        SET_PARAMETER("weight", posting->weight);
+        SET_PARAMETER("n_rest_postings", posting->rest);
+    }
     SET_PARAMETER("term_id", term_id);
-    SET_PARAMETER("position", posting->pos);
-    SET_PARAMETER("term_frequency", posting->tf);
-    SET_PARAMETER("weight", posting->weight);
-    SET_PARAMETER("n_rest_postings", posting->rest);
 
 #undef SET_PARAMETER
 
@@ -47,6 +49,24 @@ rb_grn_posting_new (grn_posting *posting, grn_id term_id,
 
     return rb_funcall(rb_cGrnPosting, rb_intern("new"), 1,
                       parameters);
+}
+
+void
+rb_grn_posting_update (VALUE self, grn_posting *posting, grn_id term_id)
+{
+#define SET_PARAMETER(key, value) \
+    rb_funcall(self, rb_intern(key "="), 1, INT2NUM(value));
+
+    SET_PARAMETER("record_id",       posting->rid);
+    SET_PARAMETER("section_id",      posting->sid);
+    SET_PARAMETER("position",        posting->pos);
+    SET_PARAMETER("term_frequency",  posting->tf);
+    SET_PARAMETER("weight",          posting->weight);
+    SET_PARAMETER("n_rest_postings", posting->rest);
+
+    SET_PARAMETER("term_id",         term_id);
+
+#undef SET_PARAMETER
 }
 
 void

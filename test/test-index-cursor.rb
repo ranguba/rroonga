@@ -1,4 +1,4 @@
-# Copyright (C) 2012  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2012-2014  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -58,6 +58,26 @@ class IndexCursorTest < Test::Unit::TestCase
     @terms.open_cursor do |table_cursor|
       @content_index.open_cursor(table_cursor) do |cursor|
         postings = cursor.each.collect(&:to_hash)
+        assert_equal(expected_postings, postings)
+        opened = true
+      end
+    end
+
+    assert_true(opened)
+  end
+
+  def test_each_reuse_posting_object
+    opened = false
+    @terms.open_cursor do |table_cursor|
+      @content_index.open_cursor(table_cursor) do |cursor|
+        posting_object_ids = []
+        postings = []
+        cursor.each(:reuse_posting_object => true) do |posting|
+          posting_object_ids << posting.object_id
+          postings << posting.to_hash
+        end
+        assert_equal([posting_object_ids.first] * posting_object_ids.size,
+                     posting_object_ids)
         assert_equal(expected_postings, postings)
         opened = true
       end

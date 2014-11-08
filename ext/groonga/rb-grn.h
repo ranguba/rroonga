@@ -568,6 +568,9 @@ VALUE          rb_grn_posting_new                   (grn_posting *posting,
                                                      grn_id term_id,
                                                      VALUE rb_table,
                                                      VALUE rb_lexicon);
+void           rb_grn_posting_update                (VALUE rb_posting,
+                                                     grn_posting *posting,
+                                                     grn_id term_id);
 
 VALUE          rb_grn_tokyo_geo_point_new           (int   latitude,
                                                      int   longitude);

@@ -57,7 +57,8 @@ rb_grn_index_cursor_deconstruct (RbGrnIndexCursor *rb_grn_index_cursor,
 }
 
 static VALUE
-next_value (grn_ctx *context, grn_obj *cursor, VALUE rb_table, VALUE rb_lexicon)
+next_value (VALUE rb_posting,
+            grn_ctx *context, grn_obj *cursor, VALUE rb_table, VALUE rb_lexicon)
 {
     grn_posting *posting;
     grn_id term_id;
@@ -67,7 +68,12 @@ next_value (grn_ctx *context, grn_obj *cursor, VALUE rb_table, VALUE rb_lexicon)
         return Qnil;
     }
 
-    return rb_grn_posting_new(posting, term_id, rb_table, rb_lexicon);
+    if (NIL_P(rb_posting)) {
+        return rb_grn_posting_new(posting, term_id, rb_table, rb_lexicon);
+    } else {
+        rb_grn_posting_update(rb_posting, posting, term_id);
+        return rb_posting;
+    }
 }
 
 static VALUE
@@ -84,7 +90,7 @@ rb_grn_index_cursor_next (VALUE self)
         VALUE rb_lexicon;
         rb_table = rb_iv_get(self, "@table");
         rb_lexicon = rb_iv_get(self, "@lexicon");
-        rb_posting = next_value(context, cursor, rb_table, rb_lexicon);
+        rb_posting = next_value(Qnil, context, cursor, rb_table, rb_lexicon);
     }
 
     return rb_posting;
@@ -92,14 +98,24 @@ rb_grn_index_cursor_next (VALUE self)
 }
 
 static VALUE
-rb_grn_index_cursor_each (VALUE self)
+rb_grn_index_cursor_each (int argc, VALUE *argv, VALUE self)
 {
     grn_obj *cursor;
     grn_ctx *context;
+    grn_bool reuse_posting_object;
+    VALUE rb_options;
+    VALUE rb_reuse_posting_object;
     VALUE rb_table;
     VALUE rb_lexicon;
+    VALUE rb_posting = Qnil;
 
-    RETURN_ENUMERATOR(self, 0, NULL);
+    RETURN_ENUMERATOR(self, argc, argv);
+
+    rb_scan_args(argc, argv, "01", &rb_options);
+
+    rb_grn_scan_options(rb_options,
+                        "reuse_posting_object", &rb_reuse_posting_object,
+                        NULL);
 
     rb_grn_index_cursor_deconstruct(SELF(self), &cursor, &context,
                                     NULL, NULL, NULL, NULL);
@@ -114,9 +130,17 @@ rb_grn_index_cursor_each (VALUE self)
 
     rb_table = rb_iv_get(self, "@table");
     rb_lexicon = rb_iv_get(self, "@lexicon");
+    reuse_posting_object = RVAL2CBOOL(rb_reuse_posting_object);
+
+    if (reuse_posting_object) {
+        rb_posting = rb_grn_posting_new(NULL, GRN_ID_NIL, rb_table, rb_lexicon);
+    }
     while (GRN_TRUE) {
-        VALUE rb_posting;
-        rb_posting = next_value(context, cursor, rb_table, rb_lexicon);
+        if (!reuse_posting_object) {
+            rb_posting = Qnil;
+        }
+        rb_posting = next_value(rb_posting,
+                                context, cursor, rb_table, rb_lexicon);
         if (NIL_P(rb_posting)) {
             break;
         }
@@ -135,5 +159,5 @@ rb_grn_init_index_cursor (VALUE mGrn)
     rb_include_module(rb_cGrnIndexCursor, rb_mEnumerable);
 
     rb_define_method(rb_cGrnIndexCursor, "next", rb_grn_index_cursor_next, 0);
-    rb_define_method(rb_cGrnIndexCursor, "each", rb_grn_index_cursor_each, 0);
+    rb_define_method(rb_cGrnIndexCursor, "each", rb_grn_index_cursor_each, -1);
 }
