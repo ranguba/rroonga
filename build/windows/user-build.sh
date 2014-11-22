@@ -1,7 +1,7 @@
 #!/bin/bash -x
 
 readonly RUBY19="1.9.3-p551"
-readonly RUBY20="2.0.0-p576"
+readonly RUBY20="2.0.0-p598"
 readonly RUBY21="2.1.3"
 readonly CROSS_TERGET="1.9.3:2.0.0:2.1.3"
 readonly PKG_GEMS="/vagrant/pkg"
