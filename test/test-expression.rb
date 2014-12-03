@@ -299,48 +299,48 @@ class ExpressionTest < Test::Unit::TestCase
 
     class DefaultOperatorTest < self
       def test_nil
-        assert_equal("AND", parse(nil))
+        assert_equal("and", parse(nil))
       end
 
       def test_name
-        assert_equal("OR", parse("or"))
+        assert_equal("or", parse("or"))
       end
 
       def test_name_symbol
-        assert_equal("OR", parse(:or))
+        assert_equal("or", parse(:or))
       end
 
       def test_symbol
-        assert_equal("OR", parse("||"))
+        assert_equal("or", parse("||"))
       end
 
       def test_integer
-        assert_equal("ADJUST", parse(Groonga::Operator::ADJUST))
+        assert_equal("adjust", parse(Groonga::Operator::ADJUST))
       end
 
       private
       def parse(default_operator)
         @expression.parse("_id:1 _id:2", :default_operator => default_operator)
-        operator = @expression.inspect[/\d([a-zA-Z_-]+)}/, 1]
+        operator = @expression.inspect[/6:<([a-zA-Z_-]+)/, 1]
         operator
       end
     end
 
     class DefaultModeTest < self
       def test_nil
-        assert_equal("MATCH", parse(nil))
+        assert_equal("match", parse(nil))
       end
 
       def test_name
-        assert_equal("EQUAL", parse("equal"))
+        assert_equal("equal", parse("equal"))
       end
 
       def test_symbol
-        assert_equal("EQUAL", parse(:equal))
+        assert_equal("equal", parse(:equal))
       end
 
       def test_integer
-        assert_equal("EQUAL", parse(Groonga::Operator::EQUAL))
+        assert_equal("equal", parse(Groonga::Operator::EQUAL))
       end
 
       private
@@ -348,7 +348,7 @@ class ExpressionTest < Test::Unit::TestCase
         @expression.parse("query",
                           :default_column => "_id",
                           :default_mode => default_mode)
-        operator = @expression.inspect[/\d([a-zA-Z_-]+)}/, 1]
+        operator = @expression.inspect[/2:<([a-zA-Z_-]+)/, 1]
         operator
       end
     end
