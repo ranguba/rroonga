@@ -77,8 +77,17 @@ class ExpressionTest < Test::Unit::TestCase
     expression.append_operation(Groonga::Operation::PLUS, 2)
     expression.compile
 
-    assert_equal("#<Groonga::Expression noname(){21,01,0PLUS}>",
-                 expression.inspect)
+    assert_equal(<<-INSPECTED.chomp, expression.inspect)
+#<Groonga::Expression #<expr
+  vars:{
+  },
+  codes:{
+    0:<push(), modify:2, value:1>,
+    1:<push(), modify:0, value:1>,
+    2:<plus(), modify:0, value:(NULL)>
+  }
+>>
+    INSPECTED
   end
 
   def test_snippet
@@ -162,14 +171,28 @@ class ExpressionTest < Test::Unit::TestCase
         @expression.append_object(Groonga["TokenBigram"],
                                   Groonga::Operator::PUSH,
                                   1)
-        assert_equal("#<Groonga::Expression noname(){0TokenBigram}>",
-                     @expression.inspect)
+        assert_equal(<<-INSPECTED.chomp, @expression.inspect)
+#<Groonga::Expression #<expr
+  vars:{
+  },
+  codes:{
+    0:<push(), modify:0, value:#<proc:tokenizer TokenBigram arguments:[$1, $2, $3]>>
+  }
+>>
+        INSPECTED
       end
 
       def test_name
         @expression.append_object(Groonga["TokenBigram"], "push", 1)
-        assert_equal("#<Groonga::Expression noname(){0TokenBigram}>",
-                     @expression.inspect)
+        assert_equal(<<-INSPECTED.chomp, @expression.inspect)
+#<Groonga::Expression #<expr
+  vars:{
+  },
+  codes:{
+    0:<push(), modify:0, value:#<proc:tokenizer TokenBigram arguments:[$1, $2, $3]>>
+  }
+>>
+        INSPECTED
       end
     end
   end
@@ -183,14 +206,28 @@ class ExpressionTest < Test::Unit::TestCase
     class OperatorTest < self
       def test_constant
         @expression.append_constant(29, Groonga::Operator::PUSH, 1)
-        assert_equal("#<Groonga::Expression noname(){029}>",
-                     @expression.inspect)
+        assert_equal(<<-INSPECTED.chomp, @expression.inspect)
+#<Groonga::Expression #<expr
+  vars:{
+  },
+  codes:{
+    0:<push(), modify:0, value:29>
+  }
+>>
+        INSPECTED
       end
 
       def test_name
         @expression.append_constant(29, "push", 1)
-        assert_equal("#<Groonga::Expression noname(){029}>",
-                     @expression.inspect)
+        assert_equal(<<-INSPECTED.chomp, @expression.inspect)
+#<Groonga::Expression #<expr
+  vars:{
+  },
+  codes:{
+    0:<push(), modify:0, value:29>
+  }
+>>
+        INSPECTED
       end
     end
   end
@@ -205,14 +242,32 @@ class ExpressionTest < Test::Unit::TestCase
 
     def test_constant
       @expression.append_operation(Groonga::Operator::PLUS, 2)
-      assert_equal("#<Groonga::Expression noname(){229,092,0PLUS}>",
-                   @expression.inspect)
+      assert_equal(<<-INSPECTED.chomp, @expression.inspect)
+#<Groonga::Expression #<expr
+  vars:{
+  },
+  codes:{
+    0:<push(), modify:2, value:29>,
+    1:<push(), modify:0, value:92>,
+    2:<plus(), modify:0, value:(NULL)>
+  }
+>>
+      INSPECTED
     end
 
     def test_name
       @expression.append_operation("plus", 2)
-      assert_equal("#<Groonga::Expression noname(){229,092,0PLUS}>",
-                   @expression.inspect)
+      assert_equal(<<-INSPECTED.chomp, @expression.inspect)
+#<Groonga::Expression #<expr
+  vars:{
+  },
+  codes:{
+    0:<push(), modify:2, value:29>,
+    1:<push(), modify:0, value:92>,
+    2:<plus(), modify:0, value:(NULL)>
+  }
+>>
+      INSPECTED
     end
   end
 

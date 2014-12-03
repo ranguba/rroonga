@@ -169,9 +169,18 @@ class ColumnTest < Test::Unit::TestCase
                  result.records.collect do |record|
                    record["body"]
                  end)
-    assert_equal("#<Groonga::Expression noname($1:null)" +
-                 "{2body GET_VALUE,0\"drive\",0MATCH}>",
-                 result.expression.inspect)
+    assert_equal(<<-INSPECTED.chomp, result.expression.inspect)
+#<Groonga::Expression #<expr
+  vars:{
+    $1:#<record:hash:Posts id:0(nonexistent)>
+  },
+  codes:{
+    0:<get_value(), modify:2, value:#<column:var_size Posts.body range:Text type:scalar compress:none>>,
+    1:<push(), modify:0, value:"drive">,
+    2:<match(), modify:0, value:(NULL)>
+  }
+>>
+    INSPECTED
   end
 
   def test_select_query_from_ctx
@@ -200,9 +209,18 @@ class ColumnTest < Test::Unit::TestCase
                  result.records.collect do |record|
                    record["body"]
                  end)
-    assert_equal("#<Groonga::Expression noname($1:null)" +
-                 "{2body GET_VALUE,0\"drive\",0MATCH}>",
-                 result.expression.inspect)
+    assert_equal(<<-INSPECTED.chomp, result.expression.inspect)
+#<Groonga::Expression #<expr
+  vars:{
+    $1:#<record:hash:Posts id:0(nonexistent)>
+  },
+  codes:{
+    0:<get_value(), modify:2, value:#<column:var_size Posts.body range:Text type:scalar compress:none>>,
+    1:<push(), modify:0, value:"drive">,
+    2:<match(), modify:0, value:(NULL)>
+  }
+>>
+    INSPECTED
   end
 
   def test_select_expression
@@ -218,9 +236,19 @@ class ColumnTest < Test::Unit::TestCase
                  result.records.collect do |record|
                    record["body"]
                  end)
-    assert_equal("#<Groonga::Expression noname($1:null)" +
-                 "{0null,2body GET_VALUE,0\"drive\",0MATCH}>",
-                 result.expression.inspect)
+    assert_equal(<<-INSPECTED.chomp, result.expression.inspect)
+#<Groonga::Expression #<expr
+  vars:{
+    $1:#<record:hash:Posts id:0(nonexistent)>
+  },
+  codes:{
+    0:<push(), modify:0, value:#<record:hash:Posts id:0(nonexistent)>>,
+    1:<get_value(), modify:2, value:#<column:var_size Posts.body range:Text type:scalar compress:none>>,
+    2:<push(), modify:0, value:"drive">,
+    3:<match(), modify:0, value:(NULL)>
+  }
+>>
+    INSPECTED
   end
 
   def test_select_with_block
@@ -233,9 +261,19 @@ class ColumnTest < Test::Unit::TestCase
                  result.records.collect do |record|
                    record["body"]
                  end)
-    assert_equal("#<Groonga::Expression noname($1:null)" +
-                 "{1null,2body GET_VALUE,0\"drive\",0MATCH}>",
-                 result.expression.inspect)
+    assert_equal(<<-INSPECTED.chomp, result.expression.inspect)
+#<Groonga::Expression #<expr
+  vars:{
+    $1:#<record:hash:Posts id:0(nonexistent)>
+  },
+  codes:{
+    0:<push(), modify:1, value:#<record:hash:Posts id:0(nonexistent)>>,
+    1:<get_value(), modify:2, value:#<column:var_size Posts.body range:Text type:scalar compress:none>>,
+    2:<push(), modify:0, value:"drive">,
+    3:<match(), modify:0, value:(NULL)>
+  }
+>>
+    INSPECTED
   end
 
   def test_set_time
