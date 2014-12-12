@@ -503,8 +503,6 @@ rb_grn_expression_compile (VALUE self)
 static VALUE
 rb_grn_expression_dump_plan (VALUE self)
 {
-/* TODO: Remove me after Groogna 4.0.8 is released. */
-#ifdef HAVE_GRN_EXPR_DUMP_PLAN
     grn_ctx *context = NULL;
     grn_obj *expression;
     grn_obj dumped_plan;
@@ -520,9 +518,6 @@ rb_grn_expression_dump_plan (VALUE self)
     grn_obj_unlink(context, &dumped_plan);
 
     return rb_dumped_plan;
-#else
-    return rb_str_new2("");
-#endif
 }
 
 /*

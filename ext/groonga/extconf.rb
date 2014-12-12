@@ -283,9 +283,6 @@ have_func("rb_sym2str", "ruby.h")
 have_func("rb_to_symbol", "ruby.h")
 have_type("enum ruby_value_type", "ruby.h")
 
-# TODO: Remove me after Groogna 4.0.8 is released.
-have_func("grn_expr_dump_plan", "groonga.h")
-
 checking_for(checking_message("--enable-debug-log option")) do
   enable_debug_log = enable_config("debug-log", false)
   if enable_debug_log
