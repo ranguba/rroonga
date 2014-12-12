@@ -1,5 +1,17 @@
 h1. NEWS
 
+h2(#4-0-7). 4.0.7: 2014-12-12
+
+h3. Improvements
+
+* Supported Groonga 4.0.8. Groonga 4.0.7 or older aren't supported.
+* Added @:reuse_posting_object@ option to
+  {Groonga::IndexCursor#each}. The option improves performance by
+  reducing memory allocation. The option is disabled by default because
+  reusing the same object isn't Rubyish.
+* Added {Groonga::IndexCursor#estimate_size}. [GitHub#38]
+* Accepted string for integer, unsigned integer and float type key.
+
 h2(#4-0-6). 4.0.6: 2014-11-06
 
 h3. Improvements
