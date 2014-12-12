@@ -511,6 +511,14 @@ msgid ""
 "* Added {Groonga::IndexColumn#estimate_size}. [GitHub#38]\n"
 "* Accepted string for integer, unsigned integer and float type key."
 msgstr ""
+"* Groonga 4.0.8に対応。Groonga 4.0.7以前はサポートしません。\n"
+"* {Groonga::IndexCursor#each} に @:reuse_posting_object@ オプションを追加。\n"
+"  このオプションはメモリー割り当てを減らすことでパフォーマンスを改善します。\n"
+"  ただし、同じオブジェクトを再利用するのはRubyらしくないため、\n"
+"  このオプションはデフォルトでは無効です。\n"
+"* {Groonga::IndexColumn#estimate_size} を追加。 [GitHub#38]\n"
+"* 数値型（intger、unsigned integer、float）のキーが文字列型の数値を\n"
+"  受け入れるようになった。（内部で数値型に変換される）"
 
 msgid "h2(#4-0-6). 4.0.6: 2014-11-06"
 msgstr ""
@@ -5480,9 +5488,8 @@ msgid ""
 msgstr ""
 
 # @overload
-#, fuzzy
 msgid "tag|overload|estimate_size"
-msgstr "登録されたロガーの登録を削除する。削除後はデフォルトのロガーが使われます。"
+msgstr ""
 
 # @param [Integer, Record]
 msgid "tag|param|token_id"
@@ -5518,7 +5525,7 @@ msgstr ""
 msgid ""
 "Unregister the registered logger. The default logger is used after\n"
 "unregistering."
-msgstr ""
+msgstr "登録されたロガーの登録を削除する。削除後はデフォルトのロガーが使われます。"
 
 # @return
 msgid "void"
@@ -5526,7 +5533,7 @@ msgstr ""
 
 # @overload
 msgid "tag|overload|unregister"
-msgstr "登録されたロガーの登録を削除する。削除後はデフォルトのロガーが使われます。"
+msgstr ""
 
 # Groonga::Logger.reopen
 msgid ""
