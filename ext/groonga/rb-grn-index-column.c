@@ -955,6 +955,97 @@ rb_grn_index_column_open_cursor (int argc, VALUE *argv, VALUE self)
         return rb_cursor;
 }
 
+/*
+ * Estimates the number of documents found by the given token ID.
+ *
+ * @example Token ID style
+ *    # Define schema
+ *    Groonga::Schema.define do |schema|
+ *      schema.create_table("Articles") do |table|
+ *        table.text("content")
+ *      end
+ *
+ *      schema.create_table("Terms",
+ *                          :type => :hash,
+ *                          :key_type => "ShortText",
+ *                          :default_tokenizer => "TokenBigram",
+ *                          :normalizer => "NormalizerAuto") do |table|
+ *        table.index("Articles.content",
+ *                    :name => "articles_content",
+ *                    :with_position => true,
+ *                    :with_section => true)
+ *      end
+ *    end
+ *    articles = Groonga["Articles"]
+ *    terms = Groonga["Terms"]
+ *    index = Groonga["Terms.articles_content"]
+ *
+ *    # Add data
+ *    articles.add(:content => "Groonga is fast")
+ *    articles.add(:content => "Rroonga is fast")
+ *    articles.add(:content => "Mroonga is fast")
+ *
+ *    # Estimate the number of documents found by token ID
+ *    p @index.estimate_size(@terms["fast"].id)    # => 7
+ *    p @index.estimate_size(@terms["Groonga"].id) # => 1
+ *
+ * @example Token record style
+ *    # Define schema
+ *    Groonga::Schema.define do |schema|
+ *      schema.create_table("Articles") do |table|
+ *        table.text("content")
+ *      end
+ *
+ *      schema.create_table("Terms",
+ *                          :type => :hash,
+ *                          :key_type => "ShortText",
+ *                          :default_tokenizer => "TokenBigram",
+ *                          :normalizer => "NormalizerAuto") do |table|
+ *        table.index("Articles.content",
+ *                    :name => "articles_content",
+ *                    :with_position => true,
+ *                    :with_section => true)
+ *      end
+ *    end
+ *    articles = Groonga["Articles"]
+ *    terms = Groonga["Terms"]
+ *    index = Groonga["Terms.articles_content"]
+ *
+ *    # Add data
+ *    articles.add(:content => "Groonga is fast")
+ *    articles.add(:content => "Rroonga is fast")
+ *    articles.add(:content => "Mroonga is fast")
+ *
+ *    # Estimate the number of documents found by token record
+ *    p @index.estimate_size(@terms["fast"])    # => 7
+ *    p @index.estimate_size(@terms["Groonga"]) # => 1
+ *
+ * @overload estimate_size(token_id)
+ *   @param [Integer, Record] token_id The token ID to be estimated.
+ *   @return [Integer] The estimated number of documents found by the
+ *     given token ID.
+ */
+static VALUE
+rb_grn_index_column_estimate_size (VALUE self, VALUE rb_token_id)
+{
+    grn_ctx *context;
+    grn_obj *column;
+    grn_obj *domain_object;
+    grn_id token_id;
+    unsigned int size;
+
+    rb_grn_index_column_deconstruct(SELF(self), &column, &context,
+                                    NULL, &domain_object,
+                                    NULL, NULL, NULL,
+                                    NULL, NULL,
+                                    NULL, NULL);
+
+    token_id = RVAL2GRNID(rb_token_id, context, domain_object, self);
+    size = grn_ii_estimate_size(context, (grn_ii *)column, token_id);
+
+    return UINT2NUM(size);
+}
+
 void
 rb_grn_init_index_column (VALUE mGrn)
 {
@@ -990,4 +1081,7 @@ rb_grn_init_index_column (VALUE mGrn)
 
     rb_define_method(rb_cGrnIndexColumn, "open_cursor",
                      rb_grn_index_column_open_cursor, -1);
+
+    rb_define_method(rb_cGrnIndexColumn, "estimate_size",
+                     rb_grn_index_column_estimate_size, 1);
 }
