@@ -9,7 +9,7 @@ h3. Improvements
   {Groonga::IndexCursor#each}. The option improves performance by
   reducing memory allocation. The option is disabled by default because
   reusing the same object isn't Rubyish.
-* Added {Groonga::IndexCursor#estimate_size}. [GitHub#38]
+* Added {Groonga::IndexColumn#estimate_size}. [GitHub#38]
 * Accepted string for integer, unsigned integer and float type key.
 
 h2(#4-0-6). 4.0.6: 2014-11-06
