@@ -1024,6 +1024,8 @@ rb_grn_index_column_open_cursor (int argc, VALUE *argv, VALUE self)
  *   @param [Integer, Record] token_id The token ID to be estimated.
  *   @return [Integer] The estimated number of documents found by the
  *     given token ID.
+ *
+ * @since 4.0.8
  */
 static VALUE
 rb_grn_index_column_estimate_size (VALUE self, VALUE rb_token_id)
