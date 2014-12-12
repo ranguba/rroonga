@@ -498,7 +498,7 @@ rb_grn_expression_compile (VALUE self)
  * Dump execution plan of the `expression` in string.
  *
  * @overload dump_plan
- * @since 4.0.8
+ * @since 4.0.7
  */
 static VALUE
 rb_grn_expression_dump_plan (VALUE self)
