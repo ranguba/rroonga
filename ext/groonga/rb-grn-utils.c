@@ -481,46 +481,73 @@ rb_grn_bulk_from_ruby_object_with_type (VALUE object, grn_ctx *context,
 
     switch (type_id) {
     case GRN_DB_INT8:
+        if (string_p) {
+            object = rb_Integer(object);
+        }
         value.int8_value = NUM2SHORT(object);
         string = (const char *)&(value.int8_value);
         size = sizeof(value.int8_value);
         break;
     case GRN_DB_UINT8:
+        if (string_p) {
+            object = rb_Integer(object);
+        }
         value.uint8_value = NUM2USHORT(object);
         string = (const char *)&(value.uint8_value);
         size = sizeof(value.uint8_value);
         break;
     case GRN_DB_INT16:
+        if (string_p) {
+            object = rb_Integer(object);
+        }
         value.int16_value = NUM2SHORT(object);
         string = (const char *)&(value.int16_value);
         size = sizeof(value.int16_value);
         break;
     case GRN_DB_UINT16:
+        if (string_p) {
+            object = rb_Integer(object);
+        }
         value.uint16_value = NUM2USHORT(object);
         string = (const char *)&(value.uint16_value);
         size = sizeof(value.uint16_value);
         break;
     case GRN_DB_INT32:
+        if (string_p) {
+            object = rb_Integer(object);
+        }
         value.int32_value = NUM2INT(object);
         string = (const char *)&(value.int32_value);
         size = sizeof(value.int32_value);
         break;
     case GRN_DB_UINT32:
+        if (string_p) {
+            object = rb_Integer(object);
+        }
         value.uint32_value = NUM2UINT(object);
         string = (const char *)&(value.uint32_value);
         size = sizeof(value.uint32_value);
         break;
     case GRN_DB_INT64:
+        if (string_p) {
+            object = rb_Integer(object);
+        }
         value.int64_value = NUM2LL(object);
         string = (const char *)&(value.int64_value);
         size = sizeof(value.int64_value);
         break;
     case GRN_DB_UINT64:
+        if (string_p) {
+            object = rb_Integer(object);
+        }
         value.uint64_value = NUM2ULL(object);
         string = (const char *)&(value.uint64_value);
         size = sizeof(value.uint64_value);
         break;
     case GRN_DB_FLOAT:
+        if (string_p) {
+            object = rb_Float(object);
+        }
         value.double_value = NUM2DBL(object);
         string = (const char *)&(value.double_value);
         size = sizeof(value.double_value);

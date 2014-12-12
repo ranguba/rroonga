@@ -1,4 +1,4 @@
-# Copyright (C) 2013  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2013-2014  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -73,6 +73,64 @@ class TableKeySupportTest < Test::Unit::TestCase
       ids = Groonga::Hash.create(:name => "IDs", :key_type => "UInt64")
       id = ids.add(key)
       assert_equal(key, id.key)
+    end
+  end
+
+  class CastTest < self
+    def test_int8
+      key = "-1"
+      ids = Groonga::Hash.create(:name => "IDs", :key_type => "Int8")
+      id = ids.add(key)
+      assert_equal(key.to_i, id.key)
+    end
+
+    def test_uint8
+      key = "1"
+      ids = Groonga::Hash.create(:name => "IDs", :key_type => "UInt8")
+      id = ids.add(key)
+      assert_equal(key.to_i, id.key)
+    end
+
+    def test_int16
+      key = (-(2 ** 8)).to_s
+      ids = Groonga::Hash.create(:name => "IDs", :key_type => "Int16")
+      id = ids.add(key)
+      assert_equal(key.to_i, id.key)
+    end
+
+    def test_uint16
+      key = (2 ** 8).to_s
+      ids = Groonga::Hash.create(:name => "IDs", :key_type => "UInt16")
+      id = ids.add(key)
+      assert_equal(key.to_i, id.key)
+    end
+
+    def test_int32
+      key = (-(2 ** 16)).to_s
+      ids = Groonga::Hash.create(:name => "IDs", :key_type => "Int32")
+      id = ids.add(key)
+      assert_equal(key.to_i, id.key)
+    end
+
+    def test_uint32
+      key = (2 ** 16).to_s
+      ids = Groonga::Hash.create(:name => "IDs", :key_type => "UInt32")
+      id = ids.add(key)
+      assert_equal(key.to_i, id.key)
+    end
+
+    def test_int64
+      key = (-(2 ** 32)).to_s
+      ids = Groonga::Hash.create(:name => "IDs", :key_type => "Int64")
+      id = ids.add(key)
+      assert_equal(key.to_i, id.key)
+    end
+
+    def test_uint64
+      key = (2 ** 32).to_s
+      ids = Groonga::Hash.create(:name => "IDs", :key_type => "UInt64")
+      id = ids.add(key)
+      assert_equal(key.to_i, id.key)
     end
   end
 
