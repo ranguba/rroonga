@@ -520,10 +520,6 @@ class ColumnTest < Test::Unit::TestCase
   end
 
   class TruncateTest < self
-    def setup
-      setup_database
-
-    end
     def test_truncate
       posts = Groonga::Hash.create(:name => "Posts", :key_type => "ShortText")
       posts.define_column("article", "Text")
