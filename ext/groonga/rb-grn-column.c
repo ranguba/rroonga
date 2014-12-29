@@ -609,7 +609,7 @@ rb_grn_column_reference_p (VALUE self)
 }
 
 /*
- * Remove all column at once.
+ * Clears all values in column.
  *
  * @since 4.0.8
  *
