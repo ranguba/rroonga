@@ -611,6 +611,10 @@ rb_grn_column_reference_p (VALUE self)
 /*
  * Clears all values in column.
  *
+ * This method is a dangerous method. You can't use this method when
+ * other process is using the column. The other process that is using
+ * the column must re-open its database after this method is done.
+ *
  * @since 4.0.8
  *
  * @overload truncate
