@@ -234,5 +234,4 @@ class CommandSelectTest < Test::Unit::TestCase
                    result.records)
     end
   end
-
 end
