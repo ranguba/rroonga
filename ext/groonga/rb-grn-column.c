@@ -609,6 +609,31 @@ rb_grn_column_reference_p (VALUE self)
 }
 
 /*
+ * Clears all values in column.
+ *
+ * @since 4.0.8
+ *
+ * @overload truncate
+ */
+static VALUE
+rb_grn_column_truncate (VALUE self)
+{
+    grn_ctx *context;
+    grn_obj *column;
+    grn_rc rc;
+
+    rb_grn_column_deconstruct(SELF(self), &column, &context,
+                              NULL, NULL,
+                              NULL, NULL, NULL);
+    rc = grn_column_truncate(context, column);
+
+    rb_grn_context_check(context, self);
+    rb_grn_rc_check(rc, self);
+
+    return Qnil;
+}
+
+/*
  * _column_ が {Groonga::IndexColumn} の場合は +true+ を返し、
  * そうでない場合は +false+ を返す。
  *
@@ -802,6 +827,7 @@ rb_grn_init_column (VALUE mGrn)
     rb_define_method(rb_cGrnColumn, "clear_lock", rb_grn_column_clear_lock, -1);
     rb_define_method(rb_cGrnColumn, "locked?", rb_grn_column_is_locked, -1);
     rb_define_method(rb_cGrnColumn, "reference?", rb_grn_column_reference_p, 0);
+    rb_define_method(rb_cGrnColumn, "truncate", rb_grn_column_truncate, 0);
     /* deprecated: backward compatibility */
     rb_define_alias(rb_cGrnColumn, "reference_column?", "reference?");
     rb_define_method(rb_cGrnColumn, "index?", rb_grn_column_index_p, 0);

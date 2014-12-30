@@ -518,4 +518,25 @@ class ColumnTest < Test::Unit::TestCase
       assert_nil(@users.column("name"))
     end
   end
+
+  class TruncateTest < self
+    def test_truncate
+      posts = Groonga::Hash.create(:name => "Posts", :key_type => "ShortText")
+      posts.define_column("article", "Text")
+      article = "This is test."
+      post1 = posts.add("hello1", :article => article)
+      post2 = posts.add("hello2", :article => article)
+
+      assert_equal(article, post1["article"])
+      assert_equal(article, post2["article"])
+
+      @posts = context["Posts"]
+      assert_nothing_raised do
+        @posts.column("article").truncate
+      end
+
+      assert_nil(post1["article"])
+      assert_nil(post2["article"])
+    end
+  end
 end
