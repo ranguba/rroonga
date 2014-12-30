@@ -614,6 +614,7 @@ rb_grn_column_reference_p (VALUE self)
  * @since 4.0.8
  *
  * @overload truncate
+ *   @return void
  */
 static VALUE
 rb_grn_column_truncate (VALUE self)
