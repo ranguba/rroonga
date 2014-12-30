@@ -172,7 +172,7 @@ class ColumnTest < Test::Unit::TestCase
     assert_equal(<<-INSPECTED.chomp, result.expression.inspect)
 #<Groonga::Expression #<expr
   vars:{
-    $1:#<record:hash:Posts id:0(nonexistent)>
+    $1:#<record:hash:Posts id:(no value)>
   },
   codes:{
     0:<get_value(), modify:2, value:#<column:var_size Posts.body range:Text type:scalar compress:none>>,
@@ -212,7 +212,7 @@ class ColumnTest < Test::Unit::TestCase
     assert_equal(<<-INSPECTED.chomp, result.expression.inspect)
 #<Groonga::Expression #<expr
   vars:{
-    $1:#<record:hash:Posts id:0(nonexistent)>
+    $1:#<record:hash:Posts id:(no value)>
   },
   codes:{
     0:<get_value(), modify:2, value:#<column:var_size Posts.body range:Text type:scalar compress:none>>,
@@ -239,10 +239,10 @@ class ColumnTest < Test::Unit::TestCase
     assert_equal(<<-INSPECTED.chomp, result.expression.inspect)
 #<Groonga::Expression #<expr
   vars:{
-    $1:#<record:hash:Posts id:0(nonexistent)>
+    $1:#<record:hash:Posts id:(no value)>
   },
   codes:{
-    0:<push(), modify:0, value:#<record:hash:Posts id:0(nonexistent)>>,
+    0:<push(), modify:0, value:#<record:hash:Posts id:(no value)>>,
     1:<get_value(), modify:2, value:#<column:var_size Posts.body range:Text type:scalar compress:none>>,
     2:<push(), modify:0, value:"drive">,
     3:<match(), modify:0, value:(NULL)>
@@ -264,10 +264,10 @@ class ColumnTest < Test::Unit::TestCase
     assert_equal(<<-INSPECTED.chomp, result.expression.inspect)
 #<Groonga::Expression #<expr
   vars:{
-    $1:#<record:hash:Posts id:0(nonexistent)>
+    $1:#<record:hash:Posts id:(no value)>
   },
   codes:{
-    0:<push(), modify:1, value:#<record:hash:Posts id:0(nonexistent)>>,
+    0:<push(), modify:1, value:#<record:hash:Posts id:(no value)>>,
     1:<get_value(), modify:2, value:#<column:var_size Posts.body range:Text type:scalar compress:none>>,
     2:<push(), modify:0, value:"drive">,
     3:<match(), modify:0, value:(NULL)>
