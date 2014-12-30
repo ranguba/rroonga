@@ -531,9 +531,7 @@ class ColumnTest < Test::Unit::TestCase
       assert_equal(article, post2["article"])
 
       @posts = context["Posts"]
-      assert_nothing_raised do
-        @posts.column("article").truncate
-      end
+      @posts.column("article").truncate
 
       assert_nil(post1["article"])
       assert_nil(post2["article"])
