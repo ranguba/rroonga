@@ -524,8 +524,8 @@ class ColumnTest < Test::Unit::TestCase
       posts = Groonga::Hash.create(:name => "Posts", :key_type => "ShortText")
       posts.define_column("body", "Text")
       body = "This is test."
-      post1 = posts.add("hello1", :body => body)
-      post2 = posts.add("hello2", :body => body)
+      post1 = posts.add("title1", :body => body)
+      post2 = posts.add("title2", :body => body)
 
       assert_equal(body, post1["body"])
       assert_equal(body, post2["body"])
