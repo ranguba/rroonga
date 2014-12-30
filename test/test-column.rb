@@ -520,20 +520,35 @@ class ColumnTest < Test::Unit::TestCase
   end
 
   class TruncateTest < self
-    def test_truncate
-      posts = Groonga::Hash.create(:name => "Posts", :key_type => "ShortText")
-      posts.define_column("body", "Text")
+    def setup
+      setup_database
 
+      setup_schema
+    end
+
+    def setup_schema
+      Groonga::Schema.define do |schema|
+        schema.create_table("Posts",
+                            :type => :hash,
+                            :key_type => "ShortText") do |table|
+          table.text("body")
+        end
+      end
+
+      @posts = Groonga["Posts"]
+    end
+
+    def test_truncate
       body1 = "body1"
       body2 = "body2"
       records = [
-        posts.add("title1", :body => body1),
-        posts.add("title2", :body => body2),
+        @posts.add("title1", :body => body1),
+        @posts.add("title2", :body => body2),
       ]
 
       assert_equal([body1, body2],
                    records.collect(&:body))
-      posts.column("body").truncate
+      @posts.column("body").truncate
       assert_equal([nil, nil],
                    records.collect(&:body))
     end
