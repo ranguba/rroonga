@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # Copyright (C) 2012  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2014  Masafumi Yokoyama <myokoym@gmail.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -136,7 +137,7 @@ module Groonga
     def ==(other)
       case other
       when String
-        to_s == otehr
+        to_s == other
       when GeoPoint
         normalized_self = to_msec
         normalized_other = coerce(other).to_msec

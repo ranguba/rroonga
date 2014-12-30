@@ -1,4 +1,5 @@
 # Copyright (C) 2012  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2014  Masafumi Yokoyama <myokoym@gmail.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -182,6 +183,20 @@ class GeoPointTest < Test::Unit::TestCase
         def test_different_unit
           geo_point1 = Groonga::TokyoGeoPoint.new(35.6813819, 139.7660839)
           geo_point2 = Groonga::WGS84GeoPoint.new(128464590, 503146349)
+          assert_equal(geo_point1, geo_point2)
+        end
+      end
+
+      class StringTest < self
+        def test_degree
+          geo_point1 = Groonga::WGS84GeoPoint.new(35.6846084, 139.7628746)
+          geo_point2 = "35.6846084x139.7628746"
+          assert_equal(geo_point1, geo_point2)
+        end
+
+        def test_msec
+          geo_point1 = Groonga::WGS84GeoPoint.new(128464590, 503146349)
+          geo_point2 = "128464590x503146349"
           assert_equal(geo_point1, geo_point2)
         end
       end
