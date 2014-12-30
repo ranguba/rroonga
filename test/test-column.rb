@@ -538,7 +538,7 @@ class ColumnTest < Test::Unit::TestCase
       @posts = Groonga["Posts"]
     end
 
-    def test_truncate
+    def test_not_indexed
       body1 = "body1"
       body2 = "body2"
       records = [
@@ -551,6 +551,33 @@ class ColumnTest < Test::Unit::TestCase
       @posts.column("body").truncate
       assert_equal([nil, nil],
                    records.collect(&:body))
+    end
+
+    def test_indexed
+      Groonga::Schema.define do |schema|
+        schema.create_table("Terms",
+                            :type => :patricia_trie,
+                            :key_type => "ShortText",
+                            :default_tokenizer => "TokenBigram",
+                            :normalizer => "NormalizerAuto") do |table|
+          table.index("Posts.body")
+        end
+      end
+
+      post1 = @posts.add("title1", :body => "body1")
+      post2 = @posts.add("title2", :body => "body2")
+
+      select = lambda do
+        @posts.select {|record| record.body =~ "1"}.collect(&:_key)
+      end
+
+      assert_equal(["title1"], select.call)
+      @posts.column("body").truncate
+      assert_equal([], select.call)
+
+      post1.body = "body1"
+      post2.body = "body2"
+      assert_equal(["title1"], select.call)
     end
   end
 end
