@@ -145,7 +145,7 @@ class VariableSizeColumnTest < Test::Unit::TestCase
 
     class StringTest < self
       def test_append
-        omit("append for non table domain column isn't supported by groonga.")
+        omit("append for non table domain column isn't supported by Groonga.")
         assert_equal([], @morita["nick_names"])
         @morita.append("nick_names", "morita")
         assert_equal(["morita"], @morita["nick_names"])
@@ -154,7 +154,7 @@ class VariableSizeColumnTest < Test::Unit::TestCase
       end
 
       def test_prepend
-        omit("prepend for non table domain column isn't supported by groonga.")
+        omit("prepend for non table domain column isn't supported by Groonga.")
         assert_equal([], @morita["nick_names"])
         @morita.prepend("nick_names", "morita")
         assert_equal(["morita"], @morita["nick_names"])
