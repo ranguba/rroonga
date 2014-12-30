@@ -202,8 +202,6 @@ class CommandSelectTest < Test::Unit::TestCase
   end
 
   class EscapeTest < self
-    setup :setup_database
-
     def test_backslash
       key = "the \\ book"
       @books.add(key, :published => Time.parse("2011/04/01"))
