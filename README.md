@@ -40,7 +40,7 @@ contributed patches.)
 ## Dependencies
 
 * Ruby >= 1.9.3
-* Groonga >= 4.0.8
+* Groonga >= 4.0.9
 
 ## Install
 
