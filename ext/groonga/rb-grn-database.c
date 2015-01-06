@@ -1,6 +1,6 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
-  Copyright (C) 2009-2011  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2015  Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -562,6 +562,37 @@ rb_grn_database_defrag (int argc, VALUE *argv, VALUE self)
     return INT2NUM(n_segments);
 }
 
+/*
+ * Recovers database.
+ *
+ * @overload recover()
+ *
+ *   If the database is broken, try to recover the database. If the
+ *   database can't be recovered, an {Groonga::Error} family exception
+ *   is raised.
+ *
+ *   If the database isn't broken, it does nothing.
+ *
+ *   @return [void]
+ *
+ * @since 4.0.8
+ */
+static VALUE
+rb_grn_database_recover (VALUE self)
+{
+    grn_rc rc;
+    grn_ctx *context;
+    grn_obj *database;
+
+    rb_grn_database_deconstruct(SELF(self), &database, &context,
+                                NULL, NULL, NULL, NULL);
+    rc = grn_db_recover(context, database);
+    rb_grn_context_check(context, self);
+    rb_grn_rc_check(rc, self);
+
+    return Qnil;
+}
+
 void
 rb_grn_init_database (VALUE mGrn)
 {
@@ -593,4 +624,5 @@ rb_grn_init_database (VALUE mGrn)
 
     rb_define_method(rb_cGrnDatabase, "touch", rb_grn_database_touch, 0);
     rb_define_method(rb_cGrnDatabase, "defrag", rb_grn_database_defrag, -1);
+    rb_define_method(rb_cGrnDatabase, "recover", rb_grn_database_recover, 0);
 }

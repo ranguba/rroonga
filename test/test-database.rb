@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2014  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2015  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -169,6 +169,33 @@ class DatabaseTest < Test::Unit::TestCase
                 :address => "address #{i}" + large_data)
     end
     assert_equal(2, @database.defrag)
+  end
+
+  def test_recover
+    setup_database
+    Groonga::Schema.define do |schema|
+      schema.create_table("Users") do |table|
+        table.short_text("name")
+      end
+
+      schema.create_table("Terms",
+                          :type => :patricia_trie,
+                          :key_type => :short_text,
+                          :default_tokenizer => "TokenBigram",
+                          :normalizer => "NormalizerAuto") do |table|
+        table.index("Users.name")
+      end
+    end
+
+    index = context["Terms.Users_name"]
+    index.lock
+    assert do
+      index.locked?
+    end
+    @database.recover
+    assert do
+      not index.locked?
+    end
   end
 
   def test_tables
