@@ -192,8 +192,9 @@ def build_groonga_from_git(major, minor, micro)
   FileUtils.rm_rf("groonga")
   message(" done\n")
 
+  repository_url = "https://github.com/groonga/groonga"
   run_command("cloning...",
-              "git clone --recursive --depth 1 https://github.com/groonga/groonga")
+              "git clone --recursive --depth 1 #{repository_url}")
 
   Dir.chdir("groonga") do
     run_command("running autogen.sh...",
