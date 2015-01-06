@@ -192,7 +192,7 @@ def build_groonga_from_git(major, minor, micro)
   FileUtils.rm_rf("groonga")
   message(" done\n")
 
-  repository_url = "https://github.com/groonga/groonga"
+  repository_url = "https://github.com/groonga/groonga.git"
   run_command("cloning...",
               "git clone --recursive --depth 1 #{repository_url}")
 
