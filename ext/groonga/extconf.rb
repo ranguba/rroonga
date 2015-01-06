@@ -193,13 +193,9 @@ def build_groonga_from_git(major, minor, micro)
   message(" done\n")
 
   run_command("cloning...",
-              "git clone --depth 1 https://github.com/groonga/groonga")
+              "git clone --recursive --depth 1 https://github.com/groonga/groonga")
 
   Dir.chdir("groonga") do
-    run_command("initializing submodules...",
-                "git submodule init")
-    run_command("cloning submodules...",
-                "git submodule update")
     run_command("running autogen.sh...",
                 "./autogen.sh")
     install_for_gnu_build_system(local_groonga_install_dir)
