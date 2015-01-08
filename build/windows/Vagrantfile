@@ -4,18 +4,17 @@
 # Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
 VAGRANTFILE_API_VERSION = "2"
 
-def use_cpu_nums
+def available_n_cpus
   proc_file = "/proc/cpuinfo"
-  use_cpus = 1
   if File.exist?(proc_file)
-    cpu_nums = `cat #{proc_file} |grep processor|wc -l`
+    File.readlines(proc_file).grep(/\Aprocessor\b/).size
   elsif RUBY_PLATFORM =~ /darwin/
-    cpu_nums = `sysctl -n hw.ncpu`
+    `sysctl -n hw.ncpu`.to_i
   elsif RUBY_PLATFORM =~ /mswin|msys|mingw|cygwin|bccwin|wince|emc/
-    cpu_nums = `echo %NUMBER_OF_PROCESSORS%`
+    `echo %NUMBER_OF_PROCESSORS%`.to_i
+  else
+    1
   end
-  use_cpus = cpu_nums.to_i / 2 if cpu_nums.to_i >=2
-  use_cpus
 end
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
@@ -24,7 +23,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.provider("virtualbox") do |vb|
     vb.gui = false
-    used_n_cpus = use_cpu_nums
+    used_n_cpus = available_n_cpus
+    used_n_cpus /= 2 if used_n_cpus >= 2
     vb.customize ["modifyvm", :id, "--cpus", use_n_cpus.to_s]
     vb.customize ["modifyvm", :id, "--memory", "2048"]
   end
