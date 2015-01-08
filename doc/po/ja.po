@@ -2430,7 +2430,7 @@ msgstr "    h3. 感謝"
 msgid "## 2. Translate"
 msgstr ""
 
-msgid "### Update PO"
+msgid "### 2-1. Update PO"
 msgstr ""
 
 msgid "Update PO files (e.g.: ja.po) by the following command:"
@@ -2439,10 +2439,10 @@ msgstr ""
 msgid "    $ rake reference:po:update"
 msgstr ""
 
-msgid "Then, edit PO files."
+msgid "### 2-2. Edit PO"
 msgstr ""
 
-msgid "### Edit PO"
+msgid "Then, edit PO files:"
 msgstr ""
 
 msgid ""
@@ -2452,7 +2452,34 @@ msgid ""
 "  * Then, remove fuzzy."
 msgstr ""
 
-msgid "## 3. Update version and release date"
+msgid "## 3. Upload gem to RubyGems.org"
+msgstr ""
+
+msgid "### 3-1. For Linux"
+msgstr ""
+
+msgid "    $ rake release"
+msgstr ""
+
+msgid "### 3-2. For Windows"
+msgstr ""
+
+msgid ""
+"    $ rake build:windows\n"
+"    $ gem push pkg/rroonga-<the latest release version>-x86-mingw32.gem\n"
+"    $ gem push pkg/rroonga-<the latest release version>-x64-mingw32.gem"
+msgstr ""
+
+msgid "### 3-3. Bump version"
+msgstr ""
+
+msgid "    $ $EDITOR ext/groonga/rb-grn.h"
+msgstr ""
+
+msgid "## 4. Update ranguba.org"
+msgstr ""
+
+msgid "### 4-1. Update the latest version and release date"
 msgstr ""
 
 msgid "Update version and release date in ranguba.org (index.html、ja/index.html)."
@@ -2464,16 +2491,54 @@ msgstr ""
 msgid ""
 "    $ cd ..\n"
 "    $ git clone git@github.com:ranguba/ranguba.org.git\n"
-"    $ cd -"
-msgstr ""
-
-msgid "Or,"
+"    $ cd ranguba.org"
 msgstr ""
 
 msgid ""
-"    $ cd ../ranguba.org/\n"
-"    $ git pull\n"
-"    $ cd -"
+"    $ cd ../ranguba.org\n"
+"    $ git pull"
+msgstr ""
+
+msgid "Second, update the latest version and release date:"
+msgstr ""
+
+msgid "    $ $EDITOR _config.yml"
+msgstr ""
+
+msgid "### 4-2. Update reference manual"
+msgstr ""
+
+msgid "First, copy references to reference html directory in ranguba.org:"
+msgstr ""
+
+msgid ""
+"    $ cd ../rroonga\n"
+"    $ rake release:references:upload"
+msgstr ""
+
+msgid "Second, commit and push the html directory:"
+msgstr ""
+
+msgid ""
+"    $ cd ../ranguba.org\n"
+"    $ git add .\n"
+"    $ git commit\n"
+"    $ git push"
+msgstr ""
+
+msgid "## 5. Announce in mailing lists"
+msgstr ""
+
+msgid ""
+"* groonga-talk (English)\n"
+"  * e.g.: http://sourceforge.net/p/groonga/mailman/message/33144993/\n"
+"* groonga-dev (Japanese)\n"
+"  * e.g.: http://sourceforge.jp/projects/groonga/lists/archive/dev/2014-Decemb"
+"er/003014.html\n"
+"* ruby-talk (English) (optional)\n"
+"  * e.g.: http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-talk/428992\n"
+"* ruby-list (Japanese) (optional)\n"
+"  * e.g.: http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-list/50025"
 msgstr ""
 
 msgid "h1. Tutorial"
@@ -5103,10 +5168,6 @@ msgstr ""
 
 # @overload
 msgid "tag|overload|decrement!"
-msgstr ""
-
-# Groonga::Geo
-msgid "A class for geophysics search."
 msgstr ""
 
 # Groonga::HashCursor
