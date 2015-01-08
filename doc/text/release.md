@@ -119,7 +119,8 @@ First, copy references to reference html directory in ranguba.org:
 Second, commit and push the html directory:
 
     $ cd ../ranguba.org
-    $ git commit .
+    $ git add .
+    $ git commit
     $ git push
 
 ## 5. Announce in mailing lists
