@@ -21,6 +21,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.box = "ubuntu-14.04-x86_64"
   config.vm.box_url = "http://opscode-vm-bento.s3.amazonaws.com/vagrant/virtualbox/opscode_ubuntu-14.04_chef-provisionerless.box"
 
+  config.vm.synced_folder("../../", "/rroonga")
+
   config.vm.provider("virtualbox") do |vb|
     vb.gui = false
     used_n_cpus = available_n_cpus

@@ -31,7 +31,7 @@ ruby_install_with_bundler $RUBY20
 ruby_install_with_bundler $RUBY21
 
 if [ ! -d ~/rroonga ]; then
-    git clone https://github.com/ranguba/rroonga.git ~/rroonga
+    git clone file:///rroonga/.git ~/rroonga
 fi
 
 cd ~/rroonga
