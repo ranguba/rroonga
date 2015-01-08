@@ -27,9 +27,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     use_cpus = use_cpu_nums
     vb.customize ["modifyvm", :id, "--cpus", use_cpus.to_s]
     vb.customize ["modifyvm", :id, "--memory", "2048"]
-    vb.customize ["modifyvm", :id, "--ioapic", "on"]
-    vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
-    vb.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
   end
 
   config.vm.provision :shell, path: "cross-build-rroonga.sh", privileged: false
