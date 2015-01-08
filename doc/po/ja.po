@@ -81,7 +81,7 @@ msgstr "## 依存ソフトウェア"
 
 msgid ""
 "* Ruby >= 1.9.3\n"
-"* Groonga >= 4.1.0"
+"* Groonga >= 4.0.9"
 msgstr ""
 
 msgid "## Install"
@@ -496,9 +496,8 @@ msgstr "* \"2. インストール - Groonga ドキュメント\":http://groonga.
 msgid "h1. NEWS"
 msgstr "h1. お知らせ"
 
-#, fuzzy
 msgid "h2(#4-0-8). 4.0.8: 2014-01-08"
-msgstr "* groonga 0.1.6対応"
+msgstr ""
 
 msgid "h3. Improvements"
 msgstr "h3. 改善"
@@ -508,18 +507,21 @@ msgid ""
 "* Added {Groonga::Column#truncate}. [GitHub#41] [Patch by Hiroshi Hatake]\n"
 "* Added {Groonga::Database#recover}."
 msgstr ""
+"* Groonga 4.0.9に対応。Groonga 4.0.8以前はサポートしません。\n"
+"* {Groonga::Column#truncate} を追加。 [GitHub#41] [Hiroshi Hatakeさんがパッチ提供]\n"
+"* {Groonga::Database#recover} を追加。"
 
 msgid "h3. Fixes"
 msgstr "h3. 修正"
 
 msgid "* Fixed a typo in {Groonga::GeoPoint#==}."
-msgstr ""
+msgstr "* {Groonga::GeoPoint#==} のtypoを修正。"
 
 msgid "h3. Thanks"
 msgstr "h3. 感謝"
 
 msgid "* Hiroshi Hatake"
-msgstr ""
+msgstr "* Hiroshi Hatakeさん"
 
 msgid "h2(#4-0-7). 4.0.7: 2014-12-12"
 msgstr ""
