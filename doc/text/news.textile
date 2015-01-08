@@ -1,5 +1,21 @@
 h1. NEWS
 
+h2(#4-0-8). 4.0.8: 2014-01-08
+
+h3. Improvements
+
+* Supported Groonga 4.0.9. Groonga 4.0.8 or older aren't supported.
+* Added {Groonga::Column#truncate}. [GitHub#41] [Patch by Hiroshi Hatake]
+* Added {Groonga::Database#recover}.
+
+h3. Fixes
+
+* Fixed a typo in {Groonga::GeoPoint#==}.
+
+h3. Thanks
+
+* Hiroshi Hatake
+
 h2(#4-0-7). 4.0.7: 2014-12-12
 
 h3. Improvements
