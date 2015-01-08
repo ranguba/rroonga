@@ -25,8 +25,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     vb.gui = false
     used_n_cpus = available_n_cpus
     used_n_cpus /= 2 if used_n_cpus >= 2
-    vb.customize ["modifyvm", :id, "--cpus", use_n_cpus.to_s]
-    vb.customize ["modifyvm", :id, "--memory", "2048"]
+    vb.cpus = used_n_cpus
+    vb.memory = 2048
   end
 
   config.vm.provision :shell, path: "cross-build-rroonga.sh", privileged: false
