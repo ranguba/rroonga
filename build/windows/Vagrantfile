@@ -8,9 +8,9 @@ def available_n_cpus
   proc_file = "/proc/cpuinfo"
   if File.exist?(proc_file)
     File.readlines(proc_file).grep(/\Aprocessor\b/).size
-  elsif RUBY_PLATFORM =~ /darwin/
+  elsif /darwin/ =~ RUBY_PLATFORM
     `sysctl -n hw.ncpu`.to_i
-  elsif RUBY_PLATFORM =~ /mswin|msys|mingw|cygwin|bccwin|wince|emc/
+  elsif /mswin|msys|mingw|cygwin|bccwin|wince|emc/ =~ RUBY_PLATFORM
     `echo %NUMBER_OF_PROCESSORS%`.to_i
   else
     1
