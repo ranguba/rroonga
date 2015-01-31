@@ -619,6 +619,11 @@ class RecordTest < Test::Unit::TestCase
     def setup
       setup_database
       setup_schema
+      setup_tz
+    end
+
+    def teardown
+      teardown_tz
     end
 
     def setup_schema
@@ -633,8 +638,12 @@ class RecordTest < Test::Unit::TestCase
       @bookmarks = Groonga["Bookmarks"]
     end
 
-    def teardown
-      ENV["TZ"] = "Japan"
+    def setup_tz
+      @tz_original = ENV["TZ"]
+    end
+
+    def teardown_tz
+      ENV["TZ"] = @tz_original
     end
 
     def test_to_json
