@@ -672,5 +672,9 @@ class RecordTest < Test::Unit::TestCase
       }.to_json
       assert_equal(expected, groonga.to_json)
     end
+
+    def teardown
+      ENV["TZ"] = "Japan"
+    end
   end
 end
