@@ -166,8 +166,7 @@ module GroongaTestUtils
   end
 
   def linux?
-    operating_system = `uname -s`
-    operating_system =~ /Linux/
+    RUBY_PLATFORM =~ /linux/
   end
 
   def only_linux
