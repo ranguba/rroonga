@@ -654,6 +654,7 @@ class RecordTest < Test::Unit::TestCase
     end
 
     def test_to_json_with_leap_second
+      only_linux
       ENV["TZ"] = "right/Japan"
       created_at = Time.parse("2012-07-01T08:59:60+09:00")
       values = {

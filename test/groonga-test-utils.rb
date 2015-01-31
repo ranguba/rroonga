@@ -165,6 +165,15 @@ module GroongaTestUtils
     omit("Ruby 1.9 is needed.") unless ruby19?
   end
 
+  def linux?
+    operating_system = `uname -s`
+    operating_system =~ /Linux/
+  end
+
+  def only_linux
+    omit("This test is only for Linux system.") unless linux?
+  end
+
   def support_self_recursive_equal?
     self_recursive_hash1 = {}
     self_recursive_hash1["next"] = self_recursive_hash1
