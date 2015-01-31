@@ -652,5 +652,25 @@ class RecordTest < Test::Unit::TestCase
       }.to_json
       assert_equal(expected, groonga.to_json)
     end
+
+    def test_to_json_with_leap_second
+      ENV["TZ"] = "right/Japan"
+      created_at = Time.parse("2012-07-01T08:59:60+09:00")
+      values = {
+        "uri"        => "http://groonga.org/",
+        "rate"       => 5,
+        "comment"    => "Great!",
+        "created_at" => created_at,
+      }
+      groonga = @bookmarks.add(values)
+      expected = {
+        "_id"        => groonga.id,
+        "comment"    => values["comment"],
+        "created_at" => created_at.iso8601,
+        "rate"       => values["rate"],
+        "uri"        => values["uri"],
+      }.to_json
+      assert_equal(expected, groonga.to_json)
+    end
   end
 end
