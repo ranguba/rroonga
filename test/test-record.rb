@@ -633,6 +633,10 @@ class RecordTest < Test::Unit::TestCase
       @bookmarks = Groonga["Bookmarks"]
     end
 
+    def teardown
+      ENV["TZ"] = "Japan"
+    end
+
     def test_to_json
       ENV["TZ"] = "Japan"
       created_at = Time.parse("2013-05-16T16:57:34+09:00")
@@ -672,10 +676,6 @@ class RecordTest < Test::Unit::TestCase
         "uri"        => values["uri"],
       }.to_json
       assert_equal(expected, groonga.to_json)
-    end
-
-    def teardown
-      ENV["TZ"] = "Japan"
     end
   end
 end
