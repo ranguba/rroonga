@@ -35,14 +35,26 @@ VALUE rb_cGrnNormalizer;
  *   # Normalizes "ABC" with the default normalizer
  *   Groonga::Normalizer.normalize("AbC") # => "abc"
  *
- * @overload normalize(string)
- *   @return [String] The normalized string
+ * @overload normalize(string, options={:remove_blank => true})
  *   @param [String] string The original string
+ *
+ *   @param [::Hash] options The optional parameters.
+ *   @option options :remove_blank (true)
+ *     If it's `true`, all blank characters are removed.
+ *   @option options :remove_tokenized_delimiter (false)
+ *     If it's `true`, all tokenized delimiter characters are removed.
+ *     The character is `U+FFFE`.
+ *
+ *   @return [String] The normalized string
  */
 static VALUE
 rb_grn_normalizer_s_normalize (int argc, VALUE *argv, VALUE klass)
 {
     VALUE rb_context = Qnil;
+    VALUE rb_string;
+    VALUE rb_options;
+    VALUE rb_remove_blank_p;
+    VALUE rb_remove_tokenized_delimiter_p;
     VALUE rb_encoded_string;
     VALUE rb_normalized_string;
     grn_ctx *context = NULL;
@@ -52,20 +64,27 @@ rb_grn_normalizer_s_normalize (int argc, VALUE *argv, VALUE klass)
     const char *normalized_string;
     unsigned int normalized_string_length;
 
-    if (argc != 1 && argc != 2) {
-        rb_raise(rb_eArgError, "wrong number of arguments");
-    } else if (TYPE(argv[0]) != T_STRING) {
-        rb_raise(rb_eArgError, "argument 0 should be a string to be normalized");
-    } else if (argc == 1) {
-        flags = GRN_STRING_REMOVE_BLANK;
-    } else if (TYPE(argv[1]) == T_FIXNUM) {
-        flags = FIX2INT(argv[1]);
-    } else {
-        rb_raise(rb_eArgError, "argument 1 should be a flag defined in Groonga::Normalizer class");
-    }
+    rb_scan_args(argc, argv, "11", &rb_string, &rb_options);
+    rb_grn_scan_options(rb_options,
+                        "remove_blank", &rb_remove_blank_p,
+                        "remove_tokenized_delimiter_p",
+                        &rb_remove_tokenized_delimiter_p,
+                        NULL);
 
     context = rb_grn_context_ensure(&rb_context);
-    rb_encoded_string = rb_grn_context_rb_string_encode(context, argv[0]);
+    rb_encoded_string = rb_grn_context_rb_string_encode(context, rb_string);
+    if (NIL_P(rb_remove_blank_p)) {
+        rb_remove_blank_p = Qtrue;
+    }
+    if (RVAL2CBOOL(rb_remove_blank_p)) {
+        flags |= GRN_STRING_REMOVE_BLANK;
+    }
+    if (NIL_P(rb_remove_tokenized_delimiter_p)) {
+        rb_remove_tokenized_delimiter_p = Qfalse;
+    }
+    if (RVAL2CBOOL(rb_remove_tokenized_delimiter_p)) {
+        flags |= GRN_STRING_REMOVE_TOKENIZED_DELIMITER;
+    }
     grn_string = grn_string_open(context,
                                  RSTRING_PTR(rb_encoded_string),
                                  RSTRING_LEN(rb_encoded_string),
@@ -91,8 +110,4 @@ rb_grn_init_normalizer (VALUE mGrn)
 
     rb_define_singleton_method(rb_cGrnNormalizer, "normalize",
                                rb_grn_normalizer_s_normalize, -1);
-    rb_define_const(rb_cGrnNormalizer, "REMOVE_BLANK",
-                    INT2FIX(GRN_STRING_REMOVE_BLANK));
-    rb_define_const(rb_cGrnNormalizer, "REMOVE_TOKENIZED_DELIMITER",
-                    INT2FIX(GRN_STRING_REMOVE_TOKENIZED_DELIMITER));
 }

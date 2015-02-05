@@ -30,7 +30,8 @@ class NormalizerTest < Test::Unit::TestCase
 
   def test_normalize_with_space_explicitly
     assert_equal("abcdefgh",
-                 Groonga::Normalizer.normalize("AbC Def　gh", Groonga::Normalizer::REMOVE_BLANK))
+                 Groonga::Normalizer.normalize("AbC Def　gh",
+                                               :remove_blank => true))
   end
 
   def test_normalize_group_text
@@ -41,7 +42,8 @@ class NormalizerTest < Test::Unit::TestCase
   def test_normalize_keep_space
     # full width space => half width space
     assert_equal("abc def gh",
-                 Groonga::Normalizer.normalize("AbC Def　gh", 0))
+                 Groonga::Normalizer.normalize("AbC Def　gh",
+                                               :remove_blank => false))
   end
 
   def test_normalize_tilda
