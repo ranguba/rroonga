@@ -59,7 +59,7 @@ contributed patches.)
 ## Thanks
 
 * Daijiro MORI: sent patches to support the latest Groonga.
-* Tasuku SUENAGA: sent bug reports.
+* Tasuku SUENAGA: sent patches and bug reports.
 * niku: sent bug reports.
 * dara:
   * wrote tests.
