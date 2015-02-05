@@ -5779,8 +5779,10 @@ msgstr "文字列を正規化します。"
 
 # @example
 msgid ""
-"# Normalizes \"ABC\" with the default normalizer\n"
-"Groonga::Normalizer.normalize(\"AbC\") # => \"abc\""
+"# Normalizes \"AbC DeF\" with the default normalizer (removing spaces)\n"
+"Groonga::Normalizer.normalize(\"AbC DeF\") # => \"abcdef\""
+"# Normalizes \"AbC DeF\" without removing spaces\n"
+"Groonga::Normalizer.normalize(\"AbC DeF\", 0) # => \"abc def\""
 msgstr ""
 
 # @overload

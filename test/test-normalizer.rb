@@ -21,4 +21,28 @@ class NormalizerTest < Test::Unit::TestCase
   def test_normalize
     assert_equal("abc", Groonga::Normalizer.normalize("AbC"))
   end
+
+  def test_normalize_with_space
+    assert_equal("abcdefgh", Groonga::Normalizer.normalize("AbC Def　gh"))
+  end
+
+  def test_normalize_with_space_explicitly
+    assert_equal("abcdefgh",
+                 Groonga::Normalizer.normalize("AbC Def　gh", Groonga::Normalizer::REMOVE_BLANK))
+  end
+
+  def test_normalize_group_text
+    assert_equal("キロメートルキロメートルキロメートルキロメートル",
+                 Groonga::Normalizer.normalize("㌖㌖㌖㌖"));
+  end
+
+  def test_normalize_keep_space
+    # full width space => half width space
+    assert_equal("abc def gh",
+                 Groonga::Normalizer.normalize("AbC Def　gh", 0))
+  end
+
+  def test_normalize_tilda
+    assert_equal("~~~", Groonga::Normalizer.normalize("~～〜"))
+  end
 end

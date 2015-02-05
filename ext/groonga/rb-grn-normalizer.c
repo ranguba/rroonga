@@ -40,7 +40,7 @@ VALUE rb_cGrnNormalizer;
  *   @param [String] string The original string
  */
 static VALUE
-rb_grn_normalizer_s_normalize (VALUE klass, VALUE rb_string)
+rb_grn_normalizer_s_normalize (int argc, VALUE *argv, VALUE klass)
 {
     VALUE rb_context = Qnil;
     VALUE rb_encoded_string;
@@ -48,19 +48,30 @@ rb_grn_normalizer_s_normalize (VALUE klass, VALUE rb_string)
     grn_ctx *context = NULL;
     grn_obj *grn_string;
     grn_obj *normalizer = GRN_NORMALIZER_AUTO;
-    /* TODO: make customizable */
-    int flags = GRN_STRING_REMOVE_BLANK;
+    int flags = 0;
     const char *normalized_string;
     unsigned int normalized_string_length;
 
+    if (argc != 1 && argc != 2) {
+        rb_raise(rb_eArgError, "wrong number of arguments");
+    } else if (TYPE(argv[0]) != T_STRING) {
+        rb_raise(rb_eArgError, "argument 0 should be a string to be normalized");
+    } else if (argc == 1) {
+        flags = GRN_STRING_REMOVE_BLANK;
+    } else if (TYPE(argv[1]) == T_FIXNUM) {
+        flags = FIX2INT(argv[1]);
+    } else {
+        rb_raise(rb_eArgError, "argument 1 should be a flag defined in Groonga::Normalizer class");
+    }
+
     context = rb_grn_context_ensure(&rb_context);
-    rb_encoded_string = rb_grn_context_rb_string_encode(context, rb_string);
+    rb_encoded_string = rb_grn_context_rb_string_encode(context, argv[0]);
     grn_string = grn_string_open(context,
                                  RSTRING_PTR(rb_encoded_string),
                                  RSTRING_LEN(rb_encoded_string),
                                  normalizer,
                                  flags);
-    rb_grn_context_check(context, rb_string);
+    rb_grn_context_check(context, argv[0]);
     grn_string_get_normalized(context, grn_string,
                               &normalized_string, &normalized_string_length,
                               NULL);
@@ -79,5 +90,9 @@ rb_grn_init_normalizer (VALUE mGrn)
     rb_cGrnNormalizer = rb_define_class_under(mGrn, "Normalizer", rb_cObject);
 
     rb_define_singleton_method(rb_cGrnNormalizer, "normalize",
-                               rb_grn_normalizer_s_normalize, 1);
+                               rb_grn_normalizer_s_normalize, -1);
+    rb_define_const(rb_cGrnNormalizer, "REMOVE_BLANK",
+                    INT2FIX(GRN_STRING_REMOVE_BLANK));
+    rb_define_const(rb_cGrnNormalizer, "REMOVE_TOKENIZED_DELIMITER",
+                    INT2FIX(GRN_STRING_REMOVE_TOKENIZED_DELIMITER));
 }
