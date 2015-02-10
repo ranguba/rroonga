@@ -98,6 +98,7 @@ class ExceptionTest < Test::Unit::TestCase
     assert_const_defined(Groonga, :NormalizerError)
     assert_const_defined(Groonga, :TokenFilterError)
     assert_const_defined(Groonga, :CommandError)
+    assert_const_defined(Groonga, :PluginError)
   end
 end
 

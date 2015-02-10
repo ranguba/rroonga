@@ -98,6 +98,7 @@ static VALUE eGrnUnsupportedCommandVersion;
 static VALUE eGrnNormalizerError;
 static VALUE eGrnTokenFilterError;
 static VALUE eGrnCommandError;
+static VALUE eGrnPluginError;
 
 VALUE
 rb_grn_rc_to_exception (grn_rc rc)
@@ -332,6 +333,9 @@ rb_grn_rc_to_exception (grn_rc rc)
         break;
       case GRN_COMMAND_ERROR:
         exception = eGrnCommandError;
+        break;
+      case GRN_PLUGIN_ERROR:
+        exception = eGrnPluginError;
         break;
     }
 
@@ -574,6 +578,9 @@ rb_grn_rc_to_message (grn_rc rc)
         break;
       case GRN_COMMAND_ERROR:
         message = "command error";
+        break;
+      case GRN_PLUGIN_ERROR:
+        message = "plugin error";
         break;
     }
 
@@ -1244,4 +1251,14 @@ rb_grn_init_exception (VALUE mGrn)
      */
     eGrnCommandError =
         rb_define_class_under(mGrn, "CommandError", rb_eGrnError);
+
+    /*
+     * Document-class: Groonga::PluginError
+     *
+     * It is used when a plugin causes an error.
+     *
+     * @since 5.0.0
+     */
+    eGrnPluginError =
+        rb_define_class_under(mGrn, "PluginError", rb_eGrnError);
 }
