@@ -1,7 +1,7 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
+  Copyright (C) 2014-2015  Masafumi Yokoyama <yokoyama@clear-code.com>
   Copyright (C) 2009-2014  Kouhei Sutou <kou@clear-code.com>
-  Copyright (C) 2014  Masafumi Yokoyama <myokoym@gmail.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -97,6 +97,7 @@ static VALUE eGrnCASError;
 static VALUE eGrnUnsupportedCommandVersion;
 static VALUE eGrnNormalizerError;
 static VALUE eGrnTokenFilterError;
+static VALUE eGrnCommandError;
 
 VALUE
 rb_grn_rc_to_exception (grn_rc rc)
@@ -328,6 +329,9 @@ rb_grn_rc_to_exception (grn_rc rc)
         break;
       case GRN_TOKEN_FILTER_ERROR:
         exception = eGrnTokenFilterError;
+        break;
+      case GRN_COMMAND_ERROR:
+        exception = eGrnCommandError;
         break;
     }
 
@@ -567,6 +571,9 @@ rb_grn_rc_to_message (grn_rc rc)
         break;
       case GRN_TOKEN_FILTER_ERROR:
         message = "token filter error";
+        break;
+      case GRN_COMMAND_ERROR:
+        message = "command error";
         break;
     }
 
@@ -1227,4 +1234,14 @@ rb_grn_init_exception (VALUE mGrn)
      */
     eGrnTokenFilterError =
         rb_define_class_under(mGrn, "TokenFilterError", rb_eGrnError);
+
+    /*
+     * Document-class: Groonga::CommandError
+     *
+     * It is used when a command causes an error.
+     *
+     * @since 5.0.0
+     */
+    eGrnCommandError =
+        rb_define_class_under(mGrn, "CommandError", rb_eGrnError);
 }

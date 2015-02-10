@@ -1,5 +1,5 @@
+# Copyright (C) 2014-2015  Masafumi Yokoyama <yokoyama@clear-code.com>
 # Copyright (C) 2009-2014  Kouhei Sutou <kou@clear-code.com>
-# Copyright (C) 2014  Masafumi Yokoyama <myokoym@gmail.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -97,6 +97,7 @@ class ExceptionTest < Test::Unit::TestCase
     assert_const_defined(Groonga, :UnsupportedCommandVersion)
     assert_const_defined(Groonga, :NormalizerError)
     assert_const_defined(Groonga, :TokenFilterError)
+    assert_const_defined(Groonga, :CommandError)
   end
 end
 
