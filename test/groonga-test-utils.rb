@@ -1,3 +1,4 @@
+# Copyright (C) 2015  Masafumi Yokoyama <yokoyama@clear-code.com>
 # Copyright (C) 2009-2014  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
@@ -166,7 +167,7 @@ module GroongaTestUtils
   end
 
   def linux?
-    RUBY_PLATFORM =~ /linux/
+    /linux/ =~ RUBY_PLATFORM
   end
 
   def only_linux
