@@ -198,4 +198,56 @@ class TableGroupTest < Test::Unit::TestCase
       end
     end
   end
+
+  class MultipleKeyTest < self
+    setup
+    def setup_schema
+      Groonga::Schema.define do |schema|
+        schema.create_table("Memos", :type => :hash) do |table|
+          table.short_text("tag")
+          table.int64("priority")
+        end
+      end
+    end
+
+    setup
+    def setup_data
+      setup_memos
+    end
+
+    def setup_memos
+      @memos = Groonga["Memos"]
+      @memo1 = @memos.add("Groonga1",
+                          :tag => "Groonga",
+                          :priority => 10)
+      @memo2 = @memos.add("Groonga2",
+                          :tag => "Groonga",
+                          :priority => 20)
+      @memo3 = @memos.add("Mroonga1",
+                          :tag => "Mroonga",
+                          :priority => 10)
+      @memo4 = @memos.add("Mroonga2",
+                          :tag => "Mroonga",
+                          :priority => 10)
+    end
+
+    def test_two_keys
+      keys = ["tag", "priority"]
+      grouped_records = @memos.group(keys).collect do |record|
+        sub_record = record.sub_records.first
+        [
+          record.n_sub_records,
+          sub_record.tag,
+          sub_record.priority,
+        ]
+      end
+
+      assert_equal([
+                     [1, "Groonga", 10],
+                     [1, "Groonga", 20],
+                     [2, "Mroonga", 10],
+                   ],
+                   grouped_records)
+    end
+  end
 end

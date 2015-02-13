@@ -1,7 +1,7 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
+  Copyright (C) 2014-2015  Masafumi Yokoyama <yokoyama@clear-code.com>
   Copyright (C) 2009-2014  Kouhei Sutou <kou@clear-code.com>
-  Copyright (C) 2014  Masafumi Yokoyama <myokoym@gmail.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -1306,8 +1306,33 @@ rb_grn_table_sort (int argc, VALUE *argv, VALUE self)
  * 値でグループ化する。多くの場合、キーにはカラムを指定する。
  * カラムはカラム名（文字列）でも指定可能。
  *
+ * If one key is specified, you can get the grouping key by {Groonga::Record#key}:
+ *
+ * <pre>
+ * !!!ruby
+ * grouped_record = table.group("key1").collect do |record|
+ *   [record.key, record.n_sub_records]
+ * end
+ * </pre>
+ *
+ * If two or more keys are specified, the default value of _:max_n_sub_records_
+ * is _1_ (When one key is specified, the value is _0_.). You can get the grouping
+ * keys by {Groonga::Record#sub_records}:
+ *
+ * <pre>
+ * !!!ruby
+ * grouped_record = table.group(["key1", "key2"]).collect do |record|
+ *   sub_record = record.sub_records.first
+ *   [
+ *     sub_record.key1,
+ *     sub_record.key2,
+ *     record.n_sub_records,
+ *   ]
+ * end
+ * </pre>
+ *
  * @overload group([key1, key2, ...], options={})
- *   @return [[Groonga::Hash, ...]]
+ *   @return [Groonga::Hash]
  * @overload group(key, options={})
  *   @return [Groonga::Hash]
  * @option options :max_n_sub_records
@@ -1320,13 +1345,12 @@ rb_grn_table_group (int argc, VALUE *argv, VALUE self)
     grn_ctx *context = NULL;
     grn_obj *table;
     grn_table_sort_key *keys;
-    grn_table_group_result *results;
-    int i, n_keys, n_results;
+    grn_table_group_result result;
+    int i, n_keys;
     unsigned int max_n_sub_records = 0;
     grn_rc rc;
     VALUE rb_keys, rb_options, rb_max_n_sub_records;
     VALUE *rb_group_keys;
-    VALUE rb_results;
 
     rb_grn_table_deconstruct(SELF(self), &table, &context,
                              NULL, NULL,
@@ -1347,8 +1371,15 @@ rb_grn_table_group (int argc, VALUE *argv, VALUE self)
                         "max_n_sub_records", &rb_max_n_sub_records,
                         NULL);
 
-    if (!NIL_P(rb_max_n_sub_records))
+    if (NIL_P(rb_max_n_sub_records)) {
+        if (n_keys > 1) {
+            max_n_sub_records = 1;
+        } else {
+            max_n_sub_records = 0;
+        }
+    } else {
         max_n_sub_records = NUM2UINT(rb_max_n_sub_records);
+    }
 
     keys = ALLOCA_N(grn_table_sort_key, n_keys);
     for (i = 0; i < n_keys; i++) {
@@ -1380,34 +1411,20 @@ rb_grn_table_group (int argc, VALUE *argv, VALUE self)
         keys[i].flags = 0;
     }
 
-    n_results = n_keys;
-    results = ALLOCA_N(grn_table_group_result, n_results);
-    rb_results = rb_ary_new();
-    for (i = 0; i < n_results; i++) {
-        grn_obj *result;
-        VALUE rb_result;
+    result.table = NULL;
+    result.key_begin = 0;
+    result.key_end = n_keys - 1;
+    result.limit = 1;
+    result.flags = GRN_TABLE_GROUP_CALC_COUNT;
+    result.op = GRN_OP_OR;
+    result.max_n_subrecs = max_n_sub_records;
+    result.calc_target = NULL;
 
-        result = grn_table_create_for_group(context, NULL, 0, NULL,
-                                            keys[i].key, table, max_n_sub_records);
-        results[i].table = result;
-        results[i].key_begin = 0;
-        results[i].key_end = 0;
-        results[i].limit = 0;
-        results[i].flags = 0;
-        results[i].op = GRN_OP_OR;
-
-        rb_result = GRNOBJECT2RVAL(Qnil, context, result, GRN_TRUE);
-        rb_ary_push(rb_results, rb_result);
-    }
-
-    rc = grn_table_group(context, table, keys, n_keys, results, n_results);
+    rc = grn_table_group(context, table, keys, n_keys, &result, 1);
     rb_grn_context_check(context, self);
     rb_grn_rc_check(rc, self);
 
-    if (n_results == 1)
-        return rb_ary_pop(rb_results);
-    else
-        return rb_results;
+    return GRNOBJECT2RVAL(Qnil, context, result.table, GRN_TRUE);
 }
 
 /*
