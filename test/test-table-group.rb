@@ -217,18 +217,18 @@ class TableGroupTest < Test::Unit::TestCase
 
     def setup_memos
       @memos = Groonga["Memos"]
-      @memo1 = @memos.add("Groonga1",
-                          :tag => "Groonga",
-                          :priority => 10)
-      @memo2 = @memos.add("Groonga2",
-                          :tag => "Groonga",
-                          :priority => 20)
-      @memo3 = @memos.add("Mroonga1",
-                          :tag => "Mroonga",
-                          :priority => 10)
-      @memo4 = @memos.add("Mroonga2",
-                          :tag => "Mroonga",
-                          :priority => 10)
+      @memos.add("Groonga1",
+                 :tag => "Groonga",
+                 :priority => 10)
+      @memos.add("Groonga2",
+                 :tag => "Groonga",
+                 :priority => 20)
+      @memos.add("Mroonga1",
+                 :tag => "Mroonga",
+                 :priority => 10)
+      @memos.add("Mroonga2",
+                 :tag => "Mroonga",
+                 :priority => 10)
     end
 
     def test_two_keys
