@@ -1310,8 +1310,8 @@ rb_grn_table_sort (int argc, VALUE *argv, VALUE self)
  *
  * <pre>
  * !!!ruby
- * grouped_records = table.group("key1").collect do |record|
- *   [record.key, record.n_sub_records]
+ * grouped_records = table.group("key1").collect do |group|
+ *   [group.key, group.n_sub_records]
  * end
  * </pre>
  *
@@ -1321,12 +1321,12 @@ rb_grn_table_sort (int argc, VALUE *argv, VALUE self)
  *
  * <pre>
  * !!!ruby
- * grouped_records = table.group(["key1", "key2"]).collect do |record|
- *   sub_record = record.sub_records.first
+ * grouped_records = table.group(["key1", "key2"]).collect do |group|
+ *   sub_record = group.sub_records.first
  *   [
  *     sub_record.key1,
  *     sub_record.key2,
- *     record.n_sub_records,
+ *     group.n_sub_records,
  *   ]
  * end
  * </pre>
