@@ -1333,11 +1333,18 @@ rb_grn_table_sort (int argc, VALUE *argv, VALUE self)
  *
  * @overload group([key1, key2, ...], options={})
  *   @return [Groonga::Hash]
+ *
+ *   @!macro [new] table.group.options
+ *     @option options :max_n_sub_records
+ *       グループ化した後のレコードのそれぞれについて最大 _:max_n_sub_records_ 件まで
+ *       そのグループに含まれる _table_ のレコードをサブレコードとして格納する。
+ *
+ *   @!macro table.group.options
+ *
  * @overload group(key, options={})
  *   @return [Groonga::Hash]
- * @option options :max_n_sub_records
- *   グループ化した後のレコードのそれぞれについて最大 _:max_n_sub_records_ 件まで
- *   そのグループに含まれる _table_ のレコードをサブレコードとして格納する。
+ *
+ *   @!macro table.group.options
  */
 static VALUE
 rb_grn_table_group (int argc, VALUE *argv, VALUE self)
