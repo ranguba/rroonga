@@ -35,7 +35,7 @@ static ID id_array_set;
 /*
  * Document-class: Groonga::Table < Groonga::Object
  *
- * rroongaが提供するテーブルのベースとなるクラス。このクラス
+ * Rroongaが提供するテーブルのベースとなるクラス。このクラス
  * から {Groonga::Array} , {Groonga::Hash} , {Groonga::PatriciaTrie}
  * が継承されている。
  */
@@ -1289,7 +1289,7 @@ rb_grn_table_sort (int argc, VALUE *argv, VALUE self)
     result = grn_table_create(context, NULL, 0, NULL, GRN_TABLE_NO_KEY,
                               NULL, table);
     /* use n_records that is return value from
-       grn_table_sort() when rroonga user become specifying
+       grn_table_sort() when Rroonga user become specifying
        output table. */
     grn_table_sort(context, table, offset, limit, result, keys, n_keys);
     exception = rb_grn_context_to_exception(context, self);
@@ -2447,7 +2447,7 @@ rb_grn_table_support_sub_records_p (VALUE self)
  * records for each group, the number of records is stored to
  * it. Records for each group are called as "sub records".
  *
- * Normally, you don't need to care about the space because rroonga
+ * Normally, you don't need to care about the space because Rroonga
  * creates a table with the space automatically. Normal tables
  * (persistent tables) don't have the space because they don't need
  * it.
