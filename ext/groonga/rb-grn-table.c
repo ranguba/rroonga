@@ -1338,6 +1338,16 @@ rb_grn_table_sort (int argc, VALUE *argv, VALUE self)
  *     @option options :max_n_sub_records
  *       グループ化した後のレコードのそれぞれについて最大 _:max_n_sub_records_ 件まで
  *       そのグループに含まれる _table_ のレコードをサブレコードとして格納する。
+ *     @option options [String or Symbol] :calc_target
+ *       The target column name for _:calc_types_.
+ *     @option options [::Array] :calc_types
+ *       It specifies how to calculate (aggregate) values in grouped records by
+ *       a drilldown. You can specify multiple calculation types.
+ *
+ *       - +:max+ := Finding the maximum integer value from integer values in grouped records.
+ *       - +:min+ := Finding the minimum integer value from integer values in grouped records.
+ *       - +:sum+ := Summing integer values in grouped records.
+ *       - +:average+ := Averaging integer/float values in grouped records.
  *
  *   @!macro table.group.options
  *
@@ -1357,6 +1367,7 @@ rb_grn_table_group (int argc, VALUE *argv, VALUE self)
     unsigned int max_n_sub_records = 0;
     grn_rc rc;
     VALUE rb_keys, rb_options, rb_max_n_sub_records;
+    VALUE rb_calc_target, rb_calc_types;
     VALUE *rb_group_keys;
 
     rb_grn_table_deconstruct(SELF(self), &table, &context,
@@ -1376,6 +1387,8 @@ rb_grn_table_group (int argc, VALUE *argv, VALUE self)
 
     rb_grn_scan_options(rb_options,
                         "max_n_sub_records", &rb_max_n_sub_records,
+                        "calc_target", &rb_calc_target,
+                        "calc_types", &rb_calc_types,
                         NULL);
 
     if (NIL_P(rb_max_n_sub_records)) {
@@ -1426,6 +1439,36 @@ rb_grn_table_group (int argc, VALUE *argv, VALUE self)
     result.op = GRN_OP_OR;
     result.max_n_subrecs = max_n_sub_records;
     result.calc_target = NULL;
+
+    if (!NIL_P(rb_calc_target)) {
+        const char *name = NULL;
+        unsigned name_size = 0;
+        ruby_object_to_column_name(rb_calc_target, &name, &name_size);
+        result.calc_target = grn_obj_column(context, table, name, name_size);
+    }
+    if (result.calc_target) {
+        int i, n_calc_types;
+        VALUE *raw_calc_types;
+        raw_calc_types = RARRAY_PTR(rb_calc_types);
+        n_calc_types = RARRAY_LEN(rb_calc_types);
+        for (i = 0; i < n_calc_types; i++) {
+            VALUE rb_calc_type = raw_calc_types[i];
+            if (rb_grn_equal_option(rb_calc_type, "max")) {
+                result.flags |= GRN_TABLE_GROUP_CALC_MAX;
+            } else if (rb_grn_equal_option(rb_calc_type, "min")) {
+                result.flags |= GRN_TABLE_GROUP_CALC_MIN;
+            } else if (rb_grn_equal_option(rb_calc_type, "sum")) {
+                result.flags |= GRN_TABLE_GROUP_CALC_SUM;
+            } else if (rb_grn_equal_option(rb_calc_type, "average")) {
+                result.flags |= GRN_TABLE_GROUP_CALC_AVG;
+            } else {
+                rb_raise(rb_eArgError,
+                         "invalid calculation type: %s: "
+                         "available types: [:max, :min, :sum, :average]",
+                         rb_grn_inspect(rb_calc_type));
+            }
+        }
+    }
 
     rc = grn_table_group(context, table, keys, n_keys, &result, 1);
     rb_grn_context_check(context, self);

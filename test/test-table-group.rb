@@ -250,4 +250,103 @@ class TableGroupTest < Test::Unit::TestCase
                    grouped_records)
     end
   end
+
+  class CalculationTest < self
+    setup
+    def setup_schema
+      Groonga::Schema.define do |schema|
+        schema.create_table("Tags", :type => :hash)
+
+        schema.create_table("Memos", :type => :hash) do |table|
+          table.reference("tag")
+          table.int64("priority")
+        end
+      end
+    end
+
+    setup
+    def setup_data
+      setup_tags
+      setup_memos
+    end
+
+    def setup_tags
+      @tags = Groonga["Tags"]
+      @groonga = @tags.add("Groonga")
+      @mroonga = @tags.add("Mroonga")
+      @rroonga = @tags.add("Rroonga")
+    end
+
+    def setup_memos
+      @memos = Groonga["Memos"]
+      @memos.add("Groonga1",
+                 :tag => @groonga,
+                 :priority => 10)
+      @memos.add("Groonga2",
+                 :tag => @groonga,
+                 :priority => 20)
+      @memos.add("Groonga3",
+                 :tag => @groonga,
+                 :priority => 40)
+      @memos.add("Mroonga1",
+                 :tag => @mroonga,
+                 :priority => 50)
+      @memos.add("Mroonga2",
+                 :tag => @mroonga,
+                 :priority => 25)
+      @memos.add("Mroonga3",
+                 :tag => @mroonga,
+                 :priority => 10)
+      @memos.add("Rroonga1",
+                 :tag => @rroonga,
+                 :priority => 25)
+      @memos.add("Rroonga2",
+                 :tag => @rroonga,
+                 :priority => -25)
+      @memos.add("Rroonga3",
+                 :tag => @rroonga,
+                 :priority => 0)
+    end
+
+    def test_max
+      grouped_records = @memos.group("tag",
+                                     :calc_target => "priority",
+                                     :calc_types => [:max]).collect do |group|
+        tag = group.key
+        [
+          tag.key,
+          group.max,
+        ]
+      end
+
+      assert_equal([
+                     ["Groonga", 40],
+                     ["Mroonga", 50],
+                     ["Rroonga", 25],
+                   ],
+                   grouped_records)
+    end
+
+    def test_all_types
+      grouped_records = @memos.group("tag",
+                                     :calc_target => "priority",
+                                     :calc_types => [:max, :min, :sum, :average]).collect do |group|
+        tag = group.key
+        [
+          tag.key,
+          group.max,
+          group.min,
+          group.sum,
+          group.average.round(3),
+        ]
+      end
+
+      assert_equal([
+                     ["Groonga", 40, 10, 70, 23.333],
+                     ["Mroonga", 50, 10, 85, 28.333],
+                     ["Rroonga", 25, -25, 0, 0.0],
+                   ],
+                   grouped_records)
+    end
+  end
 end

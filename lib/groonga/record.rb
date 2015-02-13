@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2014  Masafumi Yokoyama <myokoym@gmail.com>
+# Copyright (C) 2014-2015  Masafumi Yokoyama <yokoyama@clear-code.com>
 # Copyright (C) 2009-2014  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
@@ -224,6 +224,50 @@ module Groonga
     # 返す。
     def support_sub_records?
       @table.support_sub_records?
+    end
+
+    # The maximum integer value from integer values in grouped records.
+    # It can be used when specifying _:calc_target_ and _:calc_types_
+    # to {Groonga::Table#group}.
+    #
+    # @return [Integer] The maximum integer value from integer values in grouped records.
+    #
+    # @since 5.0.0
+    def max
+      self["_max"]
+    end
+
+    # The minimum integer value from integer values in grouped records.
+    # It can be used when specifying _:calc_target_ and _:calc_types_
+    # to {Groonga::Table#group}.
+    #
+    # @return [Integer] The minimum integer value from integer values in grouped records.
+    #
+    # @since 5.0.0
+    def min
+      self["_min"]
+    end
+
+    # The sum of integer values in grouped records.
+    # It can be used when specifying _:calc_target_ and _:calc_types_
+    # to {Groonga::Table#group}.
+    #
+    # @return [Integer] The sum of integer values in grouped records.
+    #
+    # @since 5.0.0
+    def sum
+      self["_sum"]
+    end
+
+    # The average of integer/float values in grouped records.
+    # It can be used when specifying _:calc_target_ and _:calc_types_
+    # to {Groonga::Table#group}.
+    #
+    # @return [Float] The average of integer/float values in grouped records.
+    #
+    # @since 5.0.0
+    def average
+      self["_avg"]
     end
 
     # レコードの値を返す。
