@@ -1447,7 +1447,6 @@ rb_grn_table_group (int argc, VALUE *argv, VALUE self)
         result.calc_target = grn_obj_column(context, table, name, name_size);
     }
     if (result.calc_target) {
-        grn_obj_unlink(context, result.calc_target);
         int i, n_calc_types;
         VALUE *raw_calc_types;
         raw_calc_types = RARRAY_PTR(rb_calc_types);
