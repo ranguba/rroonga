@@ -1472,10 +1472,9 @@ rb_grn_table_group (int argc, VALUE *argv, VALUE self)
     }
 
     rc = grn_table_group(context, table, keys, n_keys, &result, 1);
+    grn_obj_unlink(context, result.calc_target);
     rb_grn_context_check(context, self);
     rb_grn_rc_check(rc, self);
-
-    grn_obj_unlink(context, result.calc_target);
 
     return GRNOBJECT2RVAL(Qnil, context, result.table, GRN_TRUE);
 }
