@@ -1,5 +1,24 @@
 h1. NEWS
 
+h2(#5-0-0). 5.0.0: 2014-02-16 (planned)
+
+h3. Improvements
+
+* Supported Groonga 5.0.0. Groonga 4.1.1 or older aren't supported.
+* Added flags for {Groonga::Normalizer.normalize}.
+  [GitHub#44] [Patch by Tasuku SUENAGA a.k.a. gunyarakun]
+  <pre>
+  Groonga::Normalizer.normalize("AbC Def　gh")                         #=> "abcdefgh"
+  Groonga::Normalizer.normalize("AbC Def　gh", :remove_blank => true)  #=> "abcdefgh"
+  Groonga::Normalizer.normalize("AbC Def　gh", :remove_blank => false) #=> "abc def gh"
+  </pre>
+* Supported drilldown by multiple keys in {Groonga::Table#group}.
+* Supported calculation for drilldown in {Groonga::Table#group}.
+
+h3. Thanks
+
+* Tasuku SUENAGA a.k.a. gunyarakun
+
 h2(#4-0-8). 4.0.8: 2014-01-08
 
 h3. Improvements
