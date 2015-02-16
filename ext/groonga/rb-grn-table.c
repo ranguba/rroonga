@@ -238,7 +238,7 @@ rb_grn_table_inspect (VALUE self)
  *     - +:zlib+ := 値をzlib圧縮して格納する。
  *     - +:lz4+ := 値をLZ4圧縮して格納する。
  *
- * @return [Groonga::FixSizeColumn or Groonga::VariableSizeColumn]
+ * @return [Groonga::FixSizeColumn, Groonga::VariableSizeColumn]
  */
 static VALUE
 rb_grn_table_define_column (int argc, VALUE *argv, VALUE self)
@@ -494,7 +494,7 @@ ruby_object_to_column_name (VALUE rb_name,
  * い場合は +nil+ を返す。
  *
  * @overload column(name)
- *   @return [Groonga::Column or nil]
+ *   @return [Groonga::Column, nil]
  */
 VALUE
 rb_grn_table_get_column (VALUE self, VALUE rb_name)
@@ -1338,7 +1338,7 @@ rb_grn_table_sort (int argc, VALUE *argv, VALUE self)
  *     @option options :max_n_sub_records
  *       グループ化した後のレコードのそれぞれについて最大 _:max_n_sub_records_ 件まで
  *       そのグループに含まれる _table_ のレコードをサブレコードとして格納する。
- *     @option options [String or Symbol] :calc_target
+ *     @option options [String, Symbol] :calc_target
  *       The target column name for _:calc_types_.
  *     @option options [::Array] :calc_types
  *       It specifies how to calculate (aggregate) values in grouped records by
@@ -1733,7 +1733,7 @@ rb_grn_table_set_column_value (VALUE self, VALUE rb_id,
  * @overload set_column_value(id, name, value)
  *   @!macro [new] table.set_column_value.base_arguments
  *     @param id [Integer] The ID of the target record.
- *     @param name [String or Symbol] The name of the target column.
+ *     @param name [String, Symbol] The name of the target column.
  *   @!macro [new] table.set_column_value.value
  *     @param value [::Object] The new value.
  *
