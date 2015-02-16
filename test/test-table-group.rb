@@ -191,6 +191,20 @@ class TableGroupTest < Test::Unit::TestCase
                    grouped_records)
     end
 
+    def test_accessor
+      grouped_records = @comments.group("bookmark._key").collect do |record|
+        [
+          record.n_sub_records,
+          record.key
+        ]
+      end
+      assert_equal([
+                     [2, "http://groonga.org/"],
+                     [1, "http://ruby-lang.org/"],
+                   ],
+                   grouped_records)
+    end
+
     def test_nonexistent
       message = "unknown group key: <\"nonexistent\">: <#{@comments.inspect}>"
       assert_raise(ArgumentError.new(message)) do
