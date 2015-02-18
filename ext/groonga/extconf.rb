@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 #
-# Copyright (C) 2009-2014  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2015  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -283,6 +283,9 @@ have_func("rb_errinfo", "ruby.h")
 have_func("rb_sym2str", "ruby.h")
 have_func("rb_to_symbol", "ruby.h")
 have_type("enum ruby_value_type", "ruby.h")
+
+# TODO: Remove me when Groonga 5.0.1 is released.
+have_func("grn_expr_estimate_size", "groonga.h")
 
 checking_for(checking_message("--enable-debug-log option")) do
   enable_debug_log = enable_config("debug-log", false)

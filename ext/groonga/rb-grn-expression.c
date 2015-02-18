@@ -1,6 +1,6 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
-  Copyright (C) 2009-2014  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2015  Kouhei Sutou <kou@clear-code.com>
   Copyright (C) 2014  Masafumi Yokoyama <myokoym@gmail.com>
 
   This library is free software; you can redistribute it and/or
@@ -785,6 +785,42 @@ rb_grn_expression_get_keywords (VALUE self)
     return rb_keywords;
 }
 
+/* TODO: Remove the ifdef when Groonga 5.0.1 is released. */
+#ifdef HAVE_GRN_EXPR_ESTIMATE_SIZE
+/*
+ * Estimates the number of matched records when `expression` is
+ * executed.
+ *
+ * Note that the estimated size isn't correct value. It's just
+ * estimated size.
+ *
+ * @example
+ *   expression.parse("Ruby OR Groonga")
+ *   expression.estimate_size # => 10
+ *
+ * @overload estimate_size
+ *   @return [Integer] the estimated number of matched records when
+ *     `expression` is executed.
+ *
+ * @since 5.0.1
+ */
+static VALUE
+rb_grn_expression_estimate_size (VALUE self)
+{
+    grn_ctx *context = NULL;
+    grn_obj *expression;
+    unsigned int size;
+
+    rb_grn_expression_deconstruct(SELF(self), &expression, &context,
+                                  NULL, NULL,
+                                  NULL, NULL, NULL);
+
+    size = grn_expr_estimate_size(context, expression);
+
+    return UINT2NUM(size);
+}
+#endif
+
 void
 rb_grn_init_expression (VALUE mGrn)
 {
@@ -820,6 +856,11 @@ rb_grn_init_expression (VALUE mGrn)
 
     rb_define_method(rb_cGrnExpression, "keywords",
                      rb_grn_expression_get_keywords, 0);
+
+#ifdef HAVE_GRN_EXPR_ESTIMATE_SIZE
+    rb_define_method(rb_cGrnExpression, "estimate_size",
+                     rb_grn_expression_estimate_size, 0);
+#endif
 
     rb_define_method(rb_cGrnExpression, "inspect",
                      rb_grn_expression_inspect, 0);
