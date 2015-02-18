@@ -561,43 +561,6 @@ rb_grn_expression_array_reference (VALUE self, VALUE rb_name_or_offset)
     return GRNVARIABLE2RVAL(context, variable);
 }
 
-/* REMOVE ME */
-grn_rc grn_expr_inspect(grn_ctx *ctx, grn_obj *buf, grn_obj *expr);
-
-/*
- * _expression_ の中身を人に見やすい文字列で返す。
- *
- * @overload inspect
- *   @return [String]
- */
-static VALUE
-rb_grn_expression_inspect (VALUE self)
-{
-    grn_ctx *context = NULL;
-    grn_obj inspected;
-    grn_obj *expression;
-    VALUE rb_inspected;
-
-    rb_grn_expression_deconstruct(SELF(self), &expression, &context,
-                                  NULL, NULL,
-                                  NULL, NULL, NULL);
-
-    GRN_TEXT_INIT(&inspected, 0);
-    GRN_TEXT_PUTS(context, &inspected, "#<Groonga::Expression ");
-#ifdef WIN32
-    GRN_TEXT_PUTS(context, &inspected, "(not supported on Windows)");
-#else
-    grn_expr_inspect(context, &inspected, expression);
-#endif
-    GRN_TEXT_PUTS(context, &inspected, ">");
-    rb_inspected = rb_grn_context_rb_string_new(context,
-                                                GRN_TEXT_VALUE(&inspected),
-                                                GRN_TEXT_LEN(&inspected));
-    GRN_OBJ_FIN(context, &inspected);
-
-    return rb_inspected;
-}
-
 /*
  * _expression_ から {Groonga::Snippet} を生成する。 _tags_ には
  * キーワードの前後に挿入するタグの配列を以下のような形式で指定
@@ -861,7 +824,4 @@ rb_grn_init_expression (VALUE mGrn)
     rb_define_method(rb_cGrnExpression, "estimate_size",
                      rb_grn_expression_estimate_size, 0);
 #endif
-
-    rb_define_method(rb_cGrnExpression, "inspect",
-                     rb_grn_expression_inspect, 0);
 }
