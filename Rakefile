@@ -1,6 +1,6 @@
 # -*- coding: utf-8; mode: ruby -*-
 #
-# Copyright (C) 2009-2012  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2015  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -114,15 +114,6 @@ Rake::ExtensionTask.new("groonga", spec) do |ext|
       if windows?(_spec.platform.to_s)
         binary_files = collect_binary_files(relative_binary_dir)
         _spec.files += binary_files
-        stage_path = "#{ext.tmp_dir}/#{_spec.platform}/stage"
-        binary_files.each do |binary_file|
-          stage_binary_file = "#{stage_path}/#{binary_file}"
-          stage_binary_dir = File.dirname(stage_binary_file)
-          directory stage_binary_dir
-          file stage_binary_file => [stage_binary_dir, binary_file] do
-            cp binary_file, stage_binary_file
-          end
-        end
       end
     end
   end
