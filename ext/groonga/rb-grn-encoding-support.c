@@ -1,6 +1,6 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
-  Copyright (C) 2009  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2015  Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -44,6 +44,12 @@ rb_grn_encoding_support_get_encoding (VALUE self)
 
     rb_grn_object_deconstruct(SELF(self), &object, &context,
                               NULL, NULL, NULL, NULL);
+    if (!object) {
+        rb_raise(rb_eGrnClosed,
+                 "can't access already closed Groonga object: <%s>",
+                 rb_grn_inspect(self));
+    }
+
     encoding_value = grn_obj_get_info(context, object, GRN_INFO_ENCODING, NULL);
     rb_grn_context_check(context, self);
 
