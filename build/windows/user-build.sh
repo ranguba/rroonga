@@ -3,7 +3,8 @@
 readonly RUBY19="1.9.3-p551"
 readonly RUBY20="2.0.0-p598"
 readonly RUBY21="2.1.5"
-readonly CROSS_TERGET="1.9.3:2.0.0:2.1.5"
+readonly RUBY22="2.2.1"
+readonly CROSS_TERGET="1.9.3:2.0.0:2.1.5:2.2.1"
 readonly PKG_GEMS="/vagrant/pkg"
 readonly CPU_NUMS=`cat /proc/cpuinfo |grep processor|wc -l`
 readonly MAKE_OPTIONS="debugflags="
@@ -40,11 +41,13 @@ cd ~/rroonga
 bundle_install $RUBY19
 bundle_install $RUBY20
 bundle_install $RUBY21
+bundle_install $RUBY22
 
 # install cross ruby with rake-compiler
 install_rake_compiler_cross_ruby $RUBY19
 install_rake_compiler_cross_ruby $RUBY20
 install_rake_compiler_cross_ruby $RUBY21
+install_rake_compiler_cross_ruby $RUBY22
 
 # cross-compile
 cross_compile
