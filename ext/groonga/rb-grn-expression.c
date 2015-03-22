@@ -107,6 +107,45 @@ rb_grn_expression_initialize (int argc, VALUE *argv, VALUE self)
     return Qnil;
 }
 
+static VALUE
+rb_grn_expression_inspect (VALUE self)
+{
+    grn_ctx *context = NULL;
+    grn_obj *expression;
+    grn_obj inspected;
+    VALUE rb_inspected;
+
+    rb_grn_expression_deconstruct(SELF(self), &expression, &context,
+                                  NULL, NULL,
+                                  NULL, NULL, NULL);
+
+    rb_inspected = rb_str_new_cstr("");
+    rb_grn_object_inspect_header(self, rb_inspected);
+
+    GRN_TEXT_INIT(&inspected, 0);
+    grn_inspect(context, &inspected, expression);
+    grn_bulk_truncate(context, &inspected, GRN_TEXT_LEN(&inspected) - 2);
+    {
+        size_t prefix_length;
+        const char *content;
+        size_t content_length;
+
+        prefix_length = strlen("#<expr");
+        content = GRN_TEXT_VALUE(&inspected) + prefix_length;
+        content_length = GRN_TEXT_LEN(&inspected) - prefix_length;
+        rb_str_concat(rb_inspected,
+                      rb_grn_context_rb_string_new(context,
+                                                   content,
+                                                   content_length));
+    }
+
+    GRN_OBJ_FIN(context, &inspected);
+
+    rb_grn_object_inspect_footer(self, rb_inspected);
+
+    return rb_inspected;
+}
+
 /*
  * _expression_ で使用可能な変数を作成する。
  *
@@ -791,6 +830,9 @@ rb_grn_init_expression (VALUE mGrn)
 
     rb_define_method(rb_cGrnExpression, "initialize",
                      rb_grn_expression_initialize, -1);
+
+    rb_define_method(rb_cGrnExpression, "inspect",
+                     rb_grn_expression_inspect, 0);
 
     rb_define_method(rb_cGrnExpression, "define_variable",
                      rb_grn_expression_define_variable, -1);

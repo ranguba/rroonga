@@ -170,7 +170,7 @@ class ColumnTest < Test::Unit::TestCase
                    record["body"]
                  end)
     assert_equal(<<-INSPECTED.chomp, result.expression.inspect)
-#<Groonga::Expression #<expr
+#<Groonga::Expression
   vars:{
     $1:#<record:hash:Posts id:(no value)>
   },
@@ -178,8 +178,7 @@ class ColumnTest < Test::Unit::TestCase
     0:<get_value(), modify:2, value:#<column:var_size Posts.body range:Text type:scalar compress:none>>,
     1:<push(), modify:0, value:"drive">,
     2:<match(), modify:0, value:(NULL)>
-  }
->>
+  }>
     INSPECTED
   end
 
@@ -210,7 +209,7 @@ class ColumnTest < Test::Unit::TestCase
                    record["body"]
                  end)
     assert_equal(<<-INSPECTED.chomp, result.expression.inspect)
-#<Groonga::Expression #<expr
+#<Groonga::Expression
   vars:{
     $1:#<record:hash:Posts id:(no value)>
   },
@@ -218,8 +217,7 @@ class ColumnTest < Test::Unit::TestCase
     0:<get_value(), modify:2, value:#<column:var_size Posts.body range:Text type:scalar compress:none>>,
     1:<push(), modify:0, value:"drive">,
     2:<match(), modify:0, value:(NULL)>
-  }
->>
+  }>
     INSPECTED
   end
 
@@ -237,7 +235,7 @@ class ColumnTest < Test::Unit::TestCase
                    record["body"]
                  end)
     assert_equal(<<-INSPECTED.chomp, result.expression.inspect)
-#<Groonga::Expression #<expr
+#<Groonga::Expression
   vars:{
     $1:#<record:hash:Posts id:(no value)>
   },
@@ -246,8 +244,7 @@ class ColumnTest < Test::Unit::TestCase
     1:<get_value(), modify:2, value:#<column:var_size Posts.body range:Text type:scalar compress:none>>,
     2:<push(), modify:0, value:"drive">,
     3:<match(), modify:0, value:(NULL)>
-  }
->>
+  }>
     INSPECTED
   end
 
@@ -262,7 +259,7 @@ class ColumnTest < Test::Unit::TestCase
                    record["body"]
                  end)
     assert_equal(<<-INSPECTED.chomp, result.expression.inspect)
-#<Groonga::Expression #<expr
+#<Groonga::Expression
   vars:{
     $1:#<record:hash:Posts id:(no value)>
   },
@@ -271,8 +268,7 @@ class ColumnTest < Test::Unit::TestCase
     1:<get_value(), modify:2, value:#<column:var_size Posts.body range:Text type:scalar compress:none>>,
     2:<push(), modify:0, value:"drive">,
     3:<match(), modify:0, value:(NULL)>
-  }
->>
+  }>
     INSPECTED
   end
 
