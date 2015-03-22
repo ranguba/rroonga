@@ -50,5 +50,9 @@ class NormalizerTest < Test::Unit::TestCase
     def test_tilda
       assert_equal("~~~", Groonga::Normalizer.normalize("~～〜"))
     end
+
+    def test_empty
+      assert_equal("", Groonga::Normalizer.normalize(""))
+    end
   end
 end

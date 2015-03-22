@@ -1,6 +1,6 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
-  Copyright (C) 2012  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2012-2015  Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -73,6 +73,10 @@ rb_grn_normalizer_s_normalize (int argc, VALUE *argv, VALUE klass)
 
     context = rb_grn_context_ensure(&rb_context);
     rb_encoded_string = rb_grn_context_rb_string_encode(context, rb_string);
+    if (RSTRING_LEN(rb_encoded_string) == 0) {
+        return rb_grn_context_rb_string_new(context, "", 0);
+    }
+
     if (NIL_P(rb_remove_blank_p)) {
         rb_remove_blank_p = Qtrue;
     }
@@ -91,6 +95,9 @@ rb_grn_normalizer_s_normalize (int argc, VALUE *argv, VALUE klass)
                                  normalizer,
                                  flags);
     rb_grn_context_check(context, argv[0]);
+    if (!grn_string) {
+        return Qnil;
+    }
     grn_string_get_normalized(context, grn_string,
                               &normalized_string, &normalized_string_length,
                               NULL);
