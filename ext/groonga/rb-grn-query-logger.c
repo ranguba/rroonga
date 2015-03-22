@@ -58,9 +58,9 @@ rb_grn_query_logger_log (grn_ctx *ctx, unsigned int flag,
     /* TODO: use rb_protect(). */
     rb_funcall(handler, id_log, 4,
                GRNQUERYLOGFLAGS2RVAL(flag),
-               rb_str_new2(timestamp),
-               rb_str_new2(info),
-               rb_str_new2(message));
+               rb_str_new_cstr(timestamp),
+               rb_str_new_cstr(info),
+               rb_str_new_cstr(message));
 }
 
 static void
@@ -234,7 +234,7 @@ rb_grn_query_logger_s_get_path (VALUE klass)
 
     path = grn_default_query_logger_get_path();
     if (path) {
-        rb_path = rb_str_new2(path);
+        rb_path = rb_str_new_cstr(path);
     }
     return rb_path;
 }

@@ -130,7 +130,7 @@ rb_grn_plugin_s_register (int argc, VALUE *argv, VALUE klass)
 static VALUE
 rb_grn_plugin_s_system_plugins_dir (VALUE klass)
 {
-    return rb_str_new2(grn_plugin_get_system_plugins_dir());
+    return rb_str_new_cstr(grn_plugin_get_system_plugins_dir());
 }
 
 /*
@@ -142,7 +142,7 @@ rb_grn_plugin_s_system_plugins_dir (VALUE klass)
 static VALUE
 rb_grn_plugin_s_suffix (VALUE klass)
 {
-    return rb_str_new2(grn_plugin_get_suffix());
+    return rb_str_new_cstr(grn_plugin_get_suffix());
 }
 
 void

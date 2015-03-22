@@ -146,7 +146,7 @@ rb_grn_equal_option (VALUE option, const char *key)
 {
     VALUE key_string, key_symbol;
 
-    key_string = rb_str_new2(key);
+    key_string = rb_str_new_cstr(key);
     if (RVAL2CBOOL(rb_funcall(option, rb_intern("=="), 1, key_string)))
         return GRN_TRUE;
 

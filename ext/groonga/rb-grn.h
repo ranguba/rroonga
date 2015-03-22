@@ -603,7 +603,7 @@ VALUE          rb_grn_column_expression_builder_build
                                                     (VALUE self);
 
 
-#define RB_GRN_INTERN(c_string)       (rb_to_symbol(rb_str_new2(c_string)))
+#define RB_GRN_INTERN(c_string)       (rb_to_symbol(rb_str_new_cstr(c_string)))
 
 #define RVAL2CBOOL(object)            (RTEST(object))
 #define CBOOL2RVAL(boolean)           ((boolean) ? Qtrue : Qfalse)

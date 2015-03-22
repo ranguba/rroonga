@@ -837,13 +837,13 @@ rb_grn_object_inspect_content_flags_with_label (VALUE inspected,
 
     if (0) {
         if (flags & GRN_OBJ_TABLE_HASH_KEY)
-            rb_ary_push(inspected_flags, rb_str_new2("TABLE_HASH_KEY"));
+            rb_ary_push(inspected_flags, rb_str_new_cstr("TABLE_HASH_KEY"));
         if (flags & GRN_OBJ_TABLE_PAT_KEY)
-            rb_ary_push(inspected_flags, rb_str_new2("TABLE_PAT_KEY"));
+            rb_ary_push(inspected_flags, rb_str_new_cstr("TABLE_PAT_KEY"));
         if (flags & GRN_OBJ_TABLE_DAT_KEY)
-            rb_ary_push(inspected_flags, rb_str_new2("TABLE_DAT_KEY"));
+            rb_ary_push(inspected_flags, rb_str_new_cstr("TABLE_DAT_KEY"));
         if (flags & GRN_OBJ_TABLE_NO_KEY)
-            rb_ary_push(inspected_flags, rb_str_new2("TABLE_NO_KEY"));
+            rb_ary_push(inspected_flags, rb_str_new_cstr("TABLE_NO_KEY"));
     }
 
     switch (object->header.type) {
@@ -851,20 +851,20 @@ rb_grn_object_inspect_content_flags_with_label (VALUE inspected,
       case GRN_COLUMN_VAR_SIZE:
       case GRN_TYPE:
         if (flags & GRN_OBJ_KEY_VAR_SIZE) {
-            rb_ary_push(inspected_flags, rb_str_new2("KEY_VAR_SIZE"));
+            rb_ary_push(inspected_flags, rb_str_new_cstr("KEY_VAR_SIZE"));
         } else {
             switch (flags & GRN_OBJ_KEY_MASK) {
               case GRN_OBJ_KEY_UINT:
-                rb_ary_push(inspected_flags, rb_str_new2("KEY_UINT"));
+                rb_ary_push(inspected_flags, rb_str_new_cstr("KEY_UINT"));
                 break;
               case GRN_OBJ_KEY_INT:
-                rb_ary_push(inspected_flags, rb_str_new2("KEY_INT"));
+                rb_ary_push(inspected_flags, rb_str_new_cstr("KEY_INT"));
                 break;
               case GRN_OBJ_KEY_FLOAT:
-                rb_ary_push(inspected_flags, rb_str_new2("KEY_FLOAT"));
+                rb_ary_push(inspected_flags, rb_str_new_cstr("KEY_FLOAT"));
                 break;
               case GRN_OBJ_KEY_GEO_POINT:
-                rb_ary_push(inspected_flags, rb_str_new2("KEY_GEO_POINT"));
+                rb_ary_push(inspected_flags, rb_str_new_cstr("KEY_GEO_POINT"));
                 break;
               default:
                 break;
@@ -880,9 +880,9 @@ rb_grn_object_inspect_content_flags_with_label (VALUE inspected,
       case GRN_TABLE_PAT_KEY:
       case GRN_TABLE_DAT_KEY:
         if (flags & GRN_OBJ_KEY_WITH_SIS)
-            rb_ary_push(inspected_flags, rb_str_new2("KEY_WITH_SIS"));
+            rb_ary_push(inspected_flags, rb_str_new_cstr("KEY_WITH_SIS"));
         if (flags & GRN_OBJ_KEY_NORMALIZE)
-            rb_ary_push(inspected_flags, rb_str_new2("KEY_NORMALIZE"));
+            rb_ary_push(inspected_flags, rb_str_new_cstr("KEY_NORMALIZE"));
         break;
       default:
         break;
@@ -890,57 +890,57 @@ rb_grn_object_inspect_content_flags_with_label (VALUE inspected,
 
     if (0) {
         if (flags & GRN_OBJ_COLUMN_SCALAR)
-            rb_ary_push(inspected_flags, rb_str_new2("COLUMN_SCALAR"));
+            rb_ary_push(inspected_flags, rb_str_new_cstr("COLUMN_SCALAR"));
         if (flags & GRN_OBJ_COLUMN_VECTOR)
-            rb_ary_push(inspected_flags, rb_str_new2("COLUMN_VECTOR"));
+            rb_ary_push(inspected_flags, rb_str_new_cstr("COLUMN_VECTOR"));
         if (flags & GRN_OBJ_COLUMN_INDEX)
-            rb_ary_push(inspected_flags, rb_str_new2("COLUMN_INDEX"));
+            rb_ary_push(inspected_flags, rb_str_new_cstr("COLUMN_INDEX"));
     }
 
     switch (object->header.type) {
       case GRN_COLUMN_FIX_SIZE:
       case GRN_COLUMN_VAR_SIZE:
         if (flags & GRN_OBJ_COMPRESS_ZLIB)
-            rb_ary_push(inspected_flags, rb_str_new2("COMPRESS_ZLIB"));
+            rb_ary_push(inspected_flags, rb_str_new_cstr("COMPRESS_ZLIB"));
         if (flags & GRN_OBJ_COMPRESS_LZ4)
-            rb_ary_push(inspected_flags, rb_str_new2("COMPRESS_LZ4"));
+            rb_ary_push(inspected_flags, rb_str_new_cstr("COMPRESS_LZ4"));
         break;
       case GRN_COLUMN_INDEX:
         if (flags & GRN_OBJ_WITH_SECTION)
-            rb_ary_push(inspected_flags, rb_str_new2("WITH_SECTION"));
+            rb_ary_push(inspected_flags, rb_str_new_cstr("WITH_SECTION"));
         if (flags & GRN_OBJ_WITH_WEIGHT)
-            rb_ary_push(inspected_flags, rb_str_new2("WITH_WEIGHT"));
+            rb_ary_push(inspected_flags, rb_str_new_cstr("WITH_WEIGHT"));
         if (flags & GRN_OBJ_WITH_POSITION)
-            rb_ary_push(inspected_flags, rb_str_new2("WITH_POSITION"));
+            rb_ary_push(inspected_flags, rb_str_new_cstr("WITH_POSITION"));
         break;
       default:
         break;
     }
 
     if (flags & GRN_OBJ_RING_BUFFER)
-        rb_ary_push(inspected_flags, rb_str_new2("RING_BUFFER"));
+        rb_ary_push(inspected_flags, rb_str_new_cstr("RING_BUFFER"));
 
     if (flags & GRN_OBJ_WITH_SUBREC) {
-        rb_ary_push(inspected_flags, rb_str_new2("WITH_SUBREC"));
+        rb_ary_push(inspected_flags, rb_str_new_cstr("WITH_SUBREC"));
 
         if (flags & GRN_OBJ_UNIT_DOCUMENT_SECTION)
-            rb_ary_push(inspected_flags, rb_str_new2("UNIT_DOCUMENT_SECTION"));
+            rb_ary_push(inspected_flags, rb_str_new_cstr("UNIT_DOCUMENT_SECTION"));
         if (flags & GRN_OBJ_UNIT_DOCUMENT_POSITION)
-            rb_ary_push(inspected_flags, rb_str_new2("UNIT_DOCUMENT_POSITION"));
+            rb_ary_push(inspected_flags, rb_str_new_cstr("UNIT_DOCUMENT_POSITION"));
 
         if (flags & GRN_OBJ_UNIT_SECTION_POSITION)
-            rb_ary_push(inspected_flags, rb_str_new2("UNIT_SECTION_POSITION"));
+            rb_ary_push(inspected_flags, rb_str_new_cstr("UNIT_SECTION_POSITION"));
 
         if (flags & GRN_OBJ_UNIT_USERDEF_DOCUMENT)
-            rb_ary_push(inspected_flags, rb_str_new2("UNIT_USERDEF_DOCUMENT"));
+            rb_ary_push(inspected_flags, rb_str_new_cstr("UNIT_USERDEF_DOCUMENT"));
         if (flags & GRN_OBJ_UNIT_USERDEF_SECTION)
-            rb_ary_push(inspected_flags, rb_str_new2("UNIT_USERDEF_SECTION"));
+            rb_ary_push(inspected_flags, rb_str_new_cstr("UNIT_USERDEF_SECTION"));
         if (flags & GRN_OBJ_UNIT_USERDEF_POSITION)
-            rb_ary_push(inspected_flags, rb_str_new2("UNIT_USERDEF_POSITION"));
+            rb_ary_push(inspected_flags, rb_str_new_cstr("UNIT_USERDEF_POSITION"));
     }
 
     rb_str_cat2(inspected, "<");
-    rb_str_concat(inspected, rb_ary_join(inspected_flags, rb_str_new2("|")));
+    rb_str_concat(inspected, rb_ary_join(inspected_flags, rb_str_new_cstr("|")));
     rb_str_cat2(inspected, ">");
 
     return inspected;
@@ -1010,7 +1010,7 @@ rb_grn_object_inspect (VALUE self)
 {
     VALUE inspected;
 
-    inspected = rb_str_new2("");
+    inspected = rb_str_new_cstr("");
     rb_grn_object_inspect_header(self, inspected);
     rb_grn_object_inspect_content(self, inspected);
     rb_grn_object_inspect_footer(self, inspected);
@@ -1064,7 +1064,7 @@ rb_grn_object_get_path (VALUE self)
     if (!path)
         return Qnil;
     else
-        return rb_str_new2(path);
+        return rb_str_new_cstr(path);
 }
 
 /*

@@ -159,10 +159,10 @@ rb_grn_logger_log (grn_ctx *ctx, grn_log_level level,
     /* TODO: use rb_protect(). */
     rb_funcall(handler, id_log, 5,
                GRNLOGLEVEL2RVAL(level),
-               rb_str_new2(timestamp),
-               rb_str_new2(title),
-               rb_str_new2(message),
-               rb_str_new2(location));
+               rb_str_new_cstr(timestamp),
+               rb_str_new_cstr(title),
+               rb_str_new_cstr(message),
+               rb_str_new_cstr(location));
 }
 
 static void
@@ -359,7 +359,7 @@ rb_grn_logger_s_get_path (VALUE klass)
 
     path = grn_default_logger_get_path();
     if (path) {
-        rb_path = rb_str_new2(path);
+        rb_path = rb_str_new_cstr(path);
     }
     return rb_path;
 }

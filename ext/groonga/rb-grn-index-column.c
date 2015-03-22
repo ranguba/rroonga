@@ -181,7 +181,7 @@ rb_grn_index_column_inspect (VALUE self)
 {
     VALUE inspected;
 
-    inspected = rb_str_new2("");
+    inspected = rb_str_new_cstr("");
     rb_grn_object_inspect_header(self, inspected);
     rb_grn_object_inspect_content(self, inspected);
     rb_grn_index_column_inspect_content(self, inspected);

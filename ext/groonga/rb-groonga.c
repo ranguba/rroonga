@@ -62,7 +62,7 @@ rb_grn_init_runtime_version (VALUE mGrn)
     rb_ary_push(runtime_version, rb_Integer(micro));
 
     if (component_end) {
-        tag = rb_str_new2(component_end + 1);
+        tag = rb_str_new_cstr(component_end + 1);
     } else {
         tag = Qnil;
     }

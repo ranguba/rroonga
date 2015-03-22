@@ -534,7 +534,7 @@ rb_grn_context_inspect (VALUE self)
 
     context = SELF(self);
 
-    inspected = rb_str_new2("#<");
+    inspected = rb_str_new_cstr("#<");
     rb_str_concat(inspected, rb_inspect(rb_obj_class(self)));
     rb_str_cat2(inspected, " ");
 
