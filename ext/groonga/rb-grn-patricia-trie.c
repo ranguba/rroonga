@@ -306,6 +306,8 @@ rb_grn_patricia_trie_search (int argc, VALUE *argv, VALUE self)
     grn_bool search_options_is_set = GRN_FALSE;
     VALUE rb_key, options, rb_result, rb_operator, rb_type;
 
+    memset(&search_options, 0, sizeof(grn_search_optarg));
+
     rb_grn_table_key_support_deconstruct(SELF(self), &table, &context,
                                          &key, &domain_id, &domain,
                                          NULL, NULL, NULL,

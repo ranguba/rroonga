@@ -796,6 +796,7 @@ rb_grn_index_column_search (int argc, VALUE *argv, VALUE self)
 
     operator = RVAL2GRNOPERATOR(rb_operator);
 
+    memset(&options, 0, sizeof(grn_search_optarg));
     if (NIL_P(rb_mode)) {
         options.mode = GRN_OP_EXACT;
     } else {
