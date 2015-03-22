@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2012  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2012-2015  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -20,33 +20,35 @@ class NormalizerTest < Test::Unit::TestCase
 
   setup :setup_database
 
-  def test_normalize
-    assert_equal("abc", Groonga::Normalizer.normalize("AbC"))
-  end
+  sub_test_case(".normalize") do
+    def test_normal
+      assert_equal("abc", Groonga::Normalizer.normalize("AbC"))
+    end
 
-  def test_normalize_with_space
-    assert_equal("abcdefgh", Groonga::Normalizer.normalize("AbC Def　gh"))
-  end
+    def test_space
+      assert_equal("abcdefgh", Groonga::Normalizer.normalize("AbC Def　gh"))
+    end
 
-  def test_normalize_with_space_explicitly
-    assert_equal("abcdefgh",
-                 Groonga::Normalizer.normalize("AbC Def　gh",
-                                               :remove_blank => true))
-  end
+    def test_remove_blank
+      assert_equal("abcdefgh",
+                   Groonga::Normalizer.normalize("AbC Def　gh",
+                                                 :remove_blank => true))
+    end
 
-  def test_normalize_group_text
-    assert_equal("キロメートルキロメートルキロメートルキロメートル",
-                 Groonga::Normalizer.normalize("㌖㌖㌖㌖"));
-  end
+    def test_group_text
+      assert_equal("キロメートルキロメートルキロメートルキロメートル",
+                   Groonga::Normalizer.normalize("㌖㌖㌖㌖"));
+    end
 
-  def test_normalize_keep_space
-    # full width space => half width space
-    assert_equal("abc def gh",
-                 Groonga::Normalizer.normalize("AbC Def　gh",
-                                               :remove_blank => false))
-  end
+    def test_keep_space
+      # full width space => half width space
+      assert_equal("abc def gh",
+                   Groonga::Normalizer.normalize("AbC Def　gh",
+                                                 :remove_blank => false))
+    end
 
-  def test_normalize_tilda
-    assert_equal("~~~", Groonga::Normalizer.normalize("~～〜"))
+    def test_tilda
+      assert_equal("~~~", Groonga::Normalizer.normalize("~～〜"))
+    end
   end
 end
