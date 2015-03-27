@@ -8,8 +8,8 @@ rvm:
   - 2.1
   - 2.2
   - ruby-head
-# env:
-#   - GROONGA_MASTER=yes
+env:
+  - GROONGA_MASTER=yes
 # matrix:
 #   allow_failures:
 #     - rvm: 2.1.0
