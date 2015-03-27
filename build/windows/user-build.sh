@@ -30,6 +30,8 @@ old_ruby_install_with_bundler $RUBY19
 ruby_install_with_bundler $RUBY20
 # Ruby 2.1.x
 ruby_install_with_bundler $RUBY21
+# Ruby 2.2.x
+ruby_install_with_bundler $RUBY22
 
 if [ ! -d ~/rroonga ]; then
     git clone file:///rroonga/.git ~/rroonga
