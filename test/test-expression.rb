@@ -82,9 +82,9 @@ class ExpressionTest < Test::Unit::TestCase
   vars:{
   },
   codes:{
-    0:<push(), modify:2, value:1>,
-    1:<push(), modify:0, value:1>,
-    2:<plus(), modify:0, value:(NULL)>
+    0:<push n_args:1, flags:0, modify:2, value:1>,
+    1:<push n_args:1, flags:0, modify:0, value:1>,
+    2:<plus n_args:2, flags:0, modify:0, value:(NULL)>
   }>
     INSPECTED
   end
@@ -175,7 +175,7 @@ class ExpressionTest < Test::Unit::TestCase
   vars:{
   },
   codes:{
-    0:<push(), modify:0, value:#<proc:tokenizer TokenBigram arguments:[$1, $2, $3]>>
+    0:<push n_args:1, flags:0, modify:0, value:#<proc:tokenizer TokenBigram arguments:[$1, $2, $3]>>
   }>
         INSPECTED
       end
@@ -187,7 +187,7 @@ class ExpressionTest < Test::Unit::TestCase
   vars:{
   },
   codes:{
-    0:<push(), modify:0, value:#<proc:tokenizer TokenBigram arguments:[$1, $2, $3]>>
+    0:<push n_args:1, flags:0, modify:0, value:#<proc:tokenizer TokenBigram arguments:[$1, $2, $3]>>
   }>
         INSPECTED
       end
@@ -208,7 +208,7 @@ class ExpressionTest < Test::Unit::TestCase
   vars:{
   },
   codes:{
-    0:<push(), modify:0, value:29>
+    0:<push n_args:1, flags:0, modify:0, value:29>
   }>
         INSPECTED
       end
@@ -220,7 +220,7 @@ class ExpressionTest < Test::Unit::TestCase
   vars:{
   },
   codes:{
-    0:<push(), modify:0, value:29>
+    0:<push n_args:1, flags:0, modify:0, value:29>
   }>
         INSPECTED
       end
@@ -242,9 +242,9 @@ class ExpressionTest < Test::Unit::TestCase
   vars:{
   },
   codes:{
-    0:<push(), modify:2, value:29>,
-    1:<push(), modify:0, value:92>,
-    2:<plus(), modify:0, value:(NULL)>
+    0:<push n_args:1, flags:0, modify:2, value:29>,
+    1:<push n_args:1, flags:0, modify:0, value:92>,
+    2:<plus n_args:2, flags:0, modify:0, value:(NULL)>
   }>
       INSPECTED
     end
@@ -256,9 +256,9 @@ class ExpressionTest < Test::Unit::TestCase
   vars:{
   },
   codes:{
-    0:<push(), modify:2, value:29>,
-    1:<push(), modify:0, value:92>,
-    2:<plus(), modify:0, value:(NULL)>
+    0:<push n_args:1, flags:0, modify:2, value:29>,
+    1:<push n_args:1, flags:0, modify:0, value:92>,
+    2:<plus n_args:2, flags:0, modify:0, value:(NULL)>
   }>
       INSPECTED
     end
