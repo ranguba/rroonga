@@ -278,4 +278,5 @@ rb_grn_init_type (VALUE mGrn)
     rb_define_const(rb_cGrnType, "BIGRAM", INT2NUM(GRN_DB_BIGRAM));
     rb_define_const(rb_cGrnType, "TRIGRAM", INT2NUM(GRN_DB_TRIGRAM));
     rb_define_const(rb_cGrnType, "MECAB", INT2NUM(GRN_DB_MECAB));
+    rb_define_const(rb_cGrnType, "REGEXP", INT2NUM(GRN_OP_REGEXP));
 }
