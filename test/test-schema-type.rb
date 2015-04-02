@@ -201,6 +201,12 @@ class SchemaTypeTest < Test::Unit::TestCase
     assert_normalize_type("TokenMecab", "TokenMecab")
   end
 
+  def test_normalize_regexp
+    assert_normalize_type("TokenRegexp", "regexp")
+    assert_normalize_type("TokenRegexp", "token_regexp")
+    assert_normalize_type("TokenRegexp", "TokenRegexp")
+  end
+
   private
   def assert_normalize_type(expected, type)
     assert_equal(expected, Groonga::Schema.normalize_type(type))
