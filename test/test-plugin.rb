@@ -22,16 +22,16 @@ class PluginTest < Test::Unit::TestCase
 
   def test_register
     context = Groonga::Context.default
-    assert_nil(context["suggest"])
-    context.register_plugin("suggest/suggest")
-    assert_not_nil(context["suggest"])
+    assert_nil(context["TokenFilterStopWord"])
+    context.register_plugin("token_filters/stop_word")
+    assert_not_nil(context["TokenFilterStopWord"])
   end
 
   def test_system_plugins_dir
-    suggest_plugin_path = "#{Groonga::Plugin.system_plugins_dir}/"
-    suggest_plugin_path << "suggest/suggest#{Groonga::Plugin.suffix}"
+    plugin_path = "#{Groonga::Plugin.system_plugins_dir}/"
+    plugin_path << "token_filters/stop_word#{Groonga::Plugin.suffix}"
     assert do
-      File.exist?(suggest_plugin_path)
+      File.exist?(plugin_path)
     end
   end
 end
