@@ -22,9 +22,9 @@ class PluginTest < Test::Unit::TestCase
 
   def test_register
     context = Groonga::Context.default
-    assert_nil(context["suggest"])
-    context.register_plugin("suggest/suggest")
-    assert_not_nil(context["suggest"])
+    assert_nil(context["TokenFilterStopWord"])
+    context.register_plugin("token_filters/stop_word")
+    assert_not_nil(context["TokenFilterStopWord"])
   end
 
   def test_system_plugins_dir
