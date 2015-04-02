@@ -99,6 +99,7 @@ static VALUE eGrnNormalizerError;
 static VALUE eGrnTokenFilterError;
 static VALUE eGrnCommandError;
 static VALUE eGrnPluginError;
+static VALUE eGrnScorerError;
 
 VALUE
 rb_grn_rc_to_exception (grn_rc rc)
@@ -336,6 +337,9 @@ rb_grn_rc_to_exception (grn_rc rc)
         break;
       case GRN_PLUGIN_ERROR:
         exception = eGrnPluginError;
+        break;
+      case GRN_SCORER_ERROR:
+        exception = eGrnScorerError;
         break;
     }
 
@@ -581,6 +585,9 @@ rb_grn_rc_to_message (grn_rc rc)
         break;
       case GRN_PLUGIN_ERROR:
         message = "plugin error";
+        break;
+      case GRN_SCORER_ERROR:
+        message = "scorer error";
         break;
     }
 
@@ -1261,4 +1268,14 @@ rb_grn_init_exception (VALUE mGrn)
      */
     eGrnPluginError =
         rb_define_class_under(mGrn, "PluginError", rb_eGrnError);
+
+    /*
+     * Document-class: Groonga::ScorerError
+     *
+     * It is used when a scorer causes an error.
+     *
+     * @since 5.0.1
+     */
+    eGrnPluginError =
+        rb_define_class_under(mGrn, "ScorerError", rb_eGrnError);
 }
