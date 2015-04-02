@@ -119,6 +119,21 @@ module Groonga
       end
     end
 
+    # Unregister already registered `name` plugin
+    # If path is specified, you can unregister plugin
+    # which isn't placed at plugin directory.
+    #
+    # @since 5.0.1
+    def unregister_plugin(name_or_options)
+      options = {:context => self}
+      if name_or_options.is_a?(String)
+        name = name_or_options
+        Plugin.unregister(name, options)
+      else
+        Plugin.unregister(name_or_options.merge(options))
+      end
+    end
+
     # _table_ から指定した条件にマッチするレコードの値を取得
     # する。 _table_ はテーブル名かテーブルオブジェクトを指定
     # する。
