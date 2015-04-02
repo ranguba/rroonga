@@ -28,10 +28,10 @@ class PluginTest < Test::Unit::TestCase
   end
 
   def test_system_plugins_dir
-    suggest_plugin_path = "#{Groonga::Plugin.system_plugins_dir}/"
-    suggest_plugin_path << "suggest/suggest#{Groonga::Plugin.suffix}"
+    plugin_path = "#{Groonga::Plugin.system_plugins_dir}/"
+    plugin_path << "token_filters/stop_word#{Groonga::Plugin.suffix}"
     assert do
-      File.exist?(suggest_plugin_path)
+      File.exist?(plugin_path)
     end
   end
 end
