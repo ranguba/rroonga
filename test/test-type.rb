@@ -153,6 +153,7 @@ class TypeTest < Test::Unit::TestCase
     end
 
     def test_mecab
+      check_mecab_availability
       assert_equal_type("TokenMecab",  Groonga::Type::MECAB)
     end
   end
