@@ -122,6 +122,45 @@ rb_grn_plugin_s_register (int argc, VALUE *argv, VALUE klass)
 }
 
 /*
+ * Unregister already registered plugin
+ *
+ * @overload unregister(name, options=nil)
+ *   Unregister specified `name` plugin.
+ *   @param [String] name The name of plugin
+ *   @param options [::Hash] The name and value
+ *     pairs. Omitted names are initialized as the default value.
+ *   @option options :context (Groonga::Context.default)
+ *     The context which is bound to database.
+ */
+static VALUE
+rb_grn_plugin_s_unregister (int argc, VALUE *argv, VALUE klass)
+{
+    const char *name = NULL;
+    VALUE rb_options, rb_name = Qnil, rb_context;
+    grn_ctx *context;
+
+    if (argc >= 1) {
+        rb_name = rb_grn_check_convert_to_string(argv[0]);
+    }
+
+    rb_scan_args(argc, argv, "11", &rb_name, &rb_options);
+    rb_grn_scan_options(rb_options,
+                        "context", &rb_context,
+                        NULL);
+    name = StringValueCStr(rb_name);
+
+    if (NIL_P(rb_context)) {
+        rb_context = rb_grn_context_get_default();
+    }
+    context = RVAL2GRNCONTEXT(rb_context);
+
+    grn_plugin_unregister(context, name);
+
+    rb_grn_context_check(context, rb_ary_new4(argc, argv));
+    return Qnil;
+}
+
+/*
  * Returns the system plugins directory.
  *
  * @overload system_plugins_dir
@@ -153,6 +192,8 @@ rb_grn_init_plugin (VALUE mGrn)
 
     rb_define_singleton_method(cGrnPlugin, "register",
                                rb_grn_plugin_s_register, -1);
+    rb_define_singleton_method(cGrnPlugin, "unregister",
+                               rb_grn_plugin_s_unregister, -1);
     rb_define_singleton_method(cGrnPlugin, "system_plugins_dir",
                                rb_grn_plugin_s_system_plugins_dir, 0);
     rb_define_singleton_method(cGrnPlugin, "suffix",
