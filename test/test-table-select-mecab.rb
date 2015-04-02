@@ -20,10 +20,7 @@ class TableSelectMecabTest < Test::Unit::TestCase
 
   setup :setup_database
 
-  setup
-  def check_mecab_availability
-    omit("MeCab isn't available") if context["TokenMecab"].nil?
-  end
+  setup :check_mecab_availability
 
   setup
   def setup_tables
