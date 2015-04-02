@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # Copyright (C) 2009-2014  Kouhei Sutou <kou@clear-code.com>
-# Copyright (C) 2014  Masafumi Yokoyama <myokoym@gmail.com>
+# Copyright (C) 2014-2015  Masafumi Yokoyama <yokoyama@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -598,6 +598,8 @@ module Groonga
         "token_trigram" => "TokenTrigram",
         "mecab" => "TokenMecab",
         "token_mecab"=> "TokenMecab",
+        "regexp" => "TokenRegexp",
+        "token_regexp"=> "TokenRegexp",
       }
       # @private
       def normalize_type(type, options={})
