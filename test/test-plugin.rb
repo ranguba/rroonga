@@ -33,6 +33,22 @@ class PluginTest < Test::Unit::TestCase
     end
   end
 
+  class UnregisterTest < self
+    def test_by_name
+      context = Groonga::Context.default
+      context.register_plugin("suggest/suggest")
+      context.unregister_plugin("suggest/suggest")
+      assert_nil(context["suggest"])
+    end
+
+    def test_by_path
+      context = Groonga::Context.default
+      context.register_plugin("suggest/suggest")
+      context.unregister_plugin(suggest_plugin_path)
+      assert_nil(context["suggest"])
+    end
+  end
+
   private
   def suggest_plugin_path
     path = "#{Groonga::Plugin.system_plugins_dir}/"
