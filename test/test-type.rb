@@ -1,4 +1,5 @@
 # Copyright (C) 2009-2012  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2015  Masafumi Yokoyama <yokoyama@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -132,5 +133,27 @@ class TypeTest < Test::Unit::TestCase
     type = Groonga[id]
     assert_equal(expected_name,
                  type ? type.name : type)
+  end
+
+  class TokenizerTest < self
+    def test_delimit
+      assert_equal_type("TokenDelimit", Groonga::Type::DELIMIT)
+    end
+
+    def test_unigram
+      assert_equal_type("TokenUnigram", Groonga::Type::UNIGRAM)
+    end
+
+    def test_bigram
+      assert_equal_type("TokenBigram", Groonga::Type::BIGRAM)
+    end
+
+    def test_trigram
+      assert_equal_type("TokenTrigram", Groonga::Type::TRIGRAM)
+    end
+
+    def test_mecab
+      assert_equal_type("TokenMecab",  Groonga::Type::MECAB)
+    end
   end
 end
