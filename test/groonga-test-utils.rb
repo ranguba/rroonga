@@ -189,4 +189,8 @@ module GroongaTestUtils
   def need_encoding
     omit("Encoding is needed.") unless defined?(::Encoding)
   end
+
+  def check_mecab_availability
+    omit("MeCab isn't available") if context["TokenMecab"].nil?
+  end
 end
