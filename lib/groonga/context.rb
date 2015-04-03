@@ -119,6 +119,37 @@ module Groonga
       end
     end
 
+    # Unregister a registered `name` plugin.
+    #
+    # You can unregister `name` plugin by name if
+    # `name` plugin is installed to plugin directory.
+    #
+    # @example Unregister a registerd plugin by name.
+    #   context.register_plugin("token_filters/stop_word")
+    #   context.unregister_plugin("token_filters/stop_word")
+    #
+    # You can also specify the path of `name` plugin explicitly.
+    #
+    # @example Unregister a registerd plugin by path.
+    #   context.register_plugin("token_filters/stop_word")
+    #   context.unregister_plugin("/usr/local/lib/groonga/plugins/token_filters/stop_word.so")
+    #
+    # @overload unregister_plugin(name)
+    #   Unregister a registerd plugin by name.
+    #
+    #   @param [String] name The plugin name.
+    #
+    # @overload unregister_plugin(path)
+    #   Unregister a registerd plugin by path.
+    #
+    #   @param [String] path The path to plugin.
+    #
+    # @since 5.0.1
+    def unregister_plugin(name_or_path)
+      options = {:context => self}
+      Plugin.unregister(name_or_path, options)
+    end
+
     # _table_ から指定した条件にマッチするレコードの値を取得
     # する。 _table_ はテーブル名かテーブルオブジェクトを指定
     # する。
