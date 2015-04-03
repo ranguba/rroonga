@@ -359,6 +359,7 @@ grn_bool       rb_grn_equal_option                  (VALUE option,
                                                      const char *key);
 grn_bool       rb_grn_equal_string                  (const char *string1,
                                                      const char *string2);
+VALUE          rb_grn_convert_to_string             (VALUE object);
 VALUE          rb_grn_convert_to_array              (VALUE object);
 VALUE          rb_grn_check_convert_to_string       (VALUE object);
 VALUE          rb_grn_check_convert_to_array        (VALUE object);
