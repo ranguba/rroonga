@@ -753,7 +753,7 @@ rb_grn_column_get_indexes (int argc, VALUE *argv, VALUE self)
 {
     grn_ctx *context;
     grn_obj *column;
-    grn_obj **indexes = NULL;
+    grn_index_datum *index_data = NULL;
     int i, n_indexes;
     grn_operator operator = GRN_OP_MATCH;
     VALUE rb_operator, rb_indexes;
@@ -769,21 +769,20 @@ rb_grn_column_get_indexes (int argc, VALUE *argv, VALUE self)
     }
 
     rb_indexes = rb_ary_new();
-    n_indexes = grn_column_index(context, column, operator,
-                                 NULL, 0, NULL);
+    n_indexes = grn_column_find_index_data(context, column, operator, NULL, 0);
     if (n_indexes == 0)
         return rb_indexes;
 
-    indexes = xmalloc(sizeof(grn_obj *) * n_indexes);
-    n_indexes = grn_column_index(context, column, operator,
-                                 indexes, n_indexes, NULL);
+    index_data = xmalloc(sizeof(grn_index_datum) * n_indexes);
+    n_indexes = grn_column_find_index_data(context, column, operator,
+                                           index_data, n_indexes);
     for (i = 0; i < n_indexes; i++) {
         VALUE rb_index;
-        rb_index = GRNOBJECT2RVAL(Qnil, context, indexes[i], GRN_FALSE);
+        rb_index = GRNOBJECT2RVAL(Qnil, context, index_data[i].index, GRN_FALSE);
         rb_ary_push(rb_indexes, rb_index);
-        grn_obj_unlink(context, indexes[i]);
+        grn_obj_unlink(context, index_data[i].index);
     }
-    xfree(indexes);
+    xfree(index_data);
     return rb_indexes;
 }
 
