@@ -220,6 +220,8 @@ rb_grn_operator_from_ruby_object (VALUE rb_operator)
     } else if (rb_grn_equal_option(rb_operator, "json-put") ||
                rb_grn_equal_option(rb_operator, "json_put")) {
         operator = GRN_OP_JSON_PUT;
+    } else if (rb_grn_equal_option(rb_operator, "regexp")) {
+        operator = GRN_OP_REGEXP;
     } else {
         rb_raise(rb_eArgError,
                  "operator should be one of "
@@ -426,6 +428,8 @@ rb_grn_init_operator (VALUE mGrn)
                     UINT2NUM(GRN_OP_TABLE_GROUP));
     rb_define_const(rb_mGrnOperator, "JSON_PUT",
                     UINT2NUM(GRN_OP_JSON_PUT));
+    rb_define_const(rb_mGrnOperator, "REGEXP",
+                    UINT2NUM(GRN_OP_REGEXP));
 
 
 /*
