@@ -178,7 +178,7 @@ module Groonga
         if other.is_a?(Regexp)
           RegexpExpressionBuilder.new(self, normalize(other.source))
         else
-        MatchExpressionBuilder.new(self, normalize(other))
+          MatchExpressionBuilder.new(self, normalize(other))
         end
       end
 
