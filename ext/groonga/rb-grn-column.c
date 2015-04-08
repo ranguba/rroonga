@@ -742,9 +742,9 @@ rb_grn_column_with_weight_p(VALUE self)
 }
 
 /*
- * `operator` を実行できる `column` のインデックスを返す。
+ * Return indexes on `column` which can execute `operator`.
  * @since 1.0.9
- * @return [Array<index_column>] `operator` を実行できる `column` のインデックス
+ * @return [Array<index_column>] Indexes on `column` which can execute `operator`.
  * @overload indexes(operator=Groonga::Operator::MATCH)
  *   @param [Groonga::Operator::XXX] operator
  */
