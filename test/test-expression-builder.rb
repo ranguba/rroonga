@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2014  Masafumi Yokoyama <myokoym@gmail.com>
+# Copyright (C) 2014-2015  Masafumi Yokoyama <yokoyama@clear-code.com>
 # Copyright (C) 2009-2012  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
@@ -245,6 +245,48 @@ class ExpressionBuilderTest < Test::Unit::TestCase
       result = @users.select("name:@ro")
       assert_equal(["morita", "yu"],
                    result.collect {|record| record.key.key})
+    end
+  end
+
+  class RegexpSearchTest < self
+    def setup_tables
+      Groonga::Schema.define do |schema|
+        schema.create_table("Users",
+                            :type => :hash,
+                            :key_type => "ShortText") do |table|
+          table.short_text("name")
+        end
+
+        schema.create_table("Terms",
+                            :type => :patricia_trie,
+                            :key_type => "ShortText",
+                            :default_tokenizer => "TokenRegexp",
+                            :normalizer => "NormalizerAuto") do |table|
+          table.index("Users.name")
+        end
+      end
+
+      @users = Groonga["Users"]
+    end
+
+    def setup_data
+      @users.add("sato",   :name => "taro sato")
+      @users.add("suzuki", :name => "Shiro SUZUKI")
+      @users.add("ito",    :name => "Takashi Ito")
+    end
+
+    class QueryStringTest < self
+      def test_match
+        result = @users.select("name:~t")
+        assert_equal(["ito", "sato"],
+                     result.collect {|record| record.key.key}.sort)
+      end
+
+      def test_not_match
+        result = @users.select("name:~x")
+        assert_equal([],
+                     result.collect {|record| record.key.key}.sort)
+      end
     end
   end
 
