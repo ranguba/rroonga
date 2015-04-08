@@ -34,4 +34,22 @@ class PluginTest < Test::Unit::TestCase
       File.exist?(plugin_path)
     end
   end
+
+  class UnregisterTest < self
+    def test_by_name
+      context.register_plugin("token_filters/stop_word")
+      assert_not_nil(context["TokenFilterStopWord"])
+      context.unregister_plugin("token_filters/stop_word")
+      assert_nil(context["TokenFilterStopWord"])
+    end
+
+    def test_by_path
+      context.register_plugin("token_filters/stop_word")
+      assert_not_nil(context["TokenFilterStopWord"])
+      plugin_path = "#{Groonga::Plugin.system_plugins_dir}/"
+      plugin_path << "token_filters/stop_word#{Groonga::Plugin.suffix}"
+      context.unregister_plugin(plugin_path)
+      assert_nil(context["TokenFilterStopWord"])
+    end
+  end
 end
