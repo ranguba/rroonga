@@ -24,8 +24,8 @@ class OperatorTest < Test::Unit::TestCase
     setup
     def setup_expression
       @expression = Groonga::Expression.new
-      @expression.append_constant(39)
-      @expression.append_constant(93)
+      @expression.append_constant("column")
+      @expression.append_constant(/\A[aA].*l/.source)
     end
 
     def test_constant
@@ -35,8 +35,8 @@ class OperatorTest < Test::Unit::TestCase
   vars:{
   },
   codes:{
-    0:<push n_args:1, flags:0, modify:2, value:39>,
-    1:<push n_args:1, flags:0, modify:0, value:93>,
+    0:<push n_args:1, flags:0, modify:2, value:"column">,
+    1:<push n_args:1, flags:0, modify:0, value:"\\\\A[aA].*l">,
     2:<regexp n_args:2, flags:0, modify:0, value:(NULL)>
   }>
       INSPECTED
@@ -49,8 +49,8 @@ class OperatorTest < Test::Unit::TestCase
   vars:{
   },
   codes:{
-    0:<push n_args:1, flags:0, modify:2, value:39>,
-    1:<push n_args:1, flags:0, modify:0, value:93>,
+    0:<push n_args:1, flags:0, modify:2, value:"column">,
+    1:<push n_args:1, flags:0, modify:0, value:"\\\\A[aA].*l">,
     2:<regexp n_args:2, flags:0, modify:0, value:(NULL)>
   }>
       INSPECTED
