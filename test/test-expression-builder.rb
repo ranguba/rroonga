@@ -275,6 +275,24 @@ class ExpressionBuilderTest < Test::Unit::TestCase
       @users.add("ito",    :name => "Takashi Ito")
     end
 
+    class BlockTest < self
+      def test_match
+        result = @users.select do |record|
+          record["name"] =~ /sh/
+        end
+        assert_equal(["ito", "suzuki"],
+                     result.collect {|record| record.key.key}.sort)
+      end
+
+      def test_not_match
+        result = @users.select do |record|
+          record["name"] =~ /abcabcabc/
+        end
+        assert_equal([],
+                     result.collect {|record| record.key.key}.sort)
+      end
+    end
+
     class QueryStringTest < self
       def test_match
         result = @users.select("name:~t")

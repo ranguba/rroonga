@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 #
+# Copyright (C) 2015  Masafumi Yokoyama <yokoyama@clear-code.com>
 # Copyright (C) 2009-2012  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
@@ -173,7 +174,12 @@ module Groonga
           raise ArgumentError,
                  "match word should not be nil: #{full_column_name}"
         end
+
+        if other.is_a?(Regexp)
+          RegexpExpressionBuilder.new(self, normalize(other.source))
+        else
         MatchExpressionBuilder.new(self, normalize(other))
+        end
       end
 
       def <(other)
@@ -329,6 +335,13 @@ module Groonga
     class MatchExpressionBuilder < BinaryExpressionBuilder
       def initialize(column_value_builder, value)
         super(Groonga::Operation::MATCH, column_value_builder, value)
+      end
+    end
+
+    # @private
+    class RegexpExpressionBuilder < BinaryExpressionBuilder
+      def initialize(column_value_builder, value)
+        super(Groonga::Operation::REGEXP, column_value_builder, value)
       end
     end
 
