@@ -30,7 +30,7 @@ class OperatorTest < Test::Unit::TestCase
 
     def test_constant
       @expression.append_operation(Groonga::Operator::REGEXP, 2)
-      assert_equal(<<-END_OF_INSPECT.chomp, @expression.inspect)
+      assert_equal(<<-INSPECTED.chomp, @expression.inspect)
 #<Groonga::Expression
   vars:{
   },
@@ -39,12 +39,12 @@ class OperatorTest < Test::Unit::TestCase
     1:<push n_args:1, flags:0, modify:0, value:93>,
     2:<regexp n_args:2, flags:0, modify:0, value:(NULL)>
   }>
-      END_OF_INSPECT
+      INSPECTED
     end
 
     def test_name
       @expression.append_operation("regexp", 2)
-      assert_equal(<<-END_OF_INSPECT.chomp, @expression.inspect)
+      assert_equal(<<-INSPECTED.chomp, @expression.inspect)
 #<Groonga::Expression
   vars:{
   },
@@ -53,7 +53,7 @@ class OperatorTest < Test::Unit::TestCase
     1:<push n_args:1, flags:0, modify:0, value:93>,
     2:<regexp n_args:2, flags:0, modify:0, value:(NULL)>
   }>
-      END_OF_INSPECT
+      INSPECTED
     end
   end
 end
