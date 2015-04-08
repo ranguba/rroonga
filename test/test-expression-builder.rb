@@ -291,6 +291,14 @@ class ExpressionBuilderTest < Test::Unit::TestCase
         assert_equal([],
                      result.collect {|record| record.key.key}.sort)
       end
+
+      def test_beginning_of_text
+        result = @users.select do |record|
+          record["name"] =~ /\Ash/
+        end
+        assert_equal(["suzuki"],
+                     result.collect {|record| record.key.key}.sort)
+      end
     end
 
     class QueryStringTest < self
