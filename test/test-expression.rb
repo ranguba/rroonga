@@ -264,6 +264,43 @@ class ExpressionTest < Test::Unit::TestCase
         INSPECTED
       end
     end
+
+    class RegexpTest < self
+      setup
+      def setup_expression
+        @expression = Groonga::Expression.new
+        @expression.append_constant("Alice")
+        @expression.append_constant(/\A[aA].*l/.source)
+      end
+
+      def test_constant
+        @expression.append_operation(Groonga::Operator::REGEXP, 2)
+        assert_equal(<<-INSPECTED.chomp, @expression.inspect)
+#<Groonga::Expression
+  vars:{
+  },
+  codes:{
+    0:<push n_args:1, flags:0, modify:2, value:"Alice">,
+    1:<push n_args:1, flags:0, modify:0, value:"\\\\A[aA].*l">,
+    2:<regexp n_args:2, flags:0, modify:0, value:(NULL)>
+  }>
+        INSPECTED
+      end
+
+      def test_name
+        @expression.append_operation("regexp", 2)
+        assert_equal(<<-INSPECTED.chomp, @expression.inspect)
+#<Groonga::Expression
+  vars:{
+  },
+  codes:{
+    0:<push n_args:1, flags:0, modify:2, value:"Alice">,
+    1:<push n_args:1, flags:0, modify:0, value:"\\\\A[aA].*l">,
+    2:<regexp n_args:2, flags:0, modify:0, value:(NULL)>
+  }>
+        INSPECTED
+      end
+    end
   end
 
   class VariableTest < self
