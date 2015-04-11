@@ -1,6 +1,6 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
-  Copyright (C) 2009-2012  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2015  Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -18,7 +18,7 @@
 
 #include "rb-grn.h"
 
-VALUE rb_mGrnOperator;
+VALUE rb_cGrnOperator;
 
 grn_operator
 rb_grn_operator_from_ruby_object (VALUE rb_operator)
@@ -27,6 +27,8 @@ rb_grn_operator_from_ruby_object (VALUE rb_operator)
 
     if (NIL_P(rb_operator)) {
         operator = GRN_OP_OR;
+    } else if (RVAL2CBOOL(rb_obj_is_kind_of(rb_operator, rb_cGrnOperator))) {
+        operator = NUM2UINT(rb_iv_get(rb_operator, "@value"));
     } else if (RVAL2CBOOL(rb_obj_is_kind_of(rb_operator, rb_cInteger))) {
         operator = NUM2UINT(rb_operator);
     } else if (rb_grn_equal_option(rb_operator, "push")) {
@@ -239,6 +241,8 @@ rb_grn_set_operator_from_ruby_object (VALUE rb_operator)
 
     if (NIL_P(rb_operator)) {
         operator = GRN_OP_OR;
+    } else if (RVAL2CBOOL(rb_obj_is_kind_of(rb_operator, rb_cGrnOperator))) {
+        operator = NUM2UINT(rb_iv_get(rb_operator, "@value"));
     } else if (RVAL2CBOOL(rb_obj_is_kind_of(rb_operator, rb_cInteger))) {
         operator = NUM2UINT(rb_operator);
     } else if (rb_grn_equal_option(rb_operator, "or") ||
@@ -266,186 +270,380 @@ rb_grn_set_operator_from_ruby_object (VALUE rb_operator)
     return operator;
 }
 
+static VALUE
+rb_grn_operator_initialize (VALUE self, VALUE rb_name, VALUE rb_value)
+{
+    rb_iv_set(self, "@name", rb_name);
+    rb_iv_set(self, "@value", rb_value);
+
+    return Qnil;
+}
+
+static VALUE
+rb_grn_operator_to_i (VALUE self)
+{
+    return rb_iv_get(self, "@value");
+}
+
 void
 rb_grn_init_operator (VALUE mGrn)
 {
-    rb_mGrnOperator = rb_define_module_under(mGrn, "Operator");
+    rb_cGrnOperator = rb_define_class_under(mGrn, "Operator", rb_cObject);
     /* @deprecated backward compatibility. */
-    rb_define_const(mGrn, "Operation", rb_mGrnOperator);
+    rb_define_const(mGrn, "Operation", rb_cGrnOperator);
 
-    rb_define_const(rb_mGrnOperator, "PUSH",
-                    UINT2NUM(GRN_OP_PUSH));
-    rb_define_const(rb_mGrnOperator, "POP",
-                    UINT2NUM(GRN_OP_POP));
-    rb_define_const(rb_mGrnOperator, "NO_OPERATION",
-                    UINT2NUM(GRN_OP_NOP));
-    rb_define_const(rb_mGrnOperator, "CALL",
-                    UINT2NUM(GRN_OP_CALL));
-    rb_define_const(rb_mGrnOperator, "INTERN",
-                    UINT2NUM(GRN_OP_INTERN));
-    rb_define_const(rb_mGrnOperator, "GET_REFERENCE",
-                    UINT2NUM(GRN_OP_GET_REF));
-    rb_define_const(rb_mGrnOperator, "GET_VALUE",
-                    UINT2NUM(GRN_OP_GET_VALUE));
-    rb_define_const(rb_mGrnOperator, "AND",
-                    UINT2NUM(GRN_OP_AND));
-    rb_define_const(rb_mGrnOperator, "AND_NOT",
-                    UINT2NUM(GRN_OP_AND_NOT));
+    rb_define_attr(rb_cGrnOperator, "name", GRN_TRUE, GRN_FALSE);
+    rb_define_attr(rb_cGrnOperator, "value", GRN_TRUE, GRN_FALSE);
+
+    rb_define_method(rb_cGrnOperator, "initialize",
+                     rb_grn_operator_initialize, 2);
+    rb_define_method(rb_cGrnOperator, "to_i",
+                     rb_grn_operator_to_i, 0);
+    rb_define_alias(rb_cGrnOperator, "to_int", "to_i");
+
+    rb_define_const(rb_cGrnOperator, "PUSH",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("push"),
+                               UINT2NUM(GRN_OP_PUSH)));
+    rb_define_const(rb_cGrnOperator, "POP",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("pop"),
+                               UINT2NUM(GRN_OP_POP)));
+    rb_define_const(rb_cGrnOperator, "NO_OPERATION",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("no-operation"),
+                               UINT2NUM(GRN_OP_NOP)));
+    rb_define_const(rb_cGrnOperator, "CALL",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("call"),
+                               UINT2NUM(GRN_OP_CALL)));
+    rb_define_const(rb_cGrnOperator, "INTERN",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("intern"),
+                               UINT2NUM(GRN_OP_INTERN)));
+    rb_define_const(rb_cGrnOperator, "GET_REFERENCE",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("get-reference"),
+                               UINT2NUM(GRN_OP_GET_REF)));
+    rb_define_const(rb_cGrnOperator, "GET_VALUE",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("get-value"),
+                               UINT2NUM(GRN_OP_GET_VALUE)));
+    rb_define_const(rb_cGrnOperator, "AND",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("and"),
+                               UINT2NUM(GRN_OP_AND)));
+    rb_define_const(rb_cGrnOperator, "AND_NOT",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("and-not"),
+                               UINT2NUM(GRN_OP_AND_NOT)));
     /* Just for backward compatiblity. TODO: REMOVE ME! */
-    rb_define_const(rb_mGrnOperator, "BUT",
-                    UINT2NUM(GRN_OP_BUT));
-    rb_define_const(rb_mGrnOperator, "OR",
-                    UINT2NUM(GRN_OP_OR));
-    rb_define_const(rb_mGrnOperator, "ASSIGN",
-                    UINT2NUM(GRN_OP_ASSIGN));
-    rb_define_const(rb_mGrnOperator, "STAR_ASSIGN",
-                    UINT2NUM(GRN_OP_STAR_ASSIGN));
-    rb_define_const(rb_mGrnOperator, "SLASH_ASSIGN",
-                    UINT2NUM(GRN_OP_SLASH_ASSIGN));
-    rb_define_const(rb_mGrnOperator, "MODULO_ASSIGN",
-                    UINT2NUM(GRN_OP_MOD_ASSIGN));
-    rb_define_const(rb_mGrnOperator, "PLUS_ASSIGN",
-                    UINT2NUM(GRN_OP_PLUS_ASSIGN));
-    rb_define_const(rb_mGrnOperator, "MINUS_ASSIGN",
-                    UINT2NUM(GRN_OP_MINUS_ASSIGN));
-    rb_define_const(rb_mGrnOperator, "SHIFTL_ASSIGN",
-                    UINT2NUM(GRN_OP_SHIFTL_ASSIGN));
-    rb_define_const(rb_mGrnOperator, "SHIRTR_ASSIGN",
-                    UINT2NUM(GRN_OP_SHIFTR_ASSIGN));
-    rb_define_const(rb_mGrnOperator, "SHIFTRR_ASSIGN",
-                    UINT2NUM(GRN_OP_SHIFTRR_ASSIGN));
-    rb_define_const(rb_mGrnOperator, "AND_ASSIGN",
-                    UINT2NUM(GRN_OP_AND_ASSIGN));
-    rb_define_const(rb_mGrnOperator, "XOR_ASSIGN",
-                    UINT2NUM(GRN_OP_XOR_ASSIGN));
-    rb_define_const(rb_mGrnOperator, "OR_ASSIGN",
-                    UINT2NUM(GRN_OP_OR_ASSIGN));
-    rb_define_const(rb_mGrnOperator, "JUMP",
-                    UINT2NUM(GRN_OP_JUMP));
-    rb_define_const(rb_mGrnOperator, "CJUMP",
-                    UINT2NUM(GRN_OP_CJUMP));
-    rb_define_const(rb_mGrnOperator, "COMMA",
-                    UINT2NUM(GRN_OP_COMMA));
-    rb_define_const(rb_mGrnOperator, "BITWISE_OR",
-                    UINT2NUM(GRN_OP_BITWISE_OR));
-    rb_define_const(rb_mGrnOperator, "BITWISE_XOR",
-                    UINT2NUM(GRN_OP_BITWISE_XOR));
-    rb_define_const(rb_mGrnOperator, "BITWISE_AND",
-                    UINT2NUM(GRN_OP_BITWISE_AND));
-    rb_define_const(rb_mGrnOperator, "BITWISE_NOT",
-                    UINT2NUM(GRN_OP_BITWISE_NOT));
-    rb_define_const(rb_mGrnOperator, "EQUAL",
-                    UINT2NUM(GRN_OP_EQUAL));
-    rb_define_const(rb_mGrnOperator, "NOT_EQUAL",
-                    UINT2NUM(GRN_OP_NOT_EQUAL));
-    rb_define_const(rb_mGrnOperator, "LESS",
-                    UINT2NUM(GRN_OP_LESS));
-    rb_define_const(rb_mGrnOperator, "GREATER",
-                    UINT2NUM(GRN_OP_GREATER));
-    rb_define_const(rb_mGrnOperator, "LESS_EQUAL",
-                    UINT2NUM(GRN_OP_LESS_EQUAL));
-    rb_define_const(rb_mGrnOperator, "GREATER_EQUAL",
-                    UINT2NUM(GRN_OP_GREATER_EQUAL));
-    rb_define_const(rb_mGrnOperator, "IN",
-                    UINT2NUM(GRN_OP_IN));
-    rb_define_const(rb_mGrnOperator, "MATCH",
-                    UINT2NUM(GRN_OP_MATCH));
-    rb_define_const(rb_mGrnOperator, "NEAR",
-                    UINT2NUM(GRN_OP_NEAR));
-    rb_define_const(rb_mGrnOperator, "NEAR2",
-                    UINT2NUM(GRN_OP_NEAR2));
-    rb_define_const(rb_mGrnOperator, "SIMILAR",
-                    UINT2NUM(GRN_OP_SIMILAR));
-    rb_define_const(rb_mGrnOperator, "TERM_EXTRACT",
-                    UINT2NUM(GRN_OP_TERM_EXTRACT));
-    rb_define_const(rb_mGrnOperator, "SHIFTL",
-                    UINT2NUM(GRN_OP_SHIFTL));
-    rb_define_const(rb_mGrnOperator, "SHIFTR",
-                    UINT2NUM(GRN_OP_SHIFTR));
-    rb_define_const(rb_mGrnOperator, "SHIFTRR",
-                    UINT2NUM(GRN_OP_SHIFTRR));
-    rb_define_const(rb_mGrnOperator, "PLUS",
-                    UINT2NUM(GRN_OP_PLUS));
-    rb_define_const(rb_mGrnOperator, "MINUS",
-                    UINT2NUM(GRN_OP_MINUS));
-    rb_define_const(rb_mGrnOperator, "STAR",
-                    UINT2NUM(GRN_OP_STAR));
-    rb_define_const(rb_mGrnOperator, "SLASH",
-                    UINT2NUM(GRN_OP_SLASH));
-    rb_define_const(rb_mGrnOperator, "MODULO",
-                    UINT2NUM(GRN_OP_MOD));
-    rb_define_const(rb_mGrnOperator, "DELETE",
-                    UINT2NUM(GRN_OP_DELETE));
-    rb_define_const(rb_mGrnOperator, "INCREMENT",
-                    UINT2NUM(GRN_OP_INCR));
-    rb_define_const(rb_mGrnOperator, "DECREMENT",
-                    UINT2NUM(GRN_OP_DECR));
-    rb_define_const(rb_mGrnOperator, "INCREMENT_POST",
-                    UINT2NUM(GRN_OP_INCR_POST));
-    rb_define_const(rb_mGrnOperator, "DECREMENT_POST",
-                    UINT2NUM(GRN_OP_DECR_POST));
-    rb_define_const(rb_mGrnOperator, "NOT",
-                    UINT2NUM(GRN_OP_NOT));
-    rb_define_const(rb_mGrnOperator, "ADJUST",
-                    UINT2NUM(GRN_OP_ADJUST));
-    rb_define_const(rb_mGrnOperator, "EXACT",
-                    UINT2NUM(GRN_OP_EXACT));
-    rb_define_const(rb_mGrnOperator, "LONGEST_COMMON_PREFIX",
-                    UINT2NUM(GRN_OP_LCP));
-    rb_define_const(rb_mGrnOperator, "PARTIAL",
-                    UINT2NUM(GRN_OP_PARTIAL));
-    rb_define_const(rb_mGrnOperator, "UNSPLIT",
-                    UINT2NUM(GRN_OP_UNSPLIT));
-    rb_define_const(rb_mGrnOperator, "PREFIX",
-                    UINT2NUM(GRN_OP_PREFIX));
-    rb_define_const(rb_mGrnOperator, "SUFFIX",
-                    UINT2NUM(GRN_OP_SUFFIX));
-    rb_define_const(rb_mGrnOperator, "GEO_DISTANCE1",
-                    UINT2NUM(GRN_OP_GEO_DISTANCE1));
-    rb_define_const(rb_mGrnOperator, "GEO_DISTANCE2",
-                    UINT2NUM(GRN_OP_GEO_DISTANCE2));
-    rb_define_const(rb_mGrnOperator, "GEO_DISTANCE3",
-                    UINT2NUM(GRN_OP_GEO_DISTANCE3));
-    rb_define_const(rb_mGrnOperator, "GEO_DISTANCE4",
-                    UINT2NUM(GRN_OP_GEO_DISTANCE4));
-    rb_define_const(rb_mGrnOperator, "GEO_WITHINP5",
-                    UINT2NUM(GRN_OP_GEO_WITHINP5));
-    rb_define_const(rb_mGrnOperator, "GEO_WITHINP6",
-                    UINT2NUM(GRN_OP_GEO_WITHINP6));
-    rb_define_const(rb_mGrnOperator, "GEO_WITHINP8",
-                    UINT2NUM(GRN_OP_GEO_WITHINP8));
-    rb_define_const(rb_mGrnOperator, "OBJECT_SEARCH",
-                    UINT2NUM(GRN_OP_OBJ_SEARCH));
-    rb_define_const(rb_mGrnOperator, "EXPRESSION_GET_VARIABLE",
-                    UINT2NUM(GRN_OP_EXPR_GET_VAR));
-    rb_define_const(rb_mGrnOperator, "TABLE_CREATE",
-                    UINT2NUM(GRN_OP_TABLE_CREATE));
-    rb_define_const(rb_mGrnOperator, "TABLE_SELECT",
-                    UINT2NUM(GRN_OP_TABLE_SELECT));
-    rb_define_const(rb_mGrnOperator, "TABLE_SORT",
-                    UINT2NUM(GRN_OP_TABLE_SORT));
-    rb_define_const(rb_mGrnOperator, "TABLE_GROUP",
-                    UINT2NUM(GRN_OP_TABLE_GROUP));
-    rb_define_const(rb_mGrnOperator, "JSON_PUT",
-                    UINT2NUM(GRN_OP_JSON_PUT));
-    rb_define_const(rb_mGrnOperator, "REGEXP",
-                    UINT2NUM(GRN_OP_REGEXP));
+    rb_define_const(rb_cGrnOperator, "BUT",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("but"),
+                               UINT2NUM(GRN_OP_BUT)));
+    rb_define_const(rb_cGrnOperator, "OR",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("or"),
+                               UINT2NUM(GRN_OP_OR)));
+    rb_define_const(rb_cGrnOperator, "ASSIGN",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("assign"),
+                               UINT2NUM(GRN_OP_ASSIGN)));
+    rb_define_const(rb_cGrnOperator, "STAR_ASSIGN",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("star-assign"),
+                               UINT2NUM(GRN_OP_STAR_ASSIGN)));
+    rb_define_const(rb_cGrnOperator, "SLASH_ASSIGN",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("slash-assign"),
+                               UINT2NUM(GRN_OP_SLASH_ASSIGN)));
+    rb_define_const(rb_cGrnOperator, "MODULO_ASSIGN",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("modulo-assign"),
+                               UINT2NUM(GRN_OP_MOD_ASSIGN)));
+    rb_define_const(rb_cGrnOperator, "PLUS_ASSIGN",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("plus-assign"),
+                               UINT2NUM(GRN_OP_PLUS_ASSIGN)));
+    rb_define_const(rb_cGrnOperator, "MINUS_ASSIGN",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("minus-assign"),
+                               UINT2NUM(GRN_OP_MINUS_ASSIGN)));
+    rb_define_const(rb_cGrnOperator, "SHIFTL_ASSIGN",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("shiftl-assign"),
+                               UINT2NUM(GRN_OP_SHIFTL_ASSIGN)));
+    rb_define_const(rb_cGrnOperator, "SHIRTR_ASSIGN",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("shirtr-assign"),
+                               UINT2NUM(GRN_OP_SHIFTR_ASSIGN)));
+    rb_define_const(rb_cGrnOperator, "SHIFTRR_ASSIGN",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("shiftrr-assign"),
+                               UINT2NUM(GRN_OP_SHIFTRR_ASSIGN)));
+    rb_define_const(rb_cGrnOperator, "AND_ASSIGN",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("and-assign"),
+                               UINT2NUM(GRN_OP_AND_ASSIGN)));
+    rb_define_const(rb_cGrnOperator, "XOR_ASSIGN",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("xor-assign"),
+                               UINT2NUM(GRN_OP_XOR_ASSIGN)));
+    rb_define_const(rb_cGrnOperator, "OR_ASSIGN",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("or-assign"),
+                               UINT2NUM(GRN_OP_OR_ASSIGN)));
+    rb_define_const(rb_cGrnOperator, "JUMP",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("jump"),
+                               UINT2NUM(GRN_OP_JUMP)));
+    rb_define_const(rb_cGrnOperator, "CJUMP",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("cjump"),
+                               UINT2NUM(GRN_OP_CJUMP)));
+    rb_define_const(rb_cGrnOperator, "COMMA",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("comma"),
+                               UINT2NUM(GRN_OP_COMMA)));
+    rb_define_const(rb_cGrnOperator, "BITWISE_OR",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("bitwise-or"),
+                               UINT2NUM(GRN_OP_BITWISE_OR)));
+    rb_define_const(rb_cGrnOperator, "BITWISE_XOR",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("bitwise-xor"),
+                               UINT2NUM(GRN_OP_BITWISE_XOR)));
+    rb_define_const(rb_cGrnOperator, "BITWISE_AND",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("bitwise-and"),
+                               UINT2NUM(GRN_OP_BITWISE_AND)));
+    rb_define_const(rb_cGrnOperator, "BITWISE_NOT",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("bitwise-not"),
+                               UINT2NUM(GRN_OP_BITWISE_NOT)));
+    rb_define_const(rb_cGrnOperator, "EQUAL",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("equal"),
+                               UINT2NUM(GRN_OP_EQUAL)));
+    rb_define_const(rb_cGrnOperator, "NOT_EQUAL",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("not-equal"),
+                               UINT2NUM(GRN_OP_NOT_EQUAL)));
+    rb_define_const(rb_cGrnOperator, "LESS",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("less"),
+                               UINT2NUM(GRN_OP_LESS)));
+    rb_define_const(rb_cGrnOperator, "GREATER",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("greater"),
+                               UINT2NUM(GRN_OP_GREATER)));
+    rb_define_const(rb_cGrnOperator, "LESS_EQUAL",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("less-equal"),
+                               UINT2NUM(GRN_OP_LESS_EQUAL)));
+    rb_define_const(rb_cGrnOperator, "GREATER_EQUAL",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("greater-equal"),
+                               UINT2NUM(GRN_OP_GREATER_EQUAL)));
+    rb_define_const(rb_cGrnOperator, "IN",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("in"),
+                               UINT2NUM(GRN_OP_IN)));
+    rb_define_const(rb_cGrnOperator, "MATCH",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("match"),
+                               UINT2NUM(GRN_OP_MATCH)));
+    rb_define_const(rb_cGrnOperator, "NEAR",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("near"),
+                               UINT2NUM(GRN_OP_NEAR)));
+    rb_define_const(rb_cGrnOperator, "NEAR2",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("near2"),
+                               UINT2NUM(GRN_OP_NEAR2)));
+    rb_define_const(rb_cGrnOperator, "SIMILAR",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("similar"),
+                               UINT2NUM(GRN_OP_SIMILAR)));
+    rb_define_const(rb_cGrnOperator, "TERM_EXTRACT",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("term-extract"),
+                               UINT2NUM(GRN_OP_TERM_EXTRACT)));
+    rb_define_const(rb_cGrnOperator, "SHIFTL",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("shiftl"),
+                               UINT2NUM(GRN_OP_SHIFTL)));
+    rb_define_const(rb_cGrnOperator, "SHIFTR",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("shiftr"),
+                               UINT2NUM(GRN_OP_SHIFTR)));
+    rb_define_const(rb_cGrnOperator, "SHIFTRR",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("shiftrr"),
+                               UINT2NUM(GRN_OP_SHIFTRR)));
+    rb_define_const(rb_cGrnOperator, "PLUS",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("plus"),
+                               UINT2NUM(GRN_OP_PLUS)));
+    rb_define_const(rb_cGrnOperator, "MINUS",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("minus"),
+                               UINT2NUM(GRN_OP_MINUS)));
+    rb_define_const(rb_cGrnOperator, "STAR",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("star"),
+                               UINT2NUM(GRN_OP_STAR)));
+    rb_define_const(rb_cGrnOperator, "SLASH",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("slash"),
+                               UINT2NUM(GRN_OP_SLASH)));
+    rb_define_const(rb_cGrnOperator, "MODULO",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("modulo"),
+                               UINT2NUM(GRN_OP_MOD)));
+    rb_define_const(rb_cGrnOperator, "DELETE",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("delete"),
+                               UINT2NUM(GRN_OP_DELETE)));
+    rb_define_const(rb_cGrnOperator, "INCREMENT",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("increment"),
+                               UINT2NUM(GRN_OP_INCR)));
+    rb_define_const(rb_cGrnOperator, "DECREMENT",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("decrement"),
+                               UINT2NUM(GRN_OP_DECR)));
+    rb_define_const(rb_cGrnOperator, "INCREMENT_POST",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("increment-post"),
+                               UINT2NUM(GRN_OP_INCR_POST)));
+    rb_define_const(rb_cGrnOperator, "DECREMENT_POST",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("decrement-post"),
+                               UINT2NUM(GRN_OP_DECR_POST)));
+    rb_define_const(rb_cGrnOperator, "NOT",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("not"),
+                               UINT2NUM(GRN_OP_NOT)));
+    rb_define_const(rb_cGrnOperator, "ADJUST",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("adjust"),
+                               UINT2NUM(GRN_OP_ADJUST)));
+    rb_define_const(rb_cGrnOperator, "EXACT",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("exact"),
+                               UINT2NUM(GRN_OP_EXACT)));
+    rb_define_const(rb_cGrnOperator, "LONGEST_COMMON_PREFIX",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("longest-common-prefix"),
+                               UINT2NUM(GRN_OP_LCP)));
+    rb_define_const(rb_cGrnOperator, "PARTIAL",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("partial"),
+                               UINT2NUM(GRN_OP_PARTIAL)));
+    rb_define_const(rb_cGrnOperator, "UNSPLIT",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("unsplit"),
+                               UINT2NUM(GRN_OP_UNSPLIT)));
+    rb_define_const(rb_cGrnOperator, "PREFIX",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("prefix"),
+                               UINT2NUM(GRN_OP_PREFIX)));
+    rb_define_const(rb_cGrnOperator, "SUFFIX",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("suffix"),
+                               UINT2NUM(GRN_OP_SUFFIX)));
+    rb_define_const(rb_cGrnOperator, "GEO_DISTANCE1",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("geo-distance1"),
+                               UINT2NUM(GRN_OP_GEO_DISTANCE1)));
+    rb_define_const(rb_cGrnOperator, "GEO_DISTANCE2",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("geo-distance2"),
+                               UINT2NUM(GRN_OP_GEO_DISTANCE2)));
+    rb_define_const(rb_cGrnOperator, "GEO_DISTANCE3",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("geo-distance3"),
+                               UINT2NUM(GRN_OP_GEO_DISTANCE3)));
+    rb_define_const(rb_cGrnOperator, "GEO_DISTANCE4",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("geo-distance4"),
+                               UINT2NUM(GRN_OP_GEO_DISTANCE4)));
+    rb_define_const(rb_cGrnOperator, "GEO_WITHINP5",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("geo-withinp5"),
+                               UINT2NUM(GRN_OP_GEO_WITHINP5)));
+    rb_define_const(rb_cGrnOperator, "GEO_WITHINP6",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("geo-withinp6"),
+                               UINT2NUM(GRN_OP_GEO_WITHINP6)));
+    rb_define_const(rb_cGrnOperator, "GEO_WITHINP8",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("geo-withinp8"),
+                               UINT2NUM(GRN_OP_GEO_WITHINP8)));
+    rb_define_const(rb_cGrnOperator, "OBJECT_SEARCH",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("object-search"),
+                               UINT2NUM(GRN_OP_OBJ_SEARCH)));
+    rb_define_const(rb_cGrnOperator, "EXPRESSION_GET_VARIABLE",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("expression-get-variable"),
+                               UINT2NUM(GRN_OP_EXPR_GET_VAR)));
+    rb_define_const(rb_cGrnOperator, "TABLE_CREATE",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("table-create"),
+                               UINT2NUM(GRN_OP_TABLE_CREATE)));
+    rb_define_const(rb_cGrnOperator, "TABLE_SELECT",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("table-select"),
+                               UINT2NUM(GRN_OP_TABLE_SELECT)));
+    rb_define_const(rb_cGrnOperator, "TABLE_SORT",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("table-sort"),
+                               UINT2NUM(GRN_OP_TABLE_SORT)));
+    rb_define_const(rb_cGrnOperator, "TABLE_GROUP",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("table-group"),
+                               UINT2NUM(GRN_OP_TABLE_GROUP)));
+    rb_define_const(rb_cGrnOperator, "JSON_PUT",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("json-put"),
+                               UINT2NUM(GRN_OP_JSON_PUT)));
+    rb_define_const(rb_cGrnOperator, "REGEXP",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("regexp"),
+                               UINT2NUM(GRN_OP_REGEXP)));
 
 
 /*
-    rb_define_const(rb_mGrnOperator, "GEO_DISTANCE1",
-                    UINT2NUM(GRN_OP_GEO_DISTANCE1));
-    rb_define_const(rb_mGrnOperator, "GEO_DISTANCE2",
-                    UINT2NUM(GRN_OP_GEO_DISTANCE2));
-    rb_define_const(rb_mGrnOperator, "GEO_DISTANCE3",
-                    UINT2NUM(GRN_OP_GEO_DISTANCE3));
-    rb_define_const(rb_mGrnOperator, "GEO_DISTANCE4",
-                    UINT2NUM(GRN_OP_GEO_DISTANCE4));
-    rb_define_const(rb_mGrnOperator, "GEO_WITHINP5",
-                    UINT2NUM(GRN_OP_GEO_WITHINP5));
-    rb_define_const(rb_mGrnOperator, "GEO_WITHINP6",
-                    UINT2NUM(GRN_OP_GEO_WITHINP6));
-    rb_define_const(rb_mGrnOperator, "GEO_WITHINP8",
-                    UINT2NUM(GRN_OP_GEO_WITHINP8));
+    rb_define_const(rb_cGrnOperator, "GEO_DISTANCE1",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("geo-distance1"),
+                               UINT2NUM(GRN_OP_GEO_DISTANCE1)));
+    rb_define_const(rb_cGrnOperator, "GEO_DISTANCE2",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("geo-distance2"),
+                               UINT2NUM(GRN_OP_GEO_DISTANCE2)));
+    rb_define_const(rb_cGrnOperator, "GEO_DISTANCE3",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("geo-distance3"),
+                               UINT2NUM(GRN_OP_GEO_DISTANCE3)));
+    rb_define_const(rb_cGrnOperator, "GEO_DISTANCE4",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("geo-distance4"),
+                               UINT2NUM(GRN_OP_GEO_DISTANCE4)));
+    rb_define_const(rb_cGrnOperator, "GEO_WITHINP5",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("geo-withinp5"),
+                               UINT2NUM(GRN_OP_GEO_WITHINP5)));
+    rb_define_const(rb_cGrnOperator, "GEO_WITHINP6",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("geo-withinp6"),
+                               UINT2NUM(GRN_OP_GEO_WITHINP6)));
+    rb_define_const(rb_cGrnOperator, "GEO_WITHINP8",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("geo-withinp8"),
+                               UINT2NUM(GRN_OP_GEO_WITHINP8)));
 */
 }
