@@ -49,15 +49,15 @@ rb_grn_context_from_ruby_object (VALUE object)
     RbGrnContext *rb_grn_context;
 
     if (!RVAL2CBOOL(rb_obj_is_kind_of(object, cGrnContext))) {
-        rb_raise(rb_eTypeError, "not a groonga context");
+        rb_raise(rb_eTypeError, "not a Groonga context");
     }
 
     Data_Get_Struct(object, RbGrnContext, rb_grn_context);
     if (!rb_grn_context)
-        rb_raise(rb_eGrnError, "groonga context is NULL");
+        rb_raise(rb_eGrnError, "Groonga context is NULL");
     if (!rb_grn_context->context)
         rb_raise(rb_eGrnClosed,
-                 "can't access already closed groonga context");
+                 "can't access already closed Groonga context");
     return rb_grn_context->context;
 }
 
