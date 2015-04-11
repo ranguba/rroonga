@@ -229,16 +229,16 @@ class ExpressionTest < Test::Unit::TestCase
 
   class AppendOperatorTest < self
     class PlusTest < self
-    setup
-    def setup_expression
-      @expression = Groonga::Expression.new
-      @expression.append_constant(29)
-      @expression.append_constant(92)
-    end
+      setup
+      def setup_expression
+        @expression = Groonga::Expression.new
+        @expression.append_constant(29)
+        @expression.append_constant(92)
+      end
 
-    def test_constant
-      @expression.append_operation(Groonga::Operator::PLUS, 2)
-      assert_equal(<<-INSPECTED.chomp, @expression.inspect)
+      def test_constant
+        @expression.append_operation(Groonga::Operator::PLUS, 2)
+        assert_equal(<<-INSPECTED.chomp, @expression.inspect)
 #<Groonga::Expression
   vars:{
   },
@@ -247,12 +247,12 @@ class ExpressionTest < Test::Unit::TestCase
     1:<push n_args:1, flags:0, modify:0, value:92>,
     2:<plus n_args:2, flags:0, modify:0, value:(NULL)>
   }>
-      INSPECTED
-    end
+        INSPECTED
+      end
 
-    def test_name
-      @expression.append_operation("plus", 2)
-      assert_equal(<<-INSPECTED.chomp, @expression.inspect)
+      def test_name
+        @expression.append_operation("plus", 2)
+        assert_equal(<<-INSPECTED.chomp, @expression.inspect)
 #<Groonga::Expression
   vars:{
   },
@@ -261,8 +261,8 @@ class ExpressionTest < Test::Unit::TestCase
     1:<push n_args:1, flags:0, modify:0, value:92>,
     2:<plus n_args:2, flags:0, modify:0, value:(NULL)>
   }>
-      INSPECTED
-    end
+        INSPECTED
+      end
     end
   end
 
