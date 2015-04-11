@@ -424,11 +424,11 @@ rb_grn_patricia_trie_scan (VALUE self, VALUE rb_string)
             term = rb_grn_context_rb_string_new(context,
                                                 string + hits[i].offset,
                                                 hits[i].length);
-            matched_info = rb_ary_new3(4,
-                                       record,
-                                       term,
-                                       UINT2NUM(hits[i].offset),
-                                       UINT2NUM(hits[i].length));
+            matched_info = rb_ary_new_from_args(4,
+                                                record,
+                                                term,
+                                                UINT2NUM(hits[i].offset),
+                                                UINT2NUM(hits[i].length));
             if (block_given) {
                 rb_yield(matched_info);
             } else {

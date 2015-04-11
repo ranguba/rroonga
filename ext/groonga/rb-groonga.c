@@ -84,10 +84,10 @@ rb_grn_init_version (VALUE mGrn)
 
     rb_grn_init_runtime_version(mGrn);
 
-    build_version = rb_ary_new3(3,
-                                INT2NUM(GRN_MAJOR_VERSION),
-                                INT2NUM(GRN_MINOR_VERSION),
-                                INT2NUM(GRN_MICRO_VERSION));
+    build_version = rb_ary_new_from_args(3,
+                                         INT2NUM(GRN_MAJOR_VERSION),
+                                         INT2NUM(GRN_MINOR_VERSION),
+                                         INT2NUM(GRN_MICRO_VERSION));
     rb_obj_freeze(build_version);
     /*
      * ビルドしたgroongaのバージョン。 @[メジャーバージョン,
@@ -95,10 +95,10 @@ rb_grn_init_version (VALUE mGrn)
      */
     rb_define_const(mGrn, "BUILD_VERSION", build_version);
 
-    bindings_version = rb_ary_new3(3,
-                                   INT2NUM(RB_GRN_MAJOR_VERSION),
-                                   INT2NUM(RB_GRN_MINOR_VERSION),
-                                   INT2NUM(RB_GRN_MICRO_VERSION));
+    bindings_version = rb_ary_new_from_args(3,
+                                            INT2NUM(RB_GRN_MAJOR_VERSION),
+                                            INT2NUM(RB_GRN_MINOR_VERSION),
+                                            INT2NUM(RB_GRN_MICRO_VERSION));
     rb_obj_freeze(bindings_version);
     /*
      * rroongaのバージョン。 @[メジャーバージョン, マ

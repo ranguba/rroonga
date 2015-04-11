@@ -328,9 +328,12 @@ rb_grn_table_define_column (int argc, VALUE *argv, VALUE self)
     column = grn_column_create(context, table, name, name_size,
                                path, flags, value_type);
     if (context->rc) {
-        rb_grn_context_check(context,
-                             rb_ary_new3(2, self,
-                                         rb_ary_new_from_values(argc, argv)));
+        VALUE rb_related_object;
+        rb_related_object =
+            rb_ary_new_from_args(2,
+                                 self,
+                                 rb_ary_new_from_values(argc, argv));
+        rb_grn_context_check(context, rb_related_object);
     }
 
     rb_column = GRNCOLUMN2RVAL(Qnil, context, column, GRN_TRUE);
@@ -452,8 +455,10 @@ rb_grn_table_define_index_column (int argc, VALUE *argv, VALUE self)
     column = grn_column_create(context, table, name, name_size,
                                path, flags, value_type);
     if (context->rc) {
-        rb_grn_context_check(context,
-                             rb_ary_new3(2, self, rb_ary_new_from_values(argc, argv)));
+        VALUE rb_related_object;
+        rb_related_object =
+            rb_ary_new_from_args(2, self, rb_ary_new_from_values(argc, argv));
+        rb_grn_context_check(context, rb_related_object);
     }
 
     rb_column = GRNCOLUMN2RVAL(Qnil, context, column, GRN_TRUE);
@@ -1585,10 +1590,14 @@ rb_grn_table_get_value_convenience (int argc, VALUE *argv, VALUE self)
                             "id", &rb_option_id,
                             NULL);
         if (!(NIL_P(rb_option_id) || RVAL2CBOOL(rb_option_id))) {
+            VALUE rb_related_object;
+            rb_related_object =
+                rb_ary_new_from_args(2,
+                                     self,
+                                     rb_ary_new_from_values(argc, argv));
             rb_raise(rb_eArgError, ":id options must be true or nil: %s: %s",
                      rb_grn_inspect(rb_option_id),
-                     rb_grn_inspect(rb_ary_new3(2,
-                                                self, rb_ary_new_from_values(argc, argv))));
+                     rb_grn_inspect(rb_related_object));
         }
     }
 
@@ -1643,10 +1652,14 @@ rb_grn_table_set_value_convenience (int argc, VALUE *argv, VALUE self)
                             "id", &rb_option_id,
                             NULL);
         if (!(NIL_P(rb_option_id) || RVAL2CBOOL(rb_option_id))) {
+            VALUE rb_related_object;
+            rb_related_object =
+                rb_ary_new_from_args(2,
+                                     self,
+                                     rb_ary_new_from_values(argc, argv));
             rb_raise(rb_eArgError, ":id options must be true or nil: %s: %s",
                      rb_grn_inspect(rb_option_id),
-                     rb_grn_inspect(rb_ary_new3(2,
-                                                self, rb_ary_new_from_values(argc, argv))));
+                     rb_grn_inspect(rb_related_object));
         }
     }
 
@@ -1694,11 +1707,14 @@ rb_grn_table_get_column_value_convenience (int argc, VALUE *argv, VALUE self)
                             "id", &rb_option_id,
                             NULL);
         if (!(NIL_P(rb_option_id) || RVAL2CBOOL(rb_option_id))) {
+            VALUE rb_related_object;
+            rb_related_object =
+                rb_ary_new_from_args(2,
+                                     self,
+                                     rb_ary_new_from_values(argc, argv));
             rb_raise(rb_eArgError, ":id options must be true or nil: %s: %s",
                      rb_grn_inspect(rb_option_id),
-                     rb_grn_inspect(rb_ary_new3(2,
-                                                self,
-                                                rb_ary_new_from_values(argc, argv))));
+                     rb_grn_inspect(rb_related_object));
         }
     }
 
@@ -1895,11 +1911,14 @@ rb_grn_table_set_column_value_convenience (int argc, VALUE *argv, VALUE self)
                             "id", &rb_option_id,
                             NULL);
         if (!(NIL_P(rb_option_id) || RVAL2CBOOL(rb_option_id))) {
+            VALUE rb_related_object;
+            rb_related_object =
+                rb_ary_new_from_args(2,
+                                     self,
+                                     rb_ary_new_from_values(argc, argv));
             rb_raise(rb_eArgError, ":id options must be true or nil: %s: %s",
                      rb_grn_inspect(rb_option_id),
-                     rb_grn_inspect(rb_ary_new3(2,
-                                                self,
-                                                rb_ary_new_from_values(argc, argv))));
+                     rb_grn_inspect(rb_related_object));
         }
     }
 

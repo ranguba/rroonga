@@ -49,6 +49,10 @@
 #  define rb_to_symbol(rb_string) (rb_str_intern(rb_string))
 #endif
 
+#ifndef HAVE_RB_ARY_NEW_FROM_ARGS
+#  define rb_ary_new_from_args(n, ...) rb_ary_new3((n), __VA_ARGS__)
+#endif
+
 #ifndef HAVE_RB_ARY_NEW_FROM_VALUES
 #  define rb_ary_new_from_values(n, values) rb_ary_new4((n), (values))
 #endif

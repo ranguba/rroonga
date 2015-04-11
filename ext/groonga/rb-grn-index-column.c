@@ -709,7 +709,7 @@ static VALUE
 rb_grn_index_column_set_source (VALUE self, VALUE rb_source)
 {
     if (!RVAL2CBOOL(rb_obj_is_kind_of(rb_source, rb_cArray)))
-        rb_source = rb_ary_new3(1, rb_source);
+        rb_source = rb_ary_new_from_args(1, rb_source);
 
     return rb_grn_index_column_set_sources(self, rb_source);
 }

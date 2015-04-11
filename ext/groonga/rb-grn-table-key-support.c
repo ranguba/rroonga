@@ -525,7 +525,9 @@ rb_grn_table_key_support_array_set (VALUE self, VALUE rb_key, VALUE rb_values)
     if (id == GRN_ID_NIL) {
         rb_raise(rb_eGrnError,
                  "failed to add record: %s",
-                 rb_grn_inspect(rb_ary_new3(3, self, rb_key, rb_values)));
+                 rb_grn_inspect(rb_ary_new_from_args(3,
+                                                     self,
+                                                     rb_key, rb_values)));
     }
 
     data.self = self;
@@ -568,9 +570,11 @@ rb_grn_table_key_support_set_column_value (int argc, VALUE *argv, VALUE self)
     if (id == GRN_ID_NIL) {
         rb_raise(rb_eGrnError,
                  "failed to add record: %s",
-                 rb_grn_inspect(rb_ary_new3(4,
-                                            self, rb_key,
-                                            rb_name, rb_value)));
+                 rb_grn_inspect(rb_ary_new_from_args(4,
+                                                     self,
+                                                     rb_key,
+                                                     rb_name,
+                                                     rb_value)));
     }
 
     return rb_grn_table_set_column_value_raw(self, id, rb_name, rb_value);

@@ -817,7 +817,7 @@ rb_grn_context_receive (VALUE self)
     }
     rb_grn_context_check(context, self);
 
-    return rb_ary_new3(2, UINT2NUM(query_id), rb_result);
+    return rb_ary_new_from_args(2, UINT2NUM(query_id), rb_result);
 }
 
 static const char *
