@@ -228,6 +228,7 @@ class ExpressionTest < Test::Unit::TestCase
   end
 
   class AppendOperatorTest < self
+    class PlusTest < self
     setup
     def setup_expression
       @expression = Groonga::Expression.new
@@ -261,6 +262,7 @@ class ExpressionTest < Test::Unit::TestCase
     2:<plus n_args:2, flags:0, modify:0, value:(NULL)>
   }>
       INSPECTED
+    end
     end
   end
 
