@@ -10,9 +10,9 @@ rvm:
   - ruby-head
 # env:
 #   - GROONGA_MASTER=yes
-# matrix:
-#   allow_failures:
-#     - rvm: 2.1.0
+matrix:
+  allow_failures:
+    - rvm: ruby-head
 before_install:
   - curl --silent --location https://github.com/groonga/groonga/raw/master/data/travis/setup.sh | sh
   - |
