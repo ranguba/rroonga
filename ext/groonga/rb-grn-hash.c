@@ -216,7 +216,7 @@ rb_grn_hash_s_create (int argc, VALUE *argv, VALUE klass)
     table = grn_table_create(context, name, name_size, path,
                              flags, key_type, value_type);
     if (!table)
-        rb_grn_context_check(context, rb_ary_new4(argc, argv));
+        rb_grn_context_check(context, rb_ary_new_from_values(argc, argv));
     rb_table = GRNOBJECT2RVAL(klass, context, table, GRN_TRUE);
 
     if (!NIL_P(rb_default_tokenizer))

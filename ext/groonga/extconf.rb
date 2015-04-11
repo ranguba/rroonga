@@ -282,6 +282,7 @@ have_header("ruby/st.h") unless have_macro("HAVE_RUBY_ST_H", "ruby.h")
 have_func("rb_errinfo", "ruby.h")
 have_func("rb_sym2str", "ruby.h")
 have_func("rb_to_symbol", "ruby.h")
+have_func("rb_ary_new_from_values", "ruby.h")
 have_type("enum ruby_value_type", "ruby.h")
 
 # TODO: Remove me when Groonga 5.0.1 is released.

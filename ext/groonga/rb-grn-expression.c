@@ -475,7 +475,7 @@ rb_grn_expression_parse (int argc, VALUE *argv, VALUE self)
     if (rc != GRN_SUCCESS) {
         VALUE related_object;
 
-        related_object = rb_ary_new3(2, self, rb_ary_new4(argc, argv));
+        related_object = rb_ary_new3(2, self, rb_ary_new_from_values(argc, argv));
         exception = rb_grn_context_to_exception(context, related_object);
     }
     if (default_column_is_created)
@@ -740,7 +740,7 @@ rb_grn_expression_snippet (int argc, VALUE *argv, VALUE self)
                             (const char **)open_tags, open_tag_lengths,
                             (const char **)close_tags, close_tag_lengths,
                             mapping);
-    related_object = rb_ary_new3(2, self, rb_ary_new4(argc, argv));
+    related_object = rb_ary_new3(2, self, rb_ary_new_from_values(argc, argv));
     rb_grn_context_check(context, related_object);
 
     return GRNOBJECT2RVAL(Qnil, context, snippet, GRN_TRUE);

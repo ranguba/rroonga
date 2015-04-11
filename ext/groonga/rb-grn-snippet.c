@@ -146,7 +146,7 @@ rb_grn_snippet_initialize (int argc, VALUE *argv, VALUE self)
                             default_open_tag, default_open_tag_length,
                             default_close_tag, default_close_tag_length,
                             mapping);
-    rb_grn_context_check(context, rb_ary_new4(argc, argv));
+    rb_grn_context_check(context, rb_ary_new_from_values(argc, argv));
 
     rb_grn_object_assign(Qnil, self, rb_context, context, snippet);
     rb_grn_context_register_floating_object(DATA_PTR(self));

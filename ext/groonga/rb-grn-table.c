@@ -329,7 +329,8 @@ rb_grn_table_define_column (int argc, VALUE *argv, VALUE self)
                                path, flags, value_type);
     if (context->rc) {
         rb_grn_context_check(context,
-                             rb_ary_new3(2, self, rb_ary_new4(argc, argv)));
+                             rb_ary_new3(2, self,
+                                         rb_ary_new_from_values(argc, argv)));
     }
 
     rb_column = GRNCOLUMN2RVAL(Qnil, context, column, GRN_TRUE);
@@ -452,7 +453,7 @@ rb_grn_table_define_index_column (int argc, VALUE *argv, VALUE self)
                                path, flags, value_type);
     if (context->rc) {
         rb_grn_context_check(context,
-                             rb_ary_new3(2, self, rb_ary_new4(argc, argv)));
+                             rb_ary_new3(2, self, rb_ary_new_from_values(argc, argv)));
     }
 
     rb_column = GRNCOLUMN2RVAL(Qnil, context, column, GRN_TRUE);
@@ -1587,7 +1588,7 @@ rb_grn_table_get_value_convenience (int argc, VALUE *argv, VALUE self)
             rb_raise(rb_eArgError, ":id options must be true or nil: %s: %s",
                      rb_grn_inspect(rb_option_id),
                      rb_grn_inspect(rb_ary_new3(2,
-                                                self, rb_ary_new4(argc, argv))));
+                                                self, rb_ary_new_from_values(argc, argv))));
         }
     }
 
@@ -1645,7 +1646,7 @@ rb_grn_table_set_value_convenience (int argc, VALUE *argv, VALUE self)
             rb_raise(rb_eArgError, ":id options must be true or nil: %s: %s",
                      rb_grn_inspect(rb_option_id),
                      rb_grn_inspect(rb_ary_new3(2,
-                                                self, rb_ary_new4(argc, argv))));
+                                                self, rb_ary_new_from_values(argc, argv))));
         }
     }
 
@@ -1697,7 +1698,7 @@ rb_grn_table_get_column_value_convenience (int argc, VALUE *argv, VALUE self)
                      rb_grn_inspect(rb_option_id),
                      rb_grn_inspect(rb_ary_new3(2,
                                                 self,
-                                                rb_ary_new4(argc, argv))));
+                                                rb_ary_new_from_values(argc, argv))));
         }
     }
 
@@ -1898,7 +1899,7 @@ rb_grn_table_set_column_value_convenience (int argc, VALUE *argv, VALUE self)
                      rb_grn_inspect(rb_option_id),
                      rb_grn_inspect(rb_ary_new3(2,
                                                 self,
-                                                rb_ary_new4(argc, argv))));
+                                                rb_ary_new_from_values(argc, argv))));
         }
     }
 
@@ -2257,7 +2258,7 @@ rb_grn_table_select (int argc, VALUE *argv, VALUE self)
                      "should be [query_string, option_hash], "
                      "[expression, option_hash] "
                      "or [option_hash]: %s",
-                     rb_grn_inspect(rb_ary_new4(argc, argv)));
+                     rb_grn_inspect(rb_ary_new_from_values(argc, argv)));
         options = condition_or_options;
     }
 
@@ -2285,7 +2286,7 @@ rb_grn_table_select (int argc, VALUE *argv, VALUE self)
         if (!result) {
             rb_raise(rb_eGrnNoMemoryAvailable,
                      "failed to create result table: %s",
-                     rb_grn_inspect(rb_ary_new4(argc, argv)));
+                     rb_grn_inspect(rb_ary_new_from_values(argc, argv)));
         }
         rb_result = GRNTABLE2RVAL(context, result, GRN_TRUE);
     } else {

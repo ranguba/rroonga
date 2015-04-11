@@ -1,7 +1,7 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
   Copyright (C) 2015  Masafumi Yokoyama <yokoyama@clear-code.com>
-  Copyright (C) 2009-2014  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2015  Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -47,6 +47,10 @@
 
 #ifndef HAVE_RB_TO_SYMBOL
 #  define rb_to_symbol(rb_string) (rb_str_intern(rb_string))
+#endif
+
+#ifndef HAVE_RB_ARY_NEW_FROM_VALUES
+#  define rb_ary_new_from_values(n, values) rb_ary_new4((n), (values))
 #endif
 
 #include <groonga.h>

@@ -117,7 +117,7 @@ rb_grn_plugin_s_register (int argc, VALUE *argv, VALUE klass)
         grn_plugin_register_by_path(context, path);
     }
 
-    rb_grn_context_check(context, rb_ary_new4(argc, argv));
+    rb_grn_context_check(context, rb_ary_new_from_values(argc, argv));
     return Qnil;
 }
 
@@ -163,7 +163,7 @@ rb_grn_plugin_s_unregister (int argc, VALUE *argv, VALUE klass)
 
     grn_plugin_unregister(context, name);
 
-    rb_grn_context_check(context, rb_ary_new4(argc, argv));
+    rb_grn_context_check(context, rb_ary_new_from_values(argc, argv));
     return Qnil;
 }
 
