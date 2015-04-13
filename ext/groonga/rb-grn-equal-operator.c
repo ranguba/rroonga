@@ -23,11 +23,11 @@ VALUE rb_cGrnEqualOperator;
 /*
  * Executes an equal operation.
  *
- * @example Executes equal operation with the default context
+ * @example Executes equal operations with the default context
  *   Groonga::Operator::EQUAL.exec("hello", "hello") # => true
  *   Groonga::Operator::EQUAL.exec("hello", "Hello") # => false
  *
- * @example Executes equal operation with the specified context
+ * @example Executes equal operations with the specified context
  *   context = Groonga::Context.new
  *   Groonga::Operator::EQUAL.exec("hello", "hello",
  *                                 :context => context) # => true
