@@ -123,7 +123,7 @@ h3. Improvements
   procedure = Groonga["TokenBigram"]
   p procedure.type == Groonga::ProcedureType::TOKENIZER  #=> true
   </pre>
-* Avoided a crash when {Groonga::Record#inspct} is called on exit.
+* Avoided a crash when {Groonga::Record#inspect} is called on exit.
   [GitHub#18] [Reported by Ippei Obayashi]
 * Updated Free Software Foundation address. [Masafumi Yokoyama]
 * Supported reference weight vector. It requires Groonga 4.0.4 or later.
