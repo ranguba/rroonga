@@ -41,4 +41,25 @@ class OperatorTest < Test::Unit::TestCase
       end
     end
   end
+
+  sub_test_case "not-equal" do
+    sub_test_case "#exec" do
+      test "not equal" do
+        assert_true(Groonga::Operator::NOT_EQUAL.exec("hello",
+                                                      "Hello"))
+      end
+
+      test "equal" do
+        assert_false(Groonga::Operator::NOT_EQUAL.exec("hello",
+                                                       "hello"))
+      end
+
+      test ":context" do
+        context = Groonga::Context.new
+        assert_true(Groonga::Operator::NOT_EQUAL.exec("hello",
+                                                      "Hello",
+                                                      :context => context))
+      end
+    end
+  end
 end
