@@ -46,7 +46,7 @@ VALUE rb_cGrnNotEqualOperator;
 static VALUE
 rb_grn_not_equal_operator_exec (int argc, VALUE *argv, VALUE self)
 {
-    grn_bool equal;
+    grn_bool not_equal;
     VALUE rb_x;
     VALUE rb_y;
     VALUE rb_options;
@@ -66,11 +66,11 @@ rb_grn_not_equal_operator_exec (int argc, VALUE *argv, VALUE self)
     GRN_VOID_INIT(&y);
     RVAL2GRNBULK(rb_x, context, &x);
     RVAL2GRNBULK(rb_y, context, &y);
-    equal = grn_operator_exec_not_equal(context, &x, &y);
+    not_equal = grn_operator_exec_not_equal(context, &x, &y);
     GRN_OBJ_FIN(context, &x);
     GRN_OBJ_FIN(context, &y);
 
-    return CBOOL2RVAL(equal);
+    return CBOOL2RVAL(not_equal);
 }
 
 void
