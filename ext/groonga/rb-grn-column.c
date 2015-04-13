@@ -195,13 +195,13 @@ rb_grn_column_get_local_name (VALUE self)
  * {Groonga::Expression#snippet} を使うことにより、指定した条件
  * 用のスニペットを簡単に生成できる。
  *
- * bc. !!!ruby
+ * @example Shows texts around "Groonga"
  *   results = description_column.select do |column|
- *     column =~ "groonga"
+ *     column =~ "Groonga"
  *   end
  *   snippet = results.expression.snippet([["<em>", "</em>"]])
  *   results.each do |record|
- *     puts "#{record['name']}の説明文の中で「groonga」が含まれる部分"
+ *     puts "#{record['name']}の説明文の中で「Groonga」を含む部分"
  *     snippet.execute(record["description"]).each do |snippet|
  *       puts "---"
  *       puts "#{snippet}..."
@@ -209,15 +209,12 @@ rb_grn_column_get_local_name (VALUE self)
  *     end
  *   end
  *
- * 出力例
- *
- * <pre>
- * !!!text
- * rroongaの説明文の中で「groonga」が含まれる部分
- * ---
- * rroongaは<em>groonga</em>のいわゆるDB-APIの層の...
- * ---
- * </pre>
+ *   # Sample output:
+ *   #
+ *   # Rroongaの説明文の中で「Groonga」を含む部分
+ *   # ---
+ *   # Rroongaは<em>Groonga</em>のいわゆるDB-APIの層の...
+ *   # ---
  *
  * @return [Groonga::Hash] 検索結果
  * @overload select(options)
