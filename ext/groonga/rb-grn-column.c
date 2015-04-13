@@ -1,7 +1,7 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /* vim: set sts=4 sw=4 ts=8 noet: */
 /*
-  Copyright (C) 2009-2014  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2015  Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -504,35 +504,23 @@ rb_grn_column_lock (int argc, VALUE *argv, VALUE self)
 }
 
 /*
- * _column_ のロックを強制的に解除する。
+ * Force to clear lock of `column`.
+ *
  * @overload clear_lock(options={})
- *   @param [::Hash] options 利用可能なオプションは以下の通り。
- *   @option options :id
- *     _:id_で指定したレコードのロックを強制的に解除する。
- *     （注: groonga側が未実装のため、現在は無視される。実装さ
- *     れるのではないかと思っているが、実装されないかもしれな
- *     い。）
+ *   @param [::Hash] options No available options.
  */
 static VALUE
 rb_grn_column_clear_lock (int argc, VALUE *argv, VALUE self)
 {
-    grn_id id = GRN_ID_NIL;
     grn_ctx *context;
     grn_obj *column;
-    VALUE options, rb_id;
+    VALUE options;
 
     rb_scan_args(argc, argv, "01",  &options);
 
     rb_grn_column_deconstruct(SELF(self), &column, &context,
                              NULL, NULL,
                              NULL, NULL, NULL);
-
-    rb_grn_scan_options(options,
-                        "id", &rb_id,
-                        NULL);
-
-    if (!NIL_P(rb_id))
-        id = NUM2UINT(rb_id);
 
     grn_obj_clear_lock(context, column);
 
@@ -540,35 +528,23 @@ rb_grn_column_clear_lock (int argc, VALUE *argv, VALUE self)
 }
 
 /*
- * _column_ がロックされていれば +true+ を返す。
+ * Check whether `column` is locked or not.
+ *
  * @overload locked?(options={})
- *   @param [::Hash] options 利用可能なオプションは以下の通り。
- *   @option options :id
- *     _:id_で指定したレコードがロックされていれば +true+ を返す。
- *     （注: groonga側が未実装のため、現在は無視される。実装さ
- *     れるのではないかと思っているが、実装されないかもしれな
- *     い。）
+ *   @param [::Hash] options No available options.
  */
 static VALUE
 rb_grn_column_is_locked (int argc, VALUE *argv, VALUE self)
 {
-    grn_id id = GRN_ID_NIL;
     grn_ctx *context;
     grn_obj *column;
-    VALUE options, rb_id;
+    VALUE options;
 
     rb_scan_args(argc, argv, "01",  &options);
 
     rb_grn_column_deconstruct(SELF(self), &column, &context,
                              NULL, NULL,
                              NULL, NULL, NULL);
-
-    rb_grn_scan_options(options,
-                        "id", &rb_id,
-                        NULL);
-
-    if (!NIL_P(rb_id))
-        id = NUM2UINT(rb_id);
 
     return CBOOL2RVAL(grn_obj_is_locked(context, column));
 }
