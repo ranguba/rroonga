@@ -98,4 +98,26 @@ class OperatorTest < Test::Unit::TestCase
       end
     end
   end
+
+  sub_test_case "less-equal" do
+    sub_test_case "#exec" do
+      test "equal" do
+        assert_true(Groonga::Operator::LESS_EQUAL.exec(1, 1))
+      end
+
+      test "less" do
+        assert_true(Groonga::Operator::LESS_EQUAL.exec(1, 2))
+      end
+
+      test "greater" do
+        assert_false(Groonga::Operator::LESS_EQUAL.exec(2, 1))
+      end
+
+      test ":context" do
+        context = Groonga::Context.new
+        assert_true(Groonga::Operator::LESS_EQUAL.exec(1, 2,
+                                                       :context => context))
+      end
+    end
+  end
 end
