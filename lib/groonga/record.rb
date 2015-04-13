@@ -366,18 +366,20 @@ module Groonga
       @table.unlock(options.merge(:id => @id))
     end
 
-    # レコードが所属するテーブルのロックを強制的に解除する。
+    # Forces to clear lock of the table to which the record belongs.
     #
-    # 利用可能なオプションは現在は無い。
-    def clear_lock(options={})
-      @table.clear_lock(options.merge(:id => @id))
+    # @return [void]
+    def clear_lock
+      @table.clear_lock
     end
 
-    # レコードが所属するテーブルがロックされていれば +true+ を返す。
+    # Checks whether the table to which the record belongs is locked
+    # or not.
     #
-    # 利用可能なオプションは現在は無い。
-    def locked?(options={})
-      @table.locked?(options.merge(:id => @id))
+    # @return [Boolean] `true` if the table to which the record
+    #   belongs is locked, `false` otherwise.
+    def locked?
+      @table.locked?
     end
 
     # レコードが持つIDが有効なIDであれば +true+ を返す。

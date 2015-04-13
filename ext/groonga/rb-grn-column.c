@@ -504,19 +504,16 @@ rb_grn_column_lock (int argc, VALUE *argv, VALUE self)
 }
 
 /*
- * Force to clear lock of `column`.
+ * Forces to clear lock of the `column`.
  *
- * @overload clear_lock(options={})
- *   @param [::Hash] options No available options.
+ * @overload clear_lock
+ *   @return [void]
  */
 static VALUE
-rb_grn_column_clear_lock (int argc, VALUE *argv, VALUE self)
+rb_grn_column_clear_lock (VALUE self)
 {
     grn_ctx *context;
     grn_obj *column;
-    VALUE options;
-
-    rb_scan_args(argc, argv, "01",  &options);
 
     rb_grn_column_deconstruct(SELF(self), &column, &context,
                              NULL, NULL,
@@ -528,19 +525,16 @@ rb_grn_column_clear_lock (int argc, VALUE *argv, VALUE self)
 }
 
 /*
- * Check whether `column` is locked or not.
+ * Checks whether the `column` is locked or not.
  *
- * @overload locked?(options={})
- *   @param [::Hash] options No available options.
+ * @overload locked?
+ *   @return [Boolean] `true` if the `column` is locked, `false` otherwise.
  */
 static VALUE
-rb_grn_column_is_locked (int argc, VALUE *argv, VALUE self)
+rb_grn_column_is_locked (VALUE self)
 {
     grn_ctx *context;
     grn_obj *column;
-    VALUE options;
-
-    rb_scan_args(argc, argv, "01",  &options);
 
     rb_grn_column_deconstruct(SELF(self), &column, &context,
                              NULL, NULL,
@@ -804,8 +798,8 @@ rb_grn_init_column (VALUE mGrn)
     rb_define_method(rb_cGrnColumn, "select", rb_grn_column_select, -1);
     rb_define_method(rb_cGrnColumn, "lock", rb_grn_column_lock, -1);
     rb_define_method(rb_cGrnColumn, "unlock", rb_grn_column_unlock, -1);
-    rb_define_method(rb_cGrnColumn, "clear_lock", rb_grn_column_clear_lock, -1);
-    rb_define_method(rb_cGrnColumn, "locked?", rb_grn_column_is_locked, -1);
+    rb_define_method(rb_cGrnColumn, "clear_lock", rb_grn_column_clear_lock, 0);
+    rb_define_method(rb_cGrnColumn, "locked?", rb_grn_column_is_locked, 0);
     rb_define_method(rb_cGrnColumn, "reference?", rb_grn_column_reference_p, 0);
     rb_define_method(rb_cGrnColumn, "truncate", rb_grn_column_truncate, 0);
     /* deprecated: backward compatibility */

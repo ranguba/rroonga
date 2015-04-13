@@ -2039,19 +2039,16 @@ rb_grn_table_lock (int argc, VALUE *argv, VALUE self)
 }
 
 /*
- * Force to clear lock of `table`.
+ * Forces to clear lock of the `table`.
  *
- * @overload clear_lock(options={})
- *   @param [::Hash] options No available options.
+ * @overload clear_lock
+ *   @return [void]
  */
 static VALUE
-rb_grn_table_clear_lock (int argc, VALUE *argv, VALUE self)
+rb_grn_table_clear_lock (VALUE self)
 {
     grn_ctx *context;
     grn_obj *table;
-    VALUE options;
-
-    rb_scan_args(argc, argv, "01",  &options);
 
     rb_grn_table_deconstruct(SELF(self), &table, &context,
                              NULL, NULL,
@@ -2064,19 +2061,16 @@ rb_grn_table_clear_lock (int argc, VALUE *argv, VALUE self)
 }
 
 /*
- * Check whether `table` is locked or not.
+ * Checks whether the `table` is locked or not.
  *
- * @overload locked?(options={})
- *   @param [options] options No available options.
+ * @overload locked?
+ *   @return [Boolean] `true` if the `table` is locked, `false` otherwise.
  */
 static VALUE
-rb_grn_table_is_locked (int argc, VALUE *argv, VALUE self)
+rb_grn_table_is_locked (VALUE self)
 {
     grn_ctx *context;
     grn_obj *table;
-    VALUE options;
-
-    rb_scan_args(argc, argv, "01",  &options);
 
     rb_grn_table_deconstruct(SELF(self), &table, &context,
                              NULL, NULL,
@@ -2623,8 +2617,8 @@ rb_grn_init_table (VALUE mGrn)
 
     rb_define_method(rb_cGrnTable, "lock", rb_grn_table_lock, -1);
     rb_define_method(rb_cGrnTable, "unlock", rb_grn_table_unlock, -1);
-    rb_define_method(rb_cGrnTable, "clear_lock", rb_grn_table_clear_lock, -1);
-    rb_define_method(rb_cGrnTable, "locked?", rb_grn_table_is_locked, -1);
+    rb_define_method(rb_cGrnTable, "clear_lock", rb_grn_table_clear_lock, 0);
+    rb_define_method(rb_cGrnTable, "locked?", rb_grn_table_is_locked, 0);
 
     rb_define_method(rb_cGrnTable, "select", rb_grn_table_select, -1);
 
