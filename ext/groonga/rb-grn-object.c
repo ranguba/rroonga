@@ -538,17 +538,15 @@ rb_grn_named_object_set_name (RbGrnNamedObject *rb_grn_named_object,
         rb_grn_named_object->name = NULL;
     }
     if (name_size > 0) {
-        RbGrnObject *rb_grn_object;
         rb_grn_named_object->name = ALLOC_N(char, name_size + 1);
         memcpy(rb_grn_named_object->name, name, name_size);
         rb_grn_named_object->name[name_size] = '\0';
-        rb_grn_object = RB_GRN_OBJECT(rb_grn_named_object);
         debug("set-name: %p:%p:%p %s(%#x): <%.*s>\n",
-              rb_grn_object->context,
-              rb_grn_object->object,
+              RB_GRN_OBJECT(rb_grn_named_object)->context,
+              RB_GRN_OBJECT(rb_grn_named_object)->object,
               rb_grn_named_object,
-              rb_grn_inspect_type(rb_grn_object->object->header.type),
-              rb_grn_object->object->header.type,
+              rb_grn_inspect_type(RB_GRN_OBJECT(rb_grn_named_object)->header.type),
+              RB_GRN_OBJECT(rb_grn_named_object)->object->header.type,
               name_size, name);
     }
     rb_grn_named_object->name_size = name_size;
