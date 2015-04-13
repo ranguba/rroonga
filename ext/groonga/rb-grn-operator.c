@@ -303,6 +303,7 @@ rb_grn_init_operator (VALUE mGrn)
 
     rb_grn_init_equal_operator(mGrn);
     rb_grn_init_not_equal_operator(mGrn);
+    rb_grn_init_less_operator(mGrn);
 
     rb_define_const(rb_cGrnOperator, "PUSH",
                     rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
@@ -434,7 +435,7 @@ rb_grn_init_operator (VALUE mGrn)
                                rb_str_new_cstr("not-equal"),
                                UINT2NUM(GRN_OP_NOT_EQUAL)));
     rb_define_const(rb_cGrnOperator, "LESS",
-                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                    rb_funcall(rb_cGrnLessOperator, rb_intern("new"), 2,
                                rb_str_new_cstr("less"),
                                UINT2NUM(GRN_OP_LESS)));
     rb_define_const(rb_cGrnOperator, "GREATER",
