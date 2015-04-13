@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # Copyright (C) 2015  Masafumi Yokoyama <yokoyama@clear-code.com>
+# Copyright (C) 2015  Kouhei Sutou  <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -20,4 +21,24 @@ class OperatorTest < Test::Unit::TestCase
 
   setup :setup_database
 
+  sub_test_case "equal" do
+    sub_test_case "#exec" do
+      test "equal" do
+        assert_true(Groonga::Operator::EQUAL.exec("hello",
+                                                  "hello"))
+      end
+
+      test "not equal" do
+        assert_false(Groonga::Operator::EQUAL.exec("hello",
+                                                   "Hello"))
+      end
+
+      test ":context" do
+        context = Groonga::Context.new
+        assert_true(Groonga::Operator::EQUAL.exec("hello",
+                                                  "hello",
+                                                  :context => context))
+      end
+    end
+  end
 end
