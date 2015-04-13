@@ -531,7 +531,7 @@ rb_grn_column_clear_lock (VALUE self)
  *   @return [Boolean] `true` if the `column` is locked, `false` otherwise.
  */
 static VALUE
-rb_grn_column_is_locked (VALUE self)
+rb_grn_column_locked_p (VALUE self)
 {
     grn_ctx *context;
     grn_obj *column;
@@ -799,7 +799,7 @@ rb_grn_init_column (VALUE mGrn)
     rb_define_method(rb_cGrnColumn, "lock", rb_grn_column_lock, -1);
     rb_define_method(rb_cGrnColumn, "unlock", rb_grn_column_unlock, -1);
     rb_define_method(rb_cGrnColumn, "clear_lock", rb_grn_column_clear_lock, 0);
-    rb_define_method(rb_cGrnColumn, "locked?", rb_grn_column_is_locked, 0);
+    rb_define_method(rb_cGrnColumn, "locked?", rb_grn_column_locked_p, 0);
     rb_define_method(rb_cGrnColumn, "reference?", rb_grn_column_reference_p, 0);
     rb_define_method(rb_cGrnColumn, "truncate", rb_grn_column_truncate, 0);
     /* deprecated: backward compatibility */

@@ -2067,7 +2067,7 @@ rb_grn_table_clear_lock (VALUE self)
  *   @return [Boolean] `true` if the `table` is locked, `false` otherwise.
  */
 static VALUE
-rb_grn_table_is_locked (VALUE self)
+rb_grn_table_locked_p (VALUE self)
 {
     grn_ctx *context;
     grn_obj *table;
@@ -2618,7 +2618,7 @@ rb_grn_init_table (VALUE mGrn)
     rb_define_method(rb_cGrnTable, "lock", rb_grn_table_lock, -1);
     rb_define_method(rb_cGrnTable, "unlock", rb_grn_table_unlock, -1);
     rb_define_method(rb_cGrnTable, "clear_lock", rb_grn_table_clear_lock, 0);
-    rb_define_method(rb_cGrnTable, "locked?", rb_grn_table_is_locked, 0);
+    rb_define_method(rb_cGrnTable, "locked?", rb_grn_table_locked_p, 0);
 
     rb_define_method(rb_cGrnTable, "select", rb_grn_table_select, -1);
 
