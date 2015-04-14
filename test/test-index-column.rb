@@ -503,44 +503,44 @@ class IndexColumnTest < Test::Unit::TestCase
 
   class EstimateSizeTest < self
     sub_test_case "token ID" do
-    setup
-    def setup_schema
-      Groonga::Schema.define do |schema|
-        schema.create_table("Articles") do |table|
-          table.text("content")
+      setup
+      def setup_schema
+        Groonga::Schema.define do |schema|
+          schema.create_table("Articles") do |table|
+            table.text("content")
+          end
+
+          schema.create_table("Terms",
+                              :type => :hash,
+                              :key_type => "ShortText",
+                              :default_tokenizer => "TokenBigram",
+                              :normalizer => "NormalizerAuto") do |table|
+            table.index("Articles.content",
+                        :name => "articles_content",
+                        :with_position => true,
+                        :with_section => true)
+          end
         end
 
-        schema.create_table("Terms",
-                            :type => :hash,
-                            :key_type => "ShortText",
-                            :default_tokenizer => "TokenBigram",
-                            :normalizer => "NormalizerAuto") do |table|
-          table.index("Articles.content",
-                      :name => "articles_content",
-                      :with_position => true,
-                      :with_section => true)
-        end
+        @articles = Groonga["Articles"]
+        @terms = Groonga["Terms"]
+        @index = Groonga["Terms.articles_content"]
       end
 
-      @articles = Groonga["Articles"]
-      @terms = Groonga["Terms"]
-      @index = Groonga["Terms.articles_content"]
-    end
+      setup
+      def setup_data
+        @articles.add(:content => "Groonga is fast")
+        @articles.add(:content => "Rroonga is fast")
+        @articles.add(:content => "Mroonga is fast")
+      end
 
-    setup
-    def setup_data
-      @articles.add(:content => "Groonga is fast")
-      @articles.add(:content => "Rroonga is fast")
-      @articles.add(:content => "Mroonga is fast")
-    end
+      def test_id
+        assert_equal(7, @index.estimate_size(@terms["fast"].id))
+      end
 
-    def test_id
-      assert_equal(7, @index.estimate_size(@terms["fast"].id))
-    end
-
-    def test_record
-      assert_equal(7, @index.estimate_size(@terms["fast"]))
-    end
+      def test_record
+        assert_equal(7, @index.estimate_size(@terms["fast"]))
+      end
     end
   end
 end
