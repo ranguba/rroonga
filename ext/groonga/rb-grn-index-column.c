@@ -588,7 +588,7 @@ resolve_source_id (grn_ctx *context, grn_obj *column, grn_id range_id,
 {
     grn_id source_id;
 
-    if (CBOOL2RVAL(rb_obj_is_kind_of(rb_source, rb_cInteger))) {
+    if (RVAL2CBOOL(rb_obj_is_kind_of(rb_source, rb_cInteger))) {
         source_id = NUM2UINT(rb_source);
     } else {
         grn_obj *source;
