@@ -448,7 +448,7 @@
 * Added {Groonga::IndexColumn#add}.
 * Added {Groonga::IndexColumn#delete}.
 * Added {Groonga::IndexColumn#update}.
-* Deprecated {Groonga::IndexColumn#[]=}. Use {Groonga::IndexColumn#add},
+* Deprecated `Groonga::IndexColumn#[]=`. Use {Groonga::IndexColumn#add},
   {Groonga::IndexColumn#delete} or {Groonga::IndexColumn#update} instead.
 * Added {Groonga::Table#have_n_sub_records_space?}.
 * [grndump] Don't dump "register PLUGIN" when schema dump is disabled.
