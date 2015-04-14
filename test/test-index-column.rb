@@ -542,5 +542,41 @@ class IndexColumnTest < Test::Unit::TestCase
         assert_equal(7, @index.estimate_size(@terms["fast"]))
       end
     end
+
+    sub_test_case "query" do
+      setup
+      def setup_schema
+        Groonga::Schema.define do |schema|
+          schema.create_table("Articles") do |table|
+            table.text("content")
+          end
+
+          schema.create_table("Terms",
+                              :type => :hash,
+                              :key_type => "ShortText",
+                              :default_tokenizer => "TokenBigramSplitSymbolAlpha",
+                              :normalizer => "NormalizerAuto") do |table|
+            table.index("Articles.content",
+                        :name => "articles_content",
+                        :with_position => true,
+                        :with_section => true)
+          end
+        end
+
+        @articles = Groonga["Articles"]
+        @index = Groonga["Terms.articles_content"]
+      end
+
+      setup
+      def setup_data
+        @articles.add(:content => "Groonga is fast")
+        @articles.add(:content => "Rroonga is fast")
+        @articles.add(:content => "Mroonga is fast")
+      end
+
+      def test_query
+        assert_equal(6, @index.estimate_size("roonga"))
+      end
+    end
   end
 end

@@ -1,6 +1,6 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
-  Copyright (C) 2009-2014  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2015  Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -1021,21 +1021,71 @@ rb_grn_index_column_open_cursor (int argc, VALUE *argv, VALUE self)
  *    p @index.estimate_size(@terms["fast"])    # => 7
  *    p @index.estimate_size(@terms["Groonga"]) # => 1
  *
+ * @example Query style
+ *    # Define schema
+ *    Groonga::Schema.define do |schema|
+ *      schema.create_table("Articles") do |table|
+ *        table.text("content")
+ *      end
+ *
+ *      schema.create_table("Terms",
+ *                          :type => :hash,
+ *                          :key_type => "ShortText",
+ *                          :default_tokenizer => "TokenBigramSplitSymbolAlpha",
+ *                          :normalizer => "NormalizerAuto") do |table|
+ *        table.index("Articles.content",
+ *                    :name => "articles_content",
+ *                    :with_position => true,
+ *                    :with_section => true)
+ *      end
+ *    end
+ *    articles = Groonga["Articles"]
+ *    terms = Groonga["Terms"]
+ *    index = Groonga["Terms.articles_content"]
+ *
+ *    # Add data
+ *    articles.add(:content => "Groonga is fast")
+ *    articles.add(:content => "Rroonga is fast")
+ *    articles.add(:content => "Mroonga is fast")
+ *
+ *    # Estimate the number of documents found by query
+ *    p @index.estimate_size("roonga") # => 6
+ *
  * @overload estimate_size(token_id)
- *   @param [Integer, Record] token_id The token ID to be estimated.
+ *   @param token_id [Integer, Record] The token ID to be estimated.
  *   @return [Integer] The estimated number of documents found by the
  *     given token ID.
+ *
+ * @overload estimate_size(query, options={})
+ *   @param query [String] The query to be estimated.
+ *   @param options [::Hash] The options.
+ *   @option options [Groonga::Operator, String, Symbol] :mode
+ *     (Groonga::Operator::EXACT)
+ *
+ *     The operation mode for search. It must be one of the followings:
+ *
+ *       * `Groonga::Operator::EXACT`, `"exact"`, `:exact`
+ *       * `Groonga::Operator::NEAR`, `"near"`, `:near`
+ *       * `Groonga::Operator::NEAR2`, `"near2"`, `:near2`
+ *       * `Groonga::Operator::SIMILAR`, `"similar"`, `:similar`
+ *       * `Groonga::Operator::REGEXP`, `"regexp"`, `:regexp`
+ *
+ *   @return [Integer] The estimated number of documents found by the
+ *     given query.
+ *
+ *   @since 5.0.1
  *
  * @since 4.0.7
  */
 static VALUE
-rb_grn_index_column_estimate_size (VALUE self, VALUE rb_token_id)
+rb_grn_index_column_estimate_size (int argc, VALUE *argv, VALUE self)
 {
     grn_ctx *context;
     grn_obj *column;
     grn_obj *domain_object;
-    grn_id token_id;
     unsigned int size;
+    VALUE rb_target;
+    VALUE rb_options;
 
     rb_grn_index_column_deconstruct(SELF(self), &column, &context,
                                     NULL, &domain_object,
@@ -1043,8 +1093,50 @@ rb_grn_index_column_estimate_size (VALUE self, VALUE rb_token_id)
                                     NULL, NULL,
                                     NULL, NULL);
 
-    token_id = RVAL2GRNID(rb_token_id, context, domain_object, self);
-    size = grn_ii_estimate_size(context, (grn_ii *)column, token_id);
+    rb_scan_args(argc, argv, "11", &rb_target, &rb_options);
+
+    if (TYPE(rb_target) == T_STRING) {
+        const char *query;
+        unsigned int query_length;
+        grn_search_optarg options;
+        VALUE rb_mode;
+
+        query = StringValueCStr(rb_target);
+        query_length = RSTRING_LEN(rb_target);
+
+        rb_grn_scan_options(rb_options,
+                            "mode", &rb_mode,
+                            NULL);
+
+        memset(&options, 0, sizeof(grn_search_optarg));
+        if (NIL_P(rb_mode)) {
+            options.mode = GRN_OP_EXACT;
+        } else {
+            options.mode = RVAL2GRNOPERATOR(rb_mode);
+        }
+        switch (options.mode) {
+        case GRN_OP_EXACT:
+        case GRN_OP_NEAR:
+        case GRN_OP_NEAR2:
+        case GRN_OP_SIMILAR:
+        case GRN_OP_REGEXP:
+            /* valid */
+            break;
+        default:
+            rb_raise(rb_eArgError,
+                     ":mode must be one of "
+                     "nil, :exact, :near, :near2, :similar or :regexp: <%s>",
+                     rb_grn_inspect(rb_mode));
+            break;
+        }
+
+        size = grn_ii_estimate_size_for_query(context, (grn_ii *)column,
+                                              query, query_length, &options);
+    } else {
+        grn_id token_id;
+        token_id = RVAL2GRNID(rb_target, context, domain_object, self);
+        size = grn_ii_estimate_size(context, (grn_ii *)column, token_id);
+    }
 
     return UINT2NUM(size);
 }
@@ -1086,5 +1178,5 @@ rb_grn_init_index_column (VALUE mGrn)
                      rb_grn_index_column_open_cursor, -1);
 
     rb_define_method(rb_cGrnIndexColumn, "estimate_size",
-                     rb_grn_index_column_estimate_size, 1);
+                     rb_grn_index_column_estimate_size, -1);
 }
