@@ -41,6 +41,7 @@
   * Added {Groonga::Object#function_procedure?}.
   * Added {Groonga::Object#selector_procedure?}.
   * Added {Groonga::Object#scorer_procedure?}.
+  * Supported regular expression in {Groonga::Table#select} block.
 
 ### Thanks
 
