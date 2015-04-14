@@ -112,7 +112,7 @@ RB_GRN_BEGIN_DECLS
 #define RB_GRN_TABLE(object) ((RbGrnTable *)(object))
 #define RB_GRN_TABLE_KEY_SUPPORT(object) ((RbGrnTableKeySupport *)(object))
 #define RB_GRN_DOUBLE_ARRAY_TRIE(object) ((RbGrnDoubleArrayTrie *)(object))
-#define RB_GRN_TABLE_CURSOR(object) ((RbGrnTableCursort *)(object))
+#define RB_GRN_TABLE_CURSOR(object) ((RbGrnTableCursor *)(object))
 #define RB_GRN_COLUMN(object) ((RbGrnColumn *)(object))
 #define RB_GRN_VARIABLE_SIZE_COLUMN(object) ((RbGrnVariableSizeColumn *)(object))
 #define RB_GRN_INDEX_COLUMN(object) ((RbGrnIndexColumn *)(object))
