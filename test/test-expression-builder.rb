@@ -270,7 +270,7 @@ class ExpressionBuilderTest < Test::Unit::TestCase
     end
 
     def setup_data
-      @users.add("sato",   :name => "taro sato")
+      @users.add("sato",   :name => "kazuki sato")
       @users.add("suzuki", :name => "Shiro SUZUKI")
       @users.add("ito",    :name => "Takashi Ito")
     end
@@ -295,6 +295,14 @@ class ExpressionBuilderTest < Test::Unit::TestCase
       def test_beginning_of_text
         result = @users.select do |record|
           record["name"] =~ /\Ash/
+        end
+        assert_equal(["suzuki"],
+                     result.collect {|record| record.key.key}.sort)
+      end
+
+      def test_end_of_text
+        result = @users.select do |record|
+          record["name"] =~ /ki\z/
         end
         assert_equal(["suzuki"],
                      result.collect {|record| record.key.key}.sort)
