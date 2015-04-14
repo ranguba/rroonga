@@ -1,10 +1,10 @@
 #!/bin/bash -x
 
 readonly RUBY19="1.9.3-p551"
-readonly RUBY20="2.0.0-p598"
-readonly RUBY21="2.1.5"
-readonly RUBY22="2.2.1"
-readonly CROSS_TERGET="1.9.3:2.0.0:2.1.5:2.2.1"
+readonly RUBY20="2.0.0-p645"
+readonly RUBY21="2.1.6"
+readonly RUBY22="2.2.2"
+readonly CROSS_TERGET="1.9.3:2.0.0:2.1.6:2.2.2"
 readonly PKG_GEMS="/vagrant/pkg"
 readonly CPU_NUMS=`cat /proc/cpuinfo |grep processor|wc -l`
 readonly MAKE_OPTIONS="debugflags="
