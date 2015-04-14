@@ -1,76 +1,78 @@
-h1. NEWS
+# NEWS
 
-h2(#5-0-0). 5.0.0: 2014-02-16
+## 5.0.0: 2014-02-16 {#version-5-0-0}
 
-h3. Improvements
+### Improvements
 
 * Supported Groonga 5.0.0. Groonga 4.1.1 or older aren't supported.
 * Added flags for {Groonga::Normalizer.normalize}.
   [GitHub#44] [Patch by Tasuku SUENAGA a.k.a. gunyarakun]
-  <pre>
+
+  ```ruby
   Groonga::Normalizer.normalize("AbC Def　gh")                         #=> "abcdefgh"
   Groonga::Normalizer.normalize("AbC Def　gh", :remove_blank => true)  #=> "abcdefgh"
   Groonga::Normalizer.normalize("AbC Def　gh", :remove_blank => false) #=> "abc def gh"
-  </pre>
+  ```
+
 * Supported drilldown by multiple keys in {Groonga::Table#group}.
 * Supported calculation for drilldown in {Groonga::Table#group}.
 
-h3. Thanks
+### Thanks
 
 * Tasuku SUENAGA a.k.a. gunyarakun
 
-h2(#4-0-8). 4.0.8: 2014-01-08
+## 4.0.8: 2014-01-08 {#version-4-0-8}
 
-h3. Improvements
+### Improvements
 
 * Supported Groonga 4.0.9. Groonga 4.0.8 or older aren't supported.
 * Added {Groonga::Column#truncate}. [GitHub#41] [Patch by Hiroshi Hatake]
 * Added {Groonga::Database#recover}.
 
-h3. Fixes
+### Fixes
 
 * Fixed a typo in {Groonga::GeoPoint#==}.
 
-h3. Thanks
+### Thanks
 
 * Hiroshi Hatake
 
-h2(#4-0-7). 4.0.7: 2014-12-12
+## 4.0.7: 2014-12-12 {#version-4-0-7}
 
-h3. Improvements
+### Improvements
 
 * Supported Groonga 4.0.8. Groonga 4.0.7 or older aren't supported.
-* Added @:reuse_posting_object@ option to
+* Added `:reuse_posting_object` option to
   {Groonga::IndexCursor#each}. The option improves performance by
   reducing memory allocation. The option is disabled by default because
   reusing the same object isn't Rubyish.
 * Added {Groonga::IndexColumn#estimate_size}. [GitHub#38]
 * Accepted string for integer, unsigned integer and float type key.
 
-h2(#4-0-6). 4.0.6: 2014-11-06
+## 4.0.6: 2014-11-06 {#version-4-0-6}
 
-h3. Improvements
+### Improvements
 
 * Supported Groonga 4.0.7. [GitHub#28]
-** Changed {Groonga::Context#support_lzo?} always returns @false@.
-** Added {Groonga::Context#support_lz4?}.
-** Supported @:lz4@ in {Groonga::Table#define_column} options.
-** Supported @:lz4@ in {Groonga::VariableSizeColumn#compressed?} options.
-** Added {Groonga::LZ4Error}.
-** [grndump] Supported @COMPRESS_ZLIB@ and @COMPRESS_LZ4@ flags.
-** Added {Groonga::Table::KeySupport#token_filters}.
-** Added {Groonga::Table::KeySupport#token_filters=}.
-** Supported @:token_filters@ in {Groonga::Hash.create} options.
-** Supported @:token_filters@ in {Groonga::PatriciaTrie.create} options.
-** Supported @:token_filters@ in {Groonga::DoubleArrayTrie.create} options.
-** Supported @:token_filters@ in {Groonga::Schema.create_table} options.
-** Added {Groonga::TokenFilterError}.
-** [grndump] Supported token filters.
+  * Changed {Groonga::Context#support_lzo?} always returns `false`.
+  * Added {Groonga::Context#support_lz4?}.
+  * Supported `:lz4` in {Groonga::Table#define_column} options.
+  * Supported `:lz4` in {Groonga::VariableSizeColumn#compressed?} options.
+  * Added {Groonga::LZ4Error}.
+  * [grndump] Supported `COMPRESS_ZLIB` and `COMPRESS_LZ4` flags.
+  * Added {Groonga::Table::KeySupport#token_filters}.
+  * Added {Groonga::Table::KeySupport#token_filters=}.
+  * Supported `:token_filters` in {Groonga::Hash.create} options.
+  * Supported `:token_filters` in {Groonga::PatriciaTrie.create} options.
+  * Supported `:token_filters` in {Groonga::DoubleArrayTrie.create} options.
+  * Supported `:token_filters` in {Groonga::Schema.create_table} options.
+  * Added {Groonga::TokenFilterError}.
+  * [grndump] Supported token filters.
 * Added {Groonga::Expression#keywords}. [GitHub#30]
 * Stopped to require logger object as the first argument of
   {Groonga::Logger.register} when block is specified.
 
-h3. Fixes
+### Fixes
 
 * [doc] Removed deprecated example.
   [GitHub#26] [Patch by ongaeshi]
@@ -83,14 +85,14 @@ h3. Fixes
   [GitHub#29] [Patch by Daisuke Goto]
 * [doc] Fixed wrong option name of {Groonga::Logger.register}.
 
-h3. Thanks
+### Thanks
 
 * ongaeshi
 * Daisuke Goto
 
-h2(#4-0-5). 4.0.5: 2014-10-05
+## 4.0.5: 2014-10-05 {#version-4-0-5}
 
-h3. Improvements
+### Improvements
 
 * [windows] Added cross build task.
 * Added {Groonga::DoubleArrayTrie#update}.
@@ -98,31 +100,33 @@ h3. Improvements
 * Added {Groonga::Record#rename}.
 * [windows] Disabled debug flags.
 
-h3. Fixes
+### Fixes
 
-* Added @:id => true@ option to {Groonga::Table::KeySupport#delete}.
-  @Groonga::Table::KeySupport#delete@ accepts both ID and key. If passed
-  value is integer, it is handled as ID. But we can use @Int32@ as key.
+* Added `:id => true` option to {Groonga::Table::KeySupport#delete}.
+  `Groonga::Table::KeySupport#delete` accepts both ID and key. If passed
+  value is integer, it is handled as ID. But we can use `Int32` as key.
   In the case, we can't delete a record by key. Therefore, we added
-  @Groonga::Table::KeySupport#delete(id, :id => true)@ API. It introduces
+  `Groonga::Table::KeySupport#delete(id, :id => true)` API. It introduces
   a backward incompatibility, but it is OK because the current API is a
   bug.
 
-h3. Thanks
+### Thanks
 
 * Masafumi Yokoyama
 
-h2(#4-0-4). 4.0.4: 2014-08-29
+## 4.0.4: 2014-08-29 {#version-4-0-4}
 
-h3. Improvements
+### Improvements
 
 * Supported Groonga 4.0.4 or later. Groonga 4.0.3 or older are not supported.
 * Added {Groonga::ProcedureType} that has constants as GRN_PROC_XXX.
 * Added {Groonga::Procedure#type} as grn_proc_get_type().
-  <pre>
+
+  ```ruby
   procedure = Groonga["TokenBigram"]
   p procedure.type == Groonga::ProcedureType::TOKENIZER  #=> true
-  </pre>
+  ```
+
 * Avoided a crash when {Groonga::Record#inspect} is called on exit.
   [GitHub#18] [Reported by Ippei Obayashi]
 * Updated Free Software Foundation address. [Masafumi Yokoyama]
@@ -130,119 +134,121 @@ h3. Improvements
 * Updated homepage in gemspec to use ranguba.org. [Masafumi Yokoyama]
 * Reduce memory usage without GC.
 
-h3. Fixes
+### Fixes
 
 * Fixed a GC related crash when GC is run while {Groonga::Table#group}.
 
-h3. Thanks
+### Thanks
 
 * Ippei Obayashi
 * uu59
 * cosmo0920
 
-h2(#4-0-3). 4.0.3: 2014-06-04
+## 4.0.3: 2014-06-04 {#version-4-0-3}
 
-h3. Fixes
+### Fixes
 
 * [windows] Fixed a bug that Rroonga reports load error by
   bundling the fixed version Groonga package.
   [groonga-dev,02398][Reported by Masafumi Yokoyama]
 
-h3. Thanks
+### Thanks
 
 * Masafumi Yokoyama
 
-h2(#4-0-2). 4.0.2: 2014-05-29
+## 4.0.2: 2014-05-29 {#version-4-0-2}
 
-h3. Improvements
+### Improvements
 
-* Removed needless @--key_type@ option in dump.
+* Removed needless `--key_type` option in dump.
   [Reported by Genki Takiuchi]
 * Added sources information to {Groonga::IndexColumn#inspect}.
-* Enabled @with_section@ flag for multiple column index by default.
+* Enabled `with_section` flag for multiple column index by default.
   See {Groonga::Schema::TableDefinition#index}.
-* Enabled @with_position@ flag for index of a table that has a default
-  tokenizer by default. You need to specify @:with_position => false@
-  explicitly to disable @with_position@ flag for @TokenDelimit@.
-  @TokenDelimit@ is a tokenizer that doesn't need @with_position@ flag.
+* Enabled `with_position` flag for index of a table that has a default
+  tokenizer by default. You need to specify `:with_position => false`
+  explicitly to disable `with_position` flag for `TokenDelimit`.
+  `TokenDelimit` is a tokenizer that doesn't need `with_position` flag.
   See {Groonga::Schema.create_table}.
 
-h3. Fixes
+### Fixes
 
 * [GitHub#16] Fixed a memory leak of {Groonga::Table#column}.
   [Reported by rutice]
 
-h3. Thanks
+### Thanks
 
 * rutice
 * Genki Takiuchi
 
-h2(#4-0-1). 4.0.1: 2014-04-04
+## 4.0.1: 2014-04-04 {#version-4-0-1}
 
-h3. Improvements
+### Improvements
 
 * Supported Groonga 4.0.1. Groonga 4.0.0 or older are not supported.
 * Supported no weight match column case.
-  <pre>
+
+  ```ruby
   table.select do |record|
     match_target = record.match_target do |target|
       target.column
     end
     match_target =~ keyword
   end
-  </pre>
+  ```
+
 * Supported weight vector.
-* grndump: Changed to use @--normalizer@ instead of @KEY_NORMALIZE@.
+* grndump: Changed to use `--normalizer` instead of `KEY_NORMALIZE`.
   Old Groonga can't restore dumped database.
-* {Groonga::IndexClumn#search}: Added @mode@ option.
-* {Groonga::IndexClumn#search}: Added @weight@ option.
+* {Groonga::IndexColumn#search}: Added `mode` option.
+* {Groonga::IndexColumn#search}: Added `weight` option.
 * Accepted String as option key.
 
-h3. Fixes
+### Fixes
 
 * Fixed a bug that index dump drops index options in Ruby syntax.
 
 
-h2(#4-0-0). 4.0.0: 2014-02-09
+## 4.0.0: 2014-02-09 {#version-4-0-0}
 
-h3. Improvements
+### Improvements
 
 * Supported Groonga 4.0.0. Groonga 3.1.2 or older are not supported.
 * Added install document. [Patch by ongaeshi]
 
-h3. Thanks
+### Thanks
 
 * ongaeshi
 
 
-h2(#3-1-2). 3.1.2: 2014-01-29
+## 3.1.2: 2014-01-29 {#version-3-1-2}
 
-h3. Improvements
+### Improvements
 
 * Supported Groonga 3.1.2. Groonga 3.1.1 or older are not supported.
 * Added {Groonga::Table#support_value?}.
 * Added {Groonga::Record#support_value?}.
-* Added @_value@ value to {Groonga::Record#attributes} result.
+* Added `_value` value to {Groonga::Record#attributes} result.
   [groonga-dev,02046] [Suggested by ongaeshi]
 * Added column values to {Groonga::Record#inspect} result.
   [groonga-dev,02048] [Suggested by ongaeshi]
-* grndump: Added @--dump-indexes@ option that controls schema for
+* grndump: Added `--dump-indexes` option that controls schema for
   indexes output. It is useful to dump only schema for indexes.
 * Added {Groonga.lock_timeout}.
 * Added {Groonga.lock_timeout=}.
 
-h3. Thanks
+### Thanks
 
 * ongaeshi
 
-h2(#3-1-1). 3.1.1: 2013-12-29
+## 3.1.1: 2013-12-29 {#version-3-1-1}
 
-h3. Improvements
+### Improvements
 
 * Supported Groonga 3.1.1.
-* [groonga-database-inspect]: Added @--no-tables@ option for hiding
+* [groonga-database-inspect]: Added `--no-tables` option for hiding
   all table information.
-* [groonga-database-inspect]: Added @--no-columns@ option for hiding
+* [groonga-database-inspect]: Added `--no-columns` option for hiding
   all column information.
 * [doc] Updated English mailing list to use Groonga-talk.
   [GitHub#14] [Patch by Masafumi Yokoyama]
@@ -250,83 +256,83 @@ h3. Improvements
 * {Groonga::Expression#append_constant} supports operator name.
 * {Groonga::Expression#append_object} supports operator name.
 
-h3. Thanks
+### Thanks
 
 * Masafumi Yokoyama
 
-h2(#3-1-0). 3.1.0: 2013-11-29
+## 3.1.0: 2013-11-29 {#version-3-1-0}
 
-h3. Improvements
+### Improvements
 
 * Reduced build failure by automatically Groonga build.
   [Reported by SHIMADA Koji]
-* Added @groonga-database-inspect@ command that inspects passed database.
+* Added `groonga-database-inspect` command that inspects passed database.
   [Suggested by Genki Takiuchi]
 * {Groonga::Database#tables} ignores missing objects rather than raising
   an exception. Because the method is interested in only existing tables.
 
-h3. Fixes
+### Fixes
 
 * Fixed a bug that {Groonga::Expression#parse} doesn't accept all
   mode and operators.
 
-h3. Thanks
+### Thanks
 
 * SHIMADA Koji
 * Genki Takiuchi
 
-h2(#3-0-9). 3.0.9: 2013-10-29
+## 3.0.9: 2013-10-29 {#version-3-0-9}
 
-h3. Improvements
+### Improvements
 
 * Supported Groonga 3.0.9.
 * Supported showing error message on error in {Groonga::Object#remove}.
 
-h3. Fixes
+### Fixes
 
-* Fixed a crash bug that is caused by assigning @nil@ as source of
+* Fixed a crash bug that is caused by assigning `nil` as source of
   index column.
 
-h2(#3-0-8). 3.0.8: 2013-09-29
+## 3.0.8: 2013-09-29 {#version-3-0-8}
 
-h3. Improvements
+### Improvements
 
 * Supported groonga 3.0.8.
 * Supported x64-mingw32 Ruby.
 * Supported Ruby 2.1.0 preview1.
 
-h2(#3-0-7). 3.0.7: 2013-09-19
+## 3.0.7: 2013-09-19 {#version-3-0-7}
 
-h3. Improvements
+### Improvements
 
 * Added {Groonga::Table::KeySupport#tokenize}. It requires groonga
   3.0.8. Groonga 3.0.8 is not released yet.
 * Changed return object of {Groonga::Context#select} to groonga-client gem's
   return object. It is a backward imcompatible change. Some APIs are changed.
-  For example, @drill_down@ is renamed to @drilldowns@. See
+  For example, `drill_down` is renamed to `drilldowns`. See
   "Groonga::Client::Response::Select":http://rubydoc.info/gems/groonga-client/Groonga/Client/Response/Select
   about rerturn object details.
 ** Added groonga-client gem, groogna-command gem, gqtp gem dependencies.
 
-h3. Fixes
+### Fixes
 
 * Fixed a bug that auto groonga installation is failed.
   [GitHub#12][Patch by Keita Haga]
 
-h3. Thanks
+### Thanks
 
 * Keita Haga
 
-h2(#3-0-6). 3.0.6: 2013-09-13
+## 3.0.6: 2013-09-13 {#version-3-0-6}
 
-h3. Improvements
+### Improvements
 
 * Supported accessing reference column that referes a table that uses
   Int8/UInt8/Int16/UInt16 key.
 
-h2(#3-0-5). 3.0.5: 2013-07-29
+## 3.0.5: 2013-07-29 {#version-3-0-5}
 
-h3. Improvements
+### Improvements
 
 * [dumper] supported dumping of DoubleArrayTrie.
 * Supported Int8/UInt8/Int16/UInt16 to Ruby conversion.
@@ -335,33 +341,35 @@ h3. Improvements
   {Groonga::Context#push_memory_pool} and {Groonga::Context#pop_memory_pool}
   are added.
   You can close temporary table objects automatically:
-  <pre>
+
+  ```ruby
   context.push_memory_pool do
     # create tempoeray table objects by select, group, sort and so on...
   end
-  # createed tempoeray table objects are closed automatically
-  </pre>
+  # created tempoeray table objects are closed automatically
+  ```
+
 * Supported max int32 over Fixnum
   [Reported by xtuaok]
 
-h3. Fixes
+### Fixes
 
 * [dumper] fixed a bug that no column table isn't dumped.
 
-h3. Thanks
+### Thanks
 
 * Masaharu YOSHIOKA
 * xtuaok
 
-h2(#3-0-4). 3.0.4: 2013-07-04
+## 3.0.4: 2013-07-04 {#version-3-0-4}
 
-h3. Fixes
+### Fixes
 
 * Fixed a rroogna 3.0.3 gem package for Windows.
 
-h2(#3-0-3). 3.0.3: 2013-07-04
+## 3.0.3: 2013-07-04 {#version-3-0-3}
 
-h3. Improvements
+### Improvements
 
 * Required groonga >= 3.0.5.
 * Added an error check for creating a result table of {Groonga::Table#select}.
@@ -369,22 +377,22 @@ h3. Improvements
 * Deprecated {Groonga::Operator::BUT} because groonga deprecated it.
   Use {Groonga::Operator::AND_NOT} instead.
 * Added {Groonga::Array#unblock}.
-* Added @:max_n_sub_records@ option to {Groonga::Table#group}.
+* Added `:max_n_sub_records` option to {Groonga::Table#group}.
 * Added {Groonga::Table#each_sub_record}.
 * Supported groonga to Ruby conversion for vector value.
-* Added @:reference => true@ option to {Groonga::Expression#define_variable}
+* Added `:reference => true` option to {Groonga::Expression#define_variable}
   that defines reference type variable.
 * Added {Groonga::Record#sub_records} that returns sub records for the record.
   Sub records is a {Groonga::SubRecords} instance.
 
-h3. Fixes
+### Fixes
 
 * Fixed {Groonga::Expression#[]} return type. It returns {Groonga::Variable}
   instead of value itself. CAUTION: It is a backward incompatible change.
 
-h2(#3-0-2). 3.0.2: 2013-05-29
+## 3.0.2: 2013-05-29 {#version-3-0-2}
 
-h3. Improvements
+### Improvements
 
 * Required groonga >= 3.0.4.
 * Supported set/get a vector of Time.
@@ -398,14 +406,14 @@ h3. Improvements
 * Added {Groonga::Table#have_n_sub_records_space?}.
 * [grndump] Don't dump "register PLUGIN" when schema dump is disabled.
 
-h3. Fixes
+### Fixes
 
 * [grndump]
   Fixed a bug that reference tables may be dumpped before referenced tables.
 
-h2(#3-0-1). 3.0.1: 2013-05-01
+## 3.0.1: 2013-05-01 {#version-3-0-1}
 
-h3. Improvements
+### Improvements
 
 * Required groonga >= 3.0.3.
 * Supported assigning weight to value. See {Groonga::Table#set_column_value},
@@ -416,17 +424,17 @@ h3. Improvements
 * Renamed to {Groonga::Logger.path=} from {Groonga::Logger.log_path=}.
 * Added missing "Packnga >= 0.9.7" requirement. [Reported by takkanm]
 
-h3. Fixes
+### Fixes
 
 * Fixed a memory leak on error.
 
-h3. Thanks
+### Thanks
 
 * takkanm
 
-h2(#3-0-0). 3.0.0: 2013-03-29
+## 3.0.0: 2013-03-29 {#version-3-0-0}
 
-h3. Improvements
+### Improvements
 
 * Required groonga >= 3.0.2.
 * Added block support to {Groonga::Context#create_database}. If a
@@ -438,13 +446,13 @@ h3. Improvements
 * Added block support to {Groonga::Context#restore}. If a block is
   given, command and its response are yielded.
 
-h3. Thanks
+### Thanks
 
 * KITAITI Makoto
 
-h2(#2-1-3). 2.1.3: 2013-01-29
+## 2.1.3: 2013-01-29 {#version-2-1-3}
 
-h3. Improvements
+### Improvements
 
 * Removed Groonga::View removed in groonga 2.1.2.
 * [doc] Added tutorial in English.
@@ -452,17 +460,18 @@ h3. Improvements
 ** for Japanese:http://ranguba.org/rroonga/ja/file.tutorial.html
 * [context] Added Context#restore. This method restores command dumped
   by "grndump" command. Please see example below:
-<pre>
-!!!ruby
-dumped_commands = File.read("dump.grn")
-context.restore(dumped_commands)
-</pre>
+
+  ```ruby
+  dumped_commands = File.read("dump.grn")
+  context.restore(dumped_commands)
+  ```
+
 * Supported new logger API in groonga. Old API isn't used anymore.
 * For installing groonga with this gem:
 ** Stopped to install documentation about groonga. See "Web site":http://groonga.org/docs/ instead.
 ** Stopped to build static library because it isn't used by rroonga.
 
-h3. Fixes
+### Fixes
 
 * [dumper] Reduced needless new lines in dumped commands.
 
@@ -471,22 +480,22 @@ h3. Fixes
 ** [template] Removed needless piwik tag.
 ** [template] Fixed URLs of references in Japanese.
 
-h2(#2-1-2). 2.1.2: 2013-01-04
+## 2.1.2: 2013-01-04 {#version-2-1-2}
 
-h3. Fixes
+### Fixes
 
 * Fixed GC related crash. Table's domain and range are also marked.
 
-h2(#2-1-1). 2.1.1: 2012-12-29
+## 2.1.1: 2012-12-29 {#version-2-1-1}
 
-h3. Improvements
+### Improvements
 
 * Required groonga 2.1.1 because groonga 2.1.0 has a serious bug
   related to key normalization.
 
-h2(#2-1-0). 2.1.0: 2012-12-29
+## 2.1.0: 2012-12-29 {#version-2-1-0}
 
-h3. Improvements
+### Improvements
 
 * Required groonga 2.1.0.
 * Supported mass record deletion with block.
@@ -505,7 +514,7 @@ h3. Improvements
   "TARGET_TABLE_NAME.index_INDEX_COLUMN_NAME".
   e.g.)
 
-  <pre>
+  ```text
    $ cat index-dump.sdf
      table_create --name Video --flags TABLE_HASH_KEY --key_type UInt32
      table_create --name Tag --flags TABLE_HASH_KEY --key_type ShortText
@@ -526,7 +535,7 @@ h3. Improvements
     index: Tag.index_tags	term: <groonga>	domain: Tag	range: Video	have_section: false	have_weight: false	have_position: false
      weight	position        term_frequency	record
      0    2     1   Video[ 1 ].tags
-  </pre>
+  ```
 
 * Added flag options to Groonga::IndexColumn#open_cursor.
   The flag options are :with_section, :with_weight, :with_position.
@@ -542,7 +551,7 @@ h3. Improvements
 * Supported Groonga::QueryLogger. This class is used to log query log.
   Please see its reference for detail.
 
-h3. Changes
+### Changes
 
 * Move groonga-query-log-extract to groonga-query-log.
   Please install groogna-query-log gem to use this tool.
@@ -558,63 +567,63 @@ h3. Changes
       record.value
     end
 
-h3. Thanks
+### Thanks
 
 * ongaeshi
 * Genki Takiuchi
 
-h2(#2-0-8). 2.0.8: 2012-12-02
+## 2.0.8: 2012-12-02 {#version-2-0-8}
 
-h3. Improvements
+### Improvements
 
 * Required groonga 2.0.9.
 
-h2(#2-0-7). 2.0.7: 2012-11-29
+## 2.0.7: 2012-11-29 {#version-2-0-7}
 
-h3. Improvements
+### Improvements
 
-* Added Groonga::Posting#record. This method returns the record for
+* Added `Groonga::Posting#record`. This method returns the record for
   the record ID in table.
-* Added Groonga::Posting#term. This method returns the record for the
+* Added `Groonga::Posting#term`. This method returns the record for the
   term ID in table.
-* Supported GRN_OBJ_KEY_VAR_SIZE for Groonga::Type#inspect.
-  GRN_OBJ_KEY_CAR_SIZE specifies its column is variable size.
-* [Type] Added reader methods to Groonga::Type (#size and #flags).
-* [Type] Added predicate methods to Groonga::Type.
-  Added methods are #fixed_size?, #variable_size?, #unsigned_integer?,
-  #integer?, #float? and #geo_point?.
+* Supported `GRN_OBJ_KEY_VAR_SIZE` for `Groonga::Type#inspect`.
+  `GRN_OBJ_KEY_CAR_SIZE` specifies its column is variable size.
+* [Type] Added reader methods to `Groonga::Type` (`#size` and `#flags`).
+* [Type] Added predicate methods to `Groonga::Type`.
+  Added methods are `#fixed_size?`, `#variable_size?`, `#unsigned_integer?`,
+  `#integer?`, `#float?` and `#geo_point?`.
 
-h3. Changes
+### Changes
 
 * Removed query log related codes.
   This feature moved to groonga-query-log gem and it is relased soon.
 
-h2(#2-0-6). 2.0.6: 2012-10-25
+## 2.0.6: 2012-10-25 {#version-2-0-6}
 
-h3. Improvements
+### Improvements
 
 * [dump] Put index columns at the bottom (after loads).
   It is for using offline index construction.
-* Added term_extract in Table#select by @table.select {|record|
-  record.key.term_extract(text)}@ syntax.
-* Supported :allow_leading_not as a option of #select.
+* Added term_extract in Table#select by `table.select {|record|
+  record.key.term_extract(text)}` syntax.
+* Supported `:allow_leading_not` as a option of `#select`.
   You should use this option carefully. It takes a long time to search
   all records which doesn't include a word. In addition, when the
   number of records is large, to search them with this option is
   slowly.
 
-h3. Changes
+### Changes
 
-* Changed option name for debug build in extconf.rb from --with-debug
-  to --enable-debug-log.
+* Changed option name for debug build in extconf.rb from `--with-debug`
+  to `--enable-debug-log`.
 
-h3. Fixes
+### Fixes
 
 * Fixed display collapse in the references.
 
-h2(#2-0-5). 2.0.5: 2012-09-28
+## 2.0.5: 2012-09-28 {#version-2-0-5}
 
-h3. Improvements
+### Improvements
 
 * Supported groonga 2.0.7.
 * Removed the workaround to install rroonga with old groonga.
@@ -629,79 +638,79 @@ h3. Improvements
 * [dumper] ignored invalid byte.
 * [grndump] showed the warning for invalid character.
 * [grndump] supported database that is created by old groonga.
-* Added Groonga::Context#ruby_encoding.
+* Added `Groonga::Context#ruby_encoding`.
 * Added many documents in codes but showed no references.
 
-h3. Fixes
+### Fixes
 
 * Added missing backslash escape for groonga command.
 
-h3. Thanks
+### Thanks
 
 * @temitan
 
-h2(#2-0-4). 2.0.4: 2012-05-02
+## 2.0.4: 2012-05-02 {#version-2-0-4}
 
-h3. Fixes
+### Fixes
 
 * Fixed a bug that weight of match target is ignored.
 
-h2(#2-0-3). 2.0.3: 2012-05-02
+## 2.0.3: 2012-05-02 {#version-2-0-3}
 
-h3. Improvements
+### Improvements
 
 * Supported groonga 2.0.2.
-* Groonga::Table#each supports options that are same as
-  Groonga::Table#open_cursor's one.
-* [grndump] added @--order-by=id@ option. With this option, dumped
+* `Groonga::Table#each` supports options that are same as
+  `Groonga::Table#open_cursor`'s one.
+* [grndump] added `--order-by=id` option. With this option, dumped
   records are sorted by ID instead of key. You can restore records
   without ID change if you don't delete any records. [#1341]
 * Supported building on Windows with RubyInstaller for Windows with DevKit.
   [GitHub#6] [Patch by @ongaeshi]
-* Supported similar search by @table.select {|record|
-  record.column.similar_search(text)}@ syntax.
+* Supported similar search by `table.select {|record|
+  record.column.similar_search(text)}` syntax.
 
-h3. Fixes
+### Fixes
 
 * Fixed a GC related crach bug.
 
-h3. Thanks
+### Thanks
 
 * @ongaeshi
 
-h2(#2-0-2). 2.0.2: 2012-03-29
+## 2.0.2: 2012-03-29 {#version-2-0-2}
 
-h3. Improvements
+### Improvements
 
 * Supported groonga 2.0.1.
 * Added "logos":http://groonga.rubyforge.org/#logo .
 
-h3. Fixes
+### Fixes
 
 * Fixed a Groonga::Snipet related crach bug caused by GC.
 
-h2(#2-0-0). 2.0.0: 2012-03-22
+## 2.0.0: 2012-03-22 {#version-2-0-0}
 
-h3. Improvements
+### Improvements
 
 * Supported groonga 2.0.0.
 * [gem][windows] Removed mswin packages.
 
-h3. Fixes
+### Fixes
 
 * [test] Fixed version test failure. [GitHub#4] [Reported by @takkanm]
 * Fixed a Groonga::Expression related crach bug caused by GC.
 * [doc] Fixed broken HTML output. [groonga-dev,00699]
   [Reported by Hirano]
 
-h3. Thanks
+### Thanks
 
 * @takkanm
 * Hirano
 
-h2(#1-3-1). 1.3.1: 2012-01-29
+## 1.3.1: 2012-01-29 {#version-1-3-1}
 
-h3. Improvements
+### Improvements
 
 * Supported groonga 1.3.0.
 * [schema] Supported Int8, Int16, UInt8 and UInt16.
@@ -709,18 +718,18 @@ h3. Improvements
 * [schema][dumper] Supported Boolean and more built-in types.
   [Reported by @mashiro]
 * [schema] Supported type object as column type. [#1002]
-* Added Groonga::VariableSizeColumn#compressed?. [#1004]
-* Added Groonga::Record#score=.
+* Added `Groonga::VariableSizeColumn#compressed?`. [#1004]
+* Added `Groonga::Record#score=`.
 * Improve performance for encoded string.
-* Added Groonga::Command::Builder.escape_value.
+* Added `Groonga::Command::Builder.escape_value`.
 
-h3. Thanks
+### Thanks
 
 * @mashiro
 
-h2(#1-3-0). 1.3.0: 2011-11-29
+## 1.3.0: 2011-11-29 {#version-1-3-0}
 
-h3. Improvements
+### Improvements
 
 * [schema] Remove also needless db.tables/ directory if it is empty.
 * [schema] Remove also needless db.tables/table.columns/ directory if it is empty.
@@ -738,43 +747,43 @@ h3. Improvements
 * [schema] Supported column rename.
 * [schema] Supported double array trie.
 
-h3. Changes
+### Changes
 
 * [schema] Don't use named path by default for location aware DB.
 
-h3. Fixes
+### Fixes
 
 * Fixed a crash problem on GC.
 
-h2. 1.2.9: 2011-09-16
+## 1.2.9: 2011-09-16
 
-h3. Fixes
+### Fixes
 
 * deleted unneed object files.
 
-h2. 1.2.8: 2011-09-16
+## 1.2.8: 2011-09-16
 
-h3. Improvements
+### Improvements
 
-* supported "!=" expression for column in block of Groonga::Table#select.
+* supported `!=` expression for column in block of `Groonga::Table#select`.
 * accepted Hash like object as options.
 * supported vector in dump in Ruby syntax.
-* supported GRN_CTX_PER_DB environment variables.
-(NOTE: You should pay attention to use this variables.)
+* supported `GRN_CTX_PER_DB` environment variables.
+  (NOTE: You should pay attention to use this variables.)
 
-h2. 1.2.7: 2011-08-29
+## 1.2.7: 2011-08-29
 
-h3. Improvements
+### Improvements
 
 * Added Groonga::Snippet#close that frees resource.
 
-h3. Fixes
+### Fixes
 
 * Fixed build error on Ruby 1.8.7.
 
-h2. 1.2.6: 2011-08-29
+## 1.2.6: 2011-08-29
 
-h3. Improvements
+### Improvements
 
 * Supported groonga 1.2.5.
 * Added Groonga::Record#added? that returns true when the record is just added.
@@ -782,15 +791,15 @@ h3. Improvements
 * Added Groonga::Database#defrag that defrags the all variable size columns.
 * Supported column name specification by symbol.
 
-h3. Fixes
+### Fixes
 
 * Fixed install *.rb failure by gem install.
 * Fixed some memory leaks.
 * Fixed crash bug on exit.
 
-h2. 1.2.5: 2011-08-05
+## 1.2.5: 2011-08-05
 
-h3. Improvements
+### Improvements
 
 * Re-supported tar.gz distribution.
 * Added Groonga::Context#close.
@@ -799,56 +808,56 @@ h3. Improvements
 * grndump: Added --exclude-table option that specifies not dumped tables.
 * dump: Removed path equality check.
 
-h3. Fixes
+### Fixes
 
 * dump: Fixed wrong index table type.
 * Re-supported auto groonga install.
 
-h2. 1.2.4: 2011-06-29
+## 1.2.4: 2011-06-29
 
-h3. Improvements
+### Improvements
 
 * Supported groonga 1.2.3.
 
-h3. Fixes
+### Fixes
 
 * Re-supported auto groonga install.
 * Added missing pkg-config gem dependency.
 
-h2. 1.2.3: 2011-06-27
+## 1.2.3: 2011-06-27
 
-h3. Fixes
+### Fixes
 
 * remove object files in gem packages.
 * fix charactor corruption in reference.
 
-h2. 1.2.2: 2011-06-27
+## 1.2.2: 2011-06-27
 
-h3. Improvements
+### Improvements
 
 * created "Developers" page in English.
 * added description for tasks of "html:publish" and "publish".
 
-h3. Changes
+### Changes
 
 * Groonga::Record#attributes return same attributes object for duplicate records.
 * added document for Groonga::Record#attributes.
 * changed tool name in document page for creating document.
 * moved NEWS*.rdoc and tutorial.texttile to doc/text/.
 
-h3. Fixes
+### Fixes
 
 * fixed the tutorial path in index page.
 * fixed the path of tutorial in index page in English.
 * follow the groonga downlowd URL change. [mallowlabs]
 
-h3. Thanks
+### Thanks
 
 * mallowlabs
 
-h2. 1.2.1: 2011-06-07
+## 1.2.1: 2011-06-07
 
-h3. Improvements
+### Improvements
 
 * added document of Groonga::Table#pagination.
 * added grndump in package.
@@ -865,44 +874,44 @@ h3. Improvements
 * added Groonga::IndexCursor. [yoshihara]
 * added Groonga::Object#builtin?. [yoshihara]
 
-h3. Changes
+### Changes
 
 * check existence of column before removing it.
 * removed grn expression document.
 
-h3. Thanks
+### Thanks
 
 * mooz
 * yoshihara
 
-h2. 1.2.0: 2011-04-01
+## 1.2.0: 2011-04-01
 
-h3. Improvements
+### Improvements
 
 * Supported groonga 1.2.0.
-* Added Groonga::Accessor#local_name.
-* Added Groonga::IndexColumn#with_section?.
-* Added Groonga::IndexColumn#with_weight?.
-* Added Groonga::IndexColumn#with_position?.
-* Groonga::Schema.dump supported groonga command format dump.
+* Added `Groonga::Accessor#local_name`.
+* Added `Groonga::IndexColumn#with_section?`.
+* Added `Groonga::IndexColumn#with_weight?`.
+* Added `Groonga::IndexColumn#with_position?`.
+* `Groonga::Schema.dump` supported groonga command format dump.
 * Added grndump command.
-* Groonga::Database#each supports order customize.
-* Added Groonga::Context#match_escalation_threshold.
-* Added Groonga::Context#match_escalation_threshold=.
+* `Groonga::Database#each` supports order customize.
+* Added `Groonga::Context#match_escalation_threshold`.
+* Added `Groonga::Context#match_escalation_threshold=`.
 * Improved error message.
-* Supported Rubyish name like :short_text instead of the
-  official type name like "ShortText" in Groonga::Schema.
+* Supported Rubyish name like `:short_text` instead of the
+  official type name like "ShortText" in `Groonga::Schema`.
 
-h2. 1.1.0: 2011-02-09
+## 1.1.0: 2011-02-09
 
-h3. Improvements
+### Improvements
 
 * Supported groonga 1.1.0.
 * Added Groonga::Plugin.register.
 
-h2. 1.0.9: 2011-01-29
+## 1.0.9: 2011-01-29
 
-h3. Improvements
+### Improvements
 
 * Supported gem creation on Windows. [Patch by ongaeshi]
 * Supported generated directory that is created by Groonga::Schema removal
@@ -912,76 +921,88 @@ h3. Improvements
 * Added Groonga::Column#indexes.
 * Supported a notation for specifying index column as match target in
   Groonga::Table#select:
-    table.select do |record|
-      record.match("query") do |match_record|
-        (match_record.index("Terms.title") * 1000) |
-          (match_record.index("Terms.description") * 100)
-          match_record.content
-      end
+
+  ```ruby
+  table.select do |record|
+    record.match("query") do |match_record|
+      (match_record.index("Terms.title") * 1000) |
+        (match_record.index("Terms.description") * 100)
+        match_record.content
     end
+  end
+  ```
+
 * Supported prefix search in Groonga::Table#select:
-    table.select do |record|
-      record.name.prefix_search("groo")
-    end
+
+  ```ruby
+  table.select do |record|
+    record.name.prefix_search("groo")
+  end
+  ```
+
 * Supported suffix search in Groonga::Table#select:
-    table.select do |record|
-      record.name.suffix_search("nga")
-    end
+
+  ```ruby
+  table.select do |record|
+    record.name.suffix_search("nga")
+  end
+  ```
+
 * Supported :default_tokenizer schema dump.
 * Supported :key_normalize schema dump.
 * Supported pseudo columns by Groonga::Table#have_column?.
 * Supported pseudo columns by Groonga::Record#have_column?.
 
-h3. Changes
+### Changes
 
 * Renamed Groonga::Operatoion to Groonga::Operator.
   (Groonga::Operation is deprecated but still usable.)
 
-h3. Fixes
+### Fixes
 
 * Fixed a crash bug when not default Groonga::Context is used in
   Groonga::Table#select.
 * Fixed a crash bug when an exception is occurred.
 
-h3. Thanks
+### Thanks
 
 * ongaeshi
 
-h2. 1.0.8: 2010-12-25
+## 1.0.8: 2010-12-25
 
-h3. Improvements
+### Improvements
 
 * Improved Groonga::Schema's n-gram tokenizer detect process.
 
-h3. Fixes
+### Fixes
 
 * Fixed GC problem caused by match_target in select.
 
-h2. 1.0.7: 2010-12-19
+## 1.0.7: 2010-12-19
 
-h3. Fixes
+### Fixes
 
 * Supported pkg-config installed by RubyGems on Ruby 1.8. [Reported by @kamipo]
 * Fixed a memory leak in Groonga::Table#columns.
 
-h3. Thanks
+### Thanks
 
 * @kamipo
 
-h2. 1.0.5: 2010-11-29
+## 1.0.5: 2010-11-29
 
-h3. Improvements
+### Improvements
 
 * Added snail_case type name aliases for built-in groonga types
   to Groonga::Schema.
 
-h3. Fixes
+### Fixes
 
 * Fixed a crash bug on GC. [Ryo Onodera]
 
-h2. 1.0.4: 2010-11-29
+## 1.0.4: 2010-11-29
 
-h3. Improvements
+### Improvements
 
 * Supported groonga 1.0.4.
   * Added Groonga::UnsupportedCommandVersion.
@@ -1019,35 +1040,35 @@ h3. Improvements
 * Added Groonga::Record#record_raw_id.
 * Accepted any object that as to_ary method for reference vector column value.
 
-h2. Changes
+## Changes
 
-* Used :key as the default value of :order_by of
-  Groonga::PatriciaTrie#open_cursor.
+* Used :key as the default value of `:order_by` of
+  `Groonga::PatriciaTrie#open_cursor`.
 * Removed a deprecated Groonga::TableKeySupport#find.
 * Used ShortText as the default key type of
   Groonga::Hash#create and Groonga::PatriciaTrie#create.
 * Renamed Groonga::Schema#load to Groonga::Schema#restore.
-* Supported pkg-confg 1.0.7.
+* Supported pkg-config 1.0.7.
 * Added Groonga::Column#index? and deprecated Groonga::Column#index_column?.
 * Added Groonga::Column#reference? and deprecated
   Groonga::Column#reference_column?.
 
-h3. Fixes
+### Fixes
 
 * Fixed index for key isn't be able to define.
 * Fixed a crash problem on GC.
 
-h2. 1.0.1: 2010-09-12
+## 1.0.1: 2010-09-12
 
-h3. Fixes
+### Fixes
 
 * Fixed wrong flag used on creating a table. [Reported by ono matope]
 
-h3. Thanks
+### Thanks
 
 * ono matope
 
-h2. 1.0.0: 2010-08-29
+## 1.0.0: 2010-08-29
 
 * Supported groonga 1.0.0.
   * Added Groonga::CASError.
@@ -1060,7 +1081,7 @@ h2. 1.0.0: 2010-08-29
     retrieve records order by distance from key.
 * Supported _key as index source.
 
-h2. 0.9.5: 2010-07-20
+## 0.9.5: 2010-07-20
 
 * Supported groonga 0.7.4.
 * Imporoved Groonga::Table#select:
@@ -1068,12 +1089,18 @@ h2. 0.9.5: 2010-07-20
 
     Here is an example to match source column or title column and
     title column has high score:
+
+    ```ruby
       table.select do |record|
         (record.title * 10 | record.source) =~ "query"
       end
+    ```
+
   * Supported and representation for and conditions:
 
     Here are examples that represents the same condition:
+
+      ```ruby
       table.select do |record|
         conditions = []
         conditions << record.title =~ "query"
@@ -1085,28 +1112,30 @@ h2. 0.9.5: 2010-07-20
         (record.title =~ "query") &
           (record.updated_at > Time.parse("2010-07-29T21:14:29+09:00"))
       end
+      ```
+
 * Provided groonga runtime version: Groonga::VERSION
 * Added Groonga::Table#support_sub_records?
 * Supported pagination: Groonga::Table#paginate, Groonga::Pagination
 
-h2. 0.9.4: 2010-04-22
+## 0.9.4: 2010-04-22
 
 * Fixed release miss.
 
-h2. 0.9.3: 2010-04-22
+## 0.9.3: 2010-04-22
 
 * Fixed release miss.
 
-h2. 0.9.2: 2010-04-22
+## 0.9.2: 2010-04-22
 
 * Supported groonga 0.1.9.
 * Many.
 
-h2. 0.9.1: 2010-02-09
+## 0.9.1: 2010-02-09
 
 * Supported groonga 0.1.6
 
-h2. 0.9.0: 2010-02-09
+## 0.9.0: 2010-02-09
 
 * Supported groonga 0.1.5
 * Added API
@@ -1157,13 +1186,13 @@ h2. 0.9.0: 2010-02-09
 * Added --with-debug option to extconf.rb for debug build.
 * Fixed a bug that Ruby 1.9.1 may fail extconf.rb.
 
-h3. Thanks
+### Thanks
 
 * dara
 * Ryo Onodera
 * Tasuku SUENAGA
 
-h2. 0.0.7: 2009-10-02
+## 0.0.7: 2009-10-02
 
 * Supported groonga 0.1.4
 * Added API
@@ -1173,7 +1202,7 @@ h2. 0.0.7: 2009-10-02
   * Groonga::Object#append
   * Groonga::Object#prepend
 
-h2. 0.0.6: 2009-07-31
+## 0.0.6: 2009-07-31
 
 * Supported groonga 0.1.1.
 * Fixed documents [id:mat_aki]
@@ -1186,7 +1215,7 @@ h2. 0.0.6: 2009-07-31
 * Provided tar.gz [id:m_seki]
 * Fixed memory leaks
 
-h2. 0.0.3: 2009-07-18
+## 0.0.3: 2009-07-18
 
 * Added Groonga::TableKeySupport#has_key? [#26145] [Tasuku SUENAGA]
 * Groonga::Record#[] raises an exception for nonexistent
@@ -1201,7 +1230,7 @@ h2. 0.0.3: 2009-07-18
   * Groonga::Schema: A DSL for schema definition
   * Groonga::Expression
 
-h2. 0.0.2: 2009-06-04
+## 0.0.2: 2009-06-04
 
 * Supported groonga 0.0.8 [mori]
 * Improved preformance: cache key, value, domain and range
@@ -1212,6 +1241,6 @@ h2. 0.0.2: 2009-06-04
   * Fixed install process [Tasuku SUENAGA]
   * Fixed memory leaks
 
-h2. 0.0.1: 2009-04-30
+## 0.0.1: 2009-04-30
 
 * Initial release!
