@@ -142,4 +142,25 @@ class OperatorTest < Test::Unit::TestCase
       end
     end
   end
+
+  sub_test_case "match" do
+    sub_test_case "#exec" do
+      test "match" do
+        assert_true(Groonga::Operator::MATCH.exec("Hello Rroonga",
+                                                  "Rroonga"))
+      end
+
+      test "not match" do
+        assert_false(Groonga::Operator::MATCH.exec("Hello Rroonga",
+                                                   "Groonga"))
+      end
+
+      test ":context" do
+        context = Groonga::Context.new
+        assert_true(Groonga::Operator::MATCH.exec("Hello Rroonga",
+                                                  "Rroonga",
+                                                  :context => context))
+      end
+    end
+  end
 end
