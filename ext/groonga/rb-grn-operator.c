@@ -285,6 +285,15 @@ rb_grn_operator_to_i (VALUE self)
     return rb_iv_get(self, "@value");
 }
 
+static VALUE
+rb_grn_operator_to_s (VALUE self)
+{
+    grn_operator operator;
+
+    operator = rb_grn_operator_from_ruby_object(self);
+    return rb_str_new_cstr(grn_operator_to_string(operator));
+}
+
 void
 rb_grn_init_operator (VALUE mGrn)
 {
@@ -300,6 +309,8 @@ rb_grn_init_operator (VALUE mGrn)
     rb_define_method(rb_cGrnOperator, "to_i",
                      rb_grn_operator_to_i, 0);
     rb_define_alias(rb_cGrnOperator, "to_int", "to_i");
+    rb_define_method(rb_cGrnOperator, "to_s",
+                     rb_grn_operator_to_s, 0);
 
     rb_grn_init_equal_operator(mGrn);
     rb_grn_init_not_equal_operator(mGrn);

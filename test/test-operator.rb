@@ -21,6 +21,12 @@ class OperatorTest < Test::Unit::TestCase
 
   setup :setup_database
 
+  sub_test_case "#to_s" do
+    test "equal" do
+      assert_equal("equal", Groonga::Operator::EQUAL.to_s)
+    end
+  end
+
   sub_test_case "equal" do
     sub_test_case "#exec" do
       test "equal" do
