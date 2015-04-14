@@ -791,8 +791,6 @@ rb_grn_expression_get_keywords (VALUE self)
     return rb_keywords;
 }
 
-/* TODO: Remove the ifdef when Groonga 5.0.1 is released. */
-#ifdef HAVE_GRN_EXPR_ESTIMATE_SIZE
 /*
  * Estimates the number of matched records when `expression` is
  * executed.
@@ -825,7 +823,6 @@ rb_grn_expression_estimate_size (VALUE self)
 
     return UINT2NUM(size);
 }
-#endif
 
 void
 rb_grn_init_expression (VALUE mGrn)
@@ -866,8 +863,6 @@ rb_grn_init_expression (VALUE mGrn)
     rb_define_method(rb_cGrnExpression, "keywords",
                      rb_grn_expression_get_keywords, 0);
 
-#ifdef HAVE_GRN_EXPR_ESTIMATE_SIZE
     rb_define_method(rb_cGrnExpression, "estimate_size",
                      rb_grn_expression_estimate_size, 0);
-#endif
 }

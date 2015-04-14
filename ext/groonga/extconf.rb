@@ -286,9 +286,6 @@ have_func("rb_ary_new_from_args", "ruby.h")
 have_func("rb_ary_new_from_values", "ruby.h")
 have_type("enum ruby_value_type", "ruby.h")
 
-# TODO: Remove me when Groonga 5.0.1 is released.
-have_func("grn_expr_estimate_size", "groonga.h")
-
 checking_for(checking_message("--enable-debug-log option")) do
   enable_debug_log = enable_config("debug-log", false)
   if enable_debug_log
