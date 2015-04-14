@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2009-2014  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2015  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -502,6 +502,7 @@ class IndexColumnTest < Test::Unit::TestCase
   end
 
   class EstimateSizeTest < self
+    sub_test_case "token ID" do
     setup
     def setup_schema
       Groonga::Schema.define do |schema|
@@ -539,6 +540,7 @@ class IndexColumnTest < Test::Unit::TestCase
 
     def test_record
       assert_equal(7, @index.estimate_size(@terms["fast"]))
+    end
     end
   end
 end
