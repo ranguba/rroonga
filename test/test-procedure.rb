@@ -40,5 +40,10 @@ class ProcedureTest < Test::Unit::TestCase
       tokenizer = Groonga["TokenBigram"]
       assert_equal(Groonga::ProcedureType::TOKENIZER, tokenizer.type)
     end
+
+    def test_scorer
+      scorer = Groonga["scorer_tf_idf"]
+      assert_equal(Groonga::ProcedureType::SCORER, scorer.type)
+    end
   end
 end

@@ -37,4 +37,8 @@ rb_grn_init_procedure_type (VALUE mGrn)
                     "HOOK", INT2NUM(GRN_PROC_HOOK));
     rb_define_const(rb_mGrnProcedureType,
                     "NORMALIZER", INT2NUM(GRN_PROC_NORMALIZER));
+    rb_define_const(rb_mGrnProcedureType,
+                    "TOKEN_FILTER", INT2NUM(GRN_PROC_TOKEN_FILTER));
+    rb_define_const(rb_mGrnProcedureType,
+                    "SCORER", INT2NUM(GRN_PROC_SCORER));
 }
