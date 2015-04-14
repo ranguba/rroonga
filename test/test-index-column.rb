@@ -578,5 +578,40 @@ class IndexColumnTest < Test::Unit::TestCase
         assert_equal(6, @index.estimate_size("roonga"))
       end
     end
+
+    sub_test_case "lexicon cursor" do
+      setup
+      def setup_schema
+        Groonga::Schema.define do |schema|
+          schema.create_table("Memos") do |table|
+            table.short_text("tags", :type => :vector)
+          end
+
+          schema.create_table("Tags",
+                              :type => :patricia_trie,
+                              :key_type => "ShortText") do |table|
+            table.index("Memos.tags",
+                        :name => "memos_tags")
+          end
+        end
+
+        @memos = Groonga["Memos"]
+        @tags = Groonga["Tags"]
+        @index = Groonga["Tags.memos_tags"]
+      end
+
+      setup
+      def setup_data
+        @memos.add(:tags => ["Groonga"])
+        @memos.add(:tags => ["Rroonga", "Ruby"])
+        @memos.add(:tags => ["grndump", "Rroonga"])
+      end
+
+      def test_query
+        @tags.open_prefix_cursor("R") do |cursor|
+          assert_equal(5, @index.estimate_size(cursor))
+        end
+      end
+    end
   end
 end

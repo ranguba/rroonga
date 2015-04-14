@@ -957,7 +957,8 @@ rb_grn_index_column_open_cursor (int argc, VALUE *argv, VALUE self)
 }
 
 /*
- * Estimates the number of documents found by the given token ID.
+ * Estimates the number of documents found by the given token ID,
+ * query or lexicon cursor.
  *
  * @example Token ID style
  *    # Define schema
@@ -1040,7 +1041,6 @@ rb_grn_index_column_open_cursor (int argc, VALUE *argv, VALUE self)
  *      end
  *    end
  *    articles = Groonga["Articles"]
- *    terms = Groonga["Terms"]
  *    index = Groonga["Terms.articles_content"]
  *
  *    # Add data
@@ -1050,6 +1050,38 @@ rb_grn_index_column_open_cursor (int argc, VALUE *argv, VALUE self)
  *
  *    # Estimate the number of documents found by query
  *    p @index.estimate_size("roonga") # => 6
+ *
+ * @example Lexicon cursor style
+ *    # Define schema
+ *    Groonga::Schema.define do |schema|
+ *      schema.create_table("Memos",
+ *                          :type => :hash,
+ *                          :key_type => "ShortText") do |table|
+ *        table.short_text("tags", :type => :vector)
+ *      end
+ *
+ *      schema.create_table("Tags",
+ *                          :type => :patricia_trie,
+ *                          :key_type => "ShortText") do |table|
+ *        table.index("Memos.tags",
+ *                    :name => "memos_tags")
+ *      end
+ *    end
+ *    memos = Groonga["Memos"]
+ *    tags = Groonga["Tags"]
+ *    index = Groonga["Tags.memos_tags"]
+ *
+ *    # Add data
+ *    memos.add(:tags => ["Groonga"])
+ *    memos.add(:tags => ["Rroonga", "Ruby"])
+ *    memos.add(:tags => ["grndump", "Rroonga"])
+ *
+ *    # Estimate the number of documents found by lexicon cursor
+ *    # Iterates tags that start with "R".
+ *    tags.open_prefix_cursor("R") do |cursor|
+ *      # The cursor iterates "Rroonga" and "Ruby".
+ *      p index.estimate_size(cursor) # => 6
+ *    end
  *
  * @overload estimate_size(token_id)
  *   @param token_id [Integer, Record] The token ID to be estimated.
@@ -1072,6 +1104,13 @@ rb_grn_index_column_open_cursor (int argc, VALUE *argv, VALUE self)
  *
  *   @return [Integer] The estimated number of documents found by the
  *     given query.
+ *
+ *   @since 5.0.1
+ *
+ * @overload estimate_size(lexicon_cursor)
+ *   @param lexicon_cursor [Groonga::TableCursor] The cursor for lexicon.
+ *   @return [Integer] The estimated number of documents found by term IDS
+ *     in the given lexicon cursor.
  *
  *   @since 5.0.1
  *
@@ -1132,6 +1171,13 @@ rb_grn_index_column_estimate_size (int argc, VALUE *argv, VALUE self)
 
         size = grn_ii_estimate_size_for_query(context, (grn_ii *)column,
                                               query, query_length, &options);
+    } else if (RVAL2CBOOL(rb_obj_is_kind_of(rb_target, rb_cGrnTableCursor))) {
+        grn_table_cursor *lexicon_cursor;
+
+        lexicon_cursor = RVAL2GRNTABLECURSOR(rb_target, &context);
+        size = grn_ii_estimate_size_for_lexicon_cursor(context,
+                                                       (grn_ii *)column,
+                                                       lexicon_cursor);
     } else {
         grn_id token_id;
         token_id = RVAL2GRNID(rb_target, context, domain_object, self);
