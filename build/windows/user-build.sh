@@ -6,7 +6,7 @@ readonly RUBY21="2.1.6"
 readonly RUBY22="2.2.2"
 readonly CROSS_TERGET="1.9.3:2.0.0:2.1.6:2.2.2"
 readonly PKG_GEMS="/vagrant/pkg"
-readonly CPU_NUMS=`cat /proc/cpuinfo |grep processor|wc -l`
+readonly CPU_NUMS=`cat /proc/cpuinfo | grep processor | wc -l`
 readonly MAKE_OPTIONS="debugflags="
 
 if [ ! -d ~/.rbenv ]; then
