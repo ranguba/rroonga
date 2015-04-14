@@ -163,4 +163,25 @@ class OperatorTest < Test::Unit::TestCase
       end
     end
   end
+
+  sub_test_case "prefix" do
+    sub_test_case "#exec" do
+      test "have prefix" do
+        assert_true(Groonga::Operator::PREFIX.exec("Hello Rroonga",
+                                                   "Hello"))
+      end
+
+      test "not have prefix" do
+        assert_false(Groonga::Operator::PREFIX.exec("Hello Rroonga",
+                                                    "Rroonga"))
+      end
+
+      test ":context" do
+        context = Groonga::Context.new
+        assert_true(Groonga::Operator::PREFIX.exec("Hello Rroonga",
+                                                   "Hello",
+                                                   :context => context))
+      end
+    end
+  end
 end

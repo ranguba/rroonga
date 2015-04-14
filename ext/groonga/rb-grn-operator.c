@@ -308,6 +308,7 @@ rb_grn_init_operator (VALUE mGrn)
     rb_grn_init_less_equal_operator(mGrn);
     rb_grn_init_greater_equal_operator(mGrn);
     rb_grn_init_match_operator(mGrn);
+    rb_grn_init_prefix_operator(mGrn);
 
     rb_define_const(rb_cGrnOperator, "PUSH",
                     rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
@@ -555,7 +556,7 @@ rb_grn_init_operator (VALUE mGrn)
                                rb_str_new_cstr("unsplit"),
                                UINT2NUM(GRN_OP_UNSPLIT)));
     rb_define_const(rb_cGrnOperator, "PREFIX",
-                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                    rb_funcall(rb_cGrnPrefixOperator, rb_intern("new"), 2,
                                rb_str_new_cstr("prefix"),
                                UINT2NUM(GRN_OP_PREFIX)));
     rb_define_const(rb_cGrnOperator, "SUFFIX",
