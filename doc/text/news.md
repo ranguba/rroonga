@@ -1,5 +1,52 @@
 # NEWS
 
+## 5.0.0: 2014-04-14 {#version-5-0-1}
+
+### Improvements
+
+  * Supported Groonga 5.0.2. Groonga 5.0.1 or older aren't supported.
+  * Added {Groonga::Expression#estimate_size}.
+  * Added closed check in `#encoding`. [GitHub#54] [Reported by yui-knk]
+  * [windows] Supported Ruby 2.2.
+  * Supported `Groonga::Normalizer.normalize("")`. [GitHub#55]
+    [Reported by Tasuku SUENAGA]
+  * Added {Groonga::ScorerError}.
+  * Added shortcuts for `TokenRegexp` to `Groonga::Schema`.
+  * Added {Groonga::Operator::REGEXP}.
+  * Added {Groonga::Plugin.unregister}.
+  * Added {Groonga::Context#unregister_plugin}.
+  * Changed {Groonga::Operator} to class from module. It's a backward
+    incompatible change but nobody will not be effected.
+  * Removed unused `:id` option from the followings:
+    * {Groonga::Column#clear_lock}
+    * {Groonga::Column#locked?}
+    * {Groonga::Table#clear_lock}
+    * {Groonga::Table#locked?}
+  * Added {Groonga::EqualOperator#exec}.
+  * Added {Groonga::NotEqualOperator#exec}.
+  * Added {Groonga::LessOperator#exec}.
+  * Added {Groonga::GreaterOperator#exec}.
+  * Added {Groonga::LessEqualOperator#exec}.
+  * Added {Groonga::GreaterEqualOperator#exec}.
+  * Added {Groonga::MatchOperator#exec}.
+  * Added {Groonga::PrefixOperator#exec}.
+  * Added {Groonga::RegexpOperator#exec}.
+  * Added {Groonga::ProcedureType::TOKEN_FILTER}.
+  * Added {Groonga::ProcedureType::SCORER}.
+  * Added {Groonga::Operator#to_s}.
+  * Supported {Groonga::IndexColumn#estimate_size} against query.
+  * Supported {Groonga::IndexColumn#estimate_size} against lexicon cursor.
+  * Added {Groonga::Object#table?}.
+  * Added {Groonga::Object#procedure?}.
+  * Added {Groonga::Object#function_procedure?}.
+  * Added {Groonga::Object#selector_procedure?}.
+  * Added {Groonga::Object#scorer_procedure?}.
+
+### Thanks
+
+  * yui-knk
+  * Tasuku SUENAGA
+
 ## 5.0.0: 2014-02-16 {#version-5-0-0}
 
 ### Improvements
