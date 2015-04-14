@@ -370,6 +370,8 @@ rb_grn_bulk_to_ruby_object (grn_ctx *context, grn_obj *bulk,
 grn_obj *
 rb_grn_bulk_from_ruby_object (VALUE object, grn_ctx *context, grn_obj *bulk)
 {
+    int object_type;
+
     if (bulk && bulk->header.domain == GRN_DB_TIME)
         return RVAL2GRNBULK_WITH_TYPE(object, context, bulk,
                                       bulk->header.domain,
@@ -380,13 +382,24 @@ rb_grn_bulk_from_ruby_object (VALUE object, grn_ctx *context, grn_obj *bulk)
         rb_grn_context_check(context, object);
     }
 
-    switch (TYPE(object)) {
+    object_type = TYPE(object);
+    switch (object_type) {
     case T_NIL:
         grn_obj_reinit(context, bulk, GRN_DB_VOID, 0);
         break;
     case T_SYMBOL:
-        object = rb_funcall(object, rb_intern("to_s"), 0);
+    case T_REGEXP:
     case T_STRING:
+        switch (object_type) {
+        case T_SYMBOL:
+            object = rb_funcall(object, rb_intern("to_s"), 0);
+            break;
+        case T_REGEXP:
+            object = rb_funcall(object, rb_intern("source"), 0);
+            break;
+        default:
+            break;
+        }
         grn_obj_reinit(context, bulk, GRN_DB_TEXT, 0);
         rb_grn_context_text_set(context, bulk, object);
         break;

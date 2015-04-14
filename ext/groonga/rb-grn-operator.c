@@ -309,6 +309,7 @@ rb_grn_init_operator (VALUE mGrn)
     rb_grn_init_greater_equal_operator(mGrn);
     rb_grn_init_match_operator(mGrn);
     rb_grn_init_prefix_operator(mGrn);
+    rb_grn_init_regexp_operator(mGrn);
 
     rb_define_const(rb_cGrnOperator, "PUSH",
                     rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
@@ -620,7 +621,7 @@ rb_grn_init_operator (VALUE mGrn)
                                rb_str_new_cstr("json-put"),
                                UINT2NUM(GRN_OP_JSON_PUT)));
     rb_define_const(rb_cGrnOperator, "REGEXP",
-                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                    rb_funcall(rb_cGrnRegexpOperator, rb_intern("new"), 2,
                                rb_str_new_cstr("regexp"),
                                UINT2NUM(GRN_OP_REGEXP)));
 
