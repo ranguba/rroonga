@@ -1502,6 +1502,134 @@ rb_grn_object_builtin_p (VALUE self)
     return CBOOL2RVAL(builtin);
 }
 
+/*
+ * Checks whether the object is table or not.
+ *
+ * @overload table?
+ *   @return [Boolean] `true` if the object is table, `false` otherwise.
+ *
+ * @since 5.0.1
+ */
+static VALUE
+rb_grn_object_table_p (VALUE self)
+{
+    grn_ctx *context;
+    grn_obj *object;
+    grn_bool table_p = GRN_FALSE;
+
+    rb_grn_object_deconstruct(SELF(self), &object, &context,
+                              NULL, NULL, NULL, NULL);
+
+    if (context && object) {
+        table_p = grn_obj_is_table(context, object);
+    }
+
+    return CBOOL2RVAL(table_p);
+}
+
+/*
+ * Checks whether the object is procedure or not.
+ *
+ * @overload procedure?
+ *   @return [Boolean] `true` if the object is procedure, `false` otherwise.
+ *
+ * @since 5.0.1
+ */
+static VALUE
+rb_grn_object_procedure_p (VALUE self)
+{
+    grn_ctx *context;
+    grn_obj *object;
+    grn_bool procedure_p = GRN_FALSE;
+
+    rb_grn_object_deconstruct(SELF(self), &object, &context,
+                              NULL, NULL, NULL, NULL);
+
+    if (context && object) {
+        procedure_p = grn_obj_is_proc(context, object);
+    }
+
+    return CBOOL2RVAL(procedure_p);
+}
+
+/*
+ * Checks whether the object is function procedure or not.
+ *
+ * @overload function_procedure?
+ *   @return [Boolean] `true` if the object is function procedure,
+ *     `false` otherwise.
+ *
+ * @since 5.0.1
+ */
+static VALUE
+rb_grn_object_function_procedure_p (VALUE self)
+{
+    grn_ctx *context;
+    grn_obj *object;
+    grn_bool function_procedure_p = GRN_FALSE;
+
+    rb_grn_object_deconstruct(SELF(self), &object, &context,
+                              NULL, NULL, NULL, NULL);
+
+    if (context && object) {
+        function_procedure_p = grn_obj_is_function_proc(context, object);
+    }
+
+    return CBOOL2RVAL(function_procedure_p);
+}
+
+/*
+ * Checks whether the object is selector procedure or not.
+ *
+ * @overload selector_procedure?
+ *   @return [Boolean] `true` if the object is selector procedure,
+ *     `false` otherwise.
+ *
+ * @since 5.0.1
+ */
+static VALUE
+rb_grn_object_selector_procedure_p (VALUE self)
+{
+    grn_ctx *context;
+    grn_obj *object;
+    grn_bool selector_procedure_p = GRN_FALSE;
+
+    rb_grn_object_deconstruct(SELF(self), &object, &context,
+                              NULL, NULL, NULL, NULL);
+
+    if (context && object) {
+        selector_procedure_p = grn_obj_is_selector_proc(context, object);
+    }
+
+    return CBOOL2RVAL(selector_procedure_p);
+}
+
+/*
+ * Checks whether the object is scorer procedure or not.
+ *
+ * @overload scorer_procedure?
+ *   @return [Boolean] `true` if the object is scorer procedure,
+ *     `false` otherwise.
+ *
+ * @since 5.0.1
+ */
+static VALUE
+rb_grn_object_scorer_procedure_p (VALUE self)
+{
+    grn_ctx *context;
+    grn_obj *object;
+    grn_bool scorer_procedure_p = GRN_FALSE;
+
+    rb_grn_object_deconstruct(SELF(self), &object, &context,
+                              NULL, NULL, NULL, NULL);
+
+    if (context && object) {
+        scorer_procedure_p = grn_obj_is_scorer_proc(context, object);
+    }
+
+    return CBOOL2RVAL(scorer_procedure_p);
+}
+
 void
 rb_grn_init_object (VALUE mGrn)
 {
@@ -1537,4 +1665,12 @@ rb_grn_init_object (VALUE mGrn)
     rb_define_method(rb_cGrnObject, "remove", rb_grn_object_remove, 0);
 
     rb_define_method(rb_cGrnObject, "builtin?", rb_grn_object_builtin_p, 0);
+    rb_define_method(rb_cGrnObject, "table?", rb_grn_object_table_p, 0);
+    rb_define_method(rb_cGrnObject, "procedure?", rb_grn_object_procedure_p, 0);
+    rb_define_method(rb_cGrnObject, "function_procedure?",
+                     rb_grn_object_function_procedure_p, 0);
+    rb_define_method(rb_cGrnObject, "selector_procedure?",
+                     rb_grn_object_selector_procedure_p, 0);
+    rb_define_method(rb_cGrnObject, "scorer_procedure?",
+                     rb_grn_object_scorer_procedure_p, 0);
 }

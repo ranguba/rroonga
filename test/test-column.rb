@@ -340,6 +340,12 @@ class ColumnTest < Test::Unit::TestCase
     assert_not_predicate(@users_name_column, :builtin?)
   end
 
+  def test_table?
+    assert do
+      not @users_name_column.table?
+    end
+  end
+
   private
   def assert_content_search(expected_records, term)
     records = @bookmarks_index_content.search(term).records

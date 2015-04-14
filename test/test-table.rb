@@ -630,6 +630,13 @@ class TableTest < Test::Unit::TestCase
     assert_not_predicate(bookmarks, :builtin?)
   end
 
+  def test_table?
+    bookmarks = Groonga::PatriciaTrie.create(:name => "Bookmarks")
+    assert do
+      bookmarks.table?
+    end
+  end
+
   class OtherProcessTest < self
     def test_create
       by_other_process do

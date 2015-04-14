@@ -27,6 +27,30 @@ class ProcedureTest < Test::Unit::TestCase
                            :accept_nil => true)
   end
 
+  def test_procedure?
+    assert do
+      Groonga["TokenBigram"].procedure?
+    end
+  end
+
+  def test_function_procedure?
+    assert do
+      Groonga["rand"].function_procedure?
+    end
+  end
+
+  def test_selector_procedure?
+    assert do
+      Groonga["between"].selector_procedure?
+    end
+  end
+
+  def test_scorer_procedure?
+    assert do
+      Groonga["scorer_tf_idf"].scorer_procedure?
+    end
+  end
+
   private
   def assert_equal_procedure(expected_name, id, options={})
     procedure = Groonga::Context.default[id]
