@@ -95,12 +95,7 @@ def download(url)
 end
 
 def extract_zip(filename, destrination_dir)
-  begin
-    require "archive/zip"
-  rescue LoadError
-    require "rubygems"
-    require "archive/zip"
-  end
+  require "archive/zip"
 
   Archive::Zip.extract(filename, destrination_dir)
 rescue LoadError

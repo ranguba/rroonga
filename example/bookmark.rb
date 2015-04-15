@@ -7,12 +7,7 @@ groonga_lib_dir = File.join(base_dir, "lib")
 $LOAD_PATH.unshift(groonga_ext_dir)
 $LOAD_PATH.unshift(groonga_lib_dir)
 
-begin
-  require "groonga"
-rescue LoadError
-  require "rubygems"
-  require "groonga"
-end
+require "groonga"
 
 require "time"
 

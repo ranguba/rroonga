@@ -11,7 +11,6 @@ base_directory = Pathname(__FILE__).dirname + ".."
 $LOAD_PATH.unshift((base_directory + "ext").to_s)
 $LOAD_PATH.unshift((base_directory + "lib").to_s)
 
-require "rubygems"
 require "groonga"
 require "nokogiri"
 

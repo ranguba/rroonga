@@ -4,7 +4,6 @@ base_dir = File.join(File.dirname(__FILE__), "..", "..")
 $LOAD_PATH.unshift(File.join(base_dir, "ext"))
 $LOAD_PATH.unshift(File.join(base_dir, "lib"))
 
-require "rubygems"
 require "rack"
 require "groonga"
 
