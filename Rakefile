@@ -19,8 +19,6 @@ require "find"
 require "fileutils"
 require "pathname"
 require "erb"
-require "rubygems"
-require "rubygems/package_task"
 require "yard"
 require "bundler/gem_helper"
 require "rake/extensiontask"
@@ -41,10 +39,6 @@ end
 
 helper.install
 spec = helper.gemspec
-
-Gem::PackageTask.new(spec) do |pkg|
-  pkg.need_tar_gz = true
-end
 
 Packnga::DocumentTask.new(spec) do |task|
   task.original_language = "en"
