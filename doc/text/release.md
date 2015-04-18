@@ -41,17 +41,17 @@ If a contributor name is in a commit log, create "Thanks" group and write the na
 
 ### Template for a new release for news.textile
 
-    h2(#x-x-x). x.x.x: YYYY-MM-DD
+    ## X.X.X: YYYY-MM-DD {#version-x-x-x}
 
-    h3. Improvements
-
-    * ...
-
-    h3. Fixes
+    ### Improvements
 
     * ...
 
-    h3. Thanks
+    ### Fixes
+
+    * ...
+
+    ### Thanks
 
     * ...
 
