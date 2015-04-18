@@ -56,11 +56,9 @@
 * Added flags for {Groonga::Normalizer.normalize}.
   [GitHub#44] [Patch by Tasuku SUENAGA a.k.a. gunyarakun]
 
-  ```ruby
-  Groonga::Normalizer.normalize("AbC Def　gh")                         #=> "abcdefgh"
-  Groonga::Normalizer.normalize("AbC Def　gh", :remove_blank => true)  #=> "abcdefgh"
-  Groonga::Normalizer.normalize("AbC Def　gh", :remove_blank => false) #=> "abc def gh"
-  ```
+      Groonga::Normalizer.normalize("AbC Def　gh")                         #=> "abcdefgh"
+      Groonga::Normalizer.normalize("AbC Def　gh", :remove_blank => true)  #=> "abcdefgh"
+      Groonga::Normalizer.normalize("AbC Def　gh", :remove_blank => false) #=> "abc def gh"
 
 * Supported drilldown by multiple keys in {Groonga::Table#group}.
 * Supported calculation for drilldown in {Groonga::Table#group}.
@@ -170,10 +168,8 @@
 * Added {Groonga::ProcedureType} that has constants as GRN_PROC_XXX.
 * Added {Groonga::Procedure#type} as grn_proc_get_type().
 
-  ```ruby
-  procedure = Groonga["TokenBigram"]
-  p procedure.type == Groonga::ProcedureType::TOKENIZER  #=> true
-  ```
+      procedure = Groonga["TokenBigram"]
+      p procedure.type == Groonga::ProcedureType::TOKENIZER  #=> true
 
 * Avoided a crash when {Groonga::Record#inspect} is called on exit.
   [GitHub#18] [Reported by Ippei Obayashi]
@@ -236,14 +232,12 @@
 * Supported Groonga 4.0.1. Groonga 4.0.0 or older are not supported.
 * Supported no weight match column case.
 
-  ```ruby
-  table.select do |record|
-    match_target = record.match_target do |target|
-      target.column
-    end
-    match_target =~ keyword
-  end
-  ```
+      table.select do |record|
+        match_target = record.match_target do |target|
+          target.column
+        end
+        match_target =~ keyword
+      end
 
 * Supported weight vector.
 * grndump: Changed to use `--normalizer` instead of `KEY_NORMALIZE`.
@@ -390,12 +384,10 @@
   are added.
   You can close temporary table objects automatically:
 
-  ```ruby
-  context.push_memory_pool do
-    # create tempoeray table objects by select, group, sort and so on...
-  end
-  # created tempoeray table objects are closed automatically
-  ```
+      context.push_memory_pool do
+        # create tempoeray table objects by select, group, sort and so on...
+      end
+      # created tempoeray table objects are closed automatically
 
 * Supported max int32 over Fixnum
   [Reported by xtuaok]
@@ -509,10 +501,8 @@
 * [context] Added Context#restore. This method restores command dumped
   by "grndump" command. Please see example below:
 
-  ```ruby
-  dumped_commands = File.read("dump.grn")
-  context.restore(dumped_commands)
-  ```
+      dumped_commands = File.read("dump.grn")
+      context.restore(dumped_commands)
 
 * Supported new logger API in groonga. Old API isn't used anymore.
 * For installing groonga with this gem:
@@ -562,28 +552,26 @@
   "TARGET_TABLE_NAME.index_INDEX_COLUMN_NAME".
   e.g.)
 
-  ```text
-   $ cat index-dump.sdf
-     table_create --name Video --flags TABLE_HASH_KEY --key_type UInt32
-     table_create --name Tag --flags TABLE_HASH_KEY --key_type ShortText
-     column_create --table Video --name title --flags COLUMN_SCALAR --type ShortText
-     column_create --table Video --name tags --flags COLUMN_VECTOR --type Tag
-     column_create --table Tag --name index_tags --flags COLUMN_INDEX --type Video --source tags
-     load --table Video
-     [
-     {"_key":1,"title":"groonga Demo","tags":["IT","Server","groonga"]},
-     {"_key":2,"title":"Ultra Baseball","tags":["Sports","Baseball"]},
-     ]
-  $ groonga --file index-dump.sdf -n index-dump.db
-  $ groonga-index-dump --output-directory=path/to/index/ index-dump.db
-  $ cd path/to/index/
-  $ ls Tag.index_tags
-    Baseball.dump  IT.dump       Server.dump  Sports.dump  groonga.dump
-  $ cat path/to/index/Tag.index_tags/groonga.dump
-    index: Tag.index_tags	term: <groonga>	domain: Tag	range: Video	have_section: false	have_weight: false	have_position: false
-     weight	position        term_frequency	record
-     0    2     1   Video[ 1 ].tags
-  ```
+      $ cat index-dump.sdf
+        table_create --name Video --flags TABLE_HASH_KEY --key_type UInt32
+        table_create --name Tag --flags TABLE_HASH_KEY --key_type ShortText
+        column_create --table Video --name title --flags COLUMN_SCALAR --type ShortText
+        column_create --table Video --name tags --flags COLUMN_VECTOR --type Tag
+        column_create --table Tag --name index_tags --flags COLUMN_INDEX --type Video --source tags
+        load --table Video
+        [
+        {"_key":1,"title":"groonga Demo","tags":["IT","Server","groonga"]},
+        {"_key":2,"title":"Ultra Baseball","tags":["Sports","Baseball"]},
+        ]
+      $ groonga --file index-dump.sdf -n index-dump.db
+      $ groonga-index-dump --output-directory=path/to/index/ index-dump.db
+      $ cd path/to/index/
+      $ ls Tag.index_tags
+        Baseball.dump  IT.dump       Server.dump  Sports.dump  groonga.dump
+      $ cat path/to/index/Tag.index_tags/groonga.dump
+        index: Tag.index_tags	term: <groonga>	domain: Tag	range: Video	have_section: false	have_weight: false	have_position: false
+         weight	position        term_frequency	record
+         0    2     1   Video[ 1 ].tags
 
 * Added flag options to Groonga::IndexColumn#open_cursor.
   The flag options are :with_section, :with_weight, :with_position.
@@ -970,31 +958,25 @@
 * Supported a notation for specifying index column as match target in
   Groonga::Table#select:
 
-  ```ruby
-  table.select do |record|
-    record.match("query") do |match_record|
-      (match_record.index("Terms.title") * 1000) |
-        (match_record.index("Terms.description") * 100)
-        match_record.content
-    end
-  end
-  ```
+      table.select do |record|
+        record.match("query") do |match_record|
+          (match_record.index("Terms.title") * 1000) |
+            (match_record.index("Terms.description") * 100)
+            match_record.content
+        end
+      end
 
 * Supported prefix search in Groonga::Table#select:
 
-  ```ruby
-  table.select do |record|
-    record.name.prefix_search("groo")
-  end
-  ```
+      table.select do |record|
+        record.name.prefix_search("groo")
+      end
 
 * Supported suffix search in Groonga::Table#select:
 
-  ```ruby
-  table.select do |record|
-    record.name.suffix_search("nga")
-  end
-  ```
+      table.select do |record|
+        record.name.suffix_search("nga")
+      end
 
 * Supported :default_tokenizer schema dump.
 * Supported :key_normalize schema dump.
@@ -1138,29 +1120,25 @@
     Here is an example to match source column or title column and
     title column has high score:
 
-    ```ruby
-      table.select do |record|
-        (record.title * 10 | record.source) =~ "query"
-      end
-    ```
+        table.select do |record|
+          (record.title * 10 | record.source) =~ "query"
+        end
 
   * Supported and representation for and conditions:
 
     Here are examples that represents the same condition:
 
-      ```ruby
-      table.select do |record|
-        conditions = []
-        conditions << record.title =~ "query"
-        conditions << record.updated_at > Time.parse("2010-07-29T21:14:29+09:00")
-        conditions
-      end
+        table.select do |record|
+          conditions = []
+          conditions << record.title =~ "query"
+          conditions << record.updated_at > Time.parse("2010-07-29T21:14:29+09:00")
+          conditions
+        end
 
-      table.select do |record|
-        (record.title =~ "query") &
-          (record.updated_at > Time.parse("2010-07-29T21:14:29+09:00"))
-      end
-      ```
+        table.select do |record|
+          (record.title =~ "query") &
+            (record.updated_at > Time.parse("2010-07-29T21:14:29+09:00"))
+        end
 
 * Provided groonga runtime version: Groonga::VERSION
 * Added Groonga::Table#support_sub_records?
