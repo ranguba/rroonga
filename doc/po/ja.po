@@ -875,7 +875,7 @@ msgstr ""
 "* grndump: インデックスのスキーマを出力するかどうかを切り替える `--dump-indexes` オプションを追加。インデックスのスキーマだけを"
 "ダンプするときに有用。\n"
 "* {Groonga.lock_timeout}を追加。\n"
-"* {Groonga.lock_timeout=}を追加。\n"
+"* {Groonga.lock_timeout=}を追加。"
 
 msgid "## 3.1.1: 2013-12-29 {#version-3-1-1}"
 msgstr ""
