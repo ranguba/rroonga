@@ -288,9 +288,9 @@
 ### Improvements
 
 * Supported Groonga 3.1.1.
-* [groonga-database-inspect]: Added `--no-tables` option for hiding
+* [groonga-database-inspect] Added `--no-tables` option for hiding
   all table information.
-* [groonga-database-inspect]: Added `--no-columns` option for hiding
+* [groonga-database-inspect] Added `--no-columns` option for hiding
   all column information.
 * [doc] Updated English mailing list to use Groonga-talk.
   [GitHub#14] [Patch by Masafumi Yokoyama]
