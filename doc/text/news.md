@@ -540,7 +540,9 @@
   [groonga-dev,01138][Suggested by ongaeshi]
 * Added Groonga::Normalizer.normalize (experimental). It normalize string.
   e.g.)
-    Groonga::Normalizer.normalize("AbC") # => "abc"
+
+      Groonga::Normalizer.normalize("AbC") # => "abc"
+
   Now, it removes any spaces by default, but it will be customized soon.
 * Supported :normalizer option in DoubleArrayTrie, PatriciaTrie, Hash,
   Schema when creating tables.
@@ -592,16 +594,19 @@
 * Move groonga-query-log-extract to groonga-query-log.
   Please install groogna-query-log gem to use this tool.
   how to install:
+
       gem install groonga-query-log
+
 * Returned Groonga::Array instead of Array by Table#sort.
   [GitHub: #8][Suggested by Genki Takiuchi]
   CAUTION: This is backward incompatible change. You need to use
   record.value to get the original record.
   The following code shows how to use old style:
-    result_since_2_1_0 = table.sort(["sort_key"])
-    result_before_2_1_0 = result_since_2_1_0.collect do |record|
-      record.value
-    end
+
+      result_since_2_1_0 = table.sort(["sort_key"])
+      result_before_2_1_0 = result_since_2_1_0.collect do |record|
+        record.value
+      end
 
 ### Thanks
 
