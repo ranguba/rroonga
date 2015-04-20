@@ -394,7 +394,7 @@ You group the results of *ruby_comments* in each item and union
 *ruby_items* .
 
     >> ruby_items = ruby_comments.group("item").union!(ruby_items)
-#<Groonga::Hash ..., size: <5>>
+    #<Groonga::Hash ..., size: <5>>
     >> ruby_items.sort([{:key => "_score", :order => "descending"}]).each do |record|
     >>   p [record.score, record.title]
     >> end
