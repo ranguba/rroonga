@@ -18,17 +18,13 @@ Please execute irb with loading Rroonga with this command:
 
 Now you use UTF-8 as the encoding of database.
 
-~~~ruby
->> Groonga::Context.default_options = {:encoding => :utf8}
-=> {:encoding=>:utf8}
-~~~
+    >> Groonga::Context.default_options = {:encoding => :utf8}
+    => {:encoding=>:utf8}
 
 Then, try to create database in a file.
 
-~~~ruby
->> Groonga::Database.create(:path => "/tmp/bookmark.db")
-=> #<Groonga::Database ...>
-~~~
+    >> Groonga::Database.create(:path => "/tmp/bookmark.db")
+    => #<Groonga::Database ...>
 
 From now, the created database is used implicitly.
 You don't have to be aware of it after you created a database first.
@@ -59,52 +55,40 @@ Groonga::Array
 Now, you use Groonga::Hash and create the table named `Items`. The type
 of its primary key is String.
 
-~~~ruby
->> Groonga::Schema.create_table("Items", :type => :hash)
-=> [...]
-~~~
+    >> Groonga::Schema.create_table("Items", :type => :hash)
+    => [...]
 
 You have `Items` table by this code.
 You can refer the defined table with Groonga.[] like below:
 
-~~~ruby
->> items = Groonga["Items"]
-=> #<Groonga::Hash ...>
-~~~
+    >> items = Groonga["Items"]
+    => #<Groonga::Hash ...>
 
 You can treat it like Hash.
 For example, let's type `items.size` to get the number of records in
 the table.
 
-~~~ruby
->> items.size
-=> 0
-~~~
+    >> items.size
+    => 0
 
 ## Add records
 
 Let's add records to `Items` table.
 
-~~~ruby
->> items.add("http://en.wikipedia.org/wiki/Ruby")
-=> #<Groonga::Record ...>
->> items.add("http://www.ruby-lang.org/")
-=> #<Groonga::Record ...>
-~~~
+    >> items.add("http://en.wikipedia.org/wiki/Ruby")
+    => #<Groonga::Record ...>
+    >> items.add("http://www.ruby-lang.org/")
+    => #<Groonga::Record ...>
 
 Please check the number of records. It increases from 0 to 2.
 
-~~~ruby
->> items.size
-=> 2
-~~~
+    >> items.size
+    => 2
 
 If you can get record by primary key, type like below:
 
-~~~ruby
->> items["http://en.wikipedia.org/wiki/Ruby"]
-=> #<Groonga::Record ...>
-~~~
+    >> items["http://en.wikipedia.org/wiki/Ruby"]
+    => #<Groonga::Record ...>
 
 ## Full text search
 
@@ -112,31 +96,25 @@ Let's add item's title to full text search.
 
 first, you add the `Text` type column "`title`" to `Items` table.
 
-~~~ruby
->> Groonga::Schema.change_table("Items") do |table|
-?>     table.text("title")
->>   end
-=> [...]
-~~~
+    >> Groonga::Schema.change_table("Items") do |table|
+    ?>     table.text("title")
+    >>   end
+    => [...]
 
 Defined columns is named as `#{TABLE_NAME}.#{COLUMN_NAME}`.
 You can refer them with {Groonga.[]} as same as tables.
 
-~~~ruby
->> title_column = Groonga["Items.title"]
-=> #<Groonga::VariableSizeColumn ...>
-~~~
+    >> title_column = Groonga["Items.title"]
+    => #<Groonga::VariableSizeColumn ...>
 
 
 Secondly, let's add the table containing terms from splited from texts.
 Then you define the `Terms` for it.
 
-~~~ruby
->> Groonga::Schema.create_table("Terms",
-?>                              :type => :patricia_trie,
-?>                              :normalizer => :NormalizerAuto,
-?>                              :default_tokenizer => "TokenBigram")
-~~~
+    >> Groonga::Schema.create_table("Terms",
+    ?>                              :type => :patricia_trie,
+    ?>                              :normalizer => :NormalizerAuto,
+    ?>                              :default_tokenizer => "TokenBigram")
 
 You specify `:default_tokenzier => "TokenBigram"` for "Tokenizer" in
 the above code.
@@ -154,12 +132,10 @@ ignoring the case.
 Now, you ready table for terms, so you define the index of
 `Items.tiltle` column.
 
-~~~ruby
->> Groonga::Schema.change_table("Terms") do |table|
-?>     table.index("Items.title")
->>   end
-=> [...]
-~~~
+    >> Groonga::Schema.change_table("Terms") do |table|
+    ?>     table.index("Items.title")
+    >>   end
+    => [...]
 
 You may feel a few unreasonable code. The index of `Items` table's
 column is defined as the column in `Terms`.
@@ -175,37 +151,29 @@ very useful to process particular search.
 Now, you finished table definition.
 Let's put some values to `title` of each record you added before.
 
-~~~ruby
->> items["http://en.wikipedia.org/wiki/Ruby"].title = "Ruby"
-=> "Ruby"
->> items["http://www.ruby-lang.org/"].title = "Ruby Programming Language"
-"Ruby Programming Language"
-~~~
+    >> items["http://en.wikipedia.org/wiki/Ruby"].title = "Ruby"
+    => "Ruby"
+    >> items["http://www.ruby-lang.org/"].title = "Ruby Programming Language"
+    "Ruby Programming Language"
 
 Now, you can do full text search like above:
 
-~~~ruby
->> ruby_items = items.select {|record| record.title =~ "Ruby"}
-=> #<Groonga::Hash ..., normalizer: (nil)>
-~~~
+    >> ruby_items = items.select {|record| record.title =~ "Ruby"}
+    => #<Groonga::Hash ..., normalizer: (nil)>
 
 Groonga returns the search result as Groonga::Hash.
 Keys in this hash table is records of hitted `Items`.
 
-~~~ruby
->> ruby_items.collect {|record| record.key.key}
-=> ["http://en.wikipedia.org/wiki/Ruby", "http://www.ruby-lang.org/"]
-~~~
+    >> ruby_items.collect {|record| record.key.key}
+    => ["http://en.wikipedia.org/wiki/Ruby", "http://www.ruby-lang.org/"]
 
 In above example, you get records in `Items` with `record.key`, and
 keys of them with `record.key.key`.
 
 You can access a refered key in records briefly with `record["_key"]`.
 
-~~~ruby
->> ruby_items.collect {|record| record["_key"]}
-=> ["http://en.wikipedia.org/wiki/Ruby", "http://www.ruby-lang.org/"]
-~~~
+    >> ruby_items.collect {|record| record["_key"]}
+    => ["http://en.wikipedia.org/wiki/Ruby", "http://www.ruby-lang.org/"]
 
 ## Improve the simple bookmark application
 
@@ -219,48 +187,40 @@ First, you add tables for users and for comments like below:
 
 Let's add the table for users, `Users`.
 
-~~~ruby
->> Groonga::Schema.create_table("Users", :type => :hash) do |table|
-?>     table.text("name")
->>   end
-=> [...]
-~~~
+    >> Groonga::Schema.create_table("Users", :type => :hash) do |table|
+    ?>     table.text("name")
+    >>   end
+    => [...]
 
 
 Next, let's add the table for comments as `Comments`.
 
-~~~ruby
->> Groonga::Schema.create_table("Comments") do |table|
-?>     table.reference("item")
->>   table.reference("author", "Users")
->>   table.text("content")
->>   table.time("issued")
->>   end
-=> [...]
-~~~
+    >> Groonga::Schema.create_table("Comments") do |table|
+    ?>     table.reference("item")
+    >>   table.reference("author", "Users")
+    >>   table.text("content")
+    >>   table.time("issued")
+    >>   end
+    => [...]
 
 Then you define the index of `content` column in `Comments` for full
 text search.
 
-~~~ruby
->> Groonga::Schema.change_table("Terms") do |table|
-?>     table.index("Comments.content")
->>   end
-=> [...]
-~~~
+    >> Groonga::Schema.change_table("Terms") do |table|
+    ?>     table.index("Comments.content")
+    >>   end
+    => [...]
 
 You finish table definition by above code.
 
 Secondly, you add some users to `Users`.
 
-~~~ruby
->> users = Groonga["Users"]
-=> #<Groonga::Hash ...>
->> users.add("alice", :name => "Alice")
-=> #<Groonga::Record ...>
->> users.add("bob", :name => "Bob")
-=> #<Groonga::Record ...>
-~~~
+    >> users = Groonga["Users"]
+    => #<Groonga::Hash ...>
+    >> users.add("alice", :name => "Alice")
+    => #<Groonga::Record ...>
+    >> users.add("bob", :name => "Bob")
+    => #<Groonga::Record ...>
 
 Now, let's write the process to bookmark by a user.
 You assume that the user, `moritan`, bookmark a page including
@@ -268,52 +228,44 @@ infomation related Ruby.
 
 First, you check if the page has been added `Items` already.
 
-~~~ruby
->> items.has_key?("http://www.ruby-doc.org/")
-=> false
-~~~
+    >> items.has_key?("http://www.ruby-doc.org/")
+    => false
 
 The page hasn't been added, so you add it to `Items`.
 
-~~~ruby
->> items.add("http://www.ruby-doc.org/",
-?>           :title => "Ruby-Doc.org: Documenting the Ruby Language")
+    >> items.add("http://www.ruby-doc.org/",
+    ?>           :title => "Ruby-Doc.org: Documenting the Ruby Language")
 => #<Groonga::Record ...>
-~~~
 
 Next, you add the record to `Comments`. This record contains this page
 as its `item` column.
 
-~~~ruby
->> require "time"
-=> true
->> comments = Groonga["Comments"]
-=> #<Groonga::Array ...>
->> comments.add(:item => "http://www.ruby-doc.org/",
-?>              :author => "alice",
-?>              :content => "Ruby documents",
-?>              :issued => Time.parse("2010-11-20T18:01:22+09:00"))
-=> #<Groonga::Record ...>
-~~~
+    >> require "time"
+    => true
+    >> comments = Groonga["Comments"]
+    => #<Groonga::Array ...>
+    >> comments.add(:item => "http://www.ruby-doc.org/",
+    ?>              :author => "alice",
+    ?>              :content => "Ruby documents",
+    ?>              :issued => Time.parse("2010-11-20T18:01:22+09:00"))
+    => #<Groonga::Record ...>
 
 ## Define methods for this process
 
 For usefull, you define methods for above processes.
 
-~~~ruby
->> @items = items
-=> #<Groonga::Hash ...>
->> @comments = comments
-=> #<Groonga::Array ...>
->> def add_bookmark(url, title, author, content, issued)
->>   item = @items[url] || @items.add(url, :title => title)
->>   @comments.add(:item => item,
-?>                 :author => author,
-?>                 :content => content,
-?>                 :issued => issued)
->>   end
-=> nil
-~~~
+    >> @items = items
+    => #<Groonga::Hash ...>
+    >> @comments = comments
+    => #<Groonga::Array ...>
+    >> def add_bookmark(url, title, author, content, issued)
+    >>   item = @items[url] || @items.add(url, :title => title)
+    >>   @comments.add(:item => item,
+    ?>                 :author => author,
+    ?>                 :content => content,
+    ?>                 :issued => issued)
+    >>   end
+    => nil
 
 You assign `items` and `comments` to each instance variable, so you can
 use them in `add_bookmark` method.
@@ -326,44 +278,40 @@ use them in `add_bookmark` method.
 
 With this method, lets bookmark some pages.
 
-~~~ruby
->> add_bookmark("https://rubygems.org/",
-?>              "RubyGems.org | your community gem host", "alice", "Ruby gems",
-?>              Time.parse("2010-10-07T14:18:28+09:00"))
-=> #<Groonga::Record ...>
->> add_bookmark("http://ranguba.org/",
-?>              "Fulltext search by Ruby with groonga - Ranguba", "bob",
-?>              "Ruby groonga fulltextsearch",
-?>              Time.parse("2010-11-11T12:39:59+09:00"))
-=> #<Groonga::Record ...>
->> add_bookmark("http://www.ruby-doc.org/",
-?>              "ruby-doc", "bob", "ruby documents",
-?>              Time.parse("2010-07-28T20:46:23+09:00"))
-=> #<Groonga::Record ...>
-~~~
+    >> add_bookmark("https://rubygems.org/",
+    ?>              "RubyGems.org | your community gem host", "alice", "Ruby gems",
+    ?>              Time.parse("2010-10-07T14:18:28+09:00"))
+    => #<Groonga::Record ...>
+    >> add_bookmark("http://ranguba.org/",
+    ?>              "Fulltext search by Ruby with groonga - Ranguba", "bob",
+    ?>              "Ruby groonga fulltextsearch",
+    ?>              Time.parse("2010-11-11T12:39:59+09:00"))
+    => #<Groonga::Record ...>
+    >> add_bookmark("http://www.ruby-doc.org/",
+    ?>              "ruby-doc", "bob", "ruby documents",
+    ?>              Time.parse("2010-07-28T20:46:23+09:00"))
+    => #<Groonga::Record ...>
 
 ## Full text search part 2
 
 Let's do full text search for added records.
 
-~~~ruby
->> records = comments.select do |record|
-?>     record["content"] =~ "Ruby"
->>   end
-=> #<Groonga::Hash ...>
->> records.each do |record|
-?>     comment = record
->>   p [comment.id,
-?>       comment.issued,
-?>       comment.item.title,
-?>       comment.author.name,
-?>       comment.content]
->>   end
-[1, 2010-11-20 18:01:22 +0900, "Ruby-Doc.org: Documenting the Ruby Language", "Alice", "Ruby documents"]
-[2, 2010-10-07 14:18:28 +0900, "RubyGems.org | your community gem host", "Alice", "Ruby gems"]
-[3, 2010-11-11 12:39:59 +0900, "Fulltext search by Ruby with groonga - Ranguba", "Bob", "Ruby groonga fulltextsearch"]
-[4, 2010-07-28 20:46:23 +0900, "Ruby-Doc.org: Documenting the Ruby Language", "Bob", "ruby documents"]
-~~~
+    >> records = comments.select do |record|
+    ?>     record["content"] =~ "Ruby"
+    >>   end
+    => #<Groonga::Hash ...>
+    >> records.each do |record|
+    ?>     comment = record
+    >>   p [comment.id,
+    ?>       comment.issued,
+    ?>       comment.item.title,
+    ?>       comment.author.name,
+    ?>       comment.content]
+    >>   end
+    [1, 2010-11-20 18:01:22 +0900, "Ruby-Doc.org: Documenting the Ruby Language", "Alice", "Ruby documents"]
+    [2, 2010-10-07 14:18:28 +0900, "RubyGems.org | your community gem host", "Alice", "Ruby gems"]
+    [3, 2010-11-11 12:39:59 +0900, "Fulltext search by Ruby with groonga - Ranguba", "Bob", "Ruby groonga fulltextsearch"]
+    [4, 2010-07-28 20:46:23 +0900, "Ruby-Doc.org: Documenting the Ruby Language", "Bob", "ruby documents"]
 
 You can access the columns with the same name method as each them.
 These methods suport to access the complex data type.
@@ -373,44 +321,38 @@ These methods suport to access the complex data type.
 The search is finished when the first sentence in this codes. The
 results of this search is the object as records set.
 
-~~~ruby
->> records
-#<Groonga::Hash ..., size: <4>>
-~~~
+    >> records
+    #<Groonga::Hash ..., size: <4>>
 
 You can arrange this records set before output.
 For example, sort these records in the descending order by date.
 
-~~~ruby
->> records.sort([{:key => "issued", :order => "descending"}]).each do |record|
-?>     comment = record
->>   p [comment.id,
-?>       comment.issued,
-?>       comment.item.title,
-?>       comment.author.name,
-?>       comment.content]
->>   end
-[1, 2010-11-20 18:01:22 +0900, "Ruby-Doc.org: Documenting the Ruby Language", "Alice", "Ruby documents"]
-[2, 2010-11-11 12:39:59 +0900, "Fulltext search by Ruby with groonga - Ranguba", "Bob", "Ruby groonga fulltextsearch"]
-[3, 2010-10-07 14:18:28 +0900, "RubyGems.org | your community gem host", "Alice", "Ruby gems"]
-[4, 2010-07-28 20:46:23 +0900, "Ruby-Doc.org: Documenting the Ruby Language", "Bob", "ruby documents"]
-=> [...]
-~~~
+    >> records.sort([{:key => "issued", :order => "descending"}]).each do |record|
+    ?>     comment = record
+    >>   p [comment.id,
+    ?>       comment.issued,
+    ?>       comment.item.title,
+    ?>       comment.author.name,
+    ?>       comment.content]
+    >>   end
+    [1, 2010-11-20 18:01:22 +0900, "Ruby-Doc.org: Documenting the Ruby Language", "Alice", "Ruby documents"]
+    [2, 2010-11-11 12:39:59 +0900, "Fulltext search by Ruby with groonga - Ranguba", "Bob", "Ruby groonga fulltextsearch"]
+    [3, 2010-10-07 14:18:28 +0900, "RubyGems.org | your community gem host", "Alice", "Ruby gems"]
+    [4, 2010-07-28 20:46:23 +0900, "Ruby-Doc.org: Documenting the Ruby Language", "Bob", "ruby documents"]
+    => [...]
 
 Let's group the result by each item for easy view.
 
-~~~ruby
->> records.group("item").each do |record|
-?>     item = record.key
->>   p [record.n_sub_records,
-?>       item.key,
-?>       item.title]
->>   end
-[2, "http://www.ruby-doc.org/", "Ruby-Doc.org: Documenting the Ruby Language"]
-[1, "https://rubygems.org/", "RubyGems.org | your community gem host"]
-[1, "http://ranguba.org/", "Fulltext search by Ruby with groonga - Ranguba"]
-=> nil
-~~~
+    >> records.group("item").each do |record|
+    ?>     item = record.key
+    >>   p [record.n_sub_records,
+    ?>       item.key,
+    ?>       item.title]
+    >>   end
+    [2, "http://www.ruby-doc.org/", "Ruby-Doc.org: Documenting the Ruby Language"]
+    [1, "https://rubygems.org/", "RubyGems.org | your community gem host"]
+    [1, "http://ranguba.org/", "Fulltext search by Ruby with groonga - Ranguba"]
+    => nil
 
 `n_sub_records` is the number of records in each group.
 It is similar value as count() function of a query including "GROUP
@@ -438,32 +380,28 @@ Then, you search records with this policy:
 
 On this policy, you try to type below:
 
-~~~ruby
->> ruby_comments = @comments.select {|record| record.content =~ "Ruby"}
-=> #<Groonga::Hash ..., size: <4>
->> ruby_items = @items.select do |record|
-?>     target = record.match_target do |match_record|
-?>       match_record.title * 10
->>     end
->>   target =~ "Ruby"
->>   end
-#<Groonga::Hash ..., size: <4>>
-~~~
+    >> ruby_comments = @comments.select {|record| record.content =~ "Ruby"}
+    => #<Groonga::Hash ..., size: <4>
+    >> ruby_items = @items.select do |record|
+    ?>     target = record.match_target do |match_record|
+    ?>       match_record.title * 10
+    >>     end
+    >>   target =~ "Ruby"
+    >>   end
+    #<Groonga::Hash ..., size: <4>>
 
 You group the results of *ruby_comments* in each item and union
 *ruby_items* .
 
-~~~ruby
->> ruby_items = ruby_comments.group("item").union!(ruby_items)
-#<Groonga::Hash ..., size: <5>>
->> ruby_items.sort([{:key => "_score", :order => "descending"}]).each do |record|
->>   p [record.score, record.title]
->> end
-[22, "Ruby-Doc.org: Documenting the Ruby Language"]
-[11, "Fulltext search by Ruby with groonga - Ranguba"]
-[10, "Ruby Programming Language"]
-[10, "Ruby"]
-[1, "RubyGems.org | your community gem host"]
-~~~
+    >> ruby_items = ruby_comments.group("item").union!(ruby_items)
+    #<Groonga::Hash ..., size: <5>>
+    >> ruby_items.sort([{:key => "_score", :order => "descending"}]).each do |record|
+    >>   p [record.score, record.title]
+    >> end
+    [22, "Ruby-Doc.org: Documenting the Ruby Language"]
+    [11, "Fulltext search by Ruby with groonga - Ranguba"]
+    [10, "Ruby Programming Language"]
+    [10, "Ruby"]
+    [1, "RubyGems.org | your community gem host"]
 
 Then, you get the result.
