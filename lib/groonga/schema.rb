@@ -1209,8 +1209,16 @@ module Groonga
       # @private
       def table_type
         type = @options[:type]
+        if type.nil?
+          if @options[:key_type]
+            type = :hash
+          else
+            type = :array
+          end
+        end
+
         case type
-        when :array, nil
+        when :array
           Groonga::Array
         when :hash
           Groonga::Hash

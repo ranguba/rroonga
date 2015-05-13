@@ -71,6 +71,25 @@ class SchemaTest < Test::Unit::TestCase
     end
   end
 
+  sub_test_case "define table" do
+    sub_test_case ":key_type" do
+      test "exist" do
+        Groonga::Schema.create_table("Posts",
+                                     :key_type => :short_text) do |table|
+        end
+        posts = context["Posts"]
+        assert_kind_of(Groonga::Hash, posts)
+      end
+
+      test "not exist" do
+        Groonga::Schema.create_table("Posts") do |table|
+        end
+        posts = context["Posts"]
+        assert_kind_of(Groonga::Array, posts)
+      end
+    end
+  end
+
   class DefineHashTest < self
     def test_default
       Groonga::Schema.create_table("Posts", :type => :hash) do |table|
