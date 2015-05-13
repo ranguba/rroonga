@@ -1,6 +1,6 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
-  Copyright (C) 2009-2013  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2015  Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -344,7 +344,7 @@ rb_grn_logger_s_reopen (VALUE klass)
 }
 
 /*
- * Gets the current log path that is used the default logger.
+ * Gets the current log path that is used by the default logger.
  *
  * @overload path
  *   @return [String or nil] The current log path
