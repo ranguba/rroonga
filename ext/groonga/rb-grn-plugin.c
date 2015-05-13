@@ -1,6 +1,6 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
-  Copyright (C) 2011  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2011-2015  Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -191,6 +191,18 @@ rb_grn_plugin_s_suffix (VALUE klass)
     return rb_str_new_cstr(grn_plugin_get_suffix());
 }
 
+/*
+ * Returns the plugin file suffix written in Ruby. It returns ".rb".
+ *
+ * @overload ruby_suffix
+ *   @return [String]
+ */
+static VALUE
+rb_grn_plugin_s_ruby_suffix (VALUE klass)
+{
+    return rb_str_new_cstr(grn_plugin_get_ruby_suffix());
+}
+
 void
 rb_grn_init_plugin (VALUE mGrn)
 {
@@ -205,4 +217,6 @@ rb_grn_init_plugin (VALUE mGrn)
                                rb_grn_plugin_s_system_plugins_dir, 0);
     rb_define_singleton_method(cGrnPlugin, "suffix",
                                rb_grn_plugin_s_suffix, 0);
+    rb_define_singleton_method(cGrnPlugin, "ruby_suffix",
+                               rb_grn_plugin_s_ruby_suffix, 0);
 }

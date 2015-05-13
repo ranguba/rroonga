@@ -1,4 +1,4 @@
-# Copyright (C) 2011  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2011-2015  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -33,6 +33,10 @@ class PluginTest < Test::Unit::TestCase
     assert do
       File.exist?(plugin_path)
     end
+  end
+
+  def test_ruby_suffix
+    assert_equal(".rb", Groonga::Plugin.ruby_suffix)
   end
 
   class UnregisterTest < self
