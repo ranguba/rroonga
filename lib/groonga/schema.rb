@@ -1219,8 +1219,13 @@ module Groonga
         when :double_array_trie
           Groonga::DoubleArrayTrie
         else
-          supported_types = [nil, :array, :hash, :patricia_trie,
-                             :double_array_trie]
+          supported_types = [
+            nil,
+            :array,
+            :hash,
+            :patricia_trie,
+            :double_array_trie,
+          ]
           raise UnknownTableType.new(type, supported_types)
         end
       end
