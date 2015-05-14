@@ -127,5 +127,8 @@ class LoggerTest < Test::Unit::TestCase
     Groonga::Logger.unregister
     Groonga::Logger.path = @log_path.to_s
     Groonga::Logger.rotate_threshold_size = 10
+    assert_equal([], Dir.glob("#{@log_path}.*"))
+    Groonga::Logger.log("Hello")
+    assert_not_equal([], Dir.glob("#{@log_path}.*"))
   end
 end
