@@ -39,6 +39,51 @@ class QueryLoggerTest < Test::Unit::TestCase
     end
   end
 
+  sub_test_case ".parse" do
+    def parse(input, base_flags=nil)
+      base_flags ||= Groonga::QueryLogger::Flags::NONE
+      Groonga::QueryLogger::Flags.parse(input, base_flags)
+    end
+
+    test "nil" do
+      assert_equal(Groonga::QueryLogger::Flags::NONE,
+                   parse(nil))
+    end
+
+    test "Integer" do
+      assert_equal(Groonga::QueryLogger::Flags::COMMAND,
+                   parse(Groonga::QueryLogger::Flags::COMMAND))
+    end
+
+    test "String" do
+      assert_equal(Groonga::QueryLogger::Flags::COMMAND,
+                   parse("command"))
+    end
+
+    test "Symbol" do
+      assert_equal(Groonga::QueryLogger::Flags::COMMAND,
+                   parse(:command))
+    end
+
+    test "Array" do
+      assert_equal(Groonga::QueryLogger::Flags::COMMAND |
+                   Groonga::QueryLogger::Flags::RESULT_CODE,
+                   parse([:command, :result_code]))
+    end
+
+    test "Hash" do
+      assert_equal(Groonga::QueryLogger::Flags::COMMAND |
+                   Groonga::QueryLogger::Flags::DESTINATION,
+                   parse({
+                           :command => true,
+                           :result_code => false,
+                           :destination => true,
+                         },
+                         Groonga::QueryLogger::Flags::COMMAND |
+                         Groonga::QueryLogger::Flags::RESULT_CODE))
+    end
+  end
+
   sub_test_case ".log" do
     test "no options" do
       messages = []

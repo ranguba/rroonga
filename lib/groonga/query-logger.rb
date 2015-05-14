@@ -18,7 +18,18 @@
 module Groonga
   class QueryLogger
     module Flags
+      NAMES = {
+        :none        => NONE,
+        :command     => COMMAND,
+        :result_code => RESULT_CODE,
+        :destination => DESTINATION,
+        :cache       => CACHE,
+        :size        => SIZE,
+        :score       => SCORE,
+      }
+
       LABELS = {
+        NONE        => "none",
         COMMAND     => "command",
         RESULT_CODE => "result_code",
         DESTINATION => "destination",
@@ -28,9 +39,43 @@ module Groonga
       }
 
       class << self
-        def parse(input, base_flags)
-          # TODO
-          base_flags
+        # TODO: Document me.
+        def parse(input, base_flags=nil)
+          base_flags |= Flags::NONE
+          case input
+          when nil
+            base_flags
+          when Integer
+            input | base_flags
+          when String, Symbol
+            value = NAMES[input.to_sym]
+            if value.nil?
+              message =
+                "flag name must be one of #{NAMES.keys.inspect}: " +
+                "<#{input.inspect}>"
+              raise ArgumentError, message
+            end
+            value | base_flags
+          when ::Array
+            input.inject(base_flags) do |flags, sub_input|
+              parse(sub_input, flags)
+            end
+          when ::Hash
+            flags = base_flags
+            input.each do |key, use_key|
+              if use_key
+                flags = parse(key, flags)
+              else
+                flags &= ~parse(key, 0)
+              end
+            end
+            flags
+          else
+            message =
+              "flags value must be nil, Integer, names, " +
+              "Array of flag or Hash of name and boolean: <#{input.inspect}>"
+            raise ArgumentError, message
+          end
         end
 
         def label(flags)
