@@ -18,10 +18,12 @@ class LoggerTest < Test::Unit::TestCase
 
   def setup
     @default_log_path = Groonga::Logger.path
+    @default_rotate_threshold_size = Groonga::Logger.rotate_threshold_size
   end
 
   def teardown
     Groonga::Logger.path = @default_log_path
+    Groonga::Logger.rotate_threshold_size = @default_rotate_threshold_size
   end
 
   def test_reopen
@@ -119,5 +121,11 @@ class LoggerTest < Test::Unit::TestCase
                    ],
                    locations)
     end
+  end
+
+  def test_rotate_threshold_size
+    Groonga::Logger.unregister
+    Groonga::Logger.path = @log_path.to_s
+    Groonga::Logger.rotate_threshold_size = 10
   end
 end

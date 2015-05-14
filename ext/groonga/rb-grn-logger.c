@@ -506,6 +506,56 @@ rb_grn_logger_s_set_path (VALUE klass, VALUE rb_path)
     return Qnil;
 }
 
+/*
+ * Gets the current rotate threshold size that is used by the default
+ * logger.
+ *
+ * If the size is larger than 0, log rotate feature is enabled in the
+ * default logger.
+ *
+ * @overload threshold
+ *   @return [Integer] The current rotate threshold size
+ *
+ * @since 5.0.2
+ */
+static VALUE
+rb_grn_logger_s_get_rotate_threshold_size (VALUE klass)
+{
+    return OFFT2NUM(grn_default_logger_get_rotate_threshold_size());
+}
+
+/*
+ * Sets the rotate threshold size that is used by the default
+ * logger. If you're using custom logger by {.register}, the rotate
+ * threshold size isn't used. Because it is for the default logger.
+ *
+ * If you specify `0` as size, log rotation by the default logger is
+ * disabled.
+ *
+ * The default rotate threshold size is 0. It means that log rotation
+ * is disabled by default.
+ *
+ * @example Changes the rotate threshold size for the default logger
+ *   Groonga::Logger.rotate_threshold_size = 1 * 1024 * 1024 # 1MiB
+ *
+ * @example Disables log ration by the default logger
+ *   Groonga::Logger.rotate_threshold_size = 0
+ *
+ * @overload rotate_threshold_size=(size)
+ *   @param size [Integer] The log path for the default logger.
+ *     If nil is specified, logging by the default logger is disabled.
+ *   @return void
+ *
+ * @since 5.0.2
+ */
+static VALUE
+rb_grn_logger_s_set_rotate_threshold_size (VALUE klass, VALUE rb_size)
+{
+    grn_default_logger_set_rotate_threshold_size(NUM2OFFT(rb_size));
+
+    return Qnil;
+}
+
 void
 rb_grn_init_logger (VALUE mGrn)
 {
@@ -541,6 +591,10 @@ rb_grn_init_logger (VALUE mGrn)
                                rb_grn_logger_s_get_path, 0);
     rb_define_singleton_method(cGrnLogger, "path=",
                                rb_grn_logger_s_set_path, 1);
+    rb_define_singleton_method(cGrnLogger, "rotate_threshold_size",
+                               rb_grn_logger_s_get_rotate_threshold_size, 0);
+    rb_define_singleton_method(cGrnLogger, "rotate_threshold_size=",
+                               rb_grn_logger_s_set_rotate_threshold_size, 1);
     rb_set_end_proc(rb_grn_logger_reset, cGrnLogger);
 
     mGrnLoggerFlags = rb_define_module_under(cGrnLogger, "Flags");
