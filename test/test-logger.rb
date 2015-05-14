@@ -34,4 +34,90 @@ class LoggerTest < Test::Unit::TestCase
     Groonga::Logger.reopen
     assert_true(@log_path.exist?)
   end
+
+  sub_test_case ".log" do
+    test "no options" do
+      messages = []
+      Groonga::Logger.register do |event, level, time, title, message, location|
+        messages << message
+      end
+      Groonga::Logger.log("1")
+      Groonga::Logger.log("2")
+      Groonga::Logger.log("3")
+      assert_equal(["1", "2", "3"],
+                   messages)
+    end
+
+    test ":level" do
+      levels = []
+      Groonga::Logger.register(:max_level => :dump) do |event, level, *rest|
+        levels << level
+      end
+      Groonga::Logger.log("default")
+      Groonga::Logger.log("debug", :level => :debug)
+      assert_equal([:notice, :debug],
+                   levels)
+    end
+
+    test "default location" do
+      locations = []
+      Groonga::Logger.register do |event, level, time, title, message, location|
+        locations << location
+      end
+      Groonga::Logger.log("message"); line = __LINE__
+      function = caller_locations(0, 1)[0].label
+      assert_equal([
+                     "#{Process.pid} #{__FILE__}:#{line} #{function}()",
+                   ],
+                   locations)
+    end
+
+    test ":file" do
+      locations = []
+      Groonga::Logger.register do |event, level, time, title, message, location|
+        locations << location
+      end
+      Groonga::Logger.log("message", :file => "file.rb")
+      locations = locations.collect do |location|
+        location.gsub(/\A(\d+) (.*?):(\d+) (.*?)\(\)\z/,
+                      "0 \\2:0 function()")
+      end
+      assert_equal([
+                     "0 file.rb:0 function()",
+                   ],
+                   locations)
+    end
+
+    test ":line" do
+      locations = []
+      Groonga::Logger.register do |event, level, time, title, message, location|
+        locations << location
+      end
+      Groonga::Logger.log("message", :line => 100)
+      locations = locations.collect do |location|
+        location.gsub(/\A(\d+) (.*?):(\d+) (.*?)\(\)\z/,
+                      "0 test.rb:\\3 function()")
+      end
+      assert_equal([
+                     "0 test.rb:100 function()",
+                   ],
+                   locations)
+    end
+
+    test ":function" do
+      locations = []
+      Groonga::Logger.register do |event, level, time, title, message, location|
+        locations << location
+      end
+      Groonga::Logger.log("message", :function => "method_name")
+      locations = locations.collect do |location|
+        location.gsub(/\A(\d+) (.*?):(\d+) (.*?)\(\)\z/,
+                      "0 test.rb:0 \\4()")
+      end
+      assert_equal([
+                     "0 test.rb:0 method_name()",
+                   ],
+                   locations)
+    end
+  end
 end

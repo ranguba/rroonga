@@ -32,6 +32,11 @@ VALUE cGrnLogger;
 VALUE mGrnLoggerFlags;
 VALUE cGrnCallbackLogger;
 
+static ID id_caller_locations;
+static ID id_path;
+static ID id_lineno;
+static ID id_label;
+
 static ID id_new;
 static ID id_parse;
 static ID id_log;
@@ -120,6 +125,96 @@ rb_grn_log_level_to_ruby_object (grn_log_level level)
     }
 
     return rb_level;
+}
+
+/*
+ * Logs a message.
+ *
+ * @overload log(message, options={})
+ *   @param message [String] The log message.
+ *   @param options [::Hash]
+ *   @option options :context [Groonga::Context] (Groonga::Context.default)
+ *     The context for the message.
+ *   @option options :level [nil, :none, :emergency, :alert, :critical,
+ *     :error, :warning, :notice, :info, :debug, :dump] (:notice)
+ *     The level for the message.
+ *
+ *     `nil` equals to `:notice`.
+ *   @option options :file [nil, String] (nil)
+ *     The file name where the message is occurred.
+ *
+ *     If all of `:file`, `:line` and `:function` are nil, these
+ *     values are guessed from `Kernel.#caller_locations` result.
+ *   @option options :line [nil, Integer] (nil)
+ *     The line number where the message is occurred.
+ *   @option options :function [nil, String] (nil)
+ *     The function or related name such as method name where the
+ *     message is occurred.
+ *   @return [void]
+ *
+ * @since 5.0.2
+ */
+static VALUE
+rb_grn_logger_s_log (int argc, VALUE *argv, VALUE klass)
+{
+    VALUE rb_message;
+    const char *message;
+    VALUE rb_context = Qnil;
+    grn_ctx *context;
+    VALUE rb_level;
+    grn_log_level level = GRN_LOG_DEFAULT_LEVEL;
+    VALUE rb_file;
+    const char *file = NULL;
+    VALUE rb_line;
+    int line;
+    VALUE rb_function;
+    const char *function = NULL;
+    VALUE rb_options;
+
+    rb_scan_args(argc, argv, "11", &rb_message, &rb_options);
+
+    message = StringValueCStr(rb_message);
+
+    rb_grn_scan_options(rb_options,
+                        "context",  &rb_context,
+                        "level",    &rb_level,
+                        "file",     &rb_file,
+                        "line",     &rb_line,
+                        "function", &rb_function,
+                        NULL);
+
+    context = rb_grn_context_ensure(&rb_context);
+
+    if (!NIL_P(rb_level)) {
+        level = RVAL2GRNLOGLEVEL(rb_level);
+    }
+
+    if (NIL_P(rb_file) && NIL_P(rb_line) && NIL_P(rb_function)) {
+        VALUE rb_locations;
+        VALUE rb_location;
+        rb_locations = rb_funcall(rb_cObject,
+                                  id_caller_locations,
+                                  2,
+                                  INT2NUM(1), INT2NUM(1));
+        rb_location = RARRAY_PTR(rb_locations)[0];
+        rb_file = rb_funcall(rb_location, id_path, 0);
+        rb_line = rb_funcall(rb_location, id_lineno, 0);
+        rb_function = rb_funcall(rb_location, id_label, 0);
+    }
+
+    if (!NIL_P(rb_file)) {
+        file = StringValueCStr(rb_file);
+    }
+    if (!NIL_P(rb_line)) {
+        line = NUM2INT(rb_line);
+    }
+    if (!NIL_P(rb_function)) {
+        function = StringValueCStr(rb_function);
+    }
+
+    grn_logger_put(context, level, file, line, function, "%s", message);
+
+    return Qnil;
 }
 
 static void
@@ -414,6 +509,11 @@ rb_grn_logger_s_set_path (VALUE klass, VALUE rb_path)
 void
 rb_grn_init_logger (VALUE mGrn)
 {
+    id_caller_locations = rb_intern("caller_locations");
+    id_path             = rb_intern("path");
+    id_lineno           = rb_intern("lineno");
+    id_label            = rb_intern("label");
+
     id_new    = rb_intern("new");
     id_parse  = rb_intern("parse");
     id_log    = rb_intern("log");
@@ -429,6 +529,8 @@ rb_grn_init_logger (VALUE mGrn)
     cGrnLogger = rb_define_class_under(mGrn, "Logger", rb_cObject);
 
     rb_cv_set(cGrnLogger, "@@current_logger", Qnil);
+    rb_define_singleton_method(cGrnLogger, "log",
+                               rb_grn_logger_s_log, -1);
     rb_define_singleton_method(cGrnLogger, "register",
                                rb_grn_logger_s_register, -1);
     rb_define_singleton_method(cGrnLogger, "unregister",
