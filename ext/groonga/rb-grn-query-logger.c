@@ -1,6 +1,6 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
-  Copyright (C) 2012-2013  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2012-2015  Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -43,6 +43,72 @@ static VALUE
 rb_grn_query_log_flags_to_ruby_object (unsigned int flags)
 {
     return UINT2NUM(flags);
+}
+
+/*
+ * Logs a message.
+ *
+ * @overload log(message, options={})
+ *   @param message [String] The log message.
+ *   @param options [::Hash]
+ *   @option options :context [Groonga::Context] (Groonga::Context.default)
+ *     The context for the message.
+ *   @option options :flags [nil, Integer, String] (0)
+ *     The flags for the message.
+ *
+ *     The flags are passed to query logger. You can custom query
+ *     logger behavior by the flags. For example, you can omit elapsed
+ *     time by passing `Groonga::QueryLogger::COMMAND` flag or
+ *     `Groonga::QueryLogger::DESTINATION`.
+ *
+ *     If `:flags` value is `String`, parsed by
+ *     {Groonga::QueryLogger.parse}.
+ *
+ *     `nil` equals to `0`.
+ *   @option options :mark [String] ("")
+ *     The mark for the message.
+ *
+ *     Normally, a character is used as a mark such as `":"`, `"<"` and `">"`.
+ *   @return [void]
+ *
+ * @since 5.0.2
+ */
+static VALUE
+rb_grn_query_logger_s_log (int argc, VALUE *argv, VALUE klass)
+{
+    VALUE rb_message;
+    const char *message;
+    VALUE rb_context = Qnil;
+    grn_ctx *context;
+    VALUE rb_flags;
+    unsigned int flags = GRN_QUERY_LOG_NONE;
+    VALUE rb_mark;
+    const char *mark = "";
+    VALUE rb_options;
+
+    rb_scan_args(argc, argv, "11", &rb_message, &rb_options);
+
+    message = StringValueCStr(rb_message);
+
+    rb_grn_scan_options(rb_options,
+                        "context", &rb_context,
+                        "flags",   &rb_flags,
+                        "mark",    &rb_mark,
+                        NULL);
+
+    context = rb_grn_context_ensure(&rb_context);
+
+    if (!NIL_P(rb_flags)) {
+        flags = rb_funcall(mGrnQueryLoggerFlags, id_parse, 2,
+                           UINT2NUM(flags), rb_flags);
+    }
+    if (!NIL_P(rb_mark)) {
+        mark = StringValueCStr(rb_mark);
+    }
+
+    grn_query_logger_put(context, flags, mark, "%s", message);
+
+    return Qnil;
 }
 
 static void
@@ -305,6 +371,8 @@ rb_grn_init_query_logger (VALUE mGrn)
     cGrnQueryLogger = rb_define_class_under(mGrn, "QueryLogger", rb_cObject);
 
     rb_cv_set(cGrnQueryLogger, "@@current_logger", Qnil);
+    rb_define_singleton_method(cGrnQueryLogger, "log",
+                               rb_grn_query_logger_s_log, -1);
     rb_define_singleton_method(cGrnQueryLogger, "register",
                                rb_grn_query_logger_s_register, -1);
     rb_define_singleton_method(cGrnQueryLogger, "unregister",

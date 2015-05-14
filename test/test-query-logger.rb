@@ -38,4 +38,36 @@ class QueryLoggerTest < Test::Unit::TestCase
       @query_log_path.exist?
     end
   end
+
+  sub_test_case ".log" do
+    test "no options" do
+      messages = []
+      Groonga::QueryLogger.register do |action, flag, timestamp, info, message|
+        messages << message
+      end
+      Groonga::QueryLogger.log("1")
+      Groonga::QueryLogger.log("2")
+      Groonga::QueryLogger.log("3")
+      assert_equal(["1", "2", "3"],
+                   messages)
+    end
+
+    test ":mark" do
+      infos = []
+      Groonga::QueryLogger.register do |action, flag, timestamp, info, message|
+        infos << info
+      end
+      Groonga::QueryLogger.log("default")
+      Groonga::QueryLogger.log("mark", :mark => ":")
+      normalized_infos = infos.collect do |info|
+        info.gsub(/\A0x[a-f\d]+\|([^\d])?[\d]+ \z/,
+                  "context_id|\\1timestamp ")
+      end
+      assert_equal([
+                     "context_id|timestamp ",
+                     "context_id|:timestamp ",
+                   ],
+                   normalized_infos)
+    end
+  end
 end
