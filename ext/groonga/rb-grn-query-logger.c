@@ -166,7 +166,7 @@ rb_grn_query_logger_fin (grn_ctx *ctx, void *user_data)
  *     @option options [Symbol, String, Integer or nil] :flags (:default)
  *       Flags describe what query log should be logged.
  *
- *       If @flags@ is String, it is parsed by {QueryLogger::Flags.parse}.
+ *       If `flags` is String, it is parsed by {QueryLogger::Flags.parse}.
  *
  *   @return void
  *
