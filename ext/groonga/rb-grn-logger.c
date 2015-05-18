@@ -166,7 +166,7 @@ rb_grn_logger_s_log (int argc, VALUE *argv, VALUE klass)
     VALUE rb_file;
     const char *file = NULL;
     VALUE rb_line;
-    int line;
+    int line = 0;
     VALUE rb_function;
     const char *function = NULL;
     VALUE rb_options;
