@@ -97,6 +97,26 @@ class QueryLoggerTest < Test::Unit::TestCase
                    messages)
     end
 
+    test ":flags" do
+      infos = []
+      Groonga::QueryLogger.register do |action, flag, timestamp, info, message|
+        infos << info
+      end
+      Groonga::QueryLogger.log("default")
+      Groonga::QueryLogger.log("flags", :flags => "command")
+      normalized_infos = infos.collect do |info|
+        info = info.gsub(/\A0x[a-f\d]+\|/,
+                         "context_id|")
+        info.gsub(/\|[\d]+ \z/,
+                  "|timestamp ")
+      end
+      assert_equal([
+                     "context_id|timestamp ",
+                     "context_id|",
+                   ],
+                   normalized_infos)
+    end
+
     test ":mark" do
       infos = []
       Groonga::QueryLogger.register do |action, flag, timestamp, info, message|

@@ -100,7 +100,7 @@ rb_grn_query_logger_s_log (int argc, VALUE *argv, VALUE klass)
 
     if (!NIL_P(rb_flags)) {
         flags = rb_funcall(mGrnQueryLoggerFlags, id_parse, 2,
-                           UINT2NUM(flags), rb_flags);
+                           rb_flags, UINT2NUM(flags));
     }
     if (!NIL_P(rb_mark)) {
         mark = StringValueCStr(rb_mark);
