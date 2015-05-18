@@ -196,6 +196,8 @@ rb_grn_plugin_s_suffix (VALUE klass)
  *
  * @overload ruby_suffix
  *   @return [String]
+ *
+ * @since 5.0.2
  */
 static VALUE
 rb_grn_plugin_s_ruby_suffix (VALUE klass)
