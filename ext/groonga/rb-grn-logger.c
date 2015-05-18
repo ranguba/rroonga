@@ -543,7 +543,7 @@ rb_grn_logger_s_get_rotate_threshold_size (VALUE klass)
  *
  * @overload rotate_threshold_size=(size)
  *   @param size [Integer] The log path for the default logger.
- *     If nil is specified, logging by the default logger is disabled.
+ *     If nil is specified, log rotate by the default logger is disabled.
  *   @return void
  *
  * @since 5.0.2
