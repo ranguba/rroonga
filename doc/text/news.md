@@ -1,5 +1,23 @@
 # NEWS
 
+## 5.0.2: 2015-05-18 {#version-5-0-2}
+
+### Improvements
+
+  * Added {Groonga::Plugin.ruby_suffix}.
+  * {Groonga::Hash} is used as the default table type when `:key_type`
+    is specified in {Groonga::Schema}. {Groonga::Array} was used as
+    the default table type. It's a backward incompatible change. But
+    nobody will not stumped. Because `:key_type` is specified but
+    `:type` isn't specified case is a bug of user's program.
+  * Added {Groonga::Logger.log}.
+  * Added {Groonga::Logger.rotate_threshold_size}.
+  * Added {Groonga::Logger.rotate_threshold_size=}.
+  * Added {Groonga::QueryLogger.log}.
+  * Added {Groonga::QueryLogger.rotate_threshold_size}.
+  * Added {Groonga::QueryLogger.rotate_threshold_size=}.
+  * Implemented {Groonga::QueryLogger::Flags.parse}.
+
 ## 5.0.1: 2015-04-14 {#version-5-0-1}
 
 ### Improvements
