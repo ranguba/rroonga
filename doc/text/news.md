@@ -1,6 +1,6 @@
 # NEWS
 
-## 5.0.1: 2014-04-14 {#version-5-0-1}
+## 5.0.1: 2015-04-14 {#version-5-0-1}
 
 ### Improvements
 
@@ -48,7 +48,7 @@
   * yui-knk
   * Tasuku SUENAGA
 
-## 5.0.0: 2014-02-16 {#version-5-0-0}
+## 5.0.0: 2015-02-16 {#version-5-0-0}
 
 ### Improvements
 
@@ -67,7 +67,7 @@
 
 * Tasuku SUENAGA a.k.a. gunyarakun
 
-## 4.0.8: 2014-01-08 {#version-4-0-8}
+## 4.0.8: 2015-01-08 {#version-4-0-8}
 
 ### Improvements
 
