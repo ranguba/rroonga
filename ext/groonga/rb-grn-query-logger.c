@@ -353,6 +353,58 @@ rb_grn_query_logger_s_set_path (VALUE klass, VALUE rb_path)
     return Qnil;
 }
 
+/*
+ * Gets the current rotate threshold size that is used by the default
+ * query logger.
+ *
+ * If the size is larger than 0, log rotate feature is enabled in the
+ * default query logger.
+ *
+ * @overload threshold
+ *   @return [Integer] The current rotate threshold size
+ *
+ * @since 5.0.2
+ */
+static VALUE
+rb_grn_query_logger_s_get_rotate_threshold_size (VALUE klass)
+{
+    return OFFT2NUM(grn_default_query_logger_get_rotate_threshold_size());
+}
+
+/*
+ * Sets the rotate threshold size that is used by the default query
+ * logger. If you're using custom query logger by {.register}, the
+ * rotate threshold size isn't used. Because it is for the default
+ * query logger.
+ *
+ * If you specify `0` as size, log rotation by the default query
+ * logger is disabled.
+ *
+ * The default rotate threshold size is 0. It means that log rotation
+ * is disabled by default.
+ *
+ * @example Changes the rotate threshold size for the default query logger
+ *   Groonga::QueryLogger.rotate_threshold_size = 1 * 1024 * 1024 # 1MiB
+ *
+ * @example Disables log ration by the default query logger
+ *   Groonga::QueryLogger.rotate_threshold_size = 0
+ *
+ * @overload rotate_threshold_size=(size)
+ *   @param size [Integer] The log path for the default query logger.
+ *     If nil is specified, log rotate by the default query logger is
+ *     disabled.
+ *   @return void
+ *
+ * @since 5.0.2
+ */
+static VALUE
+rb_grn_query_logger_s_set_rotate_threshold_size (VALUE klass, VALUE rb_size)
+{
+    grn_default_query_logger_set_rotate_threshold_size(NUM2OFFT(rb_size));
+
+    return Qnil;
+}
+
 void
 rb_grn_init_query_logger (VALUE mGrn)
 {
@@ -383,6 +435,12 @@ rb_grn_init_query_logger (VALUE mGrn)
                                rb_grn_query_logger_s_get_path, 0);
     rb_define_singleton_method(cGrnQueryLogger, "path=",
                                rb_grn_query_logger_s_set_path, 1);
+    rb_define_singleton_method(cGrnQueryLogger, "rotate_threshold_size",
+                               rb_grn_query_logger_s_get_rotate_threshold_size,
+                               0);
+    rb_define_singleton_method(cGrnQueryLogger, "rotate_threshold_size=",
+                               rb_grn_query_logger_s_set_rotate_threshold_size,
+                               1);
 
     mGrnQueryLoggerFlags = rb_define_module_under(cGrnQueryLogger, "Flags");
 #define DEFINE_FLAG(NAME)                                       \
