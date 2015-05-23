@@ -78,7 +78,6 @@ Gem::Specification.new do |s|
   s.homepage = "http://ranguba.org/#about-rroonga"
   s.licenses = ["LGPL-2.1"]
   s.require_paths = ["lib", "ext/groonga"]
-  s.rubyforge_project = "groonga"
 
   s.required_ruby_version = ">= 1.9.3"
 
