@@ -158,6 +158,9 @@ module Groonga
         indent do
           write("ID:         #{column.id}\n")
           write("Type:       #{inspect_column_type(column)}\n")
+          unless column.index?
+            write("Value type: #{inspect_value_type(column.range)}\n")
+          end
           write("Path:       #{inspect_path(column.path)}\n")
           write("Disk usage: #{inspect_sub_disk_usage(column.disk_usage)}\n")
         end
@@ -262,6 +265,14 @@ module Groonga
           table.domain.name
         else
           "(no key)"
+        end
+      end
+
+      def inspect_value_type(range)
+        if range.nil?
+          "(no value)"
+        else
+          range.name
         end
       end
 

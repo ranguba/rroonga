@@ -144,6 +144,7 @@ class DatabaseInspectorTest < Test::Unit::TestCase
         #{column.local_name}:
           ID:         #{column.id}
           Type:       #{inspect_column_type(column)}
+          Value type: #{inspect_value_type(column.range)}
           Path:       <#{column.path}>
           Disk usage: #{inspect_sub_disk_usage(column.disk_usage)}
     INSPECTED
@@ -161,6 +162,14 @@ class DatabaseInspectorTest < Test::Unit::TestCase
       end
     else
       "index"
+    end
+  end
+
+  def inspect_value_type(range)
+    if range.nil?
+      "(no value)"
+    else
+      range.name
     end
   end
 
@@ -713,10 +722,15 @@ Database
       end
 
       def inspected(type)
+        if type != "index"
+          value_type = "\n  Value type: #{@column.range.name}"
+        else
+          value_type = ""
+        end
         <<-INSPECTED
 #{@column.local_name}:
   ID:         #{@column.id}
-  Type:       #{type}
+  Type:       #{type}#{value_type}
   Path:       <#{@column.path}>
   Disk usage: #{inspect_sub_disk_usage(@column.disk_usage)}
         INSPECTED
