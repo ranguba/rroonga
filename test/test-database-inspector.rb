@@ -722,15 +722,54 @@ Database
       end
 
       def inspected(type)
-        if type != "index"
-          value_type = "\n  Value type: #{@column.range.name}"
+        if type == "index"
+          sources = @column.sources.collect do |source|
+            "  Source:     #{source.name}"
+          end
+          additional_info = sources.join("\n")
         else
-          value_type = ""
+          additional_info = "  Value type: #{@column.range.name}"
         end
         <<-INSPECTED
 #{@column.local_name}:
   ID:         #{@column.id}
-  Type:       #{type}#{value_type}
+  Type:       #{type}
+#{additional_info}
+  Path:       <#{@column.path}>
+  Disk usage: #{inspect_sub_disk_usage(@column.disk_usage)}
+        INSPECTED
+      end
+    end
+
+    class SourceTest < self
+      def test_key
+        Groonga::Schema.create_table("Users",
+                                     :type => :patricia_trie,
+                                     :key_type => "ShortText") do |table|
+        end
+        Groonga::Schema.create_table("Terms",
+                                     :type => :patricia_trie,
+                                     :key_type => "ShortText",
+                                     :default_tokenizer => "TokenBigram",
+                                     :normalizer => "NormalizerAuto") do |table|
+          table.index("Users._key")
+        end
+        @table = Groonga["Terms"]
+        @column = @table.columns.first
+        assert_equal(inspected(["Users._key"]), report)
+      end
+
+      private
+      def inspected(source_names)
+        inspected_sources = ""
+        source_names.each do |source_name|
+          inspected_sources << "  Source:     #{source_name}\n"
+        end
+        <<-INSPECTED
+#{@column.local_name}:
+  ID:         #{@column.id}
+  Type:       index
+#{inspected_sources.chomp}
   Path:       <#{@column.path}>
   Disk usage: #{inspect_sub_disk_usage(@column.disk_usage)}
         INSPECTED

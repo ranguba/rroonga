@@ -158,7 +158,11 @@ module Groonga
         indent do
           write("ID:         #{column.id}\n")
           write("Type:       #{inspect_column_type(column)}\n")
-          unless column.index?
+          if column.index?
+            column.sources.each do |source|
+              write("Source:     #{inspect_source(source)}\n")
+            end
+          else
             write("Value type: #{inspect_value_type(column.range)}\n")
           end
           write("Path:       #{inspect_path(column.path)}\n")
@@ -309,6 +313,14 @@ module Groonga
           "vector"
         else
           "scalar"
+        end
+      end
+
+      def inspect_source(source)
+        if source.is_a?(Table)
+          "#{source.name}._key"
+        else
+          source.name
         end
       end
     end
