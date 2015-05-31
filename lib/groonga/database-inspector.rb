@@ -159,8 +159,15 @@ module Groonga
           write("ID:         #{column.id}\n")
           write("Type:       #{inspect_column_type(column)}\n")
           if column.index?
-            column.sources.each do |source|
-              write("Source:     #{inspect_source(source)}\n")
+            sources = column.sources
+            write("N sources:  #{sources.size}\n")
+            unless sources.empty?
+              write("Sources:\n")
+              indent do
+                sources.each do |source|
+                  write("Name:     #{inspect_source(source)}\n")
+                end
+              end
             end
           else
             write("Value type: #{inspect_value_type(column.range)}\n")

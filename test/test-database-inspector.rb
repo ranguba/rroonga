@@ -723,10 +723,13 @@ Database
 
       def inspected(type)
         if type == "index"
-          sources = @column.sources.collect do |source|
-            "  Source:     #{source.name}"
+          sources = @column.sources
+          additional_info = "  N sources:  #{sources.size}\n"
+          additional_info << "  Sources:\n"
+          source_names = sources.collect do |source|
+            "    Name:     #{source.name}"
           end
-          additional_info = sources.join("\n")
+          additional_info << source_names.join("\n")
         else
           additional_info = "  Value type: #{@column.range.name}"
         end
@@ -761,9 +764,10 @@ Database
 
       private
       def inspected(source_names)
-        inspected_sources = ""
+        inspected_sources = "  N sources:  #{source_names.size}\n"
+        inspected_sources << "  Sources:\n"
         source_names.each do |source_name|
-          inspected_sources << "  Source:     #{source_name}\n"
+          inspected_sources << "    Name:     #{source_name}\n"
         end
         <<-INSPECTED
 #{@column.local_name}:
