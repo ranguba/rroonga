@@ -1,5 +1,19 @@
 # NEWS
 
+## 5.0.3: 2015-06-02 {#version-5-0-3}
+
+### Improvements
+
+* Removed deprecated option "rubyfroge_project" from .gemspec.
+  [Patch by takiy33]
+* [groonga-database-inspect] Showed column value type.
+* [groonga-database-inspect] Showed sources of index column.
+* [groonga-database-inspect] Showed the number of sources of index column.
+
+### Thanks
+
+* takiy33
+
 ## 5.0.2: 2015-05-18 {#version-5-0-2}
 
 ### Improvements
