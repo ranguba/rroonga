@@ -40,6 +40,11 @@ parser.on("--log-path=PATH",
           "(#{Groonga::Logger.path})") do |path|
   Groonga::Logger.path = path
 end
+parser.on("--query-log-path=PATH",
+          "Specify query log path",
+          "(#{Groonga::QueryLogger.path})") do |path|
+  Groonga::QueryLogger.path = path
+end
 args = parser.parse!(ARGV)
 
 if args.size != 1
