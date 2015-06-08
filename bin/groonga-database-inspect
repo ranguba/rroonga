@@ -35,6 +35,11 @@ parser.on("--no-columns",
           "Don't show column information") do |boolean|
   options.show_columns = boolean
 end
+parser.on("--log-path=PATH",
+          "Specify log path",
+          "(#{Groonga::Logger.path})") do |path|
+  Groonga::Logger.path = path
+end
 args = parser.parse!(ARGV)
 
 if args.size != 1
