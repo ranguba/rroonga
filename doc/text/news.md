@@ -10,7 +10,6 @@
   * [groonga-database-inspect] Added sources of index column.
   * [groonga-database-inspect] Added the number of sources of index column.
   * [groonga-database-inspect] Added `--log-path` option.
-  * [groonga-database-inspect] Added `--query-log-path` option.
 
 ### Thanks
 
