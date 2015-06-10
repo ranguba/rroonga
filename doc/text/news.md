@@ -6,9 +6,9 @@
 
   * Removed deprecated option "rubyforge_project" from .gemspec.
     [GitHub#95][Patch by takiy33]
-  * [groonga-database-inspect] Showed column value type.
-  * [groonga-database-inspect] Showed sources of index column.
-  * [groonga-database-inspect] Showed the number of sources of index column.
+  * [groonga-database-inspect] Added column value type.
+  * [groonga-database-inspect] Added sources of index column.
+  * [groonga-database-inspect] Added the number of sources of index column.
   * [groonga-database-inspect] Added `--log-path` option.
   * [groonga-database-inspect] Added `--query-log-path` option.
 
