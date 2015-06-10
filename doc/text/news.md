@@ -5,7 +5,7 @@
 ### Improvements
 
   * Removed deprecated option "rubyforge_project" from .gemspec.
-    [Patch by takiy33]
+    [GitHub#95][Patch by takiy33]
   * [groonga-database-inspect] Showed column value type.
   * [groonga-database-inspect] Showed sources of index column.
   * [groonga-database-inspect] Showed the number of sources of index column.
