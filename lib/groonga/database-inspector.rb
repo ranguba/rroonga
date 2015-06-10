@@ -89,6 +89,10 @@ module Groonga
       end
 
       private
+      def push_memory_pool(&block)
+        @database.context.push_memory_pool(&block)
+      end
+
       def report_plugins
         write("Plugins:\n")
         indent do
@@ -236,7 +240,9 @@ module Groonga
 
       def count_total_n_columns
         @database.tables.inject(0) do |previous, table|
-          previous + table.columns.size
+          push_memory_pool do
+            previous + table.columns.size
+          end
         end
       end
 
@@ -251,8 +257,10 @@ module Groonga
       end
 
       def count_total_table_disk_usage(table)
-        table.columns.inject(table.disk_usage) do |previous, column|
-          previous + column.disk_usage
+        push_memory_pool do
+          table.columns.inject(table.disk_usage) do |previous, column|
+            previous + column.disk_usage
+          end
         end
       end
 
