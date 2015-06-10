@@ -611,6 +611,7 @@ rb_grn_table_get_columns (int argc, VALUE *argv, VALUE self)
 
     columns = grn_table_create(context, NULL, 0, NULL, GRN_TABLE_HASH_KEY,
                                NULL, 0);
+    rb_grn_context_check(context, self);
     n = grn_table_columns(context, table, name, name_size, columns);
     rb_grn_context_check(context, self);
 
