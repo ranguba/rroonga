@@ -23,7 +23,7 @@
 /*
  * Document-module: Groonga::Flushable
  *
- * It provides the ability to flush memory for an object.
+ * It provides the ability to flush data on memory to disk.
  */
 
 /*
