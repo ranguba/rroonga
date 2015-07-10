@@ -29,7 +29,7 @@
 /*
  * Flush memory mapped data to disk.
  *
- * @return [nil]
+ * @return [void]
  */
 static VALUE
 rb_grn_flushable_flush (VALUE self)
