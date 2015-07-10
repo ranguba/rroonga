@@ -27,7 +27,7 @@
  */
 
 /*
- * It flushes memory mapped data to disk.
+ * Flush memory mapped data to disk.
  *
  * @return [nil]
  */
