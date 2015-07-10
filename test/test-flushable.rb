@@ -21,6 +21,8 @@ class FlushableTest < Test::Unit::TestCase
   def test_flush
     table = Groonga::Hash.create
     table.extend(Groonga::Flushable)
-    assert_nil(table.flush)
+    assert_nothing_raised do
+      table.flush
+    end
   end
 end
