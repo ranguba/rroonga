@@ -18,6 +18,13 @@ class FlushableTest < Test::Unit::TestCase
 
   setup :setup_database
 
+  def test_flush_table
+    table = Groonga::Hash.create
+    assert_nothing_raised do
+      table.flush
+    end
+  end
+
   def test_flush
     table = Groonga::Hash.create
     table.extend(Groonga::Flushable)

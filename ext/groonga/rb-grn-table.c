@@ -2571,6 +2571,7 @@ rb_grn_init_table (VALUE mGrn)
     rb_define_alloc_func(rb_cGrnTable, rb_grn_table_alloc);
 
     rb_include_module(rb_cGrnTable, rb_mEnumerable);
+    rb_include_module(rb_cGrnTable, rb_mGrnFlushable);
 
     rb_define_method(rb_cGrnTable, "initialize", rb_grn_table_initialize, 0);
 
