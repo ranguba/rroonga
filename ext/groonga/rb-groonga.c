@@ -166,6 +166,7 @@ Init_groonga (void)
     rb_grn_init_utils(mGrn);
     rb_grn_init_encoding(mGrn);
     rb_grn_init_encoding_support(mGrn);
+    rb_grn_init_flushable(mGrn);
     rb_grn_init_context(mGrn);
     rb_grn_init_object(mGrn);
     rb_grn_init_database(mGrn);
@@ -189,5 +190,4 @@ Init_groonga (void)
     rb_grn_init_snippet(mGrn);
     rb_grn_init_plugin(mGrn);
     rb_grn_init_normalizer(mGrn);
-    rb_grn_init_flushable(mGrn);
 }
