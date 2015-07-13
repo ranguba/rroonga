@@ -300,7 +300,7 @@ RB_GRN_VAR VALUE rb_cGrnRecordExpressionBuilder;
 RB_GRN_VAR VALUE rb_cGrnColumnExpressionBuilder;
 RB_GRN_VAR VALUE rb_cGrnPlugin;
 RB_GRN_VAR VALUE rb_cGrnNormalizer;
-RB_GRN_VAR VALUE rb_cGrnFlushable;
+RB_GRN_VAR VALUE rb_mGrnFlushable;
 
 void           rb_grn_init_utils                    (VALUE mGrn);
 void           rb_grn_init_exception                (VALUE mGrn);
