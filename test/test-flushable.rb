@@ -25,4 +25,12 @@ class FlushableTest < Test::Unit::TestCase
       table.flush
     end
   end
+
+  def test_flush_not_recursive
+    table = Groonga::Hash.create
+    table.extend(Groonga::Flushable)
+    assert_nothing_raised do
+      table.flush(:recursive => false)
+    end
+  end
 end

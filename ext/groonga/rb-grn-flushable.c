@@ -29,13 +29,27 @@
 /*
  * Flush memory mapped data to disk.
  *
- * @return [void]
+ * @overload flush(options={})
+ *   @param [::Hash] options
+ *   @option options [Boolean] :recursive (true) Whether to flush objects
+ *     which a target object has recursively.
+ *   @return [void]
  */
 static VALUE
-rb_grn_flushable_flush (VALUE self)
+rb_grn_flushable_flush (int argc, VALUE *argv, VALUE self)
 {
     grn_ctx *context = NULL;
     grn_obj *object = NULL;
+    VALUE rb_recursive_p;
+    VALUE rb_options;
+
+    rb_scan_args(argc, argv, "01", &rb_options);
+    rb_grn_scan_options(rb_options,
+                        "recursive", &rb_recursive_p,
+                        NULL);
+    if (NIL_P(rb_recursive_p)) {
+        rb_recursive_p = Qtrue;
+    }
 
     rb_grn_object_deconstruct(SELF(self), &object, &context,
                               NULL, NULL, NULL, NULL);
@@ -47,7 +61,11 @@ rb_grn_flushable_flush (VALUE self)
 
     rb_grn_context_check(context, self);
 
+    if (RVAL2CBOOL(rb_recursive_p)) {
     grn_obj_flush_recursive(context, object);
+    } else {
+        grn_obj_flush(context, object);
+    }
 
     return Qnil;
 }
@@ -60,5 +78,5 @@ rb_grn_init_flushable (VALUE mGrn)
     rb_mGrnFlushable = rb_define_module_under(mGrn, "Flushable");
 
     rb_define_method(rb_mGrnFlushable, "flush",
-                     rb_grn_flushable_flush, 0);
+                     rb_grn_flushable_flush, -1);
 }
