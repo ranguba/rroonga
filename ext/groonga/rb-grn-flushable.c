@@ -20,6 +20,8 @@
 
 #define SELF(object) (RB_GRN_OBJECT(DATA_PTR(object)))
 
+VALUE rb_mGrnFlushable;
+
 /*
  * Document-module: Groonga::Flushable
  *
@@ -72,8 +74,6 @@ rb_grn_flushable_flush (int argc, VALUE *argv, VALUE self)
 void
 rb_grn_init_flushable (VALUE mGrn)
 {
-    VALUE rb_mGrnFlushable;
-
     rb_mGrnFlushable = rb_define_module_under(mGrn, "Flushable");
 
     rb_define_method(rb_mGrnFlushable, "flush",
