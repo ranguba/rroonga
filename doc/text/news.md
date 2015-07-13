@@ -1,5 +1,15 @@
 # NEWS
 
+## 5.0.4: 2015-07-13 {#version-5-0-4}
+
+### Improvements
+
+  * Supported Groonga 5.0.5. Groonga 5.0.4 or older aren't supported.
+  * Added {Groonga::Flushable#flush} to bind `grn_obj_flush()` and `grn_obj_flush_recursive()`.
+  * Included {Groonga::Flushable} module to {Groonga::Table}.
+  * Included {Groonga::Flushable} module to {Groonga::Column}.
+  * Included {Groonga::Flushable} module to {Groonga::Database}.
+
 ## 5.0.3: 2015-06-10 {#version-5-0-3}
 
 ### Improvements
