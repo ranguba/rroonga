@@ -25,6 +25,14 @@ class FlushableTest < Test::Unit::TestCase
     end
   end
 
+  def test_flush_column
+    table = Groonga::Hash.create(:name => "Users")
+    column = table.define_column("name", "ShortText")
+    assert_nothing_raised do
+      column.flush
+    end
+  end
+
   def test_flush
     table = Groonga::Hash.create
     table.extend(Groonga::Flushable)

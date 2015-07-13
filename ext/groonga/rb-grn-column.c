@@ -788,6 +788,8 @@ rb_grn_init_column (VALUE mGrn)
 {
     rb_cGrnColumn = rb_define_class_under(mGrn, "Column", rb_cGrnObject);
 
+    rb_include_module(rb_cGrnColumn, rb_mGrnFlushable);
+
     rb_define_method(rb_cGrnColumn, "table", rb_grn_column_get_table, 0);
     rb_define_method(rb_cGrnColumn, "local_name",
                      rb_grn_column_get_local_name, 0);
