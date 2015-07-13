@@ -59,13 +59,12 @@ rb_grn_flushable_flush (int argc, VALUE *argv, VALUE self)
                  rb_grn_inspect(self));
     }
 
-    rb_grn_context_check(context, self);
-
     if (RVAL2CBOOL(rb_recursive_p)) {
         grn_obj_flush_recursive(context, object);
     } else {
         grn_obj_flush(context, object);
     }
+    rb_grn_context_check(context, self);
 
     return Qnil;
 }
