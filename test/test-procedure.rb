@@ -1,4 +1,5 @@
 # Copyright (C) 2009-2014  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2015  Masafumi Yokoyama <yokoyama@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -68,6 +69,20 @@ class ProcedureTest < Test::Unit::TestCase
     def test_scorer
       scorer = Groonga["scorer_tf_idf"]
       assert_equal(Groonga::ProcedureType::SCORER, scorer.type)
+    end
+  end
+
+  class SelectorOnlyProcedureTest < self
+    def test_true
+      assert do
+        Groonga["sub_filter"].selector_only_procedure?
+      end
+    end
+
+    def test_false
+      assert do
+        not Groonga["between"].selector_only_procedure?
+      end
     end
   end
 end

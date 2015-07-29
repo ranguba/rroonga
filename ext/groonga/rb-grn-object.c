@@ -1,7 +1,7 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
   Copyright (C) 2009-2014  Kouhei Sutou <kou@clear-code.com>
-  Copyright (C) 2014  Masafumi Yokoyama <myokoym@gmail.com>
+  Copyright (C) 2014-2015  Masafumi Yokoyama <yokoyama@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -1605,6 +1605,32 @@ rb_grn_object_selector_procedure_p (VALUE self)
 }
 
 /*
+ * Checks whether the object is selector only procedure or not.
+ *
+ * @overload selector_only_procedure?
+ *   @return [Boolean] `true` if the object is selector only procedure,
+ *     `false` otherwise.
+ *
+ * @since 5.0.5
+ */
+static VALUE
+rb_grn_object_selector_only_procedure_p (VALUE self)
+{
+    grn_ctx *context;
+    grn_obj *object;
+    grn_bool selector_only_procedure_p = GRN_FALSE;
+
+    rb_grn_object_deconstruct(SELF(self), &object, &context,
+                              NULL, NULL, NULL, NULL);
+
+    if (context && object) {
+        selector_only_procedure_p = grn_obj_is_selector_only_proc(context, object);
+    }
+
+    return CBOOL2RVAL(selector_only_procedure_p);
+}
+
+/*
  * Checks whether the object is scorer procedure or not.
  *
  * @overload scorer_procedure?
@@ -1671,6 +1697,8 @@ rb_grn_init_object (VALUE mGrn)
                      rb_grn_object_function_procedure_p, 0);
     rb_define_method(rb_cGrnObject, "selector_procedure?",
                      rb_grn_object_selector_procedure_p, 0);
+    rb_define_method(rb_cGrnObject, "selector_only_procedure?",
+                     rb_grn_object_selector_only_procedure_p, 0);
     rb_define_method(rb_cGrnObject, "scorer_procedure?",
                      rb_grn_object_scorer_procedure_p, 0);
 }
