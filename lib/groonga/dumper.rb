@@ -704,7 +704,12 @@ module Groonga
     end
 
     def dump_records(columns)
-      @table.each(:order_by => @options[:order_by]) do |record|
+      order_by = @options[:order_by]
+      case @table
+      when Groonga::Array, Groonga::Hash
+        order_by = nil if order_by == :key
+      end
+      @table.each(:order_by => order_by) do |record|
         write(",\n")
         values = columns.collect do |column|
           resolve_value(record, column, column[record.id])

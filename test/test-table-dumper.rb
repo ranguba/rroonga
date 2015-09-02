@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2011-2014  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2011-2015  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -31,6 +31,175 @@ class TableDumperTest < Test::Unit::TestCase
 
   def posts
     context["Posts"]
+  end
+
+  class TableTest < self
+    class ArrayTest < self
+      class OrderByTest < self
+        def setup
+          Groonga::Schema.define do |schema|
+            schema.create_table("Users") do |table|
+              table.text("name")
+            end
+          end
+
+          @users = Groonga["Users"]
+          @users.add(:name => "Chris")
+          @users.add(:name => "Bob")
+          @users.add(:name => "Alice")
+        end
+
+        def test_id
+          assert_equal(<<-DUMP, dump("Users", :order_by => :id))
+load --table Users
+[
+["_id","name"],
+[1,"Chris"],
+[2,"Bob"],
+[3,"Alice"]
+]
+          DUMP
+        end
+
+        def test_key
+          assert_equal(<<-DUMP, dump("Users", :order_by => :key))
+load --table Users
+[
+["_id","name"],
+[1,"Chris"],
+[2,"Bob"],
+[3,"Alice"]
+]
+          DUMP
+        end
+      end
+    end
+
+    class HashTest < self
+      class OrderByTest < self
+        def setup
+          Groonga::Schema.define do |schema|
+            schema.create_table("Users",
+                                :type => :hash,
+                                :key_type => "ShortText") do |table|
+            end
+          end
+
+          @users = Groonga["Users"]
+          @users.add("Chris")
+          @users.add("Bob")
+          @users.add("Alice")
+        end
+
+        def test_id
+          assert_equal(<<-DUMP, dump("Users", :order_by => :id))
+load --table Users
+[
+["_key"],
+["Chris"],
+["Bob"],
+["Alice"]
+]
+          DUMP
+        end
+
+        def test_key
+          assert_equal(<<-DUMP, dump("Users", :order_by => :key))
+load --table Users
+[
+["_key"],
+["Chris"],
+["Bob"],
+["Alice"]
+]
+          DUMP
+        end
+      end
+    end
+
+    class PatriciaTrieTest < self
+      class OrderByTest < self
+        def setup
+          Groonga::Schema.define do |schema|
+            schema.create_table("Users",
+                                :type => :patricia_trie,
+                                :key_type => "ShortText") do |table|
+            end
+          end
+
+          @users = Groonga["Users"]
+          @users.add("Chris")
+          @users.add("Bob")
+          @users.add("Alice")
+        end
+
+        def test_id
+          assert_equal(<<-DUMP, dump("Users", :order_by => :id))
+load --table Users
+[
+["_key"],
+["Chris"],
+["Bob"],
+["Alice"]
+]
+          DUMP
+        end
+
+        def test_key
+          assert_equal(<<-DUMP, dump("Users", :order_by => :key))
+load --table Users
+[
+["_key"],
+["Alice"],
+["Bob"],
+["Chris"]
+]
+          DUMP
+        end
+      end
+    end
+
+    class DoubleArrayTrieTest < self
+      class OrderByTest < self
+        def setup
+          Groonga::Schema.define do |schema|
+            schema.create_table("Users",
+                                :type => :double_array_trie,
+                                :key_type => "ShortText") do |table|
+            end
+          end
+
+          @users = Groonga["Users"]
+          @users.add("Chris")
+          @users.add("Bob")
+          @users.add("Alice")
+        end
+
+        def test_id
+          assert_equal(<<-DUMP, dump("Users", :order_by => :id))
+load --table Users
+[
+["_key"],
+["Chris"],
+["Bob"],
+["Alice"]
+]
+          DUMP
+        end
+
+        def test_key
+          assert_equal(<<-DUMP, dump("Users", :order_by => :key))
+load --table Users
+[
+["_key"],
+["Alice"],
+["Bob"],
+["Chris"]
+]
+          DUMP
+        end
+      end
+    end
   end
 
   class TextTest < self
