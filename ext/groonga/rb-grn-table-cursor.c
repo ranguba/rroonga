@@ -107,11 +107,16 @@ rb_grn_table_cursor_order_by_to_flag (unsigned char table_type,
     } else if (rb_grn_equal_option(rb_order_by, "id")) {
         flag |= GRN_CURSOR_BY_ID;
     } else if (rb_grn_equal_option(rb_order_by, "key")) {
-        if (table_type != GRN_TABLE_PAT_KEY) {
+        switch (table_type) {
+        case GRN_TABLE_PAT_KEY:
+        case GRN_TABLE_DAT_KEY:
+            break;
+        default:
             rb_raise(rb_eArgError,
-                     "order_by => :key is available "
-                     "only for Groonga::PatriciaTrie: %s",
+                     "order_by => :key is available only for "
+                     "Groonga::PatriciaTrie and Groonga::DoubleArrayTrie: %s",
                      rb_grn_inspect(rb_table));
+            break;
         }
         flag |= GRN_CURSOR_BY_KEY;
     } else {
