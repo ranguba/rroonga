@@ -489,17 +489,10 @@ rb_grn_double_array_trie_open_grn_prefix_cursor (int argc, VALUE *argv,
     } else if (rb_grn_equal_option(rb_order_by, "id")) {
         flags |= GRN_CURSOR_BY_ID;
     } else if (rb_grn_equal_option(rb_order_by, "key")) {
-        if (table->header.type != GRN_TABLE_PAT_KEY) {
-            rb_raise(rb_eArgError,
-                     "order_by => :key is available "
-                     "only for Groonga::DoubleArrayTrie: %s",
-                     rb_grn_inspect(self));
-        }
         flags |= GRN_CURSOR_BY_KEY;
     } else {
         rb_raise(rb_eArgError,
-                 "order_by should be one of [:id%s]: %s",
-                 table->header.type == GRN_TABLE_PAT_KEY ? ", :key" : "",
+                 "order_by should be one of [:id, :key]: %s",
                  rb_grn_inspect(rb_order_by));
     }
 
