@@ -593,6 +593,38 @@ rb_grn_database_recover (VALUE self)
     return Qnil;
 }
 
+/*
+ * Unmaps all mapped tables and columns in database.
+ *
+ * @overload unmap()
+ *
+ *   Unmaps all mapped tables and columns in database.
+ *
+ *   It frees resources for them.
+ *
+ *   Normally, you don't need to unmap explicitly. Because OS manages
+ *   resourced for mapped tables and columns cleverly.
+ *
+ *   @return [void]
+ *
+ * @since 5.0.5
+ */
+static VALUE
+rb_grn_database_unmap (VALUE self)
+{
+    grn_rc rc;
+    grn_ctx *context;
+    grn_obj *database;
+
+    rb_grn_database_deconstruct(SELF(self), &database, &context,
+                                NULL, NULL, NULL, NULL);
+    rc = grn_db_unmap(context, database);
+    rb_grn_context_check(context, self);
+    rb_grn_rc_check(rc, self);
+
+    return Qnil;
+}
+
 void
 rb_grn_init_database (VALUE mGrn)
 {
@@ -626,4 +658,5 @@ rb_grn_init_database (VALUE mGrn)
     rb_define_method(rb_cGrnDatabase, "touch", rb_grn_database_touch, 0);
     rb_define_method(rb_cGrnDatabase, "defrag", rb_grn_database_defrag, -1);
     rb_define_method(rb_cGrnDatabase, "recover", rb_grn_database_recover, 0);
+    rb_define_method(rb_cGrnDatabase, "unmap", rb_grn_database_unmap, 0);
 }

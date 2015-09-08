@@ -200,6 +200,17 @@ class DatabaseTest < Test::Unit::TestCase
     end
   end
 
+  def test_unmap
+    setup_database
+    Groonga::Schema.define do |schema|
+      schema.create_table("Users") do |table|
+        table.short_text("name")
+      end
+    end
+
+    @database.unmap
+  end
+
   def test_tables
     setup_database
     Groonga::Schema.define do |schema|
