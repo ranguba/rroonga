@@ -594,8 +594,6 @@ rb_grn_database_recover (VALUE self)
 }
 
 /*
- * Unmaps all mapped tables and columns in database.
- *
  * @overload unmap()
  *
  *   Unmaps all mapped tables and columns in database.
