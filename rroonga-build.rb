@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 #
-# Copyright (C) 2009-2014  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2015  Kouhei Sutou <kou@clear-code.com>
 # Copyright (C) 2015  Masafumi Yokoyama <yokoyama@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
@@ -20,15 +20,15 @@ module RroongaBuild
   module RequiredGroongaVersion
     MAJOR = 5
     MINOR = 0
-    MICRO = 6
+    MICRO = 7
     VERSION = [MAJOR, MINOR, MICRO]
-    RELEASED_DATE = Time.utc(2015, 7, 29)
+    RELEASED_DATE = Time.utc(2015, 8, 31)
   end
 
   module LatestGroongaVersion
     MAJOR = 5
     MINOR = 0
-    MICRO = 6
+    MICRO = 7
     VERSION = [MAJOR, MINOR, MICRO]
   end
 
