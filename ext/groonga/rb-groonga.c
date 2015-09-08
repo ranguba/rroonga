@@ -1,6 +1,6 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
-  Copyright (C) 2009-2014  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2015  Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -187,6 +187,7 @@ Init_groonga (void)
     rb_grn_init_expression_builder(mGrn);
     rb_grn_init_logger(mGrn);
     rb_grn_init_query_logger(mGrn);
+    rb_grn_init_windows_event_logger(mGrn);
     rb_grn_init_snippet(mGrn);
     rb_grn_init_plugin(mGrn);
     rb_grn_init_normalizer(mGrn);

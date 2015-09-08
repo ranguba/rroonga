@@ -349,6 +349,7 @@ void           rb_grn_init_expression               (VALUE mGrn);
 void           rb_grn_init_expression_builder       (VALUE mGrn);
 void           rb_grn_init_logger                   (VALUE mGrn);
 void           rb_grn_init_query_logger             (VALUE mGrn);
+void           rb_grn_init_windows_event_logger     (VALUE mGrn);
 void           rb_grn_init_snippet                  (VALUE mGrn);
 void           rb_grn_init_plugin                   (VALUE mGrn);
 void           rb_grn_init_normalizer               (VALUE mGrn);

@@ -1,5 +1,5 @@
 # Copyright (C) 2015  Masafumi Yokoyama <yokoyama@clear-code.com>
-# Copyright (C) 2009-2014  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2015  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -172,6 +172,10 @@ module GroongaTestUtils
 
   def only_linux
     omit("This test is only for Linux system.") unless linux?
+  end
+
+  def windows?
+    /cygwin|mingw|mswin/ === RUBY_PLATFORM
   end
 
   def support_self_recursive_equal?
