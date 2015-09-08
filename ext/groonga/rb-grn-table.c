@@ -819,11 +819,16 @@ rb_grn_table_open_grn_cursor (int argc, VALUE *argv, VALUE self,
  *     +:desc+ または +:descending+ を指定すると降順にレコードを
  *     取り出す。
  *   @option options :order_by
- *     +:id+ を指定するとID順にレコードを取り出す。（Arrayと
- *     Hashのデフォルト）
- *     +:key+ 指定するとキー順にレコードを取り出す。ただし、
- *     Groonga::PatriciaTrieにしか使えない。（PatriciaTrieのデ
- *     フォルト）
+ *
+ *     `:id` means that the cursor returns the next record by ID
+ *     order. It's the default for `Groonga::Array` and
+ *     `Groonga::Hash`.
+ *
+ *     `:key` means that the cursor returns the next record by key
+ *     order.  You can use it only for `Groonga::PatriciaTrie` and
+ *     `Groonga::DoubleArrayTrie`. It's the default for
+ *     `Groonga::PatriciaTrie` and `Groonga::DoubleArrayTrie`.
+ *
  *   @option options :greater_than
  *     +true+ を指定すると +:min+ で指定した値に一致した [ +key+ ] を
  *     範囲に含まない。
