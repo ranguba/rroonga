@@ -1,5 +1,27 @@
 # NEWS
 
+## 5.0.5: 2015-09-09 {#version-5-0-5}
+
+### Improvements
+
+  * Supported Groonga 5.0.7. Groonga 5.0.6 or older aren't supported.
+  * Added {Groonga::Object#selector_only_procedure?}.
+  * Supported {Groonga::Table#open_cursor} with `:order_by => :key`
+    against {Groonga::DoubleArrayTrie}.
+  * Added {Groonga::Database#unmap}.
+  * Added {Groonga::Thread.limit}.
+  * Added {Groonga::Thread.limit=}.
+  * Added {Groonga::Thread.limit_getter=}.
+  * Added {Groonga::Thread.limit_setter=}.
+  * Added {Groonga::WindowsEventLogger.register}.
+  * Added {Groonga::Logger.max_level}.
+  * Added {Groonga::Logger.max_level=}.
+
+### Fixes
+
+  * `grndump`: Fixed an error when `--order-by=key` is specified
+    against database that has `Groonga::Array` or `Groonga::Hash`.
+
 ## 5.0.4: 2015-07-13 {#version-5-0-4}
 
 ### Improvements
