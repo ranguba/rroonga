@@ -194,19 +194,19 @@ class OperatorTest < Test::Unit::TestCase
   sub_test_case "regexp" do
     sub_test_case "#exec" do
       test "match" do
-        assert_true(Groonga::Operator::REGEXP.exec("Hello Rroonga",
-                                                   /Rro+nga/))
+        assert_true(Groonga::Operator::REGEXP.exec("hello rroonga",
+                                                   /rro+nga/))
       end
 
       test "not match" do
-        assert_false(Groonga::Operator::REGEXP.exec("Hello Rroonga",
-                                                    /Gro+nga/))
+        assert_false(Groonga::Operator::REGEXP.exec("hello rroonga",
+                                                    /gro+nga/))
       end
 
       test ":context" do
         context = Groonga::Context.new
-        assert_true(Groonga::Operator::REGEXP.exec("Hello Rroonga",
-                                                   /Rro+nga/,
+        assert_true(Groonga::Operator::REGEXP.exec("hello rroonga",
+                                                   /rro+nga/,
                                                    :context => context))
       end
     end
