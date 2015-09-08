@@ -37,6 +37,12 @@ class LoggerTest < Test::Unit::TestCase
     assert_true(@log_path.exist?)
   end
 
+  def test_max_level
+    assert_equal(:notice, Groonga::Logger.max_level)
+    Groonga::Logger.max_level = :debug
+    assert_equal(:debug, Groonga::Logger.max_level)
+  end
+
   sub_test_case ".log" do
     test "no options" do
       messages = []
