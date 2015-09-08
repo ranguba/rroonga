@@ -439,66 +439,43 @@ rb_grn_logger_s_reopen (VALUE klass)
 }
 
 /*
- * @overload max_level(options={})
- *   @param options [::Hash]
- *   @option options :context [Groonga::Context] (Groonga::Context.default)
- *     The context to be set logger.
- *
+ * @overload max_level
  *   @return [Symbol] The max level of the current logger.
  *
  * @since 5.0.5
  */
 static VALUE
-rb_grn_logger_s_get_max_level (int argc, VALUE *argv, VALUE klass)
+rb_grn_logger_s_get_max_level (VALUE klass)
 {
-    VALUE rb_options;
-    VALUE rb_context;
+    VALUE rb_context = Qnil;
     grn_ctx *context;
     grn_log_level max_level;
 
-    rb_scan_args(argc, argv, "01", &rb_options);
-    rb_grn_scan_options(rb_options,
-                        "context", &rb_context,
-                        NULL);
     context = rb_grn_context_ensure(&rb_context);
-
     max_level = grn_logger_get_max_level(context);
+
     return GRNLOGLEVEL2RVAL(max_level);
 }
 
 /*
- * Sets the max level of the current logger.
- *
  * @overload max_level=(max_level)
- *   @param max_level [Symbol, String] The max level.
+ *   Sets the max level of the current logger.
  *
- *   @return [void]
- *
- * @overload set_max_level(max_level, options={})
  *   @param max_level [Symbol, String] The max level.
- *   @param options [::Hash]
- *   @option options :context [Groonga::Context] (Groonga::Context.default)
- *     The context to be set logger.
  *
  *   @return [void]
  *
  * @since 5.0.5
  */
 static VALUE
-rb_grn_logger_s_set_max_level (int argc, VALUE *argv, VALUE klass)
+rb_grn_logger_s_set_max_level (VALUE klass, VALUE rb_max_level)
 {
-    VALUE rb_max_level;
-    VALUE rb_options;
-    VALUE rb_context;
+    VALUE rb_context = Qnil;
     grn_ctx *context;
 
-    rb_scan_args(argc, argv, "11", &rb_max_level, &rb_options);
-    rb_grn_scan_options(rb_options,
-                        "context", &rb_context,
-                        NULL);
     context = rb_grn_context_ensure(&rb_context);
-
     grn_logger_set_max_level(context, RVAL2GRNLOGLEVEL(rb_max_level));
+
     return Qnil;
 }
 
@@ -652,11 +629,9 @@ rb_grn_init_logger (VALUE mGrn)
     rb_define_singleton_method(cGrnLogger, "reopen",
                                rb_grn_logger_s_reopen, 0);
     rb_define_singleton_method(cGrnLogger, "max_level",
-                               rb_grn_logger_s_get_max_level, -1);
+                               rb_grn_logger_s_get_max_level, 0);
     rb_define_singleton_method(cGrnLogger, "max_level=",
-                               rb_grn_logger_s_set_max_level, -1);
-    rb_define_singleton_method(cGrnLogger, "set_max_level",
-                               rb_grn_logger_s_set_max_level, -1);
+                               rb_grn_logger_s_set_max_level, 1);
     rb_define_singleton_method(cGrnLogger, "path",
                                rb_grn_logger_s_get_path, 0);
     rb_define_singleton_method(cGrnLogger, "path=",
