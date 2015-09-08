@@ -16,8 +16,27 @@
 class ThreadTest < Test::Unit::TestCase
   include GroongaTestUtils
 
-  def test_limit
-    Groonga::Thread.limit = 10
-    assert_equal(0, Groonga::Thread.limit)
+  sub_test_case "limit" do
+    teardown do
+      Groonga::Thread.limit_getter = nil
+      Groonga::Thread.limit_setter = nil
+    end
+
+    test "default" do
+      assert_equal(0, Groonga::Thread.limit)
+    end
+
+    test "custom" do
+      limit = 0
+      Groonga::Thread.limit_getter = lambda do
+        limit
+      end
+      Groonga::Thread.limit_setter = lambda do |new_limit|
+        limit = new_limit
+      end
+
+      Groonga::Thread.limit = 10
+      assert_equal(10, Groonga::Thread.limit)
+    end
   end
 end
