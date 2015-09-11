@@ -6,22 +6,22 @@ You can install Rroonga by RubyGems. It is the standard way for Ruby
 libraries.
 
 Rroonga is depends on Groonga. So you need to install both Groonga and
-Rroonga. You can’t install Groonga by RubyGems because it isn’t Ruby
-library. But don’t worry. Rroonga provides the following options for
+Rroonga. You can't install Groonga by RubyGems because it isn't Ruby
+library. But don't worry. Rroonga provides the following options for
 easy to install:
 
 * Rroonga downloads, builds and installs Groonga automatically. You
-  don’t need to do them explicitly.
+  don't need to do them explicitly.
 * Rroonga uses Groonga installed by your packaging system.
 
 The following sections describe the above in detail.
 
 ## Install with auto Groonga build
 
-Rroonga searches Groonga on install. If Rroonga can’t find Groonga,
+Rroonga searches Groonga on install. If Rroonga can't find Groonga,
 Rroonga downloads, builds and installs Groonga automatically.
 
-Type the following command to install Rroonga and Groonga. You don’t
+Type the following command to install Rroonga and Groonga. You don't
 need to install Groonga explicitly:
 
     % gem install rroonga
@@ -32,7 +32,7 @@ You can use Groonga package on you packaging system instead of building
 Groonga by yourself. There are the following advantages for this option:
 
 * It reduces installation time.
-* It doesn’t fail on building Groonga.
+* It doesn't fail on building Groonga.
 
 ### Windows
 
@@ -43,7 +43,7 @@ Type the following command on Ruby console:
 
     > gem install rroonga
 
-This document assumes that you’re using [RubyInstaller for
+This document assumes that you're using [RubyInstaller for
 Windows](http://rubyinstaller.org/) .
 
 ### OS X
@@ -52,7 +52,7 @@ There are Groonga packages for OS X environment.
 
 #### MacPorts
 
-If you’re using [MacPorts](http://www.macports.org/) , type the
+If you're using [MacPorts](http://www.macports.org/) , type the
 following
 commands on your terminal:
 
@@ -61,7 +61,7 @@ commands on your terminal:
 
 #### Homebrew
 
-If you’re using [Homebrew](http://brew.sh/) , type the following
+If you're using [Homebrew](http://brew.sh/) , type the following
 commands
 on your terminal:
 
@@ -99,7 +99,7 @@ documentation](http://groonga.org/docs/install/centos.html) how to set
 yum repository up.
 
 But you need to install Ruby 1.9.3 or later by yourself. Both CentOS 5
-and 6 ship Ruby 1.8. Rroonga doesn’t support Ruby 1.8.
+and 6 ship Ruby 1.8. Rroonga doesn't support Ruby 1.8.
 
 Type the following commands on your terminal after you finish to set
 yum
