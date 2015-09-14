@@ -148,16 +148,11 @@ namespace :clean do
   end
 end
 
-desc "Build cross compile binary with Vagrant"
+desc "Build cross compile binary with rake-compiler-dock"
 namespace :build do
   task :windows do
-    pkg_dir = "#{base_dir}/pkg"
-    mkdir pkg_dir unless File.exist?(pkg_dir)
-    cd "build/windows" do
-      sh("vagrant", "up")
-      cp(Dir.glob("pkg/rroonga-*-mingw32.gem"), pkg_dir)
-      sh("vagrant", "destroy", "-f")
-    end
+    require "rake_compiler_dock"
+    RakeCompilerDock.sh "bundle && rake cross native gem RUBY_CC_VERSION=2.0.0:2.1.6:2.2.2"
   end
 end
 
