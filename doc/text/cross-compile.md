@@ -56,19 +56,17 @@ $ bundle exec rake clean:groonga
 $ bundle exec rake RUBY_CC_VERSION=1.9.3:2.0.0:2.1.3 cross RROONGA_USE_GROONGA_X64=true clean native gem
 ```
 
-# For Vagrant tool Users
+# For rake-compiler-dock
 
-Vagrant is provided in `Windows`, `OS X` and `Linux(deb)/Linux(rpm)`.
+`rake-compiler-dock` depends `docker` or docker client such as `boot2docker`.
+Please install `docker` or docker client before cross compiling with `rake-compiler-dock`.
 
-## execute vagrant
+## cross compiling with rake-compiler-dock
 
-`build\windows\` directory contains Vagrantfile and its provisioning scripts.
-
-execute following command:
+execute following rake task:
 
 ```bash
-$ cd build\windows
-$ vagrant up
+$ bundle exec rake build:windows
 ```
 
 Then, `pkg` directory is created. And cross compiled gems move into `pkg` directory.
