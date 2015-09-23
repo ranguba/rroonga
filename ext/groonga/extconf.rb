@@ -162,6 +162,20 @@ def configure_command_line(prefix)
   escaped_command_line.join(" ")
 end
 
+def guess_make
+  env_make = ENV["MAKE"]
+  return env_make if env_make
+
+  candidates = ["gmake", "make"]
+  candidates.each do |candidate|
+    (ENV["PATH"] || "").split(File::PATH_SEPARATOR).each do |path|
+      return candidate if File.executable?(File.join(path, candidate))
+    end
+  end
+
+  "make"
+end
+
 def n_processors
   proc_file = "/proc/cpuinfo"
   if File.exist?(proc_file)
@@ -174,12 +188,13 @@ def n_processors
 end
 
 def install_for_gnu_build_system(install_dir)
+  make = guess_make
   run_command("configuring...",
               configure_command_line(install_dir))
   run_command("building (maybe long time)...",
-              "make -j#{n_processors}")
+              "#{make} -j#{n_processors}")
   run_command("installing...",
-              "make install")
+              "#{make} install")
 end
 
 def build_groonga_from_git(major, minor, micro)
