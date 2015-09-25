@@ -148,7 +148,7 @@ namespace :clean do
   end
 end
 
-def target_rubies
+def cross_target_rubies
   "2.0.0:2.1.6:2.2.2"
 end
 
@@ -165,7 +165,7 @@ namespace :build do
     RakeCompilerDock.sh %Q[
       bundle
       rake clean
-      rake cross native gem RUBY_CC_VERSION=\"#{target_rubies}\"
+      rake cross native gem RUBY_CC_VERSION=\"#{cross_target_rubies}\"
     ]
   end
 end
@@ -179,7 +179,7 @@ namespace :build do
       bundle
       rake clean
       export RROONGA_USE_GROONGA_X64=true
-      rake cross native gem RUBY_CC_VERSION=\"#{target_rubies}\"
+      rake cross native gem RUBY_CC_VERSION=\"#{cross_target_rubies}\"
     ]
   end
 end
