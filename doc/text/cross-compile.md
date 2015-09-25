@@ -58,8 +58,8 @@ $ bundle exec rake RUBY_CC_VERSION=1.9.3:2.0.0:2.1.3 cross RROONGA_USE_GROONGA_X
 
 # For rake-compiler-dock
 
-`rake-compiler-dock` depends `docker` or docker client such as `boot2docker`.
-Please install `docker` or docker client before cross compiling with `rake-compiler-dock`.
+`rake-compiler-dock` depends `docker` and some platform requires docker client such as `docker-machine`.
+Please install `docker` and docker client before cross compiling with `rake-compiler-dock`.
 
 ## cross compiling with rake-compiler-dock
 
