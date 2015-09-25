@@ -162,7 +162,11 @@ namespace :build do
   task :windows_x86 do
     require "rake_compiler_dock"
     rm_rf binary_dir
-    RakeCompilerDock.sh "gem install yard packnga pkg-config && bundle && bundle exec rake clean && rake cross native gem RUBY_CC_VERSION=#{target_rubies}"
+    RakeCompilerDock.sh %Q[
+      bundle
+      rake clean
+      rake cross native gem RUBY_CC_VERSION=\"#{target_rubies}\"
+    ]
   end
 end
 
@@ -171,7 +175,12 @@ namespace :build do
   task :windows_x64 do
     require "rake_compiler_dock"
     rm_rf binary_dir
-    RakeCompilerDock.sh "gem install yard packnga pkg-config && bundle && bundle exec rake clean && RROONGA_USE_GROONGA_X64=true rake cross native gem RUBY_CC_VERSION=#{target_rubies}"
+    RakeCompilerDock.sh %Q[
+      bundle
+      rake clean
+      export RROONGA_USE_GROONGA_X64=true
+      rake cross native gem RUBY_CC_VERSION=\"#{target_rubies}\"
+    ]
   end
 end
 
