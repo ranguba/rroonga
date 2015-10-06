@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # Copyright (C) 2015  Masafumi Yokoyama <yokoyama@clear-code.com>
-# Copyright (C) 2009-2012  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2015  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -448,6 +448,28 @@ module Groonga
         super(Groonga::Operation::TERM_EXTRACT, column_value_builder, value)
       end
     end
+
+    # @private
+    class CallExpressionBuilder < ExpressionBuilder
+      def initialize(function, *arguments)
+        super()
+        @function = function
+        @arguments = arguments
+      end
+
+      def build(expression, variable)
+        expression.append_object(@function)
+        @arguments.each do |argument|
+          case argument
+          when String
+            expression.append_constant(argument)
+          else
+            argument.build(expression, variable)
+          end
+        end
+        expression.append_operation(Operation::CALL, @arguments.size)
+      end
+    end
   end
 
   # @private
@@ -514,6 +536,10 @@ module Groonga
               "different index column: <#{name}>: #{object.inspect}"
       end
       column_expression_builder(object, name)
+    end
+
+    def call(function, *arguments)
+      CallExpressionBuilder.new(@table.context[function], *arguments)
     end
 
     private

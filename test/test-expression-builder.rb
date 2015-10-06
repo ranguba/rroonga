@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # Copyright (C) 2014-2015  Masafumi Yokoyama <yokoyama@clear-code.com>
-# Copyright (C) 2009-2012  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2015  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -520,6 +520,43 @@ EOC
           record.content.term_extract("Groonga is the successor project to Senna.")
         end
       end
+    end
+  end
+
+  class CallTest < self
+    def setup_tables
+      Groonga::Schema.define do |schema|
+        schema.create_table("Shops",
+                            :type => :hash,
+                            :key_type => "ShortText") do |table|
+          table.wgs84_geo_point("location")
+        end
+
+        schema.create_table("Locations",
+                            :type => :patricia_trie,
+                            :key_type => :wgs84_geo_point) do |table|
+          table.index("Shops.location")
+        end
+      end
+
+      @shops = Groonga["Shops"]
+    end
+
+    def setup_data
+      @shops.add("Nezu no taiyaki", :location => "35.720253,139.762573")
+      @shops.add("Taiyaki Kataoka", :location => "35.712521,139.715591")
+      @shops.add("Taiyaki Sharaku", :location => "35.716969,139.794846")
+    end
+
+    def test_search
+      result = @shops.select do |record|
+        record.call("geo_in_rectangle",
+                    record.location,
+                    "35.7185,139.7912",
+                    "35.7065,139.8069")
+      end
+      assert_equal(["Taiyaki Sharaku"],
+                   result.collect(&:_key))
     end
   end
 
