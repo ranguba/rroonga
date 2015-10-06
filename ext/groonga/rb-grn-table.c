@@ -1348,10 +1348,10 @@ rb_grn_table_sort (int argc, VALUE *argv, VALUE self)
  *
  *   @!macro [new] table.group.options
  *     @option options :max_n_sub_records
- *       グループ化した後のレコードのそれぞれについて最大 _:max_n_sub_records_ 件まで
+ *       グループ化した後のレコードのそれぞれについて最大`:max_n_sub_records`件まで
  *       そのグループに含まれる _table_ のレコードをサブレコードとして格納する。
  *     @option options [String, Symbol] :calc_target
- *       The target column name for _:calc_types_.
+ *       The target column name for `:calc_types`.
  *     @option options [::Array] :calc_types
  *       It specifies how to calculate (aggregate) values in grouped records by
  *       a drilldown. You can specify multiple calculation types.
