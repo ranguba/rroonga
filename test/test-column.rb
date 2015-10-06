@@ -331,8 +331,10 @@ class ColumnTest < Test::Unit::TestCase
         table.index("Comments.title")
       end
     end
-    assert_equal([Groonga["Titles.Comments_title"],
-                  Groonga["Terms.Comments_title"]],
+    assert_equal([
+                   Groonga["Terms.Comments_title"],
+                   Groonga["Titles.Comments_title"],
+                 ],
                  title.indexes)
   end
 
