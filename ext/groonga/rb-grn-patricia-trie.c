@@ -19,8 +19,6 @@
 
 #include "rb-grn.h"
 
-grn_rc grn_obj_cast(grn_ctx *ctx, grn_obj *src, grn_obj *dest, grn_bool addp);
-
 #define SELF(object) ((RbGrnTableKeySupport *)DATA_PTR(object))
 
 VALUE rb_cGrnPatriciaTrie;
