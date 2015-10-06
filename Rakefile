@@ -149,35 +149,34 @@ namespace :clean do
 end
 
 namespace :build do
+  architectures = [:x86, :x64]
+
   namespace :windows do
     ruby_versions = "2.0.0:2.1.6:2.2.2"
 
-    desc "Build gem for Windows i386"
-    task :x86 do
-      require "rake_compiler_dock"
-      rm_rf binary_dir
-      RakeCompilerDock.sh %Q[
-        bundle
-        rake clean
-        rake cross native gem RUBY_CC_VERSION=\"#{ruby_versions}\"
-      ]
-    end
-
-    desc "Build gem for Windows x64"
-    task :x64 do
-      require "rake_compiler_dock"
-      rm_rf binary_dir
-      RakeCompilerDock.sh %Q[
-        bundle
-        rake clean
-        export RROONGA_USE_GROONGA_X64=true
-        rake cross native gem RUBY_CC_VERSION=\"#{ruby_versions}\"
-      ]
+    architectures.each do |architecture|
+      desc "Build gem for Windows #{architecture}"
+      task architecture do
+        require "rake_compiler_dock"
+        rm_rf binary_dir
+        commands = [
+          "bundle",
+          "rake clean",
+          "rake cross native gem RUBY_CC_VERSION=#{ruby_versions}",
+        ]
+        if architecture == :x64
+          commands.unshift("export RROONGA_USE_GROONGA_X64=true")
+        end
+        RakeCompilerDock.sh(commands.join(" && "))
+      end
     end
   end
 
   desc "Build gems for Windows"
-  task :windows => ["windows:x86", "windows:x64"]
+  build_tasks = architectures.collect do |architecture|
+    "windows:#{architecture}"
+  end
+  task :windows => build_tasks
 end
 
 task :default => :test
