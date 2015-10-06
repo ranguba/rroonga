@@ -152,36 +152,34 @@ def cross_target_rubies
   "2.0.0:2.1.6:2.2.2"
 end
 
-desc "Build cross compile binary with rake-compiler-dock"
 namespace :build do
-  task :windows => [:windows_x86, :windows_x64]
-end
+  namespace :windows do
+    desc "Build cross compile binary with rake-compiler-dock for i386"
+    task :x86 do
+      require "rake_compiler_dock"
+      rm_rf binary_dir
+      RakeCompilerDock.sh %Q[
+        bundle
+        rake clean
+        rake cross native gem RUBY_CC_VERSION=\"#{cross_target_rubies}\"
+      ]
+    end
 
-desc "Build cross compile binary with rake-compiler-dock for i386"
-namespace :build do
-  task :windows_x86 do
-    require "rake_compiler_dock"
-    rm_rf binary_dir
-    RakeCompilerDock.sh %Q[
-      bundle
-      rake clean
-      rake cross native gem RUBY_CC_VERSION=\"#{cross_target_rubies}\"
-    ]
+    desc "Build cross compile binary with rake-compiler-dock for x64"
+    task :x64 do
+      require "rake_compiler_dock"
+      rm_rf binary_dir
+      RakeCompilerDock.sh %Q[
+        bundle
+        rake clean
+        export RROONGA_USE_GROONGA_X64=true
+        rake cross native gem RUBY_CC_VERSION=\"#{cross_target_rubies}\"
+      ]
+    end
   end
-end
 
-desc "Build cross compile binary with rake-compiler-dock for x64"
-namespace :build do
-  task :windows_x64 do
-    require "rake_compiler_dock"
-    rm_rf binary_dir
-    RakeCompilerDock.sh %Q[
-      bundle
-      rake clean
-      export RROONGA_USE_GROONGA_X64=true
-      rake cross native gem RUBY_CC_VERSION=\"#{cross_target_rubies}\"
-    ]
-  end
+  desc "Build cross compile binary with rake-compiler-dock"
+  task :windows => ["windows:x86", "windows:x64"]
 end
 
 task :default => :test
