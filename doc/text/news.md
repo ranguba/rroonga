@@ -1,5 +1,16 @@
 # NEWS
 
+## 5.0.8: 2015-10-07 {#version-5-0-8}
+
+### Improvements
+
+  * Changed to use `gmake` preferentially for auto Groonga build.
+  * Supported Groonga 5.0.8. Groonga 5.0.7 or older aren't supported.
+  * Added {Groonga::Context#opened?} that checks whether object with
+    the specified ID is opened or not.
+  * Supported calling a function in {Groonga::Table#select} by
+    `record.call("function", arg1, arg2, ...)`.
+
 ## 5.0.5: 2015-09-09 {#version-5-0-5}
 
 ### Improvements
