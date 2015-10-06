@@ -325,11 +325,12 @@ class TableGroupTest < Test::Unit::TestCase
     def test_max
       grouped_records = @memos.group("tag",
                                      :calc_target => "priority",
-                                     :calc_types => [:max]).collect do |group|
-        tag = group.key
+                                     :calc_types => [:max])
+      grouped_data = grouped_records.collect do |record|
+        tag = record.key
         [
           tag.key,
-          group.max,
+          record.max,
         ]
       end
 
@@ -338,20 +339,21 @@ class TableGroupTest < Test::Unit::TestCase
                      ["Mroonga", 50],
                      ["Rroonga", 25],
                    ],
-                   grouped_records)
+                   grouped_data)
     end
 
     def test_all_types
       grouped_records = @memos.group("tag",
                                      :calc_target => "priority",
-                                     :calc_types => [:max, :min, :sum, :average]).collect do |group|
-        tag = group.key
+                                     :calc_types => [:max, :min, :sum, :average])
+      grouped_data = grouped_records.collect do |record|
+        tag = record.key
         [
           tag.key,
-          group.max,
-          group.min,
-          group.sum,
-          group.average.round(3),
+          record.max,
+          record.min,
+          record.sum,
+          record.average.round(3),
         ]
       end
 
@@ -360,7 +362,7 @@ class TableGroupTest < Test::Unit::TestCase
                      ["Mroonga", 50, 10, 85, 28.333],
                      ["Rroonga", 25, -25, 0, 0.0],
                    ],
-                   grouped_records)
+                   grouped_data)
     end
   end
 end
