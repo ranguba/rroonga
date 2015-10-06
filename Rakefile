@@ -17,6 +17,7 @@
 
 require "find"
 require "fileutils"
+require "shellwords"
 require "pathname"
 require "erb"
 require "yard"
@@ -157,17 +158,30 @@ namespace :build do
     architectures.each do |architecture|
       desc "Build gem for Windows #{architecture}"
       task architecture do
-        require "rake_compiler_dock"
-        rm_rf binary_dir
+        build_dir = "tmp/windows"
+        rm_rf build_dir
+        mkdir_p build_dir
+
         commands = [
-          "bundle",
-          "rake clean",
-          "rake cross native gem RUBY_CC_VERSION=#{ruby_versions}",
+          ["git", "clone", "file://#{Dir.pwd}/.git", build_dir],
+          ["cd", build_dir],
+          ["bundle"],
+          ["rake", "cross", "native", "gem", "RUBY_CC_VERSION=#{ruby_versions}"],
         ]
         if architecture == :x64
-          commands.unshift("export RROONGA_USE_GROONGA_X64=true")
+          commands.unshift(["export", "RROONGA_USE_GROONGA_X64=true"])
         end
-        RakeCompilerDock.sh(commands.join(" && "))
+        raw_commands = commands.collect do |command|
+          Shellwords.join(command)
+        end
+        raw_command_line = raw_commands.join(" && ")
+
+        require "rake_compiler_dock"
+        RakeCompilerDock.sh(raw_command_line)
+
+        version = spec.version
+        cp("#{build_dir}/pkg/rroonga-#{version}-#{architecture}-mingw32.gem",
+           "pkg/")
       end
     end
   end
