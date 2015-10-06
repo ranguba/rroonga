@@ -148,12 +148,10 @@ namespace :clean do
   end
 end
 
-def cross_target_rubies
-  "2.0.0:2.1.6:2.2.2"
-end
-
 namespace :build do
   namespace :windows do
+    ruby_versions = "2.0.0:2.1.6:2.2.2"
+
     desc "Build cross compile binary with rake-compiler-dock for i386"
     task :x86 do
       require "rake_compiler_dock"
@@ -161,7 +159,7 @@ namespace :build do
       RakeCompilerDock.sh %Q[
         bundle
         rake clean
-        rake cross native gem RUBY_CC_VERSION=\"#{cross_target_rubies}\"
+        rake cross native gem RUBY_CC_VERSION=\"#{ruby_versions}\"
       ]
     end
 
@@ -173,7 +171,7 @@ namespace :build do
         bundle
         rake clean
         export RROONGA_USE_GROONGA_X64=true
-        rake cross native gem RUBY_CC_VERSION=\"#{cross_target_rubies}\"
+        rake cross native gem RUBY_CC_VERSION=\"#{ruby_versions}\"
       ]
     end
   end
