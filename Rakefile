@@ -148,16 +148,39 @@ namespace :clean do
   end
 end
 
-desc "Build cross compile binary with Vagrant"
+def cross_target_rubies
+  "2.0.0:2.1.6:2.2.2"
+end
+
+desc "Build cross compile binary with rake-compiler-dock"
 namespace :build do
-  task :windows do
-    pkg_dir = "#{base_dir}/pkg"
-    mkdir pkg_dir unless File.exist?(pkg_dir)
-    cd "build/windows" do
-      sh("vagrant", "up")
-      cp(Dir.glob("pkg/rroonga-*-mingw32.gem"), pkg_dir)
-      sh("vagrant", "destroy", "-f")
-    end
+  task :windows => [:windows_x86, :windows_x64]
+end
+
+desc "Build cross compile binary with rake-compiler-dock for i386"
+namespace :build do
+  task :windows_x86 do
+    require "rake_compiler_dock"
+    rm_rf binary_dir
+    RakeCompilerDock.sh %Q[
+      bundle
+      rake clean
+      rake cross native gem RUBY_CC_VERSION=\"#{cross_target_rubies}\"
+    ]
+  end
+end
+
+desc "Build cross compile binary with rake-compiler-dock for x64"
+namespace :build do
+  task :windows_x64 do
+    require "rake_compiler_dock"
+    rm_rf binary_dir
+    RakeCompilerDock.sh %Q[
+      bundle
+      rake clean
+      export RROONGA_USE_GROONGA_X64=true
+      rake cross native gem RUBY_CC_VERSION=\"#{cross_target_rubies}\"
+    ]
   end
 end
 
