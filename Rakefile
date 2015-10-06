@@ -152,7 +152,7 @@ namespace :build do
   namespace :windows do
     ruby_versions = "2.0.0:2.1.6:2.2.2"
 
-    desc "Build cross compile binary with rake-compiler-dock for i386"
+    desc "Build gem for Windows i386"
     task :x86 do
       require "rake_compiler_dock"
       rm_rf binary_dir
@@ -163,7 +163,7 @@ namespace :build do
       ]
     end
 
-    desc "Build cross compile binary with rake-compiler-dock for x64"
+    desc "Build gem for Windows x64"
     task :x64 do
       require "rake_compiler_dock"
       rm_rf binary_dir
@@ -176,7 +176,7 @@ namespace :build do
     end
   end
 
-  desc "Build cross compile binary with rake-compiler-dock"
+  desc "Build gems for Windows"
   task :windows => ["windows:x86", "windows:x64"]
 end
 
