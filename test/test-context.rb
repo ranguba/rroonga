@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2013  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2015  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -133,6 +133,14 @@ class ContextTest < Test::Unit::TestCase
     assert_false(context.closed?)
     context.close
     assert_true(context.closed?)
+  end
+
+  def test_opened?
+    Groonga::Database.create
+    context = Groonga::Context.default
+    assert do
+      context.opened?(Groonga::Type::SHORT_TEXT)
+    end
   end
 
   class RestoreTest < self

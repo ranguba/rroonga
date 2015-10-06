@@ -1,6 +1,6 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
-  Copyright (C) 2010-2014  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2010-2015  Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -943,6 +943,28 @@ rb_grn_context_array_reference (VALUE self, VALUE name_or_id)
     return GRNOBJECT2RVAL(Qnil, context, object, GRN_FALSE);
 }
 
+/*
+ * Checks whether object with the ID is opened or not.
+ *
+ * @overload opened?(id)
+ *   @param id [Integer] The ID to be checked
+ *   @return [Boolean] `true` if object with the `id` is opened,
+ *      `false` otherwise.
+ */
+static VALUE
+rb_grn_context_is_opened (VALUE self, VALUE rb_id)
+{
+    grn_ctx *context;
+    grn_id id;
+    grn_bool is_opened;
+
+    context = SELF(self);
+    id = NUM2UINT(rb_id);
+    is_opened = grn_ctx_is_opened(context, id);
+
+    return CBOOL2RVAL(is_opened);
+}
+
 void
 rb_grn_context_object_created (VALUE rb_context, VALUE rb_object)
 {
@@ -999,4 +1021,6 @@ rb_grn_init_context (VALUE mGrn)
     rb_define_method(cGrnContext, "connect", rb_grn_context_connect, -1);
     rb_define_method(cGrnContext, "send", rb_grn_context_send, 1);
     rb_define_method(cGrnContext, "receive", rb_grn_context_receive, 0);
+
+    rb_define_method(cGrnContext, "opened?", rb_grn_context_is_opened, 1);
 }
