@@ -10,6 +10,14 @@
     the specified ID is opened or not.
   * Supported calling a function in {Groonga::Table#select} by
     `record.call("function", arg1, arg2, ...)`.
+  * Windows: Changed to cross compile system to
+    [rake-compiler-dock](https://github.com/rake-compiler/rake-compiler-dock)
+    from Vagrant based cross compile system.
+    [GitHub#108] [Patch by Hiroshi Hatake]
+
+### Thanks
+
+  * Hiroshi Hatake
 
 ## 5.0.5: 2015-09-09 {#version-5-0-5}
 
