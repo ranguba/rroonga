@@ -93,7 +93,6 @@ module Groonga
         combined_builder.build(expression, variable)
       end
 
-      expression.compile
       expression
     end
 
