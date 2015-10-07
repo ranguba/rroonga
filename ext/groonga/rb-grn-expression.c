@@ -824,6 +824,37 @@ rb_grn_expression_estimate_size (VALUE self)
     return UINT2NUM(size);
 }
 
+/*
+ * Rewrites expression.
+ *
+ * @example
+ *   expression.parse("age >= 10 AND age < 20",
+ *                    :syntax => :script)
+ *   expression.rewrite # => New rewritten expression.
+ *                      #    It'll use between(age, 10, "include", 20, "exclude")
+ *
+ * @overload rewrite
+ *   @return [Groonga::Expression, nil] new rewritten expression when
+ *      the expression is rewritten, `nil` otherwise.
+ *
+ * @since 5.1.0
+ */
+static VALUE
+rb_grn_expression_rewrite (VALUE self)
+{
+    grn_ctx *context = NULL;
+    grn_obj *expression;
+    grn_obj *rewritten_expression;
+
+    rb_grn_expression_deconstruct(SELF(self), &expression, &context,
+                                  NULL, NULL,
+                                  NULL, NULL, NULL);
+
+    rewritten_expression = grn_expr_rewrite(context, expression);
+
+    return GRNOBJECT2RVAL(Qnil, context, rewritten_expression, GRN_TRUE);
+}
+
 void
 rb_grn_init_expression (VALUE mGrn)
 {
@@ -865,4 +896,7 @@ rb_grn_init_expression (VALUE mGrn)
 
     rb_define_method(rb_cGrnExpression, "estimate_size",
                      rb_grn_expression_estimate_size, 0);
+
+    rb_define_method(rb_cGrnExpression, "rewrite",
+                     rb_grn_expression_rewrite, 0);
 }
