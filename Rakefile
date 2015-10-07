@@ -88,6 +88,10 @@ def collect_binary_files(binary_dir)
   binary_files
 end
 
+def windows_gem_name(spec, architecture)
+  "#{spec.name}-#{spec.version}-#{architecture}-mingw32.gem"
+end
+
 relative_vendor_dir = "vendor"
 relative_binary_dir = File.join("vendor", "local")
 vendor_dir = File.join(base_dir, relative_vendor_dir)
@@ -149,13 +153,13 @@ namespace :clean do
   end
 end
 
-namespace :build do
-  architectures = [:x86, :x64]
+windows_architectures = [:x86, :x64]
 
+namespace :build do
   namespace :windows do
     ruby_versions = "2.0.0:2.1.6:2.2.2"
 
-    architectures.each do |architecture|
+    windows_architectures.each do |architecture|
       desc "Build gem for Windows #{architecture}"
       task architecture do
         build_dir = "tmp/windows"
@@ -179,18 +183,26 @@ namespace :build do
         require "rake_compiler_dock"
         RakeCompilerDock.sh(raw_command_line)
 
-        version = spec.version
-        cp("#{build_dir}/pkg/rroonga-#{version}-#{architecture}-mingw32.gem",
+        cp("#{build_dir}/pkg/#{windows_gem_name(spec, architecture)}",
            "pkg/")
       end
     end
   end
 
   desc "Build gems for Windows"
-  build_tasks = architectures.collect do |architecture|
+  build_tasks = windows_architectures.collect do |architecture|
     "windows:#{architecture}"
   end
   task :windows => build_tasks
+end
+
+namespace :release do
+  desc "Push gems for Windows to RubyGems.org"
+  task :windows do
+    windows_architectures.each do |architecture|
+      ruby("-S", "gem", "push", "pkg/#{windows_gem_name(spec, architecture)}")
+    end
+  end
 end
 
 task :default => :test
