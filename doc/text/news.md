@@ -1,5 +1,15 @@
 # NEWS
 
+## 5.0.9: 2015-11-10 {#version-5-0-9}
+
+### Improvements
+
+  * Supported Groonga 5.0.9. Groonga 5.0.7 or older aren't supported.
+  * Added {Groonga::Context#conf} that returns {Groonga::Conf}.
+  * Added {Groonga::Conf#[]} that returns a database level configuration value.
+  * Added {Groonga::Conf#[]=} that sets a database level configuration value.
+  * Added {Groonga::Table#geo_sort=} that sorts by geo point.
+
 ## 5.0.8: 2015-10-07 {#version-5-0-8}
 
 ### Improvements
