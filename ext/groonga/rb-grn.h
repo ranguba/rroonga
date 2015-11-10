@@ -354,6 +354,7 @@ void           rb_grn_init_snippet                  (VALUE mGrn);
 void           rb_grn_init_plugin                   (VALUE mGrn);
 void           rb_grn_init_normalizer               (VALUE mGrn);
 void           rb_grn_init_thread                   (VALUE mGrn);
+void           rb_grn_init_conf                     (VALUE mGrn);
 
 VALUE          rb_grn_rc_to_exception               (grn_rc rc);
 const char    *rb_grn_rc_to_message                 (grn_rc rc);

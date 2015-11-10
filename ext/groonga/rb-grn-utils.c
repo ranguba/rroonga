@@ -174,7 +174,11 @@ rb_grn_equal_string (const char *string1, const char *string2)
 VALUE
 rb_grn_convert_to_string (VALUE object)
 {
-    return rb_convert_type(object, RUBY_T_STRING, "String", "to_str");
+    if (rb_type(object) == T_SYMBOL) {
+        return rb_sym2str(object);
+    } else {
+        return rb_convert_type(object, RUBY_T_STRING, "String", "to_str");
+    }
 }
 
 VALUE

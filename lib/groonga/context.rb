@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2010-2013  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2010-2015  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -345,6 +345,14 @@ module Groonga
       return if @memory_pools.empty?
       memory_pool = @memory_pools.last
       memory_pool.register(object)
+    end
+
+    # @return [Groonga::Conf] The database level configuration sets of
+    #   this context.
+    #
+    # @since 5.0.9
+    def conf
+      @conf ||= Conf.new(self)
     end
   end
 end
