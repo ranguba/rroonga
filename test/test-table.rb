@@ -421,6 +421,42 @@ class TableTest < Test::Unit::TestCase
                  sorted_bookmarks.collect(&:value))
   end
 
+  sub_test_case "#geo_sort" do
+    setup
+    def setup_schema
+      Groonga::Schema.define do |schema|
+        schema.create_table("Posts") do |table|
+          table.wgs84_geo_point("location")
+        end
+
+        schema.create_table("Locations",
+                            :type => :patricia_trie,
+                            :key_type => "WGS84GeoPoint") do |table|
+          table.index("Posts.location")
+        end
+      end
+
+      @posts = Groonga["Posts"]
+    end
+
+    setup
+    def setup_data
+      @posts.add(:location => "35.720253x139.762573")
+      @posts.add(:location => "35.730061x139.796234")
+      @posts.add(:location => "35.685341x139.783981")
+    end
+
+    test "default" do
+      results = @posts.geo_sort(@posts.column("location"), "35.7119x139.7983")
+      assert_equal([
+                     Groonga::WGS84GeoPoint.new("35.730061x139.796234"),
+                     Groonga::WGS84GeoPoint.new("35.685341x139.783981"),
+                     Groonga::WGS84GeoPoint.new("35.720253x139.762573"),
+                   ],
+                   results.collect(&:location))
+    end
+  end
+
   def test_union!
     bookmarks = Groonga::Hash.create(:name => "Bookmarks")
     bookmarks.define_column("title", "ShortText")

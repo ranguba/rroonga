@@ -1314,6 +1314,118 @@ rb_grn_table_sort (int argc, VALUE *argv, VALUE self)
 }
 
 /*
+ * Sorts records in the table by `TokyoGeoPoint` or `WGS84GeoPoint`
+ * type column value. Order is near to far from base geo point.
+ *
+ * @overload geo_sort(column, base_geo_point, options={})
+ *   @param options [::Hash] The name and value
+ *     pairs. Omitted names are initialized as the default value.
+ *
+ *   @option options :offset (0)
+ *
+ *     It specifies what number record should be the first record in
+ *     returned table. It's 0-based.
+ *
+ *     If you specify `0`, the 0th record, the 1st record, the 2nd
+ *     record, ... are returned.
+ *
+ *     If you specify `0`, the 1st record, the 2nd record, ... are
+ *     returned. The 0th record isn't returned.
+ *
+ *     The default is `0`.
+ *
+ *   @option options :limit (-1)
+ *
+ *     It specifies up to how many records are returned. If `-1` is
+ *     specified, all records are returned.
+ *
+ *     The default is `-1`.
+ *
+ * @return [Groonga::Array] The sorted result. You can get the
+ *   original record by {#value} method of a record in the sorted
+ *   result. Normally, you doesn't need to get the original record
+ *   because you can access via column name method:
+ *
+ *   If you want to access the key of the original record, you need to
+ *   get the original record.
+ *
+ * @since 5.0.9
+ */
+static VALUE
+rb_grn_table_geo_sort (int argc, VALUE *argv, VALUE self)
+{
+    grn_ctx *context = NULL;
+    grn_obj *table;
+    VALUE rb_column;
+    VALUE rb_base_geo_point;
+    VALUE rb_options;
+    VALUE rb_offset;
+    VALUE rb_limit;
+    grn_obj *column;
+    grn_id column_range_id;
+    grn_obj base_geo_point;
+    int offset = 0;
+    int limit = -1;
+    grn_obj *result;
+    VALUE exception;
+
+    rb_grn_table_deconstruct(SELF(self), &table, &context,
+                             NULL, NULL,
+                             NULL, NULL, NULL,
+                             NULL);
+
+    rb_scan_args(argc, argv, "21", &rb_column, &rb_base_geo_point, &rb_options);
+
+    column = RVAL2GRNCOLUMN(rb_column, &context);
+    column_range_id = grn_obj_get_range(context, column);
+    switch (column_range_id) {
+    case GRN_DB_TOKYO_GEO_POINT:
+        GRN_TOKYO_GEO_POINT_INIT(&base_geo_point, 0);
+        break;
+    case GRN_DB_WGS84_GEO_POINT:
+        GRN_WGS84_GEO_POINT_INIT(&base_geo_point, 0);
+        break;
+    default:
+        rb_raise(rb_eArgError,
+                 "column's range must be TokyoGeoPoint or WGS84GeoPoint: %s",
+                 rb_grn_inspect(rb_column));
+        break;
+    }
+    RVAL2GRNBULK_WITH_TYPE(rb_base_geo_point,
+                           context,
+                           &base_geo_point,
+                           column_range_id,
+                           grn_ctx_at(context, column_range_id));
+
+    rb_grn_scan_options(rb_options,
+                        "offset", &rb_offset,
+                        "limit", &rb_limit,
+                        NULL);
+
+    if (!NIL_P(rb_offset))
+        offset = NUM2INT(rb_offset);
+    if (!NIL_P(rb_limit))
+        limit = NUM2INT(rb_limit);
+    /* TODO: Remove me when Groonga 5.1.0 is released. */
+    if (limit < 0)
+        limit = grn_table_size(context, table) + limit + 1;
+
+    result = grn_table_create(context, NULL, 0, NULL, GRN_TABLE_NO_KEY,
+                              NULL, table);
+    grn_geo_table_sort(context, table, offset, limit,
+                       result, column, &base_geo_point);
+    exception = rb_grn_context_to_exception(context, self);
+    if (!NIL_P(exception)) {
+        grn_obj_unlink(context, &base_geo_point);
+        grn_obj_unlink(context, result);
+        rb_exc_raise(exception);
+    }
+
+    grn_obj_unlink(context, &base_geo_point);
+    return GRNOBJECT2RVAL(Qnil, context, result, GRN_TRUE);
+}
+
+/*
  * _table_ のレコードを _key1_ , _key2_ , _..._ で指定したキーの
  * 値でグループ化する。多くの場合、キーにはカラムを指定する。
  * カラムはカラム名（文字列）でも指定可能。
@@ -2608,6 +2720,7 @@ rb_grn_init_table (VALUE mGrn)
     rb_define_method(rb_cGrnTable, "delete", rb_grn_table_delete, -1);
 
     rb_define_method(rb_cGrnTable, "sort", rb_grn_table_sort, -1);
+    rb_define_method(rb_cGrnTable, "geo_sort", rb_grn_table_geo_sort, -1);
     rb_define_method(rb_cGrnTable, "group", rb_grn_table_group, -1);
 
     rb_define_method(rb_cGrnTable, "[]", rb_grn_table_array_reference, 1);
