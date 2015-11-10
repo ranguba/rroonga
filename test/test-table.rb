@@ -455,6 +455,18 @@ class TableTest < Test::Unit::TestCase
                    ],
                    results.collect(&:location))
     end
+
+    test "accessor" do
+      searched_posts = @posts.select("true", :syntax => :script)
+      results = searched_posts.geo_sort(searched_posts.column("location"),
+                                        "35.7119x139.7983")
+      assert_equal([
+                     Groonga::WGS84GeoPoint.new("35.730061x139.796234"),
+                     Groonga::WGS84GeoPoint.new("35.685341x139.783981"),
+                     Groonga::WGS84GeoPoint.new("35.720253x139.762573"),
+                   ],
+                   results.collect(&:location))
+    end
   end
 
   def test_union!

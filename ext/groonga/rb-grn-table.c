@@ -1376,7 +1376,7 @@ rb_grn_table_geo_sort (int argc, VALUE *argv, VALUE self)
 
     rb_scan_args(argc, argv, "21", &rb_column, &rb_base_geo_point, &rb_options);
 
-    column = RVAL2GRNCOLUMN(rb_column, &context);
+    column = RVAL2GRNOBJECT(rb_column, &context);
     column_range_id = grn_obj_get_range(context, column);
     switch (column_range_id) {
     case GRN_DB_TOKYO_GEO_POINT:
