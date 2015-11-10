@@ -4,7 +4,7 @@
 
 ### Improvements
 
-  * Supported Groonga 5.0.9. Groonga 5.0.7 or older aren't supported.
+  * Supported Groonga 5.0.9. Groonga 5.0.8 or older aren't supported.
   * Added {Groonga::Context#conf} that returns {Groonga::Conf}.
   * Added {Groonga::Conf#[]} that returns a database level configuration value.
   * Added {Groonga::Conf#[]=} that sets a database level configuration value.
