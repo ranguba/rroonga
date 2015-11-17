@@ -16,11 +16,6 @@ Please execute irb with loading Rroonga with this command:
     % irb --simple-prompt -r groonga
     >>
 
-Now you use UTF-8 as the encoding of database.
-
-    >> Groonga::Context.default_options = {:encoding => :utf8}
-    => {:encoding=>:utf8}
-
 Then, try to create database in a file.
 
     >> Groonga::Database.create(:path => "/tmp/bookmark.db")
