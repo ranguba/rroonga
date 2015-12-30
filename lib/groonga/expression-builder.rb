@@ -81,7 +81,8 @@ module Groonga
       end
 
       if builders.empty?
-        expression.append_constant(true)
+        expression.append_object(@table.context["all_records"])
+        expression.append_operation(Operation::CALL, 0)
       else
         combined_builder = builders.inject(nil) do |previous, builder|
           if previous.nil?
