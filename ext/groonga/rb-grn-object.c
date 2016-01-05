@@ -1682,6 +1682,42 @@ rb_grn_object_accessor_p (VALUE self)
     return CBOOL2RVAL(accessor_p);
 }
 
+/*
+ * Checks whether the object is key accessor or not.
+ *
+ * @example `true` case: `column("_key")` is an accessor and it's an accessor for `_key`
+ *   Groonga::Schema.create_table("Users", :key_type => :short_text)
+ *   users = Groonga["Users"]
+ *   users.column("_key").key_accessor? # => true
+ *
+ * @example `false` case: `column("_id")` is an accessor but it's not an accessor for `_key`
+ *   Groonga::Schema.create_table("Users", :key_type => :short_text)
+ *   users = Groonga["Users"]
+ *   users.column("_id").key_accessor? # => false
+ *
+ * @overload key_accessor?
+ *   @return [Boolean] `true` if the object is key accessor,
+ *     `false` otherwise.
+ *
+ * @since 5.1.1
+ */
+static VALUE
+rb_grn_object_key_accessor_p (VALUE self)
+{
+    grn_ctx *context;
+    grn_obj *object;
+    grn_bool key_accessor_p = GRN_FALSE;
+
+    rb_grn_object_deconstruct(SELF(self), &object, &context,
+                              NULL, NULL, NULL, NULL);
+
+    if (context && object) {
+        key_accessor_p = grn_obj_is_key_accessor(context, object);
+    }
+
+    return CBOOL2RVAL(key_accessor_p);
+}
+
 void
 rb_grn_init_object (VALUE mGrn)
 {
@@ -1729,4 +1765,6 @@ rb_grn_init_object (VALUE mGrn)
                      rb_grn_object_scorer_procedure_p, 0);
     rb_define_method(rb_cGrnObject, "accessor?",
                      rb_grn_object_accessor_p, 0);
+    rb_define_method(rb_cGrnObject, "key_accessor?",
+                     rb_grn_object_key_accessor_p, 0);
 }
