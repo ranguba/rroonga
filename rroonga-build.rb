@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 #
 # Copyright (C) 2009-2015  Kouhei Sutou <kou@clear-code.com>
-# Copyright (C) 2015  Masafumi Yokoyama <yokoyama@clear-code.com>
+# Copyright (C) 2015-2016  Masafumi Yokoyama <yokoyama@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -27,8 +27,8 @@ module RroongaBuild
 
   module LatestGroongaVersion
     MAJOR = 5
-    MINOR = 0
-    MICRO = 9
+    MINOR = 1
+    MICRO = 1
     VERSION = [MAJOR, MINOR, MICRO]
   end
 
