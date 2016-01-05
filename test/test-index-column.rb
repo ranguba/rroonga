@@ -575,7 +575,7 @@ class IndexColumnTest < Test::Unit::TestCase
       end
 
       def test_query
-        assert_equal(6, @index.estimate_size("roonga"))
+        assert_equal(3, @index.estimate_size("roonga"))
       end
     end
 
