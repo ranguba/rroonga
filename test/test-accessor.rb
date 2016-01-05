@@ -1,4 +1,5 @@
 # Copyright (C) 2011  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2016  Masafumi Yokoyama <yokoyama@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -32,5 +33,19 @@ class AccessorTest < Test::Unit::TestCase
 
   def test_local_name
     assert_equal("_id", @id.local_name)
+  end
+
+  sub_test_case "#accessor?" do
+    test "true" do
+      assert do
+        @id.accessor?
+      end
+    end
+
+    test "false" do
+      assert do
+        not @posts.accessor?
+      end
+    end
   end
 end
