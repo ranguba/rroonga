@@ -13,10 +13,10 @@ rvm:
 # matrix:
 #   allow_failures:
 #     - rvm: ruby-head
-before_script: gem update bundler
 before_install:
   - curl --silent --location https://github.com/groonga/groonga/raw/master/data/travis/setup.sh | sh
   - |
     if [ "${GROONGA_MASTER}" != "yes" ]; then
       sudo apt-get -qq -y install groonga-tokenizer-mecab
     fi
+  - gem update bundler
