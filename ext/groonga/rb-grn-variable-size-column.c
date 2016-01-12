@@ -1,7 +1,7 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
   Copyright (C) 2009-2014  Kouhei Sutou <kou@clear-code.com>
-  Copyright (C) 2014  Masafumi Yokoyama <myokoym@gmail.com>
+  Copyright (C) 2014-2016  Masafumi Yokoyama <yokoyama@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -564,6 +564,86 @@ rb_grn_variable_size_column_defrag (int argc, VALUE *argv, VALUE self)
     return INT2NUM(n_segments);
 }
 
+/*
+ * Recreates all index columns for the column.
+ *
+ * This method is useful when you have any broken index columns for
+ * the column. You don't need to specify each index column. But this
+ * method spends more time rather than you specify only reindex
+ * needed index columns.
+ *
+ * You can use {Groonga::Database#reindex} to recreate all index
+ * columns in a database.
+ *
+ * You can use {Groonga::Table#reindex} to recreate all index
+ * columns in a table.
+ *
+ * You can use {Groonga::IndexColumn#reindex} to specify the reindex
+ * target index column.
+ *
+ * @example How to recreate all index columns for the column
+ *   Groonga::Schema.define do |schema|
+ *     schema.create_table("Memos") do |table|
+ *       table.short_text("title")
+ *       table.text("content")
+ *     end
+ *
+ *     schema.create_table("BigramTerms",
+ *                         :type => :patricia_trie,
+ *                         :key_type => :short_text,
+ *                         :normalizer => "NormalizerAuto",
+ *                         :default_tokenizer => "TokenBigram") do |table|
+ *       table.index("Memos.title")
+ *       table.index("Memos.content")
+ *     end
+ *
+ *     schema.create_table("MeCabTerms",
+ *                         :type => :patricia_trie,
+ *                         :key_type => :short_text,
+ *                         :normalizer => "NormalizerAuto",
+ *                         :default_tokenizer => "TokenMecab") do |table|
+ *       table.index("Memos.title")
+ *       table.index("Memos.content")
+ *     end
+ *   end
+ *
+ *   Groonga["Memos.content"].reindex
+ *   # They are called:
+ *   #   Groonga["BigramTerms.Memos_content"].reindex
+ *   #   Groonga["MeCabTerms.Memos_content"].reindex
+ *   #
+ *   # They aren't called:
+ *   #   Groonga["BigramTerms.Memos_title"].reindex
+ *   #   Groonga["MeCabTerms.Memos_title"].reindex
+ *
+ * @overload reindex
+ *   @return [void]
+ *
+ * @see Groonga::Database#reindex
+ * @see Groonga::Table#reindex
+ * @see Groonga::FixSizeColumn#reindex
+ * @see Groonga::IndexColumn#reindex
+ *
+ * @since 5.1.1
+ */
+static VALUE
+rb_grn_variable_size_column_reindex (VALUE self)
+{
+    grn_rc rc;
+    grn_ctx *context;
+    grn_obj *column;
+
+    rb_grn_variable_size_column_deconstruct(SELF(self), &column, &context,
+                                            NULL, NULL, NULL, NULL,
+                                            NULL, NULL);
+
+    rc = grn_obj_reindex(context, column);
+    rb_grn_context_check(context, self);
+    rb_grn_rc_check(rc, self);
+
+    return Qnil;
+}
+
 void
 rb_grn_init_variable_size_column (VALUE mGrn)
 {
@@ -579,4 +659,7 @@ rb_grn_init_variable_size_column (VALUE mGrn)
                      rb_grn_variable_size_column_compressed_p, -1);
     rb_define_method(rb_cGrnVariableSizeColumn, "defrag",
                      rb_grn_variable_size_column_defrag, -1);
+
+    rb_define_method(rb_cGrnVariableSizeColumn, "reindex",
+                     rb_grn_variable_size_column_reindex, 0);
 }
