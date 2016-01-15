@@ -1,6 +1,7 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
   Copyright (C) 2009-2010  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2016  Masafumi Yokoyama <yokoyama@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -141,6 +142,87 @@ rb_grn_fix_size_column_decrement (int argc, VALUE *argv, VALUE self)
     return rb_grn_fix_size_column_integer_set(argc, argv, self, GRN_OBJ_DECR);
 }
 
+/*
+ * Recreates all index columns for the column.
+ *
+ * This method is useful when you have any broken index columns for
+ * the column. You don't need to specify each index column. But this
+ * method spends more time rather than you specify only reindex
+ * needed index columns.
+ *
+ * You can use {Groonga::Database#reindex} to recreate all index
+ * columns in a database.
+ *
+ * You can use {Groonga::Table#reindex} to recreate all index
+ * columns in a table.
+ *
+ * You can use {Groonga::IndexColumn#reindex} to specify the reindex
+ * target index column.
+ *
+ * @example How to recreate all index columns for the column
+ *   Groonga::Schema.define do |schema|
+ *     schema.create_table("Users") do |table|
+ *       table.integer32("age")
+ *       table.integer32("score")
+ *     end
+ *
+ *     schema.create_table("Numbers",
+ *                         :type => :patricia_trie,
+ *                         :key_type => :integer32) do |table|
+ *       table.index("Users.age")
+ *       table.index("Users.score")
+ *     end
+ *
+ *     schema.create_table("Ages",
+ *                         :type => :patricia_trie,
+ *                         :key_type => :integer32) do |table|
+ *       table.index("Users.age")
+ *     end
+ *
+ *     schema.create_table("Scores",
+ *                         :type => :patricia_trie,
+ *                         :key_type => :integer32) do |table|
+ *       table.index("Users.score")
+ *     end
+ *   end
+ *
+ *   Groonga["Users.age"].reindex
+ *   # They are called:
+ *   #   Groonga["Numbers.Users_age"].reindex
+ *   #   Groonga["Ages.Users_age"].reindex
+ *   #
+ *   # They aren't called:
+ *   #   Groonga["Numbers.Users_score"].reindex
+ *   #   Groonga["Scores.Users_score"].reindex
+ *
+ * @overload reindex
+ *   @return [void]
+ *
+ * @see Groonga::Database#reindex
+ * @see Groonga::Table#reindex
+ * @see Groonga::VariableSizeColumn#reindex
+ * @see Groonga::IndexColumn#reindex
+ *
+ * @since 5.1.1
+ */
+static VALUE
+rb_grn_fix_size_column_reindex (VALUE self)
+{
+    grn_rc rc;
+    grn_ctx *context;
+    grn_obj *column;
+
+    rb_grn_column_deconstruct(SELF(self), &column, &context,
+                              NULL, NULL,
+                              NULL, NULL, NULL);
+
+    rc = grn_obj_reindex(context, column);
+    rb_grn_context_check(context, self);
+    rb_grn_rc_check(rc, self);
+
+    return Qnil;
+}
+
 void
 rb_grn_init_fix_size_column (VALUE mGrn)
 {
@@ -156,4 +238,7 @@ rb_grn_init_fix_size_column (VALUE mGrn)
                      rb_grn_fix_size_column_increment, -1);
     rb_define_method(rb_cGrnFixSizeColumn, "decrement!",
                      rb_grn_fix_size_column_decrement, -1);
+
+    rb_define_method(rb_cGrnFixSizeColumn, "reindex",
+                     rb_grn_fix_size_column_reindex, 0);
 }

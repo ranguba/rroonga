@@ -1,4 +1,5 @@
 # Copyright (C) 2009-2014  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2016  Masafumi Yokoyama <yokoyama@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -18,6 +19,89 @@ class FixSizeColumnTest < Test::Unit::TestCase
 
   def setup
     setup_database
+  end
+
+  def test_reindex
+    Groonga::Schema.define do |schema|
+      schema.create_table("Users", :type => :hash) do |table|
+        table.integer32("age")
+        table.integer32("score")
+      end
+
+      schema.create_table("Numbers",
+                          :type => :patricia_trie,
+                          :key_type => :integer32) do |table|
+        table.index("Users.age")
+        table.index("Users.score")
+      end
+
+      schema.create_table("Ages",
+                          :type => :patricia_trie,
+                          :key_type => :integer32) do |table|
+        table.index("Users.age")
+      end
+
+      schema.create_table("Scores",
+                          :type => :patricia_trie,
+                          :key_type => :integer32) do |table|
+        table.index("Users.score")
+      end
+    end
+
+    users = context["Users"]
+    users.add("Alice", :age => 16, :score => 123)
+    users.add("Bob", :age => 29, :score => -10)
+
+    numbers = context["Numbers"]
+    numbers.delete(16)
+    numbers.delete(123)
+
+    ages = context["Ages"]
+    ages.delete(29)
+
+    scores = context["Scores"]
+    scores.delete(-10)
+
+    assert_equal({
+                   :numbers => [
+                     -10,
+                     29,
+                   ],
+                   :ages => [
+                     16,
+                   ],
+                   :scores => [
+                     123,
+                   ],
+                 },
+                 {
+                   :numbers => numbers.collect(&:_key).sort,
+                   :ages => ages.collect(&:_key).sort,
+                   :scores => scores.collect(&:_key).sort,
+                 })
+
+    context["Users.age"].reindex
+
+    assert_equal({
+                   :numbers => [
+                     -10,
+                     16,
+                     29,
+                   ],
+                   :ages => [
+                     16,
+                     29,
+                   ],
+                   :scores => [
+                     123,
+                   ],
+                 },
+                 {
+                   :numbers => numbers.collect(&:_key).sort,
+                   :ages => ages.collect(&:_key).sort,
+                   :scores => scores.collect(&:_key).sort,
+                 })
+
   end
 
   class OperationTest < self

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # Copyright (C) 2009-2015  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2016  Masafumi Yokoyama <yokoyama@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -173,6 +174,75 @@ class IndexColumnTest < Test::Unit::TestCase
       assert_equal([groonga],
                    @index.search("MySQL").collect(&:key))
     end
+  end
+
+  def test_reindex
+    Groonga::Schema.define do |schema|
+      schema.create_table("Memos", :type => :array) do |table|
+        table.short_text("title")
+        table.text("content")
+      end
+
+      schema.create_table("BigramTerms",
+                          :type => :patricia_trie,
+                          :key_type => :short_text,
+                          :normalizer => "NormalizerAuto",
+                          :default_tokenizer => "TokenBigram") do |table|
+        table.index("Memos.title")
+        table.index("Memos.content")
+      end
+
+      schema.create_table("MeCabTerms",
+                          :type => :patricia_trie,
+                          :key_type => :short_text,
+                          :normalizer => "NormalizerAuto",
+                          :default_tokenizer => "TokenMecab") do |table|
+        table.index("Memos.title")
+        table.index("Memos.content")
+      end
+    end
+
+    memos = context["Memos"]
+    memos.add(:title => "memo1", :content => "もり")
+
+    bigram_terms = context["BigramTerms"]
+    bigram_terms.delete("memo")
+    bigram_terms.delete("り")
+
+    mecab_terms = context["MeCabTerms"]
+    mecab_terms.delete("1")
+    mecab_terms.delete("もり")
+
+    assert_equal({
+                   :bigram => [
+                     "1",
+                     "もり",
+                   ],
+                   :mecab => [
+                     "memo",
+                   ],
+                 },
+                 {
+                   :bigram => bigram_terms.collect(&:_key).sort,
+                   :mecab => mecab_terms.collect(&:_key).sort,
+                 })
+
+    context["MeCabTerms.Memos_content"].reindex
+
+    assert_equal({
+                   :bigram => [
+                     "1",
+                     "もり",
+                   ],
+                   :mecab => [
+                     "memo",
+                     "もり",
+                   ],
+                 },
+                 {
+                   :bigram => bigram_terms.collect(&:_key).sort,
+                   :mecab => mecab_terms.collect(&:_key).sort,
+                 })
   end
 
   class NGramTest < self

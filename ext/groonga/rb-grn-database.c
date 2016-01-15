@@ -1,6 +1,7 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
   Copyright (C) 2009-2015  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2016  Masafumi Yokoyama <yokoyama@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -623,6 +624,87 @@ rb_grn_database_unmap (VALUE self)
     return Qnil;
 }
 
+/*
+ * Recreates all index columns in the database.
+ *
+ * This method is useful when you have any broken index columns in
+ * the database. You don't need to specify each index column. But
+ * this method spends more time rather than you specify only reindex
+ * needed index columns.
+ *
+ * You can use {Groonga::Table#reindex} to specify reindex target
+ * index columns in a table.
+ *
+ * You can use {Groonga::FixSizeColumn#reindex} or
+ * {Groonga::VariableSizeColumn#reindex} to specify reindex target
+ * index columns. They use index columns of the data column as
+ * reindex target index columns.
+ *
+ * You can use {Groonga::IndexColumn#reindex} to specify the reindex
+ * target index column.
+ *
+ * @example How to recreate all index columns in the database
+ *   database = Groonga::Database.create(:path => "/tmp/db")
+ *
+ *   Groonga::Schema.define do |schema|
+ *     schema.create_table("Memos") do |table|
+ *       table.short_text("title")
+ *       table.text("content")
+ *     end
+ *
+ *     schema.create_table("BigramTerms",
+ *                         :type => :patricia_trie,
+ *                         :key_type => :short_text,
+ *                         :normalizer => "NormalizerAuto",
+ *                         :default_tokenizer => "TokenBigram") do |table|
+ *       table.index("Memos.title")
+ *       table.index("Memos.content")
+ *     end
+ *
+ *     schema.create_table("MeCabTerms",
+ *                         :type => :patricia_trie,
+ *                         :key_type => :short_text,
+ *                         :normalizer => "NormalizerAuto",
+ *                         :default_tokenizer => "TokenMecab") do |table|
+ *       table.index("Memos.title")
+ *       table.index("Memos.content")
+ *     end
+ *   end
+ *
+ *   database.reindex
+ *   # They are called:
+ *   #   Groonga["BigramTerms.Memos_title"].reindex
+ *   #   Groonga["BigramTerms.Memos_content"].reindex
+ *   #   Groonga["MeCabTerms.Memos_title"].reindex
+ *   #   Groonga["MeCabTerms.Memos_content"].reindex
+ *
+ * @overload reindex
+ *   @return [void]
+ *
+ * @see Groonga::Table#reindex
+ * @see Groonga::FixSizeColumn#reindex
+ * @see Groonga::VariableSizeColumn#reindex
+ * @see Groonga::IndexColumn#reindex
+ *
+ * @since 5.1.1
+ */
+static VALUE
+rb_grn_database_reindex (VALUE self)
+{
+    grn_rc rc;
+    grn_ctx *context;
+    grn_obj *database;
+
+    rb_grn_database_deconstruct(SELF(self), &database, &context,
+                                NULL, NULL, NULL, NULL);
+
+    rc = grn_obj_reindex(context, database);
+    rb_grn_context_check(context, self);
+    rb_grn_rc_check(rc, self);
+
+    return Qnil;
+}
+
 void
 rb_grn_init_database (VALUE mGrn)
 {
@@ -657,4 +739,5 @@ rb_grn_init_database (VALUE mGrn)
     rb_define_method(rb_cGrnDatabase, "defrag", rb_grn_database_defrag, -1);
     rb_define_method(rb_cGrnDatabase, "recover", rb_grn_database_recover, 0);
     rb_define_method(rb_cGrnDatabase, "unmap", rb_grn_database_unmap, 0);
+    rb_define_method(rb_cGrnDatabase, "reindex", rb_grn_database_reindex, 0);
 }

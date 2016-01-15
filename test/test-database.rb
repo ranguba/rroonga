@@ -1,4 +1,5 @@
 # Copyright (C) 2009-2015  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2016  Masafumi Yokoyama <yokoyama@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -235,6 +236,46 @@ class DatabaseTest < Test::Unit::TestCase
     context.register_plugin("query_expanders/tsv")
     assert_equal(["query_expanders/tsv#{Groonga::Plugin.suffix}"],
                  @database.plugin_paths)
+  end
+
+  def test_reindex
+    setup_database
+    Groonga::Schema.define do |schema|
+      schema.create_table("Memos",
+                          :type => :array) do |table|
+        table.column("content", "Text")
+      end
+      schema.create_table("Terms",
+                          :type => :patricia_trie,
+                          :key_type => "ShortText",
+                          :default_tokenizer => "TokenBigram",
+                          :normalizer => "NormalizerAuto") do |table|
+        table.index("Memos.content")
+      end
+    end
+
+    memos = context["Memos"]
+    memos.add(:content => "This is a memo")
+
+    terms = context["Terms"]
+    terms.delete("this")
+
+    assert_equal([
+                   "a",
+                   "is",
+                   "memo",
+                 ],
+                 terms.collect(&:_key).sort)
+
+    @database.reindex
+
+    assert_equal([
+                   "a",
+                   "is",
+                   "memo",
+                   "this",
+                 ],
+                 terms.collect(&:_key).sort)
   end
 
   class RemoveTest < self
