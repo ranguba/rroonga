@@ -150,13 +150,13 @@ rb_grn_init_lock_timeout (VALUE mGrn)
 }
 
 /*
- * Returns the Groonga's package label.
+ * Returns the Groonga package's label. It's `"Groonga"`.
  *
- * @example How to get the Groonga's package label
+ * @example How to get the Groonga package's label
  *   Groonga.package_label # => "Groonga"
  *
  * @overload package_label
- *   @return [String] The Groonga's package label
+ *   @return [String] `"Groonga"`
  *
  * @since 5.1.1
  */
