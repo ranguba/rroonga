@@ -1,6 +1,7 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
   Copyright (C) 2009-2015  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2016  Masafumi Yokoyama <yokoyama@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -148,6 +149,30 @@ rb_grn_init_lock_timeout (VALUE mGrn)
                                rb_grn_s_set_lock_timeout, 1);
 }
 
+/*
+ * Returns the Groonga's package label.
+ *
+ * @example How to get the Groonga's package label
+ *   Groonga.package_label # => "Groonga"
+ *
+ * @overload package_label
+ *   @return [String] The Groonga's package label
+ *
+ * @since 5.1.1
+ */
+static VALUE
+rb_grn_s_get_package_label (VALUE klass)
+{
+    return rb_str_new_cstr(grn_get_package_label());
+}
+
+static void
+rb_grn_init_package_label (VALUE mGrn)
+{
+    rb_define_singleton_method(mGrn, "package_label",
+                               rb_grn_s_get_package_label, 0);
+}
+
 void
 Init_groonga (void)
 {
@@ -162,6 +187,7 @@ Init_groonga (void)
 
     rb_grn_init_version(mGrn);
     rb_grn_init_lock_timeout(mGrn);
+    rb_grn_init_package_label(mGrn);
 
     rb_grn_init_utils(mGrn);
     rb_grn_init_encoding(mGrn);
