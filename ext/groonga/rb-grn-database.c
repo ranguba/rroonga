@@ -632,8 +632,8 @@ rb_grn_database_unmap (VALUE self)
  * this method spends more time rather than you specify only reindex
  * needed index columns.
  *
- * You can use {Groonga::Table#reindex} to specify reindex target
- * index columns in a table.
+ * You can use {Groonga::TableKeySupport#reindex} to specify reindex
+ * target index columns in a table.
  *
  * You can use {Groonga::FixSizeColumn#reindex} or
  * {Groonga::VariableSizeColumn#reindex} to specify reindex target
@@ -681,7 +681,7 @@ rb_grn_database_unmap (VALUE self)
  * @overload reindex
  *   @return [void]
  *
- * @see Groonga::Table#reindex
+ * @see Groonga::TableKeySupport#reindex
  * @see Groonga::FixSizeColumn#reindex
  * @see Groonga::VariableSizeColumn#reindex
  * @see Groonga::IndexColumn#reindex

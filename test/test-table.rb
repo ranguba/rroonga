@@ -422,45 +422,6 @@ class TableTest < Test::Unit::TestCase
                  sorted_bookmarks.collect(&:value))
   end
 
-  def test_reindex
-    Groonga::Schema.define do |schema|
-      schema.create_table("Memos",
-                          :type => :array) do |table|
-        table.text("content")
-      end
-      schema.create_table("Terms",
-                          :type => :patricia_trie,
-                          :key_type => :short_text,
-                          :default_tokenizer => "TokenBigram",
-                          :normalizer => "NormalizerAuto") do |table|
-        table.index("Memos.content")
-      end
-    end
-
-    memos = context["Memos"]
-    memos.add(:content => "This is a memo")
-
-    terms = context["Terms"]
-    terms.delete("this")
-
-    assert_equal([
-                   "a",
-                   "is",
-                   "memo",
-                 ],
-                 terms.collect(&:_key).sort)
-
-    terms.reindex
-
-    assert_equal([
-                   "a",
-                   "is",
-                   "memo",
-                   "this",
-                 ],
-                 terms.collect(&:_key).sort)
-  end
-
   sub_test_case "#geo_sort" do
     setup
     def setup_schema

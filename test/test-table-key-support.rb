@@ -1,4 +1,5 @@
 # Copyright (C) 2013-2014  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2016  Masafumi Yokoyama <yokoyama@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -193,6 +194,47 @@ class TableKeySupportTest < Test::Unit::TestCase
         assert_equal(["!", "hello"],
                      tokens.collect(&:key).sort)
       end
+    end
+  end
+
+  class ReindexTest < self
+    def test_patricia_trie
+      Groonga::Schema.define do |schema|
+        schema.create_table("Memos",
+                            :type => :array) do |table|
+          table.text("content")
+        end
+        schema.create_table("Terms",
+                            :type => :patricia_trie,
+                            :key_type => :short_text,
+                            :default_tokenizer => "TokenBigram",
+                            :normalizer => "NormalizerAuto") do |table|
+          table.index("Memos.content")
+        end
+      end
+
+      memos = context["Memos"]
+      memos.add(:content => "This is a memo")
+
+      terms = context["Terms"]
+      terms.delete("this")
+
+      assert_equal([
+                     "a",
+                     "is",
+                     "memo",
+                   ],
+                   terms.collect(&:_key).sort)
+
+      terms.reindex
+
+      assert_equal([
+                     "a",
+                     "is",
+                     "memo",
+                     "this",
+                   ],
+                   terms.collect(&:_key).sort)
     end
   end
 end

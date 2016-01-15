@@ -575,8 +575,8 @@ rb_grn_variable_size_column_defrag (int argc, VALUE *argv, VALUE self)
  * You can use {Groonga::Database#reindex} to recreate all index
  * columns in a database.
  *
- * You can use {Groonga::Table#reindex} to recreate all index
- * columns in a table.
+ * You can use {Groonga::TableKeySupport#reindex} to recreate all
+ * index columns in a table.
  *
  * You can use {Groonga::IndexColumn#reindex} to specify the reindex
  * target index column.
@@ -620,7 +620,7 @@ rb_grn_variable_size_column_defrag (int argc, VALUE *argv, VALUE self)
  *   @return [void]
  *
  * @see Groonga::Database#reindex
- * @see Groonga::Table#reindex
+ * @see Groonga::TableKeySupport#reindex
  * @see Groonga::FixSizeColumn#reindex
  * @see Groonga::IndexColumn#reindex
  *

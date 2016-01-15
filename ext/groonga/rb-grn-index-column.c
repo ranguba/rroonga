@@ -1196,8 +1196,8 @@ rb_grn_index_column_estimate_size (int argc, VALUE *argv, VALUE self)
  * You can use {Groonga::Database#reindex} to recreate all index
  * columns in a database.
  *
- * You can use {Groonga::Table#reindex} to recreate all index
- * columns in a table.
+ * You can use {Groonga::TableKeySupport#reindex} to recreate all
+ * index columns in a table.
  *
  * You can use {Groonga::FixSizeColumn#reindex} or
  * {Groonga::VariableSizeColumn#reindex} to recreate all index
@@ -1240,7 +1240,7 @@ rb_grn_index_column_estimate_size (int argc, VALUE *argv, VALUE self)
  *   @return [void]
  *
  * @see Groonga::Database#reindex
- * @see Groonga::Table#reindex
+ * @see Groonga::TableKeySupport#reindex
  * @see Groonga::FixSizeColumn#reindex
  * @see Groonga::VariableSizeColumn#reindex
  *
