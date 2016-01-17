@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2010-2015  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2010-2016  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -347,12 +347,21 @@ module Groonga
       memory_pool.register(object)
     end
 
-    # @return [Groonga::Conf] The database level configuration sets of
+    # @return [Groonga::Config] The database level configuration sets of
     #   this context.
     #
     # @since 5.0.9
+    # @deprecated since 5.1.1. Use {Groonga::Context#config} instead.
     def conf
-      @conf ||= Conf.new(self)
+      config
+    end
+
+    # @return [Groonga::Config] The database level configuration sets of
+    #   this context.
+    #
+    # @since 5.1.1
+    def config
+      @config ||= Config.new(self)
     end
   end
 end

@@ -1,4 +1,4 @@
-# Copyright (C) 2015  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2015-2016  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -13,19 +13,19 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
-class ConfTest < Test::Unit::TestCase
+class ConfigTest < Test::Unit::TestCase
   include GroongaTestUtils
 
   setup :setup_database
 
   sub_test_case "#[]" do
     test "existent" do
-      context.conf["rroonga.key"] = "value"
-      assert_equal("value", context.conf["rroonga.key"])
+      context.config["rroonga.key"] = "value"
+      assert_equal("value", context.config["rroonga.key"])
     end
 
     test "nonexistent" do
-      assert_nil(context.conf["nonexistent"])
+      assert_nil(context.config["nonexistent"])
     end
   end
 end

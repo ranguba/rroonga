@@ -1,6 +1,6 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
-  Copyright (C) 2009-2015  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2016  Kouhei Sutou <kou@clear-code.com>
   Copyright (C) 2015-2016  Masafumi Yokoyama <yokoyama@clear-code.com>
 
   This library is free software; you can redistribute it and/or
@@ -354,7 +354,7 @@ void           rb_grn_init_snippet                  (VALUE mGrn);
 void           rb_grn_init_plugin                   (VALUE mGrn);
 void           rb_grn_init_normalizer               (VALUE mGrn);
 void           rb_grn_init_thread                   (VALUE mGrn);
-void           rb_grn_init_conf                     (VALUE mGrn);
+void           rb_grn_init_config                   (VALUE mGrn);
 
 VALUE          rb_grn_rc_to_exception               (grn_rc rc);
 const char    *rb_grn_rc_to_message                 (grn_rc rc);

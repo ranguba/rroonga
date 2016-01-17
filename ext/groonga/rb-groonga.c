@@ -218,5 +218,5 @@ Init_groonga (void)
     rb_grn_init_plugin(mGrn);
     rb_grn_init_normalizer(mGrn);
     rb_grn_init_thread(mGrn);
-    rb_grn_init_conf(mGrn);
+    rb_grn_init_config(mGrn);
 }

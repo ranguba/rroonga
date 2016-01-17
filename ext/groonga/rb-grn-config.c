@@ -1,6 +1,6 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
-  Copyright (C) 2015  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2015-2016  Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -21,7 +21,7 @@
 #define SELF(object) (RVAL2GRNCONTEXT(object))
 
 /*
- * Document-class: Groonga::Conf
+ * Document-class: Groonga::Config
  *
  * This class manages database global configurations. Each
  * configuration is key and value pair.
@@ -37,7 +37,7 @@
  * @since 5.0.9
  */
 static VALUE
-rb_grn_conf_initialize (VALUE self, VALUE rb_context)
+rb_grn_config_initialize (VALUE self, VALUE rb_context)
 {
     rb_iv_set(self, "@context", rb_context);
 
@@ -47,14 +47,14 @@ rb_grn_conf_initialize (VALUE self, VALUE rb_context)
 /*
  * Gets a configuration value for key.
  *
- * @overload conf[](key)
+ * @overload config[](key)
  *   @param [String] key The key.
  *   @return [String, nil] The value associated with `key`.
  *
  * @since 5.0.9
  */
 static VALUE
-rb_grn_conf_get (VALUE self, VALUE rb_key)
+rb_grn_config_get (VALUE self, VALUE rb_key)
 {
     VALUE rb_context;
     VALUE rb_value;
@@ -73,6 +73,8 @@ rb_grn_conf_get (VALUE self, VALUE rb_key)
 
     {
         grn_rc rc;
+        /* TODO: Replace it with grn_config_get() after Groonga 5.1.2
+         * is released.*/
         rc = grn_conf_get(context,
                           key, key_size,
                           &value, &value_size);
@@ -92,13 +94,13 @@ rb_grn_conf_get (VALUE self, VALUE rb_key)
 /*
  * Sets a configuration key and value pair.
  *
- * @overload conf[]=(key, value)
+ * @overload config[]=(key, value)
  *   @param [String] key The key.
  *   @param [String] value The value to be assigned.
  *   @return [String] `value`.
  */
 static VALUE
-rb_grn_conf_set (VALUE self, VALUE rb_key, VALUE rb_value)
+rb_grn_config_set (VALUE self, VALUE rb_key, VALUE rb_value)
 {
     VALUE rb_value_original = rb_value;
     VALUE rb_context;
@@ -121,6 +123,8 @@ rb_grn_conf_set (VALUE self, VALUE rb_key, VALUE rb_value)
 
     {
         grn_rc rc;
+        /* TODO: Replace it with grn_config_set() after Groonga 5.1.2
+         * is released.*/
         rc = grn_conf_set(context,
                           key, key_size,
                           value, value_size);
@@ -132,14 +136,15 @@ rb_grn_conf_set (VALUE self, VALUE rb_key, VALUE rb_value)
 }
 
 void
-rb_grn_init_conf (VALUE mGrn)
+rb_grn_init_config (VALUE mGrn)
 {
-    VALUE cGrnConf;
+    VALUE cGrnConfig;
 
-    cGrnConf = rb_define_class_under(mGrn, "Conf", rb_cObject);
+    cGrnConfig = rb_define_class_under(mGrn, "Config", rb_cObject);
+    rb_define_const(mGrn, "Conf", cGrnConfig);
 
-    rb_define_method(cGrnConf, "initialize", rb_grn_conf_initialize, 1);
+    rb_define_method(cGrnConfig, "initialize", rb_grn_config_initialize, 1);
 
-    rb_define_method(cGrnConf, "[]", rb_grn_conf_get, 1);
-    rb_define_method(cGrnConf, "[]=", rb_grn_conf_set, 2);
+    rb_define_method(cGrnConfig, "[]", rb_grn_config_get, 1);
+    rb_define_method(cGrnConfig, "[]=", rb_grn_config_set, 2);
 }
