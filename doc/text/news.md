@@ -1,5 +1,23 @@
 # NEWS
 
+## 5.1.1: 2016-01-18 {#version-5-1-1}
+
+### Improvements
+
+  * Supported Groonga 5.1.1. Groonga 5.0.9 or older aren't supported.
+  * Supported accessor in {Groonga::Table#geo_sort}.
+  * Improved performance of searching with empty condition.
+  * Added {Groonga::Object#accessor?}.
+  * Added {Groonga::Object#key_accessor?}.
+  * Added {Groonga::Database#reindex}.
+  * Added {Groonga::TableKeySupport#reindex}.
+  * Added {Groonga::FixSizeColumn#reindex}.
+  * Added {Groonga::VariableSizeColumn#reindex}.
+  * Added {Groonga::IndexColumn#reindex}.
+  * Added {Groonga.package_label}.
+  * Renamed {Groonga::Conf} to {Groonga::Config}.
+  * Renamed {Groonga::Context#conf} to {Groonga::Context#config}.
+
 ## 5.0.9: 2015-11-10 {#version-5-0-9}
 
 ### Improvements
