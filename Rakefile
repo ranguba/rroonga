@@ -169,6 +169,7 @@ namespace :build do
         commands = [
           ["git", "clone", "file://#{Dir.pwd}/.git", build_dir],
           ["cd", build_dir],
+          ["gem", "install", "json"],
           ["bundle"],
           ["rake", "cross", "native", "gem", "RUBY_CC_VERSION=#{ruby_versions}"],
         ]
