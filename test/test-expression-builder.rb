@@ -195,6 +195,14 @@ class ExpressionBuilderTest < Test::Unit::TestCase
       assert_equal(["gunyara-kun", "yu"],
                    result.collect {|record| record.key.key})
     end
+
+    def test_and_not
+      result = @users.select do |record|
+        (record["hp"] > 100) - (record["hp"] == 150)
+      end
+      assert_equal(["yu"],
+                   result.collect {|record| record.key.key})
+    end
   end
 
   class FullTextSearchTest < self

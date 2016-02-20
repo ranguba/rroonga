@@ -56,6 +56,10 @@ module Groonga
       other
     end
 
+    def -(other)
+      other
+    end
+
     private
     def default_parse_options
       {
@@ -110,6 +114,10 @@ module Groonga
       def |(other)
         OrExpressionBuilder.new(self, other)
       end
+
+      def -(other)
+        AndNotExpressionBuilder.new(self, other)
+      end
     end
 
     # @private
@@ -140,6 +148,13 @@ module Groonga
     class OrExpressionBuilder < SetExpressionBuilder
       def initialize(*expression_builders)
         super(Groonga::Operation::OR, *expression_builders)
+      end
+    end
+
+    # @private
+    class AndNotExpressionBuilder < SetExpressionBuilder
+      def initialize(*expression_builders)
+        super(Groonga::Operation::AND_NOT, *expression_builders)
       end
     end
 
