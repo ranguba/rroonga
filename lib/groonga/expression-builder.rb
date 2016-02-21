@@ -476,7 +476,7 @@ module Groonga
         expression.append_object(@function)
         @arguments.each do |argument|
           case argument
-          when String
+          when String, Integer, Time
             expression.append_constant(argument)
           else
             argument.build(expression, variable)

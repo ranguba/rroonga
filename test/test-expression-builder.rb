@@ -532,39 +532,121 @@ EOC
   end
 
   class CallTest < self
-    def setup_tables
-      Groonga::Schema.define do |schema|
-        schema.create_table("Shops",
-                            :type => :hash,
-                            :key_type => "ShortText") do |table|
-          table.wgs84_geo_point("location")
+    class StringTest < self
+      def setup_tables
+        Groonga::Schema.define do |schema|
+          schema.create_table("Shops",
+                              :type => :hash,
+                              :key_type => "ShortText") do |table|
+            table.wgs84_geo_point("location")
+          end
+
+          schema.create_table("Locations",
+                              :type => :patricia_trie,
+                              :key_type => :wgs84_geo_point) do |table|
+            table.index("Shops.location")
+          end
         end
 
-        schema.create_table("Locations",
-                            :type => :patricia_trie,
-                            :key_type => :wgs84_geo_point) do |table|
-          table.index("Shops.location")
+        @shops = Groonga["Shops"]
+      end
+
+      def setup_data
+        @shops.add("Nezu no taiyaki", :location => "35.720253,139.762573")
+        @shops.add("Taiyaki Kataoka", :location => "35.712521,139.715591")
+        @shops.add("Taiyaki Sharaku", :location => "35.716969,139.794846")
+      end
+
+      def test_search
+        result = @shops.select do |record|
+          record.call("geo_in_rectangle",
+                      record.location,
+                      "35.7185,139.7912",
+                      "35.7065,139.8069")
         end
+        assert_equal(["Taiyaki Sharaku"],
+                     result.collect(&:_key))
       end
-
-      @shops = Groonga["Shops"]
     end
 
-    def setup_data
-      @shops.add("Nezu no taiyaki", :location => "35.720253,139.762573")
-      @shops.add("Taiyaki Kataoka", :location => "35.712521,139.715591")
-      @shops.add("Taiyaki Sharaku", :location => "35.716969,139.794846")
+    class IntegerTest < self
+      def setup_tables
+        Groonga::Schema.define do |schema|
+          schema.create_table("Users",
+                              :type => :hash,
+                              :key_type => "ShortText") do |table|
+            table.int32("age")
+          end
+
+          schema.create_table("Ages",
+                              :type => :patricia_trie,
+                              :key_type => :int32) do |table|
+            table.index("Users.age")
+          end
+        end
+
+        @users = Groonga["Users"]
+      end
+
+      def setup_data
+        @users.add("Alice",  :age => 18)
+        @users.add("Bob",    :age => 29)
+        @users.add("Carlos", :age => 14)
+      end
+
+      def test_search
+        result = @users.select do |record|
+          record.call("between",
+                      record.age,
+                      18,
+                      "include",
+                      29,
+                      "exclude")
+        end
+        assert_equal(["Alice"],
+                     result.collect(&:_key))
+      end
     end
 
-    def test_search
-      result = @shops.select do |record|
-        record.call("geo_in_rectangle",
-                    record.location,
-                    "35.7185,139.7912",
-                    "35.7065,139.8069")
+    class TimeTest < self
+      def setup_tables
+        Groonga::Schema.define do |schema|
+          schema.create_table("Logs",
+                              :type => :array) do |table|
+            table.time("timestamp")
+          end
+
+          schema.create_table("Times",
+                              :type => :patricia_trie,
+                              :key_type => :time) do |table|
+            table.index("Logs.timestamp")
+          end
+        end
+
+        @logs = Groonga["Logs"]
       end
-      assert_equal(["Taiyaki Sharaku"],
-                   result.collect(&:_key))
+
+      def setup_data
+        @logs.add(:timestamp => Time.iso8601("2016-02-21T19:00:01Z"))
+        @logs.add(:timestamp => Time.iso8601("2016-02-21T19:00:02Z"))
+        @logs.add(:timestamp => Time.iso8601("2016-02-21T19:00:03Z"))
+      end
+
+      def test_search
+        result = @logs.select do |record|
+          record.call("between",
+                      record.timestamp,
+                      Time.iso8601("2016-02-21T19:00:01Z"),
+                      "include",
+                      Time.iso8601("2016-02-21T19:00:03Z"),
+                      "exclude")
+        end
+        assert_equal([
+                       Time.iso8601("2016-02-21T19:00:01Z"),
+                       Time.iso8601("2016-02-21T19:00:02Z"),
+                     ],
+                     result.collect(&:timestamp))
+      end
     end
   end
 
