@@ -666,6 +666,7 @@ module Groonga
       @have_output = !@output.nil?
       @output ||= Dumper.default_output
       @error_output = @options[:error_output]
+      @max_records = @options[:max_records]
     end
 
     def dump
@@ -709,7 +710,8 @@ module Groonga
       when Groonga::Array, Groonga::Hash
         order_by = nil if order_by == :key
       end
-      @table.each(:order_by => order_by) do |record|
+      limit = @options[:max_records]
+      @table.each(:order_by => order_by, :limit => limit) do |record|
         write(",\n")
         values = columns.collect do |column|
           resolve_value(record, column, column[record.id])
