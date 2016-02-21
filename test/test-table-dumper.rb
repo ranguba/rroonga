@@ -512,9 +512,9 @@ EOS
       assert_equal(<<-EOS, dump("Users"))
 load --table Users
 [
-[\"_key\",\"name\"],
-[\"mori\",\"mori daijiro\"],
-[\"s-yata\",\"Susumu Yata\"]
+["_key","name"],
+["mori","mori daijiro"],
+["s-yata","Susumu Yata"]
 ]
 EOS
     end
@@ -557,9 +557,9 @@ EOS
       assert_equal(<<-COMMAND, dump("Products"))
 load --table Products
 [
-[\"_key\",\"tags\"],
-[\"Groonga\",{\"groonga\":100}],
-[\"Mroonga\",{\"groonga\":10,\"mroonga\":100}]
+["_key","tags"],
+["Groonga",{"groonga":100}],
+["Mroonga",{"groonga":10,"mroonga":100}]
 ]
       COMMAND
     end
