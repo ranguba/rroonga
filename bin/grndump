@@ -29,6 +29,7 @@ options.dump_schema = true
 options.dump_indexes = true
 options.dump_tables = true
 options.order_by = "id"
+options.max_records = -1
 option_parser = OptionParser.new do |parser|
   parser.version = Groonga::BINDINGS_VERSION
   parser.banner += " DB_PATH"
@@ -79,6 +80,12 @@ option_parser = OptionParser.new do |parser|
             "(#{options.order_by})") do |type|
     options.order_by = type
   end
+
+  parser.on("--max-records=NUMBER",
+            "max NUMBER of records to dump",
+            "(#{options.max_records})") do |number|
+    options.max_records = number.to_i
+  end
 end
 args = option_parser.parse!(ARGV)
 
@@ -99,6 +106,7 @@ dumper_options = {
   :tables => options.tables,
   :exclude_tables => options.exclude_tables,
   :order_by => options.order_by,
+  :max_records => options.max_records,
 }
 database_dumper = Groonga::DatabaseDumper.new(dumper_options)
 database_dumper.dump
