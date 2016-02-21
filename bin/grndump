@@ -82,7 +82,8 @@ option_parser = OptionParser.new do |parser|
   end
 
   parser.on("--max-records=NUMBER", Integer,
-            "max NUMBER of records to dump",
+            "max NUMBER of records to dump.",
+            "you can use -1 to dump all records.",
             "(#{options.max_records})") do |number|
     options.max_records = number
   end
