@@ -81,10 +81,10 @@ option_parser = OptionParser.new do |parser|
     options.order_by = type
   end
 
-  parser.on("--max-records=NUMBER",
+  parser.on("--max-records=NUMBER", Integer,
             "max NUMBER of records to dump",
             "(#{options.max_records})") do |number|
-    options.max_records = number.to_i
+    options.max_records = number
   end
 end
 args = option_parser.parse!(ARGV)
