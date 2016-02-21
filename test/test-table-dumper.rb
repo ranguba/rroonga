@@ -564,4 +564,33 @@ load --table Products
       COMMAND
     end
   end
+
+  class MaxRecordsTest < self
+    def setup
+      Groonga::Schema.define do |schema|
+        schema.create_table("Products",
+                            :type => :hash,
+                            :key_type => "ShortText") do |table|
+        end
+      end
+    end
+
+    def products
+      Groonga["Products"]
+    end
+
+    def test_small
+      products.add("Groonga")
+      products.add("Mroonga")
+      products.add("Rroonga")
+      assert_equal(<<-COMMAND, dump("Products", :max_records => 2))
+load --table Products
+[
+["_key"],
+["Groonga"],
+["Mroonga"]
+]
+      COMMAND
+    end
+  end
 end
