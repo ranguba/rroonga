@@ -686,9 +686,9 @@ EOC
                    result.collect {|record| record.key["uri"]})
     end
 
-    def test_id
+    def test_key
       result = @bookmarks.select do |record|
-        record["user"] == @morita.id
+        record["user"] == @morita.key
       end
       assert_equal(["http://groonga.org/", "http://ruby-lang.org/"],
                    result.collect {|record| record.key["uri"]})
@@ -697,8 +697,22 @@ EOC
     def test_record_like_object
       morita = Object.new
       morita_singleton_class = (class << morita; self; end)
-      morita_id = @morita.id
+      morita_key = @morita.key
       morita_singleton_class.send(:define_method, :record_id) do
+        morita_key
+      end
+      result = @bookmarks.select do |record|
+        record["user"] == morita
+      end
+      assert_equal(["http://groonga.org/", "http://ruby-lang.org/"],
+                   result.collect {|record| record.key["uri"]})
+    end
+
+    def test_record_like_object_raw
+      morita = Object.new
+      morita_singleton_class = (class << morita; self; end)
+      morita_id = @morita.id
+      morita_singleton_class.send(:define_method, :record_raw_id) do
         morita_id
       end
       result = @bookmarks.select do |record|

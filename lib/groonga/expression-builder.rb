@@ -264,14 +264,17 @@ module Groonga
 
       private
       def normalize(other)
-        if @range.is_a?(Groonga::Table)
-          if other.respond_to?(:record_id)
-            id = other.record_id
-          else
-            id = other
-          end
-          return Groonga::Record.new(@range, id) if id.is_a?(Integer)
+        return other unless @range.is_a?(Table)
+        return other if other.is_a?(Record)
+
+        if other.respond_to?(:record_raw_id)
+          return Record.new(@range, other.record_raw_id)
         end
+
+        if other.respond_to?(:record_id)
+          return @range[other.record_id]
+        end
+
         other
       end
 
