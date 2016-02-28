@@ -74,8 +74,8 @@ rb_grn_config_get (VALUE self, VALUE rb_key)
     {
         grn_rc rc;
         rc = grn_config_get(context,
-                          key, key_size,
-                          &value, &value_size);
+                            key, key_size,
+                            &value, &value_size);
         rb_grn_context_check(context, self);
         rb_grn_rc_check(rc, self);
     }
