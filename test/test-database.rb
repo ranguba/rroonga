@@ -71,8 +71,6 @@ class DatabaseTest < Test::Unit::TestCase
   end
 
   def test_new
-    # TODO: remove the line when Groonga 5.0.5 released.
-    omit("This test is failing on Groonga 5.0.4.") if Groonga.version == "5.0.4"
     assert_raise(Groonga::NoSuchFileOrDirectory) do
       new_context = Groonga::Context.new
       Groonga::Database.new(@database_path.to_s, :context => new_context)
