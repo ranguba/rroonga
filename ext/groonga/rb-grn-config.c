@@ -121,9 +121,7 @@ rb_grn_config_set (VALUE self, VALUE rb_key, VALUE rb_value)
 
     {
         grn_rc rc;
-        /* TODO: Replace it with grn_config_set() after Groonga 5.1.2
-         * is released.*/
-        rc = grn_conf_set(context,
+        rc = grn_config_set(context,
                           key, key_size,
                           value, value_size);
         rb_grn_context_check(context, self);
