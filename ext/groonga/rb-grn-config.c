@@ -122,8 +122,8 @@ rb_grn_config_set (VALUE self, VALUE rb_key, VALUE rb_value)
     {
         grn_rc rc;
         rc = grn_config_set(context,
-                          key, key_size,
-                          value, value_size);
+                            key, key_size,
+                            value, value_size);
         rb_grn_context_check(context, self);
         rb_grn_rc_check(rc, self);
     }
