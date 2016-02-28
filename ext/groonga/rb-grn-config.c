@@ -73,9 +73,7 @@ rb_grn_config_get (VALUE self, VALUE rb_key)
 
     {
         grn_rc rc;
-        /* TODO: Replace it with grn_config_get() after Groonga 5.1.2
-         * is released.*/
-        rc = grn_conf_get(context,
+        rc = grn_config_get(context,
                           key, key_size,
                           &value, &value_size);
         rb_grn_context_check(context, self);
