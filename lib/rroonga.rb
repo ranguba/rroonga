@@ -1,1 +1,1 @@
-require 'groonga'
+require "groonga"
