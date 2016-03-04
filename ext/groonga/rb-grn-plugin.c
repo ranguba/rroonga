@@ -1,6 +1,7 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
   Copyright (C) 2011-2015  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2016  Masafumi Yokoyama <yokoyama@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -205,6 +206,42 @@ rb_grn_plugin_s_ruby_suffix (VALUE klass)
     return rb_str_new_cstr(grn_plugin_get_ruby_suffix());
 }
 
+/*
+ * Returns the names of loaded plugins.
+ *
+ * @overload names(options={})
+ *   @return [Array<String>]
+ *   @param options [::Hash] The name and value pairs.
+ *   @option options :context (Groonga::Context.default)
+ *     The context which is bound to database.
+ *
+ * @since 6.0.0
+ */
+static VALUE
+rb_grn_plugin_s_names (int argc, VALUE *argv, VALUE klass)
+{
+    VALUE rb_options, rb_context, rb_names;
+    grn_ctx *context;
+    grn_obj names;
+
+    rb_scan_args(argc, argv, "01", &rb_options);
+    rb_grn_scan_options(rb_options,
+                        "context", &rb_context,
+                        NULL);
+    if (NIL_P(rb_context)) {
+        rb_context = rb_grn_context_get_default();
+    }
+    context = RVAL2GRNCONTEXT(rb_context);
+
+    GRN_TEXT_INIT(&names, GRN_OBJ_VECTOR);
+    grn_plugin_get_names(context, &names);
+    rb_names = GRNVECTOR2RVAL(context, &names);
+    GRN_OBJ_FIN(context, &names);
+
+    rb_grn_context_check(context, rb_ary_new_from_values(argc, argv));
+    return rb_names;
+}
+
 void
 rb_grn_init_plugin (VALUE mGrn)
 {
@@ -221,4 +258,6 @@ rb_grn_init_plugin (VALUE mGrn)
                                rb_grn_plugin_s_suffix, 0);
     rb_define_singleton_method(cGrnPlugin, "ruby_suffix",
                                rb_grn_plugin_s_ruby_suffix, 0);
+    rb_define_singleton_method(cGrnPlugin, "names",
+                               rb_grn_plugin_s_names, -1);
 }

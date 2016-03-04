@@ -1,4 +1,5 @@
 # Copyright (C) 2011-2015  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2016  Masafumi Yokoyama <yokoyama@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -54,6 +55,29 @@ class PluginTest < Test::Unit::TestCase
       plugin_path << "token_filters/stop_word#{Groonga::Plugin.suffix}"
       context.unregister_plugin(plugin_path)
       assert_nil(context["TokenFilterStopWord"])
+    end
+  end
+
+  class NamesTest < self
+    def test_nothing
+      assert_equal([], Groonga::Plugin.names)
+    end
+
+    def test_one_plugin
+      context.register_plugin("token_filters/stop_word")
+      assert_equal(["token_filters/stop_word"],
+                   Groonga::Plugin.names)
+    end
+
+    def test_two_plugins
+      context.register_plugin("token_filters/stop_word")
+      context.register_plugin("functions/vector")
+      assert_equal(["token_filters/stop_word", "functions/vector"],
+                   Groonga::Plugin.names)
+    end
+
+    def test_context_option
+      assert_equal([], Groonga::Plugin.names(context: context))
     end
   end
 end
