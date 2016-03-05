@@ -36,4 +36,14 @@ class ConfigTest < Test::Unit::TestCase
     context.config.delete("rroonga.key")
     assert_nil(context.config["rroonga.key"])
   end
+
+  test "#each" do
+    context.config["rroonga.key1"] = "value1"
+    context.config["rroonga.key2"] = "value2"
+    assert_equal([
+                    ["rroonga.key1", "value1"],
+                    ["rroonga.key2", "value2"],
+                 ],
+                 context.config.each.to_a)
+  end
 end
