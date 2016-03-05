@@ -227,6 +227,7 @@ rb_grn_init_config (VALUE mGrn)
     VALUE cGrnConfig;
 
     cGrnConfig = rb_define_class_under(mGrn, "Config", rb_cObject);
+    /* For backward compatibility. */
     rb_define_const(mGrn, "Conf", cGrnConfig);
 
     rb_include_module(cGrnConfig, rb_mEnumerable);
