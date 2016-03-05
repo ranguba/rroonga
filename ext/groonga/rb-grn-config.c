@@ -226,6 +226,8 @@ rb_grn_config_each_ensure (VALUE user_data)
  *
  * @overload each
  *   @yield [key, value]
+ *   @yieldparam [String] key The configuration key
+ *   @yieldparam [String] value The value which is associated with `key`
  *
  * @since 6.0.0
  */
