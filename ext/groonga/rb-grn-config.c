@@ -204,18 +204,14 @@ rb_grn_config_each (VALUE self)
         uint32_t key_size;
         const char *value;
         uint32_t value_size;
-        VALUE rb_key, rb_value, rb_key_value;
+        VALUE rb_key, rb_value;
 
         key_size = grn_config_cursor_get_key(context, cursor, &key);
         rb_key = rb_str_new(key, key_size);
         value_size = grn_config_cursor_get_value(context, cursor, &value);
         rb_value = rb_str_new(value, value_size);
 
-        rb_key_value = rb_ary_new();
-        rb_ary_push(rb_key_value, rb_key);
-        rb_ary_push(rb_key_value, rb_value);
-
-        rb_yield(rb_key_value);
+        rb_yield_values(2, rb_key, rb_value);
     }
 
     return Qnil;
