@@ -30,69 +30,6 @@ rb_grn_inspect (VALUE object)
     return StringValueCStr(inspected);
 }
 
-const char *
-rb_grn_inspect_type (unsigned char type)
-{
-    switch (type) {
-    case GRN_VOID:
-        return "void";
-    case GRN_BULK:
-        return "bulk";
-    case GRN_PTR:
-        return "ptr";
-    case GRN_UVECTOR:
-        return "uvector";
-    case GRN_PVECTOR:
-        return "pvector";
-    case GRN_MSG:
-        return "msg";
-    case GRN_QUERY:
-        return "query";
-    case GRN_ACCESSOR:
-        return "accessor";
-    case GRN_SNIP:
-        return "snip";
-    case GRN_PATSNIP:
-        return "patsnip";
-    case GRN_CURSOR_TABLE_HASH_KEY:
-        return "cursor-table-hash-key";
-    case GRN_CURSOR_TABLE_PAT_KEY:
-        return "cursor-table-pat-key";
-    case GRN_CURSOR_TABLE_DAT_KEY:
-        return "cursor-table-dat-key";
-    case GRN_CURSOR_TABLE_NO_KEY:
-        return "cursor-table-no-key";
-    case GRN_CURSOR_COLUMN_INDEX:
-        return "cursor-column-index";
-    case GRN_CURSOR_CONFIG:
-        return "cursor-config";
-    case GRN_TYPE:
-        return "type";
-    case GRN_PROC:
-        return "proc";
-    case GRN_EXPR:
-        return "expr";
-    case GRN_TABLE_HASH_KEY:
-        return "table-hash-key";
-    case GRN_TABLE_PAT_KEY:
-        return "table-pat-key";
-    case GRN_TABLE_DAT_KEY:
-        return "table-dat-key";
-    case GRN_TABLE_NO_KEY:
-        return "table-no-key";
-    case GRN_DB:
-        return "db";
-    case GRN_COLUMN_FIX_SIZE:
-        return "column-fix-size";
-    case GRN_COLUMN_VAR_SIZE:
-        return "column-var-size";
-    case GRN_COLUMN_INDEX:
-        return "column-index";
-    default:
-        return "unknown";
-    }
-}
-
 void
 rb_grn_scan_options (VALUE options, ...)
 {
@@ -905,7 +842,7 @@ rb_grn_uvector_to_ruby_object (grn_ctx *context, grn_obj *uvector,
     default:
         rb_raise(rb_eTypeError,
                  "unknown range uvector can't be converted: %s(%#x): <%s>",
-                 rb_grn_inspect_type(range->header.type),
+                 grn_obj_type_to_string(range->header.type),
                  range->header.type,
                  rb_grn_inspect(related_object));
         break;
@@ -1025,7 +962,7 @@ rb_grn_uvector_from_ruby_object_body (VALUE user_data)
     default:
         rb_raise(rb_eTypeError,
                  "can't convert to unknown domain uvector: %s(%#x): <%s>",
-                 rb_grn_inspect_type(domain->header.type),
+                 grn_obj_type_to_string(domain->header.type),
                  domain->header.type,
                  rb_grn_inspect(data->related_object));
         break;
@@ -1110,7 +1047,7 @@ rb_grn_value_to_ruby_object (grn_ctx *context,
     default:
         rb_raise(rb_eGrnError,
                  "unsupported value type: %s(%#x): %s",
-                 rb_grn_inspect_type(value->header.type),
+                 grn_obj_type_to_string(value->header.type),
                  value->header.type,
                  rb_grn_inspect(related_object));
         break;
@@ -1301,7 +1238,7 @@ rb_grn_obj_to_ruby_object (VALUE klass, grn_ctx *context,
     default:
         rb_raise(rb_eTypeError,
                  "unsupported groonga object: %s(%#x): <%s>",
-                 rb_grn_inspect_type(obj->header.type),
+                 grn_obj_type_to_string(obj->header.type),
                  obj->header.type,
                  rb_grn_inspect(related_object));
         break;
