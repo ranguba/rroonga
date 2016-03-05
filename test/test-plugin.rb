@@ -76,7 +76,8 @@ class PluginTest < Test::Unit::TestCase
     end
 
     def test_context_option
-      assert_equal([], Groonga::Plugin.names(context: context))
+      context.register_plugin("token_filters/stop_word")
+      assert_equal([], Groonga::Plugin.names(context: Groonga::Context.new))
     end
   end
 end
