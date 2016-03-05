@@ -202,9 +202,10 @@ rb_grn_config_each (VALUE self)
     while (grn_config_cursor_next(context, cursor)) {
         const char *key;
         uint32_t key_size;
+        VALUE rb_key;
         const char *value;
         uint32_t value_size;
-        VALUE rb_key, rb_value;
+        VALUE rb_value;
 
         key_size = grn_config_cursor_get_key(context, cursor, &key);
         rb_key = rb_grn_context_rb_string_new(context, key, key_size);
