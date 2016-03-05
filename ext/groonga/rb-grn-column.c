@@ -2,6 +2,7 @@
 /* vim: set sts=4 sw=4 ts=8 noet: */
 /*
   Copyright (C) 2009-2015  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2016  Masafumi Yokoyama <yokoyama@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -754,6 +755,45 @@ rb_grn_column_get_indexes (int argc, VALUE *argv, VALUE self)
 }
 
 /*
+ * Return all indexes on `column`.
+ *
+ * @overload all_indexes
+ * @return [Array<index_column>] All indexes on `column`.
+ *
+ * @since 6.0.0
+ */
+static VALUE
+rb_grn_column_get_all_indexes (VALUE self)
+{
+    grn_ctx *context;
+    grn_obj *column;
+    grn_index_datum *index_data = NULL;
+    int i, n_indexes;
+    VALUE rb_indexes;
+
+    rb_grn_column_deconstruct(SELF(self), &column, &context,
+                              NULL, NULL,
+                              NULL, NULL, NULL);
+
+    rb_indexes = rb_ary_new();
+    n_indexes = grn_column_get_all_index_data(context, column, NULL, 0);
+    if (n_indexes == 0)
+        return rb_indexes;
+
+    index_data = xmalloc(sizeof(grn_index_datum) * n_indexes);
+    n_indexes = grn_column_get_all_index_data(context, column,
+                                              index_data, n_indexes);
+    for (i = 0; i < n_indexes; i++) {
+        VALUE rb_index;
+        rb_index = GRNOBJECT2RVAL(Qnil, context, index_data[i].index, GRN_FALSE);
+        rb_ary_push(rb_indexes, rb_index);
+        grn_obj_unlink(context, index_data[i].index);
+    }
+    xfree(index_data);
+    return rb_indexes;
+}
+
+/*
  * Renames the column to name.
  * @since 1.3.0
  * @overload rename(name)
@@ -813,6 +853,7 @@ rb_grn_init_column (VALUE mGrn)
                      rb_grn_column_with_weight_p, 0);
 
     rb_define_method(rb_cGrnColumn, "indexes", rb_grn_column_get_indexes, -1);
+    rb_define_method(rb_cGrnColumn, "all_indexes", rb_grn_column_get_all_indexes, 0);
 
     rb_define_method(rb_cGrnColumn, "rename", rb_grn_column_rename, 1);
 

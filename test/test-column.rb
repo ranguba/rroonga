@@ -1,4 +1,5 @@
 # Copyright (C) 2009-2013  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2016  Masafumi Yokoyama <yokoyama@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -582,6 +583,38 @@ class ColumnTest < Test::Unit::TestCase
       post1.body = "body1"
       post2.body = "body2"
       assert_equal(["title1"], select.call)
+    end
+  end
+
+  class AllIndexedTest < self
+    def setup
+      super
+      Groonga::Schema.define do |schema|
+        schema.create_table("Comments") do |table|
+          table.short_text("title")
+        end
+      end
+      @title = Groonga["Comments.title"]
+    end
+
+    def test_nothing
+      assert_equal([], @title.all_indexes)
+    end
+
+    def test_one_index
+      Groonga::Schema.define do |schema|
+        schema.create_table("Terms",
+                            :type => :patricia_trie,
+                            :default_tokenizer => "TokenBigram") do |table|
+          table.index("Comments.title")
+        end
+      end
+      assert_equal([Groonga["Terms.Comments_title"]],
+                   @title.all_indexes)
+    end
+
+    def test_multiple_indexes
+      # TODO
     end
   end
 end
