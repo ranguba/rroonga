@@ -207,9 +207,9 @@ rb_grn_config_each (VALUE self)
         VALUE rb_key, rb_value;
 
         key_size = grn_config_cursor_get_key(context, cursor, &key);
-        rb_key = rb_str_new(key, key_size);
+        rb_key = rb_grn_context_rb_string_new(context, key, key_size);
         value_size = grn_config_cursor_get_value(context, cursor, &value);
-        rb_value = rb_str_new(value, value_size);
+        rb_value = rb_grn_context_rb_string_new(context, value, value_size);
 
         rb_yield_values(2, rb_key, rb_value);
     }
