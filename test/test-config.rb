@@ -44,6 +44,6 @@ class ConfigTest < Test::Unit::TestCase
                     ["rroonga.key1", "value1"],
                     ["rroonga.key2", "value2"],
                  ],
-                 context.config.each.to_a)
+                 context.config.to_a)
   end
 end

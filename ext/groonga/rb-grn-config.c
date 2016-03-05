@@ -229,6 +229,8 @@ rb_grn_init_config (VALUE mGrn)
     cGrnConfig = rb_define_class_under(mGrn, "Config", rb_cObject);
     rb_define_const(mGrn, "Conf", cGrnConfig);
 
+    rb_include_module(cGrnConfig, rb_mEnumerable);
+
     rb_define_method(cGrnConfig, "initialize", rb_grn_config_initialize, 1);
 
     rb_define_method(cGrnConfig, "[]", rb_grn_config_get, 1);
