@@ -249,4 +249,5 @@ Init_groonga (void)
     rb_grn_init_thread(mGrn);
     rb_grn_init_config(mGrn);
     rb_grn_init_index(mGrn);
+    rb_grn_init_global_error(mGrn);
 }

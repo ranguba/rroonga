@@ -302,6 +302,7 @@ RB_GRN_VAR VALUE rb_cGrnColumnExpressionBuilder;
 RB_GRN_VAR VALUE rb_cGrnPlugin;
 RB_GRN_VAR VALUE rb_cGrnNormalizer;
 RB_GRN_VAR VALUE rb_cGrnIndex;
+RB_GRN_VAR VALUE rb_cGrnGlobalError;
 
 void           rb_grn_init_utils                    (VALUE mGrn);
 void           rb_grn_init_exception                (VALUE mGrn);
@@ -357,6 +358,7 @@ void           rb_grn_init_normalizer               (VALUE mGrn);
 void           rb_grn_init_thread                   (VALUE mGrn);
 void           rb_grn_init_config                   (VALUE mGrn);
 void           rb_grn_init_index                    (VALUE mGrn);
+void           rb_grn_init_global_error             (VALUE mGrn);
 
 VALUE          rb_grn_rc_to_exception               (grn_rc rc);
 const char    *rb_grn_rc_to_message                 (grn_rc rc);
