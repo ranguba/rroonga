@@ -199,7 +199,7 @@ rb_grn_config_each (VALUE self)
     context = rb_grn_context_ensure(&rb_context);
 
     cursor = grn_config_cursor_open(context);
-    while (grn_config_cursor_next(context, cursor) == GRN_TRUE) {
+    while (grn_config_cursor_next(context, cursor)) {
         const char *key;
         uint32_t key_size;
         const char *value;
