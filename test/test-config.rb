@@ -34,8 +34,6 @@ class ConfigTest < Test::Unit::TestCase
     context.config["rroonga.key"] = "value"
     assert_equal("value", context.config["rroonga.key"])
     context.config.delete("rroonga.key")
-    assert do
-      not context.config["rroonga.key"]
-    end
+    assert_nil(context.config["rroonga.key"])
   end
 end
