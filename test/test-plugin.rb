@@ -70,8 +70,8 @@ class PluginTest < Test::Unit::TestCase
 
     def test_two_plugins
       context.register_plugin("token_filters/stop_word")
-      context.register_plugin("functions/vector")
-      assert_equal(["token_filters/stop_word", "functions/vector"],
+      context.register_plugin("query_expanders/tsv")
+      assert_equal(["token_filters/stop_word", "query_expanders/tsv"],
                    Groonga::Plugin.names)
     end
 
