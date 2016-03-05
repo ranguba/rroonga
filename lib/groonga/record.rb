@@ -400,7 +400,7 @@ module Groonga
     end
 
     # @private
-    def respond_to?(name)
+    def respond_to?(name, include_all=false)
       super or !@table.column(name.to_s.sub(/=\z/, '')).nil?
     end
 
