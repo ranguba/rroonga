@@ -158,14 +158,6 @@ module GroongaTestUtils
                  actual.expression.inspect)
   end
 
-  def ruby19?
-    RUBY_VERSION >= "1.9"
-  end
-
-  def only_ruby19
-    omit("Ruby 1.9 is needed.") unless ruby19?
-  end
-
   def linux?
     /linux/ =~ RUBY_PLATFORM
   end

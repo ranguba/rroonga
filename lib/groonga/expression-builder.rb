@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # Copyright (C) 2015  Masafumi Yokoyama <yokoyama@clear-code.com>
-# Copyright (C) 2009-2015  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2016  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -183,6 +183,10 @@ module Groonga
         EqualExpressionBuilder.new(self, normalize(other))
       end
 
+      def !=(other)
+        NotEqualExpressionBuilder.new(self, normalize(other))
+      end
+
       def =~(other)
         if other.nil?
           full_column_name = "#{@table.name}.#{@column_name}"
@@ -346,6 +350,13 @@ module Groonga
     class EqualExpressionBuilder < BinaryExpressionBuilder
       def initialize(column_value_builder, value)
         super(Groonga::Operation::EQUAL, column_value_builder, value)
+      end
+    end
+
+    # @private
+    class NotEqualExpressionBuilder < BinaryExpressionBuilder
+      def initialize(column_value_builder, value)
+        super(Groonga::Operation::NOT_EQUAL, column_value_builder, value)
       end
     end
 
@@ -613,6 +624,10 @@ module Groonga
       column_expression_builder == other
     end
 
+    def !=(other)
+      column_expression_builder != other
+    end
+
     def =~(other)
       column_expression_builder =~ other
     end
@@ -683,8 +698,4 @@ module Groonga
       end
     end
   end
-end
-
-if RUBY_VERSION >= "1.9"
-  require "groonga/expression-builder-19"
 end

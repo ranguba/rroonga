@@ -153,7 +153,6 @@ class TableSelectTest < Test::Unit::TestCase
   end
 
   def test_not_equal_block
-    only_ruby19
     @result = @comments.select do |record|
       record.user != "darashi"
     end
