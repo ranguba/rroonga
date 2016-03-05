@@ -30,6 +30,34 @@ finish_groonga (VALUE data)
     debug("finish: done\n");
 }
 
+/*
+ * @overload error_message
+ *   @return [String, nil] The process global error message.
+ *
+ * @since 6.0.0
+ */
+static VALUE
+rb_grn_s_get_error_message (VALUE klass)
+{
+    const char *message;
+
+    message = grn_get_global_error_message();
+    if (message[0] == '\0') {
+        return Qnil;
+    } else {
+        grn_encoding encoding = grn_get_default_encoding();
+        return rb_enc_str_new_cstr(message,
+                                   rb_grn_encoding_to_ruby_encoding(encoding));
+    }
+}
+
+static void
+rb_grn_init_error_message (VALUE mGrn)
+{
+    rb_define_singleton_method(mGrn, "error_message",
+                               rb_grn_s_get_error_message, 0);
+}
+
 static void
 rb_grn_init_runtime_version (VALUE mGrn)
 {
@@ -180,6 +208,7 @@ Init_groonga (void)
 
     mGrn = rb_define_module("Groonga");
 
+    rb_grn_init_error_message(mGrn);
     rb_grn_init_exception(mGrn);
 
     rb_grn_rc_check(grn_init(), Qnil);
