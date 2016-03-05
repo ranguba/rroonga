@@ -302,18 +302,13 @@ rb_grn_context_rb_string_new (grn_ctx *context, const char *string, long length)
 {
     if (length < 0)
         length = strlen(string);
-#ifdef HAVE_RUBY_ENCODING_H
     return rb_enc_str_new(string, length,
                           rb_grn_encoding_to_ruby_encoding(context->encoding));
-#else
-    return rb_str_new(string, length);
-#endif
 }
 
 VALUE
 rb_grn_context_rb_string_encode (grn_ctx *context, VALUE rb_string)
 {
-#ifdef HAVE_RUBY_ENCODING_H
     int index, to_index;
     rb_encoding *encoding, *to_encoding;
     grn_encoding context_encoding;
@@ -339,7 +334,6 @@ rb_grn_context_rb_string_encode (grn_ctx *context, VALUE rb_string)
 
     rb_string = rb_str_encode(rb_string, rb_enc_from_encoding(to_encoding),
                               0, Qnil);
-#endif
     return rb_string;
 }
 
@@ -601,14 +595,10 @@ rb_grn_context_set_encoding (VALUE self, VALUE rb_encoding)
 static VALUE
 rb_grn_context_get_ruby_encoding (VALUE self)
 {
-#ifdef HAVE_RUBY_ENCODING_H
     grn_encoding encoding;
 
     encoding = GRN_CTX_GET_ENCODING(SELF(self));
     return rb_grn_encoding_to_ruby_encoding_object(encoding);
-#else
-    return Qnil;
-#endif
 }
 
 /*

@@ -21,10 +21,8 @@
 #define __RB_GRN_H__
 
 #include <ruby.h>
+#include <ruby/encoding.h>
 
-#ifdef HAVE_RUBY_ENCODING_H
-#  include <ruby/encoding.h>
-#endif
 #ifdef HAVE_RUBY_INTERN_H
 #  include <ruby/intern.h>
 #endif
@@ -745,11 +743,9 @@ VALUE          rb_grn_index_new                     (VALUE rb_index_column,
 grn_encoding   rb_grn_encoding_from_ruby_object     (VALUE object,
                                                      grn_ctx *context);
 VALUE          rb_grn_encoding_to_ruby_object       (grn_encoding encoding);
-#ifdef HAVE_RUBY_ENCODING_H
 rb_encoding   *rb_grn_encoding_to_ruby_encoding     (grn_encoding encoding);
 VALUE          rb_grn_encoding_to_ruby_encoding_object
                                                     (grn_encoding encoding);
-#endif
 
 grn_ctx       *rb_grn_context_from_ruby_object      (VALUE object);
 VALUE          rb_grn_context_to_ruby_object        (grn_ctx *context);
