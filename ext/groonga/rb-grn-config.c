@@ -166,6 +166,61 @@ rb_grn_config_delete (VALUE self, VALUE rb_key)
     return Qnil;
 }
 
+/*
+ * Passes all key/value of the config to block in order.
+ *
+ * @example Shows all keys and all values of the config
+ *   context.config["rroonga.key1"] = "value1"
+ *   context.config["rroonga.key2"] = "value2"
+ *   keys = []
+ *   values = []
+ *   context.config.each do |key, value|
+ *     keys << key
+ *     values << value
+ *   end
+ *   p keys   # => ["rroonga.key1", "rroonga.key2"]
+ *   p values # => ["value1", "value2"]
+ *
+ * @overload each
+ *   @yield [key, value]
+ *
+ * @since 6.0.0
+ */
+static VALUE
+rb_grn_config_each (VALUE self)
+{
+    grn_ctx *context = NULL;
+    grn_obj *cursor;
+    VALUE rb_context;
+
+    RETURN_ENUMERATOR(self, 0, NULL);
+
+    rb_context = rb_iv_get(self, "@context");
+    context = rb_grn_context_ensure(&rb_context);
+
+    cursor = grn_config_cursor_open(context);
+    while (grn_config_cursor_next(context, cursor) == GRN_TRUE) {
+        const char *key;
+        uint32_t key_size;
+        const char *value;
+        uint32_t value_size;
+        VALUE rb_key, rb_value, rb_key_value;
+
+        key_size = grn_config_cursor_get_key(context, cursor, &key);
+        rb_key = rb_str_new(key, key_size);
+        value_size = grn_config_cursor_get_value(context, cursor, &value);
+        rb_value = rb_str_new(value, value_size);
+
+        rb_key_value = rb_ary_new();
+        rb_ary_push(rb_key_value, rb_key);
+        rb_ary_push(rb_key_value, rb_value);
+
+        rb_yield(rb_key_value);
+    }
+
+    return Qnil;
+}
+
 void
 rb_grn_init_config (VALUE mGrn)
 {
@@ -180,4 +235,6 @@ rb_grn_init_config (VALUE mGrn)
     rb_define_method(cGrnConfig, "[]=", rb_grn_config_set, 2);
 
     rb_define_method(cGrnConfig, "delete", rb_grn_config_delete, 1);
+
+    rb_define_method(cGrnConfig, "each", rb_grn_config_each, 0);
 }
