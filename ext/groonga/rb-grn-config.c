@@ -1,6 +1,7 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
   Copyright (C) 2015-2016  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2016  Masafumi Yokoyama <yokoyama@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -131,6 +132,40 @@ rb_grn_config_set (VALUE self, VALUE rb_key, VALUE rb_value)
     return rb_value_original;
 }
 
+/*
+ * Deletes a configuration for key.
+ *
+ * @overload delete(key)
+ *   @param [String] key The key.
+ *
+ * @since 6.0.0
+ */
+static VALUE
+rb_grn_config_delete (VALUE self, VALUE rb_key)
+{
+    VALUE rb_context;
+    grn_ctx *context;
+    const char *key;
+    int key_size;
+
+    rb_context = rb_iv_get(self, "@context");
+    context = rb_grn_context_ensure(&rb_context);
+
+    rb_key = rb_grn_convert_to_string(rb_key);
+    key = RSTRING_PTR(rb_key);
+    key_size = RSTRING_LEN(rb_key);
+
+    {
+        grn_rc rc;
+        rc = grn_config_delete(context,
+                            key, key_size);
+        rb_grn_context_check(context, self);
+        rb_grn_rc_check(rc, self);
+    }
+
+    return Qnil;
+}
+
 void
 rb_grn_init_config (VALUE mGrn)
 {
@@ -143,4 +178,6 @@ rb_grn_init_config (VALUE mGrn)
 
     rb_define_method(cGrnConfig, "[]", rb_grn_config_get, 1);
     rb_define_method(cGrnConfig, "[]=", rb_grn_config_set, 2);
+
+    rb_define_method(cGrnConfig, "delete", rb_grn_config_delete, 1);
 }
