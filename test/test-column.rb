@@ -655,5 +655,39 @@ class ColumnTest < Test::Unit::TestCase
                      @title.find_indexes)
       end
     end
+
+    class OperatorTest < self
+      def setup
+        super
+        Groonga::Schema.define do |schema|
+          schema.create_table("Comments") do |table|
+            table.short_text("title")
+            table.short_text("body")
+          end
+        end
+        @title = Groonga["Comments.title"]
+      end
+
+      def test_equal
+        Groonga::Schema.define do |schema|
+          schema.create_table("Terms",
+                              :type => :patricia_trie,
+                              :key_type => :short_text,
+                              :default_tokenizer => "TokenBigram") do |table|
+            table.index("Comments.title")
+          end
+
+          schema.create_table("Titles",
+                              :type => :patricia_trie,
+                              :key_type => :short_text) do |table|
+            table.index("Comments.title")
+          end
+        end
+        assert_equal([
+                       Groonga::Index.new(Groonga["Titles.Comments_title"], 0),
+                     ],
+                     @title.find_indexes(:operator => :equal))
+      end
+    end
   end
 end

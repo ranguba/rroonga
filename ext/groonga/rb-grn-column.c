@@ -710,51 +710,6 @@ rb_grn_column_with_weight_p(VALUE self)
 }
 
 /*
- * Return indexes on `column` which can execute `operator`.
- * @since 1.0.9
- * @return [Array<index_column>] Indexes on `column` which can execute `operator`.
- * @overload indexes(operator=Groonga::Operator::MATCH)
- *   @param [Groonga::Operator::XXX] operator
- */
-static VALUE
-rb_grn_column_get_indexes (int argc, VALUE *argv, VALUE self)
-{
-    grn_ctx *context;
-    grn_obj *column;
-    grn_index_datum *index_data = NULL;
-    int i, n_indexes;
-    grn_operator operator = GRN_OP_MATCH;
-    VALUE rb_operator, rb_indexes;
-
-    rb_scan_args(argc, argv, "01", &rb_operator);
-
-    rb_grn_column_deconstruct(SELF(self), &column, &context,
-                             NULL, NULL,
-                             NULL, NULL, NULL);
-
-    if (!NIL_P(rb_operator)) {
-        operator = RVAL2GRNOPERATOR(rb_operator);
-    }
-
-    rb_indexes = rb_ary_new();
-    n_indexes = grn_column_find_index_data(context, column, operator, NULL, 0);
-    if (n_indexes == 0)
-        return rb_indexes;
-
-    index_data = xmalloc(sizeof(grn_index_datum) * n_indexes);
-    n_indexes = grn_column_find_index_data(context, column, operator,
-                                           index_data, n_indexes);
-    for (i = 0; i < n_indexes; i++) {
-        VALUE rb_index;
-        rb_index = GRNOBJECT2RVAL(Qnil, context, index_data[i].index, GRN_FALSE);
-        rb_ary_push(rb_indexes, rb_index);
-        grn_obj_unlink(context, index_data[i].index);
-    }
-    xfree(index_data);
-    return rb_indexes;
-}
-
-/*
  * Return indexes on `column`. If operator is specified, indexes that
  * can executes the operator are only returned. Otherwise, all indexes
  * are returned.
@@ -886,7 +841,6 @@ rb_grn_init_column (VALUE mGrn)
     rb_define_method(rb_cGrnColumn, "with_weight?",
                      rb_grn_column_with_weight_p, 0);
 
-    rb_define_method(rb_cGrnColumn, "indexes", rb_grn_column_get_indexes, -1);
     rb_define_method(rb_cGrnColumn, "find_indexes",
                      rb_grn_column_find_indexes, -1);
 

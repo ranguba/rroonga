@@ -21,5 +21,18 @@ module Groonga
       measurer = StatisticMeasurer.new
       measurer.measure_disk_usage(path)
     end
+
+    # @param [Groonga::Operator] operator (Groonga::Operator::MATCH)
+    # @return [Array<Groonga::IndexColumn>] Indexes on `column` which can
+    #    execute `operator`.
+    # @since 1.0.9
+    #
+    # @deprecated since 6.0.0. Use {Groonga::Column#find_indexes} instead.
+    def indexes(operator=nil)
+      operator ||= Operator::MATCH
+      find_indexes(:operator => operator).collect do |index|
+        index.column
+      end
+    end
   end
 end
