@@ -166,6 +166,49 @@ rb_grn_config_delete (VALUE self, VALUE rb_key)
     return Qnil;
 }
 
+typedef struct {
+    grn_ctx *context;
+    grn_obj *cursor;
+} RbGrnConfigEachData;
+
+static VALUE
+rb_grn_config_each_body (VALUE user_data)
+{
+    RbGrnConfigEachData *data = (RbGrnConfigEachData *)user_data;
+    grn_ctx *context;
+    grn_obj *cursor;
+
+    context = data->context;
+    cursor = data->cursor;
+    while (grn_config_cursor_next(context, cursor)) {
+        const char *key;
+        uint32_t key_size;
+        VALUE rb_key;
+        const char *value;
+        uint32_t value_size;
+        VALUE rb_value;
+
+        key_size = grn_config_cursor_get_key(context, cursor, &key);
+        rb_key = rb_grn_context_rb_string_new(context, key, key_size);
+        value_size = grn_config_cursor_get_value(context, cursor, &value);
+        rb_value = rb_grn_context_rb_string_new(context, value, value_size);
+
+        rb_yield_values(2, rb_key, rb_value);
+    }
+
+    return Qnil;
+}
+
+static VALUE
+rb_grn_config_each_ensure (VALUE user_data)
+{
+    RbGrnConfigEachData *data = (RbGrnConfigEachData *)user_data;
+
+    grn_obj_close(data->context, data->cursor);
+
+    return Qnil;
+}
+
 /*
  * Passes all key/value of the config to block in order.
  *
@@ -189,31 +232,17 @@ rb_grn_config_delete (VALUE self, VALUE rb_key)
 static VALUE
 rb_grn_config_each (VALUE self)
 {
-    grn_ctx *context = NULL;
-    grn_obj *cursor;
     VALUE rb_context;
+    RbGrnConfigEachData data;
 
     RETURN_ENUMERATOR(self, 0, NULL);
 
     rb_context = rb_iv_get(self, "@context");
-    context = rb_grn_context_ensure(&rb_context);
+    data.context = rb_grn_context_ensure(&rb_context);
 
-    cursor = grn_config_cursor_open(context);
-    while (grn_config_cursor_next(context, cursor)) {
-        const char *key;
-        uint32_t key_size;
-        VALUE rb_key;
-        const char *value;
-        uint32_t value_size;
-        VALUE rb_value;
-
-        key_size = grn_config_cursor_get_key(context, cursor, &key);
-        rb_key = rb_grn_context_rb_string_new(context, key, key_size);
-        value_size = grn_config_cursor_get_value(context, cursor, &value);
-        rb_value = rb_grn_context_rb_string_new(context, value, value_size);
-
-        rb_yield_values(2, rb_key, rb_value);
-    }
+    data.cursor = grn_config_cursor_open(data.context);
+    rb_ensure(rb_grn_config_each_body, (VALUE)&data,
+              rb_grn_config_each_ensure, (VALUE)&data);
 
     return Qnil;
 }
