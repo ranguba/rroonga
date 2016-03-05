@@ -1,6 +1,7 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
   Copyright (C) 2009-2015  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2016  Masafumi Yokoyama <yokoyama@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -224,6 +225,8 @@ rb_grn_operator_from_ruby_object (VALUE rb_operator)
         operator = GRN_OP_JSON_PUT;
     } else if (rb_grn_equal_option(rb_operator, "regexp")) {
         operator = GRN_OP_REGEXP;
+    } else if (rb_grn_equal_option(rb_operator, "fuzzy")) {
+        operator = GRN_OP_FUZZY;
     } else {
         rb_raise(rb_eArgError,
                  "operator should be one of "
@@ -635,6 +638,10 @@ rb_grn_init_operator (VALUE mGrn)
                     rb_funcall(rb_cGrnRegexpOperator, rb_intern("new"), 2,
                                rb_str_new_cstr("regexp"),
                                UINT2NUM(GRN_OP_REGEXP)));
+    rb_define_const(rb_cGrnOperator, "FUZZY",
+                    rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,
+                               rb_str_new_cstr("fuzzy"),
+                               UINT2NUM(GRN_OP_FUZZY)));
 
 
 /*
