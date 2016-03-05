@@ -64,6 +64,8 @@ rb_grn_inspect_type (unsigned char type)
         return "cursor-table-no-key";
     case GRN_CURSOR_COLUMN_INDEX:
         return "cursor-column-index";
+    case GRN_CURSOR_CONFIG:
+        return "cursor-config";
     case GRN_TYPE:
         return "type";
     case GRN_PROC:
@@ -1284,6 +1286,7 @@ rb_grn_obj_to_ruby_object (VALUE klass, grn_ctx *context,
     /* case GRN_CURSOR_TABLE_PAT_KEY: */
     /* case GRN_CURSOR_TABLE_NO_KEY: */
     /* case GRN_CURSOR_COLUMN_INDEX: */
+    /* case GRN_CURSOR_CONFIG: */
     /* case GRN_TYPE: */
     /* case GRN_PROC: */
     /* case GRN_EXPR: */
