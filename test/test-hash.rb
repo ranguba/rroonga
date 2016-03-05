@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2014  Masafumi Yokoyama <myokoym@gmail.com>
 # Copyright (C) 2009-2014  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2014-2016  Masafumi Yokoyama <yokoyama@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -442,5 +442,10 @@ class HashTest < Test::Unit::TestCase
 
     user_names = users.each.collect(&:key)
     assert_equal(["Alice", "Bob", "Carl"], user_names)
+  end
+
+  def test_type_string
+    users = Groonga::Hash.create(:name => "Users")
+    assert_equal("table:hash_key", users.type_string)
   end
 end

@@ -1718,6 +1718,34 @@ rb_grn_object_key_accessor_p (VALUE self)
     return CBOOL2RVAL(key_accessor_p);
 }
 
+/**
+ * Returns the object type string.
+ *
+ * @example Groonga::Database
+ *   Groonga::Database.create(:path => "/path/to/db") do |database|
+ *     p database.type_string # => "db"
+ *   end
+ *
+ * @example Groonga::Hash
+ *   users = Groonga::Hash.create(:name => "Users")
+ *   p users.type_string # => "table:hash_key"
+ *
+ * @overload type_string
+ *   @return [String] The object type string.
+ *
+ * @since 6.0.0
+ */
+static VALUE
+rb_grn_object_type_to_string (VALUE self)
+{
+    grn_obj *object;
+
+    rb_grn_object_deconstruct(SELF(self), &object, NULL,
+                              NULL, NULL, NULL, NULL);
+
+    return rb_str_new_cstr(grn_obj_type_to_string(object->header.type));
+}
+
 void
 rb_grn_init_object (VALUE mGrn)
 {
@@ -1767,4 +1795,7 @@ rb_grn_init_object (VALUE mGrn)
                      rb_grn_object_accessor_p, 0);
     rb_define_method(rb_cGrnObject, "key_accessor?",
                      rb_grn_object_key_accessor_p, 0);
+
+    rb_define_method(rb_cGrnObject, "type_string",
+                     rb_grn_object_type_to_string, 0);
 }

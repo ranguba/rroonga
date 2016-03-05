@@ -276,6 +276,12 @@ class DatabaseTest < Test::Unit::TestCase
                  terms.collect(&:_key).sort)
   end
 
+  def test_type_string
+    Groonga::Database.create(:path => @database_path.to_s) do |database|
+      assert_equal("db", database.type_string)
+    end
+  end
+
   class RemoveTest < self
     setup :setup_database
 
