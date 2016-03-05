@@ -301,6 +301,7 @@ RB_GRN_VAR VALUE rb_cGrnRecordExpressionBuilder;
 RB_GRN_VAR VALUE rb_cGrnColumnExpressionBuilder;
 RB_GRN_VAR VALUE rb_cGrnPlugin;
 RB_GRN_VAR VALUE rb_cGrnNormalizer;
+RB_GRN_VAR VALUE rb_cGrnIndex;
 
 void           rb_grn_init_utils                    (VALUE mGrn);
 void           rb_grn_init_exception                (VALUE mGrn);
@@ -355,6 +356,7 @@ void           rb_grn_init_plugin                   (VALUE mGrn);
 void           rb_grn_init_normalizer               (VALUE mGrn);
 void           rb_grn_init_thread                   (VALUE mGrn);
 void           rb_grn_init_config                   (VALUE mGrn);
+void           rb_grn_init_index                    (VALUE mGrn);
 
 VALUE          rb_grn_rc_to_exception               (grn_rc rc);
 const char    *rb_grn_rc_to_message                 (grn_rc rc);
@@ -633,6 +635,9 @@ VALUE          rb_grn_column_expression_builder_new (VALUE column,
                                                      VALUE query);
 VALUE          rb_grn_column_expression_builder_build
                                                     (VALUE self);
+
+VALUE          rb_grn_index_new                     (VALUE rb_index_column,
+                                                     VALUE rb_section);
 
 
 #define RB_GRN_INTERN(c_string)       (rb_to_symbol(rb_str_new_cstr(c_string)))

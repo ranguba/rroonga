@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2013  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2016  Kouhei Sutou <kou@clear-code.com>
 # Copyright (C) 2016  Masafumi Yokoyama <yokoyama@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
@@ -586,35 +586,74 @@ class ColumnTest < Test::Unit::TestCase
     end
   end
 
-  class AllIndexedTest < self
-    def setup
-      super
-      Groonga::Schema.define do |schema|
-        schema.create_table("Comments") do |table|
-          table.short_text("title")
+  class FindIndexesTest < self
+    class NoOperatorTest < self
+      def setup
+        super
+        Groonga::Schema.define do |schema|
+          schema.create_table("Comments") do |table|
+            table.short_text("title")
+            table.short_text("body")
+          end
         end
+        @title = Groonga["Comments.title"]
       end
-      @title = Groonga["Comments.title"]
-    end
 
-    def test_nothing
-      assert_equal([], @title.all_indexes)
-    end
+      def test_nothing
+        assert_equal([], @title.find_indexes)
+      end
 
-    def test_one_index
-      Groonga::Schema.define do |schema|
-        schema.create_table("Terms",
-                            :type => :patricia_trie,
-                            :default_tokenizer => "TokenBigram") do |table|
-          table.index("Comments.title")
+      def test_one_index
+        Groonga::Schema.define do |schema|
+          schema.create_table("Terms",
+                              :type => :patricia_trie,
+                              :key_type => :short_text,
+                              :default_tokenizer => "TokenBigram") do |table|
+            table.index("Comments.title")
+          end
         end
+        assert_equal([
+                       Groonga::Index.new(Groonga["Terms.Comments_title"], 0),
+                     ],
+                     @title.find_indexes)
       end
-      assert_equal([Groonga["Terms.Comments_title"]],
-                   @title.all_indexes)
-    end
 
-    def test_multiple_indexes
-      # TODO
+      def test_multiple_indexes
+        Groonga::Schema.define do |schema|
+          schema.create_table("Terms",
+                              :type => :patricia_trie,
+                              :key_type => :short_text,
+                              :default_tokenizer => "TokenBigram") do |table|
+            table.index("Comments.title")
+          end
+
+          schema.create_table("Titles",
+                              :type => :hash,
+                              :key_type => :short_text) do |table|
+            table.index("Comments.title")
+          end
+        end
+        assert_equal([
+                       Groonga::Index.new(Groonga["Terms.Comments_title"], 0),
+                       Groonga::Index.new(Groonga["Titles.Comments_title"], 0),
+                     ],
+                     @title.find_indexes.sort_by {|index| index.column.name})
+      end
+
+      def test_multiple_column_index
+        Groonga::Schema.define do |schema|
+          schema.create_table("Terms",
+                              :type => :patricia_trie,
+                              :default_tokenizer => "TokenBigram") do |table|
+            table.index("Comments", "body", "title",
+                        :name => "comments")
+          end
+        end
+        assert_equal([
+                       Groonga::Index.new(Groonga["Terms.comments"], 2),
+                     ],
+                     @title.find_indexes)
+      end
     end
   end
 end

@@ -755,38 +755,72 @@ rb_grn_column_get_indexes (int argc, VALUE *argv, VALUE self)
 }
 
 /*
- * Return all indexes on `column`.
+ * Return indexes on `column`. If operator is specified, indexes that
+ * can executes the operator are only returned. Otherwise, all indexes
+ * are returned.
  *
- * @overload all_indexes
- * @return [Array<index_column>] All indexes on `column`.
+ * Index means that index column and section.
+ *
+ * @overload find_indexes(options={})
+ *   @param options [::Hash] The name and value pairs.
+ *      Omitted names are initialized as the default value.
+ *   @option options :operator (nil) The operator that should be
+ *      executable by indexes. `nil` means that all operators.
+ *   @return [Array<Groonga::Index>] Target indexes on `column`.
  *
  * @since 6.0.0
  */
 static VALUE
-rb_grn_column_get_all_indexes (VALUE self)
+rb_grn_column_find_indexes (int argc, VALUE *argv, VALUE self)
 {
+    VALUE rb_options;
+    VALUE rb_operator;
     grn_ctx *context;
     grn_obj *column;
     grn_index_datum *index_data = NULL;
     int i, n_indexes;
     VALUE rb_indexes;
 
+    rb_scan_args(argc, argv, "01", &rb_options);
+    rb_grn_scan_options(rb_options,
+                        "operator", &rb_operator,
+                        NULL);
+
     rb_grn_column_deconstruct(SELF(self), &column, &context,
                               NULL, NULL,
                               NULL, NULL, NULL);
 
-    rb_indexes = rb_ary_new();
-    n_indexes = grn_column_get_all_index_data(context, column, NULL, 0);
-    if (n_indexes == 0)
-        return rb_indexes;
+    if (NIL_P(rb_operator)) {
+        n_indexes = grn_column_get_all_index_data(context, column, NULL, 0);
+        if (n_indexes == 0)
+            return rb_ary_new();
 
-    index_data = xmalloc(sizeof(grn_index_datum) * n_indexes);
-    n_indexes = grn_column_get_all_index_data(context, column,
-                                              index_data, n_indexes);
+        index_data = xmalloc(sizeof(grn_index_datum) * n_indexes);
+        n_indexes = grn_column_get_all_index_data(context, column,
+                                                  index_data, n_indexes);
+    } else {
+        grn_operator operator;
+        operator = RVAL2GRNOPERATOR(rb_operator);
+        n_indexes = grn_column_find_index_data(context, column, operator,
+                                               NULL, 0);
+        if (n_indexes == 0)
+            return rb_ary_new();
+
+        index_data = xmalloc(sizeof(grn_index_datum) * n_indexes);
+        n_indexes = grn_column_find_index_data(context, column, operator,
+                                               index_data, n_indexes);
+    }
+
+    rb_indexes = rb_ary_new_capa(n_indexes);
     for (i = 0; i < n_indexes; i++) {
-        VALUE rb_index;
-        rb_index = GRNOBJECT2RVAL(Qnil, context, index_data[i].index, GRN_FALSE);
-        rb_ary_push(rb_indexes, rb_index);
+        VALUE rb_index_column;
+        VALUE rb_section;
+        rb_index_column = GRNOBJECT2RVAL(Qnil,
+                                         context,
+                                         index_data[i].index,
+                                         GRN_FALSE);
+        rb_section = UINT2NUM(index_data[i].section);
+        rb_ary_push(rb_indexes, rb_grn_index_new(rb_index_column, rb_section));
         grn_obj_unlink(context, index_data[i].index);
     }
     xfree(index_data);
@@ -853,7 +887,8 @@ rb_grn_init_column (VALUE mGrn)
                      rb_grn_column_with_weight_p, 0);
 
     rb_define_method(rb_cGrnColumn, "indexes", rb_grn_column_get_indexes, -1);
-    rb_define_method(rb_cGrnColumn, "all_indexes", rb_grn_column_get_all_indexes, 0);
+    rb_define_method(rb_cGrnColumn, "find_indexes",
+                     rb_grn_column_find_indexes, -1);
 
     rb_define_method(rb_cGrnColumn, "rename", rb_grn_column_rename, 1);
 

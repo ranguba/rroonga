@@ -38,6 +38,7 @@ require "groonga/geo-point"
 require "groonga/record"
 require "groonga/expression-builder"
 require "groonga/posting"
+require "groonga/index"
 begin
   major, minor, _ = RUBY_VERSION.split(/\./)
   require "#{major}.#{minor}/groonga.so"
