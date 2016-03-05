@@ -1,4 +1,5 @@
 # Copyright (C) 2015-2016  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2016  Masafumi Yokoyama <yokoyama@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -27,5 +28,12 @@ class ConfigTest < Test::Unit::TestCase
     test "nonexistent" do
       assert_nil(context.config["nonexistent"])
     end
+  end
+
+  test "#delete" do
+    context.config["rroonga.key"] = "value"
+    assert_equal("value", context.config["rroonga.key"])
+    context.config.delete("rroonga.key")
+    assert_nil(context.config["rroonga.key"])
   end
 end
