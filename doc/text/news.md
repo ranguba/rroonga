@@ -4,6 +4,7 @@
 
 ### Improvements
 
+  * Supported Groonga 6.0.0. Groonga 5.1.2 or older aren't supported.
   * Supported `-` operator as {Groonga::Operator::AND_NOT}.
   * `grndump`: Added `:max_records` option.
     [Patch by Genki Takiuchi]
