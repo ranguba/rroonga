@@ -483,7 +483,7 @@ msgstr ""
 "れていました。"
 
 msgid ""
-"    It's backward compatible change but we introduced the\n"
+"    It's backward incompatible change but we introduced the\n"
 "    change. Because we marked this behavior as a bug."
 msgstr "    これは非互換な変更ですがこの変更をいれました。それは、この動作はバグと判断したためです。"
 

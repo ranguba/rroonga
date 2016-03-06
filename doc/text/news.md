@@ -22,7 +22,7 @@
     as number object. The number object was always treated as ID not
     key.
 
-    It's backward compatible change but we introduced the
+    It's backward incompatible change but we introduced the
     change. Because we marked this behavior as a bug.
 
   * Supported `require "rroonga"` for `Bundler.require`.
