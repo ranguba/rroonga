@@ -13,8 +13,16 @@
 
   * Accepted integer and time as function call arguments.
 
-  * `expression-builder`: Disabled auto ID detection.
-    It's confused when Int/Uint types for key.
+  * {Groonga::Table#select}: Disabled auto conversion to record ID
+    from number object in condition block. If you want to specify
+    record ID as right hand side value, you need to pass
+    {Groonga::Record}. The number object is treated as key not ID from
+    this release. Because we couldn't specify Int/UInt family type key
+    as number object. The number object was always treated as ID not
+    key.
+
+    It's backward compatible change but we introduced the
+    change. Because we marked this behavior as a bug.
 
   * Supported `require "rroonga"` for `Bundler.require`.
     [Patch by Fumiaki MATSUSHIMA]
