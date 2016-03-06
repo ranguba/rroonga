@@ -5,24 +5,39 @@
 ### Improvements
 
   * Supported Groonga 6.0.0. Groonga 5.1.2 or older aren't supported.
+
   * Supported `-` operator as {Groonga::Operator::AND_NOT}.
+
   * `grndump`: Added `:max_records` option.
     [Patch by Genki Takiuchi]
+
   * Accepted integer and time as function call arguments.
+
   * `expression-builder`: Disabled auto ID detection.
     It's confused when Int/Uint types for key.
+
   * Supported `require "rroonga"` for `Bundler.require`.
     [Patch by Fumiaki MATSUSHIMA]
+
   * Added {Groonga::Plugin.names}.
+
   * Added {Groonga::Config#delete}.
+
   * Added {Groonga::Config#each}.
+
   * Added {Groonga::Index}. It has index column and section.
+
   * Added {Groonga::Column#find_indexes}.
     It returns an array of {Groonga::Index}.
+
   * Mark {Groonga::Column#indexes} as deprecated.
     Use {Groonga::Column#find_indexes} instead.
+
   * Added {Groonga.error_message}.
-  * Supported method style function call in {Groonga::Table#select} block. It's Rubyish API.
+
+  * Supported method style function call in {Groonga::Table#select}
+    block. It's Rubyish API.
+
     Example:
 
         @shops.select do |record|
@@ -33,6 +48,7 @@
 ### Thanks
 
   * Genki Takiuchi
+
   * Fumiaki MATSUSHIMA
 
 ## 5.1.1: 2016-01-18 {#version-5-1-1}
