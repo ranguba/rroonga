@@ -203,6 +203,43 @@ rb_grn_expression_define_variable (int argc, VALUE *argv, VALUE self)
     return rb_variable;
 }
 
+/* TODO: Enable when Groonga 6.0.1 is released. */
+/*
+typedef struct
+{
+    grn_ctx *context;
+    grn_hash *hash;
+    VALUE rb_hash;
+} RbGrnHashFromRubyHashData;
+
+static int
+rb_grn_hash_from_ruby_hash_body (VALUE rb_key,
+                                 VALUE rb_value,
+                                 VALUE user_data)
+{
+    RbGrnHashFromRubyHashData *data = (RbGrnHashFromRubyHashData *)user_data;
+    grn_obj *value;
+    int added;
+
+    rb_key = rb_grn_convert_to_string(rb_key);
+
+    grn_hash_add(data->context,
+                 data->hash,
+                 RSTRING_PTR(rb_key),
+                 RSTRING_LEN(rb_key),
+                 (void **)&value,
+                 &added);
+    rb_grn_context_check(data->context, data->rb_hash);
+
+    if (added) {
+        GRN_VOID_INIT(value);
+    }
+    RVAL2GRNBULK(rb_value, data->context, value);
+
+    return ST_CONTINUE;
+}
+*/
+
 /*
  * _object_ を追加し、 _n_arguments_ 個の引数を取る _operation_ を追加する。
  *
@@ -232,9 +269,32 @@ rb_grn_expression_append_object (int argc, VALUE *argv, VALUE self)
                                   NULL, NULL,
                                   NULL, NULL, NULL);
 
-    object = RVAL2GRNOBJECT(rb_object, &context);
-    grn_expr_append_obj(context, expression, object,
-                        operation, n_arguments);
+    /* TODO: Enable when Groonga 6.0.1 is released. */
+    /*
+    if (RB_TYPE_P(rb_object, RUBY_T_HASH)) {
+        RbGrnHashFromRubyHashData data;
+        data.context = context;
+        data.hash = grn_hash_create(context, NULL,
+                                    GRN_TABLE_MAX_KEY_SIZE,
+                                    sizeof(grn_obj),
+                                    GRN_OBJ_KEY_VAR_SIZE |
+                                    GRN_OBJ_TEMPORARY |
+                                    GRN_HASH_TINY);
+        grn_expr_take_obj(context, expression, (grn_obj *)(data.hash));
+        data.rb_hash = rb_object;
+        rb_hash_foreach(rb_object,
+                        rb_grn_hash_from_ruby_hash_body,
+                        (VALUE)&data);
+        grn_expr_append_obj(context, expression, (grn_obj *)(data.hash),
+                            operation, n_arguments);
+    } else {
+    */
+        object = RVAL2GRNOBJECT(rb_object, &context);
+        grn_expr_append_obj(context, expression, object,
+                            operation, n_arguments);
+    /*
+    }
+    */
     rb_grn_context_check(context, self);
     rb_ary_push(rb_iv_get(self, "@objects"), rb_object);
 

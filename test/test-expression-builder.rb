@@ -655,6 +655,38 @@ EOC
                      result.collect(&:timestamp))
       end
     end
+
+    class HashTest < self
+      def setup_tables
+        Groonga::Schema.define do |schema|
+          schema.create_table("Tags",
+                              :type => :patricia_trie,
+                              :key_type => :short_text) do |table|
+          end
+        end
+
+        @tags = Groonga["Tags"]
+      end
+
+      def setup_data
+        @tags.add("Tom")
+        @tags.add("Tomy")
+        @tags.add("Ken")
+      end
+
+      def test_search
+        omit("TODO: Enable me when Groonga 6.0.1 is released.")
+        result = @tags.select do |record|
+          record.key.fuzzy_search("Toym", :with_transposition => true)
+        end
+        sorted_result = result.sort(["_score", "_key"])
+        assert_equal([
+                       ["Tom", 1.0],
+                       ["Tomy", 1.0],
+                     ],
+                     sorted_result.collect {|r| [r._key, r.score]})
+      end
+    end
   end
 
   class RecordTest < self

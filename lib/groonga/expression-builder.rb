@@ -509,6 +509,8 @@ module Groonga
           case argument
           when String, Integer, Time
             expression.append_constant(argument)
+          when ::Hash
+            expression.append_object(argument)
           else
             argument.build(expression, variable)
           end
