@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: rroonga 2.1.0\n"
-"PO-Revision-Date: 2016-03-06 21:11+0900\n"
+"PO-Revision-Date: 2016-03-06 22:05+0900\n"
 "Last-Translator: Kouhei Sutou <kou@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -450,52 +450,73 @@ msgstr ""
 msgid "### Improvements"
 msgstr "### 改善"
 
+msgid "  * Supported Groonga 6.0.0. Groonga 5.1.2 or older aren't supported."
+msgstr "  * Groonga 6.0.0をサポートしました。Groonga 5.1.2以前はサポートしません。"
+
+msgid "  * Supported `-` operator as {Groonga::Operator::AND_NOT}."
+msgstr "  * {Groonga::Operator::AND_NOT}のオペレーターとして`-`をサポートしました。"
+
 msgid ""
-"  * Supported Groonga 6.0.0. Groonga 5.1.2 or older aren't supported.\n"
-"  * Supported `-` operator as {Groonga::Operator::AND_NOT}.\n"
 "  * `grndump`: Added `:max_records` option.\n"
-"    [Patch by Genki Takiuchi]\n"
-"  * Accepted integer and time as function call arguments.\n"
-"  * `expression-builder`: Disabled auto ID detection.\n"
-"    It's confused when Int/Uint types for key.\n"
-"  * Suported `require \"rroonga\"` for `Bundler.require`.\n"
-"    [Patch by Fumiaki MATSUSHIMA]\n"
-"  * Added {Groonga::Plugin.names}.\n"
-"  * Added {Groonga::Config#delete}.\n"
-"  * Added {Groonga::Config#each}.\n"
-"  * Added {Groonga::Index}. It has index column and section.\n"
-"  * Added {Groonga::Column#find_indexes}.\n"
-"    It returns an array of {Groonga::Index}.\n"
-"  * Deprecated {Groonga::Column#indexes}.\n"
-"    Use {Groonga::Column#find_indexes} instead.\n"
-"  * Added {Groonga.error_message}.\n"
-"  * Supported method style function call in {Groonga::Table#select} block. "
-"It's Rubyish API.\n"
-"    Example:"
+"    [Patch by Genki Takiuchi]"
 msgstr ""
-"  * Groonga 6.0.0をサポートしました。Groonga 5.1.2以前はサポートしません。\n"
-"  * {Groonga::Operator::AND_NOT}のオペレーターとして`-`をサポートしました。\n"
 "  * `grndump`: `:max_records`オプションを追加しました。\n"
-"    [Genki Takiuchiさんがパッチ提供]\n"
-"  * `expression-builder`: `call`による関数呼び出し時の引数に数値型と日時型を"
-"受け入れるようにしました。\n"
+"    [Genki Takiuchiさんがパッチ提供]"
+
+msgid "  * Accepted integer and time as function call arguments."
+msgstr ""
+"  * `expression-builder`: `call`による関数呼び出し時の引数に数値型と日時型を受け入れるようにしました。\n"
+
+msgid ""
+"  * `expression-builder`: Disabled auto ID detection.\n"
+"    It's confused when Int/Uint types for key."
+msgstr ""
 "  * `expression-builder`: 自動ID検出を無効にしました。\n"
 "    整数型のキーと競合するためです。\n"
+
+msgid ""
+"  * Supported `require \"rroonga\"` for `Bundler.require`.\n"
+"    [Patch by Fumiaki MATSUSHIMA]"
+msgstr ""
 "  * `Bundler.require`のために`require \"rroonga\"`をサポートしました。\n"
-"    [Fumiaki MATSUSHIMAさんがパッチ提供]\n"
-"  * {Groonga::Plugin.names}を追加しました。\n"
-"  * {Groonga::Config#delete}を追加しました。\n"
-"  * {Groonga::Config#each}を追加しました。\n"
-"  * {Groonga::Index}を追加しました。これはインデックスカラムとセクションを含"
-"みます。\n"
+"    [Fumiaki MATSUSHIMAさんがパッチ提供]"
+
+msgid "  * Added {Groonga::Plugin.names}."
+msgstr "  * {Groonga::Plugin.names}を追加しました。"
+
+msgid "  * Added {Groonga::Config#delete}."
+msgstr "  * {Groonga::Config#delete}を追加しました。"
+
+msgid "  * Added {Groonga::Config#each}."
+msgstr "  * {Groonga::Config#each}を追加しました。"
+
+msgid "  * Added {Groonga::Index}. It has index column and section."
+msgstr "  * {Groonga::Index}を追加しました。これはインデックスカラムとセクションを含みます。"
+
+msgid ""
+"  * Added {Groonga::Column#find_indexes}.\n"
+"    It returns an array of {Groonga::Index}."
+msgstr ""
 "  * {Groonga::Column#find_indexes}を追加しました。\n"
-"    これは{Groonga::Index}の配列を返します。\n"
+"    これは{Groonga::Index}の配列を返します。"
+
+msgid ""
+"  * Mark {Groonga::Column#indexes} as deprecated.\n"
+"    Use {Groonga::Column#find_indexes} instead."
+msgstr ""
 "  * {Groonga::Column#indexes}を非推奨にしました。\n"
-"    代わりに{Groonga::Column#find_indexes}を使ってください。\n"
-"  * {Groonga.error_message}を追加しました。\n"
-"  * {Groonga::Table#select}のブロック内でメソッドスタイルの関数呼び出しをサ"
-"ポートしました。これはRubyらしいAPIです。\n"
-"    例:"
+"    代わりに{Groonga::Column#find_indexes}を使ってください。"
+
+msgid "  * Added {Groonga.error_message}."
+msgstr "  * {Groonga.error_message}を追加しました。"
+
+msgid ""
+"  * Supported method style function call in {Groonga::Table#select}\n"
+"    block. It's Rubyish API."
+msgstr "  * {Groonga::Table#select}のブロック内でメソッドスタイルの関数呼び出しをサポートしました。これはRubyらしいAPIです。"
+
+msgid "    Example:"
+msgstr "    例:"
 
 msgid ""
 "        @shops.select do |record|\n"
@@ -507,12 +528,11 @@ msgstr ""
 msgid "### Thanks"
 msgstr "### 感謝"
 
-msgid ""
-"  * Genki Takiuchi\n"
-"  * Fumiaki MATSUSHIMA"
-msgstr ""
-"  * Genki Takiuchiさん\n"
-"  * Fumiaki MATSUSHIMAさん"
+msgid "  * Genki Takiuchi"
+msgstr "  * Genki Takiuchiさん"
+
+msgid "  * Fumiaki MATSUSHIMA"
+msgstr "  * Fumiaki MATSUSHIMAさん"
 
 msgid "## 5.1.1: 2016-01-18 {#version-5-1-1}"
 msgstr ""
@@ -3862,11 +3882,10 @@ msgstr ""
 msgid "tag|overload|find_indexes"
 msgstr ""
 
-#, fuzzy
 msgid ""
 "The name and value pairs.\n"
 "Omitted names are initialized as the default value."
-msgstr "オプションを設定するハッシュ。指定されなかったオプションはデフォルト値が使われます。"
+msgstr "名前と値のペア。名前を指定していない場合はデフォルト値を使います。"
 
 # @return [Array<Groonga::Index>]
 msgid "Target indexes on `column`."
@@ -3932,9 +3951,8 @@ msgid "tag|param|key"
 msgstr ""
 
 # @overload
-#, fuzzy
 msgid "tag|overload|config"
-msgstr "登録されたロガーの登録を削除する。削除後はデフォルトのロガーが使われます。"
+msgstr ""
 
 # @param [String] key
 msgid "The key."
@@ -4011,9 +4029,8 @@ msgstr ""
 msgid "The value which is associated with `key`"
 msgstr ""
 
-#, fuzzy
 msgid "For backward compatibility."
-msgstr "後方互換性のために残してあります。"
+msgstr "後方互換性のためです。"
 
 msgid ""
 "groonga全体に渡る情報を管理するオブジェクト。通常のアプリ\n"
@@ -4499,9 +4516,8 @@ msgid ""
 msgstr ""
 
 # @overload
-#, fuzzy
 msgid "tag|overload|reindex"
-msgstr "登録されたロガーの登録を削除する。削除後はデフォルトのロガーが使われます。"
+msgstr ""
 
 # @see
 msgid "tag|see|Groonga::FixSizeColumn#reindex"
@@ -5396,9 +5412,8 @@ msgid ""
 msgstr ""
 
 # @overload
-#, fuzzy
 msgid "tag|overload|rewrite"
-msgstr "登録されたロガーの登録を削除する。削除後はデフォルトのロガーが使われます。"
+msgstr ""
 
 # @return [Groonga::Expression, nil]
 msgid ""
@@ -6874,9 +6889,8 @@ msgid "Checks whether the object is accessor or not."
 msgstr ""
 
 # @overload
-#, fuzzy
 msgid "tag|overload|accessor?"
-msgstr "登録されたロガーの登録を削除する。削除後はデフォルトのロガーが使われます。"
+msgstr ""
 
 # @return [Boolean]
 msgid ""
@@ -6915,9 +6929,8 @@ msgid ""
 msgstr ""
 
 # @overload
-#, fuzzy
 msgid "tag|overload|key_accessor?"
-msgstr "登録されたロガーの登録を削除する。削除後はデフォルトのロガーが使われます。"
+msgstr ""
 
 # @return [Boolean]
 msgid ""
@@ -7226,9 +7239,8 @@ msgid "Returns the names of loaded plugins."
 msgstr ""
 
 # @overload
-#, fuzzy
 msgid "tag|overload|names"
-msgstr "登録されたロガーの登録を削除する。削除後はデフォルトのロガーが使われます。"
+msgstr ""
 
 # Groonga::PrefixOperator#exec
 msgid ""
@@ -8067,9 +8079,8 @@ msgid ""
 msgstr ""
 
 # @overload
-#, fuzzy
 msgid "tag|overload|geo_sort"
-msgstr "登録されたロガーの登録を削除する。削除後はデフォルトのロガーが使われます。"
+msgstr ""
 
 # @return [Groonga::Array]
 msgid ""
@@ -8982,9 +8993,7 @@ msgid "It's a module for using Windows Event Log as log output."
 msgstr ""
 
 # Groonga
-msgid ""
-"Copyright (C) 2015  Masafumi Yokoyama <yokoyama@clear-code.com>\n"
-"Copyright (C) 2009-2016  Kouhei Sutou <kou@clear-code.com>"
+msgid "Copyright (C) 2013  Kouhei Sutou <kou@clear-code.com>"
 msgstr ""
 
 msgid ""
@@ -10018,9 +10027,8 @@ msgstr ""
 msgid "Returns the value of attribute column"
 msgstr ""
 
-#, fuzzy
 msgid "Returns the value of attribute section"
-msgstr "緯度の値を返す。"
+msgstr ""
 
 # @return [Index]
 msgid "a new instance of Index"
