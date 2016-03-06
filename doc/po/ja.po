@@ -451,6 +451,7 @@ msgid "### Improvements"
 msgstr "### 改善"
 
 msgid ""
+"  * Supported Groonga 6.0.0. Groonga 5.1.2 or older aren't supported.\n"
 "  * Supported `-` operator as {Groonga::Operator::AND_NOT}.\n"
 "  * `grndump`: Added `:max_records` option.\n"
 "    [Patch by Genki Takiuchi]\n"
