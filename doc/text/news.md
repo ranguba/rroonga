@@ -11,7 +11,8 @@
   * `grndump`: Added `:max_records` option.
     [Patch by Genki Takiuchi]
 
-  * Accepted integer and time as function call arguments.
+  * {Groonga::Table#select}: Supported integer and time as function
+    call arguments.
 
   * {Groonga::Table#select}: Disabled auto conversion to record ID
     from number object in condition block. If you want to specify
