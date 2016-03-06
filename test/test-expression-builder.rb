@@ -555,12 +555,21 @@ EOC
         @shops.add("Taiyaki Sharaku", :location => "35.716969,139.794846")
       end
 
-      def test_search
+      def test_call_style
         result = @shops.select do |record|
           record.call("geo_in_rectangle",
                       record.location,
                       "35.7185,139.7912",
                       "35.7065,139.8069")
+        end
+        assert_equal(["Taiyaki Sharaku"],
+                     result.collect(&:_key))
+      end
+
+      def test_method_style
+        result = @shops.select do |record|
+          record.location.geo_in_rectangle("35.7185,139.7912",
+                                           "35.7065,139.8069")
         end
         assert_equal(["Taiyaki Sharaku"],
                      result.collect(&:_key))

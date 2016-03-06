@@ -282,14 +282,31 @@ module Groonga
         other
       end
 
+      def callable_object?(object)
+        return false unless object.respond_to?(:function_procedure?)
+
+        object.function_procedure?
+      end
+
       def method_missing(name, *args, &block)
         return super if block
-        return super unless args.empty?
-        if VALID_COLUMN_NAME_RE =~ name.to_s
-          RecordExpressionBuilder.new(@table, @name)["#{@column_name}.#{name}"]
-        else
-          super
+
+        if args.empty? and VALID_COLUMN_NAME_RE =~ name.to_s
+          accessor_name = "#{@column_name}.#{name}"
+          accessor = @table.column(accessor_name)
+          if accessor
+            return self.class.new(accessor,
+                                  :table => @table,
+                                  :column_name => accessor_name)
+          end
         end
+
+        object = @table.context[name]
+        if callable_object?(object)
+          return CallExpressionBuilder.new(object, self, *args)
+        end
+
+        super
       end
     end
 
