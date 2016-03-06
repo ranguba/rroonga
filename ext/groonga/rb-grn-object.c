@@ -93,7 +93,7 @@ rb_grn_object_unbind (RbGrnObject *rb_grn_object)
 {
     debug("unbind: %p:%p:%p %s(%#x)\n",
           rb_grn_object->context, rb_grn_object->object, rb_grn_object,
-          rb_grn_inspect_type(rb_grn_object->object->header.type),
+          grn_obj_type_to_string(rb_grn_object->object->header.type),
           rb_grn_object->object->header.type);
 
     rb_grn_object->rb_grn_context = NULL;
@@ -116,7 +116,7 @@ rb_grn_object_run_finalizer (grn_ctx *context, grn_obj *grn_object,
           context, grn_object, rb_grn_object,
           rb_grn_object->context, rb_grn_object->object,
           rb_grn_object->rb_grn_context,
-          rb_grn_inspect_type(grn_object->header.type),
+          grn_obj_type_to_string(grn_object->header.type),
           grn_object->header.type);
 
     rb_grn_context = rb_grn_object->rb_grn_context;
@@ -173,7 +173,7 @@ rb_grn_object_run_finalizer (grn_ctx *context, grn_obj *grn_object,
     default:
         rb_raise(rb_eTypeError,
                  "unsupported Groonga object type for finalizer: %s(%#x)",
-                 rb_grn_inspect_type(grn_object->header.type),
+                 grn_obj_type_to_string(grn_object->header.type),
                  grn_object->header.type);
         break;
     }
@@ -217,7 +217,7 @@ rb_grn_object_free (RbGrnObject *rb_grn_object)
             user_data = grn_obj_user_data(context, grn_object);
         }
         debug("type: %s(%#x); need_close: %d; user_data: %p; ptr: %p\n",
-              rb_grn_inspect_type(grn_object->header.type),
+              grn_obj_type_to_string(grn_object->header.type),
               grn_object->header.type,
               rb_grn_object->need_close,
               user_data,
@@ -362,7 +362,7 @@ rb_grn_object_bind_common (VALUE klass, VALUE self, VALUE rb_context,
 
     debug("bind: %p:%p:%p %s(%#x)\n",
           context, object, rb_grn_object,
-          rb_grn_inspect_type(object->header.type),
+          grn_obj_type_to_string(object->header.type),
           object->header.type);
 
     Data_Get_Struct(rb_context, RbGrnContext, rb_grn_context);
@@ -378,7 +378,7 @@ rb_grn_object_bind_common (VALUE klass, VALUE self, VALUE rb_context,
     if (user_data) {
         debug("set-finalizer: %p:%p:%p %s(%#x)\n",
               context, object, rb_grn_object,
-              rb_grn_inspect_type(object->header.type),
+              grn_obj_type_to_string(object->header.type),
               object->header.type);
         user_data->ptr = rb_grn_object;
         grn_obj_set_finalizer(context, object, rb_grn_object_finalizer);
@@ -386,7 +386,7 @@ rb_grn_object_bind_common (VALUE klass, VALUE self, VALUE rb_context,
     } else if (object->header.type == GRN_ACCESSOR) {
         debug("set-finalizer(implicit): %p:%p:%p %s(%#x)\n",
               context, object, rb_grn_object,
-              rb_grn_inspect_type(object->header.type),
+              grn_obj_type_to_string(object->header.type),
               object->header.type);
         rb_grn_object->have_finalizer = GRN_TRUE;
     }
@@ -500,7 +500,7 @@ rb_grn_object_assign (VALUE klass, VALUE self, VALUE rb_context,
     } else {
         rb_raise(rb_eTypeError,
                  "unsupported Groonga object type for assignment: %s(%#x)",
-                 rb_grn_inspect_type(object->header.type),
+                 grn_obj_type_to_string(object->header.type),
                  object->header.type);
     }
 
@@ -508,7 +508,7 @@ rb_grn_object_assign (VALUE klass, VALUE self, VALUE rb_context,
 
     debug("assign: %p:%p:%p %s(%#x)\n",
           context, object, rb_grn_object,
-          rb_grn_inspect_type(object->header.type), object->header.type);
+          grn_obj_type_to_string(object->header.type), object->header.type);
 }
 
 void
@@ -545,7 +545,7 @@ rb_grn_named_object_set_name (RbGrnNamedObject *rb_grn_named_object,
               RB_GRN_OBJECT(rb_grn_named_object)->context,
               RB_GRN_OBJECT(rb_grn_named_object)->object,
               rb_grn_named_object,
-              rb_grn_inspect_type(RB_GRN_OBJECT(rb_grn_named_object)->header.type),
+              grn_obj_type_to_string(RB_GRN_OBJECT(rb_grn_named_object)->header.type),
               RB_GRN_OBJECT(rb_grn_named_object)->object->header.type,
               name_size, name);
     }

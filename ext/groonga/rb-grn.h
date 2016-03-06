@@ -383,7 +383,6 @@ void           rb_grn_context_object_created        (VALUE rb_context,
                                                      VALUE rb_object);
 
 const char    *rb_grn_inspect                       (VALUE object);
-const char    *rb_grn_inspect_type                  (unsigned char type);
 void           rb_grn_scan_options                  (VALUE options, ...)
                                                      RB_GRN_GNUC_NULL_TERMINATED;
 grn_bool       rb_grn_equal_option                  (VALUE option,
