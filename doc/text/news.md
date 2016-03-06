@@ -11,7 +11,7 @@
   * Accepted integer and time as function call arguments.
   * `expression-builder`: Disabled auto ID detection.
     It's confused when Int/Uint types for key.
-  * Suported `require "rroonga"` for `Bundler.require`.
+  * Supported `require "rroonga"` for `Bundler.require`.
     [Patch by Fumiaki MATSUSHIMA]
   * Added {Groonga::Plugin.names}.
   * Added {Groonga::Config#delete}.
@@ -19,7 +19,7 @@
   * Added {Groonga::Index}. It has index column and section.
   * Added {Groonga::Column#find_indexes}.
     It returns an array of {Groonga::Index}.
-  * Deprecated {Groonga::Column#indexes}.
+  * Mark {Groonga::Column#indexes} as deprecated.
     Use {Groonga::Column#find_indexes} instead.
   * Added {Groonga.error_message}.
   * Supported method style function call in {Groonga::Table#select} block. It's Rubyish API.
