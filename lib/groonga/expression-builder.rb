@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-#
 # Copyright (C) 2015  Masafumi Yokoyama <yokoyama@clear-code.com>
 # Copyright (C) 2009-2016  Kouhei Sutou <kou@clear-code.com>
 #
@@ -77,23 +75,16 @@ module Groonga
       builders << match(@query, default_parse_options) if @query
       if block_given?
         custom_builder = yield(self)
-        if custom_builder.is_a?(::Array)
-          builders.concat(custom_builder)
-        else
-          builders << custom_builder
-        end
+        builders << custom_builder
+        builders.flatten!
       end
 
       if builders.empty?
         expression.append_object(@table.context["all_records"])
         expression.append_operation(Operation::CALL, 0)
       else
-        combined_builder = builders.inject(nil) do |previous, builder|
-          if previous.nil?
-            builder
-          else
-            previous & builder
-          end
+        combined_builder = builders.inject do |previous, builder|
+          previous & builder
         end
         combined_builder.build(expression, variable)
       end

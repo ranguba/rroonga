@@ -186,6 +186,19 @@ class ExpressionBuilderTest < Test::Unit::TestCase
                    result.collect {|record| record.key.key})
     end
 
+    def test_and_array_nested
+      result = @users.select do |record|
+        conditions = []
+        conditions << [(record.hp > 100)]
+        conditions << []
+        conditions << [[[(record.hp < 200)]]]
+        conditions << [[]]
+        conditions
+      end
+      assert_equal(["gunyara-kun"],
+                   result.collect {|record| record.key.key})
+    end
+
     def test_or
       result = @users.select do |record|
         (record["hp"] == 150) | (record["hp"] > 150)
