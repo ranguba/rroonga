@@ -21,6 +21,7 @@ require "mkmf"
 require "fileutils"
 require "shellwords"
 require "open-uri"
+require "uri"
 
 require "pkg-config"
 
@@ -83,7 +84,19 @@ def download(url)
   if File.exist?(base_name)
     message(" skip (use downloaded file)\n")
   else
-    open(url, "rb") do |input|
+
+    proxy_str = ENV['http_proxy']
+    if proxy_str
+      proxy_info = URI.parse(proxy_str)
+    end
+    options = {}
+    if proxy_info
+      if proxy_info.user
+      options = {:proxy_http_basic_authentication => [proxy_info, proxy_info.user, proxy_info.password]}
+      end
+    end
+
+      open(url, "rb", options) do |input|
       File.open(base_name, "wb") do |output|
         while (buffer = input.read(1024))
           output.print(buffer)
