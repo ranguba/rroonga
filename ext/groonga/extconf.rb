@@ -85,9 +85,9 @@ def download(url)
     message(" skip (use downloaded file)\n")
   else
 
-    proxy_str = ENV["http_proxy"]
-    if proxy_str
-      proxy_info = URI.parse(proxy_str)
+    proxy_env = ENV["http_proxy"]
+    if proxy_env
+      proxy_info = URI.parse(proxy_env)
     end
     options = {}
     if proxy_info
