@@ -84,18 +84,14 @@ def download(url)
   if File.exist?(base_name)
     message(" skip (use downloaded file)\n")
   else
-
+    options = {}
     proxy_env = ENV["http_proxy"]
     if proxy_env
       proxy_url = URI.parse(proxy_env)
-    end
-    options = {}
-    if proxy_url
       if proxy_url.user
         options = {:proxy_http_basic_authentication => [proxy_url, proxy_url.user, proxy_url.password]}
       end
     end
-
     open(url, "rb", options) do |input|
       File.open(base_name, "wb") do |output|
         while (buffer = input.read(1024))
