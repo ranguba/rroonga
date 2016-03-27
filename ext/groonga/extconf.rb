@@ -92,11 +92,11 @@ def download(url)
     options = {}
     if proxy_info
       if proxy_info.user
-      options = {:proxy_http_basic_authentication => [proxy_info, proxy_info.user, proxy_info.password]}
+        options = {:proxy_http_basic_authentication => [proxy_info, proxy_info.user, proxy_info.password]}
       end
     end
 
-      open(url, "rb", options) do |input|
+    open(url, "rb", options) do |input|
       File.open(base_name, "wb") do |output|
         while (buffer = input.read(1024))
           output.print(buffer)
