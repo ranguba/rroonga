@@ -89,7 +89,11 @@ def download(url)
     if proxy_env
       proxy_url = URI.parse(proxy_env)
       if proxy_url.user
-        options = {:proxy_http_basic_authentication => [proxy_url, proxy_url.user, proxy_url.password]}
+        options[:proxy_http_basic_authentication] = [
+          proxy_url,
+          proxy_url.user,
+          proxy_url.password,
+        ]
       end
     end
     open(url, "rb", options) do |input|
