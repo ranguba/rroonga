@@ -87,12 +87,12 @@ def download(url)
 
     proxy_env = ENV["http_proxy"]
     if proxy_env
-      proxy_info = URI.parse(proxy_env)
+      proxy_url = URI.parse(proxy_env)
     end
     options = {}
-    if proxy_info
-      if proxy_info.user
-        options = {:proxy_http_basic_authentication => [proxy_info, proxy_info.user, proxy_info.password]}
+    if proxy_url
+      if proxy_url.user
+        options = {:proxy_http_basic_authentication => [proxy_url, proxy_url.user, proxy_url.password]}
       end
     end
 
