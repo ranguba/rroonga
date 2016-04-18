@@ -100,6 +100,7 @@ static VALUE eGrnTokenFilterError;
 static VALUE eGrnCommandError;
 static VALUE eGrnPluginError;
 static VALUE eGrnScorerError;
+static VALUE eGrnCancel;
 
 VALUE
 rb_grn_rc_to_exception (grn_rc rc)
@@ -340,6 +341,9 @@ rb_grn_rc_to_exception (grn_rc rc)
         break;
       case GRN_SCORER_ERROR:
         exception = eGrnScorerError;
+        break;
+      case GRN_CANCEL:
+        exception = eGrnCancel;
         break;
     }
 
@@ -588,6 +592,9 @@ rb_grn_rc_to_message (grn_rc rc)
         break;
       case GRN_SCORER_ERROR:
         message = "scorer error";
+        break;
+      case GRN_CANCEL:
+        message = "cancel";
         break;
     }
 
@@ -1278,4 +1285,14 @@ rb_grn_init_exception (VALUE mGrn)
      */
     eGrnScorerError =
         rb_define_class_under(mGrn, "ScorerError", rb_eGrnError);
+
+    /*
+     * Document-class: Groonga::Cancel
+     *
+     * It is used when a processing is canceled.
+     *
+     * @since 6.0.1
+     */
+    eGrnCancel =
+        rb_define_class_under(mGrn, "Cancel", rb_eGrnError);
 }
