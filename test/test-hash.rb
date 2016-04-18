@@ -1,7 +1,5 @@
-# -*- coding: utf-8 -*-
-#
 # Copyright (C) 2014  Masafumi Yokoyama <myokoym@gmail.com>
-# Copyright (C) 2009-2014  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2016  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -442,5 +440,26 @@ class HashTest < Test::Unit::TestCase
 
     user_names = users.each.collect(&:key)
     assert_equal(["Alice", "Bob", "Carl"], user_names)
+  end
+
+  class KeyLargeTest < self
+    def test_default
+      paths = Groonga::Hash.create(:name => "Paths",
+                                   :key_type => "ShortText")
+      inspected = context.execute_command("object_inspect",
+                                          :name => paths.name)
+      assert_equal((4 * 1024 * 1024 * 1024) - 1,
+                   inspected.body["key"]["max_total_size"])
+    end
+
+    def test_enable
+      paths = Groonga::Hash.create(:name => "Paths",
+                                   :key_type => "ShortText",
+                                   :key_large => true)
+      inspected = context.execute_command("object_inspect",
+                                          :name => paths.name)
+      assert_equal((1 * 1024 * 1024 * 1024 * 1024) - 1,
+                   inspected.body["key"]["max_total_size"])
+    end
   end
 end

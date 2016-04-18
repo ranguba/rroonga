@@ -1,6 +1,6 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
-  Copyright (C) 2009-2012  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2016  Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -103,6 +103,12 @@ VALUE rb_cGrnHash;
  *
  *       @deprecated Use @:normalizer => "NormalizerAuto"@ instead.
  *
+ *     @option options [Boolean] :key_large (false)
+ *       It specifies whether total key size is large or not. The
+ *       default total key size is 4GiB. Large total key size is 1TiB.
+ *
+ *       @since 6.0.1
+ *
  *     @option options :key_type
  *       キーの種類を示すオブジェクトを指定する。キーの種類には型
  *       名（"Int32"や"ShortText"など）または {Groonga::Type} または
@@ -161,7 +167,9 @@ rb_grn_hash_s_create (int argc, VALUE *argv, VALUE klass)
     grn_obj_flags flags = GRN_OBJ_TABLE_HASH_KEY;
     VALUE rb_table;
     VALUE options, rb_context, rb_name, rb_path, rb_persistent;
-    VALUE rb_key_normalize, rb_key_type, rb_value_type, rb_default_tokenizer;
+    VALUE rb_key_normalize;
+    VALUE rb_key_large;
+    VALUE rb_key_type, rb_value_type, rb_default_tokenizer;
     VALUE rb_token_filters;
     VALUE rb_sub_records;
     VALUE rb_normalizer;
@@ -174,6 +182,7 @@ rb_grn_hash_s_create (int argc, VALUE *argv, VALUE klass)
                         "path", &rb_path,
                         "persistent", &rb_persistent,
                         "key_normalize", &rb_key_normalize,
+                        "key_large", &rb_key_large,
                         "key_type", &rb_key_type,
                         "value_type", &rb_value_type,
                         "default_tokenizer", &rb_default_tokenizer,
@@ -200,6 +209,9 @@ rb_grn_hash_s_create (int argc, VALUE *argv, VALUE klass)
 
     if (RVAL2CBOOL(rb_key_normalize))
         flags |= GRN_OBJ_KEY_NORMALIZE;
+
+    if (RVAL2CBOOL(rb_key_large))
+        flags |= GRN_OBJ_KEY_LARGE;
 
     if (NIL_P(rb_key_type)) {
         key_type = grn_ctx_at(context, GRN_DB_SHORT_TEXT);
