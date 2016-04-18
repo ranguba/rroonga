@@ -203,8 +203,6 @@ rb_grn_expression_define_variable (int argc, VALUE *argv, VALUE self)
     return rb_variable;
 }
 
-/* TODO: Enable when Groonga 6.0.1 is released. */
-/*
 typedef struct
 {
     grn_ctx *context;
@@ -238,7 +236,6 @@ rb_grn_hash_from_ruby_hash_body (VALUE rb_key,
 
     return ST_CONTINUE;
 }
-*/
 
 /*
  * _object_ を追加し、 _n_arguments_ 個の引数を取る _operation_ を追加する。
@@ -269,8 +266,6 @@ rb_grn_expression_append_object (int argc, VALUE *argv, VALUE self)
                                   NULL, NULL,
                                   NULL, NULL, NULL);
 
-    /* TODO: Enable when Groonga 6.0.1 is released. */
-    /*
     if (RB_TYPE_P(rb_object, RUBY_T_HASH)) {
         RbGrnHashFromRubyHashData data;
         data.context = context;
@@ -288,13 +283,10 @@ rb_grn_expression_append_object (int argc, VALUE *argv, VALUE self)
         grn_expr_append_obj(context, expression, (grn_obj *)(data.hash),
                             operation, n_arguments);
     } else {
-    */
         object = RVAL2GRNOBJECT(rb_object, &context);
         grn_expr_append_obj(context, expression, object,
                             operation, n_arguments);
-    /*
     }
-    */
     rb_grn_context_check(context, self);
     rb_ary_push(rb_iv_get(self, "@objects"), rb_object);
 

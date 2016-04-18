@@ -688,7 +688,6 @@ EOC
       end
 
       def test_search
-        omit("TODO: Enable me when Groonga 6.0.1 is released.")
         result = @tags.select do |record|
           record.key.fuzzy_search("Toym", :with_transposition => true)
         end
