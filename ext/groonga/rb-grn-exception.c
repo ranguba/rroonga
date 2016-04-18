@@ -1276,6 +1276,6 @@ rb_grn_init_exception (VALUE mGrn)
      *
      * @since 5.0.1
      */
-    eGrnPluginError =
+    eGrnScorerError =
         rb_define_class_under(mGrn, "ScorerError", rb_eGrnError);
 }
