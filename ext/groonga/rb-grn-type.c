@@ -1,6 +1,6 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
-  Copyright (C) 2009-2012  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2016  Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -217,6 +217,16 @@ rb_grn_type_geo_point_p (VALUE self)
     return CBOOL2RVAL(key_type == GRN_OBJ_KEY_GEO_POINT);
 }
 
+static VALUE
+rb_grn_type_text_family_p (VALUE self)
+{
+    grn_ctx *context = NULL;
+    grn_obj *type;
+
+    type = RVAL2GRNOBJECT(self, &context);
+    return CBOOL2RVAL(grn_obj_is_text_family_type(context, type));
+}
+
 void
 rb_grn_init_type (VALUE mGrn)
 {
@@ -238,6 +248,7 @@ rb_grn_init_type (VALUE mGrn)
 
     rb_define_method(rb_cGrnType, "float?", rb_grn_type_float_p, 0);
     rb_define_method(rb_cGrnType, "geo_point?", rb_grn_type_geo_point_p, 0);
+    rb_define_method(rb_cGrnType, "text_family?", rb_grn_type_text_family_p, 0);
 
     /* 任意のテーブルに属する全てのレコード(Object型はv1.2で
        サポートされます)。 */

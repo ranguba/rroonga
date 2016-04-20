@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2012  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2016  Kouhei Sutou <kou@clear-code.com>
 # Copyright (C) 2015  Masafumi Yokoyama <yokoyama@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
@@ -89,6 +89,38 @@ class TypeTest < Test::Unit::TestCase
 
   def test_not_geo_point?
     assert_false(Groonga["UInt32"].geo_point?)
+  end
+
+  class TextFamilyTest < self
+    def test_short_text
+      assert do
+        Groonga["ShortText"].text_family?
+      end
+    end
+
+    def test_text
+      assert do
+        Groonga["Text"].text_family?
+      end
+    end
+
+    def test_long_text
+      assert do
+        Groonga["LongText"].text_family?
+      end
+    end
+
+    def test_under_short_text
+      assert do
+        not Groonga["Time"].text_family?
+      end
+    end
+
+    def test_over_long_text
+      assert do
+        not Groonga["TokyoGeoPoint"].text_family?
+      end
+    end
   end
 
   def test_builtins
