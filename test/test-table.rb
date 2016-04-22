@@ -302,13 +302,49 @@ class TableTest < Test::Unit::TestCase
     end
   end
 
-  def test_remove
-    bookmarks_path = @tables_dir + "bookmarks"
-    bookmarks = Groonga::Array.create(:name => "Bookmarks",
-                                      :path => bookmarks_path.to_s)
-    assert_predicate(bookmarks_path, :exist?)
-    bookmarks.remove
-    assert_not_predicate(bookmarks_path, :exist?)
+  class RemoveTest < self
+    def test_default
+      bookmarks_path = @tables_dir + "bookmarks"
+      bookmarks = Groonga::Array.create(:name => "Bookmarks",
+                                        :path => bookmarks_path.to_s)
+      assert_predicate(bookmarks_path, :exist?)
+      bookmarks.remove
+      assert_not_predicate(bookmarks_path, :exist?)
+    end
+
+    def test_dependent
+      names_path = @tables_dir + "names"
+      names = Groonga::Hash.create(:name => "Names",
+                                   :path => names_path.to_s,
+                                   :key_type => "ShortText")
+      users_path = @tables_dir + "users"
+      Groonga::Hash.create(:name => "Users",
+                           :path => users_path.to_s,
+                           :key_type => "Names")
+      administrators_path = @tables_dir + "administrators"
+      Groonga::Hash.create(:name => "Administrator",
+                           :path => administrators_path.to_s,
+                           :key_type => "Names")
+      members_path = @tables_dir + "members"
+      members = Groonga::Hash.create(:name => "Members",
+                                     :path => members_path.to_s,
+                                     :key_type => "ShortText")
+      members_name_path = @columns_dir + "name"
+      members.define_column("name", "Names",
+                            :path => members_name_path.to_s)
+
+      assert {names_path.exist?}
+      assert {users_path.exist?}
+      assert {administrators_path.exist?}
+      assert {members_path.exist?}
+      assert {members_name_path.exist?}
+      names.remove(:dependent => true)
+      assert {not names_path.exist?}
+      assert {not users_path.exist?}
+      assert {not administrators_path.exist?}
+      assert {members_path.exist?}
+      assert {not members_name_path.exist?}
+    end
   end
 
   def test_temporary_add

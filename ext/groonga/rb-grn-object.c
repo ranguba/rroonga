@@ -1461,23 +1461,45 @@ rb_grn_object_prepend_value (VALUE self, VALUE rb_id, VALUE rb_value)
 }
 
 /*
- * _object_ をメモリから解放し、それが永続オブジェクトであっ
- * た場合は、該当するファイル一式を削除する。
+ * Free the `object`. If the `object` is persistent object, all files
+ * related with the object are removed.
  *
- * @overload remove
+ * @overload remove(options={})
+ *
+ *   @param [::Hash] options The optional parameters.
+ *
+ *   @option options [Boolean] :dependent (false)
+ *     If it's `true`, all tables and columns that depend on the
+ *     `object`.
  */
 static VALUE
-rb_grn_object_remove (VALUE self)
+rb_grn_object_remove (int argc, VALUE *argv, VALUE self)
 {
     RbGrnObject *rb_grn_object;
     grn_ctx *context;
+    VALUE rb_options;
+    VALUE rb_dependent_p;
+    grn_bool dependent_p = GRN_FALSE;
 
     rb_grn_object = SELF(self);
     if (!rb_grn_object->object)
         return Qnil;
 
+    rb_scan_args(argc, argv, "01", &rb_options);
+    rb_grn_scan_options(rb_options,
+                        "dependent", &rb_dependent_p,
+                        NULL);
+
+    if (!NIL_P(rb_dependent_p)) {
+        dependent_p = RVAL2CBOOL(rb_dependent_p);
+    }
+
     context = rb_grn_object->context;
-    grn_obj_remove(context, rb_grn_object->object);
+    if (dependent_p) {
+        grn_obj_remove_dependent(context, rb_grn_object->object);
+    } else {
+        grn_obj_remove(context, rb_grn_object->object);
+    }
     rb_grn_context_check(context, self);
 
     rb_iv_set(self, "@context", Qnil);
@@ -1750,7 +1772,7 @@ rb_grn_init_object (VALUE mGrn)
     rb_define_method(rb_cGrnObject, "append", rb_grn_object_append_value, 2);
     rb_define_method(rb_cGrnObject, "prepend", rb_grn_object_prepend_value, 2);
 
-    rb_define_method(rb_cGrnObject, "remove", rb_grn_object_remove, 0);
+    rb_define_method(rb_cGrnObject, "remove", rb_grn_object_remove, -1);
 
     rb_define_method(rb_cGrnObject, "builtin?", rb_grn_object_builtin_p, 0);
     rb_define_method(rb_cGrnObject, "table?", rb_grn_object_table_p, 0);
