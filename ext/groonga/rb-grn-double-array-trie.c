@@ -245,7 +245,7 @@ rb_grn_double_array_trie_s_create (int argc, VALUE *argv, VALUE klass)
     grn_obj *key_type = NULL, *value_type = NULL, *table;
     const char *name = NULL, *path = NULL;
     unsigned name_size = 0;
-    grn_obj_flags flags = GRN_OBJ_TABLE_DAT_KEY;
+    grn_table_flags flags = GRN_OBJ_TABLE_DAT_KEY;
     VALUE rb_table;
     VALUE options, rb_context, rb_name, rb_path, rb_persistent;
     VALUE rb_key_normalize, rb_key_with_sis, rb_key_type;
