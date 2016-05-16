@@ -1291,7 +1291,7 @@ rb_grn_init_exception (VALUE mGrn)
      *
      * It is used when a processing is canceled.
      *
-     * @since 6.0.1
+     * @since 6.0.2
      */
     eGrnCancel =
         rb_define_class_under(mGrn, "Cancel", rb_eGrnError);
