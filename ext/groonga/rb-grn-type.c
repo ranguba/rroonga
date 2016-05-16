@@ -222,9 +222,11 @@ rb_grn_type_text_family_p (VALUE self)
 {
     grn_ctx *context = NULL;
     grn_obj *type;
+    grn_id id;
 
     type = RVAL2GRNOBJECT(self, &context);
-    return CBOOL2RVAL(grn_obj_is_text_family_type(context, type));
+    id =  grn_obj_id(context, type);
+    return CBOOL2RVAL(grn_type_id_is_text_family(context, id));
 }
 
 static VALUE
