@@ -301,6 +301,8 @@ RB_GRN_VAR VALUE rb_cGrnPlugin;
 RB_GRN_VAR VALUE rb_cGrnNormalizer;
 RB_GRN_VAR VALUE rb_cGrnIndex;
 RB_GRN_VAR VALUE rb_mGrnRequestCanceler;
+RB_GRN_VAR VALUE rb_mGrnRequestTimer;
+RB_GRN_VAR VALUE rb_cGrnRequestTimerID;
 
 void           rb_grn_init_utils                    (VALUE mGrn);
 void           rb_grn_init_exception                (VALUE mGrn);
@@ -357,6 +359,8 @@ void           rb_grn_init_thread                   (VALUE mGrn);
 void           rb_grn_init_config                   (VALUE mGrn);
 void           rb_grn_init_index                    (VALUE mGrn);
 void           rb_grn_init_request_canceler         (VALUE mGrn);
+void           rb_grn_init_request_timer            (VALUE mGrn);
+void           rb_grn_init_request_timer_id         (VALUE mGrn);
 
 VALUE          rb_grn_rc_to_exception               (grn_rc rc);
 const char    *rb_grn_rc_to_message                 (grn_rc rc);
@@ -740,6 +744,11 @@ VALUE          rb_grn_index_new                     (VALUE rb_index_column,
 #define RVAL2GRNVARIABLE(object, context) \
     (rb_grn_variable_from_ruby_object(object, context))
 
+#define GRN_REQUEST_TIMER_ID2RVAL(id) \
+    (rb_grn_request_timer_id_to_ruby_object(id))
+#define RVAL2GRN_REQUEST_TIMER_ID(rb_id) \
+    (rb_grn_request_timer_id_from_ruby_object(rb_id))
+
 
 grn_encoding   rb_grn_encoding_from_ruby_object     (VALUE object,
                                                      grn_ctx *context);
@@ -883,6 +892,11 @@ VALUE          rb_grn_obj_to_ruby_object            (VALUE klass,
                                                      grn_ctx *context,
                                                      grn_obj *obj,
                                                      VALUE related_object);
+
+void          *rb_grn_request_timer_id_from_ruby_object
+                                                    (VALUE rb_id);
+VALUE          rb_grn_request_timer_id_to_ruby_object
+                                                    (void *id);
 
 void           rb_grn_snippet_bind                  (RbGrnSnippet *rb_grn_snippet,
                                                      grn_ctx *context,
