@@ -28,9 +28,9 @@
 #define GRNLOGLEVEL2RVAL(level)    (rb_grn_log_level_to_ruby_object(level))
 #define RVAL2GRNLOGLEVEL(rb_level) (rb_grn_log_level_from_ruby_object(rb_level))
 
-VALUE cGrnLogger;
-VALUE mGrnLoggerFlags;
-VALUE cGrnCallbackLogger;
+VALUE rb_cGrnLogger;
+VALUE rb_mGrnLoggerFlags;
+VALUE rb_cGrnCallbackLogger;
 
 static ID id_caller_locations;
 static ID id_path;
@@ -333,7 +333,7 @@ rb_grn_logger_s_register (int argc, VALUE *argv, VALUE klass)
         if (!NIL_P(rb_logger)) {
             rb_options = rb_logger;
         }
-        rb_logger = rb_funcall(cGrnCallbackLogger, id_new, 1, rb_callback);
+        rb_logger = rb_funcall(rb_cGrnCallbackLogger, id_new, 1, rb_callback);
     }
 
     rb_grn_scan_options(rb_options,
@@ -361,7 +361,7 @@ rb_grn_logger_s_register (int argc, VALUE *argv, VALUE klass)
         flags |= GRN_LOG_LOCATION;
     }
     if (!NIL_P(rb_flags)) {
-        flags = rb_funcall(mGrnLoggerFlags, id_parse, 2,
+        flags = rb_funcall(rb_mGrnLoggerFlags, id_parse, 2,
                            INT2NUM(flags), rb_flags);
     }
 
@@ -617,34 +617,34 @@ rb_grn_init_logger (VALUE mGrn)
 
     rb_grn_logger.user_data = (void *)Qnil;
 
-    cGrnLogger = rb_define_class_under(mGrn, "Logger", rb_cObject);
+    rb_cGrnLogger = rb_define_class_under(mGrn, "Logger", rb_cObject);
 
-    rb_cv_set(cGrnLogger, "@@current_logger", Qnil);
-    rb_define_singleton_method(cGrnLogger, "log",
+    rb_cv_set(rb_cGrnLogger, "@@current_logger", Qnil);
+    rb_define_singleton_method(rb_cGrnLogger, "log",
                                rb_grn_logger_s_log, -1);
-    rb_define_singleton_method(cGrnLogger, "register",
+    rb_define_singleton_method(rb_cGrnLogger, "register",
                                rb_grn_logger_s_register, -1);
-    rb_define_singleton_method(cGrnLogger, "unregister",
+    rb_define_singleton_method(rb_cGrnLogger, "unregister",
                                rb_grn_logger_s_unregister, 0);
-    rb_define_singleton_method(cGrnLogger, "reopen",
+    rb_define_singleton_method(rb_cGrnLogger, "reopen",
                                rb_grn_logger_s_reopen, 0);
-    rb_define_singleton_method(cGrnLogger, "max_level",
+    rb_define_singleton_method(rb_cGrnLogger, "max_level",
                                rb_grn_logger_s_get_max_level, 0);
-    rb_define_singleton_method(cGrnLogger, "max_level=",
+    rb_define_singleton_method(rb_cGrnLogger, "max_level=",
                                rb_grn_logger_s_set_max_level, 1);
-    rb_define_singleton_method(cGrnLogger, "path",
+    rb_define_singleton_method(rb_cGrnLogger, "path",
                                rb_grn_logger_s_get_path, 0);
-    rb_define_singleton_method(cGrnLogger, "path=",
+    rb_define_singleton_method(rb_cGrnLogger, "path=",
                                rb_grn_logger_s_set_path, 1);
-    rb_define_singleton_method(cGrnLogger, "rotate_threshold_size",
+    rb_define_singleton_method(rb_cGrnLogger, "rotate_threshold_size",
                                rb_grn_logger_s_get_rotate_threshold_size, 0);
-    rb_define_singleton_method(cGrnLogger, "rotate_threshold_size=",
+    rb_define_singleton_method(rb_cGrnLogger, "rotate_threshold_size=",
                                rb_grn_logger_s_set_rotate_threshold_size, 1);
-    rb_set_end_proc(rb_grn_logger_reset, cGrnLogger);
+    rb_set_end_proc(rb_grn_logger_reset, rb_cGrnLogger);
 
-    mGrnLoggerFlags = rb_define_module_under(cGrnLogger, "Flags");
+    rb_mGrnLoggerFlags = rb_define_module_under(rb_cGrnLogger, "Flags");
 #define DEFINE_FLAG(NAME)                                       \
-    rb_define_const(mGrnLoggerFlags,                            \
+    rb_define_const(rb_mGrnLoggerFlags,                         \
                     #NAME, INT2NUM(GRN_LOG_ ## NAME))
     DEFINE_FLAG(TIME);
     DEFINE_FLAG(TITLE);
@@ -652,6 +652,6 @@ rb_grn_init_logger (VALUE mGrn)
     DEFINE_FLAG(LOCATION);
 #undef DEFINE_FLAG
 
-    cGrnCallbackLogger =
-        rb_define_class_under(mGrn, "CallbackLogger", cGrnLogger);
+    rb_cGrnCallbackLogger =
+        rb_define_class_under(mGrn, "CallbackLogger", rb_cGrnLogger);
 }
