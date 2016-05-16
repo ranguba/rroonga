@@ -174,6 +174,18 @@ rb_grn_type_variable_size_p (VALUE self)
 }
 
 static VALUE
+rb_grn_type_builtin_p (VALUE self)
+{
+    grn_ctx *context = NULL;
+    grn_obj *type;
+    grn_id id;
+
+    type = RVAL2GRNOBJECT(self, &context);
+    id =  grn_obj_id(context, type);
+    return CBOOL2RVAL(grn_type_id_is_builtin(context, id));
+}
+
+static VALUE
 rb_grn_type_unsigned_integer_p (VALUE self)
 {
     grn_obj *type;
@@ -252,6 +264,9 @@ rb_grn_init_type (VALUE mGrn)
     rb_define_method(rb_cGrnType, "fixed_size?", rb_grn_type_fixed_size_p, 0);
     rb_define_method(rb_cGrnType, "variable_size?",
                      rb_grn_type_variable_size_p, 0);
+
+    rb_define_method(rb_cGrnType, "builtin?",
+                     rb_grn_type_builtin_p, 0);
 
     rb_define_method(rb_cGrnType, "unsigned_integer?",
                      rb_grn_type_unsigned_integer_p, 0);
