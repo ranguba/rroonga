@@ -59,12 +59,6 @@ class TypeTest < Test::Unit::TestCase
     assert_false(Groonga["Int32"].variable_size?)
   end
 
-  def test_builtin?
-    assert do
-      Groonga["Int32"].builtin?
-    end
-  end
-
   def test_unsigned_integer?
     assert_true(Groonga["UInt32"].unsigned_integer?)
   end
@@ -231,7 +225,9 @@ class TypeTest < Test::Unit::TestCase
        "builtin - Time" => "Time")
   def test_builtin?(name)
     type = Groonga[name]
-    assert_predicate(type, :builtin?)
+    assert do
+      type.builtin?
+    end
   end
 
   private
