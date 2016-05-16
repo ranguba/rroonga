@@ -123,6 +123,74 @@ class TypeTest < Test::Unit::TestCase
     end
   end
 
+  class NumberFamilyTest < self
+    def test_int8
+      assert do
+        Groonga["Int8"].number_family?
+      end
+    end
+
+    def test_uint8
+      assert do
+        Groonga["UInt8"].number_family?
+      end
+    end
+
+    def test_int16
+      assert do
+        Groonga["Int16"].number_family?
+      end
+    end
+
+    def test_uint16
+      assert do
+        Groonga["UInt16"].number_family?
+      end
+    end
+
+    def test_int32
+      assert do
+        Groonga["Int32"].number_family?
+      end
+    end
+
+    def test_uint32
+      assert do
+        Groonga["UInt32"].number_family?
+      end
+    end
+
+    def test_int64
+      assert do
+        Groonga["Int64"].number_family?
+      end
+    end
+
+    def test_uint64
+      assert do
+        Groonga["UInt64"].number_family?
+      end
+    end
+
+    def test_float
+      assert do
+        Groonga["Float"].number_family?
+      end
+    end
+
+    def test_under_int8
+      assert do
+        not Groonga["Bool"].number_family?
+      end
+    end
+
+    def test_over_float
+      assert do
+        not Groonga["Time"].number_family?
+      end
+    end
+  end
+
   def test_builtins
     assert_equal_type("Object", Groonga::Type::OBJECT) # FIXME!!!
     assert_equal_type("Bool", Groonga::Type::BOOLEAN)
