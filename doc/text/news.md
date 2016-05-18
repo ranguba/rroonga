@@ -1,5 +1,42 @@
 # NEWS
 
+## 6.0.2 2016-05-18 {#version-6-0-2}
+
+### Improvements
+
+  * Supported Groonga 6.0.2. Groonga 6.0.1 or older aren't supported.
+
+  * {Groonga::Table#select}: Supported nested array as conditions.
+
+  * Supported HTTP proxy with authentication on install.
+    [GitHub#129] [Patch by ngram]
+
+  * {Groonga::Cancel}: Added a new error class.
+
+  * {Groonga::Table#select}: Supported passing Hash as function argument.
+
+  * {Groonga::Hash.create}: Added `:key_large` option to create hash
+    table that supports 1TiB total key size.
+
+  * {Groonga::Type#text_family?}: Added a new predicate that returns
+    `true` for `ShortText`, `Text` and `LongText` types.
+
+  * {Groonga::Type#number_family?}: Added a new predicate that returns
+    `true` for `UInt8`, `Int8`, ..., `UInt64`, `Int64` and `Float`
+    types.
+
+  * {Groonga::Type#builtin?}: Added a new predicate that returns
+    `true` for builtin types such as `Int32`.
+
+  * {Groonga::Object#remove}: Added `:dependent` option to remove all
+    tables and columns that depend on the object.
+
+  * {Groonga::RequestCanceler}: Added an interface that cancels one or
+    more requests.
+
+  * {Groonga::RequestTimer}: Added an interface that provides request
+    timeout feature.
+
 ## 6.0.0: 2016-03-06 {#version-6-0-0}
 
 ### Improvements
