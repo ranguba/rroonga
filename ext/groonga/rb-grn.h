@@ -101,10 +101,6 @@ RB_GRN_BEGIN_DECLS
 #define RB_GRN_MINOR_VERSION 0
 #define RB_GRN_MICRO_VERSION 2
 
-#define RB_GRN_QUERY_DEFAULT_MAX_EXPRESSIONS 32
-
-#include <stdint.h>
-
 #define RB_GRN_OBJECT(object) ((RbGrnObject *)(object))
 #define RB_GRN_NAMED_OBJECT(object) ((RbGrnNamedObject *)(object))
 #define RB_GRN_TABLE(object) ((RbGrnTable *)(object))
