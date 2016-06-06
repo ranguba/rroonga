@@ -101,6 +101,7 @@ static VALUE eGrnCommandError;
 static VALUE eGrnPluginError;
 static VALUE eGrnScorerError;
 static VALUE eGrnCancel;
+static VALUE eGrnWindowFunctionError;
 
 VALUE
 rb_grn_rc_to_exception (grn_rc rc)
@@ -344,6 +345,9 @@ rb_grn_rc_to_exception (grn_rc rc)
         break;
       case GRN_CANCEL:
         exception = eGrnCancel;
+        break;
+      case GRN_WINDOW_FUNCTION_ERROR:
+        exception = eGrnWindowFunctionError;
         break;
     }
 
@@ -595,6 +599,9 @@ rb_grn_rc_to_message (grn_rc rc)
         break;
       case GRN_CANCEL:
         message = "cancel";
+        break;
+      case GRN_WINDOW_FUNCTION_ERROR:
+        message = "window function error";
         break;
     }
 
@@ -1295,4 +1302,14 @@ rb_grn_init_exception (VALUE mGrn)
      */
     eGrnCancel =
         rb_define_class_under(mGrn, "Cancel", rb_eGrnError);
+
+    /*
+     * Document-class: Groonga::WindowFunctionError
+     *
+     * It is used when window function causes an error.
+     *
+     * @since 6.0.4
+     */
+    eGrnWindowFunctionError =
+        rb_define_class_under(mGrn, "WindowFunctionError", rb_eGrnError);
 }
