@@ -1679,6 +1679,33 @@ rb_grn_object_scorer_procedure_p (VALUE self)
 }
 
 /*
+ * Checks whether the object is windows function procedure or not.
+ *
+ * @overload window_function_procedure?
+ *   @return [Boolean] `true` if the object is window function procedure,
+ *     `false` otherwise.
+ *
+ * @since 6.0.4
+ */
+static VALUE
+rb_grn_object_window_function_procedure_p (VALUE self)
+{
+    grn_ctx *context;
+    grn_obj *object;
+    grn_bool window_function_procedure_p = GRN_FALSE;
+
+    rb_grn_object_deconstruct(SELF(self), &object, &context,
+                              NULL, NULL, NULL, NULL);
+
+    if (context && object) {
+        window_function_procedure_p =
+            grn_obj_is_window_function_proc(context, object);
+    }
+
+    return CBOOL2RVAL(window_function_procedure_p);
+}
+
+/*
  * Checks whether the object is accessor or not.
  *
  * @overload accessor?
@@ -1785,6 +1812,8 @@ rb_grn_init_object (VALUE mGrn)
                      rb_grn_object_selector_only_procedure_p, 0);
     rb_define_method(rb_cGrnObject, "scorer_procedure?",
                      rb_grn_object_scorer_procedure_p, 0);
+    rb_define_method(rb_cGrnObject, "window_function_procedure?",
+                     rb_grn_object_window_function_procedure_p, 0);
     rb_define_method(rb_cGrnObject, "accessor?",
                      rb_grn_object_accessor_p, 0);
     rb_define_method(rb_cGrnObject, "key_accessor?",

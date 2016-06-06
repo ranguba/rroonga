@@ -52,6 +52,12 @@ class ProcedureTest < Test::Unit::TestCase
     end
   end
 
+  def test_window_function_procedure?
+    assert do
+      Groonga["record_number"].window_function_procedure?
+    end
+  end
+
   private
   def assert_equal_procedure(expected_name, id, options={})
     procedure = Groonga::Context.default[id]
