@@ -1,6 +1,6 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
-  Copyright (C) 2014  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2014-2016  Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -41,4 +41,12 @@ rb_grn_init_procedure_type (VALUE mGrn)
                     "TOKEN_FILTER", INT2NUM(GRN_PROC_TOKEN_FILTER));
     rb_define_const(rb_mGrnProcedureType,
                     "SCORER", INT2NUM(GRN_PROC_SCORER));
+
+    /*
+     * It's a type for window function.
+     *
+     * @since 6.0.4
+     */
+    rb_define_const(rb_mGrnProcedureType,
+                    "WINDOW_FUNCTION", INT2NUM(GRN_PROC_WINDOW_FUNCTION));
 }

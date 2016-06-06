@@ -70,6 +70,12 @@ class ProcedureTest < Test::Unit::TestCase
       scorer = Groonga["scorer_tf_idf"]
       assert_equal(Groonga::ProcedureType::SCORER, scorer.type)
     end
+
+    def test_window_function
+      record_number = Groonga["record_number"]
+      assert_equal(Groonga::ProcedureType::WINDOW_FUNCTION,
+                   record_number.type)
+    end
   end
 
   class SelectorOnlyProcedureTest < self
