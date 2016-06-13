@@ -510,6 +510,12 @@ VALUE          rb_grn_table_set_column_value        (VALUE self,
 VALUE          rb_grn_table_inspect_content         (VALUE object,
                                                      VALUE inspected);
 
+void           rb_grn_table_sort_keys_fill          (grn_ctx *context,
+                                                     grn_table_sort_key *sort_keys,
+                                                     size_t n_sort_keys,
+                                                     VALUE rb_sort_keys,
+                                                     VALUE rb_table);
+
 grn_ctx       *rb_grn_table_cursor_ensure_context   (VALUE cursor,
                                                      VALUE *rb_context);
 int            rb_grn_table_cursor_order_to_flag    (VALUE rb_order);
