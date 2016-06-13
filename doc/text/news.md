@@ -1,6 +1,20 @@
 # NEWS
 
-## 6.0.2 2016-05-18 {#version-6-0-2}
+## 6.0.4: 2016-06-14 {#version-6-0-4}
+
+### Improvements
+
+  * Supported Groonga 6.0.4. Groonga 6.0.3 or older aren't supported.
+
+  * {Groonga::WindowFunctionError}: Added a new error class.
+
+  * {Groonga::ProcedureType::WINDOW_FUNCTION}: Added a new procedure
+    type for window function.
+
+  * {Groonga::Object#window_function_procedure?}: Added a new
+    predicate for window function.
+
+## 6.0.2: 2016-05-18 {#version-6-0-2}
 
 ### Improvements
 
