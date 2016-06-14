@@ -14,6 +14,9 @@
   * {Groonga::Object#window_function_procedure?}: Added a new
     predicate for window function.
 
+  * {Groonga::DataColumn#apply_window_function}: Added a new
+    method to apply a window function.
+
 ## 6.0.2: 2016-05-18 {#version-6-0-2}
 
 ### Improvements
