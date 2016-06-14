@@ -179,17 +179,23 @@ struct _RbGrnColumn
     grn_obj *value;
 };
 
+typedef struct _RbGrnDataColumn RbGrnDataColumn;
+struct _RbGrnDataColumn
+{
+    RbGrnColumn parent;
+};
+
 typedef struct _RbGrnVariableSizeColumn RbGrnVariableSizeColumn;
 struct _RbGrnVariableSizeColumn
 {
-    RbGrnColumn parent;
+    RbGrnDataColumn parent;
     grn_obj *element_value;
 };
 
 typedef struct _RbGrnIndexColumn RbGrnIndexColumn;
 struct _RbGrnIndexColumn
 {
-    RbGrnColumn parent;
+    RbGrnDataColumn parent;
     grn_obj *old_value;
     grn_obj *set_value;
     grn_obj *id_query;
@@ -268,6 +274,7 @@ RB_GRN_VAR VALUE rb_cGrnArrayCursor;
 RB_GRN_VAR VALUE rb_cGrnType;
 RB_GRN_VAR VALUE rb_cGrnProcedure;
 RB_GRN_VAR VALUE rb_cGrnColumn;
+RB_GRN_VAR VALUE rb_cGrnDataColumn;
 RB_GRN_VAR VALUE rb_cGrnFixSizeColumn;
 RB_GRN_VAR VALUE rb_cGrnVariableSizeColumn;
 RB_GRN_VAR VALUE rb_cGrnIndexColumn;
@@ -324,6 +331,7 @@ void           rb_grn_init_type                     (VALUE mGrn);
 void           rb_grn_init_procedure                (VALUE mGrn);
 void           rb_grn_init_procedure_type           (VALUE mGrn);
 void           rb_grn_init_column                   (VALUE mGrn);
+void           rb_grn_init_data_column              (VALUE mGrn);
 void           rb_grn_init_fix_size_column          (VALUE mGrn);
 void           rb_grn_init_variable_size_column     (VALUE mGrn);
 void           rb_grn_init_index_column             (VALUE mGrn);

@@ -1,6 +1,6 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
-  Copyright (C) 2009-2014  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2016  Kouhei Sutou <kou@clear-code.com>
   Copyright (C) 2014-2016  Masafumi Yokoyama <yokoyama@clear-code.com>
 
   This library is free software; you can redistribute it and/or
@@ -648,7 +648,7 @@ void
 rb_grn_init_variable_size_column (VALUE mGrn)
 {
     rb_cGrnVariableSizeColumn =
-        rb_define_class_under(mGrn, "VariableSizeColumn", rb_cGrnColumn);
+        rb_define_class_under(mGrn, "VariableSizeColumn", rb_cGrnDataColumn);
 
     rb_define_method(rb_cGrnVariableSizeColumn, "[]",
                      rb_grn_variable_size_column_array_reference, 1);

@@ -1,6 +1,6 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
-  Copyright (C) 2009-2010  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2016  Kouhei Sutou <kou@clear-code.com>
   Copyright (C) 2016  Masafumi Yokoyama <yokoyama@clear-code.com>
 
   This library is free software; you can redistribute it and/or
@@ -227,7 +227,7 @@ void
 rb_grn_init_fix_size_column (VALUE mGrn)
 {
     rb_cGrnFixSizeColumn =
-        rb_define_class_under(mGrn, "FixSizeColumn", rb_cGrnColumn);
+        rb_define_class_under(mGrn, "FixSizeColumn", rb_cGrnDataColumn);
 
     rb_define_method(rb_cGrnFixSizeColumn, "[]",
                      rb_grn_fix_size_column_array_reference, 1);
