@@ -349,6 +349,35 @@ class ColumnTest < Test::Unit::TestCase
     end
   end
 
+  def test_apply_window_function
+    Groonga::Schema.define do |schema|
+      schema.create_table("Comments") do |table|
+        table.uint32("nth")
+      end
+    end
+    comments = Groonga["Comments"]
+    nth = Groonga["Comments.nth"]
+
+    5.times do
+      comments.add
+    end
+
+    options = {
+      :sort_keys => [["_id", "desc"]],
+    }
+    nth.apply_window_function(options) do |record|
+      record.call("record_number")
+    end
+    assert_equal([
+                   [1, 5],
+                   [2, 4],
+                   [3, 3],
+                   [4, 2],
+                   [5, 1],
+                 ],
+                 comments.collect {|comment| [comment.id, comment.nth]})
+  end
+
   private
   def assert_content_search(expected_records, term)
     records = @bookmarks_index_content.search(term).records

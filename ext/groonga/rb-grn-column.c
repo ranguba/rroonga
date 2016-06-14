@@ -829,14 +829,19 @@ rb_grn_column_apply_window_function (int argc, VALUE *argv, VALUE self)
     grn_ctx *context;
     grn_obj *column;
     grn_obj *table;
+    VALUE rb_table;
     grn_window_definition definition;
     grn_obj *window_function_call = NULL;
     VALUE rb_options;
     VALUE rb_sort_keys;
+    VALUE rb_builder;
+    VALUE rb_window_function_call;
 
     rb_grn_column_deconstruct(SELF(self), &column, &context,
                               NULL, &table,
                               NULL, NULL, NULL);
+    rb_table = GRNOBJECT2RVAL(Qnil, context, table, GRN_FALSE);
+
     memset(&definition, 0, sizeof(grn_window_definition));
 
     rb_scan_args(argc, argv, "01", &rb_options);
@@ -862,7 +867,12 @@ rb_grn_column_apply_window_function (int argc, VALUE *argv, VALUE self)
                                     rb_table);
     }
 
-    /* TODO: set window_function_call */
+    rb_builder = rb_grn_record_expression_builder_new(rb_table, Qnil);
+    rb_window_function_call =
+        rb_grn_record_expression_builder_build(rb_builder);
+    rb_grn_object_deconstruct(RB_GRN_OBJECT(DATA_PTR(rb_window_function_call)),
+                              &window_function_call, NULL,
+                              NULL, NULL, NULL, NULL);
 
     rc = grn_table_apply_window_function(context,
                                          table,
