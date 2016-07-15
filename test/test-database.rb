@@ -375,5 +375,16 @@ class DatabaseTest < Test::Unit::TestCase
       @database.touch
       assert_equal(Time.now.sec, @database.last_modified.sec)
     end
+
+    def test_dirty?
+      omit("TODO: Enable this after Groonga 6.0.6 is released.")
+      assert do
+        not @database.dirty?
+      end
+      @database.touch
+      assert do
+        @database.dirty?
+      end
+    end
   end
 end

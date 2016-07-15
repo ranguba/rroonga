@@ -1902,6 +1902,26 @@ rb_grn_object_get_last_modified (VALUE self)
     return rb_funcall(rb_cTime, rb_intern("at"), 1, UINT2NUM(last_modified));
 }
 
+
+/*
+ * @overload dirty?
+ *   @return [Boolean] `true` if the object isn't flushed after the last change.
+ *
+ * @since 6.0.5
+ */
+static VALUE
+rb_grn_object_dirty_p (VALUE self)
+{
+    grn_ctx *context;
+    grn_obj *object;
+    grn_bool is_dirty;
+
+    rb_grn_object_deconstruct(SELF(self), &object, &context,
+                              NULL, NULL, NULL, NULL);
+    is_dirty = grn_obj_is_dirty(context, object);
+    return CBOOL2RVAL(is_dirty);
+}
+
 void
 rb_grn_init_object (VALUE mGrn)
 {
@@ -1962,4 +1982,6 @@ rb_grn_init_object (VALUE mGrn)
     rb_define_method(rb_cGrnObject, "touch", rb_grn_object_touch, -1);
     rb_define_method(rb_cGrnObject, "last_modified",
                      rb_grn_object_get_last_modified, 0);
+    rb_define_method(rb_cGrnObject, "dirty?",
+                     rb_grn_object_dirty_p, 0);
 }
