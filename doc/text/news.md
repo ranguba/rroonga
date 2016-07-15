@@ -1,5 +1,44 @@
 # NEWS
 
+## 6.0.5: 2016-07-15 {#version-6-0-5}
+
+### Improvements
+
+  * Supported Groonga 6.0.5. Groonga 6.0.4 or older aren't supported.
+
+  * {Groonga::ID}: Added a module that provided object ID related
+    features.
+
+  * {Groonga::ID.builtin?}: Added a new predicate method that checks
+    whether the given ID is ID for builtin object or not.
+
+  * {Groonga::ID::NIL}: Added a new constant that represents invalid ID.
+
+  * {Groonga::ID::MAX}: Added a new constant that represents the maximum ID.
+
+  * {Groonga::Name}: Added a new module that provides object name
+    related features.
+
+  * {Groonga::Name.column?}: Added a new predicate method that checks
+    whether the given name is column object name or not.
+
+  * {Groonga::Object#column?}: Added a new predicate for column.
+
+  * {Groonga::Object#reference_column?}: Added a new predicate for
+    column that uses table as value type.
+
+  * {Groonga::Object#index_column?}: Added a new predicate for
+    index column.
+
+  * {Groonga::Object#touch}: Added a new method that updates the last
+    modified time of the object.
+
+  * {Groonga::Object#last_modified}: Added a new method that returns
+    the last modified time of the object.
+
+  * {Groonga::Object#dirty?}: Added a new method that checks whether
+    the object is changed after the last flush.
+
 ## 6.0.4: 2016-06-14 {#version-6-0-4}
 
 ### Improvements
