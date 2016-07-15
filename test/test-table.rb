@@ -561,7 +561,7 @@ class TableTest < Test::Unit::TestCase
     ruby_bookmarks = bookmarks.select {|record| (record["title"] == "Ruby") &
                                                 (record["title"] == "Ruby") }
     all_bookmarks = bookmarks.select
-    assert_equal([["groonga", 1], ["Ruby", 2]],
+    assert_equal([["groonga", 1.0], ["Ruby", 3.0]],
                  all_bookmarks.merge!(ruby_bookmarks).collect do |record|
                    [record[".title"], record.score]
                  end)
