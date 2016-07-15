@@ -366,4 +366,14 @@ class DatabaseTest < Test::Unit::TestCase
                    @database.disk_usage)
     end
   end
+
+  class LastModifiedTest < self
+    setup :setup_database
+
+    def test_touch
+      assert_equal(Time.at(0), @database.last_modified)
+      @database.touch
+      assert_equal(Time.now.sec, @database.last_modified.sec)
+    end
+  end
 end

@@ -1844,6 +1844,64 @@ rb_grn_object_key_accessor_p (VALUE self)
     return CBOOL2RVAL(key_accessor_p);
 }
 
+/*
+ * Update the last modified time of the `object`. It's meaningful only
+ * for persistent database, table and column.
+ *
+ * @overload touch(time=nil)
+ *   @param [Time, nil] time (nil) The last modified time.
+ *     If `time` is `nil`, the current time is used.
+ *   @return [void]
+ *
+ * @since 6.0.5
+ */
+static VALUE
+rb_grn_object_touch (int argc, VALUE *argv, VALUE self)
+{
+    grn_ctx *context;
+    grn_obj *object;
+    VALUE rb_time;
+    grn_timeval time_buffer;
+    grn_timeval *time = NULL;
+
+    rb_grn_object_deconstruct(SELF(self), &object, &context,
+                              NULL, NULL, NULL, NULL);
+    if (!context || !object) {
+        return Qnil;
+    }
+
+    rb_scan_args(argc, argv, "01", &rb_time);
+    if (!NIL_P(rb_time)) {
+        time_buffer.tv_sec = NUM2LONG(rb_funcall(rb_time, rb_intern("sec"), 0));
+        time_buffer.tv_nsec = NUM2INT(rb_funcall(rb_time, rb_intern("nsec"), 0));
+        time = &time_buffer;
+    }
+
+    grn_obj_touch(context, object, time);
+    rb_grn_context_check(context, self);
+
+    return Qnil;
+}
+
+/*
+ * @overload last_modified
+ *   @return [Time] The last modified time of the object.
+ *
+ * @since 6.0.5
+ */
+static VALUE
+rb_grn_object_get_last_modified (VALUE self)
+{
+    grn_ctx *context;
+    grn_obj *object;
+    uint32_t last_modified;
+
+    rb_grn_object_deconstruct(SELF(self), &object, &context,
+                              NULL, NULL, NULL, NULL);
+    last_modified = grn_obj_get_last_modified(context, object);
+    return rb_funcall(rb_cTime, rb_intern("at"), 1, UINT2NUM(last_modified));
+}
+
 void
 rb_grn_init_object (VALUE mGrn)
 {
@@ -1900,4 +1958,8 @@ rb_grn_init_object (VALUE mGrn)
                      rb_grn_object_accessor_p, 0);
     rb_define_method(rb_cGrnObject, "key_accessor?",
                      rb_grn_object_key_accessor_p, 0);
+
+    rb_define_method(rb_cGrnObject, "touch", rb_grn_object_touch, -1);
+    rb_define_method(rb_cGrnObject, "last_modified",
+                     rb_grn_object_get_last_modified, 0);
 }
