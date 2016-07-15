@@ -365,6 +365,7 @@ void           rb_grn_init_index                    (VALUE mGrn);
 void           rb_grn_init_request_canceler         (VALUE mGrn);
 void           rb_grn_init_request_timer            (VALUE mGrn);
 void           rb_grn_init_request_timer_id         (VALUE mGrn);
+void           rb_grn_init_id                       (VALUE mGrn);
 
 VALUE          rb_grn_rc_to_exception               (grn_rc rc);
 const char    *rb_grn_rc_to_message                 (grn_rc rc);
