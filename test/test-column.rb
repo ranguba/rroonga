@@ -349,6 +349,40 @@ class ColumnTest < Test::Unit::TestCase
     end
   end
 
+  def test_column?
+    assert do
+      @users_name_column.column?
+    end
+  end
+
+  sub_test_case "#reference_column" do
+    test "true" do
+      assert do
+        @bookmarks_user.reference_column?
+      end
+    end
+
+    test "false" do
+      assert do
+        not @users_name_column.reference_column?
+      end
+    end
+  end
+
+  sub_test_case "#index_column?" do
+    test "true" do
+      assert do
+        @bookmarks_index_content.index_column?
+      end
+    end
+
+    test "false" do
+      assert do
+        not @users_name_column.index_column?
+      end
+    end
+  end
+
   private
   def assert_content_search(expected_records, term)
     records = @bookmarks_index_content.search(term).records

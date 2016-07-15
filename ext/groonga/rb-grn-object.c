@@ -1550,6 +1550,83 @@ rb_grn_object_table_p (VALUE self)
 }
 
 /*
+ * Checks whether the object is column or not.
+ *
+ * @overload column?
+ *   @return [Boolean] `true` if the object is column, `false` otherwise.
+ *
+ * @since 6.0.5
+ */
+static VALUE
+rb_grn_object_column_p (VALUE self)
+{
+    grn_ctx *context;
+    grn_obj *object;
+    grn_bool column_p = GRN_FALSE;
+
+    rb_grn_object_deconstruct(SELF(self), &object, &context,
+                              NULL, NULL, NULL, NULL);
+
+    if (context && object) {
+        column_p = grn_obj_is_column(context, object);
+    }
+
+    return CBOOL2RVAL(column_p);
+}
+
+/*
+ * Checks whether the object is reference column or not.
+ *
+ * @overload reference_column?
+ *   @return [Boolean] `true` if the object is reference column,
+ *     `false` otherwise.
+ *
+ * @since 6.0.5
+ */
+static VALUE
+rb_grn_object_reference_column_p (VALUE self)
+{
+    grn_ctx *context;
+    grn_obj *object;
+    grn_bool reference_column_p = GRN_FALSE;
+
+    rb_grn_object_deconstruct(SELF(self), &object, &context,
+                              NULL, NULL, NULL, NULL);
+
+    if (context && object) {
+        reference_column_p = grn_obj_is_reference_column(context, object);
+    }
+
+    return CBOOL2RVAL(reference_column_p);
+}
+
+/*
+ * Checks whether the object is index column or not.
+ *
+ * @overload index_column?
+ *   @return [Boolean] `true` if the object is index column,
+ *     `false` otherwise.
+ *
+ * @since 6.0.5
+ */
+static VALUE
+rb_grn_object_index_column_p (VALUE self)
+{
+    grn_ctx *context;
+    grn_obj *object;
+    grn_bool index_column_p = GRN_FALSE;
+
+    rb_grn_object_deconstruct(SELF(self), &object, &context,
+                              NULL, NULL, NULL, NULL);
+
+    if (context && object) {
+        index_column_p = grn_obj_is_index_column(context, object);
+    }
+
+    return CBOOL2RVAL(index_column_p);
+}
+
+/*
  * Checks whether the object is procedure or not.
  *
  * @overload procedure?
@@ -1803,6 +1880,11 @@ rb_grn_init_object (VALUE mGrn)
 
     rb_define_method(rb_cGrnObject, "builtin?", rb_grn_object_builtin_p, 0);
     rb_define_method(rb_cGrnObject, "table?", rb_grn_object_table_p, 0);
+    rb_define_method(rb_cGrnObject, "column?", rb_grn_object_column_p, 0);
+    rb_define_method(rb_cGrnObject, "reference_column?",
+                     rb_grn_object_reference_column_p, 0);
+    rb_define_method(rb_cGrnObject, "index_column?",
+                     rb_grn_object_index_column_p, 0);
     rb_define_method(rb_cGrnObject, "procedure?", rb_grn_object_procedure_p, 0);
     rb_define_method(rb_cGrnObject, "function_procedure?",
                      rb_grn_object_function_procedure_p, 0);
