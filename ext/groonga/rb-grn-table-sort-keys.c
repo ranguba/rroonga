@@ -25,7 +25,7 @@ rb_grn_table_sort_keys_fill (grn_ctx *context,
                              VALUE rb_sort_keys,
                              VALUE rb_table)
 {
-    int i;
+    size_t i;
 
     for (i = 0; i < n_sort_keys; i++) {
         VALUE rb_sort_key;
