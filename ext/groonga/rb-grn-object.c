@@ -888,22 +888,27 @@ rb_grn_object_inspect_content_flags_with_label (VALUE inspected,
         break;
     }
 
-    if (0) {
-        if (flags & GRN_OBJ_COLUMN_SCALAR)
+    switch (object->header.type) {
+    case GRN_COLUMN_FIX_SIZE:
+    case GRN_COLUMN_VAR_SIZE:
+        if (flags & GRN_OBJ_COLUMN_SCALAR) {
             rb_ary_push(inspected_flags, rb_str_new_cstr("COLUMN_SCALAR"));
-        if (flags & GRN_OBJ_COLUMN_VECTOR)
+        } else if (flags & GRN_OBJ_COLUMN_VECTOR) {
             rb_ary_push(inspected_flags, rb_str_new_cstr("COLUMN_VECTOR"));
-        if (flags & GRN_OBJ_COLUMN_INDEX)
-            rb_ary_push(inspected_flags, rb_str_new_cstr("COLUMN_INDEX"));
+        }
+        break;
+    default:
+        break;
     }
 
     switch (object->header.type) {
       case GRN_COLUMN_FIX_SIZE:
       case GRN_COLUMN_VAR_SIZE:
-        if (flags & GRN_OBJ_COMPRESS_ZLIB)
-            rb_ary_push(inspected_flags, rb_str_new_cstr("COMPRESS_ZLIB"));
-        if (flags & GRN_OBJ_COMPRESS_LZ4)
-            rb_ary_push(inspected_flags, rb_str_new_cstr("COMPRESS_LZ4"));
+          if (flags & GRN_OBJ_COMPRESS_ZLIB) {
+              rb_ary_push(inspected_flags, rb_str_new_cstr("COMPRESS_ZLIB"));
+          } else if (flags & GRN_OBJ_COMPRESS_LZ4) {
+              rb_ary_push(inspected_flags, rb_str_new_cstr("COMPRESS_LZ4"));
+          }
         break;
       case GRN_COLUMN_INDEX:
         if (flags & GRN_OBJ_WITH_SECTION)
