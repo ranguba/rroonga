@@ -139,7 +139,7 @@ class FixSizeColumnTest < Test::Unit::TestCase
                    "path: <#{@n_viewed_column_path}>, " +
                    "domain: <Bookmarks>, " +
                    "range: <Int32>, " +
-                   "flags: <KEY_INT>" +
+                   "flags: <>" +
                    ">",
                    @n_viewed.inspect)
     end
