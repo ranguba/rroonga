@@ -175,29 +175,36 @@ rb_grn_context_unlink_database (grn_ctx *context)
 }
 
 static void
-rb_grn_context_fin (grn_ctx *context)
+rb_grn_context_fin (RbGrnContext *rb_grn_context)
 {
-    if (context->stat == GRN_CTX_FIN)
-        return;
+    grn_ctx *context;
 
-    if (!(context->flags & GRN_CTX_PER_DB)) {
-        rb_grn_context_unlink_database(context);
+    context = rb_grn_context->context;
+
+    debug("context-fin: %p\n", context);
+
+    rb_grn_context_close_floating_objects(rb_grn_context);
+
+    if (context && context->stat != GRN_CTX_FIN && !rb_grn_exited) {
+        if (!(context->flags & GRN_CTX_PER_DB)) {
+            rb_grn_context_unlink_database(context);
+        }
+        grn_ctx_fin(context);
     }
-    grn_ctx_fin(context);
+
+    debug("context-fin: %p: done\n", context);
+
+    rb_grn_context->context = NULL;
 }
 
 static void
 rb_grn_context_free (void *pointer)
 {
     RbGrnContext *rb_grn_context = pointer;
-    grn_ctx *context;
 
-    context = rb_grn_context->context;
-    debug("context-free: %p\n", context);
-    rb_grn_context_close_floating_objects(rb_grn_context);
-    if (context && !rb_grn_exited)
-        rb_grn_context_fin(context);
-    debug("context-free: %p: done\n", context);
+    debug("context-free: %p\n", rb_grn_context);
+    rb_grn_context_fin(rb_grn_context);
+    debug("context-free: %p: done\n", rb_grn_context);
     xfree(rb_grn_context);
 }
 
@@ -482,16 +489,11 @@ rb_grn_context_initialize (int argc, VALUE *argv, VALUE self)
 static VALUE
 rb_grn_context_close (VALUE self)
 {
-    int rc;
-    grn_ctx *context;
     RbGrnContext *rb_grn_context;
 
-    context = SELF(self);
-    if (context) {
-        rc = grn_ctx_fin(context);
-        Data_Get_Struct(self, RbGrnContext, rb_grn_context);
-        rb_grn_context->context = NULL;
-        rb_grn_rc_check(rc, self);
+    Data_Get_Struct(self, RbGrnContext, rb_grn_context);
+    if (rb_grn_context->context) {
+        rb_grn_context_fin(rb_grn_context);
     }
 
     return Qnil;
