@@ -587,6 +587,10 @@ rb_grn_object_close_raw (RbGrnObject *rb_grn_object)
 
     rb_grn_object_deconstruct(rb_grn_object, &object, &context,
                               NULL, NULL, NULL, NULL);
+    debug("object:close: %p:%p:%s\n",
+          context,
+          object,
+          object ? grn_obj_type_to_string(object->header.type) : "(null)");
     if (object && context) {
         if (rb_grn_object->have_finalizer) {
             rb_grn_object_run_finalizer(context, object, rb_grn_object);
@@ -595,6 +599,7 @@ rb_grn_object_close_raw (RbGrnObject *rb_grn_object)
         }
         grn_obj_close(context, object);
     }
+    debug("object:close: %p:%p: done\n", context, object);
 }
 
 /*
