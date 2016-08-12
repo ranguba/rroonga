@@ -545,7 +545,7 @@ rb_grn_named_object_set_name (RbGrnNamedObject *rb_grn_named_object,
               RB_GRN_OBJECT(rb_grn_named_object)->context,
               RB_GRN_OBJECT(rb_grn_named_object)->object,
               rb_grn_named_object,
-              grn_obj_type_to_string(RB_GRN_OBJECT(rb_grn_named_object)->header.type),
+              grn_obj_type_to_string(RB_GRN_OBJECT(rb_grn_named_object)->object->header.type),
               RB_GRN_OBJECT(rb_grn_named_object)->object->header.type,
               name_size, name);
     }
