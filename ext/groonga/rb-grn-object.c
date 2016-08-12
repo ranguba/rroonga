@@ -850,7 +850,7 @@ rb_grn_object_inspect_content_flags_with_label (VALUE inspected,
     }
 
     switch (object->header.type) {
-      case GRN_TYPE:
+    case GRN_TYPE:
         if (flags & GRN_OBJ_KEY_VAR_SIZE) {
             rb_ary_push(inspected_flags, rb_str_new_cstr("KEY_VAR_SIZE"));
         } else {
@@ -876,15 +876,15 @@ rb_grn_object_inspect_content_flags_with_label (VALUE inspected,
     }
 
     switch (object->header.type) {
-      case GRN_TABLE_HASH_KEY:
-      case GRN_TABLE_PAT_KEY:
-      case GRN_TABLE_DAT_KEY:
+    case GRN_TABLE_HASH_KEY:
+    case GRN_TABLE_PAT_KEY:
+    case GRN_TABLE_DAT_KEY:
         if (flags & GRN_OBJ_KEY_WITH_SIS)
             rb_ary_push(inspected_flags, rb_str_new_cstr("KEY_WITH_SIS"));
         if (flags & GRN_OBJ_KEY_NORMALIZE)
             rb_ary_push(inspected_flags, rb_str_new_cstr("KEY_NORMALIZE"));
         break;
-      default:
+    default:
         break;
     }
 
@@ -902,15 +902,15 @@ rb_grn_object_inspect_content_flags_with_label (VALUE inspected,
     }
 
     switch (object->header.type) {
-      case GRN_COLUMN_FIX_SIZE:
-      case GRN_COLUMN_VAR_SIZE:
-          if (flags & GRN_OBJ_COMPRESS_ZLIB) {
-              rb_ary_push(inspected_flags, rb_str_new_cstr("COMPRESS_ZLIB"));
-          } else if (flags & GRN_OBJ_COMPRESS_LZ4) {
-              rb_ary_push(inspected_flags, rb_str_new_cstr("COMPRESS_LZ4"));
-          }
+    case GRN_COLUMN_FIX_SIZE:
+    case GRN_COLUMN_VAR_SIZE:
+        if (flags & GRN_OBJ_COMPRESS_ZLIB) {
+            rb_ary_push(inspected_flags, rb_str_new_cstr("COMPRESS_ZLIB"));
+        } else if (flags & GRN_OBJ_COMPRESS_LZ4) {
+            rb_ary_push(inspected_flags, rb_str_new_cstr("COMPRESS_LZ4"));
+        }
         break;
-      case GRN_COLUMN_INDEX:
+    case GRN_COLUMN_INDEX:
         if (flags & GRN_OBJ_WITH_SECTION)
             rb_ary_push(inspected_flags, rb_str_new_cstr("WITH_SECTION"));
         if (flags & GRN_OBJ_WITH_WEIGHT)
@@ -918,7 +918,7 @@ rb_grn_object_inspect_content_flags_with_label (VALUE inspected,
         if (flags & GRN_OBJ_WITH_POSITION)
             rb_ary_push(inspected_flags, rb_str_new_cstr("WITH_POSITION"));
         break;
-      default:
+    default:
         break;
     }
 
