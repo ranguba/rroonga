@@ -850,30 +850,27 @@ rb_grn_object_inspect_content_flags_with_label (VALUE inspected,
     }
 
     switch (object->header.type) {
-      case GRN_COLUMN_FIX_SIZE:
-      case GRN_COLUMN_VAR_SIZE:
+      case GRN_TYPE:
         if (flags & GRN_OBJ_KEY_VAR_SIZE) {
             rb_ary_push(inspected_flags, rb_str_new_cstr("KEY_VAR_SIZE"));
+        } else {
+            switch (flags & GRN_OBJ_KEY_MASK) {
+            case GRN_OBJ_KEY_UINT:
+                rb_ary_push(inspected_flags, rb_str_new_cstr("KEY_UINT"));
+                break;
+            case GRN_OBJ_KEY_INT:
+                rb_ary_push(inspected_flags, rb_str_new_cstr("KEY_INT"));
+                break;
+            case GRN_OBJ_KEY_FLOAT:
+                rb_ary_push(inspected_flags, rb_str_new_cstr("KEY_FLOAT"));
+                break;
+            case GRN_OBJ_KEY_GEO_POINT:
+                rb_ary_push(inspected_flags, rb_str_new_cstr("KEY_GEO_POINT"));
+                break;
+            default:
+                break;
+            }
         }
-        break;
-      case GRN_TYPE:
-        switch (flags & GRN_OBJ_KEY_MASK) {
-        case GRN_OBJ_KEY_UINT:
-            rb_ary_push(inspected_flags, rb_str_new_cstr("KEY_UINT"));
-            break;
-        case GRN_OBJ_KEY_INT:
-            rb_ary_push(inspected_flags, rb_str_new_cstr("KEY_INT"));
-            break;
-        case GRN_OBJ_KEY_FLOAT:
-            rb_ary_push(inspected_flags, rb_str_new_cstr("KEY_FLOAT"));
-            break;
-        case GRN_OBJ_KEY_GEO_POINT:
-            rb_ary_push(inspected_flags, rb_str_new_cstr("KEY_GEO_POINT"));
-            break;
-        default:
-            break;
-        }
-        break;
     default:
         break;
     }
