@@ -369,7 +369,6 @@ void           rb_grn_init_id                       (VALUE mGrn);
 void           rb_grn_init_name                     (VALUE mGrn);
 
 VALUE          rb_grn_rc_to_exception               (grn_rc rc);
-const char    *rb_grn_rc_to_message                 (grn_rc rc);
 void           rb_grn_rc_check                      (grn_rc rc,
                                                      VALUE related_object);
 

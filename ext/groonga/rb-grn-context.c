@@ -255,7 +255,7 @@ rb_grn_context_to_exception (grn_ctx *context, VALUE related_object)
         return Qnil;
 
     exception_class = rb_grn_rc_to_exception(context->rc);
-    message = rb_grn_rc_to_message(context->rc);
+    message = grn_rc_to_string(context->rc);
 
     GRN_OBJ_INIT(&bulk, GRN_BULK, 0, GRN_ID_NIL);
     GRN_TEXT_PUTS(context, &bulk, message);
