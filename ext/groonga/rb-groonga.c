@@ -21,13 +21,14 @@
 
 grn_bool rb_grn_exited = GRN_FALSE;
 
-static void
+static VALUE
 finish_groonga (VALUE data)
 {
     debug("finish\n");
     grn_fin();
     rb_grn_exited = GRN_TRUE;
     debug("finish: done\n");
+    return Qnil;
 }
 
 /*
@@ -212,7 +213,7 @@ Init_groonga (void)
     rb_grn_init_exception(mGrn);
 
     rb_grn_rc_check(grn_init(), Qnil);
-    rb_set_end_proc(finish_groonga, Qnil);
+    rb_define_finalizer(mGrn, rb_proc_new(finish_groonga, Qnil));
 
     rb_grn_init_version(mGrn);
     rb_grn_init_lock_timeout(mGrn);
