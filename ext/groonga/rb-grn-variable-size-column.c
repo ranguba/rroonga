@@ -28,14 +28,16 @@ rb_grn_variable_size_column_bind (RbGrnVariableSizeColumn *rb_column,
                                   grn_ctx *context, grn_obj *column)
 {
     RbGrnObject *rb_grn_object;
-    int column_type;
+    grn_column_flags flags;
+    grn_column_flags column_type;
     unsigned char value_type;
 
     rb_grn_object = RB_GRN_OBJECT(rb_column);
     rb_grn_column_bind(RB_GRN_COLUMN(rb_column), context, column);
 
     rb_column->element_value = NULL;
-    column_type = (column->header.flags & GRN_OBJ_COLUMN_TYPE_MASK);
+    flags = grn_column_get_flags(context, column);
+    column_type = (flags & GRN_OBJ_COLUMN_TYPE_MASK);
     if (column_type != GRN_OBJ_COLUMN_VECTOR) {
         return;
     }
@@ -51,7 +53,7 @@ rb_grn_variable_size_column_bind (RbGrnVariableSizeColumn *rb_column,
         value_type = GRN_VECTOR;
         break;
     }
-    if (column->header.flags & GRN_OBJ_WITH_WEIGHT) {
+    if (flags & GRN_OBJ_WITH_WEIGHT) {
         rb_column->element_value = grn_obj_open(context, value_type, 0,
                                                 rb_grn_object->range_id);
     }
@@ -161,6 +163,7 @@ rb_grn_variable_size_column_array_reference (VALUE self, VALUE rb_id)
 {
     grn_ctx *context = NULL;
     grn_obj *column, *range;
+    grn_column_flags flags;
     grn_id id;
     grn_obj *value;
     VALUE rb_value;
@@ -171,7 +174,8 @@ rb_grn_variable_size_column_array_reference (VALUE self, VALUE rb_id)
                                             NULL, NULL, &value, NULL,
                                             NULL, &range);
 
-    if (!(column->header.flags & GRN_OBJ_WITH_WEIGHT)) {
+    flags = grn_column_get_flags(context, column);
+    if (!(flags & GRN_OBJ_WITH_WEIGHT)) {
         return rb_call_super(1, &rb_id);
     }
 
@@ -373,6 +377,7 @@ rb_grn_variable_size_column_array_set (VALUE self, VALUE rb_id, VALUE rb_value)
 {
     grn_ctx *context = NULL;
     grn_obj *column, *range;
+    grn_column_flags column_flags;
     grn_rc rc;
     grn_id id;
     grn_obj *value, *element_value;
@@ -382,7 +387,8 @@ rb_grn_variable_size_column_array_set (VALUE self, VALUE rb_id, VALUE rb_value)
                                             NULL, NULL, &value, &element_value,
                                             NULL, &range);
 
-    if (!(column->header.flags & GRN_OBJ_WITH_WEIGHT)) {
+    column_flags = grn_column_get_flags(context, column);
+    if (!(column_flags & GRN_OBJ_WITH_WEIGHT)) {
         VALUE args[2];
         args[0] = rb_id;
         args[1] = rb_value;
@@ -469,7 +475,7 @@ rb_grn_variable_size_column_compressed_p (int argc, VALUE *argv, VALUE self)
     RbGrnVariableSizeColumn *rb_grn_column;
     grn_ctx *context = NULL;
     grn_obj *column;
-    grn_obj_flags flags;
+    grn_column_flags flags;
     VALUE type;
     grn_bool compressed_p = GRN_FALSE;
     grn_bool accept_any_type = GRN_FALSE;
@@ -500,7 +506,7 @@ rb_grn_variable_size_column_compressed_p (int argc, VALUE *argv, VALUE self)
                               NULL, NULL,
                               NULL, NULL);
 
-    flags = column->header.flags;
+    flags = grn_column_get_flags(context, column);
     switch (flags & GRN_OBJ_COMPRESS_MASK) {
       case GRN_OBJ_COMPRESS_ZLIB:
         if (accept_any_type || need_zlib_check) {

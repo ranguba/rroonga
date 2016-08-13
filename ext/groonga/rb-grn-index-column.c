@@ -829,13 +829,16 @@ static VALUE
 rb_grn_index_column_with_section_p (VALUE self)
 {
     grn_obj *column;
+    grn_ctx *context;
+    grn_column_flags flags;
 
-    rb_grn_index_column_deconstruct(SELF(self), &column, NULL,
+    rb_grn_index_column_deconstruct(SELF(self), &column, &context,
                                     NULL, NULL,
                                     NULL, NULL, NULL, NULL, NULL,
                                     NULL, NULL);
 
-    return CBOOL2RVAL(column->header.flags & GRN_OBJ_WITH_SECTION);
+    flags = grn_column_get_flags(context, column);
+    return CBOOL2RVAL(flags & GRN_OBJ_WITH_SECTION);
 }
 
 /*
@@ -847,13 +850,16 @@ static VALUE
 rb_grn_index_column_with_weight_p (VALUE self)
 {
     grn_obj *column;
+    grn_ctx *context;
+    grn_column_flags flags;
 
-    rb_grn_index_column_deconstruct(SELF(self), &column, NULL,
+    rb_grn_index_column_deconstruct(SELF(self), &column, &context,
                                     NULL, NULL,
                                     NULL, NULL, NULL, NULL, NULL,
                                     NULL, NULL);
 
-    return CBOOL2RVAL(column->header.flags & GRN_OBJ_WITH_WEIGHT);
+    flags = grn_column_get_flags(context, column);
+    return CBOOL2RVAL(flags & GRN_OBJ_WITH_WEIGHT);
 }
 
 /*
@@ -865,13 +871,16 @@ static VALUE
 rb_grn_index_column_with_position_p (VALUE self)
 {
     grn_obj *column;
+    grn_ctx *context;
+    grn_column_flags flags;
 
-    rb_grn_index_column_deconstruct(SELF(self), &column, NULL,
+    rb_grn_index_column_deconstruct(SELF(self), &column, &context,
                                     NULL, NULL,
                                     NULL, NULL, NULL, NULL, NULL,
                                     NULL, NULL);
 
-    return CBOOL2RVAL(column->header.flags & GRN_OBJ_WITH_POSITION);
+    flags = grn_column_get_flags(context, column);
+    return CBOOL2RVAL(flags & GRN_OBJ_WITH_POSITION);
 }
 
 /*
@@ -898,6 +907,7 @@ rb_grn_index_column_open_cursor (int argc, VALUE *argv, VALUE self)
 {
     grn_ctx          *context;
     grn_obj          *column;
+    grn_column_flags  column_flags;
     grn_obj          *range_object;
     grn_table_cursor *table_cursor;
     grn_id            rid_min = GRN_ID_NIL;
@@ -928,20 +938,22 @@ rb_grn_index_column_open_cursor (int argc, VALUE *argv, VALUE self)
     rb_table     = GRNOBJECT2RVAL(Qnil, context, range_object, GRN_FALSE);
     rb_lexicon   = rb_iv_get(rb_table_cursor, "@table");
 
+    column_flags = grn_column_get_flags(context, column);
+
     if (NIL_P(rb_with_section)) {
-        flags |= column->header.flags & GRN_OBJ_WITH_SECTION;
+        flags |= column_flags & GRN_OBJ_WITH_SECTION;
     } else if (RVAL2CBOOL(rb_with_section)) {
         flags |= GRN_OBJ_WITH_SECTION;
     }
 
     if (NIL_P(rb_with_weight)) {
-        flags |= column->header.flags & GRN_OBJ_WITH_WEIGHT;
+        flags |= column_flags & GRN_OBJ_WITH_WEIGHT;
     } else if (RVAL2CBOOL(rb_with_weight)) {
         flags |= GRN_OBJ_WITH_WEIGHT;
     }
 
     if (NIL_P(rb_with_position)) {
-        flags |= column->header.flags & GRN_OBJ_WITH_POSITION;
+        flags |= column_flags & GRN_OBJ_WITH_POSITION;
     } else if (RVAL2CBOOL(rb_with_position)) {
         flags |= GRN_OBJ_WITH_POSITION;
     }

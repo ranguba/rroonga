@@ -72,13 +72,15 @@ rb_grn_column_bind (RbGrnColumn *rb_column,
                     grn_ctx *context, grn_obj *column)
 {
     RbGrnObject *rb_grn_object;
+    grn_column_flags flags;
     int column_type;
     unsigned char value_type;
 
     rb_grn_object = RB_GRN_OBJECT(rb_column);
     rb_grn_named_object_bind(RB_GRN_NAMED_OBJECT(rb_column), context, column);
 
-    column_type = (column->header.flags & GRN_OBJ_COLUMN_TYPE_MASK);
+    flags = grn_column_get_flags(context, column);
+    column_type = (flags & GRN_OBJ_COLUMN_TYPE_MASK);
     if (column_type == GRN_OBJ_COLUMN_VECTOR) {
         switch (rb_grn_object->range->header.type) {
         case GRN_TABLE_HASH_KEY:
@@ -644,18 +646,20 @@ rb_grn_column_vector_p (VALUE self)
 {
     grn_ctx *context;
     grn_obj *column;
+    grn_column_flags flags;
+    grn_column_flags column_type;
 
     rb_grn_column_deconstruct(SELF(self), &column, &context,
                              NULL, NULL,
                              NULL, NULL, NULL);
 
-    if (column->header.type == GRN_COLUMN_VAR_SIZE &&
-        ((column->header.flags & GRN_OBJ_COLUMN_TYPE_MASK) ==
-         GRN_OBJ_COLUMN_VECTOR)) {
-        return Qtrue;
-    } else {
+    if (column->header.type != GRN_COLUMN_VAR_SIZE) {
         return Qfalse;
     }
+
+    flags = grn_column_get_flags(context, column);
+    column_type = (flags & GRN_OBJ_COLUMN_TYPE_MASK);
+    return CBOOL2RVAL(column_type == GRN_OBJ_COLUMN_VECTOR);
 }
 
 /*
@@ -671,22 +675,21 @@ rb_grn_column_scalar_p (VALUE self)
 {
     grn_ctx *context;
     grn_obj *column;
+    grn_column_flags flags;
+    grn_column_flags column_type;
 
     rb_grn_column_deconstruct(SELF(self), &column, &context,
                              NULL, NULL,
                              NULL, NULL, NULL);
 
     switch (column->header.type) {
-      case GRN_COLUMN_FIX_SIZE:
+    case GRN_COLUMN_FIX_SIZE:
         return Qtrue;
-      case GRN_COLUMN_VAR_SIZE:
-        if ((column->header.flags & GRN_OBJ_COLUMN_TYPE_MASK) ==
-            GRN_OBJ_COLUMN_SCALAR) {
-            return Qtrue;
-        } else {
-            return Qfalse;
-        }
-      default:
+    case GRN_COLUMN_VAR_SIZE:
+        flags = grn_column_get_flags(context, column);
+        column_type = (flags & GRN_OBJ_COLUMN_TYPE_MASK);
+        return CBOOL2RVAL(column_type == GRN_OBJ_COLUMN_SCALAR);
+    default:
         return Qfalse;
     }
 }
@@ -701,12 +704,15 @@ static VALUE
 rb_grn_column_with_weight_p(VALUE self)
 {
     grn_obj *column;
+    grn_ctx *context;
+    grn_column_flags flags;
 
-    rb_grn_column_deconstruct(SELF(self), &column, NULL,
+    rb_grn_column_deconstruct(SELF(self), &column, &context,
                               NULL, NULL,
                               NULL, NULL, NULL);
 
-    return CBOOL2RVAL(column->header.flags & GRN_OBJ_WITH_WEIGHT);
+    flags = grn_column_get_flags(context, column);
+    return CBOOL2RVAL(flags & GRN_OBJ_WITH_WEIGHT);
 }
 
 /*

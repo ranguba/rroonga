@@ -242,7 +242,7 @@ rb_grn_table_define_column (int argc, VALUE *argv, VALUE self)
     grn_obj *value_type, *column;
     char *name = NULL, *path = NULL;
     unsigned name_size = 0;
-    grn_obj_flags flags = 0;
+    grn_column_flags flags = 0;
     VALUE rb_name, rb_value_type;
     VALUE options, rb_path, rb_persistent, rb_compress, rb_type, rb_with_weight;
     VALUE columns;
@@ -372,7 +372,7 @@ rb_grn_table_define_index_column (int argc, VALUE *argv, VALUE self)
     grn_obj *value_type, *column;
     char *name = NULL, *path = NULL;
     unsigned name_size = 0;
-    grn_obj_flags flags = GRN_OBJ_COLUMN_INDEX;
+    grn_column_flags flags = GRN_OBJ_COLUMN_INDEX;
     VALUE rb_name, rb_value_type;
     VALUE options, rb_path, rb_persistent;
     VALUE rb_with_section, rb_with_weight, rb_with_position;

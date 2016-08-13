@@ -830,11 +830,21 @@ rb_grn_object_inspect_content_flags_with_label (VALUE inspected,
                                                 grn_obj *object)
 {
     grn_obj_flags flags;
+    grn_column_flags column_flags = 0;
     VALUE inspected_flags;
 
     rb_str_cat2(inspected, "flags: ");
 
     flags = object->header.flags;
+    switch (object->header.type) {
+    case GRN_COLUMN_FIX_SIZE:
+    case GRN_COLUMN_VAR_SIZE:
+    case GRN_COLUMN_INDEX:
+        column_flags = grn_column_get_flags(context, object);
+        break;
+    default:
+        break;
+    }
 
     inspected_flags = rb_ary_new();
 
@@ -891,9 +901,9 @@ rb_grn_object_inspect_content_flags_with_label (VALUE inspected,
     switch (object->header.type) {
     case GRN_COLUMN_FIX_SIZE:
     case GRN_COLUMN_VAR_SIZE:
-        if (flags & GRN_OBJ_COLUMN_SCALAR) {
+        if (column_flags & GRN_OBJ_COLUMN_SCALAR) {
             rb_ary_push(inspected_flags, rb_str_new_cstr("COLUMN_SCALAR"));
-        } else if (flags & GRN_OBJ_COLUMN_VECTOR) {
+        } else if (column_flags & GRN_OBJ_COLUMN_VECTOR) {
             rb_ary_push(inspected_flags, rb_str_new_cstr("COLUMN_VECTOR"));
         }
         break;
@@ -904,44 +914,59 @@ rb_grn_object_inspect_content_flags_with_label (VALUE inspected,
     switch (object->header.type) {
     case GRN_COLUMN_FIX_SIZE:
     case GRN_COLUMN_VAR_SIZE:
-        if (flags & GRN_OBJ_COMPRESS_ZLIB) {
+        if (column_flags & GRN_OBJ_COMPRESS_ZLIB) {
             rb_ary_push(inspected_flags, rb_str_new_cstr("COMPRESS_ZLIB"));
-        } else if (flags & GRN_OBJ_COMPRESS_LZ4) {
+        } else if (column_flags & GRN_OBJ_COMPRESS_LZ4) {
             rb_ary_push(inspected_flags, rb_str_new_cstr("COMPRESS_LZ4"));
         }
         break;
     case GRN_COLUMN_INDEX:
-        if (flags & GRN_OBJ_WITH_SECTION)
+        if (column_flags & GRN_OBJ_WITH_SECTION)
             rb_ary_push(inspected_flags, rb_str_new_cstr("WITH_SECTION"));
-        if (flags & GRN_OBJ_WITH_WEIGHT)
+        if (column_flags & GRN_OBJ_WITH_WEIGHT)
             rb_ary_push(inspected_flags, rb_str_new_cstr("WITH_WEIGHT"));
-        if (flags & GRN_OBJ_WITH_POSITION)
+        if (column_flags & GRN_OBJ_WITH_POSITION)
             rb_ary_push(inspected_flags, rb_str_new_cstr("WITH_POSITION"));
         break;
     default:
         break;
     }
 
-    if (flags & GRN_OBJ_RING_BUFFER)
-        rb_ary_push(inspected_flags, rb_str_new_cstr("RING_BUFFER"));
+    switch (object->header.type) {
+    case GRN_TABLE_NO_KEY:
+    case GRN_TABLE_HASH_KEY:
+    case GRN_TABLE_PAT_KEY:
+    case GRN_TABLE_DAT_KEY:
+        if (flags & GRN_OBJ_RING_BUFFER)
+            rb_ary_push(inspected_flags, rb_str_new_cstr("RING_BUFFER"));
 
-    if (flags & GRN_OBJ_WITH_SUBREC) {
-        rb_ary_push(inspected_flags, rb_str_new_cstr("WITH_SUBREC"));
+        if (flags & GRN_OBJ_WITH_SUBREC) {
+            rb_ary_push(inspected_flags, rb_str_new_cstr("WITH_SUBREC"));
 
-        if (flags & GRN_OBJ_UNIT_DOCUMENT_SECTION)
-            rb_ary_push(inspected_flags, rb_str_new_cstr("UNIT_DOCUMENT_SECTION"));
-        if (flags & GRN_OBJ_UNIT_DOCUMENT_POSITION)
-            rb_ary_push(inspected_flags, rb_str_new_cstr("UNIT_DOCUMENT_POSITION"));
+            if (flags & GRN_OBJ_UNIT_DOCUMENT_SECTION)
+                rb_ary_push(inspected_flags,
+                            rb_str_new_cstr("UNIT_DOCUMENT_SECTION"));
+            if (flags & GRN_OBJ_UNIT_DOCUMENT_POSITION)
+                rb_ary_push(inspected_flags,
+                            rb_str_new_cstr("UNIT_DOCUMENT_POSITION"));
 
-        if (flags & GRN_OBJ_UNIT_SECTION_POSITION)
-            rb_ary_push(inspected_flags, rb_str_new_cstr("UNIT_SECTION_POSITION"));
+            if (flags & GRN_OBJ_UNIT_SECTION_POSITION)
+                rb_ary_push(inspected_flags,
+                            rb_str_new_cstr("UNIT_SECTION_POSITION"));
 
-        if (flags & GRN_OBJ_UNIT_USERDEF_DOCUMENT)
-            rb_ary_push(inspected_flags, rb_str_new_cstr("UNIT_USERDEF_DOCUMENT"));
-        if (flags & GRN_OBJ_UNIT_USERDEF_SECTION)
-            rb_ary_push(inspected_flags, rb_str_new_cstr("UNIT_USERDEF_SECTION"));
-        if (flags & GRN_OBJ_UNIT_USERDEF_POSITION)
-            rb_ary_push(inspected_flags, rb_str_new_cstr("UNIT_USERDEF_POSITION"));
+            if (flags & GRN_OBJ_UNIT_USERDEF_DOCUMENT)
+                rb_ary_push(inspected_flags,
+                            rb_str_new_cstr("UNIT_USERDEF_DOCUMENT"));
+            if (flags & GRN_OBJ_UNIT_USERDEF_SECTION)
+                rb_ary_push(inspected_flags,
+                            rb_str_new_cstr("UNIT_USERDEF_SECTION"));
+            if (flags & GRN_OBJ_UNIT_USERDEF_POSITION)
+                rb_ary_push(inspected_flags,
+                            rb_str_new_cstr("UNIT_USERDEF_POSITION"));
+        }
+        break;
+    default:
+        break;
     }
 
     rb_str_cat2(inspected, "<");
@@ -1281,19 +1306,23 @@ rb_grn_object_array_reference (VALUE self, VALUE rb_id)
         break;
       case GRN_COLUMN_VAR_SIZE:
       case GRN_COLUMN_FIX_SIZE:
-        switch (object->header.flags & GRN_OBJ_COLUMN_TYPE_MASK) {
-          case GRN_OBJ_COLUMN_VECTOR:
-            GRN_OBJ_INIT(&value, GRN_VECTOR, 0, range_id);
-            break;
-          case GRN_OBJ_COLUMN_SCALAR:
-            GRN_OBJ_INIT(&value, GRN_BULK, 0, range_id);
-            break;
-          default:
-            rb_raise(rb_eGrnError, "unsupported column type: %u: %s",
-                     range_type, rb_grn_inspect(self));
-            break;
-        }
-        break;
+          {
+              grn_column_flags column_flags;
+              column_flags = grn_column_get_flags(context, object);
+              switch (column_flags & GRN_OBJ_COLUMN_TYPE_MASK) {
+              case GRN_OBJ_COLUMN_VECTOR:
+                  GRN_OBJ_INIT(&value, GRN_VECTOR, 0, range_id);
+                  break;
+              case GRN_OBJ_COLUMN_SCALAR:
+                  GRN_OBJ_INIT(&value, GRN_BULK, 0, range_id);
+                  break;
+              default:
+                  rb_raise(rb_eGrnError, "unsupported column type: %u: %s",
+                           range_type, rb_grn_inspect(self));
+                  break;
+              }
+          }
+          break;
       case GRN_COLUMN_INDEX:
         GRN_UINT32_INIT(&value, 0);
         break;
