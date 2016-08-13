@@ -1,5 +1,20 @@
 # NEWS
 
+## 6.0.7: 2016-08-13 {#version-6-0-7}
+
+### Improvements
+
+  * Supported Groonga 6.0.7. Groonga 6.0.5 or older aren't supported.
+
+  * Improved integration with libraries that uses `at_exit` such as
+    test-unit.
+
+### Fixes
+
+  * {Groonga::FixSizeColumn#inspect}: Fixed wrong flags.
+
+  * {Groonga::VariableSizeColumn#inspect}: Fixed wrong flags.
+
 ## 6.0.5: 2016-07-15 {#version-6-0-5}
 
 ### Improvements
