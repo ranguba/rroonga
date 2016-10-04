@@ -26,7 +26,7 @@ module RroongaBuild
   module LatestGroongaVersion
     MAJOR = 6
     MINOR = 0
-    MICRO = 7
+    MICRO = 9
     VERSION = [MAJOR, MINOR, MICRO]
   end
 
