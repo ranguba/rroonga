@@ -583,7 +583,7 @@ rb_grn_table_get_columns (int argc, VALUE *argv, VALUE self)
     grn_ctx *context = NULL;
     grn_obj *table;
     grn_obj *columns;
-    grn_obj *key_type = NULL;
+    grn_obj *key_type;
     grn_rc rc;
     int n;
     grn_table_cursor *cursor;
