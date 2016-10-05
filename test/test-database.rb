@@ -377,7 +377,6 @@ class DatabaseTest < Test::Unit::TestCase
     end
 
     def test_dirty?
-      omit("TODO: Enable this after Groonga 6.0.6 is released.")
       assert do
         not @database.dirty?
       end
