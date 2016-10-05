@@ -583,6 +583,7 @@ rb_grn_table_get_columns (int argc, VALUE *argv, VALUE self)
     grn_ctx *context = NULL;
     grn_obj *table;
     grn_obj *columns;
+    grn_obj *key_type = NULL;
     grn_rc rc;
     int n;
     grn_table_cursor *cursor;
@@ -603,8 +604,9 @@ rb_grn_table_get_columns (int argc, VALUE *argv, VALUE self)
         name_size = RSTRING_LEN(rb_name);
     }
 
+    key_type = grn_ctx_at(context, GRN_DB_SHORT_TEXT);
     columns = grn_table_create(context, NULL, 0, NULL, GRN_TABLE_HASH_KEY,
-                               NULL, 0);
+                               key_type, 0);
     rb_grn_context_check(context, self);
     n = grn_table_columns(context, table, name, name_size, columns);
     rb_grn_context_check(context, self);
