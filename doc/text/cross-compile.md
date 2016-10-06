@@ -1,5 +1,4 @@
-How to Cross compile Rroonga
-===
+# How to Cross compile Rroonga
 
 ## For Debian GNU/Linux like Linux distribution Users
 
