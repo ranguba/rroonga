@@ -1,5 +1,11 @@
 # NEWS
 
+## 6.0.9: 2016-10-07 {#version-6-0-9}
+
+### Improvements
+
+  * Supported Groonga 6.0.9. Groonga 6.0.8 or older aren't supported.
+
 ## 6.0.7: 2016-08-13 {#version-6-0-7}
 
 ### Improvements
