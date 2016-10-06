@@ -132,15 +132,43 @@ msgid ""
 "* mallowlabs: send a patch."
 msgstr ""
 
+msgid "# How to Cross compile Rroonga"
+msgstr ""
+
+msgid "## For rake-compiler-dock"
+msgstr ""
+
 msgid ""
-"How to Cross compile Rroonga\n"
-"==="
+"`rake-compiler-dock` depends `docker` and some platform requires docker client"
+" such as `docker-machine`.\n"
+"Please install `docker` and docker client before cross compiling with `rake-co"
+"mpiler-dock`."
 msgstr ""
 
-msgid "# For Debian GNU/Linux like Linux distribution Users"
+msgid "### cross compiling with rake-compiler-dock"
 msgstr ""
 
-msgid "## apt"
+msgid "execute following rake task:"
+msgstr ""
+
+msgid ""
+"```bash\n"
+"$ bundle exec rake build:windows\n"
+"```"
+msgstr ""
+
+msgid ""
+"Then, `pkg` directory is created. And cross compiled gems move into `pkg` dire"
+"ctory."
+msgstr ""
+
+msgid "## Manual procedure for Debian GNU/Linux like Linux distribution Users"
+msgstr ""
+
+msgid "This is the manual procedure without rake-compiler-dock."
+msgstr ""
+
+msgid "### apt"
 msgstr ""
 
 msgid ""
@@ -148,7 +176,7 @@ msgid ""
 "* build-essential"
 msgstr ""
 
-msgid "## prepare ruby and rubygems"
+msgid "### prepare ruby and rubygems"
 msgstr ""
 
 msgid ""
@@ -164,7 +192,7 @@ msgid ""
 "```"
 msgstr ""
 
-msgid "## bundle install"
+msgid "### bundle install"
 msgstr ""
 
 msgid ""
@@ -178,7 +206,7 @@ msgid ""
 "```"
 msgstr ""
 
-msgid "## rake-compiler"
+msgid "### rake-compiler"
 msgstr ""
 
 msgid ""
@@ -201,7 +229,7 @@ msgid ""
 "```"
 msgstr ""
 
-msgid "## cross compile"
+msgid "### cross compile"
 msgstr ""
 
 msgid ""
@@ -213,33 +241,6 @@ msgid ""
 "$ bundle exec rake RUBY_CC_VERSION=1.9.3:2.0.0:2.1.3 cross RROONGA_USE_GROONGA"
 "_X64=true clean native gem\n"
 "```"
-msgstr ""
-
-msgid "# For rake-compiler-dock"
-msgstr ""
-
-msgid ""
-"`rake-compiler-dock` depends `docker` and some platform requires docker client"
-" such as `docker-machine`.\n"
-"Please install `docker` and docker client before cross compiling with `rake-co"
-"mpiler-dock`."
-msgstr ""
-
-msgid "## cross compiling with rake-compiler-dock"
-msgstr ""
-
-msgid "execute following rake task:"
-msgstr ""
-
-msgid ""
-"```bash\n"
-"$ bundle exec rake build:windows\n"
-"```"
-msgstr ""
-
-msgid ""
-"Then, `pkg` directory is created. And cross compiled gems move into `pkg` dire"
-"ctory."
 msgstr ""
 
 msgid "# Install"
@@ -444,11 +445,18 @@ msgstr "* [2. インストール - Groonga ドキュメント](http://groonga.or
 msgid "# NEWS"
 msgstr "# お知らせ"
 
-msgid "## 6.0.7: 2016-08-13 {#version-6-0-7}"
+msgid "## 6.0.9: 2016-10-07 {#version-6-0-9}"
 msgstr ""
 
 msgid "### Improvements"
 msgstr "### 改善"
+
+#, fuzzy
+msgid "  * Supported Groonga 6.0.9. Groonga 6.0.8 or older aren't supported."
+msgstr "  * Groonga 6.0.0をサポートしました。Groonga 5.1.2以前はサポートしません。"
+
+msgid "## 6.0.7: 2016-08-13 {#version-6-0-7}"
+msgstr ""
 
 #, fuzzy
 msgid "  * Supported Groonga 6.0.7. Groonga 6.0.5 or older aren't supported."
@@ -8853,8 +8861,9 @@ msgstr ""
 msgid "tag|param|vector_value_with_weight"
 msgstr ""
 
-# @param [::Array<::Hash{:value => ::Object, :weight => Integer}, ::Object>] vector_value_with_weight
+# @param vector_value_with_weight
 msgid ""
+"[::Array<::Hash{:value => ::Object, :weight => Integer}, ::Object>]\n"
 "The new vector value with weight. The vector value can contain both\n"
 "::Hash and value. If a contained element uses ::Hash style, it can\n"
 "specify its weight. If a contained element doesn't use ::Hash style,\n"
