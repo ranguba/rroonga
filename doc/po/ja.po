@@ -444,11 +444,175 @@ msgstr "* [2. インストール - Groonga ドキュメント](http://groonga.or
 msgid "# NEWS"
 msgstr "# お知らせ"
 
-msgid "## 6.0.0: 2016-03-06 {#version-6-0-0}"
+msgid "## 6.0.7: 2016-08-13 {#version-6-0-7}"
 msgstr ""
 
 msgid "### Improvements"
 msgstr "### 改善"
+
+#, fuzzy
+msgid "  * Supported Groonga 6.0.7. Groonga 6.0.5 or older aren't supported."
+msgstr "  * Groonga 6.0.0をサポートしました。Groonga 5.1.2以前はサポートしません。"
+
+msgid ""
+"  * Improved integration with libraries that uses `at_exit` such as\n"
+"    test-unit."
+msgstr ""
+
+msgid "### Fixes"
+msgstr "### 修正"
+
+msgid "  * {Groonga::FixSizeColumn#inspect}: Fixed wrong flags."
+msgstr ""
+
+msgid "  * {Groonga::VariableSizeColumn#inspect}: Fixed wrong flags."
+msgstr ""
+
+msgid "## 6.0.5: 2016-07-15 {#version-6-0-5}"
+msgstr ""
+
+#, fuzzy
+msgid "  * Supported Groonga 6.0.5. Groonga 6.0.4 or older aren't supported."
+msgstr "  * Groonga 6.0.0をサポートしました。Groonga 5.1.2以前はサポートしません。"
+
+msgid ""
+"  * {Groonga::ID}: Added a module that provided object ID related\n"
+"    features."
+msgstr ""
+
+msgid ""
+"  * {Groonga::ID.builtin?}: Added a new predicate method that checks\n"
+"    whether the given ID is ID for builtin object or not."
+msgstr ""
+
+msgid "  * {Groonga::ID::NIL}: Added a new constant that represents invalid ID."
+msgstr ""
+
+msgid "  * {Groonga::ID::MAX}: Added a new constant that represents the maximum ID."
+msgstr ""
+
+msgid ""
+"  * {Groonga::Name}: Added a new module that provides object name\n"
+"    related features."
+msgstr ""
+
+msgid ""
+"  * {Groonga::Name.column?}: Added a new predicate method that checks\n"
+"    whether the given name is column object name or not."
+msgstr ""
+
+msgid "  * {Groonga::Object#column?}: Added a new predicate for column."
+msgstr ""
+
+msgid ""
+"  * {Groonga::Object#reference_column?}: Added a new predicate for\n"
+"    column that uses table as value type."
+msgstr ""
+
+msgid ""
+"  * {Groonga::Object#index_column?}: Added a new predicate for\n"
+"    index column."
+msgstr ""
+
+msgid ""
+"  * {Groonga::Object#touch}: Added a new method that updates the last\n"
+"    modified time of the object."
+msgstr ""
+
+msgid ""
+"  * {Groonga::Object#last_modified}: Added a new method that returns\n"
+"    the last modified time of the object."
+msgstr ""
+
+msgid ""
+"  * {Groonga::Object#dirty?}: Added a new method that checks whether\n"
+"    the object is changed after the last flush."
+msgstr ""
+
+msgid "## 6.0.4: 2016-06-14 {#version-6-0-4}"
+msgstr ""
+
+#, fuzzy
+msgid "  * Supported Groonga 6.0.4. Groonga 6.0.3 or older aren't supported."
+msgstr "  * Groonga 6.0.0をサポートしました。Groonga 5.1.2以前はサポートしません。"
+
+msgid "  * {Groonga::WindowFunctionError}: Added a new error class."
+msgstr ""
+
+msgid ""
+"  * {Groonga::ProcedureType::WINDOW_FUNCTION}: Added a new procedure\n"
+"    type for window function."
+msgstr ""
+
+msgid ""
+"  * {Groonga::Object#window_function_procedure?}: Added a new\n"
+"    predicate for window function."
+msgstr ""
+
+msgid ""
+"  * {Groonga::DataColumn#apply_window_function}: Added a new\n"
+"    method to apply a window function."
+msgstr ""
+
+msgid "## 6.0.2: 2016-05-18 {#version-6-0-2}"
+msgstr ""
+
+#, fuzzy
+msgid "  * Supported Groonga 6.0.2. Groonga 6.0.1 or older aren't supported."
+msgstr "  * Groonga 6.0.0をサポートしました。Groonga 5.1.2以前はサポートしません。"
+
+msgid "  * {Groonga::Table#select}: Supported nested array as conditions."
+msgstr ""
+
+msgid ""
+"  * Supported HTTP proxy with authentication on install.\n"
+"    [GitHub#129] [Patch by ngram]"
+msgstr ""
+
+msgid "  * {Groonga::Cancel}: Added a new error class."
+msgstr ""
+
+msgid "  * {Groonga::Table#select}: Supported passing Hash as function argument."
+msgstr ""
+
+msgid ""
+"  * {Groonga::Hash.create}: Added `:key_large` option to create hash\n"
+"    table that supports 1TiB total key size."
+msgstr ""
+
+msgid ""
+"  * {Groonga::Type#text_family?}: Added a new predicate that returns\n"
+"    `true` for `ShortText`, `Text` and `LongText` types."
+msgstr ""
+
+msgid ""
+"  * {Groonga::Type#number_family?}: Added a new predicate that returns\n"
+"    `true` for `UInt8`, `Int8`, ..., `UInt64`, `Int64` and `Float`\n"
+"    types."
+msgstr ""
+
+msgid ""
+"  * {Groonga::Type#builtin?}: Added a new predicate that returns\n"
+"    `true` for builtin types such as `Int32`."
+msgstr ""
+
+msgid ""
+"  * {Groonga::Object#remove}: Added `:dependent` option to remove all\n"
+"    tables and columns that depend on the object."
+msgstr ""
+
+msgid ""
+"  * {Groonga::RequestCanceler}: Added an interface that cancels one or\n"
+"    more requests."
+msgstr ""
+
+msgid ""
+"  * {Groonga::RequestTimer}: Added an interface that provides request\n"
+"    timeout feature."
+msgstr ""
+
+msgid "## 6.0.0: 2016-03-06 {#version-6-0-0}"
+msgstr ""
 
 msgid "  * Supported Groonga 6.0.0. Groonga 5.1.2 or older aren't supported."
 msgstr "  * Groonga 6.0.0をサポートしました。Groonga 5.1.2以前はサポートしません。"
@@ -614,9 +778,6 @@ msgid ""
 "  * Added {Groonga::Logger.max_level}.\n"
 "  * Added {Groonga::Logger.max_level=}."
 msgstr ""
-
-msgid "### Fixes"
-msgstr "### 修正"
 
 msgid ""
 "  * `grndump`: Fixed an error when `--order-by=key` is specified\n"
@@ -4320,6 +4481,83 @@ msgid ""
 "`false` otherwise."
 msgstr ""
 
+# Groonga::DataColumn
+msgid ""
+"The superclass for data columns such as {Groonga::FixSizeColumn}\n"
+"and {Groonga::VariableSizeColumn}."
+msgstr ""
+
+# Groonga::DataColumn#apply_window_function
+msgid ""
+"Applies the window function to records in the table of the\n"
+"column. Results are stored into the column."
+msgstr ""
+
+# @param [::Hash] options
+msgid "The name and value pairs."
+msgstr ""
+
+# @since
+msgid "6.0.4"
+msgstr ""
+
+# @example
+msgid "tag|example|Set the nth record."
+msgstr ""
+
+# @example Set the nth record.
+msgid ""
+"\n"
+"Groonga::Schema.define do |schema|\n"
+"  schema.create_table(\"Comments\") do |table|\n"
+"    # The column for storing window function result.\n"
+"    table.uint32(\"nth\")\n"
+"  end\n"
+"end\n"
+"comments = Groonga[\"Comments\"]\n"
+"nth = Groonga[\"Comments.nth\"]\n"
+"\n"
+"5.times do\n"
+"  comments.add\n"
+"end\n"
+"\n"
+"options = {\n"
+"  # Sort by _id in descending order.\n"
+"  :sort_keys => [[\"_id\", \"desc\"]],\n"
+"}\n"
+"nth.apply_window_function(options) do |record|\n"
+"  # record_number() returns Nth record in the sorted order.\n"
+"  record.call(\"record_number\")\n"
+"end\n"
+"\n"
+"comments.each do |comment|\n"
+"  p [comment.id, comment.nth]\n"
+"    # -> [1, 5]\n"
+"    # -> [2, 4]\n"
+"    # -> [3, 3]\n"
+"    # -> [4, 2]\n"
+"    # -> [5, 1]\n"
+"end"
+msgstr ""
+
+# @overload
+msgid "tag|overload|apply_window_function"
+msgstr ""
+
+# @yield [record]
+msgid ""
+"It yields an object that builds expression. The block must\n"
+"build an expression that calls a window function."
+msgstr ""
+
+# @yieldparam [Groonga::RecordExpressionBuilder] record
+msgid "The expression builder to create a window function call."
+msgstr ""
+
+# @yieldreturn [Groonga::ExpressionBuilder]
+msgid "It must be an expression that calls a window function."
+msgstr ""
+
 msgid "テーブルの集合を管理するためのオブジェクト。"
 msgstr ""
 
@@ -5200,6 +5438,18 @@ msgstr ""
 msgid "It is used when a scorer causes an error."
 msgstr ""
 
+# @since
+msgid "6.0.2"
+msgstr ""
+
+# Groonga::Cancel
+msgid "It is used when a processing is canceled."
+msgstr ""
+
+# Groonga::WindowFunctionError
+msgid "It is used when window function causes an error."
+msgstr ""
+
 msgid "検索条件やデータベースへの操作を表現するオブジェクト。"
 msgstr ""
 
@@ -5719,6 +5969,10 @@ msgid ""
 "_options_ で +:result+ を指定することにより、そのテーブルにマッ\n"
 "チしたレコードIDがキーのレコードを追加することができる。\n"
 "+:result+ にテーブルを指定した場合は、そのテーブルが返る。"
+msgstr ""
+
+# Groonga::ID
+msgid "This module provides Groonga ID related features."
 msgstr ""
 
 msgid ""
@@ -6619,12 +6873,20 @@ msgid ""
 "otherwise."
 msgstr ""
 
+# Groonga::Name
+msgid "This module provides object name related features."
+msgstr ""
+
 msgid "It normalizes string."
 msgstr "文字列を正規化するクラスです。"
 
 # Groonga::Normalizer.normalize
 msgid "Normalizes the @string@."
 msgstr "文字列を正規化します。"
+
+# @param [::Hash] options
+msgid "The optional parameters."
+msgstr ""
 
 # @example
 msgid ""
@@ -6638,10 +6900,6 @@ msgstr ""
 
 # @param [String] string
 msgid "The original string"
-msgstr ""
-
-# @param [::Hash] options
-msgid "The optional parameters."
 msgstr ""
 
 msgid "The normalized string"
@@ -6812,9 +7070,10 @@ msgstr ""
 msgid "tag|overload|prepend"
 msgstr ""
 
+# Groonga::Object#remove
 msgid ""
-"_object_ をメモリから解放し、それが永続オブジェクトであっ\n"
-"た場合は、該当するファイル一式を削除する。"
+"Free the `object`. If the `object` is persistent object, all files\n"
+"related with the object are removed."
 msgstr ""
 
 # @overload
@@ -6831,6 +7090,51 @@ msgstr ""
 
 # @return [Boolean]
 msgid "`true` if the object is table, `false` otherwise."
+msgstr ""
+
+# Groonga::Object#column?
+msgid "Checks whether the object is column or not."
+msgstr ""
+
+# @overload
+#, fuzzy
+msgid "tag|overload|column?"
+msgstr "登録されたロガーの登録を削除する。削除後はデフォルトのロガーが使われます。"
+
+# @return [Boolean]
+msgid "`true` if the object is column, `false` otherwise."
+msgstr ""
+
+# @since
+msgid "6.0.5"
+msgstr ""
+
+# Groonga::Object#reference_column?
+msgid "Checks whether the object is reference column or not."
+msgstr ""
+
+# @overload
+msgid "tag|overload|reference_column?"
+msgstr ""
+
+# @return [Boolean]
+msgid ""
+"`true` if the object is reference column,\n"
+"`false` otherwise."
+msgstr ""
+
+# Groonga::Object#index_column?
+msgid "Checks whether the object is index column or not."
+msgstr ""
+
+# @overload
+msgid "tag|overload|index_column?"
+msgstr ""
+
+# @return [Boolean]
+msgid ""
+"`true` if the object is index column,\n"
+"`false` otherwise."
 msgstr ""
 
 # Groonga::Object#procedure?
@@ -6897,6 +7201,20 @@ msgid ""
 "`false` otherwise."
 msgstr ""
 
+# Groonga::Object#window_function_procedure?
+msgid "Checks whether the object is windows function procedure or not."
+msgstr ""
+
+# @overload
+msgid "tag|overload|window_function_procedure?"
+msgstr ""
+
+# @return [Boolean]
+msgid ""
+"`true` if the object is window function procedure,\n"
+"`false` otherwise."
+msgstr ""
+
 # Groonga::Object#accessor?
 msgid "Checks whether the object is accessor or not."
 msgstr ""
@@ -6949,6 +7267,39 @@ msgstr ""
 msgid ""
 "`true` if the object is key accessor,\n"
 "`false` otherwise."
+msgstr ""
+
+# Groonga::Object#touch
+msgid ""
+"Update the last modified time of the `object`. It's meaningful only\n"
+"for persistent database, table and column."
+msgstr ""
+
+# @param [Time, nil]
+msgid "tag|param|time"
+msgstr ""
+
+# @param [Time, nil] time
+msgid ""
+"(nil) The last modified time.\n"
+"If `time` is `nil`, the current time is used."
+msgstr ""
+
+# @overload
+msgid "tag|overload|last_modified"
+msgstr ""
+
+# @return [Time]
+msgid "The last modified time of the object."
+msgstr ""
+
+# @overload
+#, fuzzy
+msgid "tag|overload|dirty?"
+msgstr "登録されたロガーの登録を削除する。削除後はデフォルトのロガーが使われます。"
+
+# @return [Boolean]
+msgid "`true` if the object isn't flushed after the last change."
 msgstr ""
 
 msgid "backward compatibility."
@@ -7216,10 +7567,6 @@ msgstr ""
 msgid "The name of plugin."
 msgstr ""
 
-# @param [::Hash] options
-msgid "The name and value pairs."
-msgstr ""
-
 # Groonga::Plugin.unregister
 msgid ""
 "Unregister specified `name` plugin.\n"
@@ -7296,6 +7643,10 @@ msgstr ""
 msgid ""
 "`true` if `text` starts with `prefix`, `false`\n"
 "otherwise."
+msgstr ""
+
+# Groonga::ProcedureType::WINDOW_FUNCTION
+msgid "It's a type for window function."
 msgstr ""
 
 # Groonga::QueryLogger
@@ -7464,6 +7815,210 @@ msgstr ""
 msgid ""
 "`true` if `text` matches `regexp`, `false`\n"
 "otherwise."
+msgstr ""
+
+# Groonga::RequestCanceler
+msgid "This module provides API for canceling requests."
+msgstr ""
+
+# Groonga::RequestCanceler.register
+msgid ""
+"Registers a request. The request can be canceled by\n"
+"{Groonga::RequestCanceler.cancel}."
+msgstr ""
+
+# @param [String]
+msgid "tag|param|request_id"
+msgstr ""
+
+# @param [String] request_id
+msgid "The ID of request to be registered."
+msgstr ""
+
+# @example
+msgid "tag|example|Register a request"
+msgstr ""
+
+# @example Register a request
+msgid ""
+"request_id = \"request-29\"\n"
+"Groonga::RequestCanceler.register(request_id)"
+msgstr ""
+
+# Groonga::RequestCanceler.unregister
+msgid "Unregisters the specified request."
+msgstr ""
+
+# @example
+msgid "tag|example|Unregister a request by ID"
+msgstr ""
+
+# @example Unregister a request by ID
+msgid ""
+"request_id = \"request-29\"\n"
+"Groonga::RequestCanceler.unregister(request_id)"
+msgstr ""
+
+# @param [String] request_id
+msgid "The ID of request to be unregistered."
+msgstr ""
+
+# Groonga::RequestCanceler.cancel
+msgid "Cancels the specified request."
+msgstr ""
+
+# @example
+msgid "tag|example|Cancels a request by ID"
+msgstr ""
+
+# @example Cancels a request by ID
+msgid ""
+"request_id = \"request-29\"\n"
+"Groonga::RequestCanceler.cancel(request_id)"
+msgstr ""
+
+# @overload
+#, fuzzy
+msgid "tag|overload|cancel"
+msgstr "登録されたロガーの登録を削除する。削除後はデフォルトのロガーが使われます。"
+
+# @param [String] request_id
+msgid "The ID of request to be canceled."
+msgstr ""
+
+# @return [Boolean]
+msgid "`true` if the request is canceled, `false` otherwise."
+msgstr ""
+
+# Groonga::RequestCanceler.cancel_all
+msgid "Cancels all running requests."
+msgstr ""
+
+# @example
+msgid "tag|example|Cancels all requests"
+msgstr ""
+
+# @example Cancels all requests
+msgid "Groonga::RequestCanceler.cancel_all"
+msgstr ""
+
+# @overload
+#, fuzzy
+msgid "tag|overload|cancel_all"
+msgstr "登録されたロガーの登録を削除する。削除後はデフォルトのロガーが使われます。"
+
+# @return [Boolean]
+msgid ""
+"`true` if one or more requests are canceled,\n"
+"`false` otherwise."
+msgstr ""
+
+# Groonga::RequestTimerID
+msgid "This class represents request timer ID. It's used with request timer."
+msgstr ""
+
+# Groonga::RequestTimer
+msgid ""
+"This module provides API for canceling requests after the specified\n"
+"time."
+msgstr ""
+
+# Groonga::RequestTimer.register
+msgid ""
+"Registers a request with timeout. If the request isn't finished\n"
+"after the specified timeout, the request is canceled."
+msgstr ""
+
+# @param [Integer]
+msgid "tag|param|timeout"
+msgstr ""
+
+# @example
+msgid "tag|example|Register a request that will be timed out after 2.9 seconds"
+msgstr ""
+
+# @example Register a request that will be timed out after 2.9 seconds
+msgid ""
+"request_id = \"request-29\"\n"
+"timeout_in_second = 2.9\n"
+"Groonga::RequestTimer.register(request_id, timeout_in_second)"
+msgstr ""
+
+# @param [nil] timeout
+msgid ""
+"[Float, nil] The timeout in second. If\n"
+"`timeout` is `nil`, {Groonga::RequestTimer.default_timeout} is\n"
+"used."
+msgstr ""
+
+# @return [Groonga::RequestTimerID]
+msgid "The ID of the request timer."
+msgstr ""
+
+# Groonga::RequestTimer.unregister
+msgid "Unregisters the specified request timer."
+msgstr ""
+
+# @example
+msgid "tag|example|Unregister a request timer by ID"
+msgstr ""
+
+# @example Unregister a request timer by ID
+msgid ""
+"timer_id = Groonga::RequestTimer.register(\"request-29\", 2.9)\n"
+"Groonga::RequestTimer.unregister(timer_id)"
+msgstr ""
+
+# @param [Groonga::RequestTimerID]
+msgid "tag|param|timer_id"
+msgstr ""
+
+# @param [Groonga::RequestTimerID] timer_id
+msgid ""
+"The ID of request timer\n"
+"to be unregistered."
+msgstr ""
+
+# Groonga::RequestTimer.default_timeout
+msgid "Gets the default timeout used by request timer."
+msgstr ""
+
+# @example
+msgid "tag|example|Gets the default timeout"
+msgstr ""
+
+# @example Gets the default timeout
+msgid "Groonga::RequestTimer.default_timeout"
+msgstr ""
+
+# @overload
+msgid "tag|overload|default_timeout"
+msgstr ""
+
+# @return [Float]
+msgid "The default timeout used by request timer."
+msgstr ""
+
+# Groonga::RequestTimer.default_timeout=
+msgid "Sets the default timeout used by request timer."
+msgstr ""
+
+# @example
+msgid "tag|example|Sets the default timeout"
+msgstr ""
+
+# @example Sets the default timeout
+msgid "Groonga::RequestTimer.default_timeout = 2.9"
+msgstr ""
+
+# @overload
+msgid "tag|overload|default_timeout="
+msgstr ""
+
+# @return [Float]
+msgid ""
+"The default timeout used by request timer. If\n"
+"`timeout` is `0.0`, the default timeout is disabled."
 msgstr ""
 
 msgid "スニペット（検索語周辺のテキスト）を生成するためのオブジェクト。"
@@ -9077,10 +9632,6 @@ msgstr ""
 
 # @overload
 msgid "tag|overload|lock_timeout="
-msgstr ""
-
-# @param [Integer]
-msgid "tag|param|timeout"
 msgstr ""
 
 # @param [Integer] timeout
