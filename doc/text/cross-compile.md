@@ -1,14 +1,14 @@
 How to Cross compile Rroonga
 ===
 
-# For Debian GNU/Linux like Linux distribution Users
+## For Debian GNU/Linux like Linux distribution Users
 
-## apt
+### apt
 
 * mingw-w64
 * build-essential
 
-## prepare ruby and rubygems
+### prepare ruby and rubygems
 
 ```bash
 $ rbenv install 1.9.3-p547
@@ -21,7 +21,7 @@ $ rbenv install 2.1.3
 $ gem install bundler
 ```
 
-## bundle install
+### bundle install
 
 ```bash
 $ rbenv local 1.9.3-p547
@@ -32,7 +32,7 @@ $ rbenv local 2.1.3
 $ bundle install [--path vendor/bundle]
 ```
 
-## rake-compiler
+### rake-compiler
 
 ```bash
 $ rbenv local 1.9.3-p547
@@ -46,7 +46,7 @@ $ bundle exec rake-compiler cross-ruby HOST=i686-w64-mingw32 VERSION=2.1.3 [EXTS
 $ bundle exec rake-compiler cross-ruby HOST=x86_64-w64-mingw32 VERSION=2.1.3 [EXTS=--without-extensions]
 ```
 
-## cross compile
+### cross compile
 
 ```bash
 $ rbenv local 1.9.3-p547
@@ -56,12 +56,12 @@ $ bundle exec rake clean:groonga
 $ bundle exec rake RUBY_CC_VERSION=1.9.3:2.0.0:2.1.3 cross RROONGA_USE_GROONGA_X64=true clean native gem
 ```
 
-# For rake-compiler-dock
+## For rake-compiler-dock
 
 `rake-compiler-dock` depends `docker` and some platform requires docker client such as `docker-machine`.
 Please install `docker` and docker client before cross compiling with `rake-compiler-dock`.
 
-## cross compiling with rake-compiler-dock
+### cross compiling with rake-compiler-dock
 
 execute following rake task:
 
