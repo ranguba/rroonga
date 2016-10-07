@@ -5,6 +5,10 @@
 ### Improvements
 
   * Supported Groonga 6.0.9. Groonga 6.0.8 or older aren't supported.
+  * {Groonga::Database#remove_force}: Added a new method that removes
+    broken object.
+  * {Groonga::ID.builtin_type?}: Added a new predicate method that checks
+    whether the given ID is ID for builtin_type object or not.
 
 ## 6.0.7: 2016-08-13 {#version-6-0-7}
 
