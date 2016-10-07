@@ -44,4 +44,20 @@ class IDTest < Test::Unit::TestCase
       end
     end
   end
+
+  sub_test_case(".builtin_type?") do
+    test "true" do
+      assert do
+        Groonga::ID.builtin_type?(Groonga::Type::INT32)
+      end
+    end
+
+    test "false" do
+      token_bigram_id = Groonga["TokenBigram"].id
+
+      assert do
+        not Groonga::ID.builtin_type?(token_bigram_id)
+      end
+    end
+  end
 end

@@ -42,6 +42,24 @@ rb_grn_id_s_builtin_p (VALUE self, VALUE rb_id)
     return CBOOL2RVAL(grn_id_is_builtin(ctx, id));
 }
 
+/*
+ * @overload builtin_type?(id)
+ *   @param [Integer] id The ID to be confirmed.
+ *   @return [Boolean] `true` if the `id` is builtin_type, `false` otherwise.
+ *
+ * @since 6.0.9
+ */
+static VALUE
+rb_grn_id_s_builtin_type_p (VALUE self, VALUE rb_id)
+{
+    grn_ctx *ctx = NULL;
+    grn_id id;
+
+    id = NUM2INT(rb_id);
+
+    return CBOOL2RVAL(grn_id_is_builtin_type(ctx, id));
+}
+
 void
 rb_grn_init_id (VALUE mGrn)
 {
@@ -53,4 +71,5 @@ rb_grn_init_id (VALUE mGrn)
     rb_define_const(mGrnID, "MAX", INT2NUM(GRN_ID_MAX));
 
     rb_define_singleton_method(mGrnID, "builtin?", rb_grn_id_s_builtin_p, 1);
+    rb_define_singleton_method(mGrnID, "builtin_type?", rb_grn_id_s_builtin_type_p, 1);
 }
