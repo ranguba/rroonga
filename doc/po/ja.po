@@ -452,7 +452,12 @@ msgid "### Improvements"
 msgstr "### 改善"
 
 #, fuzzy
-msgid "  * Supported Groonga 6.0.9. Groonga 6.0.8 or older aren't supported."
+msgid ""
+"  * Supported Groonga 6.0.9. Groonga 6.0.8 or older aren't supported.\n"
+"  * {Groonga::Database#remove_force}: Added a new method that removes\n"
+"    broken object.\n"
+"  * {Groonga::ID.builtin_type?}: Added a new predicate method that checks\n"
+"    whether the given ID is ID for builtin_type object or not."
 msgstr "  * Groonga 6.0.0をサポートしました。Groonga 5.1.2以前はサポートしません。"
 
 msgid "## 6.0.7: 2016-08-13 {#version-6-0-7}"
@@ -4839,6 +4844,26 @@ msgstr ""
 msgid "tag|see|Groonga::TableKeySupport#reindex"
 msgstr ""
 
+# Groonga::Database#remove_force
+msgid "Removes a broken object."
+msgstr ""
+
+# Groonga::Database#remove_force
+msgid "You should use {Groonga::Object#remove} normally."
+msgstr ""
+
+# @overload
+msgid "tag|overload|remove_force"
+msgstr ""
+
+# @param [String] name
+msgid "The target object name."
+msgstr ""
+
+# @since
+msgid "6.0.9"
+msgstr ""
+
 # Groonga::DoubleArrayTrieCursor
 msgid ""
 "{Groonga::DoubleArrayTrie} に登録されているレコードを順番に取り\n"
@@ -8861,9 +8886,8 @@ msgstr ""
 msgid "tag|param|vector_value_with_weight"
 msgstr ""
 
-# @param vector_value_with_weight
+# @param [::Array<::Hash{:value => ::Object, :weight => Integer}, ::Object>] vector_value_with_weight
 msgid ""
-"[::Array<::Hash{:value => ::Object, :weight => Integer}, ::Object>]\n"
 "The new vector value with weight. The vector value can contain both\n"
 "::Hash and value. If a contained element uses ::Hash style, it can\n"
 "specify its weight. If a contained element doesn't use ::Hash style,\n"
