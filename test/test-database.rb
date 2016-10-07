@@ -276,6 +276,27 @@ class DatabaseTest < Test::Unit::TestCase
                  terms.collect(&:_key).sort)
   end
 
+  def test_remove_force
+    setup_database
+    table_name = "Bookmarks"
+    table = Groonga::Array.create(:name => table_name)
+    table_path = Pathname.new(table.path)
+    @database.unmap
+    table_path.open("w") do |file|
+      file.print("BROKEN")
+    end
+    assert_raise(Groonga::IncompatibleFileFormat) do
+      context[table_name]
+    end
+    assert do
+      table_path.exist?
+    end
+    @database.remove_force(table_name)
+    assert do
+      not table_path.exist?
+    end
+  end
+
   class RemoveTest < self
     setup :setup_database
 

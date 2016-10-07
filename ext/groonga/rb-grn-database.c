@@ -705,6 +705,38 @@ rb_grn_database_reindex (VALUE self)
     return Qnil;
 }
 
+/*
+ * Removes a broken object.
+ *
+ * You should use {Groonga::Object#remove} normally.
+ *
+ * @overload remove_force(name)
+ *
+ *   @param [String] name The target object name.
+ *
+ * @since 6.0.9
+ */
+static VALUE
+rb_grn_database_remove_force (VALUE self, VALUE rb_name)
+{
+    grn_rc rc;
+    grn_ctx *context;
+    char *name;
+    int name_size;
+
+    rb_grn_database_deconstruct(SELF(self), NULL, &context,
+                                NULL, NULL, NULL, NULL);
+
+    name = StringValueCStr(rb_name);
+    name_size = RSTRING_LEN(rb_name);
+
+    rc = grn_obj_remove_force(context, name, name_size);
+    rb_grn_context_check(context, self);
+    rb_grn_rc_check(rc, self);
+
+    return Qnil;
+}
+
 void
 rb_grn_init_database (VALUE mGrn)
 {
@@ -740,4 +772,5 @@ rb_grn_init_database (VALUE mGrn)
     rb_define_method(rb_cGrnDatabase, "recover", rb_grn_database_recover, 0);
     rb_define_method(rb_cGrnDatabase, "unmap", rb_grn_database_unmap, 0);
     rb_define_method(rb_cGrnDatabase, "reindex", rb_grn_database_reindex, 0);
+    rb_define_method(rb_cGrnDatabase, "remove_force", rb_grn_database_remove_force, 1);
 }
