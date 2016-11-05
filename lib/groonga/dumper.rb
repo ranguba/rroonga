@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2011-2014  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2011-2016  Kouhei Sutou <kou@clear-code.com>
 # Copyright (C) 2014  Masafumi Yokoyama <myokoym@gmail.com>
 #
 # This library is free software; you can redistribute it and/or
@@ -487,7 +487,11 @@ module Groonga
         options[:with_section]  = true if column.with_section?
         options[:with_weight]   = true if column.with_weight?
         options[:with_position] = true if column.with_position?
-        options[:size] = column.size if column.small? or column.medium?
+        if column.small?
+          options[:size] = :small
+        elsif column.medium?
+          options[:size] = :medium
+        end
         arguments = [
           dump_object(target_table_name),
           sources.size == 1 ? source_names : "[#{source_names}]",

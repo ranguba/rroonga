@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2014  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2016  Kouhei Sutou <kou@clear-code.com>
 # Copyright (C) 2014  Masafumi Yokoyama <myokoym@gmail.com>
 #
 # This library is free software; you can redistribute it and/or
@@ -86,7 +86,7 @@ class SchemaDumperTest < Test::Unit::TestCase
     end
   end
 
-  def define_index_schema
+  def define_index_schema(options={})
     context.register_plugin("token_filters/stop_word")
     Groonga::Schema.define do |schema|
       schema.create_table("Items",
@@ -101,8 +101,8 @@ class SchemaDumperTest < Test::Unit::TestCase
                           :default_tokenizer => "TokenBigram",
                           :token_filters => ["TokenFilterStopWord"],
                           :normalizer => "NormalizerAuto") do |table|
-        table.index("Items", "_key")
-        table.index("Items", "title")
+        table.index("Items", "_key", options[:key_index_options] || {})
+        table.index("Items", "title", options[:title_index_options] || {})
       end
     end
   end
@@ -236,6 +236,58 @@ end
       SCHEMA
     end
 
+    def test_small_index
+      define_index_schema(:title_index_options => {:size => :small})
+      assert_equal(<<-SCHEMA, dump)
+create_table("Items",
+             :type => :hash,
+             :key_type => "ShortText",
+             :force => true) do |table|
+  table.short_text("title")
+end
+
+create_table("Terms",
+             :type => :patricia_trie,
+             :key_type => "ShortText",
+             :default_tokenizer => "TokenBigram",
+             :token_filters => ["TokenFilterStopWord"],
+             :normalizer => "NormalizerAuto",
+             :force => true) do |table|
+end
+
+change_table("Terms") do |table|
+  table.index("Items", "_key", :name => "Items__key", :with_position => true)
+  table.index("Items", "title", :name => "Items_title", :with_position => true, :size => :small)
+end
+      SCHEMA
+    end
+
+    def test_medium_index
+      define_index_schema(:title_index_options => {:size => :medium})
+      assert_equal(<<-SCHEMA, dump)
+create_table("Items",
+             :type => :hash,
+             :key_type => "ShortText",
+             :force => true) do |table|
+  table.short_text("title")
+end
+
+create_table("Terms",
+             :type => :patricia_trie,
+             :key_type => "ShortText",
+             :default_tokenizer => "TokenBigram",
+             :token_filters => ["TokenFilterStopWord"],
+             :normalizer => "NormalizerAuto",
+             :force => true) do |table|
+end
+
+change_table("Terms") do |table|
+  table.index("Items", "_key", :name => "Items__key", :with_position => true)
+  table.index("Items", "title", :name => "Items_title", :with_position => true, :size => :medium)
+end
+      SCHEMA
+    end
+
     def test_weight_vector
       define_weight_vector_schema
       assert_equal(<<-SCHEMA, dump)
@@ -314,6 +366,32 @@ table_create Terms TABLE_PAT_KEY ShortText --default_tokenizer TokenBigram --tok
 
 column_create Terms Items__key COLUMN_INDEX|WITH_POSITION Items _key
 column_create Terms Items_title COLUMN_INDEX|WITH_POSITION Items title
+      SCHEMA
+    end
+
+    def test_small_index
+      define_index_schema(:title_index_options => {:size => :small})
+      assert_equal(<<-SCHEMA, dump)
+table_create Items TABLE_HASH_KEY ShortText
+column_create Items title COLUMN_SCALAR ShortText
+
+table_create Terms TABLE_PAT_KEY ShortText --default_tokenizer TokenBigram --token_filters TokenFilterStopWord --normalizer NormalizerAuto
+
+column_create Terms Items__key COLUMN_INDEX|WITH_POSITION Items _key
+column_create Terms Items_title COLUMN_INDEX|WITH_POSITION|INDEX_SMALL Items title
+      SCHEMA
+    end
+
+    def test_medium_index
+      define_index_schema(:title_index_options => {:size => :medium})
+      assert_equal(<<-SCHEMA, dump)
+table_create Items TABLE_HASH_KEY ShortText
+column_create Items title COLUMN_SCALAR ShortText
+
+table_create Terms TABLE_PAT_KEY ShortText --default_tokenizer TokenBigram --token_filters TokenFilterStopWord --normalizer NormalizerAuto
+
+column_create Terms Items__key COLUMN_INDEX|WITH_POSITION Items _key
+column_create Terms Items_title COLUMN_INDEX|WITH_POSITION|INDEX_MEDIUM Items title
       SCHEMA
     end
 
