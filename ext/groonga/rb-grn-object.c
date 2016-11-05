@@ -927,6 +927,10 @@ rb_grn_object_inspect_content_flags_with_label (VALUE inspected,
             rb_ary_push(inspected_flags, rb_str_new_cstr("WITH_WEIGHT"));
         if (column_flags & GRN_OBJ_WITH_POSITION)
             rb_ary_push(inspected_flags, rb_str_new_cstr("WITH_POSITION"));
+        if (column_flags & GRN_OBJ_INDEX_SMALL)
+            rb_ary_push(inspected_flags, rb_str_new_cstr("SMALL"));
+        if (column_flags & GRN_OBJ_INDEX_MEDIUM)
+            rb_ary_push(inspected_flags, rb_str_new_cstr("MEDIUM"));
         break;
     default:
         break;

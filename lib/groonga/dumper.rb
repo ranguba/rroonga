@@ -487,6 +487,7 @@ module Groonga
         options[:with_section]  = true if column.with_section?
         options[:with_weight]   = true if column.with_weight?
         options[:with_position] = true if column.with_position?
+        options[:size] = column.size if column.small? or column.medium?
         arguments = [
           dump_object(target_table_name),
           sources.size == 1 ? source_names : "[#{source_names}]",
@@ -643,6 +644,8 @@ module Groonga
         flags << "WITH_SECTION" if column.with_section?
         flags << "WITH_WEIGHT" if column.with_weight?
         flags << "WITH_POSITION" if column.with_position?
+        flags << "INDEX_SMALL" if column.small?
+        flags << "INDEX_MEDIUM" if column.medium?
         parameters << "#{flags.join('|')}"
         parameters << "#{column.range.name}"
         source_names = column.sources.collect do |source|
