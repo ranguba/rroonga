@@ -884,10 +884,10 @@ rb_grn_index_column_with_position_p (VALUE self)
 }
 
 /*
- * Checks whether the object is a small size of index column.
+ * Checks whether the index column is small or not.
  *
  * @overload small?
- *   @return [Boolean] `true` if the object is a small size of index column,
+ *   @return [Boolean] `true` if the index column is small,
  *     `false` otherwise.
  *
  * @since 6.1.0
@@ -909,10 +909,10 @@ rb_grn_index_column_small_p (VALUE self)
 }
 
 /*
- * Checks whether the object is a medium size of index column.
+ * Checks whether the index column is medium or not.
  *
  * @overload medium?
- *   @return [Boolean] `true` if the object is a medium size of index column,
+ *   @return [Boolean] `true` if the index column is medium,
  *     `false` otherwise.
  *
  * @since 6.1.0
