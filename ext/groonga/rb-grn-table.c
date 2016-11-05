@@ -357,9 +357,10 @@ rb_grn_table_define_column (int argc, VALUE *argv, VALUE self)
  *     転置索引にweight情報を合わせて格納する。
  *   @option options :with_position
  *     転置索引に出現位置情報を合わせて格納する。
- *   @option options :size
- *     The size of index column. It must be `:small` or `:medium`.
- *     Omitted size is initialized as default index column.
+ *   @option options :size (nil)
+ *     The size of index column. It must be `nil`, `:small` or
+ *     `:medium`. `nil` means full size. `:small` means small
+ *     size. `:medium` means medium size.
  *   @option options :source
  *    インデックス対象となるカラムを指定する。 +:sources+ との併用はできない。
  *   @option options :sources
