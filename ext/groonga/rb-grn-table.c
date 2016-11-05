@@ -374,7 +374,7 @@ rb_grn_table_define_index_column (int argc, VALUE *argv, VALUE self)
     grn_ctx *context = NULL;
     grn_obj *table;
     grn_obj *value_type, *column;
-    char *name = NULL, *path = NULL, *index_size = NULL;
+    char *name = NULL, *path = NULL;
     unsigned name_size = 0;
     grn_column_flags flags = GRN_OBJ_COLUMN_INDEX;
     VALUE rb_name, rb_value_type;
@@ -449,23 +449,16 @@ rb_grn_table_define_index_column (int argc, VALUE *argv, VALUE self)
     if (RVAL2CBOOL(rb_with_position))
         flags |= GRN_OBJ_WITH_POSITION;
 
-    if (!NIL_P(rb_size)) {
-        if (rb_type(rb_size) != T_SYMBOL) {
-            rb_raise(rb_eArgError,
-                     ":size must be nil, :small or :medium: <%" PRIsVALUE ">",
-                     rb_size);
-        } else {
-            index_size = RSYMBOL2CSTR(rb_size);
-        }
-        if (strcmp(index_size, "small") == 0) {
-            flags |= GRN_OBJ_INDEX_SMALL;
-        } else if (strcmp(index_size, "medium") == 0) {
-            flags |= GRN_OBJ_INDEX_MEDIUM;
-        } else {
-            rb_raise(rb_eArgError,
-                     ":size must be nil, :small or :medium: <%" PRIsVALUE ">",
-                     rb_size);
-        }
+    if (NIL_P(rb_size)) {
+        /* do nothing */
+    } else if (rb_grn_equal_option(rb_size, "small")) {
+        flags |= GRN_OBJ_INDEX_SMALL;
+    } else if (rb_grn_equal_option(rb_size, "medium")) {
+        flags |= GRN_OBJ_INDEX_MEDIUM;
+    } else {
+        rb_raise(rb_eArgError,
+                 ":size must be nil, :small or :medium: <%" PRIsVALUE ">",
+                 rb_size);
     }
 
     if (!NIL_P(rb_source) && !NIL_P(rb_sources))
