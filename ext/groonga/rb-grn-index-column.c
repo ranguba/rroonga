@@ -884,6 +884,56 @@ rb_grn_index_column_with_position_p (VALUE self)
 }
 
 /*
+ * Checks whether the object is a small size of index column.
+ *
+ * @overload small?
+ *   @return [Boolean] `true` if the object is a small size of index column,
+ *     `false` otherwise.
+ *
+ * @since 6.1.0
+ */
+static VALUE
+rb_grn_index_column_small_p (VALUE self)
+{
+    grn_obj *column;
+    grn_ctx *context;
+    grn_column_flags flags;
+
+    rb_grn_index_column_deconstruct(SELF(self), &column, &context,
+                                    NULL, NULL,
+                                    NULL, NULL, NULL, NULL, NULL,
+                                    NULL, NULL);
+
+    flags = grn_column_get_flags(context, column);
+    return CBOOL2RVAL(flags & GRN_OBJ_INDEX_SMALL);
+}
+
+/*
+ * Checks whether the object is a medium size of index column.
+ *
+ * @overload medium?
+ *   @return [Boolean] `true` if the object is a medium size of index column,
+ *     `false` otherwise.
+ *
+ * @since 6.1.0
+ */
+static VALUE
+rb_grn_index_column_medium_p (VALUE self)
+{
+    grn_obj *column;
+    grn_ctx *context;
+    grn_column_flags flags;
+
+    rb_grn_index_column_deconstruct(SELF(self), &column, &context,
+                                    NULL, NULL,
+                                    NULL, NULL, NULL, NULL, NULL,
+                                    NULL, NULL);
+
+    flags = grn_column_get_flags(context, column);
+    return CBOOL2RVAL(flags & GRN_OBJ_INDEX_MEDIUM);
+}
+
+/*
  * Opens cursor to iterate posting in the index column.
  *
  * @example
@@ -1310,6 +1360,10 @@ rb_grn_init_index_column (VALUE mGrn)
                      rb_grn_index_column_with_weight_p, 0);
     rb_define_method(rb_cGrnIndexColumn, "with_position?",
                      rb_grn_index_column_with_position_p, 0);
+    rb_define_method(rb_cGrnIndexColumn, "small?",
+                     rb_grn_index_column_small_p, 0);
+    rb_define_method(rb_cGrnIndexColumn, "medium?",
+                     rb_grn_index_column_medium_p, 0);
 
     rb_define_method(rb_cGrnIndexColumn, "open_cursor",
                      rb_grn_index_column_open_cursor, -1);

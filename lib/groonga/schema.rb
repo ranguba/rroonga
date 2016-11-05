@@ -1697,6 +1697,7 @@ module Groonga
           :with_section => @options[:with_section],
           :with_weight => @options[:with_weight],
           :with_position => @options[:with_position],
+          :size => @options[:size]
         }
       end
 

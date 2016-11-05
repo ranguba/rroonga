@@ -357,6 +357,9 @@ rb_grn_table_define_column (int argc, VALUE *argv, VALUE self)
  *     転置索引にweight情報を合わせて格納する。
  *   @option options :with_position
  *     転置索引に出現位置情報を合わせて格納する。
+ *   @option options :size
+ *     The size of index column. It must be `:small` or `:medium`.
+ *     Omitted size is initialized as default index column.
  *   @option options :source
  *    インデックス対象となるカラムを指定する。 +:sources+ との併用はできない。
  *   @option options :sources
@@ -370,12 +373,13 @@ rb_grn_table_define_index_column (int argc, VALUE *argv, VALUE self)
     grn_ctx *context = NULL;
     grn_obj *table;
     grn_obj *value_type, *column;
-    char *name = NULL, *path = NULL;
+    char *name = NULL, *path = NULL, *index_size = NULL;
     unsigned name_size = 0;
     grn_column_flags flags = GRN_OBJ_COLUMN_INDEX;
     VALUE rb_name, rb_value_type;
     VALUE options, rb_path, rb_persistent;
     VALUE rb_with_section, rb_with_weight, rb_with_position;
+    VALUE rb_size;
     VALUE rb_column, rb_source, rb_sources;
     VALUE columns;
 
@@ -395,6 +399,7 @@ rb_grn_table_define_index_column (int argc, VALUE *argv, VALUE self)
                         "with_section", &rb_with_section,
                         "with_weight", &rb_with_weight,
                         "with_position", &rb_with_position,
+                        "size", &rb_size,
                         "source", &rb_source,
                         "sources", &rb_sources,
                         NULL);
@@ -442,6 +447,21 @@ rb_grn_table_define_index_column (int argc, VALUE *argv, VALUE self)
     }
     if (RVAL2CBOOL(rb_with_position))
         flags |= GRN_OBJ_WITH_POSITION;
+
+    if (!NIL_P(rb_size)) {
+        if (rb_type(rb_size) != T_SYMBOL) {
+            rb_raise(rb_eArgError, "should pass :small or :medium.");
+        } else {
+            index_size = RSYMBOL2CSTR(rb_size);
+        }
+        if (strcmp(index_size, "small") == 0) {
+            flags |= GRN_OBJ_INDEX_SMALL;
+        } else if (strcmp(index_size, "medium") == 0) {
+            flags |= GRN_OBJ_INDEX_MEDIUM;
+        } else {
+            rb_raise(rb_eArgError, "should pass :small or :medium.");
+        }
+    }
 
     if (!NIL_P(rb_source) && !NIL_P(rb_sources))
         rb_raise(rb_eArgError, "should not pass both of :source and :sources.");

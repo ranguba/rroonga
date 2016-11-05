@@ -378,6 +378,65 @@ class IndexColumnTest < Test::Unit::TestCase
                      context["Tags.default"].with_position?,
                    ])
     end
+
+    class SizeTest < self
+      def test_small
+        Groonga::Schema.define do |schema|
+          schema.create_table("Tags",
+                              :type => :patricia_trie,
+                              :key_type => "ShortText") do |table|
+            table.index("Articles.tags",
+                        :name => "small",
+                        :size => :small)
+            table.index("Articles.tags",
+                        :name => "default")
+          end
+        end
+
+        assert_equal([
+                       true,
+                       false,
+                     ],
+                     [
+                       context["Tags.small"].small?,
+                       context["Tags.default"].small?,
+                     ])
+      end
+
+      def test_medium
+        Groonga::Schema.define do |schema|
+          schema.create_table("Tags",
+                              :type => :patricia_trie,
+                              :key_type => "ShortText") do |table|
+            table.index("Articles.tags",
+                        :name => "medium",
+                        :size => :medium)
+            table.index("Articles.tags",
+                        :name => "default")
+          end
+        end
+
+        assert_equal([
+                       true,
+                       false,
+                     ],
+                     [
+                       context["Tags.medium"].medium?,
+                       context["Tags.default"].medium?,
+                     ])
+      end
+
+      def test_invalid
+        Groonga::Schema.create_table("Tags",
+                                     :type => :patricia_trie,
+                                     :key_type => "ShortText")
+        assert_raise(ArgumentError.new("should pass :small or :medium.")) do
+          tags = Groonga["Tags"]
+          tags.define_index_column("small", Groonga["Articles"],
+                                   :size => "invalid")
+        end
+      end
+    end
   end
 
   class SourceTest < self
