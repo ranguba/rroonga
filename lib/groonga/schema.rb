@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2009-2014  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2016  Kouhei Sutou <kou@clear-code.com>
 # Copyright (C) 2014-2015  Masafumi Yokoyama <yokoyama@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
@@ -1697,7 +1697,7 @@ module Groonga
           :with_section => @options[:with_section],
           :with_weight => @options[:with_weight],
           :with_position => @options[:with_position],
-          :size => @options[:size]
+          :size => @options[:size],
         }
       end
 
