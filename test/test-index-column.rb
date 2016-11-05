@@ -434,7 +434,7 @@ class IndexColumnTest < Test::Unit::TestCase
         assert_raise(ArgumentError.new(message)) do
           tags = context["Tags"]
           tags.define_index_column("small",
-                                   contet["Articles"],
+                                   context["Articles"],
                                    :size => "invalid")
         end
       end
