@@ -451,7 +451,9 @@ rb_grn_table_define_index_column (int argc, VALUE *argv, VALUE self)
 
     if (!NIL_P(rb_size)) {
         if (rb_type(rb_size) != T_SYMBOL) {
-            rb_raise(rb_eArgError, "should pass :small or :medium.");
+            rb_raise(rb_eArgError,
+                     ":size must be nil, :small or :medium: <%" PRIsVALUE ">",
+                     rb_size);
         } else {
             index_size = RSYMBOL2CSTR(rb_size);
         }
@@ -460,7 +462,9 @@ rb_grn_table_define_index_column (int argc, VALUE *argv, VALUE self)
         } else if (strcmp(index_size, "medium") == 0) {
             flags |= GRN_OBJ_INDEX_MEDIUM;
         } else {
-            rb_raise(rb_eArgError, "should pass :small or :medium.");
+            rb_raise(rb_eArgError,
+                     ":size must be nil, :small or :medium: <%" PRIsVALUE ">",
+                     rb_size);
         }
     }
 

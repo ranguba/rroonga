@@ -430,7 +430,8 @@ class IndexColumnTest < Test::Unit::TestCase
         Groonga::Schema.create_table("Tags",
                                      :type => :patricia_trie,
                                      :key_type => "ShortText")
-        assert_raise(ArgumentError.new("should pass :small or :medium.")) do
+        message = ":size must be nil, :small or :medium: <invalid>"
+        assert_raise(ArgumentError.new(message)) do
           tags = Groonga["Tags"]
           tags.define_index_column("small", Groonga["Articles"],
                                    :size => "invalid")
