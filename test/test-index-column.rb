@@ -432,8 +432,9 @@ class IndexColumnTest < Test::Unit::TestCase
                                      :key_type => "ShortText")
         message = ":size must be nil, :small or :medium: <invalid>"
         assert_raise(ArgumentError.new(message)) do
-          tags = Groonga["Tags"]
-          tags.define_index_column("small", Groonga["Articles"],
+          tags = context["Tags"]
+          tags.define_index_column("small",
+                                   contet["Articles"],
                                    :size => "invalid")
         end
       end
