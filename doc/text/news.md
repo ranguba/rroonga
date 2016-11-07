@@ -1,5 +1,13 @@
 # NEWS
 
+## 6.1.0: 2016-11-07 {#version-6-1-0}
+
+### Improvements
+
+  * {Groonga::Table#define_index_column}: Added `:size` option to
+    support small or medium size of index column. Specify `:small` or
+    `:medium` to customize it.
+
 ## 6.0.9: 2016-10-07 {#version-6-0-9}
 
 ### Improvements
