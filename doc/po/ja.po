@@ -456,7 +456,9 @@ msgid ""
 "  * {Groonga::Table#define_index_column}: Added `:size` option to\n"
 "    support small or medium size of index column. Specify `:small` or\n"
 "    `:medium` to customize it."
-msgstr "  * {Groonga::Table#define_index_column}: 小さなサイズや中サイズのインデックスカラムを作成するために `:size` オプションをサポートしました。 このオプションには `:small` や `:medium` を指定します。"
+msgstr ""
+"  * {Groonga::Table#define_index_column}: 小さなサイズや中サイズのインデックスカラムを作成するために `:size"
+"` オプションをサポートしました。 このオプションには `:small` や `:medium` を指定します。"
 
 msgid "## 6.0.9: 2016-10-07 {#version-6-0-9}"
 msgstr ""
@@ -4514,12 +4516,12 @@ msgid ""
 "column. Results are stored into the column."
 msgstr ""
 
-# @since
-msgid "6.0.4"
-msgstr ""
-
 # @param [::Hash] options
 msgid "The name and value pairs."
+msgstr ""
+
+# @since
+msgid "6.0.4"
 msgstr ""
 
 # @example
@@ -8922,9 +8924,8 @@ msgstr ""
 msgid "tag|param|vector_value_with_weight"
 msgstr ""
 
-# @param vector_value_with_weight
+# @param [::Array<::Hash{:value => ::Object, :weight => Integer}, ::Object>] vector_value_with_weight
 msgid ""
-"[::Array<::Hash{:value => ::Object, :weight => Integer}, ::Object>]\n"
 "The new vector value with weight. The vector value can contain both\n"
 "::Hash and value. If a contained element uses ::Hash style, it can\n"
 "specify its weight. If a contained element doesn't use ::Hash style,\n"
@@ -9709,7 +9710,7 @@ msgid "The new lock timeout."
 msgstr ""
 
 # @see
-msgid "tag|see|{#lock_timeout}"
+msgid "tag|see|lock_timeout"
 msgstr ""
 
 # @since
