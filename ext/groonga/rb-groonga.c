@@ -159,7 +159,7 @@ rb_grn_s_get_lock_timeout (VALUE klass)
  * @overload lock_timeout=(timeout)
  *    @param [Integer] timeout The new lock timeout.
  *
- * @see {#lock_timeout}
+ * @see lock_timeout
  * @since 3.1.2
  */
 static VALUE
