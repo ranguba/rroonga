@@ -1,7 +1,7 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
-  Copyright (C) 2014-2015  Masafumi Yokoyama <yokoyama@clear-code.com>
   Copyright (C) 2009-2016  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2014-2016  Masafumi Yokoyama <yokoyama@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -102,6 +102,7 @@ static VALUE eGrnPluginError;
 static VALUE eGrnScorerError;
 static VALUE eGrnCancel;
 static VALUE eGrnWindowFunctionError;
+static VALUE eGrnZstdError;
 
 VALUE
 rb_grn_rc_to_exception (grn_rc rc)
@@ -348,6 +349,9 @@ rb_grn_rc_to_exception (grn_rc rc)
         break;
       case GRN_WINDOW_FUNCTION_ERROR:
         exception = eGrnWindowFunctionError;
+        break;
+      case GRN_ZSTD_ERROR:
+        exception = eGrnZstdError;
         break;
     }
 
@@ -1058,4 +1062,14 @@ rb_grn_init_exception (VALUE mGrn)
      */
     eGrnWindowFunctionError =
         rb_define_class_under(mGrn, "WindowFunctionError", rb_eGrnError);
+
+    /*
+     * Document-class: Groonga::ZstdError
+     *
+     * It is used when Zstd causes an error.
+     *
+     * @since 6.1.1
+     */
+    eGrnZstdError =
+        rb_define_class_under(mGrn, "ZstdError", rb_eGrnError);
 }

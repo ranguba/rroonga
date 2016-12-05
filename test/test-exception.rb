@@ -1,5 +1,5 @@
-# Copyright (C) 2014-2015  Masafumi Yokoyama <yokoyama@clear-code.com>
 # Copyright (C) 2009-2014  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2014-2016  Masafumi Yokoyama <yokoyama@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -100,6 +100,7 @@ class ExceptionTest < Test::Unit::TestCase
     assert_const_defined(Groonga, :CommandError)
     assert_const_defined(Groonga, :PluginError)
     assert_const_defined(Groonga, :ScorerError)
+    assert_const_defined(Groonga, :ZstdError)
   end
 end
 
