@@ -232,6 +232,7 @@ rb_grn_table_inspect (VALUE self)
  *     * `:zlib`: Compressed by zlib.
  *     * `:lz4`: Compressed by LZ4.
  *     * `:zstd`: Compressed by Zstandard.
+ *     * `:zstandard`: Compressed by Zstandard.
  *
  * @return [Groonga::FixSizeColumn, Groonga::VariableSizeColumn]
  */
@@ -315,10 +316,12 @@ rb_grn_table_define_column (int argc, VALUE *argv, VALUE self)
         flags |= GRN_OBJ_COMPRESS_LZ4;
     } else if (rb_grn_equal_option(rb_compress, "zstd")) {
         flags |= GRN_OBJ_COMPRESS_ZSTD;
+    } else if (rb_grn_equal_option(rb_compress, "zstandard")) {
+        flags |= GRN_OBJ_COMPRESS_ZSTD;
     } else {
         rb_raise(rb_eArgError,
                  "invalid compress type: %s: "
-                 "available types: [:zlib, :lz4, :zstd, nil]",
+                 "available types: [:zlib, :lz4, :zstd, :zstandard, nil]",
                  rb_grn_inspect(rb_compress));
     }
 
