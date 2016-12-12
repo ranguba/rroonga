@@ -628,6 +628,8 @@ module Groonga
             flags << "COMPRESS_ZLIB"
           elsif column.compressed?(:lz4)
             flags << "COMPRESS_LZ4"
+          elsif column.compressed?(:zstd)
+            flags << "COMPRESS_ZSTD"
           end
         end
         parameters << "#{flags.join('|')}"
