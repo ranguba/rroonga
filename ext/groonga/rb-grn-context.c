@@ -700,8 +700,8 @@ rb_grn_context_support_lz4_p (VALUE self)
 }
 
 /*
- * If Groonga supports Zstandard compression, it returns +true+,
- * otherwise it returns +false+.
+ * If Groonga supports Zstandard compression, it returns `true`,
+ * otherwise it returns `false`.
  *
  * @overload support_zstd?
  */
