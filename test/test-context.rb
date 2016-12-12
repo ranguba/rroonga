@@ -1,4 +1,5 @@
 # Copyright (C) 2009-2015  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2016  Masafumi Yokoyama <yokoyama@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -120,6 +121,10 @@ class ContextTest < Test::Unit::TestCase
 
   def test_support_lz4?
     assert_boolean(Groonga::Context.default.support_lz4?)
+  end
+
+  def test_support_zstd?
+    assert_boolean(Groonga::Context.default.support_zstd?)
   end
 
   def test_match_escalation_threshold
