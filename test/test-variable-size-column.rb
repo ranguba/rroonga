@@ -96,6 +96,16 @@ class VariableSizeColumnTest < Test::Unit::TestCase
     end
   end
 
+  def test_compressed_zstd?
+    description = @users.define_column("description", "ShortText",
+                                       :compress => :zstd)
+    if context.support_zstd?
+      assert {description.compressed?(:zstd)}
+    else
+      assert {not description.compressed?(:zstd)}
+    end
+  end
+
   def test_inspect
     assert_equal("#<Groonga::VariableSizeColumn " +
                  "id: <#{@name.id}>, " +

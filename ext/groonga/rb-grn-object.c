@@ -918,6 +918,8 @@ rb_grn_object_inspect_content_flags_with_label (VALUE inspected,
             rb_ary_push(inspected_flags, rb_str_new_cstr("COMPRESS_ZLIB"));
         } else if (column_flags & GRN_OBJ_COMPRESS_LZ4) {
             rb_ary_push(inspected_flags, rb_str_new_cstr("COMPRESS_LZ4"));
+        } else if (column_flags & GRN_OBJ_COMPRESS_ZSTD) {
+            rb_ary_push(inspected_flags, rb_str_new_cstr("COMPRESS_ZSTD"));
         }
         break;
     case GRN_COLUMN_INDEX:

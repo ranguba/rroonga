@@ -1,5 +1,5 @@
 # Copyright (C) 2009-2016  Kouhei Sutou <kou@clear-code.com>
-# Copyright (C) 2014  Masafumi Yokoyama <myokoym@gmail.com>
+# Copyright (C) 2014-2016  Masafumi Yokoyama <yokoyama@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -432,6 +432,16 @@ column_create Posts title #{flags} ShortText
         SCHEMA
       end
 
+      def test_zstd
+        define_column_compression_zstd_schema
+        flags = "COLUMN_SCALAR"
+        flags << "|COMPRESS_ZSTD" if context.support_zstd?
+        assert_equal(<<-SCHEMA, dump)
+table_create Posts TABLE_NO_KEY
+column_create Posts title #{flags} ShortText
+        SCHEMA
+      end
+
       def test_with_weight_vector
         define_column_compression_with_weight_vector_schema
         flags = "COLUMN_VECTOR|WITH_WEIGHT"
@@ -455,6 +465,14 @@ column_create Posts comments #{flags} ShortText
         Groonga::Schema.define do |schema|
           schema.create_table("Posts") do |table|
             table.short_text("title", :compress => :lz4)
+          end
+        end
+      end
+
+      def define_column_compression_zstd_schema
+        Groonga::Schema.define do |schema|
+          schema.create_table("Posts") do |table|
+            table.short_text("title", :compress => :zstd)
           end
         end
       end
