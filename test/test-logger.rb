@@ -137,4 +137,10 @@ class LoggerTest < Test::Unit::TestCase
     Groonga::Logger.log("Hello")
     assert_not_equal([], Dir.glob("#{@log_path}.*"))
   end
+
+  sub_test_case "Flags" do
+    test "pid" do
+      assert_const_defined(Groonga::Logger::Flags, :PID)
+    end
+  end
 end
