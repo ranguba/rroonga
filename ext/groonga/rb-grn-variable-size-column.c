@@ -465,7 +465,7 @@ rb_grn_variable_size_column_array_set (VALUE self, VALUE rb_id, VALUE rb_value)
  * @overload compressed?
  *   @return [Boolean] whether the column is compressed or not.
  * @overload compressed?(type)
- *   @param [:zlib, :lz4, :zstd] type (nil)
+ *   @param [:zlib, :lz4, :zstd, :zstandard] type (nil)
  *   @return [Boolean] whether specified compressed type is used or not.
  * @since 1.3.1
  */
@@ -497,9 +497,12 @@ rb_grn_variable_size_column_compressed_p (int argc, VALUE *argv, VALUE self)
             need_lz4_check = GRN_TRUE;
         } else if (rb_grn_equal_option(type, "zstd")) {
             need_zstd_check = GRN_TRUE;
+        } else if (rb_grn_equal_option(type, "zstandardd")) {
+            need_zstd_check = GRN_TRUE;
         } else {
             rb_raise(rb_eArgError,
-                     "compressed type should be <:zlib>, <:lz4> or <:zstd>: <%s>",
+                     "compressed type should be "
+                     "<:zlib>, <:lz4>, <:zstd> or <:zstandard>: <%s>",
                      rb_grn_inspect(type));
         }
     }
