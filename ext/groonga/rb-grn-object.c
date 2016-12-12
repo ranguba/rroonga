@@ -1,6 +1,6 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
-  Copyright (C) 2009-2014  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2016  Kouhei Sutou <kou@clear-code.com>
   Copyright (C) 2014-2016  Masafumi Yokoyama <yokoyama@clear-code.com>
 
   This library is free software; you can redistribute it and/or
@@ -914,12 +914,18 @@ rb_grn_object_inspect_content_flags_with_label (VALUE inspected,
     switch (object->header.type) {
     case GRN_COLUMN_FIX_SIZE:
     case GRN_COLUMN_VAR_SIZE:
-        if (column_flags & GRN_OBJ_COMPRESS_ZLIB) {
+        switch (column_flags & GRN_OBJ_COMPRESS_MASK) {
+        case GRN_OBJ_COMPRESS_ZLIB:
             rb_ary_push(inspected_flags, rb_str_new_cstr("COMPRESS_ZLIB"));
-        } else if (column_flags & GRN_OBJ_COMPRESS_LZ4) {
+            break;
+        case GRN_OBJ_COMPRESS_LZ4:
             rb_ary_push(inspected_flags, rb_str_new_cstr("COMPRESS_LZ4"));
-        } else if (column_flags & GRN_OBJ_COMPRESS_ZSTD) {
+            break;
+        case GRN_OBJ_COMPRESS_ZSTD:
             rb_ary_push(inspected_flags, rb_str_new_cstr("COMPRESS_ZSTD"));
+            break;
+        default:
+            break;
         }
         break;
     case GRN_COLUMN_INDEX:
