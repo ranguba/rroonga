@@ -650,6 +650,7 @@ rb_grn_init_logger (VALUE mGrn)
     DEFINE_FLAG(TITLE);
     DEFINE_FLAG(MESSAGE);
     DEFINE_FLAG(LOCATION);
+    DEFINE_FLAG(PID);
 #undef DEFINE_FLAG
 
     rb_cGrnCallbackLogger =
