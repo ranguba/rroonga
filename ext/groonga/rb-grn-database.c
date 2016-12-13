@@ -706,9 +706,9 @@ rb_grn_database_reindex (VALUE self)
 }
 
 /*
- * Removes a broken object.
+ * Removes an object forcibly.
  *
- * You should use {Groonga::Object#remove} normally.
+ * Normally, you should use {Groonga::Object#remove}.
  *
  * @overload remove_force(name)
  *
