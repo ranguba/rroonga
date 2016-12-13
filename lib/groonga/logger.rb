@@ -23,7 +23,7 @@ module Groonga
         TITLE    => "title",
         MESSAGE  => "message",
         LOCATION => "location",
-        PID => "pid",
+        PID      => "pid",
       }
 
       class << self
