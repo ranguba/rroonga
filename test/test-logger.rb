@@ -139,8 +139,11 @@ class LoggerTest < Test::Unit::TestCase
   end
 
   sub_test_case "Flags" do
-    test "pid" do
-      assert_const_defined(Groonga::Logger::Flags, :PID)
+    sub_test_case "#label" do
+      test "pid" do
+        flags = Groonga::Logger::Flags::PID
+        assert_equal("pid", Groonga::Logger::Flags.label(flags))
+      end
     end
   end
 end

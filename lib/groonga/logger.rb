@@ -35,7 +35,7 @@ module Groonga
         def label(flags)
           labels = []
           LABELS.each do |flag, label|
-            flags << label if (flags & flag) == flag
+            labels << label if (flags & flag) == flag
           end
           labels << "none" if labels.empty?
           labels.join("|")
