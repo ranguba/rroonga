@@ -1,7 +1,7 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
   Copyright (C) 2009-2016  Kouhei Sutou <kou@clear-code.com>
-  Copyright (C) 2015-2016  Masafumi Yokoyama <yokoyama@clear-code.com>
+  Copyright (C) 2015-2017  Masafumi Yokoyama <yokoyama@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -99,7 +99,7 @@ RB_GRN_BEGIN_DECLS
 
 #define RB_GRN_MAJOR_VERSION 6
 #define RB_GRN_MINOR_VERSION 1
-#define RB_GRN_MICRO_VERSION 1
+#define RB_GRN_MICRO_VERSION 3
 
 #define RB_GRN_OBJECT(object) ((RbGrnObject *)(object))
 #define RB_GRN_NAMED_OBJECT(object) ((RbGrnNamedObject *)(object))
