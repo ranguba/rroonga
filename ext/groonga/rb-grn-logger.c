@@ -580,10 +580,7 @@ rb_grn_logger_s_get_flags (VALUE klass)
 static VALUE
 rb_grn_logger_s_set_flags (VALUE klass, VALUE rb_flags)
 {
-    int flags = 0;
-
-    flags = NUM2INT(rb_flags);
-    grn_default_logger_set_flags(flags);
+    grn_default_logger_set_flags(NUM2INT(rb_flags));
 
     return Qnil;
 }
