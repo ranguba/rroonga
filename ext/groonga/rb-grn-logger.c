@@ -563,7 +563,7 @@ rb_grn_logger_s_get_flags (VALUE klass)
     VALUE rb_flags;
 
     flags = grn_default_logger_get_flags();
-    rb_flags = UINT2NUM(flags);
+    rb_flags = INT2NUM(flags);
 
     return rb_flags;
 }
