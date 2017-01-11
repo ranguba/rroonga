@@ -583,7 +583,7 @@ rb_grn_logger_s_set_flags (VALUE klass, VALUE rb_flags)
     int flags = 0;
 
     if (!NIL_P(rb_flags)) {
-        flags = NUM2UINT(rb_flags);
+        flags = NUM2INT(rb_flags);
     }
     grn_default_logger_set_flags(flags);
 
