@@ -1068,7 +1068,7 @@ rb_grn_init_exception (VALUE mGrn)
      *
      * It is used when Zstd causes an error.
      *
-     * @since 6.1.1
+     * @since 6.1.3
      */
     eGrnZstdError =
         rb_define_class_under(mGrn, "ZstdError", rb_eGrnError);
