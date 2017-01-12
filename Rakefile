@@ -1,6 +1,7 @@
 # -*- coding: utf-8; mode: ruby -*-
 #
 # Copyright (C) 2009-2016  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2017  Masafumi Yokoyama <yokoyama@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -157,7 +158,7 @@ windows_architectures = [:x86, :x64]
 
 namespace :build do
   namespace :windows do
-    ruby_versions = "2.1.6:2.2.2:2.3.0"
+    ruby_versions = "2.1.6:2.2.2:2.3.0:2.4.0"
 
     windows_architectures.each do |architecture|
       desc "Build gem for Windows #{architecture}"
