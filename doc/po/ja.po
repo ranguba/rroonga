@@ -446,11 +446,51 @@ msgstr "* [2. インストール - Groonga ドキュメント](http://groonga.or
 msgid "# NEWS"
 msgstr "# お知らせ"
 
-msgid "## 6.1.0: 2016-11-07 {#version-6-1-0}"
+msgid "## 6.1.3: 2017-01-12 {#version-6-1-3}"
 msgstr ""
 
 msgid "### Improvements"
 msgstr "### 改善"
+
+#, fuzzy
+msgid "  * Supported Groonga 6.1.3. Groonga 6.1.0 or older aren't supported."
+msgstr "  * Groonga 6.0.7をサポートしました。Groonga 6.0.5以前はサポートしません。"
+
+msgid "  * Added {Groonga::Context#support_zstd?}."
+msgstr ""
+
+msgid "  * Added {Groonga::ZstdError}."
+msgstr ""
+
+msgid ""
+"  * Supported Zstandard compression.\n"
+"    If Zstandard is available in your enviromemt, you can use Zstandard\n"
+"    compression for columns. How to use:"
+msgstr ""
+
+msgid ""
+"          Groonga::Schema.define do |schema|\n"
+"            schema.create_table(\"Posts\") do |table|\n"
+"              table.short_text(\"title\", :compress => :zstandard)\n"
+"              # shortened form\n"
+"              # table.short_text(\"title\", :compress => :zstd)\n"
+"            end\n"
+"          end"
+msgstr ""
+
+msgid "  * Added PID for {Groonga::Logger::Flags}."
+msgstr ""
+
+#, fuzzy
+msgid "  * Added {Groonga::Logger.flags}."
+msgstr "  * {Groonga::Plugin.names}を追加しました。"
+
+#, fuzzy
+msgid "  * Added {Groonga::Logger.flags=}."
+msgstr "  * {Groonga::Plugin.names}を追加しました。"
+
+msgid "## 6.1.0: 2016-11-07 {#version-6-1-0}"
+msgstr ""
 
 msgid ""
 "  * {Groonga::Table#define_index_column}: Added `:size` option to\n"
@@ -4418,6 +4458,16 @@ msgstr ""
 msgid "tag|overload|support_lz4?"
 msgstr ""
 
+# Groonga::Context#support_zstd?
+msgid ""
+"If Groonga supports Zstandard compression, it returns `true`,\n"
+"otherwise it returns `false`."
+msgstr ""
+
+# @overload
+msgid "tag|overload|support_zstd?"
+msgstr ""
+
 msgid "コンテキストが使うデータベースを返す。"
 msgstr ""
 
@@ -4855,11 +4905,11 @@ msgid "tag|see|Groonga::TableKeySupport#reindex"
 msgstr ""
 
 # Groonga::Database#remove_force
-msgid "Removes a broken object."
+msgid "Removes an object forcibly."
 msgstr ""
 
 # Groonga::Database#remove_force
-msgid "You should use {Groonga::Object#remove} normally."
+msgid "Normally, you should use {Groonga::Object#remove}."
 msgstr ""
 
 # @overload
@@ -5491,6 +5541,14 @@ msgstr ""
 
 # Groonga::WindowFunctionError
 msgid "It is used when window function causes an error."
+msgstr ""
+
+# @since
+msgid "6.1.3"
+msgstr ""
+
+# Groonga::ZstdError
+msgid "It is used when Zstd causes an error."
 msgstr ""
 
 msgid "検索条件やデータベースへの操作を表現するオブジェクト。"
@@ -6825,6 +6883,34 @@ msgstr ""
 msgid ""
 "The log path for the default logger.\n"
 "If nil is specified, logging by the default logger is disabled."
+msgstr ""
+
+# Groonga::Logger.flags
+msgid "Gets the current log flags that is used by the default logger."
+msgstr ""
+
+# @overload
+msgid "tag|overload|flags"
+msgstr ""
+
+# @return [Integer]
+msgid "The current log flags."
+msgstr ""
+
+# Groonga::Logger.flags=
+msgid "Sets the log flags that is used by the default logger."
+msgstr ""
+
+# @overload
+msgid "tag|overload|flags="
+msgstr ""
+
+# @param [Integer]
+msgid "tag|param|flags"
+msgstr ""
+
+# @param [Integer] flags
+msgid "The log flags for the default logger."
 msgstr ""
 
 # Groonga::Logger.rotate_threshold_size
@@ -8924,8 +9010,9 @@ msgstr ""
 msgid "tag|param|vector_value_with_weight"
 msgstr ""
 
-# @param [::Array<::Hash{:value => ::Object, :weight => Integer}, ::Object>] vector_value_with_weight
+# @param vector_value_with_weight
 msgid ""
+"[::Array<::Hash{:value => ::Object, :weight => Integer}, ::Object>]\n"
 "The new vector value with weight. The vector value can contain both\n"
 "::Hash and value. If a contained element uses ::Hash style, it can\n"
 "specify its weight. If a contained element doesn't use ::Hash style,\n"
