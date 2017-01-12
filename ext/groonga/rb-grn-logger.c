@@ -554,7 +554,7 @@ rb_grn_logger_s_set_path (VALUE klass, VALUE rb_path)
  * @overload flags
  *   @return [Integer] The current log flags.
  *
- * @since 6.1.1
+ * @since 6.1.3
  */
 static VALUE
 rb_grn_logger_s_get_flags (VALUE klass)
@@ -575,7 +575,7 @@ rb_grn_logger_s_get_flags (VALUE klass)
  *   @param flags [Integer] The log flags for the default logger.
  *   @return void
  *
- * @since 6.1.1
+ * @since 6.1.3
  */
 static VALUE
 rb_grn_logger_s_set_flags (VALUE klass, VALUE rb_flags)
