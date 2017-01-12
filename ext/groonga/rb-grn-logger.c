@@ -1,6 +1,7 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
   Copyright (C) 2009-2015  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2016-2017  Masafumi Yokoyama <yokoyama@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -548,6 +549,43 @@ rb_grn_logger_s_set_path (VALUE klass, VALUE rb_path)
 }
 
 /*
+ * Gets the current log flags that is used by the default logger.
+ *
+ * @overload flags
+ *   @return [Integer] The current log flags.
+ *
+ * @since 6.1.1
+ */
+static VALUE
+rb_grn_logger_s_get_flags (VALUE klass)
+{
+    int flags = 0;
+    VALUE rb_flags;
+
+    flags = grn_default_logger_get_flags();
+    rb_flags = INT2NUM(flags);
+
+    return rb_flags;
+}
+
+/*
+ * Sets the log flags that is used by the default logger.
+ *
+ * @overload flags=(flags)
+ *   @param flags [Integer] The log flags for the default logger.
+ *   @return void
+ *
+ * @since 6.1.1
+ */
+static VALUE
+rb_grn_logger_s_set_flags (VALUE klass, VALUE rb_flags)
+{
+    grn_default_logger_set_flags(NUM2INT(rb_flags));
+
+    return Qnil;
+}
+
+/*
  * Gets the current rotate threshold size that is used by the default
  * logger.
  *
@@ -636,6 +674,10 @@ rb_grn_init_logger (VALUE mGrn)
                                rb_grn_logger_s_get_path, 0);
     rb_define_singleton_method(rb_cGrnLogger, "path=",
                                rb_grn_logger_s_set_path, 1);
+    rb_define_singleton_method(rb_cGrnLogger, "flags",
+                               rb_grn_logger_s_get_flags, 0);
+    rb_define_singleton_method(rb_cGrnLogger, "flags=",
+                               rb_grn_logger_s_set_flags, 1);
     rb_define_singleton_method(rb_cGrnLogger, "rotate_threshold_size",
                                rb_grn_logger_s_get_rotate_threshold_size, 0);
     rb_define_singleton_method(rb_cGrnLogger, "rotate_threshold_size=",
