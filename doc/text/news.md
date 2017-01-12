@@ -1,5 +1,28 @@
 # NEWS
 
+## 6.1.3: 2017-01-12 {#version-6-1-3}
+
+### Improvements
+
+  * Supported Groonga 6.1.3. Groonga 6.1.0 or older aren't supported.
+  * Added {Groonga::Context#support_zstd?}.
+  * Added {Groonga::ZstdError}.
+  * Supported Zstandard compression.
+    If Zstandard is available in your enviromemt, you can use Zstandard
+    compression for columns. How to use:
+
+          Groonga::Schema.define do |schema|
+            schema.create_table("Posts") do |table|
+              table.short_text("title", :compress => :zstandard)
+              # shortened form
+              # table.short_text("title", :compress => :zstd)
+            end
+          end
+
+  * Added PID for {Groonga::Logger::Flags}.
+  * Added {Groonga::Logger.flags}.
+  * Added {Groonga::Logger.flags=}.
+
 ## 6.1.0: 2016-11-07 {#version-6-1-0}
 
 ### Improvements
