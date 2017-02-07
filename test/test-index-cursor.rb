@@ -23,21 +23,21 @@ class IndexCursorTest < Test::Unit::TestCase
   end
 
   sub_test_case("#open_cursor") do
-  def test_table_cursor
-    postings = []
-    @terms.open_cursor do |table_cursor|
-      index_cursor = nil
-      @content_index.open_cursor(table_cursor) do |cursor|
-        cursor.each do |posting|
-          postings << posting.to_hash
+    def test_table_cursor
+      postings = []
+      @terms.open_cursor do |table_cursor|
+        index_cursor = nil
+        @content_index.open_cursor(table_cursor) do |cursor|
+          cursor.each do |posting|
+            postings << posting.to_hash
+          end
+          index_cursor = cursor
         end
-        index_cursor = cursor
+        assert_predicate(index_cursor, :closed?)
       end
-      assert_predicate(index_cursor, :closed?)
-    end
 
-    assert_equal(expected_postings, postings)
-  end
+      assert_equal(expected_postings, postings)
+    end
   end
 
   def test_enumerable
