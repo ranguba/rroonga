@@ -991,7 +991,7 @@ rb_grn_context_object_created (VALUE rb_context, VALUE rb_object)
 void
 rb_grn_init_context (VALUE mGrn)
 {
-    cGrnContext = rb_define_class_under(mGrn, "Context", rb_cObject);
+    cGrnContext = rb_define_class_under(mGrn, "Context", rb_cData);
     rb_define_alloc_func(cGrnContext, rb_grn_context_alloc);
 
     rb_cv_set(cGrnContext, "@@default", Qnil);

@@ -277,7 +277,7 @@ rb_grn_table_cursor_each (VALUE self)
 void
 rb_grn_init_table_cursor (VALUE mGrn)
 {
-    rb_cGrnTableCursor = rb_define_class_under(mGrn, "TableCursor", rb_cObject);
+    rb_cGrnTableCursor = rb_define_class_under(mGrn, "TableCursor", rb_cData);
     rb_define_alloc_func(rb_cGrnTableCursor, rb_grn_object_alloc);
 
     rb_include_module(rb_cGrnTableCursor, rb_mEnumerable);

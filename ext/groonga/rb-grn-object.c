@@ -1973,7 +1973,7 @@ rb_grn_object_dirty_p (VALUE self)
 void
 rb_grn_init_object (VALUE mGrn)
 {
-    rb_cGrnObject = rb_define_class_under(mGrn, "Object", rb_cObject);
+    rb_cGrnObject = rb_define_class_under(mGrn, "Object", rb_cData);
     rb_define_alloc_func(rb_cGrnObject, rb_grn_object_alloc);
 
     rb_define_attr(rb_cGrnObject, "context", GRN_TRUE, GRN_FALSE);

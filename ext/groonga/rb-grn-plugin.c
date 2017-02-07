@@ -245,7 +245,7 @@ rb_grn_plugin_s_names (int argc, VALUE *argv, VALUE klass)
 void
 rb_grn_init_plugin (VALUE mGrn)
 {
-    cGrnPlugin = rb_define_class_under(mGrn, "Plugin", rb_cObject);
+    cGrnPlugin = rb_define_class_under(mGrn, "Plugin", rb_cData);
     rb_define_alloc_func(cGrnPlugin, rb_grn_plugin_alloc);
 
     rb_define_singleton_method(cGrnPlugin, "register",
