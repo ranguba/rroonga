@@ -139,6 +139,7 @@ class DatabaseTest < Test::Unit::TestCase
   end
 
   def test_clear_lock
+    omit("Groonga 7.0.0 has a crash bug for clear_lock against temporary database")
     database = Groonga::Database.create
 
     assert_not_predicate(database, :locked?)
