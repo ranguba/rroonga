@@ -1,6 +1,6 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
-  Copyright (C) 2009-2016  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2017  Kouhei Sutou <kou@clear-code.com>
   Copyright (C) 2015-2017  Masafumi Yokoyama <yokoyama@clear-code.com>
 
   This library is free software; you can redistribute it and/or
@@ -336,6 +336,7 @@ void           rb_grn_init_fix_size_column          (VALUE mGrn);
 void           rb_grn_init_variable_size_column     (VALUE mGrn);
 void           rb_grn_init_index_column             (VALUE mGrn);
 void           rb_grn_init_index_cursor             (VALUE mGrn);
+void           rb_grn_init_inverted_index_cursor    (VALUE mGrn);
 void           rb_grn_init_posting                  (VALUE mGrn);
 void           rb_grn_init_accessor                 (VALUE mGrn);
 void           rb_grn_init_geo_point                (VALUE mGrn);
@@ -825,6 +826,11 @@ VALUE          rb_grn_index_cursor_to_ruby_object   (grn_ctx *context,
                                                      VALUE rb_table,
                                                      VALUE rb_lexicon,
                                                      grn_bool owner);
+VALUE          rb_grn_inverted_index_cursor_to_ruby_object
+                                                    (grn_ctx *context,
+                                                     grn_ii_cursor *cursor,
+                                                     VALUE rb_table,
+                                                     VALUE rb_lexicon);
 
 grn_operator   rb_grn_operator_from_ruby_object     (VALUE object);
 grn_operator   rb_grn_set_operator_from_ruby_object (VALUE object);

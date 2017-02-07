@@ -1,4 +1,4 @@
-# Copyright (C) 2012-2014  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2012-2017  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -22,7 +22,8 @@ class IndexCursorTest < Test::Unit::TestCase
     setup_records
   end
 
-  def test_open_cursor
+  sub_test_case("#open_cursor") do
+  def test_table_cursor
     postings = []
     @terms.open_cursor do |table_cursor|
       index_cursor = nil
@@ -36,6 +37,7 @@ class IndexCursorTest < Test::Unit::TestCase
     end
 
     assert_equal(expected_postings, postings)
+  end
   end
 
   def test_enumerable
