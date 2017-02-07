@@ -36,7 +36,27 @@ class IndexCursorTest < Test::Unit::TestCase
         assert_predicate(index_cursor, :closed?)
       end
 
-      assert_equal(expected_postings, postings)
+      assert_equal(expected_postings(:with_position => true),
+                   postings)
+    end
+
+    def test_term_id
+      postings = []
+      @terms.open_cursor do |table_cursor|
+        table_cursor.each do |term|
+          index_cursor = nil
+          @content_index.open_cursor(term.id) do |cursor|
+            cursor.each do |posting|
+              postings << posting.to_hash
+            end
+            index_cursor = cursor
+          end
+          assert_predicate(index_cursor, :closed?)
+        end
+      end
+
+      assert_equal(expected_postings(:with_position => false),
+                   postings)
     end
   end
 
@@ -151,20 +171,40 @@ class IndexCursorTest < Test::Unit::TestCase
     @articles.add("3", :content => "hello")
   end
 
-  def expected_postings
-    parameters = [:record_id, :section_id, :term_id, :position,
-                  :term_frequency, :weight, :n_rest_postings]
+  def expected_postings(options={})
+    parameters = [
+      :record_id,
+      :section_id,
+      :term_id,
+      :position,
+      :term_frequency,
+      :weight,
+      :n_rest_postings,
+    ]
 
-    expected = [
-                [1, 1, 1, 0, 1, 0, 0],
-                [2, 1, 1, 1, 1, 0, 0],
-                [2, 1, 2, 0, 1, 0, 0],
-                [3, 1, 2, 2, 1, 0, 0],
-                [3, 1, 3, 0, 1, 0, 0],
-                [3, 1, 4, 1, 1, 0, 0],
-                [3, 1, 5, 3, 1, 0, 0],
-                [3, 1, 6, 4, 1, 0, 0]
-               ]
+    if options[:with_position]
+      expected = [
+        [1, 1, 1, 0, 1, 0, 0],
+        [2, 1, 1, 1, 1, 0, 0],
+        [2, 1, 2, 0, 1, 0, 0],
+        [3, 1, 2, 2, 1, 0, 0],
+        [3, 1, 3, 0, 1, 0, 0],
+        [3, 1, 4, 1, 1, 0, 0],
+        [3, 1, 5, 3, 1, 0, 0],
+        [3, 1, 6, 4, 1, 0, 0]
+      ]
+    else
+      expected = [
+        [1, 1, 1, 0, 1, 0, 1],
+        [2, 1, 1, 0, 1, 0, 1],
+        [2, 1, 2, 0, 1, 0, 1],
+        [3, 1, 2, 0, 1, 0, 1],
+        [3, 1, 3, 0, 1, 0, 0],
+        [3, 1, 4, 1, 1, 0, 0],
+        [3, 1, 5, 3, 1, 0, 0],
+        [3, 1, 6, 4, 1, 0, 0]
+      ]
+    end
 
     create_hashes(parameters, expected)
   end

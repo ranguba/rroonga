@@ -27,6 +27,7 @@ struct _RbGrnInvertedIndexCursor
     grn_ctx *context;
     grn_ii_cursor *cursor;
     grn_id term_id;
+    int flags;
 };
 
 static VALUE rb_cGrnInvertedIndexCursor;
@@ -36,7 +37,7 @@ rb_grn_inverted_index_cursor_free(void *data)
 {
     RbGrnInvertedIndexCursor *rb_grn_cursor = data;
 
-    if (rb_grn_cursor->context) {
+    if (rb_grn_cursor->context && rb_grn_cursor->cursor) {
         grn_ii_cursor_close(rb_grn_cursor->context,
                             rb_grn_cursor->cursor);
     }
@@ -58,6 +59,8 @@ static const rb_data_type_t rb_grn_inverted_index_cursor_type = {
 VALUE
 rb_grn_inverted_index_cursor_to_ruby_object (grn_ctx *context,
                                              grn_ii_cursor *cursor,
+                                             grn_id term_id,
+                                             int flags,
                                              VALUE rb_table,
                                              VALUE rb_lexicon)
 {
@@ -72,8 +75,17 @@ rb_grn_inverted_index_cursor_to_ruby_object (grn_ctx *context,
     rb_grn_cursor->self = rb_cursor;
     rb_grn_cursor->context = context;
     rb_grn_cursor->cursor = cursor;
+    rb_grn_cursor->term_id = term_id;
+    rb_grn_cursor->flags = flags;
     rb_iv_set(rb_cursor, "@table", rb_table);
     rb_iv_set(rb_cursor, "@lexicon", rb_lexicon);
+
+    /* TODO: Require Groonga 7.0.1.
+    if (rb_grn_cursor->cursor &&
+        (rb_grn_cursor->flags & GRN_OBJ_WITH_POSITION)) {
+        grn_ii_cursor_next(context, cursor);
+    }
+    */
 
     return rb_cursor;
 }
@@ -84,10 +96,24 @@ next_value (VALUE rb_posting,
             VALUE rb_table,
             VALUE rb_lexicon)
 {
-    grn_posting *posting;
+    grn_ctx *context = rb_grn_cursor->context;
+    grn_ii_cursor *cursor = rb_grn_cursor->cursor;
+    grn_posting *posting = NULL;
 
-    posting = grn_ii_cursor_next(rb_grn_cursor->context,
-                                 rb_grn_cursor->cursor);
+    /* TODO: Require Groonga 7.0.1. */
+    /*
+    if (rb_grn_cursor->flags & GRN_OBJ_WITH_POSITION) {
+        posting = grn_ii_cursor_next_pos(context, cursor);
+        while (!posting && grn_ii_cursor_next(context, cursor)) {
+            posting = grn_ii_cursor_next_pos(context, cursor);
+            break;
+        }
+    } else {
+    */
+        posting = grn_ii_cursor_next(context, cursor);
+    /*
+    }
+    */
     if (!posting) {
         return Qnil;
     }
@@ -121,6 +147,10 @@ rb_grn_inverted_index_cursor_next (VALUE self)
         rb_raise(rb_eGrnClosed,
                  "can't access already closed Groonga object: %" PRIsVALUE,
                  self);
+    }
+
+    if (!rb_grn_cursor->cursor) {
+        return Qnil;
     }
 
     rb_table = rb_iv_get(self, "@table");
@@ -160,6 +190,10 @@ rb_grn_inverted_index_cursor_each (int argc, VALUE *argv, VALUE self)
                  self);
     }
 
+    if (!rb_grn_cursor->cursor) {
+        return Qnil;
+    }
+
     rb_table = rb_iv_get(self, "@table");
     rb_lexicon = rb_iv_get(self, "@lexicon");
     reuse_posting_object = RVAL2CBOOL(rb_reuse_posting_object);
@@ -196,12 +230,31 @@ rb_grn_inverted_index_cursor_close (VALUE self)
                  self);
     }
 
-    grn_ii_cursor_close(rb_grn_cursor->context,
-                        rb_grn_cursor->cursor);
+    if (rb_grn_cursor->cursor) {
+        grn_ii_cursor_close(rb_grn_cursor->context,
+                            rb_grn_cursor->cursor);
+    }
     rb_grn_cursor->context = NULL;
     rb_grn_cursor->cursor = NULL;
 
     return Qnil;
+
+}
+
+static VALUE
+rb_grn_inverted_index_cursor_is_closed (VALUE self)
+{
+    RbGrnInvertedIndexCursor *rb_grn_cursor;
+
+    TypedData_Get_Struct(self,
+                         RbGrnInvertedIndexCursor,
+                         &rb_grn_inverted_index_cursor_type,
+                         rb_grn_cursor);
+    if (rb_grn_cursor->context) {
+        return Qfalse;
+    } else {
+        return Qtrue;
+    }
 
 }
 
@@ -218,4 +271,6 @@ rb_grn_init_inverted_index_cursor (VALUE mGrn)
                      rb_grn_inverted_index_cursor_each, -1);
     rb_define_method(rb_cGrnInvertedIndexCursor, "close",
                      rb_grn_inverted_index_cursor_close, 0);
+    rb_define_method(rb_cGrnInvertedIndexCursor, "closed?",
+                     rb_grn_inverted_index_cursor_is_closed, 0);
 }

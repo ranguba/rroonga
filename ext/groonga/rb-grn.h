@@ -829,6 +829,8 @@ VALUE          rb_grn_index_cursor_to_ruby_object   (grn_ctx *context,
 VALUE          rb_grn_inverted_index_cursor_to_ruby_object
                                                     (grn_ctx *context,
                                                      grn_ii_cursor *cursor,
+                                                     grn_id term_id,
+                                                     int flags,
                                                      VALUE rb_table,
                                                      VALUE rb_lexicon);
 

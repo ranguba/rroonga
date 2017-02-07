@@ -933,6 +933,12 @@ rb_grn_index_column_medium_p (VALUE self)
     return CBOOL2RVAL(flags & GRN_OBJ_INDEX_MEDIUM);
 }
 
+static VALUE
+call_close (VALUE object)
+{
+    return rb_funcall(object, rb_intern("close"), 0);
+}
+
 /*
  * Opens cursor to iterate posting in the index column.
  *
@@ -959,12 +965,12 @@ rb_grn_index_column_open_cursor (int argc, VALUE *argv, VALUE self)
     grn_obj          *column;
     grn_column_flags  column_flags;
     grn_obj          *range_object;
-    grn_table_cursor *table_cursor;
+    grn_table_cursor *table_cursor = NULL;
+    grn_id            term_id = GRN_ID_NIL;
     grn_id            rid_min = GRN_ID_NIL;
     grn_id            rid_max = GRN_ID_MAX;
     int               flags   = 0;
-    grn_obj          *index_cursor;
-    VALUE             rb_table_cursor;
+    VALUE             rb_table_cursor_or_term_id;
     VALUE             options;
     VALUE             rb_with_section, rb_with_weight, rb_with_position;
     VALUE             rb_table;
@@ -977,16 +983,20 @@ rb_grn_index_column_open_cursor (int argc, VALUE *argv, VALUE self)
                                     NULL, &range_object,
                                     NULL, NULL);
 
-    rb_scan_args(argc, argv, "11", &rb_table_cursor, &options);
+    rb_scan_args(argc, argv, "11", &rb_table_cursor_or_term_id, &options);
     rb_grn_scan_options(options,
                         "with_section", &rb_with_section,
                         "with_weight", &rb_with_weight,
                         "with_position", &rb_with_position,
                         NULL);
 
-    table_cursor = RVAL2GRNTABLECURSOR(rb_table_cursor, NULL);
+    if (CBOOL2RVAL(rb_obj_is_kind_of(rb_table_cursor_or_term_id, rb_cInteger))) {
+        term_id = NUM2UINT(rb_table_cursor_or_term_id);
+    } else {
+        table_cursor = RVAL2GRNTABLECURSOR(rb_table_cursor_or_term_id, NULL);
+    }
     rb_table     = GRNOBJECT2RVAL(Qnil, context, range_object, GRN_FALSE);
-    rb_lexicon   = rb_iv_get(rb_table_cursor, "@table");
+    rb_lexicon   = rb_funcall(self, rb_intern("table"), 0);
 
     column_flags = grn_column_get_flags(context, column);
 
@@ -1003,18 +1013,43 @@ rb_grn_index_column_open_cursor (int argc, VALUE *argv, VALUE self)
     }
 
     if (NIL_P(rb_with_position)) {
-        flags |= column_flags & GRN_OBJ_WITH_POSITION;
+        /* TODO: Remove this check. Require Groonga 7.0.1. */
+        if (table_cursor) {
+            flags |= column_flags & GRN_OBJ_WITH_POSITION;
+        }
     } else if (RVAL2CBOOL(rb_with_position)) {
         flags |= GRN_OBJ_WITH_POSITION;
     }
 
-    index_cursor = grn_index_cursor_open(context, table_cursor,
-                                         column, rid_min, rid_max, flags);
-
-    rb_cursor = GRNINDEXCURSOR2RVAL(context, index_cursor, rb_table, rb_lexicon);
+    if (table_cursor) {
+        grn_obj *index_cursor;
+        index_cursor = grn_index_cursor_open(context, table_cursor,
+                                             column, rid_min, rid_max, flags);
+        rb_cursor = GRNINDEXCURSOR2RVAL(context,
+                                        index_cursor,
+                                        rb_table,
+                                        rb_lexicon);
+    } else {
+        grn_ii *ii = (grn_ii *)column;
+        grn_ii_cursor *ii_cursor;
+        ii_cursor = grn_ii_cursor_open(context,
+                                       ii,
+                                       term_id,
+                                       rid_min,
+                                       rid_max,
+                                       /* TODO: Require Groonga 7.0.1. */
+                                       0, /* grn_ii_get_n_elements(context, ii), */
+                                       flags);
+        rb_cursor = rb_grn_inverted_index_cursor_to_ruby_object(context,
+                                                                ii_cursor,
+                                                                term_id,
+                                                                flags,
+                                                                rb_table,
+                                                                rb_lexicon);
+    }
 
     if (rb_block_given_p())
-        return rb_ensure(rb_yield, rb_cursor, rb_grn_object_close, rb_cursor);
+        return rb_ensure(rb_yield, rb_cursor, call_close, rb_cursor);
     else
         return rb_cursor;
 }
