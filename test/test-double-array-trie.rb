@@ -123,6 +123,13 @@ class DoubleArrayTrieTest < Test::Unit::TestCase
     assert_true(users.has_key?("morita"))
   end
 
+  def test_key?
+    users = Groonga::DoubleArrayTrie.create(:name => "Users")
+    assert_false(users.key?("morita"))
+    users.add("morita")
+    assert_true(users.key?("morita"))
+  end
+
   def test_prefix_cursor
     paths = Groonga::DoubleArrayTrie.create(:name => "Paths",
                                             :key_type => 'ShortText')

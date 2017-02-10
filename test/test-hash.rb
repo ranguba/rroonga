@@ -280,6 +280,13 @@ class HashTest < Test::Unit::TestCase
                  index.search("engine").collect {|record| record.key.key})
   end
 
+  def test_key?
+    users = Groonga::Hash.create(:name => "Users")
+    assert_false(users.key?("morita"))
+    users.add("morita")
+    assert_true(users.key?("morita"))
+  end
+
   def test_has_key?
     users = Groonga::Hash.create(:name => "Users")
     assert_false(users.has_key?("morita"))

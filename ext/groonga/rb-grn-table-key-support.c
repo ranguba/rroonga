@@ -356,7 +356,11 @@ rb_grn_table_key_support_get_key (VALUE self, VALUE rb_id)
 /*
  * テーブルに主キーが _key_ のレコードがあるならtrueを返す。
  *
+ * @overload key?(key)
+ *    @since 7.0.0
+ *
  * @overload has_key?(key)
+ *    @deprecated Use {key?} instead.
  */
 static VALUE
 rb_grn_table_key_support_has_key (VALUE self, VALUE rb_key)
@@ -1123,6 +1127,8 @@ rb_grn_init_table_key_support (VALUE mGrn)
                      rb_grn_table_key_support_get_id, -1);
     rb_define_method(rb_mGrnTableKeySupport, "key",
                      rb_grn_table_key_support_get_key, 1);
+    rb_define_method(rb_mGrnTableKeySupport, "key?",
+                     rb_grn_table_key_support_has_key, 1);
     rb_define_method(rb_mGrnTableKeySupport, "has_key?",
                      rb_grn_table_key_support_has_key, 1);
 

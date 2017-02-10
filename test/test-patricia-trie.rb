@@ -124,6 +124,13 @@ class PatriciaTrieTest < Test::Unit::TestCase
     end
   end
 
+  def test_key?
+    users = Groonga::PatriciaTrie.create(:name => "Users")
+    assert_false(users.key?("morita"))
+    users.add("morita")
+    assert_true(users.key?("morita"))
+  end
+
   def test_has_key?
     users = Groonga::PatriciaTrie.create(:name => "Users")
     assert_false(users.has_key?("morita"))
