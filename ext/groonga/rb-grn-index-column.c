@@ -970,7 +970,7 @@ rb_grn_index_column_open_cursor (int argc, VALUE *argv, VALUE self)
     grn_id            rid_min = GRN_ID_NIL;
     grn_id            rid_max = GRN_ID_MAX;
     int               flags   = 0;
-    VALUE             rb_table_cursor_or_term_id;
+    VALUE             rb_table_cursor_or_term;
     VALUE             options;
     VALUE             rb_with_section, rb_with_weight, rb_with_position;
     VALUE             rb_table;
@@ -983,20 +983,40 @@ rb_grn_index_column_open_cursor (int argc, VALUE *argv, VALUE self)
                                     NULL, &range_object,
                                     NULL, NULL);
 
-    rb_scan_args(argc, argv, "11", &rb_table_cursor_or_term_id, &options);
+    rb_scan_args(argc, argv, "11", &rb_table_cursor_or_term, &options);
     rb_grn_scan_options(options,
                         "with_section", &rb_with_section,
                         "with_weight", &rb_with_weight,
                         "with_position", &rb_with_position,
                         NULL);
 
-    if (CBOOL2RVAL(rb_obj_is_kind_of(rb_table_cursor_or_term_id, rb_cInteger))) {
-        term_id = NUM2UINT(rb_table_cursor_or_term_id);
-    } else {
-        table_cursor = RVAL2GRNTABLECURSOR(rb_table_cursor_or_term_id, NULL);
-    }
     rb_table     = GRNOBJECT2RVAL(Qnil, context, range_object, GRN_FALSE);
     rb_lexicon   = rb_funcall(self, rb_intern("table"), 0);
+    if (CBOOL2RVAL(rb_obj_is_kind_of(rb_table_cursor_or_term,
+                                     rb_cGrnTableCursor))) {
+        VALUE rb_table_cursor = rb_table_cursor_or_term;
+        table_cursor = RVAL2GRNTABLECURSOR(rb_table_cursor, NULL);
+    } else if (CBOOL2RVAL(rb_obj_is_kind_of(rb_table_cursor_or_term,
+                                            rb_cInteger))) {
+        VALUE rb_term_id = rb_table_cursor_or_term;
+        term_id = NUM2UINT(rb_term_id);
+    } else if (CBOOL2RVAL(rb_obj_is_kind_of(rb_table_cursor_or_term,
+                                            rb_cGrnRecord))) {
+        VALUE rb_term = rb_table_cursor_or_term;
+        term_id = NUM2UINT(rb_funcall(rb_term, rb_intern("id"), 0));
+    } else {
+        VALUE rb_term_key = rb_table_cursor_or_term;
+        VALUE rb_term;
+
+        rb_term = rb_funcall(rb_lexicon, rb_intern("[]"), 1, rb_term_key);
+        if (NIL_P(rb_term)) {
+            rb_raise(rb_eArgError,
+                     "nonexistent term key: %" PRIsVALUE ": %" PRIsVALUE,
+                     rb_term_key,
+                     self);
+        }
+        term_id = NUM2UINT(rb_funcall(rb_term, rb_intern("id"), 0));
+    }
 
     column_flags = grn_column_get_flags(context, column);
 
