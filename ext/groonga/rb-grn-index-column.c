@@ -54,11 +54,18 @@ void
 rb_grn_index_column_bind (RbGrnIndexColumn *rb_grn_index_column,
                           grn_ctx *context, grn_obj *column)
 {
+    RbGrnColumn *rb_grn_column;
     RbGrnObject *rb_grn_object;
 
-    rb_grn_column_bind(RB_GRN_COLUMN(rb_grn_index_column), context, column);
-    rb_grn_object = RB_GRN_OBJECT(rb_grn_index_column);
+    rb_grn_column = RB_GRN_COLUMN(rb_grn_index_column);
+    rb_grn_column_bind(rb_grn_column, context, column);
 
+    grn_obj_reinit(context,
+                   rb_grn_column->value,
+                   GRN_DB_UINT32,
+                   0);
+
+    rb_grn_object = RB_GRN_OBJECT(rb_grn_index_column);
     rb_grn_index_column->old_value = grn_obj_open(context, GRN_BULK, 0,
                                                   rb_grn_object->range_id);
     rb_grn_index_column->set_value =
@@ -189,6 +196,38 @@ rb_grn_index_column_inspect (VALUE self)
     rb_grn_object_inspect_footer(self, inspected);
 
     return inspected;
+}
+
+static VALUE
+rb_grn_index_column_array_reference (VALUE self, VALUE rb_token)
+{
+    grn_ctx *context = NULL;
+    grn_obj *column;
+    grn_obj *domain;
+    grn_id token_id;
+    grn_obj *value;
+    VALUE rb_value;
+
+    rb_grn_index_column_deconstruct(SELF(self),
+                                    &column,
+                                    &context,
+                                    NULL,
+                                    &domain,
+                                    &value,
+                                    NULL,
+                                    NULL,
+                                    NULL,
+                                    NULL,
+                                    NULL,
+                                    NULL);
+
+    token_id = RVAL2GRNID(rb_token, context, domain, self);
+    GRN_BULK_REWIND(value);
+    grn_obj_get_value(context, column, token_id, value);
+    rb_grn_context_check(context, self);
+    rb_value = GRNVALUE2RVAL(context, value, NULL, self);
+
+    return rb_value;
 }
 
 /*
@@ -964,6 +1003,7 @@ rb_grn_index_column_open_cursor (int argc, VALUE *argv, VALUE self)
     grn_ctx          *context;
     grn_obj          *column;
     grn_column_flags  column_flags;
+    grn_obj          *domain_object;
     grn_obj          *range_object;
     grn_table_cursor *table_cursor = NULL;
     grn_id            token_id = GRN_ID_NIL;
@@ -978,7 +1018,7 @@ rb_grn_index_column_open_cursor (int argc, VALUE *argv, VALUE self)
     VALUE             rb_cursor;
 
     rb_grn_index_column_deconstruct(SELF(self), &column, &context,
-                                    NULL, NULL,
+                                    NULL, &domain_object,
                                     NULL, NULL, NULL,
                                     NULL, &range_object,
                                     NULL, NULL);
@@ -996,26 +1036,9 @@ rb_grn_index_column_open_cursor (int argc, VALUE *argv, VALUE self)
                                      rb_cGrnTableCursor))) {
         VALUE rb_table_cursor = rb_table_cursor_or_token;
         table_cursor = RVAL2GRNTABLECURSOR(rb_table_cursor, NULL);
-    } else if (CBOOL2RVAL(rb_obj_is_kind_of(rb_table_cursor_or_token,
-                                            rb_cInteger))) {
-        VALUE rb_token_id = rb_table_cursor_or_token;
-        token_id = NUM2UINT(rb_token_id);
-    } else if (CBOOL2RVAL(rb_obj_is_kind_of(rb_table_cursor_or_token,
-                                            rb_cGrnRecord))) {
-        VALUE rb_token = rb_table_cursor_or_token;
-        token_id = NUM2UINT(rb_funcall(rb_token, rb_intern("id"), 0));
     } else {
-        VALUE rb_token_key = rb_table_cursor_or_token;
-        VALUE rb_token;
-
-        rb_token = rb_funcall(rb_lexicon, rb_intern("[]"), 1, rb_token_key);
-        if (NIL_P(rb_token)) {
-            rb_raise(rb_eArgError,
-                     "nonexistent token key: %" PRIsVALUE ": %" PRIsVALUE,
-                     rb_token_key,
-                     self);
-        }
-        token_id = NUM2UINT(rb_funcall(rb_token, rb_intern("id"), 0));
+        VALUE rb_token = rb_table_cursor_or_token;
+        token_id = RVAL2GRNID(rb_token, context, domain_object, self);
     }
 
     column_flags = grn_column_get_flags(context, column);
@@ -1391,6 +1414,10 @@ rb_grn_init_index_column (VALUE mGrn)
 
     rb_define_method(rb_cGrnIndexColumn, "inspect",
                      rb_grn_index_column_inspect, 0);
+
+    rb_define_method(rb_cGrnIndexColumn, "[]",
+                     rb_grn_index_column_array_reference, 1);
+    rb_undef_method(rb_cGrnIndexColumn, "[]=");
 
     rb_define_method(rb_cGrnIndexColumn, "add",
                      rb_grn_index_column_add, -1);

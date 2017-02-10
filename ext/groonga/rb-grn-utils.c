@@ -1061,12 +1061,36 @@ rb_grn_value_to_ruby_object (grn_ctx *context,
 
 grn_id
 rb_grn_id_from_ruby_object (VALUE object, grn_ctx *context, grn_obj *table,
-                            VALUE related_object)
+                            VALUE rb_related_object)
 {
     VALUE rb_id;
 
     if (NIL_P(object))
         return Qnil;
+
+    if (!RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cGrnRecord)) &&
+        !RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cInteger))) {
+        VALUE rb_record;
+        if (table) {
+            VALUE rb_table;
+            rb_table = GRNOBJECT2RVAL(Qnil, context, table, GRN_FALSE);
+            if (!NIL_P(rb_table) &&
+                RVAL2CBOOL(rb_obj_is_kind_of(rb_table,
+                                             rb_mGrnTableKeySupport))) {
+                rb_record = rb_funcall(rb_table, rb_intern("[]"), 1, object);
+                if (NIL_P(rb_record)) {
+                    rb_raise(rb_eArgError,
+                             "nonexistent key: %" PRIsVALUE
+                             ": %" PRIsVALUE
+                             ": %" PRIsVALUE,
+                             object,
+                             rb_table,
+                             rb_related_object);
+                }
+                object = rb_record;
+            }
+        }
+    }
 
     if (RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cGrnRecord))) {
         VALUE rb_table;
@@ -1077,9 +1101,12 @@ rb_grn_id_from_ruby_object (VALUE object, grn_ctx *context, grn_obj *table,
             rb_expected_table =
                 GRNOBJECT2RVAL(Qnil, context, table, GRN_FALSE);
             rb_raise(rb_eGrnError,
-                     "wrong table: expected <%s>: actual <%s>",
-                     rb_grn_inspect(rb_expected_table),
-                     rb_grn_inspect(rb_table));
+                     "wrong table: expected %" PRIsVALUE
+                     ": actual %" PRIsVALUE
+                     ": %" PRIsVALUE,
+                     rb_expected_table,
+                     rb_table,
+                     rb_related_object);
         }
         rb_id = rb_funcall(object, rb_intern("id"), 0);
     } else {
@@ -1088,9 +1115,10 @@ rb_grn_id_from_ruby_object (VALUE object, grn_ctx *context, grn_obj *table,
 
     if (!RVAL2CBOOL(rb_obj_is_kind_of(rb_id, rb_cInteger)))
         rb_raise(rb_eGrnError,
-                 "should be unsigned integer or Groogna::Record: <%s>: <%s>",
-                 rb_grn_inspect(object),
-                 rb_grn_inspect(related_object));
+                 "should be unsigned integer or Groogna::Record: %" PRIsVALUE
+                 ": %" PRIsVALUE,
+                 object,
+                 rb_related_object);
 
     return NUM2UINT(rb_id);
 }
