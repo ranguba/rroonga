@@ -67,7 +67,8 @@ class IndexCursorTest < Test::Unit::TestCase
         postings = cursor.collect do |posting|
           posting.to_hash
         end
-        assert_equal(expected_postings, postings)
+        assert_equal(expected_postings(:with_position => true),
+                     postings)
         opened = true
       end
     end
@@ -80,7 +81,8 @@ class IndexCursorTest < Test::Unit::TestCase
     @terms.open_cursor do |table_cursor|
       @content_index.open_cursor(table_cursor) do |cursor|
         postings = cursor.each.collect(&:to_hash)
-        assert_equal(expected_postings, postings)
+        assert_equal(expected_postings(:with_position => true),
+                     postings)
         opened = true
       end
     end
@@ -100,7 +102,8 @@ class IndexCursorTest < Test::Unit::TestCase
         end
         assert_equal([posting_object_ids.first] * posting_object_ids.size,
                      posting_object_ids)
-        assert_equal(expected_postings, postings)
+        assert_equal(expected_postings(:with_position => true),
+                     postings)
         opened = true
       end
     end
