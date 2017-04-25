@@ -1377,9 +1377,6 @@ rb_grn_table_geo_sort (int argc, VALUE *argv, VALUE self)
         offset = NUM2INT(rb_offset);
     if (!NIL_P(rb_limit))
         limit = NUM2INT(rb_limit);
-    /* TODO: Remove me when Groonga 5.1.0 is released. */
-    if (limit < 0)
-        limit = grn_table_size(context, table) + limit + 1;
 
     result = grn_table_create(context, NULL, 0, NULL, GRN_TABLE_NO_KEY,
                               NULL, table);
