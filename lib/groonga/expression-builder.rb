@@ -1,5 +1,5 @@
 # Copyright (C) 2015  Masafumi Yokoyama <yokoyama@clear-code.com>
-# Copyright (C) 2009-2017  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2016  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -16,24 +16,7 @@
 
 module Groonga
   # @private
-  module CallOperationAppendable
-    private
-    def append_call_operation(expression, n_arguments)
-      # TODO: Remove me when we require Groonga 7.0.2 or later.
-      if (VERSION[0, 3] <=> [7, 0, 2]) > 0 or
-          (VERSION[0, 3] == [7, 0, 1] and
-           (VERSION[3] || "0").split("-")[0].to_i >= 105)
-        expression.append_operation(Operation::CALL, 1 + n_arguments)
-      else
-        expression.append_operation(Operation::CALL, n_arguments)
-      end
-    end
-  end
-
-  # @private
   module ExpressionBuildable
-    include CallOperationAppendable
-
     attr_reader :table
     attr_accessor :query
     attr_accessor :syntax
@@ -98,7 +81,7 @@ module Groonga
 
       if builders.empty?
         expression.append_object(@table.context["all_records"])
-        append_call_operation(expression, 0)
+        expression.append_operation(Operation::CALL, 0)
       else
         combined_builder = builders.inject do |previous, builder|
           previous & builder
@@ -505,8 +488,6 @@ module Groonga
 
     # @private
     class CallExpressionBuilder < ExpressionBuilder
-      include CallOperationAppendable
-
       def initialize(function, *arguments)
         super()
         @function = function
@@ -525,7 +506,7 @@ module Groonga
             argument.build(expression, variable)
           end
         end
-        append_call_operation(expression, @arguments.size)
+        expression.append_operation(Operation::CALL, @arguments.size)
       end
     end
   end
