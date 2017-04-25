@@ -70,6 +70,9 @@ VALUE rb_cGrnDataColumn;
  * @overload apply_window_function(options={}) {|record| }
  *   @param options [::Hash] The name and value pairs.
  *   @option options [::Array<String>] :sort_keys
+ *     TODO: Description.
+ *   @option options [::Array<String>] :group_keys
+ *     TODO: Description.
  *
  *   @yield [record]
  *     It yields an object that builds expression. The block must
