@@ -1056,10 +1056,7 @@ rb_grn_index_column_open_cursor (int argc, VALUE *argv, VALUE self)
     }
 
     if (NIL_P(rb_with_position)) {
-        /* TODO: Remove this check. Require Groonga 7.0.1. */
-        if (table_cursor) {
-            flags |= column_flags & GRN_OBJ_WITH_POSITION;
-        }
+        flags |= column_flags & GRN_OBJ_WITH_POSITION;
     } else if (RVAL2CBOOL(rb_with_position)) {
         flags |= GRN_OBJ_WITH_POSITION;
     }
@@ -1080,8 +1077,7 @@ rb_grn_index_column_open_cursor (int argc, VALUE *argv, VALUE self)
                                        token_id,
                                        rid_min,
                                        rid_max,
-                                       /* TODO: Require Groonga 7.0.1. */
-                                       0, /* grn_ii_get_n_elements(context, ii), */
+                                       grn_ii_get_n_elements(context, ii),
                                        flags);
         rb_cursor = rb_grn_inverted_index_cursor_to_ruby_object(context,
                                                                 ii_cursor,

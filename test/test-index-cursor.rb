@@ -40,7 +40,27 @@ class IndexCursorTest < Test::Unit::TestCase
                    postings)
     end
 
-    def test_term_id
+    def test_term_id_without_position
+      postings = []
+      @terms.open_cursor do |table_cursor|
+        table_cursor.each do |term|
+          index_cursor = nil
+          @content_index.open_cursor(term.id,
+                                     :with_position => false) do |cursor|
+            cursor.each do |posting|
+              postings << posting.to_hash
+            end
+            index_cursor = cursor
+          end
+          assert_predicate(index_cursor, :closed?)
+        end
+      end
+
+      assert_equal(expected_postings(:with_position => false),
+                   postings)
+    end
+
+    def test_term_id_with_position
       postings = []
       @terms.open_cursor do |table_cursor|
         table_cursor.each do |term|
@@ -55,7 +75,7 @@ class IndexCursorTest < Test::Unit::TestCase
         end
       end
 
-      assert_equal(expected_postings(:with_position => false),
+      assert_equal(expected_postings(:with_position => true),
                    postings)
     end
   end

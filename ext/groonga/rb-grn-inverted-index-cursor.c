@@ -80,12 +80,10 @@ rb_grn_inverted_index_cursor_to_ruby_object (grn_ctx *context,
     rb_iv_set(rb_cursor, "@table", rb_table);
     rb_iv_set(rb_cursor, "@lexicon", rb_lexicon);
 
-    /* TODO: Require Groonga 7.0.1.
     if (rb_grn_cursor->cursor &&
         (rb_grn_cursor->flags & GRN_OBJ_WITH_POSITION)) {
         grn_ii_cursor_next(context, cursor);
     }
-    */
 
     return rb_cursor;
 }
@@ -100,8 +98,6 @@ next_value (VALUE rb_posting,
     grn_ii_cursor *cursor = rb_grn_cursor->cursor;
     grn_posting *posting = NULL;
 
-    /* TODO: Require Groonga 7.0.1. */
-    /*
     if (rb_grn_cursor->flags & GRN_OBJ_WITH_POSITION) {
         posting = grn_ii_cursor_next_pos(context, cursor);
         while (!posting && grn_ii_cursor_next(context, cursor)) {
@@ -109,11 +105,8 @@ next_value (VALUE rb_posting,
             break;
         }
     } else {
-    */
         posting = grn_ii_cursor_next(context, cursor);
-    /*
     }
-    */
     if (!posting) {
         return Qnil;
     }
