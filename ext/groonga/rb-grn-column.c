@@ -707,6 +707,26 @@ rb_grn_column_scalar_p (VALUE self)
 }
 
 /*
+ * @overload data?
+ *   @return [Bool] `true` if the column is a data column (a scalar
+ *   column or a vector column), `false` otherwise.
+ *
+ * @since 7.0.2
+ */
+static VALUE
+rb_grn_column_data_p (VALUE self)
+{
+    grn_ctx *context;
+    grn_obj *column;
+
+    rb_grn_column_deconstruct(SELF(self), &column, &context,
+                             NULL, NULL,
+                             NULL, NULL, NULL);
+
+    return CBOOL2RVAL(grn_obj_is_data_column(context, column));
+}
+
+/*
  * @overload with_weight?
  * @return [Boolean] @true@ if the column is vector and created with
  *   @:with_weight => true@ flag, @false@ otherwise.
@@ -857,6 +877,7 @@ rb_grn_init_column (VALUE mGrn)
     rb_define_method(rb_cGrnColumn, "weight_vector?",
                      rb_grn_column_weight_vector_p, 0);
     rb_define_method(rb_cGrnColumn, "scalar?", rb_grn_column_scalar_p, 0);
+    rb_define_method(rb_cGrnColumn, "data?", rb_grn_column_data_p, 0);
 
     rb_define_method(rb_cGrnColumn, "with_weight?",
                      rb_grn_column_with_weight_p, 0);

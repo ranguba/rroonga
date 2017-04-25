@@ -57,6 +57,12 @@ class IndexColumnTest < Test::Unit::TestCase
     def test_scalar?
       assert_not_predicate(@index, :scalar?)
     end
+
+    def test_data?
+      assert do
+        not @index.data?
+      end
+    end
   end
 
   class CRUDTest < self

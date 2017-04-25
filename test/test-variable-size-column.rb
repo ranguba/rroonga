@@ -79,6 +79,12 @@ class VariableSizeColumnTest < Test::Unit::TestCase
     assert_not_predicate(@nick_names, :scalar?)
   end
 
+  def test_data?
+    assert do
+      @nick_names.data?
+    end
+  end
+
   def test_compressed?
     description = @users.define_column("description", "ShortText",
                                        :compress => :zlib)

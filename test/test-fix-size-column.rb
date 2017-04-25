@@ -138,6 +138,12 @@ class FixSizeColumnTest < Test::Unit::TestCase
       assert_predicate(@n_viewed, :scalar?)
     end
 
+    def test_data?
+      assert do
+        @n_viewed.data?
+      end
+    end
+
     def test_inspect
       assert_equal("#<Groonga::FixSizeColumn " +
                    "id: <#{@n_viewed.id}>, " +
