@@ -21,7 +21,7 @@ class DataColumnTest < Test::Unit::TestCase
   end
 
   sub_test_case "#apply_window_function" do
-    def test_no_argument
+    def test_sort_keys
       Groonga::Schema.define do |schema|
         schema.create_table("Comments") do |table|
           table.uint32("nth")
@@ -90,6 +90,33 @@ class DataColumnTest < Test::Unit::TestCase
                      [6,  1, "b"],
                    ],
                    values)
+    end
+  end
+
+  sub_test_case "#apply_expression" do
+    def test_simple
+      Groonga::Schema.define do |schema|
+        schema.create_table("Comments") do |table|
+          table.uint32("base")
+          table.uint32("plus1")
+        end
+      end
+      comments = Groonga["Comments"]
+      plus1 = Groonga["Comments.plus1"]
+
+      3.times do |i|
+        comments.add(:base => i)
+      end
+
+      plus1.apply_expression do |record|
+        record.base + 1
+      end
+      assert_equal([
+                     [0, 1],
+                     [1, 2],
+                     [2, 3],
+                   ],
+                   comments.collect {|comment| [comment.base, comment.plus1]})
     end
   end
 end

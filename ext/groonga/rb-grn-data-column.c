@@ -164,6 +164,84 @@ rb_grn_data_column_apply_window_function (int argc, VALUE *argv, VALUE self)
     return self;
 }
 
+/*
+ * Applies the expression to all records in the table of the
+ * column. Results are stored into the column.
+ *
+ * @example Compute column values from other column values.
+ *
+ *   Groonga::Schema.define do |schema|
+ *     schema.create_table("Comments") do |table|
+ *       # The column that has base data to compute "plus1" column data.
+ *       table.uint32("base")
+ *       # The column for storing computed value with "base" column data.
+ *       table.uint32("plus1")
+ *     end
+ *   end
+ *   comments = Groonga["Comments"]
+ *   plus1 = Groonga["Comments.plus1"]
+ *
+ *   3.times do |i|
+ *     comments.add(:base => i)
+ *   end
+ *
+ *   plus1.apply_expression do |record|
+ *     # Computes "base" column value plus one.
+ *     record.base + 1
+ *   end
+ *
+ *   comments.each do |comment|
+ *     p [comment.base, comment.plus1]
+ *       # -> [0, 1]
+ *       # -> [1, 2]
+ *       # -> [2, 3]
+ *   end
+ *
+ * @overload apply_expression {|record| }
+ *
+ *   @yield [record]
+ *     It yields an object that builds expression. The block must
+ *     build an expression to be applied to all records.
+ *   @yieldparam [Groonga::RecordExpressionBuilder] record
+ *     The expression builder to create an expression.
+ *   @yieldreturn [Groonga::ExpressionBuilder]
+ *     It must be an expression.
+ *
+ * @since 7.0.2
+ */
+static VALUE
+rb_grn_data_column_apply_expression (VALUE self)
+{
+    grn_rc rc;
+    grn_ctx *context;
+    grn_obj *column;
+    grn_obj *table;
+    VALUE rb_table;
+    grn_obj *expression = NULL;
+    VALUE rb_builder;
+    VALUE rb_expression;
+
+    rb_grn_column_deconstruct(SELF(self), &column, &context,
+                              NULL, &table,
+                              NULL, NULL, NULL);
+    rb_table = GRNOBJECT2RVAL(Qnil, context, table, GRN_FALSE);
+
+    rb_builder = rb_grn_record_expression_builder_new(rb_table, Qnil);
+    rb_expression = rb_grn_record_expression_builder_build(rb_builder);
+    rb_grn_object_deconstruct(RB_GRN_OBJECT(DATA_PTR(rb_expression)),
+                              &expression, NULL,
+                              NULL, NULL, NULL, NULL);
+
+    rc = grn_table_apply_expr(context,
+                              table,
+                              column,
+                              expression);
+    rb_grn_context_check(context, self);
+    rb_grn_rc_check(rc, self);
+
+    return self;
+}
+
 void
 rb_grn_init_data_column (VALUE mGrn)
 {
@@ -171,6 +249,8 @@ rb_grn_init_data_column (VALUE mGrn)
 
     rb_define_method(rb_cGrnDataColumn, "apply_window_function",
                      rb_grn_data_column_apply_window_function, -1);
+    rb_define_method(rb_cGrnDataColumn, "apply_expression",
+                     rb_grn_data_column_apply_expression, 0);
 
     rb_grn_init_fix_size_column(mGrn);
     rb_grn_init_variable_size_column(mGrn);
