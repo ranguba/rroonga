@@ -646,20 +646,12 @@ rb_grn_column_vector_p (VALUE self)
 {
     grn_ctx *context;
     grn_obj *column;
-    grn_column_flags flags;
-    grn_column_flags column_type;
 
     rb_grn_column_deconstruct(SELF(self), &column, &context,
                              NULL, NULL,
                              NULL, NULL, NULL);
 
-    if (column->header.type != GRN_COLUMN_VAR_SIZE) {
-        return Qfalse;
-    }
-
-    flags = grn_column_get_flags(context, column);
-    column_type = (flags & GRN_OBJ_COLUMN_TYPE_MASK);
-    return CBOOL2RVAL(column_type == GRN_OBJ_COLUMN_VECTOR);
+    return CBOOL2RVAL(grn_obj_is_vector_column(context, column));
 }
 
 /*
