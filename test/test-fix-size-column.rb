@@ -128,6 +128,12 @@ class FixSizeColumnTest < Test::Unit::TestCase
       assert_not_predicate(@n_viewed, :vector?)
     end
 
+    def test_weight_vector?
+      assert do
+        not @n_viewed.weight_vector?
+      end
+    end
+
     def test_scalar?
       assert_predicate(@n_viewed, :scalar?)
     end

@@ -655,6 +655,26 @@ rb_grn_column_vector_p (VALUE self)
 }
 
 /*
+ * @overload weight_vector?
+ *   @return [Bool] `true` if the column is a weight vector column,
+ *   `false` otherwise.
+ *
+ * @since 7.0.2
+ */
+static VALUE
+rb_grn_column_weight_vector_p (VALUE self)
+{
+    grn_ctx *context;
+    grn_obj *column;
+
+    rb_grn_column_deconstruct(SELF(self), &column, &context,
+                             NULL, NULL,
+                             NULL, NULL, NULL);
+
+    return CBOOL2RVAL(grn_obj_is_weight_vector_column(context, column));
+}
+
+/*
  * _column_ がスカラーカラムの場合は +true+ を返し、
  * そうでない場合は +false+ を返す。
  *
@@ -834,6 +854,8 @@ rb_grn_init_column (VALUE mGrn)
     /* deprecated: backward compatibility */
     rb_define_alias(rb_cGrnColumn, "index_column?", "index?");
     rb_define_method(rb_cGrnColumn, "vector?", rb_grn_column_vector_p, 0);
+    rb_define_method(rb_cGrnColumn, "weight_vector?",
+                     rb_grn_column_weight_vector_p, 0);
     rb_define_method(rb_cGrnColumn, "scalar?", rb_grn_column_scalar_p, 0);
 
     rb_define_method(rb_cGrnColumn, "with_weight?",

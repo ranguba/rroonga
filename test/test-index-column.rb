@@ -48,6 +48,12 @@ class IndexColumnTest < Test::Unit::TestCase
       assert_not_predicate(@index, :vector?)
     end
 
+    def test_weight_vector?
+      assert do
+        not @index.weight_vector?
+      end
+    end
+
     def test_scalar?
       assert_not_predicate(@index, :scalar?)
     end

@@ -46,6 +46,13 @@ class VariableSizeColumnTest < Test::Unit::TestCase
       @users.define_column("nick_names", "ShortText",
                            :type => :vector,
                            :path => @users_nick_names_column_path.to_s)
+
+    @users_tags_column_path = @columns_dir + "tags"
+    @tags =
+      @users.define_column("tags", "ShortText",
+                           :type => :vector,
+                           :with_weight => true,
+                           :path => @users_tags_column_path.to_s)
   end
 
   def setup_users
@@ -60,6 +67,12 @@ class VariableSizeColumnTest < Test::Unit::TestCase
 
   def test_vector?
     assert_predicate(@nick_names, :vector?)
+  end
+
+  def test_weigth_vector?
+    assert do
+      @tags.weight_vector?
+    end
   end
 
   def test_scalar?
