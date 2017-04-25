@@ -1,3 +1,5 @@
+dist: trusty
+sudo: required
 notifications:
   email:
     recipients:
@@ -7,8 +9,8 @@ rvm:
   - 2.2
   - 2.3.3
   - 2.4.0
-# env:
-#   - GROONGA_MASTER=yes
+env:
+  - GROONGA_MASTER=yes
 # matrix:
 #   allow_failures:
 #     - rvm: ruby-head
