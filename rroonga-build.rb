@@ -16,17 +16,17 @@
 
 module RroongaBuild
   module RequiredGroongaVersion
-    MAJOR = 6
-    MINOR = 1
-    MICRO = 1
+    MAJOR = 7
+    MINOR = 0
+    MICRO = 2
     VERSION = [MAJOR, MINOR, MICRO]
-    RELEASED_DATE = Time.utc(2016, 11, 29)
+    RELEASED_DATE = Time.utc(2017, 4, 29)
   end
 
   module LatestGroongaVersion
-    MAJOR = 6
-    MINOR = 1
-    MICRO = 3
+    MAJOR = 7
+    MINOR = 0
+    MICRO = 2
     VERSION = [MAJOR, MINOR, MICRO]
   end
 
