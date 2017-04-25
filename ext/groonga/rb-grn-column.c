@@ -609,12 +609,11 @@ rb_grn_column_truncate (VALUE self)
 }
 
 /*
- * _column_ が {Groonga::IndexColumn} の場合は +true+ を返し、
- * そうでない場合は +false+ を返す。
+ * @overload index?
+ *   @return [Bool] `true` if the column is an index column
+ *     ({Groonga::IndexColumn}), `false` otherwise.
  *
  * @since 1.0.5
- *
- * @overload index?
  */
 static VALUE
 rb_grn_column_index_p (VALUE self)
@@ -634,12 +633,11 @@ rb_grn_column_index_p (VALUE self)
 }
 
 /*
- * _column_ がベクターカラムの場合は +true+ を返し、
- * そうでない場合は +false+ を返す。
+ * @overload vector?
+ *   @return [Bool] `true` if the column is a vector column,
+ *     `false` otherwise.
  *
  * @since 1.0.5
- *
- * @overload vector?
  */
 static VALUE
 rb_grn_column_vector_p (VALUE self)
@@ -657,7 +655,7 @@ rb_grn_column_vector_p (VALUE self)
 /*
  * @overload weight_vector?
  *   @return [Bool] `true` if the column is a weight vector column,
- *   `false` otherwise.
+ *     `false` otherwise.
  *
  * @since 7.0.2
  */
@@ -675,41 +673,29 @@ rb_grn_column_weight_vector_p (VALUE self)
 }
 
 /*
- * _column_ がスカラーカラムの場合は +true+ を返し、
- * そうでない場合は +false+ を返す。
+ * @overload scalar?
+ *   @return [Bool] `true` if the column is a scalar column,
+ *     `false` otherwise.
  *
  * @since 1.0.5
- *
- * @overload scalar?
  */
 static VALUE
 rb_grn_column_scalar_p (VALUE self)
 {
     grn_ctx *context;
     grn_obj *column;
-    grn_column_flags flags;
-    grn_column_flags column_type;
 
     rb_grn_column_deconstruct(SELF(self), &column, &context,
                              NULL, NULL,
                              NULL, NULL, NULL);
 
-    switch (column->header.type) {
-    case GRN_COLUMN_FIX_SIZE:
-        return Qtrue;
-    case GRN_COLUMN_VAR_SIZE:
-        flags = grn_column_get_flags(context, column);
-        column_type = (flags & GRN_OBJ_COLUMN_TYPE_MASK);
-        return CBOOL2RVAL(column_type == GRN_OBJ_COLUMN_SCALAR);
-    default:
-        return Qfalse;
-    }
+    return CBOOL2RVAL(grn_obj_is_scalar_column(context, column));
 }
 
 /*
  * @overload data?
  *   @return [Bool] `true` if the column is a data column (a scalar
- *   column or a vector column), `false` otherwise.
+ *     column or a vector column), `false` otherwise.
  *
  * @since 7.0.2
  */
