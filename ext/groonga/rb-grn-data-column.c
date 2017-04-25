@@ -93,6 +93,7 @@ rb_grn_data_column_apply_window_function (int argc, VALUE *argv, VALUE self)
     grn_obj *window_function_call = NULL;
     VALUE rb_options;
     VALUE rb_sort_keys;
+    VALUE rb_group_keys;
     VALUE rb_builder;
     VALUE rb_window_function_call;
 
@@ -106,6 +107,7 @@ rb_grn_data_column_apply_window_function (int argc, VALUE *argv, VALUE self)
     rb_scan_args(argc, argv, "01", &rb_options);
     rb_grn_scan_options(rb_options,
                         "sort_keys", &rb_sort_keys,
+                        "group_keys", &rb_group_keys,
                         NULL);
 
     if (!NIL_P(rb_sort_keys)) {
@@ -123,6 +125,24 @@ rb_grn_data_column_apply_window_function (int argc, VALUE *argv, VALUE self)
                                     definition.sort_keys,
                                     definition.n_sort_keys,
                                     rb_sort_keys,
+                                    rb_table);
+    }
+
+    if (!NIL_P(rb_group_keys)) {
+        VALUE rb_table;
+
+        if (!RVAL2CBOOL(rb_obj_is_kind_of(rb_group_keys, rb_cArray)))
+            rb_raise(rb_eArgError, ":group_keys should be an array of key: <%s>",
+                     rb_grn_inspect(rb_group_keys));
+
+        definition.n_group_keys = RARRAY_LEN(rb_group_keys);
+        definition.group_keys = ALLOCA_N(grn_table_sort_key,
+                                         definition.n_group_keys);
+        rb_table = GRNOBJECT2RVAL(Qnil, context, table, GRN_FALSE);
+        rb_grn_table_sort_keys_fill(context,
+                                    definition.group_keys,
+                                    definition.n_group_keys,
+                                    rb_group_keys,
                                     rb_table);
     }
 
