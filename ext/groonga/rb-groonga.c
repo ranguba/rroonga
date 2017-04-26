@@ -256,4 +256,5 @@ Init_groonga (void)
     rb_grn_init_request_timer_id(mGrn);
     rb_grn_init_id(mGrn);
     rb_grn_init_name(mGrn);
+    rb_grn_init_default_cache(mGrn);
 }

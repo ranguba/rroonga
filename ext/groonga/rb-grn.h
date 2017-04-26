@@ -368,6 +368,7 @@ void           rb_grn_init_request_timer            (VALUE mGrn);
 void           rb_grn_init_request_timer_id         (VALUE mGrn);
 void           rb_grn_init_id                       (VALUE mGrn);
 void           rb_grn_init_name                     (VALUE mGrn);
+void           rb_grn_init_default_cache            (VALUE mGrn);
 
 VALUE          rb_grn_rc_to_exception               (grn_rc rc);
 void           rb_grn_rc_check                      (grn_rc rc,
