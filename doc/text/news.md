@@ -1,5 +1,33 @@
 # NEWS
 
+## 7.0.2: 2017-04-29 {#version-7-0-2}
+
+### Improvements
+
+  * Supported Groonga 7.0.2. Groonga 7.0.1 or older aren't supported.
+
+  * {Groonga::IndexColumn#open_cursor}: Supported opening a cursor by
+    token.
+
+  * {Groonga::IndexColumn#[]}: Supported a token.
+
+  * {Groonga::InvertedIndexCursor#closed?}: Added.
+
+  * {Groonga::TableKeySupport#key?}: Added.
+
+  * {Groonga::TableKeySupport#has_key?}: Deprecated. Use
+    {Groonga::TableKeySupport#key?} instead.
+
+  * {Groonga::DataColumn#apply_window_function}: Supported `:group_keys`.
+
+  * {Groonga::Column#weight_vector?}: Added.
+
+  * {Groonga::DataColumn#apply_expression}: Added.
+
+  * {Groonga::Column#data?}: Added.
+
+  * {Groonga::DefaultCache}: Added.
+
 ## 6.1.3: 2017-01-12 {#version-6-1-3}
 
 ### Improvements
