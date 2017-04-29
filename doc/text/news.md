@@ -13,10 +13,10 @@
 
   * {Groonga::InvertedIndexCursor#closed?}: Added.
 
-  * {Groonga::TableKeySupport#key?}: Added.
+  * {Groonga::Table::KeySupport#key?}: Added.
 
-  * {Groonga::TableKeySupport#has_key?}: Deprecated. Use
-    {Groonga::TableKeySupport#key?} instead.
+  * {Groonga::Table::KeySupport#has_key?}: Deprecated. Use
+    {Groonga::Table::KeySupport#key?} instead.
 
   * {Groonga::DataColumn#apply_window_function}: Supported `:group_keys`.
 
@@ -252,7 +252,7 @@
   * Added {Groonga::Object#accessor?}.
   * Added {Groonga::Object#key_accessor?}.
   * Added {Groonga::Database#reindex}.
-  * Added {Groonga::TableKeySupport#reindex}.
+  * Added {Groonga::Table::KeySupport#reindex}.
   * Added {Groonga::FixSizeColumn#reindex}.
   * Added {Groonga::VariableSizeColumn#reindex}.
   * Added {Groonga::IndexColumn#reindex}.
@@ -1435,7 +1435,7 @@
 
 * Used :key as the default value of `:order_by` of
   `Groonga::PatriciaTrie#open_cursor`.
-* Removed a deprecated Groonga::TableKeySupport#find.
+* Removed a deprecated Groonga::Table::KeySupport#find.
 * Used ShortText as the default key type of
   Groonga::Hash#create and Groonga::PatriciaTrie#create.
 * Renamed Groonga::Schema#load to Groonga::Schema#restore.
@@ -1562,7 +1562,7 @@
   * Groonga::Table#find -> Groonga::Table#[]
   * Groonga::Table#find -> obsolete
   * Groonga::Table#[]= -> removed
-  * Groonga::TableKeySupport#[]= is alias of Groonga::TableKeySupport#add
+  * Groonga::Table::KeySupport#[]= is alias of Groonga::Table::KeySupport#add
   * Changed exception class to Groonga::NoSuchColumn from
     Groonga::InvalidArgument when Groonga::Record accesses nonexistent
     a column.
@@ -1604,7 +1604,7 @@
 
 ## 0.0.3: 2009-07-18
 
-* Added Groonga::TableKeySupport#has_key? [#26145] [Tasuku SUENAGA]
+* Added Groonga::Table::KeySupport#has_key? [#26145] [Tasuku SUENAGA]
 * Groonga::Record#[] raises an exception for nonexistent
   column name. [#26146] [Tasuku SUENAGA]
 * Supported 32bit environment [niku]

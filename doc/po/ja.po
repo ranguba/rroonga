@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: rroonga 2.1.0\n"
-"PO-Revision-Date: 2017-01-12 17:46+0900\n"
+"PO-Revision-Date: 2017-04-29 11:52+0900\n"
 "Last-Translator: Masafumi Yokoyama <yokoyama@clear-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -446,11 +446,51 @@ msgstr "* [2. インストール - Groonga ドキュメント](http://groonga.or
 msgid "# NEWS"
 msgstr "# お知らせ"
 
-msgid "## 6.1.3: 2017-01-12 {#version-6-1-3}"
+msgid "## 7.0.2: 2017-04-29 {#version-7-0-2}"
 msgstr ""
 
 msgid "### Improvements"
 msgstr "### 改善"
+
+msgid "  * Supported Groonga 7.0.2. Groonga 7.0.1 or older aren't supported."
+msgstr ""
+
+msgid ""
+"  * {Groonga::IndexColumn#open_cursor}: Supported opening a cursor by\n"
+"    token."
+msgstr ""
+
+msgid "  * {Groonga::IndexColumn#[]}: Supported a token."
+msgstr ""
+
+msgid "  * {Groonga::InvertedIndexCursor#closed?}: Added."
+msgstr ""
+
+msgid "  * {Groonga::Table::KeySupport#key?}: Added."
+msgstr ""
+
+msgid ""
+"  * {Groonga::Table::KeySupport#has_key?}: Deprecated. Use\n"
+"    {Groonga::Table::KeySupport#key?} instead."
+msgstr ""
+
+msgid "  * {Groonga::DataColumn#apply_window_function}: Supported `:group_keys`."
+msgstr ""
+
+msgid "  * {Groonga::Column#weight_vector?}: Added."
+msgstr ""
+
+msgid "  * {Groonga::DataColumn#apply_expression}: Added."
+msgstr ""
+
+msgid "  * {Groonga::Column#data?}: Added."
+msgstr ""
+
+msgid "  * {Groonga::DefaultCache}: Added."
+msgstr ""
+
+msgid "## 6.1.3: 2017-01-12 {#version-6-1-3}"
+msgstr ""
 
 msgid "  * Supported Groonga 6.1.3. Groonga 6.1.0 or older aren't supported."
 msgstr "  * Groonga 6.1.3をサポートしました。Groonga 6.1.0以前はサポートしません。"
@@ -784,7 +824,7 @@ msgid ""
 "  * Added {Groonga::Object#accessor?}.\n"
 "  * Added {Groonga::Object#key_accessor?}.\n"
 "  * Added {Groonga::Database#reindex}.\n"
-"  * Added {Groonga::TableKeySupport#reindex}.\n"
+"  * Added {Groonga::Table::KeySupport#reindex}.\n"
 "  * Added {Groonga::FixSizeColumn#reindex}.\n"
 "  * Added {Groonga::VariableSizeColumn#reindex}.\n"
 "  * Added {Groonga::IndexColumn#reindex}.\n"
@@ -2320,7 +2360,7 @@ msgstr "## 変更"
 msgid ""
 "* Used :key as the default value of `:order_by` of\n"
 "  `Groonga::PatriciaTrie#open_cursor`.\n"
-"* Removed a deprecated Groonga::TableKeySupport#find.\n"
+"* Removed a deprecated Groonga::Table::KeySupport#find.\n"
 "* Used ShortText as the default key type of\n"
 "  Groonga::Hash#create and Groonga::PatriciaTrie#create.\n"
 "* Renamed Groonga::Schema#load to Groonga::Schema#restore.\n"
@@ -2330,7 +2370,7 @@ msgid ""
 "  Groonga::Column#reference_column?."
 msgstr ""
 "* `Groonga::PatriciaTrie#open_cursor`では`:order_b`yのデフォルト値として:keyを使うようにした。\n"
-"* 非推奨扱いのGroonga::TableKeySupport#findを削除。\n"
+"* 非推奨扱いのGroonga::Table::KeySupport#findを削除。\n"
 "* Groonga::Hash#createとGroonga::PatriciaTrie#createでキーの型を省略した場合はShortTextを使用する"
 "ようにした。\n"
 "* Groonga::Schema#loadをGroonga::Schema#restoreに改名。\n"
@@ -2496,7 +2536,7 @@ msgid ""
 "  * Groonga::Table#find -> Groonga::Table#[]\n"
 "  * Groonga::Table#find -> obsolete\n"
 "  * Groonga::Table#[]= -> removed\n"
-"  * Groonga::TableKeySupport#[]= is alias of Groonga::TableKeySupport#add\n"
+"  * Groonga::Table::KeySupport#[]= is alias of Groonga::Table::KeySupport#add\n"
 "  * Changed exception class to Groonga::NoSuchColumn from\n"
 "    Groonga::InvalidArgument when Groonga::Record accesses nonexistent\n"
 "    a column.\n"
@@ -2545,7 +2585,7 @@ msgstr ""
 "* Groonga::Table#find → Groonga::Table#[]\n"
 "* Groonga::Table#find → obsolete\n"
 "* Groonga::Table#[]= → 削除\n"
-"* Groonga::TableKeySupport#[]=はGroonga::TableKeySupport#addの別名\n"
+"* Groonga::Table::KeySupport#[]=はGroonga::Table::KeySupport#addの別名\n"
 "* Groonga::Recordで存在しないカラムにアクセスしたときの例外をGroonga::InvalidArgumentからGroonga::NoSu"
 "chColumnに変更\n"
 "* Bug fixes\n"
@@ -2613,7 +2653,7 @@ msgid "## 0.0.3: 2009-07-18"
 msgstr ""
 
 msgid ""
-"* Added Groonga::TableKeySupport#has_key? [#26145] [Tasuku SUENAGA]\n"
+"* Added Groonga::Table::KeySupport#has_key? [#26145] [Tasuku SUENAGA]\n"
 "* Groonga::Record#[] raises an exception for nonexistent\n"
 "  column name. [#26146] [Tasuku SUENAGA]\n"
 "* Supported 32bit environment [niku]\n"
@@ -2626,7 +2666,7 @@ msgid ""
 "  * Groonga::Schema: A DSL for schema definition\n"
 "  * Groonga::Expression"
 msgstr ""
-"* Groonga::TableKeySupport#has_key?の追加 [#26145] [Tasuku SUENAGA]\n"
+"* Groonga::Table::KeySupport#has_key?の追加 [#26145] [Tasuku SUENAGA]\n"
 "* カラム名が存在しない場合はGroonga::Record#[]が例外をあげるように変更。 [#26146] [Tasuku SUENAGA]\n"
 "* 32ビット環境をサポート [niku]\n"
 "* N-gramインデックスサーチのテストを追加 [dara]\n"
@@ -4059,35 +4099,58 @@ msgstr ""
 msgid "4.0.8"
 msgstr ""
 
-# Groonga::Column#index?
-# Groonga::Column#index_column?
-msgid ""
-"_column_ が {Groonga::IndexColumn} の場合は +true+ を返し、\n"
-"そうでない場合は +false+ を返す。"
-msgstr ""
-
 # @overload
 msgid "tag|overload|index?"
 msgstr ""
 
-# Groonga::Column#vector?
+# @return [Bool]
 msgid ""
-"_column_ がベクターカラムの場合は +true+ を返し、\n"
-"そうでない場合は +false+ を返す。"
+"`true` if the column is an index column\n"
+"({Groonga::IndexColumn}), `false` otherwise."
 msgstr ""
 
 # @overload
 msgid "tag|overload|vector?"
 msgstr ""
 
-# Groonga::Column#scalar?
+# @return [Bool]
 msgid ""
-"_column_ がスカラーカラムの場合は +true+ を返し、\n"
-"そうでない場合は +false+ を返す。"
+"`true` if the column is a vector column,\n"
+"`false` otherwise."
+msgstr ""
+
+# @overload
+msgid "tag|overload|weight_vector?"
+msgstr ""
+
+# @return [Bool]
+msgid ""
+"`true` if the column is a weight vector column,\n"
+"`false` otherwise."
+msgstr ""
+
+# @since
+msgid "7.0.2"
 msgstr ""
 
 # @overload
 msgid "tag|overload|scalar?"
+msgstr ""
+
+# @return [Bool]
+msgid ""
+"`true` if the column is a scalar column,\n"
+"`false` otherwise."
+msgstr ""
+
+# @overload
+msgid "tag|overload|data?"
+msgstr ""
+
+# @return [Bool]
+msgid ""
+"`true` if the column is a data column (a scalar\n"
+"column or a vector column), `false` otherwise."
 msgstr ""
 
 # @overload
@@ -4631,6 +4694,65 @@ msgstr ""
 msgid "It must be an expression that calls a window function."
 msgstr ""
 
+# Groonga::DataColumn#apply_expression
+msgid ""
+"Applies the expression to all records in the table of the\n"
+"column. Results are stored into the column."
+msgstr ""
+
+# @example
+msgid "tag|example|Compute column values from other column values."
+msgstr ""
+
+# @example Compute column values from other column values.
+msgid ""
+"\n"
+"Groonga::Schema.define do |schema|\n"
+"  schema.create_table(\"Comments\") do |table|\n"
+"    # The column that has base data to compute \"plus1\" column data.\n"
+"    table.uint32(\"base\")\n"
+"    # The column for storing computed value with \"base\" column data.\n"
+"    table.uint32(\"plus1\")\n"
+"  end\n"
+"end\n"
+"comments = Groonga[\"Comments\"]\n"
+"plus1 = Groonga[\"Comments.plus1\"]\n"
+"\n"
+"3.times do |i|\n"
+"  comments.add(:base => i)\n"
+"end\n"
+"\n"
+"plus1.apply_expression do |record|\n"
+"  # Computes \"base\" column value plus one.\n"
+"  record.base + 1\n"
+"end\n"
+"\n"
+"comments.each do |comment|\n"
+"  p [comment.base, comment.plus1]\n"
+"    # -> [0, 1]\n"
+"    # -> [1, 2]\n"
+"    # -> [2, 3]\n"
+"end"
+msgstr ""
+
+# @overload
+msgid "tag|overload|apply_expression"
+msgstr ""
+
+# @yield [record]
+msgid ""
+"It yields an object that builds expression. The block must\n"
+"build an expression to be applied to all records."
+msgstr ""
+
+# @yieldparam [Groonga::RecordExpressionBuilder] record
+msgid "The expression builder to create an expression."
+msgstr ""
+
+# @yieldreturn [Groonga::ExpressionBuilder]
+msgid "It must be an expression."
+msgstr ""
+
 msgid "テーブルの集合を管理するためのオブジェクト。"
 msgstr ""
 
@@ -4922,6 +5044,46 @@ msgstr ""
 
 # @since
 msgid "6.0.9"
+msgstr ""
+
+# Groonga::DefaultCache
+msgid "This module provides the default cache related features."
+msgstr ""
+
+# @overload
+msgid "tag|overload|base_path"
+msgstr ""
+
+# @return [String, nil]
+msgid "the default cache base path or `nil`."
+msgstr ""
+
+# @overload
+msgid "tag|overload|base_path="
+msgstr ""
+
+# @param [String, nil]
+msgid "tag|param|base_path"
+msgstr ""
+
+# @param [String, nil] base_path
+msgid ""
+"The new default cache base path.\n"
+"If you specify `String`, the default cache will be persistent.\n"
+"If you specify `nil`, the default cache will be just on memory.\n"
+"You need to call {.reopen} to apply this change."
+msgstr ""
+
+# @return [String, nil]
+msgid "The `base_path` itself."
+msgstr ""
+
+# @overload
+msgid "tag|overload|reopen"
+msgstr ""
+
+# Groonga::DefaultCache.reopen
+msgid "Reopens the default cache."
 msgstr ""
 
 # Groonga::DoubleArrayTrieCursor
@@ -6799,10 +6961,6 @@ msgid ""
 msgstr "現在のロガーに再オープンのリクエストを送ります。ログファイルの使い分けに便利です。"
 
 # @overload
-msgid "tag|overload|reopen"
-msgstr ""
-
-# @overload
 msgid "tag|overload|max_level"
 msgstr ""
 
@@ -8302,7 +8460,19 @@ msgid "テーブルに主キーが _key_ のレコードがあるならtrueを�
 msgstr ""
 
 # @overload
+msgid "tag|overload|key?"
+msgstr ""
+
+# @since
+msgid "7.0.0"
+msgstr ""
+
+# @overload
 msgid "tag|overload|has_key?"
+msgstr ""
+
+# @deprecated
+msgid "Use {key?} instead."
 msgstr ""
 
 # @param [Integer] id
