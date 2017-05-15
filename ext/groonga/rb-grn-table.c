@@ -1,6 +1,6 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
-  Copyright (C) 2009-2015  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2017  Kouhei Sutou <kou@clear-code.com>
   Copyright (C) 2014-2016  Masafumi Yokoyama <yokoyama@clear-code.com>
 
   This library is free software; you can redistribute it and/or
@@ -2646,6 +2646,95 @@ rb_grn_table_rename (VALUE self, VALUE rb_name)
     return self;
 }
 
+/*
+ * @overload load_arrow(path)
+ *
+ *   Loads records from Apache Arrow file format file.
+ *
+ *   @param path [String, #to_path] the path of file in Apache Arrow
+ *     file format.
+ *
+ *   @return [void]
+ *
+ *   @since 7.0.3
+ */
+static VALUE
+rb_grn_table_load_arrow (VALUE self, VALUE rb_path)
+{
+    int rc;
+    grn_ctx *context;
+    grn_obj *table;
+
+    rb_grn_table_deconstruct(SELF(self), &table, &context,
+                             NULL, NULL, NULL,
+                             NULL, NULL,
+                             NULL);
+
+    {
+        VALUE rb_path_string;
+        rb_path_string = rb_grn_check_convert_to_string(rb_path);
+        if (NIL_P(rb_path_string)) {
+            ID to_path;
+            CONST_ID(to_path, "to_path");
+            rb_path_string = rb_check_funcall(rb_path, to_path, 0, 0);
+            if (rb_path_string == Qundef) {
+                rb_path_string = rb_path;
+            }
+            rb_path = rb_grn_convert_to_string(rb_path_string);
+        }
+    }
+
+    rc = grn_arrow_load(context, table, StringValueCStr(rb_path));
+    rb_grn_context_check(context, self);
+    rb_grn_rc_check(rc, self);
+
+    return self;
+}
+
+/*
+ * @overload dump_arrow(path)
+ *
+ *   Dump records to file in Apache Arrow file format.
+ *
+ *   @param path [String, #to_path] the output file path.
+ *
+ *   @return [void]
+ *
+ *   @since 7.0.3
+ */
+static VALUE
+rb_grn_table_dump_arrow (VALUE self, VALUE rb_path)
+{
+    int rc;
+    grn_ctx *context;
+    grn_obj *table;
+
+    rb_grn_table_deconstruct(SELF(self), &table, &context,
+                             NULL, NULL, NULL,
+                             NULL, NULL,
+                             NULL);
+
+    {
+        VALUE rb_path_string;
+        rb_path_string = rb_grn_check_convert_to_string(rb_path);
+        if (NIL_P(rb_path_string)) {
+            ID to_path;
+            CONST_ID(to_path, "to_path");
+            rb_path_string = rb_check_funcall(rb_path, to_path, 0, 0);
+            if (rb_path_string == Qundef) {
+                rb_path_string = rb_path;
+            }
+            rb_path = rb_grn_convert_to_string(rb_path_string);
+        }
+    }
+
+    rc = grn_arrow_dump(context, table, StringValueCStr(rb_path));
+    rb_grn_context_check(context, self);
+    rb_grn_rc_check(rc, self);
+
+    return self;
+}
+
 void
 rb_grn_init_table (VALUE mGrn)
 {
@@ -2732,6 +2821,9 @@ rb_grn_init_table (VALUE mGrn)
     rb_define_method(rb_cGrnTable, "defrag", rb_grn_table_defrag, -1);
 
     rb_define_method(rb_cGrnTable, "rename", rb_grn_table_rename, 1);
+
+    rb_define_method(rb_cGrnTable, "load_arrow", rb_grn_table_load_arrow, 1);
+    rb_define_method(rb_cGrnTable, "dump_arrow", rb_grn_table_dump_arrow, 1);
 
     rb_grn_init_table_key_support(mGrn);
     rb_grn_init_array(mGrn);

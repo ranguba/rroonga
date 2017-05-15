@@ -1,7 +1,7 @@
-/* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /* vim: set sts=4 sw=4 ts=8 noet: */
 /*
-  Copyright (C) 2009-2013  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2017  Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -124,6 +124,25 @@ VALUE
 rb_grn_convert_to_array (VALUE object)
 {
     return rb_convert_type(object, RUBY_T_ARRAY, "Array", "to_ary");
+}
+
+VALUE
+rb_grn_convert_to_path (VALUE object)
+{
+    VALUE path;
+
+    path = rb_grn_check_convert_to_string(object);
+    if (NIL_P(path)) {
+        ID to_path;
+        CONST_ID(to_path, "to_path");
+        path = rb_check_funcall(object, to_path, 0, 0);
+        if (path == Qundef) {
+            path = object;
+        }
+        path = rb_grn_convert_to_string(path);
+    }
+
+    return path;
 }
 
 VALUE
