@@ -2692,22 +2692,36 @@ rb_grn_table_load_arrow (VALUE self, VALUE rb_path)
 }
 
 /*
- * @overload dump_arrow(path)
+ * @overload dump_arrow(path, options)
  *
  *   Dump records to file in Apache Arrow file format.
  *
  *   @param path [String, #to_path] the output file path.
+ *
+ *   @param options [::Hash] the options.
+ *
+ *   @option options :columns [::Array<Groonga::Column>] the columns
+ *     to be dumped. All columns are dumped by default.
  *
  *   @return [void]
  *
  *   @since 7.0.3
  */
 static VALUE
-rb_grn_table_dump_arrow (VALUE self, VALUE rb_path)
+rb_grn_table_dump_arrow (int argc, VALUE *argv, VALUE self)
 {
     int rc;
     grn_ctx *context;
     grn_obj *table;
+    const char *path;
+    VALUE rb_path;
+    VALUE rb_options;
+    VALUE rb_columns = Qnil;
+
+    rb_scan_args(argc, argv, "11", &rb_path, &rb_options);
+    rb_grn_scan_options(rb_options,
+                        "columns", &rb_columns,
+                        NULL);
 
     rb_grn_table_deconstruct(SELF(self), &table, &context,
                              NULL, NULL, NULL,
@@ -2727,8 +2741,28 @@ rb_grn_table_dump_arrow (VALUE self, VALUE rb_path)
             rb_path = rb_grn_convert_to_string(rb_path_string);
         }
     }
+    path = StringValueCStr(rb_path);
 
-    rc = grn_arrow_dump(context, table, StringValueCStr(rb_path));
+    if (NIL_P(rb_columns)) {
+        rc = grn_arrow_dump(context, table, path);
+    } else {
+        grn_obj columns;
+        int i, n;
+
+        rb_columns = rb_grn_convert_to_array(rb_columns);
+
+        GRN_PTR_INIT(&columns, GRN_OBJ_VECTOR, GRN_ID_NIL);
+        n = RARRAY_LEN(rb_columns);
+        for (i = 0; i < n; i++) {
+            VALUE rb_column = RARRAY_PTR(rb_columns)[i];
+            grn_obj *column;
+
+            column = RVAL2GRNOBJECT(rb_column, &context);
+            GRN_PTR_PUT(context, &columns, column);
+        }
+        rc = grn_arrow_dump_columns(context, table, &columns, path);
+        GRN_OBJ_FIN(context, &columns);
+    }
     rb_grn_context_check(context, self);
     rb_grn_rc_check(rc, self);
 
@@ -2823,7 +2857,7 @@ rb_grn_init_table (VALUE mGrn)
     rb_define_method(rb_cGrnTable, "rename", rb_grn_table_rename, 1);
 
     rb_define_method(rb_cGrnTable, "load_arrow", rb_grn_table_load_arrow, 1);
-    rb_define_method(rb_cGrnTable, "dump_arrow", rb_grn_table_dump_arrow, 1);
+    rb_define_method(rb_cGrnTable, "dump_arrow", rb_grn_table_dump_arrow, -1);
 
     rb_grn_init_table_key_support(mGrn);
     rb_grn_init_array(mGrn);
