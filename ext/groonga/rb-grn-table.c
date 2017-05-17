@@ -2700,8 +2700,18 @@ rb_grn_table_load_arrow (VALUE self, VALUE rb_path)
  *
  *   @param options [::Hash] the options.
  *
- *   @option options :columns [::Array<Groonga::Column>] the columns
- *     to be dumped. All columns are dumped by default.
+ *   @option options :columns [::Array<Groonga::Column>] (nil) the
+ *     columns to be dumped.
+ *
+ *     If you don't specify neither `:columns` and `:column_names`,
+ *     all columns are dumped. It's the default.
+ *
+ *   @option options :column_names [::Array<Groonga::Column>] (nil)
+ *     the column names to be dumped. If `:columns` is specified,
+ *     `:column_names` is ignored.
+ *
+ *     If you don't specify neither `:columns` and `:column_names`,
+ *     all columns are dumped. It's the default.
  *
  *   @return [void]
  *
@@ -2717,10 +2727,12 @@ rb_grn_table_dump_arrow (int argc, VALUE *argv, VALUE self)
     VALUE rb_path;
     VALUE rb_options;
     VALUE rb_columns = Qnil;
+    VALUE rb_column_names = Qnil;
 
     rb_scan_args(argc, argv, "11", &rb_path, &rb_options);
     rb_grn_scan_options(rb_options,
                         "columns", &rb_columns,
+                        "column_names", &rb_column_names,
                         NULL);
 
     rb_grn_table_deconstruct(SELF(self), &table, &context,
@@ -2743,9 +2755,9 @@ rb_grn_table_dump_arrow (int argc, VALUE *argv, VALUE self)
     }
     path = StringValueCStr(rb_path);
 
-    if (NIL_P(rb_columns)) {
+    if (NIL_P(rb_columns) && NIL_P(rb_column_names)) {
         rc = grn_arrow_dump(context, table, path);
-    } else {
+    } else if (!NIL_P(rb_columns)) {
         grn_obj columns;
         int i, n;
 
@@ -2761,6 +2773,37 @@ rb_grn_table_dump_arrow (int argc, VALUE *argv, VALUE self)
             GRN_PTR_PUT(context, &columns, column);
         }
         rc = grn_arrow_dump_columns(context, table, &columns, path);
+        GRN_OBJ_FIN(context, &columns);
+    } else if (!NIL_P(rb_column_names)) {
+        grn_obj columns;
+        int i, n;
+
+        rb_column_names = rb_grn_convert_to_array(rb_column_names);
+
+        GRN_PTR_INIT(&columns, GRN_OBJ_VECTOR, GRN_ID_NIL);
+        n = RARRAY_LEN(rb_column_names);
+        for (i = 0; i < n; i++) {
+            VALUE rb_column_name = RARRAY_PTR(rb_column_names)[i];
+            grn_obj *column;
+
+            column = grn_obj_column(context, table,
+                                    RSTRING_PTR(rb_column_name),
+                                    RSTRING_LEN(rb_column_name));
+            if (!column) {
+                continue;
+            }
+            GRN_PTR_PUT(context, &columns, column);
+        }
+        rc = grn_arrow_dump_columns(context, table, &columns, path);
+        n = GRN_BULK_VSIZE(&columns) / sizeof(grn_obj *);
+        for (i = 0; i < n; i++) {
+            grn_obj *column;
+
+            column = GRN_PTR_VALUE_AT(&columns, i);
+            if (column->header.type == GRN_ACCESSOR) {
+                grn_obj_unlink(context, column);
+            }
+        }
         GRN_OBJ_FIN(context, &columns);
     }
     rb_grn_context_check(context, self);

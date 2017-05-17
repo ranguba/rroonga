@@ -156,4 +156,34 @@ class TableArrowTest < Test::Unit::TestCase
     assert_equal(expected,
                  destination.collect(&:attributes))
   end
+
+  def test_dump_column_names
+    Groonga::Schema.define do |schema|
+      schema.create_table("Source") do |table|
+        table.int32("data1")
+        table.short_text("data2")
+      end
+
+      schema.create_table("Destination") do |table|
+      end
+    end
+
+    source = Groonga["Source"]
+    destination = Groonga["Destination"]
+
+    expected = []
+    10.times do |i|
+      data1 = i * 10
+      data2 = i.to_s
+      expected << {"_id" => i + 1, "data1" => data1}
+      source.add(:data1 => data1, :data2 => data2)
+    end
+
+    tempfile = Tempfile.new(["table-arrow", ".arrow"])
+    source.dump_arrow(tempfile.path, :column_names => ["data1"])
+    destination.load_arrow(tempfile.path)
+
+    assert_equal(expected,
+                 destination.collect(&:attributes))
+  end
 end
