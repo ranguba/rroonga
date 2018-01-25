@@ -1,6 +1,4 @@
-# -*- coding: utf-8 -*-
-#
-# Copyright (C) 2009-2013  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2018  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -32,6 +30,13 @@ if local_groonga_bin_dir.exist?
   end
 
   prepend_path.call("PATH", File::PATH_SEPARATOR)
+
+  begin
+    require "ruby_installer/runtime"
+  rescue LoadError
+  else
+    RubyInstaller::Runtime.add_dll_directory(local_groonga_bin_dir.to_s)
+  end
 end
 
 require "groonga/geo-point"
