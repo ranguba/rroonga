@@ -34,23 +34,26 @@ VALUE rb_cGrnColumnCache;
 static void
 rb_grn_column_cache_mark(void *data)
 {
-    RbGrnColumnCache *column_cache = data;
+    RbGrnColumnCache *rb_grn_column_cache = data;
 
-    rb_gc_mark(column_cache->rb_column);
+    if (!rb_grn_column_cache->column_cache)
+        return;
+
+    rb_gc_mark(rb_grn_column_cache->rb_column);
 }
 
 static void
 rb_grn_column_cache_free(void *data)
 {
-    RbGrnColumnCache *rb_column_cache = data;
+    RbGrnColumnCache *rb_grn_column_cache = data;
 
-    if (!rb_column_cache->column_cache)
+    if (!rb_grn_column_cache->column_cache)
         return;
 
-    GRN_OBJ_FIN(rb_column_cache->context,
-                &(rb_column_cache->buffer));
-    grn_column_cache_close(rb_column_cache->context,
-                           rb_column_cache->column_cache);
+    GRN_OBJ_FIN(rb_grn_column_cache->context,
+                &(rb_grn_column_cache->buffer));
+    grn_column_cache_close(rb_grn_column_cache->context,
+                           rb_grn_column_cache->column_cache);
 }
 
 static rb_data_type_t data_type = {
@@ -69,6 +72,33 @@ static VALUE
 rb_grn_column_cache_allocate (VALUE klass)
 {
     return TypedData_Wrap_Struct(klass, &data_type, NULL);
+}
+
+static VALUE rb_grn_column_cache_close (VALUE self);
+
+/*
+ * Opens a new column cache and passes to the given block. The opened
+ * column cache is closed after the given block is finished.
+ *
+ * @overload open(column) {|column_cache| ...}
+ *   @param column [Groonga::Column] The column to be cached.
+ *
+ *   @yieldparam [Groonga::ColumnCache] The opened column cache.
+ *
+ *   @return [Object] The object returned by the given block.
+ */
+static VALUE
+rb_grn_column_cache_s_open (VALUE klass, VALUE rb_column)
+{
+    VALUE rb_column_cache;
+
+    rb_column_cache = rb_funcall(klass, rb_intern("new"), 1, rb_column);
+    if (rb_block_given_p()) {
+        return rb_ensure(rb_yield, rb_column_cache,
+                         rb_grn_column_cache_close, rb_column_cache);
+    } else {
+        return rb_column_cache;
+    }
 }
 
 /*
@@ -133,6 +163,10 @@ rb_grn_column_cache_array_reference (VALUE self, VALUE rb_id)
                          &data_type,
                          rb_grn_column_cache);
 
+    if (!rb_grn_column_cache->column_cache) {
+        return Qnil;
+    }
+
     id = rb_grn_id_from_ruby_object(rb_id,
                                     rb_grn_column_cache->context,
                                     rb_grn_column_cache->table,
@@ -152,6 +186,32 @@ rb_grn_column_cache_array_reference (VALUE self, VALUE rb_id)
                         self);
 }
 
+/*
+ * @overload close
+ *   @return [void] Close the column cache.
+ */
+static VALUE
+rb_grn_column_cache_close (VALUE self)
+{
+    RbGrnColumnCache *rb_grn_column_cache;
+
+    TypedData_Get_Struct(self,
+                         RbGrnColumnCache,
+                         &data_type,
+                         rb_grn_column_cache);
+
+    if (rb_grn_column_cache->column_cache) {
+        GRN_OBJ_FIN(rb_grn_column_cache->context,
+                    &(rb_grn_column_cache->buffer));
+        grn_column_cache_close(rb_grn_column_cache->context,
+                               rb_grn_column_cache->column_cache);
+        rb_grn_column_cache->column_cache = NULL;
+        rb_grn_context_check(rb_grn_column_cache->context, self);
+    }
+
+    return Qnil;
+}
+
 void
 rb_grn_init_column_cache (VALUE mGrn)
 {
@@ -159,6 +219,11 @@ rb_grn_init_column_cache (VALUE mGrn)
         rb_define_class_under(mGrn, "ColumnCache", rb_cData);
 
     rb_define_alloc_func(rb_cGrnColumnCache, rb_grn_column_cache_allocate);
+
+    rb_define_singleton_method(rb_cGrnColumnCache,
+                               "open",
+                               rb_grn_column_cache_s_open,
+                               1);
 
     rb_define_method(rb_cGrnColumnCache,
                      "initialize",
@@ -168,4 +233,8 @@ rb_grn_init_column_cache (VALUE mGrn)
                      "[]",
                      rb_grn_column_cache_array_reference,
                      1);
+    rb_define_method(rb_cGrnColumnCache,
+                     "close",
+                     rb_grn_column_cache_close,
+                     0);
 }

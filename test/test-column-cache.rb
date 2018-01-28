@@ -38,8 +38,9 @@ class ColumnCacheTest < Test::Unit::TestCase
   end
 
   def test_array_reference
-    column_cache = Groonga::ColumnCache.new(@age)
-    assert_equal(@users.collect(&:age),
-                 @users.collect {|user| column_cache[user]})
+    Groonga::ColumnCache.open(@age) do |column_cache|
+      assert_equal(@users.collect(&:age),
+                   @users.collect {|user| column_cache[user]})
+    end
   end
 end
