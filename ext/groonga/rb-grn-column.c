@@ -54,7 +54,7 @@ grn_obj *
 rb_grn_column_from_ruby_object (VALUE object, grn_ctx **context)
 {
     if (!RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cGrnColumn))) {
-        rb_raise(rb_eTypeError, "not a groonga column");
+        rb_raise(rb_eTypeError, "not a Groonga column");
     }
 
     return RVAL2GRNOBJECT(object, context);
