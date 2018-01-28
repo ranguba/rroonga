@@ -1,4 +1,4 @@
-# Copyright (C) 2010-2012  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2010-2018  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -186,6 +186,41 @@ class CommandSelectTest < Test::Unit::TestCase
         assert_raise(Groonga::SyntaxError) do
           @entries.select do |record|
             record[:content].match("-mroonga")
+          end
+        end
+      end
+    end
+
+    class TestNoSyntaxError < self
+      def setup_data
+        @paren =
+          @entries.add("Have paren",
+                       "content" => "(hello)")
+        @no_paren =
+          @entries.add("Not have paren",
+                       "content" => "hello")
+      end
+
+      def test_true
+        result = @entries.select do |record|
+          record[:content].match("(", :no_syntax_error => true)
+        end
+        assert_equal_select_result([@paren],
+                                   result)
+      end
+
+      def test_false
+        assert_raise(Groonga::SyntaxError) do
+          @entries.select do |record|
+            record[:content].match("(", :no_syntax_error => false)
+          end
+        end
+      end
+
+      def test_default
+        assert_raise(Groonga::SyntaxError) do
+          @entries.select do |record|
+            record[:content].match("(")
           end
         end
       end

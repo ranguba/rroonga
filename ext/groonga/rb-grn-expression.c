@@ -1,6 +1,6 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
-  Copyright (C) 2009-2015  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2018  Kouhei Sutou <kou@clear-code.com>
   Copyright (C) 2014  Masafumi Yokoyama <myokoym@gmail.com>
 
   This library is free software; you can redistribute it and/or
@@ -424,6 +424,18 @@ rb_grn_expression_append_operation (VALUE self, VALUE rb_operation,
  *     デフォルトでは更新操作を利用できる。
  *
  *     参考: "Groongaのクエリ構文のドキュメント":http://groonga.org/ja/docs/reference/grn_expr/query_syntax.html
+ *   @option options :no_syntax_error
+ *     Specifies whether preventing syntax error in query syntax.
+ *
+ *     If it's `true`, special characters are treated as normal
+ *     characters on syntax error.
+ *
+ *     If it's `false`, syntax error is reported on syntax error.
+ *     It's the default.
+ *
+ *     You can't use this option in script syntax.
+ *
+ *     @see [Query syntax document in Groonga](http://groonga.org/docs/reference/grn_expr/query_syntax.html)
  */
 static VALUE
 rb_grn_expression_parse (int argc, VALUE *argv, VALUE self)
@@ -440,6 +452,7 @@ rb_grn_expression_parse (int argc, VALUE *argv, VALUE self)
     VALUE options, rb_query, rb_default_column, rb_default_operator;
     VALUE rb_default_mode, rb_syntax;
     VALUE rb_allow_pragma, rb_allow_column, rb_allow_update, rb_allow_leading_not;
+    VALUE rb_no_syntax_error;
     VALUE exception = Qnil;
 
     rb_scan_args(argc, argv, "11", &rb_query, &options);
@@ -452,6 +465,7 @@ rb_grn_expression_parse (int argc, VALUE *argv, VALUE self)
                         "allow_column", &rb_allow_column,
                         "allow_update", &rb_allow_update,
                         "allow_leading_not", &rb_allow_leading_not,
+                        "no_syntax_error", &rb_no_syntax_error,
                         NULL);
 
     query = StringValuePtr(rb_query);
@@ -519,6 +533,14 @@ rb_grn_expression_parse (int argc, VALUE *argv, VALUE self)
     if (!NIL_P(rb_allow_leading_not)) {
         if (RVAL2CBOOL(rb_allow_leading_not))
             flags |= GRN_EXPR_ALLOW_LEADING_NOT;
+    }
+
+    if (!NIL_P(rb_no_syntax_error)) {
+        if ((flags & GRN_EXPR_SYNTAX_SCRIPT))
+            rb_raise(rb_eArgError,
+                     ":no_syntax_error isn't allowed in script syntax");
+        if (RVAL2CBOOL(rb_no_syntax_error))
+            flags |= GRN_EXPR_QUERY_NO_SYNTAX_ERROR;
     }
 
     rc = grn_expr_parse(context, expression, query, query_size,
