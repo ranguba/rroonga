@@ -1,6 +1,6 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
-  Copyright (C) 2009-2017  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2018  Kouhei Sutou <kou@clear-code.com>
   Copyright (C) 2015-2017  Masafumi Yokoyama <yokoyama@clear-code.com>
 
   This library is free software; you can redistribute it and/or
@@ -248,6 +248,18 @@ struct _RbGrnPlugin
     grn_id id;
 };
 
+typedef struct _RbGrnColumnCache RbGrnColumnCache;
+struct _RbGrnColumnCache
+{
+    VALUE self;
+    grn_ctx *context;
+    VALUE rb_column;
+    grn_column_cache *column_cache;
+    grn_obj buffer;
+    grn_obj *range;
+    grn_obj *table;
+};
+
 RB_GRN_VAR grn_bool rb_grn_exited;
 
 RB_GRN_VAR VALUE rb_eGrnError;
@@ -306,6 +318,7 @@ RB_GRN_VAR VALUE rb_cGrnIndex;
 RB_GRN_VAR VALUE rb_mGrnRequestCanceler;
 RB_GRN_VAR VALUE rb_mGrnRequestTimer;
 RB_GRN_VAR VALUE rb_cGrnRequestTimerID;
+RB_GRN_VAR VALUE rb_cGrnColumnCache;
 
 void           rb_grn_init_utils                    (VALUE mGrn);
 void           rb_grn_init_exception                (VALUE mGrn);
@@ -369,6 +382,7 @@ void           rb_grn_init_request_timer_id         (VALUE mGrn);
 void           rb_grn_init_id                       (VALUE mGrn);
 void           rb_grn_init_name                     (VALUE mGrn);
 void           rb_grn_init_default_cache            (VALUE mGrn);
+void           rb_grn_init_column_cache             (VALUE mGrn);
 
 VALUE          rb_grn_rc_to_exception               (grn_rc rc);
 void           rb_grn_rc_check                      (grn_rc rc,

@@ -1,6 +1,6 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
-  Copyright (C) 2009-2016  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2018  Kouhei Sutou <kou@clear-code.com>
   Copyright (C) 2016  Masafumi Yokoyama <yokoyama@clear-code.com>
 
   This library is free software; you can redistribute it and/or
@@ -257,4 +257,5 @@ Init_groonga (void)
     rb_grn_init_id(mGrn);
     rb_grn_init_name(mGrn);
     rb_grn_init_default_cache(mGrn);
+    rb_grn_init_column_cache(mGrn);
 }
