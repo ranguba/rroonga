@@ -27,8 +27,10 @@ module TestOffsetAndLimitSupport
     assert_equal(((200 - 1)...200).to_a, ids(:offset => -1))
     assert_equal(((200 - 32)...200).to_a, ids(:offset => -32))
     assert_equal(((200 - 100)...200).to_a, ids(:offset => -100))
+    assert_equal(((200 - 100)...101).to_a, ids(:offset => -199))
+    assert_equal(((200 - 100)...100).to_a, ids(:offset => -200))
     assert_raise(Groonga::TooSmallOffset) do
-      ids(:offset => -101)
+      ids(:offset => -201)
     end
   end
 
