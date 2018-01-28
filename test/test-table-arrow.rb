@@ -1,4 +1,4 @@
-# Copyright (C) 2007  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2017-2018  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -16,7 +16,11 @@
 class TableArrowTest < Test::Unit::TestCase
   include GroongaTestUtils
 
-  setup :setup_database
+  def setup
+    setup_database
+
+    omit("Apache Arrow support is required") unless context.support_arrow?
+  end
 
   def assert_dump_load(type, n_records)
     Groonga::Schema.define do |schema|
