@@ -68,12 +68,10 @@ module GroongaTestUtils
     @dump_log = false
 
     @log_path = @tmp_dir + "groonga.log"
-    logger = Groonga::FileLogger.new(@log_path.to_s)
-    Groonga::Logger.register(logger)
+    Groonga::Logger.path = @log_path.to_s
 
     @query_log_path = @tmp_dir + "groonga-query.log"
-    query_logger = Groonga::FileQueryLogger.new(@query_log_path.to_s)
-    Groonga::QueryLogger.register(query_logger, :all => true)
+    Groonga::QueryLogger.path = @query_log_path.to_s
   end
 
   def setup_tables_directory
@@ -130,11 +128,10 @@ module GroongaTestUtils
 
   def teardown_log_path
     return unless @dump_log
-    log_path = Groonga::Logger.log_path
-    if File.exist?(log_path)
-      header = "--- log: #{log_path} ---"
+    if @log_path.exist?(log_path)
+      header = "--- log: #{@log_path} ---"
       puts(header)
-      puts(File.read(log_path))
+      puts(@log_path.read)
       puts("-" * header.length)
     end
     if @query_log_path.exist?

@@ -1,4 +1,4 @@
-# Copyright (C) 2010  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2010-2018  Kouhei Sutou <kou@clear-code.com>
 # Copyright (C) 2016  Masafumi Yokoyama <yokoyama@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
@@ -19,11 +19,13 @@ class LoggerTest < Test::Unit::TestCase
 
   def setup
     @default_log_path = Groonga::Logger.path
+    @default_log_max_level = Groonga::Logger.max_level
     @default_rotate_threshold_size = Groonga::Logger.rotate_threshold_size
   end
 
   def teardown
     Groonga::Logger.path = @default_log_path
+    Groonga::Logger.max_level = @default_log_max_level
     Groonga::Logger.rotate_threshold_size = @default_rotate_threshold_size
   end
 
@@ -53,6 +55,15 @@ class LoggerTest < Test::Unit::TestCase
   end
 
   sub_test_case ".log" do
+    setup do
+      GC.disable
+    end
+
+    teardown do
+      Groonga::Logger.unregister
+      GC.enable
+    end
+
     test "no options" do
       messages = []
       Groonga::Logger.register do |event, level, time, title, message, location|
@@ -141,6 +152,7 @@ class LoggerTest < Test::Unit::TestCase
   def test_rotate_threshold_size
     Groonga::Logger.unregister
     Groonga::Logger.path = @log_path.to_s
+    Groonga::Logger.reopen
     Groonga::Logger.rotate_threshold_size = 10
     assert_equal([], Dir.glob("#{@log_path}.*"))
     Groonga::Logger.log("Hello")

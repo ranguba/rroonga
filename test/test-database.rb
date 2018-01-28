@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2015  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2018  Kouhei Sutou <kou@clear-code.com>
 # Copyright (C) 2016  Masafumi Yokoyama <yokoyama@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
@@ -30,7 +30,6 @@ class DatabaseTest < Test::Unit::TestCase
   end
 
   def test_temporary
-    Groonga::Logger.register(nil)
     before_files = @tmp_dir.children
     database = Groonga::Database.create
     assert_nil(database.name)

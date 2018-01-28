@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2015  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2018  Kouhei Sutou <kou@clear-code.com>
 # Copyright (C) 2016  Masafumi Yokoyama <yokoyama@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
@@ -41,7 +41,6 @@ class ContextTest < Test::Unit::TestCase
   end
 
   def test_create_temporary_database
-    Groonga::Logger.register(nil)
     before_files = @tmp_dir.children
     context = Groonga::Context.new
     database = context.create_database
