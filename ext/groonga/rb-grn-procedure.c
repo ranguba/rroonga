@@ -1,6 +1,6 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
-  Copyright (C) 2009-2014  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2018  Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -50,6 +50,19 @@ rb_grn_procedure_get_type (VALUE self)
     return INT2NUM(type);
 }
 
+static VALUE
+rb_grn_procedure_stable_p (VALUE self)
+{
+    grn_ctx *context;
+    grn_obj *procedure;
+    grn_bool is_stable;
+
+    procedure = RVAL2GRNOBJECT(self, &context);
+    is_stable = grn_proc_is_stable(context, procedure);
+
+    return CBOOL2RVAL(is_stable);
+}
+
 void
 rb_grn_init_procedure (VALUE mGrn)
 {
@@ -62,4 +75,6 @@ rb_grn_init_procedure (VALUE mGrn)
     rb_define_const(rb_cGrnProcedure, "MECAB", INT2NUM(GRN_DB_MECAB));
 
     rb_define_method(rb_cGrnProcedure, "type", rb_grn_procedure_get_type, 0);
+
+    rb_define_method(rb_cGrnProcedure, "stable?", rb_grn_procedure_stable_p, 0);
 }

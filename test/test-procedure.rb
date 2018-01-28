@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2014  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2018  Kouhei Sutou <kou@clear-code.com>
 # Copyright (C) 2015  Masafumi Yokoyama <yokoyama@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
@@ -55,6 +55,12 @@ class ProcedureTest < Test::Unit::TestCase
   def test_window_function_procedure?
     assert do
       Groonga["record_number"].window_function_procedure?
+    end
+  end
+
+  def test_stable?
+    assert do
+      not Groonga["rand"].stable?
     end
   end
 
