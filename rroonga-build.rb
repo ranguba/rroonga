@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2016  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2018  Kouhei Sutou <kou@clear-code.com>
 # Copyright (C) 2015-2017  Masafumi Yokoyama <yokoyama@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
@@ -17,16 +17,16 @@
 module RroongaBuild
   module RequiredGroongaVersion
     MAJOR = 7
-    MINOR = 0
-    MICRO = 3
+    MINOR = 1
+    MICRO = 0
     VERSION = [MAJOR, MINOR, MICRO]
-    RELEASED_DATE = Time.utc(2017, 5, 29)
+    RELEASED_DATE = Time.utc(2017, 12, 29)
   end
 
   module LatestGroongaVersion
     MAJOR = 7
-    MINOR = 0
-    MICRO = 3
+    MINOR = 1
+    MICRO = 0
     VERSION = [MAJOR, MINOR, MICRO]
   end
 
