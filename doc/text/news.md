@@ -1,5 +1,44 @@
 # NEWS
 
+## 7.1.1: 2018-01-30 {#version-7-1-1}
+
+### Improvements
+
+  * Added Groonga 7.1.1 support. Groonga 7.1.0 or older aren't supported.
+
+  * Added Apache Arrow support:
+
+    * {Groonga::Table#load_arrow}
+
+    * {Groonga::Table#dump_arrow}
+
+  * Windows: Added Ruby 2.4 or later support.
+    [groonga-dev,04565][Reported by ongaeshi]
+
+  * {Groonga::ColumnCache}: Added.
+
+  * {Groonga::Expression#parse}: Added `:no_syntax_error` option.
+
+  * {Groonga::Context#support_arrow?}: Added.
+
+  * {Groonga::Procedure#stable?}: Added.
+
+  * {Groonga::Array}: Removed queue support.
+
+  * {Groonga::QueryLogger.flags}: Added.
+
+  * {Groonga::QueryLogger.flags=}: Added.
+
+  * {Groonga::Object#corrupt?}: Added.
+
+  * {Groonga::Object#disk_usage}: Added.
+
+### Thanks
+
+  * naofumi-fujii
+
+  * ongaeshi
+
 ## 7.0.2: 2017-04-29 {#version-7-0-2}
 
 ### Improvements
