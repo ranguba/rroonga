@@ -1,6 +1,6 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
-  Copyright (C) 2012-2015  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2012-2018  Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -390,10 +390,11 @@ rb_grn_query_logger_s_get_rotate_threshold_size (VALUE klass)
  *   Groonga::QueryLogger.rotate_threshold_size = 0
  *
  * @overload rotate_threshold_size=(size)
- *   @param size [Integer] The log path for the default query logger.
- *     If nil is specified, log rotate by the default query logger is
- *     disabled.
- *   @return void
+ *   @param size [Integer] The rotate threshold size for the default
+ *     query logger. If `nil` is specified, log rotate by the default
+ *     query logger is disabled.
+ *
+ *   @return `size` itself.
  *
  * @since 5.0.2
  */
@@ -402,7 +403,49 @@ rb_grn_query_logger_s_set_rotate_threshold_size (VALUE klass, VALUE rb_size)
 {
     grn_default_query_logger_set_rotate_threshold_size(NUM2OFFT(rb_size));
 
-    return Qnil;
+    return rb_size;
+}
+
+/*
+ * Gets the current flags that are used by the default query logger.
+ *
+ * @overload flags
+ *   @return [Integer] The current flags
+ *
+ * @since 7.1.1
+ */
+static VALUE
+rb_grn_query_logger_s_get_flags (VALUE klass)
+{
+    return UINT2NUM(grn_default_query_logger_get_flags());
+}
+
+/*
+ * Sets the flags that are used by the default query logger. If you're
+ * using custom query logger by {.register}, the flags aren't
+ * used. Because it is for the default query logger.
+ *
+ * @example Changes the rotate threshold size for the default query logger
+ *   Groonga::QueryLogger.rotate_threshold_size = 1 * 1024 * 1024 # 1MiB
+ *
+ * @example Disables log ration by the default query logger
+ *   Groonga::QueryLogger.rotate_threshold_size = 0
+ *
+ * @overload flags=(flags)
+ *   @param flags [Integer] The flags for the default query logger.
+ *   @return void
+ *
+ * @since 7.1.1
+ */
+static VALUE
+rb_grn_query_logger_s_set_flags (VALUE klass, VALUE rb_flags)
+{
+    VALUE rb_parsed_flags;
+
+    rb_parsed_flags = rb_funcall(mGrnQueryLoggerFlags, id_parse, 1, rb_flags);
+    grn_default_query_logger_set_flags(NUM2UINT(rb_parsed_flags));
+
+    return rb_flags;
 }
 
 void
@@ -440,6 +483,12 @@ rb_grn_init_query_logger (VALUE mGrn)
                                0);
     rb_define_singleton_method(cGrnQueryLogger, "rotate_threshold_size=",
                                rb_grn_query_logger_s_set_rotate_threshold_size,
+                               1);
+    rb_define_singleton_method(cGrnQueryLogger, "flags",
+                               rb_grn_query_logger_s_get_flags,
+                               0);
+    rb_define_singleton_method(cGrnQueryLogger, "flags=",
+                               rb_grn_query_logger_s_set_flags,
                                1);
 
     mGrnQueryLoggerFlags = rb_define_module_under(cGrnQueryLogger, "Flags");

@@ -41,7 +41,7 @@ module Groonga
       class << self
         # TODO: Document me.
         def parse(input, base_flags=nil)
-          base_flags |= Flags::NONE
+          base_flags ||= Flags::NONE
           case input
           when nil
             base_flags

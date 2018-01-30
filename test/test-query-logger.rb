@@ -19,11 +19,13 @@ class QueryLoggerTest < Test::Unit::TestCase
   def setup
     @default_log_path = Groonga::QueryLogger.path
     @default_rotate_threshold_size = Groonga::QueryLogger.rotate_threshold_size
+    @default_flags = Groonga::QueryLogger.flags
   end
 
   def teardown
     Groonga::QueryLogger.path = @default_log_path
     Groonga::QueryLogger.rotate_threshold_size = @default_rotate_threshold_size
+    Groonga::QueryLogger.flags = @default_flags
   end
 
   def test_reopen
@@ -146,5 +148,13 @@ class QueryLoggerTest < Test::Unit::TestCase
     assert_equal([], Dir.glob("#{@query_log_path}.*"))
     Groonga::QueryLogger.log("command")
     assert_not_equal([], Dir.glob("#{@query_log_path}.*"))
+  end
+
+  sub_test_case("flags") do
+    test("name") do
+      Groonga::QueryLogger.flags = :command
+      assert_equal(Groonga::QueryLogger::Flags::COMMAND,
+                   Groonga::QueryLogger.flags)
+    end
   end
 end
