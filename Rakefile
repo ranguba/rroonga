@@ -168,6 +168,11 @@ namespace :build do
         mkdir_p build_dir
 
         commands = [
+          ["sudo", "apt-get", "-y", "install", "software-properties-common"],
+          ["sudo", "add-apt-repository", "-y", "universe"],
+          ["sudo", "add-apt-repository", "-y", "ppa:groonga/ppa"],
+          ["sudo", "apt-get", "update"],
+          ["sudo", "apt-get", "install", "-y", "libgroonga-dev"],
           ["git", "clone", "file://#{Dir.pwd}/.git", build_dir],
           ["cd", build_dir],
           ["gem", "install", "json"],

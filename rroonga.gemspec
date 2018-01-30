@@ -89,7 +89,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency("test-unit", [">= 3.0.0"])
   s.add_development_dependency("rake")
   s.add_development_dependency("rake-compiler", [">= 0.9.5"])
-  s.add_development_dependency("rake-compiler-dock", [">= 0.6.2"])
+  s.add_development_dependency("rake-compiler-dock", [">= 0.6.3"])
   s.add_development_dependency("bundler")
   s.add_development_dependency("yard")
   s.add_development_dependency("packnga", [">= 1.0.0"])
