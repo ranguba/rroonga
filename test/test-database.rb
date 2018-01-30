@@ -405,5 +405,11 @@ class DatabaseTest < Test::Unit::TestCase
         @database.dirty?
       end
     end
+
+    def test_corrupt?
+      assert do
+        not @database.corrupt?
+      end
+    end
   end
 end

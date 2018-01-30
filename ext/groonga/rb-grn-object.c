@@ -1970,6 +1970,25 @@ rb_grn_object_dirty_p (VALUE self)
     return CBOOL2RVAL(is_dirty);
 }
 
+/*
+ * @overload corrupt?
+ *   @return [Boolean] `true` if the object is corrupt, `false` otherwise.
+ *
+ * @since 7.1.1
+ */
+static VALUE
+rb_grn_object_corrupt_p (VALUE self)
+{
+    grn_ctx *context;
+    grn_obj *object;
+    grn_bool is_corrupt;
+
+    rb_grn_object_deconstruct(SELF(self), &object, &context,
+                              NULL, NULL, NULL, NULL);
+    is_corrupt = grn_obj_is_corrupt(context, object);
+    return CBOOL2RVAL(is_corrupt);
+}
+
 void
 rb_grn_init_object (VALUE mGrn)
 {
@@ -2032,4 +2051,6 @@ rb_grn_init_object (VALUE mGrn)
                      rb_grn_object_get_last_modified, 0);
     rb_define_method(rb_cGrnObject, "dirty?",
                      rb_grn_object_dirty_p, 0);
+    rb_define_method(rb_cGrnObject, "corrupt?",
+                     rb_grn_object_corrupt_p, 0);
 }
