@@ -376,6 +376,7 @@ class DatabaseTest < Test::Unit::TestCase
     def test_empty
       paths = [
         @database.path,
+        "#{@database.path}.conf",
         "#{@database.path}.001",
         "#{@database.path}.0000000",
       ]
@@ -395,6 +396,10 @@ class DatabaseTest < Test::Unit::TestCase
       @database.touch
       assert_equal(Time.now.sec, @database.last_modified.sec)
     end
+  end
+
+  class DirtyTest < self
+    setup :setup_database
 
     def test_dirty?
       assert do
@@ -405,6 +410,10 @@ class DatabaseTest < Test::Unit::TestCase
         @database.dirty?
       end
     end
+  end
+
+  class CorruptTest < self
+    setup :setup_database
 
     def test_corrupt?
       assert do

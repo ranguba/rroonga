@@ -1,6 +1,6 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
-  Copyright (C) 2009-2016  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2018  Kouhei Sutou <kou@clear-code.com>
   Copyright (C) 2014-2016  Masafumi Yokoyama <yokoyama@clear-code.com>
 
   This library is free software; you can redistribute it and/or
@@ -1989,6 +1989,25 @@ rb_grn_object_corrupt_p (VALUE self)
     return CBOOL2RVAL(is_corrupt);
 }
 
+/*
+ * @overload disk_usage
+ *   @return [Integer] The number of bytes used by this object in disk.
+ *
+ * @since 7.1.1
+ */
+static VALUE
+rb_grn_object_get_disk_usage (VALUE self)
+{
+    grn_ctx *context;
+    grn_obj *object;
+    size_t disk_usage;
+
+    rb_grn_object_deconstruct(SELF(self), &object, &context,
+                              NULL, NULL, NULL, NULL);
+    disk_usage = grn_obj_get_disk_usage(context, object);
+    return UINT2NUM(disk_usage);
+}
+
 void
 rb_grn_init_object (VALUE mGrn)
 {
@@ -2053,4 +2072,7 @@ rb_grn_init_object (VALUE mGrn)
                      rb_grn_object_dirty_p, 0);
     rb_define_method(rb_cGrnObject, "corrupt?",
                      rb_grn_object_corrupt_p, 0);
+
+    rb_define_method(rb_cGrnObject, "disk_usage",
+                     rb_grn_object_get_disk_usage, 0);
 }

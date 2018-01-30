@@ -96,9 +96,7 @@ module Groonga
 end
 
 require "groonga/context"
-require "groonga/statistic-measurer"
 require "groonga/database"
-require "groonga/table"
 require "groonga/column"
 require "groonga/patricia-trie"
 require "groonga/index-column"

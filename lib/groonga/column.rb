@@ -17,11 +17,6 @@
 
 module Groonga
   class Column
-    def disk_usage
-      measurer = StatisticMeasurer.new
-      measurer.measure_disk_usage(path)
-    end
-
     # @param [Groonga::Operator] operator (Groonga::Operator::MATCH)
     # @return [Array<Groonga::IndexColumn>] Indexes on `column` which can
     #    execute `operator`.

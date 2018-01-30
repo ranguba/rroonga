@@ -44,16 +44,6 @@ module Groonga
       paths
     end
 
-    def disk_usage
-      return 0 if path.nil?
-
-      usage = 0
-      measurer = StatisticMeasurer.new
-      usage += measurer.measure_disk_usage(path)
-      usage += measurer.measure_disk_usage("%s.%07X" % [path, 0])
-      usage
-    end
-
     def dump_index(output_directory)
       each do |object|
         next unless object.is_a?(Groonga::IndexColumn)

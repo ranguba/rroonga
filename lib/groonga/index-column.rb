@@ -24,16 +24,6 @@ module Groonga
       dumper = IndexColumnDumper.new(self, output_directory)
       dumper.dump
     end
-
-    def disk_usage
-      return 0 if path.nil?
-
-      usage = super
-      chunk_path = "#{path}.c"
-      measurer = StatisticMeasurer.new
-      usage += measurer.measure_disk_usage(chunk_path)
-      usage
-    end
   end
 
   class IndexColumnDumper
