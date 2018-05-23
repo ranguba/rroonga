@@ -672,6 +672,19 @@ module Groonga
       @definitions << definition
     end
 
+    def create_lexicon(name,
+                       use_case: :full_text_search,
+                       **options, &block)
+      case use_case
+      when :full_text_search
+        options[:type] ||= :patricia_trie
+        options[:key_type] ||= :short_text
+        options[:default_tokenizer] ||= "TokenBigram"
+        options[:normalizer] ||= "NormalizerAuto"
+      end
+      create_table(name, options, &block)
+    end
+
     # 名前が _name_ のテーブルを削除する。
     #
     # テーブルの削除は# {define} を呼び出すまでは実行されないこ
