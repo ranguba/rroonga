@@ -1,9 +1,7 @@
-dist: trusty
 sudo: required
 notifications:
-  email:
-    recipients:
-      - groonga-commit@lists.sourceforge.jp
+  webhooks:
+    - https://webhook.commit-email.info/
 rvm:
   - 2.1
   - 2.2
