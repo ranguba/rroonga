@@ -169,7 +169,7 @@ def configure_command_line(prefix)
   command_line << "--disable-document"
   command_line << "--disable-benchmark"
   command_line << "--without-cutter"
-  command_line << "--disable-groonga-httpd" if ENV['WITHOUT_HTTPD']
+  command_line << "--disable-groonga-httpd" unless ENV['RROONGA_WITH_HTTPD']
   escaped_command_line = command_line.collect do |command|
     Shellwords.escape(command)
   end
