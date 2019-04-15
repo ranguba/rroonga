@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 #
-# Copyright (C) 2009-2015  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2019  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -232,7 +232,7 @@ end
 
 def build_groonga_from_tar_gz
   tar_gz = "groonga-latest.tar.gz"
-  url = "http://packages.groonga.org/source/groonga/#{tar_gz}"
+  url = "https://packages.groonga.org/source/groonga/#{tar_gz}"
   groonga_source_dir = "groonga-latest"
 
   download(url)
