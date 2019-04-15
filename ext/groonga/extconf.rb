@@ -237,11 +237,8 @@ def build_groonga_from_tar_gz
 
   download(url)
 
-  if Dir.exist?(groonga_source_dir)
-    FileUtils.rm_rf(groonga_source_dir)
-  else
-    Dir.mkdir(groonga_source_dir, 0755)
-  end
+  FileUtils.rm_rf(groonga_source_dir)
+  FileUtils.mkdir_p(groonga_source_dir)
 
   message("extracting...")
   if xsystem("tar xfz #{tar_gz} -C #{groonga_source_dir} --strip=1")
