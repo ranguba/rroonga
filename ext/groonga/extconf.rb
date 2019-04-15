@@ -241,7 +241,7 @@ def build_groonga_from_tar_gz
   FileUtils.mkdir_p(groonga_source_dir)
 
   message("extracting...")
-  if xsystem("tar xfz #{tar_gz} -C #{groonga_source_dir} --strip=1")
+  if xsystem("tar xfz #{tar_gz} -C #{groonga_source_dir} --strip-components=1")
     message(" done\n")
   else
     message(" failed\n")
