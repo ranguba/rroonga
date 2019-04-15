@@ -233,7 +233,7 @@ end
 def build_groonga_from_tar_gz
   tar_gz = "groonga-latest.tar.gz"
   url = "http://packages.groonga.org/source/groonga/#{tar_gz}"
-  groonga_source_dir = "./groonga-latest"
+  groonga_source_dir = "groonga-latest"
 
   download(url)
 
