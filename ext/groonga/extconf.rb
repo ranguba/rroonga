@@ -71,7 +71,7 @@ def install_groonga_locally(major, minor, micro)
     if win32?
       extract_groonga_win32_binary(major, minor, micro)
     else
-      build_groonga(major, minor, micro)
+      build_groonga
     end
   end
 
@@ -210,7 +210,7 @@ def install_for_gnu_build_system(install_dir)
               "#{make} install")
 end
 
-def build_groonga_from_git(major, minor, micro)
+def build_groonga_from_git
   message("removing old cloned repository...")
   FileUtils.rm_rf("groonga")
   message(" done\n")
@@ -230,21 +230,24 @@ def build_groonga_from_git(major, minor, micro)
   message(" done\n")
 end
 
-def build_groonga_from_tar_gz(major, minor, micro)
-  tar_gz = "groonga-#{major}.#{minor}.#{micro}.tar.gz"
+def build_groonga_from_tar_gz
+  tar_gz = "groonga-latest.tar.gz"
   url = "http://packages.groonga.org/source/groonga/#{tar_gz}"
+  groonga_source_dir = "groonga-latest"
 
   download(url)
 
+  FileUtils.rm_rf(groonga_source_dir)
+  FileUtils.mkdir_p(groonga_source_dir)
+
   message("extracting...")
-  if xsystem("tar xfz #{tar_gz}")
+  if xsystem("tar xfz #{tar_gz} -C #{groonga_source_dir} --strip-components=1")
     message(" done\n")
   else
     message(" failed\n")
     exit(false)
   end
 
-  groonga_source_dir = "groonga-#{major}.#{minor}.#{micro}"
   Dir.chdir(groonga_source_dir) do
     install_for_gnu_build_system(local_groonga_install_dir)
   end
@@ -258,11 +261,11 @@ def build_groonga_from_tar_gz(major, minor, micro)
   message(" done\n")
 end
 
-def build_groonga(major, minor, micro)
+def build_groonga
   if RequiredGroongaVersion::RELEASED_DATE > Time.now
-    build_groonga_from_git(major, minor, micro)
+    build_groonga_from_git
   else
-    build_groonga_from_tar_gz(major, minor, micro)
+    build_groonga_from_tar_gz
   end
 end
 
