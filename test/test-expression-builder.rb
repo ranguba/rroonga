@@ -303,9 +303,9 @@ class ExpressionBuilderTest < Test::Unit::TestCase
                      result.collect {|record| record.key.key}.sort)
       end
 
-      def test_match_uppercase
+      def test_match_include_uppercase
         result = @users.select do |record|
-          record["name"] =~ /\ASu/i
+          record["name"] =~ /Su/i
         end
         assert_equal(["suzuki"],
                      result.collect {|record| record.key.key}.sort)
