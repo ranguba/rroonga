@@ -326,6 +326,14 @@ class ExpressionBuilderTest < Test::Unit::TestCase
         assert_equal(["suzuki"],
                      result.collect {|record| record.key.key}.sort)
       end
+
+      def test_option
+        result = @users.select do |record|
+          record["name"] =~ /Su/i
+        end
+        assert_equal(["suzuki"],
+                     result.collect {|record| record.key.key}.sort)
+      end
     end
 
     class QueryStringTest < self
