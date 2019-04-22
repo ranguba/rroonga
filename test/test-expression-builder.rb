@@ -303,14 +303,6 @@ class ExpressionBuilderTest < Test::Unit::TestCase
                      result.collect {|record| record.key.key}.sort)
       end
 
-      def test_match_include_uppercase
-        result = @users.select do |record|
-          record["name"] =~ /Su/i
-        end
-        assert_equal(["suzuki"],
-                     result.collect {|record| record.key.key}.sort)
-      end
-
       def test_not_match
         result = @users.select do |record|
           record["name"] =~ /abcabcabc/
@@ -330,6 +322,14 @@ class ExpressionBuilderTest < Test::Unit::TestCase
       def test_end_of_text
         result = @users.select do |record|
           record["name"] =~ /ki\z/
+        end
+        assert_equal(["suzuki"],
+                     result.collect {|record| record.key.key}.sort)
+      end
+
+      def test_option
+        result = @users.select do |record|
+          record["name"] =~ /Su/i
         end
         assert_equal(["suzuki"],
                      result.collect {|record| record.key.key}.sort)
