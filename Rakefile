@@ -1,6 +1,6 @@
 # -*- coding: utf-8; mode: ruby -*-
 #
-# Copyright (C) 2009-2018  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2019  Kouhei Sutou <kou@clear-code.com>
 # Copyright (C) 2017  Masafumi Yokoyama <yokoyama@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
@@ -132,7 +132,7 @@ task :configure => "Makefile"
 
 desc "Run test"
 task :test => :configure do
-  ruby("-rubygems", "test/run-test.rb")
+  ruby("test/run-test.rb")
 end
 
 namespace :test do
@@ -143,7 +143,7 @@ namespace :test do
     gem_spec = Gem.source_index.find_name("rroonga").last
     installed_path = gem_spec.full_gem_path
     ENV["NO_MAKE"] = "yes"
-    ruby("-rubygems", "#{installed_path}/test/run-test.rb")
+    ruby("#{installed_path}/test/run-test.rb")
   end
 end
 
