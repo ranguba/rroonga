@@ -11,8 +11,6 @@ env:
     - GROONGA_MASTER=no GROONGA_LATEST=yes
     - GROONGA_MASTER=yes GROONGA_LATEST=no
     - GROONGA_MASTER=no GROONGA_LATEST=no
-# env:
-#   - GROONGA_MASTER=yes
 # matrix:
 #   allow_failures:
 #     - rvm: ruby-head
@@ -20,7 +18,6 @@ before_install:
   - |
     if [ "${GROONGA_LATEST}" != "yes" ]; then
       curl --silent --location https://github.com/groonga/groonga/raw/master/data/travis/setup.sh | sh
-    - |
       if [ "${GROONGA_MASTER}" != "yes" ]; then
         sudo apt-get -qq -y install groonga-tokenizer-mecab;
       fi
