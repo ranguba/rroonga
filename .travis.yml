@@ -2,21 +2,22 @@ sudo: required
 notifications:
   webhooks:
     - https://webhook.commit-email.info/
-rvm:
-  - 2.4
-  - 2.5
-  - 2.6
-env:
+# env:
+#   - GROONGA_MASTER=yes
   matrix:
-    - GROONGA_MASTER=no GROONGA_LATEST=yes
-    - GROONGA_MASTER=yes GROONGA_LATEST=no
-    - GROONGA_MASTER=no GROONGA_LATEST=no
-# matrix:
-#   allow_failures:
-#     - rvm: ruby-head
+    - name: "Ruby 2.4"
+      rvm: 2.4
+    - name: "Ruby 2.5"
+      rvm: 2.5
+    - name: "Ruby 2.6"
+      rvm: 2.6
+    - name: "Auto Groonga build"
+      rvm: 2.6
+      env:
+        - INSTALL_GROONGA=no
 before_install:
   - |
-    if [ "${GROONGA_LATEST}" != "yes" ]; then
+    if [ "${INSTALL_GROONGA}" != "no" ]; then
       curl --silent --location https://github.com/groonga/groonga/raw/master/data/travis/setup.sh | sh
       if [ "${GROONGA_MASTER}" != "yes" ]; then
         sudo apt-get -qq -y install groonga-tokenizer-mecab;
