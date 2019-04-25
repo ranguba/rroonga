@@ -20,7 +20,7 @@ before_install:
     if [ "${INSTALL_GROONGA}" != "no" ]; then
       curl --silent --location https://github.com/groonga/groonga/raw/master/data/travis/setup.sh | sh
       if [ "${GROONGA_MASTER}" != "yes" ]; then
-        sudo apt-get -qq -y install groonga-tokenizer-mecab;
+        sudo apt-get -qq -y install groonga-tokenizer-mecab
       fi
     fi
   - gem update bundler
