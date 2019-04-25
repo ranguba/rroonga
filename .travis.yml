@@ -24,4 +24,4 @@ before_install:
     fi
   - gem update bundler
 after_failure:
-  - cat ./ext/groonga/mkmf.log
+  - cat ext/groonga/mkmf.log
