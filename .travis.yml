@@ -4,18 +4,18 @@ notifications:
     - https://webhook.commit-email.info/
 # env:
 #   - GROONGA_MASTER=yes
-  matrix:
-    include:
-    - name: "Ruby 2.4"
-      rvm: 2.4
-    - name: "Ruby 2.5"
-      rvm: 2.5
-    - name: "Ruby 2.6"
-      rvm: 2.6
-    - name: "Auto Groonga build"
-      rvm: 2.6
-      env:
-        - INSTALL_GROONGA=no
+matrix:
+  inlude:
+  - name: "Ruby 2.4"
+    rvm: 2.4
+  - name: "Ruby 2.5"
+    rvm: 2.5
+  - name: "Ruby 2.6"
+    rvm: 2.6
+  - name: "Auto Groonga build"
+    rvm: 2.6
+    env:
+      - INSTALL_GROONGA=no
 before_install:
   - |
     if [ "${INSTALL_GROONGA}" != "no" ]; then
