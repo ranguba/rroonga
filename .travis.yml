@@ -5,6 +5,7 @@ notifications:
 # env:
 #   - GROONGA_MASTER=yes
   matrix:
+    include:
     - name: "Ruby 2.4"
       rvm: 2.4
     - name: "Ruby 2.5"
