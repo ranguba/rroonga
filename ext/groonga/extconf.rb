@@ -172,6 +172,10 @@ def configure_command_line(prefix)
   escaped_command_line = command_line.collect do |command|
     Shellwords.escape(command)
   end
+  custom_command_line_options = with_config("groonga-configure-options")
+  if custom_command_line_options.is_a?(String)
+    escaped_command_line << custom_command_line_options
+  end
   escaped_command_line.join(" ")
 end
 
