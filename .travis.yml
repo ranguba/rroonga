@@ -16,6 +16,11 @@ matrix:
       rvm: 2.6
       env:
         - INSTALL_GROONGA=no
+      addons:
+        apt:
+          packages:
+            - libmecab-dev
+            - mecab-naist-jdic
 before_install:
   - |
     if [ "${INSTALL_GROONGA}" != "no" ]; then
