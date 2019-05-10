@@ -5,6 +5,8 @@ notifications:
   - provider: Webhook
     url: https://webhook.commit-email.info/
 
+image: Visual Studio 2017
+
 environment:
   matrix:
     - ruby_version: "24"
