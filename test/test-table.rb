@@ -738,6 +738,7 @@ class TableTest < Test::Unit::TestCase
 
     private
     def by_other_process
+      only_linux
       pid = Process.fork do
         yield
       end
