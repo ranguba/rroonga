@@ -1,5 +1,27 @@
 # NEWS
 
+## 9.0.2: 2019-05-10 {#version-9-0-2}
+
+### Improvements
+
+  * Disable groonga-httpd by default.
+
+  * Added support for "--with-groonga-configure-options".
+    [GitHub#146][Reported by Tomás Pollak]
+
+  * {Groonga::RegexpExpressionBuilder}: Added support (?-mix:XXX) for searching of regular expression.
+    [groonga-dev,04694][Reported by Masatoshi SEKI]
+
+  * Use "groonga-latest.tar.gz" for build Groonga.
+
+  * {Groonga::Schema#create_lexicon}: Added.
+
+### Thanks
+
+  * Tomás Pollak
+
+  * Masatoshi SEKI
+
 ## 7.1.1: 2018-01-30 {#version-7-1-1}
 
 ### Improvements
