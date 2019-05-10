@@ -22,7 +22,7 @@ class RemoteTest < Test::Unit::TestCase
 
     vendor_local_bin = File.join(__dir__, "..", "vendor", "local", "bin")
     if File.exist?(vendor_local_bin)
-      groonga = File.join(vendor_locaL_bin, "groonga")
+      groonga = File.join(vendor_local_bin, "groonga")
     else
       package_config = PKGConfig.package_config("groonga")
       groonga = package_config.variable("groonga")
