@@ -64,12 +64,12 @@ checking_for(checking_message("Win32 OS")) do
   win32
 end
 
-def install_groonga_locally(major, minor, micro)
+def install_groonga_locally
   FileUtils.mkdir_p(local_groonga_base_dir)
 
   Dir.chdir(local_groonga_base_dir) do
     if win32?
-      extract_groonga_win32_binary(major, minor, micro)
+      extract_groonga_win32_binary
     else
       build_groonga
     end
@@ -118,13 +118,13 @@ rescue LoadError
   end
 end
 
-def extract_groonga_win32_binary(major, minor, micro)
+def extract_groonga_win32_binary
   if ENV["RROONGA_USE_GROONGA_X64"]
     architecture = "x64"
   else
     architecture = "x86"
   end
-  zip = "groonga-#{major}.#{minor}.#{micro}-#{architecture}.zip"
+  zip = "groonga-latest-#{architecture}.zip"
   url = "http://packages.groonga.org/windows/groonga/#{zip}"
   install_dir = local_groonga_install_dir
 
@@ -275,7 +275,7 @@ end
 
 def install_local_groonga(package_name, major, minor, micro)
   unless have_local_groonga?(package_name, major, minor, micro)
-    install_groonga_locally(major, minor, micro)
+    install_groonga_locally
   end
   unless PKGConfig.have_package(package_name, major, minor, micro)
     exit(false)
