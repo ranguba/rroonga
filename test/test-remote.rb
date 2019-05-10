@@ -30,7 +30,6 @@ class RemoteTest < Test::Unit::TestCase
                         "-i", @host,
                         "-p", @port.to_s,
                         "-s", "-n", @remote_database_path.to_s)
-    end
     sleep(1)
   end
 
