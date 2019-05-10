@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2013  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2019  Kouhei Sutou <kou@clear-code.com>
 # Copyright (C) 2016  Masafumi Yokoyama <yokoyama@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
@@ -738,7 +738,7 @@ class TableTest < Test::Unit::TestCase
 
     private
     def by_other_process
-      only_linux
+      only_not_windows
       pid = Process.fork do
         yield
       end
