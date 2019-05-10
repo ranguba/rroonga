@@ -20,6 +20,7 @@ install:
   - SET PATH=C:\Ruby%ruby_version%\bin;%PATH%
   - ruby --version
   - ridk exec pacman -Syu --noconfirm
+  - ruby -run -e mkdir -- -p vendor\local
   - bundle install
 
 build_script:
