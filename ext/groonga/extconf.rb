@@ -131,7 +131,9 @@ def extract_groonga_win32_binary
   download(url)
 
   message("extracting...")
+  before_paths = Dir.glob("*")
   extract_zip(zip, ".")
+  extracted_dir = Dir.glob("*") - before_paths
   message(" done\n")
 
   if File.exist?(install_dir)
@@ -141,7 +143,7 @@ def extract_groonga_win32_binary
   end
 
   message("installing...")
-  FileUtils.mv(File.basename(zip, ".zip"), install_dir)
+  FileUtils.mv(extracted_dir, install_dir)
   message(" done\n")
 
   message("removing binary archive...")
