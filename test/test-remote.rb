@@ -40,7 +40,10 @@ class RemoteTest < Test::Unit::TestCase
 
   teardown
   def teardown_remote_connection
-    Process.kill(:TERM, @process_id) if @process_id
+    if @process_id
+      Process.kill(:INT, @process_id)
+      Process.waitpid(@process_id)
+    end
   end
 
   def test_send
