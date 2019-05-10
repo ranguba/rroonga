@@ -44,7 +44,7 @@ module GroongaTestUtils
     setup_context
 
     @database = nil
-    name_for_path = name.gsub(/[\(\)\[\] ]/, "-")
+    name_for_path = escape_path(name)
     @database_path = @tmp_dir + "#{name_for_path}.db"
   end
 
@@ -153,6 +153,12 @@ module GroongaTestUtils
     assert_equal(expected,
                  actual.collect(&normalizer),
                  actual.expression.inspect)
+  end
+
+  def escape_path(path)
+    path.gsub(/[: ?!\(\)\[\]]/) do
+      "_"
+    end
   end
 
   def linux?
