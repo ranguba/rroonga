@@ -1,5 +1,11 @@
 # NEWS
 
+## 9.0.3: 2019-05-10 {#version-9-0-3}
+
+### Improvements
+
+  * Windows: Added Ruby 2.6 support.
+
 ## 9.0.2: 2019-05-10 {#version-9-0-2}
 
 ### Improvements
