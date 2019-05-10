@@ -108,11 +108,16 @@ class TooManyOpenFilesTest < Test::Unit::TestCase
   include GroongaTestUtils
 
   def setup
+    @sub_context = nil
+    unless Process.const_defined?(:RLIMIT_NOFILE)
+      omit("No Process::RLIMIT_NOFILE")
+    end
     setup_database
     @sub_context = create_sub_context
   end
 
   def teardown
+    return if @sub_context.nil?
     @sub_context.database.close
     @sub_context.close
   end
