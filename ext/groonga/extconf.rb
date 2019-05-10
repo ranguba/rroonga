@@ -143,7 +143,7 @@ def extract_groonga_win32_binary
   end
 
   message("installing...")
-  FileUtils.mv(extracted_dir, install_dir)
+  FileUtils.mv(extracted_dir.first, install_dir)
   message(" done\n")
 
   message("removing binary archive...")
