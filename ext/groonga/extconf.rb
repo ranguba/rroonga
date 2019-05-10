@@ -125,7 +125,7 @@ def extract_groonga_win32_binary
     architecture = "x86"
   end
   zip = "groonga-latest-#{architecture}.zip"
-  url = "http://packages.groonga.org/windows/groonga/#{zip}"
+  url = "https://packages.groonga.org/windows/groonga/#{zip}"
   install_dir = local_groonga_install_dir
 
   download(url)
