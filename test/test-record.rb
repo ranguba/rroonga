@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2013  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2019  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -647,6 +647,7 @@ class RecordTest < Test::Unit::TestCase
     end
 
     def test_to_json
+      only_not_windows
       ENV["TZ"] = "Japan"
       created_at = Time.parse("2013-05-16T16:57:34+09:00")
       values = {
