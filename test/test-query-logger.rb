@@ -110,7 +110,7 @@ class QueryLoggerTest < Test::Unit::TestCase
       Groonga::QueryLogger.log("default")
       Groonga::QueryLogger.log("flags", :flags => "command")
       normalized_infos = infos.collect do |info|
-        info = info.gsub(/\A0x[a-f\d]+\|/,
+        info = info.gsub(/\A[a-fA-Z\d]+\|/,
                          "context_id|")
         info.gsub(/\|[\d]+ \z/,
                   "|timestamp ")
@@ -130,7 +130,7 @@ class QueryLoggerTest < Test::Unit::TestCase
       Groonga::QueryLogger.log("default")
       Groonga::QueryLogger.log("mark", :mark => ":")
       normalized_infos = infos.collect do |info|
-        info.gsub(/\A0x[a-f\d]+\|([^\d])?[\d]+ \z/,
+        info.gsub(/\A[a-fA-Z\d]+\|([^\d])?[\d]+ \z/,
                   "context_id|\\1timestamp ")
       end
       assert_equal([
