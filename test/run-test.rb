@@ -17,8 +17,6 @@
 
 $VERBOSE = true
 
-$KCODE = "u" if RUBY_VERSION < "1.9"
-
 base_dir = File.expand_path(File.join(File.dirname(__FILE__), ".."))
 ext_dir = File.join(base_dir, "ext", "groonga")
 lib_dir = File.join(base_dir, "lib")
