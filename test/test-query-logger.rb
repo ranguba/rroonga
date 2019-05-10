@@ -1,4 +1,4 @@
-# Copyright (C) 2015-2018  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2015-2019  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -29,6 +29,7 @@ class QueryLoggerTest < Test::Unit::TestCase
   end
 
   def test_reopen
+    only_not_windows
     Groonga::QueryLogger.unregister
     Groonga::QueryLogger.path = @query_log_path.to_s
     if @query_log_path.exist?

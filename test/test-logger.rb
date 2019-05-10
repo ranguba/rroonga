@@ -1,4 +1,4 @@
-# Copyright (C) 2010-2018  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2010-2019  Kouhei Sutou <kou@clear-code.com>
 # Copyright (C) 2016  Masafumi Yokoyama <yokoyama@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
@@ -30,6 +30,7 @@ class LoggerTest < Test::Unit::TestCase
   end
 
   def test_reopen
+    only_not_windows
     Groonga::Logger.unregister
     Groonga::Logger.path = @log_path.to_s
     if @log_path.exist?
