@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2010  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2019  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -26,11 +26,10 @@ class RemoteTest < Test::Unit::TestCase
     @host = "127.0.0.1"
     @port = 12345
     @remote_database_path = @tmp_dir + "remote-database"
-    @process_id = Process.fork do
-      exec(groonga,
-           "-i", @host,
-           "-p", @port.to_s,
-           "-s", "-n", @remote_database_path.to_s)
+    @process_id = spawn(groonga,
+                        "-i", @host,
+                        "-p", @port.to_s,
+                        "-s", "-n", @remote_database_path.to_s)
     end
     sleep(1)
   end
