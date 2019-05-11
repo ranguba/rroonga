@@ -48,7 +48,7 @@ class PluginTest < Test::Unit::TestCase
     end
 
     def test_by_path
-      only_not_windows # TODO: This must be passed
+      only_not_windows # TODO: We can remove this with Groonga 9.0.3
       context.register_plugin("token_filters/stop_word")
       assert_not_nil(context["TokenFilterStopWord"])
       plugin_path = "#{Groonga::Plugin.system_plugins_dir}/"
