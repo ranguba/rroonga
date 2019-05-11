@@ -34,16 +34,40 @@ class RemoteTest < Test::Unit::TestCase
     @process_id = spawn(groonga,
                         "-i", @host,
                         "-p", @port.to_s,
-                        "-s", "-n", @remote_database_path.to_s)
-    sleep(1)
+                        "-s",
+                        "-n", @remote_database_path.to_s)
+    Timeout.timeout(5) do
+      loop do
+        begin
+          open_client do |client|
+            client.status
+          end
+        rescue Groonga::Client::Error
+        else
+          break
+        end
+      end
+    end
   end
 
   teardown
   def teardown_remote_connection
     if @process_id
-      Process.kill(:INT, @process_id)
+      begin
+        open_client do |client|
+          client.shutdown
+        end
+      rescue Groonga::Client::Error
+      end
       Process.waitpid(@process_id)
     end
+  end
+
+  def open_client(&block)
+    Groonga::Client.open(host: @host,
+                         port: @port,
+                         protocol: :gqtp,
+                         &block)
   end
 
   def test_send

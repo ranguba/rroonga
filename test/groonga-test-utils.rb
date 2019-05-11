@@ -14,13 +14,16 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
+require "erb"
 require "fileutils"
+require "json"
 require "pathname"
+require "stringio"
 require "tempfile"
 require "time"
-require "erb"
-require "stringio"
-require "json"
+require "timeout"
+
+require "groonga/client"
 require "pkg-config"
 
 require "groonga"
