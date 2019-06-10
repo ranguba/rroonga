@@ -63,6 +63,10 @@ class IndexColumnTest < Test::Unit::TestCase
         not @index.data?
       end
     end
+
+    def test_lexicon?
+      assert_not_predicate(@index, :lexicon?)
+    end
   end
 
   class CRUDTest < self
