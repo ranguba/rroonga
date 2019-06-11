@@ -65,7 +65,9 @@ class IndexColumnTest < Test::Unit::TestCase
     end
 
     def test_lexicon?
-      assert_not_predicate(@index, :lexicon?)
+      assert do
+        not @index.lexicon?
+      end
     end
   end
 
