@@ -2,6 +2,7 @@
 /*
   Copyright (C) 2009-2018  Kouhei Sutou <kou@clear-code.com>
   Copyright (C) 2014-2016  Masafumi Yokoyama <yokoyama@clear-code.com>
+  Copyright (C) 2019  Yasuhiro Horimoto <horimoto@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -1990,6 +1991,25 @@ rb_grn_object_corrupt_p (VALUE self)
 }
 
 /*
+ * @overload lexicon?
+ *   @return [Boolean] `true` if the object is lexicon, `false` otherwise.
+ *
+ * @since 9.0.4
+ */
+static VALUE
+rb_grn_object_lexicon_p (VALUE self)
+{
+    grn_ctx *context;
+    grn_obj *object;
+    grn_bool is_lexicon;
+
+    rb_grn_object_deconstruct(SELF(self), &object, &context,
+                              NULL, NULL, NULL, NULL);
+    is_lexicon = grn_obj_is_lexicon(context, object);
+    return CBOOL2RVAL(is_lexicon);
+}
+
+/*
  * @overload disk_usage
  *   @return [Integer] The number of bytes used by this object in disk.
  *
@@ -2072,6 +2092,8 @@ rb_grn_init_object (VALUE mGrn)
                      rb_grn_object_dirty_p, 0);
     rb_define_method(rb_cGrnObject, "corrupt?",
                      rb_grn_object_corrupt_p, 0);
+    rb_define_method(rb_cGrnObject, "lexicon?",
+                     rb_grn_object_lexicon_p, 0);
 
     rb_define_method(rb_cGrnObject, "disk_usage",
                      rb_grn_object_get_disk_usage, 0);

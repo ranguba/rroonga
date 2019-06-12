@@ -33,11 +33,11 @@ class IndexColumnTest < Test::Unit::TestCase
       articles = Groonga::Array.create(:name => "Articles")
       articles.define_column("content", "Text")
 
-      terms = Groonga::Hash.create(:name => "Terms",
-                                   :key_type => "ShortText",
-                                   :default_tokenizer => "TokenBigram")
-      @index = terms.define_index_column("content", articles,
-                                         :with_section => true)
+      @terms = Groonga::Hash.create(:name => "Terms",
+                                    :key_type => "ShortText",
+                                    :default_tokenizer => "TokenBigram")
+      @index = @terms.define_index_column("content", articles,
+                                          :with_section => true)
     end
 
     def test_index?
@@ -61,6 +61,20 @@ class IndexColumnTest < Test::Unit::TestCase
     def test_data?
       assert do
         not @index.data?
+      end
+    end
+
+    sub_test_case("#lexicon?") do
+      def test_true
+        assert do
+          @terms.lexicon?
+        end
+      end
+
+      def test_false
+        assert do
+          not @index.lexicon?
+        end
       end
     end
   end
