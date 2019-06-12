@@ -64,12 +64,17 @@ class IndexColumnTest < Test::Unit::TestCase
       end
     end
 
-    def test_lexicon?
-      assert do
-        @terms.lexicon?
+    sub_test_case("#lexicon?") do
+      def test_true
+        assert do
+          @terms.lexicon?
+        end
       end
-      assert do
-        not @index.lexicon?
+
+      def test_false
+        assert do
+          not @index.lexicon?
+        end
       end
     end
   end
