@@ -155,6 +155,11 @@ class IndexCursorTest < Test::Unit::TestCase
     assert_equal("l", term.key)
   end
 
+  def test_set_min_enable
+    Groonga.min_enable = true
+    assert_equal(true, Groonga.min_enable)
+  end
+
   private
   def create_hashes(keys, values)
     hashes = []
