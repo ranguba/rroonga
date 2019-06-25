@@ -452,11 +452,35 @@ class IndexColumnTest < Test::Unit::TestCase
                      ])
       end
 
+      def test_large
+        Groonga::Schema.define do |schema|
+          schema.create_table("Tags",
+                              :type => :patricia_trie,
+                              :key_type => "ShortText") do |table|
+            table.index("Articles.tags",
+                        :name => "large",
+                        :size => :large)
+            table.index("Articles.tags",
+                        :name => "default")
+          end
+        end
+
+        assert_equal([
+                       true,
+                       false,
+                     ],
+                     [
+                       context["Tags.large"].large?,
+                       context["Tags.default"].large?,
+                     ])
+      end
+
       def test_invalid
         Groonga::Schema.create_table("Tags",
                                      :type => :patricia_trie,
                                      :key_type => "ShortText")
-        message = ":size must be nil, :small or :medium: <invalid>"
+        message =
+          ":size must be nil, :small, :medium, or :large: <invalid>"
         assert_raise(ArgumentError.new(message)) do
           tags = context["Tags"]
           tags.define_index_column("small",
