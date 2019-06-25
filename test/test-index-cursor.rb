@@ -156,8 +156,10 @@ class IndexCursorTest < Test::Unit::TestCase
   end
 
   def test_set_min_enable
-    Groonga.min_enable = true
-    assert_equal(true, Groonga.min_enable)
+    default_value = Groonga.min_enable
+    Groonga.min_enable = false
+    assert_equal([true, false],
+                 [default_value, Groonga.min_enable])
   end
 
   private
