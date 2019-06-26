@@ -940,6 +940,8 @@ rb_grn_object_inspect_content_flags_with_label (VALUE inspected,
             rb_ary_push(inspected_flags, rb_str_new_cstr("SMALL"));
         if (column_flags & GRN_OBJ_INDEX_MEDIUM)
             rb_ary_push(inspected_flags, rb_str_new_cstr("MEDIUM"));
+        if (column_flags & GRN_OBJ_INDEX_LARGE)
+            rb_ary_push(inspected_flags, rb_str_new_cstr("LARGE"));
         break;
     default:
         break;

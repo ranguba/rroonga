@@ -856,5 +856,28 @@ class IndexColumnTest < Test::Unit::TestCase
                    ">",
                    index.inspect)
     end
+
+    def test_large_size
+      Groonga::Schema.define do |schema|
+        schema.create_table("Tags",
+                            :type => :hash,
+                            :key_type => "ShortText") do |tags|
+          tags.index("Articles.tag", :size => :large)
+        end
+      end
+
+      index = context["Tags.Articles_tag"]
+      source_column_names = index.sources.collect(&:local_name).join(",")
+      assert_equal("\#<Groonga::IndexColumn " +
+                   "id: <#{index.id}>, " +
+                   "name: <#{index.name}>, " +
+                   "path: <#{index.path}>, " +
+                   "domain: <#{index.domain.name}>, " +
+                   "range: <#{index.range.name}>, " +
+                   "flags: <LARGE>, " +
+                   "sources: <#{source_column_names}>" +
+                   ">",
+                   index.inspect)
+    end
   end
 end
