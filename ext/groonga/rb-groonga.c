@@ -202,28 +202,6 @@ rb_grn_init_package_label (VALUE mGrn)
                                rb_grn_s_get_package_label, 0);
 }
 
-static VALUE
-rb_grn_s_get_min_enable (VALUE klass)
-{
-    return CBOOL2RVAL(grn_ii_cursor_set_min_enable_get());
-}
-
-static VALUE
-rb_grn_s_set_min_enable (VALUE klass, VALUE enable)
-{
-    grn_ii_cursor_set_min_enable_set(RVAL2CBOOL(enable));
-    return Qnil;
-}
-
-static void
-rb_grn_init_min_enable (VALUE mGrn)
-{
-    rb_define_singleton_method(mGrn, "min_enable",
-                               rb_grn_s_get_min_enable, 0);
-    rb_define_singleton_method(mGrn, "min_enable=",
-                               rb_grn_s_set_min_enable, 1);
-}
-
 void
 Init_groonga (void)
 {
@@ -280,6 +258,4 @@ Init_groonga (void)
     rb_grn_init_name(mGrn);
     rb_grn_init_default_cache(mGrn);
     rb_grn_init_column_cache(mGrn);
-
-    rb_grn_init_min_enable(mGrn);
 }
