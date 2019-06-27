@@ -1,4 +1,5 @@
 # Copyright (C) 2012-2017  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2019  Horimoto Yasuhiro <horimoto@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -156,10 +157,12 @@ class IndexCursorTest < Test::Unit::TestCase
   end
 
   def test_set_min_enable
-    default_value = Groonga.min_enable
-    Groonga.min_enable = false
+    table_cursor = @terms.open_cursor
+    cursor = @content_index.open_cursor(table_cursor)
+    default_value = cursor.set_min
+    cursor.set_min = false
     assert_equal([true, false],
-                 [default_value, Groonga.min_enable])
+                 [default_value, cursor.set_min])
   end
 
   private

@@ -2,6 +2,7 @@
 /*
   Copyright (C) 2011  Haruka Yoshihara <yoshihara@clear-code.com>
   Copyright (C) 2012  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2019  Horimoto Yasuhiro <horimoto@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -150,6 +151,19 @@ rb_grn_index_cursor_each (int argc, VALUE *argv, VALUE self)
     return Qnil;
 }
 
+static VALUE
+rb_grn_index_cursor_set_min_enable_get (VALUE klass)
+{
+    return CBOOL2RVAL(grn_ii_cursor_set_min_enable_get());
+}
+
+static VALUE
+rb_grn_index_cursor_set_min_enable_set (VALUE klass, VALUE enable)
+{
+    grn_ii_cursor_set_min_enable_set(RVAL2CBOOL(enable));
+    return Qnil;
+}
+
 void
 rb_grn_init_index_cursor (VALUE mGrn)
 {
@@ -160,4 +174,9 @@ rb_grn_init_index_cursor (VALUE mGrn)
 
     rb_define_method(rb_cGrnIndexCursor, "next", rb_grn_index_cursor_next, 0);
     rb_define_method(rb_cGrnIndexCursor, "each", rb_grn_index_cursor_each, -1);
+
+    rb_define_method(rb_cGrnIndexCursor, "set_min",
+                     rb_grn_index_cursor_set_min_enable_get, 0);
+    rb_define_method(rb_cGrnIndexCursor, "set_min=",
+                     rb_grn_index_cursor_set_min_enable_set, 1);
 }
