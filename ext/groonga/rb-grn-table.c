@@ -366,7 +366,7 @@ rb_grn_table_define_column (int argc, VALUE *argv, VALUE self)
  *     転置索引に出現位置情報を合わせて格納する。
  *   @option options :size (nil)
  *     The size of index column. It must be `nil`, `:small`,
- *     `:medium`, or `:large`. `nil` means full size. `:small` means small
+ *     `:medium` or `:large`. `nil` means full size. `:small` means small
  *     size. `:medium` means medium size. `:large` means large size.
  *   @option options :source
  *    インデックス対象となるカラムを指定する。 +:sources+ との併用はできない。
@@ -466,7 +466,7 @@ rb_grn_table_define_index_column (int argc, VALUE *argv, VALUE self)
         flags |= GRN_OBJ_INDEX_LARGE;
     } else {
         rb_raise(rb_eArgError,
-                 ":size must be nil, :small, :medium, or :large: <%" PRIsVALUE ">",
+                 ":size must be nil, :small, :medium or :large: <%" PRIsVALUE ">",
                  rb_size);
     }
 

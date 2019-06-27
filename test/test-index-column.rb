@@ -480,7 +480,7 @@ class IndexColumnTest < Test::Unit::TestCase
                                      :type => :patricia_trie,
                                      :key_type => "ShortText")
         message =
-          ":size must be nil, :small, :medium, or :large: <invalid>"
+          ":size must be nil, :small, :medium or :large: <invalid>"
         assert_raise(ArgumentError.new(message)) do
           tags = context["Tags"]
           tags.define_index_column("small",
