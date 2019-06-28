@@ -161,7 +161,7 @@ static VALUE
 rb_grn_index_cursor_s_set_min_set (VALUE klass, VALUE enable)
 {
     grn_ii_cursor_set_min_enable_set(RVAL2CBOOL(enable));
-    return Qnil;
+    return enable;
 }
 
 void
