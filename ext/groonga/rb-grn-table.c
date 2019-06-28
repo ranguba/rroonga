@@ -1,5 +1,6 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
+  Copyright (C) 2019  Horimoto Yasuhiro <horimoto@clear-code.com>
   Copyright (C) 2009-2017  Kouhei Sutou <kou@clear-code.com>
   Copyright (C) 2014-2016  Masafumi Yokoyama <yokoyama@clear-code.com>
 
@@ -364,9 +365,9 @@ rb_grn_table_define_column (int argc, VALUE *argv, VALUE self)
  *   @option options :with_position
  *     転置索引に出現位置情報を合わせて格納する。
  *   @option options :size (nil)
- *     The size of index column. It must be `nil`, `:small` or
- *     `:medium`. `nil` means full size. `:small` means small
- *     size. `:medium` means medium size.
+ *     The size of index column. It must be `nil`, `:small`,
+ *     `:medium` or `:large`. `nil` means full size. `:small` means small
+ *     size. `:medium` means medium size. `:large` means large size.
  *   @option options :source
  *    インデックス対象となるカラムを指定する。 +:sources+ との併用はできない。
  *   @option options :sources
@@ -461,9 +462,11 @@ rb_grn_table_define_index_column (int argc, VALUE *argv, VALUE self)
         flags |= GRN_OBJ_INDEX_SMALL;
     } else if (rb_grn_equal_option(rb_size, "medium")) {
         flags |= GRN_OBJ_INDEX_MEDIUM;
+    } else if (rb_grn_equal_option(rb_size, "large")) {
+        flags |= GRN_OBJ_INDEX_LARGE;
     } else {
         rb_raise(rb_eArgError,
-                 ":size must be nil, :small or :medium: <%" PRIsVALUE ">",
+                 ":size must be nil, :small, :medium or :large: <%" PRIsVALUE ">",
                  rb_size);
     }
 

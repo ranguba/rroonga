@@ -452,11 +452,35 @@ class IndexColumnTest < Test::Unit::TestCase
                      ])
       end
 
+      def test_large
+        Groonga::Schema.define do |schema|
+          schema.create_table("Tags",
+                              :type => :patricia_trie,
+                              :key_type => "ShortText") do |table|
+            table.index("Articles.tags",
+                        :name => "large",
+                        :size => :large)
+            table.index("Articles.tags",
+                        :name => "default")
+          end
+        end
+
+        assert_equal([
+                       true,
+                       false,
+                     ],
+                     [
+                       context["Tags.large"].large?,
+                       context["Tags.default"].large?,
+                     ])
+      end
+
       def test_invalid
         Groonga::Schema.create_table("Tags",
                                      :type => :patricia_trie,
                                      :key_type => "ShortText")
-        message = ":size must be nil, :small or :medium: <invalid>"
+        message =
+          ":size must be nil, :small, :medium or :large: <invalid>"
         assert_raise(ArgumentError.new(message)) do
           tags = context["Tags"]
           tags.define_index_column("small",
@@ -828,6 +852,29 @@ class IndexColumnTest < Test::Unit::TestCase
                    "domain: <#{index.domain.name}>, " +
                    "range: <#{index.range.name}>, " +
                    "flags: <MEDIUM>, " +
+                   "sources: <#{source_column_names}>" +
+                   ">",
+                   index.inspect)
+    end
+
+    def test_large_size
+      Groonga::Schema.define do |schema|
+        schema.create_table("Tags",
+                            :type => :hash,
+                            :key_type => "ShortText") do |tags|
+          tags.index("Articles.tag", :size => :large)
+        end
+      end
+
+      index = context["Tags.Articles_tag"]
+      source_column_names = index.sources.collect(&:local_name).join(",")
+      assert_equal("\#<Groonga::IndexColumn " +
+                   "id: <#{index.id}>, " +
+                   "name: <#{index.name}>, " +
+                   "path: <#{index.path}>, " +
+                   "domain: <#{index.domain.name}>, " +
+                   "range: <#{index.range.name}>, " +
+                   "flags: <LARGE>, " +
                    "sources: <#{source_column_names}>" +
                    ">",
                    index.inspect)

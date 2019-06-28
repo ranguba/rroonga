@@ -491,6 +491,8 @@ module Groonga
           options[:size] = :small
         elsif column.medium?
           options[:size] = :medium
+        elsif column.large?
+          options[:size] = :large
         end
         arguments = [
           dump_object(target_table_name),
@@ -652,6 +654,7 @@ module Groonga
         flags << "WITH_POSITION" if column.with_position?
         flags << "INDEX_SMALL" if column.small?
         flags << "INDEX_MEDIUM" if column.medium?
+        flags << "INDEX_LARGE" if column.large?
         parameters << "#{flags.join('|')}"
         parameters << "#{column.range.name}"
         source_names = column.sources.collect do |source|

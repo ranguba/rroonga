@@ -1,5 +1,6 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
+  Copyright (C) 2019  Horimoto Yasuhiro <horimoto@clear-code.com>
   Copyright (C) 2009-2017  Kouhei Sutou <kou@clear-code.com>
   Copyright (C) 2016  Masafumi Yokoyama <yokoyama@clear-code.com>
 
@@ -972,6 +973,31 @@ rb_grn_index_column_medium_p (VALUE self)
     return CBOOL2RVAL(flags & GRN_OBJ_INDEX_MEDIUM);
 }
 
+/*
+ * Checks whether the index column is large or not.
+ *
+ * @overload large?
+ *   @return [Boolean] `true` if the index column size is large,
+ *     `false` otherwise.
+ *
+ * @since 9.0.4
+ */
+static VALUE
+rb_grn_index_column_large_p (VALUE self)
+{
+    grn_obj *column;
+    grn_ctx *context;
+    grn_column_flags flags;
+
+    rb_grn_index_column_deconstruct(SELF(self), &column, &context,
+                                    NULL, NULL,
+                                    NULL, NULL, NULL, NULL, NULL,
+                                    NULL, NULL);
+
+    flags = grn_column_get_flags(context, column);
+    return CBOOL2RVAL(flags & GRN_OBJ_INDEX_LARGE);
+}
+
 static VALUE
 call_close (VALUE object)
 {
@@ -1442,6 +1468,8 @@ rb_grn_init_index_column (VALUE mGrn)
                      rb_grn_index_column_small_p, 0);
     rb_define_method(rb_cGrnIndexColumn, "medium?",
                      rb_grn_index_column_medium_p, 0);
+    rb_define_method(rb_cGrnIndexColumn, "large?",
+                     rb_grn_index_column_large_p, 0);
 
     rb_define_method(rb_cGrnIndexColumn, "open_cursor",
                      rb_grn_index_column_open_cursor, -1);

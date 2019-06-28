@@ -395,6 +395,19 @@ column_create Terms Items_title COLUMN_INDEX|WITH_POSITION|INDEX_MEDIUM Items ti
       SCHEMA
     end
 
+    def test_large_index
+      define_index_schema(:title_index_options => {:size => :large})
+      assert_equal(<<-SCHEMA, dump)
+table_create Items TABLE_HASH_KEY ShortText
+column_create Items title COLUMN_SCALAR ShortText
+
+table_create Terms TABLE_PAT_KEY ShortText --default_tokenizer TokenBigram --token_filters TokenFilterStopWord --normalizer NormalizerAuto
+
+column_create Terms Items__key COLUMN_INDEX|WITH_POSITION Items _key
+column_create Terms Items_title COLUMN_INDEX|WITH_POSITION|INDEX_LARGE Items title
+      SCHEMA
+    end
+
     def test_weight_vector
       define_weight_vector_schema
       assert_equal(<<-SCHEMA, dump)
