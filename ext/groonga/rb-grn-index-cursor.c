@@ -175,8 +175,8 @@ rb_grn_init_index_cursor (VALUE mGrn)
     rb_define_method(rb_cGrnIndexCursor, "next", rb_grn_index_cursor_next, 0);
     rb_define_method(rb_cGrnIndexCursor, "each", rb_grn_index_cursor_each, -1);
 
-    rb_define_method(rb_cGrnIndexCursor, "set_min",
-                     rb_grn_index_cursor_s_set_min_p, 0);
-    rb_define_method(rb_cGrnIndexCursor, "set_min=",
-                     rb_grn_index_cursor_s_set_min_set, 1);
+    rb_define_singleton_method(rb_cGrnIndexCursor, "set_min",
+                               rb_grn_index_cursor_s_set_min_p, 0);
+    rb_define_singleton_method(rb_cGrnIndexCursor, "set_min=",
+                               rb_grn_index_cursor_s_set_min_set, 1);
 }
