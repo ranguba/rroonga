@@ -152,13 +152,13 @@ rb_grn_index_cursor_each (int argc, VALUE *argv, VALUE self)
 }
 
 static VALUE
-rb_grn_index_cursor_set_min_enable_get (VALUE klass)
+rb_grn_index_cursor_s_set_min_p (VALUE klass)
 {
     return CBOOL2RVAL(grn_ii_cursor_set_min_enable_get());
 }
 
 static VALUE
-rb_grn_index_cursor_set_min_enable_set (VALUE klass, VALUE enable)
+rb_grn_index_cursor_s_set_min_set (VALUE klass, VALUE enable)
 {
     grn_ii_cursor_set_min_enable_set(RVAL2CBOOL(enable));
     return Qnil;
@@ -176,7 +176,7 @@ rb_grn_init_index_cursor (VALUE mGrn)
     rb_define_method(rb_cGrnIndexCursor, "each", rb_grn_index_cursor_each, -1);
 
     rb_define_method(rb_cGrnIndexCursor, "set_min",
-                     rb_grn_index_cursor_set_min_enable_get, 0);
+                     rb_grn_index_cursor_s_set_min_p, 0);
     rb_define_method(rb_cGrnIndexCursor, "set_min=",
-                     rb_grn_index_cursor_set_min_enable_set, 1);
+                     rb_grn_index_cursor_s_set_min_set, 1);
 }
