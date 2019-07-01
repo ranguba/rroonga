@@ -156,13 +156,20 @@ class IndexCursorTest < Test::Unit::TestCase
     assert_equal("l", term.key)
   end
 
-  def test_set_min
-    table_cursor = @terms.open_cursor
-    cursor = @content_index.open_cursor(table_cursor)
-    default_value = cursor.set_min?
-    cursor.set_min = false
-    assert_equal([true, false],
-                 [default_value, cursor.set_min])
+  sub_test_case(".set_min?") do
+    def test_true
+      Groonga::IndexCursor.set_min = true
+      assert do
+        Groonga::IndexCursor.set_min?
+      end
+    end
+
+    def test_false
+      Groonga::IndexCursor.set_min = false
+      assert do
+        not Groonga::IndexCursor.set_min?
+      end
+    end
   end
 
   private
