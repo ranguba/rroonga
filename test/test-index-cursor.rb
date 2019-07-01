@@ -156,10 +156,10 @@ class IndexCursorTest < Test::Unit::TestCase
     assert_equal("l", term.key)
   end
 
-  def test_set_min_enable
+  def test_set_min
     table_cursor = @terms.open_cursor
     cursor = @content_index.open_cursor(table_cursor)
-    default_value = cursor.set_min
+    default_value = cursor.set_min?
     cursor.set_min = false
     assert_equal([true, false],
                  [default_value, cursor.set_min])
