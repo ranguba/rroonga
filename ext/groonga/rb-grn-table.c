@@ -30,9 +30,9 @@ static ID id_array_set;
 /*
  * Document-class: Groonga::Table < Groonga::Object
  *
- * Rroongaが提供するテーブルのベースとなるクラス。このクラス
- * から {Groonga::Array} , {Groonga::Hash} , {Groonga::PatriciaTrie}
- * が継承されている。
+ * This class is base class of table provides Rroonga.
+ * {Groonga::Array} , {Groonga::Hash} , {Groonga::PatriciaTrie}
+ * are extended from this class.
  */
 
 grn_obj *
