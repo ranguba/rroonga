@@ -2,6 +2,7 @@
 /*
   Copyright (C) 2011  Haruka Yoshihara <yoshihara@clear-code.com>
   Copyright (C) 2012  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2019  Horimoto Yasuhiro <horimoto@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -54,6 +55,19 @@ rb_grn_index_cursor_deconstruct (RbGrnIndexCursor *rb_grn_index_cursor,
     rb_grn_object_deconstruct(rb_grn_object, cursor, context,
                               domain_id, domain,
                               range_id, range);
+}
+
+static VALUE
+rb_grn_index_cursor_s_set_min_p (VALUE klass)
+{
+    return CBOOL2RVAL(grn_ii_cursor_set_min_enable_get());
+}
+
+static VALUE
+rb_grn_index_cursor_s_set_min_set (VALUE klass, VALUE enable)
+{
+    grn_ii_cursor_set_min_enable_set(RVAL2CBOOL(enable));
+    return enable;
 }
 
 static VALUE
@@ -157,6 +171,11 @@ rb_grn_init_index_cursor (VALUE mGrn)
         rb_define_class_under(mGrn, "IndexCursor", rb_cGrnObject);
     rb_define_alloc_func(rb_cGrnIndexCursor, rb_grn_object_alloc);
     rb_include_module(rb_cGrnIndexCursor, rb_mEnumerable);
+
+    rb_define_singleton_method(rb_cGrnIndexCursor, "set_min?",
+                               rb_grn_index_cursor_s_set_min_p, 0);
+    rb_define_singleton_method(rb_cGrnIndexCursor, "set_min=",
+                               rb_grn_index_cursor_s_set_min_set, 1);
 
     rb_define_method(rb_cGrnIndexCursor, "next", rb_grn_index_cursor_next, 0);
     rb_define_method(rb_cGrnIndexCursor, "each", rb_grn_index_cursor_each, -1);

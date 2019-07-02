@@ -1,4 +1,5 @@
 # Copyright (C) 2012-2017  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2019  Horimoto Yasuhiro <horimoto@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -153,6 +154,31 @@ class IndexCursorTest < Test::Unit::TestCase
     end
 
     assert_equal("l", term.key)
+  end
+
+  sub_test_case(".set_min?") do
+    def setup
+      default_set_min = Groonga::IndexCursor.set_min?
+      begin
+        yield
+      ensure
+        Groonga::IndexCursor.set_min = default_set_min
+      end
+    end
+
+    def test_true
+      Groonga::IndexCursor.set_min = true
+      assert do
+        Groonga::IndexCursor.set_min?
+      end
+    end
+
+    def test_false
+      Groonga::IndexCursor.set_min = false
+      assert do
+        not Groonga::IndexCursor.set_min?
+      end
+    end
   end
 
   private
