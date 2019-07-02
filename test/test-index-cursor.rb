@@ -157,6 +157,15 @@ class IndexCursorTest < Test::Unit::TestCase
   end
 
   sub_test_case(".set_min?") do
+    def setup
+      default_set_min = Groonga::IndexCursor.set_min?
+      begin
+        yield
+      ensure
+        Groonga::IndexCursor.set_min = default_set_min
+      end
+    end
+
     def test_true
       Groonga::IndexCursor.set_min = true
       assert do
