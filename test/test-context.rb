@@ -134,13 +134,11 @@ class ContextTest < Test::Unit::TestCase
 
   sub_test_case("#force_match_escalation?") do
     def setup
-      default_force_match_escalation =
-        context.force_match_escalation?
+      default_force_match_escalation = context.force_match_escalation?
       begin
         yield
       ensure
-        context.force_match_escalation =
-          default_force_match_escalation
+        context.force_match_escalation = default_force_match_escalation
       end
     end
 
