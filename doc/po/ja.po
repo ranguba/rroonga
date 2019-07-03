@@ -8755,7 +8755,7 @@ msgstr ""
 
 # Groonga::Table
 msgid ""
-"This class is base class of table provides Rroonga.\n"
+"This class is base class which represents Rroonga's table.\n"
 "{Groonga::Array} , {Groonga::Hash} , {Groonga::PatriciaTrie}\n"
 "are extended from this class."
 msgstr ""
