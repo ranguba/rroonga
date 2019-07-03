@@ -606,20 +606,20 @@ rb_grn_context_get_ruby_encoding (VALUE self)
 }
 
 /*
- * @overload match_escalation?
+ * @overload force_match_escalation?
  *   @return [Bool]
  */
 static VALUE
-rb_grn_context_get_match_escalation (VALUE self)
+rb_grn_context_get_force_match_escalation (VALUE self)
 {
     return CBOOL2RVAL(grn_ctx_get_force_match_escalation(SELF(self)));
 }
 
 /*
- * @overload match_escalation=(force_match_escalation)
+ * @overload force_match_escalation=(force_match_escalation)
  */
 static VALUE
-rb_grn_context_set_match_escalation (VALUE self, VALUE force_match_escalation)
+rb_grn_context_set_force_match_escalation (VALUE self, VALUE force_match_escalation)
 {
     grn_ctx_set_force_match_escalation(SELF(self),
                                        RVAL2CBOOL(force_match_escalation));
@@ -1062,10 +1062,10 @@ rb_grn_init_context (VALUE mGrn)
     rb_define_method(cGrnContext, "ruby_encoding",
                      rb_grn_context_get_ruby_encoding, 0);
 
-    rb_define_method(cGrnContext, "match_escalation?",
-                     rb_grn_context_get_match_escalation, 0);
-    rb_define_method(cGrnContext, "match_escalation=",
-                     rb_grn_context_set_match_escalation, 1);
+    rb_define_method(cGrnContext, "force_match_escalation?",
+                     rb_grn_context_get_force_match_escalation, 0);
+    rb_define_method(cGrnContext, "force_match_escalation=",
+                     rb_grn_context_set_force_match_escalation, 1);
     rb_define_method(cGrnContext, "match_escalation_threshold",
                      rb_grn_context_get_match_escalation_threshold, 0);
     rb_define_method(cGrnContext, "match_escalation_threshold=",

@@ -132,29 +132,29 @@ class ContextTest < Test::Unit::TestCase
     assert_equal(-1, context.match_escalation_threshold)
   end
 
-  sub_test_case(".match_escalation?") do
+  sub_test_case(".force_match_escalation?") do
     def setup
-      default_match_escalation =
-        context.match_escalation?
+      default_force_match_escalation =
+        context.force_match_escalation?
       begin
         yield
       ensure
-        context.match_escalation =
-          default_match_escalation
+        context.force_match_escalation =
+          default_force_match_escalation
       end
     end
 
     def test_true
-      context.match_escalation = true
+      context.force_match_escalation = true
       assert do
-        context.match_escalation?
+        context.force_match_escalation?
       end
     end
 
     def test_false
-      context.match_escalation = false
+      context.force_match_escalation = false
       assert do
-        not context.match_escalation?
+        not context.force_match_escalation?
       end
     end
   end
