@@ -2,6 +2,7 @@
 /*
   Copyright (C) 2009-2015  Kouhei Sutou <kou@clear-code.com>
   Copyright (C) 2016-2017  Masafumi Yokoyama <yokoyama@clear-code.com>
+  Copyright (C) 2019  Horimoto Yasuhiro <horimoto@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -315,6 +316,9 @@ rb_grn_logger_fin (grn_ctx *ctx, void *user_data)
  *     ログの発生元のプロセスIDとgroongaのソースコードのファイ
  *     ル名、行番号、関数名をブロックに渡したいなら +true+ を指
  *     定する。デフォルトでは渡す。
+ *   @option options :thread_id
+ *     スレッドIDをブロックに渡したいなら +true+ を指定す
+ *     る。デフォルトでは渡さない。
  */
 static VALUE
 rb_grn_logger_s_register (int argc, VALUE *argv, VALUE klass)
@@ -323,7 +327,7 @@ rb_grn_logger_s_register (int argc, VALUE *argv, VALUE klass)
     grn_ctx *context;
     VALUE rb_logger, rb_callback;
     VALUE rb_options, rb_max_level;
-    VALUE rb_time, rb_title, rb_message, rb_location;
+    VALUE rb_time, rb_title, rb_message, rb_location, rb_thread_id;
     VALUE rb_flags;
     grn_log_level max_level = GRN_LOG_DEFAULT_LEVEL;
     int flags = 0;
@@ -343,6 +347,7 @@ rb_grn_logger_s_register (int argc, VALUE *argv, VALUE klass)
                         "title",     &rb_title,
                         "message",   &rb_message,
                         "location",  &rb_location,
+                        "thread_id", &rb_thread_id,
                         "flags",     &rb_flags,
                         NULL);
     if (!NIL_P(rb_max_level)) {
@@ -360,6 +365,9 @@ rb_grn_logger_s_register (int argc, VALUE *argv, VALUE klass)
     }
     if (NIL_P(rb_location) || CBOOL2RVAL(rb_location)) {
         flags |= GRN_LOG_LOCATION;
+    }
+    if (NIL_P(rb_thread_id) || CBOOL2RVAL(rb_thread_id)) {
+        flags |= GRN_LOG_THREAD_ID;
     }
     if (!NIL_P(rb_flags)) {
         flags = rb_funcall(rb_mGrnLoggerFlags, id_parse, 2,
@@ -693,6 +701,7 @@ rb_grn_init_logger (VALUE mGrn)
     DEFINE_FLAG(MESSAGE);
     DEFINE_FLAG(LOCATION);
     DEFINE_FLAG(PID);
+    DEFINE_FLAG(THREAD_ID);
 #undef DEFINE_FLAG
 
     rb_cGrnCallbackLogger =

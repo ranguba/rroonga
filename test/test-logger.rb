@@ -47,12 +47,22 @@ class LoggerTest < Test::Unit::TestCase
     assert_equal(:debug, Groonga::Logger.max_level)
   end
 
-  def test_flags
-    default_flags = Groonga::Logger::Flags::TIME |
-                      Groonga::Logger::Flags::MESSAGE
-    assert_equal(default_flags, Groonga::Logger.flags)
-    Groonga::Logger.flags = Groonga::Logger::Flags::LOCATION
-    assert_equal(Groonga::Logger::Flags::LOCATION, Groonga::Logger.flags)
+  sub_test_case ".flags" do
+    def test_default
+      default_flags = Groonga::Logger::Flags::TIME |
+                        Groonga::Logger::Flags::MESSAGE
+      assert_equal(default_flags, Groonga::Logger.flags)
+    end
+
+    def test_location
+      Groonga::Logger.flags = Groonga::Logger::Flags::LOCATION
+      assert_equal(Groonga::Logger::Flags::LOCATION, Groonga::Logger.flags)
+    end
+
+    def test_thread_id
+      Groonga::Logger.flags = Groonga::Logger::Flags::THREAD_ID
+      assert_equal(Groonga::Logger::Flags::THREAD_ID, Groonga::Logger.flags)
+    end
   end
 
   sub_test_case ".log" do
