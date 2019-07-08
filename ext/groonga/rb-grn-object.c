@@ -2,7 +2,7 @@
 /*
   Copyright (C) 2009-2018  Kouhei Sutou <kou@clear-code.com>
   Copyright (C) 2014-2016  Masafumi Yokoyama <yokoyama@clear-code.com>
-  Copyright (C) 2019  Yasuhiro Horimoto <horimoto@clear-code.com>
+  Copyright (C) 2019  Horimoto Yasuhiro <horimoto@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -1896,6 +1896,40 @@ rb_grn_object_key_accessor_p (VALUE self)
 }
 
 /*
+ * Checks whether the object is id accessor or not.
+ *
+ * @example `true` case: `column("_id")` is an accessor.
+ *   Groonga::Schema.create_table("Users", :key_type => :short_text)
+ *   users = Groonga["Users"]
+ *   users.column("_id").id_accessor? # => true
+ *
+ * @example `false` case: `column("_key")` is an accessor.
+ *   Groonga::Schema.create_table("Users", :key_type => :short_text)
+ *   users = Groonga["Users"]
+ *   users.column("_key").key_accessor? # => false
+ *
+ * @overload id_accessor?
+ *   @return [Boolean] `true` if the object is id accessor,
+ *     `false` otherwise.
+ */
+static VALUE
+rb_grn_object_id_accessor_p (VALUE self)
+{
+    grn_ctx *context;
+    grn_obj *object;
+    grn_bool id_accessor_p = GRN_FALSE;
+
+    rb_grn_object_deconstruct(SELF(self), &object, &context,
+                              NULL, NULL, NULL, NULL);
+
+    if (context && object) {
+        id_accessor_p = grn_obj_is_id_accessor(context, object);
+    }
+
+    return CBOOL2RVAL(id_accessor_p);
+}
+
+/*
  * Update the last modified time of the `object`. It's meaningful only
  * for persistent database, table and column.
  *
@@ -2086,6 +2120,8 @@ rb_grn_init_object (VALUE mGrn)
                      rb_grn_object_accessor_p, 0);
     rb_define_method(rb_cGrnObject, "key_accessor?",
                      rb_grn_object_key_accessor_p, 0);
+    rb_define_method(rb_cGrnObject, "id_accessor?",
+                     rb_grn_object_id_accessor_p, 0);
 
     rb_define_method(rb_cGrnObject, "touch", rb_grn_object_touch, -1);
     rb_define_method(rb_cGrnObject, "last_modified",

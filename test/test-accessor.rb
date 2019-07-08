@@ -63,4 +63,19 @@ class AccessorTest < Test::Unit::TestCase
       end
     end
   end
+
+  sub_test_case "#id_accessor?" do
+    test "true" do
+      assert do
+        @id.id_accessor?
+      end
+    end
+
+    test "false" do
+      key = @posts.column("_key")
+      assert do
+        not key.id_accessor?
+      end
+    end
+  end
 end
