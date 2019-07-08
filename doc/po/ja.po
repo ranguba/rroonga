@@ -8755,10 +8755,13 @@ msgstr ""
 
 # Groonga::Table
 msgid ""
+"This class is base class which represents Rroonga's table.\n"
+"{Groonga::Array} , {Groonga::Hash} , {Groonga::PatriciaTrie}\n"
+"are extended from this class."
+msgstr ""
 "Rroongaが提供するテーブルのベースとなるクラス。このクラス\n"
 "から {Groonga::Array} , {Groonga::Hash} , {Groonga::PatriciaTrie}\n"
 "が継承されている。"
-msgstr ""
 
 msgid "テーブルの中身を人に見やすい文字列で返す。"
 msgstr ""

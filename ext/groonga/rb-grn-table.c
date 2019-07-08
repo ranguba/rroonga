@@ -1,8 +1,8 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
-  Copyright (C) 2019  Horimoto Yasuhiro <horimoto@clear-code.com>
   Copyright (C) 2009-2017  Kouhei Sutou <kou@clear-code.com>
   Copyright (C) 2014-2016  Masafumi Yokoyama <yokoyama@clear-code.com>
+  Copyright (C) 2019  Horimoto Yasuhiro <horimoto@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -30,9 +30,9 @@ static ID id_array_set;
 /*
  * Document-class: Groonga::Table < Groonga::Object
  *
- * Rroongaが提供するテーブルのベースとなるクラス。このクラス
- * から {Groonga::Array} , {Groonga::Hash} , {Groonga::PatriciaTrie}
- * が継承されている。
+ * This class is base class which represents Rroonga's table.
+ * {Groonga::Array} , {Groonga::Hash} , {Groonga::PatriciaTrie}
+ * are extended from this class.
  */
 
 grn_obj *
