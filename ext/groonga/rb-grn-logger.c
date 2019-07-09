@@ -316,9 +316,10 @@ rb_grn_logger_fin (grn_ctx *ctx, void *user_data)
  *     ログの発生元のプロセスIDとgroongaのソースコードのファイ
  *     ル名、行番号、関数名をブロックに渡したいなら +true+ を指
  *     定する。デフォルトでは渡す。
- *   @option options :thread_id
- *     スレッドIDをブロックに渡したいなら +true+ を指定す
- *     る。デフォルトでは渡さない。
+ *   @option options [Bool] :thread_id (true)
+ *     Specifies whether `location` includes thread ID or not.
+ *
+ *     @since 9.0.4
  */
 static VALUE
 rb_grn_logger_s_register (int argc, VALUE *argv, VALUE klass)
