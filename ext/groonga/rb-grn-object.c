@@ -2022,7 +2022,7 @@ rb_grn_object_bulk_p (VALUE self)
 {
     grn_ctx *context;
     grn_obj *object;
-    grn_bool is_bulk;
+    bool is_bulk = false;
 
     rb_grn_object_deconstruct(SELF(self), &object, &context,
                               NULL, NULL, NULL, NULL);
