@@ -162,6 +162,34 @@ class LoggerTest < Test::Unit::TestCase
     end
   end
 
+  sub_test_case ".register" do
+    setup do
+      GC.disable
+    end
+
+    teardown do
+      Groonga::Logger.unregister
+      GC.enable
+    end
+
+    test ":thread_id" do
+      locations = []
+      Groonga::Logger.register(location: false,
+                               thread_id: true) do |*args|
+        location = args[5]
+        locations << location
+      end
+      Groonga::Logger.log("message")
+      locations = locations.collect do |location|
+        location.gsub(/\A([a-f\d]+)\z/, "THREAD_ID")
+      end
+      assert_equal([
+                     "THREAD_ID",
+                   ],
+                   locations)
+    end
+  end
+
   def test_rotate_threshold_size
     Groonga::Logger.unregister
     Groonga::Logger.path = @log_path.to_s
