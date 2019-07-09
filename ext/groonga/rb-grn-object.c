@@ -1860,7 +1860,7 @@ rb_grn_object_accessor_p (VALUE self)
 }
 
 /*
- * Checks whether the object is key accessor or not.
+ * Checks whether the object is an accessor for `_key` or not.
  *
  * @example `true` case: `column("_key")` is an accessor and it's an accessor for `_key`
  *   Groonga::Schema.create_table("Users", :key_type => :short_text)
@@ -1896,7 +1896,7 @@ rb_grn_object_key_accessor_p (VALUE self)
 }
 
 /*
- * Checks whether the object is _id accessor or not.
+ * Checks whether the object is an accessor for `_id` or not.
  *
  * @example `true` case: `column("_id")`.
  *   Groonga::Schema.create_table("Users", :key_type => :short_text)
