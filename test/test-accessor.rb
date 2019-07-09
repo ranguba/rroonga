@@ -21,10 +21,7 @@ class AccessorTest < Test::Unit::TestCase
     setup_database
     @posts = Groonga::Hash.create(:name => "Posts", :key_type => "ShortText")
     @id = @posts.column("_id")
-  end
-
-  def teardown
-    @id = nil
+    @key = @posts.column("_key")
   end
 
   def test_name
@@ -51,15 +48,28 @@ class AccessorTest < Test::Unit::TestCase
 
   sub_test_case "#key_accessor?" do
     test "true" do
-      key = @posts.column("_key")
       assert do
-        key.key_accessor?
+        @key.key_accessor?
       end
     end
 
     test "false" do
       assert do
         not @id.key_accessor?
+      end
+    end
+  end
+
+  sub_test_case "#id_accessor?" do
+    test "true" do
+      assert do
+        @id.id_accessor?
+      end
+    end
+
+    test "false" do
+      assert do
+        not @key.id_accessor?
       end
     end
   end
