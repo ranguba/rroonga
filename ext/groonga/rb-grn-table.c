@@ -184,7 +184,8 @@ rb_grn_table_inspect_content (VALUE self, VALUE inspected)
 }
 
 /*
- * テーブルの中身を人に見やすい文字列で返す。
+ * This function return contents of a table as a string
+ * easy to understand for human.
  *
  * @overload inspect
  *   @return [String]
