@@ -318,8 +318,6 @@ rb_grn_logger_fin (grn_ctx *ctx, void *user_data)
  *     定する。デフォルトでは渡す。
  *   @option options [Bool] :thread_id (true)
  *     Specifies whether `location` includes thread ID or not.
- *
- *     @since 9.0.4
  */
 static VALUE
 rb_grn_logger_s_register (int argc, VALUE *argv, VALUE klass)
