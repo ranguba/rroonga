@@ -1911,6 +1911,8 @@ rb_grn_object_key_accessor_p (VALUE self)
  * @overload id_accessor?
  *   @return [Boolean] `true` if the object is _id accessor,
  *     `false` otherwise.
+ *
+ * @since 9.0.5
  */
 static VALUE
 rb_grn_object_id_accessor_p (VALUE self)
