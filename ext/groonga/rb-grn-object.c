@@ -2026,7 +2026,9 @@ rb_grn_object_bulk_p (VALUE self)
 
     rb_grn_object_deconstruct(SELF(self), &object, &context,
                               NULL, NULL, NULL, NULL);
-    is_bulk = grn_obj_is_bulk(context, object);
+    if (context && object) {
+        is_bulk = grn_obj_is_bulk(context, object);
+    }
     return CBOOL2RVAL(is_bulk);
 }
 
