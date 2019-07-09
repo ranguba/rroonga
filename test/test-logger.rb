@@ -102,7 +102,8 @@ class LoggerTest < Test::Unit::TestCase
 
     test "default location" do
       locations = []
-      Groonga::Logger.register do |event, level, time, title, message, location|
+      Groonga::Logger.register(thread_id: false) do |*args|
+        location = args[5]
         locations << location
       end
       Groonga::Logger.log("message"); line = __LINE__
@@ -115,7 +116,8 @@ class LoggerTest < Test::Unit::TestCase
 
     test ":file" do
       locations = []
-      Groonga::Logger.register do |event, level, time, title, message, location|
+      Groonga::Logger.register(thread_id: false) do |*args|
+        location = args[5]
         locations << location
       end
       Groonga::Logger.log("message", :file => "file.rb")
@@ -131,7 +133,8 @@ class LoggerTest < Test::Unit::TestCase
 
     test ":line" do
       locations = []
-      Groonga::Logger.register do |event, level, time, title, message, location|
+      Groonga::Logger.register(thread_id: false) do |*args|
+        location = args[5]
         locations << location
       end
       Groonga::Logger.log("message", :line => 100)
@@ -147,7 +150,8 @@ class LoggerTest < Test::Unit::TestCase
 
     test ":function" do
       locations = []
-      Groonga::Logger.register do |event, level, time, title, message, location|
+      Groonga::Logger.register(thread_id: false) do |*args|
+        location = args[5]
         locations << location
       end
       Groonga::Logger.log("message", :function => "method_name")
