@@ -21,12 +21,14 @@ class LoggerTest < Test::Unit::TestCase
     @default_log_path = Groonga::Logger.path
     @default_log_max_level = Groonga::Logger.max_level
     @default_rotate_threshold_size = Groonga::Logger.rotate_threshold_size
+    @default_flags = Groonga::Logger.flags
   end
 
   def teardown
     Groonga::Logger.path = @default_log_path
     Groonga::Logger.max_level = @default_log_max_level
     Groonga::Logger.rotate_threshold_size = @default_rotate_threshold_size
+    Groonga::Logger.flags = @default_flags
   end
 
   def test_reopen
