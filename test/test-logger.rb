@@ -49,9 +49,9 @@ class LoggerTest < Test::Unit::TestCase
 
   sub_test_case ".flags" do
     def test_default
-      default_flags = Groonga::Logger::Flags::TIME |
-                        Groonga::Logger::Flags::MESSAGE
-      assert_equal(default_flags, Groonga::Logger.flags)
+      assert_equal(Groonga::Logger::Flags::TIME |
+                   Groonga::Logger::Flags::MESSAGE,
+                   Groonga::Logger.flags)
     end
 
     def test_location
