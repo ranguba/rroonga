@@ -2,7 +2,7 @@
 /*
   Copyright (C) 2009-2018  Kouhei Sutou <kou@clear-code.com>
   Copyright (C) 2014-2016  Masafumi Yokoyama <yokoyama@clear-code.com>
-  Copyright (C) 2019 Horimoto Yasuhiro <horimoto@clear-code.com>
+  Copyright (C) 2019  Horimoto Yasuhiro <horimoto@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
