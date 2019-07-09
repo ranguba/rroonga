@@ -1917,7 +1917,7 @@ rb_grn_object_id_accessor_p (VALUE self)
 {
     grn_ctx *context;
     grn_obj *object;
-    grn_bool id_accessor_p = GRN_FALSE;
+    bool id_accessor_p = false;
 
     rb_grn_object_deconstruct(SELF(self), &object, &context,
                               NULL, NULL, NULL, NULL);
