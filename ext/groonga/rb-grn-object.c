@@ -1906,7 +1906,7 @@ rb_grn_object_key_accessor_p (VALUE self)
  * @example `false` case: `column("_key")`.
  *   Groonga::Schema.create_table("Users", :key_type => :short_text)
  *   users = Groonga["Users"]
- *   users.column("_key").key_accessor? # => false
+ *   users.column("_key").id_accessor? # => false
  *
  * @overload id_accessor?
  *   @return [Boolean] `true` if the object is _id accessor,
