@@ -132,6 +132,31 @@ class ContextTest < Test::Unit::TestCase
     assert_equal(-1, context.match_escalation_threshold)
   end
 
+  sub_test_case("#force_match_escalation?") do
+    def setup
+      default_force_match_escalation = context.force_match_escalation?
+      begin
+        yield
+      ensure
+        context.force_match_escalation = default_force_match_escalation
+      end
+    end
+
+    def test_true
+      context.force_match_escalation = true
+      assert do
+        context.force_match_escalation?
+      end
+    end
+
+    def test_false
+      context.force_match_escalation = false
+      assert do
+        not context.force_match_escalation?
+      end
+    end
+  end
+
   def test_close
     context = Groonga::Context.new
     assert_false(context.closed?)
