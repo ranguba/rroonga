@@ -1912,7 +1912,7 @@ rb_grn_object_key_accessor_p (VALUE self)
  *   @return [Boolean] `true` if the object is an accessor for `_id`,
  *     `false` otherwise.
  *
- * @since 9.0.5
+ * @since 9.0.4
  */
 static VALUE
 rb_grn_object_id_accessor_p (VALUE self)
