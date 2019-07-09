@@ -326,9 +326,15 @@ rb_grn_logger_s_register (int argc, VALUE *argv, VALUE klass)
 {
     VALUE rb_context = Qnil;
     grn_ctx *context;
-    VALUE rb_logger, rb_callback;
-    VALUE rb_options, rb_max_level;
-    VALUE rb_time, rb_title, rb_message, rb_location, rb_thread_id;
+    VALUE rb_logger;
+    VALUE rb_callback;
+    VALUE rb_options;
+    VALUE rb_max_level;
+    VALUE rb_time;
+    VALUE rb_title;
+    VALUE rb_message;
+    VALUE rb_location;
+    VALUE rb_thread_id;
     VALUE rb_flags;
     grn_log_level max_level = GRN_LOG_DEFAULT_LEVEL;
     int flags = 0;
