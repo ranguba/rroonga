@@ -159,25 +159,6 @@ class ExpressionTest < Test::Unit::TestCase
                  expression.keywords.sort)
   end
 
-  sub_test_case("#bulk?") do
-    def test_true
-      expression = Groonga::Expression.new
-      mori = expression.define_variable
-
-      assert do
-        mori.bulk?
-      end
-    end
-
-    def test_false
-      expression = Groonga::Expression.new
-
-      assert do
-        not expression.bulk?
-      end
-    end
-  end
-
   class AppendObjectTest < self
     setup
     def setup_expression
