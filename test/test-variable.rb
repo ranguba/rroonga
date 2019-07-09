@@ -16,8 +16,8 @@
 class VariableTest < Test::Unit::TestCase
   include GroongaTestUtils
 
-  setup :setup_database
   def setup
+    setup_database
     @expression = Groonga::Expression.new
     @variable = @expression.define_variable
   end
