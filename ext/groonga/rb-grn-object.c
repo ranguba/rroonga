@@ -1909,7 +1909,7 @@ rb_grn_object_key_accessor_p (VALUE self)
  *   users.column("_key").id_accessor? # => false
  *
  * @overload id_accessor?
- *   @return [Boolean] `true` if the object is _id accessor,
+ *   @return [Boolean] `true` if the object is an accessor for `_id`,
  *     `false` otherwise.
  *
  * @since 9.0.5
