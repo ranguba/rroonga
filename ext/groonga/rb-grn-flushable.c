@@ -69,7 +69,7 @@ rb_grn_flushable_flush (int argc, VALUE *argv, VALUE self)
     if (RVAL2CBOOL(rb_recursive_p)) {
         grn_obj_flush_recursive(context, object);
     } else if (RVAL2CBOOL(rb_dependent_p)) {
-        grn_obj_flush_dependent(context, object); 
+        grn_obj_flush_recursive_dependent(context, object);
     } else {
         grn_obj_flush(context, object);
     }
