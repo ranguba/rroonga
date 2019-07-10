@@ -2048,6 +2048,27 @@ rb_grn_object_lexicon_p (VALUE self)
 }
 
 /*
+ * @overload bulk?
+ *   @return [Boolean] `true` if the object is bulk, `false` otherwise.
+ *
+ * @since 9.0.4
+ */
+static VALUE
+rb_grn_object_bulk_p (VALUE self)
+{
+    grn_ctx *context;
+    grn_obj *object;
+    bool is_bulk = false;
+
+    rb_grn_object_deconstruct(SELF(self), &object, &context,
+                              NULL, NULL, NULL, NULL);
+    if (context && object) {
+        is_bulk = grn_obj_is_bulk(context, object);
+    }
+    return CBOOL2RVAL(is_bulk);
+}
+
+/*
  * @overload disk_usage
  *   @return [Integer] The number of bytes used by this object in disk.
  *
@@ -2134,6 +2155,8 @@ rb_grn_init_object (VALUE mGrn)
                      rb_grn_object_corrupt_p, 0);
     rb_define_method(rb_cGrnObject, "lexicon?",
                      rb_grn_object_lexicon_p, 0);
+    rb_define_method(rb_cGrnObject, "bulk?",
+                     rb_grn_object_bulk_p, 0);
 
     rb_define_method(rb_cGrnObject, "disk_usage",
                      rb_grn_object_get_disk_usage, 0);

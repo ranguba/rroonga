@@ -1,4 +1,4 @@
-# Copyright (C) 2009  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2019  Sutou Kouhei <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -16,13 +16,29 @@
 class VariableTest < Test::Unit::TestCase
   include GroongaTestUtils
 
-  setup :setup_database
+  def setup
+    setup_database
+    @expression = Groonga::Expression.new
+    @variable = @expression.define_variable
+  end
 
   def test_value
-    expression = Groonga::Expression.new
-    variable = expression.define_variable
-    assert_nil(variable.value)
-    variable.value = "morita"
-    assert_equal("morita", variable.value)
+    assert_nil(@variable.value)
+    @variable.value = "morita"
+    assert_equal("morita", @variable.value)
+  end
+
+  sub_test_case("#bulk?") do
+    def test_true
+      assert do
+        @variable.bulk?
+      end
+    end
+
+    def test_false
+      assert do
+        not @expression.bulk?
+      end
+    end
   end
 end
