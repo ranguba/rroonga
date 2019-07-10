@@ -21,12 +21,14 @@ class LoggerTest < Test::Unit::TestCase
     @default_log_path = Groonga::Logger.path
     @default_log_max_level = Groonga::Logger.max_level
     @default_rotate_threshold_size = Groonga::Logger.rotate_threshold_size
+    @default_flags = Groonga::Logger.flags
   end
 
   def teardown
     Groonga::Logger.path = @default_log_path
     Groonga::Logger.max_level = @default_log_max_level
     Groonga::Logger.rotate_threshold_size = @default_rotate_threshold_size
+    Groonga::Logger.flags = @default_flags
   end
 
   def test_reopen
@@ -47,12 +49,22 @@ class LoggerTest < Test::Unit::TestCase
     assert_equal(:debug, Groonga::Logger.max_level)
   end
 
-  def test_flags
-    default_flags = Groonga::Logger::Flags::TIME |
-                      Groonga::Logger::Flags::MESSAGE
-    assert_equal(default_flags, Groonga::Logger.flags)
-    Groonga::Logger.flags = Groonga::Logger::Flags::LOCATION
-    assert_equal(Groonga::Logger::Flags::LOCATION, Groonga::Logger.flags)
+  sub_test_case ".flags" do
+    def test_default
+      assert_equal(Groonga::Logger::Flags::TIME |
+                   Groonga::Logger::Flags::MESSAGE,
+                   Groonga::Logger.flags)
+    end
+
+    def test_location
+      Groonga::Logger.flags = Groonga::Logger::Flags::LOCATION
+      assert_equal(Groonga::Logger::Flags::LOCATION, Groonga::Logger.flags)
+    end
+
+    def test_thread_id
+      Groonga::Logger.flags = Groonga::Logger::Flags::THREAD_ID
+      assert_equal(Groonga::Logger::Flags::THREAD_ID, Groonga::Logger.flags)
+    end
   end
 
   sub_test_case ".log" do
@@ -90,7 +102,8 @@ class LoggerTest < Test::Unit::TestCase
 
     test "default location" do
       locations = []
-      Groonga::Logger.register do |event, level, time, title, message, location|
+      Groonga::Logger.register(thread_id: false) do |*args|
+        location = args[5]
         locations << location
       end
       Groonga::Logger.log("message"); line = __LINE__
@@ -103,7 +116,8 @@ class LoggerTest < Test::Unit::TestCase
 
     test ":file" do
       locations = []
-      Groonga::Logger.register do |event, level, time, title, message, location|
+      Groonga::Logger.register(thread_id: false) do |*args|
+        location = args[5]
         locations << location
       end
       Groonga::Logger.log("message", :file => "file.rb")
@@ -119,7 +133,8 @@ class LoggerTest < Test::Unit::TestCase
 
     test ":line" do
       locations = []
-      Groonga::Logger.register do |event, level, time, title, message, location|
+      Groonga::Logger.register(thread_id: false) do |*args|
+        location = args[5]
         locations << location
       end
       Groonga::Logger.log("message", :line => 100)
@@ -135,7 +150,8 @@ class LoggerTest < Test::Unit::TestCase
 
     test ":function" do
       locations = []
-      Groonga::Logger.register do |event, level, time, title, message, location|
+      Groonga::Logger.register(thread_id: false) do |*args|
+        location = args[5]
         locations << location
       end
       Groonga::Logger.log("message", :function => "method_name")
@@ -145,6 +161,34 @@ class LoggerTest < Test::Unit::TestCase
       end
       assert_equal([
                      "0 test.rb:0 method_name()",
+                   ],
+                   locations)
+    end
+  end
+
+  sub_test_case ".register" do
+    setup do
+      GC.disable
+    end
+
+    teardown do
+      Groonga::Logger.unregister
+      GC.enable
+    end
+
+    test ":thread_id" do
+      locations = []
+      Groonga::Logger.register(location: false,
+                               thread_id: true) do |*args|
+        location = args[5]
+        locations << location
+      end
+      Groonga::Logger.log("message")
+      locations = locations.collect do |location|
+        location.gsub(/\A([a-f\d]+)\z/, "THREAD_ID")
+      end
+      assert_equal([
+                     "THREAD_ID",
                    ],
                    locations)
     end
