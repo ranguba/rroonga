@@ -207,8 +207,9 @@ module Groonga
 
     # {Groonga::Record#score} が利用できる場合は +true+ を
     # 返す。
+    # @@deprecated since 9.0.4 Use {Groonga::table.support_score?} instead.
     def support_score?
-      @table.have_column?("_score") # TODO delegate to Table
+      @table.support_score? # For backward compatibility
     end
 
     # 主キーの値が同一であったレコードの件数を返す。検索結果とし

@@ -2522,6 +2522,19 @@ rb_grn_table_support_sub_records_p (VALUE self)
 }
 
 /*
+ * @overload support_value?
+ *
+ *   @return @true@ if the table has _score column, @false@
+ *   otherwise.
+ */
+static VALUE
+rb_grn_table_support_score_p (VALUE self)
+{
+    return CBOOL2RVAL(rb_grn_table_have_column(self,
+                                               rb_str_new_literal("_score")));
+}
+
+/*
  * {Groonga::Table#group} returns a table that contains grouped
  * records. If grouped table has a space to store the number of
  * records for each group, the number of records is stored to
@@ -2894,6 +2907,8 @@ rb_grn_init_table (VALUE mGrn)
                      rb_grn_table_support_value_p, 0);
     rb_define_method(rb_cGrnTable, "support_sub_records?",
                      rb_grn_table_support_sub_records_p, 0);
+    rb_define_method(rb_cGrnTable, "support_score?",
+                     rb_grn_table_support_score_p, 0);
     rb_define_method(rb_cGrnTable, "have_n_sub_records_space?",
                      rb_grn_table_have_n_sub_records_space_p, 0);
 
