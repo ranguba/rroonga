@@ -19,9 +19,12 @@ class AccessorTest < Test::Unit::TestCase
 
   def setup
     setup_database
-    @posts = Groonga::Hash.create(:name => "Posts", :key_type => "ShortText")
+    @posts = Groonga::Hash.create(:name => "Posts",
+                                  :key_type => "ShortText",
+                                  :value_type => "UInt32")
     @id = @posts.column("_id")
     @key = @posts.column("_key")
+    @value = @posts.column("_value")
   end
 
   def test_name
@@ -70,6 +73,20 @@ class AccessorTest < Test::Unit::TestCase
     test "false" do
       assert do
         not @key.id_accessor?
+      end
+    end
+  end
+
+  sub_test_case "#value_accessor?" do
+    test "true" do
+      assert do
+        @value.value_accessor?
+      end
+    end
+
+    test "false" do
+      assert do
+        not @key.value_accessor?
       end
     end
   end
