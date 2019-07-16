@@ -90,4 +90,18 @@ class AccessorTest < Test::Unit::TestCase
       end
     end
   end
+
+  sub_test_case "#score_accessor?" do
+    test "true" do
+      assert do
+        @posts.select.column("_score").score_accessor?
+      end
+    end
+
+    test "false" do
+      assert do
+        not @key.score_accessor?
+      end
+    end
+  end
 end
