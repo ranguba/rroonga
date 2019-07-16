@@ -1358,7 +1358,7 @@ rb_grn_object_array_reference (VALUE self, VALUE rb_id)
     return rb_value;
 }
 
-static grn_bool
+static bool
 rb_uvector_value_p (RbGrnObject *rb_grn_object, VALUE rb_value)
 {
     VALUE first_element;
@@ -1366,7 +1366,7 @@ rb_uvector_value_p (RbGrnObject *rb_grn_object, VALUE rb_value)
     switch (rb_grn_object->range->header.type) {
       case GRN_TYPE:
         if (!(rb_grn_object->range->header.flags & GRN_OBJ_KEY_VAR_SIZE)) {
-            return GRN_TRUE;
+            return true;
         }
         break;
       case GRN_TABLE_HASH_KEY:
@@ -1382,7 +1382,7 @@ rb_uvector_value_p (RbGrnObject *rb_grn_object, VALUE rb_value)
         break;
     }
 
-    return GRN_FALSE;
+    return false;
 }
 
 typedef struct {
@@ -1530,7 +1530,7 @@ rb_grn_object_remove (int argc, VALUE *argv, VALUE self)
     grn_ctx *context;
     VALUE rb_options;
     VALUE rb_dependent_p;
-    grn_bool dependent_p = GRN_FALSE;
+    bool dependent_p = false;
 
     rb_grn_object = SELF(self);
     if (!rb_grn_object->object)
@@ -1563,7 +1563,7 @@ rb_grn_object_builtin_p (VALUE self)
 {
     grn_ctx *context;
     grn_obj *object;
-    grn_bool builtin = GRN_FALSE;
+    bool builtin = false;
 
     rb_grn_object_deconstruct(SELF(self), &object, &context,
                               NULL, NULL, NULL, NULL);
@@ -1588,7 +1588,7 @@ rb_grn_object_table_p (VALUE self)
 {
     grn_ctx *context;
     grn_obj *object;
-    grn_bool table_p = GRN_FALSE;
+    bool table_p = false;
 
     rb_grn_object_deconstruct(SELF(self), &object, &context,
                               NULL, NULL, NULL, NULL);
@@ -1613,7 +1613,7 @@ rb_grn_object_column_p (VALUE self)
 {
     grn_ctx *context;
     grn_obj *object;
-    grn_bool column_p = GRN_FALSE;
+    bool column_p = false;
 
     rb_grn_object_deconstruct(SELF(self), &object, &context,
                               NULL, NULL, NULL, NULL);
@@ -1639,7 +1639,7 @@ rb_grn_object_reference_column_p (VALUE self)
 {
     grn_ctx *context;
     grn_obj *object;
-    grn_bool reference_column_p = GRN_FALSE;
+    bool reference_column_p = false;
 
     rb_grn_object_deconstruct(SELF(self), &object, &context,
                               NULL, NULL, NULL, NULL);
@@ -1665,7 +1665,7 @@ rb_grn_object_index_column_p (VALUE self)
 {
     grn_ctx *context;
     grn_obj *object;
-    grn_bool index_column_p = GRN_FALSE;
+    bool index_column_p = false;
 
     rb_grn_object_deconstruct(SELF(self), &object, &context,
                               NULL, NULL, NULL, NULL);
@@ -1690,7 +1690,7 @@ rb_grn_object_procedure_p (VALUE self)
 {
     grn_ctx *context;
     grn_obj *object;
-    grn_bool procedure_p = GRN_FALSE;
+    bool procedure_p = false;
 
     rb_grn_object_deconstruct(SELF(self), &object, &context,
                               NULL, NULL, NULL, NULL);
@@ -1716,7 +1716,7 @@ rb_grn_object_function_procedure_p (VALUE self)
 {
     grn_ctx *context;
     grn_obj *object;
-    grn_bool function_procedure_p = GRN_FALSE;
+    bool function_procedure_p = false;
 
     rb_grn_object_deconstruct(SELF(self), &object, &context,
                               NULL, NULL, NULL, NULL);
@@ -1742,7 +1742,7 @@ rb_grn_object_selector_procedure_p (VALUE self)
 {
     grn_ctx *context;
     grn_obj *object;
-    grn_bool selector_procedure_p = GRN_FALSE;
+    bool selector_procedure_p = false;
 
     rb_grn_object_deconstruct(SELF(self), &object, &context,
                               NULL, NULL, NULL, NULL);
@@ -1768,7 +1768,7 @@ rb_grn_object_selector_only_procedure_p (VALUE self)
 {
     grn_ctx *context;
     grn_obj *object;
-    grn_bool selector_only_procedure_p = GRN_FALSE;
+    bool selector_only_procedure_p = false;
 
     rb_grn_object_deconstruct(SELF(self), &object, &context,
                               NULL, NULL, NULL, NULL);
@@ -1794,7 +1794,7 @@ rb_grn_object_scorer_procedure_p (VALUE self)
 {
     grn_ctx *context;
     grn_obj *object;
-    grn_bool scorer_procedure_p = GRN_FALSE;
+    bool scorer_procedure_p = false;
 
     rb_grn_object_deconstruct(SELF(self), &object, &context,
                               NULL, NULL, NULL, NULL);
@@ -1820,7 +1820,7 @@ rb_grn_object_window_function_procedure_p (VALUE self)
 {
     grn_ctx *context;
     grn_obj *object;
-    grn_bool window_function_procedure_p = GRN_FALSE;
+    bool window_function_procedure_p = false;
 
     rb_grn_object_deconstruct(SELF(self), &object, &context,
                               NULL, NULL, NULL, NULL);
@@ -1847,7 +1847,7 @@ rb_grn_object_accessor_p (VALUE self)
 {
     grn_ctx *context;
     grn_obj *object;
-    grn_bool accessor_p = GRN_FALSE;
+    bool accessor_p = false;
 
     rb_grn_object_deconstruct(SELF(self), &object, &context,
                               NULL, NULL, NULL, NULL);
@@ -1883,7 +1883,7 @@ rb_grn_object_key_accessor_p (VALUE self)
 {
     grn_ctx *context;
     grn_obj *object;
-    grn_bool key_accessor_p = GRN_FALSE;
+    bool key_accessor_p = false;
 
     rb_grn_object_deconstruct(SELF(self), &object, &context,
                               NULL, NULL, NULL, NULL);
@@ -2001,7 +2001,7 @@ rb_grn_object_dirty_p (VALUE self)
 {
     grn_ctx *context;
     grn_obj *object;
-    grn_bool is_dirty;
+    bool is_dirty;
 
     rb_grn_object_deconstruct(SELF(self), &object, &context,
                               NULL, NULL, NULL, NULL);
@@ -2020,7 +2020,7 @@ rb_grn_object_corrupt_p (VALUE self)
 {
     grn_ctx *context;
     grn_obj *object;
-    grn_bool is_corrupt;
+    bool is_corrupt;
 
     rb_grn_object_deconstruct(SELF(self), &object, &context,
                               NULL, NULL, NULL, NULL);
@@ -2039,7 +2039,7 @@ rb_grn_object_lexicon_p (VALUE self)
 {
     grn_ctx *context;
     grn_obj *object;
-    grn_bool is_lexicon;
+    bool is_lexicon;
 
     rb_grn_object_deconstruct(SELF(self), &object, &context,
                               NULL, NULL, NULL, NULL);
