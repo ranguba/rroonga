@@ -29,6 +29,12 @@ class NormalizerTest < Test::Unit::TestCase
       assert_equal("abcdefgh", Groonga::Normalizer.normalize("AbC Def　gh"))
     end
 
+    def test_normalizer
+      assert_equal("©",
+                   Groonga::Normalizer.normalize("©",
+                                                 :normalizer => "NormalizerNFKC100"))
+    end
+
     def test_remove_blank
       assert_equal("abcdefgh",
                    Groonga::Normalizer.normalize("AbC Def　gh",
