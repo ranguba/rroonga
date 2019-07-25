@@ -22,6 +22,7 @@ class AccessorTest < Test::Unit::TestCase
     @posts = Groonga::Hash.create(:name => "Posts",
                                   :key_type => "ShortText",
                                   :value_type => "UInt32")
+    @grouped_posts = @posts.group("_key")
     @id = @posts.column("_id")
     @key = @posts.column("_key")
     @value = @posts.column("_value")
@@ -101,6 +102,20 @@ class AccessorTest < Test::Unit::TestCase
     test "false" do
       assert do
         not @key.score_accessor?
+      end
+    end
+  end
+
+  sub_test_case "#nsubrecs_accessor?" do
+    test "true" do
+      assert do
+        @grouped_posts.column("_nsubrecs").nsubrecs_accessor?
+      end
+    end
+
+    test "false" do
+      assert do
+        not @key.nsubrecs_accessor?
       end
     end
   end

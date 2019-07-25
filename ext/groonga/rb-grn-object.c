@@ -2006,6 +2006,43 @@ rb_grn_object_score_accessor_p (VALUE self)
 }
 
 /*
+ * Checks whether the object is an accessor for `_nsubrecs` or not.
+ *
+ * @example `true` case: `column("_nsubrecs")` is an accessor and it's an accessor for `_nsubrecs`
+ *   users = Groonga::Hash.create(:name => "Users",
+ *                                :key_type => "ShortText")
+ *   grouped_users = users.group("_key")
+ *   grouped_users.column("_nsubrecs").nsubrecs_accessor? # => true
+ *
+ * @example `false` case: `column("_key")` is an accessor but it's not an accessor for `_nsubrecs`
+ *   Groonga::Schema.create_table("Users", :key_type => :short_text)
+ *   users = Groonga["Users"]
+ *   users.column("_key").nsubrecs_accessor? # => false
+ *
+ * @overload nsubrecs_accessor?
+ *   @return [Boolean] `true` if the object is an accessor for `_nsubrecs`,
+ *     `false` otherwise.
+ *
+ * @since 9.0.4
+ */
+VALUE
+rb_grn_object_nsubrecs_accessor_p (VALUE self)
+{
+    grn_ctx *context;
+    grn_obj *object;
+    bool nsubrecs_accessor_p = false;
+
+    rb_grn_object_deconstruct(SELF(self), &object, &context,
+                              NULL, NULL, NULL, NULL);
+
+    if (context && object) {
+        nsubrecs_accessor_p = grn_obj_is_nsubrecs_accessor(context, object);
+    }
+
+    return CBOOL2RVAL(nsubrecs_accessor_p);
+}
+
+/*
  * Update the last modified time of the `object`. It's meaningful only
  * for persistent database, table and column.
  *
@@ -2223,6 +2260,8 @@ rb_grn_init_object (VALUE mGrn)
                      rb_grn_object_value_accessor_p, 0);
     rb_define_method(rb_cGrnObject, "score_accessor?",
                      rb_grn_object_score_accessor_p, 0);
+    rb_define_method(rb_cGrnObject, "nsubrecs_accessor?",
+                     rb_grn_object_nsubrecs_accessor_p, 0);
 
     rb_define_method(rb_cGrnObject, "touch", rb_grn_object_touch, -1);
     rb_define_method(rb_cGrnObject, "last_modified",
