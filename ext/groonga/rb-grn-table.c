@@ -216,8 +216,7 @@ rb_grn_table_inspect (VALUE self)
  *     A path for saving column.
  *     If we omit +:path+ , add a path automatically.
  *   @option options :persistent (A persistent column)
- *     If we specify +true+, a column is a persistent column.
- *     If we omit this option, a column is a persistent column.
+ *     If we specify +true+ or omit, a column is a persistent column.
  *   @option options :type (:scalar)
  *     This option specifies how to store a value of a column.
  *     If we omit this option, how to store is +:scalar+ .
