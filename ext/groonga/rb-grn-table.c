@@ -205,9 +205,9 @@ rb_grn_table_inspect (VALUE self)
 }
 
 /*
- * This function defines a column taht name is _name_ and
+ * This function defines a column that name is _name_ and
  * type is _value_type_.
- * It returns new defined cokumn.
+ * It returns new defined column.
  *
  * @overload define_column(name, value_type, options={})
  *   @param options [::Hash] The name and value
