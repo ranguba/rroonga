@@ -219,7 +219,7 @@ rb_grn_table_inspect (VALUE self)
  *     If we specify +true+ or omit, a column is a persistent column.
  *   @option options :type (:scalar)
  *     This option specifies how to store a value of a column.
- *     If we omit this option, how to store is +:scalar+ .
+ *     If this option is omitted, +:scalar+ is used.
  *
  *     - +:scalar+ := Store scalar value.
  *     - +:vector+ := Store array value.
