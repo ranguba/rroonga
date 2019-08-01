@@ -205,31 +205,32 @@ rb_grn_table_inspect (VALUE self)
 }
 
 /*
- * テーブルに名前が _name_ で型が _value_type_ のカラムを定義
- * し、新しく定義されたカラムを返す。
+ * This function defines a column that name is _name_ and
+ * type is _value_type_.
+ * It returns new defined column.
  *
  * @overload define_column(name, value_type, options={})
  *   @param options [::Hash] The name and value
  *     pairs. Omitted names are initialized as the default value.
  *   @option options :path
- *     カラムを保存するパス。
- *   @option options :persistent (永続カラム)
- *     +true+ を指定すると永続カラムとなる。省略した場合は永
- *     続カラムとなる。 +:path+ を省略した場合は自動的にパスが
- *     付加される。
+ *     A path for saving column.
+ *     If we omit +:path+ , add a path automatically.
+ *   @option options :persistent (A persistent column)
+ *     If we specify +true+ or omit, a column is a persistent column.
  *   @option options :type (:scalar)
- *     カラムの値の格納方法について指定する。省略した場合は、
- *     +:scalar+ になる。
+ *     This option specifies how to store a value of a column.
+ *     If this option is omitted, +:scalar+ is used.
  *
- *     - +:scalar+ := スカラ値(単独の値)を格納する。
- *     - +:vector+ := 値の配列を格納する。
+ *     - +:scalar+ := Store scalar value.
+ *     - +:vector+ := Store array value.
  *   @option options [Boolean] :with_weight (false)
  *     It specifies whether making the column weight vector column or not.
  *     Weight vector column can store weight for each element.
  *
  *     You can't use this option for scalar column.
  *   @option options :compress
- *     値の圧縮方法を指定する。省略した場合は、圧縮しない。
+ *     This option specifies how to compress values.
+ *     If we omit this option, values are not compressed.
  *
  *     * `:zlib`: Compressed by zlib.
  *     * `:lz4`: Compressed by LZ4.
