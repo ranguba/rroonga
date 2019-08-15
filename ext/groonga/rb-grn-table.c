@@ -348,32 +348,34 @@ rb_grn_table_define_column (int argc, VALUE *argv, VALUE self)
 }
 
 /*
- * テーブルに名前が _name_ で型が _value_type_ のインデックスカ
- * ラムを定義し、新しく定義されたカラムを返す。
+ * This function defines an index column that name is _name_ and
+ * type is _value_type_.
+ * It returns new defined the column.
  *
  * @overload define_index_column(name, value_type, options={})
  *   @param options [::Hash] The name and value
  *     pairs. Omitted names are initialized as the default value.
  *   @option options :path
- *     カラムを保存するパス。
- *   @option options :persistent (永続カラム)
- *     +true+ を指定すると永続カラムとなる。省略した場合は永
- *     続カラムとなる。 +:path+ を省略した場合は自動的にパスが
- *     付加される。
+ *     A path for saving the column.
+ *   @option options :persistent (A persistent column)
+ *     If we specify +true+ or omit, a column is a persistent column.
+ *     If we omit +:path+ , add a path automatically.
  *   @option options :with_section
- *     転置索引にsection(段落情報)を合わせて格納する。
+ *     This option save invert index with section.
  *   @option options :with_weight
- *     転置索引にweight情報を合わせて格納する。
+ *     This option save invert index with weight.
  *   @option options :with_position
- *     転置索引に出現位置情報を合わせて格納する。
+ *     This option save invert index with position.
  *   @option options :size (nil)
  *     The size of index column. It must be `nil`, `:small`,
  *     `:medium` or `:large`. `nil` means full size. `:small` means small
  *     size. `:medium` means medium size. `:large` means large size.
  *   @option options :source
- *    インデックス対象となるカラムを指定する。 +:sources+ との併用はできない。
+ *    This option specify a column of target of index.
+ *    We can't use this option at the same time as +:sources+.
  *   @option options :sources
- *    インデックス対象となる複数のカラムを指定する。 +:source+ との併用はできない。
+ *    This option specify multiple columns of target of index.
+ *    We can't use this option at the same time as +:source+.
  *
  * @return [Groonga::IndexColumn]
  */
