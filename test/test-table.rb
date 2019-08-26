@@ -276,6 +276,25 @@ class TableTest < Test::Unit::TestCase
                  bookmark["created_at"].to_a)
   end
 
+  sub_test_case "#support_score?" do
+    setup
+    def setup_table
+      @table = Groonga::Hash.create(:name => "Bookmarks")
+    end
+
+    test "true" do
+       assert do
+         @table.select.support_score?
+      end
+    end
+
+    test "false" do
+      assert do
+        not @table.support_score?
+      end
+    end
+  end
+
   class DeleteTest < self
     setup
     def setup_data

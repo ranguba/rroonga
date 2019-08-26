@@ -205,10 +205,10 @@ module Groonga
       self["_score"] = new_score
     end
 
-    # {Groonga::Record#score} が利用できる場合は +true+ を
+    # {Groonga::Record#score} が利用できる場合は `true` を
     # 返す。
     def support_score?
-      @table.have_column?("_score") # TODO delegate to Table
+      @table.support_score?
     end
 
     # 主キーの値が同一であったレコードの件数を返す。検索結果とし
