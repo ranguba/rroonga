@@ -205,18 +205,19 @@ rb_grn_table_inspect (VALUE self)
 }
 
 /*
- * This function defines a column that name is _name_ and
- * type is _value_type_.
- * It returns new defined column.
+ * Defines a column that name is `name` and type is `value_type`. It
+ * returns the newly defined column.
  *
  * @overload define_column(name, value_type, options={})
  *   @param options [::Hash] The name and value
  *     pairs. Omitted names are initialized as the default value.
- *   @option options :path
- *     A path for saving column.
- *     If we omit +:path+ , add a path automatically.
- *   @option options :persistent (A persistent column)
- *     If we specify +true+ or omit, a column is a persistent column.
+ *   @option options :path [String, nil] (nil)
+ *     The path to store the content of the column.
+ *     If this is omitted, path is generated automatically.
+ *   @option options :persistent [Boolean] (true)
+ *     Whether the column is a persistent column or not.
+ *     If this is `true` and `:path` is omitted, path is generated
+ *     automatically.
  *   @option options :type (:scalar)
  *     This option specifies how to store a value of a column.
  *     If this option is omitted, +:scalar+ is used.
@@ -348,34 +349,37 @@ rb_grn_table_define_column (int argc, VALUE *argv, VALUE self)
 }
 
 /*
- * This function defines an index column that name is _name_ and
- * type is _value_type_.
- * It returns new defined the column.
+ * Defines an index column that name is `name` and type is
+ * `value_type`. It returns the newly defined index column.
  *
  * @overload define_index_column(name, value_type, options={})
  *   @param options [::Hash] The name and value
  *     pairs. Omitted names are initialized as the default value.
- *   @option options :path
- *     A path for saving the column.
- *   @option options :persistent (A persistent column)
- *     If we specify +true+ or omit, a column is a persistent column.
- *     If we omit +:path+ , add a path automatically.
- *   @option options :with_section
- *     This option save invert index with section.
- *   @option options :with_weight
- *     This option save invert index with weight.
- *   @option options :with_position
- *     This option save invert index with position.
- *   @option options :size (nil)
+ *   @option options :path [String, nil] (nil)
+ *     The path to store the content of the index column.
+ *     If this is omitted, path is generated automatically.
+ *   @option options :persistent [Boolean] (true)
+ *     Whether the index column is a persistent indent column or not.
+ *     If this is `true` and `:path` is omitted, path is generated
+ *     automatically.
+ *   @option options :with_section [Boolean] (false)
+ *     Whether section information is stored to the index column or not.
+ *   @option options :with_weight [Boolean] (false)
+ *     Whether weight information is stored to the index column or not.
+ *   @option options :with_position [Boolean] (false)
+ *     Whether position information is stored to the index column or not.
+ *   @option options :size [Symbol, nil] (nil)
  *     The size of index column. It must be `nil`, `:small`,
- *     `:medium` or `:large`. `nil` means full size. `:small` means small
- *     size. `:medium` means medium size. `:large` means large size.
- *   @option options :source
- *    This option specify a column of target of index.
- *    We can't use this option at the same time as +:sources+.
- *   @option options :sources
- *    This option specify multiple columns of target of index.
- *    We can't use this option at the same time as +:source+.
+ *     `:medium` or `:large`. `nil` means the default size.
+ *     `:small` means small size. `:medium` means medium size. Medium size
+ *     is smaller than the default size. `:large` means large size.
+ *     Large size is larger than the default size.
+ *   @option options :source [Groonga::Column, nil] (nil)
+ *     Specifies the source column of the index column.
+ *     This option can't be used with `:sources`.
+ *   @option options :sources [::Array<Groonga::Column>, nil] (nil)
+ *     Specifies the source columns of the index column.
+ *     This option can't be used with `:source`.
  *
  * @return [Groonga::IndexColumn]
  */
