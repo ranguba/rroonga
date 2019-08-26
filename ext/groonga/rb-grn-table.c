@@ -205,18 +205,19 @@ rb_grn_table_inspect (VALUE self)
 }
 
 /*
- * This function defines a column that name is _name_ and
- * type is _value_type_.
- * It returns new defined column.
+ * Defines a column that name is `name` and type is `value_type`. It
+ * returns the newly defined column.
  *
  * @overload define_column(name, value_type, options={})
  *   @param options [::Hash] The name and value
  *     pairs. Omitted names are initialized as the default value.
- *   @option options :path
- *     A path for saving column.
- *     If we omit +:path+ , add a path automatically.
- *   @option options :persistent (A persistent column)
- *     If we specify +true+ or omit, a column is a persistent column.
+ *   @option options :path [String, nil] (nil)
+ *     The path to store the content of the column.
+ *     If this is omitted, path is generated automatically.
+ *   @option options :persistent [Boolean] (true)
+ *     Whether the column is a persistent column or not.
+ *     If this is `true` and `:path` is omitted, path is generated
+ *     automatically.
  *   @option options :type (:scalar)
  *     This option specifies how to store a value of a column.
  *     If this option is omitted, +:scalar+ is used.
@@ -348,32 +349,37 @@ rb_grn_table_define_column (int argc, VALUE *argv, VALUE self)
 }
 
 /*
- * テーブルに名前が _name_ で型が _value_type_ のインデックスカ
- * ラムを定義し、新しく定義されたカラムを返す。
+ * Defines an index column that name is `name` and type is
+ * `value_type`. It returns the newly defined index column.
  *
  * @overload define_index_column(name, value_type, options={})
  *   @param options [::Hash] The name and value
  *     pairs. Omitted names are initialized as the default value.
- *   @option options :path
- *     カラムを保存するパス。
- *   @option options :persistent (永続カラム)
- *     +true+ を指定すると永続カラムとなる。省略した場合は永
- *     続カラムとなる。 +:path+ を省略した場合は自動的にパスが
- *     付加される。
- *   @option options :with_section
- *     転置索引にsection(段落情報)を合わせて格納する。
- *   @option options :with_weight
- *     転置索引にweight情報を合わせて格納する。
- *   @option options :with_position
- *     転置索引に出現位置情報を合わせて格納する。
- *   @option options :size (nil)
+ *   @option options :path [String, nil] (nil)
+ *     The path to store the content of the index column.
+ *     If this is omitted, path is generated automatically.
+ *   @option options :persistent [Boolean] (true)
+ *     Whether the index column is a persistent indent column or not.
+ *     If this is `true` and `:path` is omitted, path is generated
+ *     automatically.
+ *   @option options :with_section [Boolean] (false)
+ *     Whether section information is stored to the index column or not.
+ *   @option options :with_weight [Boolean] (false)
+ *     Whether weight information is stored to the index column or not.
+ *   @option options :with_position [Boolean] (false)
+ *     Whether position information is stored to the index column or not.
+ *   @option options :size [Symbol, nil] (nil)
  *     The size of index column. It must be `nil`, `:small`,
- *     `:medium` or `:large`. `nil` means full size. `:small` means small
- *     size. `:medium` means medium size. `:large` means large size.
- *   @option options :source
- *    インデックス対象となるカラムを指定する。 +:sources+ との併用はできない。
- *   @option options :sources
- *    インデックス対象となる複数のカラムを指定する。 +:source+ との併用はできない。
+ *     `:medium` or `:large`. `nil` means the default size.
+ *     `:small` means small size. `:medium` means medium size. Medium size
+ *     is smaller than the default size. `:large` means large size.
+ *     Large size is larger than the default size.
+ *   @option options :source [Groonga::Column, nil] (nil)
+ *     Specifies the source column of the index column.
+ *     This option can't be used with `:sources`.
+ *   @option options :sources [::Array<Groonga::Column>, nil] (nil)
+ *     Specifies the source columns of the index column.
+ *     This option can't be used with `:source`.
  *
  * @return [Groonga::IndexColumn]
  */
