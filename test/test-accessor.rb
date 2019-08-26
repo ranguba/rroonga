@@ -106,16 +106,16 @@ class AccessorTest < Test::Unit::TestCase
     end
   end
 
-  sub_test_case "#nsubrecs_accessor?" do
+  sub_test_case "#n_sub_records_accessor?" do
     test "true" do
       assert do
-        @grouped_posts.column("_nsubrecs").nsubrecs_accessor?
+        @grouped_posts.column("_nsubrecs").n_sub_records_accessor?
       end
     end
 
     test "false" do
       assert do
-        not @key.nsubrecs_accessor?
+        not @key.n_sub_records_accessor?
       end
     end
   end
