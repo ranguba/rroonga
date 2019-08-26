@@ -2075,11 +2075,15 @@ rb_grn_object_dirty_p (VALUE self)
 {
     grn_ctx *context;
     grn_obj *object;
-    bool is_dirty;
+    bool is_dirty = false;
 
     rb_grn_object_deconstruct(SELF(self), &object, &context,
                               NULL, NULL, NULL, NULL);
-    is_dirty = grn_obj_is_dirty(context, object);
+
+    if (context && object) {
+        is_dirty = grn_obj_is_dirty(context, object);
+    }
+
     return CBOOL2RVAL(is_dirty);
 }
 
@@ -2094,11 +2098,15 @@ rb_grn_object_corrupt_p (VALUE self)
 {
     grn_ctx *context;
     grn_obj *object;
-    bool is_corrupt;
+    bool is_corrupt = false;
 
     rb_grn_object_deconstruct(SELF(self), &object, &context,
                               NULL, NULL, NULL, NULL);
-    is_corrupt = grn_obj_is_corrupt(context, object);
+
+    if (context && object) {
+        is_corrupt = grn_obj_is_corrupt(context, object);
+    }
+
     return CBOOL2RVAL(is_corrupt);
 }
 
@@ -2113,11 +2121,15 @@ rb_grn_object_lexicon_p (VALUE self)
 {
     grn_ctx *context;
     grn_obj *object;
-    bool is_lexicon;
+    bool is_lexicon = false;
 
     rb_grn_object_deconstruct(SELF(self), &object, &context,
                               NULL, NULL, NULL, NULL);
-    is_lexicon = grn_obj_is_lexicon(context, object);
+
+    if (context && object) {
+        is_lexicon = grn_obj_is_lexicon(context, object);
+    }
+
     return CBOOL2RVAL(is_lexicon);
 }
 
