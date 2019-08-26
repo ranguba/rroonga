@@ -278,7 +278,6 @@ class TableTest < Test::Unit::TestCase
 
   sub_test_case "#support_score?" do
     setup
-
     def setup_table
       table_path = @tables_dir + "bookmarks"
       @table = Groonga::Hash.create(:name => "Bookmarks",
