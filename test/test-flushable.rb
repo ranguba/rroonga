@@ -18,32 +18,77 @@ class FlushableTest < Test::Unit::TestCase
 
   setup :setup_database
 
+  def normalize_query_log(log)
+    log.lines.collect do |line|
+      line.chomp.gsub(/\A.*?:\d+ /, "")
+    end
+  end
+
   def test_flush_table
     table = Groonga::Hash.create
-    assert_nothing_raised do
+    log = collect_query_log do
       table.flush
     end
+    assert_equal([
+                   "flush[(anonymous:table:hash_key)]",
+                 ],
+                 normalize_query_log(log))
   end
 
   def test_flush_column
     table = Groonga::Hash.create(:name => "Users")
     column = table.define_column("name", "ShortText")
-    assert_nothing_raised do
+    log = collect_query_log do
       column.flush
     end
+    assert_equal([
+                   "flush[Users.name]",
+                 ],
+                 normalize_query_log(log))
   end
 
   def test_flush_database
-    assert_nothing_raised do
+    table = Groonga::Hash.create(:name => "Users")
+    table.define_column("name", "ShortText")
+    log = collect_query_log do
       @database.flush
     end
+    assert_equal([
+                   "flush[Users.name]",
+                   "flush[Users]",
+                   "flush[(anonymous:table:dat_key)]",
+                   "flush[(anonymous:column:var_size)]",
+                   "flush[(anonymous:table:hash_key)]",
+                   "flush[(anonymous:column:var_size)]",
+                   "flush[(DB)]",
+                 ],
+                 normalize_query_log(log))
   end
 
   def test_flush_not_recursive
-    table = Groonga::Hash.create
-    table.extend(Groonga::Flushable)
-    assert_nothing_raised do
+    table = Groonga::Hash.create(:name => "Users")
+    table.define_column("name", "ShortText")
+    log = collect_query_log do
       table.flush(:recursive => false)
     end
+    assert_equal([
+                   "flush[Users]",
+                 ],
+                 normalize_query_log(log))
+  end
+
+  def test_flush_dependent
+    referenced_table = Groonga::Hash.create(name: "Names")
+    table = Groonga::Hash.create(:name => "Users")
+    table.define_column("name", referenced_table)
+    log = collect_query_log do
+      table.flush(:recursive => false, :dependent => true)
+    end
+    assert_equal([
+                   "flush[Names]",
+                   "flush[Users.name]",
+                   "flush[Users]",
+                 ],
+                 normalize_query_log(log))
   end
 end

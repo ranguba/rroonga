@@ -43,14 +43,19 @@ rb_grn_flushable_flush (int argc, VALUE *argv, VALUE self)
     grn_ctx *context = NULL;
     grn_obj *object = NULL;
     VALUE rb_recursive_p;
+    VALUE rb_dependent_p;
     VALUE rb_options;
 
     rb_scan_args(argc, argv, "01", &rb_options);
     rb_grn_scan_options(rb_options,
                         "recursive", &rb_recursive_p,
+                        "dependent", &rb_dependent_p,
                         NULL);
     if (NIL_P(rb_recursive_p)) {
         rb_recursive_p = Qtrue;
+    }
+    if (NIL_P(rb_dependent_p)) {
+        rb_dependent_p = Qfalse;
     }
 
     rb_grn_object_deconstruct(SELF(self), &object, &context,
@@ -63,6 +68,8 @@ rb_grn_flushable_flush (int argc, VALUE *argv, VALUE self)
 
     if (RVAL2CBOOL(rb_recursive_p)) {
         grn_obj_flush_recursive(context, object);
+    } else if (RVAL2CBOOL(rb_dependent_p)) {
+        grn_obj_flush_recursive_dependent(context, object);
     } else {
         grn_obj_flush(context, object);
     }

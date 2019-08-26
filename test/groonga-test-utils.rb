@@ -72,9 +72,11 @@ module GroongaTestUtils
 
     @log_path = @tmp_dir + "groonga.log"
     Groonga::Logger.path = @log_path.to_s
+    Groonga::Logger.reopen
 
     @query_log_path = @tmp_dir + "groonga-query.log"
     Groonga::QueryLogger.path = @query_log_path.to_s
+    Groonga::QueryLogger.reopen
   end
 
   def setup_tables_directory
@@ -107,6 +109,14 @@ module GroongaTestUtils
   def setup_logger
     Groonga::Logger.register(:max_level => :dump) do |*args|
       p args
+    end
+  end
+
+  def collect_query_log
+    @query_log_path.open do |file|
+      file.seek(0, IO::SEEK_END)
+      yield
+      file.read
     end
   end
 
