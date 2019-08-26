@@ -2486,8 +2486,8 @@ rb_grn_table_support_key_p (VALUE self)
 /*
  * @overload support_value?
  *
- *   @return @true@ if the table is created with value type, @false@
- *   otherwise.
+ *   @return [Boolean] `true` if the table is created with value type,
+ *     `false` otherwise.
  */
 static VALUE
 rb_grn_table_support_value_p (VALUE self)
@@ -2522,10 +2522,10 @@ rb_grn_table_support_sub_records_p (VALUE self)
 }
 
 /*
- * @overload support_value?
+ * @overload support_score?
  *
- *   @return @true@ if the table has _score column, @false@
- *   otherwise.
+ *   @return [Boolean] `true` if the table has `_score` column,
+ *     `false` otherwise.
  */
 static VALUE
 rb_grn_table_support_score_p (VALUE self)
