@@ -1935,8 +1935,9 @@ rb_grn_object_id_accessor_p (VALUE self)
  * Checks whether the object is an accessor for `_value` or not.
  *
  * @example `true` case: `column("_value")` is an accessor and it's an accessor for `_value`
- *   Groonga::Schema.create_table
- *     ("Users", :key_type => :short_text, :value_type => "UInt32")
+ *   Groonga::Schema.create_table("Users",
+ *                                :key_type => :short_text,
+ *                                :value_type => "UInt32")
  *   users = Groonga["Users"]
  *   users.column("_value").value_accessor? # => true
  *
