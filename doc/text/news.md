@@ -1,5 +1,35 @@
 # NEWS
 
+## 9.0.7: 2019-08-29 {#version-9-0-7}
+
+### Improvements
+
+  * {Groonga::Object#lexicon?} Added.
+
+  * {Groonga::IndexColumn} Added support "INDEX_LARGE".
+
+  * {Groonga::IndexCursor.min_enable?/min_enable=} Added.
+
+  * {Groonga::Context#match_escalation?/match_escalation=} Added.
+
+  * {Groona::Object#id_accessor?} Added.
+
+  * {Groonga::Logger.flags} Added support for thread id option.
+
+  * {Groonga::Object#bulk?} Added.
+
+  * {Groonga::Object#value_accessor?} Added.
+
+  * {Groonga::Table} Delegate support_score? from Groonga::Record to Groonga::Table.
+
+  * {Groonga::Flashable} Added support dependent option.
+
+  * {Groonga::Object#score_accessor?} Added.
+
+  * {Groonga::Object#nsubrecs_accessor? } Added.
+
+  * Translate a part of explanation of Groonga::Table into English.
+
 ## 9.0.3: 2019-05-10 {#version-9-0-3}
 
 ### Improvements
