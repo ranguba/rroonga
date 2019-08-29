@@ -446,11 +446,146 @@ msgstr "* [2. インストール - Groonga ドキュメント](http://groonga.or
 msgid "# NEWS"
 msgstr "# お知らせ"
 
-msgid "## 7.0.2: 2017-04-29 {#version-7-0-2}"
+msgid "## 9.0.7: 2019-08-29 {#version-9-0-7}"
 msgstr ""
 
 msgid "### Improvements"
 msgstr "### 改善"
+
+msgid "  * {Groonga::Object#lexicon?} Added."
+msgstr ""
+
+msgid "  * {Groonga::IndexColumn} Added support \"INDEX_LARGE\"."
+msgstr ""
+
+msgid "  * {Groonga::IndexCursor.min_enable?/min_enable=} Added."
+msgstr ""
+
+msgid "  * {Groonga::Context#match_escalation?/match_escalation=} Added."
+msgstr ""
+
+msgid "  * {Groona::Object#id_accessor?} Added."
+msgstr ""
+
+msgid "  * {Groonga::Logger.flags} Added support for thread id option."
+msgstr ""
+
+msgid "  * {Groonga::Object#bulk?} Added."
+msgstr ""
+
+msgid "  * {Groonga::Object#value_accessor?} Added."
+msgstr ""
+
+msgid ""
+"  * {Groonga::Table} Delegate support_score? from Groonga::Record to Groonga::"
+"Table."
+msgstr ""
+
+msgid "  * {Groonga::Flashable} Added support dependent option."
+msgstr ""
+
+msgid "  * {Groonga::Object#score_accessor?} Added."
+msgstr ""
+
+msgid "  * {Groonga::Object#nsubrecs_accessor? } Added."
+msgstr ""
+
+msgid "  * Translate a part of explanation of Groonga::Table into English."
+msgstr ""
+
+msgid "## 9.0.3: 2019-05-10 {#version-9-0-3}"
+msgstr ""
+
+msgid "  * Windows: Added Ruby 2.6 support."
+msgstr ""
+
+msgid "## 9.0.2: 2019-05-10 {#version-9-0-2}"
+msgstr ""
+
+msgid "  * Disable groonga-httpd by default."
+msgstr ""
+
+msgid ""
+"  * Added support for \"--with-groonga-configure-options\".\n"
+"    [GitHub#146][Reported by Tomás Pollak]"
+msgstr ""
+
+msgid ""
+"  * {Groonga::RegexpExpressionBuilder}: Added support (?-mix:XXX) for searchin"
+"g of regular expression.\n"
+"    [groonga-dev,04694][Reported by Masatoshi SEKI]"
+msgstr ""
+
+msgid "  * Use \"groonga-latest.tar.gz\" for build Groonga."
+msgstr ""
+
+msgid "  * {Groonga::Schema#create_lexicon}: Added."
+msgstr ""
+
+msgid "### Thanks"
+msgstr "### 感謝"
+
+msgid "  * Tomás Pollak"
+msgstr ""
+
+msgid "  * Masatoshi SEKI"
+msgstr ""
+
+msgid "## 7.1.1: 2018-01-30 {#version-7-1-1}"
+msgstr ""
+
+msgid "  * Added Groonga 7.1.1 support. Groonga 7.1.0 or older aren't supported."
+msgstr "  * Groonga 7.1.1をサポートしました。Groonga 7.1.0以前はサポートしません。"
+
+msgid "  * Added Apache Arrow support:"
+msgstr ""
+
+msgid "    * {Groonga::Table#load_arrow}"
+msgstr ""
+
+msgid "    * {Groonga::Table#dump_arrow}"
+msgstr ""
+
+msgid ""
+"  * Windows: Added Ruby 2.4 or later support.\n"
+"    [groonga-dev,04565][Reported by ongaeshi]"
+msgstr ""
+
+msgid "  * {Groonga::ColumnCache}: Added."
+msgstr ""
+
+msgid "  * {Groonga::Expression#parse}: Added `:no_syntax_error` option."
+msgstr ""
+
+msgid "  * {Groonga::Context#support_arrow?}: Added."
+msgstr ""
+
+msgid "  * {Groonga::Procedure#stable?}: Added."
+msgstr ""
+
+msgid "  * {Groonga::Array}: Removed queue support."
+msgstr ""
+
+msgid "  * {Groonga::QueryLogger.flags}: Added."
+msgstr ""
+
+msgid "  * {Groonga::QueryLogger.flags=}: Added."
+msgstr ""
+
+msgid "  * {Groonga::Object#corrupt?}: Added."
+msgstr ""
+
+msgid "  * {Groonga::Object#disk_usage}: Added."
+msgstr ""
+
+msgid "  * naofumi-fujii"
+msgstr ""
+
+msgid "  * ongaeshi"
+msgstr "  * おんがえしさん"
+
+msgid "## 7.0.2: 2017-04-29 {#version-7-0-2}"
+msgstr ""
 
 msgid "  * Supported Groonga 7.0.2. Groonga 7.0.1 or older aren't supported."
 msgstr ""
@@ -804,9 +939,6 @@ msgid ""
 "                                           \"35.7065,139.8069\")\n"
 "        end"
 msgstr ""
-
-msgid "### Thanks"
-msgstr "### 感謝"
 
 msgid "  * Genki Takiuchi"
 msgstr "  * Genki Takiuchiさん"
@@ -3543,6 +3675,10 @@ msgid ""
 "にテーブルが破棄される。"
 msgstr ""
 
+# @option
+msgid "tag|option|options"
+msgstr ""
+
 msgid "tag|param|options"
 msgstr ""
 
@@ -3550,10 +3686,6 @@ msgid ""
 "The name and value\n"
 "pairs. Omitted names are initialized as the default value."
 msgstr "オプションを設定するハッシュ。指定されなかったオプションはデフォルト値が使われます。"
-
-# @option
-msgid "tag|option|options"
-msgstr ""
 
 # @overload
 msgid "tag|overload|create"
@@ -3615,262 +3747,81 @@ msgid ""
 "                        :uri => \"http://d.hatena.ne.jp/tasukuchan/\")"
 msgstr ""
 
-# Groonga::Array#push
+# Groonga::ColumnCache
+msgid "This is a class for accelerating column value read."
+msgstr ""
+
+# Groonga::ColumnCache
+msgid "{Groonga::FixSizeColumn} is only supported for now."
+msgstr ""
+
+# Groonga::ColumnCache.open
 msgid ""
-"Pushes a record to the array. The record should be filled in the\n"
-"given block. The pushed record can be pulled by\n"
-"{Groonga::Array#pull}."
-msgstr ""
-
-# Groonga::Array#push
-msgid ""
-"The record that is passed to the given block may be nil. You need\n"
-"to handle the case. For example, just ignoring it or reports an\n"
-"error."
-msgstr ""
-
-# Groonga::Array#push
-msgid ""
-"If an error is occurred in the given block, the pushed record may\n"
-"not be filled completely. You should handle the case in pull side."
-msgstr ""
-
-# @yieldparam [Record]
-msgid "tag|yieldparam|record"
-msgstr ""
-
-# @example
-msgid "tag|example|A program that pushes a job without error handling"
-msgstr ""
-
-# @example A program that pushes a job without error handling
-msgid ""
-"queue = Groonga::Array.create(:name => \"CrawlURLQueue\")\n"
-"queue.define_column(\"url\", \"ShortText\")\n"
-"urls = [\"http://groonga.org/\", \"http://ranguba.org/\"]\n"
-"urls.each do |url|\n"
-"  queue.push do |record|\n"
-"    record.url = url\n"
-"  end\n"
-"end"
-msgstr ""
-
-# @example
-msgid "tag|example|A program that pulls a job without error handling"
-msgstr ""
-
-# @example A program that pulls a job without error handling
-msgid ""
-"queue = Groonga::Array.open(:name => \"CrawlURLQueue\")\n"
-"loop do\n"
-"  url = nil\n"
-"  queue.pull do |record|\n"
-"    url = record.url\n"
-"    record.delete\n"
-"  end\n"
-"  # Crawl URL\n"
-"end"
-msgstr ""
-
-# @example
-msgid "tag|example|A program that pushes a job with error handling"
-msgstr ""
-
-# @example A program that pushes a job with error handling
-msgid ""
-"queue = Groonga::Array.create(:name => \"CrawlURLQueue\")\n"
-"queue.define_column(\"url\", \"ShortText\")\n"
-"urls = [\"http://groonga.org/\", \"http://ranguba.org/\"]\n"
-"urls.each do |url|\n"
-"  queue.push do |record|\n"
-"    record.url = url if record # check record is not nil\n"
-"  end\n"
-"end"
-msgstr ""
-
-# @example
-msgid "tag|example|A program that has an error in push block"
-msgstr ""
-
-# @example A program that has an error in push block
-msgid ""
-"queue = Groonga::Array.create(:name => \"CrawlURLQueue\")\n"
-"queue.define_column(\"url\", \"ShortText\")\n"
-"urls = [\"http://groonga.org/\", \"http://ranguba.org/\"]\n"
-"urls.each do |url|\n"
-"  queue.push do |record|\n"
-"    record.url = uri # Typo! It should be ur*l* not ur*i*\n"
-"    # record.url isn't set\n"
-"  end\n"
-"end"
-msgstr ""
-
-# @example
-msgid "tag|example|A program that pulls a job with error handling"
-msgstr ""
-
-# @example A program that pulls a job with error handling
-msgid ""
-"queue = Groonga::Array.open(:name => \"CrawlURLQueue\")\n"
-"loop do\n"
-"  url = nil\n"
-"  queue.pull do |record|\n"
-"    url = record.url # record.url is nil!\n"
-"    record.delete\n"
-"  end\n"
-"  next if url.nil? # Ignore an uncompleted added job\n"
-"  # Crawl URL\n"
-"end"
+"Opens a new column cache and passes to the given block. The opened\n"
+"column cache is closed after the given block is finished."
 msgstr ""
 
 # @overload
-msgid "tag|overload|push"
+msgid "tag|overload|open"
 msgstr ""
 
-# @yield [record]
-msgid "Filles columns of a pushed record in the given block."
+# @param [Groonga::Column]
+msgid "tag|param|column"
 msgstr ""
 
-# @yieldparam [Groonga::Record or nil] record
-msgid "A pushed record. It is nil when pushing is failed."
+# @param [Groonga::Column] column
+msgid "The column to be cached."
 msgstr ""
 
-# @return [Groonga::Record or nil]
-msgid "A pushed record that is yielded."
+# @return [Object]
+msgid "The object returned by the given block."
 msgstr ""
 
-# Groonga::Array#pull
-msgid ""
-"Pulls a record from the array. The required values should be\n"
-"retrieved in the given block."
+# @yieldparam [Groonga::ColumnCache]
+msgid "tag|yieldparam|The"
 msgstr ""
 
-# Groonga::Array#pull
-msgid ""
-"If {Groonga::Array#push} failes to fill values of the pushed\n"
-"record, the pulled record may be uncompleted. It should be handled\n"
-"by your application."
-msgstr ""
-
-# Groonga::Array#pull
-msgid ""
-"If you passes @:block? => true@ option, the pull operation blocks\n"
-"until a pushed record is pushed. It is the default behavior."
-msgstr ""
-
-# Groonga::Array#pull
-msgid ""
-"If you passes @:block? => false@ option, the pull operation returns\n"
-"immediately, the given block isn't called and returns nil when no\n"
-"record exist in the array."
-msgstr ""
-
-# Groonga::Array#pull
-msgid ""
-"Note that your signal handlers can't be ran while a pull\n"
-"operation. You need to use {Groonga::Array#unblock} from\n"
-"another process to unblock the pull operation. If you call\n"
-"{Groonga::Array#unblock}, signal handler can be ran."
-msgstr ""
-
-# @example
-msgid "tag|example|A program that pulls with non-block mode"
-msgstr ""
-
-# @example A program that pulls with non-block mode
-msgid ""
-"queue = Groonga::Array.open(:name => \"CrawlURLQueue\")\n"
-"loop do\n"
-"  url = nil\n"
-"  # The case for no pushed records in the array.\n"
-"  pulled_record = queue.pull(:block? => false) do |record|\n"
-"    # This block isn't called\n"
-"    url = record.url\n"
-"    record.delete\n"
-"  end\n"
-"  p pulled_record.nil? # => true\n"
-"end"
-msgstr ""
-
-# @example
-msgid "tag|example|Signal handler isn't called"
-msgstr ""
-
-# @example Signal handler isn't called
-msgid ""
-"queue = Groonga::Array.open(:name => \"CrawlURLQueue\")\n"
-"trap(:INT) do\n"
-"  p :not_called!\n"
-"end\n"
-"queue.pull do |record|\n"
-"  # Send SIGINT while blocking the pull operation.\n"
-"  # The signal handler isn't called.\n"
-"end"
-msgstr ""
-
-# @see
-msgid "tag|see|Groonga::Array#push"
-msgstr ""
-
-# @see {Groonga::Array#push}
-msgid "Examples exist in the push documentation."
+# @yieldparam [Groonga::ColumnCache] The
+msgid "opened column cache."
 msgstr ""
 
 # @overload
-msgid "tag|overload|pull"
+msgid "tag|overload|initialize"
 msgstr ""
 
-# @param [::Hash] options
-msgid "The option parameters."
-msgstr ""
-
-# @yield [record]
-msgid "Gets required values for a pull record in the given block."
-msgstr ""
-
-# @yieldparam [Groonga::Record or nil] record
-msgid ""
-"A pulled record. It is nil when no records exist in the array\n"
-"and @block?@ parameter is not @true@."
-msgstr ""
-
-# @return [Groonga::Record or nil]
-msgid "A pulled record that is yielded."
-msgstr ""
-
-# Groonga::Array#unblock
-msgid "Unblocks all {Groonga::Array#pull} operations for the array."
-msgstr ""
-
-# @example
-msgid "tag|example|Pull, unblock and signal"
-msgstr ""
-
-# @example Pull, unblock and signal
-msgid ""
-"# pull.rb\n"
-"queue = Groonga::Array.open(:name => \"CrawlURLQueue\")\n"
-"trap(:INT) do\n"
-"  p :called!\n"
-"end\n"
-"queue.pull do |record|\n"
-"  # 1. Send SIGINT while blocking the pull operation.\n"
-"  #    The signal handler isn't called.\n"
-"  # 2. Run unblock.rb.\n"
-"  #    The signal handler is called!\n"
-"end\n"
-"\n"
-"# unblock.rb\n"
-"queue = Groonga::Array.open(:name => \"CrawlURLQueue\")\n"
-"queue.unblock"
-msgstr ""
-
-# @see
-msgid "tag|see|Groonga::Array#pull"
+# @return [Groonga::ColumnCache]
+msgid "Create a new column cache."
 msgstr ""
 
 # @overload
-msgid "tag|overload|unblock"
+msgid "tag|overload|[]"
+msgstr ""
+
+# @param [Integer, Record]
+# @param [Integer]
+msgid "tag|param|id"
+msgstr ""
+
+# @param [Integer, Groonga::Record] id
+msgid ""
+"The record ID for the\n"
+"column value."
+msgstr ""
+
+# @return [Object]
+msgid "The value for the record ID."
+msgstr ""
+
+# @overload
+msgid "tag|overload|close"
+msgstr ""
+
+# @since
+msgid "7.1.1"
+msgstr ""
+
+# @return [void]
+msgid "Close the column cache."
 msgstr ""
 
 msgid ""
@@ -3932,10 +3883,6 @@ msgid ""
 "用のスニペットを簡単に生成できる。"
 msgstr ""
 
-# @overload
-msgid "tag|overload|select"
-msgstr ""
-
 # @example
 msgid "tag|example|Shows texts around \"Groonga\""
 msgstr ""
@@ -3963,7 +3910,12 @@ msgid ""
 "# ---"
 msgstr ""
 
-msgid "検索結果"
+# @overload
+msgid "tag|overload|select"
+msgstr ""
+
+# @yieldparam [Record]
+msgid "tag|yieldparam|record"
 msgstr ""
 
 # @yieldparam [Groonga::Record] record
@@ -4020,15 +3972,18 @@ msgid ""
 "_expression_ には既に作成済みの {Groonga::Expression} を渡す。"
 msgstr ""
 
-msgid "_column_ のロックを解除する。"
+msgid "検索結果"
 msgstr ""
 
-# @overload
-msgid "tag|overload|unlock"
+msgid "_column_ のロックを解除する。"
 msgstr ""
 
 # @param [::Hash] options
 msgid "利用可能なオプションは以下の通り。"
+msgstr ""
+
+# @overload
+msgid "tag|overload|unlock"
 msgstr ""
 
 # Groonga::Column#lock
@@ -4037,11 +3992,11 @@ msgid ""
 "{Groonga::ResourceDeadlockAvoided} 例外が発生する。"
 msgstr ""
 
-msgid "ブロックを指定した場合はブロックを抜けたときにunlockする。"
-msgstr ""
-
 # @overload
 msgid "tag|overload|lock"
+msgstr ""
+
+msgid "ブロックを指定した場合はブロックを抜けたときにunlockする。"
 msgstr ""
 
 # Groonga::Column#clear_lock
@@ -4069,11 +4024,11 @@ msgid ""
 "そうでない場合は +false+ を返す。"
 msgstr ""
 
-msgid "1.0.5"
-msgstr ""
-
 # @overload
 msgid "tag|overload|reference?"
+msgstr ""
+
+msgid "1.0.5"
 msgstr ""
 
 # Groonga::Column#truncate
@@ -4198,19 +4153,19 @@ msgstr ""
 msgid "Renames the column to name."
 msgstr ""
 
-# @param [String or Symbol]
-msgid "tag|param|name"
-msgstr ""
-
-msgid "1.3.0"
-msgstr ""
-
 # @overload
 msgid "tag|overload|rename"
 msgstr ""
 
+# @param [String or Symbol]
+msgid "tag|param|name"
+msgstr ""
+
 # @param [String] name
 msgid "the new name"
+msgstr ""
+
+msgid "1.3.0"
 msgstr ""
 
 # Groonga::Conf
@@ -4225,10 +4180,6 @@ msgstr ""
 
 # @since
 msgid "5.0.9"
-msgstr ""
-
-# @overload
-msgid "tag|overload|initialize"
 msgstr ""
 
 # @param [Groonga::Context, nil]
@@ -4413,10 +4364,6 @@ msgid ""
 "anymore."
 msgstr "コンテキストを閉じる。閉じられたコンテキストは使用できなくなる。"
 
-# @overload
-msgid "tag|overload|close"
-msgstr ""
-
 msgid "Returns whether the _context_ is closed by #close or not."
 msgstr "コンテキストが#closeによって閉じられているかどうかを返す。"
 
@@ -4458,6 +4405,14 @@ msgid "the encoding used by the context"
 msgstr ""
 
 msgid "2.0.5"
+msgstr ""
+
+# @overload
+msgid "tag|overload|force_match_escalation?"
+msgstr ""
+
+# @overload
+msgid "tag|overload|force_match_escalation="
 msgstr ""
 
 # Groonga::Context#match_escalation_threshold
@@ -4521,14 +4476,24 @@ msgstr ""
 msgid "tag|overload|support_lz4?"
 msgstr ""
 
-# Groonga::Context#support_zstd?
+# @overload
+msgid "tag|overload|support_zstd?"
+msgstr ""
+
+# @return [Boolean]
 msgid ""
-"If Groonga supports Zstandard compression, it returns `true`,\n"
-"otherwise it returns `false`."
+"`true` if Groonga supports Zstandard compression,\n"
+"`false` otherwise."
 msgstr ""
 
 # @overload
-msgid "tag|overload|support_zstd?"
+msgid "tag|overload|support_arrow?"
+msgstr ""
+
+# @return [Boolean]
+msgid ""
+"`true` if Groonga supports Apache Arrow,\n"
+"`false` otherwise."
 msgstr ""
 
 msgid "コンテキストが使うデータベースを返す。"
@@ -4552,19 +4517,19 @@ msgstr ""
 msgid "groongaサーバにクエリ文字列を送信する。"
 msgstr ""
 
-# @param [String]
-msgid "tag|param|string"
-msgstr ""
-
-msgid "ID"
-msgstr ""
-
 # @overload
 msgid "tag|overload|send"
 msgstr ""
 
+# @param [String]
+msgid "tag|param|string"
+msgstr ""
+
 # @param [String] string
 msgid "クエリ文字列"
+msgstr ""
+
+msgid "ID"
 msgstr ""
 
 msgid "groongaサーバからクエリ実行結果文字列を受信する。"
@@ -4590,17 +4555,8 @@ msgid ""
 "トを検索する。"
 msgstr ""
 
-# @overload
-msgid "tag|overload|[]"
-msgstr ""
-
 # Groonga::Context#opened?
 msgid "Checks whether object with the ID is opened or not."
-msgstr ""
-
-# @param [Integer, Record]
-# @param [Integer]
-msgid "tag|param|id"
 msgstr ""
 
 # @overload
@@ -4629,12 +4585,12 @@ msgid ""
 "column. Results are stored into the column."
 msgstr ""
 
-# @param [::Hash] options
-msgid "The name and value pairs."
-msgstr ""
-
 # @since
 msgid "6.0.4"
+msgstr ""
+
+# @param [::Hash] options
+msgid "The name and value pairs."
 msgstr ""
 
 # @example
@@ -4806,10 +4762,6 @@ msgid ""
 "る。 _options_ にはハッシュでオプションを指定する。"
 msgstr ""
 
-# @overload
-msgid "tag|overload|open"
-msgstr ""
-
 msgid "データベース内のオブジェクトを順番にブロックに渡す。"
 msgstr ""
 
@@ -4874,12 +4826,12 @@ msgstr "データベースの可変長カラムをすべてデフラグする。
 msgid "tag|overload|defrag"
 msgstr ""
 
-msgid "the number of defraged segments"
-msgstr "デフラグされたセグメントの数"
-
 # @param [::Hash] options
 msgid "option for defrag"
 msgstr ""
+
+msgid "the number of defraged segments"
+msgstr "デフラグされたセグメントの数"
 
 msgid "1.2.6"
 msgstr ""
@@ -4961,22 +4913,6 @@ msgid ""
 "target index column."
 msgstr ""
 
-# @overload
-msgid "tag|overload|reindex"
-msgstr ""
-
-# @see
-msgid "tag|see|Groonga::FixSizeColumn#reindex"
-msgstr ""
-
-# @see
-msgid "tag|see|Groonga::VariableSizeColumn#reindex"
-msgstr ""
-
-# @see
-msgid "tag|see|Groonga::IndexColumn#reindex"
-msgstr ""
-
 # @since
 msgid "5.1.1"
 msgstr ""
@@ -5022,8 +4958,24 @@ msgid ""
 "#   Groonga[\"MeCabTerms.Memos_content\"].reindex"
 msgstr ""
 
+# @overload
+msgid "tag|overload|reindex"
+msgstr ""
+
 # @see
 msgid "tag|see|Groonga::TableKeySupport#reindex"
+msgstr ""
+
+# @see
+msgid "tag|see|Groonga::FixSizeColumn#reindex"
+msgstr ""
+
+# @see
+msgid "tag|see|Groonga::VariableSizeColumn#reindex"
+msgstr ""
+
+# @see
+msgid "tag|see|Groonga::IndexColumn#reindex"
 msgstr ""
 
 # Groonga::Database#remove_force
@@ -6234,8 +6186,28 @@ msgid ""
 "+:result+ にテーブルを指定した場合は、そのテーブルが返る。"
 msgstr ""
 
-# Groonga::ID
-msgid "This module provides Groonga ID related features."
+# @overload
+msgid "tag|overload|builtin?"
+msgstr ""
+
+# @param [Integer] id
+msgid "The ID to be confirmed."
+msgstr ""
+
+# @return [Boolean]
+msgid "`true` if the `id` is builtin, `false` otherwise."
+msgstr ""
+
+# @since
+msgid "6.0.5"
+msgstr ""
+
+# @overload
+msgid "tag|overload|builtin_type?"
+msgstr ""
+
+# @return [Boolean]
+msgid "`true` if the `id` is builtin_type, `false` otherwise."
 msgstr ""
 
 msgid ""
@@ -6507,10 +6479,6 @@ msgstr ""
 msgid "tag|overload|source="
 msgstr ""
 
-# @param [Groonga::Column]
-msgid "tag|param|column"
-msgstr ""
-
 # @param [Groonga::Column] column
 msgid "インデックス対象とするカラム"
 msgstr ""
@@ -6570,6 +6538,24 @@ msgstr ""
 msgid ""
 "`true` if the index column is medium,\n"
 "`false` otherwise."
+msgstr ""
+
+# Groonga::IndexColumn#large?
+msgid "Checks whether the index column is large or not."
+msgstr ""
+
+# @overload
+msgid "tag|overload|large?"
+msgstr ""
+
+# @return [Boolean]
+msgid ""
+"`true` if the index column size is large,\n"
+"`false` otherwise."
+msgstr ""
+
+# @since
+msgid "9.0.4"
 msgstr ""
 
 # Groonga::IndexColumn#open_cursor
@@ -7192,8 +7178,16 @@ msgid ""
 "otherwise."
 msgstr ""
 
-# Groonga::Name
-msgid "This module provides object name related features."
+# @overload
+msgid "tag|overload|column?"
+msgstr ""
+
+# @param [String] name
+msgid "The name to be confirmed."
+msgstr ""
+
+# @return [Boolean]
+msgid "`true` if the `name` is column, `false` otherwise."
 msgstr ""
 
 msgid "It normalizes string."
@@ -7415,16 +7409,8 @@ msgstr ""
 msgid "Checks whether the object is column or not."
 msgstr ""
 
-# @overload
-msgid "tag|overload|column?"
-msgstr ""
-
 # @return [Boolean]
 msgid "`true` if the object is column, `false` otherwise."
-msgstr ""
-
-# @since
-msgid "6.0.5"
 msgstr ""
 
 # Groonga::Object#reference_column?
@@ -7548,7 +7534,7 @@ msgid ""
 msgstr ""
 
 # Groonga::Object#key_accessor?
-msgid "Checks whether the object is key accessor or not."
+msgid "Checks whether the object is an accessor for `_key` or not."
 msgstr ""
 
 # @example
@@ -7587,6 +7573,169 @@ msgid ""
 "`false` otherwise."
 msgstr ""
 
+# Groonga::Object#id_accessor?
+msgid "Checks whether the object is an accessor for `_id` or not."
+msgstr ""
+
+# @example
+msgid ""
+"tag|example|`true` case: `column(\"_id\")` is an accessor and it's an accessor f"
+"or `_id`"
+msgstr ""
+
+# @example `true` case: `column("_id")` is an accessor and it's an accessor for `_id`
+msgid ""
+"Groonga::Schema.create_table(\"Users\", :key_type => :short_text)\n"
+"users = Groonga[\"Users\"]\n"
+"users.column(\"_id\").id_accessor? # => true"
+msgstr ""
+
+# @example
+msgid ""
+"tag|example|`false` case: `column(\"_key\")` is an accessor but it's not an acce"
+"ssor for `_id`"
+msgstr ""
+
+# @example `false` case: `column("_key")` is an accessor but it's not an accessor for `_id`
+msgid ""
+"Groonga::Schema.create_table(\"Users\", :key_type => :short_text)\n"
+"users = Groonga[\"Users\"]\n"
+"users.column(\"_key\").id_accessor? # => false"
+msgstr ""
+
+# @overload
+msgid "tag|overload|id_accessor?"
+msgstr ""
+
+# @return [Boolean]
+msgid ""
+"`true` if the object is an accessor for `_id`,\n"
+"`false` otherwise."
+msgstr ""
+
+# Groonga::Object#value_accessor?
+msgid "Checks whether the object is an accessor for `_value` or not."
+msgstr ""
+
+# @example
+msgid ""
+"tag|example|`true` case: `column(\"_value\")` is an accessor and it's an accesso"
+"r for `_value`"
+msgstr ""
+
+# @example `true` case: `column("_value")` is an accessor and it's an accessor for `_value`
+msgid ""
+"Groonga::Schema.create_table(\"Users\",\n"
+"                             :key_type => :short_text,\n"
+"                             :value_type => \"UInt32\")\n"
+"users = Groonga[\"Users\"]\n"
+"users.column(\"_value\").value_accessor? # => true"
+msgstr ""
+
+# @example
+msgid ""
+"tag|example|`false` case: `column(\"_key\")` is an accessor but it's not an acce"
+"ssor for `_value`"
+msgstr ""
+
+# @example `false` case: `column("_key")` is an accessor but it's not an accessor for `_value`
+msgid ""
+"Groonga::Schema.create_table(\"Users\", :key_type => :short_text)\n"
+"users = Groonga[\"Users\"]\n"
+"users.column(\"_key\").value_accessor? # => false"
+msgstr ""
+
+# @overload
+msgid "tag|overload|value_accessor?"
+msgstr ""
+
+# @return [Boolean]
+msgid ""
+"`true` if the object is an accessor for `_value`,\n"
+"`false` otherwise."
+msgstr ""
+
+# Groonga::Object#score_accessor?
+msgid "Checks whether the object is an accessor for `_socre` or not."
+msgstr ""
+
+# @example
+msgid ""
+"tag|example|`true` case: `column(\"_score\")` is an accessor and it's an accesso"
+"r for `_score`"
+msgstr ""
+
+# @example `true` case: `column("_score")` is an accessor and it's an accessor for `_score`
+msgid ""
+"Groonga::Schema.create_table(\"Users\", :key_type => :short_text)\n"
+"users = Groonga[\"Users\"]\n"
+"users.select.column(\"_score\").socre_accessor? # => true"
+msgstr ""
+
+# @example
+msgid ""
+"tag|example|`false` case: `column(\"_key\")` is an accessor but it's not an acce"
+"ssor for `_score`"
+msgstr ""
+
+# @example `false` case: `column("_key")` is an accessor but it's not an accessor for `_score`
+msgid ""
+"Groonga::Schema.create_table(\"Users\", :key_type => :short_text)\n"
+"users = Groonga[\"Users\"]\n"
+"users.column(\"_key\").score_accessor? # => false"
+msgstr ""
+
+# @overload
+msgid "tag|overload|score_accessor?"
+msgstr ""
+
+# @return [Boolean]
+msgid ""
+"`true` if the object is an accessor for `_score`,\n"
+"`false` otherwise."
+msgstr ""
+
+# Groonga::Object#n_sub_records_accessor?
+msgid "Checks whether the object is an accessor for `_nsubrecs` or not."
+msgstr ""
+
+# @example
+msgid ""
+"tag|example|`true` case: `column(\"_nsubrecs\")` is an accessor and it's an acce"
+"ssor for `_nsubrecs`"
+msgstr ""
+
+# @example `true` case: `column("_nsubrecs")` is an accessor and it's an accessor for `_nsubrecs`
+msgid ""
+"users = Groonga::Hash.create(:name => \"Users\",\n"
+"                             :key_type => \"ShortText\")\n"
+"grouped_users = users.group(\"_key\")\n"
+"grouped_users.column(\"_nsubrecs\").n_sub_records_accessor? # => true"
+msgstr ""
+
+# @example
+msgid ""
+"tag|example|`false` case: `column(\"_key\")` is an accessor but it's not an acce"
+"ssor for `_nsubrecs`"
+msgstr ""
+
+# @example `false` case: `column("_key")` is an accessor but it's not an accessor for `_nsubrecs`
+msgid ""
+"Groonga::Schema.create_table(\"Users\", :key_type => :short_text)\n"
+"users = Groonga[\"Users\"]\n"
+"users.column(\"_key\").n_sub_records_accessor? # => false"
+msgstr ""
+
+# @overload
+msgid "tag|overload|n_sub_records_accessor?"
+msgstr ""
+
+# @return [Boolean]
+msgid ""
+"`true` if the object is an accessor for `_nsubrecs`,\n"
+"`false` otherwise."
+msgstr ""
+
 # Groonga::Object#touch
 msgid ""
 "Update the last modified time of the `object`. It's meaningful only\n"
@@ -7617,6 +7766,38 @@ msgstr ""
 
 # @return [Boolean]
 msgid "`true` if the object isn't flushed after the last change."
+msgstr ""
+
+# @overload
+msgid "tag|overload|corrupt?"
+msgstr ""
+
+# @return [Boolean]
+msgid "`true` if the object is corrupt, `false` otherwise."
+msgstr ""
+
+# @overload
+msgid "tag|overload|lexicon?"
+msgstr ""
+
+# @return [Boolean]
+msgid "`true` if the object is lexicon, `false` otherwise."
+msgstr ""
+
+# @overload
+msgid "tag|overload|bulk?"
+msgstr ""
+
+# @return [Boolean]
+msgid "`true` if the object is bulk, `false` otherwise."
+msgstr ""
+
+# @overload
+msgid "tag|overload|disk_usage"
+msgstr ""
+
+# @return [Integer]
+msgid "The number of bytes used by this object in disk."
 msgstr ""
 
 msgid "backward compatibility."
@@ -8084,9 +8265,32 @@ msgstr ""
 
 # @param [Integer] size
 msgid ""
-"The log path for the default query logger.\n"
-"If nil is specified, log rotate by the default query logger is\n"
-"disabled."
+"The rotate threshold size for the default\n"
+"query logger. If `nil` is specified, log rotate by the default\n"
+"query logger is disabled."
+msgstr ""
+
+# @return
+msgid "`size` itself."
+msgstr ""
+
+# Groonga::QueryLogger.flags
+msgid "Gets the current flags that are used by the default query logger."
+msgstr ""
+
+# @return [Integer]
+msgid "The current flags"
+msgstr ""
+
+# Groonga::QueryLogger.flags=
+msgid ""
+"Sets the flags that are used by the default query logger. If you're\n"
+"using custom query logger by {.register}, the flags aren't\n"
+"used. Because it is for the default query logger."
+msgstr ""
+
+# @param [Integer] flags
+msgid "The flags for the default query logger."
 msgstr ""
 
 # Groonga::RegexpOperator#exec
@@ -8763,20 +8967,25 @@ msgstr ""
 "から {Groonga::Array} , {Groonga::Hash} , {Groonga::PatriciaTrie}\n"
 "が継承されている。"
 
-msgid "テーブルの中身を人に見やすい文字列で返す。"
+# Groonga::Table#inspect
+msgid ""
+"This function return contents of a table as a string.\n"
+"It's easy to understand for human."
 msgstr ""
 
+# Groonga::Table#define_column
 msgid ""
-"テーブルに名前が _name_ で型が _value_type_ のカラムを定義\n"
-"し、新しく定義されたカラムを返す。"
+"Defines a column that name is `name` and type is `value_type`. It\n"
+"returns the newly defined column."
 msgstr ""
 
 msgid "tag|overload|define_column"
 msgstr ""
 
+# Groonga::Table#define_index_column
 msgid ""
-"テーブルに名前が _name_ で型が _value_type_ のインデックスカ\n"
-"ラムを定義し、新しく定義されたカラムを返す。"
+"Defines an index column that name is `name` and type is\n"
+"`value_type`. It returns the newly defined index column."
 msgstr ""
 
 msgid "tag|overload|define_index_column"
@@ -8925,6 +9134,25 @@ msgid ""
 "=:"
 msgstr ""
 
+# @example
+msgid "tag|example|Describe incompatible API change"
+msgstr ""
+
+# @example Describe incompatible API change
+msgid ""
+"result_since_2_1_0 = table.sort([\"sort_key\"])\n"
+"result_before_2_1_0 = result_since_2_1_0.collect do |record|\n"
+"  record.value\n"
+"end"
+msgstr ""
+
+# @note
+msgid ""
+"The return value is changed to {Groonga::Array} from\n"
+"{::Array} since 2.1.0. If you want to get before 2.1.0 style\n"
+"result, use the following code:"
+msgstr ""
+
 # @overload
 msgid "tag|overload|sort"
 msgstr ""
@@ -8949,25 +9177,6 @@ msgid ""
 "\n"
 "If you want to access the key of the original record, you need to\n"
 "get the original record."
-msgstr ""
-
-# @note
-msgid ""
-"The return value is changed to {Groonga::Array} from\n"
-"{::Array} since 2.1.0. If you want to get before 2.1.0 style\n"
-"result, use the following code:"
-msgstr ""
-
-# @example
-msgid "tag|example|Describe incompatible API change"
-msgstr ""
-
-# @example Describe incompatible API change
-msgid ""
-"result_since_2_1_0 = table.sort([\"sort_key\"])\n"
-"result_before_2_1_0 = result_since_2_1_0.collect do |record|\n"
-"  record.value\n"
-"end"
 msgstr ""
 
 # Groonga::Table#geo_sort
@@ -9110,14 +9319,6 @@ msgstr ""
 msgid "The new value."
 msgstr ""
 
-# @note
-msgid ""
-"To use weight, there are two requirements. They are using vector\n"
-"column and using index column with weight support. Weight supported\n"
-"index column can be created with @:with_weight => true@ option.\n"
-"See {#define_index_column}."
-msgstr ""
-
 # @example
 msgid "tag|example|Sets vector value with weight"
 msgstr ""
@@ -9177,6 +9378,14 @@ msgid ""
 "  record.tags =~ \"fulltext search\"\n"
 "end\n"
 "p records.collect(&:score) # => [1] (1 + 0 weight)"
+msgstr ""
+
+# @note
+msgid ""
+"To use weight, there are two requirements. They are using vector\n"
+"column and using index column with weight support. Weight supported\n"
+"index column can be created with @:with_weight => true@ option.\n"
+"See {#define_index_column}."
 msgstr ""
 
 # @param [::Array<::Hash{:value => ::Object, :weight => Integer}, ::Object>]
@@ -9442,12 +9651,10 @@ msgstr ""
 msgid "tag|overload|support_value?"
 msgstr ""
 
-# @return
-msgid "@true@ if the table is created with value type, @false@"
-msgstr ""
-
-# Groonga::Table#support_value?
-msgid "otherwise."
+# @return [Boolean]
+msgid ""
+"`true` if the table is created with value type,\n"
+"`false` otherwise."
 msgstr ""
 
 msgid ""
@@ -9457,6 +9664,16 @@ msgid ""
 msgstr ""
 
 msgid "tag|overload|support_sub_records?"
+msgstr ""
+
+# @overload
+msgid "tag|overload|support_score?"
+msgstr ""
+
+# @return [Boolean]
+msgid ""
+"`true` if the table has `_score` column,\n"
+"`false` otherwise."
 msgstr ""
 
 # Groonga::Table#have_n_sub_records_space?
@@ -9527,8 +9744,100 @@ msgstr "テーブル内の全ての可変長カラムをデフラグします。
 msgid "Renames the table to name."
 msgstr ""
 
-# Groonga::Thread
-msgid "It's a namespace for thread related features."
+# @overload
+msgid "tag|overload|load_arrow"
+msgstr ""
+
+# @param [String, #to_path] path
+msgid ""
+"the path of file in Apache Arrow\n"
+"file format."
+msgstr ""
+
+# @since
+msgid "7.0.3"
+msgstr ""
+
+# Groonga::Table#load_arrow
+msgid "Loads records from Apache Arrow file format file."
+msgstr ""
+
+# @overload
+msgid "tag|overload|dump_arrow"
+msgstr ""
+
+# @param [String, #to_path] path
+msgid "the output file path."
+msgstr ""
+
+# @param [::Hash] options
+msgid "the options."
+msgstr ""
+
+# Groonga::Table#dump_arrow
+msgid "Dump records to file in Apache Arrow file format."
+msgstr ""
+
+# @overload
+msgid "tag|overload|limit"
+msgstr ""
+
+# @return [Integer]
+msgid ""
+"the max number of threads. `0` means that\n"
+"thread isn't supported."
+msgstr ""
+
+# @overload
+msgid "tag|overload|limit="
+msgstr ""
+
+# @param [Integer]
+msgid "tag|param|new_limit"
+msgstr ""
+
+# @param [Integer] new_limit
+msgid "The new max number of threads."
+msgstr ""
+
+# Groonga::Thread.limit=
+msgid "Sets the max number of threads."
+msgstr ""
+
+# @overload
+msgid "tag|overload|limit_getter="
+msgstr ""
+
+# @param [#call]
+msgid "tag|param|getter"
+msgstr ""
+
+# @param [#call] getter
+msgid ""
+"Callable object that returns the max number\n"
+"of threads."
+msgstr ""
+
+# Groonga::Thread.limit_getter=
+msgid "Sets a callable object that returns the max number of threads."
+msgstr ""
+
+# @overload
+msgid "tag|overload|limit_setter="
+msgstr ""
+
+# @param [#call]
+msgid "tag|param|setter"
+msgstr ""
+
+# @param [#call] setter
+msgid ""
+"Callable object that sets the max number\n"
+"of threads."
+msgstr ""
+
+# Groonga::Thread.limit_setter=
+msgid "Sets a callable object that sets the max number of threads."
 msgstr ""
 
 msgid ""
@@ -9887,12 +10196,24 @@ msgstr ""
 msgid "変数の値を _value_ に設定する。"
 msgstr ""
 
-# Groonga::WindowsEventLogger
-msgid "It's a module for using Windows Event Log as log output."
+# @param [String]
+msgid "tag|param|event_source_name"
+msgstr ""
+
+# @param [String] event_source_name
+msgid "The event source name."
+msgstr ""
+
+# Groonga::WindowsEventLogger.register
+msgid ""
+"Registers Windows Event Log based logger that uses\n"
+"`event_source_name` as event source name."
 msgstr ""
 
 # Groonga
-msgid "Copyright (C) 2013  Kouhei Sutou <kou@clear-code.com>"
+msgid ""
+"Copyright (C) 2015  Masafumi Yokoyama <yokoyama@clear-code.com>\n"
+"Copyright (C) 2009-2016  Kouhei Sutou <kou@clear-code.com>"
 msgstr ""
 
 msgid ""
@@ -10029,6 +10350,10 @@ msgstr ""
 msgid "便利メソッド。Groonga::Context.default[name]と同じ。"
 msgstr ""
 
+# @deprecated
+msgid "since 6.0.0. Use {Groonga::Column#find_indexes} instead."
+msgstr ""
+
 # @param [Groonga::Operator::XXX]
 msgid "tag|param|operator"
 msgstr ""
@@ -10044,10 +10369,6 @@ msgid ""
 msgstr ""
 
 msgid "1.0.9"
-msgstr ""
-
-# @deprecated
-msgid "since 6.0.0. Use {Groonga::Column#find_indexes} instead."
 msgstr ""
 
 msgid ""
@@ -10066,16 +10387,31 @@ msgstr ""
 msgid "tag|overload|create_database"
 msgstr ""
 
-# @return [Groonga::Database]
-msgid "A new temporary database."
-msgstr ""
-
 # @example
 msgid "tag|example|Creating a new temporary database"
 msgstr ""
 
 # @example Creating a new temporary database
 msgid "temporary_database = context.create_database"
+msgstr ""
+
+# @return [Groonga::Database]
+msgid "A new temporary database."
+msgstr ""
+
+# @example
+msgid "tag|example|Creating a new temporary database with block"
+msgstr ""
+
+# @example Creating a new temporary database with block
+msgid ""
+"context.create_database do |temporary_database|\n"
+"  # ...\n"
+"end"
+msgstr ""
+
+# @return
+msgid "Returned value from the block."
 msgstr ""
 
 # @yield [database]
@@ -10097,19 +10433,12 @@ msgid ""
 "returned value from this method."
 msgstr ""
 
-# @return
-msgid "Returned value from the block."
-msgstr ""
-
 # @example
-msgid "tag|example|Creating a new temporary database with block"
+msgid "tag|example|Creating a new persistent database to _\"/tmp/db.groonga\"_"
 msgstr ""
 
-# @example Creating a new temporary database with block
-msgid ""
-"context.create_database do |temporary_database|\n"
-"  # ...\n"
-"end"
+# @example Creating a new persistent database to _"/tmp/db.groonga"_
+msgid "database = context.create_database(\"/tmp/db.groonga\")"
 msgstr ""
 
 # @param [String] path
@@ -10125,11 +10454,16 @@ msgid ""
 msgstr ""
 
 # @example
-msgid "tag|example|Creating a new persistent database to _\"/tmp/db.groonga\"_"
+msgid ""
+"tag|example|Creating a new persistent database to _\"/tmp/db.groonga\"_ database"
+" with block"
 msgstr ""
 
-# @example Creating a new persistent database to _"/tmp/db.groonga"_
-msgid "database = context.create_database(\"/tmp/db.groonga\")"
+# @example Creating a new persistent database to _"/tmp/db.groonga"_ database with block
+msgid ""
+"context.create_database(\"/tmp/db.groonga\") do |persistent_database|\n"
+"  # ...\n"
+"end"
 msgstr ""
 
 # @yield [database]
@@ -10143,19 +10477,6 @@ msgstr ""
 msgid ""
 "A newly created\n"
 "persistent database for the context."
-msgstr ""
-
-# @example
-msgid ""
-"tag|example|Creating a new persistent database to _\"/tmp/db.groonga\"_ database"
-" with block"
-msgstr ""
-
-# @example Creating a new persistent database to _"/tmp/db.groonga"_ database with block
-msgid ""
-"context.create_database(\"/tmp/db.groonga\") do |persistent_database|\n"
-"  # ...\n"
-"end"
 msgstr ""
 
 # Groonga::Context#create_database
@@ -10428,6 +10749,10 @@ msgstr ""
 msgid "tag|overload|push_memory_pool"
 msgstr ""
 
+# @return [Object]
+msgid "The value returned by the block."
+msgstr ""
+
 # @yield
 msgid ""
 "[]\n"
@@ -10439,10 +10764,6 @@ msgstr ""
 msgid ""
 "It is the return value of this\n"
 "method call."
-msgstr ""
-
-# @return [Object]
-msgid "The value returned by the block."
 msgstr ""
 
 # @since
@@ -10473,14 +10794,14 @@ msgstr ""
 msgid "private"
 msgstr ""
 
+# @deprecated
+msgid "since 5.1.1. Use {Groonga::Context#config} instead."
+msgstr ""
+
 # @return [Groonga::Conf]
 msgid ""
 "The database level configuration sets of\n"
 "this context."
-msgstr ""
-
-# @deprecated
-msgid "since 5.1.1. Use {Groonga::Context#config} instead."
 msgstr ""
 
 # @return [CommandExecutor]
@@ -11192,10 +11513,10 @@ msgstr ""
 msgid "Updates all values."
 msgstr ""
 
-msgid "tag|param|parameters"
+msgid "tag|option|parameters"
 msgstr ""
 
-msgid "tag|option|parameters"
+msgid "tag|param|parameters"
 msgstr ""
 
 msgid "1.2.1"
@@ -11276,6 +11597,14 @@ msgstr ""
 msgid "Sets column value of the record."
 msgstr ""
 
+# @example
+msgid "tag|example|Set a new value"
+msgstr ""
+
+# @example Set a new value
+msgid "user[\"age\"] = 29"
+msgstr ""
+
 # @param [String]
 msgid "tag|param|column_name"
 msgstr ""
@@ -11289,11 +11618,15 @@ msgid "The column value. Weight of the value is 0."
 msgstr ""
 
 # @example
-msgid "tag|example|Set a new value"
+msgid "tag|example|Set a new value with weight \"2\""
 msgstr ""
 
-# @example Set a new value
-msgid "user[\"age\"] = 29"
+# @example Set a new value with weight "2"
+msgid "user[\"tags\"] = [{:value => \"groonga\", :weight => 2}]"
+msgstr ""
+
+# @option
+msgid "tag|option|value_with_weight"
 msgstr ""
 
 # @param [::Hash]
@@ -11302,18 +11635,6 @@ msgstr ""
 
 # @param [::Hash] value_with_weight
 msgid "The column value with weight."
-msgstr ""
-
-# @option
-msgid "tag|option|value_with_weight"
-msgstr ""
-
-# @example
-msgid "tag|example|Set a new value with weight \"2\""
-msgstr ""
-
-# @example Set a new value with weight "2"
-msgid "user[\"tags\"] = [{:value => \"groonga\", :weight => 2}]"
 msgstr ""
 
 # @see
@@ -11409,7 +11730,7 @@ msgstr ""
 
 # Groonga::Record#support_score?
 msgid ""
-"{Groonga::Record#score} が利用できる場合は +true+ を\n"
+"{Groonga::Record#score} が利用できる場合は `true` を\n"
 "返す。"
 msgstr ""
 
@@ -12313,18 +12634,6 @@ msgid "Sets the attribute target_columns"
 msgstr ""
 
 msgid "a new instance of IndexColumnDefinition"
-msgstr ""
-
-# Groonga::StatisticMeasurer
-msgid "Measures statistic."
-msgstr ""
-
-# @param [String, nil] path
-msgid "Measures disk usage of the path."
-msgstr ""
-
-# @return [Integer]
-msgid "0 if path is @nil@, disk usage of the path otherwise."
 msgstr ""
 
 # Groonga::SubRecords
