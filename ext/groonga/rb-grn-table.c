@@ -525,8 +525,8 @@ ruby_object_to_column_name (VALUE rb_name,
 }
 
 /*
- * テーブルの _name_ に対応するカラムを返す。カラムが存在しな
- * い場合は +nil+ を返す。
+ * It returns the column has a specified name.
+ * If the specified column does not exist, it returns `nil`.
  *
  * @overload column(name)
  *   @return [Groonga::Column, nil]
