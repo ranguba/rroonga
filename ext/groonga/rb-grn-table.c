@@ -525,7 +525,7 @@ ruby_object_to_column_name (VALUE rb_name,
 }
 
 /*
- * It returns the column has a specified name.
+ * It returns the column has the specified name.
  * If the specified column does not exist, it returns `nil`.
  *
  * @overload column(name)
