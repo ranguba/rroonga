@@ -606,11 +606,12 @@ rb_grn_table_get_column_surely (VALUE self, VALUE rb_name)
 }
 
 /*
- * テーブルの全てのカラムを返す。 _name_ が指定された場合はカ
- * ラム名の先頭が _name_ で始まるカラムを返す。
+ * It returns all columns in table.
+ * If we specify `name`, it returns the column that column
+ * name starts from `name`.
  *
  * @overload columns(name=nil)
- *   @return [Groonga::Columnの配列]
+ *   @return [Array of Groonga::Column]
  */
 static VALUE
 rb_grn_table_get_columns (int argc, VALUE *argv, VALUE self)
