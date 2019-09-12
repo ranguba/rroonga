@@ -611,7 +611,7 @@ rb_grn_table_get_column_surely (VALUE self, VALUE rb_name)
  * name starts from `name`.
  *
  * @overload columns(name=nil)
- *   @return [Array of Groonga::Column]
+ *   @return [::Array<Groonga::Column>]
  */
 static VALUE
 rb_grn_table_get_columns (int argc, VALUE *argv, VALUE self)
