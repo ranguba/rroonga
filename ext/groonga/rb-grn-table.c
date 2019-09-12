@@ -607,8 +607,8 @@ rb_grn_table_get_column_surely (VALUE self, VALUE rb_name)
 
 /*
  * It returns all columns in table.
- * If we specify `name`, it returns the column that column
- * name starts from `name`.
+ * If we specify `prefix`, it returns the column
+ * which has name starts with `prefix`.
  *
  * @overload columns(name=nil)
  *   @return [::Array<Groonga::Column>]
