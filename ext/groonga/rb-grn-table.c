@@ -606,11 +606,15 @@ rb_grn_table_get_column_surely (VALUE self, VALUE rb_name)
 }
 
 /*
- * テーブルの全てのカラムを返す。 _name_ が指定された場合はカ
- * ラム名の先頭が _name_ で始まるカラムを返す。
+ * @overload columns(prefix=nil)
+ *   It returns the specified columns in the table.
  *
- * @overload columns(name=nil)
- *   @return [Groonga::Columnの配列]
+ *   @param prefix [String, nil]
+ *     If this is `nil`, it returns the all columns in table.
+ *
+ *     Otherwise it returns columns which have name starts with `prefix`.
+ *
+ *   @return [::Array<Groonga::Column>]
  */
 static VALUE
 rb_grn_table_get_columns (int argc, VALUE *argv, VALUE self)
@@ -622,9 +626,9 @@ rb_grn_table_get_columns (int argc, VALUE *argv, VALUE self)
     grn_rc rc;
     int n;
     grn_table_cursor *cursor;
-    VALUE rb_name, rb_columns;
-    char *name = NULL;
-    unsigned name_size = 0;
+    VALUE rb_prefix, rb_columns;
+    char *prefix = NULL;
+    unsigned prefix_size = 0;
     VALUE exception;
 
     rb_grn_table_deconstruct(SELF(self), &table, &context,
@@ -632,18 +636,18 @@ rb_grn_table_get_columns (int argc, VALUE *argv, VALUE self)
                              NULL, NULL, NULL,
                              NULL);
 
-    rb_scan_args(argc, argv, "01", &rb_name);
+    rb_scan_args(argc, argv, "01", &rb_prefix);
 
-    if (!NIL_P(rb_name)) {
-        name = StringValuePtr(rb_name);
-        name_size = RSTRING_LEN(rb_name);
+    if (!NIL_P(rb_prefix)) {
+        prefix = StringValuePtr(rb_prefix);
+        prefix_size = RSTRING_LEN(rb_prefix);
     }
 
     key_type = grn_ctx_at(context, GRN_DB_SHORT_TEXT);
     columns = grn_table_create(context, NULL, 0, NULL, GRN_TABLE_HASH_KEY,
                                key_type, 0);
     rb_grn_context_check(context, self);
-    n = grn_table_columns(context, table, name, name_size, columns);
+    n = grn_table_columns(context, table, prefix, prefix_size, columns);
     rb_grn_context_check(context, self);
 
     rb_columns = rb_ary_new2(n);
