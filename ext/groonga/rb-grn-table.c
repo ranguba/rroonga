@@ -705,9 +705,10 @@ rb_grn_table_get_columns (int argc, VALUE *argv, VALUE self)
 }
 
 /*
- * テーブルが _name_ カラムを持っている場合は +true+ を返す。
+ * Checks whether the table has a specified column or not.
  *
  * @overload have_column?(name)
+ *   @return [Boolean] `true` if the table has a `name` column, `false` otherwise.
  */
 static VALUE
 rb_grn_table_have_column (VALUE self, VALUE rb_name)
