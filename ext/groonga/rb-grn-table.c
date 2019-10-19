@@ -2584,11 +2584,10 @@ rb_grn_table_have_n_sub_records_space_p (VALUE self)
 
 /*
  * @overload exist?(id)
- * @return [Boolean] `true` if the table has a record specified ID
- * by `id`, `false` otherwise.
+ *   @return [Boolean] `true` if the table has a record specified ID
+ *      by `id`, `false` otherwise.
  *
- * Note: This function is heavy. therefore, if possible, we should
- * not call this.
+ *   @note This method is heavy. You should not call this as much as possible.
  */
 static VALUE
 rb_grn_table_exist_p (VALUE self, VALUE id)
