@@ -889,11 +889,10 @@ rb_grn_table_open_cursor (int argc, VALUE *argv, VALUE self)
 }
 
 /*
- * テーブルに登録されている全てのレコードが入っている配列を
- * 返す。
- *
  * @overload records
- *   @return [Groonga::Recordの配列]
+ *   It returns all records in the table.
+ *
+ *   @return [::Array<Groonga::Record>]
  */
 static VALUE
 rb_grn_table_get_records (int argc, VALUE *argv, VALUE self)
