@@ -913,9 +913,9 @@ rb_grn_table_get_records (int argc, VALUE *argv, VALUE self)
 }
 
 /*
- * テーブルに登録されているレコード数を返す。
- *
  * @overload size
+ *   It returns the number of records in the table.
+ *
  *   @return [Integer]
  */
 static VALUE
