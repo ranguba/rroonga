@@ -2513,11 +2513,10 @@ rb_grn_table_support_value_p (VALUE self)
 }
 
 /*
- * グループ化したとき、テーブルにグループに含まれるレコード
- * 数を格納できる場合は +true+ 、格納できない場合は +false+ を返
- * す。
- *
  * @overload support_sub_records?
+ *
+ *   @return [Boolean] `true` if the table can store records
+ *     included in the group when the table group, `false` otherwise.
  */
 static VALUE
 rb_grn_table_support_sub_records_p (VALUE self)
