@@ -934,9 +934,10 @@ rb_grn_table_get_size (VALUE self)
 }
 
 /*
- * テーブルにレコードが登録されていなければ +true+ を返す。
- *
  * @overload empty?
+ *
+ *   @return [Boolean] `true` if the table hasn't been registered records,
+ *     `false` otherwise.
  */
 static VALUE
 rb_grn_table_empty_p (VALUE self)
