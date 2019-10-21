@@ -2515,8 +2515,9 @@ rb_grn_table_support_value_p (VALUE self)
 /*
  * @overload support_sub_records?
  *
- *   @return [Boolean] `true` if the table can store records
- *     included in the group when the table group, `false` otherwise.
+ *   @return [Boolean] `true` if the table can store the number of
+ *     records for each group when the table is grouped, `false`
+ *     otherwise.
  */
 static VALUE
 rb_grn_table_support_sub_records_p (VALUE self)
