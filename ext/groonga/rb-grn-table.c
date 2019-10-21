@@ -936,7 +936,7 @@ rb_grn_table_get_size (VALUE self)
 /*
  * @overload empty?
  *
- *   @return [Boolean] `true` if the table hasn't been registered records,
+ *   @return [Boolean] `true` if the table has no records,
  *     `false` otherwise.
  */
 static VALUE
