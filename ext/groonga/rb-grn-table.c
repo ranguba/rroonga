@@ -954,9 +954,10 @@ rb_grn_table_empty_p (VALUE self)
 }
 
 /*
- * テーブルの全レコードを一括して削除する。
- *
  * @overload truncate
+ *
+ *  @return void
+ *  This method deletes all records in the table all at once.
  */
 static VALUE
 rb_grn_table_truncate (VALUE self)
