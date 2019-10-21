@@ -954,10 +954,11 @@ rb_grn_table_empty_p (VALUE self)
 }
 
 /*
+ * Deletes all records in the table at once.
+ *
  * @overload truncate
  *
- *  @return void
- *  This method deletes all records in the table all at once.
+ *   @return [void]
  */
 static VALUE
 rb_grn_table_truncate (VALUE self)
