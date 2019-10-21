@@ -1129,7 +1129,7 @@ rb_grn_table_delete_by_expression (VALUE self)
  *
  *   @param id [Integer] The ID of delete target record.
  *
- *   @return void
+ *   @return [void]
  *
  * @overload delete
  *   Delete records that are matched with the given condition
@@ -1147,7 +1147,7 @@ rb_grn_table_delete_by_expression (VALUE self)
  *   @yieldreturn [Groonga::ExpressionBuilder]
  *     TODO: See #select.
  *
- *   @return void
+ *   @return [void]
  */
 static VALUE
 rb_grn_table_delete (int argc, VALUE *argv, VALUE self)
