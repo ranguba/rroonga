@@ -1631,9 +1631,10 @@ rb_grn_table_each_sub_record (VALUE self, VALUE rb_id)
 }
 
 /*
- * _table_ の _id_ に対応する {Groonga::Record} を返す。
+ * It returns the {Groonga::Record} for the `id` in the `table`.
  *
- * 0.9.0から値ではなく {Groonga::Record} を返すようになった。
+ * The return value has been changed to {Groonga::Record} from `id`
+ * itself since 0.9.0.
  *
  * @overload [](id)
  *   @return [Groonga::Record]
