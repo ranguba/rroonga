@@ -1674,14 +1674,13 @@ rb_grn_table_get_value (VALUE self, VALUE rb_id)
 /*
  * It returns the value for the `id` in the `table`.
  *
- * You can specify `:id => true` for the convenience.
- *
- * Even if {Groonga::Array}, it can be executed the
- * same arguments {Groonga::Hash} or {Groonga::PatriciaTrie}.
+ * You can specify `id: true` for the convenience. `id: true` works
+ * with {Groonga::Array} like for {Groonga::Hash},
+ * {Groonga::PatriciaTrie} and so on.
  *
  * @overload value(id)
  *   @return [value]
- * @overload value(id, :id => true)
+ * @overload value(id, id: true)
  *   @return [value]
  */
 static VALUE
