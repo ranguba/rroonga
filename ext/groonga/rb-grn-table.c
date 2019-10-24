@@ -1672,16 +1672,16 @@ rb_grn_table_get_value (VALUE self, VALUE rb_id)
 }
 
 /*
- * _table_ の _id_ に対応する値を返す。
+ * It returns the value for the `id` in the `table`.
  *
- * @:id => true@ が指定できるのは利便性のため。
- * {Groonga::Array} でも {Groonga::Hash} や {Groonga::PatriciaTrie} と
- * 同じ引数で動くようになる。
+ * You can specify `id: true` for the convenience. `id: true` works
+ * with {Groonga::Array} like for {Groonga::Hash},
+ * {Groonga::PatriciaTrie} and so on.
  *
  * @overload value(id)
- *   @return [値]
- * @overload value(id, :id => true)
- *   @return [値]
+ *   @return [value]
+ * @overload value(id, id: true)
+ *   @return [value]
  */
 static VALUE
 rb_grn_table_get_value_convenience (int argc, VALUE *argv, VALUE self)
