@@ -1674,7 +1674,7 @@ rb_grn_table_get_value (VALUE self, VALUE rb_id)
 /*
  * It returns the value for the `id` in the `table`.
  *
- * You can specify @:id => true@ for the convenience.
+ * You can specify `:id => true` for the convenience.
  *
  * Even if {Groonga::Array}, it can be executed the
  * same arguments {Groonga::Hash} or {Groonga::PatriciaTrie}.
