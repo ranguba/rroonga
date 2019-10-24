@@ -1023,9 +1023,10 @@ rb_grn_table_each_ensure (VALUE user_data)
 }
 
 /*
- * テーブルに登録されているレコードを順番にブロックに渡す。
+ * This method passes in order that records registered in
+ * the table to the block.
  *
- * _options_ is the same as {#open_cursor} 's one.
+ * `options` is the same as {#open_cursor} 's one.
  *
  * @overload each
  *   @!macro [new] table.each.metadata
