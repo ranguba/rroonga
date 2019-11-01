@@ -83,6 +83,7 @@ class RemoteTest < Test::Unit::TestCase
                    "command_version",
                    "default_command_version",
                    "max_command_version",
+                   "n_jobs",
                    "n_queries",
                    "start_time",
                    "starttime",
