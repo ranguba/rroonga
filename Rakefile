@@ -158,7 +158,7 @@ windows_architectures = [:x86, :x64]
 
 namespace :build do
   namespace :windows do
-    ruby_versions = "2.3.0:2.4.0:2.5.0:2.6.0:2.7.0"
+    ruby_versions = "2.4.0:2.5.0:2.6.0:2.7.0"
 
     windows_architectures.each do |architecture|
       desc "Build gem for Windows #{architecture}"
