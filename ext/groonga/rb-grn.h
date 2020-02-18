@@ -1,6 +1,6 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
-  Copyright (C) 2009-2018  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2020  Sutou Kouhei <kou@clear-code.com>
   Copyright (C) 2015-2017  Masafumi Yokoyama <yokoyama@clear-code.com>
 
   This library is free software; you can redistribute it and/or
@@ -73,15 +73,7 @@ RB_GRN_BEGIN_DECLS
 #  define RB_GRN_GNUC_NULL_TERMINATED
 #endif
 
-#if defined(RUBY_GRN_PLATFORM_WIN32) && !defined(RB_GRN_PLATFORM_WIN32)
-#  define RB_GRN_PLATFORM_WIN32 RUBY_GRN_PLATFORM_WIN32
-#endif
-
-#if defined(RUBY_GRN_STATIC_COMPILATION) && !defined(RB_GRN_STATIC_COMPILATION)
-#  define RB_GRN_STATIC_COMPILATION RUBY_GRN_STATIC_COMPILATION
-#endif
-
-#if defined(RB_GRN_PLATFORM_WIN32) && !defined(RB_GRN_STATIC_COMPILATION)
+#ifdef __WIN32__
 #  ifdef RB_GRN_COMPILATION
 #    define RB_GRN_VAR __declspec(dllexport)
 #  else

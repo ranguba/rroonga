@@ -1,6 +1,6 @@
-# -*- mode: ruby; coding: utf-8 -*-
+# -*- ruby -*-
 #
-# Copyright (C) 2012-2016  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2012-2020  Sutou Kouhei <kou@clear-code.com>
 # Copyright (C) 2017  Masafumi Yokoyama <yokoyama@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
@@ -85,14 +85,13 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency("pkg-config")
   s.add_runtime_dependency("groonga-client", ">= 0.0.3")
   s.add_runtime_dependency("json")
-  s.add_runtime_dependency("archive-zip")
   s.add_development_dependency("test-unit", [">= 3.0.0"])
   s.add_development_dependency("rake")
-  s.add_development_dependency("rake-compiler", [">= 0.9.5"])
-  s.add_development_dependency("rake-compiler-dock", [">= 0.6.2"])
   s.add_development_dependency("bundler")
   s.add_development_dependency("yard")
   s.add_development_dependency("packnga", [">= 1.0.0"])
   s.add_development_dependency("kramdown")
+
+  s.metadata["msys2_mingw_dependencies"] = "groonga"
 end
 

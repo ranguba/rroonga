@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 #
-# Copyright (C) 2009-2019  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2020  Sutou Kouhei <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -49,30 +49,11 @@ def win32?
   /cygwin|mingw|mswin/ =~ RUBY_PLATFORM
 end
 
-checking_for(checking_message("Win32 OS")) do
-  win32 = win32?
-  if win32
-    $defs << "-DRB_GRN_PLATFORM_WIN32"
-    import_library_name = "libruby-#{module_name}.a"
-    $DLDFLAGS << " -Wl,--out-implib=#{import_library_name}"
-    $cleanfiles << import_library_name
-    binary_base_dir = base_dir + "vendor" + "local"
-    pkg_config_dir = binary_base_dir + "lib" + "pkgconfig"
-    PKGConfig.add_path(pkg_config_dir.to_s)
-    PKGConfig.set_override_variable("prefix", binary_base_dir.to_s)
-  end
-  win32
-end
-
 def install_groonga_locally
   FileUtils.mkdir_p(local_groonga_base_dir)
 
   Dir.chdir(local_groonga_base_dir) do
-    if win32?
-      extract_groonga_win32_binary
-    else
-      build_groonga
-    end
+    build_groonga
   end
 
   prepend_pkg_config_path_for_local_groonga
@@ -105,50 +86,6 @@ def download(url)
     end
     message(" done\n")
   end
-end
-
-def extract_zip(filename, destrination_dir)
-  require "archive/zip"
-
-  Archive::Zip.extract(filename, destrination_dir)
-rescue LoadError
-  command_line = ["unzip", filename, "-d", destrination_dir]
-  unless system(*command_line)
-    raise "Failed to unzip: #{command_line.join(' ')}"
-  end
-end
-
-def extract_groonga_win32_binary
-  if ENV["RROONGA_USE_GROONGA_X64"]
-    architecture = "x64"
-  else
-    architecture = "x86"
-  end
-  zip = "groonga-latest-#{architecture}.zip"
-  url = "https://packages.groonga.org/windows/groonga/#{zip}"
-  install_dir = local_groonga_install_dir
-
-  download(url)
-
-  message("extracting...")
-  before_paths = Dir.glob("*")
-  extract_zip(zip, ".")
-  extracted_dir = (Dir.glob("*") - before_paths).first
-  message(" done\n")
-
-  if File.exist?(install_dir)
-    message("removing old install... #{install_dir}")
-    FileUtils.rm_rf(install_dir)
-    message(" done\n")
-  end
-
-  message("installing...")
-  FileUtils.mv(extracted_dir, install_dir)
-  message(" done\n")
-
-  message("removing binary archive...")
-  FileUtils.rm_rf(zip)
-  message(" done\n")
 end
 
 def run_command(start_message, command)
@@ -247,6 +184,7 @@ def build_groonga_from_tar_gz
   FileUtils.mkdir_p(groonga_source_dir)
 
   message("extracting...")
+  # TODO: Use Zlip::GzipReader and Gem::Package::TarReader
   if xsystem("tar xfz #{tar_gz} -C #{groonga_source_dir} --strip-components=1")
     message(" done\n")
   else
@@ -285,14 +223,8 @@ def install_local_groonga(package_name, major, minor, micro)
   add_rpath_for_local_groonga
 end
 
-if win32?
-  unless have_local_groonga?(package_name, major, minor, micro)
-    install_local_groonga(package_name, major, minor, micro)
-  end
-else
-  unless PKGConfig.have_package(package_name, major, minor, micro)
-    install_local_groonga(package_name, major, minor, micro)
-  end
+unless PKGConfig.have_package(package_name, major, minor, micro)
+  install_local_groonga(package_name, major, minor, micro)
 end
 
 real_version = PKGConfig.modversion(package_name)

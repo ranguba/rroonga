@@ -11,24 +11,18 @@ environment:
   matrix:
     - ruby_version: "24"
     - ruby_version: "24-x64"
-      RROONGA_USE_GROONGA_X64: "yes"
     - ruby_version: "25"
     - ruby_version: "25-x64"
-      RROONGA_USE_GROONGA_X64: "yes"
     - ruby_version: "26"
     - ruby_version: "26-x64"
-      RROONGA_USE_GROONGA_X64: "yes"
+    - ruby_version: "27"
+    - ruby_version: "27-x64"
 
 install:
   - SET PATH=C:\Ruby%ruby_version%\bin;%PATH%
   - ruby --version
   - ridk exec pacman -Syu --noconfirm
-  - ruby -run -e mkdir -- -p vendor\local
   - bundle install
 
-build_script:
-  - bundle exec ruby -rdevkit -S rake compile
-
 test_script:
-  - set NO_MAKE=yes
-  - bundle exec ruby -rdevkit test/run-test.rb
+  - ridk exec bundle exec rake

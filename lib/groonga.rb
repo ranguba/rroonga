@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2018  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2020  Sutou Kouhei <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -44,12 +44,8 @@ require "groonga/record"
 require "groonga/expression-builder"
 require "groonga/posting"
 require "groonga/index"
-begin
-  major, minor, _ = RUBY_VERSION.split(/\./)
-  require "#{major}.#{minor}/groonga.so"
-rescue LoadError
-  require "groonga.so"
-end
+
+require "groonga.so"
 
 ##
 # rroonga用のネームスペース。rroongaのクラスやメソッ

@@ -1,6 +1,6 @@
-# -*- coding: utf-8; mode: ruby -*-
+# -*- ruby -*-
 #
-# Copyright (C) 2009-2019  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2020  Sutou Kouhei <kou@clear-code.com>
 # Copyright (C) 2017  Masafumi Yokoyama <yokoyama@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
@@ -16,15 +16,9 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
-require "find"
-require "fileutils"
-require "shellwords"
-require "pathname"
-require "erb"
-require "yard"
 require "bundler/gem_helper"
-require "rake/extensiontask"
 require "packnga"
+require "yard"
 
 base_dir = File.join(File.dirname(__FILE__))
 
@@ -74,51 +68,6 @@ module YARD
   end
 end
 
-def windows?(platform=nil)
-  platform ||= RUBY_PLATFORM
-  platform =~ /mswin(?!ce)|mingw|cygwin|bccwin/
-end
-
-def collect_binary_files(binary_dir)
-  binary_files = []
-  Find.find(binary_dir) do |name|
-    next unless File.file?(name)
-    next if /\.zip\z/i =~ name
-    binary_files << name
-  end
-  binary_files
-end
-
-def windows_gem_name(spec, architecture)
-  "#{spec.name}-#{spec.version}-#{architecture}-mingw32.gem"
-end
-
-relative_vendor_dir = "vendor"
-relative_binary_dir = File.join("vendor", "local")
-vendor_dir = File.join(base_dir, relative_vendor_dir)
-binary_dir = File.join(base_dir, relative_binary_dir)
-
-groonga_win32_i386_p = ENV["RROONGA_USE_GROONGA_X64"].nil?
-
-Rake::ExtensionTask.new("groonga", spec) do |ext|
-  if groonga_win32_i386_p
-    ext.cross_platform = ["x86-mingw32"]
-  else
-    ext.cross_platform = ["x64-mingw32"]
-  end
-  if windows?
-    ext.gem_spec.files += collect_binary_files(relative_binary_dir)
-  else
-    ext.cross_compile = true
-    ext.cross_compiling do |_spec|
-      if windows?(_spec.platform.to_s)
-        binary_files = collect_binary_files(relative_binary_dir)
-        _spec.files += binary_files
-      end
-    end
-  end
-end
-
 file "Makefile" => ["extconf.rb", "ext/groonga/extconf.rb"] do
   extconf_args = []
   if ENV["TRAVIS"]
@@ -144,66 +93,6 @@ namespace :test do
     installed_path = gem_spec.full_gem_path
     ENV["NO_MAKE"] = "yes"
     ruby("#{installed_path}/test/run-test.rb")
-  end
-end
-
-desc "Remove Groonga binary directory"
-namespace :clean do
-  task :groonga do
-    rm_rf binary_dir
-  end
-end
-
-windows_architectures = [:x86, :x64]
-
-namespace :build do
-  namespace :windows do
-    ruby_versions = "2.4.0:2.5.0:2.6.0:2.7.0"
-
-    windows_architectures.each do |architecture|
-      desc "Build gem for Windows #{architecture}"
-      task architecture do
-        build_dir = "tmp/windows"
-        rm_rf build_dir
-        mkdir_p build_dir
-
-        commands = [
-          ["git", "clone", "file://#{Dir.pwd}/.git", build_dir],
-          ["cd", build_dir],
-          ["gem", "install", "json"],
-          ["bundle"],
-          ["rake", "cross", "native", "gem", "RUBY_CC_VERSION=#{ruby_versions}"],
-        ]
-        if architecture == :x64
-          commands.unshift(["export", "RROONGA_USE_GROONGA_X64=true"])
-        end
-        raw_commands = commands.collect do |command|
-          Shellwords.join(command)
-        end
-        raw_command_line = raw_commands.join(" && ")
-
-        require "rake_compiler_dock"
-        RakeCompilerDock.sh(raw_command_line)
-
-        cp("#{build_dir}/pkg/#{windows_gem_name(spec, architecture)}",
-           "pkg/")
-      end
-    end
-  end
-
-  desc "Build gems for Windows"
-  build_tasks = windows_architectures.collect do |architecture|
-    "windows:#{architecture}"
-  end
-  task :windows => build_tasks
-end
-
-namespace :release do
-  desc "Push gems for Windows to RubyGems.org"
-  task :windows do
-    windows_architectures.each do |architecture|
-      ruby("-S", "gem", "push", "pkg/#{windows_gem_name(spec, architecture)}")
-    end
   end
 end
 
