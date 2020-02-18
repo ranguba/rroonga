@@ -26,6 +26,7 @@ class RemoteTest < Test::Unit::TestCase
     else
       package_config = PKGConfig.package_config("groonga")
       groonga = package_config.variable("groonga")
+      groonga = "groonga" unless File.exist?(groonga)
     end
 
     @host = "127.0.0.1"
