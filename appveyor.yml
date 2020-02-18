@@ -22,7 +22,7 @@ install:
   - SET PATH=C:\Ruby%ruby_version%\bin;%PATH%
   - ruby --version
   - ridk exec pacman -Syu --noconfirm
-  - bundle install
+  - ridk exec bundle install
 
 test_script:
   - ridk exec bundle exec rake
