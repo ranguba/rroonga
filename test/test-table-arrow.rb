@@ -1,4 +1,4 @@
-# Copyright (C) 2017-2018  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2017-2020  Sutou Kouhei <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -20,6 +20,7 @@ class TableArrowTest < Test::Unit::TestCase
     setup_database
 
     omit("Apache Arrow support is required") unless context.support_arrow?
+    omit("Groonga 9.1.2 is buggy") if Groonga::VERSION[0, 3] == [9, 1, 2]
   end
 
   def assert_dump_load(type, n_records)
