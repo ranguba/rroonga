@@ -24,5 +24,10 @@ install:
   - ridk exec pacman -Syu --noconfirm
   - ridk exec bundle install
 
+build_script:
+  - ridk exec bundle exec ruby extconf.rb
+  - ridk exec bundle exec make
+
 test_script:
+  - set NO_MAKE=yes
   - ridk exec bundle exec rake
