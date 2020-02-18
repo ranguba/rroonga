@@ -25,9 +25,12 @@ install:
   - ridk exec bundle install
 
 build_script:
+  - ridk exec pacman -Qqe
   - ridk exec bundle exec ruby extconf.rb
   - ridk exec bundle exec make
 
 test_script:
+  - ridk exec pacman -Qqe
+  - dir ext\groonga
   - set NO_MAKE=yes
   - ridk exec bundle exec rake
