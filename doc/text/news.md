@@ -1,5 +1,17 @@
 # NEWS
 
+## 10.0.0: 2020-03-29 {#version-10-0-0}
+
+### Improvements
+
+  * Windows: Added Ruby 2.7 support.
+
+  * Windows: Dropped Ruby 2.3.
+
+    * This version has been EOL.
+
+  * Dropped fat gem support.
+
 ## 9.0.7: 2019-08-29 {#version-9-0-7}
 
 ### Improvements
