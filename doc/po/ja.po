@@ -446,11 +446,26 @@ msgstr "* [2. インストール - Groonga ドキュメント](http://groonga.or
 msgid "# NEWS"
 msgstr "# お知らせ"
 
-msgid "## 9.0.7: 2019-08-29 {#version-9-0-7}"
+msgid "## 10.0.0: 2020-03-29 {#version-10-0-0}"
 msgstr ""
 
 msgid "### Improvements"
 msgstr "### 改善"
+
+msgid "  * Windows: Added Ruby 2.7 support."
+msgstr ""
+
+msgid "  * Windows: Dropped Ruby 2.3."
+msgstr ""
+
+msgid "    * This version has been EOL."
+msgstr ""
+
+msgid "  * Dropped fat gem support."
+msgstr ""
+
+msgid "## 9.0.7: 2019-08-29 {#version-9-0-7}"
+msgstr ""
 
 msgid "  * {Groonga::Object#lexicon?} Added."
 msgstr ""
@@ -5155,11 +5170,11 @@ msgid ""
 "ロックを抜けると自動的にカーソルが破棄される。"
 msgstr ""
 
-msgid "tag|overload|open_prefix_cursor"
-msgstr ""
-
 # @param [String]
 msgid "tag|param|prefix"
+msgstr ""
+
+msgid "tag|overload|open_prefix_cursor"
 msgstr ""
 
 # @param [String] prefix
@@ -8991,26 +9006,37 @@ msgstr ""
 msgid "tag|overload|define_index_column"
 msgstr ""
 
+# Groonga::Table#column
 msgid ""
-"テーブルの _name_ に対応するカラムを返す。カラムが存在しな\n"
-"い場合は +nil+ を返す。"
-msgstr ""
-
-msgid ""
-"テーブルの全てのカラムを返す。 _name_ が指定された場合はカ\n"
-"ラム名の先頭が _name_ で始まるカラムを返す。"
+"It returns the column has the specified name.\n"
+"If the specified column does not exist, it returns `nil`."
 msgstr ""
 
 # @overload
 msgid "tag|overload|columns"
 msgstr ""
 
+# @param [String, nil] prefix
+msgid ""
+"If this is `nil`, it returns the all columns in table.\n"
+"\n"
+"Otherwise it returns columns which have name starts with `prefix`."
+msgstr ""
+
+# Groonga::Table#columns
+msgid "It returns the specified columns in the table."
+msgstr ""
+
 # Groonga::Table#have_column?
-msgid "テーブルが _name_ カラムを持っている場合は +true+ を返す。"
+msgid "Checks whether the table has a specified column or not."
 msgstr ""
 
 # @overload
 msgid "tag|overload|have_column?"
+msgstr ""
+
+# @return [Boolean]
+msgid "`true` if the table has a `name` column, `false` otherwise."
 msgstr ""
 
 msgid ""
@@ -9019,30 +9045,34 @@ msgid ""
 "カーソルが破棄される。"
 msgstr ""
 
-msgid ""
-"テーブルに登録されている全てのレコードが入っている配列を\n"
-"返す。"
-msgstr ""
-
 # @overload
 msgid "tag|overload|records"
 msgstr ""
 
-msgid "テーブルに登録されているレコード数を返す。"
+# Groonga::Table#records
+msgid "It returns all records in the table."
 msgstr ""
 
 # @overload
 msgid "tag|overload|size"
 msgstr ""
 
-msgid "テーブルにレコードが登録されていなければ +true+ を返す。"
+# Groonga::Table#size
+msgid "It returns the number of records in the table."
 msgstr ""
 
 # @overload
 msgid "tag|overload|empty?"
 msgstr ""
 
-msgid "テーブルの全レコードを一括して削除する。"
+# @return [Boolean]
+msgid ""
+"`true` if the table has no records,\n"
+"`false` otherwise."
+msgstr ""
+
+# Groonga::Table#truncate
+msgid "Deletes all records in the table at once."
 msgstr ""
 
 msgid "テーブルに登録されているレコードを順番にブロックに渡す。"
@@ -9274,11 +9304,30 @@ msgid "3.0.3"
 msgstr ""
 
 # Groonga::Table#[]
-msgid "_table_ の _id_ に対応する {Groonga::Record} を返す。"
+msgid "It returns the {Groonga::Record} for the `id` in the `table`."
+msgstr ""
+
+# Groonga::Table#[]
+msgid ""
+"The return value has been changed to {Groonga::Record} from `id`\n"
+"itself since 0.9.0."
 msgstr ""
 
 # Groonga::Table#value
-msgid "_table_ の _id_ に対応する値を返す。"
+msgid "It returns the value for the `id` in the `table`."
+msgstr ""
+
+# Groonga::Table#value
+msgid ""
+"You can specify `id: true` for the convenience. `id: true` works\n"
+"with {Groonga::Array} like for {Groonga::Hash},\n"
+"{Groonga::PatriciaTrie} and so on."
+msgstr ""
+
+# Groonga::Table#set_value
+msgid ""
+"_table_ の _id_ に対応する値として _value_ 設定する。既存の値は\n"
+"上書きされる。"
 msgstr ""
 
 # Groonga::Table#column_value
@@ -9289,12 +9338,6 @@ msgid ""
 "@:id => true@ が指定できるのは利便性のため。\n"
 "{Groonga::Array} でも {Groonga::Hash} や {Groonga::PatriciaTrie} と\n"
 "同じ引数で動くようになる。"
-msgstr ""
-
-# Groonga::Table#set_value
-msgid ""
-"_table_ の _id_ に対応する値として _value_ 設定する。既存の値は\n"
-"上書きされる。"
 msgstr ""
 
 # Groonga::Table#column_value
@@ -9657,13 +9700,14 @@ msgid ""
 "`false` otherwise."
 msgstr ""
 
-msgid ""
-"グループ化したとき、テーブルにグループに含まれるレコード\n"
-"数を格納できる場合は +true+ 、格納できない場合は +false+ を返\n"
-"す。"
+msgid "tag|overload|support_sub_records?"
 msgstr ""
 
-msgid "tag|overload|support_sub_records?"
+# @return [Boolean]
+msgid ""
+"`true` if the table can store the number of\n"
+"records for each group when the table is grouped, `false`\n"
+"otherwise."
 msgstr ""
 
 # @overload
@@ -9723,19 +9767,18 @@ msgid ""
 "the number of sub records, @false@ otherwise."
 msgstr ""
 
-# Groonga::Table#exist?
-msgid ""
-"_table_ に _id_ で指定したIDのレコードが存在する場合は +true+ 、\n"
-"存在しない場合は +false+ を返す。"
-msgstr ""
-
-msgid ""
-"注意: 実行には相応のコストがかかるのであまり頻繁に呼ばな\n"
-"いようにして下さい。"
-msgstr ""
-
 # @overload
 msgid "tag|overload|exist?"
+msgstr ""
+
+# @note
+msgid "This method is heavy. You should not call this as much as possible."
+msgstr ""
+
+# @return [Boolean]
+msgid ""
+"`true` if the table has a record specified ID\n"
+"by `id`, `false` otherwise."
 msgstr ""
 
 msgid "Defrags all variable size columns in the table."
@@ -10904,14 +10947,14 @@ msgstr ""
 msgid "a new instance of TableDumper"
 msgstr ""
 
-msgid "Returns the value of attribute table"
+msgid "Returns the value of attribute table."
 msgstr ""
 
 # @param value
 msgid "the value to set the attribute query to."
 msgstr ""
 
-msgid "Returns the value of attribute query"
+msgid "Returns the value of attribute query."
 msgstr ""
 
 msgid "Sets the attribute query"
@@ -10921,7 +10964,7 @@ msgstr ""
 msgid "the value to set the attribute syntax to."
 msgstr ""
 
-msgid "Returns the value of attribute syntax"
+msgid "Returns the value of attribute syntax."
 msgstr ""
 
 msgid "Sets the attribute syntax"
@@ -10931,7 +10974,7 @@ msgstr ""
 msgid "the value to set the attribute allow_pragma to."
 msgstr ""
 
-msgid "Returns the value of attribute allow_pragma"
+msgid "Returns the value of attribute allow_pragma."
 msgstr ""
 
 # Groonga::ExpressionBuildable#allow_pragma=
@@ -10942,7 +10985,7 @@ msgstr ""
 msgid "the value to set the attribute allow_column to."
 msgstr ""
 
-msgid "Returns the value of attribute allow_column"
+msgid "Returns the value of attribute allow_column."
 msgstr ""
 
 # Groonga::ExpressionBuildable#allow_column=
@@ -10953,8 +10996,8 @@ msgstr ""
 msgid "the value to set the attribute allow_update to."
 msgstr ""
 
-msgid "Returns the value of attribute allow_update"
-msgstr "緯度の値を返す。"
+msgid "Returns the value of attribute allow_update."
+msgstr ""
 
 # Groonga::ExpressionBuildable#allow_update=
 msgid "Sets the attribute allow_update"
@@ -10964,7 +11007,7 @@ msgstr ""
 msgid "the value to set the attribute allow_leading_not to."
 msgstr ""
 
-msgid "Returns the value of attribute allow_leading_not"
+msgid "Returns the value of attribute allow_leading_not."
 msgstr ""
 
 # Groonga::ExpressionBuildable#allow_leading_not=
@@ -10975,7 +11018,7 @@ msgstr ""
 msgid "the value to set the attribute default_column to."
 msgstr ""
 
-msgid "Returns the value of attribute default_column"
+msgid "Returns the value of attribute default_column."
 msgstr ""
 
 # Groonga::ExpressionBuildable#default_column=
@@ -11079,13 +11122,13 @@ msgstr "緯度の値を返す。"
 msgid "the value to set the attribute longitude to."
 msgstr "経度の値を返す。"
 
-msgid "Returns the value of attribute latitude"
+msgid "Returns the value of attribute latitude."
 msgstr "緯度の値を返す。"
 
 msgid "Sets the attribute latitude"
 msgstr "緯度の値を返す。"
 
-msgid "Returns the value of attribute longitude"
+msgid "Returns the value of attribute longitude."
 msgstr "経度の値を返す。"
 
 msgid "Sets the attribute longitude"
@@ -11130,7 +11173,7 @@ msgstr ""
 msgid "a new instance of EnvironmentEvent"
 msgstr ""
 
-msgid "Returns the value of attribute jobs"
+msgid "Returns the value of attribute jobs."
 msgstr ""
 
 msgid "a new instance of JobsStartEvent"
@@ -11204,31 +11247,31 @@ msgstr ""
 msgid "Returns the value of attribute result"
 msgstr ""
 
-msgid "Returns the value of attribute job"
+msgid "Returns the value of attribute job."
 msgstr ""
 
-msgid "Returns the value of attribute latency"
+msgid "Returns the value of attribute latency."
 msgstr ""
 
-msgid "Returns the value of attribute elapsed"
+msgid "Returns the value of attribute elapsed."
 msgstr ""
 
-msgid "Returns the value of attribute qps"
+msgid "Returns the value of attribute qps."
 msgstr ""
 
-msgid "Returns the value of attribute min"
+msgid "Returns the value of attribute min."
 msgstr ""
 
-msgid "Returns the value of attribute max"
+msgid "Returns the value of attribute max."
 msgstr ""
 
-msgid "Returns the value of attribute n_queries"
+msgid "Returns the value of attribute n_queries."
 msgstr ""
 
 msgid "a new instance of JobSummaryEvent"
 msgstr ""
 
-msgid "Returns the value of attribute summaries"
+msgid "Returns the value of attribute summaries."
 msgstr ""
 
 msgid "a new instance of JobsEndEvent"
@@ -11240,10 +11283,10 @@ msgstr ""
 msgid "a new instance of IndexColumnDumper"
 msgstr ""
 
-msgid "Returns the value of attribute column"
+msgid "Returns the value of attribute column."
 msgstr ""
 
-msgid "Returns the value of attribute section"
+msgid "Returns the value of attribute section."
 msgstr ""
 
 # @return [Index]
@@ -11874,7 +11917,7 @@ msgstr ""
 msgid "Sub records of the record."
 msgstr ""
 
-msgid "Returns the value of attribute attributes"
+msgid "Returns the value of attribute attributes."
 msgstr ""
 
 msgid "a new instance of AttributeHashBuilder"
@@ -11924,7 +11967,7 @@ msgstr ""
 msgid "テーブルが存在しないときに発生する。"
 msgstr ""
 
-msgid "Returns the value of attribute name"
+msgid "Returns the value of attribute name."
 msgstr ""
 
 msgid "a new instance of TableNotExists"
@@ -11941,7 +11984,7 @@ msgid ""
 "うとしたときに発生する。"
 msgstr ""
 
-msgid "Returns the value of attribute options"
+msgid "Returns the value of attribute options."
 msgstr ""
 
 msgid "a new instance of TableCreationWithDifferentOptions"
@@ -11964,7 +12007,7 @@ msgstr ""
 msgid "未知のインデックス対象を指定したときに発生する。"
 msgstr ""
 
-msgid "Returns the value of attribute targets"
+msgid "Returns the value of attribute targets."
 msgstr ""
 
 msgid "a new instance of UnknownIndexTarget"
@@ -11973,10 +12016,10 @@ msgstr ""
 msgid "未知のオプションを指定したときに発生する。"
 msgstr ""
 
-msgid "Returns the value of attribute unknown_keys"
+msgid "Returns the value of attribute unknown_keys."
 msgstr ""
 
-msgid "Returns the value of attribute available_keys"
+msgid "Returns the value of attribute available_keys."
 msgstr ""
 
 msgid "a new instance of UnknownOptions"
@@ -11985,10 +12028,10 @@ msgstr ""
 msgid "未知のテーブルの種類を指定したときに発生する。"
 msgstr ""
 
-msgid "Returns the value of attribute type"
+msgid "Returns the value of attribute type."
 msgstr ""
 
-msgid "Returns the value of attribute available_types"
+msgid "Returns the value of attribute available_types."
 msgstr ""
 
 msgid "a new instance of UnknownTableType"
@@ -11997,7 +12040,7 @@ msgstr ""
 msgid "参照先のテーブルを推測できないときに発生する。"
 msgstr ""
 
-msgid "Returns the value of attribute tried_table_names"
+msgid "Returns the value of attribute tried_table_names."
 msgstr ""
 
 msgid "a new instance of UnguessableReferenceTable"
@@ -12597,13 +12640,13 @@ msgstr ""
 msgid "the value to set the attribute new_name to."
 msgstr ""
 
-msgid "Returns the value of attribute current_name"
+msgid "Returns the value of attribute current_name."
 msgstr ""
 
 msgid "Sets the attribute current_name"
 msgstr ""
 
-msgid "Returns the value of attribute new_name"
+msgid "Returns the value of attribute new_name."
 msgstr ""
 
 msgid "Sets the attribute new_name"
@@ -12620,13 +12663,13 @@ msgstr ""
 msgid "the value to set the attribute target_columns to."
 msgstr ""
 
-msgid "Returns the value of attribute target_table"
+msgid "Returns the value of attribute target_table."
 msgstr ""
 
 msgid "Sets the attribute target_table"
 msgstr ""
 
-msgid "Returns the value of attribute target_columns"
+msgid "Returns the value of attribute target_columns."
 msgstr ""
 
 # Groonga::Schema::IndexColumnDefinition#target_columns=
