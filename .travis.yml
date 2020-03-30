@@ -26,6 +26,7 @@ matrix:
         apt:
           packages:
             - libmecab-dev
+            - libmsgpack-dev
             - mecab-naist-jdic
 before_install:
   - |
