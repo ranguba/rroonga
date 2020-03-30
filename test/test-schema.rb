@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2014  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2020  Kouhei Sutou <kou@clear-code.com>
 # Copyright (C) 2014  Masafumi Yokoyama <myokoym@gmail.com>
 #
 # This library is free software; you can redistribute it and/or
@@ -918,6 +918,14 @@ class SchemaTest < Test::Unit::TestCase
       end
       assert_directory_not_removed(columns_directory)
     end
+  end
+
+  def test_normalizer_with_options
+    Groonga::Schema.create_table("Names",
+                                 key_type: :short_text,
+                                 normalizer: "NormalizerNFKC121('unify_kana', true)")
+    assert_equal(Groonga["NormalizerNFKC121"],
+                 Groonga["Names"].normalizer)
   end
 
   private

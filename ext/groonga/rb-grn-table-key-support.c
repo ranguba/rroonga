@@ -1,6 +1,6 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
-  Copyright (C) 2009-2014  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2020  Kouhei Sutou <kou@clear-code.com>
   Copyright (C) 2014-2016  Masafumi Yokoyama <yokoyama@clear-code.com>
 
   This library is free software; you can redistribute it and/or
@@ -911,7 +911,9 @@ rb_grn_table_key_support_get_normalizer (VALUE self)
  *   # Specifies normalizer object.
  *   table.normalizer = Groonga::Context["NormalizerNFKC51"]
  *   # Uses auto normalizer that is a normalizer for backward compatibility.
- *   table.normalizer = "TNormalizerAuto"
+ *   table.normalizer = "NormalizerAuto"
+ *   # Uses a normalizer with options.
+ *   table.normalizer = "NormalizerNFKC121('unify_kana', true)"
  *
  * @overload normalizer=(name)
  *    @param [String] name Set a nomalizer named @name@.
@@ -927,7 +929,6 @@ rb_grn_table_key_support_set_normalizer (VALUE self, VALUE rb_normalizer)
 {
     grn_ctx *context;
     grn_obj *table;
-    grn_obj *normalizer;
     grn_rc rc;
 
     rb_grn_table_key_support_deconstruct(SELF(self), &table, &context,
@@ -935,9 +936,25 @@ rb_grn_table_key_support_set_normalizer (VALUE self, VALUE rb_normalizer)
                                          NULL, NULL, NULL,
                                          NULL);
 
-    normalizer = RVAL2GRNOBJECT(rb_normalizer, &context);
-    rc = grn_obj_set_info(context, table, GRN_INFO_NORMALIZER, normalizer);
-    rb_grn_context_check(context, self);
+    if (RB_TYPE_P(rb_normalizer, RUBY_T_STRING)) {
+        grn_obj normalizer;
+        VALUE exception;
+        GRN_TEXT_INIT(&normalizer, GRN_OBJ_DO_SHALLOW_COPY);
+        GRN_TEXT_SET(context,
+                     &normalizer,
+                     RSTRING_PTR(rb_normalizer),
+                     RSTRING_LEN(rb_normalizer));
+        rc = grn_obj_set_info(context, table, GRN_INFO_NORMALIZER, &normalizer);
+        exception = rb_grn_context_to_exception(context, self);
+        GRN_OBJ_FIN(context, &normalizer);
+        if (!NIL_P(exception)) {
+            rb_exc_raise(exception);
+        }
+    } else {
+        grn_obj *normalizer = RVAL2GRNOBJECT(rb_normalizer, &context);
+        rc = grn_obj_set_info(context, table, GRN_INFO_NORMALIZER, normalizer);
+        rb_grn_context_check(context, self);
+    }
     rb_grn_rc_check(rc, self);
 
     return Qnil;
