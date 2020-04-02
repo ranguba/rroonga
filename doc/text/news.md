@@ -1,8 +1,10 @@
 # NEWS
 
-## 10.0.0: 2020-03-29 {#version-10-0-0}
+## 10.0.1: 2020-04-02 {#version-10-0-1}
 
 ### Improvements
+
+  * Added support for creating a table with normalizer with options
 
   * Windows: Added Ruby 2.7 support.
 

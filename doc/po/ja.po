@@ -446,11 +446,14 @@ msgstr "* [2. インストール - Groonga ドキュメント](http://groonga.or
 msgid "# NEWS"
 msgstr "# お知らせ"
 
-msgid "## 10.0.0: 2020-03-29 {#version-10-0-0}"
+msgid "## 10.0.1: 2020-04-02 {#version-10-0-1}"
 msgstr ""
 
 msgid "### Improvements"
 msgstr "### 改善"
+
+msgid "  * Added support for creating a table with normalizer with options"
+msgstr ""
 
 msgid "  * Windows: Added Ruby 2.7 support."
 msgstr ""
