@@ -22,11 +22,15 @@
 
   * {Groonga::IndexColumn} Added support "INDEX_LARGE".
 
-  * {Groonga::IndexCursor.min_enable?/min_enable=} Added.
+  * {Groonga::IndexCursor#set_min?} Added.
 
-  * {Groonga::Context#match_escalation?/match_escalation=} Added.
+  * {Groonga::IndexCursor#set_min=} Added.
 
-  * {Groona::Object#id_accessor?} Added.
+  * {Groonga::Context#force_match_escalation?} Added.
+
+  * {Groonga::Context#force_match_escalation=} Added.
+
+  * {Groonga::Object#id_accessor?} Added.
 
   * {Groonga::Logger.flags} Added support for thread id option.
 
@@ -36,7 +40,7 @@
 
   * {Groonga::Table} Delegate support_score? from Groonga::Record to Groonga::Table.
 
-  * {Groonga::Flashable} Added support dependent option.
+  * Groonga::Flashable Added support dependent option.
 
   * {Groonga::Object#score_accessor?} Added.
 
@@ -59,7 +63,7 @@
   * Added support for "--with-groonga-configure-options".
     [GitHub#146][Reported by Tomás Pollak]
 
-  * {Groonga::RegexpExpressionBuilder}: Added support (?-mix:XXX) for searching of regular expression.
+  * Groonga::RegexpExpressionBuilder: Added support (?-mix:XXX) for searching of regular expression.
     [groonga-dev,04694][Reported by Masatoshi SEKI]
 
   * Use "groonga-latest.tar.gz" for build Groonga.
