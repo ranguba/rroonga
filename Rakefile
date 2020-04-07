@@ -46,28 +46,6 @@ Packnga::ReleaseTask.new(spec) do |task|
   task.index_html_dir = ranguba_org_dir
 end
 
-module YARD
-  module CodeObjects
-    class Proxy
-      alias_method :initialize_original, :initialize
-      def initialize(namespace, name, type=nil)
-        name = name.to_s.gsub(/\AGrn(.*)\z/) do
-          suffix = $1
-          case suffix
-          when ""
-            "Groonga"
-          when "TableKeySupport"
-            "Groonga::Table::KeySupport"
-          else
-            "Groonga::#{suffix}"
-          end
-        end
-        initialize_original(namespace, name, type)
-      end
-    end
-  end
-end
-
 file "Makefile" => ["extconf.rb", "ext/groonga/extconf.rb"] do
   extconf_args = []
   if ENV["TRAVIS"]
