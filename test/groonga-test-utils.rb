@@ -209,4 +209,10 @@ module GroongaTestUtils
   def check_mecab_availability
     omit("MeCab isn't available") if context["TokenMecab"].nil?
   end
+
+  def need_groonga(major, minor, micro)
+    if (Groonga::BUILD_VERSION[0, 3] <=> [major, minor, micro]) < 0
+      omit("Groonga #{major}.#{minor}.#{micro} or later is required")
+    end
+  end
 end

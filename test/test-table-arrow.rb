@@ -20,9 +20,6 @@ class TableArrowTest < Test::Unit::TestCase
     setup_database
 
     omit("Apache Arrow support is required") unless context.support_arrow?
-    if (Groonga::VERSION[0, 3] <=> [9, 1, 2]) <= 0
-      omit("Groonga 9.1.2 is buggy")
-    end
   end
 
   def assert_dump_load(type, n_records)

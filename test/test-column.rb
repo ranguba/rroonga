@@ -308,6 +308,8 @@ class ColumnTest < Test::Unit::TestCase
   end
 
   def test_float32
+    need_groonga(10, 0, 2)
+
     numbers = Groonga::Array.create(:name => "Numbers")
     numbers.define_column("data", "Float32")
 
