@@ -1,7 +1,7 @@
 /* -*- mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /* vim: set sts=4 sw=4 ts=8 noet: */
 /*
-  Copyright (C) 2009-2017  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2020  Sutou Kouhei <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -201,6 +201,11 @@ rb_grn_bulk_to_ruby_object_by_range_id (grn_ctx *context, grn_obj *bulk,
     case GRN_DB_UINT64:
         *rb_value = ULL2NUM(GRN_UINT64_VALUE(bulk));
         break;
+#if RB_GRN_HAVE_FLOAT32
+    case GRN_DB_FLOAT32:
+        *rb_value = rb_float_new(GRN_FLOAT32_VALUE(bulk));
+        break;
+#endif
     case GRN_DB_FLOAT:
         *rb_value = rb_float_new(GRN_FLOAT_VALUE(bulk));
         break;
@@ -447,6 +452,7 @@ rb_grn_bulk_from_ruby_object_with_type (VALUE object, grn_ctx *context,
         int64_t int64_value;
         uint64_t uint64_value;
         int64_t time_value;
+        float float_value;
         double double_value;
         grn_geo_point geo_point_value;
         grn_id record_id;
@@ -525,6 +531,16 @@ rb_grn_bulk_from_ruby_object_with_type (VALUE object, grn_ctx *context,
         string = (const char *)&(value.uint64_value);
         size = sizeof(value.uint64_value);
         break;
+#if RB_GRN_HAVE_FLOAT32
+    case GRN_DB_FLOAT32:
+        if (string_p) {
+            object = rb_Float(object);
+        }
+        value.float_value = NUM2DBL(object);
+        string = (const char *)&(value.float_value);
+        size = sizeof(value.float_value);
+        break;
+#endif
     case GRN_DB_FLOAT:
         if (string_p) {
             object = rb_Float(object);

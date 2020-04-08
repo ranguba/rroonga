@@ -1,6 +1,6 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
-  Copyright (C) 2009-2016  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2020  Sutou Kouhei <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -304,6 +304,10 @@ rb_grn_init_type (VALUE mGrn)
     rb_define_const(rb_cGrnType, "INT64", INT2NUM(GRN_DB_INT64));
     /* 64bit符号なし整数。 */
     rb_define_const(rb_cGrnType, "UINT64", INT2NUM(GRN_DB_UINT64));
+#if RB_GRN_HAVE_FLOAT32
+    /* 32bit floating pointer number in IEEE754 format. */
+    rb_define_const(rb_cGrnType, "FLOAT32", INT2NUM(GRN_DB_FLOAT32));
+#endif
     /* ieee754形式の64bit浮動小数点数。 */
     rb_define_const(rb_cGrnType, "FLOAT", INT2NUM(GRN_DB_FLOAT));
     /* 1970年1月1日0時0分0秒からの経過マイクロ秒数を64bit符

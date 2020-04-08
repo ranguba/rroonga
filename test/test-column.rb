@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2016  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2020  Sutou Kouhei <kou@clear-code.com>
 # Copyright (C) 2016  Masafumi Yokoyama <yokoyama@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
@@ -305,6 +305,15 @@ class ColumnTest < Test::Unit::TestCase
 
     post["hidden"] = false
     assert_false(post["hidden"])
+  end
+
+  def test_float32
+    numbers = Groonga::Array.create(:name => "Numbers")
+    numbers.define_column("data", "Float32")
+
+    number = numbers.add
+    number["data"] = 1.1
+    assert_in_delta(1.1, number["data"])
   end
 
   def test_indexes

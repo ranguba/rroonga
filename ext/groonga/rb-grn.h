@@ -89,6 +89,8 @@ RB_GRN_BEGIN_DECLS
 #  define debug(...)
 #endif
 
+#define RB_GRN_HAVE_FLOAT32 GRN_VERSION_OR_LATER(10, 0, 2)
+
 #define RB_GRN_MAJOR_VERSION 10
 #define RB_GRN_MINOR_VERSION 0
 #define RB_GRN_MICRO_VERSION 2
