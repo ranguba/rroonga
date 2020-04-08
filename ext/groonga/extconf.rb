@@ -267,7 +267,7 @@ end
 
 def enable_debug_build_flag(flags)
   if gcc?
-    flags.gsub(/(^|\s)?-g\d?(\s|$)?/, '\\1-ggdb3\\2')
+    flags.gsub(/(^|\s)?-g\d?(\s|$)/, '\\1-ggdb3\\2')
   else
     flags
   end
@@ -278,6 +278,9 @@ checking_for(checking_message("--enable-debug-build option")) do
   if enable_debug_build
     $CFLAGS = disable_optimization_build_flag($CFLAGS)
     $CFLAGS = enable_debug_build_flag($CFLAGS)
+
+    CONFIG["optflags"] = disable_optimization_build_flag(CONFIG["optflags"])
+    CONFIG["debugflags"] = enable_debug_build_flag(CONFIG["debugflags"])
 
     CONFIG["CXXFLAGS"] = disable_optimization_build_flag(CONFIG["CXXFLAGS"])
     CONFIG["CXXFLAGS"] = enable_debug_build_flag(CONFIG["CXXFLAGS"])
