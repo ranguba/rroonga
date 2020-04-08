@@ -92,6 +92,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency("packnga", [">= 1.0.0"])
   s.add_development_dependency("kramdown")
 
-  s.metadata["msys2_mingw_dependencies"] = "groonga >= 10.0.1"
+  s.metadata["msys2_mingw_dependencies"] = "groonga>=10.0.1"
 end
 
