@@ -1,6 +1,6 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
-  Copyright (C) 2009  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2020  Sutou Kouhei <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -42,9 +42,9 @@ build (VALUE self)
 }
 
 static VALUE
-build_block (VALUE self)
+build_block (RB_BLOCK_CALL_FUNC_ARGLIST(yielded_arg, callback_arg))
 {
-    return rb_funcall(rb_block_proc(), rb_intern("call"), 1, self);
+    return rb_funcall(rb_block_proc(), rb_intern("call"), 1, yielded_arg);
 }
 
 VALUE

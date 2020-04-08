@@ -1,6 +1,6 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
-  Copyright (C) 2009-2020  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2020  Sutou Kouhei <kou@clear-code.com>
   Copyright (C) 2014-2016  Masafumi Yokoyama <yokoyama@clear-code.com>
 
   This library is free software; you can redistribute it and/or
@@ -481,8 +481,10 @@ typedef struct _SetValueData
 } SetValueData;
 
 static VALUE
-set_value (VALUE args, SetValueData *data)
+set_value (RB_BLOCK_CALL_FUNC_ARGLIST(yielded_arg, callback_arg))
 {
+    VALUE args = yielded_arg;
+    SetValueData *data = (SetValueData *)callback_arg;
     VALUE rb_name, rb_value, rb_column;
     RbGrnObject *rb_grn_object;
 

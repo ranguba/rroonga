@@ -1,6 +1,6 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
-  Copyright (C) 2009-2018  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2020  Sutou Kouhei <kou@clear-code.com>
   Copyright (C) 2016  Masafumi Yokoyama <yokoyama@clear-code.com>
 
   This library is free software; you can redistribute it and/or
@@ -22,7 +22,7 @@
 grn_bool rb_grn_exited = GRN_FALSE;
 
 static VALUE
-finish_groonga (VALUE data)
+finish_groonga (RB_BLOCK_CALL_FUNC_ARGLIST(yielded_arg, callback_arg))
 {
     debug("finish\n");
     grn_fin();
