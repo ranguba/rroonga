@@ -1,6 +1,7 @@
 --output-dir doc/reference/en
 --markup markdown
 --markup-provider kramdown
+--asset doc/images:images
 lib/**/*.rb
 ext/**/*.c
 -
