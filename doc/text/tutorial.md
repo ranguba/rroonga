@@ -178,7 +178,7 @@ bookmarks.
 
 First, you add tables for users and for comments like below:
 
-![sample schema](../images/sample-schema.png)
+![Sample schema](images/sample-schema.png)
 
 Let's add the table for users, `Users`.
 
