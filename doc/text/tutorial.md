@@ -178,7 +178,7 @@ bookmarks.
 
 First, you add tables for users and for comments like below:
 
-!http://qwik.jp/senna/senna2.files/rect4605.png!
+![sample schema](../images/sample-schema.png)
 
 Let's add the table for users, `Users`.
 
