@@ -1,5 +1,17 @@
 # NEWS
 
+## 10.0.2: 2020-04-29 {#version-10-0-2}
+
+### Improvements
+
+  * Added support for Float32 in Groonga 10.0.2.
+
+  * [doc] Fixed markup of a image in tutorial [GitHub#192][Patched by takahashim]
+
+### Thanks
+
+  * takahashim
+
 ## 10.0.1: 2020-04-02 {#version-10-0-1}
 
 ### Improvements
