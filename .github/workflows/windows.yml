@@ -24,6 +24,9 @@ jobs:
       - name: Update GCC
         run: |
           ridk exec pacman --sync --noconfirm mingw-w64-x86_64-gcc
+      - name: Install Groonga explicitly
+        run: |
+          ridk exec pacman --sync --noconfirm mingw-w64-x86_64-groonga
       - name: Install dependencies for building gem
         run: |
           gem install `
