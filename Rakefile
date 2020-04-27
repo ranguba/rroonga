@@ -63,12 +63,12 @@ task :test => :configure do
 end
 
 namespace :test do
-  task :install do
-    gemspec_helper = Rake.application.jeweler.gemspec_helper
-    ruby("-S gem install --user-install #{gemspec_helper.gem_path}")
-
-    gem_spec = Gem.source_index.find_name("rroonga").last
-    installed_path = gem_spec.full_gem_path
+  task :install => "install" do
+    rroonga_specs = Gem.source_index.find_name("rroonga")
+    target_rroonga_spec = rroonga_specs.find do |rroonga_spec|
+      rroonga_spec.version == helper.gemspec.version
+    end
+    installed_path = target_rroonga_spec.full_gem_path
     ENV["NO_MAKE"] = "yes"
     ruby("#{installed_path}/test/run-test.rb")
   end

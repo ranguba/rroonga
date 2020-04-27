@@ -23,13 +23,9 @@ jobs:
           ridk exec pacman -Syu --noconfirm
       - name: Install dependencies for building gem
         run: |
-          gem install ^
-            packnga ^
+          gem install `
+            packnga `
             yard
-      - name: Build gem and install
-        run: |
-          ridk exec rake install
       - name: Test
         run: |
-          $Env:NO_MAKE = "yes"
-          ridk exec bundle exec ruby test\run-test.rb
+          ridk exec rake test:install
