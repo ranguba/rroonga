@@ -20,7 +20,7 @@ jobs:
           ruby-version: ${{ matrix.ruby-version }}
       - name: Update MSYS2
         run: |
-          ridk exec pacman -Syu --noconfirm
+          ridk exec pacman --sync -yy -uu --noconfirm
       - name: Install dependencies for building gem
         run: |
           gem install `
