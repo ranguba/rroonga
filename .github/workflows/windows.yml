@@ -26,6 +26,13 @@ jobs:
           gem install `
             packnga `
             yard
+      - name: Build gem
+        run: |
+          rake build
+      - name: Install gem
+        run: |
+          gem install pkg\*.gem
       - name: Test
         run: |
-          ridk exec rake test:install
+          $Env:NO_MAKE = "yes"
+          ruby test\run-test.rb
