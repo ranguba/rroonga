@@ -75,7 +75,7 @@ RB_GRN_BEGIN_DECLS
 
 #ifdef __WIN32__
 #  ifdef RB_GRN_COMPILATION
-#    define RB_GRN_VAR __declspec(dllexport)
+#    define RB_GRN_VAR extern __declspec(dllexport)
 #  else
 #    define RB_GRN_VAR extern __declspec(dllimport)
 #  endif
