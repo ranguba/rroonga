@@ -37,7 +37,7 @@ end
 require "test-unit"
 require "test/unit/priority"
 
-Test::Unit::Priority.enable
+Test::Unit::Priority.enable unless ENV["CI"]
 
 
 groonga_command_dir = File.join(base_dir, "..", "groonga-command")
