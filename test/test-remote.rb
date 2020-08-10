@@ -26,6 +26,7 @@ class RemoteTest < Test::Unit::TestCase
     else
       package_config = PKGConfig.package_config("groonga")
       groonga = package_config.variable("groonga")
+      groonga = normalize_groonga_path(groonga)
       groonga = "groonga" unless File.exist?(groonga)
     end
 
@@ -48,6 +49,19 @@ class RemoteTest < Test::Unit::TestCase
           break
         end
       end
+    end
+  end
+
+  def normalize_groonga_path(groonga)
+    return groonga unless groonga
+    return groonga unless Object.const_defined?(:RubyInstaller)
+
+    msys2_installation = RubyInstaller::Runtime.msys2_installation
+    mingw_prefix = msys2_installation.mingw_prefix
+    mingw_bin_path = "#{mingw_prefix}/bin/"
+    mingw_bin_path_windows = "#{msys2_installation.mingw_bin_path}\\"
+    groonga.gsub(/\A#{Regexp.escape(mingw_bin_path)}/) do
+      mingw_bin_path_windows
     end
   end
 
