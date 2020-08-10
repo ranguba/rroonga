@@ -52,4 +52,4 @@ jobs:
       - name: Test
         run: |
           $Env:NO_MAKE = "yes"
-          ruby test\run-test.rb
+          ridk exec ruby test\run-test.rb
