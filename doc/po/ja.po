@@ -446,6 +446,15 @@ msgstr "* [2. インストール - Groonga ドキュメント](http://groonga.or
 msgid "# NEWS"
 msgstr "# お知らせ"
 
+msgid "## 10.0.6: 2020-09-01 {#version-10-0-6}"
+msgstr ""
+
+msgid "### Fixes"
+msgstr "### 修正"
+
+msgid "  * Fixed a bug that failed `gem install rroonga` in Windows version."
+msgstr "  * Windows版で `gem install rroonga` に失敗する問題を修正しました。"
+
 msgid "## 10.0.2: 2020-04-29 {#version-10-0-2}"
 msgstr ""
 
@@ -737,9 +746,6 @@ msgid ""
 "  * Improved integration with libraries that uses `at_exit` such as\n"
 "    test-unit."
 msgstr ""
-
-msgid "### Fixes"
-msgstr "### 修正"
 
 msgid "  * {Groonga::FixSizeColumn#inspect}: Fixed wrong flags."
 msgstr ""

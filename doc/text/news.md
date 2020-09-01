@@ -1,5 +1,11 @@
 # NEWS
 
+## 10.0.6: 2020-09-01 {#version-10-0-6}
+
+### Fixes
+
+  * Fixed a bug that failed `gem install rroonga` in Windows version.
+
 ## 10.0.2: 2020-04-29 {#version-10-0-2}
 
 ### Improvements
