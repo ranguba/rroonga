@@ -94,9 +94,11 @@ class RemoteTest < Test::Unit::TestCase
     values = JSON.load(result)
     assert_equal([
                    "alloc_count",
+                   "apache_arrow",
                    "cache_hit_rate",
                    "command_version",
                    "default_command_version",
+                   "features",
                    "max_command_version",
                    "n_jobs",
                    "n_queries",
