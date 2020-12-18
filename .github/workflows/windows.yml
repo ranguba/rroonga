@@ -48,6 +48,9 @@ jobs:
           gem install `
             packnga `
             yard
+          if ("${{ matrix.ruby-version }}" -eq "2.5") {
+            gem install bundler
+          }
       - name: Build gem
         run: |
           rake build
