@@ -1,0 +1,43 @@
+name: Test
+on:
+  - push
+  - pull_request
+jobs:
+  test:
+    name: ${{ matrix.ruby-version }} x ${{ matrix.runs-on }}
+    runs-on: ${{ matrix.runs-on }}
+    strategy:
+      fail-fast: false
+      matrix:
+        runs-on:
+          - ubuntu-latest
+          - macos-latest
+          - windows-latest
+        ruby-version:
+          - "2.5"
+          - "2.6"
+          - "2.7"
+          - "3.0"
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Groonga APT repository
+        if: |
+          ${{ matrix.runs-on }} == 'ubuntu-latest'
+        run: |
+          sudo -H add-apt-repository -y ppa:groonga/ppa
+          sudo -H apt update
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby-version }}
+          bundler-cache: true
+      - name: Build gem
+        run: |
+          rake build
+      - name: Install gem
+        run: |
+          gem install pkg/*.gem
+      - name: Test
+        run: |
+          ruby test/run-test.rb
+        env:
+          NO_MAKE: "yes"
