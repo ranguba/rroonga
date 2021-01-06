@@ -38,6 +38,13 @@ jobs:
       - name: Install gem
         run: |
           gem install --verbose pkg/*.gem
+      - name: Install additional Groonga pakcages to run tests
+        if: |
+          matrix.runs-on == 'ubuntu-latest'
+        run: |
+          sudo -H apt install -y \
+            groonga \
+            groonga-plugin-tokenizer-mecab
       - name: Test
         run: |
           ruby test/run-test.rb
