@@ -82,9 +82,10 @@ Gem::Specification.new do |s|
 
   s.required_ruby_version = ">= 1.9.3"
 
-  s.add_runtime_dependency("pkg-config")
   s.add_runtime_dependency("groonga-client", ">= 0.0.3")
   s.add_runtime_dependency("json")
+  s.add_runtime_dependency("native-package-installer")
+  s.add_runtime_dependency("pkg-config")
   s.add_development_dependency("test-unit", [">= 3.0.0"])
   s.add_development_dependency("rake")
   s.add_development_dependency("bundler")

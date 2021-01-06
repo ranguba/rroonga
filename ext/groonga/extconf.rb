@@ -223,7 +223,17 @@ def install_local_groonga(package_name, major, minor, micro)
   add_rpath_for_local_groonga
 end
 
+need_auto_groonga_install = false
 unless PKGConfig.have_package(package_name, major, minor, micro)
+  if NativePackageInstaller.install([package_name, major, minor, micro],
+                                    debian: "libgroonga-dev",
+                                    homebrew: "groonga",
+                                    msys2: "groonga")
+    need_auto_groonga_install =
+      !PKGConfig.have_package(package_name, major, minor, micro)
+  end
+end
+if need_auto_groonga_install
   install_local_groonga(package_name, major, minor, micro)
 end
 
