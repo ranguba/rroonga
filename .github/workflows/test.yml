@@ -53,15 +53,11 @@ jobs:
             --sysupgrade `
             --sysupgrade
           taskkill /F /FI "MODULES eq msys-2.0.dll"
-      - name: Install groonga Formula explicitly
+      - name: Update Homebrew
         if: |
           matrix.runs-on == 'macos-latest'
         run: |
-          gem install pkg-config
-          ruby -r pkg-config -e 'pp PKGConfig.modversion("groonga")' || :
           brew update
-          brew install groonga
-          ruby -r pkg-config -e 'pp PKGConfig.modversion("groonga")' || :
       - name: Install gem
         run: |
           gem install --verbose pkg/*.gem
