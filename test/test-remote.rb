@@ -92,6 +92,8 @@ class RemoteTest < Test::Unit::TestCase
     id, result = _context.receive
     assert_equal(0, id)
     values = JSON.load(result)
+    values.delete("apache_arrow")
+    values.delete("features")
     assert_equal([
                    "alloc_count",
                    "cache_hit_rate",
