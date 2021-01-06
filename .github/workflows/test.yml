@@ -46,11 +46,13 @@ jobs:
             --sync `
             --sysupgrade `
             --sysupgrade
+          taskkill /F /FI "MODULES eq msys-2.0.dll"
           ridk exec pacman `
             --noconfirm `
             --sync `
             --sysupgrade `
             --sysupgrade
+          taskkill /F /FI "MODULES eq msys-2.0.dll"
       - name: Install groonga Formula explicitly
         if: |
           matrix.runs-on == 'macos-latest'
