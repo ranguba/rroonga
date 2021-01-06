@@ -35,24 +35,14 @@ jobs:
       - name: Build gem
         run: |
           rake build
-      - name: Update MSYS2 packages
+      - name: Update MSYS2 package database
         if: |
           matrix.runs-on == 'windows-latest'
         run: |
           ridk exec pacman `
             --noconfirm `
             --refresh `
-            --refresh `
-            --sync `
-            --sysupgrade `
-            --sysupgrade
-          taskkill /F /FI "MODULES eq msys-2.0.dll"
-          ridk exec pacman `
-            --noconfirm `
-            --sync `
-            --sysupgrade `
-            --sysupgrade
-          taskkill /F /FI "MODULES eq msys-2.0.dll"
+            --sync
       - name: Update Homebrew
         if: |
           matrix.runs-on == 'macos-latest'
