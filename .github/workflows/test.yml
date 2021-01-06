@@ -22,7 +22,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Set up Groonga APT repository
         if: |
-          ${{ matrix.runs-on }} == 'ubuntu-latest'
+          matrix.runs-on == 'ubuntu-latest'
         run: |
           sudo -H add-apt-repository -y ppa:groonga/ppa
           sudo -H apt update
