@@ -17,6 +17,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 require "English"
+require_relative "rroonga-build"
 
 base_dir = File.dirname(__FILE__)
 ext_dir = File.join(base_dir, "ext", "groonga")
@@ -93,6 +94,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency("packnga", [">= 1.0.0"])
   s.add_development_dependency("kramdown")
 
-  s.metadata["msys2_mingw_dependencies"] = "groonga>=10.0.1"
+  required_groonga_version = RroongaBuild::RequiredGroongaVersion::STRING
+  s.metadata["msys2_mingw_dependencies"] = "groonga>=#{required_groonga_version}"
 end
 

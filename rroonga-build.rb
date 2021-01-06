@@ -20,6 +20,7 @@ module RroongaBuild
     MINOR = 1
     MICRO = 0
     VERSION = [MAJOR, MINOR, MICRO]
+    STRING = VERSION.join(".")
     RELEASED_DATE = Time.utc(2020, 12, 29)
   end
 
