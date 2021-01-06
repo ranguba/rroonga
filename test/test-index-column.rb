@@ -1,6 +1,4 @@
-# -*- coding: utf-8 -*-
-#
-# Copyright (C) 2009-2016  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2021  Sutou Kouhei <kou@clear-code.com>
 # Copyright (C) 2016  Masafumi Yokoyama <yokoyama@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
@@ -203,6 +201,8 @@ class IndexColumnTest < Test::Unit::TestCase
   end
 
   def test_reindex
+    check_mecab_availability
+
     Groonga::Schema.define do |schema|
       schema.create_table("Memos", :type => :array) do |table|
         table.short_text("title")
