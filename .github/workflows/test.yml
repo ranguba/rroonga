@@ -29,10 +29,12 @@ jobs:
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby-version }}
-          bundler-cache: true
+      - name: Install dependencies to build gems
+        run: |
+          gem install packnga yard
       - name: Build gem
         run: |
-          bundle exec rake build
+          rake build
       - name: Install gem
         run: |
           gem install --verbose pkg/*.gem
