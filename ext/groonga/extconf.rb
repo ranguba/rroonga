@@ -77,7 +77,7 @@ def download(url)
         ]
       end
     end
-    open(url, "rb", options) do |input|
+    URI.open(url, "rb", *options) do |input|
       File.open(base_name, "wb") do |output|
         while (buffer = input.read(1024))
           output.print(buffer)
