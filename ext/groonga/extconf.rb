@@ -226,8 +226,7 @@ end
 
 need_auto_groonga_install = false
 unless PKGConfig.have_package(package_name, major, minor, micro)
-  if NativePackageInstaller.install([package_name, major, minor, micro],
-                                    debian: "libgroonga-dev",
+  if NativePackageInstaller.install(debian: "libgroonga-dev",
                                     homebrew: "groonga",
                                     msys2: "groonga")
     need_auto_groonga_install =
