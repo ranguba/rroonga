@@ -44,7 +44,7 @@ jobs:
         run: |
           sudo -H apt install -y \
             groonga \
-            groonga-plugin-tokenizer-mecab
+            groonga-tokenizer-mecab
       - name: Test
         run: |
           ruby test/run-test.rb
