@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 #
-# Copyright (C) 2009-2020  Sutou Kouhei <kou@clear-code.com>
+# Copyright (C) 2009-2021  Sutou Kouhei <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -23,6 +23,7 @@ require "shellwords"
 require "open-uri"
 require "uri"
 
+require "native-package-installer"
 require "pkg-config"
 
 base_dir = Pathname(__FILE__).dirname.parent.parent.expand_path
