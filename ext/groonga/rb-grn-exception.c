@@ -103,6 +103,7 @@ static VALUE eGrnScorerError;
 static VALUE eGrnCancel;
 static VALUE eGrnWindowFunctionError;
 static VALUE eGrnZstdError;
+static VALUE eGrnConnectionReset;
 
 VALUE
 rb_grn_rc_to_exception (grn_rc rc)
@@ -352,6 +353,9 @@ rb_grn_rc_to_exception (grn_rc rc)
         break;
       case GRN_ZSTD_ERROR:
         exception = eGrnZstdError;
+        break;
+      case GRN_CONNECTION_RESET:
+        exception = eGrnConnectionReset;
         break;
     }
 
@@ -1072,4 +1076,14 @@ rb_grn_init_exception (VALUE mGrn)
      */
     eGrnZstdError =
         rb_define_class_under(mGrn, "ZstdError", rb_eGrnError);
+
+    /*
+     * Document-class: Groonga::ConnectionReset
+     *
+     * It is used when connection is reset.
+     *
+     * @since 10.1.1
+     */
+    eGrnConnectionReset =
+        rb_define_class_under(mGrn, "ConnectionReset", rb_eGrnError);
 }
