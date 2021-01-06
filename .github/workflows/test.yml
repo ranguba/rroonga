@@ -57,6 +57,7 @@ jobs:
         run: |
           gem install pkg-config
           ruby -r pkg-config -e 'pp PKGConfig.modversion("groonga")' || :
+          brew update
           brew install groonga
           ruby -r pkg-config -e 'pp PKGConfig.modversion("groonga")' || :
       - name: Install gem
