@@ -70,6 +70,9 @@ jobs:
             groonga-tokenizer-mecab
       - name: Test
         run: |
+          ruby -run -e mkdir -- tmp
+          ruby -run -e cp -- -p -r test tmp
+          cd tmp
           ruby test/run-test.rb
         env:
           NO_MAKE: "yes"
