@@ -35,6 +35,22 @@ jobs:
       - name: Build gem
         run: |
           rake build
+      - name: Update MSYS2 packages
+        if: |
+          matrix.runs-on == 'windows-latest'
+        run: |
+          ridk exec pacman `
+            --noconfirm `
+            --refresh `
+            --refresh `
+            --sync `
+            --sysupgrade `
+            --sysupgrade
+          ridk exec pacman `
+            --noconfirm `
+            --sync `
+            --sysupgrade `
+            --sysupgrade
       - name: Install gem
         run: |
           gem install --verbose pkg/*.gem
