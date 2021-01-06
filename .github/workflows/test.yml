@@ -35,7 +35,7 @@ jobs:
           bundle exec rake build
       - name: Install gem
         run: |
-          gem install pkg/*.gem
+          gem install --verbose pkg/*.gem
       - name: Test
         run: |
           ruby test/run-test.rb
