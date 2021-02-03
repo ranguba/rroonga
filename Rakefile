@@ -74,4 +74,35 @@ namespace :test do
   end
 end
 
+def update_version(new_version)
+  splitted_new_version = new_version.split(".")
+  new_majorversion = splitted_new_version[0]
+  new_minorversion = splitted_new_version[1]
+  new_microversion = splitted_new_version[2]
+
+  rroonga_version = {
+    "RB_GRN_MAJOR_VERSION" => new_majorversion,
+    "RB_GRN_MINOR_VERSION" => new_minorversion,
+    "RB_GRN_MICRO_VERSION" => new_microversion
+  }
+
+  File.open("./ext/groonga/rb-grn.h", "rb+") do |file|
+    rb_grn_header = file.read
+
+    rroonga_version.each do |key, value|
+      replacement = "#{key} #{value}"
+      rb_grn_header.gsub!(/#{key}\s\d{1,}/, replacement)
+    end
+    file.rewind()
+    file.write(rb_grn_header)
+  end
+end
+
+namespace :release do
+  desc "Bump version"
+  task :version, ['new_version'] do |_, args|
+    update_version(args[:new_version])
+  end
+end
+
 task :default => :test
