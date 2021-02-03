@@ -91,9 +91,9 @@ RB_GRN_BEGIN_DECLS
 
 #define RB_GRN_HAVE_FLOAT32 GRN_VERSION_OR_LATER(10, 0, 2)
 
-#define RB_GRN_MAJOR_VERSION 10
-#define RB_GRN_MINOR_VERSION 1
-#define RB_GRN_MICRO_VERSION 1
+#define RB_GRN_MAJOR_VERSION 11
+#define RB_GRN_MINOR_VERSION 0
+#define RB_GRN_MICRO_VERSION 0
 
 #define RB_GRN_OBJECT(object) ((RbGrnObject *)(object))
 #define RB_GRN_NAMED_OBJECT(object) ((RbGrnNamedObject *)(object))
