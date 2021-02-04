@@ -76,14 +76,14 @@ end
 
 def update_version(new_version)
   splitted_new_version = new_version.split(".")
-  new_majorversion = splitted_new_version[0]
-  new_minorversion = splitted_new_version[1]
-  new_microversion = splitted_new_version[2]
+  new_major_version = splitted_new_version[0]
+  new_minor_version = splitted_new_version[1]
+  new_micro_version = splitted_new_version[2]
 
   rroonga_version = {
-    "RB_GRN_MAJOR_VERSION" => new_majorversion,
-    "RB_GRN_MINOR_VERSION" => new_minorversion,
-    "RB_GRN_MICRO_VERSION" => new_microversion
+    "RB_GRN_MAJOR_VERSION" => new_major_version,
+    "RB_GRN_MINOR_VERSION" => new_minor_version,
+    "RB_GRN_MICRO_VERSION" => new_micro_version
   }
 
   File.open("./ext/groonga/rb-grn.h", "rb+") do |file|
