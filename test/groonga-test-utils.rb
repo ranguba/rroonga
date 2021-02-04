@@ -140,6 +140,9 @@ module GroongaTestUtils
   end
 
   def teardown_log_path
+    Groonga::Logger.path = nil
+    Groonga::QueryLogger.path = nil
+
     return unless @dump_log
     if @log_path.exist?(log_path)
       header = "--- log: #{@log_path} ---"

@@ -22,6 +22,15 @@ class TableArrowTest < Test::Unit::TestCase
     omit("Apache Arrow support is required") unless context.support_arrow?
   end
 
+  def open_temporary_file(extension)
+    tempfile = Tempfile.new(["table-arrow", extension])
+    begin
+      yield(tempfile)
+    ensure
+      tempfile.close!
+    end
+  end
+
   def assert_dump_load(type, n_records)
     Groonga::Schema.define do |schema|
       schema.create_table("Source") do |table|
@@ -42,9 +51,10 @@ class TableArrowTest < Test::Unit::TestCase
       source.add(:data => data)
     end
 
-    tempfile = Tempfile.new(["table-arrow", ".arrow"])
-    source.dump_arrow(tempfile.path)
-    destination.load_arrow(tempfile.path)
+    open_temporary_file(".arrow") do |tempfile|
+      source.dump_arrow(tempfile.path)
+      destination.load_arrow(tempfile.path)
+    end
 
     assert_equal(expected,
                  destination.collect(&:attributes))
@@ -153,9 +163,10 @@ class TableArrowTest < Test::Unit::TestCase
       source.add(:data1 => data1, :data2 => data2)
     end
 
-    tempfile = Tempfile.new(["table-arrow", ".arrow"])
-    source.dump_arrow(tempfile.path, :columns => source.columns[0, 1])
-    destination.load_arrow(tempfile.path)
+    open_temporary_file(".arrow") do |tempfile|
+      source.dump_arrow(tempfile.path, columns: source.columns[0, 1])
+      destination.load_arrow(tempfile.path)
+    end
 
     assert_equal(expected,
                  destination.collect(&:attributes))
@@ -183,9 +194,10 @@ class TableArrowTest < Test::Unit::TestCase
       source.add(:data1 => data1, :data2 => data2)
     end
 
-    tempfile = Tempfile.new(["table-arrow", ".arrow"])
-    source.dump_arrow(tempfile.path, :column_names => ["data1"])
-    destination.load_arrow(tempfile.path)
+    open_temporary_file(".arrow") do |tempfile|
+      source.dump_arrow(tempfile.path, column_names: ["data1"])
+      destination.load_arrow(tempfile.path)
+    end
 
     assert_equal(expected,
                  destination.collect(&:attributes))
