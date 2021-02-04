@@ -93,7 +93,7 @@ def update_version(new_version)
       replacement = "#{key} #{value}"
       rb_grn_header.gsub!(/#{key}\s\d{1,}/, replacement)
     end
-    file.rewind()
+    file.rewind
     file.write(rb_grn_header)
   end
 end
