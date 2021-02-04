@@ -325,187 +325,193 @@ rb_grn_init_operator (VALUE mGrn)
     rb_grn_init_prefix_operator(mGrn);
     rb_grn_init_regexp_operator(mGrn);
 
-#define OPERATOR_NEW(name, NAME)                                    \
-    rb_obj_freeze(rb_funcall(rb_cGrnOperator, rb_intern("new"), 2,  \
+#define OPERATOR_NEW(klass, name, NAME)                             \
+    rb_obj_freeze(rb_funcall(klass, rb_intern("new"), 2,            \
                              rb_obj_freeze(rb_str_new_cstr(name)),  \
                              UINT2NUM(GRN_OP_ ## NAME)))
 
     rb_define_const(rb_cGrnOperator, "PUSH",
-                    OPERATOR_NEW("push", PUSH));
+                    OPERATOR_NEW(rb_cGrnOperator, "push", PUSH));
     rb_define_const(rb_cGrnOperator, "POP",
-                    OPERATOR_NEW("pop", POP));
+                    OPERATOR_NEW(rb_cGrnOperator, "pop", POP));
     rb_define_const(rb_cGrnOperator, "NO_OPERATION",
-                    OPERATOR_NEW("no-operation", NOP));
+                    OPERATOR_NEW(rb_cGrnOperator, "no-operation", NOP));
     rb_define_const(rb_cGrnOperator, "CALL",
-                    OPERATOR_NEW("call", CALL));
+                    OPERATOR_NEW(rb_cGrnOperator, "call", CALL));
     rb_define_const(rb_cGrnOperator, "INTERN",
-                    OPERATOR_NEW("intern", INTERN));
+                    OPERATOR_NEW(rb_cGrnOperator, "intern", INTERN));
     rb_define_const(rb_cGrnOperator, "GET_REFERENCE",
-                    OPERATOR_NEW("get-reference", GET_REF));
+                    OPERATOR_NEW(rb_cGrnOperator, "get-reference", GET_REF));
     rb_define_const(rb_cGrnOperator, "GET_VALUE",
-                    OPERATOR_NEW("get-value", GET_VALUE));
+                    OPERATOR_NEW(rb_cGrnOperator, "get-value", GET_VALUE));
     rb_define_const(rb_cGrnOperator, "AND",
-                    OPERATOR_NEW("and", AND));
+                    OPERATOR_NEW(rb_cGrnOperator, "and", AND));
     rb_define_const(rb_cGrnOperator, "AND_NOT",
-                    OPERATOR_NEW("and-not", AND_NOT));
+                    OPERATOR_NEW(rb_cGrnOperator, "and-not", AND_NOT));
     /* Just for backward compatibility. TODO: REMOVE ME! */
     rb_define_const(rb_cGrnOperator, "BUT",
-                    OPERATOR_NEW("but", BUT));
+                    OPERATOR_NEW(rb_cGrnOperator, "but", BUT));
     rb_define_const(rb_cGrnOperator, "OR",
-                    OPERATOR_NEW("or", OR));
+                    OPERATOR_NEW(rb_cGrnOperator, "or", OR));
     rb_define_const(rb_cGrnOperator, "ASSIGN",
-                    OPERATOR_NEW("assign", ASSIGN));
+                    OPERATOR_NEW(rb_cGrnOperator, "assign", ASSIGN));
     rb_define_const(rb_cGrnOperator, "STAR_ASSIGN",
-                    OPERATOR_NEW("star-assign", STAR_ASSIGN));
+                    OPERATOR_NEW(rb_cGrnOperator, "star-assign", STAR_ASSIGN));
     rb_define_const(rb_cGrnOperator, "SLASH_ASSIGN",
-                    OPERATOR_NEW("slash-assign", SLASH_ASSIGN));
+                    OPERATOR_NEW(rb_cGrnOperator, "slash-assign", SLASH_ASSIGN));
     rb_define_const(rb_cGrnOperator, "MODULO_ASSIGN",
-                    OPERATOR_NEW("modulo-assign", MOD_ASSIGN));
+                    OPERATOR_NEW(rb_cGrnOperator, "modulo-assign", MOD_ASSIGN));
     rb_define_const(rb_cGrnOperator, "PLUS_ASSIGN",
-                    OPERATOR_NEW("plus-assign", PLUS_ASSIGN));
+                    OPERATOR_NEW(rb_cGrnOperator, "plus-assign", PLUS_ASSIGN));
     rb_define_const(rb_cGrnOperator, "MINUS_ASSIGN",
-                    OPERATOR_NEW("minus-assign", MINUS_ASSIGN));
+                    OPERATOR_NEW(rb_cGrnOperator, "minus-assign", MINUS_ASSIGN));
     rb_define_const(rb_cGrnOperator, "SHIFTL_ASSIGN",
-                    OPERATOR_NEW("shiftl-assign", SHIFTL_ASSIGN));
+                    OPERATOR_NEW(rb_cGrnOperator, "shiftl-assign", SHIFTL_ASSIGN));
     rb_define_const(rb_cGrnOperator, "SHIRTR_ASSIGN",
-                    OPERATOR_NEW("shirtr-assign", SHIFTR_ASSIGN));
+                    OPERATOR_NEW(rb_cGrnOperator, "shirtr-assign", SHIFTR_ASSIGN));
     rb_define_const(rb_cGrnOperator, "SHIFTRR_ASSIGN",
-                    OPERATOR_NEW("shiftrr-assign", SHIFTRR_ASSIGN));
+                    OPERATOR_NEW(rb_cGrnOperator, "shiftrr-assign", SHIFTRR_ASSIGN));
     rb_define_const(rb_cGrnOperator, "AND_ASSIGN",
-                    OPERATOR_NEW("and-assign", AND_ASSIGN));
+                    OPERATOR_NEW(rb_cGrnOperator, "and-assign", AND_ASSIGN));
     rb_define_const(rb_cGrnOperator, "XOR_ASSIGN",
-                    OPERATOR_NEW("xor-assign", XOR_ASSIGN));
+                    OPERATOR_NEW(rb_cGrnOperator, "xor-assign", XOR_ASSIGN));
     rb_define_const(rb_cGrnOperator, "OR_ASSIGN",
-                    OPERATOR_NEW("or-assign", OR_ASSIGN));
+                    OPERATOR_NEW(rb_cGrnOperator, "or-assign", OR_ASSIGN));
     rb_define_const(rb_cGrnOperator, "JUMP",
-                    OPERATOR_NEW("jump", JUMP));
+                    OPERATOR_NEW(rb_cGrnOperator, "jump", JUMP));
     rb_define_const(rb_cGrnOperator, "CJUMP",
-                    OPERATOR_NEW("cjump", CJUMP));
+                    OPERATOR_NEW(rb_cGrnOperator, "cjump", CJUMP));
     rb_define_const(rb_cGrnOperator, "COMMA",
-                    OPERATOR_NEW("comma", COMMA));
+                    OPERATOR_NEW(rb_cGrnOperator, "comma", COMMA));
     rb_define_const(rb_cGrnOperator, "BITWISE_OR",
-                    OPERATOR_NEW("bitwise-or", BITWISE_OR));
+                    OPERATOR_NEW(rb_cGrnOperator, "bitwise-or", BITWISE_OR));
     rb_define_const(rb_cGrnOperator, "BITWISE_XOR",
-                    OPERATOR_NEW("bitwise-xor", BITWISE_XOR));
+                    OPERATOR_NEW(rb_cGrnOperator, "bitwise-xor", BITWISE_XOR));
     rb_define_const(rb_cGrnOperator, "BITWISE_AND",
-                    OPERATOR_NEW("bitwise-and", BITWISE_AND));
+                    OPERATOR_NEW(rb_cGrnOperator, "bitwise-and", BITWISE_AND));
     rb_define_const(rb_cGrnOperator, "BITWISE_NOT",
-                    OPERATOR_NEW("bitwise-not", BITWISE_NOT));
+                    OPERATOR_NEW(rb_cGrnOperator, "bitwise-not", BITWISE_NOT));
     rb_define_const(rb_cGrnOperator, "EQUAL",
-                    OPERATOR_NEW("equal", EQUAL));
+                    OPERATOR_NEW(rb_cGrnEqualOperator, "equal", EQUAL));
     rb_define_const(rb_cGrnOperator, "NOT_EQUAL",
-                    OPERATOR_NEW("not-equal", NOT_EQUAL));
+                    OPERATOR_NEW(rb_cGrnNotEqualOperator,
+                                 "not-equal",
+                                 NOT_EQUAL));
     rb_define_const(rb_cGrnOperator, "LESS",
-                    OPERATOR_NEW("less", LESS));
+                    OPERATOR_NEW(rb_cGrnLessOperator, "less", LESS));
     rb_define_const(rb_cGrnOperator, "GREATER",
-                    OPERATOR_NEW("greater", GREATER));
+                    OPERATOR_NEW(rb_cGrnGreaterOperator, "greater", GREATER));
     rb_define_const(rb_cGrnOperator, "LESS_EQUAL",
-                    OPERATOR_NEW("less-equal", LESS_EQUAL));
+                    OPERATOR_NEW(rb_cGrnLessEqualOperator,
+                                 "less-equal",
+                                 LESS_EQUAL));
     rb_define_const(rb_cGrnOperator, "GREATER_EQUAL",
-                    OPERATOR_NEW("greater-equal", GREATER_EQUAL));
+                    OPERATOR_NEW(rb_cGrnGreaterEqualOperator,
+                                 "greater-equal",
+                                 GREATER_EQUAL));
     rb_define_const(rb_cGrnOperator, "IN",
-                    OPERATOR_NEW("in", IN));
+                    OPERATOR_NEW(rb_cGrnOperator, "in", IN));
     rb_define_const(rb_cGrnOperator, "MATCH",
-                    OPERATOR_NEW("match", MATCH));
+                    OPERATOR_NEW(rb_cGrnMatchOperator, "match", MATCH));
     rb_define_const(rb_cGrnOperator, "NEAR",
-                    OPERATOR_NEW("near", NEAR));
+                    OPERATOR_NEW(rb_cGrnOperator, "near", NEAR));
     rb_define_const(rb_cGrnOperator, "NEAR2",
-                    OPERATOR_NEW("near2", NEAR2));
+                    OPERATOR_NEW(rb_cGrnOperator, "near2", NEAR2));
     rb_define_const(rb_cGrnOperator, "SIMILAR",
-                    OPERATOR_NEW("similar", SIMILAR));
+                    OPERATOR_NEW(rb_cGrnOperator, "similar", SIMILAR));
     rb_define_const(rb_cGrnOperator, "TERM_EXTRACT",
-                    OPERATOR_NEW("term-extract", TERM_EXTRACT));
+                    OPERATOR_NEW(rb_cGrnOperator, "term-extract", TERM_EXTRACT));
     rb_define_const(rb_cGrnOperator, "SHIFTL",
-                    OPERATOR_NEW("shiftl", SHIFTL));
+                    OPERATOR_NEW(rb_cGrnOperator, "shiftl", SHIFTL));
     rb_define_const(rb_cGrnOperator, "SHIFTR",
-                    OPERATOR_NEW("shiftr", SHIFTR));
+                    OPERATOR_NEW(rb_cGrnOperator, "shiftr", SHIFTR));
     rb_define_const(rb_cGrnOperator, "SHIFTRR",
-                    OPERATOR_NEW("shiftrr", SHIFTRR));
+                    OPERATOR_NEW(rb_cGrnOperator, "shiftrr", SHIFTRR));
     rb_define_const(rb_cGrnOperator, "PLUS",
-                    OPERATOR_NEW("plus", PLUS));
+                    OPERATOR_NEW(rb_cGrnOperator, "plus", PLUS));
     rb_define_const(rb_cGrnOperator, "MINUS",
-                    OPERATOR_NEW("minus", MINUS));
+                    OPERATOR_NEW(rb_cGrnOperator, "minus", MINUS));
     rb_define_const(rb_cGrnOperator, "STAR",
-                    OPERATOR_NEW("star", STAR));
+                    OPERATOR_NEW(rb_cGrnOperator, "star", STAR));
     rb_define_const(rb_cGrnOperator, "SLASH",
-                    OPERATOR_NEW("slash", SLASH));
+                    OPERATOR_NEW(rb_cGrnOperator, "slash", SLASH));
     rb_define_const(rb_cGrnOperator, "MODULO",
-                    OPERATOR_NEW("modulo", MOD));
+                    OPERATOR_NEW(rb_cGrnOperator, "modulo", MOD));
     rb_define_const(rb_cGrnOperator, "DELETE",
-                    OPERATOR_NEW("delete", DELETE));
+                    OPERATOR_NEW(rb_cGrnOperator, "delete", DELETE));
     rb_define_const(rb_cGrnOperator, "INCREMENT",
-                    OPERATOR_NEW("increment", INCR));
+                    OPERATOR_NEW(rb_cGrnOperator, "increment", INCR));
     rb_define_const(rb_cGrnOperator, "DECREMENT",
-                    OPERATOR_NEW("decrement", DECR));
+                    OPERATOR_NEW(rb_cGrnOperator, "decrement", DECR));
     rb_define_const(rb_cGrnOperator, "INCREMENT_POST",
-                    OPERATOR_NEW("increment-post", INCR_POST));
+                    OPERATOR_NEW(rb_cGrnOperator, "increment-post", INCR_POST));
     rb_define_const(rb_cGrnOperator, "DECREMENT_POST",
-                    OPERATOR_NEW("decrement-post", DECR_POST));
+                    OPERATOR_NEW(rb_cGrnOperator, "decrement-post", DECR_POST));
     rb_define_const(rb_cGrnOperator, "NOT",
-                    OPERATOR_NEW("not", NOT));
+                    OPERATOR_NEW(rb_cGrnOperator, "not", NOT));
     rb_define_const(rb_cGrnOperator, "ADJUST",
-                    OPERATOR_NEW("adjust", ADJUST));
+                    OPERATOR_NEW(rb_cGrnOperator, "adjust", ADJUST));
     rb_define_const(rb_cGrnOperator, "EXACT",
-                    OPERATOR_NEW("exact", EXACT));
+                    OPERATOR_NEW(rb_cGrnOperator, "exact", EXACT));
     rb_define_const(rb_cGrnOperator, "LONGEST_COMMON_PREFIX",
-                    OPERATOR_NEW("longest-common-prefix", LCP));
+                    OPERATOR_NEW(rb_cGrnOperator, "longest-common-prefix", LCP));
     rb_define_const(rb_cGrnOperator, "PARTIAL",
-                    OPERATOR_NEW("partial", PARTIAL));
+                    OPERATOR_NEW(rb_cGrnOperator, "partial", PARTIAL));
     rb_define_const(rb_cGrnOperator, "UNSPLIT",
-                    OPERATOR_NEW("unsplit", UNSPLIT));
+                    OPERATOR_NEW(rb_cGrnOperator, "unsplit", UNSPLIT));
     rb_define_const(rb_cGrnOperator, "PREFIX",
-                    OPERATOR_NEW("prefix", PREFIX));
+                    OPERATOR_NEW(rb_cGrnPrefixOperator, "prefix", PREFIX));
     rb_define_const(rb_cGrnOperator, "SUFFIX",
-                    OPERATOR_NEW("suffix", SUFFIX));
+                    OPERATOR_NEW(rb_cGrnOperator, "suffix", SUFFIX));
     rb_define_const(rb_cGrnOperator, "GEO_DISTANCE1",
-                    OPERATOR_NEW("geo-distance1", GEO_DISTANCE1));
+                    OPERATOR_NEW(rb_cGrnOperator, "geo-distance1", GEO_DISTANCE1));
     rb_define_const(rb_cGrnOperator, "GEO_DISTANCE2",
-                    OPERATOR_NEW("geo-distance2", GEO_DISTANCE2));
+                    OPERATOR_NEW(rb_cGrnOperator, "geo-distance2", GEO_DISTANCE2));
     rb_define_const(rb_cGrnOperator, "GEO_DISTANCE3",
-                    OPERATOR_NEW("geo-distance3", GEO_DISTANCE3));
+                    OPERATOR_NEW(rb_cGrnOperator, "geo-distance3", GEO_DISTANCE3));
     rb_define_const(rb_cGrnOperator, "GEO_DISTANCE4",
-                    OPERATOR_NEW("geo-distance4", GEO_DISTANCE4));
+                    OPERATOR_NEW(rb_cGrnOperator, "geo-distance4", GEO_DISTANCE4));
     rb_define_const(rb_cGrnOperator, "GEO_WITHINP5",
-                    OPERATOR_NEW("geo-withinp5", GEO_WITHINP5));
+                    OPERATOR_NEW(rb_cGrnOperator, "geo-withinp5", GEO_WITHINP5));
     rb_define_const(rb_cGrnOperator, "GEO_WITHINP6",
-                    OPERATOR_NEW("geo-withinp6", GEO_WITHINP6));
+                    OPERATOR_NEW(rb_cGrnOperator, "geo-withinp6", GEO_WITHINP6));
     rb_define_const(rb_cGrnOperator, "GEO_WITHINP8",
-                    OPERATOR_NEW("geo-withinp8", GEO_WITHINP8));
+                    OPERATOR_NEW(rb_cGrnOperator, "geo-withinp8", GEO_WITHINP8));
     rb_define_const(rb_cGrnOperator, "OBJECT_SEARCH",
-                    OPERATOR_NEW("object-search", OBJ_SEARCH));
+                    OPERATOR_NEW(rb_cGrnOperator, "object-search", OBJ_SEARCH));
     rb_define_const(rb_cGrnOperator, "EXPRESSION_GET_VARIABLE",
-                    OPERATOR_NEW("expression-get-variable", EXPR_GET_VAR));
+                    OPERATOR_NEW(rb_cGrnOperator, "expression-get-variable", EXPR_GET_VAR));
     rb_define_const(rb_cGrnOperator, "TABLE_CREATE",
-                    OPERATOR_NEW("table-create", TABLE_CREATE));
+                    OPERATOR_NEW(rb_cGrnOperator, "table-create", TABLE_CREATE));
     rb_define_const(rb_cGrnOperator, "TABLE_SELECT",
-                    OPERATOR_NEW("table-select", TABLE_SELECT));
+                    OPERATOR_NEW(rb_cGrnOperator, "table-select", TABLE_SELECT));
     rb_define_const(rb_cGrnOperator, "TABLE_SORT",
-                    OPERATOR_NEW("table-sort", TABLE_SORT));
+                    OPERATOR_NEW(rb_cGrnOperator, "table-sort", TABLE_SORT));
     rb_define_const(rb_cGrnOperator, "TABLE_GROUP",
-                    OPERATOR_NEW("table-group", TABLE_GROUP));
+                    OPERATOR_NEW(rb_cGrnOperator, "table-group", TABLE_GROUP));
     rb_define_const(rb_cGrnOperator, "JSON_PUT",
-                    OPERATOR_NEW("json-put", JSON_PUT));
+                    OPERATOR_NEW(rb_cGrnOperator, "json-put", JSON_PUT));
     rb_define_const(rb_cGrnOperator, "REGEXP",
-                    OPERATOR_NEW("regexp", REGEXP));
+                    OPERATOR_NEW(rb_cGrnRegexpOperator, "regexp", REGEXP));
     rb_define_const(rb_cGrnOperator, "FUZZY",
-                    OPERATOR_NEW("fuzzy", FUZZY));
+                    OPERATOR_NEW(rb_cGrnOperator, "fuzzy", FUZZY));
 
 
 /*
     rb_define_const(rb_cGrnOperator, "GEO_DISTANCE1",
-                    OPERATOR_NEW("geo-distance1", GEO_DISTANCE1));
+                    OPERATOR_NEW(rb_cGrnOperator, "geo-distance1", GEO_DISTANCE1));
     rb_define_const(rb_cGrnOperator, "GEO_DISTANCE2",
-                    OPERATOR_NEW("geo-distance2", GEO_DISTANCE2));
+                    OPERATOR_NEW(rb_cGrnOperator, "geo-distance2", GEO_DISTANCE2));
     rb_define_const(rb_cGrnOperator, "GEO_DISTANCE3",
-                    OPERATOR_NEW("geo-distance3", GEO_DISTANCE3));
+                    OPERATOR_NEW(rb_cGrnOperator, "geo-distance3", GEO_DISTANCE3));
     rb_define_const(rb_cGrnOperator, "GEO_DISTANCE4",
-                    OPERATOR_NEW("geo-distance4", GEO_DISTANCE4));
+                    OPERATOR_NEW(rb_cGrnOperator, "geo-distance4", GEO_DISTANCE4));
     rb_define_const(rb_cGrnOperator, "GEO_WITHINP5",
-                    OPERATOR_NEW("geo-withinp5", GEO_WITHINP5));
+                    OPERATOR_NEW(rb_cGrnOperator, "geo-withinp5", GEO_WITHINP5));
     rb_define_const(rb_cGrnOperator, "GEO_WITHINP6",
-                    OPERATOR_NEW("geo-withinp6", GEO_WITHINP6));
+                    OPERATOR_NEW(rb_cGrnOperator, "geo-withinp6", GEO_WITHINP6));
     rb_define_const(rb_cGrnOperator, "GEO_WITHINP8",
-                    OPERATOR_NEW("geo-withinp8", GEO_WITHINP8));
+                    OPERATOR_NEW(rb_cGrnOperator, "geo-withinp8", GEO_WITHINP8));
 */
 
 #undef OPERATOR_NEW
