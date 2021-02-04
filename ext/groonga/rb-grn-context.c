@@ -486,30 +486,39 @@ rb_grn_context_s_open (int argc, VALUE *argv, VALUE klass)
 static VALUE
 rb_grn_context_initialize (int argc, VALUE *argv, VALUE self)
 {
-    RbGrnContext *rb_grn_context;
-    grn_ctx *context;
-    int flags = 0; /* TODO: GRN_CTX_PER_DB */
-    VALUE options, default_options;
-    VALUE rb_encoding;
+    VALUE options;
+    rb_scan_args(argc, argv, ":", &options);
 
-    rb_scan_args(argc, argv, "01", &options);
-    default_options = rb_grn_context_s_get_default_options(rb_obj_class(self));
-    if (NIL_P(default_options))
-        default_options = rb_hash_new();
+    static ID keyword_ids[1];
+    if (!keyword_ids[0]) {
+        CONST_ID(keyword_ids[0], "encoding");
+    }
+    VALUE kwargs[1];
+    VALUE rb_encoding = Qundef;
+    if (!NIL_P(options)) {
+        rb_get_kwargs(options, keyword_ids, 0, 1, kwargs);
+        rb_encoding = kwargs[0];
+    }
+    if (rb_encoding == Qundef) {
+        VALUE default_options =
+            rb_grn_context_s_get_default_options(rb_obj_class(self));
+        if (!NIL_P(default_options)) {
+            rb_get_kwargs(default_options, keyword_ids, 0, 1, kwargs);
+            rb_encoding = kwargs[0];
+        }
+        if (rb_encoding == Qundef) {
+            rb_encoding = Qnil;
+        }
+    }
 
-    if (NIL_P(options))
-        options = rb_hash_new();
-    options = rb_funcall(default_options, rb_intern("merge"), 1, options);
-
-    rb_grn_scan_options(options,
-                        "encoding", &rb_encoding,
-                        NULL);
-
-    rb_grn_context = ALLOC(RbGrnContext);
+    RbGrnContext *rb_grn_context = ALLOC(RbGrnContext);
     RTYPEDDATA_DATA(self) = rb_grn_context;
     rb_grn_context->self = self;
+    int flags = 0; /* TODO: GRN_CTX_PER_DB */
     grn_ctx_init(&(rb_grn_context->context_entity), flags);
-    context = rb_grn_context->context = &(rb_grn_context->context_entity);
+    grn_ctx *context =
+        rb_grn_context->context =
+        &(rb_grn_context->context_entity);
     rb_grn_context_check(context, self);
 
     GRN_CTX_USER_DATA(context)->ptr = rb_grn_context;
