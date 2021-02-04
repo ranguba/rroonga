@@ -86,7 +86,7 @@ def update_version(new_version)
     "RB_GRN_MICRO_VERSION" => new_micro_version
   }
 
-  File.open("./ext/groonga/rb-grn.h", "rb+") do |file|
+  File.open("ext/groonga/rb-grn.h", "rb+") do |file|
     rb_grn_header = file.read
 
     rroonga_version.each do |key, value|
