@@ -91,8 +91,10 @@ end
 
 namespace :version do
   desc "Update version"
-  task :update, ["new_version"] do |_, args|
-    update_version(args[:new_version])
+  task :update do |_, args|
+    new_version = ENV["NEW_VERSION"]
+    raise "NEW_VERSION must be specified" if new_version.nil?
+    update_version(new_version)
   end
 end
 
