@@ -205,8 +205,10 @@ rb_grn_database_s_create (int argc, VALUE *argv, VALUE klass)
                         "builtin_type_names", &builtin_type_names,
                         NULL);
 
-    if (!NIL_P(rb_path))
+    if (!NIL_P(rb_path)) {
+        FilePathValue(rb_path);
         path = StringValuePtr(rb_path);
+    }
     context = rb_grn_context_ensure(&rb_context);
 
     create_args.builtin_type_names = NULL;
@@ -261,6 +263,7 @@ rb_grn_database_initialize (int argc, VALUE *argv, VALUE self)
 
     rb_scan_args(argc, argv, "11", &rb_path, &options);
 
+    FilePathValue(rb_path);
     path = StringValuePtr(rb_path);
     rb_grn_scan_options(options,
                         "context", &rb_context,
