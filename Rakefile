@@ -76,22 +76,13 @@ end
 
 def update_version(new_version)
   splitted_new_version = new_version.split(".")
-  new_major_version = splitted_new_version[0]
-  new_minor_version = splitted_new_version[1]
-  new_micro_version = splitted_new_version[2]
-
-  rroonga_version = {
-    "RB_GRN_MAJOR_VERSION" => new_major_version,
-    "RB_GRN_MINOR_VERSION" => new_minor_version,
-    "RB_GRN_MICRO_VERSION" => new_micro_version
-  }
-
+  type_order = ["MAJOR", "MINOR", "MICRO"]
   File.open("ext/groonga/rb-grn.h", "rb+") do |file|
     rb_grn_header = file.read
-
-    rroonga_version.each do |key, value|
-      replacement = "#{key} #{value}"
-      rb_grn_header.gsub!(/#{key}\s\d{1,}/, replacement)
+    rb_grn_header.gsub!(/(RB_GRN_(MAJOR|MINOR|MICRO)_VERSION) \d+/) do
+      name = $1
+      type = $2
+      "#{name} #{splitted_new_version[type_order.index(type)]}"
     end
     file.rewind
     file.write(rb_grn_header)
