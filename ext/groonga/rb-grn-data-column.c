@@ -1,7 +1,7 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /* vim: set sts=4 sw=4 ts=8 noet: */
 /*
-  Copyright (C) 2016  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2016-2021  Sutou Kouhei <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -19,7 +19,7 @@
 
 #include "rb-grn.h"
 
-#define SELF(object) ((RbGrnColumn *)DATA_PTR(object))
+#define SELF(object) ((RbGrnColumn *)RTYPEDDATA_DATA(object))
 
 VALUE rb_cGrnDataColumn;
 
@@ -152,7 +152,7 @@ rb_grn_data_column_apply_window_function (int argc, VALUE *argv, VALUE self)
     rb_builder = rb_grn_record_expression_builder_new(rb_table, Qnil);
     rb_window_function_call =
         rb_grn_record_expression_builder_build(rb_builder);
-    rb_grn_object_deconstruct(RB_GRN_OBJECT(DATA_PTR(rb_window_function_call)),
+    rb_grn_object_deconstruct(RB_GRN_OBJECT(RTYPEDDATA_DATA(rb_window_function_call)),
                               &window_function_call, NULL,
                               NULL, NULL, NULL, NULL);
 
@@ -231,7 +231,7 @@ rb_grn_data_column_apply_expression (VALUE self)
 
     rb_builder = rb_grn_record_expression_builder_new(rb_table, Qnil);
     rb_expression = rb_grn_record_expression_builder_build(rb_builder);
-    rb_grn_object_deconstruct(RB_GRN_OBJECT(DATA_PTR(rb_expression)),
+    rb_grn_object_deconstruct(RB_GRN_OBJECT(RTYPEDDATA_DATA(rb_expression)),
                               &expression, NULL,
                               NULL, NULL, NULL, NULL);
 

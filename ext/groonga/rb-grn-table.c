@@ -1,6 +1,6 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
-  Copyright (C) 2009-2017  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2021  Sutou Kouhei <kou@clear-code.com>
   Copyright (C) 2014-2016  Masafumi Yokoyama <yokoyama@clear-code.com>
   Copyright (C) 2019  Horimoto Yasuhiro <horimoto@clear-code.com>
 
@@ -20,13 +20,6 @@
 
 #include "rb-grn.h"
 
-#define SELF(object) ((RbGrnTable *)DATA_PTR(object))
-
-VALUE rb_cGrnTable;
-
-static ID id_array_reference;
-static ID id_array_set;
-
 /*
  * Document-class: Groonga::Table < Groonga::Object
  *
@@ -34,6 +27,59 @@ static ID id_array_set;
  * {Groonga::Array} , {Groonga::Hash} , {Groonga::PatriciaTrie}
  * are extended from this class.
  */
+
+#define SELF(object) ((RbGrnTable *)RTYPEDDATA_DATA(object))
+
+VALUE rb_cGrnTable;
+
+static ID id_array_reference;
+static ID id_array_set;
+
+static void
+rb_grn_table_mark (void *data)
+{
+    RbGrnObject *rb_grn_object = data;
+    RbGrnTable *rb_grn_table = data;
+    grn_ctx *context;
+    grn_obj *table;
+
+    if (!rb_grn_object)
+        return;
+
+    rb_gc_mark(rb_grn_table->columns);
+
+    context = rb_grn_object->context;
+    table = rb_grn_object->object;
+    if (!context || !table)
+        return;
+
+    rb_grn_context_mark_grn_id(context, table->header.domain);
+    rb_grn_context_mark_grn_id(context, grn_obj_get_range(context, table));
+
+    if (!grn_obj_path(context, table))
+        return;
+
+    if (grn_obj_name(context, table, NULL, 0) == 0)
+        return;
+}
+
+static void
+rb_grn_table_free (void *pointer)
+{
+    rb_grn_object_free(pointer);
+}
+
+static rb_data_type_t data_type = {
+    "Groonga::Table",
+    {
+        rb_grn_table_mark,
+        rb_grn_table_free,
+        NULL,
+    },
+    &rb_grn_object_data_type,
+    NULL,
+    RUBY_TYPED_FREE_IMMEDIATELY
+};
 
 grn_obj *
 rb_grn_table_from_ruby_object (VALUE object, grn_ctx **context)
@@ -101,38 +147,10 @@ rb_grn_table_deconstruct (RbGrnTable *rb_grn_table,
         *columns = rb_grn_table->columns;
 }
 
-static void
-rb_grn_table_mark (void *data)
-{
-    RbGrnObject *rb_grn_object = data;
-    RbGrnTable *rb_grn_table = data;
-    grn_ctx *context;
-    grn_obj *table;
-
-    if (!rb_grn_object)
-        return;
-
-    rb_gc_mark(rb_grn_table->columns);
-
-    context = rb_grn_object->context;
-    table = rb_grn_object->object;
-    if (!context || !table)
-        return;
-
-    rb_grn_context_mark_grn_id(context, table->header.domain);
-    rb_grn_context_mark_grn_id(context, grn_obj_get_range(context, table));
-
-    if (!grn_obj_path(context, table))
-        return;
-
-    if (grn_obj_name(context, table, NULL, 0) == 0)
-        return;
-}
-
 static VALUE
 rb_grn_table_alloc (VALUE klass)
 {
-    return Data_Wrap_Struct(klass, rb_grn_table_mark, rb_grn_object_free, NULL);
+    return TypedData_Wrap_Struct(klass, &data_type, NULL);
 }
 
 static VALUE
@@ -342,7 +360,7 @@ rb_grn_table_define_column (int argc, VALUE *argv, VALUE self)
 
     rb_column = GRNCOLUMN2RVAL(Qnil, context, column, GRN_TRUE);
     rb_ary_push(columns, rb_column);
-    rb_grn_named_object_set_name(RB_GRN_NAMED_OBJECT(DATA_PTR(rb_column)),
+    rb_grn_named_object_set_name(RB_GRN_NAMED_OBJECT(RTYPEDDATA_DATA(rb_column)),
                                  name, name_size);
 
     return rb_column;
@@ -497,7 +515,7 @@ rb_grn_table_define_index_column (int argc, VALUE *argv, VALUE self)
         rb_funcall(rb_column, rb_intern("sources="), 1, rb_sources);
 
     rb_ary_push(columns, rb_column);
-    rb_grn_named_object_set_name(RB_GRN_NAMED_OBJECT(DATA_PTR(rb_column)),
+    rb_grn_named_object_set_name(RB_GRN_NAMED_OBJECT(RTYPEDDATA_DATA(rb_column)),
                                  name, name_size);
 
     return rb_column;
@@ -558,7 +576,7 @@ rb_grn_table_get_column (VALUE self, VALUE rb_name)
         VALUE rb_column = raw_columns[i];
         RbGrnNamedObject *rb_grn_named_object;
 
-        rb_grn_named_object = RB_GRN_NAMED_OBJECT(DATA_PTR(rb_column));
+        rb_grn_named_object = RB_GRN_NAMED_OBJECT(RTYPEDDATA_DATA(rb_column));
         if (name_size == rb_grn_named_object->name_size &&
             memcmp(name, rb_grn_named_object->name, name_size) == 0) {
             return rb_column;
@@ -583,9 +601,9 @@ rb_grn_table_get_column (VALUE self, VALUE rb_name)
     owner = column->header.type == GRN_ACCESSOR;
     rb_column = GRNCOLUMN2RVAL(Qnil, context, column, owner);
     if (owner) {
-        rb_grn_context_register_floating_object(DATA_PTR(rb_column));
+        rb_grn_context_register_floating_object(RTYPEDDATA_DATA(rb_column));
     }
-    rb_grn_named_object_set_name(RB_GRN_NAMED_OBJECT(DATA_PTR(rb_column)),
+    rb_grn_named_object_set_name(RB_GRN_NAMED_OBJECT(RTYPEDDATA_DATA(rb_column)),
                                  name, name_size);
 
     return rb_column;
@@ -688,7 +706,7 @@ rb_grn_table_get_columns (int argc, VALUE *argv, VALUE self)
             RbGrnNamedObject *rb_grn_named_object;
             name_size = grn_column_name(context, column,
                                         name, GRN_TABLE_MAX_KEY_SIZE);
-            rb_grn_named_object = RB_GRN_NAMED_OBJECT(DATA_PTR(rb_column));
+            rb_grn_named_object = RB_GRN_NAMED_OBJECT(RTYPEDDATA_DATA(rb_column));
             rb_grn_named_object_set_name(rb_grn_named_object, name, name_size);
         }
 
@@ -1092,7 +1110,7 @@ rb_grn_table_delete_by_expression (VALUE self)
 
     rb_builder = rb_grn_record_expression_builder_new(self, Qnil);
     rb_expression = rb_grn_record_expression_builder_build(rb_builder);
-    rb_grn_object_deconstruct(RB_GRN_OBJECT(DATA_PTR(rb_expression)),
+    rb_grn_object_deconstruct(RB_GRN_OBJECT(RTYPEDDATA_DATA(rb_expression)),
                               &expression, NULL,
                               NULL, NULL, NULL, NULL);
 
@@ -2394,7 +2412,7 @@ rb_grn_table_select (int argc, VALUE *argv, VALUE self)
       rb_funcall(builder, rb_intern("default_column="), 1, rb_default_column);
       rb_expression = rb_grn_record_expression_builder_build(builder);
     }
-    rb_grn_object_deconstruct(RB_GRN_OBJECT(DATA_PTR(rb_expression)),
+    rb_grn_object_deconstruct(RB_GRN_OBJECT(RTYPEDDATA_DATA(rb_expression)),
                               &expression, NULL,
                               NULL, NULL, NULL, NULL);
 

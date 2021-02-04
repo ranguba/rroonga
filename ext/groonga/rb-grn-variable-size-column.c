@@ -1,6 +1,6 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
-  Copyright (C) 2009-2016  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2021  Sutou Kouhei <kou@clear-code.com>
   Copyright (C) 2014-2016  Masafumi Yokoyama <yokoyama@clear-code.com>
 
   This library is free software; you can redistribute it and/or
@@ -19,7 +19,7 @@
 
 #include "rb-grn.h"
 
-#define SELF(object) ((RbGrnVariableSizeColumn *)DATA_PTR(object))
+#define SELF(object) ((RbGrnVariableSizeColumn *)RTYPEDDATA_DATA(object))
 
 VALUE rb_cGrnVariableSizeColumn;
 

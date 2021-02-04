@@ -1,8 +1,8 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /* vim: set sts=4 sw=4 ts=8 noet: */
 /*
+  Copyright (C) 2011-2021  Sutou Kouhei <kou@clear-code.com>
   Copyright (C) 2014  Masafumi Yokoyama <myokoym@gmail.com>
-  Copyright (C) 2011-2014  Kouhei Sutou <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -20,7 +20,7 @@
 
 #include "rb-grn.h"
 
-#define SELF(object) ((RbGrnDoubleArrayTrie *)DATA_PTR(object))
+#define SELF(object) ((RbGrnDoubleArrayTrie *)RTYPEDDATA_DATA(object))
 
 VALUE rb_cGrnDoubleArrayTrie;
 

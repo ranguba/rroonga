@@ -1,6 +1,6 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
-  Copyright (C) 2009-2015  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2021  Sutou Kouhei <kou@clear-code.com>
   Copyright (C) 2016  Masafumi Yokoyama <yokoyama@clear-code.com>
 
   This library is free software; you can redistribute it and/or
@@ -17,12 +17,6 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#include "rb-grn.h"
-
-#define SELF(object) ((RbGrnObject *)DATA_PTR(object))
-
-VALUE rb_cGrnDatabase;
-
 /*
  * Document-class: Groonga::Database
  *
@@ -34,22 +28,11 @@ VALUE rb_cGrnDatabase;
  * に作成されないので明示的に作成する必要がある。
  */
 
-grn_obj *
-rb_grn_database_from_ruby_object (VALUE object)
-{
-    if (!RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cGrnDatabase))) {
-        rb_raise(rb_eTypeError, "not a groonga database");
-    }
+#include "rb-grn.h"
 
-    return RVAL2GRNOBJECT(object, NULL);
-}
+#define SELF(object) ((RbGrnObject *)RTYPEDDATA_DATA(object))
 
-VALUE
-rb_grn_database_to_ruby_object (grn_ctx *context, grn_obj *database,
-                                grn_bool owner)
-{
-    return GRNOBJECT2RVAL(rb_cGrnDatabase, context, database, owner);
-}
+VALUE rb_cGrnDatabase;
 
 static void
 rb_grn_database_mark_existing_ruby_object (grn_ctx *context, grn_obj *database)
@@ -86,11 +69,45 @@ rb_grn_database_mark (void *data)
     rb_grn_database_mark_existing_ruby_object(context, database);
 }
 
+static void
+rb_grn_database_free (void *pointer)
+{
+    rb_grn_object_free(pointer);
+}
+
+static rb_data_type_t data_type = {
+    "Groonga::Database",
+    {
+        rb_grn_database_mark,
+        rb_grn_database_free,
+        NULL,
+    },
+    &rb_grn_object_data_type,
+    NULL,
+    RUBY_TYPED_FREE_IMMEDIATELY
+};
+
+grn_obj *
+rb_grn_database_from_ruby_object (VALUE object)
+{
+    if (!RVAL2CBOOL(rb_obj_is_kind_of(object, rb_cGrnDatabase))) {
+        rb_raise(rb_eTypeError, "not a Rroonga database");
+    }
+
+    return RVAL2GRNOBJECT(object, NULL);
+}
+
+VALUE
+rb_grn_database_to_ruby_object (grn_ctx *context, grn_obj *database,
+                                grn_bool owner)
+{
+    return GRNOBJECT2RVAL(rb_cGrnDatabase, context, database, owner);
+}
+
 static VALUE
 rb_grn_database_alloc (VALUE klass)
 {
-    return Data_Wrap_Struct(klass, rb_grn_database_mark, rb_grn_object_free,
-                            NULL);
+    return TypedData_Wrap_Struct(klass, &data_type, NULL);
 }
 
 static void
@@ -143,8 +160,7 @@ rb_grn_database_close (VALUE self)
 static void
 reset_floating_objects (VALUE rb_context)
 {
-    RbGrnContext *rb_grn_context;
-    Data_Get_Struct(rb_context, RbGrnContext, rb_grn_context);
+    RbGrnContext *rb_grn_context = rb_grn_context_get_struct(rb_context);
     rb_grn_context_reset_floating_objects(rb_grn_context);
 }
 

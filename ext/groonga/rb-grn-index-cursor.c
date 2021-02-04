@@ -1,7 +1,7 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
   Copyright (C) 2011  Haruka Yoshihara <yoshihara@clear-code.com>
-  Copyright (C) 2012  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2012-2021  Sutou Kouhei <kou@clear-code.com>
   Copyright (C) 2019  Horimoto Yasuhiro <horimoto@clear-code.com>
 
   This library is free software; you can redistribute it and/or
@@ -20,7 +20,7 @@
 
 #include "rb-grn.h"
 
-#define SELF(object) ((RbGrnIndexCursor *)DATA_PTR(object))
+#define SELF(object) ((RbGrnIndexCursor *)RTYPEDDATA_DATA(object))
 
 VALUE rb_cGrnIndexCursor;
 

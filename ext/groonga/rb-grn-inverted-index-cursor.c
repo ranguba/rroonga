@@ -1,6 +1,6 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
-  Copyright (C) 2017  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2017-2021  Sutou Kouhei <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -18,7 +18,7 @@
 
 #include "rb-grn.h"
 
-#define SELF(object) ((RbGrnInvertedIndexCursor *)DATA_PTR(object))
+#define SELF(object) ((RbGrnInvertedIndexCursor *)RTYPEDDATA_DATA(object))
 
 typedef struct _RbGrnInvertedIndexCursor RbGrnInvertedIndexCursor;
 struct _RbGrnInvertedIndexCursor
@@ -255,7 +255,7 @@ void
 rb_grn_init_inverted_index_cursor (VALUE mGrn)
 {
     rb_cGrnInvertedIndexCursor =
-      rb_define_class_under(mGrn, "InvertedIndexCursor", rb_cData);
+      rb_define_class_under(mGrn, "InvertedIndexCursor", rb_cObject);
     rb_include_module(rb_cGrnInvertedIndexCursor, rb_mEnumerable);
 
     rb_define_method(rb_cGrnInvertedIndexCursor, "next",

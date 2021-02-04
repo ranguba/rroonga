@@ -1,7 +1,7 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /* vim: set sts=4 sw=4 ts=8 noet: */
 /*
-  Copyright (C) 2018  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2018-2021  Sutou Kouhei <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -120,7 +120,7 @@ rb_grn_column_cache_initialize (VALUE self, VALUE rb_column)
     rb_grn_column_cache->context = NULL;
     rb_grn_column_cache->rb_column = rb_column;
     rb_grn_column_cache->column_cache = NULL;
-    DATA_PTR(self) = rb_grn_column_cache;
+    RTYPEDDATA_DATA(self) = rb_grn_column_cache;
 
     column = RVAL2GRNCOLUMN(rb_column, &(rb_grn_column_cache->context));
     context = rb_grn_column_cache->context;
@@ -216,7 +216,7 @@ void
 rb_grn_init_column_cache (VALUE mGrn)
 {
     rb_cGrnColumnCache =
-        rb_define_class_under(mGrn, "ColumnCache", rb_cData);
+        rb_define_class_under(mGrn, "ColumnCache", rb_cObject);
 
     rb_define_alloc_func(rb_cGrnColumnCache, rb_grn_column_cache_allocate);
 

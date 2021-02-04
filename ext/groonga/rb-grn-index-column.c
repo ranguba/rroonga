@@ -1,8 +1,8 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
-  Copyright (C) 2019  Horimoto Yasuhiro <horimoto@clear-code.com>
-  Copyright (C) 2009-2017  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2021  Sutou Kouhei <kou@clear-code.com>
   Copyright (C) 2016  Masafumi Yokoyama <yokoyama@clear-code.com>
+  Copyright (C) 2019  Horimoto Yasuhiro <horimoto@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -22,7 +22,7 @@
 
 #include <string.h>
 
-#define SELF(object) ((RbGrnIndexColumn *)DATA_PTR(object))
+#define SELF(object) ((RbGrnIndexColumn *)RTYPEDDATA_DATA(object))
 
 VALUE rb_cGrnIndexColumn;
 

@@ -1,7 +1,7 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /* vim: set sts=4 sw=4 ts=8 noet: */
 /*
-  Copyright (C) 2009-2015  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2021  Sutou Kouhei <kou@clear-code.com>
   Copyright (C) 2016  Masafumi Yokoyama <yokoyama@clear-code.com>
 
   This library is free software; you can redistribute it and/or
@@ -20,7 +20,7 @@
 
 #include "rb-grn.h"
 
-#define SELF(object) ((RbGrnColumn *)DATA_PTR(object))
+#define SELF(object) ((RbGrnColumn *)RTYPEDDATA_DATA(object))
 
 VALUE rb_cGrnColumn;
 
@@ -388,7 +388,7 @@ rb_grn_column_select (int argc, VALUE *argv, VALUE self)
       rb_funcall(builder, rb_intern("allow_leading_not="), 1, rb_allow_leading_not);
       rb_expression = rb_grn_column_expression_builder_build(builder);
     }
-    rb_grn_object_deconstruct(RB_GRN_OBJECT(DATA_PTR(rb_expression)),
+    rb_grn_object_deconstruct(RB_GRN_OBJECT(RTYPEDDATA_DATA(rb_expression)),
                               &expression, NULL,
                               NULL, NULL, NULL, NULL);
 
@@ -831,7 +831,7 @@ rb_grn_column_rename (VALUE self, VALUE rb_name)
     rc = grn_column_rename(context, column, name, name_size);
     rb_grn_context_check(context, self);
     rb_grn_rc_check(rc, self);
-    rb_grn_named_object_set_name(RB_GRN_NAMED_OBJECT(DATA_PTR(self)),
+    rb_grn_named_object_set_name(RB_GRN_NAMED_OBJECT(RTYPEDDATA_DATA(self)),
                                  name, name_size);
     return self;
 }

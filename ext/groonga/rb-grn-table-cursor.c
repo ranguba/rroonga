@@ -1,6 +1,6 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
-  Copyright (C) 2009-2013  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2021  Sutou Kouhei <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -18,7 +18,7 @@
 
 #include "rb-grn.h"
 
-#define SELF(object) ((RbGrnTableCursor *)DATA_PTR(object))
+#define SELF(object) ((RbGrnTableCursor *)RTYPEDDATA_DATA(object))
 
 VALUE rb_cGrnTableCursor;
 
@@ -277,7 +277,7 @@ rb_grn_table_cursor_each (VALUE self)
 void
 rb_grn_init_table_cursor (VALUE mGrn)
 {
-    rb_cGrnTableCursor = rb_define_class_under(mGrn, "TableCursor", rb_cData);
+    rb_cGrnTableCursor = rb_define_class_under(mGrn, "TableCursor", rb_cObject);
     rb_define_alloc_func(rb_cGrnTableCursor, rb_grn_object_alloc);
 
     rb_include_module(rb_cGrnTableCursor, rb_mEnumerable);

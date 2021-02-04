@@ -1,6 +1,6 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
-  Copyright (C) 2009-2018  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2021  Sutou Kouhei <kou@clear-code.com>
   Copyright (C) 2014  Masafumi Yokoyama <myokoym@gmail.com>
 
   This library is free software; you can redistribute it and/or
@@ -19,7 +19,7 @@
 
 #include "rb-grn.h"
 
-#define SELF(object) ((RbGrnExpression *)DATA_PTR(object))
+#define SELF(object) ((RbGrnExpression *)RTYPEDDATA_DATA(object))
 
 VALUE rb_cGrnExpression;
 
@@ -100,7 +100,7 @@ rb_grn_expression_initialize (int argc, VALUE *argv, VALUE self)
     expression = grn_expr_create(context, name, name_size);
     rb_grn_context_check(context, self);
     rb_grn_object_assign(Qnil, self, rb_context, context, expression);
-    rb_grn_context_register_floating_object(DATA_PTR(self));
+    rb_grn_context_register_floating_object(RTYPEDDATA_DATA(self));
 
     rb_iv_set(self, "@objects", rb_ary_new());
 

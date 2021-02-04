@@ -1,6 +1,6 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
-  Copyright (C) 2011-2015  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2011-2021  Sutou Kouhei <kou@clear-code.com>
   Copyright (C) 2016  Masafumi Yokoyama <yokoyama@clear-code.com>
 
   This library is free software; you can redistribute it and/or
@@ -17,34 +17,19 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+/*
+ * Document-class: Groonga::Plugin
+ *
+ * プラグイン。現在のところ、RubyでGroongaのプラグインを作成
+ * することはできず、Cで作成された既存のプラグインを登録する
+ * ことができるだけです。
+ */
+
 #include "rb-grn.h"
 
 #define SELF(object) (RVAL2GRNCONTEXT(object))
 
 static VALUE cGrnPlugin;
-
-/*
- * Document-class: Groonga::Plugin
- *
- * プラグイン。現在のところ、Rubyでgroongaのプラグインを作成
- * することはできず、Cで作成された既存のプラグインを登録する
- * ことができるだけです。
- */
-
-grn_id
-rb_grn_plugin_from_ruby_object (VALUE object)
-{
-    RbGrnPlugin *rb_grn_plugin;
-
-    if (!RVAL2CBOOL(rb_obj_is_kind_of(object, cGrnPlugin))) {
-        rb_raise(rb_eTypeError, "not a groonga plugin");
-    }
-
-    Data_Get_Struct(object, RbGrnPlugin, rb_grn_plugin);
-    if (!rb_grn_plugin)
-        rb_raise(rb_eGrnError, "groonga plugin is NULL");
-    return rb_grn_plugin->id;
-}
 
 void
 rb_grn_plugin_fin (grn_id id)
@@ -59,10 +44,37 @@ rb_grn_plugin_free (void *pointer)
     xfree(rb_grn_plugin);
 }
 
+static rb_data_type_t data_type = {
+    "Groonga::Plugin",
+    {
+        NULL,
+        rb_grn_plugin_free,
+        NULL,
+    },
+    NULL,
+    NULL,
+    RUBY_TYPED_FREE_IMMEDIATELY
+};
+
+grn_id
+rb_grn_plugin_from_ruby_object (VALUE object)
+{
+    RbGrnPlugin *rb_grn_plugin;
+
+    if (!RVAL2CBOOL(rb_obj_is_kind_of(object, cGrnPlugin))) {
+        rb_raise(rb_eTypeError, "not a groonga plugin");
+    }
+
+    TypedData_Get_Struct(object, RbGrnPlugin, &data_type, rb_grn_plugin);
+    if (!rb_grn_plugin)
+        rb_raise(rb_eGrnError, "groonga plugin is NULL");
+    return rb_grn_plugin->id;
+}
+
 static VALUE
 rb_grn_plugin_alloc (VALUE klass)
 {
-    return Data_Wrap_Struct(klass, NULL, rb_grn_plugin_free, NULL);
+    return TypedData_Wrap_Struct(klass, &data_type, NULL);
 }
 
 /*
@@ -245,7 +257,7 @@ rb_grn_plugin_s_names (int argc, VALUE *argv, VALUE klass)
 void
 rb_grn_init_plugin (VALUE mGrn)
 {
-    cGrnPlugin = rb_define_class_under(mGrn, "Plugin", rb_cData);
+    cGrnPlugin = rb_define_class_under(mGrn, "Plugin", rb_cObject);
     rb_define_alloc_func(cGrnPlugin, rb_grn_plugin_alloc);
 
     rb_define_singleton_method(cGrnPlugin, "register",

@@ -1,6 +1,6 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
-  Copyright (C) 2009-2018  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2021  Sutou Kouhei <kou@clear-code.com>
   Copyright (C) 2014-2016  Masafumi Yokoyama <yokoyama@clear-code.com>
   Copyright (C) 2019  Horimoto Yasuhiro <horimoto@clear-code.com>
 
@@ -28,9 +28,27 @@
 
 #include "rb-grn.h"
 
-#define SELF(object) ((RbGrnObject *)DATA_PTR(object))
+#define SELF(object) ((RbGrnObject *)RTYPEDDATA_DATA(object))
 
 VALUE rb_cGrnObject;
+
+static void
+rb_grn_object_dfree (void *pointer)
+{
+    rb_grn_object_free(pointer);
+}
+
+rb_data_type_t rb_grn_object_data_type = {
+    "Groonga::Object",
+    {
+        NULL,
+        rb_grn_object_dfree,
+        NULL,
+    },
+    NULL,
+    NULL,
+    RUBY_TYPED_FREE_IMMEDIATELY
+};
 
 grn_obj *
 rb_grn_object_from_ruby_object (VALUE object, grn_ctx **context)
@@ -73,7 +91,10 @@ rb_grn_object_from_ruby_object (VALUE object, grn_ctx **context)
                  rb_grn_inspect(object));
     }
 
-    Data_Get_Struct(object, RbGrnObject, rb_grn_object);
+    TypedData_Get_Struct(object,
+                         RbGrnObject,
+                         &rb_grn_object_data_type,
+                         rb_grn_object);
     if (!rb_grn_object)
         rb_raise(rb_eGrnError, "Groonga object is NULL");
 
@@ -350,7 +371,9 @@ rb_grn_object_to_ruby_object (VALUE klass, grn_ctx *context, grn_obj *object,
 VALUE
 rb_grn_object_alloc (VALUE klass)
 {
-    return Data_Wrap_Struct(klass, NULL, rb_grn_object_free, NULL);
+    return TypedData_Wrap_Struct(klass,
+                                 &rb_grn_object_data_type,
+                                 NULL);
 }
 
 static void
@@ -359,15 +382,13 @@ rb_grn_object_bind_common (VALUE klass, VALUE self, VALUE rb_context,
                            grn_ctx *context, grn_obj *object)
 {
     grn_user_data *user_data;
-    RbGrnContext *rb_grn_context;
 
     debug("bind: %p:%p:%p %s(%#x)\n",
           context, object, rb_grn_object,
           grn_obj_type_to_string(object->header.type),
           object->header.type);
 
-    Data_Get_Struct(rb_context, RbGrnContext, rb_grn_context);
-    rb_grn_object->rb_grn_context = rb_grn_context;
+    rb_grn_object->rb_grn_context = rb_grn_context_get_struct(rb_context);
     rb_grn_object->context = context;
     rb_grn_object->object = object;
     rb_grn_object->self = self;
@@ -419,7 +440,7 @@ rb_grn_object_bind_common (VALUE klass, VALUE self, VALUE rb_context,
     else
         rb_grn_object->range = grn_ctx_at(context, rb_grn_object->range_id);
 
-    DATA_PTR(self) = rb_grn_object;
+    RTYPEDDATA_DATA(self) = rb_grn_object;
 }
 
 void
@@ -2213,7 +2234,7 @@ rb_grn_object_get_disk_usage (VALUE self)
 void
 rb_grn_init_object (VALUE mGrn)
 {
-    rb_cGrnObject = rb_define_class_under(mGrn, "Object", rb_cData);
+    rb_cGrnObject = rb_define_class_under(mGrn, "Object", rb_cObject);
     rb_define_alloc_func(rb_cGrnObject, rb_grn_object_alloc);
 
     rb_define_attr(rb_cGrnObject, "context", GRN_TRUE, GRN_FALSE);

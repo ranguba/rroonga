@@ -1,6 +1,6 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
-  Copyright (C) 2010-2018  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2010-2021  Sutou Kouhei <kou@clear-code.com>
   Copyright (C) 2016  Masafumi Yokoyama <yokoyama@clear-code.com>
   Copyright (C) 2019  Horimoto Yasuhiro <horimoto@clear-code.com>
 
@@ -17,12 +17,6 @@
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
-
-#include "rb-grn.h"
-
-#define SELF(object) (RVAL2GRNCONTEXT(object))
-
-static VALUE cGrnContext;
 
 /*
  * Document-class: Groonga::Context
@@ -45,23 +39,11 @@ static VALUE cGrnContext;
  * する。
  */
 
-grn_ctx *
-rb_grn_context_from_ruby_object (VALUE object)
-{
-    RbGrnContext *rb_grn_context;
+#include "rb-grn.h"
 
-    if (!RVAL2CBOOL(rb_obj_is_kind_of(object, cGrnContext))) {
-        rb_raise(rb_eTypeError, "not a Groonga context");
-    }
+#define SELF(object) (RVAL2GRNCONTEXT(object))
 
-    Data_Get_Struct(object, RbGrnContext, rb_grn_context);
-    if (!rb_grn_context)
-        rb_raise(rb_eGrnError, "Groonga context is NULL");
-    if (!rb_grn_context->context)
-        rb_raise(rb_eGrnClosed,
-                 "can't access already closed Groonga context");
-    return rb_grn_context->context;
-}
+static VALUE cGrnContext;
 
 void
 rb_grn_context_register_floating_object (RbGrnObject *rb_grn_object)
@@ -210,10 +192,48 @@ rb_grn_context_free (void *pointer)
     xfree(rb_grn_context);
 }
 
+static rb_data_type_t data_type = {
+    "Groonga::Context",
+    {
+        NULL,
+        rb_grn_context_free,
+        NULL,
+    },
+    NULL,
+    NULL,
+    RUBY_TYPED_FREE_IMMEDIATELY
+};
+
+RbGrnContext *
+rb_grn_context_get_struct (VALUE rb_context)
+{
+    if (!RVAL2CBOOL(rb_obj_is_kind_of(rb_context, cGrnContext))) {
+        rb_raise(rb_eTypeError,
+                 "not a Groonga context: %" PRIsVALUE,
+                 rb_context);
+    }
+
+    RbGrnContext *rb_grn_context;
+    TypedData_Get_Struct(rb_context, RbGrnContext, &data_type, rb_grn_context);
+    return rb_grn_context;
+}
+
+grn_ctx *
+rb_grn_context_from_ruby_object (VALUE rb_context)
+{
+    RbGrnContext *rb_grn_context = rb_grn_context_get_struct(rb_context);
+    if (!rb_grn_context)
+        rb_raise(rb_eGrnError, "Groonga context is NULL");
+    if (!rb_grn_context->context)
+        rb_raise(rb_eGrnClosed,
+                 "can't access already closed Groonga context");
+    return rb_grn_context->context;
+}
+
 static VALUE
 rb_grn_context_alloc (VALUE klass)
 {
-    return Data_Wrap_Struct(klass, NULL, rb_grn_context_free, NULL);
+    return TypedData_Wrap_Struct(klass, &data_type, NULL);
 }
 
 static grn_obj *
@@ -457,7 +477,7 @@ rb_grn_context_initialize (int argc, VALUE *argv, VALUE self)
                         NULL);
 
     rb_grn_context = ALLOC(RbGrnContext);
-    DATA_PTR(self) = rb_grn_context;
+    RTYPEDDATA_DATA(self) = rb_grn_context;
     rb_grn_context->self = self;
     grn_ctx_init(&(rb_grn_context->context_entity), flags);
     context = rb_grn_context->context = &(rb_grn_context->context_entity);
@@ -491,9 +511,7 @@ rb_grn_context_initialize (int argc, VALUE *argv, VALUE self)
 static VALUE
 rb_grn_context_close (VALUE self)
 {
-    RbGrnContext *rb_grn_context;
-
-    Data_Get_Struct(self, RbGrnContext, rb_grn_context);
+    RbGrnContext *rb_grn_context = RTYPEDDATA_DATA(self);
     if (rb_grn_context->context) {
         rb_grn_context_fin(rb_grn_context);
     }
@@ -509,10 +527,7 @@ rb_grn_context_close (VALUE self)
 static VALUE
 rb_grn_context_closed_p (VALUE self)
 {
-    RbGrnContext *rb_grn_context;
-
-    Data_Get_Struct(self, RbGrnContext, rb_grn_context);
-
+    RbGrnContext *rb_grn_context = RTYPEDDATA_DATA(self);
     return CBOOL2RVAL(rb_grn_context->context == NULL);
 }
 
@@ -1035,7 +1050,7 @@ rb_grn_context_object_created (VALUE rb_context, VALUE rb_object)
 void
 rb_grn_init_context (VALUE mGrn)
 {
-    cGrnContext = rb_define_class_under(mGrn, "Context", rb_cData);
+    cGrnContext = rb_define_class_under(mGrn, "Context", rb_cObject);
     rb_define_alloc_func(cGrnContext, rb_grn_context_alloc);
 
     rb_cv_set(cGrnContext, "@@default", Qnil);

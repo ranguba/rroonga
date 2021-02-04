@@ -314,6 +314,8 @@ RB_GRN_VAR VALUE rb_mGrnRequestTimer;
 RB_GRN_VAR VALUE rb_cGrnRequestTimerID;
 RB_GRN_VAR VALUE rb_cGrnColumnCache;
 
+RB_GRN_VAR rb_data_type_t rb_grn_object_data_type;
+
 void           rb_grn_init_utils                    (VALUE mGrn);
 void           rb_grn_init_exception                (VALUE mGrn);
 void           rb_grn_init_encoding                 (VALUE mGrn);
@@ -779,7 +781,8 @@ rb_encoding   *rb_grn_encoding_to_ruby_encoding     (grn_encoding encoding);
 VALUE          rb_grn_encoding_to_ruby_encoding_object
                                                     (grn_encoding encoding);
 
-grn_ctx       *rb_grn_context_from_ruby_object      (VALUE object);
+RbGrnContext  *rb_grn_context_get_struct            (VALUE rb_context);
+grn_ctx       *rb_grn_context_from_ruby_object      (VALUE rb_context);
 VALUE          rb_grn_context_to_ruby_object        (grn_ctx *context);
 VALUE          rb_grn_context_rb_string_new         (grn_ctx *context,
                                                      const char *string,

@@ -1,6 +1,6 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
-  Copyright (C) 2009-2014  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2021  Sutou Kouhei <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -18,7 +18,7 @@
 
 #include "rb-grn.h"
 
-#define SELF(object) ((RbGrnSnippet *)DATA_PTR(object))
+#define SELF(object) ((RbGrnSnippet *)RTYPEDDATA_DATA(object))
 
 VALUE rb_cGrnSnippet;
 
@@ -149,7 +149,7 @@ rb_grn_snippet_initialize (int argc, VALUE *argv, VALUE self)
     rb_grn_context_check(context, rb_ary_new_from_values(argc, argv));
 
     rb_grn_object_assign(Qnil, self, rb_context, context, snippet);
-    rb_grn_context_register_floating_object(DATA_PTR(self));
+    rb_grn_context_register_floating_object(RTYPEDDATA_DATA(self));
 
     rb_iv_set(self, "@context", rb_context);
 

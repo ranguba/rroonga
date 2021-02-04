@@ -1,6 +1,6 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
-  Copyright (C) 2009-2020  Sutou Kouhei <kou@clear-code.com>
+  Copyright (C) 2009-2021  Sutou Kouhei <kou@clear-code.com>
   Copyright (C) 2014-2016  Masafumi Yokoyama <yokoyama@clear-code.com>
 
   This library is free software; you can redistribute it and/or
@@ -19,7 +19,7 @@
 
 #include "rb-grn.h"
 
-#define SELF(object) ((RbGrnTableKeySupport *)DATA_PTR(object))
+#define SELF(object) ((RbGrnTableKeySupport *)RTYPEDDATA_DATA(object))
 
 VALUE rb_mGrnTableKeySupport;
 
@@ -498,7 +498,7 @@ set_value (RB_BLOCK_CALL_FUNC_ARGLIST(yielded_arg, callback_arg))
                  rb_grn_inspect(rb_name), rb_grn_inspect(data->self));
     }
 
-    rb_grn_object = RB_GRN_OBJECT(DATA_PTR(rb_column));
+    rb_grn_object = RB_GRN_OBJECT(RTYPEDDATA_DATA(rb_column));
     return rb_grn_object_set_raw(rb_grn_object,
                                  data->id, rb_value, GRN_OBJ_SET, data->self);
 }
