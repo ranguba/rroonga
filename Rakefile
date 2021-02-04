@@ -89,9 +89,9 @@ def update_version(new_version)
   end
 end
 
-namespace :release do
-  desc "Bump version"
-  task :version, ['new_version'] do |_, args|
+namespace :version do
+  desc "Update version"
+  task :update, ["new_version"] do |_, args|
     update_version(args[:new_version])
   end
 end
