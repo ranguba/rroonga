@@ -445,14 +445,43 @@ rb_grn_context_s_set_default_options (VALUE self, VALUE options)
     return Qnil;
 }
 
+static VALUE rb_grn_context_close (VALUE self);
+
 /*
- * コンテキストを作成する。
- * @overload new(options=nil)
- *   @param [::Hash] options The name and value
- *     pairs. Omitted names are initialized as the default value.
- *   @option options [Groonga::Encoding] :encoding The encoding
- *     エンコーディングを指定する。エンコーディングの指定方法
- *     は {Groonga::Encoding} を参照。
+ * Opens a new context. If block is given, the opened context is closed
+ * automatically after the given block is evaluated.
+ *
+ * @overload open(encoding: nil, &block)
+ *   @!macro [new] initialize_options
+ *     @param encoding [Groonga::Encoding] The encoding to be used in
+ *       the newly created context. See {Groonga::Encoding} how to specify
+ *       encoding.
+ *   @macro initialize_options
+ *   @yieldparam context [Groonga::Context] The newly created context.
+ *   @return [Object] The return value of the given block is the return value
+ *     of the call.
+ *
+ * @overload open(encoding: nil)
+ *   @macro initialize_options
+ *   @return [Groonga::Context] The newly created context.
+ */
+static VALUE
+rb_grn_context_s_open (int argc, VALUE *argv, VALUE klass)
+{
+    VALUE rb_context = rb_class_new_instance_pass_kw(argc, argv, klass);
+    if (rb_block_given_p()) {
+        return rb_ensure(rb_yield, rb_context, rb_grn_context_close, rb_context);
+    } else {
+        return rb_context;
+    }
+}
+
+/*
+ * Creates a new context.
+ *
+ * @overload new(encoding: nil)
+ *   @macro initialize_options
+ *   @return [Groonga::Context] The newly created context.
  */
 static VALUE
 rb_grn_context_initialize (int argc, VALUE *argv, VALUE self)
@@ -1064,6 +1093,8 @@ rb_grn_init_context (VALUE mGrn)
                                rb_grn_context_s_get_default_options, 0);
     rb_define_singleton_method(cGrnContext, "default_options=",
                                rb_grn_context_s_set_default_options, 1);
+
+    rb_define_singleton_method(cGrnContext, "open", rb_grn_context_s_open, -1);
 
     rb_define_method(cGrnContext, "initialize", rb_grn_context_initialize, -1);
 
