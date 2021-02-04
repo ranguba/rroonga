@@ -20,6 +20,38 @@ require "groonga/context/command-executor"
 
 module Groonga
   class Context
+    class << self
+      # Opens a new context. If block is given, the opened context is
+      # closed automatically after the given block is evaluated.
+      #
+      # @overload open(*args, &block)
+      #   @param args [::Array<Object>] Passed through to
+      #     {Groonga::Context#initialize}.
+      #   @yieldparam context [Groonga::Context] The newly created context.
+      #   @return [Object] The return value of the given block is the
+      #     return value of the call.
+      #
+      # @overload open(*args)
+      #   @param args [::Array<Object>] Passed through to
+      #     {Groonga::Context#initialize}.
+      #   @yieldparam context [Groonga::Context] The newly created context.
+      #   @return [Groonga::Context] The newly created context.
+      #
+      # @see Groonga::Context#initialize
+      def open(*args, **kwargs)
+        context = new(*args, **kwargs)
+        if block_given?
+          begin
+            yield(context)
+          ensure
+            context.close
+          end
+        else
+          context
+        end
+      end
+    end
+
     # _path_ にある既存のデータベースを開く。ブロックを指定した場
     # 合はブロックに開いたデータベースを渡し、ブロックを抜けると
     # きに閉じる。
