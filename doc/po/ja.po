@@ -446,6 +446,24 @@ msgstr "* [2. インストール - Groonga ドキュメント](http://groonga.or
 msgid "# NEWS"
 msgstr "# お知らせ"
 
+msgid "## 11.0.0: 2021-02-09 {#version-11-0-0}"
+msgstr ""
+
+msgid "### Improvements"
+msgstr "### 改善"
+
+msgid "  * {Groonga::ConnectionReset} Added."
+msgstr ""
+
+msgid "  * {Groonga::Context.open} Added."
+msgstr ""
+
+msgid "  * Added support for Ractor."
+msgstr ""
+
+msgid "  * {Groonga::Database} Accept path like object in .open/.create."
+msgstr ""
+
 msgid "## 10.0.6: 2020-09-01 {#version-10-0-6}"
 msgstr ""
 
@@ -457,9 +475,6 @@ msgstr "  * Windows版で `gem install rroonga` に失敗する問題を修正�
 
 msgid "## 10.0.2: 2020-04-29 {#version-10-0-2}"
 msgstr ""
-
-msgid "### Improvements"
-msgstr "### 改善"
 
 msgid "  * Added support for Float32 in Groonga 10.0.2."
 msgstr ""

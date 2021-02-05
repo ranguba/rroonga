@@ -1,5 +1,17 @@
 # NEWS
 
+## 11.0.0: 2021-02-09 {#version-11-0-0}
+
+### Improvements
+
+  * {Groonga::ConnectionReset} Added.
+
+  * {Groonga::Context.open} Added.
+
+  * Added support for Ractor.
+
+  * {Groonga::Database} Accept path like object in .open/.create.
+
 ## 10.0.6: 2020-09-01 {#version-10-0-6}
 
 ### Fixes
