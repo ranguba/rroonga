@@ -16,12 +16,12 @@
 
 module RroongaBuild
   module RequiredGroongaVersion
-    MAJOR = 10
-    MINOR = 1
+    MAJOR = 11
+    MINOR = 0
     MICRO = 0
     VERSION = [MAJOR, MINOR, MICRO]
     STRING = VERSION.join(".")
-    RELEASED_DATE = Time.utc(2020, 12, 29)
+    RELEASED_DATE = Time.utc(2021, 2, 9)
   end
 
   module_function
