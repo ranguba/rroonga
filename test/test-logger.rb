@@ -39,6 +39,8 @@ class LoggerTest < Test::Unit::TestCase
       FileUtils.mv(@log_path, "#{@log_path}.old")
     end
     assert_false(@log_path.exist?)
+    # Reopen log uses debug level since Groonga 11.0.1.
+    Groonga::Logger.max_level = :debug
     Groonga::Logger.reopen
     assert_true(@log_path.exist?)
   end
