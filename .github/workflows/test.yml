@@ -6,6 +6,7 @@ jobs:
   test:
     name: ${{ matrix.ruby-version }} x ${{ matrix.runs-on }}
     runs-on: ${{ matrix.runs-on }}
+    timeout-minutes: 15
     strategy:
       fail-fast: false
       matrix:
