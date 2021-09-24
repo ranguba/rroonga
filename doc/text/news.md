@@ -1,5 +1,17 @@
 # NEWS
 
+## 11.0.6: 2021-09-24 {#version-11-0-6}
+
+### Improvements
+
+  * Installed Groonga automatically when native package isn't
+    installed automatically.
+    [GitHub#204][Patch by skawaji]
+
+### Thanks
+
+  * skawaji
+
 ## 11.0.0: 2021-02-09 {#version-11-0-0}
 
 ### Improvements
