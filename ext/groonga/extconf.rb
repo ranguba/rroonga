@@ -231,6 +231,8 @@ unless PKGConfig.have_package(package_name, major, minor, micro)
                                     msys2: "groonga")
     need_auto_groonga_install =
       !PKGConfig.have_package(package_name, major, minor, micro)
+  else
+    need_auto_groonga_install = true
   end
 end
 if need_auto_groonga_install
