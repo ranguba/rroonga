@@ -446,11 +446,26 @@ msgstr "* [2. インストール - Groonga ドキュメント](http://groonga.or
 msgid "# NEWS"
 msgstr "# お知らせ"
 
-msgid "## 11.0.0: 2021-02-09 {#version-11-0-0}"
+msgid "## 11.0.6: 2021-09-24 {#version-11-0-6}"
 msgstr ""
 
 msgid "### Improvements"
 msgstr "### 改善"
+
+msgid ""
+"  * Installed Groonga automatically when native package isn't\n"
+"    installed automatically.\n"
+"    [GitHub#204][Patch by skawaji]"
+msgstr ""
+
+msgid "### Thanks"
+msgstr "### 感謝"
+
+msgid "  * skawaji"
+msgstr ""
+
+msgid "## 11.0.0: 2021-02-09 {#version-11-0-0}"
+msgstr ""
 
 msgid "  * {Groonga::ConnectionReset} Added."
 msgstr ""
@@ -483,9 +498,6 @@ msgid ""
 "  * [doc] Fixed markup of a image in tutorial [GitHub#192][Patched by takahash"
 "im]"
 msgstr ""
-
-msgid "### Thanks"
-msgstr "### 感謝"
 
 msgid "  * takahashim"
 msgstr ""
