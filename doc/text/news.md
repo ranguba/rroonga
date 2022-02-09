@@ -1,5 +1,11 @@
 # NEWS
 
+## 12.0.0: 2022-02-09 {#version-12-0-0}
+
+### Improvements
+
+  * Added support for Ruby 3.1.
+
 ## 11.0.6: 2021-09-24 {#version-11-0-6}
 
 ### Improvements
