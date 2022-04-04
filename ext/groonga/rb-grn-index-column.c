@@ -1,6 +1,6 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
-  Copyright (C) 2009-2021  Sutou Kouhei <kou@clear-code.com>
+  Copyright (C) 2009-2022  Sutou Kouhei <kou@clear-code.com>
   Copyright (C) 2016  Masafumi Yokoyama <yokoyama@clear-code.com>
   Copyright (C) 2019  Horimoto Yasuhiro <horimoto@clear-code.com>
 
@@ -882,27 +882,6 @@ rb_grn_index_column_with_section_p (VALUE self)
 }
 
 /*
- * _column_ がウェイト情報も格納する場合は +true+ を返します。
- *
- * @overload with_weight?
- */
-static VALUE
-rb_grn_index_column_with_weight_p (VALUE self)
-{
-    grn_obj *column;
-    grn_ctx *context;
-    grn_column_flags flags;
-
-    rb_grn_index_column_deconstruct(SELF(self), &column, &context,
-                                    NULL, NULL,
-                                    NULL, NULL, NULL, NULL, NULL,
-                                    NULL, NULL);
-
-    flags = grn_column_get_flags(context, column);
-    return CBOOL2RVAL(flags & GRN_OBJ_WITH_WEIGHT);
-}
-
-/*
  * _column_ が位置情報も格納する場合は +true+ を返します。
  *
  * @overload with_position?
@@ -1460,8 +1439,6 @@ rb_grn_init_index_column (VALUE mGrn)
 
     rb_define_method(rb_cGrnIndexColumn, "with_section?",
                      rb_grn_index_column_with_section_p, 0);
-    rb_define_method(rb_cGrnIndexColumn, "with_weight?",
-                     rb_grn_index_column_with_weight_p, 0);
     rb_define_method(rb_cGrnIndexColumn, "with_position?",
                      rb_grn_index_column_with_position_p, 0);
     rb_define_method(rb_cGrnIndexColumn, "small?",
