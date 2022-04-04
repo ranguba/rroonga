@@ -344,7 +344,7 @@ rb_grn_table_key_support_get_key (VALUE self, VALUE rb_id)
     if (key_size == 0)
         return Qnil;
 
-    if (GRN_BULK_VSIZE(key) < key_size) {
+    if (GRN_BULK_VSIZE(key) < (size_t)key_size) {
         grn_bulk_reserve(context, key, key_size);
         grn_table_get_key(context, table, id, GRN_BULK_HEAD(key), key_size);
     }
