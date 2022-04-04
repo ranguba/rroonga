@@ -1,7 +1,7 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /* vim: set sts=4 sw=4 ts=8 noet: */
 /*
-  Copyright (C) 2009-2021  Sutou Kouhei <kou@clear-code.com>
+  Copyright (C) 2009-2022  Sutou Kouhei <kou@clear-code.com>
   Copyright (C) 2016  Masafumi Yokoyama <yokoyama@clear-code.com>
 
   This library is free software; you can redistribute it and/or
@@ -734,6 +734,26 @@ rb_grn_column_with_weight_p(VALUE self)
 }
 
 /*
+ * @overload weight_float32?
+ * @return [Boolean] @true@ if the column uses 32 bit float for weight.
+ * @since 12.0.2
+ */
+static VALUE
+rb_grn_column_weight_float32_p(VALUE self)
+{
+    grn_obj *column;
+    grn_ctx *context;
+    grn_column_flags flags;
+
+    rb_grn_column_deconstruct(SELF(self), &column, &context,
+                              NULL, NULL,
+                              NULL, NULL, NULL);
+
+    flags = grn_column_get_flags(context, column);
+    return CBOOL2RVAL(flags & GRN_OBJ_WEIGHT_FLOAT32);
+}
+
+/*
  * Return indexes on `column`. If operator is specified, indexes that
  * can executes the operator are only returned. Otherwise, all indexes
  * are returned.
@@ -867,6 +887,8 @@ rb_grn_init_column (VALUE mGrn)
 
     rb_define_method(rb_cGrnColumn, "with_weight?",
                      rb_grn_column_with_weight_p, 0);
+    rb_define_method(rb_cGrnColumn, "weight_float32?",
+                     rb_grn_column_weight_float32_p, 0);
 
     rb_define_method(rb_cGrnColumn, "find_indexes",
                      rb_grn_column_find_indexes, -1);

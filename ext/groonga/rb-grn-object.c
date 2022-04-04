@@ -1,6 +1,6 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
-  Copyright (C) 2009-2021  Sutou Kouhei <kou@clear-code.com>
+  Copyright (C) 2009-2022  Sutou Kouhei <kou@clear-code.com>
   Copyright (C) 2014-2016  Masafumi Yokoyama <yokoyama@clear-code.com>
   Copyright (C) 2019  Horimoto Yasuhiro <horimoto@clear-code.com>
 
@@ -927,6 +927,10 @@ rb_grn_object_inspect_content_flags_with_label (VALUE inspected,
             rb_ary_push(inspected_flags, rb_str_new_cstr("COLUMN_SCALAR"));
         } else if (column_flags & GRN_OBJ_COLUMN_VECTOR) {
             rb_ary_push(inspected_flags, rb_str_new_cstr("COLUMN_VECTOR"));
+            if (column_flags & GRN_OBJ_WITH_WEIGHT)
+                rb_ary_push(inspected_flags, rb_str_new_cstr("WITH_WEIGHT"));
+            if (column_flags & GRN_OBJ_WEIGHT_FLOAT32)
+                rb_ary_push(inspected_flags, rb_str_new_cstr("WEIGHT_FLOAT32"));
         }
         break;
     default:

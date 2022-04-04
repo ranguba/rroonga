@@ -1,6 +1,6 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
-  Copyright (C) 2009-2021  Sutou Kouhei <kou@clear-code.com>
+  Copyright (C) 2009-2022  Sutou Kouhei <kou@clear-code.com>
   Copyright (C) 2014-2016  Masafumi Yokoyama <yokoyama@clear-code.com>
   Copyright (C) 2019  Horimoto Yasuhiro <horimoto@clear-code.com>
 
@@ -255,6 +255,10 @@ rb_grn_table_inspect (VALUE self)
  *     * `:lz4`: Compressed by LZ4.
  *     * `:zstd`: Compressed by Zstandard.
  *     * `:zstandard`: Compressed by Zstandard.
+ *   @option options :weight_float32 [Boolean] (false)
+ *     It specifies whether weight is stored as 32 bit float or not.
+ *
+ *     You can't use this option for scalar column.
  *
  * @return [Groonga::FixSizeColumn, Groonga::VariableSizeColumn]
  */
@@ -269,6 +273,7 @@ rb_grn_table_define_column (int argc, VALUE *argv, VALUE self)
     grn_column_flags flags = 0;
     VALUE rb_name, rb_value_type;
     VALUE options, rb_path, rb_persistent, rb_compress, rb_type, rb_with_weight;
+    VALUE rb_weight_float32;
     VALUE columns;
     VALUE rb_column;
 
@@ -288,6 +293,7 @@ rb_grn_table_define_column (int argc, VALUE *argv, VALUE self)
                         "type", &rb_type,
                         "with_weight", &rb_with_weight,
                         "compress", &rb_compress,
+                        "weight_float32", &rb_weight_float32,
                         NULL);
 
     value_type = RVAL2GRNOBJECT(rb_value_type, &context);
@@ -345,6 +351,15 @@ rb_grn_table_define_column (int argc, VALUE *argv, VALUE self)
                  "invalid compress type: %s: "
                  "available types: [:zlib, :lz4, :zstd, :zstandard, nil]",
                  rb_grn_inspect(rb_compress));
+    }
+
+    if (RVAL2CBOOL(rb_weight_float32)) {
+        if (flags & GRN_OBJ_COLUMN_VECTOR) {
+            flags |= GRN_OBJ_WEIGHT_FLOAT32;
+        } else {
+            rb_raise(rb_eArgError,
+                     "can't use 32 bit float weight for scalar column");
+        }
     }
 
     column = grn_column_create(context, table, name, name_size,

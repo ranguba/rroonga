@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2020  Sutou Kouhei <kou@clear-code.com>
+# Copyright (C) 2009-2022  Sutou Kouhei <kou@clear-code.com>
 # Copyright (C) 2016  Masafumi Yokoyama <yokoyama@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
@@ -431,12 +431,19 @@ class ColumnTest < Test::Unit::TestCase
     def setup_schema
       Groonga::Schema.define do |schema|
         schema.create_table("Shops", :type => :hash) do |table|
-          table.short_text("tags", :type => :vector)
+          table.short_text("tags",
+                           type: :vector,
+                           with_weight: true)
+          table.short_text("tags_float32",
+                           type: :vector,
+                           with_weight: true,
+                           weight_float32: true)
         end
 
         schema.create_table("Tags",
                             :type => :patricia_trie) do |table|
-          table.index("Shops.tags", :with_weight => true)
+          table.index("Shops.tags",
+                      with_weight: true)
         end
       end
 
@@ -451,6 +458,33 @@ class ColumnTest < Test::Unit::TestCase
                  ])
       assert_equal([["Soul Food India", 11]],
                    select_by_tag("curry"))
+    end
+
+    def test_vector_weight_float32
+      @shops.add("Soul Food India",
+                 :tags_float32 => [
+                   {:value => "curry", :weight => 11.1},
+                   {:value => "hot",   :weight => 33.3},
+                 ])
+      actual = @shops.collect do |shop|
+        attributes = shop.attributes
+        attributes["tags_float32"].each do |tag|
+          tag[:weight] = tag[:weight].round(1)
+        end
+        attributes
+      end
+      assert_equal([
+                     {
+                       "_id" => 1,
+                       "_key" => "Soul Food India",
+                       "tags" => [],
+                       "tags_float32" => [
+                         {:value => "curry", :weight => 11.1},
+                         {:value => "hot",   :weight => 33.3},
+                       ]
+                     },
+                   ],
+                   actual)
     end
 
     def test_offline_index

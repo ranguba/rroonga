@@ -1,6 +1,6 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
-  Copyright (C) 2009-2021  Sutou Kouhei <kou@clear-code.com>
+  Copyright (C) 2009-2022  Sutou Kouhei <kou@clear-code.com>
   Copyright (C) 2014-2016  Masafumi Yokoyama <yokoyama@clear-code.com>
 
   This library is free software; you can redistribute it and/or
@@ -193,23 +193,24 @@ rb_grn_variable_size_column_array_reference (VALUE self, VALUE rb_id)
     rb_value = rb_ary_new2(n);
     for (i = 0; i < n; i++) {
         VALUE rb_element_value;
-        unsigned int weight = 0;
+        float weight = 0.0;
         grn_id domain;
         VALUE rb_element;
 
         if (value->header.type == GRN_UVECTOR) {
             grn_id id;
-            id = grn_uvector_get_element(context, value, i, &weight);
+            id = grn_uvector_get_element_record(context, value, i, &weight);
             rb_element_value = rb_grn_record_new(rb_range, id, Qnil);
         } else {
             const char *element_value;
             unsigned int element_value_length;
-            element_value_length = grn_vector_get_element(context,
-                                                          value,
-                                                          i,
-                                                          &element_value,
-                                                          &weight,
-                                                          &domain);
+            element_value_length =
+                grn_vector_get_element_float(context,
+                                             value,
+                                             i,
+                                             &element_value,
+                                             &weight,
+                                             &domain);
             rb_element_value = rb_str_new(element_value, element_value_length);
         }
 
@@ -217,9 +218,15 @@ rb_grn_variable_size_column_array_reference (VALUE self, VALUE rb_id)
         rb_hash_aset(rb_element,
                      RB_GRN_INTERN("value"),
                      rb_element_value);
-        rb_hash_aset(rb_element,
-                     RB_GRN_INTERN("weight"),
-                     UINT2NUM(weight));
+        if (flags & GRN_OBJ_WEIGHT_FLOAT32) {
+            rb_hash_aset(rb_element,
+                         RB_GRN_INTERN("weight"),
+                         rb_float_new(weight));
+        } else {
+            rb_hash_aset(rb_element,
+                         RB_GRN_INTERN("weight"),
+                         UINT2NUM((uint32_t)weight));
+        }
 
         rb_ary_push(rb_value, rb_element);
     }
@@ -240,22 +247,22 @@ hash_element_to_vector_element(VALUE key, VALUE value, VALUE user_data)
 {
     HashElementToVectorElementData *data =
         (HashElementToVectorElementData *)user_data;
-    unsigned int weight;
+    float weight;
 
-    weight = NUM2UINT(value);
+    weight = (float)NUM2DBL(value);
 
     if (data->vector->header.type == GRN_UVECTOR) {
         grn_id id = RVAL2GRNID(key, data->context, data->range, data->self);
-        grn_uvector_add_element(data->context, data->vector, id, weight);
+        grn_uvector_add_element_record(data->context, data->vector, id, weight);
     } else {
         GRN_BULK_REWIND(data->element_value);
         RVAL2GRNBULK(key, data->context, data->element_value);
 
-        grn_vector_add_element(data->context, data->vector,
-                               GRN_BULK_HEAD(data->element_value),
-                               GRN_BULK_VSIZE(data->element_value),
-                               weight,
-                               data->element_value->header.domain);
+        grn_vector_add_element_float(data->context, data->vector,
+                                     GRN_BULK_HEAD(data->element_value),
+                                     GRN_BULK_VSIZE(data->element_value),
+                                     weight,
+                                     data->element_value->header.domain);
     }
 
     return ST_CONTINUE;
@@ -405,7 +412,7 @@ rb_grn_variable_size_column_array_set (VALUE self, VALUE rb_id, VALUE rb_value)
         int i, n;
         n = RARRAY_LEN(rb_value);
         for (i = 0; i < n; i++) {
-            unsigned int weight = 0;
+            float weight = 0;
             VALUE rb_element_value, rb_weight;
 
             rb_grn_scan_options(RARRAY_PTR(rb_value)[i],
@@ -414,23 +421,23 @@ rb_grn_variable_size_column_array_set (VALUE self, VALUE rb_id, VALUE rb_value)
                                 NULL);
 
             if (!NIL_P(rb_weight)) {
-                weight = NUM2UINT(rb_weight);
+                weight = (float)NUM2DBL(rb_weight);
             }
 
             if (value->header.type == GRN_UVECTOR) {
                 grn_id id = RVAL2GRNID(rb_element_value, context, range, self);
-                grn_uvector_add_element(context, value, id, weight);
+                grn_uvector_add_element_record(context, value, id, weight);
             } else {
                 GRN_BULK_REWIND(element_value);
                 if (!NIL_P(rb_element_value)) {
                     RVAL2GRNBULK(rb_element_value, context, element_value);
                 }
 
-                grn_vector_add_element(context, value,
-                                       GRN_BULK_HEAD(element_value),
-                                       GRN_BULK_VSIZE(element_value),
-                                       weight,
-                                       element_value->header.domain);
+                grn_vector_add_element_float(context, value,
+                                             GRN_BULK_HEAD(element_value),
+                                             GRN_BULK_VSIZE(element_value),
+                                             weight,
+                                             element_value->header.domain);
             }
         }
     } else if (RVAL2CBOOL(rb_obj_is_kind_of(rb_value, rb_cHash))) {

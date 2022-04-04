@@ -1,6 +1,4 @@
-# -*- coding: utf-8 -*-
-#
-# Copyright (C) 2009-2016  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2022  Sutou Kouhei <kou@clear-code.com>
 # Copyright (C) 2014-2015  Masafumi Yokoyama <yokoyama@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
@@ -867,6 +865,10 @@ module Groonga
       #   * `:lz4`: Compzressed by LZ4.
       #   * `:zstd`: Compressed by Zstandard.
       #   * `:zstandard`: Compressed by Zstandard.
+      # @option options [Boolean] :weight_float32 (false)
+      #    It specifies whether the column uses 32 bit float for weight or not.
+      #
+      #    You can't use this option for scalar column.
       def column(name, type, options={})
         definition = self[name, ColumnDefinition]
         if definition.nil?
@@ -1540,6 +1542,7 @@ module Groonga
           :type => @options[:type],
           :with_weight => @options[:with_weight],
           :compress => @options[:compress],
+          :weight_float32 => @options[:weight_float32],
         }
       end
 
