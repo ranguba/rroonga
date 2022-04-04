@@ -1,4 +1,4 @@
-# Copyright (C) 2016-2017  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2016-2022  Sutou Kouhei <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -117,6 +117,200 @@ class DataColumnTest < Test::Unit::TestCase
                      [2, 3],
                    ],
                    comments.collect {|comment| [comment.base, comment.plus1]})
+    end
+  end
+
+  sub_test_case "#missing_mode" do
+    def test_add
+      Groonga::Schema.define do |schema|
+        schema.create_table("Tags",
+                            type: :hash,
+                            key_type: :short_text) do |table|
+        end
+        schema.create_table("Memos") do |table|
+          table.reference("tags",
+                          "Tags",
+                          type: :vector,
+                          missing_mode: :add)
+        end
+      end
+      memos = Groonga["Memos"]
+      memos_tags = Groonga["Memos.tags"]
+      tags = Groonga["Tags"]
+
+      record = memos.add(tags: ["nonexistent"])
+
+      assert_equal({
+                     missing_mode: :add,
+                     missing_add: true,
+                     missing_ignore: false,
+                     missing_nil: false,
+                     values: [tags["nonexistent"]],
+                   },
+                   {
+                     missing_mode: memos_tags.missing_mode,
+                     missing_add: memos_tags.missing_add?,
+                     missing_ignore: memos_tags.missing_ignore?,
+                     missing_nil: memos_tags.missing_nil?,
+                     values: record.tags,
+                   })
+    end
+
+    def test_ignore
+      Groonga::Schema.define do |schema|
+        schema.create_table("Tags",
+                            type: :hash,
+                            key_type: :short_text) do |table|
+        end
+        schema.create_table("Memos") do |table|
+          table.reference("tags",
+                          "Tags",
+                          type: :vector,
+                          missing_mode: :ignore)
+        end
+      end
+      memos = Groonga["Memos"]
+      memos_tags = Groonga["Memos.tags"]
+
+      record = memos.add(tags: ["nonexistent"])
+
+      assert_equal({
+                     missing_mode: :ignore,
+                     missing_add: false,
+                     missing_ignore: true,
+                     missing_nil: false,
+                     values: [],
+                   },
+                   {
+                     missing_mode: memos_tags.missing_mode,
+                     missing_add: memos_tags.missing_add?,
+                     missing_ignore: memos_tags.missing_ignore?,
+                     missing_nil: memos_tags.missing_nil?,
+                     values: record.tags,
+                   })
+    end
+
+    def test_nil
+      Groonga::Schema.define do |schema|
+        schema.create_table("Tags",
+                            type: :hash,
+                            key_type: :short_text) do |table|
+        end
+        schema.create_table("Memos") do |table|
+          table.reference("tags",
+                          "Tags",
+                          type: :vector,
+                          missing_mode: :nil,
+                          invalid_mode: :ignore)
+        end
+      end
+      memos = Groonga["Memos"]
+      memos_tags = Groonga["Memos.tags"]
+
+      record = memos.add(tags: ["nonexistent"])
+
+      assert_equal({
+                     missing_mode: :nil,
+                     missing_add: false,
+                     missing_ignore: false,
+                     missing_nil: true,
+                     values: [nil],
+                   },
+                   {
+                     missing_mode: memos_tags.missing_mode,
+                     missing_add: memos_tags.missing_add?,
+                     missing_ignore: memos_tags.missing_ignore?,
+                     missing_nil: memos_tags.missing_nil?,
+                     values: record.tags,
+                   })
+    end
+  end
+
+  sub_test_case "#invalid_mode" do
+    def test_error
+      Groonga::Schema.define do |schema|
+        schema.create_table("Memos") do |table|
+          table.uint32("count", invalid_mode: :error)
+        end
+      end
+      memos = Groonga["Memos"]
+      memos_count = Groonga["Memos.count"]
+
+      record = memos.add
+      assert_raise(Groonga::InvalidArgument) do
+        record.count = "invalid"
+      end
+
+      assert_equal({
+                     invalid_mode: :error,
+                     invalid_error: true,
+                     invalid_warn: false,
+                     invalid_ignore: false,
+                     value: 0,
+                   },
+                   {
+                     invalid_mode: memos_count.invalid_mode,
+                     invalid_error: memos_count.invalid_error?,
+                     invalid_warn: memos_count.invalid_warn?,
+                     invalid_ignore: memos_count.invalid_ignore?,
+                     value: record.count,
+                   })
+    end
+
+    def test_warn
+      Groonga::Schema.define do |schema|
+        schema.create_table("Memos") do |table|
+          table.uint32("count", invalid_mode: :warn)
+        end
+      end
+      memos = Groonga["Memos"]
+      memos_count = Groonga["Memos.count"]
+
+      record = memos.add
+      record.count = "invalid"
+
+      assert_equal({
+                     invalid_mode: :warn,
+                     invalid_error: false,
+                     invalid_warn: true,
+                     invalid_ignore: false,
+                     value: 0,
+                   },
+                   {
+                     invalid_mode: memos_count.invalid_mode,
+                     invalid_error: memos_count.invalid_error?,
+                     invalid_warn: memos_count.invalid_warn?,
+                     invalid_ignore: memos_count.invalid_ignore?,
+                     value: record.count,
+                   })
+    end
+
+    def test_ignore
+      Groonga::Schema.define do |schema|
+        schema.create_table("Memos") do |table|
+          table.uint32("count", invalid_mode: :ignore)
+        end
+      end
+      memos = Groonga["Memos"]
+      memos_count = Groonga["Memos.count"]
+
+      record = memos.add
+      record.count = "invalid"
+
+      assert_equal({
+                     invalid_mode: :ignore,
+                     invalid_error: false,
+                     invalid_warn: false,
+                     invalid_ignore: true,
+                     value: 0,
+                   },
+                   {
+                     invalid_mode: memos_count.invalid_mode,
+                     invalid_error: memos_count.invalid_error?,
+                     invalid_warn: memos_count.invalid_warn?,
+                     invalid_ignore: memos_count.invalid_ignore?,
+                     value: record.count,
+                   })
     end
   end
 end

@@ -869,6 +869,32 @@ module Groonga
       #    It specifies whether the column uses 32 bit float for weight or not.
       #
       #    You can't use this option for scalar column.
+      #
+      #   @since 12.0.2
+      # @option options [:add, :ignore, :nil, nil] :missing_mode (nil)
+      #   It specifies how to process missing value.
+      #
+      #   * `:add`, `nil`: Correspond to `MISSING_ADD`
+      #   * `:ignore`: Correspond to `MISSING_IGNORE`
+      #   * `:nil`: Correspond to `MISSING_NIL`
+      #
+      #   See
+      #   https://groonga.org/docs/reference/commands/column_create.html#column-create-missing-mode
+      #   for each `MISSING_*` values.
+      #
+      #   @since 12.0.2
+      # @option options [:error, :warn, :ignore, nil] :invalid_mode (nil)
+      #   It specifies how to process invalid value.
+      #
+      #   * `:add`, `nil`: Correspond to `INVALID_ERROR`
+      #   * `:warn`: Correspond to `INVALID_WARN`
+      #   * `:ignore`: Correspond to `INVALID_IGNORE`
+      #
+      #   See
+      #   https://groonga.org/docs/reference/commands/column_create.html#column-create-invalid-mode
+      #   for each `INVALID_*` values.
+      #
+      #   @since 12.0.2
       def column(name, type, options={})
         definition = self[name, ColumnDefinition]
         if definition.nil?
@@ -1543,6 +1569,8 @@ module Groonga
           :with_weight => @options[:with_weight],
           :compress => @options[:compress],
           :weight_float32 => @options[:weight_float32],
+          :missing_mode => @options[:missing_mode],
+          :invalid_mode => @options[:invalid_mode],
         }
       end
 

@@ -260,6 +260,32 @@ rb_grn_table_inspect (VALUE self)
  *
  *     You can't use this option for scalar column.
  *
+ *     @since 12.0.2
+ *   @option options [:add, :ignore, :nil, nil] :missing_mode (nil)
+ *     It specifies how to process missing value.
+ *
+ *     * `:add`, `nil`: Correspond to `MISSING_ADD`
+ *     * `:ignore`: Correspond to `MISSING_IGNORE`
+ *     * `:nil`: Correspond to `MISSING_NIL`
+ *
+ *     See
+ *     https://groonga.org/docs/reference/commands/column_create.html#column-create-missing-mode
+ *     for each `MISSING_*` values.
+ *
+ *     @since 12.0.2
+ *   @option options [:error, :warn, :ignore, nil] :invalid_mode (nil)
+ *     It specifies how to process invalid value.
+ *
+ *     * `:add`, `nil`: Correspond to `INVALID_ERROR`
+ *     * `:warn`: Correspond to `INVALID_WARN`
+ *     * `:ignore`: Correspond to `INVALID_IGNORE`
+ *
+ *     See
+ *     https://groonga.org/docs/reference/commands/column_create.html#column-create-invalid-mode
+ *     for each `INVALID_*` values.
+ *
+ *     @since 12.0.2
+ *
  * @return [Groonga::FixSizeColumn, Groonga::VariableSizeColumn]
  */
 static VALUE
@@ -274,6 +300,8 @@ rb_grn_table_define_column (int argc, VALUE *argv, VALUE self)
     VALUE rb_name, rb_value_type;
     VALUE options, rb_path, rb_persistent, rb_compress, rb_type, rb_with_weight;
     VALUE rb_weight_float32;
+    VALUE rb_missing_mode;
+    VALUE rb_invalid_mode;
     VALUE columns;
     VALUE rb_column;
 
@@ -294,6 +322,8 @@ rb_grn_table_define_column (int argc, VALUE *argv, VALUE self)
                         "with_weight", &rb_with_weight,
                         "compress", &rb_compress,
                         "weight_float32", &rb_weight_float32,
+                        "missing_mode", &rb_missing_mode,
+                        "invalid_mode", &rb_invalid_mode,
                         NULL);
 
     value_type = RVAL2GRNOBJECT(rb_value_type, &context);
@@ -360,6 +390,34 @@ rb_grn_table_define_column (int argc, VALUE *argv, VALUE self)
             rb_raise(rb_eArgError,
                      "can't use 32 bit float weight for scalar column");
         }
+    }
+
+    if (NIL_P(rb_missing_mode) ||
+        rb_grn_equal_option(rb_missing_mode, "add")) {
+        flags |= GRN_OBJ_MISSING_ADD;
+    } else if (rb_grn_equal_option(rb_missing_mode, "ignore")) {
+        flags |= GRN_OBJ_MISSING_IGNORE;
+    } else if (rb_grn_equal_option(rb_missing_mode, "nil")) {
+        flags |= GRN_OBJ_MISSING_NIL;
+    } else {
+        rb_raise(rb_eArgError,
+                 "invalid missing mode: %s: "
+                 "available types: [:add, :ignore, :nil, nil]",
+                 rb_grn_inspect(rb_missing_mode));
+    }
+
+    if (NIL_P(rb_invalid_mode) ||
+        rb_grn_equal_option(rb_invalid_mode, "error")) {
+        flags |= GRN_OBJ_INVALID_ERROR;
+    } else if (rb_grn_equal_option(rb_invalid_mode, "warn")) {
+        flags |= GRN_OBJ_INVALID_WARN;
+    } else if (rb_grn_equal_option(rb_invalid_mode, "ignore")) {
+        flags |= GRN_OBJ_INVALID_IGNORE;
+    } else {
+        rb_raise(rb_eArgError,
+                 "invalid invalid mode: %s: "
+                 "available types: [:add, :warn, :ignore, nil]",
+                 rb_grn_inspect(rb_invalid_mode));
     }
 
     column = grn_column_create(context, table, name, name_size,

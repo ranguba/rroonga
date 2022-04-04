@@ -932,6 +932,26 @@ rb_grn_object_inspect_content_flags_with_label (VALUE inspected,
             if (column_flags & GRN_OBJ_WEIGHT_FLOAT32)
                 rb_ary_push(inspected_flags, rb_str_new_cstr("WEIGHT_FLOAT32"));
         }
+        switch (column_flags & GRN_OBJ_MISSING_MASK) {
+        case GRN_OBJ_MISSING_IGNORE:
+            rb_ary_push(inspected_flags, rb_str_new_cstr("MISSING_IGNORE"));
+            break;
+        case GRN_OBJ_MISSING_NIL:
+            rb_ary_push(inspected_flags, rb_str_new_cstr("MISSING_NIL"));
+            break;
+        default:
+            break;
+        }
+        switch (column_flags & GRN_OBJ_INVALID_MASK) {
+        case GRN_OBJ_INVALID_WARN:
+            rb_ary_push(inspected_flags, rb_str_new_cstr("INVALID_WARN"));
+            break;
+        case GRN_OBJ_INVALID_IGNORE:
+            rb_ary_push(inspected_flags, rb_str_new_cstr("INVALID_IGNORE"));
+            break;
+        default:
+            break;
+        }
         break;
     default:
         break;

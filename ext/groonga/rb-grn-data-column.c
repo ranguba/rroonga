@@ -1,7 +1,7 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /* vim: set sts=4 sw=4 ts=8 noet: */
 /*
-  Copyright (C) 2016-2021  Sutou Kouhei <kou@clear-code.com>
+  Copyright (C) 2016-2022  Sutou Kouhei <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -245,6 +245,180 @@ rb_grn_data_column_apply_expression (VALUE self)
     return self;
 }
 
+/*
+ * @overload missing_mode
+ * @return [:add, :ignore, :nil] The missing mode of the column.
+ * @since 12.0.2
+ */
+static VALUE
+rb_grn_data_column_get_missing_mode(VALUE self)
+{
+    grn_obj *column;
+    grn_ctx *context;
+    grn_column_flags flags;
+
+    rb_grn_column_deconstruct(SELF(self), &column, &context,
+                              NULL, NULL,
+                              NULL, NULL, NULL);
+
+    flags = grn_column_get_flags(context, column);
+    switch ((flags & GRN_OBJ_MISSING_MASK)) {
+    case GRN_OBJ_MISSING_IGNORE:
+        return rb_id2sym(rb_intern("ignore"));
+    case GRN_OBJ_MISSING_NIL:
+        return rb_id2sym(rb_intern("nil"));
+    default:
+        return rb_id2sym(rb_intern("add"));
+    }
+}
+
+/*
+ * @overload missing_add?
+ * @return [Boolean] @true@ if the column uses @:add@ missing mode.
+ * @since 12.0.2
+ */
+static VALUE
+rb_grn_data_column_missing_add_p(VALUE self)
+{
+    grn_obj *column;
+    grn_ctx *context;
+    grn_column_flags flags;
+
+    rb_grn_column_deconstruct(SELF(self), &column, &context,
+                              NULL, NULL,
+                              NULL, NULL, NULL);
+
+    flags = grn_column_get_flags(context, column);
+    return CBOOL2RVAL((flags & GRN_OBJ_MISSING_MASK) == GRN_OBJ_MISSING_ADD);
+}
+
+/*
+ * @overload missing_ignore?
+ * @return [Boolean] @true@ if the column uses @:ignore@ missing mode.
+ * @since 12.0.2
+ */
+static VALUE
+rb_grn_data_column_missing_ignore_p(VALUE self)
+{
+    grn_obj *column;
+    grn_ctx *context;
+    grn_column_flags flags;
+
+    rb_grn_column_deconstruct(SELF(self), &column, &context,
+                              NULL, NULL,
+                              NULL, NULL, NULL);
+
+    flags = grn_column_get_flags(context, column);
+    return CBOOL2RVAL((flags & GRN_OBJ_MISSING_MASK) == GRN_OBJ_MISSING_IGNORE);
+}
+
+/*
+ * @overload missing_nil?
+ * @return [Boolean] @true@ if the column uses @:nil@ missing mode.
+ * @since 12.0.2
+ */
+static VALUE
+rb_grn_data_column_missing_nil_p(VALUE self)
+{
+    grn_obj *column;
+    grn_ctx *context;
+    grn_column_flags flags;
+
+    rb_grn_column_deconstruct(SELF(self), &column, &context,
+                              NULL, NULL,
+                              NULL, NULL, NULL);
+
+    flags = grn_column_get_flags(context, column);
+    return CBOOL2RVAL((flags & GRN_OBJ_MISSING_MASK) == GRN_OBJ_MISSING_NIL);
+}
+
+/*
+ * @overload invalid_mode
+ * @return [:error, :warn, :ignore] The invalid mode of the column.
+ * @since 12.0.2
+ */
+static VALUE
+rb_grn_data_column_get_invalid_mode(VALUE self)
+{
+    grn_obj *column;
+    grn_ctx *context;
+    grn_column_flags flags;
+
+    rb_grn_column_deconstruct(SELF(self), &column, &context,
+                              NULL, NULL,
+                              NULL, NULL, NULL);
+
+    flags = grn_column_get_flags(context, column);
+    switch ((flags & GRN_OBJ_INVALID_MASK)) {
+    case GRN_OBJ_INVALID_WARN:
+        return rb_id2sym(rb_intern("warn"));
+    case GRN_OBJ_INVALID_IGNORE:
+        return rb_id2sym(rb_intern("ignore"));
+    default:
+        return rb_id2sym(rb_intern("error"));
+    }
+}
+
+/*
+ * @overload invalid_error?
+ * @return [Boolean] @true@ if the column uses @:error@ invalid mode.
+ * @since 12.0.2
+ */
+static VALUE
+rb_grn_data_column_invalid_error_p(VALUE self)
+{
+    grn_obj *column;
+    grn_ctx *context;
+    grn_column_flags flags;
+
+    rb_grn_column_deconstruct(SELF(self), &column, &context,
+                              NULL, NULL,
+                              NULL, NULL, NULL);
+
+    flags = grn_column_get_flags(context, column);
+    return CBOOL2RVAL((flags & GRN_OBJ_INVALID_MASK) == GRN_OBJ_INVALID_ERROR);
+}
+
+/*
+ * @overload invalid_warn?
+ * @return [Boolean] @true@ if the column uses @:warn@ invalid mode.
+ * @since 12.0.2
+ */
+static VALUE
+rb_grn_data_column_invalid_warn_p(VALUE self)
+{
+    grn_obj *column;
+    grn_ctx *context;
+    grn_column_flags flags;
+
+    rb_grn_column_deconstruct(SELF(self), &column, &context,
+                              NULL, NULL,
+                              NULL, NULL, NULL);
+
+    flags = grn_column_get_flags(context, column);
+    return CBOOL2RVAL((flags & GRN_OBJ_INVALID_MASK) == GRN_OBJ_INVALID_WARN);
+}
+
+/*
+ * @overload invalid_ignore?
+ * @return [Boolean] @true@ if the column uses @:ignore@ invalid mode.
+ * @since 12.0.2
+ */
+static VALUE
+rb_grn_data_column_invalid_ignore_p(VALUE self)
+{
+    grn_obj *column;
+    grn_ctx *context;
+    grn_column_flags flags;
+
+    rb_grn_column_deconstruct(SELF(self), &column, &context,
+                              NULL, NULL,
+                              NULL, NULL, NULL);
+
+    flags = grn_column_get_flags(context, column);
+    return CBOOL2RVAL((flags & GRN_OBJ_INVALID_MASK) == GRN_OBJ_INVALID_IGNORE);
+}
+
 void
 rb_grn_init_data_column (VALUE mGrn)
 {
@@ -254,6 +428,24 @@ rb_grn_init_data_column (VALUE mGrn)
                      rb_grn_data_column_apply_window_function, -1);
     rb_define_method(rb_cGrnDataColumn, "apply_expression",
                      rb_grn_data_column_apply_expression, 0);
+
+    rb_define_method(rb_cGrnDataColumn, "missing_mode",
+                     rb_grn_data_column_get_missing_mode, 0);
+    rb_define_method(rb_cGrnDataColumn, "missing_add?",
+                     rb_grn_data_column_missing_add_p, 0);
+    rb_define_method(rb_cGrnDataColumn, "missing_ignore?",
+                     rb_grn_data_column_missing_ignore_p, 0);
+    rb_define_method(rb_cGrnDataColumn, "missing_nil?",
+                     rb_grn_data_column_missing_nil_p, 0);
+
+    rb_define_method(rb_cGrnDataColumn, "invalid_mode",
+                     rb_grn_data_column_get_invalid_mode, 0);
+    rb_define_method(rb_cGrnDataColumn, "invalid_error?",
+                     rb_grn_data_column_invalid_error_p, 0);
+    rb_define_method(rb_cGrnDataColumn, "invalid_warn?",
+                     rb_grn_data_column_invalid_warn_p, 0);
+    rb_define_method(rb_cGrnDataColumn, "invalid_ignore?",
+                     rb_grn_data_column_invalid_ignore_p, 0);
 
     rb_grn_init_fix_size_column(mGrn);
     rb_grn_init_variable_size_column(mGrn);
