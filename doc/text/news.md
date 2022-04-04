@@ -1,5 +1,17 @@
 # NEWS
 
+## 12.0.2: 2022-04-04 {#version-12-0-2}
+
+### Improvements
+
+  * Added support for `:weight_float32` for vector column. This
+    requires Groonga 12.0.2 or later.
+
+  * Removed needless `Groonga::IndexColumn#with_weight?`.
+
+  * Added support for `:missing_mode` and `:invalid_mode` for scalar
+    column and vector column. This requires Groonga 12.0.2 or later.
+
 ## 12.0.0: 2022-02-09 {#version-12-0-0}
 
 ### Improvements
