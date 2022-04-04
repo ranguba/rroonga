@@ -1,6 +1,6 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
-  Copyright (C) 2009-2021  Sutou Kouhei <kou@clear-code.com>
+  Copyright (C) 2009-2022  Sutou Kouhei <kou@clear-code.com>
   Copyright (C) 2014-2016  Masafumi Yokoyama <yokoyama@clear-code.com>
 
   This library is free software; you can redistribute it and/or
@@ -540,7 +540,11 @@ rb_grn_table_key_support_array_set (VALUE self, VALUE rb_key, VALUE rb_values)
     data.id = id;
     data.table = table;
     data.rb_grn_object.context = context;
-    rb_iterate(rb_each, rb_values, set_value, (VALUE)&data);
+    {
+        ID id_each;
+        CONST_ID(id_each, "each");
+        rb_block_call(rb_values, id_each, 0, NULL, set_value, (VALUE)&data);
+    }
 
     return Qnil;
 }
