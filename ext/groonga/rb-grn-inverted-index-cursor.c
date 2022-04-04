@@ -1,6 +1,6 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
-  Copyright (C) 2017-2021  Sutou Kouhei <kou@clear-code.com>
+  Copyright (C) 2017-2022  Sutou Kouhei <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -55,6 +55,15 @@ static const rb_data_type_t rb_grn_inverted_index_cursor_type = {
     0,
     RUBY_TYPED_FREE_IMMEDIATELY,
 };
+
+static VALUE
+rb_grn_inverted_index_cursor_alloc (VALUE klass)
+{
+    return TypedData_Wrap_Struct(klass,
+                                 &rb_grn_inverted_index_cursor_type,
+                                 NULL);
+}
+
 
 VALUE
 rb_grn_inverted_index_cursor_to_ruby_object (grn_ctx *context,
@@ -256,6 +265,8 @@ rb_grn_init_inverted_index_cursor (VALUE mGrn)
 {
     rb_cGrnInvertedIndexCursor =
       rb_define_class_under(mGrn, "InvertedIndexCursor", rb_cObject);
+    rb_define_alloc_func(rb_cGrnInvertedIndexCursor,
+                         rb_grn_inverted_index_cursor_alloc);
     rb_include_module(rb_cGrnInvertedIndexCursor, rb_mEnumerable);
 
     rb_define_method(rb_cGrnInvertedIndexCursor, "next",

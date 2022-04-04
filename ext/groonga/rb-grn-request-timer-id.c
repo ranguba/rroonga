@@ -1,6 +1,6 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
-  Copyright (C) 2016-2021  Sutou Kouhei <kou@clear-code.com>
+  Copyright (C) 2016-2022  Sutou Kouhei <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -38,6 +38,12 @@ static rb_data_type_t data_type = {
     0
 };
 
+static VALUE
+rb_grn_request_timer_id_alloc (VALUE klass)
+{
+    return TypedData_Wrap_Struct(klass, &data_type, NULL);
+}
+
 void *
 rb_grn_request_timer_id_from_ruby_object (VALUE rb_id)
 {
@@ -61,4 +67,6 @@ rb_grn_init_request_timer_id (VALUE mGrn)
 {
     rb_cGrnRequestTimerID =
         rb_define_class_under(mGrn, "RequestTimerID", rb_cObject);
+    rb_define_alloc_func(rb_cGrnRequestTimerID,
+                         rb_grn_request_timer_id_alloc);
 }
