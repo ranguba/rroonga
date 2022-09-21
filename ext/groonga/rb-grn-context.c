@@ -2,7 +2,7 @@
 /*
   Copyright (C) 2010-2021  Sutou Kouhei <kou@clear-code.com>
   Copyright (C) 2016  Masafumi Yokoyama <yokoyama@clear-code.com>
-  Copyright (C) 2019  Horimoto Yasuhiro <horimoto@clear-code.com>
+  Copyright (C) 2019-2022  Horimoto Yasuhiro <horimoto@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -324,6 +324,26 @@ rb_grn_context_ensure (VALUE *context)
     if (NIL_P(*context))
         *context = rb_grn_context_get_default();
     return SELF(*context);
+}
+
+/*
+ * If context has already implemented database, it returns +true+,
+ * otherwise it returns +false+.
+ *
+ *   @return [Boolean] `true` if context has already implemented database.
+ *     `false` if context does not implement database.
+ */
+VALUE
+rb_grn_context_implement_db (grn_ctx *context)
+{
+    grn_obj *database;
+
+    database = grn_ctx_db(context);
+    if (database) {
+        return Qtrue;
+    } else {
+        return Qfalse;
+    }
 }
 
 VALUE
