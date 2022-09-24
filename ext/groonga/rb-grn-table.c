@@ -298,6 +298,7 @@ rb_grn_table_define_column (int argc, VALUE *argv, VALUE self)
     unsigned name_size = 0;
     grn_column_flags flags = 0;
     VALUE rb_name, rb_value_type;
+    VALUE rb_value_size, rb_value_var_size;
     VALUE options, rb_path, rb_persistent, rb_compress, rb_type, rb_with_weight;
     VALUE rb_weight_float32;
     VALUE rb_missing_mode;
@@ -319,6 +320,8 @@ rb_grn_table_define_column (int argc, VALUE *argv, VALUE self)
                         "path", &rb_path,
                         "persistent", &rb_persistent,
                         "type", &rb_type,
+                        "value_size", &rb_value_size,
+                        "value_var_size", &rb_value_var_size,
                         "with_weight", &rb_with_weight,
                         "compress", &rb_compress,
                         "weight_float32", &rb_weight_float32,
@@ -420,8 +423,58 @@ rb_grn_table_define_column (int argc, VALUE *argv, VALUE self)
                  rb_grn_inspect(rb_invalid_mode));
     }
 
-    column = grn_column_create(context, table, name, name_size,
-                               path, flags, value_type);
+    if (rb_grn_context_implement_db(context)) {
+        column = grn_column_create(context, table, name, name_size,
+                                   path, flags, value_type);
+    } else {
+        char fullname[GRN_TABLE_MAX_KEY_SIZE];
+        unsigned int fullname_size;
+        int table_name_len = strlen(fullname);
+        if (name_size + 1 + table_name_len > GRN_TABLE_MAX_KEY_SIZE) {
+            rb_raise(rb_eArgError,
+                     "[column][create] too long column name: required name_size(%d) < %d"
+                     ": <%.*s>.<%.*s>",
+                     name_size, GRN_TABLE_MAX_KEY_SIZE - 1 - table_name_len,
+                     table_name_len, fullname, name_size, name);
+        }
+//        fullname[table_name_len] = '.';
+//        grn_memcpy(fullname + table_name_len + 1, name, name_size);
+//        fullname_size = table_name_len + 1 + name_size;
+//        grn_ctx *target_ctx = context;
+//        grn_id id = GRN_ID_NIL;
+//        id = grn_pat_add(target_ctx,
+//                         target_ctx->impl->temporary_columns,
+//                         fullname, fullname_size,
+//                         NULL,
+//                         &added);
+//        id |= GRN_OBJ_TMP_OBJECT | GRN_OBJ_TMP_COLUMN;
+
+        if (RVAL2CBOOL(rb_value_var_size))
+            flags |= GRN_OBJ_KEY_VAR_SIZE;
+        int64_t value_size = 0;
+        if (!NIL_P(rb_value_size))
+            value_size = NUM2INT(rb_value_size);
+
+        grn_obj *res;
+        switch (flags & GRN_OBJ_COLUMN_TYPE_MASK) {
+        case GRN_OBJ_COLUMN_SCALAR :
+            if ((flags & GRN_OBJ_KEY_VAR_SIZE) || value_size > sizeof(int64_t)) {
+                res = (grn_obj *)grn_ja_create(context, path, value_size, flags);
+            } else {
+                res = (grn_obj *)grn_ra_create(context, path, value_size, flags);
+            }
+            break;
+        case GRN_OBJ_COLUMN_VECTOR :
+            res = (grn_obj *)grn_ja_create(context, path, value_size * 30/*todo*/, flags);
+            //todo : zlib support
+            break;
+        case GRN_OBJ_COLUMN_INDEX :
+            res = (grn_obj *)grn_ii_create(context, path, table, flags); //todo : ii layout support
+            break;
+        }
+        column = res;
+    }
+
     if (context->rc) {
         VALUE rb_related_object;
         rb_related_object =

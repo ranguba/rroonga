@@ -28,7 +28,7 @@ class PatriciaTrieTestNoDB < Test::Unit::TestCase
 
   def test_add
     users = Groonga::PatriciaTrie.create(key_size: 4096, key_var_size: true)
-    users.define_column("address", "ShortText")
+    users.define_column("address", value_size: 4096, value_var_size: true)
     me = users.add("me", :address => "me@example.com")
     assert_equal("me@example.com", me[:address])
   end
@@ -74,8 +74,8 @@ class PatriciaTrieTestNoDB < Test::Unit::TestCase
 
   def test_rename
     users = Groonga::PatriciaTrie.create(key_size: 4096, key_var_size: true)
-    name = users.define_column("name", "ShortText")
-    address = users.define_column("address", "ShortText")
+    name = users.define_column("name", value_size: 4096, value_var_size: true)
+    address = users.define_column("address", value_size: 4096, value_var_size: true)
 
     users.rename("People")
     assert_equal(["People", "People.name", "People.address"],
