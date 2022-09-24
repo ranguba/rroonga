@@ -166,10 +166,12 @@ rb_grn_patricia_trie_s_create (int argc, VALUE *argv, VALUE klass)
     grn_obj *key_type = NULL, *value_type = NULL, *table;
     const char *name = NULL, *path = NULL;
     unsigned name_size = 0;
+    unsigned int key_size = 0;
+    unsigned int value_size = 0;
     grn_table_flags flags = GRN_OBJ_TABLE_PAT_KEY;
     VALUE rb_table;
     VALUE options, rb_context, rb_name, rb_path, rb_persistent;
-    VALUE rb_key_normalize, rb_key_with_sis, rb_key_type;
+    VALUE rb_key_normalize, rb_key_with_sis, rb_key_type, rb_key_size, rb_key_var_size;
     VALUE rb_value_type;
     VALUE rb_default_tokenizer;
     VALUE rb_token_filters;
@@ -186,6 +188,8 @@ rb_grn_patricia_trie_s_create (int argc, VALUE *argv, VALUE klass)
                         "key_normalize", &rb_key_normalize,
                         "key_with_sis", &rb_key_with_sis,
                         "key_type", &rb_key_type,
+                        "key_size", &rb_key_size,
+                        "key_var_size", &rb_key_var_size,
                         "value_type", &rb_value_type,
                         "default_tokenizer", &rb_default_tokenizer,
                         "token_filters", &rb_token_filters,
@@ -227,8 +231,17 @@ rb_grn_patricia_trie_s_create (int argc, VALUE *argv, VALUE klass)
     if (RVAL2CBOOL(rb_sub_records))
         flags |= GRN_OBJ_WITH_SUBREC;
 
-    table = grn_table_create(context, name, name_size, path,
-                             flags, key_type, value_type);
+    if (rb_grn_context_implement_db(context)) {
+        table = grn_table_create(context, name, name_size, path,
+                                 flags, key_type, value_type);
+    } else {
+        if (RVAL2CBOOL(rb_key_var_size))
+            flags |= GRN_OBJ_KEY_VAR_SIZE;
+        if (!NIL_P(rb_key_size))
+            key_size = NUM2UINT(rb_key_size);
+        value_size = 0;
+        table = (grn_obj *)grn_pat_create(context, path, key_size, value_size, flags);
+    }
     if (!table)
         rb_grn_context_check(context, rb_ary_new_from_values(argc, argv));
     rb_table = GRNOBJECT2RVAL(klass, context, table, GRN_TRUE);
