@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2019  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2022  Sutou Kouhei <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -100,6 +100,7 @@ class RemoteTest < Test::Unit::TestCase
                    "command_version",
                    "default_command_version",
                    "max_command_version",
+                   "memory_map_size",
                    "n_jobs",
                    "n_queries",
                    "start_time",
