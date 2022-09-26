@@ -712,15 +712,11 @@ rb_grn_table_get_columns (int argc, VALUE *argv, VALUE self)
 {
     grn_ctx *context = NULL;
     grn_obj *table;
-    grn_obj *columns;
-    grn_obj *key_type;
-    grn_rc rc;
+    grn_hash *columns;
     int n;
-    grn_table_cursor *cursor;
     VALUE rb_prefix, rb_columns;
     char *prefix = NULL;
     unsigned prefix_size = 0;
-    VALUE exception;
 
     rb_grn_table_deconstruct(SELF(self), &table, &context,
                              NULL, NULL,
@@ -734,23 +730,27 @@ rb_grn_table_get_columns (int argc, VALUE *argv, VALUE self)
         prefix_size = RSTRING_LEN(rb_prefix);
     }
 
-    key_type = grn_ctx_at(context, GRN_DB_SHORT_TEXT);
-    columns = grn_table_create(context, NULL, 0, NULL, GRN_TABLE_HASH_KEY,
-                               key_type, 0);
+    columns = grn_hash_create(context,
+                              NULL,
+                              sizeof(grn_id),
+                              0,
+                              GRN_OBJ_TABLE_HASH_KEY|GRN_HASH_TINY);
     rb_grn_context_check(context, self);
-    n = grn_table_columns(context, table, prefix, prefix_size, columns);
+    n = grn_table_columns(context,
+                          table,
+                          prefix,
+                          prefix_size,
+                          (grn_obj *)columns);
     rb_grn_context_check(context, self);
 
     rb_columns = rb_ary_new2(n);
     if (n == 0) {
-        grn_obj_unlink(context, columns);
+        grn_hash_close(context, columns);
         return rb_columns;
     }
 
-    cursor = grn_table_cursor_open(context, columns, NULL, 0, NULL, 0,
-                                   0, -1, GRN_CURSOR_ASCENDING);
-    rb_grn_context_check(context, self);
-    while (grn_table_cursor_next(context, cursor) != GRN_ID_NIL) {
+    VALUE exception = RUBY_Qnil;
+    GRN_HASH_EACH_BEGIN(context, columns, cursor, id) {
         void *key;
         grn_id *column_id;
         grn_obj *column;
@@ -758,14 +758,12 @@ rb_grn_table_get_columns (int argc, VALUE *argv, VALUE self)
         grn_user_data *user_data;
         grn_bool need_to_set_name = GRN_FALSE;
 
-        grn_table_cursor_get_key(context, cursor, &key);
+        grn_hash_cursor_get_key(context, cursor, &key);
         column_id = key;
         column = grn_ctx_at(context, *column_id);
         exception = rb_grn_context_to_exception(context, self);
-        if (!NIL_P(exception)) {
-            grn_table_cursor_close(context, cursor);
-            grn_obj_unlink(context, columns);
-            rb_exc_raise(exception);
+        if (!RB_NIL_P(exception)) {
+            break;
         }
 
         user_data = grn_obj_user_data(context, column);
@@ -784,13 +782,12 @@ rb_grn_table_get_columns (int argc, VALUE *argv, VALUE self)
         }
 
         rb_ary_push(rb_columns, rb_column);
+    } GRN_HASH_EACH_END(context, cursor);
+    grn_hash_close(context, columns);
+    if (!RB_NIL_P(exception)) {
+        rb_exc_raise(exception);
     }
-    rc = grn_table_cursor_close(context, cursor);
-    grn_obj_unlink(context, columns);
-    if (rc != GRN_SUCCESS) {
-        rb_grn_context_check(context, self);
-        rb_grn_rc_check(rc, self);
-    }
+    rb_grn_context_check(context, self);
 
     return rb_columns;
 }
