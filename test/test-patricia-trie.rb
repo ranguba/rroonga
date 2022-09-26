@@ -1,6 +1,4 @@
-# -*- coding: utf-8 -*-
-#
-# Copyright (C) 2009-2014  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2022  Sutou Kouhei <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -154,6 +152,27 @@ class PatriciaTrieTest < Test::Unit::TestCase
                   [arupaka, "アルパカ", 42, 12],
                   [gaxtu, "ガッ", 55, 6]],
                  words.scan('muTEki リンクの冒険 ミリバール アルパカ ガッ'))
+  end
+
+  def test_scan_no_database
+    Groonga::Context.open(encoding: "utf-8") do |context|
+      Groonga::PatriciaTrie.create(context: context,
+                                   key_size: 4096,
+                                   key_variable_size: true) do |words|
+        words.add("リンク")
+        arupaka = words.add("アルパカ")
+        words.add("アルパカ(生物)")
+        adventure_of_link = words.add('リンクの冒険')
+        words.add('冒険')
+        words.add('ｶﾞｯ')
+        words.add('ＭＵＴＥＫＩ')
+        assert_equal([
+                       [adventure_of_link, "リンクの冒険", 7, 18],
+                       [arupaka, "アルパカ", 42, 12],
+                     ],
+                     words.scan('muTEki リンクの冒険 ミリバール アルパカ ガッ'))
+      end
+    end
   end
 
   def test_tag_keys

@@ -1,7 +1,7 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /* vim: set sts=4 sw=4 ts=8 noet: */
 /*
-  Copyright (C) 2009-2021  Sutou Kouhei <kou@clear-code.com>
+  Copyright (C) 2009-2022  Sutou Kouhei <kou@clear-code.com>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -129,11 +129,45 @@ VALUE rb_cGrnPatriciaTrie;
  *
  *       省略した場合はShortText型をキーとして使用する。この場合、
  *       4096バイトまで使用可能である。
+ *
+ *     @option options :key_size (nil) The key size in bytes or the
+ *       max key size in bytes. If `key_variable_size: true` is also
+ *       specified, the size is the max key size not the key size.
+ *
+ *       This is used only when the `:context` isn't associated with a
+ *       database. If `:context` is associated with a database, this
+ *       value is ignored.
+ *
+ *       @see :key_type
+ *       @see :key_variable_size
+ *       @since 12.0.8
+ *
+ *     @option options :key_variable_size (false) Whether the key is
+ *       variable size or not.
+ *
+ *       This is used only when the `:context` isn't associated with a
+ *       database. If `:context` is associated with a database, this
+ *       value is ignored.
+ *
+ *       @see :key_type
+ *       @see :key_size
+ *       @since 12.0.8
+ *
  *     @option options :value_type
  *       値の型を指定する。省略すると値のための領域を確保しない。
  *       値を保存したい場合は必ず指定すること。
  *
  *       参考: {Groonga::Type.new}
+ *
+ *     @option options :value_size (nil) The value size in bytes.
+ *
+ *       This is used only when the `:context` isn't associated with a
+ *       database. If `:context` is associated with a database, this
+ *       value is ignored.
+ *
+ *       @see :value_type
+ *       @since 12.0.8
+ *
  *     @option options :default_tokenizer
  *       {Groonga::IndexColumn} で使用するトークナイザを指定する。
  *       デフォルトでは何も設定されていないので、テーブルに
@@ -170,7 +204,10 @@ rb_grn_patricia_trie_s_create (int argc, VALUE *argv, VALUE klass)
     VALUE rb_table;
     VALUE options, rb_context, rb_name, rb_path, rb_persistent;
     VALUE rb_key_normalize, rb_key_with_sis, rb_key_type;
+    VALUE rb_key_size;
+    VALUE rb_key_variable_size;
     VALUE rb_value_type;
+    VALUE rb_value_size;
     VALUE rb_default_tokenizer;
     VALUE rb_token_filters;
     VALUE rb_sub_records;
@@ -186,7 +223,10 @@ rb_grn_patricia_trie_s_create (int argc, VALUE *argv, VALUE klass)
                         "key_normalize", &rb_key_normalize,
                         "key_with_sis", &rb_key_with_sis,
                         "key_type", &rb_key_type,
+                        "key_size", &rb_key_size,
+                        "key_variable_size", &rb_key_variable_size,
                         "value_type", &rb_value_type,
+                        "value_size", &rb_value_size,
                         "default_tokenizer", &rb_default_tokenizer,
                         "token_filters", &rb_token_filters,
                         "sub_records", &rb_sub_records,
@@ -227,10 +267,26 @@ rb_grn_patricia_trie_s_create (int argc, VALUE *argv, VALUE klass)
     if (RVAL2CBOOL(rb_sub_records))
         flags |= GRN_OBJ_WITH_SUBREC;
 
-    table = grn_table_create(context, name, name_size, path,
-                             flags, key_type, value_type);
-    if (!table)
-        rb_grn_context_check(context, rb_ary_new_from_values(argc, argv));
+    if (grn_ctx_db(context)) {
+        table = grn_table_create(context, name, name_size, path,
+                                 flags, key_type, value_type);
+        if (!table)
+            rb_grn_context_check(context, rb_ary_new_from_values(argc, argv));
+    } else {
+        unsigned int key_size = NUM2UINT(rb_key_size);
+        unsigned int value_size =
+            RB_NIL_P(rb_value_size) ? 0 : NUM2UINT(rb_value_size);
+        if (RVAL2CBOOL(rb_key_variable_size)) {
+            flags |= GRN_OBJ_KEY_VAR_SIZE;
+        }
+        table = (grn_obj *)grn_pat_create(context,
+                                          path,
+                                          key_size,
+                                          value_size,
+                                          flags);
+        if (!table)
+            rb_grn_context_check(context, rb_ary_new_from_values(argc, argv));
+    }
     rb_table = GRNOBJECT2RVAL(klass, context, table, GRN_TRUE);
 
     if (!NIL_P(rb_default_tokenizer))
