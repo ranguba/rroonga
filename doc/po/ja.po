@@ -446,11 +446,29 @@ msgstr "* [2. インストール - Groonga ドキュメント](http://groonga.or
 msgid "# NEWS"
 msgstr "# お知らせ"
 
-msgid "## 12.0.0: 2022-02-09 {#version-12-0-0}"
 msgstr ""
 
 msgid "### Improvements"
 msgstr "### 改善"
+
+msgid "## 12.0.2: 2022-04-04 {#version-12-0-2}"
+msgstr ""
+
+msgid ""
+"  * Added support for `:weight_float32` for vector column. This\n"
+"    requires Groonga 12.0.2 or later."
+msgstr ""
+
+msgid "  * Removed needless `Groonga::IndexColumn#with_weight?`."
+msgstr ""
+
+msgid ""
+"  * Added support for `:missing_mode` and `:invalid_mode` for scalar\n"
+"    column and vector column. This requires Groonga 12.0.2 or later."
+msgstr ""
+
+msgid "## 12.0.0: 2022-02-09 {#version-12-0-0}"
+msgstr ""
 
 msgid "  * Added support for Ruby 3.1."
 msgstr ""
