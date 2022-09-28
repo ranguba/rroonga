@@ -1,5 +1,11 @@
 # NEWS
 
+## 12.0.8: 2022-09-28 {#version-12-0-8}
+
+### Improvements
+
+  * Add support for creating a {Groonga::PatriciaTrie} without database.
+
 ## 12.0.2: 2022-04-04 {#version-12-0-2}
 
 ### Improvements
