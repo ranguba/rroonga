@@ -445,10 +445,14 @@ rb_grn_patricia_trie_scan (VALUE self, VALUE rb_string)
     grn_pat_scan_hit hits[1024];
     const char *string;
     long string_length;
+    const char *original_string;
+    long rest_offset;
     grn_bool block_given;
 
     string = StringValuePtr(rb_string);
     string_length = RSTRING_LEN(rb_string);
+    original_string = string;
+    rest_offset = 0;
 
     rb_grn_table_key_support_deconstruct(SELF(self), &table, &context,
                                          NULL, NULL, NULL,
@@ -481,7 +485,7 @@ rb_grn_patricia_trie_scan (VALUE self, VALUE rb_string)
             matched_info = rb_ary_new_from_args(4,
                                                 record,
                                                 term,
-                                                UINT2NUM(hits[i].offset),
+                                                UINT2NUM(hits[i].offset + rest_offset),
                                                 UINT2NUM(hits[i].length));
             if (block_given) {
                 rb_yield(matched_info);
@@ -490,6 +494,7 @@ rb_grn_patricia_trie_scan (VALUE self, VALUE rb_string)
             }
             previous_offset = hits[i].offset;
         }
+        rest_offset = rest - original_string;
         string_length -= rest - string;
         string = rest;
     }

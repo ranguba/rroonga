@@ -154,6 +154,23 @@ class PatriciaTrieTest < Test::Unit::TestCase
                  words.scan('muTEki リンクの冒険 ミリバール アルパカ ガッ'))
   end
 
+  def test_scan_for_many_words
+    Groonga::Context.default_options = {:encoding => "utf-8"}
+    words = Groonga::PatriciaTrie.create(:key_type => "ShortText",
+                                         :key_normalize => true)
+    words.add("x")
+    dot = words.add(".")
+    longtext = ""
+    scanned = []
+
+    1025.times.each do |i|
+      longtext += "."
+      scanned.push([dot, ".", i, 1])
+    end
+    assert_equal(scanned,
+                 words.scan(longtext))
+  end
+
   def test_scan_no_database
     Groonga::Context.open(encoding: "utf-8") do |context|
       Groonga::PatriciaTrie.create(context: context,
