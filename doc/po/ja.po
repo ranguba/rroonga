@@ -446,6 +446,26 @@ msgstr "* [2. インストール - Groonga ドキュメント](http://groonga.or
 msgid "# NEWS"
 msgstr "# お知らせ"
 
+msgid "## 12.1.0: 2022-12-05 {#version-12-1-0}"
+msgstr ""
+
+msgid "### Fixes"
+msgstr "### 修正"
+
+msgid ""
+"  * [{Groonga::PatriciaTrie}] Fixed a bug that `Groonga::PatriciaTrie#scan` re"
+"turned wrong offsets if there are many hit words. [GitHub#207][Patch by Naoya"
+" Murakami]"
+msgstr ""
+"  * [{Groonga::PatriciaTrie}] 大量のワードがヒットするとき、 `Groonga::PatriciaTrie#scan`"
+" が誤ったオフセットを返却する問題を修正しました。[GitHub#207][村上さんのパッチ提供]"
+
+msgid "### Thanks"
+msgstr "### 感謝"
+
+msgid "  * Naoya Murakami"
+msgstr "  * 村上さん"
+
 msgid "## 12.0.8: 2022-09-28 {#version-12-0-8}"
 msgstr ""
 
@@ -486,9 +506,6 @@ msgid ""
 "    [GitHub#204][Patch by skawaji]"
 msgstr ""
 
-msgid "### Thanks"
-msgstr "### 感謝"
-
 msgid "  * skawaji"
 msgstr ""
 
@@ -509,9 +526,6 @@ msgstr ""
 
 msgid "## 10.0.6: 2020-09-01 {#version-10-0-6}"
 msgstr ""
-
-msgid "### Fixes"
-msgstr "### 修正"
 
 msgid "  * Fixed a bug that failed `gem install rroonga` in Windows version."
 msgstr "  * Windows版で `gem install rroonga` に失敗する問題を修正しました。"

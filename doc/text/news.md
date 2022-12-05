@@ -1,5 +1,15 @@
 # NEWS
 
+## 12.1.0: 2022-12-05 {#version-12-1-0}
+
+### Fixes
+
+  * [{Groonga::PatriciaTrie}] Fixed a bug that `Groonga::PatriciaTrie#scan` returned wrong offsets if there are many hit words. [GitHub#207][Patch by Naoya Murakami]
+
+### Thanks
+
+  * Naoya Murakami
+
 ## 12.0.8: 2022-09-28 {#version-12-0-8}
 
 ### Improvements
