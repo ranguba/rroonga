@@ -74,17 +74,20 @@ Then, edit PO files:
 
 ## 3. Upload gem to RubyGems.org
 
-### 3-1. For Linux
+### 3-1. Bump version if need
+
+Change `RB_GRN_MAJOR_VERSION`, `RB_GRN_MINOR_VERSION` and `RB_GRN_MICRO_VERSION`
+to the same version of latest Groonga.
+
+    $ $EDITOR ext/groonga/rb-grn.h
+
+### 3-2. Release
 
     $ rake release
 
-### 3-2. For Windows
-
-    $ rake build:windows
-    $ gem push pkg/rroonga-<the latest release version>-x86-mingw32.gem
-    $ gem push pkg/rroonga-<the latest release version>-x64-mingw32.gem
-
 ### 3-3. Bump version
+
+Increment `RB_GRN_MICRO_VERSION`.
 
     $ $EDITOR ext/groonga/rb-grn.h
 
@@ -123,13 +126,17 @@ Second, commit and push the html directory:
     $ git commit
     $ git push
 
-## 5. Announce in mailing lists
+## 5. Update blogroonga (blog)
 
-* groonga-talk (English)
-  * e.g.: http://sourceforge.net/p/groonga/mailman/message/33144993/
-* groonga-dev (Japanese)
-  * e.g.: http://sourceforge.jp/projects/groonga/lists/archive/dev/2014-December/003014.html
-* ruby-talk (English) (optional)
+Please refer to [Groonga document](https://groonga.org/ja/docs/contribution/development/release.html#blogroonga) 
+for how to update blogroonga.
+
+## 6. Announce
+
+* [GitHub Discussions](https://github.com/ranguba/rroonga/discussions/categories/releases) (English/Japanese)
+* [Twitter](https://twitter.com/groonga) (English/Japanese)
+* [Facebook](https://ja-jp.facebook.com/groonga/) (English/Japanese)
+* ruby-talk (English)
   * e.g.: http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-talk/428992
-* ruby-list (Japanese) (optional)
+* ruby-list (Japanese)
   * e.g.: http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-list/50025

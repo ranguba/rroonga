@@ -3058,25 +3058,28 @@ msgstr ""
 msgid "## 3. Upload gem to RubyGems.org"
 msgstr ""
 
-msgid "### 3-1. For Linux"
+msgid "### 3-1. Bump version"
+msgstr ""
+
+msgid ""
+"Change `RB_GRN_MAJOR_VERSION`, `RB_GRN_MINOR_VERSION` and `RB_GRN_MICRO_VERSIO"
+"N`\n"
+"to the same version of latest Groonga."
+msgstr ""
+
+msgid "    $ $EDITOR ext/groonga/rb-grn.h"
+msgstr ""
+
+msgid "### 3-2. Release"
 msgstr ""
 
 msgid "    $ rake release"
 msgstr ""
 
-msgid "### 3-2. For Windows"
-msgstr ""
-
-msgid ""
-"    $ rake build:windows\n"
-"    $ gem push pkg/rroonga-<the latest release version>-x86-mingw32.gem\n"
-"    $ gem push pkg/rroonga-<the latest release version>-x64-mingw32.gem"
-msgstr ""
-
 msgid "### 3-3. Bump version"
 msgstr ""
 
-msgid "    $ $EDITOR ext/groonga/rb-grn.h"
+msgid "Increment `RB_GRN_MICRO_VERSION`."
 msgstr ""
 
 msgid "## 4. Update ranguba.org"
@@ -3129,18 +3132,26 @@ msgid ""
 "    $ git push"
 msgstr ""
 
-msgid "## 5. Announce in mailing lists"
+msgid "## 5. Update blogroonga (blog)"
 msgstr ""
 
 msgid ""
-"* groonga-talk (English)\n"
-"  * e.g.: http://sourceforge.net/p/groonga/mailman/message/33144993/\n"
-"* groonga-dev (Japanese)\n"
-"  * e.g.: http://sourceforge.jp/projects/groonga/lists/archive/dev/2014-Decemb"
-"er/003014.html\n"
-"* ruby-talk (English) (optional)\n"
+"Please refer to [Groonga document](https://groonga.org/ja/docs/contribution/de"
+"velopment/release.html#blogroonga) \n"
+"for how to update blogroonga."
+msgstr ""
+
+msgid "## 6. Announce"
+msgstr ""
+
+msgid ""
+"* [GitHub Discussions](https://github.com/ranguba/rroonga/discussions/categori"
+"es/releases) (English/Japanese)\n"
+"* [Twitter](https://twitter.com/groonga) (English/Japanese)\n"
+"* [Facebook](https://ja-jp.facebook.com/groonga/) (English/Japanese)\n"
+"* ruby-talk (English)\n"
 "  * e.g.: http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-talk/428992\n"
-"* ruby-list (Japanese) (optional)\n"
+"* ruby-list (Japanese)\n"
 "  * e.g.: http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-list/50025"
 msgstr ""
 
