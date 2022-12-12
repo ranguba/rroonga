@@ -77,7 +77,7 @@ Then, edit PO files:
 ### 3-1. Bump version if need
 
 Change `RB_GRN_MAJOR_VERSION`, `RB_GRN_MINOR_VERSION` and `RB_GRN_MICRO_VERSION`
-to the same version of latest Groonga.
+to the same version of the latest Groonga.
 
     $ $EDITOR ext/groonga/rb-grn.h
 
@@ -88,6 +88,7 @@ to the same version of latest Groonga.
 ### 3-3. Bump version
 
 Increment `RB_GRN_MICRO_VERSION`.
+If current `RB_GRN_MICRO_VERSION` is `9`, increment `RB_GRN_MINOR_VERSION` and reset `RB_GRN_MICRO_VERSION` to `0`.
 
     $ $EDITOR ext/groonga/rb-grn.h
 
@@ -126,10 +127,10 @@ Second, commit and push the html directory:
     $ git commit
     $ git push
 
-## 5. Update blogroonga (blog)
+## 5. Update Blogroonga (blog)
 
-Please refer to [Groonga document](https://groonga.org/ja/docs/contribution/development/release.html#blogroonga) 
-for how to update blogroonga.
+Please refer to [Groonga document](https://groonga.org//docs/contribution/development/release.html#blogroonga) 
+for how to update Blogroonga.
 
 ## 6. Announce
 
