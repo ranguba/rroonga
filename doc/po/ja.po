@@ -3135,13 +3135,13 @@ msgid ""
 "    $ git push"
 msgstr ""
 
-msgid "## 5. Update Blogroonga (blog)"
+msgid "## 5. Update BloGroonga (blog)"
 msgstr ""
 
 msgid ""
 "Please refer to [Groonga document](https://groonga.org//docs/contribution/deve"
 "lopment/release.html#blogroonga) \n"
-"for how to update Blogroonga."
+"for how to update BloGroonga."
 msgstr ""
 
 msgid "## 6. Announce"

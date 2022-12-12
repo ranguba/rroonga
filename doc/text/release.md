@@ -127,10 +127,10 @@ Second, commit and push the html directory:
     $ git commit
     $ git push
 
-## 5. Update Blogroonga (blog)
+## 5. Update BloGroonga (blog)
 
 Please refer to [Groonga document](https://groonga.org//docs/contribution/development/release.html#blogroonga) 
-for how to update Blogroonga.
+for how to update BloGroonga.
 
 ## 6. Announce
 
