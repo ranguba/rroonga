@@ -20,9 +20,7 @@ msgstr "# はじめに"
 
 msgid ""
 "[![Gem Version](https://badge.fury.io/rb/rroonga.svg)](http://badge.fury.io/rb"
-"/rroonga)\n"
-"[![Build Status](https://travis-ci.org/ranguba/rroonga.svg?branch=master)](htt"
-"ps://travis-ci.org/ranguba/rroonga)"
+"/rroonga)"
 msgstr ""
 
 msgid "## Name"

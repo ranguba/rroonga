@@ -1,7 +1,6 @@
 # README
 
 [![Gem Version](https://badge.fury.io/rb/rroonga.svg)](http://badge.fury.io/rb/rroonga)
-[![Build Status](https://travis-ci.org/ranguba/rroonga.svg?branch=master)](https://travis-ci.org/ranguba/rroonga)
 
 ## Name
 
