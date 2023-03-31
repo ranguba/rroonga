@@ -47,11 +47,7 @@ Packnga::ReleaseTask.new(spec) do |task|
 end
 
 file "Makefile" => ["extconf.rb", "ext/groonga/extconf.rb"] do
-  extconf_args = []
-  if ENV["TRAVIS"]
-    extconf_args << "--enable-debug-build"
-  end
-  ruby("extconf.rb", *extconf_args)
+  ruby("extconf.rb")
 end
 
 desc "Configure"
