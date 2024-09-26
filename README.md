@@ -1,6 +1,6 @@
 # README
 
-[![Gem Version](https://badge.fury.io/rb/rroonga.svg)](http://badge.fury.io/rb/rroonga)
+[![Gem Version](https://badge.fury.io/rb/rroonga.svg)](https://badge.fury.io/rb/rroonga)
 
 ## Name
 
@@ -18,7 +18,7 @@ functional features from Ruby with Rubyish form.
 
 See the following URL about Groonga.
 
-* [The Groonga official site](http://groonga.org/)
+* [The Groonga official site](https://groonga.org/)
 
 ## Authors
 
@@ -47,13 +47,13 @@ contributed patches.)
 
 ## Documents
 
-* [Reference manual in English](http://ranguba.org/rroonga/en/)
-* [Reference manual in Japanese](http://ranguba.org/rroonga/ja/)
+* [Reference manual in English](https://ranguba.org/rroonga/en/)
+* [Reference manual in Japanese](https://ranguba.org/rroonga/ja/)
 
 ## Mailing list
 
-* English: [groonga-talk](http://lists.sourceforge.net/mailman/listinfo/groonga-talk)
-* Japanese: [groonga-dev](http://lists.sourceforge.jp/mailman/listinfo/groonga-dev)
+* English: [groonga-talk](https://lists.sourceforge.net/mailman/listinfo/groonga-talk)
+* Japanese: [groonga-dev](https://lists.sourceforge.jp/mailman/listinfo/groonga-dev)
 
 ## Thanks
 
