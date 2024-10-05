@@ -114,7 +114,8 @@ class RemoteTest < Test::Unit::TestCase
   def test_invalid_select
     context.connect(:host => @host, :port => @port)
 
-    assert_raise(Groonga::InvalidArgument) do
+    # Return code 65514 is INVALID_ARGUMENT in GQTP.
+    assert_raise(Groonga::Error.new("invalid return code: 65514")) do
       context.select("bogus", :query => "()()")
     end
   end
