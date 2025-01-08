@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 #
-# Copyright (C) 2009-2016  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2025  Sutou Kouhei <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -18,20 +18,21 @@
 $VERBOSE = true
 
 base_dir = File.expand_path(File.join(File.dirname(__FILE__), ".."))
-ext_dir = File.join(base_dir, "ext", "groonga")
+build_dir = Dir.pwd
+ext_dir = File.join(build_dir, "ext", "groonga")
 lib_dir = File.join(base_dir, "lib")
 test_dir = File.join(base_dir, "test")
 
 make = nil
 if ENV["NO_MAKE"] != "yes"
-  if system("which gmake > /dev/null")
+  if system("which", "gmake", out: IO::NULL)
     make = "gmake"
-  elsif system("which make > /dev/null")
+  elsif system("which", "make", out: IO::NULL)
     make = "make"
   end
 end
 if make
-  system("cd #{base_dir.dump} && #{make} > /dev/null") or exit(false)
+  system(make, "-C", build_dir, out: IO::NULL) or exit(false)
 end
 
 require "test-unit"
