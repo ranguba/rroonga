@@ -20,12 +20,6 @@ jobs:
           - "3.3"
     steps:
       - uses: actions/checkout@v4
-      - name: Set up Groonga APT repository
-        if: |
-          matrix.runs-on == 'ubuntu-latest'
-        run: |
-          sudo -H add-apt-repository -y ppa:groonga/ppa
-          sudo -H apt update
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby-version }}
@@ -43,11 +37,6 @@ jobs:
             --noconfirm `
             --refresh `
             --sync
-      - name: Update Homebrew
-        if: |
-          matrix.runs-on == 'macos-latest'
-        run: |
-          brew update
       - name: Install gem
         run: |
           gem install --verbose pkg/*.gem

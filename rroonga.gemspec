@@ -87,6 +87,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency("json")
   s.add_runtime_dependency("native-package-installer")
   s.add_runtime_dependency("pkg-config")
+  s.add_runtime_dependency("rubygems-requirements-system")
   s.add_development_dependency("test-unit", [">= 3.0.0"])
   s.add_development_dependency("rake")
   s.add_development_dependency("bundler")
@@ -96,5 +97,43 @@ Gem::Specification.new do |s|
 
   required_groonga_version = RroongaBuild::RequiredGroongaVersion::STRING
   s.metadata["msys2_mingw_dependencies"] = "groonga>=#{required_groonga_version}"
+
+  package = "groonga>=#{required_groonga_version}"
+  [
+    [
+      "debian",
+      "https://apache.jfrog.io/artifactory/arrow/%{distribution}/apache-arrow-apt-source-latest-%{code_name}.deb",
+    ],
+    [
+      "debian",
+      "https://packages.groonga.org/%{distribution}/groonga-apt-source-latest-%{code_name}.deb",
+    ],
+    [
+      "ubuntu",
+      "ppa:groonga/ppa",
+    ],
+    [
+      "debian",
+      "libgroonga-dev",
+    ],
+    [
+      "rhel",
+      "https://apache.jfrog.io/artifactory/arrow/almalinux/%{major_version}/apache-arrow-release-latest.rpm",
+    ],
+    [
+      "rhel",
+      "https://packages.groonga.org/almalinux/%{major_version}/groonga-release-latest.noarch.rpm",
+    ],
+    [
+      "rhel",
+      "pkgconfig(groonga)",
+    ],
+    [
+      "homebrew",
+      "groonga",
+    ],
+  ].each do |platform, system_package|
+    s.requirements << "system: #{package}: #{platform}: #{system_package}"
+  end
 end
 
