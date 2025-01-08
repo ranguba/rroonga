@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2020  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2025  Sutou Kouhei <kou@clear-code.com>
 # Copyright (C) 2014  Masafumi Yokoyama <myokoym@gmail.com>
 #
 # This library is free software; you can redistribute it and/or
@@ -144,8 +144,7 @@ class SchemaTest < Test::Unit::TestCase
       end
       posts = context["Posts"]
       assert_kind_of(Groonga::Hash, posts)
-      Groonga::Schema.rename_table("Posts", "Entries") do |table|
-      end
+      Groonga::Schema.rename_table("Posts", "Entries")
       entries = context["Entries"]
       assert_kind_of(Groonga::Hash, entries)
       assert_equal("Entries", posts.name)
@@ -206,8 +205,7 @@ class SchemaTest < Test::Unit::TestCase
       end
       posts = context["Posts"]
       assert_kind_of(Groonga::PatriciaTrie, posts)
-      Groonga::Schema.rename_table("Posts", "Entries") do |table|
-      end
+      Groonga::Schema.rename_table("Posts", "Entries")
       entries = context["Entries"]
       assert_kind_of(Groonga::PatriciaTrie, entries)
       assert_equal("Entries", posts.name)
@@ -268,8 +266,7 @@ class SchemaTest < Test::Unit::TestCase
       end
       posts = context["Posts"]
       assert_kind_of(Groonga::DoubleArrayTrie, posts)
-      Groonga::Schema.rename_table("Posts", "Entries") do |table|
-      end
+      Groonga::Schema.rename_table("Posts", "Entries")
       entries = context["Entries"]
       assert_kind_of(Groonga::DoubleArrayTrie, entries)
       assert_equal("Entries", posts.name)
@@ -320,8 +317,7 @@ class SchemaTest < Test::Unit::TestCase
       end
       posts = context["Posts"]
       assert_kind_of(Groonga::Array, posts)
-      Groonga::Schema.rename_table("Posts", "Entries") do |table|
-      end
+      Groonga::Schema.rename_table("Posts", "Entries")
       entries = context["Entries"]
       assert_kind_of(Groonga::Array, entries)
       assert_equal("Entries", posts.name)
