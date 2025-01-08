@@ -1,4 +1,4 @@
-# Copyright (C) 2013  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2013-2025  Sutou Kouhei <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -131,7 +131,7 @@ class DatabaseInspectorTest < Test::Unit::TestCase
         None
       INSPECTED
     else
-      inspected = "      Columns:\n"
+      inspected = +"      Columns:\n"
       columns.each do |column|
         inspected << inspect_column(column)
       end
@@ -270,7 +270,7 @@ Database
 
       private
       def inspected(n_tables)
-        inspected_tables = "  Tables:\n"
+        inspected_tables = +"  Tables:\n"
         if @database.tables.empty?
           inspected_tables << "    None\n"
         else

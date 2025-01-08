@@ -1,6 +1,4 @@
-# -*- coding: utf-8 -*-
-#
-# Copyright (C) 2009-2010  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2025  Sutou Kouhei <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -55,7 +53,7 @@ module Groonga
       options ||= {}
       other_text_handler = options[:other_text_handler]
       position = 0
-      result = ''
+      result = +""
       if text.respond_to?(:encoding)
         encoding = text.encoding
         bytes = text.dup.force_encoding("ascii-8bit")

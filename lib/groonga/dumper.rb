@@ -1,6 +1,4 @@
-# -*- coding: utf-8 -*-
-#
-# Copyright (C) 2011-2016  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2011-2025  Sutou Kouhei <kou@clear-code.com>
 # Copyright (C) 2014  Masafumi Yokoyama <myokoym@gmail.com>
 #
 # This library is free software; you can redistribute it and/or
@@ -26,7 +24,7 @@ module Groonga
     end
 
     def utf8_string
-      ""
+      +""
     end
   end
 
@@ -759,7 +757,7 @@ module Groonga
         ""
       else
         return value unless value.respond_to?(:valid_encoding?)
-        sanitized_value = ""
+        sanitized_value = +""
         value = fix_encoding(value)
         value.each_char do |char|
           if char.valid_encoding?

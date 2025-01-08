@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2016  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2025  Sutou Kouhei <kou@clear-code.com>
 # Copyright (C) 2014-2016  Masafumi Yokoyama <yokoyama@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
@@ -427,7 +427,7 @@ column_create Accounts name COLUMN_SCALAR ShortText
     class ColumnCompressionTest < self
       def test_zlib
         define_column_compression_zlib_schema
-        flags = "COLUMN_SCALAR"
+        flags = +"COLUMN_SCALAR"
         flags << "|COMPRESS_ZLIB" if context.support_zlib?
         assert_equal(<<-SCHEMA, dump)
 table_create Posts TABLE_NO_KEY
@@ -437,7 +437,7 @@ column_create Posts title #{flags} ShortText
 
       def test_lz4
         define_column_compression_lz4_schema
-        flags = "COLUMN_SCALAR"
+        flags = +"COLUMN_SCALAR"
         flags << "|COMPRESS_LZ4" if context.support_lz4?
         assert_equal(<<-SCHEMA, dump)
 table_create Posts TABLE_NO_KEY
@@ -447,7 +447,7 @@ column_create Posts title #{flags} ShortText
 
       def test_zstd
         define_column_compression_zstd_schema
-        flags = "COLUMN_SCALAR"
+        flags = +"COLUMN_SCALAR"
         flags << "|COMPRESS_ZSTD" if context.support_zstd?
         assert_equal(<<-SCHEMA, dump)
 table_create Posts TABLE_NO_KEY
@@ -457,7 +457,7 @@ column_create Posts title #{flags} ShortText
 
       def test_with_weight_vector
         define_column_compression_with_weight_vector_schema
-        flags = "COLUMN_VECTOR|WITH_WEIGHT"
+        flags = +"COLUMN_VECTOR|WITH_WEIGHT"
         flags << "|COMPRESS_ZLIB" if context.support_zlib?
         assert_equal(<<-SCHEMA, dump)
 table_create Posts TABLE_NO_KEY

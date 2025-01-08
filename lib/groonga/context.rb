@@ -1,6 +1,4 @@
-# -*- coding: utf-8 -*-
-#
-# Copyright (C) 2010-2016  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2010-2025  Sutou Kouhei <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -232,7 +230,7 @@ module Groonga
     # @yieldparam response [String] A response for a command.
     # @return [void]
     def restore(dumped_commands)
-      buffer = ""
+      buffer = +""
       continued = false
       dumped_commands.each_line do |line|
         line = line.chomp
