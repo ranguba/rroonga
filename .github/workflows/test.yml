@@ -38,6 +38,11 @@ jobs:
             --noconfirm `
             --refresh `
             --sync
+      - name: Install rubygems-requirements-system explicitly
+        if: |
+          matrix.ruby-version == '3.1'
+        run: |
+          gem install rubygems-requirements-system
       - name: Install gem
         run: |
           gem install --verbose pkg/*.gem
