@@ -1,5 +1,14 @@
 # NEWS
 
+## 14.1.2: 2025-01-09 {#version-14-1-2}
+
+### Improvements
+
+  * Suppressed warnings from Ruby 3.4.
+
+  * Added support for
+    [rubygems-requirements-system](https://rubygems.org/gems/rubygems-requirements-system).
+
 ## 12.1.0: 2022-12-05 {#version-12-1-0}
 
 ### Fixes
