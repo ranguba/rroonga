@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 #
-# Copyright (C) 2009-2021  Sutou Kouhei <kou@clear-code.com>
+# Copyright (C) 2009-2025  Sutou Kouhei <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -16,11 +16,13 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 require "English"
-require "pathname"
-require "mkmf"
+require "etc"
 require "fileutils"
-require "shellwords"
+require "mkmf"
 require "open-uri"
+require "pathname"
+require "shellwords"
+require "tmpdir"
 require "uri"
 
 require "native-package-installer"
@@ -60,7 +62,7 @@ def install_groonga_locally
   prepend_pkg_config_path_for_local_groonga
 end
 
-def download(url)
+def download(url, output_path)
   message("downloading %s...", url)
   base_name = File.basename(url)
   if File.exist?(base_name)
@@ -79,19 +81,17 @@ def download(url)
       end
     end
     URI.open(url, "rb", *options) do |input|
-      File.open(base_name, "wb") do |output|
-        while (buffer = input.read(1024))
-          output.print(buffer)
-        end
+      File.open(output_path, "wb") do |output|
+        IO.copy_stream(input, output)
       end
     end
     message(" done\n")
   end
 end
 
-def run_command(start_message, command)
+def run_command(start_message, command_line)
   message(start_message)
-  if xsystem(command)
+  if xsystem(command_line)
     message(" done\n")
   else
     message(" failed\n")
@@ -99,111 +99,77 @@ def run_command(start_message, command)
   end
 end
 
-def configure_command_line(prefix)
-  command_line = ["./configure"]
+def cmake_command_line(source_dir, build_dir, install_dir)
+  command_line = ["cmake", "-S", source_dir, "-B", build_dir]
   debug_build_p = ENV["RROONGA_DEBUG_BUILD"] == "yes"
-  command_line.concat("--enable-debug") if debug_build_p
-  command_line << "--prefix=#{prefix}"
-  command_line << "--disable-static"
-  command_line << "--disable-document"
-  command_line << "--disable-benchmark"
-  command_line << "--disable-groonga-httpd"
-  command_line << "--without-cutter"
-  escaped_command_line = command_line.collect do |command|
-    Shellwords.escape(command)
-  end
-  custom_command_line_options = with_config("groonga-configure-options")
-  if custom_command_line_options.is_a?(String)
-    escaped_command_line << custom_command_line_options
-  end
-  escaped_command_line.join(" ")
-end
-
-def guess_make
-  env_make = ENV["MAKE"]
-  return env_make if env_make
-
-  candidates = ["gmake", "make"]
-  candidates.each do |candidate|
-    (ENV["PATH"] || "").split(File::PATH_SEPARATOR).each do |path|
-      return candidate if File.executable?(File.join(path, candidate))
-    end
-  end
-
-  "make"
-end
-
-def n_processors
-  proc_file = "/proc/cpuinfo"
-  if File.exist?(proc_file)
-    File.readlines(proc_file).grep(/^processor/).size
-  elsif /darwin/ =~ RUBY_PLATFORM
-    `sysctl -n hw.ncpu`.to_i
+  if debug_build_p
+    command_line << "-DCMAKE_BUILD_TYPE=Debug"
   else
-    1
+    command_line << "-DCMAKE_BUILD_TYPE=RelWithDebInfo"
   end
+  command_line << "-DCMAKE_INSTALL_PREFIX=#{install_dir}"
+  custom_command_line_options = with_config("groonga-cmake-options")
+  if custom_command_line_options.is_a?(String)
+    command_line.concat(Shellwords.split(custom_command_line_options))
+  end
+  command_line
 end
 
-def install_for_gnu_build_system(install_dir)
-  make = guess_make
+def install_with_cmake(source_dir, build_dir, install_dir)
   run_command("configuring...",
-              configure_command_line(install_dir))
+              cmake_command_line(source_dir, build_dir, install_dir))
   run_command("building (maybe long time)...",
-              "#{make} -j#{n_processors}")
+              [{"CMAKE_BUILD_PARALLEL_LEVEL" => Etc.nprocessors.to_s},
+               "cmake", "--build", build_dir])
   run_command("installing...",
-              "#{make} install")
+              ["cmake", "--install", build_dir])
 end
 
 def build_groonga_from_git
-  message("removing old cloned repository...")
-  FileUtils.rm_rf("groonga")
-  message(" done\n")
+  Dir.mktmpdir do |source_base_dir|
+    source_dir = File.join(source_base_dir, "groonga")
+    repository_url = "https://github.com/groonga/groonga.git"
+    run_command("cloning...",
+                [
+                  "git",
+                  "clone",
+                  "--recursive",
+                  "--depth=1",
+                  repository_url,
+                  source_dir,
+                ])
 
-  repository_url = "https://github.com/groonga/groonga.git"
-  run_command("cloning...",
-              "git clone --recursive --depth 1 #{repository_url}")
-
-  Dir.chdir("groonga") do
-    run_command("running autogen.sh...",
-                "./autogen.sh")
-    install_for_gnu_build_system(local_groonga_install_dir)
+    Dir.mktmpdir do |build_dir|
+      install_with_cmake(source_dir, build_dir, local_groonga_install_dir)
+    end
   end
-
-  message("removing cloned repository...")
-  FileUtils.rm_rf("groonga")
-  message(" done\n")
 end
 
 def build_groonga_from_tar_gz
   tar_gz = "groonga-latest.tar.gz"
   url = "https://packages.groonga.org/source/groonga/#{tar_gz}"
-  groonga_source_dir = "groonga-latest"
+  Dir.mktmpdir do |source_base_dir|
+    source_tar_gz = File.join(source_base_dir, "groonga")
+    source_dir = File.join(source_base_dir, "groonga-latest")
+    download(url, source_tar_gz)
 
-  download(url)
+    FileUtils.mkdir_p(source_dir)
+    message("extracting...")
+    # TODO: Use Zlip::GzipReader and Gem::Package::TarReader
+    if xsystem(["tar",
+                "-xf", source_tar_gz,
+                "-C", source_dir,
+                "--strip-components=1"])
+      message(" done\n")
+    else
+      message(" failed\n")
+      exit(false)
+    end
 
-  FileUtils.rm_rf(groonga_source_dir)
-  FileUtils.mkdir_p(groonga_source_dir)
-
-  message("extracting...")
-  # TODO: Use Zlip::GzipReader and Gem::Package::TarReader
-  if xsystem("tar xfz #{tar_gz} -C #{groonga_source_dir} --strip-components=1")
-    message(" done\n")
-  else
-    message(" failed\n")
-    exit(false)
+    Dir.mktmpdir do |build_dir|
+      install_with_cmake(source_dir, build_dir, local_groonga_install_dir)
+    end
   end
-
-  Dir.chdir(groonga_source_dir) do
-    install_for_gnu_build_system(local_groonga_install_dir)
-  end
-
-  message("removing source...")
-  FileUtils.rm_rf(groonga_source_dir)
-  message(" done\n")
-
-  message("removing source archive...")
-  FileUtils.rm_rf(tar_gz)
-  message(" done\n")
 end
 
 def build_groonga
