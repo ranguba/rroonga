@@ -1,0 +1,63 @@
+# Copyright (C) 2025  Sutou Kouhei <kou@clear-code.com>
+#
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public
+# License as published by the Free Software Foundation; either
+# version 2.1 of the License, or (at your option) any later version.
+#
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public
+# License along with this library; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+
+name: Release
+on:
+  push:
+    tags:
+      - "*"
+jobs:
+  github:
+    name: GitHub
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Extract release note
+        run: |
+          ruby \
+            -e 'print("## Rroonga "); \
+                puts(ARGF.read.split(/^## /)[1]. \
+                       gsub(/ {.+?}/, ""). \
+                       gsub(/\[(.+?)\]\[.+?\]/) {$1})' \
+            doc/text/news.md > release-note.md
+      - name: Upload to release
+        run: |
+          title=$(head -n1 release-note.md | sed -e 's/^## //')
+          tail -n +2 release-note.md > release-note-without-version.md
+          gh release create ${GITHUB_REF_NAME} \
+            --discussion-category Announcements \
+            --notes-file release-note-without-version.md \
+            --title "${title}"
+        env:
+          GH_TOKEN: ${{ github.token }}
+  rubygems:
+    name: RubyGems
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      id-token: write
+    environment: release
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ruby
+          bundler-cache: true
+      - uses: rubygems/configure-rubygems-credentials@v1.0.0
+      - name: Push gems
+        run: |
+          bundle exec rake release:rubygem_push
