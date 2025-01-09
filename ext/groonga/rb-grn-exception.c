@@ -1,6 +1,6 @@
 /* -*- coding: utf-8; mode: C; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
-  Copyright (C) 2009-2016  Kouhei Sutou <kou@clear-code.com>
+  Copyright (C) 2009-2025  Sutou Kouhei <kou@clear-code.com>
   Copyright (C) 2014-2016  Masafumi Yokoyama <yokoyama@clear-code.com>
 
   This library is free software; you can redistribute it and/or
@@ -104,6 +104,7 @@ static VALUE eGrnCancel;
 static VALUE eGrnWindowFunctionError;
 static VALUE eGrnZstdError;
 static VALUE eGrnConnectionReset;
+static VALUE eGrnBloscError;
 
 VALUE
 rb_grn_rc_to_exception (grn_rc rc)
@@ -357,6 +358,11 @@ rb_grn_rc_to_exception (grn_rc rc)
       case GRN_CONNECTION_RESET:
         exception = eGrnConnectionReset;
         break;
+#if GRN_VERSION_OR_LATER(13, 0, 8)
+      case GRN_BLOSC_ERROR:
+        exception = eGrnBloscError;
+        break;
+#endif
     }
 
     if (NIL_P(exception))
@@ -1086,4 +1092,16 @@ rb_grn_init_exception (VALUE mGrn)
      */
     eGrnConnectionReset =
         rb_define_class_under(mGrn, "ConnectionReset", rb_eGrnError);
+
+#if GRN_VERSION_OR_LATER(13, 0, 8)
+    /*
+     * Document-class: Groonga::BloscError
+     *
+     * It is used when Blosc reports an error.
+     *
+     * @since 14.1.2
+     */
+    eGrnBloscError =
+        rb_define_class_under(mGrn, "BloscError", rb_eGrnError);
+#endif
 }
