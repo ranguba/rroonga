@@ -475,7 +475,6 @@ class PatriciaTrieTest < Test::Unit::TestCase
   end
 
   def test_defrag
-    need_groonga(14, 1, 3) # We'll fix this in 14.1.3.
     users = Groonga::PatriciaTrie.create(:name => "Users",
                                          :key_type => "ShortText")
     users.define_column("name", "ShortText")
