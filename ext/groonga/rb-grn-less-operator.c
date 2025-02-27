@@ -46,7 +46,7 @@ VALUE rb_cGrnLessOperator;
 static VALUE
 rb_grn_less_operator_exec (int argc, VALUE *argv, VALUE self)
 {
-    grn_bool less;
+    bool less;
     VALUE rb_x;
     VALUE rb_y;
     VALUE rb_options;
