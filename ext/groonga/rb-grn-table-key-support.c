@@ -250,7 +250,7 @@ rb_grn_table_key_support_add (int argc, VALUE *argv, VALUE self)
 {
     grn_id id;
     VALUE key, values;
-    int added = GRN_FALSE;
+    int added = false;
 
     rb_scan_args(argc, argv, "11", &key, &values);
     id = rb_grn_table_key_support_add_raw(self, key, &added);
@@ -659,12 +659,12 @@ static VALUE
 rb_grn_table_key_support_get_value (int argc, VALUE *argv, VALUE self)
 {
     VALUE rb_id_or_key, rb_options;
-    grn_bool use_key;
+    bool use_key;
 
     rb_scan_args(argc, argv, "11", &rb_id_or_key, &rb_options);
 
     if (NIL_P(rb_options)) {
-        use_key = GRN_TRUE;
+        use_key = true;
     } else {
         VALUE rb_option_id;
 
@@ -729,12 +729,12 @@ static VALUE
 rb_grn_table_key_support_set_value (int argc, VALUE *argv, VALUE self)
 {
     VALUE rb_id_or_key, rb_value, rb_options;
-    grn_bool use_key;
+    bool use_key;
 
     rb_scan_args(argc, argv, "21", &rb_id_or_key, &rb_value, &rb_options);
 
     if (NIL_P(rb_options)) {
-        use_key = GRN_TRUE;
+        use_key = true;
     } else {
         VALUE rb_option_id;
 
@@ -775,7 +775,7 @@ rb_grn_table_key_support_get_default_tokenizer (VALUE self)
                                  NULL);
     rb_grn_context_check(context, self);
 
-    return GRNOBJECT2RVAL(Qnil, context, tokenizer, GRN_FALSE);
+    return GRNOBJECT2RVAL(Qnil, context, tokenizer, false);
 }
 
 /*
@@ -905,7 +905,7 @@ rb_grn_table_key_support_get_normalizer (VALUE self)
     normalizer = grn_obj_get_info(context, table, GRN_INFO_NORMALIZER, NULL);
     rb_grn_context_check(context, self);
 
-    return GRNOBJECT2RVAL(Qnil, context, normalizer, GRN_FALSE);
+    return GRNOBJECT2RVAL(Qnil, context, normalizer, false);
 }
 
 /*
@@ -1020,7 +1020,7 @@ rb_grn_table_key_support_tokenize (int argc, VALUE *argv, VALUE self)
     grn_obj *table;
     char *string;
     int string_size;
-    grn_bool add_p;
+    bool add_p;
     grn_obj tokens;
 
     rb_scan_args(argc, argv, "11", &rb_string, &rb_options);
