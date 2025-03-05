@@ -1,4 +1,4 @@
-# -*- mode: ruby; coding: utf-8 -*-
+# -*- ruby -*-
 #
 # Copyright (C) 2011-2013  Kouhei Sutou <kou@clear-code.com>
 #
@@ -16,5 +16,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 source "https://rubygems.org/"
+
+plugin "rubygems-requirements-system"
 
 gemspec

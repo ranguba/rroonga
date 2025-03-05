@@ -43,7 +43,21 @@ contributed patches.)
 
 ## Install
 
-    % sudo gem install rroonga
+If you're using Bundler, add `plugin "rubygems-requirements-system"`
+and `gem "rroonga"` to your `Gemfile`:
+
+```ruby
+plugin "rubygems-requirements-system"
+
+gem "rroonga"
+```
+
+If you're not using Bundler, install `rubygems-requirements-system`
+and `rroonga`:
+
+```bash
+sudo gem install rubygems-requirements-system rroonga
+```
 
 ## Documents
 
