@@ -35,9 +35,12 @@ jobs:
       - name: Install dependencies
         run: |
           bundle install
+      - name: Build gem
+        run: |
+          bundle exec rake build
       - name: Install as gem
         run: |
-          bundle exec rake install
+          gem install pkg/*.gem
       - name: Install additional Groonga pakcages to run tests
         if: |
           matrix.runs-on == 'ubuntu-latest'
