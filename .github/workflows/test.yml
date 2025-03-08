@@ -34,18 +34,13 @@ jobs:
             --sync
       - name: Install dependencies
         run: |
-          gem install \
-            packnga \
-            rake \
-            yard
+          gem install packnga rake yard
       - name: Build gem
         run: |
           rake build
       - name: Install as gem
         run: |
-          gem install \
-            rubygems-requirements-system \
-            pkg/*.gem
+          gem install rubygems-requirements-system pkg/*.gem
       - name: Install additional Groonga pakcages to run tests
         if: |
           matrix.runs-on == 'ubuntu-latest'
