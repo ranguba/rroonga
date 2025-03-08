@@ -20,3 +20,10 @@ source "https://rubygems.org/"
 plugin "rubygems-requirements-system"
 
 gemspec
+
+gem "bundler"
+gem "kramdown"
+gem "packnga", ">= 1.0.0"
+gem "rake"
+gem "test-unit", ">= 3.0.0"
+gem "yard"

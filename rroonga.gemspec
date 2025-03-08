@@ -86,12 +86,6 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency("groonga-client", ">= 0.0.3")
   s.add_runtime_dependency("json")
   s.add_runtime_dependency("pkg-config")
-  s.add_development_dependency("test-unit", [">= 3.0.0"])
-  s.add_development_dependency("rake")
-  s.add_development_dependency("bundler")
-  s.add_development_dependency("yard")
-  s.add_development_dependency("packnga", [">= 1.0.0"])
-  s.add_development_dependency("kramdown")
 
   required_groonga_version = RroongaBuild::RequiredGroongaVersion::STRING
   s.metadata["msys2_mingw_dependencies"] = "groonga>=#{required_groonga_version}"
