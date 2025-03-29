@@ -91,27 +91,32 @@ Gem::Specification.new do |s|
   s.metadata["msys2_mingw_dependencies"] = "groonga>=#{required_groonga_version}"
 
   package = "groonga>=#{required_groonga_version}"
+  groonga_base_url = "https://packages.groonga.org"
   [
-    [
-      "debian",
-      "https://apache.jfrog.io/artifactory/arrow/%{distribution}/apache-arrow-apt-source-latest-%{code_name}.deb",
-    ],
-    [
-      "debian",
-      "https://packages.groonga.org/%{distribution}/groonga-apt-source-latest-%{code_name}.deb",
-    ],
+    # Try without additional APT repositories
     [
       "debian",
       "libgroonga-dev",
     ],
     [
+      "debian",
+      "#{groonga_base_url}/%{distribution}/groonga-apt-source-latest-%{code_name}.deb",
+    ],
+    # Retry with additional APT repositories
+    [
+      "debian",
+      "libgroonga-dev",
+    ],
+    # Try without additional Yum repositories
+    [
       "rhel",
-      "https://apache.jfrog.io/artifactory/arrow/almalinux/%{major_version}/apache-arrow-release-latest.rpm",
+      "pkgconfig(groonga)",
     ],
     [
       "rhel",
-      "https://packages.groonga.org/almalinux/%{major_version}/groonga-release-latest.noarch.rpm",
+      "#{groonga_base_url}/almalinux/%{major_version}/groonga-release-latest.noarch.rpm",
     ],
+    # Retry without additional Yum repositories
     [
       "rhel",
       "pkgconfig(groonga)",
