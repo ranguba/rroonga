@@ -95,7 +95,7 @@ class RemoteTest < Test::Unit::TestCase
     groonga_version = Gem::Version.new(values["version"])
     expected = [
       "alloc_count",
-      "apache_arrow"
+      "apache_arrow",
       "cache_hit_rate",
       "command_version",
       "default_command_version",
