@@ -23,14 +23,6 @@ jobs:
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby-version }}
-      - name: Update MSYS2 package database
-        if: |
-          matrix.runs-on == 'windows-latest'
-        run: |
-          ridk exec pacman `
-            --noconfirm `
-            --refresh `
-            --sync
       - name: Install dependencies
         run: |
           gem install packnga rake yard
