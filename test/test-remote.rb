@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2022  Sutou Kouhei <kou@clear-code.com>
+# Copyright (C) 2009-2025  Sutou Kouhei <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -92,27 +92,32 @@ class RemoteTest < Test::Unit::TestCase
     id, result = _context.receive
     assert_equal(0, id)
     values = JSON.load(result)
-    values.delete("apache_arrow")
-    values.delete("features")
-    assert_equal([
-                   "alloc_count",
-                   "cache_hit_rate",
-                   "command_version",
-                   "cpu",
-                   "default_command_version",
-                   "default_n_workers",
-                   "max_command_version",
-                   "memory_map_size",
-                   "n_jobs",
-                   "n_queries",
-                   "n_workers",
-                   "os",
-                   "start_time",
-                   "starttime",
-                   "uptime",
-                   "version",
-                 ],
-                 values.keys.sort)
+    groonga_version = Gem::Version.new(values["version"])
+    expected = [
+      "alloc_count",
+      "apache_arrow"
+      "cache_hit_rate",
+      "command_version",
+      "default_command_version",
+      "features",
+      "max_command_version",
+      "memory_map_size",
+      "n_jobs",
+      "n_queries",
+      "start_time",
+      "starttime",
+      "uptime",
+      "version",
+    ]
+    if groonga_version >= Gem::Version.new("14.0.0")
+      expected << "default_n_workers"
+      expected << "n_workers"
+    end
+    if groonga_version >= Gem::Version.new("14.0.8")
+      expected << "cpu"
+      expected << "os"
+    end
+    assert_equal(expected.sort, values.keys.sort)
   end
 
   def test_invalid_select
