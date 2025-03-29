@@ -93,7 +93,7 @@ RB_GRN_BEGIN_DECLS
 
 #define RB_GRN_MAJOR_VERSION 15
 #define RB_GRN_MINOR_VERSION 0
-#define RB_GRN_MICRO_VERSION 4
+#define RB_GRN_MICRO_VERSION 5
 
 #define RB_GRN_OBJECT(object) ((RbGrnObject *)(object))
 #define RB_GRN_NAMED_OBJECT(object) ((RbGrnNamedObject *)(object))
