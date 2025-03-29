@@ -1,5 +1,14 @@
 # NEWS
 
+## 15.0.4: 2025-03-29 {#version-15-0-4}
+
+### Improvements
+
+  * Dropped support for
+    [native-package-installer](https://rubygems.org/gems/native-package-installer).
+    We use only
+    [rubygems-requirements-system](https://rubygems.org/gems/rubygems-requirements-system).
+
 ## 14.1.2: 2025-01-09 {#version-14-1-2}
 
 ### Improvements
