@@ -39,6 +39,8 @@ VALUE rb_cGrnNormalizer;
  *   @param [String] string The original string
  *
  *   @param [::Hash] options The optional parameters.
+ *   @option options :normalizer
+ *     We can specify using normalizer.
  *   @option options :remove_blank (true)
  *     If it's `true`, all blank characters are removed.
  *   @option options :remove_tokenized_delimiter (false)
@@ -53,6 +55,7 @@ rb_grn_normalizer_s_normalize (int argc, VALUE *argv, VALUE klass)
     VALUE rb_context = Qnil;
     VALUE rb_string;
     VALUE rb_options;
+    VALUE rb_normalizer_p;
     VALUE rb_remove_blank_p;
     VALUE rb_remove_tokenized_delimiter_p;
     VALUE rb_encoded_string;
@@ -66,6 +69,7 @@ rb_grn_normalizer_s_normalize (int argc, VALUE *argv, VALUE klass)
 
     rb_scan_args(argc, argv, "11", &rb_string, &rb_options);
     rb_grn_scan_options(rb_options,
+                        "normalizer", &rb_normalizer_p,
                         "remove_blank", &rb_remove_blank_p,
                         "remove_tokenized_delimiter_p",
                         &rb_remove_tokenized_delimiter_p,
@@ -77,6 +81,9 @@ rb_grn_normalizer_s_normalize (int argc, VALUE *argv, VALUE klass)
         return rb_grn_context_rb_string_new(context, "", 0);
     }
 
+    if (!NIL_P(rb_normalizer_p)) {
+        normalizer = RVAL2GRNOBJECT(rb_normalizer_p, &context);
+    }
     if (NIL_P(rb_remove_blank_p)) {
         rb_remove_blank_p = Qtrue;
     }
