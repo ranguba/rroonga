@@ -59,7 +59,10 @@ class RactorTest < Test::Unit::TestCase
         end
       end
     end
+    # Ractor#take was replaced at Ruby 3.5.
+    # https://bugs.ruby-lang.org/issues/21262
+    result = ractor.respond_to?(:take) ? ractor.take : ractor.value
     assert_equal(["Groonga is fast!", "Rroonga is the Groonga bindings"],
-                 ractor.take)
+                 result)
   end
 end
