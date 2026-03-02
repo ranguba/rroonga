@@ -135,7 +135,7 @@ class ExpressionTest < Test::Unit::TestCase
     expression.parse("ラングバ", :default_column => name)
     expression.compile
 
-    snippet = expression.snippet([], :width => 30)
+    snippet = expression.snippet([[]], :width => 30)
     assert_equal(["ラングバプロジェクト"],
                  snippet.execute("ラングバプロジェクトはカラムストア機能も"))
     snippet.close
